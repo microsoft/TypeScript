@@ -60,18 +60,18 @@ var __assign = (this && this.__assign) || function () {
 };
 function f(definiteBoolean, definiteString, optionalString, optionalNumber, undefinedString, undefinedNumber) {
     // optional
-    let optionalUnionStops = __assign(__assign(__assign({}, definiteBoolean), definiteString), optionalNumber);
-    let optionalUnionDuplicates = __assign(__assign(__assign(__assign({}, definiteBoolean), definiteString), optionalString), optionalNumber);
-    let allOptional = __assign(__assign({}, optionalString), optionalNumber);
+    var optionalUnionStops = __assign(__assign(__assign({}, definiteBoolean), definiteString), optionalNumber);
+    var optionalUnionDuplicates = __assign(__assign(__assign(__assign({}, definiteBoolean), definiteString), optionalString), optionalNumber);
+    var allOptional = __assign(__assign({}, optionalString), optionalNumber);
     // undefined
-    let undefinedUnionStops = __assign(__assign(__assign({}, definiteBoolean), definiteString), undefinedNumber);
-    let undefinedUnionDuplicates = __assign(__assign(__assign(__assign({}, definiteBoolean), definiteString), undefinedString), undefinedNumber);
-    let allUndefined = __assign(__assign({}, undefinedString), undefinedNumber);
-    let undefinedWithOptionalContinues = __assign(__assign(__assign({}, definiteBoolean), undefinedString), optionalNumber);
+    var undefinedUnionStops = __assign(__assign(__assign({}, definiteBoolean), definiteString), undefinedNumber);
+    var undefinedUnionDuplicates = __assign(__assign(__assign(__assign({}, definiteBoolean), definiteString), undefinedString), undefinedNumber);
+    var allUndefined = __assign(__assign({}, undefinedString), undefinedNumber);
+    var undefinedWithOptionalContinues = __assign(__assign(__assign({}, definiteBoolean), undefinedString), optionalNumber);
 }
-const m = { title: "The Matrix", yearReleased: 1999 };
+var m = { title: "The Matrix", yearReleased: 1999 };
 // should error here because title: undefined is not assignable to string
-const x = __assign(__assign({}, m), { title: undefined });
+var x = __assign(__assign({}, m), { title: undefined });
 function g(fields, partialFields, nearlyPartialFields) {
     // ok, undefined is stripped from optional properties when spread
     fields = __assign(__assign({}, fields), partialFields);

@@ -9,11 +9,14 @@ class C<T> {
 }
 
 //// [declFileForTypeParameters.js]
-class C {
-    foo(a) {
-        return this.x;
+var C = /** @class */ (function () {
+    function C() {
     }
-}
+    C.prototype.foo = function (a) {
+        return this.x;
+    };
+    return C;
+}());
 
 
 //// [declFileForTypeParameters.d.ts]

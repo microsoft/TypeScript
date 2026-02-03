@@ -8,9 +8,10 @@ class A {
 }
 
 //// [unusedTypeParameterInMethod5.js]
-class A {
-    constructor() {
+var A = /** @class */ (function () {
+    function A() {
         this.f1 = function () {
         };
     }
-}
+    return A;
+}());

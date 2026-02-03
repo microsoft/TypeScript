@@ -44,8 +44,12 @@ var P;
         export { foo };
         export { baz as b } from "ambient";
         export default v;
-        export default class C {
-        }
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
+        export default C;
         export function bee() { }
         import I2 = require("foo");
         import * as Foo from "ambient";

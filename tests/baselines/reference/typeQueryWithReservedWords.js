@@ -18,11 +18,14 @@ interface IScope {
 
 
 //// [typeQueryWithReservedWords.js]
-class Controller {
-    create() {
+var Controller = /** @class */ (function () {
+    function Controller() {
     }
-    delete() {
-    }
-    var() {
-    }
-}
+    Controller.prototype.create = function () {
+    };
+    Controller.prototype.delete = function () {
+    };
+    Controller.prototype.var = function () {
+    };
+    return Controller;
+}());

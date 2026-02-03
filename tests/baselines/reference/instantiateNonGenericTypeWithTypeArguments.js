@@ -23,8 +23,11 @@ var r2 = new a<number>();
 //// [instantiateNonGenericTypeWithTypeArguments.js]
 // it is an error to provide type arguments to a non-generic call
 // all of these are errors
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var c = new C();
 function Foo() { }
 var r = new Foo();

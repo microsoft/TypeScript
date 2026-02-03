@@ -159,6 +159,21 @@ var f12: (x: number) => any = x => { // should be (x: number) => Base | AnotherC
 }
 
 //// [functionImplementations.js]
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // FunctionExpression with no return type annotation and no return statement returns void
 var v = function () { }();
 // FunctionExpression f with no return type annotation and directly references f in its body returns any
@@ -224,10 +239,18 @@ var n = function () {
 // ignoring return statements with no expressions.
 // A compile - time error occurs if no return statement expression has a type that is a supertype of each of the others.
 // FunctionExpression with no return type annotation with multiple return statements with subtype relation between returns
-class Base {
-}
-class Derived extends Base {
-}
+var Base = /** @class */ (function () {
+    function Base() {
+    }
+    return Base;
+}());
+var Derived = /** @class */ (function (_super) {
+    __extends(Derived, _super);
+    function Derived() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Derived;
+}(Base));
 var b;
 var b = function () {
     return new Base();
@@ -249,17 +272,20 @@ function thisFunc() {
     var x;
 }
 // Function signature with optional parameter, no type annotation and initializer has initializer's type
-function opt1(n = 4) {
+function opt1(n) {
+    if (n === void 0) { n = 4; }
     var m = n;
     var m;
 }
 // Function signature with optional parameter, no type annotation and initializer has initializer's widened type
-function opt2(n = { x: null, y: undefined }) {
+function opt2(n) {
+    if (n === void 0) { n = { x: null, y: undefined }; }
     var m = n;
     var m;
 }
 // Function signature with initializer referencing other parameter to the left
-function opt3(n, m = n) {
+function opt3(n, m) {
+    if (m === void 0) { m = n; }
     var y = m;
     var y;
 }
@@ -269,37 +295,45 @@ function opt3(n, m = n) {
 function f6() {
     return;
 }
-class Derived2 extends Base {
-}
-class AnotherClass {
-}
+var Derived2 = /** @class */ (function (_super) {
+    __extends(Derived2, _super);
+    function Derived2() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Derived2;
+}(Base));
+var AnotherClass = /** @class */ (function () {
+    function AnotherClass() {
+    }
+    return AnotherClass;
+}());
 // if f is a contextually typed function expression, the inferred return type is the union type
 // of the types of the return statement expressions in the function body, 
 // ignoring return statements with no expressions.
-var f7 = x => {
+var f7 = function (x) {
     if (x < 0) {
         return x;
     }
     return x.toString();
 };
-var f8 = x => {
+var f8 = function (x) {
     return new Base();
     return new Derived2();
 };
-var f9 = x => {
+var f9 = function (x) {
     return new Base();
     return new Derived();
     return new Derived2();
 };
-var f10 = x => {
+var f10 = function (x) {
     return new Derived();
     return new Derived2();
 };
-var f11 = x => {
+var f11 = function (x) {
     return new Base();
     return new AnotherClass();
 };
-var f12 = x => {
+var f12 = function (x) {
     return new Base();
     return; // should be ignored
     return new AnotherClass();

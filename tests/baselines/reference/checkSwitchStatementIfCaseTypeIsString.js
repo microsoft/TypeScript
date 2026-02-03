@@ -14,12 +14,16 @@ class A {
 }
 
 //// [checkSwitchStatementIfCaseTypeIsString.js]
-class A {
-    doIt(x) {
-        x.forEach((v) => {
+var A = /** @class */ (function () {
+    function A() {
+    }
+    A.prototype.doIt = function (x) {
+        var _this = this;
+        x.forEach(function (v) {
             switch (v) {
-                case "test": use(this);
+                case "test": use(_this);
             }
         });
-    }
-}
+    };
+    return A;
+}());

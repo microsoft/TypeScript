@@ -428,137 +428,263 @@ module publicModuleInGlobal {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicModule = exports.publicVarWithPrivateModulePropertyTypes = exports.publicClassWithPrivateModulePropertyTypes = exports.publicVarWithPublicPropertyTypes = exports.publicVarWithPrivatePropertyTypes = exports.publicClassWithWithPublicPropertyTypes = exports.publicClassWithWithPrivatePropertyTypes = exports.publicClass = void 0;
-class privateClass {
-}
-class publicClass {
-}
+var privateClass = /** @class */ (function () {
+    function privateClass() {
+    }
+    return privateClass;
+}());
+var publicClass = /** @class */ (function () {
+    function publicClass() {
+    }
+    return publicClass;
+}());
 exports.publicClass = publicClass;
-class publicClassWithWithPrivatePropertyTypes {
-}
+var publicClassWithWithPrivatePropertyTypes = /** @class */ (function () {
+    function publicClassWithWithPrivatePropertyTypes() {
+    }
+    return publicClassWithWithPrivatePropertyTypes;
+}());
 exports.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
-class publicClassWithWithPublicPropertyTypes {
-}
+var publicClassWithWithPublicPropertyTypes = /** @class */ (function () {
+    function publicClassWithWithPublicPropertyTypes() {
+    }
+    return publicClassWithWithPublicPropertyTypes;
+}());
 exports.publicClassWithWithPublicPropertyTypes = publicClassWithWithPublicPropertyTypes;
-class privateClassWithWithPrivatePropertyTypes {
-}
-class privateClassWithWithPublicPropertyTypes {
-}
+var privateClassWithWithPrivatePropertyTypes = /** @class */ (function () {
+    function privateClassWithWithPrivatePropertyTypes() {
+    }
+    return privateClassWithWithPrivatePropertyTypes;
+}());
+var privateClassWithWithPublicPropertyTypes = /** @class */ (function () {
+    function privateClassWithWithPublicPropertyTypes() {
+    }
+    return privateClassWithWithPublicPropertyTypes;
+}());
 var privateVarWithPrivatePropertyTypes;
 var privateVarWithPublicPropertyTypes;
-class publicClassWithPrivateModulePropertyTypes {
-}
+var publicClassWithPrivateModulePropertyTypes = /** @class */ (function () {
+    function publicClassWithPrivateModulePropertyTypes() {
+    }
+    return publicClassWithPrivateModulePropertyTypes;
+}());
 exports.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
-class privateClassWithPrivateModulePropertyTypes {
-}
+var privateClassWithPrivateModulePropertyTypes = /** @class */ (function () {
+    function privateClassWithPrivateModulePropertyTypes() {
+    }
+    return privateClassWithPrivateModulePropertyTypes;
+}());
 var privateVarWithPrivateModulePropertyTypes;
 var publicModule;
 (function (publicModule) {
-    class privateClass {
-    }
-    class publicClass {
-    }
+    var privateClass = /** @class */ (function () {
+        function privateClass() {
+        }
+        return privateClass;
+    }());
+    var publicClass = /** @class */ (function () {
+        function publicClass() {
+        }
+        return publicClass;
+    }());
     publicModule.publicClass = publicClass;
-    class publicClassWithWithPrivatePropertyTypes {
-    }
+    var publicClassWithWithPrivatePropertyTypes = /** @class */ (function () {
+        function publicClassWithWithPrivatePropertyTypes() {
+        }
+        return publicClassWithWithPrivatePropertyTypes;
+    }());
     publicModule.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
-    class publicClassWithWithPublicPropertyTypes {
-    }
+    var publicClassWithWithPublicPropertyTypes = /** @class */ (function () {
+        function publicClassWithWithPublicPropertyTypes() {
+        }
+        return publicClassWithWithPublicPropertyTypes;
+    }());
     publicModule.publicClassWithWithPublicPropertyTypes = publicClassWithWithPublicPropertyTypes;
-    class privateClassWithWithPrivatePropertyTypes {
-    }
-    class privateClassWithWithPublicPropertyTypes {
-    }
+    var privateClassWithWithPrivatePropertyTypes = /** @class */ (function () {
+        function privateClassWithWithPrivatePropertyTypes() {
+        }
+        return privateClassWithWithPrivatePropertyTypes;
+    }());
+    var privateClassWithWithPublicPropertyTypes = /** @class */ (function () {
+        function privateClassWithWithPublicPropertyTypes() {
+        }
+        return privateClassWithWithPublicPropertyTypes;
+    }());
     var privateVarWithPrivatePropertyTypes;
     var privateVarWithPublicPropertyTypes;
-    class publicClassWithPrivateModulePropertyTypes {
-    }
+    var publicClassWithPrivateModulePropertyTypes = /** @class */ (function () {
+        function publicClassWithPrivateModulePropertyTypes() {
+        }
+        return publicClassWithPrivateModulePropertyTypes;
+    }());
     publicModule.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
-    class privateClassWithPrivateModulePropertyTypes {
-    }
+    var privateClassWithPrivateModulePropertyTypes = /** @class */ (function () {
+        function privateClassWithPrivateModulePropertyTypes() {
+        }
+        return privateClassWithPrivateModulePropertyTypes;
+    }());
     var privateVarWithPrivateModulePropertyTypes;
 })(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
-    class privateClass {
-    }
-    class publicClass {
-    }
+    var privateClass = /** @class */ (function () {
+        function privateClass() {
+        }
+        return privateClass;
+    }());
+    var publicClass = /** @class */ (function () {
+        function publicClass() {
+        }
+        return publicClass;
+    }());
     privateModule.publicClass = publicClass;
-    class publicClassWithWithPrivatePropertyTypes {
-    }
+    var publicClassWithWithPrivatePropertyTypes = /** @class */ (function () {
+        function publicClassWithWithPrivatePropertyTypes() {
+        }
+        return publicClassWithWithPrivatePropertyTypes;
+    }());
     privateModule.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
-    class publicClassWithWithPublicPropertyTypes {
-    }
+    var publicClassWithWithPublicPropertyTypes = /** @class */ (function () {
+        function publicClassWithWithPublicPropertyTypes() {
+        }
+        return publicClassWithWithPublicPropertyTypes;
+    }());
     privateModule.publicClassWithWithPublicPropertyTypes = publicClassWithWithPublicPropertyTypes;
-    class privateClassWithWithPrivatePropertyTypes {
-    }
-    class privateClassWithWithPublicPropertyTypes {
-    }
+    var privateClassWithWithPrivatePropertyTypes = /** @class */ (function () {
+        function privateClassWithWithPrivatePropertyTypes() {
+        }
+        return privateClassWithWithPrivatePropertyTypes;
+    }());
+    var privateClassWithWithPublicPropertyTypes = /** @class */ (function () {
+        function privateClassWithWithPublicPropertyTypes() {
+        }
+        return privateClassWithWithPublicPropertyTypes;
+    }());
     var privateVarWithPrivatePropertyTypes;
     var privateVarWithPublicPropertyTypes;
-    class publicClassWithPrivateModulePropertyTypes {
-    }
+    var publicClassWithPrivateModulePropertyTypes = /** @class */ (function () {
+        function publicClassWithPrivateModulePropertyTypes() {
+        }
+        return publicClassWithPrivateModulePropertyTypes;
+    }());
     privateModule.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
-    class privateClassWithPrivateModulePropertyTypes {
-    }
+    var privateClassWithPrivateModulePropertyTypes = /** @class */ (function () {
+        function privateClassWithPrivateModulePropertyTypes() {
+        }
+        return privateClassWithPrivateModulePropertyTypes;
+    }());
     var privateVarWithPrivateModulePropertyTypes;
 })(privateModule || (privateModule = {}));
 //// [privacyVarDeclFile_GlobalFile.js]
-class publicClassInGlobal {
-}
-class publicClassWithWithPublicPropertyTypesInGlobal {
-}
+var publicClassInGlobal = /** @class */ (function () {
+    function publicClassInGlobal() {
+    }
+    return publicClassInGlobal;
+}());
+var publicClassWithWithPublicPropertyTypesInGlobal = /** @class */ (function () {
+    function publicClassWithWithPublicPropertyTypesInGlobal() {
+    }
+    return publicClassWithWithPublicPropertyTypesInGlobal;
+}());
 var publicVarWithPublicPropertyTypesInGlobal;
 var publicModuleInGlobal;
 (function (publicModuleInGlobal) {
-    class privateClass {
-    }
-    class publicClass {
-    }
+    var privateClass = /** @class */ (function () {
+        function privateClass() {
+        }
+        return privateClass;
+    }());
+    var publicClass = /** @class */ (function () {
+        function publicClass() {
+        }
+        return publicClass;
+    }());
     publicModuleInGlobal.publicClass = publicClass;
-    let privateModule;
+    var privateModule;
     (function (privateModule) {
-        class privateClass {
-        }
-        class publicClass {
-        }
+        var privateClass = /** @class */ (function () {
+            function privateClass() {
+            }
+            return privateClass;
+        }());
+        var publicClass = /** @class */ (function () {
+            function publicClass() {
+            }
+            return publicClass;
+        }());
         privateModule.publicClass = publicClass;
-        class publicClassWithWithPrivatePropertyTypes {
-        }
+        var publicClassWithWithPrivatePropertyTypes = /** @class */ (function () {
+            function publicClassWithWithPrivatePropertyTypes() {
+            }
+            return publicClassWithWithPrivatePropertyTypes;
+        }());
         privateModule.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
-        class publicClassWithWithPublicPropertyTypes {
-        }
+        var publicClassWithWithPublicPropertyTypes = /** @class */ (function () {
+            function publicClassWithWithPublicPropertyTypes() {
+            }
+            return publicClassWithWithPublicPropertyTypes;
+        }());
         privateModule.publicClassWithWithPublicPropertyTypes = publicClassWithWithPublicPropertyTypes;
-        class privateClassWithWithPrivatePropertyTypes {
-        }
-        class privateClassWithWithPublicPropertyTypes {
-        }
+        var privateClassWithWithPrivatePropertyTypes = /** @class */ (function () {
+            function privateClassWithWithPrivatePropertyTypes() {
+            }
+            return privateClassWithWithPrivatePropertyTypes;
+        }());
+        var privateClassWithWithPublicPropertyTypes = /** @class */ (function () {
+            function privateClassWithWithPublicPropertyTypes() {
+            }
+            return privateClassWithWithPublicPropertyTypes;
+        }());
         var privateVarWithPrivatePropertyTypes;
         var privateVarWithPublicPropertyTypes;
-        class publicClassWithPrivateModulePropertyTypes {
-        }
+        var publicClassWithPrivateModulePropertyTypes = /** @class */ (function () {
+            function publicClassWithPrivateModulePropertyTypes() {
+            }
+            return publicClassWithPrivateModulePropertyTypes;
+        }());
         privateModule.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
-        class privateClassWithPrivateModulePropertyTypes {
-        }
+        var privateClassWithPrivateModulePropertyTypes = /** @class */ (function () {
+            function privateClassWithPrivateModulePropertyTypes() {
+            }
+            return privateClassWithPrivateModulePropertyTypes;
+        }());
         var privateVarWithPrivateModulePropertyTypes;
     })(privateModule || (privateModule = {}));
-    class publicClassWithWithPrivatePropertyTypes {
-    }
+    var publicClassWithWithPrivatePropertyTypes = /** @class */ (function () {
+        function publicClassWithWithPrivatePropertyTypes() {
+        }
+        return publicClassWithWithPrivatePropertyTypes;
+    }());
     publicModuleInGlobal.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
-    class publicClassWithWithPublicPropertyTypes {
-    }
+    var publicClassWithWithPublicPropertyTypes = /** @class */ (function () {
+        function publicClassWithWithPublicPropertyTypes() {
+        }
+        return publicClassWithWithPublicPropertyTypes;
+    }());
     publicModuleInGlobal.publicClassWithWithPublicPropertyTypes = publicClassWithWithPublicPropertyTypes;
-    class privateClassWithWithPrivatePropertyTypes {
-    }
-    class privateClassWithWithPublicPropertyTypes {
-    }
+    var privateClassWithWithPrivatePropertyTypes = /** @class */ (function () {
+        function privateClassWithWithPrivatePropertyTypes() {
+        }
+        return privateClassWithWithPrivatePropertyTypes;
+    }());
+    var privateClassWithWithPublicPropertyTypes = /** @class */ (function () {
+        function privateClassWithWithPublicPropertyTypes() {
+        }
+        return privateClassWithWithPublicPropertyTypes;
+    }());
     var privateVarWithPrivatePropertyTypes;
     var privateVarWithPublicPropertyTypes;
-    class publicClassWithPrivateModulePropertyTypes {
-    }
+    var publicClassWithPrivateModulePropertyTypes = /** @class */ (function () {
+        function publicClassWithPrivateModulePropertyTypes() {
+        }
+        return publicClassWithPrivateModulePropertyTypes;
+    }());
     publicModuleInGlobal.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
-    class privateClassWithPrivateModulePropertyTypes {
-    }
+    var privateClassWithPrivateModulePropertyTypes = /** @class */ (function () {
+        function privateClassWithPrivateModulePropertyTypes() {
+        }
+        return privateClassWithPrivateModulePropertyTypes;
+    }());
     var privateVarWithPrivateModulePropertyTypes;
 })(publicModuleInGlobal || (publicModuleInGlobal = {}));
 

@@ -20,12 +20,12 @@ function foo<T>(a: T) {
 
 //// [inlineConditionalHasSimilarAssignability.js]
 function foo(a) {
-    const b = 0;
+    var b = 0;
     a = b; // ok
-    const c = 0;
+    var c = 0;
     a = c;
-    const d = 0;
+    var d = 0;
     a = d; // ok
-    const e = 0;
+    var e = 0;
     a = e;
 }

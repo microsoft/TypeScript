@@ -279,7 +279,7 @@ export type MyNominal = Nominal<string, 'MyNominal'>;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getVar = getVar;
-const variable = {
+var variable = {
     key: 'value',
 };
 function getVar() {

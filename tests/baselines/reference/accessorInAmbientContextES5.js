@@ -43,13 +43,19 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
 };
 var _RegularClass_shouldError_accessor_storage;
 // Regular class should still error when targeting ES5
-class RegularClass {
-    constructor() {
+var RegularClass = /** @class */ (function () {
+    function RegularClass() {
         _RegularClass_shouldError_accessor_storage.set(this, void 0);
     }
-    get shouldError() { return __classPrivateFieldGet(this, _RegularClass_shouldError_accessor_storage, "f"); } // Should still error
-    set shouldError(value) { __classPrivateFieldSet(this, _RegularClass_shouldError_accessor_storage, value, "f"); }
-}
+    Object.defineProperty(RegularClass.prototype, "shouldError", {
+        get: function () { return __classPrivateFieldGet(this, _RegularClass_shouldError_accessor_storage, "f"); } // Should still error
+        ,
+        set: function (value) { __classPrivateFieldSet(this, _RegularClass_shouldError_accessor_storage, value, "f"); },
+        enumerable: false,
+        configurable: true
+    });
+    return RegularClass;
+}());
 _RegularClass_shouldError_accessor_storage = new WeakMap();
 
 

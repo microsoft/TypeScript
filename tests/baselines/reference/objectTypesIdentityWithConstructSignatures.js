@@ -91,15 +91,21 @@ function foo15(x: any) { }
 
 //// [objectTypesIdentityWithConstructSignatures.js]
 // object types are identical structurally
-class A {
-    constructor(x) { }
-}
-class B {
-    constructor(x) { }
-}
-class C {
-    constructor(x) { }
-}
+var A = /** @class */ (function () {
+    function A(x) {
+    }
+    return A;
+}());
+var B = /** @class */ (function () {
+    function B(x) {
+    }
+    return B;
+}());
+var C = /** @class */ (function () {
+    function C(x) {
+    }
+    return C;
+}());
 var a;
 function foo1(x) { }
 function foo1b(x) { }

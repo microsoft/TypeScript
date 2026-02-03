@@ -65,7 +65,7 @@ watchMain();
 Object.defineProperty(exports, "__esModule", { value: true });
 var ts = require("typescript");
 function watchMain() {
-    const configPath = ts.findConfigFile(/*searchPath*/ "./", ts.sys.fileExists, "tsconfig.json");
+    var configPath = ts.findConfigFile(/*searchPath*/ "./", ts.sys.fileExists, "tsconfig.json");
     if (!configPath) {
         throw new Error("Could not find a valid 'tsconfig.json'.");
     }
@@ -79,16 +79,16 @@ function watchMain() {
     // Between `createEmitAndSemanticDiagnosticsBuilderProgram` and `createSemanticDiagnosticsBuilderProgram`, the only difference is emit.
     // For pure type-checking scenarios, or when another tool/process handles emit, using `createSemanticDiagnosticsBuilderProgram` may be more desirable.
     // Note that there is another overload for `createWatchCompilerHost` that takes a set of root files.
-    const host = ts.createWatchCompilerHost(configPath, {}, ts.sys);
+    var host = ts.createWatchCompilerHost(configPath, {}, ts.sys);
     // You can technically override any given hook on the host, though you probably don't need to.
     // Note that we're assuming `origCreateProgram` and `origPostProgramCreate` doesn't use `this` at all.
-    const origCreateProgram = host.createProgram;
-    host.createProgram = (rootNames, options, host, oldProgram) => {
+    var origCreateProgram = host.createProgram;
+    host.createProgram = function (rootNames, options, host, oldProgram) {
         console.log("** We're about to create the program! **");
         return origCreateProgram(rootNames, options, host, oldProgram);
     };
-    const origPostProgramCreate = host.afterProgramCreate;
-    host.afterProgramCreate = program => {
+    var origPostProgramCreate = host.afterProgramCreate;
+    host.afterProgramCreate = function (program) {
         console.log("** We finished making the program! **");
         origPostProgramCreate(program);
     };

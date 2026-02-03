@@ -41,22 +41,25 @@ function f3(bb: BoxifiedBacon) {
 }
 
 //// [mappedTypes3.js]
-class Box {
-}
+var Box = /** @class */ (function () {
+    function Box() {
+    }
+    return Box;
+}());
 function f1(b) {
-    let bb = boxify(b);
-    let isPerfect = bb.isPerfect.value;
-    let weight = bb.weight.value;
+    var bb = boxify(b);
+    var isPerfect = bb.isPerfect.value;
+    var weight = bb.weight.value;
 }
 function f2(bb) {
-    let b = unboxify(bb); // Infer Bacon for T
-    let bool = b.isPerfect;
-    let weight = b.weight;
+    var b = unboxify(bb); // Infer Bacon for T
+    var bool = b.isPerfect;
+    var weight = b.weight;
 }
 function f3(bb) {
-    let b = unboxify(bb); // Explicit type parameter required
-    let bool = b.isPerfect;
-    let weight = bb.weight;
+    var b = unboxify(bb); // Explicit type parameter required
+    var bool = b.isPerfect;
+    var weight = bb.weight;
 }
 
 

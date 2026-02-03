@@ -36,7 +36,7 @@ Output::
 
 
 //// [/home/src/workspaces/project/a.js]
-const x = 10;
+var x = 10;
 
 
 //// [/home/src/workspaces/project/a.d.ts]
@@ -44,7 +44,7 @@ declare const x = 10;
 
 
 //// [/home/src/workspaces/project/b.js]
-const y = 10;
+var y = 10;
 
 
 //// [/home/src/workspaces/project/b.d.ts]

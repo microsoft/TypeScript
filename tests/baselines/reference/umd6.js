@@ -14,4 +14,4 @@ let y: number = Foo.fn();
 
 //// [a.js]
 /// <reference path="foo.d.ts" />
-let y = Foo.fn();
+var y = Foo.fn();

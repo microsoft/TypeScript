@@ -92,71 +92,108 @@ function fn8(x: Alpha|Beta|Gamma) {
 
 
 //// [instanceOfAssignability.js]
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // Derived1 is assignable to, but not a subtype of, Base
-class Derived1 {
-}
+var Derived1 = /** @class */ (function () {
+    function Derived1() {
+    }
+    return Derived1;
+}());
 // Derived2 is a subtype of Base that is not assignable to Derived1
-class Derived2 {
-}
-class Animal {
-}
-class Mammal extends Animal {
-}
-class Giraffe extends Mammal {
-}
+var Derived2 = /** @class */ (function () {
+    function Derived2() {
+    }
+    return Derived2;
+}());
+var Animal = /** @class */ (function () {
+    function Animal() {
+    }
+    return Animal;
+}());
+var Mammal = /** @class */ (function (_super) {
+    __extends(Mammal, _super);
+    function Mammal() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Mammal;
+}(Animal));
+var Giraffe = /** @class */ (function (_super) {
+    __extends(Giraffe, _super);
+    function Giraffe() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Giraffe;
+}(Mammal));
 function fn1(x) {
     if (x instanceof Array) {
         // 1.5: y: Array<number>|Array<string>
         // Want: y: Array<number>|Array<string>
-        let y = x;
+        var y = x;
     }
 }
 function fn2(x) {
     if (x instanceof Derived1) {
         // 1.5: y: Base
         // Want: y: Derived1
-        let y = x;
+        var y = x;
     }
 }
 function fn3(x) {
     if (x instanceof Derived2) {
         // 1.5: y: Derived2
         // Want: Derived2
-        let y = x;
+        var y = x;
     }
 }
 function fn4(x) {
     if (x instanceof Derived1) {
         // 1.5: y: {}
         // Want: Derived1
-        let y = x;
+        var y = x;
     }
 }
 function fn5(x) {
     if (x instanceof Derived2) {
         // 1.5: y: Derived1
         // Want: ???
-        let y = x;
+        var y = x;
     }
 }
 function fn6(x) {
     if (x instanceof Giraffe) {
         // 1.5: y: Derived1
         // Want: ???
-        let y = x;
+        var y = x;
     }
 }
 function fn7(x) {
     if (x instanceof Array) {
         // 1.5: y: Array<number>|Array<string>
         // Want: y: Array<number>|Array<string>
-        let y = x;
+        var y = x;
     }
 }
-class ABC {
-}
+var ABC = /** @class */ (function () {
+    function ABC() {
+    }
+    return ABC;
+}());
 function fn8(x) {
     if (x instanceof ABC) {
-        let y = x;
+        var y = x;
     }
 }

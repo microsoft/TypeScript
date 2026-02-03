@@ -28,8 +28,11 @@ class A {
 
 
 //// [inlinedAliasAssignableToConstraintSameAsAlias.js]
-class A {
-    whereRelated() {
-        return 1;
+var A = /** @class */ (function () {
+    function A() {
     }
-}
+    A.prototype.whereRelated = function () {
+        return 1;
+    };
+    return A;
+}());

@@ -273,7 +273,7 @@ Output::
 }
 
 //// [/home/src/projects/outFile.js]
-const a = "hello";
+var a = "hello";
 
 
 
@@ -450,7 +450,7 @@ Found 1 error.
 }
 
 //// [/home/src/projects/outFile.js]
-const a = "hello;
+var a = "hello;
 
 
 

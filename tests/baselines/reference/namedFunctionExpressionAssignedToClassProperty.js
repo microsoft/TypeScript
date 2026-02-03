@@ -17,9 +17,10 @@ class Foo{
 
 
 //// [namedFunctionExpressionAssignedToClassProperty.js]
-class Foo {
-    constructor() {
+var Foo = /** @class */ (function () {
+    function Foo() {
         this.a = function bar() {
         }; // this shouldn't crash the compiler...
     }
-}
+    return Foo;
+}());

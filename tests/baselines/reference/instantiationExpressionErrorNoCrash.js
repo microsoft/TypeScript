@@ -22,10 +22,13 @@ export type Cache<N extends string, QR> = {
 //// [instantiationExpressionErrorNoCrash.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const createCacheReducer = (queries) => {
-    const queriesMap = {};
-    const initialState = {
+var createCacheReducer = function (queries) {
+    var queriesMap = {};
+    var initialState = {
         queries: queriesMap,
     };
-    return (state = initialState) => state;
+    return function (state) {
+        if (state === void 0) { state = initialState; }
+        return state;
+    };
 };

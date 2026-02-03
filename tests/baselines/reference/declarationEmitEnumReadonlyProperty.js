@@ -18,12 +18,13 @@ var E;
     E["A"] = "a";
     E["B"] = "b";
 })(E || (E = {}));
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.type = E.A;
     }
-}
-let x = new C().type;
+    return C;
+}());
+var x = new C().type;
 
 
 //// [declarationEmitEnumReadonlyProperty.d.ts]

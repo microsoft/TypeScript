@@ -10,6 +10,8 @@ class test {
 
 //// [parser642331_1.js]
 "use strict";
-class test {
-    constructor(static) { }
-}
+var test = /** @class */ (function () {
+    function test(static) {
+    }
+    return test;
+}());

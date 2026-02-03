@@ -10,10 +10,10 @@ const bar = {
 
 //// [definiteAssignmentAssertionsWithObjectShortHand.js]
 "use strict";
-const a = 'ff';
-const foo = { a };
-const bar = {
-    a() { }
+var a = 'ff';
+var foo = { a: a };
+var bar = {
+    a: function () { }
 };
 
 

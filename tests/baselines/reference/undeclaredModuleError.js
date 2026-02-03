@@ -22,12 +22,17 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
 function readdir(path, accept, callback) { }
-function join(...paths) { }
+function join() {
+    var paths = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        paths[_i] = arguments[_i];
+    }
+}
 function instrumentFile(covFileDir, covFileName, originalFilePath) {
-    fs.readFile(originalFilePath, () => {
-        readdir(covFileDir, () => {
-        }, (error, files) => {
-            files.forEach((file) => {
+    fs.readFile(originalFilePath, function () {
+        readdir(covFileDir, function () {
+        }, function (error, files) {
+            files.forEach(function (file) {
                 var fullPath = join(IDoNotExist);
             });
         });

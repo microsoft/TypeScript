@@ -60,11 +60,11 @@ function f3() {
     }
 }
 function f4() {
-    let v;
+    var v;
     v.x = 10;
     if (true) {
-        let v;
-        v.x = "hello";
+        var v_1;
+        v_1.x = "hello";
     }
     else {
         v.x = 20;

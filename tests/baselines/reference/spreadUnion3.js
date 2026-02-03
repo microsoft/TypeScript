@@ -38,8 +38,8 @@ function f(x) {
 }
 f(undefined);
 function g(t) {
-    let b = __assign({}, t);
-    let c = b.a; // might not have 'a'
+    var b = __assign({}, t);
+    var c = b.a; // might not have 'a'
 }
 g();
 g(undefined);

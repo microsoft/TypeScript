@@ -26,8 +26,11 @@ export var b: ClassB; // This should result in type ClassB
 
 //// [recursiveExportAssignmentAndFindAliasedType3_moduleB.js]
 "use strict";
-class ClassB {
-}
+var ClassB = /** @class */ (function () {
+    function ClassB() {
+    }
+    return ClassB;
+}());
 module.exports = ClassB;
 //// [recursiveExportAssignmentAndFindAliasedType3_moduleA.js]
 "use strict";

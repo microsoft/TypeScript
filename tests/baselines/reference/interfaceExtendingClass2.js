@@ -18,11 +18,18 @@ interface I2 extends Foo { // error
     }
 
 //// [interfaceExtendingClass2.js]
-class Foo {
-    y() { }
-    get Z() {
-        return 1;
+var Foo = /** @class */ (function () {
+    function Foo() {
     }
-}
+    Foo.prototype.y = function () { };
+    Object.defineProperty(Foo.prototype, "Z", {
+        get: function () {
+            return 1;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return Foo;
+}());
 return 1;
 ;

@@ -177,7 +177,7 @@ Output::
 //// [/home/src/projects/outFile.tsbuildinfo] file written with same contents
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/outFile.js]
-const a = "hello";
+var a = "hello";
 
 
 
@@ -345,11 +345,12 @@ Output::
 //// [/home/src/projects/outFile.tsbuildinfo] file written with same contents
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/outFile.js]
-const a = class {
-    constructor() {
+var a = /** @class */ (function () {
+    function class_1() {
         this.p = 10;
     }
-};
+    return class_1;
+}());
 
 
 

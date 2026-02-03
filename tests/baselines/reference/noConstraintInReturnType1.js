@@ -7,9 +7,12 @@ class List<T extends {}> {
 
 
 //// [noConstraintInReturnType1.js]
-class List {
-    static empty() { return null; }
-}
+var List = /** @class */ (function () {
+    function List() {
+    }
+    List.empty = function () { return null; };
+    return List;
+}());
 
 
 //// [noConstraintInReturnType1.d.ts]

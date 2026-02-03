@@ -4,5 +4,8 @@
 class any {}
 
 //// [primitiveTypeAsClassName.js]
-class any {
-}
+var any = /** @class */ (function () {
+    function any() {
+    }
+    return any;
+}());

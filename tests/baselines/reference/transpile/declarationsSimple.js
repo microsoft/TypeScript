@@ -17,7 +17,7 @@ export default expr;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 exports.c = 1;
-let expr;
+var expr;
 expr = {
     x: 12,
 };

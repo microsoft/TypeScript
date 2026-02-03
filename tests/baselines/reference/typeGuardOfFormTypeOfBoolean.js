@@ -89,8 +89,11 @@ else {
 
 
 //// [typeGuardOfFormTypeOfBoolean.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 ;
 var str;
 var bool;
@@ -132,10 +135,10 @@ else {
     c = boolOrC; // C
 }
 if (typeof strOrNum === "boolean") {
-    let z1 = strOrNum; // {}
+    var z1 = strOrNum; // {}
 }
 else {
-    let z2 = strOrNum; // string | number
+    var z2 = strOrNum; // string | number
 }
 // A type guard of the form typeof x !== s, where s is a string literal,
 //  - when true, narrows the type of x by typeof x === s when false, or
@@ -165,8 +168,8 @@ else {
     bool = boolOrC; // boolean
 }
 if (typeof strOrNum !== "boolean") {
-    let z1 = strOrNum; // string | number
+    var z1 = strOrNum; // string | number
 }
 else {
-    let z2 = strOrNum; // {}
+    var z2 = strOrNum; // {}
 }

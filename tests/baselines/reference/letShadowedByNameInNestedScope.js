@@ -13,7 +13,7 @@ function foo() {
 //// [letShadowedByNameInNestedScope.js]
 var x;
 function foo() {
-    let x = 0;
+    var x = 0;
     (function () {
         var _x = 1;
         console.log(x);

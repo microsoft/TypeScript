@@ -14,12 +14,15 @@ c.P(1,2,3);
 
 
 //// [argsInScope.js]
-class C {
-    P(ii, j, k) {
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.P = function (ii, j, k) {
         for (var i = 0; i < arguments.length; i++) {
             // WScript.Echo("param: " + arguments[i]);
         }
-    }
-}
+    };
+    return C;
+}());
 var c = new C();
 c.P(1, 2, 3);

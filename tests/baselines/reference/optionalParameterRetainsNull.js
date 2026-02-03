@@ -10,7 +10,7 @@ a.test("bar", null); // ok, null is assignable to number | null | undefined
 
 
 //// [optionalParameterRetainsNull.js]
-let a = {
-    test(a, b) { }
+var a = {
+    test: function (a, b) { }
 };
 a.test("bar", null); // ok, null is assignable to number | null | undefined

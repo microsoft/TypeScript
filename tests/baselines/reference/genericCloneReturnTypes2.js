@@ -18,15 +18,16 @@ var c: MyList<string> = a.clone(); // bug was there was an error on this line
 var d: MyList<number> = a.clone(); // error
 
 //// [genericCloneReturnTypes2.js]
-class MyList {
-    constructor(n) {
+var MyList = /** @class */ (function () {
+    function MyList(n) {
         this.size = n;
         this.data = new Array(this.size);
     }
-    clone() {
+    MyList.prototype.clone = function () {
         return new MyList(this.size);
-    }
-}
+    };
+    return MyList;
+}());
 var a;
 var b = a.clone(); // ok
 var c = a.clone(); // bug was there was an error on this line

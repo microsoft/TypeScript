@@ -59,10 +59,14 @@ xx = (0, xx['fn'])();
 xx = (0, xx.fn)``;
 
 //// [commaOperatorLeftSideUnused.js]
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
 var xx;
 var yy;
 function fn() {
-    let arr = [];
+    var arr = [];
     switch (arr.length) {
         // Should error
         case 0, 1:
@@ -72,19 +76,19 @@ function fn() {
     }
 }
 // Should error
-let x = Math.pow((3, 5), 2);
+var x = Math.pow((3, 5), 2);
 // Should error
-let a = [(3 + 4), ((1 + 1, 8) * 4)];
+var a = [(3 + 4), ((1 + 1, 8) * 4)];
 // Error cases
 xx = (1, 2);
 xx = ('', xx);
 xx = (/323/, 5);
-xx = (`wat`, 'ok'),
+xx = ("wat", 'ok'),
     xx = (true, false);
 xx = (false, true);
 xx = (null, xx);
 xx = (undefined, 10);
-xx = (() => { }, 'no');
+xx = (function () { }, 'no');
 xx = (function () { }, 100);
 xx = ({}, {});
 xx = (typeof xx, 'unused');
@@ -109,4 +113,4 @@ xx = (void xx, 10);
 xx = (xx, 100);
 xx = (0, xx.fn)();
 xx = (0, xx['fn'])();
-xx = (0, xx.fn) ``;
+xx = (0, xx.fn)(__makeTemplateObject([""], [""]));

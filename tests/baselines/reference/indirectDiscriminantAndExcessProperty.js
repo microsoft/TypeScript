@@ -31,18 +31,18 @@ thing({
 //// [indirectDiscriminantAndExcessProperty.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let foo1 = "foo";
+var foo1 = "foo";
 thing({
     type: foo1,
     abc: "hello!"
 });
-let foo2 = "foo";
+var foo2 = "foo";
 thing({
     type: foo2,
     abc: "hello!",
     extra: 123,
 });
-let bar = "bar";
+var bar = "bar";
 thing({
     type: bar,
     xyz: 123,

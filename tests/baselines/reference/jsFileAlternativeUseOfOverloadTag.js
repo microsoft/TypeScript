@@ -58,7 +58,7 @@ const example3 = {
 // These are a few examples of existing alternative uses of @overload tag.
 // They will not work as expected with our implementation, but we are
 // trying to make sure that our changes do not result in any crashes here.
-const example1 = {
+var example1 = {
     /**
      * @overload Example1(value)
      *   Creates Example1
@@ -66,7 +66,7 @@ const example1 = {
      */
     constructor: function Example1(value, options) { },
 };
-const example2 = {
+var example2 = {
     /**
      * Example 2
      *
@@ -87,7 +87,7 @@ const example2 = {
      */
     constructor: function Example2() { },
 };
-const example3 = {
+var example3 = {
     /**
      * @overload evaluate(options = {}, [callback])
      *   Evaluate something

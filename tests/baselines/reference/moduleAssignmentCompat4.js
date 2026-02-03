@@ -21,18 +21,24 @@ b = a; // error
 //// [moduleAssignmentCompat4.js]
 var A;
 (function (A) {
-    let M;
+    var M;
     (function (M) {
-        class C {
-        }
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
     })(M = A.M || (A.M = {}));
 })(A || (A = {}));
 var B;
 (function (B) {
-    let M;
+    var M;
     (function (M) {
-        class D {
-        }
+        var D = /** @class */ (function () {
+            function D() {
+            }
+            return D;
+        }());
         M.D = D;
     })(M = B.M || (B.M = {}));
 })(B || (B = {}));

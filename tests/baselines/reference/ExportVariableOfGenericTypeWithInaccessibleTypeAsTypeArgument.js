@@ -13,7 +13,10 @@ module A {
 //// [ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.js]
 var A;
 (function (A) {
-    class B {
-    }
+    var B = /** @class */ (function () {
+        function B() {
+        }
+        return B;
+    }());
     A.beez2 = new Array();
 })(A || (A = {}));

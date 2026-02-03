@@ -10,7 +10,10 @@ module M {
 //// [bind1.js]
 var M;
 (function (M) {
-    class C {
-    } // this should be an unresolved symbol I error
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }()); // this should be an unresolved symbol I error
     M.C = C;
 })(M || (M = {}));

@@ -25,8 +25,11 @@ let b = x.b;
 
 //// [file1.js]
 "use strict";
-class foo {
-}
+var foo = /** @class */ (function () {
+    function foo() {
+    }
+    return foo;
+}());
 (function (foo) {
     foo.v = 1;
 })(foo || (foo = {}));
@@ -74,5 +77,5 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var x = __importStar(require("./file1"));
 require("./file2");
-let a;
-let b = x.b;
+var a;
+var b = x.b;

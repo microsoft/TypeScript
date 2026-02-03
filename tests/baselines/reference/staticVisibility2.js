@@ -9,8 +9,9 @@ class Square {
 }
 
 //// [staticVisibility2.js]
-class Square {
-    constructor(sideLength) {
+var Square = /** @class */ (function () {
+    function Square(sideLength) {
         this.sideLength = sideLength;
     }
-}
+    return Square;
+}());

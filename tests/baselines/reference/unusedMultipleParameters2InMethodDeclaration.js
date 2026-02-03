@@ -9,9 +9,12 @@ class Dummy {
 }
 
 //// [unusedMultipleParameters2InMethodDeclaration.js]
-class Dummy {
-    greeter(person, person2, person3) {
+var Dummy = /** @class */ (function () {
+    function Dummy() {
+    }
+    Dummy.prototype.greeter = function (person, person2, person3) {
         var unused = 20;
         person2 = "dummy value";
-    }
-}
+    };
+    return Dummy;
+}());

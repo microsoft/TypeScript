@@ -43,8 +43,11 @@ var p: W.D;
 //// [enumAssignmentCompat.js]
 var W;
 (function (W) {
-    class D {
-    }
+    var D = /** @class */ (function () {
+        function D() {
+        }
+        return D;
+    }());
     W.D = D;
 })(W || (W = {}));
 (function (W) {

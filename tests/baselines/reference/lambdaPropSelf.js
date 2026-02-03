@@ -26,18 +26,23 @@ module M {
 
 
 //// [lambdaPropSelf.js]
-class Person {
-    constructor(name, children) {
+var Person = /** @class */ (function () {
+    function Person(name, children) {
+        var _this = this;
         this.name = name;
-        this.addChild = () => this.children.push("New child");
+        this.addChild = function () { return _this.children.push("New child"); };
         this.children = ko.observableArray(children);
     }
-}
-class T {
-    fo() {
-        var x = this;
+    return Person;
+}());
+var T = /** @class */ (function () {
+    function T() {
     }
-}
+    T.prototype.fo = function () {
+        var x = this;
+    };
+    return T;
+}());
 var M;
 (function (M) {
     var x = this;

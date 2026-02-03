@@ -11,9 +11,10 @@ var bar: any;
 var { foo, baz } = foo;
 
 //// [destructuringReassignsRightHandSide.js]
+var _a;
 var foo = { foo: 1, bar: 2 };
 var bar;
 // reassignment in destructuring pattern
-({ foo, bar } = foo);
+(_a = foo, foo = _a.foo, bar = _a.bar);
 // reassignment in subsequent var
-var { foo, baz } = foo;
+var _b = foo, foo = _b.foo, baz = _b.baz;

@@ -133,20 +133,23 @@ function move2(direction) {
 function check(x) {
     return x || error("Undefined value");
 }
-class C {
-    void1() {
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.void1 = function () {
         throw new Error();
-    }
-    void2() {
+    };
+    C.prototype.void2 = function () {
         while (true) { }
-    }
-    never1() {
+    };
+    C.prototype.never1 = function () {
         throw new Error();
-    }
-    never2() {
+    };
+    C.prototype.never2 = function () {
         while (true) { }
-    }
-}
+    };
+    return C;
+}());
 function f1(x) {
     if (typeof x === "boolean") {
         x; // never
@@ -160,13 +163,13 @@ function f2(x) {
     }
 }
 function test(cb) {
-    let s = cb();
+    var s = cb();
     return s;
 }
-let errorCallback = () => error("Error callback");
-test(() => "hello");
-test(() => fail());
-test(() => { throw new Error(); });
+var errorCallback = function () { return error("Error callback"); };
+test(function () { return "hello"; });
+test(function () { return fail(); });
+test(function () { throw new Error(); });
 test(errorCallback);
 
 

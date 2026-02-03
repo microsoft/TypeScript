@@ -54,44 +54,44 @@ function createObjNoCrash() {
 // https://github.com/microsoft/TypeScript/issues/29902
 function createObj() {
     return {
-        func1() {
+        func1: function () {
             return this;
         },
-        func2() {
+        func2: function () {
             return this;
         },
-        func3() {
+        func3: function () {
             return this;
         }
     };
 }
 function createObjNoCrash() {
     return {
-        func1() {
+        func1: function () {
             return this;
         },
-        func2() {
+        func2: function () {
             return this;
         },
-        func3() {
+        func3: function () {
             return this;
         },
-        func4() {
+        func4: function () {
             return this;
         },
-        func5() {
+        func5: function () {
             return this;
         },
-        func6() {
+        func6: function () {
             return this;
         },
-        func7() {
+        func7: function () {
             return this;
         },
-        func8() {
+        func8: function () {
             return this;
         },
-        func9() {
+        func9: function () {
             return this;
         }
     };

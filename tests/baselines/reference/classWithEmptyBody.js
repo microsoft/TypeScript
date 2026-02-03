@@ -23,20 +23,24 @@ d = { foo: '' }
 d = () => { }
 
 //// [classWithEmptyBody.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var c;
 var o = c;
 c = 1;
 c = { foo: '' };
-c = () => { };
-class D {
-    constructor() {
+c = function () { };
+var D = /** @class */ (function () {
+    function D() {
         return 1;
     }
-}
+    return D;
+}());
 var d;
 var o = d;
 d = 1;
 d = { foo: '' };
-d = () => { };
+d = function () { };

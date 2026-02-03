@@ -9,5 +9,8 @@ class A implements I {
 }
 
 //// [classImplementingInterfaceIndexer.js]
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());

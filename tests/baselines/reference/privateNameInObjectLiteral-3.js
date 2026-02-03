@@ -9,7 +9,7 @@ const obj = {
 
 
 //// [privateNameInObjectLiteral-3.js]
-const obj = {
+var obj = {
     get () {
         return "";
     }

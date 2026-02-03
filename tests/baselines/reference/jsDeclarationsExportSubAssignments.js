@@ -10,12 +10,15 @@ module.exports = Foo;
 module.exports.Strings = Strings;
 
 //// [cls.js]
-const Strings = {
+var Strings = {
     a: "A",
     b: "B"
 };
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 module.exports = Foo;
 module.exports.Strings = Strings;
 

@@ -46,12 +46,12 @@ exports.assertIsElement = assertIsElement;
 exports.assertNodeTagName = assertNodeTagName;
 exports.assertNodeProperty = assertNodeProperty;
 function assertIsElement(node) {
-    let nodeType = node === null ? null : node.nodeType;
+    var nodeType = node === null ? null : node.nodeType;
     return nodeType === 1;
 }
 function assertNodeTagName(node, tagName) {
     if (assertIsElement(node)) {
-        const nodeTagName = node.tagName.toLowerCase();
+        var nodeTagName = node.tagName.toLowerCase();
         return nodeTagName === tagName;
     }
     return false;

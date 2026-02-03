@@ -15,15 +15,15 @@ fn());
 = fn();
 
 //// [destructionAssignmentError.js]
-let a;
-let b;
-({ a, b } = fn());
+var _a, _b;
+var a;
+var b;
+(_a = fn(), a = _a.a, b = _a.b);
 {
     a, b;
 }
 fn();
-({ a, b } =
-    fn());
+(_b = fn(), a = _b.a, b = _b.b);
 {
     a, b;
 }

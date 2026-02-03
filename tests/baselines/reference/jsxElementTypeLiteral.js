@@ -62,9 +62,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 var React = __importStar(require("react"));
 // should be fine - `ElementType` accepts `div`
-let a = React.createElement("div", null);
+var a = React.createElement("div", null);
 // should be an error - `ElementType` does not accept `span`
-let b = React.createElement("span", null);
+var b = React.createElement("span", null);
 // Should be an error.
 // `ruhroh` is in neither `IntrinsicElements` nor `ElementType`
-let c = React.createElement("ruhroh", null);
+var c = React.createElement("ruhroh", null);

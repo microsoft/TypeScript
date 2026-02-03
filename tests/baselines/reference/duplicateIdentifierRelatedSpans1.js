@@ -12,11 +12,17 @@ let Bar = 42
 
 
 //// [file1.js]
-class Foo {
-}
-const Bar = 3;
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
+var Bar = 3;
 //// [file2.js]
-class Bar {
-}
+var Bar = /** @class */ (function () {
+    function Bar() {
+    }
+    return Bar;
+}());
 //// [file3.js]
-let Bar = 42;
+var Bar = 42;

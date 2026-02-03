@@ -25,4 +25,4 @@ var E;
     E["B"] = "b";
     E["C"] = "c";
 })(E || (E = {}));
-const snb = item[e];
+var snb = item[e];

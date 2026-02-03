@@ -19,6 +19,6 @@ function f(x) {
     return x;
 }
 var zz = {
-    g: () => { },
+    g: function () { },
     get f() { return "abc"; },
 };

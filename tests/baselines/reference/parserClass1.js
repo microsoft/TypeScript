@@ -15,13 +15,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NullLogger = void 0;
-class NullLogger {
-    information() { return false; }
-    debug() { return false; }
-    warning() { return false; }
-    error() { return false; }
-    fatal() { return false; }
-    log(s) {
+var NullLogger = /** @class */ (function () {
+    function NullLogger() {
     }
-}
+    NullLogger.prototype.information = function () { return false; };
+    NullLogger.prototype.debug = function () { return false; };
+    NullLogger.prototype.warning = function () { return false; };
+    NullLogger.prototype.error = function () { return false; };
+    NullLogger.prototype.fatal = function () { return false; };
+    NullLogger.prototype.log = function (s) {
+    };
+    return NullLogger;
+}());
 exports.NullLogger = NullLogger;

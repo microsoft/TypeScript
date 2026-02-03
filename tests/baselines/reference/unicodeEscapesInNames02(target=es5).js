@@ -33,7 +33,7 @@ import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClass
 //// [extendedEscapesForAstralsInVarsAndClasses.js]
 // U+102A7 CARIAN LETTER A2
 var string;
-var u, { 102: A7 };
+var u, A7 = (void 0)[102];
 if (Math.random()) {
     "hello";
 }
@@ -45,8 +45,11 @@ else {
     }
     "hallo";
 }
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 {
     102;
     A7;

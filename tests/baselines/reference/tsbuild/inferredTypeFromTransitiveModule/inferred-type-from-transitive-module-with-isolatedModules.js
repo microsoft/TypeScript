@@ -100,16 +100,18 @@ export default _default;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LazyAction = exports.LazyModule = void 0;
-class LazyModule {
-    constructor(importCallback) {
+var LazyModule = /** @class */ (function () {
+    function LazyModule(importCallback) {
         this.importCallback = importCallback;
     }
-}
+    return LazyModule;
+}());
 exports.LazyModule = LazyModule;
-class LazyAction {
-    constructor(_lazyModule, _getter) {
+var LazyAction = /** @class */ (function () {
+    function LazyAction(_lazyModule, _getter) {
     }
-}
+    return LazyAction;
+}());
 exports.LazyAction = LazyAction;
 
 
@@ -176,8 +178,10 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazyBar = void 0;
 var bundling_1 = require("./bundling");
-const lazyModule = new bundling_1.LazyModule(() => Promise.resolve().then(function () { return __importStar(require('./lazyIndex')); }));
-exports.lazyBar = new bundling_1.LazyAction(lazyModule, m => m.bar);
+var lazyModule = new bundling_1.LazyModule(function () {
+    return Promise.resolve().then(function () { return __importStar(require('./lazyIndex')); });
+});
+exports.lazyBar = new bundling_1.LazyAction(lazyModule, function (m) { return m.bar; });
 
 
 //// [/home/src/workspaces/project/obj/index.d.ts]

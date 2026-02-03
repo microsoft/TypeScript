@@ -90,7 +90,8 @@ function f2(x: A | B) {
 //// [narrowingByDiscriminantInLoop.js]
 // Repro from #9977
 function insertInterface(callbackType) {
-    for (const memberType of callbackType.members) {
+    for (var _i = 0, _a = callbackType.members; _i < _a.length; _i++) {
+        var memberType = _a[_i];
         if (memberType.type === "const") {
             memberType.idlType; // string
         }
@@ -101,7 +102,8 @@ function insertInterface(callbackType) {
     }
 }
 function insertInterface2(callbackType) {
-    for (const memberType of callbackType.members) {
+    for (var _i = 0, _a = callbackType.members; _i < _a.length; _i++) {
+        var memberType = _a[_i];
         if (memberType.type === "operation") {
             memberType.idlType.origin; // string
         }

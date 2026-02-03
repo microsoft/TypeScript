@@ -12,11 +12,12 @@ class CDoc {
 
 
 //// [functionExpressionAndLambdaMatchesFunction.js]
-class CDoc {
-    constructor() {
+var CDoc = /** @class */ (function () {
+    function CDoc() {
         function doSomething(a) {
         }
-        doSomething(() => undefined);
+        doSomething(function () { return undefined; });
         doSomething(function () { });
     }
-}
+    return CDoc;
+}());

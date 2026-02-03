@@ -29,9 +29,9 @@ function f(x: number | null) {
 //// [controlFlowNullTypeAndLiteral.js]
 "use strict";
 // Repros from #23771
-const myNull = null;
-const objWithValMaybeNull = { val: 1 };
-const addOne = function (num) {
+var myNull = null;
+var objWithValMaybeNull = { val: 1 };
+var addOne = function (num) {
     return num + 1;
 };
 if (objWithValMaybeNull.val !== null)
@@ -44,6 +44,6 @@ if (objWithValMaybeNull.val === myNull)
     addOne(objWithValMaybeNull.val); // Error
 function f(x) {
     if (x === myNull) {
-        const s = x; // Error
+        var s = x; // Error
     }
 }

@@ -23,9 +23,9 @@ export function Component() {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Component = Component;
 function Component() {
-    const [state, setState] = useState(() => ({
+    var _a = useState(function () { return ({
         value: "string", // this should be a number
-        foo: (arg) => setState(arg),
-        bar: (arg) => setState(arg),
-    }));
+        foo: function (arg) { return setState(arg); },
+        bar: function (arg) { return setState(arg); },
+    }); }), state = _a[0], setState = _a[1];
 }

@@ -21,7 +21,7 @@ module A.M {
 //// [moduleSharesNameWithImportDeclarationInsideIt5.js]
 var Z;
 (function (Z) {
-    let M;
+    var M;
     (function (M) {
         function bar() {
             return "";

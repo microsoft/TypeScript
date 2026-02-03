@@ -26,7 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.doSomething_Actual = doSomething_Actual;
 function doSomething_Actual(a) {
-    const x = null;
+    var x = null;
     return x;
 }
 exports.a = doSomething_Actual({ prop: "test" });

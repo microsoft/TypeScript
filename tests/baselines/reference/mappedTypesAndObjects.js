@@ -47,12 +47,12 @@ class Form<T> {
 
 //// [mappedTypesAndObjects.js]
 function f1(x, y) {
-    let obj;
+    var obj;
     obj = x;
     obj = y;
 }
 function f2(x, y) {
-    let obj;
+    var obj;
     obj = x;
     obj = y;
 }
@@ -61,11 +61,12 @@ function f3(x) {
 }
 ;
 // Repro from #13747
-class Form {
-    constructor() {
+var Form = /** @class */ (function () {
+    function Form() {
         this.values = {};
     }
-}
+    return Form;
+}());
 
 
 //// [mappedTypesAndObjects.d.ts]

@@ -24,8 +24,11 @@ console.log(x);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 exports.A = A;
 //// [b.js]
 "use strict";
@@ -33,7 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.A = void 0;
 var A = a.A; // Error
 exports.A = A;
-const x = 0;
+var x = 0;
 exports.x = x;
 //// [c.js]
 "use strict";

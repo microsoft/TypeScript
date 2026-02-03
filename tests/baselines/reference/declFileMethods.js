@@ -193,132 +193,170 @@ interface I2 {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c1 = void 0;
-class c1 {
+var c1 = /** @class */ (function () {
+    function c1() {
+    }
     /** This comment should appear for foo*/
-    foo() {
-    }
+    c1.prototype.foo = function () {
+    };
     /** This is comment for function signature*/
-    fooWithParameters(/** this is comment about a*/ a, 
+    c1.prototype.fooWithParameters = function (/** this is comment about a*/ a, 
     /** this is comment for b*/
     b) {
         var d = a;
-    }
-    fooWithRestParameters(a, ...rests) {
+    };
+    c1.prototype.fooWithRestParameters = function (a) {
+        var rests = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rests[_i - 1] = arguments[_i];
+        }
         return a + rests.join("");
-    }
-    fooWithOverloads(a) {
+    };
+    c1.prototype.fooWithOverloads = function (a) {
         return a;
-    }
+    };
     /** This comment should appear for privateFoo*/
-    privateFoo() {
-    }
+    c1.prototype.privateFoo = function () {
+    };
     /** This is comment for function signature*/
-    privateFooWithParameters(/** this is comment about a*/ a, 
+    c1.prototype.privateFooWithParameters = function (/** this is comment about a*/ a, 
     /** this is comment for b*/
     b) {
         var d = a;
-    }
-    privateFooWithRestParameters(a, ...rests) {
+    };
+    c1.prototype.privateFooWithRestParameters = function (a) {
+        var rests = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rests[_i - 1] = arguments[_i];
+        }
         return a + rests.join("");
-    }
-    privateFooWithOverloads(a) {
+    };
+    c1.prototype.privateFooWithOverloads = function (a) {
         return a;
-    }
+    };
     /** This comment should appear for static foo*/
-    static staticFoo() {
-    }
+    c1.staticFoo = function () {
+    };
     /** This is comment for function signature*/
-    static staticFooWithParameters(/** this is comment about a*/ a, 
+    c1.staticFooWithParameters = function (/** this is comment about a*/ a, 
     /** this is comment for b*/
     b) {
         var d = a;
-    }
-    static staticFooWithRestParameters(a, ...rests) {
+    };
+    c1.staticFooWithRestParameters = function (a) {
+        var rests = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rests[_i - 1] = arguments[_i];
+        }
         return a + rests.join("");
-    }
-    static staticFooWithOverloads(a) {
+    };
+    c1.staticFooWithOverloads = function (a) {
         return a;
-    }
+    };
     /** This comment should appear for privateStaticFoo*/
-    static privateStaticFoo() {
-    }
+    c1.privateStaticFoo = function () {
+    };
     /** This is comment for function signature*/
-    static privateStaticFooWithParameters(/** this is comment about a*/ a, 
+    c1.privateStaticFooWithParameters = function (/** this is comment about a*/ a, 
     /** this is comment for b*/
     b) {
         var d = a;
-    }
-    static privateStaticFooWithRestParameters(a, ...rests) {
+    };
+    c1.privateStaticFooWithRestParameters = function (a) {
+        var rests = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rests[_i - 1] = arguments[_i];
+        }
         return a + rests.join("");
-    }
-    static privateStaticFooWithOverloads(a) {
+    };
+    c1.privateStaticFooWithOverloads = function (a) {
         return a;
-    }
-}
+    };
+    return c1;
+}());
 exports.c1 = c1;
 //// [declFileMethods_1.js]
-class c2 {
+var c2 = /** @class */ (function () {
+    function c2() {
+    }
     /** This comment should appear for foo*/
-    foo() {
-    }
+    c2.prototype.foo = function () {
+    };
     /** This is comment for function signature*/
-    fooWithParameters(/** this is comment about a*/ a, 
+    c2.prototype.fooWithParameters = function (/** this is comment about a*/ a, 
     /** this is comment for b*/
     b) {
         var d = a;
-    }
-    fooWithRestParameters(a, ...rests) {
+    };
+    c2.prototype.fooWithRestParameters = function (a) {
+        var rests = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rests[_i - 1] = arguments[_i];
+        }
         return a + rests.join("");
-    }
-    fooWithOverloads(a) {
+    };
+    c2.prototype.fooWithOverloads = function (a) {
         return a;
-    }
+    };
     /** This comment should appear for privateFoo*/
-    privateFoo() {
-    }
+    c2.prototype.privateFoo = function () {
+    };
     /** This is comment for function signature*/
-    privateFooWithParameters(/** this is comment about a*/ a, 
+    c2.prototype.privateFooWithParameters = function (/** this is comment about a*/ a, 
     /** this is comment for b*/
     b) {
         var d = a;
-    }
-    privateFooWithRestParameters(a, ...rests) {
+    };
+    c2.prototype.privateFooWithRestParameters = function (a) {
+        var rests = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rests[_i - 1] = arguments[_i];
+        }
         return a + rests.join("");
-    }
-    privateFooWithOverloads(a) {
+    };
+    c2.prototype.privateFooWithOverloads = function (a) {
         return a;
-    }
+    };
     /** This comment should appear for static foo*/
-    static staticFoo() {
-    }
+    c2.staticFoo = function () {
+    };
     /** This is comment for function signature*/
-    static staticFooWithParameters(/** this is comment about a*/ a, 
+    c2.staticFooWithParameters = function (/** this is comment about a*/ a, 
     /** this is comment for b*/
     b) {
         var d = a;
-    }
-    static staticFooWithRestParameters(a, ...rests) {
+    };
+    c2.staticFooWithRestParameters = function (a) {
+        var rests = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rests[_i - 1] = arguments[_i];
+        }
         return a + rests.join("");
-    }
-    static staticFooWithOverloads(a) {
+    };
+    c2.staticFooWithOverloads = function (a) {
         return a;
-    }
+    };
     /** This comment should appear for privateStaticFoo*/
-    static privateStaticFoo() {
-    }
+    c2.privateStaticFoo = function () {
+    };
     /** This is comment for function signature*/
-    static privateStaticFooWithParameters(/** this is comment about a*/ a, 
+    c2.privateStaticFooWithParameters = function (/** this is comment about a*/ a, 
     /** this is comment for b*/
     b) {
         var d = a;
-    }
-    static privateStaticFooWithRestParameters(a, ...rests) {
+    };
+    c2.privateStaticFooWithRestParameters = function (a) {
+        var rests = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rests[_i - 1] = arguments[_i];
+        }
         return a + rests.join("");
-    }
-    static privateStaticFooWithOverloads(a) {
+    };
+    c2.privateStaticFooWithOverloads = function (a) {
         return a;
-    }
-}
+    };
+    return c2;
+}());
 
 
 //// [declFileMethods_0.d.ts]

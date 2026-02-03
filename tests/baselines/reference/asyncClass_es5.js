@@ -5,5 +5,8 @@ async class C {
 }
 
 //// [asyncClass_es5.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

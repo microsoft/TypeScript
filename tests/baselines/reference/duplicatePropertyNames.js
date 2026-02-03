@@ -52,18 +52,19 @@ var b = {
 
 //// [duplicatePropertyNames.js]
 // duplicate property names are an error in all types
-class C {
-    constructor() {
-        this.baz = () => { };
-        this.baz = () => { };
+var C = /** @class */ (function () {
+    function C() {
+        this.baz = function () { };
+        this.baz = function () { };
     }
-    bar(x) { }
-    bar(x) { }
-}
+    C.prototype.bar = function (x) { };
+    C.prototype.bar = function (x) { };
+    return C;
+}());
 var a;
 var b = {
     foo: '',
     foo: '',
-    bar: () => { },
-    bar: () => { }
+    bar: function () { },
+    bar: function () { }
 };

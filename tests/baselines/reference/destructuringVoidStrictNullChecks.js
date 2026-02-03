@@ -6,4 +6,4 @@ const {} = v;
 
 
 //// [destructuringVoidStrictNullChecks.js]
-const {} = v;
+var _a = v;

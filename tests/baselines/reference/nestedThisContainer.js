@@ -15,10 +15,10 @@ foo.zab = (function () {
 
 
 //// [nestedThisContainer.js]
-const foo = {};
+var foo = {};
 foo.bar = function () {
-    const self = this;
+    var self = this;
 };
 foo.zab = (function () {
-    const self = this;
+    var self = this;
 });

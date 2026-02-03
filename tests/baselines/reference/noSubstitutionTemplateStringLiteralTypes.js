@@ -5,4 +5,4 @@ const x: `foo` = "foo";
 
 
 //// [noSubstitutionTemplateStringLiteralTypes.js]
-const x = "foo";
+var x = "foo";

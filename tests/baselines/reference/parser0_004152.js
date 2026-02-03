@@ -10,10 +10,11 @@ export class Game {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Game = void 0;
-class Game {
-    constructor() {
+var Game = /** @class */ (function () {
+    function Game() {
         this.position = new DisplayPosition([]);
     }
     ;
-}
+    return Game;
+}());
 exports.Game = Game;

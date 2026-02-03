@@ -196,40 +196,76 @@ module privateModule {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicModule = exports.publicClassT = exports.publicClass = void 0;
-class privateClass {
-}
-class publicClass {
-}
+var privateClass = /** @class */ (function () {
+    function privateClass() {
+    }
+    return privateClass;
+}());
+var publicClass = /** @class */ (function () {
+    function publicClass() {
+    }
+    return publicClass;
+}());
 exports.publicClass = publicClass;
-class privateClassT {
-}
-class publicClassT {
-}
+var privateClassT = /** @class */ (function () {
+    function privateClassT() {
+    }
+    return privateClassT;
+}());
+var publicClassT = /** @class */ (function () {
+    function publicClassT() {
+    }
+    return publicClassT;
+}());
 exports.publicClassT = publicClassT;
 var publicModule;
 (function (publicModule) {
-    class privateClassInPublicModule {
-    }
-    class publicClassInPublicModule {
-    }
+    var privateClassInPublicModule = /** @class */ (function () {
+        function privateClassInPublicModule() {
+        }
+        return privateClassInPublicModule;
+    }());
+    var publicClassInPublicModule = /** @class */ (function () {
+        function publicClassInPublicModule() {
+        }
+        return publicClassInPublicModule;
+    }());
     publicModule.publicClassInPublicModule = publicClassInPublicModule;
-    class privateClassInPublicModuleT {
-    }
-    class publicClassInPublicModuleT {
-    }
+    var privateClassInPublicModuleT = /** @class */ (function () {
+        function privateClassInPublicModuleT() {
+        }
+        return privateClassInPublicModuleT;
+    }());
+    var publicClassInPublicModuleT = /** @class */ (function () {
+        function publicClassInPublicModuleT() {
+        }
+        return publicClassInPublicModuleT;
+    }());
     publicModule.publicClassInPublicModuleT = publicClassInPublicModuleT;
 })(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
-    class privateClassInPrivateModule {
-    }
-    class publicClassInPrivateModule {
-    }
+    var privateClassInPrivateModule = /** @class */ (function () {
+        function privateClassInPrivateModule() {
+        }
+        return privateClassInPrivateModule;
+    }());
+    var publicClassInPrivateModule = /** @class */ (function () {
+        function publicClassInPrivateModule() {
+        }
+        return publicClassInPrivateModule;
+    }());
     privateModule.publicClassInPrivateModule = publicClassInPrivateModule;
-    class privateClassInPrivateModuleT {
-    }
-    class publicClassInPrivateModuleT {
-    }
+    var privateClassInPrivateModuleT = /** @class */ (function () {
+        function privateClassInPrivateModuleT() {
+        }
+        return privateClassInPrivateModuleT;
+    }());
+    var publicClassInPrivateModuleT = /** @class */ (function () {
+        function publicClassInPrivateModuleT() {
+        }
+        return publicClassInPrivateModuleT;
+    }());
     privateModule.publicClassInPrivateModuleT = publicClassInPrivateModuleT;
 })(privateModule || (privateModule = {}));
 

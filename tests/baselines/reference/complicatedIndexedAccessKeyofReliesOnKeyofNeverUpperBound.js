@@ -50,12 +50,12 @@ newTextChannel2.phoneNumber = '613-555-1234';
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.makeNewChannel = makeNewChannel;
 function makeNewChannel(type) {
-    const localChannelId = `blahblahblah`;
-    return { type, localChannelId };
+    var localChannelId = "blahblahblah";
+    return { type: type, localChannelId: localChannelId };
 }
-const newTextChannel = makeNewChannel('text');
+var newTextChannel = makeNewChannel('text');
 // This should work
 newTextChannel.phoneNumber = '613-555-1234';
-const newTextChannel2 = makeNewChannel('text');
+var newTextChannel2 = makeNewChannel('text');
 // Compare with this, which ofc works.
 newTextChannel2.phoneNumber = '613-555-1234';

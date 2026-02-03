@@ -31,10 +31,13 @@ define(["require", "exports"], function (require, exports) {
             (function (mod) {
                 var name;
                 (function (name) {
-                    class ReferredTo {
-                        doSomething() {
+                    var ReferredTo = /** @class */ (function () {
+                        function ReferredTo() {
                         }
-                    }
+                        ReferredTo.prototype.doSomething = function () {
+                        };
+                        return ReferredTo;
+                    }());
                     name.ReferredTo = ReferredTo;
                 })(name = mod.name || (mod.name = {}));
             })(mod = nested.mod || (nested.mod = {}));
@@ -48,10 +51,11 @@ define(["require", "exports"], function (require, exports) {
     exports.ImportingModule = void 0;
     var ImportingModule;
     (function (ImportingModule) {
-        class UsesReferredType {
-            constructor(referred) {
+        var UsesReferredType = /** @class */ (function () {
+            function UsesReferredType(referred) {
                 this.referred = referred;
             }
-        }
+            return UsesReferredType;
+        }());
     })(ImportingModule || (exports.ImportingModule = ImportingModule = {}));
 });

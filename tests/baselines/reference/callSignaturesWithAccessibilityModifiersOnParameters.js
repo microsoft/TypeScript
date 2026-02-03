@@ -45,21 +45,24 @@ var b = {
 function foo(x, y) { }
 var f = function foo(x, y) { };
 var f2 = function (x, y) { };
-var f3 = (x, y) => { };
-var f4 = (x, y) => { };
+var f3 = function (x, y) { };
+var f4 = function (x, y) { };
 function foo2(x, y) { }
 var f5 = function foo(x, y) { };
 var f6 = function (x, y) { };
-var f7 = (x, y) => { };
-var f8 = (x, y) => { };
-class C {
-    foo(x, y) { }
-    foo2(x, y) { }
-    foo3(x, y) { }
-}
+var f7 = function (x, y) { };
+var f8 = function (x, y) { };
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.foo = function (x, y) { };
+    C.prototype.foo2 = function (x, y) { };
+    C.prototype.foo3 = function (x, y) { };
+    return C;
+}());
 var a;
 var b = {
-    foo(x, y) { },
+    foo: function (x, y) { },
     a: function foo(x, y) { },
-    b: (x, y) => { }
+    b: function (x, y) { }
 };

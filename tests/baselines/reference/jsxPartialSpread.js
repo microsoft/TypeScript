@@ -19,8 +19,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Repro = Repro;
 /// <reference path="react16.d.ts" />
-const Select = (p) => <p></p>;
+var Select = function (p) { return <p></p>; };
 var react_1 = __importDefault(require("react"));
-function Repro({ SelectProps = {} }) {
+function Repro(_a) {
+    var _b = _a.SelectProps, SelectProps = _b === void 0 ? {} : _b;
     return (<Select value={'test'} {...SelectProps}/>);
 }

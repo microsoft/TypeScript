@@ -163,8 +163,11 @@ export declare function log(str: string): void;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
-class MyClass {
-}
+var MyClass = /** @class */ (function () {
+    function MyClass() {
+    }
+    return MyClass;
+}());
 exports.MyClass = MyClass;
 
 

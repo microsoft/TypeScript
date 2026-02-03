@@ -8,9 +8,13 @@ module _this { //Error
 var f = () => this;
 
 //// [collisionThisExpressionAndModuleInGlobal.js]
+var _this_1 = this;
 var _this;
 (function (_this) {
-    class c {
-    }
+    var c = /** @class */ (function () {
+        function c() {
+        }
+        return c;
+    }());
 })(_this || (_this = {}));
-var f = () => this;
+var f = function () { return _this_1; };

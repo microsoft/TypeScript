@@ -18,12 +18,15 @@ function f({ a, b }, { c, d }, { e }) {
 //// [unusedDestructuring.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { a, b } = o;
-const { c, d } = o;
+var a = o.a, b = o.b;
+var c = o.c, d = o.d;
 d;
-const { e } = o;
-const { f: g } = o;
-const { h } = o, { i } = o;
-function f({ a, b }, { c, d }, { e }) {
+var e = o.e;
+var g = o.f;
+var h = o.h, i = o.i;
+function f(_a, _b, _c) {
+    var a = _a.a, b = _a.b;
+    var c = _b.c, d = _b.d;
+    var e = _c.e;
     d;
 }

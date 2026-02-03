@@ -266,7 +266,7 @@ function f1(x) {
     }
 }
 function f2(x) {
-    let z;
+    var z;
     switch (x) {
         case 1:
             z = 10;
@@ -307,7 +307,7 @@ function g(e) {
         }
 }
 function area(s) {
-    let area;
+    var area;
     switch (s.kind) {
         case "square":
             area = s.size * s.size;
@@ -325,8 +325,8 @@ function area(s) {
     return area;
 }
 function areaWrapped(s) {
-    let area;
-    area = (() => {
+    var area;
+    area = (function () {
         switch (s.kind) {
             case "square": return s.size * s.size;
             case "rectangle": return s.width * s.height;
@@ -343,7 +343,7 @@ var MyEnum;
     MyEnum[MyEnum["B"] = 1] = "B";
 })(MyEnum || (MyEnum = {}));
 function thisGivesError(e) {
-    let s;
+    var s;
     switch (e) {
         case MyEnum.A:
             s = "it was A";
@@ -355,7 +355,7 @@ function thisGivesError(e) {
     return s;
 }
 function good1(e) {
-    let s;
+    var s;
     switch (e) {
         case MyEnum.A:
             s = "it was A";
@@ -381,8 +381,8 @@ var Level;
     Level[Level["One"] = 0] = "One";
     Level[Level["Two"] = 1] = "Two";
 })(Level || (Level = {}));
-const doSomethingWithLevel = (level) => {
-    let next;
+var doSomethingWithLevel = function (level) {
+    var next;
     switch (level) {
         case Level.One:
             next = Level.Two;
@@ -423,7 +423,7 @@ function withoutDefault(s1, s2) {
 }
 // Repro from #20823
 function test4(value) {
-    let x;
+    var x;
     switch (value) {
         case 1:
             x = "one";
@@ -449,9 +449,9 @@ function expression() {
 }
 // Repro from #34840
 function foo() {
-    const foo = 0;
+    var foo = 0;
     while (true) {
-        const stats = foo;
+        var stats = foo;
         switch (stats) {
             case 1: break;
             case 2: break;

@@ -28,17 +28,17 @@ exports.X = X;
 exports.Y = Y;
 function X() { }
 if (Math.random()) {
-    const X = {};
-    X.test = 1;
+    var X_1 = {};
+    X_1.test = 1;
 }
 function Y() { }
 Y.test = "foo";
-const aliasTopY = Y;
+var aliasTopY = Y;
 if (Math.random()) {
-    const Y = function Y() { };
-    Y.test = 42;
-    const topYcheck = aliasTopY;
-    const blockYcheck = Y;
+    var Y_1 = function Y() { };
+    Y_1.test = 42;
+    var topYcheck = aliasTopY;
+    var blockYcheck = Y_1;
 }
 
 

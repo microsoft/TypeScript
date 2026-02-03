@@ -9,9 +9,12 @@ class C {
 }
 
 //// [computedPropertyNames21_ES5.js]
-class C {
-    bar() {
-        return 0;
+var C = /** @class */ (function () {
+    function C() {
     }
-    [this.bar()]() { }
-}
+    C.prototype.bar = function () {
+        return 0;
+    };
+    C.prototype[this.bar()] = function () { };
+    return C;
+}());

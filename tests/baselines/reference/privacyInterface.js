@@ -272,28 +272,46 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.C5_public = exports.m1 = void 0;
 var m1;
 (function (m1) {
-    class C1_public {
-        f1() {
+    var C1_public = /** @class */ (function () {
+        function C1_public() {
         }
-    }
+        C1_public.prototype.f1 = function () {
+        };
+        return C1_public;
+    }());
     m1.C1_public = C1_public;
-    class C2_private {
-    }
+    var C2_private = /** @class */ (function () {
+        function C2_private() {
+        }
+        return C2_private;
+    }());
 })(m1 || (exports.m1 = m1 = {}));
 var m2;
 (function (m2) {
-    class C1_public {
-        f1() {
+    var C1_public = /** @class */ (function () {
+        function C1_public() {
         }
-    }
+        C1_public.prototype.f1 = function () {
+        };
+        return C1_public;
+    }());
     m2.C1_public = C1_public;
-    class C2_private {
-    }
+    var C2_private = /** @class */ (function () {
+        function C2_private() {
+        }
+        return C2_private;
+    }());
 })(m2 || (m2 = {}));
-class C5_public {
-    f1() {
+var C5_public = /** @class */ (function () {
+    function C5_public() {
     }
-}
+    C5_public.prototype.f1 = function () {
+    };
+    return C5_public;
+}());
 exports.C5_public = C5_public;
-class C6_private {
-}
+var C6_private = /** @class */ (function () {
+    function C6_private() {
+    }
+    return C6_private;
+}());

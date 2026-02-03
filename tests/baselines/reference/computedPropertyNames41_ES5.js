@@ -12,11 +12,20 @@ class C {
 }
 
 //// [computedPropertyNames41_ES5.js]
-class Foo {
-}
-class Foo2 {
-}
-class C {
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
+var Foo2 = /** @class */ (function () {
+    function Foo2() {
+    }
+    return Foo2;
+}());
+var C = /** @class */ (function () {
+    function C() {
+    }
     // Computed properties
-    static [""]() { return new Foo; }
-}
+    C[""] = function () { return new Foo; };
+    return C;
+}());

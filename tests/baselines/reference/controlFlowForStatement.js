@@ -45,40 +45,40 @@ function f() {
 
 
 //// [controlFlowForStatement.js]
-let cond;
+var cond;
 function a() {
-    let x;
+    var x;
     for (x = ""; cond; x = 5) {
         x; // string | number
     }
 }
 function b() {
-    let x;
+    var x;
     for (x = 5; cond; x = x.length) {
         x; // number
         x = "";
     }
 }
 function c() {
-    let x;
+    var x;
     for (x = 5; x = x.toExponential(); x = 5) {
         x; // string
     }
 }
 function d() {
-    let x;
+    var x;
     for (x = ""; typeof x === "string"; x = 5) {
         x; // string
     }
 }
 function e() {
-    let x;
+    var x;
     for (x = "" || 0; typeof x !== "string"; x = "" || true) {
         x; // number | boolean
     }
 }
 function f() {
-    let x;
+    var x;
     for (; typeof x !== "string";) {
         x; // number | boolean
         if (typeof x === "number")

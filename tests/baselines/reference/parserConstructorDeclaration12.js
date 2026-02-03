@@ -13,13 +13,8 @@ class C {
 }
 
 //// [parserConstructorDeclaration12.js]
-class C {
-    constructor() { }
-    constructor() { }
-    constructor() { }
-    constructor() { }
-    constructor() { }
-    constructor() { }
-    constructor() { }
-    constructor() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

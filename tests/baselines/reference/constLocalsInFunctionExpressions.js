@@ -42,34 +42,34 @@ function f5() {
 
 //// [constLocalsInFunctionExpressions.js]
 function f1() {
-    const x = getStringOrNumber();
+    var x = getStringOrNumber();
     if (typeof x === "string") {
-        const f = () => x.length;
+        var f = function () { return x.length; };
     }
 }
 function f2() {
-    const x = getStringOrNumber();
+    var x = getStringOrNumber();
     if (typeof x !== "string") {
         return;
     }
-    const f = () => x.length;
+    var f = function () { return x.length; };
 }
 function f3() {
-    const x = getStringOrNumber();
+    var x = getStringOrNumber();
     if (typeof x === "string") {
-        const f = function () { return x.length; };
+        var f = function () { return x.length; };
     }
 }
 function f4() {
-    const x = getStringOrNumber();
+    var x = getStringOrNumber();
     if (typeof x !== "string") {
         return;
     }
-    const f = function () { return x.length; };
+    var f = function () { return x.length; };
 }
 function f5() {
-    const x = getStringOrNumber();
+    var x = getStringOrNumber();
     if (typeof x === "string") {
-        const f = () => () => x.length;
+        var f = function () { return function () { return x.length; }; };
     }
 }

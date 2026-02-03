@@ -45,14 +45,19 @@ module M {
 //// [file.jsx]
 var M;
 (function (M) {
-    class Foo {
-        constructor() { }
-    }
-    M.Foo = Foo;
-    let S;
-    (function (S) {
-        class Bar {
+    var Foo = /** @class */ (function () {
+        function Foo() {
         }
+        return Foo;
+    }());
+    M.Foo = Foo;
+    var S;
+    (function (S) {
+        var Bar = /** @class */ (function () {
+            function Bar() {
+            }
+            return Bar;
+        }());
         S.Bar = Bar;
         // Emit Foo
         // Foo, <Foo />;
@@ -61,7 +66,7 @@ var M;
 (function (M) {
     // Emit M.Foo
     M.Foo, <M.Foo />;
-    let S;
+    var S;
     (function (S) {
         // Emit M.Foo
         M.Foo, <M.Foo />;

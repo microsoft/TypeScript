@@ -15,6 +15,9 @@ e as ErrAlias<string>;
 
 //// [aliasInstantiationExpressionGenericIntersectionNoCrash1.js]
 "use strict";
-class ErrImpl {
-}
+var ErrImpl = /** @class */ (function () {
+    function ErrImpl() {
+    }
+    return ErrImpl;
+}());
 e;

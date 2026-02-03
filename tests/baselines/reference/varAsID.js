@@ -21,15 +21,17 @@ var f2 = new Foo2();
 
 
 //// [varAsID.js]
-class Foo {
-    constructor() {
+var Foo = /** @class */ (function () {
+    function Foo() {
         this.x = 1;
     }
-}
+    return Foo;
+}());
 var f = new Foo();
-class Foo2 {
-    constructor() {
+var Foo2 = /** @class */ (function () {
+    function Foo2() {
         this.x = 1;
     }
-}
+    return Foo2;
+}());
 var f2 = new Foo2();

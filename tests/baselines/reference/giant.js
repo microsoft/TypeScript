@@ -701,66 +701,124 @@ exports.eF = eF;
 
     MAX DEPTH 3 LEVELS
 */
-const p = "propName";
+var p = "propName";
 var V;
 function F() { }
 ;
-class C {
-    constructor() { }
-    pF() { }
-    rF() { }
-    pgF() { }
-    get pgF() { }
-    psF(param) { }
-    set psF(param) { }
-    rgF() { }
-    get rgF() { }
-    rsF(param) { }
-    set rsF(param) { }
-    static tF() { }
-    static tsF(param) { }
-    static set tsF(param) { }
-    static tgF() { }
-    static get tgF() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.pF = function () { };
+    C.prototype.rF = function () { };
+    C.prototype.pgF = function () { };
+    Object.defineProperty(C.prototype, "pgF", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    C.prototype.psF = function (param) { };
+    Object.defineProperty(C.prototype, "psF", {
+        set: function (param) { },
+        enumerable: false,
+        configurable: true
+    });
+    C.prototype.rgF = function () { };
+    Object.defineProperty(C.prototype, "rgF", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    C.prototype.rsF = function (param) { };
+    Object.defineProperty(C.prototype, "rsF", {
+        set: function (param) { },
+        enumerable: false,
+        configurable: true
+    });
+    C.tF = function () { };
+    C.tsF = function (param) { };
+    Object.defineProperty(C, "tsF", {
+        set: function (param) { },
+        enumerable: false,
+        configurable: true
+    });
+    C.tgF = function () { };
+    Object.defineProperty(C, "tgF", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());
 var M;
 (function (M_1) {
     var V;
     function F() { }
     ;
-    class C {
-        constructor() { }
-        pF() { }
-        rF() { }
-        pgF() { }
-        get pgF() { }
-        psF(param) { }
-        set psF(param) { }
-        rgF() { }
-        get rgF() { }
-        rsF(param) { }
-        set rsF(param) { }
-        static tF() { }
-        static tsF(param) { }
-        static set tsF(param) { }
-        static tgF() { }
-        static get tgF() { }
-    }
-    let M;
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        C.prototype.pF = function () { };
+        C.prototype.rF = function () { };
+        C.prototype.pgF = function () { };
+        Object.defineProperty(C.prototype, "pgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        C.prototype.psF = function (param) { };
+        Object.defineProperty(C.prototype, "psF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        C.prototype.rgF = function () { };
+        Object.defineProperty(C.prototype, "rgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        C.prototype.rsF = function (param) { };
+        Object.defineProperty(C.prototype, "rsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        C.tF = function () { };
+        C.tsF = function (param) { };
+        Object.defineProperty(C, "tsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        C.tgF = function () { };
+        Object.defineProperty(C, "tgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        return C;
+    }());
+    var M;
     (function (M) {
         var V;
         function F() { }
         ;
-        class C {
-        }
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
         ;
         ;
         ;
         function eF() { }
         M.eF = eF;
         ;
-        class eC {
-        }
+        var eC = /** @class */ (function () {
+            function eC() {
+            }
+            return eC;
+        }());
         M.eC = eC;
         ;
         ;
@@ -772,40 +830,72 @@ var M;
     function eF() { }
     M_1.eF = eF;
     ;
-    class eC {
-        constructor() { }
-        pF() { }
-        rF() { }
-        pgF() { }
-        get pgF() { }
-        psF(param) { }
-        set psF(param) { }
-        rgF() { }
-        get rgF() { }
-        rsF(param) { }
-        set rsF(param) { }
-        static tF() { }
-        static tsF(param) { }
-        static set tsF(param) { }
-        static tgF() { }
-        static get tgF() { }
-    }
+    var eC = /** @class */ (function () {
+        function eC() {
+        }
+        eC.prototype.pF = function () { };
+        eC.prototype.rF = function () { };
+        eC.prototype.pgF = function () { };
+        Object.defineProperty(eC.prototype, "pgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.psF = function (param) { };
+        Object.defineProperty(eC.prototype, "psF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.rgF = function () { };
+        Object.defineProperty(eC.prototype, "rgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.rsF = function (param) { };
+        Object.defineProperty(eC.prototype, "rsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.tF = function () { };
+        eC.tsF = function (param) { };
+        Object.defineProperty(eC, "tsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.tgF = function () { };
+        Object.defineProperty(eC, "tgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        return eC;
+    }());
     M_1.eC = eC;
-    let eM;
+    var eM;
     (function (eM) {
         var V;
         function F() { }
         ;
-        class C {
-        }
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
         ;
         ;
         ;
         function eF() { }
         eM.eF = eF;
         ;
-        class eC {
-        }
+        var eC = /** @class */ (function () {
+            function eC() {
+            }
+            return eC;
+        }());
         eM.eC = eC;
         ;
         ;
@@ -818,63 +908,121 @@ var M;
 })(M || (M = {}));
 function eF() { }
 ;
-class eC {
-    constructor() { }
-    pF() { }
-    rF() { }
-    pgF() { }
-    get pgF() { }
-    psF(param) { }
-    set psF(param) { }
-    rgF() { }
-    get rgF() { }
-    rsF(param) { }
-    set rsF(param) { }
-    static tF() { }
-    static tsF(param) { }
-    static set tsF(param) { }
-    static tgF() { }
-    static get tgF() { }
-}
+var eC = /** @class */ (function () {
+    function eC() {
+    }
+    eC.prototype.pF = function () { };
+    eC.prototype.rF = function () { };
+    eC.prototype.pgF = function () { };
+    Object.defineProperty(eC.prototype, "pgF", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    eC.prototype.psF = function (param) { };
+    Object.defineProperty(eC.prototype, "psF", {
+        set: function (param) { },
+        enumerable: false,
+        configurable: true
+    });
+    eC.prototype.rgF = function () { };
+    Object.defineProperty(eC.prototype, "rgF", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    eC.prototype.rsF = function (param) { };
+    Object.defineProperty(eC.prototype, "rsF", {
+        set: function (param) { },
+        enumerable: false,
+        configurable: true
+    });
+    eC.tF = function () { };
+    eC.tsF = function (param) { };
+    Object.defineProperty(eC, "tsF", {
+        set: function (param) { },
+        enumerable: false,
+        configurable: true
+    });
+    eC.tgF = function () { };
+    Object.defineProperty(eC, "tgF", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    return eC;
+}());
 exports.eC = eC;
 var eM;
 (function (eM_1) {
     var V;
     function F() { }
     ;
-    class C {
-        constructor() { }
-        pF() { }
-        rF() { }
-        pgF() { }
-        get pgF() { }
-        psF(param) { }
-        set psF(param) { }
-        rgF() { }
-        get rgF() { }
-        rsF(param) { }
-        set rsF(param) { }
-        static tF() { }
-        static tsF(param) { }
-        static set tsF(param) { }
-        static tgF() { }
-        static get tgF() { }
-    }
-    let M;
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        C.prototype.pF = function () { };
+        C.prototype.rF = function () { };
+        C.prototype.pgF = function () { };
+        Object.defineProperty(C.prototype, "pgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        C.prototype.psF = function (param) { };
+        Object.defineProperty(C.prototype, "psF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        C.prototype.rgF = function () { };
+        Object.defineProperty(C.prototype, "rgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        C.prototype.rsF = function (param) { };
+        Object.defineProperty(C.prototype, "rsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        C.tF = function () { };
+        C.tsF = function (param) { };
+        Object.defineProperty(C, "tsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        C.tgF = function () { };
+        Object.defineProperty(C, "tgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        return C;
+    }());
+    var M;
     (function (M) {
         var V;
         function F() { }
         ;
-        class C {
-        }
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
         ;
         ;
         ;
         function eF() { }
         M.eF = eF;
         ;
-        class eC {
-        }
+        var eC = /** @class */ (function () {
+            function eC() {
+            }
+            return eC;
+        }());
         M.eC = eC;
         ;
         ;
@@ -886,40 +1034,72 @@ var eM;
     function eF() { }
     eM_1.eF = eF;
     ;
-    class eC {
-        constructor() { }
-        pF() { }
-        rF() { }
-        pgF() { }
-        get pgF() { }
-        psF(param) { }
-        set psF(param) { }
-        rgF() { }
-        get rgF() { }
-        rsF(param) { }
-        set rsF(param) { }
-        static tF() { }
-        static tsF(param) { }
-        static set tsF(param) { }
-        static tgF() { }
-        static get tgF() { }
-    }
+    var eC = /** @class */ (function () {
+        function eC() {
+        }
+        eC.prototype.pF = function () { };
+        eC.prototype.rF = function () { };
+        eC.prototype.pgF = function () { };
+        Object.defineProperty(eC.prototype, "pgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.psF = function (param) { };
+        Object.defineProperty(eC.prototype, "psF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.rgF = function () { };
+        Object.defineProperty(eC.prototype, "rgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.prototype.rsF = function (param) { };
+        Object.defineProperty(eC.prototype, "rsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.tF = function () { };
+        eC.tsF = function (param) { };
+        Object.defineProperty(eC, "tsF", {
+            set: function (param) { },
+            enumerable: false,
+            configurable: true
+        });
+        eC.tgF = function () { };
+        Object.defineProperty(eC, "tgF", {
+            get: function () { },
+            enumerable: false,
+            configurable: true
+        });
+        return eC;
+    }());
     eM_1.eC = eC;
-    let eM;
+    var eM;
     (function (eM) {
         var V;
         function F() { }
         ;
-        class C {
-        }
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
         ;
         ;
         ;
         function eF() { }
         eM.eF = eF;
         ;
-        class eC {
-        }
+        var eC = /** @class */ (function () {
+            function eC() {
+            }
+            return eC;
+        }());
         eM.eC = eC;
         ;
         ;

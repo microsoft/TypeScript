@@ -35,19 +35,20 @@ module M {
 //// [fuzzy.js]
 var M;
 (function (M) {
-    class C {
-        constructor(x) {
+    var C = /** @class */ (function () {
+        function C(x) {
             this.x = x;
         }
-        works() {
+        C.prototype.works = function () {
             return ({ anything: 1 });
-        }
-        doesntWork() {
+        };
+        C.prototype.doesntWork = function () {
             return { anything: 1, oneI: this };
-        }
-        worksToo() {
+        };
+        C.prototype.worksToo = function () {
             return ({ oneI: this });
-        }
-    }
+        };
+        return C;
+    }());
     M.C = C;
 })(M || (M = {}));

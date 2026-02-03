@@ -4,4 +4,4 @@
 var a = { b };
 
 //// [shorthandPropertyUndefined.js]
-var a = { b };
+var a = { b: b };

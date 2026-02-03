@@ -25,18 +25,18 @@ if (c[cIndex].x) {
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty5.js]
 "use strict";
-const a = {};
-const aIndex = "key";
+var a = {};
+var aIndex = "key";
 if (a[aIndex] && a[aIndex].x) {
     a[aIndex].x; // number
 }
-const b = { key: {} };
-const bIndex = "key";
+var b = { key: {} };
+var bIndex = "key";
 if (b[bIndex].x) {
     b[bIndex].x; // number
 }
-const c = [];
-const cIndex = 1;
+var c = [];
+var cIndex = 1;
 if (c[cIndex].x) {
     c[cIndex].x; // number
 }

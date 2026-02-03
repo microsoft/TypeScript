@@ -11,12 +11,13 @@ class Foo {
 
 
 //// [propertyOrdering2.js]
-class Foo {
-    constructor(x, y) {
+var Foo = /** @class */ (function () {
+    function Foo(x, y) {
         this.x = x;
     }
-    foo() {
+    Foo.prototype.foo = function () {
         var a = this.x;
         return this.y;
-    }
-}
+    };
+    return Foo;
+}());

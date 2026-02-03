@@ -18,7 +18,7 @@ export let y = () => x
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = exports.x = exports.$ = void 0;
 exports.$ = 1;
-let y = () => exports.x;
+var y = function () { return exports.x; };
 exports.y = y;
 
 

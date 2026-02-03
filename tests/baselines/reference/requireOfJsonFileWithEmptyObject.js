@@ -18,7 +18,7 @@ if (x) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var b1 = require("./b.json");
-let x = b1;
+var x = b1;
 var b2 = require("./b.json");
 if (x) {
     x = b2;

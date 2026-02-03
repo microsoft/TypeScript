@@ -38,16 +38,28 @@ var ag2 = new A.A2<string, number>();
 //// [ModuleWithExportedAndNonExportedClasses.js]
 var A;
 (function (A_1) {
-    class A {
-    }
+    var A = /** @class */ (function () {
+        function A() {
+        }
+        return A;
+    }());
     A_1.A = A;
-    class AG {
-    }
+    var AG = /** @class */ (function () {
+        function AG() {
+        }
+        return AG;
+    }());
     A_1.AG = AG;
-    class A2 {
-    }
-    class AG2 {
-    }
+    var A2 = /** @class */ (function () {
+        function A2() {
+        }
+        return A2;
+    }());
+    var AG2 = /** @class */ (function () {
+        function AG2() {
+        }
+        return AG2;
+    }());
 })(A || (A = {}));
 // no errors expected, these are all exported
 var a;

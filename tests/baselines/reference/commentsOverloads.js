@@ -201,46 +201,54 @@ f4(10);
 var i1_i;
 var i2_i;
 var i3_i;
-class c {
-    prop1(aorb) {
-        return 10;
+var c = /** @class */ (function () {
+    function c() {
     }
-    prop2(aorb) {
+    c.prototype.prop1 = function (aorb) {
         return 10;
-    }
-    prop3(aorb) {
+    };
+    c.prototype.prop2 = function (aorb) {
         return 10;
-    }
-    prop4(aorb) {
+    };
+    c.prototype.prop3 = function (aorb) {
         return 10;
-    }
+    };
+    c.prototype.prop4 = function (aorb) {
+        return 10;
+    };
     /** Prop5 implementaion*/
-    prop5(aorb) {
+    c.prototype.prop5 = function (aorb) {
         return 10;
+    };
+    return c;
+}());
+var c1 = /** @class */ (function () {
+    function c1(aorb) {
     }
-}
-class c1 {
-    constructor(aorb) {
+    return c1;
+}());
+var c2 = /** @class */ (function () {
+    function c2(aorb) {
     }
-}
-class c2 {
-    constructor(aorb) {
+    return c2;
+}());
+var c3 = /** @class */ (function () {
+    function c3(aorb) {
     }
-}
-class c3 {
-    constructor(aorb) {
-    }
-}
-class c4 {
+    return c3;
+}());
+var c4 = /** @class */ (function () {
     /** c4 3 */
-    constructor(aorb) {
+    function c4(aorb) {
     }
-}
-class c5 {
+    return c4;
+}());
+var c5 = /** @class */ (function () {
     /** c5 implementation*/
-    constructor(aorb) {
+    function c5(aorb) {
     }
-}
+    return c5;
+}());
 var c_i = new c();
 var c1_i_1 = new c1(10);
 var c1_i_2 = new c1("hello");

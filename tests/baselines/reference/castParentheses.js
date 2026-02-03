@@ -14,8 +14,11 @@ var b = (<any>new a.b);
 var b = (<any>new a).b 
 
 //// [castParentheses.js]
-class a {
-}
+var a = /** @class */ (function () {
+    function a() {
+    }
+    return a;
+}());
 var b = a;
 var b = a.b;
 var b = a.b.c;

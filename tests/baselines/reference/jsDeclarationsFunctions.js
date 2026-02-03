@@ -79,8 +79,11 @@ function a() { }
 function b() { }
 b.cat = "cat";
 function c() { }
-c.Cls = class {
-};
+c.Cls = /** @class */ (function () {
+    function Cls() {
+    }
+    return Cls;
+}());
 /**
  * @param {number} a
  * @param {number} b

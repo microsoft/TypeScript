@@ -16,11 +16,18 @@ class C {
 
 //// [anyIdenticalToItself.js]
 function foo(x, y) { }
-class C {
-    get X() {
-        var y;
-        return y;
+var C = /** @class */ (function () {
+    function C() {
     }
-    set X(v) {
-    }
-}
+    Object.defineProperty(C.prototype, "X", {
+        get: function () {
+            var y;
+            return y;
+        },
+        set: function (v) {
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());

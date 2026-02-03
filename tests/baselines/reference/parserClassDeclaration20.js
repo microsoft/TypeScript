@@ -7,6 +7,9 @@ class C {
 }
 
 //// [parserClassDeclaration20.js]
-class C {
-    "0"() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype["0"] = function () { };
+    return C;
+}());

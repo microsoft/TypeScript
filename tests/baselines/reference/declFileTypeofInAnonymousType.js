@@ -26,10 +26,13 @@ var d = {
 //// [declFileTypeofInAnonymousType.js]
 var m1;
 (function (m1) {
-    class c {
-    }
+    var c = /** @class */ (function () {
+        function c() {
+        }
+        return c;
+    }());
     m1.c = c;
-    let e;
+    var e;
     (function (e) {
         e[e["weekday"] = 0] = "weekday";
         e[e["weekend"] = 1] = "weekend";

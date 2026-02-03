@@ -18,8 +18,11 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            Foo = class Foo {
-            };
+            Foo = /** @class */ (function () {
+                function Foo() {
+                }
+                return Foo;
+            }());
             exports_1("Foo", Foo);
         }
     };

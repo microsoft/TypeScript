@@ -20,7 +20,7 @@ x = {
 var x;
 x = {
     get foo() {
-        return (n) => n;
+        return function (n) { return n; };
     },
     set foo(x) { }
 };

@@ -18,8 +18,14 @@ interface C3<T> { e: any; }
 
 //// [unusedTypeParameters9.js]
 // clas + interface
-class C1 {
-}
+var C1 = /** @class */ (function () {
+    function C1() {
+    }
+    return C1;
+}());
 // interface + class
-class C2 {
-}
+var C2 = /** @class */ (function () {
+    function C2() {
+    }
+    return C2;
+}());

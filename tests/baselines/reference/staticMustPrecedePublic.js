@@ -8,5 +8,8 @@ class Outer {
 
 
 //// [staticMustPrecedePublic.js]
-class Outer {
-}
+var Outer = /** @class */ (function () {
+    function Outer() {
+    }
+    return Outer;
+}());

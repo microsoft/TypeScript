@@ -59,8 +59,11 @@ define("m1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Cls = void 0;
-    class Cls {
-    }
+    var Cls = /** @class */ (function () {
+        function Cls() {
+        }
+        return Cls;
+    }());
     exports.Cls = Cls;
 });
 define("m2", ["require", "exports", "m1"], function (require, exports, m1_1) {
@@ -73,11 +76,17 @@ define("m3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.C2 = exports.C1 = void 0;
-    class C1 {
-    }
+    var C1 = /** @class */ (function () {
+        function C1() {
+        }
+        return C1;
+    }());
     exports.C1 = C1;
-    class C2 {
-    }
+    var C2 = /** @class */ (function () {
+        function C2() {
+        }
+        return C2;
+    }());
     exports.C2 = C2;
 });
 define("m4", ["require", "exports", "m1"], function (require, exports, m1_2) {
@@ -89,7 +98,7 @@ define("m4", ["require", "exports", "m1"], function (require, exports, m1_2) {
 define("test", ["require", "exports", "m2", "m4"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    let c;
+    var c;
     c.foo().toExponential();
     c.bar().toLowerCase();
     c.baz1().x.toExponential();

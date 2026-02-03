@@ -21,7 +21,7 @@ module.exports.apply = a;
 module.exports.apply();
 //// [test.js]
 "use strict";
-const { apply } = require('./moduleExportAliasDuplicateAlias');
+var apply = require('./moduleExportAliasDuplicateAlias').apply;
 apply();
 
 

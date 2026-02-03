@@ -17,13 +17,16 @@ function b2<B,>(x: B) { return x }
 
 
 //// [declarationEmitTypeParameterNameInOuterScope.js]
-class A {
-}
-var a = (x) => x;
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
+var a = function (x) { return x; };
 function a2(x) { return x; }
-var a3 = (x) => new A();
+var a3 = function (x) { return new A(); };
 function a4(x) { return new A(); }
-var b = (x) => x;
+var b = function (x) { return x; };
 function b2(x) { return x; }
 
 

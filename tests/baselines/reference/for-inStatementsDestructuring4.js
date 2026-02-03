@@ -6,4 +6,4 @@ for ({a, b} in []) { }
 
 //// [for-inStatementsDestructuring4.js]
 var a, b;
-for ({ a, b } in []) { }
+for ({ a: a, b: b } in []) { }

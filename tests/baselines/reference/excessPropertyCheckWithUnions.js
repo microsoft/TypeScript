@@ -167,10 +167,10 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-let wrong = { tag: "T", a1: "extra" };
+var wrong = { tag: "T", a1: "extra" };
 wrong = { tag: "A", d20: 12 };
 wrong = { tag: "D" };
-let amb;
+var amb;
 // no error for ambiguous tag, even when it could satisfy both constituents at once
 amb = { tag: "A", x: "hi" };
 amb = { tag: "A", y: 12 };
@@ -181,48 +181,48 @@ amb = { tag: "A", y: 12, extra: 12 };
 // assignability errors still work
 amb = { tag: "A" };
 amb = { tag: "A", z: true };
-let over;
+var over;
 // these two are still errors despite their doubled up discriminants
 over = { a: 1, b: 1, first: "ok", second: "error" };
 over = { a: 1, b: 1, first: "ok", third: "error" };
-let t2 = __assign({}, t1);
+var t2 = __assign({}, t1);
 t0 = t2;
-const abab = {
+var abab = {
     kind: "A",
     n: {
         a: "a",
         b: "b", // excess -- kind: "A"
     }
 };
-const abac = {
+var abac = {
     kind: "A",
     n: {
         a: "a",
         c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
     }
 };
-const obj = {
+var obj = {
     tag: 'button',
     type: 'submit',
     // should have error here
     href: 'foo',
 };
 ;
-const dataSpecification = {
+var dataSpecification = {
     foo: "asdfsadffsd"
 };
 // Repro from #34611
-const obj1 = { a: 'abc' }; // Error
-const obj2 = { a: 5, c: 'abc' }; // Error
+var obj1 = { a: 'abc' }; // Error
+var obj2 = { a: 5, c: 'abc' }; // Error
 function F1(_arg) { }
 F1({
     props: {
-        prop1,
-        prop2,
+        prop1: prop1,
+        prop2: prop2,
     },
 });
 function F2(_props) { }
 F2({
-    prop1,
-    prop2,
+    prop1: prop1,
+    prop2: prop2,
 });

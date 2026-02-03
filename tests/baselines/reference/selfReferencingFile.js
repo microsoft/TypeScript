@@ -9,5 +9,8 @@ class selfReferencingFile {
 
 //// [selfReferencingFile.js]
 ///<reference path='selfReferencingFile.ts'/>
-class selfReferencingFile {
-}
+var selfReferencingFile = /** @class */ (function () {
+    function selfReferencingFile() {
+    }
+    return selfReferencingFile;
+}());

@@ -16,11 +16,11 @@ empty["that's ok"];
 
 //// [propertyAccessStringIndexSignature.js]
 ;
-let flags;
+var flags;
 flags.b;
 flags.f;
 flags.isNotNecessarilyNeverFalse;
 flags['this is fine'];
-let empty;
+var empty;
 empty.nope;
 empty["that's ok"];

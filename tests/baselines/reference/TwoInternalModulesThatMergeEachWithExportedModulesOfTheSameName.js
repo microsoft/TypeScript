@@ -44,7 +44,7 @@ var A;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 (function (A) {
-    let B;
+    var B;
     (function (B) {
     })(B || (B = {}));
 })(A || (A = {}));
@@ -57,19 +57,25 @@ var X;
     (function (Y) {
         var Z;
         (function (Z) {
-            class Line {
-            }
+            var Line = /** @class */ (function () {
+                function Line() {
+                }
+                return Line;
+            }());
             Z.Line = Line;
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 (function (X) {
-    let Y;
+    var Y;
     (function (Y) {
-        let Z;
+        var Z;
         (function (Z) {
-            class Line {
-            }
+            var Line = /** @class */ (function () {
+                function Line() {
+                }
+                return Line;
+            }());
             Z.Line = Line;
         })(Z || (Z = {}));
     })(Y = X.Y || (X.Y = {}));

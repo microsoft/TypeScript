@@ -19,7 +19,7 @@ var y = x.a(x);
 
 //// [contextualThisType.js]
 var x = {
-    a(p) {
+    a: function (p) {
         return p;
     }
 };

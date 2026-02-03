@@ -1202,117 +1202,135 @@ exports.publicFunctionWithPrivateParmeterTypes1 = publicFunctionWithPrivateParme
 exports.publicFunctionWithPublicParmeterTypes1 = publicFunctionWithPublicParmeterTypes1;
 exports.publicFunctionWithPrivateModuleParameterTypes = publicFunctionWithPrivateModuleParameterTypes;
 exports.publicFunctionWithPrivateModuleParameterTypes1 = publicFunctionWithPrivateModuleParameterTypes1;
-class privateClass {
-}
-class publicClass {
-}
+var privateClass = /** @class */ (function () {
+    function privateClass() {
+    }
+    return privateClass;
+}());
+var publicClass = /** @class */ (function () {
+    function publicClass() {
+    }
+    return publicClass;
+}());
 exports.publicClass = publicClass;
-class publicClassWithWithPrivateParmeterTypes {
-    static myPublicStaticMethod() {
+var publicClassWithWithPrivateParmeterTypes = /** @class */ (function () {
+    function publicClassWithWithPrivateParmeterTypes() {
+    }
+    publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
         return null;
-    }
-    static myPrivateStaticMethod() {
+    };
+    publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
         return null;
-    }
-    myPublicMethod() {
+    };
+    publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
         return null;
-    }
-    myPrivateMethod() {
+    };
+    publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
         return null;
-    }
-    static myPublicStaticMethod1() {
+    };
+    publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
         return new privateClass();
-    }
-    static myPrivateStaticMethod1() {
+    };
+    publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
         return new privateClass();
-    }
-    myPublicMethod1() {
+    };
+    publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
         return new privateClass();
-    }
-    myPrivateMethod1() {
+    };
+    publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
         return new privateClass();
-    }
-}
+    };
+    return publicClassWithWithPrivateParmeterTypes;
+}());
 exports.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
-class publicClassWithWithPublicParmeterTypes {
-    static myPublicStaticMethod() {
+var publicClassWithWithPublicParmeterTypes = /** @class */ (function () {
+    function publicClassWithWithPublicParmeterTypes() {
+    }
+    publicClassWithWithPublicParmeterTypes.myPublicStaticMethod = function () {
         return null;
-    }
-    static myPrivateStaticMethod() {
+    };
+    publicClassWithWithPublicParmeterTypes.myPrivateStaticMethod = function () {
         return null;
-    }
-    myPublicMethod() {
+    };
+    publicClassWithWithPublicParmeterTypes.prototype.myPublicMethod = function () {
         return null;
-    }
-    myPrivateMethod() {
+    };
+    publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod = function () {
         return null;
-    }
-    static myPublicStaticMethod1() {
+    };
+    publicClassWithWithPublicParmeterTypes.myPublicStaticMethod1 = function () {
         return new publicClass();
-    }
-    static myPrivateStaticMethod1() {
+    };
+    publicClassWithWithPublicParmeterTypes.myPrivateStaticMethod1 = function () {
         return new publicClass();
-    }
-    myPublicMethod1() {
+    };
+    publicClassWithWithPublicParmeterTypes.prototype.myPublicMethod1 = function () {
         return new publicClass();
-    }
-    myPrivateMethod1() {
+    };
+    publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
         return new publicClass();
-    }
-}
+    };
+    return publicClassWithWithPublicParmeterTypes;
+}());
 exports.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
-class privateClassWithWithPrivateParmeterTypes {
-    static myPublicStaticMethod() {
-        return null;
+var privateClassWithWithPrivateParmeterTypes = /** @class */ (function () {
+    function privateClassWithWithPrivateParmeterTypes() {
     }
-    static myPrivateStaticMethod() {
+    privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
         return null;
-    }
-    myPublicMethod() {
+    };
+    privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
         return null;
-    }
-    myPrivateMethod() {
+    };
+    privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
         return null;
-    }
-    static myPublicStaticMethod1() {
+    };
+    privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
+        return null;
+    };
+    privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
         return new privateClass();
-    }
-    static myPrivateStaticMethod1() {
+    };
+    privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
         return new privateClass();
-    }
-    myPublicMethod1() {
+    };
+    privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
         return new privateClass();
-    }
-    myPrivateMethod1() {
+    };
+    privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
         return new privateClass();
+    };
+    return privateClassWithWithPrivateParmeterTypes;
+}());
+var privateClassWithWithPublicParmeterTypes = /** @class */ (function () {
+    function privateClassWithWithPublicParmeterTypes() {
     }
-}
-class privateClassWithWithPublicParmeterTypes {
-    static myPublicStaticMethod() {
+    privateClassWithWithPublicParmeterTypes.myPublicStaticMethod = function () {
         return null;
-    }
-    static myPrivateStaticMethod() {
+    };
+    privateClassWithWithPublicParmeterTypes.myPrivateStaticMethod = function () {
         return null;
-    }
-    myPublicMethod() {
+    };
+    privateClassWithWithPublicParmeterTypes.prototype.myPublicMethod = function () {
         return null;
-    }
-    myPrivateMethod() {
+    };
+    privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod = function () {
         return null;
-    }
-    static myPublicStaticMethod1() {
+    };
+    privateClassWithWithPublicParmeterTypes.myPublicStaticMethod1 = function () {
         return new publicClass();
-    }
-    static myPrivateStaticMethod1() {
+    };
+    privateClassWithWithPublicParmeterTypes.myPrivateStaticMethod1 = function () {
         return new publicClass();
-    }
-    myPublicMethod1() {
+    };
+    privateClassWithWithPublicParmeterTypes.prototype.myPublicMethod1 = function () {
         return new publicClass();
-    }
-    myPrivateMethod1() {
+    };
+    privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
         return new publicClass();
-    }
-}
+    };
+    return privateClassWithWithPublicParmeterTypes;
+}());
 function publicFunctionWithPrivateParmeterTypes() {
     return null;
 }
@@ -1337,20 +1355,23 @@ function privateFunctionWithPrivateParmeterTypes1() {
 function privateFunctionWithPublicParmeterTypes1() {
     return new publicClass();
 }
-class publicClassWithPrivateModuleParameterTypes {
-    static myPublicStaticMethod() {
+var publicClassWithPrivateModuleParameterTypes = /** @class */ (function () {
+    function publicClassWithPrivateModuleParameterTypes() {
+    }
+    publicClassWithPrivateModuleParameterTypes.myPublicStaticMethod = function () {
         return null;
-    }
-    myPublicMethod() {
+    };
+    publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod = function () {
         return null;
-    }
-    static myPublicStaticMethod1() {
+    };
+    publicClassWithPrivateModuleParameterTypes.myPublicStaticMethod1 = function () {
         return new privateModule.publicClass();
-    }
-    myPublicMethod1() {
+    };
+    publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
         return new privateModule.publicClass();
-    }
-}
+    };
+    return publicClassWithPrivateModuleParameterTypes;
+}());
 exports.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
 function publicFunctionWithPrivateModuleParameterTypes() {
     return null;
@@ -1358,20 +1379,23 @@ function publicFunctionWithPrivateModuleParameterTypes() {
 function publicFunctionWithPrivateModuleParameterTypes1() {
     return new privateModule.publicClass();
 }
-class privateClassWithPrivateModuleParameterTypes {
-    static myPublicStaticMethod() {
+var privateClassWithPrivateModuleParameterTypes = /** @class */ (function () {
+    function privateClassWithPrivateModuleParameterTypes() {
+    }
+    privateClassWithPrivateModuleParameterTypes.myPublicStaticMethod = function () {
         return null;
-    }
-    myPublicMethod() {
+    };
+    privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod = function () {
         return null;
-    }
-    static myPublicStaticMethod1() {
+    };
+    privateClassWithPrivateModuleParameterTypes.myPublicStaticMethod1 = function () {
         return new privateModule.publicClass();
-    }
-    myPublicMethod1() {
+    };
+    privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
         return new privateModule.publicClass();
-    }
-}
+    };
+    return privateClassWithPrivateModuleParameterTypes;
+}());
 function privateFunctionWithPrivateModuleParameterTypes() {
     return null;
 }
@@ -1380,117 +1404,135 @@ function privateFunctionWithPrivateModuleParameterTypes1() {
 }
 var publicModule;
 (function (publicModule) {
-    class privateClass {
-    }
-    class publicClass {
-    }
+    var privateClass = /** @class */ (function () {
+        function privateClass() {
+        }
+        return privateClass;
+    }());
+    var publicClass = /** @class */ (function () {
+        function publicClass() {
+        }
+        return publicClass;
+    }());
     publicModule.publicClass = publicClass;
-    class publicClassWithWithPrivateParmeterTypes {
-        static myPublicStaticMethod() {
+    var publicClassWithWithPrivateParmeterTypes = /** @class */ (function () {
+        function publicClassWithWithPrivateParmeterTypes() {
+        }
+        publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        static myPrivateStaticMethod() {
+        };
+        publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        myPrivateMethod() {
+        };
+        publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
             return new privateClass();
-        }
-        static myPrivateStaticMethod1() {
+        };
+        publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
             return new privateClass();
-        }
-        myPublicMethod1() {
+        };
+        publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
             return new privateClass();
-        }
-        myPrivateMethod1() {
+        };
+        publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new privateClass();
-        }
-    }
+        };
+        return publicClassWithWithPrivateParmeterTypes;
+    }());
     publicModule.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
-    class publicClassWithWithPublicParmeterTypes {
-        static myPublicStaticMethod() {
+    var publicClassWithWithPublicParmeterTypes = /** @class */ (function () {
+        function publicClassWithWithPublicParmeterTypes() {
+        }
+        publicClassWithWithPublicParmeterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        static myPrivateStaticMethod() {
+        };
+        publicClassWithWithPublicParmeterTypes.myPrivateStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        publicClassWithWithPublicParmeterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        myPrivateMethod() {
+        };
+        publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        publicClassWithWithPublicParmeterTypes.myPublicStaticMethod1 = function () {
             return new publicClass();
-        }
-        static myPrivateStaticMethod1() {
+        };
+        publicClassWithWithPublicParmeterTypes.myPrivateStaticMethod1 = function () {
             return new publicClass();
-        }
-        myPublicMethod1() {
+        };
+        publicClassWithWithPublicParmeterTypes.prototype.myPublicMethod1 = function () {
             return new publicClass();
-        }
-        myPrivateMethod1() {
+        };
+        publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new publicClass();
-        }
-    }
+        };
+        return publicClassWithWithPublicParmeterTypes;
+    }());
     publicModule.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
-    class privateClassWithWithPrivateParmeterTypes {
-        static myPublicStaticMethod() {
-            return null;
+    var privateClassWithWithPrivateParmeterTypes = /** @class */ (function () {
+        function privateClassWithWithPrivateParmeterTypes() {
         }
-        static myPrivateStaticMethod() {
+        privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
             return null;
-        }
-        myPrivateMethod() {
+        };
+        privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
+            return null;
+        };
+        privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
             return new privateClass();
-        }
-        static myPrivateStaticMethod1() {
+        };
+        privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
             return new privateClass();
-        }
-        myPublicMethod1() {
+        };
+        privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
             return new privateClass();
-        }
-        myPrivateMethod1() {
+        };
+        privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new privateClass();
+        };
+        return privateClassWithWithPrivateParmeterTypes;
+    }());
+    var privateClassWithWithPublicParmeterTypes = /** @class */ (function () {
+        function privateClassWithWithPublicParmeterTypes() {
         }
-    }
-    class privateClassWithWithPublicParmeterTypes {
-        static myPublicStaticMethod() {
+        privateClassWithWithPublicParmeterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        static myPrivateStaticMethod() {
+        };
+        privateClassWithWithPublicParmeterTypes.myPrivateStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        privateClassWithWithPublicParmeterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        myPrivateMethod() {
+        };
+        privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        privateClassWithWithPublicParmeterTypes.myPublicStaticMethod1 = function () {
             return new publicClass();
-        }
-        static myPrivateStaticMethod1() {
+        };
+        privateClassWithWithPublicParmeterTypes.myPrivateStaticMethod1 = function () {
             return new publicClass();
-        }
-        myPublicMethod1() {
+        };
+        privateClassWithWithPublicParmeterTypes.prototype.myPublicMethod1 = function () {
             return new publicClass();
-        }
-        myPrivateMethod1() {
+        };
+        privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new publicClass();
-        }
-    }
+        };
+        return privateClassWithWithPublicParmeterTypes;
+    }());
     function publicFunctionWithPrivateParmeterTypes() {
         return null;
     }
@@ -1519,20 +1561,23 @@ var publicModule;
     function privateFunctionWithPublicParmeterTypes1() {
         return new publicClass();
     }
-    class publicClassWithPrivateModuleParameterTypes {
-        static myPublicStaticMethod() {
+    var publicClassWithPrivateModuleParameterTypes = /** @class */ (function () {
+        function publicClassWithPrivateModuleParameterTypes() {
+        }
+        publicClassWithPrivateModuleParameterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        publicClassWithPrivateModuleParameterTypes.myPublicStaticMethod1 = function () {
             return new privateModule.publicClass();
-        }
-        myPublicMethod1() {
+        };
+        publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
             return new privateModule.publicClass();
-        }
-    }
+        };
+        return publicClassWithPrivateModuleParameterTypes;
+    }());
     publicModule.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
     function publicFunctionWithPrivateModuleParameterTypes() {
         return null;
@@ -1542,20 +1587,23 @@ var publicModule;
         return new privateModule.publicClass();
     }
     publicModule.publicFunctionWithPrivateModuleParameterTypes1 = publicFunctionWithPrivateModuleParameterTypes1;
-    class privateClassWithPrivateModuleParameterTypes {
-        static myPublicStaticMethod() {
+    var privateClassWithPrivateModuleParameterTypes = /** @class */ (function () {
+        function privateClassWithPrivateModuleParameterTypes() {
+        }
+        privateClassWithPrivateModuleParameterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        privateClassWithPrivateModuleParameterTypes.myPublicStaticMethod1 = function () {
             return new privateModule.publicClass();
-        }
-        myPublicMethod1() {
+        };
+        privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
             return new privateModule.publicClass();
-        }
-    }
+        };
+        return privateClassWithPrivateModuleParameterTypes;
+    }());
     function privateFunctionWithPrivateModuleParameterTypes() {
         return null;
     }
@@ -1565,117 +1613,135 @@ var publicModule;
 })(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
-    class privateClass {
-    }
-    class publicClass {
-    }
+    var privateClass = /** @class */ (function () {
+        function privateClass() {
+        }
+        return privateClass;
+    }());
+    var publicClass = /** @class */ (function () {
+        function publicClass() {
+        }
+        return publicClass;
+    }());
     privateModule.publicClass = publicClass;
-    class publicClassWithWithPrivateParmeterTypes {
-        static myPublicStaticMethod() {
+    var publicClassWithWithPrivateParmeterTypes = /** @class */ (function () {
+        function publicClassWithWithPrivateParmeterTypes() {
+        }
+        publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        static myPrivateStaticMethod() {
+        };
+        publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        myPrivateMethod() {
+        };
+        publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
             return new privateClass();
-        }
-        static myPrivateStaticMethod1() {
+        };
+        publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
             return new privateClass();
-        }
-        myPublicMethod1() {
+        };
+        publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
             return new privateClass();
-        }
-        myPrivateMethod1() {
+        };
+        publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new privateClass();
-        }
-    }
+        };
+        return publicClassWithWithPrivateParmeterTypes;
+    }());
     privateModule.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
-    class publicClassWithWithPublicParmeterTypes {
-        static myPublicStaticMethod() {
+    var publicClassWithWithPublicParmeterTypes = /** @class */ (function () {
+        function publicClassWithWithPublicParmeterTypes() {
+        }
+        publicClassWithWithPublicParmeterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        static myPrivateStaticMethod() {
+        };
+        publicClassWithWithPublicParmeterTypes.myPrivateStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        publicClassWithWithPublicParmeterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        myPrivateMethod() {
+        };
+        publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        publicClassWithWithPublicParmeterTypes.myPublicStaticMethod1 = function () {
             return new publicClass();
-        }
-        static myPrivateStaticMethod1() {
+        };
+        publicClassWithWithPublicParmeterTypes.myPrivateStaticMethod1 = function () {
             return new publicClass();
-        }
-        myPublicMethod1() {
+        };
+        publicClassWithWithPublicParmeterTypes.prototype.myPublicMethod1 = function () {
             return new publicClass();
-        }
-        myPrivateMethod1() {
+        };
+        publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new publicClass();
-        }
-    }
+        };
+        return publicClassWithWithPublicParmeterTypes;
+    }());
     privateModule.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
-    class privateClassWithWithPrivateParmeterTypes {
-        static myPublicStaticMethod() {
-            return null;
+    var privateClassWithWithPrivateParmeterTypes = /** @class */ (function () {
+        function privateClassWithWithPrivateParmeterTypes() {
         }
-        static myPrivateStaticMethod() {
+        privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
             return null;
-        }
-        myPrivateMethod() {
+        };
+        privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
+            return null;
+        };
+        privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
             return new privateClass();
-        }
-        static myPrivateStaticMethod1() {
+        };
+        privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
             return new privateClass();
-        }
-        myPublicMethod1() {
+        };
+        privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
             return new privateClass();
-        }
-        myPrivateMethod1() {
+        };
+        privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new privateClass();
+        };
+        return privateClassWithWithPrivateParmeterTypes;
+    }());
+    var privateClassWithWithPublicParmeterTypes = /** @class */ (function () {
+        function privateClassWithWithPublicParmeterTypes() {
         }
-    }
-    class privateClassWithWithPublicParmeterTypes {
-        static myPublicStaticMethod() {
+        privateClassWithWithPublicParmeterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        static myPrivateStaticMethod() {
+        };
+        privateClassWithWithPublicParmeterTypes.myPrivateStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        privateClassWithWithPublicParmeterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        myPrivateMethod() {
+        };
+        privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        privateClassWithWithPublicParmeterTypes.myPublicStaticMethod1 = function () {
             return new publicClass();
-        }
-        static myPrivateStaticMethod1() {
+        };
+        privateClassWithWithPublicParmeterTypes.myPrivateStaticMethod1 = function () {
             return new publicClass();
-        }
-        myPublicMethod1() {
+        };
+        privateClassWithWithPublicParmeterTypes.prototype.myPublicMethod1 = function () {
             return new publicClass();
-        }
-        myPrivateMethod1() {
+        };
+        privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new publicClass();
-        }
-    }
+        };
+        return privateClassWithWithPublicParmeterTypes;
+    }());
     function publicFunctionWithPrivateParmeterTypes() {
         return null;
     }
@@ -1704,20 +1770,23 @@ var privateModule;
     function privateFunctionWithPublicParmeterTypes1() {
         return new publicClass();
     }
-    class publicClassWithPrivateModuleParameterTypes {
-        static myPublicStaticMethod() {
+    var publicClassWithPrivateModuleParameterTypes = /** @class */ (function () {
+        function publicClassWithPrivateModuleParameterTypes() {
+        }
+        publicClassWithPrivateModuleParameterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        publicClassWithPrivateModuleParameterTypes.myPublicStaticMethod1 = function () {
             return new privateModule.publicClass();
-        }
-        myPublicMethod1() {
+        };
+        publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
             return new privateModule.publicClass();
-        }
-    }
+        };
+        return publicClassWithPrivateModuleParameterTypes;
+    }());
     privateModule.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
     function publicFunctionWithPrivateModuleParameterTypes() {
         return null;
@@ -1727,20 +1796,23 @@ var privateModule;
         return new privateModule.publicClass();
     }
     privateModule.publicFunctionWithPrivateModuleParameterTypes1 = publicFunctionWithPrivateModuleParameterTypes1;
-    class privateClassWithPrivateModuleParameterTypes {
-        static myPublicStaticMethod() {
+    var privateClassWithPrivateModuleParameterTypes = /** @class */ (function () {
+        function privateClassWithPrivateModuleParameterTypes() {
+        }
+        privateClassWithPrivateModuleParameterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        privateClassWithPrivateModuleParameterTypes.myPublicStaticMethod1 = function () {
             return new privateModule.publicClass();
-        }
-        myPublicMethod1() {
+        };
+        privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
             return new privateModule.publicClass();
-        }
-    }
+        };
+        return privateClassWithPrivateModuleParameterTypes;
+    }());
     function privateFunctionWithPrivateModuleParameterTypes() {
         return null;
     }
@@ -1749,34 +1821,40 @@ var privateModule;
     }
 })(privateModule || (privateModule = {}));
 //// [privacyFunctionReturnTypeDeclFile_GlobalFile.js]
-class publicClassInGlobal {
-}
-class publicClassWithWithPublicParmeterTypesInGlobal {
-    static myPublicStaticMethod() {
+var publicClassInGlobal = /** @class */ (function () {
+    function publicClassInGlobal() {
+    }
+    return publicClassInGlobal;
+}());
+var publicClassWithWithPublicParmeterTypesInGlobal = /** @class */ (function () {
+    function publicClassWithWithPublicParmeterTypesInGlobal() {
+    }
+    publicClassWithWithPublicParmeterTypesInGlobal.myPublicStaticMethod = function () {
         return null;
-    }
-    static myPrivateStaticMethod() {
+    };
+    publicClassWithWithPublicParmeterTypesInGlobal.myPrivateStaticMethod = function () {
         return null;
-    }
-    myPublicMethod() {
+    };
+    publicClassWithWithPublicParmeterTypesInGlobal.prototype.myPublicMethod = function () {
         return null;
-    }
-    myPrivateMethod() {
+    };
+    publicClassWithWithPublicParmeterTypesInGlobal.prototype.myPrivateMethod = function () {
         return null;
-    }
-    static myPublicStaticMethod1() {
+    };
+    publicClassWithWithPublicParmeterTypesInGlobal.myPublicStaticMethod1 = function () {
         return new publicClassInGlobal();
-    }
-    static myPrivateStaticMethod1() {
+    };
+    publicClassWithWithPublicParmeterTypesInGlobal.myPrivateStaticMethod1 = function () {
         return new publicClassInGlobal();
-    }
-    myPublicMethod1() {
+    };
+    publicClassWithWithPublicParmeterTypesInGlobal.prototype.myPublicMethod1 = function () {
         return new publicClassInGlobal();
-    }
-    myPrivateMethod1() {
+    };
+    publicClassWithWithPublicParmeterTypesInGlobal.prototype.myPrivateMethod1 = function () {
         return new publicClassInGlobal();
-    }
-}
+    };
+    return publicClassWithWithPublicParmeterTypesInGlobal;
+}());
 function publicFunctionWithPublicParmeterTypesInGlobal() {
     return null;
 }
@@ -1785,124 +1863,148 @@ function publicFunctionWithPublicParmeterTypesInGlobal1() {
 }
 var publicModuleInGlobal;
 (function (publicModuleInGlobal) {
-    class privateClass {
-    }
-    class publicClass {
-    }
+    var privateClass = /** @class */ (function () {
+        function privateClass() {
+        }
+        return privateClass;
+    }());
+    var publicClass = /** @class */ (function () {
+        function publicClass() {
+        }
+        return publicClass;
+    }());
     publicModuleInGlobal.publicClass = publicClass;
-    let privateModule;
+    var privateModule;
     (function (privateModule) {
-        class privateClass {
-        }
-        class publicClass {
-        }
+        var privateClass = /** @class */ (function () {
+            function privateClass() {
+            }
+            return privateClass;
+        }());
+        var publicClass = /** @class */ (function () {
+            function publicClass() {
+            }
+            return publicClass;
+        }());
         privateModule.publicClass = publicClass;
-        class publicClassWithWithPrivateParmeterTypes {
-            static myPublicStaticMethod() {
+        var publicClassWithWithPrivateParmeterTypes = /** @class */ (function () {
+            function publicClassWithWithPrivateParmeterTypes() {
+            }
+            publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
                 return null;
-            }
-            static myPrivateStaticMethod() {
+            };
+            publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
                 return null;
-            }
-            myPublicMethod() {
+            };
+            publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
                 return null;
-            }
-            myPrivateMethod() {
+            };
+            publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
                 return null;
-            }
-            static myPublicStaticMethod1() {
+            };
+            publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
                 return new privateClass();
-            }
-            static myPrivateStaticMethod1() {
+            };
+            publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
                 return new privateClass();
-            }
-            myPublicMethod1() {
+            };
+            publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
                 return new privateClass();
-            }
-            myPrivateMethod1() {
+            };
+            publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
                 return new privateClass();
-            }
-        }
+            };
+            return publicClassWithWithPrivateParmeterTypes;
+        }());
         privateModule.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
-        class publicClassWithWithPublicParmeterTypes {
-            static myPublicStaticMethod() {
+        var publicClassWithWithPublicParmeterTypes = /** @class */ (function () {
+            function publicClassWithWithPublicParmeterTypes() {
+            }
+            publicClassWithWithPublicParmeterTypes.myPublicStaticMethod = function () {
                 return null;
-            }
-            static myPrivateStaticMethod() {
+            };
+            publicClassWithWithPublicParmeterTypes.myPrivateStaticMethod = function () {
                 return null;
-            }
-            myPublicMethod() {
+            };
+            publicClassWithWithPublicParmeterTypes.prototype.myPublicMethod = function () {
                 return null;
-            }
-            myPrivateMethod() {
+            };
+            publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod = function () {
                 return null;
-            }
-            static myPublicStaticMethod1() {
+            };
+            publicClassWithWithPublicParmeterTypes.myPublicStaticMethod1 = function () {
                 return new publicClass();
-            }
-            static myPrivateStaticMethod1() {
+            };
+            publicClassWithWithPublicParmeterTypes.myPrivateStaticMethod1 = function () {
                 return new publicClass();
-            }
-            myPublicMethod1() {
+            };
+            publicClassWithWithPublicParmeterTypes.prototype.myPublicMethod1 = function () {
                 return new publicClass();
-            }
-            myPrivateMethod1() {
+            };
+            publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
                 return new publicClass();
-            }
-        }
+            };
+            return publicClassWithWithPublicParmeterTypes;
+        }());
         privateModule.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
-        class privateClassWithWithPrivateParmeterTypes {
-            static myPublicStaticMethod() {
-                return null;
+        var privateClassWithWithPrivateParmeterTypes = /** @class */ (function () {
+            function privateClassWithWithPrivateParmeterTypes() {
             }
-            static myPrivateStaticMethod() {
+            privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
                 return null;
-            }
-            myPublicMethod() {
+            };
+            privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
                 return null;
-            }
-            myPrivateMethod() {
+            };
+            privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
                 return null;
-            }
-            static myPublicStaticMethod1() {
+            };
+            privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
+                return null;
+            };
+            privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
                 return new privateClass();
-            }
-            static myPrivateStaticMethod1() {
+            };
+            privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
                 return new privateClass();
-            }
-            myPublicMethod1() {
+            };
+            privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
                 return new privateClass();
-            }
-            myPrivateMethod1() {
+            };
+            privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
                 return new privateClass();
+            };
+            return privateClassWithWithPrivateParmeterTypes;
+        }());
+        var privateClassWithWithPublicParmeterTypes = /** @class */ (function () {
+            function privateClassWithWithPublicParmeterTypes() {
             }
-        }
-        class privateClassWithWithPublicParmeterTypes {
-            static myPublicStaticMethod() {
+            privateClassWithWithPublicParmeterTypes.myPublicStaticMethod = function () {
                 return null;
-            }
-            static myPrivateStaticMethod() {
+            };
+            privateClassWithWithPublicParmeterTypes.myPrivateStaticMethod = function () {
                 return null;
-            }
-            myPublicMethod() {
+            };
+            privateClassWithWithPublicParmeterTypes.prototype.myPublicMethod = function () {
                 return null;
-            }
-            myPrivateMethod() {
+            };
+            privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod = function () {
                 return null;
-            }
-            static myPublicStaticMethod1() {
+            };
+            privateClassWithWithPublicParmeterTypes.myPublicStaticMethod1 = function () {
                 return new publicClass();
-            }
-            static myPrivateStaticMethod1() {
+            };
+            privateClassWithWithPublicParmeterTypes.myPrivateStaticMethod1 = function () {
                 return new publicClass();
-            }
-            myPublicMethod1() {
+            };
+            privateClassWithWithPublicParmeterTypes.prototype.myPublicMethod1 = function () {
                 return new publicClass();
-            }
-            myPrivateMethod1() {
+            };
+            privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
                 return new publicClass();
-            }
-        }
+            };
+            return privateClassWithWithPublicParmeterTypes;
+        }());
         function publicFunctionWithPrivateParmeterTypes() {
             return null;
         }
@@ -1931,20 +2033,23 @@ var publicModuleInGlobal;
         function privateFunctionWithPublicParmeterTypes1() {
             return new publicClass();
         }
-        class publicClassWithPrivateModuleParameterTypes {
-            static myPublicStaticMethod() {
+        var publicClassWithPrivateModuleParameterTypes = /** @class */ (function () {
+            function publicClassWithPrivateModuleParameterTypes() {
+            }
+            publicClassWithPrivateModuleParameterTypes.myPublicStaticMethod = function () {
                 return null;
-            }
-            myPublicMethod() {
+            };
+            publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod = function () {
                 return null;
-            }
-            static myPublicStaticMethod1() {
+            };
+            publicClassWithPrivateModuleParameterTypes.myPublicStaticMethod1 = function () {
                 return new privateModule.publicClass();
-            }
-            myPublicMethod1() {
+            };
+            publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
                 return new privateModule.publicClass();
-            }
-        }
+            };
+            return publicClassWithPrivateModuleParameterTypes;
+        }());
         privateModule.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
         function publicFunctionWithPrivateModuleParameterTypes() {
             return null;
@@ -1954,20 +2059,23 @@ var publicModuleInGlobal;
             return new privateModule.publicClass();
         }
         privateModule.publicFunctionWithPrivateModuleParameterTypes1 = publicFunctionWithPrivateModuleParameterTypes1;
-        class privateClassWithPrivateModuleParameterTypes {
-            static myPublicStaticMethod() {
+        var privateClassWithPrivateModuleParameterTypes = /** @class */ (function () {
+            function privateClassWithPrivateModuleParameterTypes() {
+            }
+            privateClassWithPrivateModuleParameterTypes.myPublicStaticMethod = function () {
                 return null;
-            }
-            myPublicMethod() {
+            };
+            privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod = function () {
                 return null;
-            }
-            static myPublicStaticMethod1() {
+            };
+            privateClassWithPrivateModuleParameterTypes.myPublicStaticMethod1 = function () {
                 return new privateModule.publicClass();
-            }
-            myPublicMethod1() {
+            };
+            privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
                 return new privateModule.publicClass();
-            }
-        }
+            };
+            return privateClassWithPrivateModuleParameterTypes;
+        }());
         function privateFunctionWithPrivateModuleParameterTypes() {
             return null;
         }
@@ -1975,112 +2083,124 @@ var publicModuleInGlobal;
             return new privateModule.publicClass();
         }
     })(privateModule || (privateModule = {}));
-    class publicClassWithWithPrivateParmeterTypes {
-        static myPublicStaticMethod() {
+    var publicClassWithWithPrivateParmeterTypes = /** @class */ (function () {
+        function publicClassWithWithPrivateParmeterTypes() {
+        }
+        publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        static myPrivateStaticMethod() {
+        };
+        publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        myPrivateMethod() {
+        };
+        publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
             return new privateClass();
-        }
-        static myPrivateStaticMethod1() {
+        };
+        publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
             return new privateClass();
-        }
-        myPublicMethod1() {
+        };
+        publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
             return new privateClass();
-        }
-        myPrivateMethod1() {
+        };
+        publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new privateClass();
-        }
-    }
+        };
+        return publicClassWithWithPrivateParmeterTypes;
+    }());
     publicModuleInGlobal.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
-    class publicClassWithWithPublicParmeterTypes {
-        static myPublicStaticMethod() {
+    var publicClassWithWithPublicParmeterTypes = /** @class */ (function () {
+        function publicClassWithWithPublicParmeterTypes() {
+        }
+        publicClassWithWithPublicParmeterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        static myPrivateStaticMethod() {
+        };
+        publicClassWithWithPublicParmeterTypes.myPrivateStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        publicClassWithWithPublicParmeterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        myPrivateMethod() {
+        };
+        publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        publicClassWithWithPublicParmeterTypes.myPublicStaticMethod1 = function () {
             return new publicClass();
-        }
-        static myPrivateStaticMethod1() {
+        };
+        publicClassWithWithPublicParmeterTypes.myPrivateStaticMethod1 = function () {
             return new publicClass();
-        }
-        myPublicMethod1() {
+        };
+        publicClassWithWithPublicParmeterTypes.prototype.myPublicMethod1 = function () {
             return new publicClass();
-        }
-        myPrivateMethod1() {
+        };
+        publicClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new publicClass();
-        }
-    }
+        };
+        return publicClassWithWithPublicParmeterTypes;
+    }());
     publicModuleInGlobal.publicClassWithWithPublicParmeterTypes = publicClassWithWithPublicParmeterTypes;
-    class privateClassWithWithPrivateParmeterTypes {
-        static myPublicStaticMethod() {
-            return null;
+    var privateClassWithWithPrivateParmeterTypes = /** @class */ (function () {
+        function privateClassWithWithPrivateParmeterTypes() {
         }
-        static myPrivateStaticMethod() {
+        privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
             return null;
-        }
-        myPrivateMethod() {
+        };
+        privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
+            return null;
+        };
+        privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
             return new privateClass();
-        }
-        static myPrivateStaticMethod1() {
+        };
+        privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
             return new privateClass();
-        }
-        myPublicMethod1() {
+        };
+        privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
             return new privateClass();
-        }
-        myPrivateMethod1() {
+        };
+        privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new privateClass();
+        };
+        return privateClassWithWithPrivateParmeterTypes;
+    }());
+    var privateClassWithWithPublicParmeterTypes = /** @class */ (function () {
+        function privateClassWithWithPublicParmeterTypes() {
         }
-    }
-    class privateClassWithWithPublicParmeterTypes {
-        static myPublicStaticMethod() {
+        privateClassWithWithPublicParmeterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        static myPrivateStaticMethod() {
+        };
+        privateClassWithWithPublicParmeterTypes.myPrivateStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        privateClassWithWithPublicParmeterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        myPrivateMethod() {
+        };
+        privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        privateClassWithWithPublicParmeterTypes.myPublicStaticMethod1 = function () {
             return new publicClass();
-        }
-        static myPrivateStaticMethod1() {
+        };
+        privateClassWithWithPublicParmeterTypes.myPrivateStaticMethod1 = function () {
             return new publicClass();
-        }
-        myPublicMethod1() {
+        };
+        privateClassWithWithPublicParmeterTypes.prototype.myPublicMethod1 = function () {
             return new publicClass();
-        }
-        myPrivateMethod1() {
+        };
+        privateClassWithWithPublicParmeterTypes.prototype.myPrivateMethod1 = function () {
             return new publicClass();
-        }
-    }
+        };
+        return privateClassWithWithPublicParmeterTypes;
+    }());
     function publicFunctionWithPrivateParmeterTypes() {
         return null;
     }
@@ -2109,20 +2229,23 @@ var publicModuleInGlobal;
     function privateFunctionWithPublicParmeterTypes1() {
         return new publicClass();
     }
-    class publicClassWithPrivateModuleParameterTypes {
-        static myPublicStaticMethod() {
+    var publicClassWithPrivateModuleParameterTypes = /** @class */ (function () {
+        function publicClassWithPrivateModuleParameterTypes() {
+        }
+        publicClassWithPrivateModuleParameterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        publicClassWithPrivateModuleParameterTypes.myPublicStaticMethod1 = function () {
             return new privateModule.publicClass();
-        }
-        myPublicMethod1() {
+        };
+        publicClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
             return new privateModule.publicClass();
-        }
-    }
+        };
+        return publicClassWithPrivateModuleParameterTypes;
+    }());
     publicModuleInGlobal.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
     function publicFunctionWithPrivateModuleParameterTypes() {
         return null;
@@ -2132,20 +2255,23 @@ var publicModuleInGlobal;
         return new privateModule.publicClass();
     }
     publicModuleInGlobal.publicFunctionWithPrivateModuleParameterTypes1 = publicFunctionWithPrivateModuleParameterTypes1;
-    class privateClassWithPrivateModuleParameterTypes {
-        static myPublicStaticMethod() {
+    var privateClassWithPrivateModuleParameterTypes = /** @class */ (function () {
+        function privateClassWithPrivateModuleParameterTypes() {
+        }
+        privateClassWithPrivateModuleParameterTypes.myPublicStaticMethod = function () {
             return null;
-        }
-        myPublicMethod() {
+        };
+        privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod = function () {
             return null;
-        }
-        static myPublicStaticMethod1() {
+        };
+        privateClassWithPrivateModuleParameterTypes.myPublicStaticMethod1 = function () {
             return new privateModule.publicClass();
-        }
-        myPublicMethod1() {
+        };
+        privateClassWithPrivateModuleParameterTypes.prototype.myPublicMethod1 = function () {
             return new privateModule.publicClass();
-        }
-    }
+        };
+        return privateClassWithPrivateModuleParameterTypes;
+    }());
     function privateFunctionWithPrivateModuleParameterTypes() {
         return null;
     }

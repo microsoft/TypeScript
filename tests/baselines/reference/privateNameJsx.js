@@ -12,12 +12,13 @@ class Test {
 
 //// [privateNameJsx.jsx]
 var _Test_prop;
-class Test {
-    constructor() {
-        _Test_prop.set(this, () => <div />);
+var Test = /** @class */ (function () {
+    function Test() {
+        _Test_prop.set(this, function () { return <div />; });
     }
-    render() {
+    Test.prototype.render = function () {
         return <this. />;
-    }
-}
+    };
+    return Test;
+}());
 _Test_prop = new WeakMap();

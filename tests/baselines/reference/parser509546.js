@@ -10,6 +10,9 @@ export class Logger {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Logger = void 0;
-class Logger {
-}
+var Logger = /** @class */ (function () {
+    function Logger() {
+    }
+    return Logger;
+}());
 exports.Logger = Logger;

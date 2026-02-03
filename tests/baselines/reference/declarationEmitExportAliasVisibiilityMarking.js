@@ -20,7 +20,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [Card.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = (suit, rank) => ({ suit, rank });
+exports.default = (function (suit, rank) { return ({ suit: suit, rank: rank }); });
 //// [index.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -58,7 +58,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazyCard = void 0;
-let lazyCard = () => Promise.resolve().then(function () { return __importStar(require('./Card')); }).then(a => a.default);
+var lazyCard = function () { return Promise.resolve().then(function () { return __importStar(require('./Card')); }).then(function (a) { return a.default; }); };
 exports.lazyCard = lazyCard;
 
 

@@ -27,5 +27,8 @@ function foo3() { }
     function x() { }
     foo3.x = x;
 })(foo3 || (foo3 = {}));
-class foo3 {
-} // Should error
+var foo3 = /** @class */ (function () {
+    function foo3() {
+    }
+    return foo3;
+}()); // Should error

@@ -21,16 +21,16 @@
 //// [enumShadowedInfinityNaN.js]
 // https://github.com/microsoft/TypeScript/issues/54981
 {
-    let Infinity = {};
-    let En;
+    var Infinity_1 = {};
+    var En = void 0;
     (function (En) {
-        En[En["X"] = Infinity] = "X";
+        En[En["X"] = Infinity_1] = "X";
     })(En || (En = {}));
 }
 {
-    let NaN = {};
-    let En;
+    var NaN_1 = {};
+    var En = void 0;
     (function (En) {
-        En[En["X"] = NaN] = "X";
+        En[En["X"] = NaN_1] = "X";
     })(En || (En = {}));
 }

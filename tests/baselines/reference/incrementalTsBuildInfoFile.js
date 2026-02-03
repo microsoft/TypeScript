@@ -7,4 +7,4 @@ const x = 10;
 
 
 //// [a.js]
-const x = 10;
+var x = 10;

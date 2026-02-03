@@ -9,10 +9,13 @@ class C {
 }
 
 //// [methodSignatureDeclarationEmit1.js]
-class C {
-    foo(a) {
+var C = /** @class */ (function () {
+    function C() {
     }
-}
+    C.prototype.foo = function (a) {
+    };
+    return C;
+}());
 
 
 //// [methodSignatureDeclarationEmit1.d.ts]

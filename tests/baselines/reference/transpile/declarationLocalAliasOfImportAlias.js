@@ -12,7 +12,7 @@ export const obj = {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.obj = void 0;
 exports.obj = {
-    doThing(_k) {
+    doThing: function (_k) {
         return {};
     },
 };

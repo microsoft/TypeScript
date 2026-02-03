@@ -49,7 +49,7 @@ ONE: while (true)
     break TWO;
 // break from inside function
 TWO: while (true) {
-    var x = () => {
+    var x = function () {
         break TWO;
     };
 }

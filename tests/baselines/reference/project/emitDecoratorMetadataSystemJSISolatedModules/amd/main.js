@@ -45,18 +45,16 @@ define(["require", "exports", "angular2/core"], function (require, exports, ng) 
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MyClass1 = void 0;
     ng = __importStar(ng);
-    let MyClass1 = (() => {
+    var MyClass1 = /** @class */ (function () {
+        function MyClass1(_elementRef) {
+            this._elementRef = _elementRef;
+        }
         var _a;
-        let MyClass1 = class MyClass1 {
-            constructor(_elementRef) {
-                this._elementRef = _elementRef;
-            }
-        };
         MyClass1 = __decorate([
             foo,
             __metadata("design:paramtypes", [typeof (_a = typeof ng !== "undefined" && ng.ElementRef) === "function" ? _a : Object])
         ], MyClass1);
         return MyClass1;
-    })();
+    }());
     exports.MyClass1 = MyClass1;
 });

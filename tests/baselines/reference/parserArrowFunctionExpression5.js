@@ -9,4 +9,4 @@
 
 
 //// [parserArrowFunctionExpression5.js]
-(bar(x, () => { }, () => { }));
+(bar(x, function () { }, function () { }));

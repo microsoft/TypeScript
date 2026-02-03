@@ -7,4 +7,4 @@ f(x => f(y => x = y));
 //// [genericFunctionHasFreshTypeArgs.js]
 function f(p) { }
 ;
-f(x => f(y => x = y));
+f(function (x) { return f(function (y) { return x = y; }); });

@@ -4,4 +4,4 @@
 var v = { foo() { } };
 
 //// [parserFunctionPropertyAssignment1.js]
-var v = { foo() { } };
+var v = { foo: function () { } };

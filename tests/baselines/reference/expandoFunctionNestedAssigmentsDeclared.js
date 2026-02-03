@@ -98,13 +98,14 @@ for (Foo.forInit = 1; (Foo.forCond = 1) > 1; Foo.forIncr = 1) {
         Foo.fromForBodyNested = 1;
     }
 }
-for (let f of (Foo.forOf = [])) {
+for (var _i = 0, _a = (Foo.forOf = []); _i < _a.length; _i++) {
+    var f = _a[_i];
     Foo.fromForOfBody = 1;
     {
         Foo.fromForOfBodyNested = 1;
     }
 }
-for (let f in (Foo.forIn = [])) {
+for (var f in (Foo.forIn = [])) {
     Foo.fromForInBody = 1;
     {
         Foo.fromForInBodyNested = 1;

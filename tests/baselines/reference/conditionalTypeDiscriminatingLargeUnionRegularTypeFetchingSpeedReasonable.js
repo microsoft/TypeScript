@@ -8018,4 +8018,6 @@ export function makeThing<T extends BigUnion['name']>(
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.makeThing = makeThing;
-function makeThing(name, children = []) { }
+function makeThing(name, children) {
+    if (children === void 0) { children = []; }
+}

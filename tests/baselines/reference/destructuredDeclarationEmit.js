@@ -26,9 +26,9 @@ export { foo2 };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.arr = exports.foo = void 0;
-const foo = { bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } };
+var foo = { bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } };
 exports.foo = foo;
-const arr = [0, 1, 2, ['a', 'b', 'c', [{ def: 'def' }, { sec: 'sec' }]]];
+var arr = [0, 1, 2, ['a', 'b', 'c', [{ def: 'def' }, { sec: 'sec' }]]];
 exports.arr = arr;
 //// [index.js]
 "use strict";
@@ -37,17 +37,17 @@ exports.foo2 = exports.sec = exports.bee = exports.one = exports.ibaz = exports.
 var foo_1 = require("./foo");
 Object.defineProperty(exports, "foo", { enumerable: true, get: function () { return foo_1.foo; } });
 Object.defineProperty(exports, "arr", { enumerable: true, get: function () { return foo_1.arr; } });
-const { bar: baz, bat, bam: { bork: { bar: ibar, baz: ibaz } } } = foo_1.foo;
+var baz = foo_1.foo.bar, bat = foo_1.foo.bat, _a = foo_1.foo.bam.bork, ibar = _a.bar, ibaz = _a.baz;
 exports.baz = baz;
 exports.ibaz = ibaz;
-const [, one, , [, bee, , [, { sec }]]] = foo_1.arr;
+var one = foo_1.arr[1], _b = foo_1.arr[3], bee = _b[1], _c = _b[3], sec = _c[1].sec;
 exports.one = one;
 exports.bee = bee;
 exports.sec = sec;
-const getFoo = () => ({
+var getFoo = function () { return ({
     foo: 'foo'
-});
-const { foo: foo2 } = getFoo();
+}); };
+var foo2 = getFoo().foo;
 exports.foo2 = foo2;
 
 

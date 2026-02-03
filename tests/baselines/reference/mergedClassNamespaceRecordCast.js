@@ -21,13 +21,19 @@ C3 as Record<string, unknown>;
 
 
 //// [mergedClassNamespaceRecordCast.js]
-class C1 {
-    foo() { }
-}
+var C1 = /** @class */ (function () {
+    function C1() {
+    }
+    C1.prototype.foo = function () { };
+    return C1;
+}());
 new C1();
-class C2 {
-    foo() { }
-}
+var C2 = /** @class */ (function () {
+    function C2() {
+    }
+    C2.prototype.foo = function () { };
+    return C2;
+}());
 (function (C2) {
     C2.unrelated = 3;
 })(C2 || (C2 = {}));

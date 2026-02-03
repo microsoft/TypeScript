@@ -16,13 +16,16 @@ function M() {
 
 //// [classExpressionTest1.js]
 function M() {
-    class C {
-        f() {
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        C.prototype.f = function () {
             var t;
             var x;
-            return { t, x };
-        }
-    }
+            return { t: t, x: x };
+        };
+        return C;
+    }());
     var v = new C();
     return v.f();
 }

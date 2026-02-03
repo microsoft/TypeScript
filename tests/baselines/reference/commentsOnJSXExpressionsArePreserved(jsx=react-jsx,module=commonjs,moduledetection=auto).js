@@ -26,8 +26,11 @@ class Component {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
-class Component {
-    render() {
-        return (0, jsx_runtime_1.jsx)("div", { children: null /* preserved */ });
+var Component = /** @class */ (function () {
+    function Component() {
     }
-}
+    Component.prototype.render = function () {
+        return (0, jsx_runtime_1.jsx)("div", { children: null /* preserved */ });
+    };
+    return Component;
+}());

@@ -11,8 +11,8 @@ export const foo = <T,>(x: T) => {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
-const foo = (x) => {
-    const inner = (y) => [x, y];
+var foo = function (x) {
+    var inner = function (y) { return [x, y]; };
     return inner;
 };
 exports.foo = foo;

@@ -28,13 +28,19 @@ a['value'] = (item) => item.property
 
 
 //// [divergentAccessorsTypes7.js]
-class Test {
-    constructor() { }
-    set value(value) { }
-    get value() {
-        return null;
+var Test = /** @class */ (function () {
+    function Test() {
     }
-}
-const a = new Test();
-a.value = (item) => item.property;
-a['value'] = (item) => item.property;
+    Object.defineProperty(Test.prototype, "value", {
+        get: function () {
+            return null;
+        },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
+    return Test;
+}());
+var a = new Test();
+a.value = function (item) { return item.property; };
+a['value'] = function (item) { return item.property; };

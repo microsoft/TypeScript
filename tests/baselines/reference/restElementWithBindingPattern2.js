@@ -4,4 +4,4 @@
 var [...{0: a, b }] = [0, 1];
 
 //// [restElementWithBindingPattern2.js]
-var [...{ 0: a, b }] = [0, 1];
+var _a = [0, 1].slice(0), a = _a[0], b = _a.b;

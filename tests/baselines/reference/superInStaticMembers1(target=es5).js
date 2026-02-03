@@ -495,640 +495,1569 @@ declare class B { static w(): number; }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Reflect = void 0;
-class Reflect {
-}
+var Reflect = /** @class */ (function () {
+    function Reflect() {
+    }
+    return Reflect;
+}());
 exports.Reflect = Reflect;
-class default_1 {
-}
+var default_1 = /** @class */ (function () {
+    function default_1() {
+    }
+    return default_1;
+}());
 exports.default = default_1;
 ;
 //// [locals.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    var _a;
     _a = C;
     C._ = [
-        (() => {
+        (function () {
             var Reflect; // collision (es2015-es2021 only)
-            super.w();
+            _super.w.call(_a);
         })(),
-        (() => {
-            var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
-            super.w();
+        (function () {
+            var Reflect = { Reflect: null }.Reflect; // collision (es2015-es2021 only)
+            _super.w.call(_a);
         })(),
-        (() => {
-            var [Reflect] = [null]; // collision (es2015-es2021 only)
-            super.w();
+        (function () {
+            var Reflect = [null][0]; // collision (es2015-es2021 only)
+            _super.w.call(_a);
         })(),
-        (() => {
-            class Reflect {
-            } // collision (es2015-es2021 only)
-            super.w();
+        (function () {
+            var Reflect = /** @class */ (function () {
+                function Reflect() {
+                }
+                return Reflect;
+            }()); // collision (es2015-es2021 only)
+            _super.w.call(_a);
         })(),
-        (() => {
+        (function () {
             function Reflect() { } // collision (es2015-es2021 only)
-            super.w();
+            _super.w.call(_a);
         })(),
-        (() => {
-            let Reflect;
+        (function () {
+            var Reflect;
             (function (Reflect) {
             })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
-            super.w();
+            _super.w.call(_a);
         })(),
-        (() => {
-            super.w();
+        (function () {
+            _super.w.call(_a);
         })(),
-        (() => {
-            super.w();
+        (function () {
+            _super.w.call(_a);
         })(),
-        (() => {
+        (function () {
             ; // no collision
-            super.w();
+            _super.w.call(_a);
         })(),
-        (() => {
-            (class Reflect {
-            }); // no collision
-            super.w();
+        (function () {
+            (/** @class */ (function () {
+                function Reflect() {
+                }
+                return Reflect;
+            }())); // no collision
+            _super.w.call(_a);
         })(),
-        (() => {
+        (function () {
             (function Reflect() { }); // no collision
-            super.w();
+            _super.w.call(_a);
         })(),
     ];
-    (() => {
-        var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
-        super.w();
+    (function () {
+        var Reflect = { Reflect: null }.Reflect; // collision (es2015-es2021 only)
+        _super.w.call(_a);
     })();
-    (() => {
-        var [Reflect] = [null]; // collision (es2015-es2021 only)
-        super.w();
+    (function () {
+        var Reflect = [null][0]; // collision (es2015-es2021 only)
+        _super.w.call(_a);
     })();
-    (() => {
+    (function () {
         var Reflect; // collision (es2015-es2021 only)
-        super.w();
+        _super.w.call(_a);
     })();
-    (() => {
-        class Reflect {
-        } // collision (es2015-es2021 only)
-        super.w();
+    (function () {
+        var Reflect = /** @class */ (function () {
+            function Reflect() {
+            }
+            return Reflect;
+        }()); // collision (es2015-es2021 only)
+        _super.w.call(_a);
     })();
-    (() => {
+    (function () {
         function Reflect() { } // collision (es2015-es2021 only)
-        super.w();
+        _super.w.call(_a);
     })();
-    (() => {
-        let Reflect;
+    (function () {
+        var Reflect;
         (function (Reflect) {
         })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
-        super.w();
+        _super.w.call(_a);
     })();
-    (() => {
-        super.w();
+    (function () {
+        _super.w.call(_a);
     })();
-    (() => {
-        super.w();
+    (function () {
+        _super.w.call(_a);
     })();
-    (() => {
-        super.w();
+    (function () {
+        _super.w.call(_a);
     })();
-    (() => {
-        (class Reflect {
-        }); // no collision
-        super.w();
+    (function () {
+        (/** @class */ (function () {
+            function Reflect() {
+            }
+            return Reflect;
+        }())); // no collision
+        _super.w.call(_a);
     })();
-    (() => {
+    (function () {
         (function Reflect() { }); // no collision
-        super.w();
+        _super.w.call(_a);
     })();
     return C;
-})();
+}(B));
 //// [varInContainingScopeStaticField1.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Reflect = null; // collision (es2015-es2021 only)
-let C = (() => {
-    var _a;
-    class C extends B {
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    var _a;
     _a = C;
-    C._ = super.w();
+    C._ = _super.w.call(_a);
     return C;
-})();
+}(B));
 //// [varInContainingScopeStaticField2.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Reflect = { Reflect: null }.Reflect; // collision (es2015-es2021 only)
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [varInContainingScopeStaticField3.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var [Reflect] = [null]; // collision (es2015-es2021 only)
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Reflect = [null][0]; // collision (es2015-es2021 only)
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [varInContainingScopeStaticBlock1.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var Reflect = null; // collision (es2015-es2021 only)
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [varInContainingScopeStaticBlock2.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
-class C extends B {
-}
+var Reflect = { Reflect: null }.Reflect; // collision (es2015-es2021 only)
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [varInContainingScopeStaticBlock3.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var [Reflect] = [null]; // collision (es2015-es2021 only)
-class C extends B {
-}
+var Reflect = [null][0]; // collision (es2015-es2021 only)
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [classDeclInContainingScopeStaticField.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class Reflect {
-} // collision (es2015-es2021 only)
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Reflect = /** @class */ (function () {
+    function Reflect() {
+    }
+    return Reflect;
+}()); // collision (es2015-es2021 only)
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [classDeclInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-class Reflect {
-} // collision (es2015-es2021 only)
-class C extends B {
-}
+var Reflect = /** @class */ (function () {
+    function Reflect() {
+    }
+    return Reflect;
+}()); // collision (es2015-es2021 only)
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [funcDeclInContainingScopeStaticField.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 function Reflect() { } // collision (es2015-es2021 only)
-let C = (() => {
-    var _a;
-    class C extends B {
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    var _a;
     _a = C;
-    C._ = super.w();
+    C._ = _super.w.call(_a);
     return C;
-})();
+}(B));
 //// [funcDeclInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 function Reflect() { } // collision (es2015-es2021 only)
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [valueNamespaceInContainingScopeStaticField.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [valueNamespaceInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [enumInContainingScopeStaticField.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Reflect;
 (function (Reflect) {
 })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
-let C = (() => {
-    var _a;
-    class C extends B {
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    var _a;
     _a = C;
-    C._ = super.w();
+    C._ = _super.w.call(_a);
     return C;
-})();
+}(B));
 //// [enumInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var Reflect;
 (function (Reflect) {
 })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [constEnumInContainingScopeStaticField.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [constEnumInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [namespaceImportInContainingScopeStaticField.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [namespaceImportInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [namedImportInContainingScopeStaticField.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [namedImportInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [namedImportOfInterfaceInContainingScopeStaticField.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [namedImportOfInterfaceInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [namedImportOfUninstantiatedNamespaceInContainingScopeStaticField.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [namedImportOfUninstantiatedNamespaceInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [namedImportOfConstEnumInContainingScopeStaticField.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [namedImportOfConstEnumInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [typeOnlyNamedImportInContainingScopeStaticField.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [typeOnlyNamedImportInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [defaultImportInContainingScopeStaticField.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [defaultImportInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [typeOnlyDefaultImportInContainingScopeStaticField.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [typeOnlyDefaultImportInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [typeInContainingScopeStaticField.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [typeInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [interfaceInContainingScopeStaticField.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 ; // no collision
-let C = (() => {
-    var _a;
-    class C extends B {
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    var _a;
     _a = C;
-    C._ = super.w();
+    C._ = _super.w.call(_a);
     return C;
-})();
+}(B));
 //// [interfaceInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 ; // no collision
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [uninstantiatedNamespaceInContainingScopeStaticField.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 ; // no collision
-let C = (() => {
-    var _a;
-    class C extends B {
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    var _a;
     _a = C;
-    C._ = super.w();
+    C._ = _super.w.call(_a);
     return C;
-})();
+}(B));
 //// [uninstantiatedNamespaceInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 ; // no collision
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [classExprInContainingScopeStaticField.js]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-(class Reflect {
-}); // no collision
-let C = (() => {
-    var _a;
-    class C extends B {
-    }
-    _a = C;
-    C._ = super.w();
-    return C;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+(/** @class */ (function () {
+    function Reflect() {
+    }
+    return Reflect;
+}())); // no collision
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    var _a;
+    _a = C;
+    C._ = _super.w.call(_a);
+    return C;
+}(B));
 //// [classExprInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-(class Reflect {
-}); // no collision
-class C extends B {
-}
+(/** @class */ (function () {
+    function Reflect() {
+    }
+    return Reflect;
+}())); // no collision
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [inContainingClassExprStaticField.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-(_a = class Reflect {
-    },
-    (() => {
-        let C = (() => {
-            var _b;
-            class C extends B {
+(_a = /** @class */ (function () {
+        function Reflect() {
+        }
+        return Reflect;
+    }()),
+    (function () {
+        var C = /** @class */ (function (_super) {
+            __extends(C, _super);
+            function C() {
+                return _super !== null && _super.apply(this, arguments) || this;
             }
+            var _b;
             _b = C;
-            C._ = super.w();
+            C._ = _super.w.call(_b);
             return C;
-        })();
+        }(B));
     })(),
     _a);
 //// [inContainingClassExprStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-(_a = class Reflect {
-    },
-    (() => {
-        var _b;
-        class C extends B {
+(_a = /** @class */ (function () {
+        function Reflect() {
         }
+        return Reflect;
+    }()),
+    (function () {
+        var _b;
+        var C = /** @class */ (function (_super) {
+            __extends(C, _super);
+            function C() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            return C;
+        }(B));
         _b = C;
-        (() => {
-            super.w();
+        (function () {
+            _super.w.call(_b);
         })();
     })(),
     _a);
 //// [funcExprInContainingScopeStaticField.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 (function Reflect() { }); // no collision
-let C = (() => {
-    var _a;
-    class C extends B {
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    var _a;
     _a = C;
-    C._ = super.w();
+    C._ = _super.w.call(_a);
     return C;
-})();
+}(B));
 //// [funcExprInContainingScopeStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 (function Reflect() { }); // no collision
-class C extends B {
-}
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(B));
 _a = C;
-(() => {
-    super.w();
+(function () {
+    _super.w.call(_a);
 })();
 //// [inContainingFuncExprStaticField.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 (function Reflect() {
-    let C = (() => {
-        var _a;
-        class C extends B {
+    var C = /** @class */ (function (_super) {
+        __extends(C, _super);
+        function C() {
+            return _super !== null && _super.apply(this, arguments) || this;
         }
+        var _a;
         _a = C;
-        C._ = super.w();
+        C._ = _super.w.call(_a);
         return C;
-    })();
+    }(B));
 });
 //// [inContainingFuncExprStaticBlock.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 (function Reflect() {
+    var _this = this;
     var _a;
-    class C extends B {
-    }
+    var C = /** @class */ (function (_super) {
+        __extends(C, _super);
+        function C() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return C;
+    }(B));
     _a = C;
-    (() => {
-        super.w();
+    (function () {
+        _super.w.call(_a);
     })();
 });

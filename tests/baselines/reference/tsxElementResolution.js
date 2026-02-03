@@ -27,14 +27,23 @@ var e = <Dotted.Name />;
 
 
 //// [tsxElementResolution.jsx]
-class foundFirst {
-}
-class Other {
-}
+var foundFirst = /** @class */ (function () {
+    function foundFirst() {
+    }
+    return foundFirst;
+}());
+var Other = /** @class */ (function () {
+    function Other() {
+    }
+    return Other;
+}());
 var Dotted;
 (function (Dotted) {
-    class Name {
-    }
+    var Name = /** @class */ (function () {
+        function Name() {
+        }
+        return Name;
+    }());
     Dotted.Name = Name;
 })(Dotted || (Dotted = {}));
 // Should find the intrinsic element, not the class element

@@ -40,16 +40,16 @@ define(["require", "exports", "react"], function (require, exports, React) {
     Object.defineProperty(exports, "__esModule", { value: true });
     // Error
     function Bar(arg) {
-        let a1 = <ComponentSpecific1 {...arg} ignore-prop={10}/>;
+        var a1 = <ComponentSpecific1 {...arg} ignore-prop={10}/>;
     }
     // Error
     function Baz(arg) {
-        let a0 = <ComponentSpecific1 {...arg}/>;
+        var a0 = <ComponentSpecific1 {...arg}/>;
     }
     // Error
     function createLink(func) {
-        let o = <Link func={func}/>;
+        var o = <Link func={func}/>;
     }
     // Error
-    let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }}/>;
+    var i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={function (val) { }}/>;
 });

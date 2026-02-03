@@ -4,4 +4,4 @@
 var foo = () => undefined;
 
 //// [typeCheckReturnExpression.js]
-var foo = () => undefined;
+var foo = function () { return undefined; };

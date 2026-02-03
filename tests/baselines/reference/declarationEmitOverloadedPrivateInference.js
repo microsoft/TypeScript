@@ -33,17 +33,18 @@ function noArgs() {
 function oneArg(input) {
     return null;
 }
-class Wrapper {
-    constructor() {
+var Wrapper = /** @class */ (function () {
+    function Wrapper() {
         this.Proxies = {
             Failure: this.proxy(noArgs, true),
             Success: this.proxy(oneArg),
         };
     }
-    proxy(fn) {
+    Wrapper.prototype.proxy = function (fn) {
         return null;
-    }
-}
+    };
+    return Wrapper;
+}());
 exports.Wrapper = Wrapper;
 
 

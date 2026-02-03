@@ -106,18 +106,18 @@ m.prop['a'];
 var a = {}["hello"];
 var b = { '': 'foo' }[''];
 var c = {
-    get: (key) => 'foobar'
+    get: function (key) { return 'foobar'; }
 };
 c['hello'];
-const foo = c['hello'];
+var foo = c['hello'];
 var d = {
-    set: (key) => 'foobar'
+    set: function (key) { return 'foobar'; }
 };
-const bar = d['hello'];
+var bar = d['hello'];
 {
-    let e = {
-        get: (key) => 'foobar',
-        set: (key) => 'foobar'
+    var e = {
+        get: function (key) { return 'foobar'; },
+        set: function (key) { return 'foobar'; }
     };
     e['hello'];
     e['hello'] = 'modified';
@@ -125,9 +125,9 @@ const bar = d['hello'];
     e['hello']++;
 }
 {
-    let e = {
-        get: (key) => 'foobar',
-        set: (key, value) => 'foobar'
+    var e = {
+        get: function (key) { return 'foobar'; },
+        set: function (key, value) { return 'foobar'; }
     };
     e['hello'];
     e['hello'] = 'modified';
@@ -135,9 +135,9 @@ const bar = d['hello'];
     e['hello']++;
 }
 {
-    let e = {
-        get: (key) => 'foobar',
-        set: (key, value) => 'foobar'
+    var e = {
+        get: function (key) { return 'foobar'; },
+        set: function (key, value) { return 'foobar'; }
     };
     e['hello'];
     e['hello'] = 'modified';
@@ -145,18 +145,18 @@ const bar = d['hello'];
     e['hello']++;
 }
 {
-    ({ get: (key) => 'hello', set: (key, value) => { } })['hello'];
-    ({ get: (key) => 'hello', set: (key, value) => { } })['hello'] = 'modified';
-    ({ get: (key) => 'hello', set: (key, value) => { } })['hello'] += 1;
-    ({ get: (key) => 'hello', set: (key, value) => { } })['hello']++;
+    ({ get: function (key) { return 'hello'; }, set: function (key, value) { } })['hello'];
+    ({ get: function (key) { return 'hello'; }, set: function (key, value) { } })['hello'] = 'modified';
+    ({ get: function (key) { return 'hello'; }, set: function (key, value) { } })['hello'] += 1;
+    ({ get: function (key) { return 'hello'; }, set: function (key, value) { } })['hello']++;
 }
 {
-    ({ foo: { get: (key) => 'hello', set: (key, value) => { } } }).foo['hello'];
-    ({ foo: { get: (key) => 'hello', set: (key, value) => { } } }).foo['hello'] = 'modified';
-    ({ foo: { get: (key) => 'hello', set: (key, value) => { } } }).foo['hello'] += 1;
-    ({ foo: { get: (key) => 'hello', set: (key, value) => { } } }).foo['hello']++;
+    ({ foo: { get: function (key) { return 'hello'; }, set: function (key, value) { } } }).foo['hello'];
+    ({ foo: { get: function (key) { return 'hello'; }, set: function (key, value) { } } }).foo['hello'] = 'modified';
+    ({ foo: { get: function (key) { return 'hello'; }, set: function (key, value) { } } }).foo['hello'] += 1;
+    ({ foo: { get: function (key) { return 'hello'; }, set: function (key, value) { } } }).foo['hello']++;
 }
-const o = { a: 0 };
+var o = { a: 0 };
 o[k];
 o[k2];
 o[sym];
@@ -165,15 +165,15 @@ var NumEnum;
     NumEnum[NumEnum["a"] = 0] = "a";
     NumEnum[NumEnum["b"] = 1] = "b";
 })(NumEnum || (NumEnum = {}));
-let numEnumKey;
+var numEnumKey;
 o[numEnumKey];
 var StrEnum;
 (function (StrEnum) {
     StrEnum["a"] = "a";
     StrEnum["b"] = "b";
 })(StrEnum || (StrEnum = {}));
-let strEnumKey;
+var strEnumKey;
 o[strEnumKey];
-let rover = { bark() { } };
+var rover = { bark: function () { } };
 map[rover] = "Rover";
 m.prop['a'];

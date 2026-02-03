@@ -146,14 +146,14 @@ function test(x, s) {
     x = s; // Error
 }
 function testAssignabilityToConditionalType() {
-    const o = { a: 1, b: 2 };
-    const x = undefined;
+    var o = { a: 1, b: 2 };
+    var x = undefined;
     // Simple case: OK
-    const o1 = o;
+    var o1 = o;
     // Simple case where source happens to be a conditional type: also OK
-    const x1 = x;
+    var x1 = x;
     // Infer type parameters: no good
-    const o2 = o;
+    var o2 = o;
     // The next 4 are arguable - if you choose to ignore the `never` distribution case,
     // then they're all good. The `never` case _is_ a bit of an outlier - we say distributive types
     // look approximately like the sum of their branches, but the `never` case bucks that.
@@ -161,19 +161,22 @@ function testAssignabilityToConditionalType() {
     // being not `never`, but instead the intersection of the branches - a much more precise bound
     // on that "impossible" input.
     // Distributive where T might instantiate to never: no good
-    const o3 = o;
+    var o3 = o;
     // Distributive where T & string might instantiate to never: also no good
-    const o4 = o;
+    var o4 = o;
     // Distributive where {a: T} cannot instantiate to never: OK
-    const o5 = o;
+    var o5 = o;
     // Distributive where check type is a conditional which returns a non-never type upon instantiation with `never` but can still return never otherwise: no good
-    const o6 = o;
+    var o6 = o;
 }
-class Foo2 {
-    method() {
-        set(this, "prop", "hi"); // <-- type error
+var Foo2 = /** @class */ (function () {
+    function Foo2() {
     }
-}
+    Foo2.prototype.method = function () {
+        set(this, "prop", "hi"); // <-- type error
+    };
+    return Foo2;
+}());
 set(new Foo2(), "prop", "hi"); // <-- typechecks
 function f3(x) {
     return x;

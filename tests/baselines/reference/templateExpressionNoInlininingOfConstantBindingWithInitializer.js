@@ -19,11 +19,11 @@ function example2(parameters: Params) {
 
 //// [templateExpressionNoInlininingOfConstantBindingWithInitializer.js]
 function example(parameters) {
-    const { value = '123' } = parameters;
-    return `${value}` === '345';
+    var _a = parameters.value, value = _a === void 0 ? '123' : _a;
+    return "".concat(value) === '345';
 }
 function example2(parameters) {
-    const { value = '123' } = parameters;
-    const b = `${value}`;
+    var _a = parameters.value, value = _a === void 0 ? '123' : _a;
+    var b = "".concat(value);
     return b;
 }

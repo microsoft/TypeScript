@@ -10,4 +10,4 @@ const b = foo<<T>(x: T) => number>(() => 1);
 
 //// [parseGenericArrowRatherThanLeftShift.js]
 function foo(_x) { }
-const b = foo(() => 1);
+var b = foo(function () { return 1; });

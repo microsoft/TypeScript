@@ -33,9 +33,9 @@ module otherRoot {
 //// [part1.js]
 var Root;
 (function (Root) {
-    let A;
+    var A;
     (function (A) {
-        let Utils;
+        var Utils;
         (function (Utils) {
             function mirror(p) {
                 return { x: p.y, y: p.x };
@@ -47,18 +47,19 @@ var Root;
 //// [part2.js]
 var otherRoot;
 (function (otherRoot) {
-    let A;
+    var A;
     (function (A) {
         // have to be fully qualified since in different root
         A.Origin = { x: 0, y: 0 };
-        let Utils;
+        var Utils;
         (function (Utils) {
-            class Plane {
-                constructor(tl, br) {
+            var Plane = /** @class */ (function () {
+                function Plane(tl, br) {
                     this.tl = tl;
                     this.br = br;
                 }
-            }
+                return Plane;
+            }());
             Utils.Plane = Plane;
         })(Utils = A.Utils || (A.Utils = {}));
     })(A = otherRoot.A || (otherRoot.A = {}));

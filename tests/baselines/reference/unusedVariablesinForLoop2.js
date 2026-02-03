@@ -9,6 +9,6 @@ function f1 () {
 
 //// [unusedVariablesinForLoop2.js]
 function f1() {
-    for (const elem in ["a", "b", "c"]) {
+    for (var elem in ["a", "b", "c"]) {
     }
 }

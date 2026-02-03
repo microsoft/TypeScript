@@ -64,9 +64,12 @@ z: typeof M.n;
 var STRING;
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
-class A {
-    static foo() { return ""; }
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    A.foo = function () { return ""; };
+    return A;
+}());
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -77,7 +80,7 @@ var ResultIsString2 = typeof STRING1;
 // string type literal
 var ResultIsString3 = typeof "";
 var ResultIsString4 = typeof { x: "", y: "" };
-var ResultIsString5 = typeof { x: "", y: (s) => { return s; } };
+var ResultIsString5 = typeof { x: "", y: function (s) { return s; } };
 // string type expressions
 var ResultIsString6 = typeof objA.a;
 var ResultIsString7 = typeof M.n;

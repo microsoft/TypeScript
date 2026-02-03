@@ -35,17 +35,17 @@ export {};
 
 
 //// [a.js]
-export const _ = 0;
+export var _ = 0;
 //// [b.mjs]
-export const _ = 0;
+export var _ = 0;
 //// [c.cjs]
-export const _ = 0;
+export var _ = 0;
 //// [d.js]
-export const _ = 0;
+export var _ = 0;
 //// [e.mjs]
-export const _ = 0;
+export var _ = 0;
 //// [f.mjs]
-export const _ = 0;
+export var _ = 0;
 //// [g.js]
 //// [h.mjs]
 //// [i.cjs]

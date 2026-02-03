@@ -7,7 +7,8 @@ class C {
 }
 
 //// [ParameterList6.js]
-class C {
-    constructor(C) {
+var C = /** @class */ (function () {
+    function C(C) {
     }
-}
+    return C;
+}());

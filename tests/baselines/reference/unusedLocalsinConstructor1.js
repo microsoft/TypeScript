@@ -8,8 +8,9 @@ class greeter {
 }
 
 //// [unusedLocalsinConstructor1.js]
-class greeter {
-    constructor() {
+var greeter = /** @class */ (function () {
+    function greeter() {
         var unused = 20;
     }
-}
+    return greeter;
+}());

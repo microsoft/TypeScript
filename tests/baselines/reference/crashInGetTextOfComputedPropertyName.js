@@ -35,15 +35,15 @@ typeof itemWithTSError // :(
 //// [crashInGetTextOfComputedPropertyName.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const itemId = 'some-id';
+var itemId = 'some-id';
 // --- test on first level ---
-const items = {};
-const { [itemId]: itemOk1 } = items;
+var items = {};
+var _a = items, _b = itemId, itemOk1 = _a[_b];
 typeof itemOk1; // pass
-const objWithItems = { items: {} };
-const itemOk2 = objWithItems.items[itemId];
+var objWithItems = { items: {} };
+var itemOk2 = objWithItems.items[itemId];
 typeof itemOk2; // pass
-const { items: { [itemId]: itemWithTSError } = {} /*happens when default value is provided*/ } = objWithItems;
+var _c = objWithItems, _d = _c.items /*happens when default value is provided*/, _e = _d === void 0 ? {} : _d /*happens when default value is provided*/, _f = itemId, itemWithTSError = _e[_f];
 // in order to re-produce the error, uncomment next line:
 typeof itemWithTSError; // :(
 // will result in:

@@ -44,31 +44,33 @@ function C() {
 C.prototype.m = function () {
     this.nothing();
 };
-class X {
-    constructor() {
+var X = /** @class */ (function () {
+    function X() {
         this.m = this.m.bind(this);
         this.mistake = 'frankly, complete nonsense';
     }
-    m() {
-    }
-    mistake() {
-    }
-}
-let x = new X();
+    X.prototype.m = function () {
+    };
+    X.prototype.mistake = function () {
+    };
+    return X;
+}());
+var x = new X();
 X.prototype.mistake = false;
 x.m();
 x.mistake;
-class Y {
-    mistake() {
-    }
-    m() {
-    }
-    constructor() {
+var Y = /** @class */ (function () {
+    function Y() {
         this.m = this.m.bind(this);
         this.mistake = 'even more nonsense';
     }
-}
+    Y.prototype.mistake = function () {
+    };
+    Y.prototype.m = function () {
+    };
+    return Y;
+}());
 Y.prototype.mistake = true;
-let y = new Y();
+var y = new Y();
 y.m();
 y.mistake();

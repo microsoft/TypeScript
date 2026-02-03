@@ -53,9 +53,12 @@ function f(x) {
     x[100];
     x['hello'];
 }
-class MyClass {
-    static displayTree1(tree) {
+var MyClass = /** @class */ (function () {
+    function MyClass() {
+    }
+    MyClass.displayTree1 = function (tree) {
         // error "Property 'children' does not exist on type 'T'"
         tree.children;
-    }
-}
+    };
+    return MyClass;
+}());

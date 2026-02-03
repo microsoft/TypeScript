@@ -75,7 +75,7 @@ function flatMap(array, iterable = identity) {
  * @template T
  * @type {Call<T>}
  */
-const identity = x => x;
+var identity = function (x) { return x; };
 /**
  * @typedef Nested
  * @property {Object} oh
@@ -102,11 +102,12 @@ const identity = x => x;
  * @param {(x: unknown) => unknown} iterable
  * @returns {unknown[]}
  */
-function flatMap(array, iterable = identity) {
+function flatMap(array, iterable) {
+    if (iterable === void 0) { iterable = identity; }
     /** @type {unknown[]} */
-    const result = [];
-    for (let i = 0; i < array.length; i += 1) {
-        result.push(... /** @type {unknown[]} */(iterable(array[i])));
+    var result = [];
+    for (var i = 0; i < array.length; i += 1) {
+        result.push.apply(result, /** @type {unknown[]} */ (iterable(array[i])));
     }
     return result;
 }

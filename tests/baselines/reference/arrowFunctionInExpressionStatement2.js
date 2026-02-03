@@ -8,5 +8,5 @@ module M {
 //// [arrowFunctionInExpressionStatement2.js]
 var M;
 (function (M) {
-    () => 0;
+    (function () { return 0; });
 })(M || (M = {}));

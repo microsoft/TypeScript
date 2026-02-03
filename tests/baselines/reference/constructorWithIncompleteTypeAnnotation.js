@@ -282,15 +282,34 @@ TypeScriptAllInOne.Program.Main();
 
 
 //// [constructorWithIncompleteTypeAnnotation.js]
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var fs = module;
 ("fs");
 var TypeScriptAllInOne;
 (function (TypeScriptAllInOne) {
-    class Program {
-        constructor() {
+    var Program = /** @class */ (function () {
+        function Program() {
             this.case = bfs.STATEMENTS(4);
         }
-        static Main(...args) {
+        Program.Main = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
             try {
                 var bfs = new BasicFeatures();
                 var retValue = 0;
@@ -302,9 +321,10 @@ var TypeScriptAllInOne;
             }
             finally {
             }
-        }
-        if(retValue) { }
-    }
+        };
+        Program.prototype.if = function (retValue) { };
+        return Program;
+    }());
     TypeScriptAllInOne.Program = Program;
      != 0;
     {
@@ -332,12 +352,14 @@ var TypeScriptAllInOne;
     console.log('Done');
     return 0;
 })(TypeScriptAllInOne || (TypeScriptAllInOne = {}));
-class BasicFeatures {
+var BasicFeatures = /** @class */ (function () {
+    function BasicFeatures() {
+    }
     /// <summary>
     /// Test various of variables. Including nullable,key world as variable,special format
     /// </summary>
     /// <returns></returns>
-    VARIABLES() {
+    BasicFeatures.prototype.VARIABLES = function () {
         var local = Number.MAX_VALUE;
         var min = Number.MIN_VALUE;
         var inf = Number.NEGATIVE_INFINITY -
@@ -354,7 +376,7 @@ class BasicFeatures {
         ;
         var quoted = '"', quoted2 = "'";
         var reg = /\w*/;
-        var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, instanceof: () => 'objLit{42}' };
+        var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, instanceof: function () { return 'objLit{42}'; } };
         var weekday = Weekdays.Monday;
         var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
         //
@@ -380,13 +402,13 @@ class BasicFeatures {
         var yield = 0;
         var sum3 = any + bool + declare + constructor + get + implements + interface + let + module + number + package + private + protected + public + set + static + string + yield;
         return 0;
-    }
+    };
     /// <summary>
     /// Test different statements. Including if-else,swith,foreach,(un)checked,lock,using,try-catch-finally
     /// </summary>
     /// <param name="i"></param>
     /// <returns></returns>
-    STATEMENTS(i) {
+    BasicFeatures.prototype.STATEMENTS = function (i) {
         var retVal = 0;
         if (i == 1)
             retVal = 1;
@@ -416,12 +438,12 @@ class BasicFeatures {
             catch (Exception) { }
         }
         return retVal;
-    }
+    };
     /// <summary>
     /// Test types in ts language. Including class,struct,interface,delegate,anonymous type
     /// </summary>
     /// <returns></returns>
-    TYPES() {
+    BasicFeatures.prototype.TYPES = function () {
         var retVal = 0;
         var c = new CLASS();
         var xx = c;
@@ -435,12 +457,12 @@ class BasicFeatures {
         var anony = { a: new CLASS() };
         retVal += anony.a.d();
         return retVal;
-    }
+    };
     ///// <summary>
     ///// Test different operators
     ///// </summary>
     ///// <returns></returns>
-    OPERATOR() {
+    BasicFeatures.prototype.OPERATOR = function () {
         var a = [1, 2, 3, 4, 5,]; /*[] bug*/ // YES []
         var i = a[1]; /*[]*/
         i = i + i - i * i / i % i & i | i ^ i; /*+ - * / % & | ^*/
@@ -472,29 +494,38 @@ class BasicFeatures {
             return 0;
         else
             return 1;
+    };
+    return BasicFeatures;
+}());
+var CLASS = /** @class */ (function () {
+    function CLASS() {
+        this.d = function () { yield 0; };
     }
-}
-class CLASS {
-    constructor() {
-        this.d = () => { yield 0; };
-    }
-    get Property() { return 0; }
-    Member() {
+    Object.defineProperty(CLASS.prototype, "Property", {
+        get: function () { return 0; },
+        enumerable: false,
+        configurable: true
+    });
+    CLASS.prototype.Member = function () {
         return 0;
-    }
-    Foo() {
-        var myEvent = () => { return 1; };
+    };
+    CLASS.prototype.Foo = function () {
+        var myEvent = function () { return 1; };
         if (myEvent() == 1)
             return true ?
                 :
             ;
         else
             return false;
-    }
-}
+    };
+    return CLASS;
+}());
 // todo: use these
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 method1(val, number);
 {
     return val;
@@ -503,16 +534,22 @@ method2();
 {
     return 2 * this.method1(2);
 }
-class B extends A {
-    method2() {
-        return this.method1(2);
+var B = /** @class */ (function (_super) {
+    __extends(B, _super);
+    function B() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
-class Overloading {
-    constructor() {
+    B.prototype.method2 = function () {
+        return this.method1(2);
+    };
+    return B;
+}(A));
+var Overloading = /** @class */ (function () {
+    function Overloading() {
         this.otherValue = 42;
     }
-}
+    return Overloading;
+}());
 Overloads(value, string);
 Overloads();
 while ()

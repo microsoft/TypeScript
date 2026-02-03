@@ -6,4 +6,4 @@ const {} = v;
 
 
 //// [destructuringVoid.js]
-const {} = v;
+var _a = v;

@@ -43,25 +43,40 @@ result+=x.fonly("a","b","c","d"); //ok
 //// [vararg.js]
 var M;
 (function (M) {
-    class C {
-        f(x, ...rest) {
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        C.prototype.f = function (x) {
+            var rest = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                rest[_i - 1] = arguments[_i];
+            }
             var sum = 0;
             for (var i = 0; i < rest.length; i++) {
                 sum += rest[i];
             }
             result += (x + ": " + sum);
             return result;
-        }
-        fnope(x, ...rest) {
-        }
-        fonly(...rest) {
+        };
+        C.prototype.fnope = function (x) {
+            var rest = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                rest[_i - 1] = arguments[_i];
+            }
+        };
+        C.prototype.fonly = function () {
+            var rest = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                rest[_i] = arguments[_i];
+            }
             builder = "";
             for (var i = 0; i < rest.length; i++) {
                 builder += rest[i];
             }
             return builder;
-        }
-    }
+        };
+        return C;
+    }());
     M.C = C;
 })(M || (M = {}));
 var x = new M.C();

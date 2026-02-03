@@ -21,8 +21,11 @@ export { x };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.instantiatedModule = exports.c2 = exports.c = void 0;
-class c {
-}
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
 exports.c = c;
 exports.c2 = c;
 var m;

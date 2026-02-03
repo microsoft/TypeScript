@@ -24,13 +24,16 @@ define(["require", "exports"], function (require, exports) {
     exports.App = void 0;
     var App;
     (function (App) {
-        let Services;
+        var Services;
         (function (Services) {
-            class UserServices {
-                getUserName() {
-                    return "Bill Gates";
+            var UserServices = /** @class */ (function () {
+                function UserServices() {
                 }
-            }
+                UserServices.prototype.getUserName = function () {
+                    return "Bill Gates";
+                };
+                return UserServices;
+            }());
             Services.UserServices = UserServices;
         })(Services = App.Services || (App.Services = {}));
     })(App || (exports.App = App = {}));

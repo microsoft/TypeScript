@@ -124,34 +124,34 @@ var StringEnum1;
     StringEnum1["B"] = "Beta";
 })(StringEnum1 || (StringEnum1 = {}));
 // All of these should be errors
-const e1 = strMap["foo"];
-const e2 = strMap.bar;
-const e3 = strMap[0];
-const e4 = strMap[0];
-const e5 = strMap[0];
-const e6 = strMap[0];
-const e7 = strMap["foo"];
-const e8 = strMap[NumericEnum1.A];
-const e9 = strMap[NumericEnum2.A];
-const e10 = strMap[StringEnum1.A];
-const e11 = strMap[StringEnum1.A];
-const e12 = strMap[NumericEnum1.A];
-const e13 = strMap[NumericEnum2.A];
-const e14 = strMap[null];
+var e1 = strMap["foo"];
+var e2 = strMap.bar;
+var e3 = strMap[0];
+var e4 = strMap[0];
+var e5 = strMap[0];
+var e6 = strMap[0];
+var e7 = strMap["foo"];
+var e8 = strMap[NumericEnum1.A];
+var e9 = strMap[NumericEnum2.A];
+var e10 = strMap[StringEnum1.A];
+var e11 = strMap[StringEnum1.A];
+var e12 = strMap[NumericEnum1.A];
+var e13 = strMap[NumericEnum2.A];
+var e14 = strMap[null];
 // Should be OK
-const ok1 = strMap["foo"];
-const ok2 = strMap.bar;
+var ok1 = strMap["foo"];
+var ok2 = strMap.bar;
 // Writes don't allow 'undefined'; all should be errors
 strMap["baz"] = undefined;
 strMap.qua = undefined;
 strMap[0] = undefined;
 strMap[null] = undefined;
 // All of these should be ok
-const num_ok1 = numMap[0];
-const num_ok2 = numMap[0];
-const num_ok3 = numMap[0];
-const num_ok4 = numMap[NumericEnum1.A];
-const num_ok5 = numMap[NumericEnum2.A];
+var num_ok1 = numMap[0];
+var num_ok2 = numMap[0];
+var num_ok3 = numMap[0];
+var num_ok4 = numMap[NumericEnum1.A];
+var num_ok5 = numMap[NumericEnum2.A];
 // Generics
 function generic1(arg) {
     // Should error
@@ -166,21 +166,21 @@ function generic3(arg) {
     return strMap[arg];
 }
 obj1["x"];
-const y = "y";
+var y = "y";
 obj1[y];
-let yy = "y";
+var yy = "y";
 obj1[yy];
-let z = "z";
+var z = "z";
 obj1[z];
 // Should error
-const f1 = strMapUnion["foo"];
-const e15 = symbolMap[s]; // Should OK
+var f1 = strMapUnion["foo"];
+var e15 = symbolMap[s]; // Should OK
 symbolMap[s] = undefined; // Should error
-const variadicOk1 = nonEmptyStringArray[0]; // Should OK
-const variadicError1 = nonEmptyStringArray[1]; // Should error
-const fn1 = (key) => myRecord1[key]; // Should OK
-const fn2 = (key) => myRecord2[key]; // Should OK
-const fn3 = (key) => {
+var variadicOk1 = nonEmptyStringArray[0]; // Should OK
+var variadicError1 = nonEmptyStringArray[1]; // Should error
+var fn1 = function (key) { return myRecord1[key]; }; // Should OK
+var fn2 = function (key) { return myRecord2[key]; }; // Should OK
+var fn3 = function (key) {
     myRecord2[key] = undefined; // Should error
-    const v = myRecord2[key]; // Should error
+    var v = myRecord2[key]; // Should error
 };

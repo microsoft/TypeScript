@@ -100,99 +100,125 @@ class GlobalConstructorWithParameterInitializer {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConstructorWithParameterInitializer = exports.ConstructorWithOptionalParameterProperty = exports.ConstructorWithPrivateParameterProperty = exports.ConstructorWithPublicParameterProperty = exports.ConstructorWithOverloads = exports.ConstructorWithRestParamters = exports.ConstructorWithParameters = exports.SimpleConstructor = void 0;
-class SimpleConstructor {
+var SimpleConstructor = /** @class */ (function () {
     /** This comment should appear for foo*/
-    constructor() {
+    function SimpleConstructor() {
     }
-}
+    return SimpleConstructor;
+}());
 exports.SimpleConstructor = SimpleConstructor;
-class ConstructorWithParameters {
+var ConstructorWithParameters = /** @class */ (function () {
     /** This is comment for function signature*/
-    constructor(/** this is comment about a*/ a, 
+    function ConstructorWithParameters(/** this is comment about a*/ a, 
     /** this is comment for b*/
     b) {
         var d = a;
     }
-}
+    return ConstructorWithParameters;
+}());
 exports.ConstructorWithParameters = ConstructorWithParameters;
-class ConstructorWithRestParamters {
-    constructor(a, ...rests) {
+var ConstructorWithRestParamters = /** @class */ (function () {
+    function ConstructorWithRestParamters(a) {
+        var rests = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rests[_i - 1] = arguments[_i];
+        }
         return a + rests.join("");
     }
-}
+    return ConstructorWithRestParamters;
+}());
 exports.ConstructorWithRestParamters = ConstructorWithRestParamters;
-class ConstructorWithOverloads {
-    constructor(a) {
+var ConstructorWithOverloads = /** @class */ (function () {
+    function ConstructorWithOverloads(a) {
     }
-}
+    return ConstructorWithOverloads;
+}());
 exports.ConstructorWithOverloads = ConstructorWithOverloads;
-class ConstructorWithPublicParameterProperty {
-    constructor(x) {
+var ConstructorWithPublicParameterProperty = /** @class */ (function () {
+    function ConstructorWithPublicParameterProperty(x) {
         this.x = x;
     }
-}
+    return ConstructorWithPublicParameterProperty;
+}());
 exports.ConstructorWithPublicParameterProperty = ConstructorWithPublicParameterProperty;
-class ConstructorWithPrivateParameterProperty {
-    constructor(x) {
+var ConstructorWithPrivateParameterProperty = /** @class */ (function () {
+    function ConstructorWithPrivateParameterProperty(x) {
         this.x = x;
     }
-}
+    return ConstructorWithPrivateParameterProperty;
+}());
 exports.ConstructorWithPrivateParameterProperty = ConstructorWithPrivateParameterProperty;
-class ConstructorWithOptionalParameterProperty {
-    constructor(x) {
+var ConstructorWithOptionalParameterProperty = /** @class */ (function () {
+    function ConstructorWithOptionalParameterProperty(x) {
         this.x = x;
     }
-}
+    return ConstructorWithOptionalParameterProperty;
+}());
 exports.ConstructorWithOptionalParameterProperty = ConstructorWithOptionalParameterProperty;
-class ConstructorWithParameterInitializer {
-    constructor(x = "hello") {
+var ConstructorWithParameterInitializer = /** @class */ (function () {
+    function ConstructorWithParameterInitializer(x) {
+        if (x === void 0) { x = "hello"; }
         this.x = x;
     }
-}
+    return ConstructorWithParameterInitializer;
+}());
 exports.ConstructorWithParameterInitializer = ConstructorWithParameterInitializer;
 //// [declFileConstructors_1.js]
-class GlobalSimpleConstructor {
+var GlobalSimpleConstructor = /** @class */ (function () {
     /** This comment should appear for foo*/
-    constructor() {
+    function GlobalSimpleConstructor() {
     }
-}
-class GlobalConstructorWithParameters {
+    return GlobalSimpleConstructor;
+}());
+var GlobalConstructorWithParameters = /** @class */ (function () {
     /** This is comment for function signature*/
-    constructor(/** this is comment about a*/ a, 
+    function GlobalConstructorWithParameters(/** this is comment about a*/ a, 
     /** this is comment for b*/
     b) {
         var d = a;
     }
-}
-class GlobalConstructorWithRestParamters {
-    constructor(a, ...rests) {
+    return GlobalConstructorWithParameters;
+}());
+var GlobalConstructorWithRestParamters = /** @class */ (function () {
+    function GlobalConstructorWithRestParamters(a) {
+        var rests = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rests[_i - 1] = arguments[_i];
+        }
         return a + rests.join("");
     }
-}
-class GlobalConstructorWithOverloads {
-    constructor(a) {
+    return GlobalConstructorWithRestParamters;
+}());
+var GlobalConstructorWithOverloads = /** @class */ (function () {
+    function GlobalConstructorWithOverloads(a) {
     }
-}
-class GlobalConstructorWithPublicParameterProperty {
-    constructor(x) {
+    return GlobalConstructorWithOverloads;
+}());
+var GlobalConstructorWithPublicParameterProperty = /** @class */ (function () {
+    function GlobalConstructorWithPublicParameterProperty(x) {
         this.x = x;
     }
-}
-class GlobalConstructorWithPrivateParameterProperty {
-    constructor(x) {
+    return GlobalConstructorWithPublicParameterProperty;
+}());
+var GlobalConstructorWithPrivateParameterProperty = /** @class */ (function () {
+    function GlobalConstructorWithPrivateParameterProperty(x) {
         this.x = x;
     }
-}
-class GlobalConstructorWithOptionalParameterProperty {
-    constructor(x) {
+    return GlobalConstructorWithPrivateParameterProperty;
+}());
+var GlobalConstructorWithOptionalParameterProperty = /** @class */ (function () {
+    function GlobalConstructorWithOptionalParameterProperty(x) {
         this.x = x;
     }
-}
-class GlobalConstructorWithParameterInitializer {
-    constructor(x = "hello") {
+    return GlobalConstructorWithOptionalParameterProperty;
+}());
+var GlobalConstructorWithParameterInitializer = /** @class */ (function () {
+    function GlobalConstructorWithParameterInitializer(x) {
+        if (x === void 0) { x = "hello"; }
         this.x = x;
     }
-}
+    return GlobalConstructorWithParameterInitializer;
+}());
 
 
 //// [declFileConstructors_0.d.ts]

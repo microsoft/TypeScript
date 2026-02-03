@@ -29,23 +29,44 @@ const GetSetEnumerableObjectGetSet = {
 
 
 //// [getSetEnumerable.js]
-class GetSetEnumerableClassGet {
-    get prop() { return true; }
-}
-class GetSetEnumerableClassSet {
-    set prop(value) { }
-}
-class GetSetEnumerableClassGetSet {
-    get prop() { return true; }
-    set prop(value) { }
-}
-const GetSetEnumerableObjectGet = {
+var GetSetEnumerableClassGet = /** @class */ (function () {
+    function GetSetEnumerableClassGet() {
+    }
+    Object.defineProperty(GetSetEnumerableClassGet.prototype, "prop", {
+        get: function () { return true; },
+        enumerable: false,
+        configurable: true
+    });
+    return GetSetEnumerableClassGet;
+}());
+var GetSetEnumerableClassSet = /** @class */ (function () {
+    function GetSetEnumerableClassSet() {
+    }
+    Object.defineProperty(GetSetEnumerableClassSet.prototype, "prop", {
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
+    return GetSetEnumerableClassSet;
+}());
+var GetSetEnumerableClassGetSet = /** @class */ (function () {
+    function GetSetEnumerableClassGetSet() {
+    }
+    Object.defineProperty(GetSetEnumerableClassGetSet.prototype, "prop", {
+        get: function () { return true; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
+    return GetSetEnumerableClassGetSet;
+}());
+var GetSetEnumerableObjectGet = {
     get prop() { return true; }
 };
-const GetSetEnumerableObjectSet = {
+var GetSetEnumerableObjectSet = {
     set prop(value) { }
 };
-const GetSetEnumerableObjectGetSet = {
+var GetSetEnumerableObjectGetSet = {
     get prop() { return true; },
     set prop(value) { }
 };

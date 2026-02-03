@@ -20,10 +20,10 @@ var GlobalIns = {
     prop1: 1,
     prop2: 2,
     prop3: 3,
-    test() {
+    test: function () {
         this.accept_foo(this);
     },
-    accept_foo(foo) {
+    accept_foo: function (foo) {
         return !!foo && !!foo.bar;
     }
 };

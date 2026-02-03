@@ -9,10 +9,12 @@ function foo(x = new A(123)) { //should error, 123 is not string
 }}
 
 //// [objectCreationExpressionInFunctionParameter.js]
-class A {
-    constructor(a1) {
+var A = /** @class */ (function () {
+    function A(a1) {
         this.a1 = a1;
     }
-}
-function foo(x = new A(123)) {
+    return A;
+}());
+function foo(x) {
+    if (x === void 0) { x = new A(123); }
 }

@@ -47,8 +47,11 @@ var W;
     W[W["c"] = 2] = "c";
 })(W || (W = {}));
 (function (W) {
-    class D {
-    }
+    var D = /** @class */ (function () {
+        function D() {
+        }
+        return D;
+    }());
     W.D = D;
 })(W || (W = {}));
 var x = W;

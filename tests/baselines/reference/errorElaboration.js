@@ -28,12 +28,15 @@ const x = ({ [foo.bar]: c }) => undefined;
 
 //// [errorElaboration.js]
 // Repro for #5712
-let a;
+var a;
 foo(a);
 // Repro for #25498
 function test() {
     return { foo: "bar" };
 }
 // Repro for #32358
-const foo = { bar: 'a' };
-const x = ({ [foo.bar]: c }) => undefined;
+var foo = { bar: 'a' };
+var x = function (_a) {
+    var _b = foo.bar, c = _a[_b];
+    return undefined;
+};

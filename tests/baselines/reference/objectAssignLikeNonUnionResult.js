@@ -21,7 +21,7 @@ type Explode<T> = T extends { x: infer A } ? [A] : 'X';
 type e1 = Explode<typeof data1>;
 
 //// [objectAssignLikeNonUnionResult.js]
-const defaultValue = { field: 1 };
+var defaultValue = { field: 1 };
 // Displayed type: Interface & { field: number }
 // Underlying type: Something else...
-const data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});
+var data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});

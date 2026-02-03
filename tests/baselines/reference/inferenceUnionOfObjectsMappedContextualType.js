@@ -20,8 +20,8 @@ const test: RowRenderer<Entity> = {
 
 //// [inferenceUnionOfObjectsMappedContextualType.js]
 "use strict";
-const test = {
+var test = {
     key: 'someDate',
     caption: 'My Date',
-    formatter: (value) => value ? value.toString() : '-' // value: any
+    formatter: function (value) { return value ? value.toString() : '-'; } // value: any
 };

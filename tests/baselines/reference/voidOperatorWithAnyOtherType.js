@@ -73,12 +73,15 @@ function foo() {
     var a;
     return a;
 }
-class A {
-    static foo() {
+var A = /** @class */ (function () {
+    function A() {
+    }
+    A.foo = function () {
         var a;
         return a;
-    }
-}
+    };
+    return A;
+}());
 var M;
 (function (M) {
 })(M || (M = {}));

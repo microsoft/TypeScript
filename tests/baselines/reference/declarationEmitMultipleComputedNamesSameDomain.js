@@ -14,12 +14,13 @@ export class Test {
 var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = void 0;
-class Test {
-    constructor() {
+var Test = /** @class */ (function () {
+    function Test() {
         this[_a] = 10;
         this[_b] = 10;
     }
-}
+    return Test;
+}());
 exports.Test = Test;
 _a = x, _b = y;
 

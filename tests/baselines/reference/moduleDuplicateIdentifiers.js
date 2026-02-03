@@ -55,17 +55,19 @@ var FooBar;
 (function (FooBar) {
     FooBar.member2 = 42;
 })(FooBar || (exports.FooBar = FooBar = {}));
-class Kettle {
-    constructor() {
+var Kettle = /** @class */ (function () {
+    function Kettle() {
         this.member1 = 2;
     }
-}
+    return Kettle;
+}());
 exports.Kettle = Kettle;
-class Kettle {
-    constructor() {
+var Kettle = /** @class */ (function () {
+    function Kettle() {
         this.member2 = 42;
     }
-}
+    return Kettle;
+}());
 exports.Kettle = Kettle;
 exports.Pot = 2;
 exports.Pot = 42; // Shouldn't error

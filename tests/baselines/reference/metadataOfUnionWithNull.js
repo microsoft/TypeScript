@@ -55,10 +55,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 function PropDeco(target, propKey) { }
-class A {
-}
-let B = (() => {
-    class B {
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
+var B = /** @class */ (function () {
+    function B() {
     }
     __decorate([
         PropDeco,
@@ -109,4 +112,4 @@ let B = (() => {
         __metadata("design:type", typeof Symbol === "function" ? Symbol : Object)
     ], B.prototype, "j", void 0);
     return B;
-})();
+}());

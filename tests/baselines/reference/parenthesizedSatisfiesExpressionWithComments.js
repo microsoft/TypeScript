@@ -7,5 +7,5 @@ const b = ((/*comm*/ 10 satisfies number));
 
 //// [parenthesizedSatisfiesExpressionWithComments.js]
 "use strict";
-const a = /*comm*/ 10;
-const b = /*comm*/ 10;
+var a = /*comm*/ 10;
+var b = /*comm*/ 10;

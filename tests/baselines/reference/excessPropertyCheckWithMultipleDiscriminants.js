@@ -146,54 +146,54 @@ const attributes2: Attribute2 = {
 "use strict";
 // Repro from #32657
 Object.defineProperty(exports, "__esModule", { value: true });
-const foo = {
+var foo = {
     type: "number",
     value: 10,
     multipleOf: 5, // excess property
     format: "what?"
 };
 // This has excess error because variant three is the only applicable case.
-const a = {
+var a = {
     p1: 'left',
     p2: false,
     p3: 42,
     p4: "hello"
 };
 // This has excess error because variant two is not applicable.
-const b = {
+var b = {
     p1: 'left',
     p2: true,
     p3: 42,
     p4: "hello"
 };
 // This has excess error because variant two is the only applicable case
-const c = {
+var c = {
     p1: 'right',
     p2: false,
     p3: 42,
     p4: "hello"
 };
 // Should reject { b } because reduced to Common | (Common & A)
-const c1 = {
+var c1 = {
     type: "A",
     n: 1,
     a: 1,
     b: 1 // excess property
 };
 // Should still reject { b } because reduced to Common | A, even though these are now disjoint
-const c2 = {
+var c2 = {
     type: "A",
     n: 1,
     a: 1,
     b: 1 // excess property
 };
 // both should error due to excess properties
-const attributes = {
+var attributes = {
     type: 'string',
     autoIncrement: true,
     required: true,
 };
-const attributes2 = {
+var attributes2 = {
     type: 'string',
     autoIncrement: true,
     required: true,

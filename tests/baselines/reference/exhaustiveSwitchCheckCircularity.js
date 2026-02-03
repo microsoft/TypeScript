@@ -43,7 +43,7 @@ function functionC(): void {
 "use strict";
 // Repro from #47539
 function f() {
-    let foo = "aaa";
+    var foo = "aaa";
     while (true) {
         switch (foo) {
             case "aaa":
@@ -57,9 +57,9 @@ function f() {
     }
 }
 function functionC() {
-    let unionVal = "A";
+    var unionVal = "A";
     while (true) {
-        let key;
+        var key = void 0;
         switch (unionVal) {
             case "A": {
                 key = "AA";

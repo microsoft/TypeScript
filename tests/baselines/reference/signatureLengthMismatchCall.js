@@ -12,4 +12,4 @@ takesCallback((a: number, b: number) => {});
 function takesCallback(fn) {
     // ...
 }
-takesCallback((a, b) => { });
+takesCallback(function (a, b) { });

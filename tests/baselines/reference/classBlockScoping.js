@@ -38,33 +38,36 @@ function f(b: boolean) {
 //// [classBlockScoping.js]
 function f(b) {
     var _a;
-    let Foo;
+    var Foo;
     if (b) {
-        Foo = (_a = class Foo {
-                static x() {
-                    new _a();
+        Foo = (_a = /** @class */ (function () {
+                function Foo() {
                 }
-                m() {
+                Foo.x = function () {
                     new _a();
-                }
-            },
+                };
+                Foo.prototype.m = function () {
+                    new _a();
+                };
+                return Foo;
+            }()),
             _a.y = new _a(),
             _a);
         new Foo();
     }
     else {
-        let Foo = (() => {
-            class Foo {
-                static x() {
-                    new Foo();
-                }
-                m() {
-                    new Foo();
-                }
+        var Foo_1 = /** @class */ (function () {
+            function Foo() {
             }
+            Foo.x = function () {
+                new Foo();
+            };
+            Foo.prototype.m = function () {
+                new Foo();
+            };
             Foo.y = new Foo();
             return Foo;
-        })();
-        new Foo();
+        }());
+        new Foo_1();
     }
 }

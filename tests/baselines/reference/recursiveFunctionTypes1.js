@@ -6,6 +6,9 @@ class C {
 }
 
 //// [recursiveFunctionTypes1.js]
-class C {
-    static g(t) { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.g = function (t) { };
+    return C;
+}());

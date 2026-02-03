@@ -34,26 +34,47 @@ for (let x; ;) {
 
 //// [downlevelLetConst18.js]
 'use strict';
-for (let x;;) {
+var _loop_1 = function (x) {
     function foo() { x; }
     ;
+};
+for (var x = void 0;;) {
+    _loop_1(x);
 }
-for (let x;;) {
+var _loop_2 = function (x) {
     function foo1() { x; }
     ;
+};
+for (var x = void 0;;) {
+    _loop_2(x);
 }
-for (let x;;) {
-    (() => { x; })();
+var _loop_3 = function (x) {
+    (function () { x; })();
+};
+for (var x = void 0;;) {
+    _loop_3(x);
 }
-for (const x = 1;;) {
-    (() => { x; })();
+var _loop_4 = function (x) {
+    (function () { x; })();
+};
+for (var x = 1;;) {
+    _loop_4(x);
 }
-for (let x;;) {
-    ({ foo() { x; } });
+var _loop_5 = function (x) {
+    ({ foo: function () { x; } });
+};
+for (var x = void 0;;) {
+    _loop_5(x);
 }
-for (let x;;) {
+var _loop_6 = function (x) {
     ({ get foo() { return x; } });
+};
+for (var x = void 0;;) {
+    _loop_6(x);
 }
-for (let x;;) {
+var _loop_7 = function (x) {
     ({ set foo(v) { x; } });
+};
+for (var x = void 0;;) {
+    _loop_7(x);
 }

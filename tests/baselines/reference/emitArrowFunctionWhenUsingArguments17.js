@@ -11,9 +11,9 @@ function f() {
 
 //// [emitArrowFunctionWhenUsingArguments17.js]
 function f() {
-    var { arguments } = { arguments: "hello" };
+    var arguments = { arguments: "hello" }.arguments;
     if (Math.random()) {
-        return () => arguments[0];
+        return function () { return arguments[0]; };
     }
     var arguments = "world";
 }

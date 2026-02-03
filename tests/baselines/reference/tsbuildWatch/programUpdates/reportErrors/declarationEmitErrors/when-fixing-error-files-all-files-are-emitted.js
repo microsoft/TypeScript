@@ -55,21 +55,24 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.myClassWithError = void 0;
-var myClassWithError = class {
-    constructor() {
+exports.myClassWithError = /** @class */ (function () {
+    function class_1() {
         this.p = 12;
     }
-    tags() { }
-};
-exports.myClassWithError = myClassWithError;
+    class_1.prototype.tags = function () { };
+    return class_1;
+}());
 
 
 //// [/user/username/projects/solution/app/fileWithoutError.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.myClass = void 0;
-class myClass {
-}
+var myClass = /** @class */ (function () {
+    function myClass() {
+    }
+    return myClass;
+}());
 exports.myClass = myClass;
 
 
@@ -226,10 +229,12 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.myClassWithError = void 0;
-var myClassWithError = class {
-    tags() { }
-};
-exports.myClassWithError = myClassWithError;
+exports.myClassWithError = /** @class */ (function () {
+    function myClassWithError() {
+    }
+    myClassWithError.prototype.tags = function () { };
+    return myClassWithError;
+}());
 
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo]

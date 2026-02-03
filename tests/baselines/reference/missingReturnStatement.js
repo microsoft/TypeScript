@@ -12,9 +12,12 @@ module Test {
 //// [missingReturnStatement.js]
 var Test;
 (function (Test) {
-    class Bug {
-        foo() {
+    var Bug = /** @class */ (function () {
+        function Bug() {
         }
-    }
+        Bug.prototype.foo = function () {
+        };
+        return Bug;
+    }());
     Test.Bug = Bug;
 })(Test || (Test = {}));

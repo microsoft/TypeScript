@@ -15,10 +15,16 @@ class Foo {
 }
 
 //// [staticClassMemberError.js]
-class C {
-    a() {
-        s = 1;
+var C = /** @class */ (function () {
+    function C() {
     }
-}
-class Foo {
-}
+    C.prototype.a = function () {
+        s = 1;
+    };
+    return C;
+}());
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());

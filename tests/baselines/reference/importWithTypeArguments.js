@@ -7,4 +7,4 @@ const a = import<string, number>
 
 //// [importWithTypeArguments.js]
 import;
-const a = (import);
+var a = (import);

@@ -62,7 +62,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
-const classes = "";
-const rest = {};
-const children = [];
+var classes = "";
+var rest = {};
+var children = [];
 React.createElement(Tag, __assign({ className: classes }, rest), children);

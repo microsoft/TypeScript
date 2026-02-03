@@ -21,9 +21,10 @@ class Emitter {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class Emitter {
-        constructor() {
+    var Emitter = /** @class */ (function () {
+        function Emitter() {
             this.listeners = {};
         }
-    }
+        return Emitter;
+    }());
 });

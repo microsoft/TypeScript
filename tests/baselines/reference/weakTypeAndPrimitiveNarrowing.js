@@ -34,7 +34,7 @@ const h = (arg: PrimitivesAndWeakTypes) => {
 
 //// [weakTypeAndPrimitiveNarrowing.js]
 "use strict";
-const g = (arg) => {
+var g = function (arg) {
     if (arg === 'A') {
         arg;
     }
@@ -42,7 +42,7 @@ const g = (arg) => {
         arg;
     }
 };
-const h = (arg) => {
+var h = function (arg) {
     if (arg === 'A') {
         arg;
     }

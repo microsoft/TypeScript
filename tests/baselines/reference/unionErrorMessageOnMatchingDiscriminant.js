@@ -27,7 +27,7 @@ const foo: Union = {
 //// [unionErrorMessageOnMatchingDiscriminant.js]
 "use strict";
 // error
-const foo = {
+var foo = {
     type: 'a',
     data: null
 };

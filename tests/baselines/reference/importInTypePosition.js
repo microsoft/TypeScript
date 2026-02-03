@@ -26,12 +26,13 @@ module C {
 //// [importInTypePosition.js]
 var A;
 (function (A) {
-    class Point {
-        constructor(x, y) {
+    var Point = /** @class */ (function () {
+        function Point(x, y) {
             this.x = x;
             this.y = y;
         }
-    }
+        return Point;
+    }());
     A.Point = Point;
     A.Origin = new Point(0, 0);
 })(A || (A = {}));

@@ -11,7 +11,10 @@ class C {
 
 //// [ES5SymbolProperty5.js]
 var Symbol;
-class C {
-    [Symbol.iterator]() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype[Symbol.iterator] = function () { };
+    return C;
+}());
 (new C)[Symbol.iterator](0); // Should error

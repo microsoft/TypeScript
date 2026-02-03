@@ -9,6 +9,9 @@ var y: new <T,U>(a:T)=>void;
 
 
 //// [unusedTypeParameterInLambda3.js]
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 var y;

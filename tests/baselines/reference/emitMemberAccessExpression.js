@@ -33,11 +33,14 @@ var Microsoft;
     (function (PeopleAtWork) {
         var Model;
         (function (Model) {
-            class _Person {
-                populate(raw) {
-                    var res = Model.KnockoutExtentions;
+            var _Person = /** @class */ (function () {
+                function _Person() {
                 }
-            }
+                _Person.prototype.populate = function (raw) {
+                    var res = Model.KnockoutExtentions;
+                };
+                return _Person;
+            }());
             Model._Person = _Person;
         })(Model = PeopleAtWork.Model || (PeopleAtWork.Model = {}));
     })(PeopleAtWork = Microsoft.PeopleAtWork || (Microsoft.PeopleAtWork = {}));
@@ -54,8 +57,11 @@ var Microsoft;
     (function (PeopleAtWork) {
         var Model;
         (function (Model) {
-            class KnockoutExtentions {
-            }
+            var KnockoutExtentions = /** @class */ (function () {
+                function KnockoutExtentions() {
+                }
+                return KnockoutExtentions;
+            }());
             Model.KnockoutExtentions = KnockoutExtentions;
         })(Model = PeopleAtWork.Model || (PeopleAtWork.Model = {}));
     })(PeopleAtWork = Microsoft.PeopleAtWork || (Microsoft.PeopleAtWork = {}));

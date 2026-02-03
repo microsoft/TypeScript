@@ -17,8 +17,11 @@ export function bar() {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 exports.Foo = Foo;
 //// [file2.js]
 "use strict";

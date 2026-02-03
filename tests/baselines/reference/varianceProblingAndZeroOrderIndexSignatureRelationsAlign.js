@@ -70,35 +70,52 @@ export class MyServer extends Server<MyInfo> {} // not assignable error at `MyIn
 
 //// [varianceProblingAndZeroOrderIndexSignatureRelationsAlign.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyServer = void 0;
-class Left {
-    constructor(value) {
+var Left = /** @class */ (function () {
+    function Left(value) {
         this.value = value;
         this._tag = 'Left';
     }
     /** The given function is applied if this is a `Right` */
-    map(f) {
+    Left.prototype.map = function (f) {
         return this;
-    }
-    ap(fab) {
+    };
+    Left.prototype.ap = function (fab) {
         return null;
-    }
-}
-class Right {
-    constructor(value) {
+    };
+    return Left;
+}());
+var Right = /** @class */ (function () {
+    function Right(value) {
         this.value = value;
         this._tag = 'Right';
     }
-    map(f) {
+    Right.prototype.map = function (f) {
         return new Right(f(this.value));
-    }
-    ap(fab) {
+    };
+    Right.prototype.ap = function (fab) {
         return null;
-    }
-}
-class Type {
-    constructor(
+    };
+    return Right;
+}());
+var Type = /** @class */ (function () {
+    function Type(
     /** a unique name for this codec */
     name, 
     /** a custom type guard */
@@ -113,13 +130,22 @@ class Type {
         this.encode = encode;
     }
     /** a version of `validate` with a default context */
-    decode(i) { return null; }
-}
-const tmp1 = null;
+    Type.prototype.decode = function (i) { return null; };
+    return Type;
+}());
+var tmp1 = null;
 function tmp2(n) { }
 tmp2(tmp1); // uncommenting this line removes a type error from a completely unrelated line ??
-class Server {
-}
-class MyServer extends Server {
-} // not assignable error at `MyInfo`
+var Server = /** @class */ (function () {
+    function Server() {
+    }
+    return Server;
+}());
+var MyServer = /** @class */ (function (_super) {
+    __extends(MyServer, _super);
+    function MyServer() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return MyServer;
+}(Server)); // not assignable error at `MyInfo`
 exports.MyServer = MyServer;

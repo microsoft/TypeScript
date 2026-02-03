@@ -23,11 +23,12 @@ export class Example<Z extends CustomDocument> {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Example = void 0;
-class Example {
-    constructor() {
+var Example = /** @class */ (function () {
+    function Example() {
         // types of increment not compatible??
         this.test();
     }
-    test() { }
-}
+    Example.prototype.test = function () { };
+    return Example;
+}());
 exports.Example = Example;

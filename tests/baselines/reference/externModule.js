@@ -45,8 +45,12 @@ n=XDate.UTC(1964,2,1);
 declare;
 module;
 {
-    export class XDate {
-    }
+    var XDate = /** @class */ (function () {
+        function XDate() {
+        }
+        return XDate;
+    }());
+    export { XDate };
 }
 var d = new XDate();
 d.getDay();

@@ -27,11 +27,25 @@ class C extends B {
 
 
 //// [defineProperty.js]
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _a;
 var x = "p";
-class A {
-    m() { }
-    constructor(y) {
+var A = /** @class */ (function () {
+    function A(y) {
         Object.defineProperty(this, "y", {
             enumerable: true,
             configurable: true,
@@ -75,10 +89,17 @@ class A {
             value: this.y
         });
     }
-}
+    Object.defineProperty(A.prototype, "m", {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function () { }
+    });
+    return A;
+}());
 _a = x;
-class B {
-    constructor() {
+var B = /** @class */ (function () {
+    function B() {
         Object.defineProperty(this, "a", {
             enumerable: true,
             configurable: true,
@@ -86,27 +107,31 @@ class B {
             value: void 0
         });
     }
-}
-class C extends B {
-    constructor(ka) {
-        super();
-        Object.defineProperty(this, "ka", {
+    return B;
+}());
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C(ka) {
+        var _this = _super.call(this) || this;
+        Object.defineProperty(_this, "ka", {
             enumerable: true,
             configurable: true,
             writable: true,
             value: ka
         });
-        Object.defineProperty(this, "z", {
+        Object.defineProperty(_this, "z", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: this.ka
+            value: _this.ka
         });
-        Object.defineProperty(this, "ki", {
+        Object.defineProperty(_this, "ki", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: this.ka
+            value: _this.ka
         });
+        return _this;
     }
-}
+    return C;
+}(B));

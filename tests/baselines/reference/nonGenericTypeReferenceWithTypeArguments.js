@@ -27,8 +27,11 @@ function f<U>() {
 
 //// [nonGenericTypeReferenceWithTypeArguments.js]
 // Check that errors are reported for non-generic types with type arguments
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var E;
 (function (E) {
 })(E || (E = {}));
@@ -37,9 +40,12 @@ var v2;
 var v3;
 var v4;
 function f() {
-    class C {
-    }
-    let E;
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
+    var E;
     (function (E) {
     })(E || (E = {}));
     var v1;

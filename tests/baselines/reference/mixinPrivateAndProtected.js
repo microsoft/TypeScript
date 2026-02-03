@@ -93,42 +93,67 @@ class Customer extends PersonMixin(Person) {
 
 //// [mixinPrivateAndProtected.js]
 // Repro from #13830
-class A {
-    constructor() {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var A = /** @class */ (function () {
+    function A() {
         this.pb = 2;
         this.ptd = 1;
         this.pvt = 0;
     }
-}
+    return A;
+}());
 function mixB(Cls) {
-    return class extends Cls {
-        constructor() {
-            super(...arguments);
-            this.ptd = 10;
-            this.pvt = 0;
+    return /** @class */ (function (_super) {
+        __extends(class_1, _super);
+        function class_1() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.ptd = 10;
+            _this.pvt = 0;
+            return _this;
         }
-    };
+        return class_1;
+    }(Cls));
 }
 function mixB2(Cls) {
-    return class extends Cls {
-        constructor() {
-            super(...arguments);
-            this.ptd = 10;
+    return /** @class */ (function (_super) {
+        __extends(class_2, _super);
+        function class_2() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.ptd = 10;
+            return _this;
         }
-    };
+        return class_2;
+    }(Cls));
 }
-const AB = mixB(A), AB2 = mixB2(A);
+var AB = mixB(A), AB2 = mixB2(A);
 function mixC(Cls) {
-    return class extends Cls {
-        constructor() {
-            super(...arguments);
-            this.ptd = 100;
-            this.pvt = 0;
+    return /** @class */ (function (_super) {
+        __extends(class_3, _super);
+        function class_3() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.ptd = 100;
+            _this.pvt = 0;
+            return _this;
         }
-    };
+        return class_3;
+    }(Cls));
 }
-const AB2C = mixC(AB2), ABC = mixC(AB);
-const a = new A(), ab = new AB(), abc = new ABC(), ab2c = new AB2C();
+var AB2C = mixC(AB2), ABC = mixC(AB);
+var a = new A(), ab = new AB(), abc = new ABC(), ab2c = new AB2C();
 a.pb.toFixed();
 a.ptd.toFixed(); // Error
 a.pvt.toFixed(); // Error
@@ -142,26 +167,38 @@ ab2c.pb.toFixed();
 ab2c.ptd.toFixed(); // Error
 ab2c.pvt.toFixed(); // Error
 // Repro from #13924
-class Person {
-    constructor(name) {
+var Person = /** @class */ (function () {
+    function Person(name) {
         this.name = name;
     }
-    myProtectedFunction() {
+    Person.prototype.myProtectedFunction = function () {
         // do something
-    }
-}
-function PersonMixin(Base) {
-    return class extends Base {
-        constructor(...args) {
-            super(...args);
-        }
-        myProtectedFunction() {
-            super.myProtectedFunction();
-            // do more things
-        }
     };
+    return Person;
+}());
+function PersonMixin(Base) {
+    return /** @class */ (function (_super) {
+        __extends(class_4, _super);
+        function class_4() {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            return _super.apply(this, args) || this;
+        }
+        class_4.prototype.myProtectedFunction = function () {
+            _super.prototype.myProtectedFunction.call(this);
+            // do more things
+        };
+        return class_4;
+    }(Base));
 }
-class Customer extends PersonMixin(Person) {
-    f() {
+var Customer = /** @class */ (function (_super) {
+    __extends(Customer, _super);
+    function Customer() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
+    Customer.prototype.f = function () {
+    };
+    return Customer;
+}(PersonMixin(Person)));

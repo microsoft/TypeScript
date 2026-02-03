@@ -18,13 +18,19 @@ class e {
 }
 
 //// [functionOverloadsOutOfOrder.js]
-class d {
-    foo(ns) {
-        return ns.toString();
+var d = /** @class */ (function () {
+    function d() {
     }
-}
-class e {
-    foo(ns) {
+    d.prototype.foo = function (ns) {
         return ns.toString();
+    };
+    return d;
+}());
+var e = /** @class */ (function () {
+    function e() {
     }
-}
+    e.prototype.foo = function (ns) {
+        return ns.toString();
+    };
+    return e;
+}());

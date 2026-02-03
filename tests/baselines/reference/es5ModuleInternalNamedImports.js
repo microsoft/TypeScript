@@ -46,11 +46,14 @@ var M;
     // variable
     M.M_V = 0;
     //calss
-    class M_C {
-    }
+    var M_C = /** @class */ (function () {
+        function M_C() {
+        }
+        return M_C;
+    }());
     M.M_C = M_C;
     // instantiated module
-    let M_M;
+    var M_M;
     (function (M_M) {
         var x;
     })(M_M = M.M_M || (M.M_M = {}));
@@ -58,7 +61,7 @@ var M;
     function M_F() { }
     M.M_F = M_F;
     // enum
-    let M_E;
+    var M_E;
     (function (M_E) {
     })(M_E = M.M_E || (M.M_E = {}));
     // alias

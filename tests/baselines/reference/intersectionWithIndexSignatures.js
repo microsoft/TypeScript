@@ -47,5 +47,5 @@ ta2 = sa2;
 tb1 = sb1; // Error
 q["asd"].a.substr(1);
 q["asd"].b; // Error
-const d = q; // Error
+var d = q; // Error
 tt = ss; // Error

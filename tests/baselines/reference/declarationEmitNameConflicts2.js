@@ -26,13 +26,16 @@ var X;
         (function (base) {
             function f() { }
             base.f = f;
-            class C {
-            }
+            var C = /** @class */ (function () {
+                function C() {
+                }
+                return C;
+            }());
             base.C = C;
-            let M;
+            var M;
             (function (M) {
             })(M = base.M || (base.M = {}));
-            let E;
+            var E;
             (function (E) {
             })(E = base.E || (base.E = {}));
         })(base = Y.base || (Y.base = {}));

@@ -24,10 +24,10 @@ reproduce({
 //// [circularContextualMappedType.js]
 "use strict";
 reproduce({
-    name: () => { return 123; }
+    name: function () { return 123; }
 });
 reproduce({
-    name() { return 123; }
+    name: function () { return 123; }
 });
 reproduce({
     name: function () { return 123; }

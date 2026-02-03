@@ -474,13 +474,14 @@ module TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    class AssignScopeContext {
-        constructor(scopeChain, typeFlow, modDeclChain) {
+    var AssignScopeContext = /** @class */ (function () {
+        function AssignScopeContext(scopeChain, typeFlow, modDeclChain) {
             this.scopeChain = scopeChain;
             this.typeFlow = typeFlow;
             this.modDeclChain = modDeclChain;
         }
-    }
+        return AssignScopeContext;
+    }());
     TypeScript.AssignScopeContext = AssignScopeContext;
     function pushAssignScope(scope, context, type, classType, fnc) {
         var chain = new ScopeChain(null, context.scopeChain, scope);
@@ -507,16 +508,16 @@ var TypeScript;
         return s.isInstanceProperty();
     }
     TypeScript.instanceFilterStop = instanceFilterStop;
-    class ScopeSearchFilter {
-        constructor(select, stop) {
+    var ScopeSearchFilter = /** @class */ (function () {
+        function ScopeSearchFilter(select, stop) {
             this.select = select;
             this.stop = stop;
             this.result = null;
         }
-        reset() {
+        ScopeSearchFilter.prototype.reset = function () {
             this.result = null;
-        }
-        update(b) {
+        };
+        ScopeSearchFilter.prototype.update = function (b) {
             this.result = this.select(this.result, b);
             if (this.result) {
                 return this.stop(this.result);
@@ -524,8 +525,9 @@ var TypeScript;
             else {
                 return false;
             }
-        }
-    }
+        };
+        return ScopeSearchFilter;
+    }());
     TypeScript.ScopeSearchFilter = ScopeSearchFilter;
     TypeScript.instanceFilter = new ScopeSearchFilter(instanceCompare, instanceFilterStop);
     function preAssignModuleScopes(ast, context) {

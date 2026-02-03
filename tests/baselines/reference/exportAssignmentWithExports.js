@@ -8,8 +8,14 @@ export = D;
 //// [exportAssignmentWithExports.js]
 "use strict";
 exports.C = void 0;
-class C {
-}
-class D {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());
 module.exports = D;

@@ -11,8 +11,11 @@ class A<T> {
 
 
 //// [overloadedStaticMethodSpecialization.js]
-class A {
-    static B(v) {
-        return null;
+var A = /** @class */ (function () {
+    function A() {
     }
-}
+    A.B = function (v) {
+        return null;
+    };
+    return A;
+}());

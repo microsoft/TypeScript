@@ -15,13 +15,11 @@ class C {
 }
 
 //// [staticMemberWithStringAndNumberNames.js]
-let C = (() => {
-    class C {
-        constructor() {
-            this.x = C['foo'];
-            this.x2 = C['0'];
-            this.x3 = C[0];
-        }
+var C = /** @class */ (function () {
+    function C() {
+        this.x = C['foo'];
+        this.x2 = C['0'];
+        this.x3 = C[0];
     }
     C["foo"] = 0;
     C[0] = 1;
@@ -29,4 +27,4 @@ let C = (() => {
     C.s2 = C['0'];
     C.s3 = C[0];
     return C;
-})();
+}());

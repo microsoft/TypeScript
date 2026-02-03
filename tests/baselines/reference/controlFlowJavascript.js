@@ -107,39 +107,39 @@ function f10() {
 
 
 //// [out.js]
-let cond = true;
+var cond = true;
 // CFA for 'let' and no initializer
 function f1() {
-    let x;
+    var x;
     if (cond) {
         x = 1;
     }
     if (cond) {
         x = "hello";
     }
-    const y = x; // string | number | undefined
+    var y = x; // string | number | undefined
 }
 // CFA for 'let' and 'undefined' initializer
 function f2() {
-    let x = undefined;
+    var x = undefined;
     if (cond) {
         x = 1;
     }
     if (cond) {
         x = "hello";
     }
-    const y = x; // string | number | undefined
+    var y = x; // string | number | undefined
 }
 // CFA for 'let' and 'null' initializer
 function f3() {
-    let x = null;
+    var x = null;
     if (cond) {
         x = 1;
     }
     if (cond) {
         x = "hello";
     }
-    const y = x; // string | number | null
+    var y = x; // string | number | null
 }
 // CFA for 'var' with no initializer
 function f5() {
@@ -150,7 +150,7 @@ function f5() {
     if (cond) {
         x = "hello";
     }
-    const y = x; // string | number | undefined
+    var y = x; // string | number | undefined
 }
 // CFA for 'var' with 'undefined' initializer
 function f6() {
@@ -161,7 +161,7 @@ function f6() {
     if (cond) {
         x = "hello";
     }
-    const y = x; // string | number | undefined
+    var y = x; // string | number | undefined
 }
 // CFA for 'var' with 'null' initializer
 function f7() {
@@ -172,33 +172,33 @@ function f7() {
     if (cond) {
         x = "hello";
     }
-    const y = x; // string | number | null
+    var y = x; // string | number | null
 }
 // No CFA for captured outer variables
 function f9() {
-    let x;
+    var x;
     if (cond) {
         x = 1;
     }
     if (cond) {
         x = "hello";
     }
-    const y = x; // string | number | undefined
+    var y = x; // string | number | undefined
     function f() {
-        const z = x; // any
+        var z = x; // any
     }
 }
 // No CFA for captured outer variables
 function f10() {
-    let x;
+    var x;
     if (cond) {
         x = 1;
     }
     if (cond) {
         x = "hello";
     }
-    const y = x; // string | number | undefined
-    const f = () => {
-        const z = x; // any
+    var y = x; // string | number | undefined
+    var f = function () {
+        var z = x; // any
     };
 }

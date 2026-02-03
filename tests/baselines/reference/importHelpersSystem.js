@@ -25,16 +25,19 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            A = class A {
-            };
+            A = /** @class */ (function () {
+                function A() {
+                }
+                return A;
+            }());
             exports_1("A", A);
         }
     };
 });
 //// [b.js]
-System.register(["./a"], function (exports_1, context_1) {
+System.register(["tslib", "./a"], function (exports_1, context_1) {
     "use strict";
-    var a_1, B;
+    var tslib_1, a_1, B;
     var __moduleName = context_1 && context_1.id;
     var exportedNames_1 = {
         "B": true
@@ -48,14 +51,22 @@ System.register(["./a"], function (exports_1, context_1) {
     }
     return {
         setters: [
+            function (tslib_1_1) {
+                tslib_1 = tslib_1_1;
+            },
             function (a_1_1) {
                 a_1 = a_1_1;
                 exportStar_1(a_1_1);
             }
         ],
         execute: function () {
-            B = class B extends a_1.A {
-            };
+            B = /** @class */ (function (_super) {
+                tslib_1.__extends(B, _super);
+                function B() {
+                    return _super !== null && _super.apply(this, arguments) || this;
+                }
+                return B;
+            }(a_1.A));
             exports_1("B", B);
         }
     };

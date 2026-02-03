@@ -17,14 +17,17 @@ class C {
 
 
 //// [classStaticBlock20.js]
-class C {
-}
-(() => {
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+(function () {
     // something
 })();
-(() => {
+(function () {
     // something
 })();
-(() => {
+(function () {
     // something
 })();

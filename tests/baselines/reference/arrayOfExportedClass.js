@@ -26,14 +26,20 @@ export = Road;
 
 //// [arrayOfExportedClass_0.js]
 "use strict";
-class Car {
-}
+var Car = /** @class */ (function () {
+    function Car() {
+    }
+    return Car;
+}());
 module.exports = Car;
 //// [arrayOfExportedClass_1.js]
 "use strict";
-class Road {
-    AddCars(cars) {
-        this.cars = cars;
+var Road = /** @class */ (function () {
+    function Road() {
     }
-}
+    Road.prototype.AddCars = function (cars) {
+        this.cars = cars;
+    };
+    return Road;
+}());
 module.exports = Road;

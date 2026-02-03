@@ -11,11 +11,12 @@ export class Bar {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = exports.FOO = void 0;
 exports.FOO = 'FOO';
-class Bar {
-    constructor() {
+var Bar = /** @class */ (function () {
+    function Bar() {
         this.type = exports.FOO; // Should be widening literal "FOO" - so either `typeof "FOO"` or = "FOO"
     }
-}
+    return Bar;
+}());
 exports.Bar = Bar;
 
 

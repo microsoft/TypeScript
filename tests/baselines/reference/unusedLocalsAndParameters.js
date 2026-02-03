@@ -100,27 +100,41 @@ var fexp = function (a) {
 };
 fexp(0);
 // arrow function paramter
-var farrow = (a) => {
+var farrow = function (a) {
 };
-class C {
+var C = /** @class */ (function () {
+    function C() {
+    }
     // Method declaration paramter
-    method(a) {
+    C.prototype.method = function (a) {
+    };
+    Object.defineProperty(C.prototype, "x", {
+        // Accessor declaration paramter
+        set: function (v) {
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());
+var E = /** @class */ (function () {
+    function class_1() {
     }
-    // Accessor declaration paramter
-    set x(v) {
-    }
-}
-var E = class {
     // Method declaration paramter
-    method(a) {
-    }
-    // Accessor declaration paramter
-    set x(v) {
-    }
-};
+    class_1.prototype.method = function (a) {
+    };
+    Object.defineProperty(class_1.prototype, "x", {
+        // Accessor declaration paramter
+        set: function (v) {
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return class_1;
+}());
 var o = {
     // Object literal method declaration paramter
-    method(a) {
+    method: function (a) {
     },
     // Accessor declaration paramter
     set x(v) {
@@ -128,33 +142,34 @@ var o = {
 };
 o;
 // in a for..in statment
-for (let i in o) {
+for (var i in o) {
 }
 // in a for..of statment
-for (let i of [1, 2, 3]) {
+for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
+    var i = _a[_i];
 }
 // in a for. statment
-for (let i = 0, n; i < 10; i++) {
+for (var i = 0, n = void 0; i < 10; i++) {
 }
 // in a block
-const condition = false;
+var condition = false;
 if (condition) {
-    const c = 0;
+    var c = 0;
 }
 // in try/catch/finally
 try {
-    const a = 0;
+    var a = 0;
 }
 catch (e) {
-    const c = 1;
+    var c = 1;
 }
 finally {
-    const c = 0;
+    var c = 0;
 }
 // in a namespace
 var N;
 (function (N) {
     var x;
 })(N || (N = {}));
-for (let x, { z }; (x); )
+for (var x = void 0, z = (void 0).z; (x); )
     ;

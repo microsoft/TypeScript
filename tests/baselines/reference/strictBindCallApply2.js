@@ -15,4 +15,4 @@ const fb = fn.bind({ blub: "blub" });
 // Repro from #32964
 ;
 function fn() { }
-const fb = fn.bind({ blub: "blub" });
+var fb = fn.bind({ blub: "blub" });

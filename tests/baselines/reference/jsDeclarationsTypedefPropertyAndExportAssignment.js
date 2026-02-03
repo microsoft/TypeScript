@@ -65,7 +65,7 @@ module.exports = MainThreadTasks;
 /**
  * @type {{[P in TaskGroupIds]: {id: P, label: string}}}
  */
-const taskGroups = {
+var taskGroups = {
     parseHTML: {
         id: 'parseHTML',
         label: 'Parse HTML & CSS'
@@ -76,13 +76,13 @@ const taskGroups = {
     },
 };
 /** @type {Object<string, TaskGroup>} */
-const taskNameToGroup = {};
+var taskNameToGroup = {};
 module.exports = {
-    taskGroups,
-    taskNameToGroup,
+    taskGroups: taskGroups,
+    taskNameToGroup: taskNameToGroup,
 };
 //// [index.js]
-const { taskGroups, taskNameToGroup } = require('./module.js');
+var _a = require('./module.js'), taskGroups = _a.taskGroups, taskNameToGroup = _a.taskNameToGroup;
 /** @typedef {import('./module.js').TaskGroup} TaskGroup */
 /**
  * @typedef TaskNode
@@ -91,13 +91,15 @@ const { taskGroups, taskNameToGroup } = require('./module.js');
  * @prop {TaskGroup} group
  */
 /** @typedef {{timers: Map<string, TaskNode>}} PriorTaskData */
-class MainThreadTasks {
+var MainThreadTasks = /** @class */ (function () {
     /**
      * @param {TaskGroup} x
      * @param {TaskNode} y
      */
-    constructor(x, y) { }
-}
+    function MainThreadTasks(x, y) {
+    }
+    return MainThreadTasks;
+}());
 module.exports = MainThreadTasks;
 
 

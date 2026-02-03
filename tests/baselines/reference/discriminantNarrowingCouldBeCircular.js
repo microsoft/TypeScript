@@ -42,27 +42,28 @@ declare function isPlainObject2<T>(
 
 //// [discriminantNarrowingCouldBeCircular.js]
 "use strict";
-const o = {};
+var o = {};
 if (o) {
-    for (const key in o) {
-        const value = o[key];
+    for (var key in o) {
+        var value = o[key];
         if (is(value)) {
         }
     }
 }
 function getImplicitAriaRole(element) {
-    let ancestor = element;
+    var ancestor = element;
     while (ancestor) {
-        const parent = parentElementOrShadowHost(ancestor);
-        const parents = kPresentationInheritanceParents[ancestor.a];
+        var parent = parentElementOrShadowHost(ancestor);
+        var parents = kPresentationInheritanceParents[ancestor.a];
         if (!parents || !parent || !parents.includes(parent.a))
             break;
         ancestor = parent;
     }
 }
 if (isPlainObject2(myObj2)) {
-    for (const key of ["a", "b", "c"]) {
-        const deeper = myObj2[key];
-        const deeperKeys = isPlainObject2(deeper) ? Object.keys(deeper) : [];
+    for (var _i = 0, _a = ["a", "b", "c"]; _i < _a.length; _i++) {
+        var key = _a[_i];
+        var deeper = myObj2[key];
+        var deeperKeys = isPlainObject2(deeper) ? Object.keys(deeper) : [];
     }
 }

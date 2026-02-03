@@ -34,27 +34,36 @@ class E<T extends Date> {
 }
 
 //// [typeOfThisInMemberFunctions.js]
-class C {
-    foo() {
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.foo = function () {
         var r = this;
-    }
-    static bar() {
+    };
+    C.bar = function () {
         var r2 = this;
+    };
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
     }
-}
-class D {
-    foo() {
+    D.prototype.foo = function () {
         var r = this;
-    }
-    static bar() {
+    };
+    D.bar = function () {
         var r2 = this;
+    };
+    return D;
+}());
+var E = /** @class */ (function () {
+    function E() {
     }
-}
-class E {
-    foo() {
+    E.prototype.foo = function () {
         var r = this;
-    }
-    static bar() {
+    };
+    E.bar = function () {
         var r2 = this;
-    }
-}
+    };
+    return E;
+}());

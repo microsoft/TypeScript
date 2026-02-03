@@ -18,14 +18,14 @@ function foo(x: X): 1 {
 
 //// [arrayDestructuringInSwitch2.js]
 function foo(x) {
-    const { kind, a } = x;
+    var kind = x.kind, a = x.a;
     switch (kind) {
         case "a":
             return a[0];
         case "b":
             return 1;
         default:
-            const [n] = a;
+            var n = a[0];
             return a;
     }
 }

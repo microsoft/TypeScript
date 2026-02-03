@@ -110,16 +110,16 @@ function h3() {
 
 
 //// [controlFlowWhileStatement.js]
-let cond;
+var cond;
 function a() {
-    let x;
+    var x;
     x = "";
     while (cond) {
         x; // string
     }
 }
 function b() {
-    let x;
+    var x;
     x = "";
     while (cond) {
         x; // string
@@ -128,7 +128,7 @@ function b() {
     }
 }
 function c() {
-    let x;
+    var x;
     x = "";
     while (cond) {
         x; // string
@@ -139,7 +139,7 @@ function c() {
     }
 }
 function d() {
-    let x;
+    var x;
     x = "";
     while (x = x.length) {
         x; // number
@@ -147,7 +147,7 @@ function d() {
     }
 }
 function e() {
-    let x;
+    var x;
     x = "";
     while (cond) {
         x; // string | number
@@ -157,7 +157,7 @@ function e() {
     x; // string | number
 }
 function f() {
-    let x;
+    var x;
     x = "";
     while (cond) {
         if (cond) {
@@ -173,7 +173,7 @@ function f() {
     x; // string | number | boolean | RegExp
 }
 function g() {
-    let x;
+    var x;
     x = "";
     while (true) {
         if (cond) {
@@ -189,7 +189,7 @@ function g() {
     x; // number
 }
 function h1() {
-    let x;
+    var x;
     x = "";
     while (x > 1) {
         x; // string | number
@@ -199,7 +199,7 @@ function h1() {
     x; // string | number
 }
 function h2() {
-    let x;
+    var x;
     x = "";
     while (cond) {
         x = len(x);
@@ -208,7 +208,7 @@ function h2() {
     x; // string | number
 }
 function h3() {
-    let x;
+    var x;
     x = "";
     while (cond) {
         x; // string | number

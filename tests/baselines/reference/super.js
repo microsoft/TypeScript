@@ -40,32 +40,61 @@ s.foo() + ss.foo();
 
 
 //// [super.js]
-class Base {
-    constructor() {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Base = /** @class */ (function () {
+    function Base() {
         var x;
     }
-    foo() {
+    Base.prototype.foo = function () {
         return "base";
-    }
-    bar() {
+    };
+    Base.prototype.bar = function () {
         return "basebar";
+    };
+    return Base;
+}());
+var Sub1 = /** @class */ (function (_super) {
+    __extends(Sub1, _super);
+    function Sub1() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
-class Sub1 extends Base {
-    foo() {
-        return "sub1" + super.foo() + super.bar();
+    Sub1.prototype.foo = function () {
+        return "sub1" + _super.prototype.foo.call(this) + _super.prototype.bar.call(this);
+    };
+    return Sub1;
+}(Base));
+var SubSub1 = /** @class */ (function (_super) {
+    __extends(SubSub1, _super);
+    function SubSub1() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
-class SubSub1 extends Sub1 {
-    foo() {
-        return "subsub1" + super.foo();
+    SubSub1.prototype.foo = function () {
+        return "subsub1" + _super.prototype.foo.call(this);
+    };
+    return SubSub1;
+}(Sub1));
+var Base2 = /** @class */ (function () {
+    function Base2() {
     }
-}
-class Base2 {
-    foo() {
-        super.foo();
-    }
-}
+    Base2.prototype.foo = function () {
+        _super.prototype.foo.call(this);
+    };
+    return Base2;
+}());
 var s = new Sub1();
 var ss = new SubSub1();
 s.foo() + ss.foo();

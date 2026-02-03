@@ -11,7 +11,8 @@ class Markup {
 
 //// [classCannotExtendVar.js]
 var Markup;
-class Markup {
-    constructor() {
+var Markup = /** @class */ (function () {
+    function Markup() {
     }
-}
+    return Markup;
+}());

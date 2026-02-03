@@ -13,10 +13,11 @@ function f<T, K extends keyof T>() {
 
 //// [computedPropertyNames51_ES5.js]
 function f() {
+    var _a;
     var t;
     var k;
-    var v = {
-        [t]: 0,
-        [k]: 1
-    };
+    var v = (_a = {},
+        _a[t] = 0,
+        _a[k] = 1,
+        _a);
 }

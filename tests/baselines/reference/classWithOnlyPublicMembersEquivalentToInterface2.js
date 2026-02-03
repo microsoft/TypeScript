@@ -31,11 +31,18 @@ i = c;
 
 //// [classWithOnlyPublicMembersEquivalentToInterface2.js]
 // no errors expected
-class C {
-    y(a) { return null; }
-    get z() { return 1; }
-    set z(v) { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.y = function (a) { return null; };
+    Object.defineProperty(C.prototype, "z", {
+        get: function () { return 1; },
+        set: function (v) { },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());
 var c;
 var i;
 c = i;

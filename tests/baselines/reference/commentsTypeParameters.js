@@ -18,16 +18,19 @@ function compare</**type*/T>(a: T, b: T) {
 }
 
 //// [commentsTypeParameters.js]
-class C {
-    method(a) {
+var C = /** @class */ (function () {
+    function C() {
     }
-    static staticmethod(a) {
-    }
-    privatemethod(a) {
-    }
-    static privatestaticmethod(a) {
-    }
-}
+    C.prototype.method = function (a) {
+    };
+    C.staticmethod = function (a) {
+    };
+    C.prototype.privatemethod = function (a) {
+    };
+    C.privatestaticmethod = function (a) {
+    };
+    return C;
+}());
 function compare(a, b) {
     return a === b;
 }

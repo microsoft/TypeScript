@@ -4,5 +4,8 @@
 class A<T extends A> { }
 
 //// [recursiveTypeParameterConstraintReferenceLacksTypeArgs.js]
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());

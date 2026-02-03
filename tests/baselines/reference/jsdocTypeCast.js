@@ -25,12 +25,12 @@
  */
 function f(x) {
     /** @type {'a' | 'b'} */
-    let a = (x); // Error
+    var a = (x); // Error
     a;
     /** @type {'a' | 'b'} */
-    let b = (((x))); // Error
+    var b = (((x))); // Error
     b;
     /** @type {'a' | 'b'} */
-    let c = /** @type {'a' | 'b'} */ (x); // Ok
+    var c = /** @type {'a' | 'b'} */ (x); // Ok
     c;
 }

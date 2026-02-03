@@ -35,22 +35,26 @@ class D {
 }
 
 //// [classConstructorOverloadsAccessibility.js]
-class A {
-    constructor() {
+var A = /** @class */ (function () {
+    function A() {
     }
-}
-class B {
-    constructor() {
+    return A;
+}());
+var B = /** @class */ (function () {
+    function B() {
     }
-}
-class C {
-    constructor() {
+    return B;
+}());
+var C = /** @class */ (function () {
+    function C() {
     }
-}
-class D {
-    constructor() {
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
     }
-}
+    return D;
+}());
 
 
 //// [classConstructorOverloadsAccessibility.d.ts]

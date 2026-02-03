@@ -14,7 +14,10 @@ class A {
 function foo(a) {
     return "";
 }
-class A {
-    [foo(a)](a) {
+var A = /** @class */ (function () {
+    function A() {
     }
-}
+    A.prototype[foo(a)] = function (a) {
+    };
+    return A;
+}());

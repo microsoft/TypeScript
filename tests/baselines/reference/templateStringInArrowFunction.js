@@ -4,4 +4,4 @@
 var x = x => `abc${ x }def`;
 
 //// [templateStringInArrowFunction.js]
-var x = x => `abc${x}def`;
+var x = function (x) { return "abc".concat(x, "def"); };

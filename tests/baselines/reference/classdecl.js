@@ -96,63 +96,124 @@ class e {
 }
 
 //// [classdecl.js]
-class a {
-    constructor(ns) {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var a = /** @class */ (function () {
+    function a(ns) {
     }
-    pgF() { }
-    get d() {
-        return 30;
-    }
-    set d(a) {
-    }
-    static get p2() {
-        return { x: 30, y: 40 };
-    }
-    static d2() {
-    }
-    static get p3() {
-        return "string";
-    }
-    foo(ns) {
+    a.prototype.pgF = function () { };
+    Object.defineProperty(a.prototype, "d", {
+        get: function () {
+            return 30;
+        },
+        set: function (a) {
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(a, "p2", {
+        get: function () {
+            return { x: 30, y: 40 };
+        },
+        enumerable: false,
+        configurable: true
+    });
+    a.d2 = function () {
+    };
+    Object.defineProperty(a, "p3", {
+        get: function () {
+            return "string";
+        },
+        enumerable: false,
+        configurable: true
+    });
+    a.prototype.foo = function (ns) {
         return ns.toString();
+    };
+    return a;
+}());
+var b = /** @class */ (function (_super) {
+    __extends(b, _super);
+    function b() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
-class b extends a {
-}
+    return b;
+}(a));
 var m1;
 (function (m1) {
-    class b {
-    }
+    var b = /** @class */ (function () {
+        function b() {
+        }
+        return b;
+    }());
     m1.b = b;
-    class d {
-    }
+    var d = /** @class */ (function () {
+        function d() {
+        }
+        return d;
+    }());
 })(m1 || (m1 = {}));
 var m2;
 (function (m2) {
-    let m3;
+    var m3;
     (function (m3) {
-        class c extends b {
-        }
+        var c = /** @class */ (function (_super) {
+            __extends(c, _super);
+            function c() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            return c;
+        }(b));
         m3.c = c;
-        class ib2 {
-        }
+        var ib2 = /** @class */ (function () {
+            function ib2() {
+            }
+            return ib2;
+        }());
         m3.ib2 = ib2;
     })(m3 = m2.m3 || (m2.m3 = {}));
 })(m2 || (m2 = {}));
-class c extends m1.b {
-}
-class ib2 {
-}
-class d {
-    foo(ns) {
-        return ns.toString();
+var c = /** @class */ (function (_super) {
+    __extends(c, _super);
+    function c() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
-class e {
-    foo(ns) {
-        return ns.toString();
+    return c;
+}(m1.b));
+var ib2 = /** @class */ (function () {
+    function ib2() {
     }
-}
+    return ib2;
+}());
+var d = /** @class */ (function () {
+    function d() {
+    }
+    d.prototype.foo = function (ns) {
+        return ns.toString();
+    };
+    return d;
+}());
+var e = /** @class */ (function () {
+    function e() {
+    }
+    e.prototype.foo = function (ns) {
+        return ns.toString();
+    };
+    return e;
+}());
 
 
 //// [classdecl.d.ts]

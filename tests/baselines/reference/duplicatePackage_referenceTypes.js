@@ -61,4 +61,4 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var a = __importStar(require("a"));
-let foo = a.foo;
+var foo = a.foo;

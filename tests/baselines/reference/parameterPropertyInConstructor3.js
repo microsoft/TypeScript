@@ -7,8 +7,9 @@ class Foo {
 
 
 //// [parameterPropertyInConstructor3.js]
-class Foo {
-    constructor(constructor) {
+var Foo = /** @class */ (function () {
+    function Foo(constructor) {
         this.constructor = constructor;
     }
-}
+    return Foo;
+}());

@@ -39,16 +39,18 @@ type _5 = (Foo | (Foo & Bar))['foo']; // Prev error, now ok
 
 
 //// [unionPropertyOfProtectedAndIntersectionProperty.js]
-class Foo {
-    constructor() {
+var Foo = /** @class */ (function () {
+    function Foo() {
         this.foo = 0;
     }
-}
-class Bar {
-    constructor() {
+    return Foo;
+}());
+var Bar = /** @class */ (function () {
+    function Bar() {
         this.foo = 0;
     }
-}
+    return Bar;
+}());
 // V[P] in `Nothing<V[P]>` is the substitution type `V[P] & Foo`. When
 // checking if that's assignable to `Foo` in the constraint of `Nothing`,
 // it passes the regular assignability check but then goes into intersection

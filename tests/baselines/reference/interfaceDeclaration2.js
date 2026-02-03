@@ -16,7 +16,10 @@ var I4:number;
 
 
 //// [interfaceDeclaration2.js]
-class I2 {
-}
+var I2 = /** @class */ (function () {
+    function I2() {
+    }
+    return I2;
+}());
 function I3() { }
 var I4;

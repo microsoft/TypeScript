@@ -36,11 +36,15 @@ var b: {
 
 //// [constructSignaturesWithOverloadsThatDifferOnlyByReturnType.js]
 // Error for construct signature overloads to differ only by return type
-class C {
-    constructor(x) { }
-}
-class C2 {
-    constructor(x, y) { }
-}
+var C = /** @class */ (function () {
+    function C(x) {
+    }
+    return C;
+}());
+var C2 = /** @class */ (function () {
+    function C2(x, y) {
+    }
+    return C2;
+}());
 var a;
 var b;

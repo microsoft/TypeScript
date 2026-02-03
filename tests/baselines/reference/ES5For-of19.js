@@ -12,11 +12,13 @@ for (let v of []) {
 
 
 //// [ES5For-of19.js]
-for (let v of []) {
+for (var _i = 0, _a = []; _i < _a.length; _i++) {
+    var v = _a[_i];
     v;
     function foo() {
-        for (const v of []) {
-            v;
+        for (var _i = 0, _a = []; _i < _a.length; _i++) {
+            var v_1 = _a[_i];
+            v_1;
         }
     }
 }

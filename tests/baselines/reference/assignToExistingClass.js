@@ -20,13 +20,19 @@ module Test {
 //// [assignToExistingClass.js]
 var Test;
 (function (Test) {
-    class Mocked {
-    }
-    class Tester {
-        willThrowError() {
+    var Mocked = /** @class */ (function () {
+        function Mocked() {
+        }
+        return Mocked;
+    }());
+    var Tester = /** @class */ (function () {
+        function Tester() {
+        }
+        Tester.prototype.willThrowError = function () {
             Mocked = Mocked || function () {
                 return { myProp: "test" };
             };
-        }
-    }
+        };
+        return Tester;
+    }());
 })(Test || (Test = {}));

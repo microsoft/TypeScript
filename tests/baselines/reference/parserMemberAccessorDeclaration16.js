@@ -6,6 +6,15 @@ class C {
 }
 
 //// [parserMemberAccessorDeclaration16.js]
-class C {
-    set Foo(a = 1) { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    Object.defineProperty(C.prototype, "Foo", {
+        set: function (a) {
+            if (a === void 0) { a = 1; }
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());

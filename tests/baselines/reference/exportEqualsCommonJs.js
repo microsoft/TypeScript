@@ -5,4 +5,5 @@ export = { ["hi"]: "there" };
 
 //// [exportEqualsCommonJs.js]
 "use strict";
-module.exports = { ["hi"]: "there" };
+var _a;
+module.exports = (_a = {}, _a["hi"] = "there", _a);

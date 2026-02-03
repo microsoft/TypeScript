@@ -24,15 +24,21 @@ function use() {
 //// [aliasBug.js]
 var foo;
 (function (foo) {
-    class Provide {
-    }
+    var Provide = /** @class */ (function () {
+        function Provide() {
+        }
+        return Provide;
+    }());
     foo.Provide = Provide;
-    let bar;
+    var bar;
     (function (bar) {
-        let baz;
+        var baz;
         (function (baz) {
-            class boo {
-            }
+            var boo = /** @class */ (function () {
+                function boo() {
+                }
+                return boo;
+            }());
             baz.boo = boo;
         })(baz = bar.baz || (bar.baz = {}));
     })(bar = foo.bar || (foo.bar = {}));

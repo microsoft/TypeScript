@@ -15,10 +15,11 @@ export = Foo;
 define("NamedModule", ["require", "exports"], function (require, exports) {
     "use strict";
     ///<amd-module name='NamedModule'/>
-    class Foo {
-        constructor() {
+    var Foo = /** @class */ (function () {
+        function Foo() {
             this.x = 5;
         }
-    }
+        return Foo;
+    }());
     return Foo;
 });

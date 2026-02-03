@@ -16,7 +16,7 @@ module.exports.Strings = Strings;
 
 
 //// [index.js]
-const Strings = {
+var Strings = {
     a: "A",
     b: "B"
 };

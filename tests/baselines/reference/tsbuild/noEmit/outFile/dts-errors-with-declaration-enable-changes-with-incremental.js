@@ -415,11 +415,12 @@ Found 1 error.
 }
 
 //// [/home/src/projects/outFile.js]
-const a = class {
-    constructor() {
+var a = /** @class */ (function () {
+    function class_1() {
         this.p = 10;
     }
-};
+    return class_1;
+}());
 
 
 

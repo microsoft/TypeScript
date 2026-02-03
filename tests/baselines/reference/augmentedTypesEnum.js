@@ -54,15 +54,18 @@ var e3;
 (function (e3) {
     e3[e3["One"] = 0] = "One";
 })(e3 || (e3 = {})); // error
-var e3 = () => { }; // error
+var e3 = function () { }; // error
 // enum then class
 var e4;
 (function (e4) {
     e4[e4["One"] = 0] = "One";
 })(e4 || (e4 = {})); // error
-class e4 {
-    foo() { }
-} // error
+var e4 = /** @class */ (function () {
+    function e4() {
+    }
+    e4.prototype.foo = function () { };
+    return e4;
+}()); // error
 // enum then enum
 var e5;
 (function (e5) {

@@ -18,7 +18,13 @@ interface Foo2<T> extends Base2<T> { // error
 }
 
 //// [interfaceWithPropertyThatIsPrivateInBaseType.js]
-class Base {
-}
-class Base2 {
-}
+var Base = /** @class */ (function () {
+    function Base() {
+    }
+    return Base;
+}());
+var Base2 = /** @class */ (function () {
+    function Base2() {
+    }
+    return Base2;
+}());

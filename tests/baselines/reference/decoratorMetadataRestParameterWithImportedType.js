@@ -43,22 +43,31 @@ export class ClassA {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SomeClass = void 0;
-class SomeClass {
-}
+var SomeClass = /** @class */ (function () {
+    function SomeClass() {
+    }
+    return SomeClass;
+}());
 exports.SomeClass = SomeClass;
 //// [aux1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SomeClass1 = void 0;
-class SomeClass1 {
-}
+var SomeClass1 = /** @class */ (function () {
+    function SomeClass1() {
+    }
+    return SomeClass1;
+}());
 exports.SomeClass1 = SomeClass1;
 //// [aux2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SomeClass2 = void 0;
-class SomeClass2 {
-}
+var SomeClass2 = /** @class */ (function () {
+    function SomeClass2() {
+    }
+    return SomeClass2;
+}());
 exports.SomeClass2 = SomeClass2;
 //// [main.js]
 "use strict";
@@ -76,17 +85,23 @@ exports.ClassA = void 0;
 var aux_1 = require("./aux");
 var aux1_1 = require("./aux1");
 function annotation() {
-    return (target) => { };
+    return function (target) { };
 }
 function annotation1() {
-    return (target) => { };
+    return function (target) { };
 }
-let ClassA = (() => {
-    let ClassA = class ClassA {
-        constructor(...init) {
-            this.array = init;
+var ClassA = /** @class */ (function () {
+    function ClassA() {
+        var init = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            init[_i] = arguments[_i];
         }
-        foo(...args) {
+        this.array = init;
+    }
+    ClassA.prototype.foo = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
         }
     };
     __decorate([
@@ -100,5 +115,5 @@ let ClassA = (() => {
         __metadata("design:paramtypes", [aux_1.SomeClass])
     ], ClassA);
     return ClassA;
-})();
+}());
 exports.ClassA = ClassA;

@@ -11,8 +11,11 @@ module A {
 //// [unusedClassesinModule1.js]
 var A;
 (function (A) {
-    class Calculator {
-        handelChar() {
+    var Calculator = /** @class */ (function () {
+        function Calculator() {
         }
-    }
+        Calculator.prototype.handelChar = function () {
+        };
+        return Calculator;
+    }());
 })(A || (A = {}));

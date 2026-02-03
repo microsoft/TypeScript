@@ -8,7 +8,10 @@ class abstract {
 new abstract;
 
 //// [classAbstractAsIdentifier.js]
-class abstract {
-    foo() { return 1; }
-}
+var abstract = /** @class */ (function () {
+    function abstract() {
+    }
+    abstract.prototype.foo = function () { return 1; };
+    return abstract;
+}());
 new abstract;

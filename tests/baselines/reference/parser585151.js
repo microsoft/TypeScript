@@ -7,6 +7,9 @@ class Foo2 {
 
 
 //// [parser585151.js]
-class Foo2 {
-}
+var Foo2 = /** @class */ (function () {
+    function Foo2() {
+    }
+    return Foo2;
+}());
 var icecream = "chocolate";

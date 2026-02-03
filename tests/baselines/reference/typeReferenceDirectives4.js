@@ -17,8 +17,8 @@ let y = () => x
 //// [app.js]
 /// <reference path="./ref.d.ts"/>
 /// <reference types="lib" preserve="true" />
-let x;
-let y = () => x;
+var x;
+var y = function () { return x; };
 
 
 //// [app.d.ts]

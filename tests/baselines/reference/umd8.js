@@ -23,7 +23,7 @@ let x: any = Foo; // Not OK in value position
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let y; // OK in type position
+var y; // OK in type position
 y.foo();
-let z; // OK in ns position
-let x = Foo; // Not OK in value position
+var z; // OK in ns position
+var x = Foo; // Not OK in value position

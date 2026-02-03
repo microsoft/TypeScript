@@ -13,8 +13,11 @@ export const instance = getSomething();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSomething = getSomething;
 function getSomething() { return null; }
-class Something {
-}
+var Something = /** @class */ (function () {
+    function Something() {
+    }
+    return Something;
+}());
 exports.default = Something;
 //// [main.js]
 "use strict";

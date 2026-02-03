@@ -22,11 +22,12 @@ module M {
 //// [covariance1.js]
 var M;
 (function (M) {
-    class XX {
-        constructor(m1) {
+    var XX = /** @class */ (function () {
+        function XX(m1) {
             this.m1 = m1;
         }
-    }
+        return XX;
+    }());
     M.XX = XX;
     function f(y) { }
     M.f = f;

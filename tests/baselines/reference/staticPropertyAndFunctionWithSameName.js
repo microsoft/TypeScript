@@ -12,8 +12,14 @@ class D {
 }
 
 //// [staticPropertyAndFunctionWithSameName.js]
-class C {
-}
-class D {
-    f() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
+    }
+    D.prototype.f = function () { };
+    return D;
+}());

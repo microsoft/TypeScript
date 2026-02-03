@@ -5,4 +5,4 @@ const file = Bun.file("/a.ts");
 
 
 //// [a.js]
-const file = Bun.file("/a.ts");
+var file = Bun.file("/a.ts");

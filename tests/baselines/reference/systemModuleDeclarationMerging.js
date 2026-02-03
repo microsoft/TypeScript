@@ -23,8 +23,11 @@ System.register([], function (exports_1, context_1) {
             (function (F) {
                 var x;
             })(F || (exports_1("F", F = {})));
-            C = class C {
-            };
+            C = /** @class */ (function () {
+                function C() {
+                }
+                return C;
+            }());
             exports_1("C", C);
             (function (C) {
                 var x;

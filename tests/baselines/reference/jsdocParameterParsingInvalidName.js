@@ -10,10 +10,13 @@ class c {
 }
 
 //// [jsdocParameterParsingInvalidName.js]
-class c {
+var c = /** @class */ (function () {
+    function c() {
+    }
     /**
      * @param {string} [`foo]
      */
-    method(foo) {
-    }
-}
+    c.prototype.method = function (foo) {
+    };
+    return c;
+}());

@@ -19,10 +19,13 @@ function myFunction(myType: MyType) {
 
 //// [argumentsAsPropertyName.js]
 function myFunction(myType) {
-    for (let i = 0; i < 10; i++) {
+    var _loop_1 = function (i) {
         use(myType.arguments[i]);
         // create closure so that tsc will turn loop body into function
-        const x = 5;
+        var x = 5;
         [1, 2, 3].forEach(function (j) { use(x); });
+    };
+    for (var i = 0; i < 10; i++) {
+        _loop_1(i);
     }
 }

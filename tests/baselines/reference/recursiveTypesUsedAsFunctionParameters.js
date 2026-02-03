@@ -46,10 +46,16 @@ function other<T extends List<U>, U>() {
 }
 
 //// [recursiveTypesUsedAsFunctionParameters.js]
-class List {
-}
-class MyList {
-}
+var List = /** @class */ (function () {
+    function List() {
+    }
+    return List;
+}());
+var MyList = /** @class */ (function () {
+    function MyList() {
+    }
+    return MyList;
+}());
 function foo(x) {
 }
 function foo2(x) {

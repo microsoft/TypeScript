@@ -13,8 +13,11 @@ var r: typeof C;
 var r2: typeof c;
 
 //// [typeofClassWithPrivates.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var c;
 var r;
 var r2;

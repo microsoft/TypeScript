@@ -16,11 +16,13 @@ class D<T> {
 }
 
 //// [constructorOverloadsWithOptionalParameters.js]
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
     }
-}
-class D {
-    constructor() {
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
     }
-}
+    return D;
+}());

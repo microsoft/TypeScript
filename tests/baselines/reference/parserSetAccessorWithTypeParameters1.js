@@ -6,6 +6,13 @@ class C {
 }
 
 //// [parserSetAccessorWithTypeParameters1.js]
-class C {
-    set foo<T>(v) { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    Object.defineProperty(C.prototype, "foo", {
+        set: function (v) { },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());

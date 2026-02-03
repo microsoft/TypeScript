@@ -4,4 +4,9 @@
 var v = { get [e]() { } };
 
 //// [parserES5ComputedPropertyName4.js]
-var v = { get [e]() { } };
+var _a;
+var v = (_a = {}, Object.defineProperty(_a, e, {
+    get: function () { },
+    enumerable: false,
+    configurable: true
+}), _a);

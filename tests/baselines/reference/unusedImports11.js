@@ -21,8 +21,11 @@ new r.Member();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Member = void 0;
-class Member {
-}
+var Member = /** @class */ (function () {
+    function Member() {
+    }
+    return Member;
+}());
 exports.Member = Member;
 exports.default = Member;
 //// [a.js]

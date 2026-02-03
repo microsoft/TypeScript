@@ -7,8 +7,9 @@ class C {
 }
 
 //// [illegalModifiersOnClassElements.js]
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.bar = 1;
     }
-}
+    return C;
+}());

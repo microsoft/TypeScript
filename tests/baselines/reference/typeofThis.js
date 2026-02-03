@@ -147,14 +147,15 @@ class Tests12 {
 
 //// [typeofThis.js]
 "use strict";
-class Test {
-    constructor() {
+var Test = /** @class */ (function () {
+    function Test() {
         this.data = {};
         var copy = {};
     }
-}
-class Test1 {
-    constructor() {
+    return Test;
+}());
+var Test1 = /** @class */ (function () {
+    function Test1() {
         this.data = { foo: '' };
         this['this'] = '';
         var copy = { foo: '' };
@@ -163,101 +164,121 @@ class Test1 {
         self.data;
         var str = '';
     }
-}
+    return Test1;
+}());
 function Test2() {
-    let x = 1;
+    var x = 1;
 }
 function Test3() {
-    let x = 1;
+    var x = 1;
 }
 function Test4() {
-    let x = 1;
+    var x = 1;
 }
-class Test5 {
-    constructor() {
+var Test5 = /** @class */ (function () {
+    function Test5() {
         this.no = 1;
-        this.f = () => {
+        this.f = function () {
             // should not capture this.
-            let x = 1;
+            var x = 1;
         };
     }
-}
+    return Test5;
+}());
 var Test6;
 (function (Test6) {
-    Test6.f = () => {
-        let x = 1;
+    Test6.f = function () {
+        var x = 1;
     };
 })(Test6 || (Test6 = {}));
 var Test7;
 (function (Test7) {
-    Test7.f = () => {
-        let x = 1;
+    Test7.f = function () {
+        var x = 1;
     };
 })(Test7 || (Test7 = {}));
-const Test8 = () => {
-    let x = 1;
+var Test8 = function () {
+    var x = 1;
 };
-class Test9 {
-    constructor() {
+var Test9 = /** @class */ (function () {
+    function Test9() {
         this.no = 0;
         this.this = 0;
     }
-    f() {
+    Test9.prototype.f = function () {
         if (this instanceof Test9D1) {
-            const d1 = this;
+            var d1 = this;
             d1.f1();
         }
         if (this instanceof Test9D2) {
-            const d2 = this;
+            var d2 = this;
             d2.f2();
         }
-    }
-    g() {
+    };
+    Test9.prototype.g = function () {
         if (this.no === 1) {
-            const no = this.no;
+            var no = this.no;
         }
         if (this.this === 1) {
-            const no = this.this;
+            var no = this.this;
         }
+    };
+    return Test9;
+}());
+var Test9D1 = /** @class */ (function () {
+    function Test9D1() {
     }
-}
-class Test9D1 {
-    f1() { }
-}
-class Test9D2 {
-    f2() { }
-}
-class Test10 {
-    foo() {
-        let a = undefined;
+    Test9D1.prototype.f1 = function () { };
+    return Test9D1;
+}());
+var Test9D2 = /** @class */ (function () {
+    function Test9D2() {
+    }
+    Test9D2.prototype.f2 = function () { };
+    return Test9D2;
+}());
+var Test10 = /** @class */ (function () {
+    function Test10() {
+    }
+    Test10.prototype.foo = function () {
+        var a = undefined;
         if (this.a) {
-            let a = undefined; // should narrow to { b?: string }
-            let b = undefined;
+            var a_1 = undefined; // should narrow to { b?: string }
+            var b = undefined;
             if (this.a.b) {
-                let b = undefined; // should narrow to string
+                var b_1 = undefined; // should narrow to string
             }
         }
+    };
+    return Test10;
+}());
+var Test11 = /** @class */ (function () {
+    function Test11() {
     }
-}
-class Test11 {
-    foo() {
-        const o = this;
-        let bar = {};
+    Test11.prototype.foo = function () {
+        var o = this;
+        var bar = {};
         if (o.this && o.this.x) {
-            let y = o.this.x; // should narrow to string
+            var y = o.this.x; // should narrow to string
         }
+    };
+    return Test11;
+}());
+var Tests12 = /** @class */ (function () {
+    function Tests12() {
     }
-}
-class Tests12 {
-    test1() {
-    }
-    test2() {
+    Tests12.prototype.test1 = function () {
+    };
+    Tests12.prototype.test2 = function () {
         for (;;) { }
-    }
-    test3() {
-        for (const dummy in []) { }
-    }
-    test4() {
-        for (const dummy of []) { }
-    }
-}
+    };
+    Tests12.prototype.test3 = function () {
+        for (var dummy in []) { }
+    };
+    Tests12.prototype.test4 = function () {
+        for (var _i = 0, _a = []; _i < _a.length; _i++) {
+            var dummy = _a[_i];
+        }
+    };
+    return Tests12;
+}());

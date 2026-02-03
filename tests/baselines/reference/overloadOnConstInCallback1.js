@@ -12,11 +12,14 @@ class C {
 }
 
 //// [overloadOnConstInCallback1.js]
-class C {
-    x1(a, callback) {
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.x1 = function (a, callback) {
         callback('hi');
         callback('bye');
         var hm = "hm";
         callback(hm);
-    }
-}
+    };
+    return C;
+}());

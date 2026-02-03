@@ -13,9 +13,10 @@ class C {
 
 //// [implicitAnyDeclareMemberWithoutType2.js]
 // this should be an error
-class C {
-    constructor(c1, c2, c3) {
+var C = /** @class */ (function () {
+    function C(c1, c2, c3) {
         this.x = null; // error at "x"
     } // error at "c1, c2"
-    funcOfC(f1, f2, f3) { } // error at "f1,f2"
-}
+    C.prototype.funcOfC = function (f1, f2, f3) { }; // error at "f1,f2"
+    return C;
+}());

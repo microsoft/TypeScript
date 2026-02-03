@@ -162,10 +162,13 @@ define(["require", "exports"], function (require, exports) {
     // private elements
     var m_private;
     (function (m_private) {
-        class c_private {
-        }
+        var c_private = /** @class */ (function () {
+            function c_private() {
+            }
+            return c_private;
+        }());
         m_private.c_private = c_private;
-        let e_private;
+        var e_private;
         (function (e_private) {
             e_private[e_private["Happy"] = 0] = "Happy";
             e_private[e_private["Grumpy"] = 1] = "Grumpy";
@@ -175,20 +178,26 @@ define(["require", "exports"], function (require, exports) {
         }
         m_private.f_private = f_private;
         m_private.v_private = new c_private();
-        let mi_private;
+        var mi_private;
         (function (mi_private) {
-            class c {
-            }
+            var c = /** @class */ (function () {
+                function c() {
+                }
+                return c;
+            }());
             mi_private.c = c;
         })(mi_private = m_private.mi_private || (m_private.mi_private = {}));
     })(m_private || (m_private = {}));
     // Public elements
     var m_public;
     (function (m_public) {
-        class c_public {
-        }
+        var c_public = /** @class */ (function () {
+            function c_public() {
+            }
+            return c_public;
+        }());
         m_public.c_public = c_public;
-        let e_public;
+        var e_public;
         (function (e_public) {
             e_public[e_public["Happy"] = 0] = "Happy";
             e_public[e_public["Grumpy"] = 1] = "Grumpy";
@@ -198,10 +207,13 @@ define(["require", "exports"], function (require, exports) {
         }
         m_public.f_public = f_public;
         m_public.v_public = 10;
-        let mi_public;
+        var mi_public;
         (function (mi_public) {
-            class c {
-            }
+            var c = /** @class */ (function () {
+                function c() {
+                }
+                return c;
+            }());
             mi_public.c = c;
         })(mi_public = m_public.mi_public || (m_public.mi_public = {}));
     })(m_public || (exports.m_public = m_public = {}));

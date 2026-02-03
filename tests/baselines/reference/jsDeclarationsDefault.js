@@ -57,28 +57,47 @@ exports.x = foo;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = exports.X = void 0;
-class Foo {
-    constructor() {
+var Foo = /** @class */ (function () {
+    function Foo() {
         this.a = (null);
     }
-}
-exports.default = Foo;
+    return Foo;
+}());
 exports.Bar = Foo;
+exports.default = Foo;
 ;
 exports.X = Foo;
 //// [index4.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var index3_1 = __importDefault(require("./index3"));
-class Bar extends index3_1.default {
-    constructor() {
-        super(...arguments);
-        this.x = (null);
+var Bar = /** @class */ (function (_super) {
+    __extends(Bar, _super);
+    function Bar() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.x = (null);
+        return _this;
     }
-}
+    return Bar;
+}(index3_1.default));
 exports.default = Bar;
 //// [index5.js]
 "use strict";

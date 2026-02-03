@@ -26,7 +26,7 @@ export const baddts = foo()
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.baddts = void 0;
-const foo = () => (x) => null;
+var foo = function () { return function (x) { return null; }; };
 exports.baddts = foo();
 
 

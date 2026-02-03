@@ -39,8 +39,12 @@ export namespace F {
 }
 
 //// [es6modulekindWithES5Target12.js]
-export class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+export { C };
 (function (C) {
     C.x = 1;
 })(C || (C = {}));

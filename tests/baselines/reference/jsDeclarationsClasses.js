@@ -198,171 +198,257 @@ export class ExtendsStatics extends HasStatics {
 
 //// [index.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExtendsStatics = exports.HasStatics = exports.VariableBase = exports.O = exports.N = exports.M = exports.L = exports.K = exports.J = exports.JJ = exports.II = exports.I = exports.H = exports.G = exports.F = exports.E = exports.D = exports.C = exports.B = exports.A = void 0;
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 exports.A = A;
-let B = (() => {
-    class B {
+var B = /** @class */ (function () {
+    function B() {
     }
     B.cat = "cat";
     return B;
-})();
+}());
 exports.B = B;
-let C = (() => {
-    class C {
+var C = /** @class */ (function () {
+    function C() {
     }
-    C.Cls = class {
-    };
+    C.Cls = /** @class */ (function () {
+        function class_1() {
+        }
+        return class_1;
+    }());
     return C;
-})();
+}());
 exports.C = C;
-class D {
+var D = /** @class */ (function () {
     /**
      * @param {number} a
      * @param {number} b
      */
-    constructor(a, b) { }
-}
+    function D(a, b) {
+    }
+    return D;
+}());
 exports.D = D;
 /**
  * @template T,U
  */
-let E = (() => {
-    class E {
-        /**
-         * @return {U}
-         */
-        get f1() { return /** @type {*} */ (null); }
-        /**
-         * @param {U} _p
-         */
-        set f1(_p) { }
-        /**
-         * @return {U}
-         */
-        get f2() { return /** @type {*} */ (null); }
-        /**
-         * @param {U} _p
-         */
-        set f3(_p) { }
-        /**
-         * @param {T} a
-         * @param {U} b
-         */
-        constructor(a, b) {
-            this.initializedField = 12;
-        }
-        /**
-         * @return {string}
-         */
-        static get s1() { return ""; }
-        /**
-         * @param {string} _p
-         */
-        static set s1(_p) { }
-        /**
-         * @return {string}
-         */
-        static get s2() { return ""; }
-        /**
-         * @param {string} _p
-         */
-        static set s3(_p) { }
-    }
-    E.staticInitializedField = 12;
-    return E;
-})();
-exports.E = E;
-/**
- * @template T,U
- */
-class F {
+var E = /** @class */ (function () {
     /**
      * @param {T} a
      * @param {U} b
      */
-    constructor(a, b) { }
+    function E(a, b) {
+        this.initializedField = 12;
+    }
+    Object.defineProperty(E.prototype, "f1", {
+        /**
+         * @return {U}
+         */
+        get: function () { return /** @type {*} */ (null); },
+        /**
+         * @param {U} _p
+         */
+        set: function (_p) { },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(E.prototype, "f2", {
+        /**
+         * @return {U}
+         */
+        get: function () { return /** @type {*} */ (null); },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(E.prototype, "f3", {
+        /**
+         * @param {U} _p
+         */
+        set: function (_p) { },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(E, "s1", {
+        /**
+         * @return {string}
+         */
+        get: function () { return ""; },
+        /**
+         * @param {string} _p
+         */
+        set: function (_p) { },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(E, "s2", {
+        /**
+         * @return {string}
+         */
+        get: function () { return ""; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(E, "s3", {
+        /**
+         * @param {string} _p
+         */
+        set: function (_p) { },
+        enumerable: false,
+        configurable: true
+    });
+    E.staticInitializedField = 12;
+    return E;
+}());
+exports.E = E;
+/**
+ * @template T,U
+ */
+var F = /** @class */ (function () {
+    /**
+     * @param {T} a
+     * @param {U} b
+     */
+    function F(a, b) {
+    }
     /**
      * @template A,B
      * @param {A} a
      * @param {B} b
      */
-    static create(a, b) { return new F(a, b); }
-}
+    F.create = function (a, b) { return new F(a, b); };
+    return F;
+}());
 exports.F = F;
-class G {
-}
+var G = /** @class */ (function () {
+    function G() {
+    }
+    return G;
+}());
 exports.G = G;
-class HH {
-}
+var HH = /** @class */ (function () {
+    function HH() {
+    }
+    return HH;
+}());
 exports.H = HH;
-class I {
-}
+var I = /** @class */ (function () {
+    function I() {
+    }
+    return I;
+}());
 exports.I = I;
 exports.II = I;
-class J {
-}
-exports.J = J;
+var J = /** @class */ (function () {
+    function J() {
+    }
+    return J;
+}());
 exports.JJ = J;
-class K {
-    constructor() {
+exports.J = J;
+var K = /** @class */ (function () {
+    function K() {
         this.p1 = 12;
         this.p2 = "ok";
     }
-    method() {
+    K.prototype.method = function () {
         return this.p1;
-    }
-}
+    };
+    return K;
+}());
 exports.K = K;
-class L extends K {
-}
-exports.L = L;
-class M extends null {
-    constructor() {
-        this.prop = 12;
+var L = /** @class */ (function (_super) {
+    __extends(L, _super);
+    function L() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
+    return L;
+}(K));
+exports.L = L;
+var M = /** @class */ (function (_super) {
+    __extends(M, _super);
+    function M() {
+        _this.prop = 12;
+    }
+    return M;
+}(null));
 exports.M = M;
 /**
  * @template T
  */
-class N extends L {
+var N = /** @class */ (function (_super) {
+    __extends(N, _super);
     /**
      * @param {T} param
      */
-    constructor(param) {
-        super();
-        this.another = param;
+    function N(param) {
+        var _this = _super.call(this) || this;
+        _this.another = param;
+        return _this;
     }
-}
+    return N;
+}(L));
 exports.N = N;
 /**
  * @template U
  * @extends {N<U>}
  */
-class O extends N {
+var O = /** @class */ (function (_super) {
+    __extends(O, _super);
     /**
      * @param {U} param
      */
-    constructor(param) {
-        super(param);
-        this.another2 = param;
+    function O(param) {
+        var _this = _super.call(this, param) || this;
+        _this.another2 = param;
+        return _this;
     }
-}
+    return O;
+}(N));
 exports.O = O;
 var x = /** @type {*} */ (null);
-class VariableBase extends x {
-}
+var VariableBase = /** @class */ (function (_super) {
+    __extends(VariableBase, _super);
+    function VariableBase() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return VariableBase;
+}(x));
 exports.VariableBase = VariableBase;
-class HasStatics {
-    static staticMethod() { }
-}
+var HasStatics = /** @class */ (function () {
+    function HasStatics() {
+    }
+    HasStatics.staticMethod = function () { };
+    return HasStatics;
+}());
 exports.HasStatics = HasStatics;
-class ExtendsStatics extends HasStatics {
-    static also() { }
-}
+var ExtendsStatics = /** @class */ (function (_super) {
+    __extends(ExtendsStatics, _super);
+    function ExtendsStatics() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ExtendsStatics.also = function () { };
+    return ExtendsStatics;
+}(HasStatics));
 exports.ExtendsStatics = ExtendsStatics;
 
 

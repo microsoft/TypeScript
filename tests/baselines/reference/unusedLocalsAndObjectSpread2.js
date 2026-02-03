@@ -33,10 +33,10 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.asdf = void 0;
-const { children, // here!
-active: _a } = props, // here!
+var children = props.children, // here!
+_a = props.active, // here!
 rest = __rest(props, ["children", "active"]);
 function foo() {
-    const { children, active: _a } = props, rest = __rest(props, ["children", "active"]);
+    var children = props.children, _a = props.active, rest = __rest(props, ["children", "active"]);
 }
 exports.asdf = 123;

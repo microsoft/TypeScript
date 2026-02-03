@@ -20,7 +20,7 @@ const { Provider, useUsername, useAge, useStore } = createStore({
 
 //// [templateLiteralIntersection4.js]
 "use strict";
-const { Provider, useUsername, useAge, useStore } = createStore({
+var _a = createStore({
     username: "Aral",
     age: 31
-});
+}), Provider = _a.Provider, useUsername = _a.useUsername, useAge = _a.useAge, useStore = _a.useStore;

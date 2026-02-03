@@ -41,7 +41,7 @@ Output::
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
 /// <reference path="commonFile2.ts"/>
-let x = y;
+var x = y;
 
 
 
@@ -129,7 +129,7 @@ Output::
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
-let y = 1;
+var y = 1;
 
 
 

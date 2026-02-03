@@ -8,8 +8,11 @@ class Greeter {
 }
 
 //// [commentOnStaticMember1.js]
-class Greeter {
-    //Hello World
-    static foo() {
+var Greeter = /** @class */ (function () {
+    function Greeter() {
     }
-}
+    //Hello World
+    Greeter.foo = function () {
+    };
+    return Greeter;
+}());

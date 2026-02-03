@@ -10,10 +10,13 @@ class A {
 }
 
 //// [argumentsUsedInObjectLiteralProperty.js]
-class A {
-    static createSelectableViewModel(initialState, selectedValue) {
+var A = /** @class */ (function () {
+    function A() {
+    }
+    A.createSelectableViewModel = function (initialState, selectedValue) {
         return {
             selectedValue: arguments.length
         };
-    }
-}
+    };
+    return A;
+}());

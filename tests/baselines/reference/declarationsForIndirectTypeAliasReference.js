@@ -40,13 +40,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.doSome = doSome;
-const MAP = {
+var MAP = {
     a: "a"
 };
-const MAP2 = {
+var MAP2 = {
     a: "a"
 };
-function doSome(arg1, arg2 = MAP, arg3 = MAP2) {
+function doSome(arg1, arg2, arg3) {
+    if (arg2 === void 0) { arg2 = MAP; }
+    if (arg3 === void 0) { arg3 = MAP2; }
 }
 
 

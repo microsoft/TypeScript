@@ -16,8 +16,11 @@ function bar() {
 
 
 //// [out.js]
-class c {
-}
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
 function bar() {
 }
 /// <reference path="c.js"/>

@@ -13,5 +13,6 @@ function x() {
 var console;
 var _this = 5;
 function x() {
-    x => { console.log(this); };
+    var _this_1 = this;
+    (function (x) { console.log(_this_1); });
 }

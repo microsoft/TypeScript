@@ -61,7 +61,7 @@ exports.y = 10;
 //// [/home/src/projects/a/b/file1Consumer2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let z = 10;
+var z = 10;
 
 
 //// [/home/src/projects/a/b/globalFile3.js]
@@ -303,7 +303,7 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var moduleFile1_1 = require("./moduleFile1");
-let y = (0, moduleFile1_1.Foo)();
+var y = (0, moduleFile1_1.Foo)();
 
 
 

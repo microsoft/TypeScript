@@ -19,14 +19,14 @@ const foo3 = {
 //// [thisPredicateInObjectLiteral.js]
 "use strict";
 // Should be OK
-const foo2 = {
-    isNumber() {
+var foo2 = {
+    isNumber: function () {
         return true;
     },
 };
 // Still an error
-const foo3 = {
-    isNumber(x) {
+var foo3 = {
+    isNumber: function (x) {
         return true;
     },
 };

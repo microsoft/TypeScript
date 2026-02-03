@@ -15,14 +15,12 @@ middle${
 tail`;
 
 //// [templateStringWithEmbeddedComments.js]
-`head${ // single line comment
-10}
-middle${
+"head".concat(// single line comment
+10, "\nmiddle").concat(
 /* Multi-
  * line
  * comment
  */
 20
 // closing comment
-}
-tail`;
+, "\ntail");

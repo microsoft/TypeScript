@@ -35,15 +35,18 @@ if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 // have no effect on members of objects such as properties. 
 // Note that the class's property must be copied to a local variable for
 // the type guard to have an effect
-class D {
-    getData() {
+var D = /** @class */ (function () {
+    function D() {
+    }
+    D.prototype.getData = function () {
         var data = this.data;
         return typeof data === "string" ? data : data.join(" ");
-    }
-    getData1() {
+    };
+    D.prototype.getData1 = function () {
         return typeof this.data === "string" ? this.data : this.data.join(" ");
-    }
-}
+    };
+    return D;
+}());
 var o = {
     prop1: "string",
     prop2: true

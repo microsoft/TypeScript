@@ -133,13 +133,16 @@ var W = __importStar(require("./wrap.js"));
  * @param {C} source
  * @returns {W.Wrap<C>}
  */
-const wrap = source => {
+var wrap = function (source) {
     throw source;
 };
 /**
  * @returns {B.Box<number>}
  */
-const box = (n = 0) => ({ unbox: () => n });
+var box = function (n) {
+    if (n === void 0) { n = 0; }
+    return ({ unbox: function () { return n; } });
+};
 exports.bug = wrap({ n: box(1) });
 
 
@@ -308,13 +311,16 @@ var W = __importStar(require("./wrap.js"));
  * @param {C} source
  * @returns {W.Wrap<C>}
  */
-const wrap = source => {
+var wrap = function (source) {
     throw source;
 };
 /**
  * @returns {B.Box<number>}
  */
-const box = (n = 0) => ({ unbox: () => n });
+var box = function (n) {
+    if (n === void 0) { n = 0; }
+    return ({ unbox: function () { return n; } });
+};
 exports.bug = wrap({ n: box(1) });
 exports.something = 1;
 

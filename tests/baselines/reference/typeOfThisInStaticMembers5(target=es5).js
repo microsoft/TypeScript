@@ -11,14 +11,12 @@ class C {
 
 
 //// [typeOfThisInStaticMembers5.js]
-let C = (() => {
-    var _a;
-    class C {
-        constructor(foo) {
-            this.foo = foo;
-        }
+var C = /** @class */ (function () {
+    function C(foo) {
+        this.foo = foo;
     }
+    var _a;
     _a = C;
-    C.create = () => new _a("yep");
+    C.create = function () { return new _a("yep"); };
     return C;
-})();
+}());

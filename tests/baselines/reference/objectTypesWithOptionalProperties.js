@@ -30,10 +30,16 @@ var b = {
 //// [objectTypesWithOptionalProperties.js]
 // Basic uses of optional properties
 var a;
-class C {
-}
-class C2 {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+var C2 = /** @class */ (function () {
+    function C2() {
+    }
+    return C2;
+}());
 var b = {
     x: 1 // error
 };

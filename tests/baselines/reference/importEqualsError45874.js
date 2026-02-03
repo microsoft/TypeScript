@@ -18,4 +18,4 @@ var globals;
 })(globals || (globals = {}));
 var Foo = globals.toString.Blah;
 //// [index.js]
-const Foo = {};
+var Foo = {};

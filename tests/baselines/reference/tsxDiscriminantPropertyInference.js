@@ -35,10 +35,10 @@ void (<Comp cb={n => n.toFixed()} />);
 
 //// [tsxDiscriminantPropertyInference.jsx]
 // simple inference
-void (<Comp disc cb={s => parseInt(s)}/>);
+void (<Comp disc cb={function (s) { return parseInt(s); }}/>);
 // simple inference
-void (<Comp disc={false} cb={n => n.toFixed()}/>);
+void (<Comp disc={false} cb={function (n) { return n.toFixed(); }}/>);
 // simple inference when strict-null-checks are enabled
-void (<Comp disc={undefined} cb={n => n.toFixed()}/>);
+void (<Comp disc={undefined} cb={function (n) { return n.toFixed(); }}/>);
 // requires checking type information since discriminator is missing from object
-void (<Comp cb={n => n.toFixed()}/>);
+void (<Comp cb={function (n) { return n.toFixed(); }}/>);

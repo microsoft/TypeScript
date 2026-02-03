@@ -65,8 +65,8 @@ function e(x: I<"A" | "B">) {
 
 
 //// [controlFlowIfStatement.js]
-let x;
-let cond;
+var x;
+var cond;
 x = /a/;
 if (x /* RegExp */, (x = true)) {
     x; // boolean
@@ -78,7 +78,7 @@ else {
 }
 x; // string | number
 function a() {
-    let x;
+    var x;
     if (cond) {
         x = 42;
     }
@@ -89,7 +89,7 @@ function a() {
     x; // number
 }
 function b() {
-    let x;
+    var x;
     if (cond) {
         x = 42;
         throw "";
@@ -117,6 +117,6 @@ function d(data) {
 }
 function e(x) {
     if (x.p === "A") {
-        let a = null;
+        var a_1 = null;
     }
 }

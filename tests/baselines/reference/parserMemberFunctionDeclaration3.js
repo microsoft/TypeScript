@@ -6,6 +6,9 @@ class C {
 }
 
 //// [parserMemberFunctionDeclaration3.js]
-class C {
-    static Foo() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.Foo = function () { };
+    return C;
+}());

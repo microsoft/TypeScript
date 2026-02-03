@@ -26,15 +26,22 @@ module.exports.Strings = Strings
 
 
 //// [source.js]
-class Handler {
-    static get OPTIONS() {
-        return 1;
+var Handler = /** @class */ (function () {
+    function Handler() {
     }
-    process() {
-    }
-}
+    Object.defineProperty(Handler, "OPTIONS", {
+        get: function () {
+            return 1;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Handler.prototype.process = function () {
+    };
+    return Handler;
+}());
 Handler.statische = function () { };
-const Strings = {
+var Strings = {
     a: "A",
     b: "B"
 };

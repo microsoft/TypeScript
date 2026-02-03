@@ -5,5 +5,8 @@ class C extends {
 }
 
 //// [parserErrorRecovery_ExtendsOrImplementsClause1.js]
-class C extends  {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

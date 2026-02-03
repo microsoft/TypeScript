@@ -62,8 +62,11 @@ Found 1 error in project2/tsconfig.json[90m:3[0m
 
 
 //// [/home/src/workspaces/projects/project2/class2.js]
-class class2 {
-}
+var class2 = /** @class */ (function () {
+    function class2() {
+    }
+    return class2;
+}());
 
 
 //// [/home/src/workspaces/projects/project2/class2.d.ts]

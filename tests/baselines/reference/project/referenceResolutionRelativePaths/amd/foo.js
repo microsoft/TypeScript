@@ -1,3 +1,6 @@
 /// <reference path="../../../bar/bar.ts" />
-class foo {
-}
+var foo = /** @class */ (function () {
+    function foo() {
+    }
+    return foo;
+}());

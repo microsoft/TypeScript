@@ -238,14 +238,15 @@ function isEmpty(string) {
 function isConvertiblePixelValue(value) {
     return /^\d+px$/.test(value);
 }
-class HTMLtoJSX {
-    constructor() {
+var HTMLtoJSX = /** @class */ (function () {
+    function HTMLtoJSX() {
+        var _this = this;
         /**
          * Handles processing of the specified text node
          *
          * @param {TextNode} node
          */
-        this._visitText = (node) => {
+        this._visitText = function (node) {
             var parentTag = node.parentNode && node.parentNode.tagName.toLowerCase();
             if (parentTag === 'textarea' || parentTag === 'style') {
                 // Ignore text content of textareas and styles, as it will have already been moved
@@ -253,7 +254,7 @@ class HTMLtoJSX {
                 return;
             }
             var text = '';
-            if (this._inPreTag) {
+            if (_this._inPreTag) {
                 // If this text is contained within a <pre>, we need to ensure the JSX
                 // whitespace coalescing rules don't eat the whitespace. This means
                 // wrapping newlines and sequences of two or more spaces in variables.
@@ -268,24 +269,27 @@ class HTMLtoJSX {
                 if (text.indexOf('\n') > -1) {
                 }
             }
-            this.output += text;
+            _this.output += text;
         };
     }
-}
+    return HTMLtoJSX;
+}());
 exports.HTMLtoJSX = HTMLtoJSX;
 ;
 /**
  * Handles parsing of inline styles
  */
-class StyleParser {
-    constructor() {
+var StyleParser = /** @class */ (function () {
+    function StyleParser() {
+        var _this = this;
         this.styles = {};
-        this.toJSXString = () => {
-            for (var key in this.styles) {
-                if (!this.styles.hasOwnProperty(key)) {
+        this.toJSXString = function () {
+            for (var key in _this.styles) {
+                if (!_this.styles.hasOwnProperty(key)) {
                 }
             }
         };
     }
-}
+    return StyleParser;
+}());
 exports.StyleParser = StyleParser;

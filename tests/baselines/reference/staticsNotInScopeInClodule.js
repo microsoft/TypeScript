@@ -10,12 +10,12 @@ module Clod {
 }
 
 //// [staticsNotInScopeInClodule.js]
-let Clod = (() => {
-    class Clod {
+var Clod = /** @class */ (function () {
+    function Clod() {
     }
     Clod.x = 10;
     return Clod;
-})();
+}());
 (function (Clod) {
     var p = x; // x isn't in scope here
 })(Clod || (Clod = {}));

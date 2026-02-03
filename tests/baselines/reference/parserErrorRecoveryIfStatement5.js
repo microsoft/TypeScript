@@ -12,8 +12,10 @@ class Foo {
 }
 
 //// [parserErrorRecoveryIfStatement5.js]
-class Foo {
-    f1() {
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    Foo.prototype.f1 = function () {
         if (a.b) {
         }
         f2();
@@ -22,5 +24,6 @@ class Foo {
         f3();
         {
         }
-    }
-}
+    };
+    return Foo;
+}());

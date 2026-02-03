@@ -8,8 +8,9 @@ class greeter {
 }
 
 //// [unusedParametersinConstructor2.js]
-class greeter {
-    constructor(param1, param2) {
+var greeter = /** @class */ (function () {
+    function greeter(param1, param2) {
         param2 = param2 + "dummy value";
     }
-}
+    return greeter;
+}());

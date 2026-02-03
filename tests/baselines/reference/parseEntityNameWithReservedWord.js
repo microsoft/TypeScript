@@ -10,4 +10,4 @@ var Bool;
 (function (Bool) {
     Bool[Bool["false"] = 0] = "false";
 })(Bool || (Bool = {}));
-const x = Bool.false;
+var x = Bool.false;

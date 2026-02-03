@@ -5,5 +5,5 @@ export const c = 0;
 export let l = 1;
 
 //// [es6modulekindWithES5Target8.js]
-export const c = 0;
-export let l = 1;
+export var c = 0;
+export var l = 1;

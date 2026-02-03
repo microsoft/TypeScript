@@ -23,5 +23,5 @@ define(["require", "exports", "react"], function (require, exports, React) {
         return <div>attr.values</div>;
     }
     // Error
-    let i1 = <MyComponent1 values={5}/>;
+    var i1 = <MyComponent1 values={5}/>;
 });

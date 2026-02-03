@@ -24,8 +24,8 @@ const x: Foo = (void 0, {
 
 
 //// [slightlyIndirectedDeepObjectLiteralElaborations.js]
-let q;
-const x = (void 0, {
+var q;
+var x = (void 0, {
     a: q = {
         b: ({
             c: {

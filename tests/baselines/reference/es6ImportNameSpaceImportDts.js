@@ -12,8 +12,11 @@ import * as nameSpaceBinding2 from "./server"; // unreferenced
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
-class c {
-}
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
 exports.c = c;
 ;
 //// [client.js]

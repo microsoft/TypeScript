@@ -6,4 +6,4 @@ const array: ArrayLike<any> = func;
 
 //// [functionAssignabilityWithArrayLike01.js]
 function func() { }
-const array = func;
+var array = func;

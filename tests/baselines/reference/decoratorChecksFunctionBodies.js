@@ -26,17 +26,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 // from #2971
 function func(s) {
 }
-let A = (() => {
-    class A {
-        m() {
-        }
+var A = /** @class */ (function () {
+    function A() {
     }
+    A.prototype.m = function () {
+    };
     __decorate([
-        ((x, p, d) => {
+        (function (x, p, d) {
             var a = 3;
             func(a);
             return d;
         })
     ], A.prototype, "m", null);
     return A;
-})();
+}());

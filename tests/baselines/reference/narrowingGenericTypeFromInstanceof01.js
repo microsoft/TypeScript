@@ -30,13 +30,17 @@ function test<T>(x: A<T> | B<T>) {
 }
 
 //// [narrowingGenericTypeFromInstanceof01.js]
-class A {
-    constructor(a) {
+var A = /** @class */ (function () {
+    function A(a) {
         this.a = a;
     }
-}
-class B {
-}
+    return A;
+}());
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 function acceptA(a) { }
 function acceptB(b) { }
 function test(x) {

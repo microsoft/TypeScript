@@ -30,7 +30,7 @@ var M;
     var r = f.hello;
 })(M || (M = {}));
 (function (M) {
-    let f;
+    var f;
     (function (f) {
         f.hello = 1;
     })(f = M.f || (M.f = {}));

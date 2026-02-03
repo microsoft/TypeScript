@@ -41,15 +41,21 @@ exports.x = void 0;
 Function.prototype.now = function () {
     return "now";
 };
-class X {
-    static now() {
+var X = /** @class */ (function () {
+    function X() {
+    }
+    X.now = function () {
         return {};
+    };
+    X.prototype.why = function () {
+    };
+    return X;
+}());
+var Y = /** @class */ (function () {
+    function Y() {
     }
-    why() {
-    }
-}
-class Y {
-}
+    return Y;
+}());
 console.log(X.now()); // works as expected
 console.log(Y.now()); // works as expected
 exports.x = Math.random() > 0.5 ? new X() : 1;

@@ -33,9 +33,15 @@ var y: Foo2;
 Object.defineProperty(exports, "__esModule", { value: true });
 var x;
 var x; // Should be error (mod1.Foo !== mod2.Foo)
-class Foo1 {
-}
-class Foo2 {
-}
+var Foo1 = /** @class */ (function () {
+    function Foo1() {
+    }
+    return Foo1;
+}());
+var Foo2 = /** @class */ (function () {
+    function Foo2() {
+    }
+    return Foo2;
+}());
 var y;
 var y;

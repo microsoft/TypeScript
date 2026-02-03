@@ -60,16 +60,22 @@ exports.r13 = exports.r12 = exports.r11 = exports.r10 = exports.E = exports.r9 =
 exports.foo = foo;
 exports.x = 1;
 exports.y = { foo: '' };
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 exports.C = C;
 var c2;
 var i2;
 var M;
 (function (M) {
     M.foo = '';
-    class C {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
     M.C = C;
 })(M || (exports.M = M = {}));
 exports.Z = M;
@@ -80,7 +86,10 @@ var E;
 function foo() { }
 (function (foo) {
     foo.y = 1;
-    class C {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
     foo.C = C;
 })(foo || (exports.foo = foo = {}));

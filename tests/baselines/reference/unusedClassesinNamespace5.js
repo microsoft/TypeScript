@@ -18,11 +18,20 @@ namespace Validation {
 //// [unusedClassesinNamespace5.js]
 var Validation;
 (function (Validation) {
-    class c1 {
-    }
-    class c2 {
-    }
+    var c1 = /** @class */ (function () {
+        function c1() {
+        }
+        return c1;
+    }());
+    var c2 = /** @class */ (function () {
+        function c2() {
+        }
+        return c2;
+    }());
     Validation.c2 = c2;
-    class c3 {
-    }
+    var c3 = /** @class */ (function () {
+        function c3() {
+        }
+        return c3;
+    }());
 })(Validation || (Validation = {}));

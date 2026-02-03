@@ -13,7 +13,7 @@ module Outer {
 //// [privacyCheckTypeOfInvisibleModuleNoError.js]
 var Outer;
 (function (Outer) {
-    let Inner;
+    var Inner;
     (function (Inner) {
     })(Inner || (Inner = {}));
 })(Outer || (Outer = {}));

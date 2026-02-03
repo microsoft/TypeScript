@@ -19,9 +19,12 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.A = void 0;
-    class A {
-        getF() { return this._f; }
-    }
+    var A = /** @class */ (function () {
+        function A() {
+        }
+        A.prototype.getF = function () { return this._f; };
+        return A;
+    }());
     exports.A = A;
 });
 //// [b.js]

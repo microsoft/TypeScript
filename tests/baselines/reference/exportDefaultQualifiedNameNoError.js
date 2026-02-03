@@ -10,12 +10,12 @@ void def;
 //// [code.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    class C {
+var C = /** @class */ (function () {
+    function C() {
     }
     C.x = 0;
     return C;
-})();
+}());
 ;
 exports.default = C.x;
 //// [usage.js]

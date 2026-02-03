@@ -53,8 +53,11 @@ export module M.Q {
 "use strict";
 var f;
 (function (f) {
-    class c {
-    }
+    var c = /** @class */ (function () {
+        function c() {
+        }
+        return c;
+    }());
     f.c = c;
 })(f || (f = {}));
 module.exports = f;
@@ -67,10 +70,13 @@ var M;
 (function (M) {
     function f() { }
     M.f = f;
-    class C {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
     M.C = C;
-    let N;
+    var N;
     (function (N) {
         function g() { }
         N.g = g;
@@ -86,10 +92,13 @@ var M;
     (function (P) {
         function f() { }
         P.f = f;
-        class C {
-        }
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
         P.C = C;
-        let N;
+        var N;
         (function (N) {
             function g() { }
             N.g = g;
@@ -108,10 +117,13 @@ var M;
     (function (Q) {
         function f() { }
         Q.f = f;
-        class C {
-        }
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
         Q.C = C;
-        let N;
+        var N;
         (function (N) {
             function g() { }
             N.g = g;

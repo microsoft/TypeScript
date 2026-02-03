@@ -47,14 +47,14 @@ var Kind;
 function isBoth(x) {
     return true;
 }
-let foo = undefined;
+var foo = undefined;
 if (isBoth(foo)) {
     switch (foo.kind) {
         case Kind.A:
-            const myA = foo; // Should not be an error
+            var myA = foo; // Should not be an error
             break;
         case Kind.B:
-            const myB = foo;
+            var myB = foo;
             break;
     }
 }

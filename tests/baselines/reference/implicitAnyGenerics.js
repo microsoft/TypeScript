@@ -28,15 +28,20 @@ foo<any>();
     
 
 //// [implicitAnyGenerics.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var c = new C();
 var c2 = new C();
 var c3 = new C();
 var c4 = new C();
-class D {
-    constructor(x) { }
-}
+var D = /** @class */ (function () {
+    function D(x) {
+    }
+    return D;
+}());
 var d = new D(null);
 var d2 = new D(1);
 var d3 = new D(1);

@@ -73,11 +73,14 @@ define(["require", "exports"], function (require, exports) {
             return m1.b;
         }
         /** m2 comments*/
-        let m2;
+        var m2;
         (function (m2) {
             /** class comment;*/
-            class c {
-            }
+            var c = /** @class */ (function () {
+                function c() {
+                }
+                return c;
+            }());
             m2.c = c;
             ;
             /** i*/
@@ -101,11 +104,14 @@ define(["require", "exports"], function (require, exports) {
         }
         /** m2 comments
         */
-        let m2;
+        var m2;
         (function (m2) {
             /** class comment; */
-            class c {
-            }
+            var c = /** @class */ (function () {
+                function c() {
+                }
+                return c;
+            }());
             m2.c = c;
             ;
             /** i */

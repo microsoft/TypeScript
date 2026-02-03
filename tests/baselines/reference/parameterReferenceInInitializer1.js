@@ -18,9 +18,11 @@ class C {
 function fn(y, set) {
     return undefined;
 }
-class C {
-    constructor(y, x = fn(y, (y, x) => y.x = x) // expected to work, but actually doesn't
+var C = /** @class */ (function () {
+    function C(y, x // expected to work, but actually doesn't
     ) {
+        if (x === void 0) { x = fn(y, function (y, x) { return y.x = x; }); }
         this.x = x;
     }
-}
+    return C;
+}());

@@ -92,12 +92,21 @@ function foo14(x: any) { }
 
 //// [objectTypesIdentity.js]
 // object types are identical structurally
-class A {
-}
-class B {
-}
-class C {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var a;
 var b = { foo: '' };
 function foo1(x) { }

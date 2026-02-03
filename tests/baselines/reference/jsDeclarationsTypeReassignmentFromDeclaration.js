@@ -13,7 +13,7 @@ module.exports = items;
 
 //// [index.js]
 /** @type {typeof import("/some-mod")} */
-const items = [];
+var items = [];
 module.exports = items;
 
 

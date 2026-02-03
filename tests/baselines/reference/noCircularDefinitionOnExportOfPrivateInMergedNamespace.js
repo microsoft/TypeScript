@@ -10,7 +10,10 @@ declare namespace Foo {
 
 //// [noCircularDefinitionOnExportOfPrivateInMergedNamespace.js]
 "use strict";
-const cat = 12;
-class Foo {
-}
+var cat = 12;
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 module.exports = Foo;

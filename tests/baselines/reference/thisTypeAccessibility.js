@@ -65,21 +65,22 @@ function extension4<T extends number>(this: MyGenericClass<T>, p: T) {
 
 
 //// [thisTypeAccessibility.js]
-let MyClass = (() => {
-    class MyClass {
-        constructor() {
-            this.p = 123;
-            this.pp = 123;
-            this.ppp = 123;
-        }
+var MyClass = /** @class */ (function () {
+    function MyClass() {
+        this.p = 123;
+        this.pp = 123;
+        this.ppp = 123;
     }
     MyClass.sp = 123;
     MyClass.spp = 123;
     MyClass.sppp = 123;
     return MyClass;
-})();
-class MyGenericClass {
-}
+}());
+var MyGenericClass = /** @class */ (function () {
+    function MyGenericClass() {
+    }
+    return MyGenericClass;
+}());
 MyClass.prototype.extension1 = function (p) {
     this.p = p;
     this.pp = p;

@@ -24,14 +24,15 @@ module A {
 //// [ExportClassWhichExtendsInterfaceWithInaccessibleType.js]
 var A;
 (function (A) {
-    class Point2d {
-        constructor(x, y) {
+    var Point2d = /** @class */ (function () {
+        function Point2d(x, y) {
             this.x = x;
             this.y = y;
         }
-        fromOrigin(p) {
+        Point2d.prototype.fromOrigin = function (p) {
             return 1;
-        }
-    }
+        };
+        return Point2d;
+    }());
     A.Point2d = Point2d;
 })(A || (A = {}));

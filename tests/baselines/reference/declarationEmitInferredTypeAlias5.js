@@ -13,13 +13,13 @@ export { v }
 //// [0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let obj = true;
+var obj = true;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.v = void 0;
 //let v2: Z.Data;
-let v = "str" || true;
+var v = "str" || true;
 exports.v = v;
 
 

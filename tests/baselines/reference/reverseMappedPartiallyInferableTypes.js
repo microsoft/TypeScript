@@ -133,17 +133,17 @@ inferMappedReadonly({
 "use strict";
 // Repro from #30505
 Object.defineProperty(exports, "__esModule", { value: true });
-const r = extend({
+var r = extend({
     props: {
         notResolved: {
             type: Object,
-            validator: x => {
+            validator: function (x) {
                 return x.valid;
             }
         },
         explicit: {
             type: Object,
-            validator: (x) => {
+            validator: function (x) {
                 return x.valid;
             }
         }
@@ -154,34 +154,34 @@ r.notResolved;
 r.explicit.required;
 r.notResolved.required;
 // All properties have inferable types
-const obj1 = id({
+var obj1 = id({
     foo: {
         contents: ""
     }
 });
 // Some properties have inferable types
-const obj2 = id({
+var obj2 = id({
     foo: {
         contents: "",
-        contains(k) {
+        contains: function (k) {
             return k.length > 0;
         }
     }
 });
 // No properties have inferable types
-const obj3 = id({
+var obj3 = id({
     foo: {
-        contains(k) {
+        contains: function (k) {
             return k.length > 0;
         }
     }
 });
 inferMapped1({
-    key: [3, arg => arg.key > 5]
+    key: [3, function (arg) { return arg.key > 5; }]
 });
 inferMapped2({
-    key: [3, arg => arg.key > 5]
+    key: [3, function (arg) { return arg.key > 5; }]
 });
 inferMappedReadonly({
-    key: [3, arg => arg.key > 5]
+    key: [3, function (arg) { return arg.key > 5; }]
 });

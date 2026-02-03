@@ -15,10 +15,16 @@ module M {
 }
 
 //// [classAndInterfaceWithSameName.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var M;
 (function (M) {
-    class D {
-    }
+    var D = /** @class */ (function () {
+        function D() {
+        }
+        return D;
+    }());
 })(M || (M = {}));

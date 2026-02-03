@@ -44,11 +44,11 @@ sysLog:: /user/username/projects/project:: Changing to watchFile
 
 
 //// [/user/username/projects/project/commonFile1.js] Inode:: 113
-let x = 1;
+var x = 1;
 
 
 //// [/user/username/projects/project/commonFile2.js] Inode:: 114
-let y = 1;
+var y = 1;
 
 
 

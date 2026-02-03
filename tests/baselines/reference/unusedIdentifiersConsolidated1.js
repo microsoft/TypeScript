@@ -104,56 +104,95 @@ namespace Greeter {
 }
 
 //// [unusedIdentifiersConsolidated1.js]
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 function greeter(person) {
     var unused = 20;
 }
-class Dummy {
-    constructor(message) {
+var Dummy = /** @class */ (function () {
+    function Dummy(message) {
         var unused2 = 22;
         this.greeting = "Dummy Message";
     }
-    greeter(person) {
+    Dummy.prototype.greeter = function (person) {
         var unused = 20;
         this.usedPrivateFunction();
-    }
-    usedPrivateFunction() {
-    }
-    unUsedPrivateFunction() {
-    }
-}
+    };
+    Dummy.prototype.usedPrivateFunction = function () {
+    };
+    Dummy.prototype.unUsedPrivateFunction = function () {
+    };
+    return Dummy;
+}());
 var user = "Jane User";
 var user2 = "Jane2 User2";
 var Validation;
 (function (Validation) {
-    const lettersRegexp = /^[A-Za-z]+$/;
-    const numberRegexp = /^[0-9]+$/;
-    class LettersOnlyValidator {
-        isAcceptable(s2) {
+    var lettersRegexp = /^[A-Za-z]+$/;
+    var numberRegexp = /^[0-9]+$/;
+    var LettersOnlyValidator = /** @class */ (function () {
+        function LettersOnlyValidator() {
+        }
+        LettersOnlyValidator.prototype.isAcceptable = function (s2) {
             return lettersRegexp.test(s2);
-        }
-        unUsedPrivateFunction() {
-        }
-    }
+        };
+        LettersOnlyValidator.prototype.unUsedPrivateFunction = function () {
+        };
+        return LettersOnlyValidator;
+    }());
     Validation.LettersOnlyValidator = LettersOnlyValidator;
-    class ZipCodeValidator {
-        isAcceptable(s3) {
-            return s3.length === 5;
+    var ZipCodeValidator = /** @class */ (function () {
+        function ZipCodeValidator() {
         }
-    }
+        ZipCodeValidator.prototype.isAcceptable = function (s3) {
+            return s3.length === 5;
+        };
+        return ZipCodeValidator;
+    }());
     Validation.ZipCodeValidator = ZipCodeValidator;
-    class dummy {
-    }
+    var dummy = /** @class */ (function () {
+        function dummy() {
+        }
+        return dummy;
+    }());
 })(Validation || (Validation = {}));
 var Greeter;
 (function (Greeter) {
-    class class1 {
-    }
-    class class2 extends class1 {
-    }
+    var class1 = /** @class */ (function () {
+        function class1() {
+        }
+        return class1;
+    }());
+    var class2 = /** @class */ (function (_super) {
+        __extends(class2, _super);
+        function class2() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return class2;
+    }(class1));
     Greeter.class2 = class2;
-    class class3 {
-    }
-    class class4 {
-    }
+    var class3 = /** @class */ (function () {
+        function class3() {
+        }
+        return class3;
+    }());
+    var class4 = /** @class */ (function () {
+        function class4() {
+        }
+        return class4;
+    }());
     Greeter.class4 = class4;
 })(Greeter || (Greeter = {}));

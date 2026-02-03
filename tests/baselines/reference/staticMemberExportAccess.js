@@ -23,12 +23,15 @@ var r4 = $.sammy.x; // error
 Sammy.bar();
 
 //// [staticMemberExportAccess.js]
-class Sammy {
-    foo() { return "hi"; }
-    static bar() {
-        return -1;
+var Sammy = /** @class */ (function () {
+    function Sammy() {
     }
-}
+    Sammy.prototype.foo = function () { return "hi"; };
+    Sammy.bar = function () {
+        return -1;
+    };
+    return Sammy;
+}());
 (function (Sammy) {
     Sammy.x = 1;
 })(Sammy || (Sammy = {}));

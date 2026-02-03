@@ -16,7 +16,7 @@ function f() {
 
 //// [unreachableFlowAfterFinally.js]
 function f() {
-    let x = 100;
+    var x = 100;
     try {
         throw "WAT";
     }

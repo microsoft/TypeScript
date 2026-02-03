@@ -15,10 +15,10 @@ const car = {
 
 
 //// [typeSatisfaction_ensureInterfaceImpl.js]
-const car = {
-    start() { },
-    move(d) {
+var car = {
+    start: function () { },
+    move: function (d) {
         // d should be number
     },
-    stop() { }
+    stop: function () { }
 };

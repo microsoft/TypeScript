@@ -127,11 +127,17 @@ var r4 = foo5(E.A);
 var r4 = foo6(E.A);
 var r4 = foo7(E.A);
 var r4 = foo8(E.A);
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 var r4 = foo9(E.A);
-class A2 {
-}
+var A2 = /** @class */ (function () {
+    function A2() {
+    }
+    return A2;
+}());
 var r4 = foo10(E.A);
 var r4 = foo11(E.A);
 var r4 = foo12(E.A);
@@ -145,8 +151,11 @@ function f() { }
     f.bar = 1;
 })(f || (f = {}));
 var r4 = foo14(E.A);
-class CC {
-}
+var CC = /** @class */ (function () {
+    function CC() {
+    }
+    return CC;
+}());
 (function (CC) {
     CC.bar = 1;
 })(CC || (CC = {}));

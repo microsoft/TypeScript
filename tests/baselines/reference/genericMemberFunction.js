@@ -25,24 +25,37 @@ export class BuildResult<A, B, C>{
 
 
 //// [genericMemberFunction.js]
-export class BuildError {
-    parent() {
-        return undefined;
+var BuildError = /** @class */ (function () {
+    function BuildError() {
     }
-}
-export class FileWithErrors {
-    errors() {
+    BuildError.prototype.parent = function () {
         return undefined;
+    };
+    return BuildError;
+}());
+export { BuildError };
+var FileWithErrors = /** @class */ (function () {
+    function FileWithErrors() {
     }
-    parent() {
+    FileWithErrors.prototype.errors = function () {
         return undefined;
+    };
+    FileWithErrors.prototype.parent = function () {
+        return undefined;
+    };
+    return FileWithErrors;
+}());
+export { FileWithErrors };
+var BuildResult = /** @class */ (function () {
+    function BuildResult() {
     }
-}
-export class BuildResult {
-    merge(other) {
+    BuildResult.prototype.merge = function (other) {
+        var _this = this;
         a.b.c.d.e.f.g = 0;
-        removedFiles.forEach((each) => {
-            this.removeFile(each);
+        removedFiles.forEach(function (each) {
+            _this.removeFile(each);
         });
-    }
-}
+    };
+    return BuildResult;
+}());
+export { BuildResult };

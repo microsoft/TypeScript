@@ -35,11 +35,11 @@ Output::
 
 
 //// [/user/username/projects/project/commonFile1.js]
-let x = 1;
+var x = 1;
 
 
 //// [/user/username/projects/project/commonFile2.js]
-let y = 1;
+var y = 1;
 
 
 

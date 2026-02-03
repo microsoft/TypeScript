@@ -162,35 +162,35 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ts = __importStar(require("typescript"));
 function watch(rootFileNames, options) {
-    const files = {};
+    var files = {};
     // initialize the list of files
-    rootFileNames.forEach(fileName => {
+    rootFileNames.forEach(function (fileName) {
         files[fileName] = { version: 0 };
     });
     // Create the language service host to allow the LS to communicate with the host
-    const servicesHost = {
-        getScriptFileNames: () => rootFileNames,
-        getScriptVersion: (fileName) => files[fileName] && files[fileName].version.toString(),
-        getScriptSnapshot: (fileName) => {
+    var servicesHost = {
+        getScriptFileNames: function () { return rootFileNames; },
+        getScriptVersion: function (fileName) { return files[fileName] && files[fileName].version.toString(); },
+        getScriptSnapshot: function (fileName) {
             if (!fs.existsSync(fileName)) {
                 return undefined;
             }
             return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());
         },
-        getCurrentDirectory: () => process.cwd(),
-        getCompilationSettings: () => options,
-        getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
-        fileExists: fileName => fs.existsSync(fileName),
-        readFile: fileName => fs.readFileSync(fileName),
+        getCurrentDirectory: function () { return process.cwd(); },
+        getCompilationSettings: function () { return options; },
+        getDefaultLibFileName: function (options) { return ts.getDefaultLibFilePath(options); },
+        fileExists: function (fileName) { return fs.existsSync(fileName); },
+        readFile: function (fileName) { return fs.readFileSync(fileName); },
     };
     // Create the language service files
-    const services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry());
+    var services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry());
     // Now let's watch the files
-    rootFileNames.forEach(fileName => {
+    rootFileNames.forEach(function (fileName) {
         // First time around, emit all files
         emitFile(fileName);
         // Add a watch on the file to handle next change
-        fs.watchFile(fileName, { persistent: true, interval: 250 }, (curr, prev) => {
+        fs.watchFile(fileName, { persistent: true, interval: 250 }, function (curr, prev) {
             // Check timestamp
             if (+curr.mtime <= +prev.mtime) {
                 return;
@@ -202,36 +202,36 @@ function watch(rootFileNames, options) {
         });
     });
     function emitFile(fileName) {
-        let output = services.getEmitOutput(fileName);
+        var output = services.getEmitOutput(fileName);
         if (!output.emitSkipped) {
-            console.log(`Emitting ${fileName}`);
+            console.log("Emitting ".concat(fileName));
         }
         else {
-            console.log(`Emitting ${fileName} failed`);
+            console.log("Emitting ".concat(fileName, " failed"));
             logErrors(fileName);
         }
-        output.outputFiles.forEach(o => {
+        output.outputFiles.forEach(function (o) {
             fs.writeFileSync(o.name, o.text, "utf8");
         });
     }
     function logErrors(fileName) {
-        let allDiagnostics = services.getCompilerOptionsDiagnostics()
+        var allDiagnostics = services.getCompilerOptionsDiagnostics()
             .concat(services.getSyntacticDiagnostics(fileName))
             .concat(services.getSemanticDiagnostics(fileName));
-        allDiagnostics.forEach(diagnostic => {
-            let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
+        allDiagnostics.forEach(function (diagnostic) {
+            var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
             if (diagnostic.file) {
-                let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
-                console.log(`  Error ${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
+                var _a = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start), line = _a.line, character = _a.character;
+                console.log("  Error ".concat(diagnostic.file.fileName, " (").concat(line + 1, ",").concat(character + 1, "): ").concat(message));
             }
             else {
-                console.log(`  Error: ${message}`);
+                console.log("  Error: ".concat(message));
             }
         });
     }
 }
 // Initialize files constituting the program as all .ts files in the current directory
-const currentDirectoryFiles = fs.readdirSync(process.cwd()).
-    filter(fileName => fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts");
+var currentDirectoryFiles = fs.readdirSync(process.cwd()).
+    filter(function (fileName) { return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts"; });
 // Start the watcher
 watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });

@@ -17,15 +17,15 @@ var resolve = {
 
 //// [commentsOnPropertyOfObjectLiteral1.js]
 var resolve = {
-    id: /*! @ngInject */ (details) => details.id,
+    id: /*! @ngInject */ function (details) { return details.id; },
     id1: /* c1 */ "hello",
     id2: 
-    /*! @ngInject */ (details) => details.id,
+    /*! @ngInject */ function (details) { return details.id; },
     id3: 
     /*! @ngInject */
-    (details) => details.id,
+    function (details) { return details.id; },
     id4: 
     /*! @ngInject */
     /* C2 */
-    (details) => details.id,
+    function (details) { return details.id; },
 };

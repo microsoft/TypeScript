@@ -44,9 +44,12 @@ var r20 = E.a + M;
 
 //// [additionOperatorWithInvalidOperands.js]
 function foo() { }
-class C {
-    static foo() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.foo = function () { };
+    return C;
+}());
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

@@ -10,8 +10,9 @@ class Abc {
 
 //// [strictBooleanMemberAssignability.js]
 "use strict";
-class Abc {
-    constructor() {
+var Abc = /** @class */ (function () {
+    function Abc() {
         this.def = true;
     }
-}
+    return Abc;
+}());

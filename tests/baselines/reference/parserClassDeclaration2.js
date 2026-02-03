@@ -5,5 +5,8 @@ class C implements A implements B {
 }
 
 //// [parserClassDeclaration2.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

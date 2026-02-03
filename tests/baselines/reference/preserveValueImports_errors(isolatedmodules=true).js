@@ -48,8 +48,11 @@ export type { A, B as BB };
 //// [a.js]
 export {};
 //// [b.js]
-class B {
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 ;
 export {};
 //// [c.js]

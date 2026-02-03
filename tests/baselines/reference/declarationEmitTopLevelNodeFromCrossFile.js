@@ -20,7 +20,7 @@ export const x = { p: fn };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn = void 0;
-exports.fn = { o: (a) => { } };
+exports.fn = { o: function (a) { } };
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

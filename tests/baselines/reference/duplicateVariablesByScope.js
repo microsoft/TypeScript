@@ -52,13 +52,16 @@ function foo() {
         var result = 2;
     }
 }
-class C {
-    foo() {
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.foo = function () {
         try {
             var x = 1;
         }
         catch (e) {
             var x = 2;
         }
-    }
-}
+    };
+    return C;
+}());

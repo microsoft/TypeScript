@@ -18,11 +18,11 @@ function a() {
 
 
 //// [letConstMatchingParameterNames.js]
-let parent = true;
-const parent2 = true;
+var parent = true;
+var parent2 = true;
 function a() {
-    let parent = 1;
-    const parent2 = 2;
+    var parent = 1;
+    var parent2 = 2;
     function b(parent, parent2) {
         use(parent);
         use(parent2);

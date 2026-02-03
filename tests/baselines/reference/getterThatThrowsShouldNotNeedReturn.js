@@ -12,11 +12,18 @@ class Greeter {
 
 
 //// [getterThatThrowsShouldNotNeedReturn.js]
-class Greeter {
-    get greet() {
-        throw ''; // should not raise an error
+var Greeter = /** @class */ (function () {
+    function Greeter() {
     }
-    greeting() {
+    Object.defineProperty(Greeter.prototype, "greet", {
+        get: function () {
+            throw ''; // should not raise an error
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Greeter.prototype.greeting = function () {
         throw ''; // should not raise an error
-    }
-}
+    };
+    return Greeter;
+}());

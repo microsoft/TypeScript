@@ -593,7 +593,7 @@ export const m = mod;
 function foo() {}export class cNew {}
 
 //// [/user/username/projects/sample1/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,0CAEC;AAHD,+CAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,yDAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC;AACrB,SAAS,GAAG,KAAI,CAAC;AAAA,MAAa,IAAI;CAAG;AAApB,oBAAoB"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,0CAEC;AAHD,+CAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,yDAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC;AACrB,SAAS,GAAG,KAAI,CAAC;AAAA;IAAA;IAAmB,CAAC;IAAD,WAAC;AAAD,CAAC,AAApB,IAAoB;AAAP,oBAAI"}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
@@ -640,8 +640,11 @@ function getSecondsInDay() {
 var mod = __importStar(require("../core/anotherModule"));
 exports.m = mod;
 function foo() { }
-class cNew {
-}
+var cNew = /** @class */ (function () {
+    function cNew() {
+    }
+    return cNew;
+}());
 exports.cNew = cNew;
 //# sourceMappingURL=index.js.map
 

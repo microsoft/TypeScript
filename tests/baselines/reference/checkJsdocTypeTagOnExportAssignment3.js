@@ -28,7 +28,7 @@ a;
  * @property {boolean} b
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const bar = { c: 1 };
+var bar = { c: 1 };
 /** @type {Foo} */
 exports.default = bar;
 //// [b.js]

@@ -6,6 +6,8 @@ class C {
 }
 
 //// [restParamModifier.js]
-class C {
-    constructor(...public, rest) { }
-}
+var C = /** @class */ (function () {
+    function C(rest) {
+    }
+    return C;
+}());

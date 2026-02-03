@@ -36,21 +36,21 @@ function flatMapChildren2<T>(node: Node, cb: (child: Node) => readonly T[] | T |
 //// [inferenceDoesNotAddUndefinedOrNull.js]
 "use strict";
 function flatMapChildren(node, cb) {
-    const result = [];
-    node.forEachChild(child => {
-        const value = cb(child);
+    var result = [];
+    node.forEachChild(function (child) {
+        var value = cb(child);
         if (value !== undefined) {
-            result.push(...toArray(value));
+            result.push.apply(result, toArray(value));
         }
     });
     return result;
 }
 function flatMapChildren2(node, cb) {
-    const result = [];
-    node.forEachChild(child => {
-        const value = cb(child);
+    var result = [];
+    node.forEachChild(function (child) {
+        var value = cb(child);
         if (value !== null) {
-            result.push(...toArray(value));
+            result.push.apply(result, toArray(value));
         }
     });
     return result;

@@ -13,6 +13,6 @@ function foo() {
 
 //// [index.js]
 function foo() {
-    const a = require('../outside-of-rootdir/foo');
-    const { other } = require('./other');
+    var a = require('../outside-of-rootdir/foo');
+    var other = require('./other').other;
 }

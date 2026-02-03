@@ -23,11 +23,11 @@ const c = ""
 
 //// [seeTag1.js]
 /** @see {Foo} foooo*/
-const a = "";
+var a = "";
 /** @see {NS.Bar} ns.bar*/
-const b = "";
+var b = "";
 /** @see {b} b */
-const c = "";
+var c = "";
 
 
 //// [seeTag1.d.ts]

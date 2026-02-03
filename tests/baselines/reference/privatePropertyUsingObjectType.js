@@ -16,7 +16,10 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.FilterManager = void 0;
-    class FilterManager {
-    }
+    var FilterManager = /** @class */ (function () {
+        function FilterManager() {
+        }
+        return FilterManager;
+    }());
     exports.FilterManager = FilterManager;
 });

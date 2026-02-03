@@ -244,40 +244,63 @@ function f22() {
 function f23() {
     // Error; because `undefined | number` becomes `number` without strictNullChecks.
 }
-const f30 = () => {
+var f30 = function () {
     // Ok, contextual type for implicit return is `undefined`
 };
-const f31 = () => {
+var f31 = function () {
     // Ok, contextual type for expression-less return is `undefined`
     return;
 };
-const f32 = () => {
+var f32 = function () {
     // Error, contextual type for implicit return isn't just `undefined`
 };
-const f33 = () => {
+var f33 = function () {
     // Error, contextual type for expression-less return isn't just `undefined`
     return;
 };
-class C {
-    get m1() {
-        // Errors; get accessors must return a value.
+var C = /** @class */ (function () {
+    function C() {
     }
-    get m2() {
-        // Permissible; returns undefined.
-        return;
-    }
-    get m3() {
-        return "Okay, because this is a return expression.";
-    }
-    get m4() {
-        // Fine since this consists of a single throw statement.
-        throw null;
-    }
-    get m5() {
-        // Not fine, since we can *only* consist of a single throw statement
-        // if no return statements are present but we are a get accessor.
-        throw null;
-        throw undefined.
-        ;
-    }
-}
+    Object.defineProperty(C.prototype, "m1", {
+        get: function () {
+            // Errors; get accessors must return a value.
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(C.prototype, "m2", {
+        get: function () {
+            // Permissible; returns undefined.
+            return;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(C.prototype, "m3", {
+        get: function () {
+            return "Okay, because this is a return expression.";
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(C.prototype, "m4", {
+        get: function () {
+            // Fine since this consists of a single throw statement.
+            throw null;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(C.prototype, "m5", {
+        get: function () {
+            // Not fine, since we can *only* consist of a single throw statement
+            // if no return statements are present but we are a get accessor.
+            throw null;
+            throw undefined.
+            ;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());

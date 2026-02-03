@@ -38,29 +38,31 @@ module.exports = {
 /**
  * @typedef {string | number} Whatever
  */
-class Conn {
-    constructor() {
+var Conn = /** @class */ (function () {
+    function Conn() {
         this.item = 3;
     }
-    method() { }
-}
+    Conn.prototype.method = function () { };
+    return Conn;
+}());
 module.exports = Conn;
 //// [usage.js]
 /**
  * @typedef {import("./conn")} Conn
  */
-class Wrap {
+var Wrap = /** @class */ (function () {
     /**
      * @param {Conn} c
      */
-    constructor(c) {
+    function Wrap(c) {
         this.connItem = c.item;
         /** @type {import("./conn").Whatever} */
         this.another = "";
     }
-}
+    return Wrap;
+}());
 module.exports = {
-    Wrap
+    Wrap: Wrap
 };
 
 

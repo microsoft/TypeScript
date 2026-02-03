@@ -242,7 +242,7 @@ Output::
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/project/a.js]
-const a = "hello";
+var a = "hello";
 
 
 

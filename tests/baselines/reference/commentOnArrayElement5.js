@@ -10,7 +10,7 @@ const array = [
 
 
 //// [commentOnArrayElement5.js]
-const array = [
+var array = [
     /* element 1 */
     1,
     /* end of element 1 */

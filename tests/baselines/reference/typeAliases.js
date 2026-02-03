@@ -96,8 +96,11 @@ var x5;
 var x5;
 var x6;
 var x6;
-class C7 {
-}
+var C7 = /** @class */ (function () {
+    function C7() {
+    }
+    return C7;
+}());
 var x7;
 var x7;
 var x8;

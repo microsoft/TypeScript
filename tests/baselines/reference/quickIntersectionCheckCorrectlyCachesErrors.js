@@ -32,10 +32,13 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.wu = wu;
 function wu(CC) {
-    class WU {
-        m() {
+    var WU = /** @class */ (function () {
+        function WU() {
+        }
+        WU.prototype.m = function () {
             g(CC);
             return React.createElement(CC, __assign({}, null));
-        }
-    }
+        };
+        return WU;
+    }());
 }

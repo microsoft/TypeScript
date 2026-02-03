@@ -6,4 +6,4 @@ var tuple: [string, number];
 
 //// [assignmentRestElementWithErrorSourceType.js]
 var tuple;
-[...c] = tupel; // intentionally misspelled
+c = tupel.slice(0); // intentionally misspelled

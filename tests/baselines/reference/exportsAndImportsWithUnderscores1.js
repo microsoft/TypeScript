@@ -29,4 +29,4 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var m1_1 = __importDefault(require("./m1"));
-const { __, _, ___ } = m1_1.default;
+var __ = m1_1.default.__, _ = m1_1.default._, ___ = m1_1.default.___;

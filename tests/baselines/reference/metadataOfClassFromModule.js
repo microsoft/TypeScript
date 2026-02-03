@@ -27,17 +27,20 @@ var MyModule;
 (function (MyModule) {
     function inject(target, key) { }
     MyModule.inject = inject;
-    class Leg {
-    }
+    var Leg = /** @class */ (function () {
+        function Leg() {
+        }
+        return Leg;
+    }());
     MyModule.Leg = Leg;
-    let Person = (() => {
-        class Person {
+    var Person = /** @class */ (function () {
+        function Person() {
         }
         __decorate([
             inject,
             __metadata("design:type", Leg)
         ], Person.prototype, "leftLeg", void 0);
         return Person;
-    })();
+    }());
     MyModule.Person = Person;
 })(MyModule || (MyModule = {}));

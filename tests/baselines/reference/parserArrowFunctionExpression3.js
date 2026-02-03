@@ -4,4 +4,4 @@
 a = (() => { } || a)
 
 //// [parserArrowFunctionExpression3.js]
-a = (() => { }) || a;
+a = (function () { }) || a;

@@ -20,16 +20,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Greeter = void 0;
-let Greeter = (() => {
-    class Greeter {
-        constructor() {
-            this.greeting = `employee`; //template literals on this line cause the issue
-        }
+var Greeter = /** @class */ (function () {
+    function Greeter() {
+        this.greeting = "employee"; //template literals on this line cause the issue
     }
     __decorate([
         format("Hello, %s"),
         __metadata("design:type", String)
     ], Greeter.prototype, "greeting", void 0);
     return Greeter;
-})();
+}());
 exports.Greeter = Greeter;

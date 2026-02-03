@@ -92,50 +92,73 @@ export class B<T> extends A<T> { }
 
 //// [performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = exports.A = void 0;
-class A {
-    filter(callback) {
-        return undefined;
+var A = /** @class */ (function () {
+    function A() {
     }
-    map(callback) {
+    A.prototype.filter = function (callback) {
         return undefined;
-    }
-    await() {
+    };
+    A.prototype.map = function (callback) {
         return undefined;
-    }
-    awaitOrdered() {
+    };
+    A.prototype.await = function () {
         return undefined;
-    }
-    awaitOrdered2() {
+    };
+    A.prototype.awaitOrdered = function () {
         return undefined;
-    }
-    awaitOrdered3() {
+    };
+    A.prototype.awaitOrdered2 = function () {
         return undefined;
-    }
-    awaitOrdered4() {
+    };
+    A.prototype.awaitOrdered3 = function () {
         return undefined;
-    }
-    awaitOrdered5() {
+    };
+    A.prototype.awaitOrdered4 = function () {
         return undefined;
-    }
-    awaitOrdered6() {
+    };
+    A.prototype.awaitOrdered5 = function () {
         return undefined;
-    }
-    awaitOrdered7() {
+    };
+    A.prototype.awaitOrdered6 = function () {
         return undefined;
-    }
-    awaitOrdered8() {
+    };
+    A.prototype.awaitOrdered7 = function () {
         return undefined;
-    }
-    awaitOrdered9() {
+    };
+    A.prototype.awaitOrdered8 = function () {
         return undefined;
-    }
-    awaitLatest() {
+    };
+    A.prototype.awaitOrdered9 = function () {
         return undefined;
-    }
-}
+    };
+    A.prototype.awaitLatest = function () {
+        return undefined;
+    };
+    return A;
+}());
 exports.A = A;
-class B extends A {
-}
+var B = /** @class */ (function (_super) {
+    __extends(B, _super);
+    function B() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return B;
+}(A));
 exports.B = B;

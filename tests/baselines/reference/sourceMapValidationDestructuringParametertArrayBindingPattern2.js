@@ -37,16 +37,20 @@ foo4(["roomba", ["vacuum", "mopping"]]);
 
 //// [sourceMapValidationDestructuringParametertArrayBindingPattern2.js]
 var robotA = ["trimmer", ["trimming", "edging"]];
-function foo1([, skillA]) {
+function foo1(_a) {
+    var skillA = _a[1];
     console.log(skillA);
 }
-function foo2([nameMB]) {
+function foo2(_a) {
+    var nameMB = _a[0];
     console.log(nameMB);
 }
-function foo3([nameMA, [primarySkillA, secondarySkillA]]) {
+function foo3(_a) {
+    var nameMA = _a[0], _b = _a[1], primarySkillA = _b[0], secondarySkillA = _b[1];
     console.log(nameMA);
 }
-function foo4([...multiRobotAInfo]) {
+function foo4(_a) {
+    var multiRobotAInfo = _a.slice(0);
     console.log(multiRobotAInfo);
 }
 foo1(robotA);

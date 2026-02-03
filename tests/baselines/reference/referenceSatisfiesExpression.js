@@ -29,22 +29,23 @@ for ((x satisfies string) in { a: 10 }) {
 
 
 //// [referenceSatisfiesExpression.js]
-let a = 10;
+var a = 10;
 --a;
 ++a;
 a++;
 a--;
-let b;
+var b;
 b = 10;
-let c;
-[c] = [10];
-let d, e = 1;
-({ d: e } = { d: 10 });
-let g = 1;
-for (g of [10]) {
+var c;
+c = [10][0];
+var d, e = 1;
+(e = { d: 10 }.d);
+var g = 1;
+for (var _i = 0, _a = [10]; _i < _a.length; _i++) {
+    g = _a[_i];
     console.log(g);
 }
-let x = "hello";
+var x = "hello";
 for (x in { a: 10 }) {
     console.log(x);
 }

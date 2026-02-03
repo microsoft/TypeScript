@@ -5,5 +5,9 @@ export class Object {}
 
 
 //// [exnextmodulekindExportClassNameWithObject.js]
-export class Object {
-}
+var Object = /** @class */ (function () {
+    function Object() {
+    }
+    return Object;
+}());
+export { Object };

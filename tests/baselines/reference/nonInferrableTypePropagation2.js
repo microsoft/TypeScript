@@ -37,4 +37,4 @@ const x = pipe(es, filter(exists((n) => n > 0)))
 //// [nonInferrableTypePropagation2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const x = pipe(es, filter(exists((n) => n > 0)));
+var x = pipe(es, filter(exists(function (n) { return n > 0; })));

@@ -66,7 +66,7 @@ var f1 = function () {
     return f1();
 };
 // Error expected
-var f2 = () => f2();
+var f2 = function () { return f2(); };
 // Error expected
 function h() {
     return foo();
@@ -75,14 +75,22 @@ function h() {
     }
 }
 function foo(x) { return "abc"; }
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.s = foo(this);
     }
-}
-class D {
-    // Error expected
-    get x() {
-        return this.x;
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
     }
-}
+    Object.defineProperty(D.prototype, "x", {
+        // Error expected
+        get: function () {
+            return this.x;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return D;
+}());

@@ -27,8 +27,11 @@ var self = require("./recursiveExportAssignmentAndFindAliasedType5_moduleD");
 module.exports = self;
 //// [recursiveExportAssignmentAndFindAliasedType5_moduleB.js]
 "use strict";
-class ClassB {
-}
+var ClassB = /** @class */ (function () {
+    function ClassB() {
+    }
+    return ClassB;
+}());
 module.exports = ClassB;
 //// [recursiveExportAssignmentAndFindAliasedType5_moduleA.js]
 "use strict";

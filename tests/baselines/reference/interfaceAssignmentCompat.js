@@ -57,7 +57,7 @@ M.test();
 //// [interfaceAssignmentCompat.js]
 var M;
 (function (M) {
-    let Color;
+    var Color;
     (function (Color) {
         Color[Color["Green"] = 0] = "Green";
         Color[Color["Blue"] = 1] = "Blue";

@@ -51,9 +51,12 @@ var ResultIsBoolean14 = !!!(STRING + STRING);
 var STRING;
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
-class A {
-    static foo() { return ""; }
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    A.foo = function () { return ""; };
+    return A;
+}());
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -64,7 +67,7 @@ var ResultIsBoolean2 = !STRING1;
 // string type literal
 var ResultIsBoolean3 = !"";
 var ResultIsBoolean4 = !{ x: "", y: "" };
-var ResultIsBoolean5 = !{ x: "", y: (s) => { return s; } };
+var ResultIsBoolean5 = !{ x: "", y: function (s) { return s; } };
 // string type expressions
 var ResultIsBoolean6 = !objA.a;
 var ResultIsBoolean7 = !M.n;

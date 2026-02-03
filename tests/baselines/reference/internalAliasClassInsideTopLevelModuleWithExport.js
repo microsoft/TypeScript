@@ -19,11 +19,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.cProp = exports.xc = exports.x = void 0;
 var x;
 (function (x) {
-    class c {
-        foo(a) {
-            return a;
+    var c = /** @class */ (function () {
+        function c() {
         }
-    }
+        c.prototype.foo = function (a) {
+            return a;
+        };
+        return c;
+    }());
     x.c = c;
 })(x || (exports.x = x = {}));
 exports.xc = x.c;

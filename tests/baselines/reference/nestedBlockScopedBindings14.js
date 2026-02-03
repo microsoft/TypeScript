@@ -15,12 +15,15 @@ for (; false;) {
 
 //// [nestedBlockScopedBindings14.js]
 var x;
+var _loop_1 = function () {
+    var x_1;
+    (function () { return x_1; });
+};
 for (; false;) {
-    let x;
-    () => x;
+    _loop_1();
 }
 var y;
 for (; false;) {
-    let y;
-    y = 1;
+    var y_1 = void 0;
+    y_1 = 1;
 }

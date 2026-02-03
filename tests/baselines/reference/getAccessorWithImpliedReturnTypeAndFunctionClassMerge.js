@@ -32,11 +32,18 @@ module MyModule {
 //// [getAccessorWithImpliedReturnTypeAndFunctionClassMerge.js]
 var MyModule;
 (function (MyModule) {
-    class MyClass {
-        get myGetter() {
-            var obj = {};
-            return obj;
+    var MyClass = /** @class */ (function () {
+        function MyClass() {
         }
-    }
+        Object.defineProperty(MyClass.prototype, "myGetter", {
+            get: function () {
+                var obj = {};
+                return obj;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        return MyClass;
+    }());
     MyModule.MyClass = MyClass;
 })(MyModule || (MyModule = {}));

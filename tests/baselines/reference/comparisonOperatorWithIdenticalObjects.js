@@ -197,25 +197,59 @@ var r8b6 = b5 !== a5;
 var r8b7 = b6 !== a6;
 
 //// [comparisonOperatorWithIdenticalObjects.js]
-class A1 {
-    fn(a) {
-        return null;
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var A1 = /** @class */ (function () {
+    function A1() {
     }
-}
-class B1 {
-    fn(b) {
+    A1.prototype.fn = function (a) {
         return null;
+    };
+    return A1;
+}());
+var B1 = /** @class */ (function () {
+    function B1() {
     }
-}
-class Base {
-    fn(b) {
+    B1.prototype.fn = function (b) {
         return null;
+    };
+    return B1;
+}());
+var Base = /** @class */ (function () {
+    function Base() {
     }
-}
-class A2 extends Base {
-}
-class B2 extends Base {
-}
+    Base.prototype.fn = function (b) {
+        return null;
+    };
+    return Base;
+}());
+var A2 = /** @class */ (function (_super) {
+    __extends(A2, _super);
+    function A2() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return A2;
+}(Base));
+var B2 = /** @class */ (function (_super) {
+    __extends(B2, _super);
+    function B2() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return B2;
+}(Base));
 var a1;
 var a2;
 var a3;

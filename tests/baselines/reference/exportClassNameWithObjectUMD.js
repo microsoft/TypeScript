@@ -17,7 +17,10 @@ export class Object {}
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Object = void 0;
-    class Object {
-    }
+    var Object = /** @class */ (function () {
+        function Object() {
+        }
+        return Object;
+    }());
     exports.Object = Object;
 });

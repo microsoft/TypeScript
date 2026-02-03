@@ -34,29 +34,33 @@ exports.Bar4 = exports.Bar3 = exports.Bar2 = exports.Bar = void 0;
 exports.test1 = test1;
 exports.test2 = test2;
 exports.test3 = test3;
-class Bar {
-    constructor(x) {
+var Bar = /** @class */ (function () {
+    function Bar(x) {
         this.x = x;
     }
-}
+    return Bar;
+}());
 exports.Bar = Bar;
-class Bar2 {
-    constructor(x) {
+var Bar2 = /** @class */ (function () {
+    function Bar2(x) {
         this.x = x;
     }
-}
+    return Bar2;
+}());
 exports.Bar2 = Bar2;
-class Bar3 {
-    constructor(x) {
+var Bar3 = /** @class */ (function () {
+    function Bar3(x) {
         this.x = x;
     }
-}
+    return Bar3;
+}());
 exports.Bar3 = Bar3;
-class Bar4 {
-    constructor(x) {
+var Bar4 = /** @class */ (function () {
+    function Bar4(x) {
         this.x = x;
     }
-}
+    return Bar4;
+}());
 exports.Bar4 = Bar4;
 function test1(x) { }
 function test2(x) { }

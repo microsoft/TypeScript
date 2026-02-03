@@ -6,6 +6,9 @@ class C {
 }
 
 //// [parserMemberFunctionDeclaration4.js]
-class C {
-    export Foo() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.Foo = function () { };
+    return C;
+}());

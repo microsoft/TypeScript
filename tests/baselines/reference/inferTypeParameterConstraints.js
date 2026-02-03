@@ -43,16 +43,37 @@ m.child; // ok
 //// [inferTypeParameterConstraints.js]
 "use strict";
 // Repro from #42636
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // https://github.com/microsoft/TypeScript/issues/57286#issuecomment-1927920336
-class BaseClass {
-    fake() {
+var BaseClass = /** @class */ (function () {
+    function BaseClass() {
+    }
+    BaseClass.prototype.fake = function () {
         throw new Error("");
+    };
+    return BaseClass;
+}());
+var Klass = /** @class */ (function (_super) {
+    __extends(Klass, _super);
+    function Klass() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.child = true;
+        return _this;
     }
-}
-class Klass extends BaseClass {
-    constructor() {
-        super(...arguments);
-        this.child = true;
-    }
-}
+    return Klass;
+}(BaseClass));
 m.child; // ok

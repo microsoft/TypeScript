@@ -40,14 +40,21 @@ var s = new fnNumber(); // Error
 
 
 //// [newOperatorErrorCases.js]
-class C0 {
-}
-class C1 {
-    constructor(n, s) { }
-}
-class T {
-    constructor(n) { }
-}
+var C0 = /** @class */ (function () {
+    function C0() {
+    }
+    return C0;
+}());
+var C1 = /** @class */ (function () {
+    function C1(n, s) {
+    }
+    return C1;
+}());
+var T = /** @class */ (function () {
+    function T(n) {
+    }
+    return T;
+}());
 var anyCtor;
 var anyCtor1;
 var nestedCtor;

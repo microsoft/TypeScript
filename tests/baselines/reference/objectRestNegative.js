@@ -32,17 +32,17 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-let o = { a: 1, b: 'no' };
-var { a } = o;
+var o = { a: 1, b: 'no' };
+var a = o.a;
 var b;
-let notAssignable;
-({ b } = o, notAssignable = __rest(o, ["b"]));
+var notAssignable;
+(b = o.b, notAssignable = __rest(o, ["b"]));
 function stillMustBeLast(_a) {
-    var { a } = _a;
+    var a = _a.a;
 }
 function generic(t) {
-    let { x } = t, rest = __rest(t, ["x"]);
+    var x = t.x, rest = __rest(t, ["x"]);
     return rest;
 }
-let rest;
-({ a } = o, rest.b + rest.b = __rest(o, ["a"]));
+var rest;
+(a = o.a, rest.b + rest.b = __rest(o, ["a"]));

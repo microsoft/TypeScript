@@ -49,31 +49,40 @@ function getFoo3(): Foo {
 
 //// [contextuallyTypedClassExpressionMethodDeclaration01.js]
 function getFoo1() {
-    return class {
-        static method1(arg) {
+    return /** @class */ (function () {
+        function class_1() {
+        }
+        class_1.method1 = function (arg) {
             arg.numProp = 10;
-        }
-        static method2(arg) {
+        };
+        class_1.method2 = function (arg) {
             arg.strProp = "hello";
-        }
-    };
+        };
+        return class_1;
+    }());
 }
 function getFoo2() {
     var _a;
-    return _a = class {
-        },
-        _a.method1 = (arg) => {
+    return _a = /** @class */ (function () {
+            function class_2() {
+            }
+            return class_2;
+        }()),
+        _a.method1 = function (arg) {
             arg.numProp = 10;
         },
-        _a.method2 = (arg) => {
+        _a.method2 = function (arg) {
             arg.strProp = "hello";
         },
         _a;
 }
 function getFoo3() {
     var _a;
-    return _a = class {
-        },
+    return _a = /** @class */ (function () {
+            function class_3() {
+            }
+            return class_3;
+        }()),
         _a.method1 = function (arg) {
             arg.numProp = 10;
         },

@@ -36,8 +36,8 @@ function bar(obj) {
 function bar2(obj) {
     return foo2(obj);
 }
-const a = null;
-const b = a;
+var a = null;
+var b = a;
 
 
 //// [inferTypes2.d.ts]

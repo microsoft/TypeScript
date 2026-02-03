@@ -11,10 +11,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LoggerAdapter = void 0;
-class LoggerAdapter {
-    constructor(logger) {
+var LoggerAdapter = /** @class */ (function () {
+    function LoggerAdapter(logger) {
         this.logger = logger;
         this._information = this.logger.information();
     }
-}
+    return LoggerAdapter;
+}());
 exports.LoggerAdapter = LoggerAdapter;

@@ -31,7 +31,7 @@ function c(x: string | number) {
 
 
 //// [typeGuardsInDoStatement.js]
-let cond;
+var cond;
 function a(x) {
     x = true;
     do {

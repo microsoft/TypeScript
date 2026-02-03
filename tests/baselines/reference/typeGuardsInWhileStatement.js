@@ -28,7 +28,7 @@ function c(x: string | number) {
 
 
 //// [typeGuardsInWhileStatement.js]
-let cond;
+var cond;
 function a(x) {
     while (typeof x === "string") {
         x; // string

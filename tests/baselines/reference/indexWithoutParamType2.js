@@ -7,5 +7,8 @@ class C {
 }
 
 //// [indexWithoutParamType2.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

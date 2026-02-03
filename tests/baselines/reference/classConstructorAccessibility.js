@@ -37,41 +37,47 @@ module Generic {
 
 
 //// [classConstructorAccessibility.js]
-class C {
-    constructor(x) {
+var C = /** @class */ (function () {
+    function C(x) {
         this.x = x;
     }
-}
-class D {
-    constructor(x) {
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D(x) {
         this.x = x;
     }
-}
-class E {
-    constructor(x) {
+    return D;
+}());
+var E = /** @class */ (function () {
+    function E(x) {
         this.x = x;
     }
-}
+    return E;
+}());
 var c = new C(1);
 var d = new D(1); // error
 var e = new E(1); // error
 var Generic;
 (function (Generic) {
-    class C {
-        constructor(x) {
+    var C = /** @class */ (function () {
+        function C(x) {
             this.x = x;
         }
-    }
-    class D {
-        constructor(x) {
+        return C;
+    }());
+    var D = /** @class */ (function () {
+        function D(x) {
             this.x = x;
         }
-    }
-    class E {
-        constructor(x) {
+        return D;
+    }());
+    var E = /** @class */ (function () {
+        function E(x) {
             this.x = x;
         }
-    }
+        return E;
+    }());
     var c = new C(1);
     var d = new D(1); // error
     var e = new E(1); // error

@@ -3,6 +3,9 @@ EmitSkipped: false
 
 FileName : /tests/cases/fourslash/inputFile2.js
 var x;
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 

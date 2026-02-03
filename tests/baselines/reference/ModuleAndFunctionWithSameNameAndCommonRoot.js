@@ -32,7 +32,7 @@ module B {
 //// [module.js]
 var A;
 (function (A) {
-    let Point;
+    var Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
     })(Point = A.Point || (A.Point = {}));
@@ -49,7 +49,7 @@ var A;
 //// [simple.js]
 var B;
 (function (B) {
-    let Point;
+    var Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
     })(Point = B.Point || (B.Point = {}));

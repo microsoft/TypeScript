@@ -6,5 +6,5 @@ let x: (a: string) => string;
 x = (100, a => a);
 
 //// [contextuallyTypeCommaOperator01.js]
-let x;
-x = (100, a => a);
+var x;
+x = (100, function (a) { return a; });

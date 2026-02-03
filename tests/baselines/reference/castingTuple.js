@@ -37,22 +37,54 @@ t4[2] = 10;
 
 
 //// [castingTuple.js]
-class A {
-    constructor() {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var A = /** @class */ (function () {
+    function A() {
         this.a = 10;
     }
-}
-class C {
-}
+    return A;
+}());
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 ;
-class D {
-}
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());
 ;
-class E extends A {
-}
+var E = /** @class */ (function (_super) {
+    __extends(E, _super);
+    function E() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return E;
+}(A));
 ;
-class F extends A {
-}
+var F = /** @class */ (function (_super) {
+    __extends(F, _super);
+    function F() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return F;
+}(A));
 ;
 var E1;
 (function (E1) {

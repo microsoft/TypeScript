@@ -12,11 +12,15 @@ class TestFile {
 }
 
 //// [detachedCommentAtStartOfFunctionBody2.js]
-class TestFile {
-    foo(message) {
+var TestFile = /** @class */ (function () {
+    function TestFile() {
+    }
+    TestFile.prototype.foo = function (message) {
         /// <summary>Test summary</summary>
         /// <param name="message" type="String" />
         /// <returns type="Function" />
-        return () => message + this.name;
-    }
-}
+        var _this = this;
+        return function () { return message + _this.name; };
+    };
+    return TestFile;
+}());

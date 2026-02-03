@@ -22,8 +22,11 @@ const d: D = {};
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -34,4 +37,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 new D();
-const d = {};
+var d = {};

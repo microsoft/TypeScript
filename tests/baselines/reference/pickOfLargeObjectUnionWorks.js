@@ -82,4 +82,4 @@ interface Base {
   const xyz: Pick<A | B | C, 'id'> = {id: 'id'}
 
 //// [pickOfLargeObjectUnionWorks.js]
-const xyz = { id: 'id' };
+var xyz = { id: 'id' };

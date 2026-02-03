@@ -13,11 +13,14 @@ class C {
 
 //// [thisShadowingErrorSpans.js]
 "use strict";
-class C {
-    m() {
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.m = function () {
         this.m();
         function f() {
             this.m();
         }
-    }
-}
+    };
+    return C;
+}());

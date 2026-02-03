@@ -33,8 +33,11 @@ module test {
 // Boolean primitive type.
 var test;
 (function (test) {
-    class Object {
-    }
+    var Object = /** @class */ (function () {
+        function Object() {
+        }
+        return Object;
+    }());
     var obj;
     4 instanceof null;
     // Error and should be error

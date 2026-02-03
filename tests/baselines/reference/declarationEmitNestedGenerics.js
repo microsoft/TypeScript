@@ -13,11 +13,11 @@ function g<T>(x: T) {
 
 //// [declarationEmitNestedGenerics.js]
 function f(p) {
-    let g = null;
+    var g = null;
     return g;
 }
 function g(x) {
-    let y = null;
+    var y = null;
     return y;
 }
 

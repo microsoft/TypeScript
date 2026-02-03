@@ -9,6 +9,9 @@ export class C {
 //// [parserExportAssignment8.js]
 "use strict";
 exports.C = void 0;
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 module.exports = B;

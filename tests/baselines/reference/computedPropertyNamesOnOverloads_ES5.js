@@ -12,6 +12,9 @@ class C {
 //// [computedPropertyNamesOnOverloads_ES5.js]
 var methodName = "method";
 var accessorName = "accessor";
-class C {
-    [methodName](v) { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype[methodName] = function (v) { };
+    return C;
+}());

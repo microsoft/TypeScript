@@ -6,5 +6,5 @@ const y = 0;
 
 
 //// [jsxAttributeMissingInitializer.jsx]
-const x = <div foo></div>;
-const y = 0;
+var x = <div foo></div>;
+var y = 0;

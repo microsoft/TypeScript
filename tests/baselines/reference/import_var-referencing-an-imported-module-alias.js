@@ -14,8 +14,11 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Host = void 0;
-    class Host {
-    }
+    var Host = /** @class */ (function () {
+        function Host() {
+        }
+        return Host;
+    }());
     exports.Host = Host;
 });
 //// [consumer.js]

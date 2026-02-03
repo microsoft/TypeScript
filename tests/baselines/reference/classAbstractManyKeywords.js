@@ -10,13 +10,25 @@ import abstract class D {}
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 exports.default = A;
-class B {
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 exports.B = B;
-class C {
-}
-class D {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());

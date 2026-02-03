@@ -18,17 +18,17 @@ using after = null;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
-let C = (() => {
-    let C = class C {
-    };
+var C = /** @class */ (function () {
+    function C() {
+    }
     C = __decorate([
         dec
     ], C);
     return C;
-})();
+}());
 exports.D = C;
 var after;
-const env_1 = { stack: [], error: void 0, hasError: false };
+var env_1 = { stack: [], error: void 0, hasError: false };
 try {
     after = __addDisposableResource(env_1, null, false);
 }

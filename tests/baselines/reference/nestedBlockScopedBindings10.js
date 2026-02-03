@@ -15,12 +15,12 @@ switch (1) {
 
 //// [nestedBlockScopedBindings10.js]
 {
-    let x;
+    var x = void 0;
     x = 1;
 }
 switch (1) {
     case 1:
-        let y;
+        var y = void 0;
         y = 1;
         break;
 }

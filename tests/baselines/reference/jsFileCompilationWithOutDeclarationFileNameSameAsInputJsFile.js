@@ -9,5 +9,8 @@ declare function foo(): boolean;
 
 
 //// [b.js]
-class c {
-}
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());

@@ -34,19 +34,21 @@ a.baz();
 
 
 //// [autoLift2.js]
-class A {
-    constructor() {
+var A = /** @class */ (function () {
+    function A() {
         this.foo;
         any;
         this.bar;
         any;
     }
-    baz() {
+    A.prototype.baz = function () {
+        var _this = this;
         this.foo = "foo";
         this.bar = "bar";
-        [1, 2].forEach((p) => this.foo);
-        [1, 2].forEach((p) => this.bar);
-    }
-}
+        [1, 2].forEach(function (p) { return _this.foo; });
+        [1, 2].forEach(function (p) { return _this.bar; });
+    };
+    return A;
+}());
 var a = new A();
 a.baz();

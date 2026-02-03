@@ -29,18 +29,27 @@ interface I extends A, B {
 }
 
 //// [declFileForClassWithMultipleBaseClasses.js]
-class A {
-    foo() { }
-}
-class B {
-    bar() { }
-}
-class D {
-    baz() { }
-    bat() { }
-    foo() { }
-    bar() { }
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    A.prototype.foo = function () { };
+    return A;
+}());
+var B = /** @class */ (function () {
+    function B() {
+    }
+    B.prototype.bar = function () { };
+    return B;
+}());
+var D = /** @class */ (function () {
+    function D() {
+    }
+    D.prototype.baz = function () { };
+    D.prototype.bat = function () { };
+    D.prototype.foo = function () { };
+    D.prototype.bar = function () { };
+    return D;
+}());
 
 
 //// [declFileForClassWithMultipleBaseClasses.d.ts]

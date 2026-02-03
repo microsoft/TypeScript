@@ -7,4 +7,4 @@ type U = Idx | I | "lit";
 const u: U = { x: "lit" };
 
 //// [unionTypeWithIndexedLiteralType.js]
-const u = { x: "lit" };
+var u = { x: "lit" };

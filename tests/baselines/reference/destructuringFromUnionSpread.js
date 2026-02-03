@@ -20,4 +20,4 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-const { a } = __assign({}, x); // error
+var a = __assign({}, x).a; // error

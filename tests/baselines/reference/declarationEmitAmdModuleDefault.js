@@ -7,8 +7,11 @@ export default class DefaultClass { }
 define("declarationEmitAmdModuleDefault", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class DefaultClass {
-    }
+    var DefaultClass = /** @class */ (function () {
+        function DefaultClass() {
+        }
+        return DefaultClass;
+    }());
     exports.default = DefaultClass;
 });
 

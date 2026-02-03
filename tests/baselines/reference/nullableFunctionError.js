@@ -10,5 +10,5 @@ f();
 //// [nullableFunctionError.js]
 null();
 undefined();
-let f;
+var f;
 f();

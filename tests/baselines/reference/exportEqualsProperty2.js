@@ -17,11 +17,14 @@ const x: B = { c: B };
 
 //// [a.js]
 "use strict";
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 module.exports = C.B;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var B = require("./a");
-const x = { c: B };
+var x = { c: B };

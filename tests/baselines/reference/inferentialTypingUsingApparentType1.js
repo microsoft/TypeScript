@@ -11,4 +11,4 @@ foo(x => x.length);
 function foo(x) {
     return undefined;
 }
-foo(x => x.length);
+foo(function (x) { return x.length; });

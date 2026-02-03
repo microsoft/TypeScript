@@ -23,12 +23,21 @@ x = a;
 x = b;
 
 //// [stringIndexerAssignments2.js]
-class C1 {
-}
-class C2 {
-}
-class C3 {
-}
+var C1 = /** @class */ (function () {
+    function C1() {
+    }
+    return C1;
+}());
+var C2 = /** @class */ (function () {
+    function C2() {
+    }
+    return C2;
+}());
+var C3 = /** @class */ (function () {
+    function C3() {
+    }
+    return C3;
+}());
 var x;
 var a;
 var b;

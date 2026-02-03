@@ -17,14 +17,15 @@ foo(() => {
 
 
 //// [emitArrowFunctionThisCapturing.js]
-var f1 = () => {
-    this.age = 10;
+var _this = this;
+var f1 = function () {
+    _this.age = 10;
 };
-var f2 = (x) => {
-    this.name = x;
+var f2 = function (x) {
+    _this.name = x;
 };
 function foo(func) { }
-foo(() => {
-    this.age = 100;
+foo(function () {
+    _this.age = 100;
     return true;
 });

@@ -24,14 +24,16 @@ class Foo<T> {
 "use strict";
 // Issue #52813
 Object.defineProperty(exports, "__esModule", { value: true });
-class Bar {
-    constructor() {
+var Bar = /** @class */ (function () {
+    function Bar() {
         this.Value = callme(new Foo(this)).bar.num;
         this.Field = callme(new Foo(this)).bar.num;
     }
-}
-class Foo {
-    constructor(bar) {
+    return Bar;
+}());
+var Foo = /** @class */ (function () {
+    function Foo(bar) {
         this.bar = bar;
     }
-}
+    return Foo;
+}());

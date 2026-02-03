@@ -38,18 +38,24 @@ module m {
 //// [declFileTypeAnnotationVisibilityErrorTypeLiteral.js]
 var m;
 (function (m) {
-    class private1 {
-    }
-    let m2;
-    (function (m2) {
-        class public1 {
+    var private1 = /** @class */ (function () {
+        function private1() {
         }
+        return private1;
+    }());
+    var m2;
+    (function (m2) {
+        var public1 = /** @class */ (function () {
+            function public1() {
+            }
+            return public1;
+        }());
         m2.public1 = public1;
     })(m2 || (m2 = {}));
     m.x2 = {
         x: new private1(),
         y: new m2.public1(),
-        method() {
+        method: function () {
             return new private1();
         }
     };

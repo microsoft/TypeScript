@@ -13,12 +13,19 @@ class C {
 
 
 //// [typeOfThisInStatics.js]
-class C {
-    static foo() {
-        var r = this;
+var C = /** @class */ (function () {
+    function C() {
     }
-    static get x() {
+    C.foo = function () {
         var r = this;
-        return 1;
-    }
-}
+    };
+    Object.defineProperty(C, "x", {
+        get: function () {
+            var r = this;
+            return 1;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());

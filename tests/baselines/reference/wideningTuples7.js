@@ -8,6 +8,6 @@ var foo = function bar() {
 
 //// [wideningTuples7.js]
 var foo = function bar() {
-    let intermediate;
+    var intermediate;
     return intermediate = [undefined];
 };

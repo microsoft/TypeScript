@@ -75,8 +75,8 @@ module TypeScript {
 var TypeScript;
 (function (TypeScript) {
     // TODO: refactor indent logic for use in emit
-    class PrintContext {
-        constructor(outfile, parser) {
+    var PrintContext = /** @class */ (function () {
+        function PrintContext(outfile, parser) {
             this.outfile = outfile;
             this.parser = parser;
             this.builder = "";
@@ -84,13 +84,13 @@ var TypeScript;
             this.indentStrings = [];
             this.indentAmt = 0;
         }
-        increaseIndent() {
+        PrintContext.prototype.increaseIndent = function () {
             this.indentAmt++;
-        }
-        decreaseIndent() {
+        };
+        PrintContext.prototype.decreaseIndent = function () {
             this.indentAmt--;
-        }
-        startLine() {
+        };
+        PrintContext.prototype.startLine = function () {
             if (this.builder.length > 0) {
                 CompilerDiagnostics.Alert(this.builder);
             }
@@ -103,16 +103,17 @@ var TypeScript;
                 this.indentStrings[this.indentAmt] = indentString;
             }
             this.builder += indentString;
-        }
-        write(s) {
+        };
+        PrintContext.prototype.write = function (s) {
             this.builder += s;
-        }
-        writeLine(s) {
+        };
+        PrintContext.prototype.writeLine = function (s) {
             this.builder += s;
             this.outfile.WriteLine(this.builder);
             this.builder = "";
-        }
-    }
+        };
+        return PrintContext;
+    }());
     TypeScript.PrintContext = PrintContext;
     function prePrintAST(ast, parent, walker) {
         var pc = walker.state;

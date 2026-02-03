@@ -104,7 +104,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" preserve="true" />
 var react_1 = __importDefault(require("react"));
 var prop_types_1 = __importDefault(require("prop-types"));
-const TabbedShowLayout = ({}) => {
+var TabbedShowLayout = function (_a) {
     return (react_1.default.createElement("div", null));
 };
 TabbedShowLayout.propTypes = {
@@ -124,7 +124,7 @@ var react_1 = __importDefault(require("react"));
 /**
  * @type {React.SFC}
  */
-const TabbedShowLayout = () => {
+var TabbedShowLayout = function () {
     return (react_1.default.createElement("div", { className: "", key: "" }, "ok"));
 };
 TabbedShowLayout.defaultProps = {
@@ -141,7 +141,7 @@ var react_1 = __importDefault(require("react"));
 /**
  * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
  */
-const TabbedShowLayout = () => {
+var TabbedShowLayout = function () {
     return (react_1.default.createElement("div", { className: "", key: "" }, "ok"));
 };
 TabbedShowLayout.defaultProps = {
@@ -155,7 +155,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importDefault(require("react"));
-const TabbedShowLayout = (/** @type {{className: string}}*/ prop) => {
+var TabbedShowLayout = function (/** @type {{className: string}}*/ prop) {
     return (react_1.default.createElement("div", { className: prop.className, key: "" }, "ok"));
 };
 TabbedShowLayout.defaultProps = {
@@ -170,7 +170,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importDefault(require("react"));
 var prop_types_1 = __importDefault(require("prop-types"));
-function Tree({ allowDropOnRoot }) {
+function Tree(_a) {
+    var allowDropOnRoot = _a.allowDropOnRoot;
     return react_1.default.createElement("div", null);
 }
 Tree.propTypes = {

@@ -21,11 +21,12 @@ var __test1__;
 })(__test1__ || (__test1__ = {}));
 var __test2__;
 (function (__test2__) {
-    class classWithOptional {
-        constructor(one) {
+    var classWithOptional = /** @class */ (function () {
+        function classWithOptional(one) {
             this.one = one;
         }
-    }
+        return classWithOptional;
+    }());
     __test2__.classWithOptional = classWithOptional;
     var x3 = new classWithOptional();
     ;

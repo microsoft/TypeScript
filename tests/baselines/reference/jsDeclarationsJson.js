@@ -21,7 +21,7 @@ module.exports = j;
     }
 }
 //// [index.js]
-const j = require("./obj.json");
+var j = require("./obj.json");
 module.exports = j;
 
 

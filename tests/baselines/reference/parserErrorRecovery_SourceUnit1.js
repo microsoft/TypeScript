@@ -8,7 +8,13 @@ class D {
 }
 
 //// [parserErrorRecovery_SourceUnit1.js]
-class C {
-}
-class D {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());

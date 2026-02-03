@@ -18,6 +18,9 @@ declare namespace exports {
 //// [input.js]
 "use strict";
 exports.Sub = void 0;
-class Sub {
-}
+var Sub = /** @class */ (function () {
+    function Sub() {
+    }
+    return Sub;
+}());
 module.exports = exports;

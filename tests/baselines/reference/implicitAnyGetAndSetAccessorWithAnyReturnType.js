@@ -27,24 +27,43 @@ class GetterOnly {
 
 //// [implicitAnyGetAndSetAccessorWithAnyReturnType.js]
 // these should be errors
-class GetAndSet {
-    constructor() {
+var GetAndSet = /** @class */ (function () {
+    function GetAndSet() {
         this.getAndSet = null; // error at "getAndSet"
     }
-    get haveGetAndSet() {
-        return this.getAndSet;
+    Object.defineProperty(GetAndSet.prototype, "haveGetAndSet", {
+        get: function () {
+            return this.getAndSet;
+        },
+        // this shouldn't be an error
+        set: function (value) {
+            this.getAndSet = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return GetAndSet;
+}());
+var SetterOnly = /** @class */ (function () {
+    function SetterOnly() {
     }
-    // this shouldn't be an error
-    set haveGetAndSet(value) {
-        this.getAndSet = value;
+    Object.defineProperty(SetterOnly.prototype, "haveOnlySet", {
+        set: function (newXValue) {
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return SetterOnly;
+}());
+var GetterOnly = /** @class */ (function () {
+    function GetterOnly() {
     }
-}
-class SetterOnly {
-    set haveOnlySet(newXValue) {
-    }
-}
-class GetterOnly {
-    get haveOnlyGet() {
-        return null;
-    }
-}
+    Object.defineProperty(GetterOnly.prototype, "haveOnlyGet", {
+        get: function () {
+            return null;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return GetterOnly;
+}());

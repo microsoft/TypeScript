@@ -5,5 +5,5 @@ var f = (await) => {
 }
 
 //// [asyncArrowFunction2_es5.js]
-var f = (await) => {
+var f = function (await) {
 };

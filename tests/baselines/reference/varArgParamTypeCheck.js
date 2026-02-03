@@ -24,17 +24,23 @@ sequence(
 
 
 //// [varArgParamTypeCheck.js]
-function sequence(...sequences) {
+function sequence() {
+    var sequences = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        sequences[_i] = arguments[_i];
+    }
 }
 function callback(clb) {
 }
 sequence(function bar() {
 }, function foo() {
-    callback(() => {
-        this();
+    var _this = this;
+    callback(function () {
+        _this();
     });
 }, function baz() {
-    callback(() => {
-        this();
+    var _this = this;
+    callback(function () {
+        _this();
     });
 });

@@ -22,11 +22,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-let A = (() => {
-    let A = class A {
-        constructor(hi) { }
-        method(there) { }
-    };
+var A = /** @class */ (function () {
+    function A(hi) {
+    }
+    A.prototype.method = function (there) { };
     __decorate([
         MyMethodDecorator,
         __metadata("design:type", Function),
@@ -38,4 +37,4 @@ let A = (() => {
         __metadata("design:paramtypes", [Object])
     ], A);
     return A;
-})();
+}());

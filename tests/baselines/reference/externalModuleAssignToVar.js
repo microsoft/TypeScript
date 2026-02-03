@@ -31,22 +31,31 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.C = void 0;
-    class C {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
     exports.C = C;
 });
 //// [externalModuleAssignToVar_core_require2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    class C {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
     return C;
 });
 //// [externalModuleAssignToVar_ext.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    class D {
-    }
+    var D = /** @class */ (function () {
+        function D() {
+        }
+        return D;
+    }());
     return D;
 });
 //// [externalModuleAssignToVar_core.js]

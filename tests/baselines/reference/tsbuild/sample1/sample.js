@@ -838,8 +838,11 @@ exports.multiply = multiply;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 function multiply(a, b) { return a * b; }
-class someClass {
-}
+var someClass = /** @class */ (function () {
+    function someClass() {
+    }
+    return someClass;
+}());
 exports.someClass = someClass;
 
 
@@ -1271,11 +1274,17 @@ exports.multiply = multiply;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 function multiply(a, b) { return a * b; }
-class someClass {
-}
+var someClass = /** @class */ (function () {
+    function someClass() {
+    }
+    return someClass;
+}());
 exports.someClass = someClass;
-class someClass2 {
-}
+var someClass2 = /** @class */ (function () {
+    function someClass2() {
+    }
+    return someClass2;
+}());
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map] file written with same contents

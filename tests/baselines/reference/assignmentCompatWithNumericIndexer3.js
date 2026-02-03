@@ -44,21 +44,47 @@ module Generics {
 
 //// [assignmentCompatWithNumericIndexer3.js]
 // Derived type indexer must be subtype of base type indexer
-class A {
-}
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 var a;
 var b;
 a = b; // error
 b = a; // ok
-class B2 extends A {
-}
+var B2 = /** @class */ (function (_super) {
+    __extends(B2, _super);
+    function B2() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return B2;
+}(A));
 var b2;
 a = b2; // ok
 b2 = a; // error
 var Generics;
 (function (Generics) {
-    class A {
-    }
+    var A = /** @class */ (function () {
+        function A() {
+        }
+        return A;
+    }());
     function foo() {
         var a;
         var b;

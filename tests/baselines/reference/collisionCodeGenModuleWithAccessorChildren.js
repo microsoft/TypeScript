@@ -51,39 +51,74 @@ module M { // Shouldnt be _M
 var M;
 (function (M_1) {
     M_1.x = 3;
-    class c {
-        set Z(M) {
-            this.y = M_1.x;
+    var c = /** @class */ (function () {
+        function c() {
         }
-    }
+        Object.defineProperty(c.prototype, "Z", {
+            set: function (M) {
+                this.y = M_1.x;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        return c;
+    }());
 })(M || (M = {}));
 (function (M_2) {
-    class d {
-        set Z(p) {
-            var M = 10;
-            this.y = M_2.x;
+    var d = /** @class */ (function () {
+        function d() {
         }
-    }
+        Object.defineProperty(d.prototype, "Z", {
+            set: function (p) {
+                var M = 10;
+                this.y = M_2.x;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        return d;
+    }());
 })(M || (M = {}));
 (function (M) {
-    class e {
-        set M(p) {
-            this.y = M.x;
+    var e = /** @class */ (function () {
+        function e() {
         }
-    }
+        Object.defineProperty(e.prototype, "M", {
+            set: function (p) {
+                this.y = M.x;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        return e;
+    }());
 })(M || (M = {}));
 (function (M_3) {
-    class f {
-        get Z() {
-            var M = 10;
-            return M_3.x;
+    var f = /** @class */ (function () {
+        function f() {
         }
-    }
+        Object.defineProperty(f.prototype, "Z", {
+            get: function () {
+                var M = 10;
+                return M_3.x;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        return f;
+    }());
 })(M || (M = {}));
 (function (M) {
-    class e {
-        get M() {
-            return M.x;
+    var e = /** @class */ (function () {
+        function e() {
         }
-    }
+        Object.defineProperty(e.prototype, "M", {
+            get: function () {
+                return M.x;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        return e;
+    }());
 })(M || (M = {}));

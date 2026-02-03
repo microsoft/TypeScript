@@ -3,9 +3,15 @@ EmitSkipped: false
 
 FileName : outputDir/singleFile.js
 var x;
-class Bar {
-}
+var Bar = /** @class */ (function () {
+    function Bar() {
+    }
+    return Bar;
+}());
 var x;
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 

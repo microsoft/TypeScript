@@ -19,8 +19,11 @@ Biz(new Foo());
 
 
 //// [assignmentCompatInterfaceWithStringIndexSignature.js]
-class Foo {
-    Boz() { }
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    Foo.prototype.Boz = function () { };
+    return Foo;
+}());
 function Biz(map) { }
 Biz(new Foo());

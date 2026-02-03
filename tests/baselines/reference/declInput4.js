@@ -20,16 +20,25 @@ module M {
 //// [declInput4.js]
 var M;
 (function (M) {
-    class C {
-    }
-    class E {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
+    var E = /** @class */ (function () {
+        function E() {
+        }
+        return E;
+    }());
     M.E = E;
-    class D {
-        m232() { return null; }
-        m242() { return null; }
-        m26(i) { }
-    }
+    var D = /** @class */ (function () {
+        function D() {
+        }
+        D.prototype.m232 = function () { return null; };
+        D.prototype.m242 = function () { return null; };
+        D.prototype.m26 = function (i) { };
+        return D;
+    }());
     M.D = D;
 })(M || (M = {}));
 

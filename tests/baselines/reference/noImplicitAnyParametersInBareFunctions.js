@@ -57,19 +57,41 @@ function f4(x, y, z) { }
 // Implicit-'any' errors for x, and z.
 function f5(x, y, z) { }
 // Implicit-'any[]' error for r.
-function f6(...r) { }
+function f6() {
+    var r = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        r[_i] = arguments[_i];
+    }
+}
 // Implicit-'any'/'any[]' errors for x, r.
-function f7(x, ...r) { }
+function f7(x) {
+    var r = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        r[_i - 1] = arguments[_i];
+    }
+}
 function f8(x3, y3) { }
 // No implicit-'any' errors.
-var f9 = () => "";
+var f9 = function () { return ""; };
 // Implicit-'any' errors for x.
-var f10 = (x) => "";
+var f10 = function (x) { return ""; };
 // Implicit-'any' errors for x, y, and z.
-var f11 = (x, y, z) => "";
+var f11 = function (x, y, z) { return ""; };
 // Implicit-'any' errors for x and z.
-var f12 = (x, y, z) => "";
+var f12 = function (x, y, z) { return ""; };
 // Implicit-'any[]' error for r.
-var f13 = (...r) => "";
+var f13 = function () {
+    var r = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        r[_i] = arguments[_i];
+    }
+    return "";
+};
 // Implicit-'any'/'any[]' errors for x, r.
-var f14 = (x, ...r) => "";
+var f14 = function (x) {
+    var r = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        r[_i - 1] = arguments[_i];
+    }
+    return "";
+};

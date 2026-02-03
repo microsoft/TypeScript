@@ -27,7 +27,7 @@ var M;
 })(M || (M = {}));
 var foge;
 var foo;
-let x;
+var x;
 
 
 //// [namespacesDeclaration2.d.ts]

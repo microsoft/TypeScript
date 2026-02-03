@@ -134,9 +134,12 @@ function foo(instance: Function | object) {
 
 //// [typeGuardConstructorClassAndNumber.js]
 // Typical case
-class C1 {
-}
-let var1;
+var C1 = /** @class */ (function () {
+    function C1() {
+    }
+    return C1;
+}());
+var var1;
 if (var1.constructor == C1) {
     var1; // C1
     var1.property1; // string

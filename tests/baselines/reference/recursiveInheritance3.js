@@ -11,9 +11,10 @@ interface I extends C {
 }
 
 //// [recursiveInheritance3.js]
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.x = 1;
     }
-    foo(x) { return x; }
-}
+    C.prototype.foo = function (x) { return x; };
+    return C;
+}());

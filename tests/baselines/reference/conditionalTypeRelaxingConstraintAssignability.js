@@ -43,11 +43,12 @@ function g(p1: I, p2: Partial<I>): I {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Elem = void 0;
-class Elem {
-    constructor(children_) {
+var Elem = /** @class */ (function () {
+    function Elem(children_) {
         this.children_ = children_;
     }
-}
+    return Elem;
+}());
 exports.Elem = Elem;
 new Elem(undefined);
 new Elem('');

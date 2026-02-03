@@ -24,27 +24,40 @@ class C5 {
 
 
 //// [getAndSetAsMemberNames.js]
-class C1 {
-    constructor() {
+var C1 = /** @class */ (function () {
+    function C1() {
         this.get = 1;
     }
-}
-class C2 {
-}
-class C3 {
-    set(x) {
-        return x + 1;
+    return C1;
+}());
+var C2 = /** @class */ (function () {
+    function C2() {
     }
-}
-class C4 {
-    constructor() {
+    return C2;
+}());
+var C3 = /** @class */ (function () {
+    function C3() {
+    }
+    C3.prototype.set = function (x) {
+        return x + 1;
+    };
+    return C3;
+}());
+var C4 = /** @class */ (function () {
+    function C4() {
         this.get = true;
     }
-}
-class C5 {
-    constructor() {
+    return C4;
+}());
+var C5 = /** @class */ (function () {
+    function C5() {
         this.set = function () { return true; };
     }
-    get() { return true; }
-    set t(x) { }
-}
+    C5.prototype.get = function () { return true; };
+    Object.defineProperty(C5.prototype, "t", {
+        set: function (x) { },
+        enumerable: false,
+        configurable: true
+    });
+    return C5;
+}());

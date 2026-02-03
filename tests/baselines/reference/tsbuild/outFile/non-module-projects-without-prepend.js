@@ -169,10 +169,10 @@ Found 3 errors.
 
 
 //// [/home/src/workspaces/solution/first/first_PART1.js.map]
-{"version":3,"file":"first_PART1.js","sourceRoot":"","sources":["first_PART1.ts"],"names":[],"mappings":"AAIA,MAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC"}
+{"version":3,"file":"first_PART1.js","sourceRoot":"","sources":["first_PART1.ts"],"names":[],"mappings":"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC"}
 
 //// [/home/src/workspaces/solution/first/first_PART1.js]
-const s = "Hello, world";
+var s = "Hello, world";
 console.log(s);
 //# sourceMappingURL=first_PART1.js.map
 
@@ -340,14 +340,17 @@ declare namespace N {
 //# sourceMappingURL=second_part1.d.ts.map
 
 //// [/home/src/workspaces/solution/second/second_part2.js.map]
-{"version":3,"file":"second_part2.js","sourceRoot":"","sources":["second_part2.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC;IACH,WAAW;QACP,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;CACJ"}
+{"version":3,"file":"second_part2.js","sourceRoot":"","sources":["second_part2.ts"],"names":[],"mappings":"AAAA;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
 
 //// [/home/src/workspaces/solution/second/second_part2.js]
-class C {
-    doSomething() {
-        console.log("something got done");
+var C = (function () {
+    function C() {
     }
-}
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
 //# sourceMappingURL=second_part2.js.map
 
 //// [/home/src/workspaces/solution/second/second_part2.d.ts.map]

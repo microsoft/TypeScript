@@ -19,12 +19,18 @@ var r2 = D;
 
 
 //// [classWithNoConstructorOrBaseClass.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var c = new C();
 var r = C;
-class D {
-}
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());
 var d = new D();
 var d2 = new D();
 var r2 = D;

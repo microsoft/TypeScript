@@ -49,15 +49,24 @@ for(var aClassInModule: M.A = new M.A();;){}
 for(var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';;){}
 
 //// [forStatements.js]
-class C {
-}
-class D {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());
 function F(x) { return 42; }
 var M;
 (function (M) {
-    class A {
-    }
+    var A = /** @class */ (function () {
+        function A() {
+        }
+        return A;
+    }());
     M.A = A;
     function F2(x) { return x.toString(); }
     M.F2 = F2;
@@ -76,7 +85,7 @@ for (var anObjectLiteral = { id: 12 };;) { }
 for (var anOtherObjectLiteral = new C();;) { }
 for (var aFunction = F;;) { }
 for (var anOtherFunction = F;;) { }
-for (var aLambda = (x) => 2;;) { }
+for (var aLambda = function (x) { return 2; };;) { }
 for (var aModule = M;;) { }
 for (var aClassInModule = new M.A();;) { }
-for (var aFunctionInModule = (x) => 'this is a string';;) { }
+for (var aFunctionInModule = function (x) { return 'this is a string'; };;) { }

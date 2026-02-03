@@ -9,6 +9,9 @@ var a: X<boolean>;
 
 
 //// [specializedLambdaTypeArguments.js]
-class X {
-}
+var X = /** @class */ (function () {
+    function X() {
+    }
+    return X;
+}());
 var a;

@@ -86,19 +86,22 @@ function f6(a) {
 }
 // Repro from #46976
 function g1(a) {
-    const { z } = a;
+    var z = a.z;
     return __assign({}, z);
 }
-class Foo {
-    bar() {
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    Foo.prototype.bar = function () {
         if (this.hasData()) {
             this.data.toLocaleLowerCase();
         }
-    }
-    hasData() {
+    };
+    Foo.prototype.hasData = function () {
         return true;
-    }
-}
+    };
+    return Foo;
+}());
 
 
 //// [spreadObjectOrFalsy.d.ts]

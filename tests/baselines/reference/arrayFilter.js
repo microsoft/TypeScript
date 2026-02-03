@@ -15,4 +15,4 @@ var foo = [
     { name: null },
     { name: 'baz' }
 ];
-foo.filter(x => x.name); //should accepted all possible types not only boolean! 
+foo.filter(function (x) { return x.name; }); //should accepted all possible types not only boolean! 

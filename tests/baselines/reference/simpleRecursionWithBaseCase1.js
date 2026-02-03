@@ -46,11 +46,11 @@ function fn1(n) {
         return fn1(n - 1);
     }
 }
-const num = fn1();
+var num = fn1();
 function fn2(n) {
     return fn2(n);
 }
-const nev = fn2();
+var nev = fn2();
 function fn3(n) {
     if (n === 0) {
         return 3;

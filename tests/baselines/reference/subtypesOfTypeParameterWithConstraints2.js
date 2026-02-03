@@ -187,10 +187,16 @@ function f3(x, y) {
     var r3 = true ? y : new Date();
     var r3 = true ? new Date() : y;
 }
-class C1 {
-}
-class C2 {
-}
+var C1 = /** @class */ (function () {
+    function C1() {
+    }
+    return C1;
+}());
+var C2 = /** @class */ (function () {
+    function C2() {
+    }
+    return C2;
+}());
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -199,8 +205,11 @@ function f() { }
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
-class c {
-}
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));
@@ -236,12 +245,12 @@ function f10(x) {
     var r6 = true ? x : { foo: 1 }; // ok
 }
 function f11(x) {
-    var r7 = true ? () => { } : x; // ok
-    var r7 = true ? x : () => { }; // ok
+    var r7 = true ? function () { } : x; // ok
+    var r7 = true ? x : function () { }; // ok
 }
 function f12(x) {
-    var r8 = true ? (x) => { return x; } : x; // ok
-    var r8b = true ? x : (x) => { return x; }; // ok, type parameters not identical across declarations
+    var r8 = true ? function (x) { return x; } : x; // ok
+    var r8b = true ? x : function (x) { return x; }; // ok, type parameters not identical across declarations
 }
 function f13(x) {
     var i1;

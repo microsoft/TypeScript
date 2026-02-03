@@ -39,7 +39,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 //// [/user/username/projects/project/main.js]
-let a = "Hello";
+var a = "Hello";
 
 
 
@@ -110,7 +110,7 @@ CreatingProgramWith::
 
 
 //// [/user/username/projects/project/main.js]
-let a = "Hello World";
+var a = "Hello World";
 
 
 

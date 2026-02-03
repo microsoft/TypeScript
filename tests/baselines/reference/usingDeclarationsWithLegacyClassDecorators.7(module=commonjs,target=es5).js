@@ -15,16 +15,16 @@ using after = null;
 //// [usingDeclarationsWithLegacyClassDecorators.7.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let C = (() => {
-    let C = class C {
-    };
+var C = /** @class */ (function () {
+    function C() {
+    }
     C = __decorate([
         dec
     ], C);
     return C;
-})();
+}());
 var after;
-const env_1 = { stack: [], error: void 0, hasError: false };
+var env_1 = { stack: [], error: void 0, hasError: false };
 try {
     after = __addDisposableResource(env_1, null, false);
 }

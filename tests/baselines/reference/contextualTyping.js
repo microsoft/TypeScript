@@ -228,13 +228,14 @@ var x: B = { };
 
 //// [contextualTyping.js]
 // CONTEXT: Class property declaration
-class C1T5 {
-    constructor() {
+var C1T5 = /** @class */ (function () {
+    function C1T5() {
         this.foo = function (i) {
             return i;
         };
     }
-}
+    return C1T5;
+}());
 // CONTEXT: Module property declaration
 var C2T5;
 (function (C2T5) {
@@ -266,13 +267,14 @@ var c3t14 = ({
     a: []
 });
 // CONTEXT: Class property assignment
-class C4T5 {
-    constructor() {
+var C4T5 = /** @class */ (function () {
+    function C4T5() {
         this.foo = function (i, s) {
             return s;
         };
     }
-}
+    return C4T5;
+}());
 // CONTEXT: Module property assignment
 var C5T5;
 (function (C5T5) {
@@ -318,9 +320,11 @@ c9t5(function (n) {
 // CONTEXT: Return statement
 var c10t5 = function () { return function (n) { return ({}); }; };
 // CONTEXT: Newing a class
-class C11t5 {
-    constructor(f) { }
-}
+var C11t5 = /** @class */ (function () {
+    function C11t5(f) {
+    }
+    return C11t5;
+}());
 ;
 var i = new C11t5(function (n) { return ({}); });
 // CONTEXT: Type annotated expression

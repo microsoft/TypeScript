@@ -34,31 +34,59 @@ class F {
 }
 
 //// [accessorWithMismatchedAccessibilityModifiers.js]
-class C {
-    get x() {
-        return 1;
+var C = /** @class */ (function () {
+    function C() {
     }
-    set x(v) {
+    Object.defineProperty(C.prototype, "x", {
+        get: function () {
+            return 1;
+        },
+        set: function (v) {
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
     }
-}
-class D {
-    get x() {
-        return 1;
+    Object.defineProperty(D.prototype, "x", {
+        get: function () {
+            return 1;
+        },
+        set: function (v) {
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return D;
+}());
+var E = /** @class */ (function () {
+    function E() {
     }
-    set x(v) {
+    Object.defineProperty(E.prototype, "x", {
+        get: function () {
+            return 1;
+        },
+        set: function (v) {
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return E;
+}());
+var F = /** @class */ (function () {
+    function F() {
     }
-}
-class E {
-    set x(v) {
-    }
-    get x() {
-        return 1;
-    }
-}
-class F {
-    static set x(v) {
-    }
-    static get x() {
-        return 1;
-    }
-}
+    Object.defineProperty(F, "x", {
+        get: function () {
+            return 1;
+        },
+        set: function (v) {
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return F;
+}());

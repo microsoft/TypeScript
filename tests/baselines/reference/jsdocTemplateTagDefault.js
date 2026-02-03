@@ -74,13 +74,13 @@ function f3(a, b) {}
  * @typedef {[T]} A
  */
 /** @type {A} */ // ok, default for `T` in `A` is `string`
-const aDefault1 = [""];
+var aDefault1 = [""];
 /** @type {A} */ // error: `number` is not assignable to string`
-const aDefault2 = [0];
+var aDefault2 = [0];
 /** @type {A<string>} */ // ok, `T` is provided for `A`
-const aString = [""];
+var aString = [""];
 /** @type {A<number>} */ // ok, `T` is provided for `A`
-const aNumber = [0];
+var aNumber = [0];
 /**
  * @template T
  * @template [U=T] - ok: default can reference earlier type parameter

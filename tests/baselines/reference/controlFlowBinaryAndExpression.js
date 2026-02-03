@@ -13,8 +13,8 @@ x; // string | number
 
 
 //// [controlFlowBinaryAndExpression.js]
-let x;
-let cond;
+var x;
+var cond;
 (x = "") && (x = 0);
 x; // string | number
 x = "";

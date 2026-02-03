@@ -36,7 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Component;
 var React = require("react");
 function Component(props) {
-    let condition1;
+    var condition1;
     if (condition1) {
         return (<ChildComponent {...props}/>);
     }
@@ -44,6 +44,7 @@ function Component(props) {
         return (<ChildComponent {...props} property1="NewString"/>);
     }
 }
-function ChildComponent({ property1 }) {
+function ChildComponent(_a) {
+    var property1 = _a.property1;
     return (<span>{property1}</span>);
 }

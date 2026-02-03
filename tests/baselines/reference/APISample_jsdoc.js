@@ -167,21 +167,22 @@ var ts = __importStar(require("typescript"));
 // excerpted from https://github.com/YousefED/typescript-json-schema
 // (converted from a method and modified; for example, `this: any` to compensate, among other changes)
 function parseCommentsIntoDefinition(symbol, definition, otherAnnotations) {
+    var _this = this;
     if (!symbol) {
         return;
     }
     // the comments for a symbol
-    let comments = symbol.getDocumentationComment(undefined);
+    var comments = symbol.getDocumentationComment(undefined);
     if (comments.length) {
-        definition.description = comments.map(comment => comment.kind === "lineBreak" ? comment.text : comment.text.trim().replace(/\r\n/g, "\n")).join("");
+        definition.description = comments.map(function (comment) { return comment.kind === "lineBreak" ? comment.text : comment.text.trim().replace(/\r\n/g, "\n"); }).join("");
     }
     // jsdocs are separate from comments
-    const jsdocs = symbol.getJsDocTags(this.checker);
-    jsdocs.forEach(doc => {
+    var jsdocs = symbol.getJsDocTags(this.checker);
+    jsdocs.forEach(function (doc) {
         // if we have @TJS-... annotations, we have to parse them
-        const { name, text } = doc;
-        if (this.userValidationKeywords[name]) {
-            definition[name] = this.parseValue(text);
+        var name = doc.name, text = doc.text;
+        if (_this.userValidationKeywords[name]) {
+            definition[name] = _this.parseValue(text);
         }
         else {
             // special annotations
@@ -190,16 +191,17 @@ function parseCommentsIntoDefinition(symbol, definition, otherAnnotations) {
     });
 }
 function getAnnotations(node) {
-    const symbol = node.symbol;
+    var _this = this;
+    var symbol = node.symbol;
     if (!symbol) {
         return undefined;
     }
-    const jsDocTags = symbol.getJsDocTags(this.checker);
+    var jsDocTags = symbol.getJsDocTags(this.checker);
     if (!jsDocTags || !jsDocTags.length) {
         return undefined;
     }
-    const annotations = jsDocTags.reduce((result, jsDocTag) => {
-        const value = this.parseJsDocTag(jsDocTag);
+    var annotations = jsDocTags.reduce(function (result, jsDocTag) {
+        var value = _this.parseJsDocTag(jsDocTag);
         if (value !== undefined) {
             result[jsDocTag.name] = value;
         }
@@ -213,12 +215,13 @@ function parseSpecificTags(node) {
         return ts.getJSDocParameterTags(node);
     }
     if (node.kind === ts.SyntaxKind.FunctionDeclaration) {
-        const func = node;
+        var func = node;
         if (ts.hasJSDocParameterTags(func)) {
-            const flat = [];
-            for (const tags of func.parameters.map(ts.getJSDocParameterTags)) {
+            var flat = [];
+            for (var _i = 0, _a = func.parameters.map(ts.getJSDocParameterTags); _i < _a.length; _i++) {
+                var tags = _a[_i];
                 if (tags)
-                    flat.push(...tags);
+                    flat.push.apply(flat, tags);
             }
             return flat;
         }
@@ -228,7 +231,7 @@ function getReturnTypeFromJSDoc(node) {
     if (node.kind === ts.SyntaxKind.FunctionDeclaration) {
         return ts.getJSDocReturnType(node);
     }
-    let type = ts.getJSDocType(node);
+    var type = ts.getJSDocType(node);
     if (type && type.kind === ts.SyntaxKind.FunctionType) {
         return type.type;
     }
@@ -237,11 +240,11 @@ function getAllTags(node) {
     ts.getJSDocTags(node);
 }
 function getSomeOtherTags(node) {
-    const tags = [];
+    var tags = [];
     tags.push(ts.getJSDocAugmentsTag(node));
     tags.push(ts.getJSDocClassTag(node));
     tags.push(ts.getJSDocReturnTag(node));
-    const type = ts.getJSDocTypeTag(node);
+    var type = ts.getJSDocTypeTag(node);
     if (type) {
         tags.push(type);
     }

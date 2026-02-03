@@ -16,19 +16,25 @@ module M1.M2 {
 }
 
 //// [parserSuperExpression1.js]
-class C {
-    foo() {
-        super.foo();
+var C = /** @class */ (function () {
+    function C() {
     }
-}
+    C.prototype.foo = function () {
+        _super.prototype.foo.call(this);
+    };
+    return C;
+}());
 var M1;
 (function (M1) {
     var M2;
     (function (M2) {
-        class C {
-            foo() {
-                super.foo();
+        var C = /** @class */ (function () {
+            function C() {
             }
-        }
+            C.prototype.foo = function () {
+                _super.prototype.foo.call(this);
+            };
+            return C;
+        }());
     })(M2 = M1.M2 || (M1.M2 = {}));
 })(M1 || (M1 = {}));

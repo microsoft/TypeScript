@@ -25,13 +25,14 @@ class Foo {
 
 
 //// [asiInES6Classes.js]
-class Foo {
-    constructor() {
+var Foo = /** @class */ (function () {
+    function Foo() {
         this.defaults = {
             done: false
         };
     }
-    bar() {
+    Foo.prototype.bar = function () {
         return 3;
-    }
-}
+    };
+    return Foo;
+}());

@@ -23,8 +23,11 @@ export { x } from "./server";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.m = exports.c = void 0;
-class c {
-}
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
 exports.c = c;
 var m;
 (function (m) {

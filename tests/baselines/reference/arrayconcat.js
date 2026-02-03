@@ -31,8 +31,10 @@ class parser {
 }
 
 //// [arrayconcat.js]
-class parser {
-    m() {
+var parser = /** @class */ (function () {
+    function parser() {
+    }
+    parser.prototype.m = function () {
         this.options = this.options.sort(function (a, b) {
             var aName = a.name.toLowerCase();
             var bName = b.name.toLowerCase();
@@ -46,5 +48,6 @@ class parser {
                 return 0;
             }
         });
-    }
-}
+    };
+    return parser;
+}());

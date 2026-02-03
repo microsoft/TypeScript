@@ -35,13 +35,16 @@ class Y implements X {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function f(arg) {
-    let x = null;
-    let y = null;
+    var x = null;
+    var y = null;
     x = y; // is err, should be ok
     y = x; // is err, should be ok
 }
-class Y {
-    decode(ctor) {
-        throw new Error();
+var Y = /** @class */ (function () {
+    function Y() {
     }
-}
+    Y.prototype.decode = function (ctor) {
+        throw new Error();
+    };
+    return Y;
+}());

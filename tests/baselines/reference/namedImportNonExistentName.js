@@ -20,7 +20,7 @@ c;
 
 //// [foo2.js]
 "use strict";
-let x;
+var x;
 module.exports = x;
 //// [bar.js]
 "use strict";

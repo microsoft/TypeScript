@@ -31,10 +31,10 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-const obj = {
+var obj = {
     foo: 'bar',
     baz: 'qux',
     quux: 'quuz',
 };
-const { foo } = obj, rest = __rest(obj, ["foo"]);
+var foo = obj.foo, rest = __rest(obj, ["foo"]);
 delete rest.baz;

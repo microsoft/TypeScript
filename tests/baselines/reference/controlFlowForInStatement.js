@@ -21,11 +21,11 @@ x; // RegExp | string | number | boolean
 
 
 //// [controlFlowForInStatement.js]
-let x;
-let obj;
-let cond;
+var x;
+var obj;
+var cond;
 x = /a/;
-for (let y in obj) {
+for (var y in obj) {
     x = y;
     if (cond) {
         x = 42;

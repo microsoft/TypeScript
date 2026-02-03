@@ -22,17 +22,20 @@ class C {
 
 
 //// [classStaticBlock2.js]
-const a = 1;
-const b = 2;
-class C {
-}
-(() => {
-    const a = 11;
+var a = 1;
+var b = 2;
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+(function () {
+    var a = 11;
     a;
     b;
 })();
-(() => {
-    const a = 11;
+(function () {
+    var a = 11;
     a;
     b;
 })();

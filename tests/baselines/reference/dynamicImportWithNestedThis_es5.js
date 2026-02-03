@@ -59,15 +59,16 @@ var __importStar = (this && this.__importStar) || (function () {
     "use strict";
     var __syncRequire = typeof module === "object" && typeof module.exports === "object";
     // https://github.com/Microsoft/TypeScript/issues/17564
-    class C {
-        constructor() {
+    var C = /** @class */ (function () {
+        function C() {
             this._path = './other';
         }
-        dynamic() {
+        C.prototype.dynamic = function () {
             var _a;
             return _a = this._path, __syncRequire ? Promise.resolve().then(function () { return __importStar(require(_a)); }) : new Promise(function (resolve_1, reject_1) { require([_a], resolve_1, reject_1); }).then(__importStar);
-        }
-    }
-    const c = new C();
+        };
+        return C;
+    }());
+    var c = new C();
     c.dynamic();
 });

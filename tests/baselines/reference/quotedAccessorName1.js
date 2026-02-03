@@ -6,6 +6,13 @@ class C {
 }
 
 //// [quotedAccessorName1.js]
-class C {
-    get "foo"() { return 0; }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    Object.defineProperty(C.prototype, "foo", {
+        get: function () { return 0; },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());

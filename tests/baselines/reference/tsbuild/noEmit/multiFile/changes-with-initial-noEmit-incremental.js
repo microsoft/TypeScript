@@ -333,11 +333,12 @@ Found 1 error.
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
-class classC {
-    constructor() {
+var classC = /** @class */ (function () {
+    function classC() {
         this.prop = 1;
     }
-}
+    return classC;
+}());
 exports.classC = classC;
 
 
@@ -353,11 +354,12 @@ new indirectClass_1.indirectClass().classC.prop;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.indirectClass = void 0;
 var class_1 = require("./class");
-class indirectClass {
-    constructor() {
+var indirectClass = /** @class */ (function () {
+    function indirectClass() {
         this.classC = new class_1.classC();
     }
-}
+    return indirectClass;
+}());
 exports.indirectClass = indirectClass;
 
 
@@ -377,7 +379,11 @@ function writeLog(s) {
 
 
 //// [/home/src/workspaces/project/src/noChangeFileWithEmitSpecificError.js]
-function someFunc(arguments, ...rest) {
+function someFunc(arguments) {
+    var rest = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
+    }
 }
 
 
@@ -604,11 +610,12 @@ Found 3 errors.
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
-class classC {
-    constructor() {
+var classC = /** @class */ (function () {
+    function classC() {
         this.prop1 = 1;
     }
-}
+    return classC;
+}());
 exports.classC = classC;
 
 
@@ -910,11 +917,12 @@ Found 1 error.
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
-class classC {
-    constructor() {
+var classC = /** @class */ (function () {
+    function classC() {
         this.prop = 1;
     }
-}
+    return classC;
+}());
 exports.classC = classC;
 
 

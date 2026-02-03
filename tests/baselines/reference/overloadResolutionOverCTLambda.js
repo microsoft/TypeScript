@@ -6,4 +6,4 @@ foo(a => a); // can not convert (number)=>bool to (number)=>number
 
 //// [overloadResolutionOverCTLambda.js]
 function foo(b) { }
-foo(a => a); // can not convert (number)=>bool to (number)=>number
+foo(function (a) { return a; }); // can not convert (number)=>bool to (number)=>number

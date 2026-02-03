@@ -7,6 +7,9 @@ class C {
 }
 
 //// [ClassDeclaration22.js]
-class C {
-    "bar"() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype["bar"] = function () { };
+    return C;
+}());

@@ -12,9 +12,12 @@ module M {
 //// [parserErrorRecovery_ClassElement3.js]
 var M;
 (function (M) {
-    class C {
-    }
-    let E;
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
+    var E;
     (function (E) {
     })(E || (E = {}));
 })(M || (M = {}));

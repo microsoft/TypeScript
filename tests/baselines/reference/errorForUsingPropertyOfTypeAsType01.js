@@ -54,8 +54,11 @@ var Test1;
 })(Test1 || (Test1 = {}));
 var Test2;
 (function (Test2) {
-    class Foo {
-    }
+    var Foo = /** @class */ (function () {
+        function Foo() {
+        }
+        return Foo;
+    }());
     Test2.Foo = Foo;
     var x = "";
     var y = "";

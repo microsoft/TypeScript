@@ -65,4 +65,4 @@ exports.Drink = __importStar(require("./constants"));
 Object.defineProperty(exports, "__esModule", { value: true });
 var drink_1 = require("./drink");
 // 'Drink' only refers to a type, but is being used as a value here
-const x = drink_1.Drink.TEA;
+var x = drink_1.Drink.TEA;

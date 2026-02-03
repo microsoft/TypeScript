@@ -38,12 +38,13 @@ var M;
     function f() {
         var inner = outer; // Ok
     }
-    class C {
-        constructor() {
+    var C = /** @class */ (function () {
+        function C() {
             var inner = outer; // Ok
         }
-    }
-    let X;
+        return C;
+    }());
+    var X;
     (function (X) {
         var inner = outer; // Error: outer not visible
     })(X || (X = {}));

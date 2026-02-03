@@ -39,36 +39,47 @@ class Contextual {
 
 
 //// [thisTypeInAccessors.js]
-const explicit = {
+var explicit = {
     n: 12,
     get x() { return this.n; },
     set x(n) { this.n = n; }
 };
-const copiedFromGetter = {
+var copiedFromGetter = {
     n: 14,
     get x() { return this.n; },
     set x(n) { this.n = n; }
 };
-const copiedFromSetter = {
+var copiedFromSetter = {
     n: 15,
     get x() { return this.n; },
     set x(n) { this.n = n; }
 };
-const copiedFromGetterUnannotated = {
+var copiedFromGetterUnannotated = {
     n: 16,
     get x() { return this.n; },
     set x(n) { this.n = n; }
 };
-class Explicit {
-    constructor() {
+var Explicit = /** @class */ (function () {
+    function Explicit() {
         this.n = 17;
     }
-    get x() { return this.n; }
-    set x(n) { this.n = n; }
-}
-class Contextual {
-    constructor() {
+    Object.defineProperty(Explicit.prototype, "x", {
+        get: function () { return this.n; },
+        set: function (n) { this.n = n; },
+        enumerable: false,
+        configurable: true
+    });
+    return Explicit;
+}());
+var Contextual = /** @class */ (function () {
+    function Contextual() {
         this.n = 21;
     }
-    get x() { return this.n; } // inside a class, so already correct
-}
+    Object.defineProperty(Contextual.prototype, "x", {
+        get: function () { return this.n; } // inside a class, so already correct
+        ,
+        enumerable: false,
+        configurable: true
+    });
+    return Contextual;
+}());

@@ -41,7 +41,7 @@ Output::
 
 
 //// [/home/src/workspaces/project/class1.js]
-const a = 1;
+var a = 1;
 console.log(a);
 
 

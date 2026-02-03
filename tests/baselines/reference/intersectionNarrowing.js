@@ -76,5 +76,5 @@ function f4(x) {
     }
 }
 function f5(x) {
-    const t1 = x === "hello"; // Should be an error
+    var t1 = x === "hello"; // Should be an error
 }

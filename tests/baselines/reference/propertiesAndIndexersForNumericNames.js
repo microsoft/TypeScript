@@ -45,8 +45,8 @@ class C {
 
 
 //// [propertiesAndIndexersForNumericNames.js]
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         // These all have numeric names; they should error
         // because their types are not compatible with the numeric indexer.
         this["1"] = "number"; // Error
@@ -82,4 +82,5 @@ class C {
         this["0b101101001010"] = "explicit binary"; // No error
         this["0.000000000000000000012"] = "should've been in exponential form"; // No error
     }
-}
+    return C;
+}());

@@ -13,11 +13,15 @@ module M {
 //// [nestedSelf.js]
 var M;
 (function (M) {
-    class C {
-        constructor() {
+    var C = /** @class */ (function () {
+        function C() {
             this.n = 42;
         }
-        foo() { [1, 2, 3].map((x) => { return this.n * x; }); }
-    }
+        C.prototype.foo = function () {
+            var _this = this;
+            [1, 2, 3].map(function (x) { return _this.n * x; });
+        };
+        return C;
+    }());
     M.C = C;
 })(M || (M = {}));

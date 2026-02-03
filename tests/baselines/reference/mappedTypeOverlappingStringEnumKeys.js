@@ -52,7 +52,7 @@ var AlienAnimalTypes;
     AlienAnimalTypes["CAT"] = "cat";
 })(AlienAnimalTypes || (AlienAnimalTypes = {}));
 ;
-const catMap = {
+var catMap = {
     cat: [
         { type: TerrestrialAnimalTypes.CAT, address: "" },
         { type: AlienAnimalTypes.CAT, planet: "" }

@@ -18,8 +18,12 @@ export class MyComponent {
 
 //// [deps.js]
 export function Input() { }
-export class TemplateRef {
-}
+var TemplateRef = /** @class */ (function () {
+    function TemplateRef() {
+    }
+    return TemplateRef;
+}());
+export { TemplateRef };
 //// [index.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -31,16 +35,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Input, TemplateRef } from './deps';
-let MyComponent = (() => {
-    class MyComponent {
-        get ref() { return this._ref; }
-        set ref(value) { this._ref = value; }
+var MyComponent = /** @class */ (function () {
+    function MyComponent() {
     }
+    Object.defineProperty(MyComponent.prototype, "ref", {
+        get: function () { return this._ref; },
+        set: function (value) { this._ref = value; },
+        enumerable: false,
+        configurable: true
+    });
     __decorate([
         Input(),
         __metadata("design:type", TemplateRef),
         __metadata("design:paramtypes", [TemplateRef])
     ], MyComponent.prototype, "ref", null);
     return MyComponent;
-})();
+}());
 export { MyComponent };

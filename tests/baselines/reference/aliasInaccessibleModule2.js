@@ -14,10 +14,13 @@ module M {
 //// [aliasInaccessibleModule2.js]
 var M;
 (function (M) {
-    let N;
+    var N;
     (function (N) {
-        class C {
-        }
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
     })(N || (N = {}));
     var R = N;
     M.X = R;

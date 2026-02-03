@@ -25,16 +25,19 @@ module Test {
 "use strict";
 var Test;
 (function (Test) {
-    class Bug {
-        getName() {
-            return "name";
+    var Bug = /** @class */ (function () {
+        function Bug() {
         }
-        bug() {
+        Bug.prototype.getName = function () {
+            return "name";
+        };
+        Bug.prototype.bug = function () {
             var name = null;
             if ((name = this.getName()).length > 0) {
                 console.log(name);
             }
-        }
-    }
+        };
+        return Bug;
+    }());
     Test.Bug = Bug;
 })(Test || (Test = {}));

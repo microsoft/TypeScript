@@ -8,8 +8,9 @@ class C {
 }
 
 //// [incorrectClassOverloadChain.js]
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.x = 1;
     }
-}
+    return C;
+}());

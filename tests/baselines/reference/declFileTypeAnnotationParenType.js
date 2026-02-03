@@ -12,12 +12,15 @@ var k: (() => c) | string = (() => new c()) || "";
 var l = (() => new c()) || "";
 
 //// [declFileTypeAnnotationParenType.js]
-class c {
-}
-var x = [() => new c()];
-var y = [() => new c()];
-var k = (() => new c()) || "";
-var l = (() => new c()) || "";
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
+var x = [function () { return new c(); }];
+var y = [function () { return new c(); }];
+var k = (function () { return new c(); }) || "";
+var l = (function () { return new c(); }) || "";
 
 
 //// [declFileTypeAnnotationParenType.d.ts]

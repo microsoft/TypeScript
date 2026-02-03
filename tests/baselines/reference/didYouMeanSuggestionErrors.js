@@ -31,27 +31,27 @@ suite("another suite", () => {
 });
 
 //// [didYouMeanSuggestionErrors.js]
-describe("my test suite", () => {
-    it("should run", () => {
-        const a = $(".thing");
+describe("my test suite", function () {
+    it("should run", function () {
+        var a = $(".thing");
     });
 });
-suite("another suite", () => {
-    test("everything else", () => {
+suite("another suite", function () {
+    test("everything else", function () {
         console.log(process.env);
         document.createElement("div");
-        const x = require("fs");
-        const y = Buffer.from([]);
-        const z = module.exports;
-        const a = new Map();
-        const b = new Set();
-        const c = new WeakMap();
-        const d = new WeakSet();
-        const e = Symbol();
-        const f = Promise.resolve(0);
-        const i = null;
-        const j = null;
-        const k = null;
-        const l = null;
+        var x = require("fs");
+        var y = Buffer.from([]);
+        var z = module.exports;
+        var a = new Map();
+        var b = new Set();
+        var c = new WeakMap();
+        var d = new WeakSet();
+        var e = Symbol();
+        var f = Promise.resolve(0);
+        var i = null;
+        var j = null;
+        var k = null;
+        var l = null;
     });
 });

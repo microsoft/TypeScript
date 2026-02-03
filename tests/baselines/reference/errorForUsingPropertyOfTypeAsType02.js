@@ -11,6 +11,6 @@ namespace Test1 {
 var Test1;
 (function (Test1) {
     function foo(x) {
-        let a = x.abc;
+        var a = x.abc;
     }
 })(Test1 || (Test1 = {}));

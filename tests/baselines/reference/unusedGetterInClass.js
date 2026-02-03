@@ -12,10 +12,17 @@ class Employee {
 }
 
 //// [unusedGetterInClass.js]
-class Employee {
-    get fullName() {
-        return this._fullName;
+var Employee = /** @class */ (function () {
+    function Employee() {
     }
-    // Will not also error on the setter
-    set fullName(_) { }
-}
+    Object.defineProperty(Employee.prototype, "fullName", {
+        get: function () {
+            return this._fullName;
+        },
+        // Will not also error on the setter
+        set: function (_) { },
+        enumerable: false,
+        configurable: true
+    });
+    return Employee;
+}());

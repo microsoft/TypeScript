@@ -12,16 +12,18 @@ for (const row of ['1', '2', '3', '4', '5']) {
 }
 
 //// [classInConvertedLoopES5.js]
-const classesByRow = {};
-for (const row of ['1', '2', '3', '4', '5']) {
-    let RowClass = (() => {
-        class RowClass {
-            constructor() {
-                this.row = row;
-            }
+var classesByRow = {};
+var _loop_1 = function (row) {
+    var RowClass = /** @class */ (function () {
+        function RowClass() {
+            this.row = row;
         }
-        RowClass.factory = () => new RowClass();
+        RowClass.factory = function () { return new RowClass(); };
         return RowClass;
-    })();
+    }());
     classesByRow[row] = RowClass;
+};
+for (var _i = 0, _a = ['1', '2', '3', '4', '5']; _i < _a.length; _i++) {
+    var row = _a[_i];
+    _loop_1(row);
 }

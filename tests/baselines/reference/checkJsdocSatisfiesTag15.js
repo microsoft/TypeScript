@@ -51,7 +51,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn6 = exports.fn5 = exports.fn4 = exports.fn3 = exports.fn2 = exports.v2 = exports.v1 = exports.fn1 = void 0;
 exports.fn7 = fn7;
 /** @satisfies {(uuid: string) => void} */
-const fn1 = uuid => { };
+var fn1 = function (uuid) { };
 exports.fn1 = fn1;
 /** @typedef {Parameters<typeof fn1>} Foo */
 /** @type Foo */
@@ -59,34 +59,34 @@ exports.v1 = ['abc'];
 /** @type Foo */
 exports.v2 = [123]; // error
 /** @satisfies {(a: string, ...args: never) => void} */
-const fn2 = (a, b) => { };
+var fn2 = function (a, b) { };
 exports.fn2 = fn2;
 /**
  * @satisfies {(a: string, ...args: never) => void}
  * @param {string} a
  */
-const fn3 = (a, b) => { };
+var fn3 = function (a, b) { };
 exports.fn3 = fn3;
 /**
  * @satisfies {(a: string, ...args: never) => void}
  * @param {string} a
  * @param {number} b
  */
-const fn4 = (a, b) => { };
+var fn4 = function (a, b) { };
 exports.fn4 = fn4;
 /**
  * @satisfies {(a: string, ...args: number[]) => void}
  * @param {string} a
  * @param {string} b
  */
-const fn5 = (a, b) => { };
+var fn5 = function (a, b) { };
 exports.fn5 = fn5;
 /**
  * @satisfies {(a: string, ...args: number[]) => void}
  * @param {string} a
  * @param {string | number} b
  */
-const fn6 = (a, b) => { };
+var fn6 = function (a, b) { };
 exports.fn6 = fn6;
 /** @satisfies {(uuid: string) => void} */
 function fn7(uuid) { }

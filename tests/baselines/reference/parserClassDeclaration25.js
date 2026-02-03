@@ -12,5 +12,8 @@ class List<U> implements IList<U> {
 
 
 //// [parserClassDeclaration25.js]
-class List {
-}
+var List = /** @class */ (function () {
+    function List() {
+    }
+    return List;
+}());

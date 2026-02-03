@@ -19,11 +19,12 @@ if(foo.answer === 42){
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    class Foo {
-        constructor() {
+    var Foo = /** @class */ (function () {
+        function Foo() {
             this.test = "test";
         }
-    }
+        return Foo;
+    }());
     (function (Foo) {
         Foo.answer = 42;
     })(Foo || (Foo = {}));

@@ -13,6 +13,9 @@ class C {
 
 
 //// [esDecorators-classDeclaration-fields-nonStaticAmbient.js]
-const field3 = "field3";
-class C {
-}
+var field3 = "field3";
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

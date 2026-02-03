@@ -194,25 +194,31 @@ type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
 function f1(s) {
     return { a: 1, b: s };
 }
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.x = 0;
         this.y = 0;
     }
-}
-class Abstract {
-    constructor() {
+    return C;
+}());
+var Abstract = /** @class */ (function () {
+    function Abstract() {
         this.x = 0;
         this.y = 0;
     }
-}
-const z1 = ex.customClass;
-const z2 = ex.obj.nested.attr;
+    return Abstract;
+}());
+var z1 = ex.customClass;
+var z2 = ex.obj.nested.attr;
 // Repros from #26856
-function invoker(key, ...args) {
-    return (obj) => obj[key](...args);
+function invoker(key) {
+    var args = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
+    }
+    return function (obj) { return obj[key].apply(obj, args); };
 }
-const result = invoker('test', true)({ test: (a) => 123 });
+var result = invoker('test', true)({ test: function (a) { return 123; } });
 
 
 //// [inferTypes1.d.ts]

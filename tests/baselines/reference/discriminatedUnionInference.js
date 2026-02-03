@@ -25,5 +25,5 @@ let x2 = foo({ kind: 'b', data: [1, 2] });  // number
 //// [discriminatedUnionInference.js]
 "use strict";
 // Repro from #28862
-let x1 = foo({ kind: 'a', data: 42 }); // number
-let x2 = foo({ kind: 'b', data: [1, 2] }); // number
+var x1 = foo({ kind: 'a', data: 42 }); // number
+var x2 = foo({ kind: 'b', data: [1, 2] }); // number

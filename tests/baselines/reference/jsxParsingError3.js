@@ -29,14 +29,14 @@ let x6 = <div>>{"foo"}</div>;
 
 //// [file.jsx]
 //// [Error1.jsx]
-let x1 = <div>}</div>;
+var x1 = <div>}</div>;
 //// [Error2.jsx]
-let x2 = <div>></div>;
+var x2 = <div>></div>;
 //// [Error3.jsx]
-let x3 = <div>{"foo"}}</div>;
+var x3 = <div>{"foo"}}</div>;
 //// [Error4.jsx]
-let x4 = <div>{"foo"}></div>;
+var x4 = <div>{"foo"}></div>;
 //// [Error5.jsx]
-let x5 = <div>}{"foo"}</div>;
+var x5 = <div>}{"foo"}</div>;
 //// [Error6.jsx]
-let x6 = <div>>{"foo"}</div>;
+var x6 = <div>>{"foo"}</div>;

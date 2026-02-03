@@ -34,27 +34,42 @@ declare module N {
 
 
 //// [file1.js]
-class C1 {
-}
-class C2 {
-}
+var C1 = /** @class */ (function () {
+    function C1() {
+    }
+    return C1;
+}());
+var C2 = /** @class */ (function () {
+    function C2() {
+    }
+    return C2;
+}());
 function f() { }
 var v = 3;
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 var N;
 (function (N) {
-    let F;
+    var F;
     (function (F) {
         var t;
     })(F = N.F || (N.F = {}));
 })(N || (N = {}));
 //// [file2.js]
-class I {
-} // error -- cannot merge interface with non-ambient class
+var I = /** @class */ (function () {
+    function I() {
+    }
+    return I;
+}()); // error -- cannot merge interface with non-ambient class
 function C2() { } // error -- cannot merge function with non-ambient class
-class f {
-} // error -- cannot merge function with non-ambient class
+var f = /** @class */ (function () {
+    function f() {
+    }
+    return f;
+}()); // error -- cannot merge function with non-ambient class
 var v = 3;
 var Foo;
 (function (Foo) {

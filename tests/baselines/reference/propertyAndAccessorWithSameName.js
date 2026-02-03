@@ -22,17 +22,39 @@ class E {
 }
 
 //// [propertyAndAccessorWithSameName.js]
-class C {
-    get x() {
-        return 1;
+var C = /** @class */ (function () {
+    function C() {
     }
-}
-class D {
-    set x(v) { } // error
-}
-class E {
-    get x() {
-        return 1;
+    Object.defineProperty(C.prototype, "x", {
+        get: function () {
+            return 1;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
     }
-    set x(v) { }
-}
+    Object.defineProperty(D.prototype, "x", {
+        set: function (v) { } // error
+        ,
+        enumerable: false,
+        configurable: true
+    });
+    return D;
+}());
+var E = /** @class */ (function () {
+    function E() {
+    }
+    Object.defineProperty(E.prototype, "x", {
+        get: function () {
+            return 1;
+        },
+        set: function (v) { },
+        enumerable: false,
+        configurable: true
+    });
+    return E;
+}());

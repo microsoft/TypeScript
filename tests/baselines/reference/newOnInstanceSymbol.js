@@ -6,7 +6,10 @@ var x = new C(); // should be ok
 new x(); // should error
 
 //// [newOnInstanceSymbol.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var x = new C(); // should be ok
 new x(); // should error

@@ -11,20 +11,21 @@ class C {
 
 
 //// [typeOfThisInStaticMembers12.js]
-let C = (() => {
-    var _a, _b, _c, _d;
-    class C {
+var C = /** @class */ (function () {
+    function C() {
     }
+    var _a, _b, _c, _d;
     _a = C;
     C.c = "foo";
-    C.bar = (_b = class Inner {
-            constructor() {
+    C.bar = (_b = /** @class */ (function () {
+            function Inner() {
                 this[_d] = 123;
             }
-        },
+            return Inner;
+        }()),
         _c = _a.c,
         _d = _a.c,
         _b[_c] = 123,
         _b);
     return C;
-})();
+}());

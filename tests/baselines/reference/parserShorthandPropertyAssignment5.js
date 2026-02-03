@@ -6,4 +6,4 @@ var obj = { greet? };
 
 //// [parserShorthandPropertyAssignment5.js]
 var greet = "hello";
-var obj = { greet };
+var obj = { greet: greet };

@@ -114,9 +114,12 @@ var m1b = 1; // error
 var m1c = 1; // Should be allowed
 var m1d;
 (function (m1d) {
-    class I {
-        foo() { }
-    }
+    var I = /** @class */ (function () {
+        function I() {
+        }
+        I.prototype.foo = function () { };
+        return I;
+    }());
     m1d.I = I;
 })(m1d || (m1d = {}));
 var m1d = 1; // error
@@ -145,29 +148,44 @@ function m2f() { }
 function m2g() { }
 ;
 (function (m2g) {
-    class C {
-        foo() { }
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        C.prototype.foo = function () { };
+        return C;
+    }());
     m2g.C = C;
 })(m2g || (m2g = {}));
-class m3 {
-} // ok since the module is not instantiated
+var m3 = /** @class */ (function () {
+    function m3() {
+    }
+    return m3;
+}()); // ok since the module is not instantiated
 var m3a;
 (function (m3a) {
     var y = 2;
 })(m3a || (m3a = {}));
-class m3a {
-    foo() { }
-} // error, class isn't ambient or declared before the module
-class m3b {
-    foo() { }
-}
+var m3a = /** @class */ (function () {
+    function m3a() {
+    }
+    m3a.prototype.foo = function () { };
+    return m3a;
+}()); // error, class isn't ambient or declared before the module
+var m3b = /** @class */ (function () {
+    function m3b() {
+    }
+    m3b.prototype.foo = function () { };
+    return m3b;
+}());
 (function (m3b) {
     var y = 2;
 })(m3b || (m3b = {}));
-class m3c {
-    foo() { }
-}
+var m3c = /** @class */ (function () {
+    function m3c() {
+    }
+    m3c.prototype.foo = function () { };
+    return m3c;
+}());
 (function (m3c) {
     m3c.y = 2;
 })(m3c || (m3c = {}));
@@ -181,9 +199,12 @@ var m3e;
 })(m3e || (m3e = {}));
 var m3g;
 (function (m3g) {
-    class C {
-        foo() { }
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        C.prototype.foo = function () { };
+        return C;
+    }());
     m3g.C = C;
 })(m3g || (m3g = {}));
 var m4;
@@ -209,9 +230,12 @@ var m4c;
 })(m4c || (m4c = {}));
 var m4d;
 (function (m4d) {
-    class C {
-        foo() { }
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        C.prototype.foo = function () { };
+        return C;
+    }());
 })(m4d || (m4d = {}));
 (function (m4d) {
     m4d[m4d["One"] = 0] = "One";

@@ -14,12 +14,12 @@ if (isNumber((otherValue(), value))) {
 }
 
 //// [controlFlowCommaExpressionFunctionCall.js]
-const otherValue = () => true;
-const value = null;
+var otherValue = function () { return true; };
+var value = null;
 function isNumber(obj) {
     return true; // method implementation irrelevant
 }
 // Bad case - fails
 if (isNumber((otherValue(), value))) {
-    const b = value; // string | number , but should be number
+    var b = value; // string | number , but should be number
 }

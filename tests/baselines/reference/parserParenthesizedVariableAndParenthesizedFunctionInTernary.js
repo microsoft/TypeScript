@@ -7,6 +7,6 @@ const d = true ? (a) : ((function() {}));
 
 
 //// [parserParenthesizedVariableAndParenthesizedFunctionInTernary.js]
-let a;
-const c = true ? (a) : (function () { });
-const d = true ? (a) : ((function () { }));
+var a;
+var c = true ? (a) : (function () { });
+var d = true ? (a) : ((function () { }));

@@ -69,10 +69,13 @@ foo();
 function foo2(x, y) { }
 foo2(1);
 foo2(1, 2);
-class C {
-    foo(x) { }
-    foo2(x, y) { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.foo = function (x) { };
+    C.prototype.foo2 = function (x, y) { };
+    return C;
+}());
 var c;
 c.foo();
 c.foo(1);

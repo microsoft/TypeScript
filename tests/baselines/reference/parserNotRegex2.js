@@ -13,5 +13,5 @@ B(
 
 
 //// [parserNotRegex2.js]
-const x = (A / 2);
-B(C(), () => { }, () => { });
+var x = (A / 2);
+B(C(), function () { }, function () { });

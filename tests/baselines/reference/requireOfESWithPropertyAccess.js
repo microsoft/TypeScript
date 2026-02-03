@@ -16,13 +16,13 @@ export { x }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-const x = {
+var x = {
     grey: {}
 };
 exports.x = x;
 //// [main.js]
 "use strict";
-const x = require('./ch').x;
+var x = require('./ch').x;
 x;
 x.grey;
 x.x.grey;

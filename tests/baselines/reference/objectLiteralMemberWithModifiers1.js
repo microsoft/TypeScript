@@ -4,4 +4,4 @@
 var v = { public foo() { } }
 
 //// [objectLiteralMemberWithModifiers1.js]
-var v = { foo() { } };
+var v = { foo: function () { } };

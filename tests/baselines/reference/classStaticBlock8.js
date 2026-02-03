@@ -54,9 +54,12 @@ function foo (v: number) {
 //// [classStaticBlock8.js]
 function foo(v) {
     label: while (v) {
-        class C {
-        }
-        (() => {
+        var C_1 = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
+        (function () {
             if (v === 1) {
                 break label;
             }
@@ -83,9 +86,12 @@ function foo(v) {
             continue;
         }
     }
-    class C {
-    }
-    (() => {
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
+    (function () {
         outer: break outer; // valid
         loop: while (v) {
             if (v === 1)

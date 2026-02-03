@@ -131,7 +131,7 @@ else {
 }
 d.r;
 // test function expressions too
-const g = function () {
+var g = function () {
 };
 if (!!false) {
     g.expando = 1;

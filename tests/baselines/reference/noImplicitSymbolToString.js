@@ -51,34 +51,34 @@ function getKey2<S extends string>(key: S) {
 
 //// [noImplicitSymbolToString.js]
 // Fix #19666
-let symbol;
-let str = "hello ";
-const templateStr = `hello ${symbol}`;
-const appendStr = "hello " + symbol;
+var symbol;
+var str = "hello ";
+var templateStr = "hello ".concat(symbol);
+var appendStr = "hello " + symbol;
 str += symbol;
-let symbolUnionNumber;
-let symbolUnionString;
-const templateStrUnion = `union with number ${symbolUnionNumber} and union with string ${symbolUnionString}`;
+var symbolUnionNumber;
+var symbolUnionString;
+var templateStrUnion = "union with number ".concat(symbolUnionNumber, " and union with string ").concat(symbolUnionString);
 function getKey(key) {
-    return `${key} is the key`;
+    return "".concat(key, " is the key");
 }
 function getKey1(key) {
-    let s1;
-    `${s1}`;
+    var s1;
+    "".concat(s1);
     s1 + '';
     +s1;
-    let s2;
-    `${s2}`;
+    var s2;
+    "".concat(s2);
     s2 + '';
     +s2;
 }
 function getKey2(key) {
-    let s1;
-    `${s1}`;
+    var s1;
+    "".concat(s1);
     s1 + '';
     +s1;
-    let s2;
-    `${s2}`;
+    var s2;
+    "".concat(s2);
     s2 + '';
     +s2;
 }

@@ -26,20 +26,22 @@ class Bar {
 
 
 //// [propertyOrdering.js]
-class Foo {
-    constructor(store) {
+var Foo = /** @class */ (function () {
+    function Foo(store) {
         this._store = store; // no repro if this is first line in class body
     }
-    foo() {
+    Foo.prototype.foo = function () {
         return this._store.length; // shouldn't be an error
-    }
-    bar() { return this.store; } // should be an error
-}
-class Bar {
-    foo() {
-        return this._store.length; // shouldn't be an error
-    }
-    constructor(store) {
+    };
+    Foo.prototype.bar = function () { return this.store; }; // should be an error
+    return Foo;
+}());
+var Bar = /** @class */ (function () {
+    function Bar(store) {
         this._store = store;
     }
-}
+    Bar.prototype.foo = function () {
+        return this._store.length; // shouldn't be an error
+    };
+    return Bar;
+}());

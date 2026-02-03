@@ -8,4 +8,6 @@ for (v of union) { }
 //// [ES5For-ofTypeCheck11.js]
 var union;
 var v;
-for (v of union) { }
+for (var _i = 0, union_1 = union; _i < union_1.length; _i++) {
+    v = union_1[_i];
+}

@@ -17,8 +17,11 @@ y = moduleA; // should be error
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.someClass = void 0;
-class someClass {
-}
+var someClass = /** @class */ (function () {
+    function someClass() {
+    }
+    return someClass;
+}());
 exports.someClass = someClass;
 //// [aliasAssignments_1.js]
 "use strict";

@@ -22,14 +22,14 @@ define("a/inner", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.c = void 0;
-    const c = { x: 12 };
+    var c = { x: 12 };
     exports.c = c;
 });
 define("index", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.d = void 0;
-    const d = { x: 12 };
+    var d = { x: 12 };
     exports.d = d;
 });
 

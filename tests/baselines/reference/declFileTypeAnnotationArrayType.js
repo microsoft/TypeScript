@@ -53,19 +53,31 @@ function foo10() {
 }
 
 //// [declFileTypeAnnotationArrayType.js]
-class c {
-}
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
 var m;
 (function (m) {
-    class c {
-    }
+    var c = /** @class */ (function () {
+        function c() {
+        }
+        return c;
+    }());
     m.c = c;
-    class g {
-    }
+    var g = /** @class */ (function () {
+        function g() {
+        }
+        return g;
+    }());
     m.g = g;
 })(m || (m = {}));
-class g {
-}
+var g = /** @class */ (function () {
+    function g() {
+    }
+    return g;
+}());
 // Just the name
 function foo() {
     return [new c()];
@@ -96,10 +108,10 @@ function foo8() {
 }
 // Array of function types
 function foo9() {
-    return [() => new c()];
+    return [function () { return new c(); }];
 }
 function foo10() {
-    return [() => new c()];
+    return [function () { return new c(); }];
 }
 
 

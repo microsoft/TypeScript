@@ -7,8 +7,9 @@ let C = class {
 
 
 //// [constInClassExpression.js]
-let C = class {
-    constructor() {
+var C = /** @class */ (function () {
+    function class_1() {
         this.a = 4;
     }
-};
+    return class_1;
+}());

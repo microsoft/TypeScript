@@ -9,8 +9,8 @@ x = (100, a => {
 });
 
 //// [contextuallyTypeCommaOperator02.js]
-let x;
-x = (100, a => {
-    const b = a;
+var x;
+x = (100, function (a) {
+    var b = a;
     return b;
 });

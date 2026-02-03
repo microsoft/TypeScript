@@ -29,35 +29,47 @@ let ___: C = new C(); // Error
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = exports.B = exports.A = void 0;
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 exports.A = A;
-class B {
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 exports.B = B;
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 exports.C = C;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 exports.C = C;
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("./b");
-let _ = new A(); // Error
-let __ = new B(); // Error
-let ___ = new b_1.C(); // Ok
+var _ = new A(); // Error
+var __ = new B(); // Error
+var ___ = new b_1.C(); // Ok
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [e.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let _ = new A(); // Error
-let __ = new B(); // Error
-let ___ = new C(); // Error
+var _ = new A(); // Error
+var __ = new B(); // Error
+var ___ = new C(); // Error

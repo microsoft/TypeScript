@@ -11,8 +11,11 @@ var o2: {} = c;
 
 
 //// [classAppearsToHaveMembersOfObject.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var c;
 var r = c.toString();
 var r2 = c.hasOwnProperty('');

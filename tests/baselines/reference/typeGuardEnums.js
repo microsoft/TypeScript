@@ -28,7 +28,7 @@ var E;
 var V;
 (function (V) {
 })(V || (V = {}));
-let x;
+var x;
 if (typeof x === "number") {
     x; // number|E|V
 }

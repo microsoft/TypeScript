@@ -42,4 +42,4 @@ function f3(a, b) {
     a = b;
     b = a;
 }
-const h = f;
+var h = f;

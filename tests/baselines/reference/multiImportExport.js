@@ -27,10 +27,13 @@ export = Adder;
 
 //// [Adder.js]
 "use strict";
-class Adder {
-    add(a, b) {
+var Adder = /** @class */ (function () {
+    function Adder() {
     }
-}
+    Adder.prototype.add = function (a, b) {
+    };
+    return Adder;
+}());
 module.exports = Adder;
 //// [Math.js]
 "use strict";

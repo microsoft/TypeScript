@@ -22,11 +22,20 @@ class I4 {
 
 //// [circularTypeAliasForUnionWithClass.js]
 var v0;
-class I0 {
-}
+var I0 = /** @class */ (function () {
+    function I0() {
+    }
+    return I0;
+}());
 var v3;
-class I3 {
-}
+var I3 = /** @class */ (function () {
+    function I3() {
+    }
+    return I3;
+}());
 var v4;
-class I4 {
-}
+var I4 = /** @class */ (function () {
+    function I4() {
+    }
+    return I4;
+}());

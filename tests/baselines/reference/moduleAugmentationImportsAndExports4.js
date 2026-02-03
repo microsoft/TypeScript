@@ -42,15 +42,21 @@ let d = a.baz().b;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 exports.A = A;
 //// [f2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
-class B {
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 exports.B = B;
 //// [f3.js]
 "use strict";
@@ -61,7 +67,7 @@ f1_1.A.prototype.foo = function () { return undefined; };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./f3");
-let a;
-let b = a.foo().n;
-let c = a.bar().a;
-let d = a.baz().b;
+var a;
+var b = a.foo().n;
+var c = a.bar().a;
+var d = a.baz().b;

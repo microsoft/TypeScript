@@ -35,9 +35,13 @@ export default C; // error
 
 
 //// [a.js]
-export const a = 0;
-export class AClass {
-}
+export var a = 0;
+var AClass = /** @class */ (function () {
+    function AClass() {
+    }
+    return AClass;
+}());
+export { AClass };
 //// [b.js]
 import { a, A, AClass } from "./a";
 import {} from "./a";
@@ -49,8 +53,12 @@ import { AClass } from "./b";
 //// [main4.js]
 export default 1; // ok
 //// [main5.js]
-export default class C {
-} // ok
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}()); // ok
+export default C;
 //// [main6.js]
 export default I; // error
 //// [main7.js]

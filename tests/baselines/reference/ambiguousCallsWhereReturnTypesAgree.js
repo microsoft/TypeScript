@@ -31,18 +31,24 @@ class TestClass2 {
 
 
 //// [ambiguousCallsWhereReturnTypesAgree.js]
-class TestClass {
-    bar(x) {
+var TestClass = /** @class */ (function () {
+    function TestClass() {
     }
-    foo(x) {
+    TestClass.prototype.bar = function (x) {
+    };
+    TestClass.prototype.foo = function (x) {
         this.bar(x); // should not error
+    };
+    return TestClass;
+}());
+var TestClass2 = /** @class */ (function () {
+    function TestClass2() {
     }
-}
-class TestClass2 {
-    bar(x) {
+    TestClass2.prototype.bar = function (x) {
         return 0;
-    }
-    foo(x) {
+    };
+    TestClass2.prototype.foo = function (x) {
         return this.bar(x); // should not error
-    }
-}
+    };
+    return TestClass2;
+}());

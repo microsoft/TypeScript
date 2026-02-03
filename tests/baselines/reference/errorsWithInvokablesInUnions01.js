@@ -25,8 +25,10 @@ export let ctor: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<n
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ctor = exports.blah = void 0;
-let blah = (x) => { };
+var blah = function (x) { };
 exports.blah = blah;
-let ctor = class {
-};
-exports.ctor = ctor;
+exports.ctor = /** @class */ (function () {
+    function class_1() {
+    }
+    return class_1;
+}());

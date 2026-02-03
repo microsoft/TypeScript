@@ -11,7 +11,8 @@ var o: I = {
 }
 
 //// [computedPropertyNamesContextualType3_ES5.js]
-var o = {
-    [+"foo"](y) { return y.length; },
-    [+"bar"]: y => y.length
-};
+var _a;
+var o = (_a = {},
+    _a[+"foo"] = function (y) { return y.length; },
+    _a[+"bar"] = function (y) { return y.length; },
+    _a);

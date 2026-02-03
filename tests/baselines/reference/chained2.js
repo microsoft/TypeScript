@@ -24,8 +24,11 @@ const b: types.B = {};
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -77,5 +80,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var c_1 = __importDefault(require("./c"));
 new c_1.default.A();
 new c_1.default.B();
-const a = {};
-const b = {};
+var a = {};
+var b = {};

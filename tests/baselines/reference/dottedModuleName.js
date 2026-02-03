@@ -24,14 +24,14 @@ module M.N {
 //// [dottedModuleName.js]
 var M;
 (function (M) {
-    let N;
+    var N;
     (function (N) {
         2 * x;
-        let X;
+        var X;
         (function (X) {
-            let Y;
+            var Y;
             (function (Y) {
-                let Z;
+                var Z;
                 (function (Z) {
                     Z.v2 = f(Z.v);
                 })(Z = Y.Z || (Y.Z = {}));
@@ -42,11 +42,11 @@ var M;
 (function (M) {
     var N;
     (function (N) {
-        let X;
+        var X;
         (function (X) {
-            let Y;
+            var Y;
             (function (Y) {
-                let Z;
+                var Z;
                 (function (Z) {
                     Z.v = N.f(10);
                 })(Z = Y.Z || (Y.Z = {}));

@@ -29,14 +29,23 @@ let ___: X = new X(); // Ok
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.X = exports.B = exports.A = void 0;
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 exports.A = A;
-class B {
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 exports.B = B;
-class X {
-}
+var X = /** @class */ (function () {
+    function X() {
+    }
+    return X;
+}());
 exports.X = X;
 //// [b.js]
 "use strict";
@@ -48,9 +57,9 @@ Object.defineProperty(exports, "X", { enumerable: true, get: function () { retur
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("./b");
-let _ = new A(); // Error
-let __ = new C(); // Error
-let ___ = new b_1.X(); // Ok
+var _ = new A(); // Error
+var __ = new C(); // Error
+var ___ = new b_1.X(); // Ok
 //// [d.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -73,9 +82,9 @@ __exportStar(require("./a"), exports);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var d_1 = require("./d");
-let _ = new d_1.A(); // Ok
-let __ = new d_1.B(); // Ok
-let ___ = new d_1.X(); // Ok
+var _ = new d_1.A(); // Ok
+var __ = new d_1.B(); // Ok
+var ___ = new d_1.X(); // Ok
 
 
 //// [a.d.ts]

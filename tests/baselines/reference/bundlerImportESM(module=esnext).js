@@ -14,7 +14,7 @@ import { esm } from "./esm.mjs";
 
 
 //// [esm.mjs]
-export const esm = 0;
+export var esm = 0;
 //// [not-actually-cjs.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

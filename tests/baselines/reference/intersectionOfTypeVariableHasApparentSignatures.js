@@ -20,6 +20,8 @@ f({
 //// [intersectionOfTypeVariableHasApparentSignatures.js]
 f({
     props: {
-        children: (({ x }) => { })
+        children: (function (_a) {
+            var x = _a.x;
+        })
     }
 });

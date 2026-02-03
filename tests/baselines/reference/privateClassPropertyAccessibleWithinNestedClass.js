@@ -41,18 +41,30 @@ class C {
 
 //// [privateClassPropertyAccessibleWithinNestedClass.js]
 // no errors
-class C {
-    get y() { return this.x; }
-    set y(x) { this.y = this.x; }
-    foo() { return this.foo; }
-    static get y() { return this.x; }
-    static set y(x) { this.y = this.x; }
-    static foo() { return this.foo; }
-    static bar() { this.foo(); }
-    bar() {
-        class C2 {
-            foo() {
-                let x;
+var C = /** @class */ (function () {
+    function C() {
+    }
+    Object.defineProperty(C.prototype, "y", {
+        get: function () { return this.x; },
+        set: function (x) { this.y = this.x; },
+        enumerable: false,
+        configurable: true
+    });
+    C.prototype.foo = function () { return this.foo; };
+    Object.defineProperty(C, "y", {
+        get: function () { return this.x; },
+        set: function (x) { this.y = this.x; },
+        enumerable: false,
+        configurable: true
+    });
+    C.foo = function () { return this.foo; };
+    C.bar = function () { this.foo(); };
+    C.prototype.bar = function () {
+        var C2 = /** @class */ (function () {
+            function C2() {
+            }
+            C2.prototype.foo = function () {
+                var x;
                 var x1 = x.foo;
                 var x2 = x.bar;
                 var x3 = x.x;
@@ -61,12 +73,14 @@ class C {
                 var sx2 = C.y;
                 var sx3 = C.bar;
                 var sx4 = C.foo;
-                let y = new C();
+                var y = new C();
                 var y1 = y.foo;
                 var y2 = y.bar;
                 var y3 = y.x;
                 var y4 = y.y;
-            }
-        }
-    }
-}
+            };
+            return C2;
+        }());
+    };
+    return C;
+}());

@@ -2,16 +2,19 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RM = void 0;
-    class RM {
-        getName() {
+    var RM = /** @class */ (function () {
+        function RM() {
+        }
+        RM.prototype.getName = function () {
             return 'rm';
-        }
-        getDescription() {
+        };
+        RM.prototype.getDescription = function () {
             return "\t\t\tDelete file";
-        }
-        run(configuration) {
+        };
+        RM.prototype.run = function (configuration) {
             var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
-        }
-    }
+        };
+        return RM;
+    }());
     exports.RM = RM;
 });

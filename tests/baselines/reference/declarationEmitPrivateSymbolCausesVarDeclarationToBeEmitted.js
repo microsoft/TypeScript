@@ -12,9 +12,12 @@ export class User {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
-const _data = Symbol('data');
-class User {
-}
+var _data = Symbol('data');
+var User = /** @class */ (function () {
+    function User() {
+    }
+    return User;
+}());
 exports.User = User;
 ;
 

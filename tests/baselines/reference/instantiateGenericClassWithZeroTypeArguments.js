@@ -19,9 +19,15 @@ var d = new D();
 
 //// [instantiateGenericClassWithZeroTypeArguments.js]
 // no errors expected when instantiating a generic type with no type arguments provided
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var c = new C();
-class D {
-}
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());
 var d = new D();

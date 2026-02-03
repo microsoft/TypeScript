@@ -18,8 +18,11 @@ export class ClassA {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SomeClass = void 0;
-class SomeClass {
-}
+var SomeClass = /** @class */ (function () {
+    function SomeClass() {
+    }
+    return SomeClass;
+}());
 exports.SomeClass = SomeClass;
 //// [test.js]
 "use strict";
@@ -35,15 +38,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClassA = void 0;
 function annotation() {
-    return (target) => { };
+    return function (target) { };
 }
-let ClassA = (() => {
-    class ClassA {
+var ClassA = /** @class */ (function () {
+    function ClassA() {
     }
     __decorate([
         annotation(),
         __metadata("design:type", Object)
     ], ClassA.prototype, "array", void 0);
     return ClassA;
-})();
+}());
 exports.ClassA = ClassA;

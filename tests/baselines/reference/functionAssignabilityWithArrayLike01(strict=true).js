@@ -7,4 +7,4 @@ const array: ArrayLike<any> = func;
 //// [functionAssignabilityWithArrayLike01.js]
 "use strict";
 function func() { }
-const array = func;
+var array = func;

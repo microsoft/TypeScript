@@ -25,7 +25,7 @@ if (b) {
 "use strict";
 // Repro from #35655
 var _a;
-const b = (_a = f({ x: "", y: "" })) === null || _a === void 0 ? void 0 : _a.getBox();
+var b = (_a = f({ x: "", y: "" })) === null || _a === void 0 ? void 0 : _a.getBox();
 if (b) {
-    const x = b.data;
+    var x = b.data;
 }

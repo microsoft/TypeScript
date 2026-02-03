@@ -29,15 +29,16 @@ let test2: Test2<number>;
 
 //// [typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.js]
 // implement
-class Identity {
-    constructor(value) {
+var Identity = /** @class */ (function () {
+    function Identity(value) {
         this.item = value;
     }
-    set(value) {
+    Identity.prototype.set = function (value) {
         return new Identity(value);
-    }
-}
+    };
+    return Identity;
+}());
 ;
-let test1;
+var test1;
 ;
-let test2;
+var test2;

@@ -11,11 +11,12 @@ export class Foo {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-class Foo {
-    constructor(bar) {
+var Foo = /** @class */ (function () {
+    function Foo(bar) {
         this.bar = bar;
     }
-}
+    return Foo;
+}());
 exports.Foo = Foo;
 
 

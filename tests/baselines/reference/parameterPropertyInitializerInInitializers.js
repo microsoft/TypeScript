@@ -6,9 +6,11 @@ class Foo {
 }
 
 //// [parameterPropertyInitializerInInitializers.js]
-class Foo {
-    constructor(x, y = x) {
+var Foo = /** @class */ (function () {
+    function Foo(x, y) {
+        if (y === void 0) { y = x; }
         this.x = x;
         this.y = y;
     }
-}
+    return Foo;
+}());

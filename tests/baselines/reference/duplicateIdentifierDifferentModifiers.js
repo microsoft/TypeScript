@@ -26,8 +26,14 @@ interface C {
 
 //// [duplicateIdentifierDifferentModifiers.js]
 // OK
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 // Not OK
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

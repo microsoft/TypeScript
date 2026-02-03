@@ -107,6 +107,21 @@ module Sample.Thing.Languages.PlainText {
 //// [recursiveClassReferenceTest.js]
 // Scenario 1: Test reqursive function call with "this" parameter
 // Scenario 2: Test recursive function call with cast and "this" parameter
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Sample;
 (function (Sample) {
     var Actions;
@@ -115,12 +130,15 @@ var Sample;
         (function (Thing_1) {
             var Find;
             (function (Find) {
-                class StartFindAction {
-                    getId() { return "yo"; }
-                    run(Thing) {
-                        return true;
+                var StartFindAction = /** @class */ (function () {
+                    function StartFindAction() {
                     }
-                }
+                    StartFindAction.prototype.getId = function () { return "yo"; };
+                    StartFindAction.prototype.run = function (Thing) {
+                        return true;
+                    };
+                    return StartFindAction;
+                }());
                 Find.StartFindAction = StartFindAction;
             })(Find = Thing_1.Find || (Thing_1.Find = {}));
         })(Thing = Actions.Thing || (Actions.Thing = {}));
@@ -131,29 +149,33 @@ var Sample;
     (function (Thing) {
         var Widgets;
         (function (Widgets) {
-            class FindWidget {
-                gar(runner) { if (true) {
-                    return runner(this);
-                } }
-                constructor(codeThing) {
+            var FindWidget = /** @class */ (function () {
+                function FindWidget(codeThing) {
                     this.codeThing = codeThing;
                     this.domNode = null;
                     // scenario 1
                     codeThing.addWidget("addWidget", this);
                 }
-                getDomNode() {
+                FindWidget.prototype.gar = function (runner) { if (true) {
+                    return runner(this);
+                } };
+                FindWidget.prototype.getDomNode = function () {
                     return domNode;
-                }
-                destroy() {
-                }
-            }
+                };
+                FindWidget.prototype.destroy = function () {
+                };
+                return FindWidget;
+            }());
             Widgets.FindWidget = FindWidget;
         })(Widgets = Thing.Widgets || (Thing.Widgets = {}));
     })(Thing = Sample.Thing || (Sample.Thing = {}));
 })(Sample || (Sample = {}));
-class AbstractMode {
-    getInitialState() { return null; }
-}
+var AbstractMode = /** @class */ (function () {
+    function AbstractMode() {
+    }
+    AbstractMode.prototype.getInitialState = function () { return null; };
+    return AbstractMode;
+}());
 (function (Sample) {
     var Thing;
     (function (Thing) {
@@ -161,25 +183,31 @@ class AbstractMode {
         (function (Languages) {
             var PlainText;
             (function (PlainText) {
-                class State {
-                    constructor(mode) {
+                var State = /** @class */ (function () {
+                    function State(mode) {
                         this.mode = mode;
                     }
-                    clone() {
+                    State.prototype.clone = function () {
                         return this;
-                    }
-                    equals(other) {
+                    };
+                    State.prototype.equals = function (other) {
                         return this === other;
-                    }
-                    getMode() { return mode; }
-                }
+                    };
+                    State.prototype.getMode = function () { return mode; };
+                    return State;
+                }());
                 PlainText.State = State;
-                class Mode extends AbstractMode {
-                    // scenario 2
-                    getInitialState() {
-                        return new State(self);
+                var Mode = /** @class */ (function (_super) {
+                    __extends(Mode, _super);
+                    function Mode() {
+                        return _super !== null && _super.apply(this, arguments) || this;
                     }
-                }
+                    // scenario 2
+                    Mode.prototype.getInitialState = function () {
+                        return new State(self);
+                    };
+                    return Mode;
+                }(AbstractMode));
                 PlainText.Mode = Mode;
             })(PlainText = Languages.PlainText || (Languages.PlainText = {}));
         })(Languages = Thing.Languages || (Thing.Languages = {}));

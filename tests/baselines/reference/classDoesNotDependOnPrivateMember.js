@@ -11,8 +11,11 @@ module M {
 //// [classDoesNotDependOnPrivateMember.js]
 var M;
 (function (M) {
-    class C {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
     M.C = C;
 })(M || (M = {}));
 

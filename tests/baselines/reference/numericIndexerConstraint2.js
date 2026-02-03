@@ -7,9 +7,12 @@ var a: { one: number; };
 x = a;
 
 //// [numericIndexerConstraint2.js]
-class Foo {
-    foo() { }
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    Foo.prototype.foo = function () { };
+    return Foo;
+}());
 var x;
 var a;
 x = a;

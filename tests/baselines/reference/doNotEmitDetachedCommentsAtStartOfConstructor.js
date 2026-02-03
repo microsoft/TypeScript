@@ -40,23 +40,27 @@ class D {
 }
 
 //// [doNotEmitDetachedCommentsAtStartOfConstructor.js]
-class A {
-    constructor() {
+var A = (function () {
+    function A() {
         var x = 10;
     }
-}
-class B {
-    constructor() {
+    return A;
+}());
+var B = (function () {
+    function B() {
         var y = 10;
     }
-}
-class C {
-    constructor() {
+    return B;
+}());
+var C = (function () {
+    function C() {
         var x = 10;
     }
-}
-class D {
-    constructor() {
+    return C;
+}());
+var D = (function () {
+    function D() {
         var y = 10;
     }
-}
+    return D;
+}());

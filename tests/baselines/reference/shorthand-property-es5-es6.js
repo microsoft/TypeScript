@@ -8,8 +8,8 @@ const bar = { foo, baz };
 
 //// [test.js]
 import { foo } from './foo';
-const baz = 42;
-const bar = { foo, baz };
+var baz = 42;
+var bar = { foo: foo, baz: baz };
 
 
 //// [test.d.ts]

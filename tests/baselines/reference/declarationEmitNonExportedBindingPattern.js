@@ -28,12 +28,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function getFoo() {
     return { foo: { test: 42 } };
 }
-const { foo } = getFoo();
-const { foo: renamed } = getFoo();
+var foo = getFoo().foo;
+var renamed = getFoo().foo;
 function getNested() {
     return { a: { b: { c: 'd' } } };
 }
-const { a: { b: { c } } } = getNested();
+var c = getNested().a.b.c;
 
 
 //// [test.d.ts]

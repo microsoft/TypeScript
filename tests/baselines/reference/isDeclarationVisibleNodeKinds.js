@@ -129,13 +129,24 @@ var schema;
     schema_8.createValidator8 = createValidator8;
 })(schema || (schema = {}));
 (function (schema) {
-    class T {
-        get createValidator9() {
-            return undefined;
+    var T = /** @class */ (function () {
+        function T() {
         }
-        set createValidator10(v) {
-        }
-    }
+        Object.defineProperty(T.prototype, "createValidator9", {
+            get: function () {
+                return undefined;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(T.prototype, "createValidator10", {
+            set: function (v) {
+            },
+            enumerable: false,
+            configurable: true
+        });
+        return T;
+    }());
     schema.T = T;
 })(schema || (schema = {}));
 

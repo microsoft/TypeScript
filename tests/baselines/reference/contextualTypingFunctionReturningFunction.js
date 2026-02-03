@@ -16,6 +16,6 @@ f({
 
 //// [contextualTypingFunctionReturningFunction.js]
 f({
-    a: s => { },
-    b: () => n => { },
+    a: function (s) { },
+    b: function () { return function (n) { }; },
 });

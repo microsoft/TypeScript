@@ -456,10 +456,10 @@ function fx20(value: Either) {
 //// [unknownControlFlow.js]
 "use strict";
 function f01(u) {
-    let x1 = u; // Error
-    let x2 = u;
-    let x3 = u;
-    let x4 = u;
+    var x1 = u; // Error
+    var x2 = u;
+    var x3 = u;
+    var x4 = u;
 }
 function f10(x) {
     if (x) {
@@ -651,19 +651,19 @@ function ensureNotNullOrUndefined(x) {
     return ensureNotUndefined(ensureNotNull(x)); // T & {}
 }
 function f40(a, b) {
-    let a1 = ensureNotNullOrUndefined(a); // string
-    let b1 = ensureNotNullOrUndefined(b); // number
+    var a1 = ensureNotNullOrUndefined(a); // string
+    var b1 = ensureNotNullOrUndefined(b); // number
 }
 function f41(a) {
-    let a1 = ensureNotUndefined(ensureNotNull(a)); // T & {}
-    let a2 = ensureNotNull(ensureNotUndefined(a)); // T & {}
-    let a3 = ensureNotNull(ensureNotNull(a)); // T & {} | T & undefined
-    let a4 = ensureNotUndefined(ensureNotUndefined(a)); // T & {} | T & null
-    let a5 = ensureNotNullOrUndefined(ensureNotNullOrUndefined(a)); // T & {}
-    let a6 = ensureNotNull(possiblyNullOrUndefined(a)); // T & {} | undefined
-    let a7 = ensureNotUndefined(possiblyNullOrUndefined(a)); // T & {} | null
-    let a8 = ensureNotNull(possiblyUndefined(a)); // T & {} | undefined
-    let a9 = ensureNotUndefined(possiblyNull(a)); // T & {} | null
+    var a1 = ensureNotUndefined(ensureNotNull(a)); // T & {}
+    var a2 = ensureNotNull(ensureNotUndefined(a)); // T & {}
+    var a3 = ensureNotNull(ensureNotNull(a)); // T & {} | T & undefined
+    var a4 = ensureNotUndefined(ensureNotUndefined(a)); // T & {} | T & null
+    var a5 = ensureNotNullOrUndefined(ensureNotNullOrUndefined(a)); // T & {}
+    var a6 = ensureNotNull(possiblyNullOrUndefined(a)); // T & {} | undefined
+    var a7 = ensureNotUndefined(possiblyNullOrUndefined(a)); // T & {} | null
+    var a8 = ensureNotNull(possiblyUndefined(a)); // T & {} | undefined
+    var a9 = ensureNotUndefined(possiblyNull(a)); // T & {} | null
 }
 // Repro from #48468
 function deepEquals(a, b) {
@@ -680,7 +680,7 @@ function deepEquals(a, b) {
 }
 // Repro from #49386
 function foo(x) {
-    let y = x;
+    var y = x;
     if (y !== null) {
         y;
     }
@@ -794,17 +794,17 @@ function doSomething2(value) {
     }
 }
 function x(x, y) {
-    let r2 = y;
+    var r2 = y;
 }
 function assertNever(v) {
     throw new Error('never');
 }
 function fx20(value) {
     if (value === 'left') {
-        const foo = value;
+        var foo_1 = value;
     }
     else if (value === 'right') {
-        const bar = value;
+        var bar = value;
     }
     else {
         assertNever(value);

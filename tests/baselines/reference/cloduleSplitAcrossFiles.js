@@ -10,8 +10,11 @@ module D {
 D.y;
 
 //// [cloduleSplitAcrossFiles_class.js]
-class D {
-}
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());
 //// [cloduleSplitAcrossFiles_module.js]
 var D;
 (function (D) {

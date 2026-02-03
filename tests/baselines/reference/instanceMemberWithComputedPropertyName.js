@@ -15,11 +15,12 @@ class C {
 // https://github.com/microsoft/TypeScript/issues/30953
 "use strict";
 var _a;
-const x = 1;
-class C {
-    constructor() {
+var x = 1;
+var C = /** @class */ (function () {
+    function C() {
         this[_a] = true;
-        const { a, b } = { a: 1, b: 2 };
+        var _b = { a: 1, b: 2 }, a = _b.a, b = _b.b;
     }
-}
+    return C;
+}());
 _a = x;

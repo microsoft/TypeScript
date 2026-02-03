@@ -8,8 +8,11 @@ abstract class C {
 
 //// [abstractPropertyInitializer.js]
 "use strict";
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 
 
 //// [abstractPropertyInitializer.d.ts]

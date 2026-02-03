@@ -34,18 +34,18 @@ let n: number = f(2).a;
 
 //// [indirectTypeParameterReferences.js]
 // Repro from #19043
-const flowtypes = (b) => {
-    const combined = (fn) => null;
-    const literal = (fn) => null;
-    return { combined, literal };
+var flowtypes = function (b) {
+    var combined = function (fn) { return null; };
+    var literal = function (fn) { return null; };
+    return { combined: combined, literal: literal };
 };
-const { combined, literal } = flowtypes({ b: 'b-value' });
-literal(aPlusB => {
+var _a = flowtypes({ b: 'b-value' }), combined = _a.combined, literal = _a.literal;
+literal(function (aPlusB) {
     aPlusB.b;
     aPlusB.a;
 });
-combined(comb => {
+combined(function (comb) {
     comb.b;
     comb.a;
 });
-let n = f(2).a;
+var n = f(2).a;

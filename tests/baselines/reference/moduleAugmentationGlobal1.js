@@ -21,14 +21,17 @@ let y = x.getA().x;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 exports.A = A;
 //// [f2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let x = [1];
-let y = x.getA().x;
+var x = [1];
+var y = x.getA().x;
 
 
 //// [f1.d.ts]

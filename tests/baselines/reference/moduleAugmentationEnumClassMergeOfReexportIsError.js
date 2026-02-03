@@ -22,8 +22,11 @@ declare const f: ns.Foo; //is this the enum or the class? should be an error.
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 exports.Foo = Foo;
 //// [reexport.js]
 "use strict";

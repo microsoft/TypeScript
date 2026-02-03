@@ -29,17 +29,26 @@ class Widget<TValue> {
 }
 
 //// [infinitelyExpandingOverloads.js]
-class Validator2 {
-}
-class ViewModel {
-    constructor() {
+var Validator2 = /** @class */ (function () {
+    function Validator2() {
+    }
+    return Validator2;
+}());
+var ViewModel = /** @class */ (function () {
+    function ViewModel() {
         this.validationPlacements = new Array();
     }
-}
-class Widget {
-    constructor(viewModelType) {
+    return ViewModel;
+}());
+var Widget = /** @class */ (function () {
+    function Widget(viewModelType) {
     }
-    get options() {
-        return null;
-    }
-}
+    Object.defineProperty(Widget.prototype, "options", {
+        get: function () {
+            return null;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return Widget;
+}());

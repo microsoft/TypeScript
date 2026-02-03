@@ -16,5 +16,5 @@ let b = new B("Hey")
 console.log(b.a)
 
 //// [classFunctionMerging2.js]
-let b = new B("Hey");
+var b = new B("Hey");
 console.log(b.a);

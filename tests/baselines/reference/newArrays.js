@@ -17,15 +17,19 @@ module M {
 //// [newArrays.js]
 var M;
 (function (M) {
-    class Foo {
-    }
-    class Gar {
-        constructor() {
+    var Foo = /** @class */ (function () {
+        function Foo() {
+        }
+        return Foo;
+    }());
+    var Gar = /** @class */ (function () {
+        function Gar() {
             this.x = 10;
             this.y = 10;
         }
-        m() {
+        Gar.prototype.m = function () {
             this.fa = new Array(this.x * this.y);
-        }
-    }
+        };
+        return Gar;
+    }());
 })(M || (M = {}));

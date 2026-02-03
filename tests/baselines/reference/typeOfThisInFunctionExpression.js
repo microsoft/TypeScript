@@ -61,8 +61,8 @@ var t2 = function f() {
     var x = this;
     var x;
 };
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.x = function () {
             var q;
             var q = this;
@@ -72,7 +72,8 @@ class C {
             var q = this;
         };
     }
-}
+    return C;
+}());
 var M;
 (function (M) {
     function fn() {

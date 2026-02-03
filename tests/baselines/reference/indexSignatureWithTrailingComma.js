@@ -15,5 +15,8 @@ class C {
 
 
 //// [indexSignatureWithTrailingComma.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

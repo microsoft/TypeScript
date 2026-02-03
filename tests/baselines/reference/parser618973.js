@@ -10,8 +10,11 @@ export export class Foo {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-class Foo {
-    Bar() {
+var Foo = /** @class */ (function () {
+    function Foo() {
     }
-}
+    Foo.prototype.Bar = function () {
+    };
+    return Foo;
+}());
 exports.Foo = Foo;

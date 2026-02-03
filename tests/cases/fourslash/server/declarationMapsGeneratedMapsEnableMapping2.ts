@@ -36,21 +36,24 @@
 ////instance.[|/*1*/methodName|]({member: 12});
 
 // @Filename: /home/src/workspaces/project/dist/index.js.map
-////{"version":3,"file":"index.js","sourceRoot":"/home/src/workspaces/project/","sources":["index.ts"],"names":[],"mappings":";;;AAAA,MAAa,GAAG;IAEZ,UAAU,CAAC,QAAkB,IAAc,OAAO,QAAQ,CAAC,CAAC,CAAC;IAC7D,WAAW;QACP,IAAI,IAAI,CAAC,MAAM,EAAE,GAAG,GAAG,EAAE,CAAC;YACtB,OAAO,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC;QACnB,CAAC;QACD,OAAO,EAAC,CAAC,EAAE,KAAK,EAAC,CAAC;IACtB,CAAC;CACJ;AATD,kBASC"}
+////{"version":3,"file":"index.js","sourceRoot":"/home/src/workspaces/project/","sources":["index.ts"],"names":[],"mappings":";;;AAAA;IAAA;IASA,CAAC;IAPG,wBAAU,GAAV,UAAW,QAAkB,IAAc,OAAO,QAAQ,CAAC,CAAC,CAAC;IAC7D,yBAAW,GAAX;QACI,IAAI,IAAI,CAAC,MAAM,EAAE,GAAG,GAAG,EAAE,CAAC;YACtB,OAAO,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC;QACnB,CAAC;QACD,OAAO,EAAC,CAAC,EAAE,KAAK,EAAC,CAAC;IACtB,CAAC;IACL,UAAC;AAAD,CAAC,AATD,IASC;AATY,kBAAG"}
 
 // @Filename: /home/src/workspaces/project/dist/index.js
 ////"use strict";
 ////Object.defineProperty(exports, "__esModule", { value: true });
 ////exports.Foo = void 0;
-////class Foo {
-////    methodName(propName) { return propName; }
-////    otherMethod() {
+////var Foo = /** @class */ (function () {
+////    function Foo() {
+////    }
+////    Foo.prototype.methodName = function (propName) { return propName; };
+////    Foo.prototype.otherMethod = function () {
 ////        if (Math.random() > 0.5) {
 ////            return { x: 42 };
 ////        }
 ////        return { y: "yes" };
-////    }
-////}
+////    };
+////    return Foo;
+////}());
 ////exports.Foo = Foo;
 //////# sourceMappingURL=index.js.map
 

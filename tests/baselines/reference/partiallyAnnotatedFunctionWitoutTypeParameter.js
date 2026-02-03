@@ -9,5 +9,5 @@ simple((a, b: number) => {})
 
 
 //// [partiallyAnnotatedFunctionWitoutTypeParameter.js]
-simple((a, b) => { });
-simple((a, b) => { });
+simple(function (a, b) { });
+simple(function (a, b) { });

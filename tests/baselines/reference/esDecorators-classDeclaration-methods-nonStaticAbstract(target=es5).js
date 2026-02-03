@@ -13,6 +13,9 @@ abstract class C {
 
 
 //// [esDecorators-classDeclaration-methods-nonStaticAbstract.js]
-const method3 = "method3";
-class C {
-}
+var method3 = "method3";
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

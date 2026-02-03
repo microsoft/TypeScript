@@ -8,6 +8,8 @@ class C {
 }
 
 //// [duplicateConstructorOverloadSignature.js]
-class C {
-    constructor(x) { }
-}
+var C = /** @class */ (function () {
+    function C(x) {
+    }
+    return C;
+}());

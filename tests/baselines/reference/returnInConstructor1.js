@@ -69,56 +69,82 @@ class I extends G {
 
 
 //// [returnInConstructor1.js]
-class A {
-    foo() { }
-    constructor() {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var A = /** @class */ (function () {
+    function A() {
         return;
     }
-}
-class B {
-    foo() { }
-    constructor() {
+    A.prototype.foo = function () { };
+    return A;
+}());
+var B = /** @class */ (function () {
+    function B() {
         return 1; // error
     }
-}
-class C {
-    foo() { }
-    constructor() {
+    B.prototype.foo = function () { };
+    return B;
+}());
+var C = /** @class */ (function () {
+    function C() {
         return this;
     }
-}
-class D {
-    foo() { }
-    constructor() {
+    C.prototype.foo = function () { };
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
         return "test"; // error
     }
-}
-class E {
-    constructor() {
+    D.prototype.foo = function () { };
+    return D;
+}());
+var E = /** @class */ (function () {
+    function E() {
         return { foo: 1 };
     }
-}
-class F {
-    constructor() {
+    return E;
+}());
+var F = /** @class */ (function () {
+    function F() {
         return { foo: 1 }; //error
     }
-}
-class G {
-    test1() { }
-    foo() { }
-    constructor() {
+    return F;
+}());
+var G = /** @class */ (function () {
+    function G() {
         this.test = 2;
     }
-}
-class H extends F {
-    constructor() {
-        super();
+    G.prototype.test1 = function () { };
+    G.prototype.foo = function () { };
+    return G;
+}());
+var H = /** @class */ (function (_super) {
+    __extends(H, _super);
+    function H() {
+        var _this = _super.call(this) || this;
         return new G(); //error
     }
-}
-class I extends G {
-    constructor() {
-        super();
+    return H;
+}(F));
+var I = /** @class */ (function (_super) {
+    __extends(I, _super);
+    function I() {
+        var _this = _super.call(this) || this;
         return new G();
     }
-}
+    return I;
+}(G));

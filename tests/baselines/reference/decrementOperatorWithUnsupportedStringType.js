@@ -72,9 +72,12 @@ objA.a--, M.n--;
 var STRING;
 var STRING1 = ["", ""];
 function foo() { return ""; }
-class A {
-    static foo() { return ""; }
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    A.foo = function () { return ""; };
+    return A;
+}());
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -87,10 +90,10 @@ var ResultIsNumber4 = STRING1--;
 // string type literal
 var ResultIsNumber5 = --"";
 var ResultIsNumber6 = --{ x: "", y: "" };
-var ResultIsNumber7 = --{ x: "", y: (s) => { return s; } };
+var ResultIsNumber7 = --{ x: "", y: function (s) { return s; } };
 var ResultIsNumber8 = ""--;
 var ResultIsNumber9 = { x: "", y: "" }--;
-var ResultIsNumber10 = { x: "", y: (s) => { return s; } }--;
+var ResultIsNumber10 = { x: "", y: function (s) { return s; } }--;
 // string type expressions
 var ResultIsNumber11 = --objA.a;
 var ResultIsNumber12 = --M.n;

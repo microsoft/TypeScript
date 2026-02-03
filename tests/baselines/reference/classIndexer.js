@@ -8,7 +8,8 @@ class C123 {
 }
 
 //// [classIndexer.js]
-class C123 {
-    constructor() {
+var C123 = /** @class */ (function () {
+    function C123() {
     }
-}
+    return C123;
+}());

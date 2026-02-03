@@ -40,10 +40,16 @@ if (v === 0) {
 
 //// [staticIndexSignature4.js]
 "use strict";
-class B {
-}
-class D {
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());
 if (v === 0) {
     B.a = D.a;
     B[2] = D[2];

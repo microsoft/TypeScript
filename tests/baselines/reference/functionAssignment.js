@@ -48,11 +48,11 @@ test.get(function (param) {
     var x = barbaz.get(function () { });
 });
 function f2(n) { }
-f2(() => {
+f2(function () {
     var n = '';
     n = 4;
 });
 function f3(a) { }
 f3({ a: 0, b: 0 });
 function callb(a) { }
-callb((a) => { a.length; });
+callb(function (a) { a.length; });

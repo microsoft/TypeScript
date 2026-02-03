@@ -42,13 +42,13 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-const y1 = x1 && 3;
+var y1 = x1 && 3;
 function foo1() {
     return __assign({ display: "block" }, (isTreeHeader1 && {
         display: "flex",
     }));
 }
-const y2 = x2 && 3;
+var y2 = x2 && 3;
 function foo2() {
     return __assign({ display: "block" }, (isTreeHeader1 && {
         display: "flex",

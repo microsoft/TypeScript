@@ -6,11 +6,12 @@ class C {
 }
 
 //// [declarationEmitReadonly.js]
-class C {
-    constructor(x) {
+var C = /** @class */ (function () {
+    function C(x) {
         this.x = x;
     }
-}
+    return C;
+}());
 
 
 //// [declarationEmitReadonly.d.ts]

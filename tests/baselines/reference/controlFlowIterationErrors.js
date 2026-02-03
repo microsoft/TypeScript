@@ -95,12 +95,12 @@ function h4() {
 
 
 //// [controlFlowIterationErrors.js]
-let cond;
+var cond;
 function len(s) {
     return s.length;
 }
 function f1() {
-    let x;
+    var x;
     x = "";
     while (cond) {
         x = len(x);
@@ -109,7 +109,7 @@ function f1() {
     x;
 }
 function f2() {
-    let x;
+    var x;
     x = "";
     while (cond) {
         x;
@@ -118,7 +118,7 @@ function f2() {
     x;
 }
 function g1() {
-    let x;
+    var x;
     x = "";
     while (cond) {
         x = foo(x);
@@ -127,7 +127,7 @@ function g1() {
     x;
 }
 function g2() {
-    let x;
+    var x;
     x = "";
     while (cond) {
         x;
@@ -139,7 +139,7 @@ function asNumber(x) {
     return +x;
 }
 function h1() {
-    let x;
+    var x;
     x = "0";
     while (cond) {
         x = +x + 1;
@@ -147,7 +147,7 @@ function h1() {
     }
 }
 function h2() {
-    let x;
+    var x;
     x = "0";
     while (cond) {
         x = asNumber(x) + 1;
@@ -155,20 +155,20 @@ function h2() {
     }
 }
 function h3() {
-    let x;
+    var x;
     x = "0";
     while (cond) {
-        let y = asNumber(x);
+        var y = asNumber(x);
         x = y + 1;
         x;
     }
 }
 function h4() {
-    let x;
+    var x;
     x = "0";
     while (cond) {
         x;
-        let y = asNumber(x);
+        var y = asNumber(x);
         x = y + 1;
         x;
     }

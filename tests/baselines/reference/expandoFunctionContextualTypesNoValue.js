@@ -19,4 +19,4 @@ exports.Foo = Foo;
 // GH #38532
 var blah_1 = __importDefault(require("blah"));
 function Foo() { }
-blah_1.default.bar = () => { };
+blah_1.default.bar = function () { };

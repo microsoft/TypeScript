@@ -28,12 +28,13 @@ export class A
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.A = void 0;
-    class A {
-        constructor() {
+    var A = /** @class */ (function () {
+        function A() {
         }
-        B() {
+        A.prototype.B = function () {
             return 42;
-        }
-    }
+        };
+        return A;
+    }());
     exports.A = A;
 });

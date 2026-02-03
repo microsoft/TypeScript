@@ -69,34 +69,34 @@ const zee = z!!!; // since x is `any`, `x extends null | undefined` should be bo
 
 //// [conditionalTypesSimplifyWhenTrivial.js]
 "use strict";
-const fn1 = (params) => params;
+var fn1 = function (params) { return params; };
 function fn2(x) {
     var y = x;
     x = y;
 }
-const fn3 = (params) => params;
+var fn3 = function (params) { return params; };
 function fn4(x) {
     var y = x;
     x = y;
 }
-const fn5 = (params) => params;
+var fn5 = function (params) { return params; };
 function fn6(x) {
     var y = x;
     x = y;
 }
-const fn7 = (params) => params;
+var fn7 = function (params) { return params; };
 function fn8(x) {
     var y = x;
     x = y;
 }
-const fn9 = (params) => params;
+var fn9 = function (params) { return params; };
 function fn10(x) {
     var y = x;
     x = y;
 }
-const fn11 = (params) => params;
+var fn11 = function (params) { return params; };
 function fn12(x) {
     var y = x;
     x = y;
 }
-const zee = z; // since x is `any`, `x extends null | undefined` should be both true and false - and thus yield `any` 
+var zee = z; // since x is `any`, `x extends null | undefined` should be both true and false - and thus yield `any` 

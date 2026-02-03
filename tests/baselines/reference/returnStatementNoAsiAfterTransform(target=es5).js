@@ -66,6 +66,10 @@ function t10() {
 
 
 //// [returnStatementNoAsiAfterTransform.js]
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
 function t1() {
     return (
     // comment
@@ -99,7 +103,7 @@ function t6() {
 function t7() {
     return (
     // comment
-    a) ``;
+    a)(__makeTemplateObject([""], [""]));
 }
 function t8() {
     return (

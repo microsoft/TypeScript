@@ -174,7 +174,7 @@ export interface IThings {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn4 = fn4;
 function fn4() {
-    const a = { thing1: { a: 'b' } };
+    var a = { thing1: { a: 'b' } };
     return a.thing1;
 }
 

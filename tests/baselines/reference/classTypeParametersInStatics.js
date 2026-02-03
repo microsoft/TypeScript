@@ -38,29 +38,30 @@ module Editor {
 //// [classTypeParametersInStatics.js]
 var Editor;
 (function (Editor) {
-    class List {
-        constructor(isHead, data) {
+    var List = /** @class */ (function () {
+        function List(isHead, data) {
             this.isHead = isHead;
             this.data = data;
         }
-        static MakeHead() {
+        List.MakeHead = function () {
             var entry = new List(true, null);
             entry.prev = entry;
             entry.next = entry;
             return entry;
-        }
-        static MakeHead2() {
+        };
+        List.MakeHead2 = function () {
             var entry = new List(true, null);
             entry.prev = entry;
             entry.next = entry;
             return entry;
-        }
-        static MakeHead3() {
+        };
+        List.MakeHead3 = function () {
             var entry = new List(true, null);
             entry.prev = entry;
             entry.next = entry;
             return entry;
-        }
-    }
+        };
+        return List;
+    }());
     Editor.List = List;
 })(Editor || (Editor = {}));

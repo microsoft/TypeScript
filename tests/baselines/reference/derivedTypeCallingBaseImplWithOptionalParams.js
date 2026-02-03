@@ -16,10 +16,13 @@ var y: MyClass = new MyClass();
 y.myMethod(); // error
 
 //// [derivedTypeCallingBaseImplWithOptionalParams.js]
-class MyClass {
-    myMethod(myList) {
+var MyClass = /** @class */ (function () {
+    function MyClass() {
     }
-}
+    MyClass.prototype.myMethod = function (myList) {
+    };
+    return MyClass;
+}());
 var x = new MyClass();
 x.myMethod(); // should be valid, but MyClass has no implementation to handle it.
 var y = new MyClass();

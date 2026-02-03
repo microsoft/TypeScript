@@ -60,5 +60,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx dom */
 var renderer_1 = require("./renderer");
 var component_1 = __importDefault(require("./component"));
-let elem = component_1.default;
+var elem = component_1.default;
 elem = (0, renderer_1.dom)("h", null); // Expect assignability error here

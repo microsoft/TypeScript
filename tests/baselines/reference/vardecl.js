@@ -136,16 +136,18 @@ var m2;
     var m1;
     var a2, b22 = 10, b222;
     var m3;
-    class C {
-        constructor(b) {
+    var C = /** @class */ (function () {
+        function C(b) {
             this.b = b;
         }
-    }
-    class C2 {
-        constructor(b) {
+        return C;
+    }());
+    var C2 = /** @class */ (function () {
+        function C2(b) {
             this.b = b;
         }
-    }
+        return C2;
+    }());
     m2.C2 = C2;
     var m;
     var b23;

@@ -7,4 +7,6 @@ wrap(({ cancelable } = {}) => {});
 
 //// [inferredRestTypeFixedOnce.js]
 function wrap(_) { }
-wrap(({ cancelable } = {}) => { });
+wrap(function (_a) {
+    var _b = _a === void 0 ? {} : _a, cancelable = _b.cancelable;
+});

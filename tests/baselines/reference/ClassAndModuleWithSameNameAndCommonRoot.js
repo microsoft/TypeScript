@@ -45,12 +45,13 @@ var X;
 (function (X) {
     var Y;
     (function (Y) {
-        class Point {
-            constructor(x, y) {
+        var Point = /** @class */ (function () {
+            function Point(x, y) {
                 this.x = x;
                 this.y = y;
             }
-        }
+            return Point;
+        }());
         Y.Point = Point;
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
@@ -59,7 +60,7 @@ var X;
 (function (X) {
     var Y;
     (function (Y) {
-        let Point;
+        var Point;
         (function (Point) {
             Point.Origin = new Point(0, 0);
         })(Point = Y.Point || (Y.Point = {}));
@@ -70,8 +71,11 @@ var X;
 var cl = new X.Y.Point(1, 1);
 var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
 //// [simple.js]
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 (function (A) {
     A.Instance = new A();
 })(A || (A = {}));

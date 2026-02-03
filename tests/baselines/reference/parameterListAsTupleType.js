@@ -30,14 +30,25 @@ type Dcps = ConstructorParameters<typeof D>; // should be [number, ...string[]]
 function foo(a, b) {
     return true;
 }
-const x = (a) => 5;
-const a = ['should-not-work']; // works, but shouldn't
-function t(...args) { } // should work
-class C {
-    constructor(a, b) {
+var x = function (a) { return 5; };
+var a = ['should-not-work']; // works, but shouldn't
+function t() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
     }
-}
-class D {
-    constructor(a, ...rest) {
+} // should work
+var C = /** @class */ (function () {
+    function C(a, b) {
     }
-}
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D(a) {
+        var rest = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rest[_i - 1] = arguments[_i];
+        }
+    }
+    return D;
+}());

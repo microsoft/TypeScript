@@ -19,16 +19,16 @@ if (isNumber((otherValue(), value).inner)) {
 }
 
 //// [narrowCommaOperatorNestedWithinLHS.js]
-const otherValue = () => true;
-const value = null;
+var otherValue = function () { return true; };
+var value = null;
 function isNumber(obj) {
     return true; // method implementation irrelevant
 }
 if (typeof (otherValue(), value).inner === 'number') {
-    const a = value.inner; // number
-    const b = (otherValue(), value).inner; // string | number , but should be number
+    var a = value.inner; // number
+    var b = (otherValue(), value).inner; // string | number , but should be number
 }
 if (isNumber((otherValue(), value).inner)) {
-    const a = value.inner; // number
-    const b = (otherValue(), value).inner; // string | number , but should be number
+    var a = value.inner; // number
+    var b = (otherValue(), value).inner; // string | number , but should be number
 }

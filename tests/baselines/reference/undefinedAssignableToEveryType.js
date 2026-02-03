@@ -45,8 +45,11 @@ function foo<T, U, V extends Date>(x: T, y: U, z: V) {
 //}
 
 //// [undefinedAssignableToEveryType.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var ac;
 var ai;
 var E;

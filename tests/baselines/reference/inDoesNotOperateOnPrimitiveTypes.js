@@ -69,10 +69,10 @@ function intersection2<T>(thing: T & (0 | 1 | 2)) {
 
 
 //// [inDoesNotOperateOnPrimitiveTypes.js]
-const validHasKey = (thing, key) => {
+var validHasKey = function (thing, key) {
     return key in thing; // Ok
 };
-const alsoValidHasKey = (thing, key) => {
+var alsoValidHasKey = function (thing, key) {
     return key in thing; // Ok (as T may be instantiated with a valid type)
 };
 function invalidHasKey(thing, key) {

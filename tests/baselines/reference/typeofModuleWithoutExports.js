@@ -14,7 +14,10 @@ var r: typeof M;
 var M;
 (function (M) {
     var x = 1;
-    class C {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
 })(M || (M = {}));
 var r;

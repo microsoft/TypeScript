@@ -24,19 +24,17 @@ var r7: string = C.f();
 var r8: string = C.g();
 
 //// [classWithPublicProperty.js]
-let C = (() => {
-    class C {
-        constructor() {
-            this.a = '';
-            this.b = '';
-            this.d = () => '';
-        }
-        c() { return ''; }
-        static f() { return ''; }
+var C = /** @class */ (function () {
+    function C() {
+        this.a = '';
+        this.b = '';
+        this.d = function () { return ''; };
     }
-    C.g = () => '';
+    C.prototype.c = function () { return ''; };
+    C.f = function () { return ''; };
+    C.g = function () { return ''; };
     return C;
-})();
+}());
 // all of these are valid
 var c = new C();
 var r1 = c.x;

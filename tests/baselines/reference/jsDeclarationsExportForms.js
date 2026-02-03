@@ -62,8 +62,11 @@ import "./bar2";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 exports.Foo = Foo;
 //// [func.js]
 "use strict";
@@ -230,16 +233,16 @@ exports.classContainer = void 0;
 var ns = __importStar(require("./cls"));
 exports.classContainer = ns;
 //// [cjs.js]
-const ns = require("./cls");
-module.exports = { ns };
+var ns = require("./cls");
+module.exports = { ns: ns };
 //// [cjs2.js]
-const ns = require("./cls");
+var ns = require("./cls");
 module.exports = ns;
 //// [cjs3.js]
-const ns = require("./cls");
+var ns = require("./cls");
 module.exports.ns = ns;
 //// [cjs4.js]
-const ns = require("./cls");
+var ns = require("./cls");
 module.exports.names = ns;
 //// [includeAll.js]
 "use strict";

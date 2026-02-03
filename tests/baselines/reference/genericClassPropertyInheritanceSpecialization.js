@@ -78,17 +78,34 @@ class ViewModel<TValue> implements Contract<TValue> {
 
 
 //// [genericClassPropertyInheritanceSpecialization.js]
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Portal;
 (function (Portal) {
     var Controls;
     (function (Controls) {
         var Validators;
         (function (Validators) {
-            class Validator {
-                constructor(message) { }
-                destroy() { }
-                _validate(value) { return 0; }
-            }
+            var Validator = /** @class */ (function () {
+                function Validator(message) {
+                }
+                Validator.prototype.destroy = function () { };
+                Validator.prototype._validate = function (value) { return 0; };
+                return Validator;
+            }());
             Validators.Validator = Validator;
         })(Validators = Controls.Validators || (Controls.Validators = {}));
     })(Controls = Portal.Controls || (Portal.Controls = {}));
@@ -101,18 +118,21 @@ var PortalFx;
         (function (Controls) {
             var Validators;
             (function (Validators) {
-                class Validator extends Portal.Controls.Validators.Validator {
-                    constructor(message) {
-                        super(message);
+                var Validator = /** @class */ (function (_super) {
+                    __extends(Validator, _super);
+                    function Validator(message) {
+                        return _super.call(this, message) || this;
                     }
-                }
+                    return Validator;
+                }(Portal.Controls.Validators.Validator));
                 Validators.Validator = Validator;
             })(Validators = Controls.Validators || (Controls.Validators = {}));
         })(Controls = ViewModels.Controls || (ViewModels.Controls = {}));
     })(ViewModels = PortalFx.ViewModels || (PortalFx.ViewModels = {}));
 })(PortalFx || (PortalFx = {}));
-class ViewModel {
-    constructor() {
+var ViewModel = /** @class */ (function () {
+    function ViewModel() {
         this.validators = ko.observableArray();
     }
-}
+    return ViewModel;
+}());

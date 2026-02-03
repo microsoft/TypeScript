@@ -25,21 +25,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 function decorator() {
-    return (target) => { };
+    return function (target) { };
 }
 try {
-    let Foo = (() => {
-        var Foo_1;
-        let Foo = Foo_1 = class Foo {
-            static func() {
-                return new Foo_1();
-            }
+    var Foo_1 = /** @class */ (function () {
+        function Foo() {
+        }
+        Foo_2 = Foo;
+        Foo.func = function () {
+            return new Foo_2();
         };
-        Foo = Foo_1 = __decorate([
+        var Foo_2;
+        Foo = Foo_2 = __decorate([
             decorator()
         ], Foo);
         return Foo;
-    })();
-    Foo.func();
+    }());
+    Foo_1.func();
 }
 catch (e) { }

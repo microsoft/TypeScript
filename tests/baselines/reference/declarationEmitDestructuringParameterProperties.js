@@ -19,18 +19,24 @@ class C3 {
 }
 
 //// [declarationEmitDestructuringParameterProperties.js]
-class C1 {
-    constructor([x, y, z]) {
+var C1 = /** @class */ (function () {
+    function C1(_a) {
+        var x = _a[0], y = _a[1], z = _a[2];
     }
-}
-class C2 {
-    constructor([x, y, z]) {
+    return C1;
+}());
+var C2 = /** @class */ (function () {
+    function C2(_a) {
+        var x = _a[0], y = _a[1], z = _a[2];
     }
-}
-class C3 {
-    constructor({ x, y, z }) {
+    return C2;
+}());
+var C3 = /** @class */ (function () {
+    function C3(_a) {
+        var x = _a.x, y = _a.y, z = _a.z;
     }
-}
+    return C3;
+}());
 
 
 //// [declarationEmitDestructuringParameterProperties.d.ts]

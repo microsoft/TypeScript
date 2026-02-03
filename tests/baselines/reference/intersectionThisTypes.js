@@ -53,7 +53,7 @@ function f2(t) {
     t = t.me().self().me();
 }
 function test(label) {
-    const extended = label.extend({ id: 67 }).extend({ tag: "hello" });
+    var extended = label.extend({ id: 67 }).extend({ tag: "hello" });
     extended.id; // Ok
     extended.tag; // Ok
 }

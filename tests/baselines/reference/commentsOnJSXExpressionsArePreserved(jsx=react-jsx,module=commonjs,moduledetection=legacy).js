@@ -23,8 +23,11 @@ class Component {
 }
 
 //// [commentsOnJSXExpressionsArePreserved.js]
-class Component {
-    render() {
-        return (0, _a.jsx)("div", { children: null /* preserved */ });
+var Component = /** @class */ (function () {
+    function Component() {
     }
-}
+    Component.prototype.render = function () {
+        return (0, _a.jsx)("div", { children: null /* preserved */ });
+    };
+    return Component;
+}());

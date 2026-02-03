@@ -7,9 +7,10 @@ class C {
 }
 
 //// [staticModifierAlreadySeen.js]
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.foo = 1;
     }
-    bar() { }
-}
+    C.prototype.bar = function () { };
+    return C;
+}());

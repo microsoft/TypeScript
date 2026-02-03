@@ -19,9 +19,12 @@ class C {
 
 
 //// [conflictMarkerDiff3Trivia2.js]
-class C {
-    foo() {
-        a();
+var C = /** @class */ (function () {
+    function C() {
     }
-    bar() { }
-}
+    C.prototype.foo = function () {
+        a();
+    };
+    C.prototype.bar = function () { };
+    return C;
+}());

@@ -4,4 +4,5 @@
 export const [] = [];
 
 //// [exportEmptyArrayBindingPattern.js]
-export const [] = [];
+var _a;
+export var _b = _a = [];

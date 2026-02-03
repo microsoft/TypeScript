@@ -49,7 +49,7 @@ ONE: for (var x in {})
     continue TWO;
 // continue from inside function
 TWO: for (var x in {}) {
-    var fn = () => {
+    var fn = function () {
         continue TWO;
     };
 }

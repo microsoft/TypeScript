@@ -31,20 +31,22 @@ function h<T extends Record<K, number>, K extends string>(array: T[], prop: K): 
 //// [typeParameterExtendsPrimitive.js]
 // #14473
 function f() {
+    var _a;
     var t;
-    var v = {
-        [t]: 0
-    };
+    var v = (_a = {},
+        _a[t] = 0,
+        _a);
     return t + t;
 }
 function g(i) {
-    const n = i.x;
+    var n = i.x;
     return i.x * 2;
 }
 // #17069
 function h(array, prop) {
-    let result = 0;
-    for (const v of array) {
+    var result = 0;
+    for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
+        var v = array_1[_i];
         result += v[prop];
     }
     return result;

@@ -36,8 +36,11 @@ function foo(x, y) {
     foo(y, y);
     return new C();
 }
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 //function foo<T, U extends T>(x: T, y: U) {
 //    foo<U, U>(y, y);
 //    return new C<U, T>();

@@ -18,7 +18,7 @@ MyComponent.defaultProps = {
 
 
 //// [expandoFunctionContextualTypes.js]
-const MyComponent = () => null;
+var MyComponent = function () { return null; };
 MyComponent.defaultProps = {
     color: "red"
 };

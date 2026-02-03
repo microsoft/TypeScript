@@ -32,10 +32,11 @@ let x: TodoListProps;
 function Todo(prop) {
     return <div>{prop.key.toString() + prop.todo}</div>;
 }
-function TodoList({ todos }) {
+function TodoList(_a) {
+    var todos = _a.todos;
     return <div>
-        {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}
+        {...todos.map(function (todo) { return <Todo key={todo.id} todo={todo.todo}/>; })}
     </div>;
 }
-let x;
+var x;
 <TodoList {...x}/>;

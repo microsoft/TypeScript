@@ -12,11 +12,14 @@ class DebugClass {
 }
 
 //// [commentsOnReturnStatement1.js]
-class DebugClass {
-    static debugFunc() {
+var DebugClass = /** @class */ (function () {
+    function DebugClass() {
+    }
+    DebugClass.debugFunc = function () {
         // Start Debugger Test Code
         var i = 0;
         // End Debugger Test Code
         return true;
-    }
-}
+    };
+    return DebugClass;
+}());

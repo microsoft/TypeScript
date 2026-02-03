@@ -81,147 +81,261 @@ async function whileStatement18() {
 
 //// [es5-asyncFunctionWhileStatements.js]
 function whileStatement0() {
-    return __awaiter(this, void 0, void 0, function* () {
-        while (x) {
-            y;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            while (x) {
+                y;
+            }
+            return [2 /*return*/];
+        });
     });
 }
 function whileStatement1() {
-    return __awaiter(this, void 0, void 0, function* () {
-        while (yield x) {
-            y;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, x];
+                case 1:
+                    if (!_a.sent()) return [3 /*break*/, 2];
+                    y;
+                    return [3 /*break*/, 0];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }
 function whileStatement2() {
-    return __awaiter(this, void 0, void 0, function* () {
-        while (x) {
-            yield y;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!x) return [3 /*break*/, 2];
+                    return [4 /*yield*/, y];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 0];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }
 function whileStatement3() {
-    return __awaiter(this, void 0, void 0, function* () {
-        while (x) {
-            continue;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            while (x) {
+                continue;
+            }
+            return [2 /*return*/];
+        });
     });
 }
 function whileStatement4() {
-    return __awaiter(this, void 0, void 0, function* () {
-        while (yield x) {
-            continue;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, x];
+                case 1:
+                    if (!_a.sent()) return [3 /*break*/, 2];
+                    return [3 /*break*/, 0];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }
 function whileStatement5() {
-    return __awaiter(this, void 0, void 0, function* () {
-        while (x) {
-            yield y;
-            continue;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!x) return [3 /*break*/, 2];
+                    return [4 /*yield*/, y];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 0];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }
 function whileStatement6() {
-    return __awaiter(this, void 0, void 0, function* () {
-        while (x) {
-            if (1)
-                continue;
-            yield y;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!x) return [3 /*break*/, 2];
+                    if (1)
+                        return [3 /*break*/, 0];
+                    return [4 /*yield*/, y];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 0];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }
 function whileStatement7() {
-    return __awaiter(this, void 0, void 0, function* () {
-        A: while (x) {
-            continue A;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            A: while (x) {
+                continue A;
+            }
+            return [2 /*return*/];
+        });
     });
 }
 function whileStatement8() {
-    return __awaiter(this, void 0, void 0, function* () {
-        B: while (yield x) {
-            continue B;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, x];
+                case 1:
+                    if (!_a.sent()) return [3 /*break*/, 2];
+                    return [3 /*break*/, 0];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }
 function whileStatement9() {
-    return __awaiter(this, void 0, void 0, function* () {
-        C: while (x) {
-            yield y;
-            continue C;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!x) return [3 /*break*/, 2];
+                    return [4 /*yield*/, y];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 0];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }
 function whileStatement10() {
-    return __awaiter(this, void 0, void 0, function* () {
-        D: while (x) {
-            if (1)
-                continue D;
-            yield y;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!x) return [3 /*break*/, 2];
+                    if (1)
+                        return [3 /*break*/, 0];
+                    return [4 /*yield*/, y];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 0];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }
 function whileStatement11() {
-    return __awaiter(this, void 0, void 0, function* () {
-        while (x) {
-            break;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            while (x) {
+                break;
+            }
+            return [2 /*return*/];
+        });
     });
 }
 function whileStatement12() {
-    return __awaiter(this, void 0, void 0, function* () {
-        while (yield x) {
-            break;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, x];
+                case 1:
+                    if (!_a.sent()) return [3 /*break*/, 2];
+                    return [3 /*break*/, 2];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }
 function whileStatement13() {
-    return __awaiter(this, void 0, void 0, function* () {
-        while (x) {
-            yield y;
-            break;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!x) return [3 /*break*/, 2];
+                    return [4 /*yield*/, y];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 2];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }
 function whileStatement14() {
-    return __awaiter(this, void 0, void 0, function* () {
-        while (x) {
-            if (1)
-                break;
-            yield y;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!x) return [3 /*break*/, 2];
+                    if (1)
+                        return [3 /*break*/, 2];
+                    return [4 /*yield*/, y];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 0];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }
 function whileStatement15() {
-    return __awaiter(this, void 0, void 0, function* () {
-        E: while (x) {
-            break E;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            E: while (x) {
+                break E;
+            }
+            return [2 /*return*/];
+        });
     });
 }
 function whileStatement16() {
-    return __awaiter(this, void 0, void 0, function* () {
-        F: while (yield x) {
-            break F;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, x];
+                case 1:
+                    if (!_a.sent()) return [3 /*break*/, 2];
+                    return [3 /*break*/, 2];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }
 function whileStatement17() {
-    return __awaiter(this, void 0, void 0, function* () {
-        G: while (x) {
-            yield y;
-            break G;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!x) return [3 /*break*/, 2];
+                    return [4 /*yield*/, y];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 2];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }
 function whileStatement18() {
-    return __awaiter(this, void 0, void 0, function* () {
-        H: while (x) {
-            if (1)
-                break H;
-            yield y;
-        }
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!x) return [3 /*break*/, 2];
+                    if (1)
+                        return [3 /*break*/, 2];
+                    return [4 /*yield*/, y];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 0];
+                case 2: return [2 /*return*/];
+            }
+        });
     });
 }

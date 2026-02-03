@@ -11,5 +11,8 @@ const A: {new(): A} = class {}
 
 //// [classExpressionAssignment.js]
 // This is invalid
-const A = class {
-};
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());

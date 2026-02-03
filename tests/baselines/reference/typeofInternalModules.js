@@ -29,10 +29,13 @@ x7 = importInst;
 //// [typeofInternalModules.js]
 var Outer;
 (function (Outer) {
-    let instantiated;
+    var instantiated;
     (function (instantiated) {
-        class C {
-        }
+        var C = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
         instantiated.C = C;
     })(instantiated = Outer.instantiated || (Outer.instantiated = {}));
 })(Outer || (Outer = {}));

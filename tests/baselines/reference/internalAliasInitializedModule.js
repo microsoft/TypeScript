@@ -16,10 +16,13 @@ module c {
 //// [internalAliasInitializedModule.js]
 var a;
 (function (a) {
-    let b;
+    var b;
     (function (b) {
-        class c {
-        }
+        var c = /** @class */ (function () {
+            function c() {
+            }
+            return c;
+        }());
         b.c = c;
     })(b = a.b || (a.b = {}));
 })(a || (a = {}));

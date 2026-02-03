@@ -22,8 +22,11 @@ exports.el = void 0;
 /**
  * @module A
  */
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 /**
  * Target element
  * @type {module:A}

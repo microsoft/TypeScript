@@ -94,7 +94,7 @@ merged2 = abc; // ok
 //// [enumAssignmentCompat3.js]
 var First;
 (function (First) {
-    let E;
+    var E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -103,13 +103,13 @@ var First;
 })(First || (First = {}));
 var Abc;
 (function (Abc) {
-    let E;
+    var E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
         E[E["c"] = 2] = "c";
     })(E = Abc.E || (Abc.E = {}));
-    let Nope;
+    var Nope;
     (function (Nope) {
         Nope[Nope["a"] = 0] = "a";
         Nope[Nope["b"] = 1] = "b";
@@ -118,7 +118,7 @@ var Abc;
 })(Abc || (Abc = {}));
 var Abcd;
 (function (Abcd) {
-    let E;
+    var E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -128,7 +128,7 @@ var Abcd;
 })(Abcd || (Abcd = {}));
 var Ab;
 (function (Ab) {
-    let E;
+    var E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -136,7 +136,7 @@ var Ab;
 })(Ab || (Ab = {}));
 var Cd;
 (function (Cd) {
-    let E;
+    var E;
     (function (E) {
         E[E["c"] = 0] = "c";
         E[E["d"] = 1] = "d";
@@ -147,7 +147,7 @@ var Decl;
 })(Decl || (Decl = {}));
 var Merged;
 (function (Merged) {
-    let E;
+    var E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -159,7 +159,7 @@ var Merged;
 })(Merged || (Merged = {}));
 var Merged2;
 (function (Merged2) {
-    let E;
+    var E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";

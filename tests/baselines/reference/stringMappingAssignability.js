@@ -7,5 +7,5 @@ const y: Uppercase<string> = { foo: "bar" };
 
 //// [stringMappingAssignability.js]
 "use strict";
-const x = 42;
-const y = { foo: "bar" };
+var x = 42;
+var y = { foo: "bar" };

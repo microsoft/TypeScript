@@ -25,22 +25,28 @@ class B<T extends A> {
 
 
 //// [thisTypeAndConstraints.js]
-class A {
-    self() {
-        return this;
+var A = /** @class */ (function () {
+    function A() {
     }
-}
+    A.prototype.self = function () {
+        return this;
+    };
+    return A;
+}());
 function f(x) {
     function g(x) {
         x = x.self();
     }
     x = x.self();
 }
-class B {
-    foo(x) {
-        x = x.self();
+var B = /** @class */ (function () {
+    function B() {
     }
-    bar(x) {
+    B.prototype.foo = function (x) {
         x = x.self();
-    }
-}
+    };
+    B.prototype.bar = function (x) {
+        x = x.self();
+    };
+    return B;
+}());

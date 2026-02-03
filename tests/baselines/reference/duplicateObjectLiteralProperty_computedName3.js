@@ -79,21 +79,22 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", { value: true });
 var keys = __importStar(require("./a"));
-const t1 = {
-    [keys.n]: 1,
-    [keys.n]: 1, // duplicate
-};
-const t2 = {
-    [keys.s]: 1,
-    [keys.s]: 1, // duplicate
-};
-const t3 = {
-    [keys.E1.A]: 1,
-    [keys.E1.A]: 1, // duplicate
-};
-const t4 = {
-    [keys.E2.B]: 1,
-    [keys.E2.B]: 1, // duplicate
-};
+var t1 = (_a = {},
+    _a[keys.n] = 1,
+    _a[keys.n] = 1,
+    _a);
+var t2 = (_b = {},
+    _b[keys.s] = 1,
+    _b[keys.s] = 1,
+    _b);
+var t3 = (_c = {},
+    _c[keys.E1.A] = 1,
+    _c[keys.E1.A] = 1,
+    _c);
+var t4 = (_d = {},
+    _d[keys.E2.B] = 1,
+    _d[keys.E2.B] = 1,
+    _d);

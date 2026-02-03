@@ -48,15 +48,24 @@ const E = class {
 "use strict";
 var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 P in PlaceType;
-const D = (_a = class {
-    },
+var D = (_a = /** @class */ (function () {
+        function class_1() {
+        }
+        return class_1;
+    }()),
     P in PlaceType,
     _a);
-const E = (_b = class {
-    },
+var E = (_b = /** @class */ (function () {
+        function class_2() {
+        }
+        return class_2;
+    }()),
     P in 'a' | 'b',
     _b);
 

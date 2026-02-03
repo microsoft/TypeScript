@@ -15,17 +15,17 @@ export default class C {
 //// [usingDeclarationsWithLegacyClassDecorators.3.js]
 export { _default as default };
 var before, C, _default;
-const env_1 = { stack: [], error: void 0, hasError: false };
+var env_1 = { stack: [], error: void 0, hasError: false };
 try {
     before = __addDisposableResource(env_1, null, false);
-    C = (() => {
-        let C = class C {
-        };
+    C = /** @class */ (function () {
+        function C() {
+        }
         C = __decorate([
             dec
         ], C);
         return C;
-    })();
+    }());
     _default = C;
 }
 catch (e_1) {

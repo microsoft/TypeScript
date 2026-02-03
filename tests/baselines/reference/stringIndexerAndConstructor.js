@@ -16,7 +16,9 @@ interface I {
 }
 
 //// [stringIndexerAndConstructor.js]
-class C {
-    constructor() { }
-    static v() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.v = function () { };
+    return C;
+}());

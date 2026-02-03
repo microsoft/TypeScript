@@ -12,8 +12,8 @@ if (foo[key]) {
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty2.js]
 "use strict";
-const foo = {};
-const key = 'key';
+var foo = {};
+var key = 'key';
 if (foo[key]) {
     foo[key]; // number
     foo.key; // number

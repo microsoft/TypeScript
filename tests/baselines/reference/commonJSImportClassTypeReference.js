@@ -18,15 +18,18 @@ exports.K = K;
 
 //// [mod1.js]
 "use strict";
-class K {
-    values() {
-        return new K();
+var K = /** @class */ (function () {
+    function K() {
     }
-}
+    K.prototype.values = function () {
+        return new K();
+    };
+    return K;
+}());
 exports.K = K;
 //// [main.js]
 "use strict";
-const { K } = require("./mod1");
+var K = require("./mod1").K;
 /** @param {K} k */
 function f(k) {
     k.values();

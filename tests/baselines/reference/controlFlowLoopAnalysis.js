@@ -53,10 +53,10 @@ function mapUntilCant<a, b>(
 
 //// [controlFlowLoopAnalysis.js]
 // Repro from #8418
-let cond;
+var cond;
 function foo(x) { return 1; }
 function test1() {
-    let x;
+    var x;
     while (cond) {
         while (cond) {
             while (cond) {
@@ -68,7 +68,7 @@ function test1() {
 }
 // Repro from #8418
 function test2() {
-    let x;
+    var x;
     x = 1;
     while (cond) {
         while (cond) {
@@ -78,9 +78,9 @@ function test2() {
 }
 // Repro from #8511
 function mapUntilCant(values, canTake, mapping) {
-    let result = [];
-    for (let index = 0, length = values.length; index < length; index++) {
-        let value = values[index];
+    var result = [];
+    for (var index = 0, length_1 = values.length; index < length_1; index++) {
+        var value = values[index];
         if (canTake(value, index)) {
             result.push(mapping(value, index));
         }

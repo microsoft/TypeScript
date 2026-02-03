@@ -26,19 +26,28 @@ class Weird {
 function getNumber() {
     return 1;
 }
-class Example {
-    getNumber() {
+var Example = /** @class */ (function () {
+    function Example() {
+    }
+    Example.prototype.getNumber = function () {
         return 1;
-    }
-    doSomething(a = this.getNumber()) {
+    };
+    Example.prototype.doSomething = function (a) {
+        if (a === void 0) { a = this.getNumber(); }
         return a;
-    }
-}
-function weird(a = this.getNumber()) {
+    };
+    return Example;
+}());
+function weird(a) {
+    if (a === void 0) { a = this.getNumber(); }
     return a;
 }
-class Weird {
-    doSomething(a = this.getNumber()) {
-        return a;
+var Weird = /** @class */ (function () {
+    function Weird() {
     }
-}
+    Weird.prototype.doSomething = function (a) {
+        if (a === void 0) { a = this.getNumber(); }
+        return a;
+    };
+    return Weird;
+}());

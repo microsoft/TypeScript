@@ -6,4 +6,4 @@ let bar: bar;
 
 
 //// [resolveInterfaceNameWithSameLetDeclarationName1.js]
-let bar;
+var bar;

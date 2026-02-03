@@ -17,8 +17,11 @@ function test(strInput: string & MyBrand) {
 
 
 //// [switchComparableCompatForBrands.js]
-class MyBrand {
-}
+var MyBrand = /** @class */ (function () {
+    function MyBrand() {
+    }
+    return MyBrand;
+}());
 function test(strInput) {
     switch (strInput) {
         case "a":

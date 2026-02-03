@@ -24,14 +24,17 @@ define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Foo = void 0;
-    class Foo {
-        doThing(x) {
+    var Foo = /** @class */ (function () {
+        function Foo() {
+        }
+        Foo.prototype.doThing = function (x) {
             return { b: x.a };
-        }
-        static make() {
+        };
+        Foo.make = function () {
             return new Foo();
-        }
-    }
+        };
+        return Foo;
+    }());
     exports.Foo = Foo;
 });
 define("index", ["require", "exports", "a"], function (require, exports, a_1) {
@@ -39,7 +42,7 @@ define("index", ["require", "exports", "a"], function (require, exports, a_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Foo = exports.c = exports.x = void 0;
     Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return a_1.Foo; } });
-    const c = new a_1.Foo();
+    var c = new a_1.Foo();
     exports.c = c;
     c.doThing({ a: 42 });
     exports.x = c.doThing({ a: 12 });

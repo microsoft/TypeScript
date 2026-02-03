@@ -29,20 +29,27 @@ class A {
 function f0(a) {
     a.b;
 }
-function f1({ a }) {
+function f1(_a) {
+    var a = _a.a;
     a.b;
 }
-function f2([a]) {
+function f2(_a) {
+    var a = _a[0];
     a.b;
 }
-class A {
-    m0(a) {
-        a.b;
+var A = /** @class */ (function () {
+    function A() {
     }
-    m1({ a }) {
+    A.prototype.m0 = function (a) {
         a.b;
-    }
-    m2([a]) {
+    };
+    A.prototype.m1 = function (_a) {
+        var a = _a.a;
         a.b;
-    }
-}
+    };
+    A.prototype.m2 = function (_a) {
+        var a = _a[0];
+        a.b;
+    };
+    return A;
+}());

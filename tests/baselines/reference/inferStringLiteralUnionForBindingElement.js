@@ -26,18 +26,18 @@ function func3() {
 
 //// [inferStringLiteralUnionForBindingElement.js]
 function func1() {
-    const { firstKey } = func({ keys: ["aa", "bb"] });
-    const a = firstKey;
-    const { keys } = func({ keys: ["aa", "bb"] });
-    const b = keys;
+    var firstKey = func({ keys: ["aa", "bb"] }).firstKey;
+    var a = firstKey;
+    var keys = func({ keys: ["aa", "bb"] }).keys;
+    var b = keys;
 }
 function func2() {
-    const { keys, firstKey } = func({ keys: ["aa", "bb"] });
-    const a = firstKey;
-    const b = keys;
+    var _a = func({ keys: ["aa", "bb"] }), keys = _a.keys, firstKey = _a.firstKey;
+    var a = firstKey;
+    var b = keys;
 }
 function func3() {
-    const x = func({ keys: ["aa", "bb"] });
-    const a = x.firstKey;
-    const b = x.keys;
+    var x = func({ keys: ["aa", "bb"] });
+    var a = x.firstKey;
+    var b = x.keys;
 }

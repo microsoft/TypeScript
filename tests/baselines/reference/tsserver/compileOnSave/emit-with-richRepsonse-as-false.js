@@ -293,7 +293,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/user/username/projects/myproject/test/file1.js]
-const x = 1;
+var x = 1;
 
 
 //// [/user/username/projects/myproject/test/file1.d.ts]

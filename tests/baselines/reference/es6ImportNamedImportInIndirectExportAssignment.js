@@ -17,8 +17,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 var a;
 (function (a) {
-    class c {
-    }
+    var c = /** @class */ (function () {
+        function c() {
+        }
+        return c;
+    }());
     a.c = c;
 })(a || (exports.a = a = {}));
 //// [es6ImportNamedImportInIndirectExportAssignment_1.js]

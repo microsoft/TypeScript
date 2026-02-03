@@ -18,9 +18,9 @@ console.log(a); // <- error here
 
 //// [controlFlowFinallyNoCatchAssignments.js]
 "use strict";
-let x;
+var x;
 x = Math.random();
-let a;
+var a;
 try {
     if (x) {
         a = 1;

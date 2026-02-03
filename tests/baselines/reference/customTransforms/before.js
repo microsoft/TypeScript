@@ -1,9 +1,12 @@
 // [source.js]
 /*@before*/
 function f1() { }
-class c {
-}
-() => { };
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
+(function () { });
 var e;
 (function (e) {
 })(e || (e = {}));

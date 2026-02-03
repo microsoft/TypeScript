@@ -72,7 +72,7 @@ var OuterMod;
 (function (OuterMod) {
     function someExportedOuterFunc() { return -1; }
     OuterMod.someExportedOuterFunc = someExportedOuterFunc;
-    let OuterInnerMod;
+    var OuterInnerMod;
     (function (OuterInnerMod) {
         function someExportedOuterInnerFunc() { return "foo"; }
         OuterInnerMod.someExportedOuterInnerFunc = someExportedOuterInnerFunc;
@@ -81,12 +81,12 @@ var OuterMod;
 var OuterInnerAlias = OuterMod.OuterInnerMod;
 var M;
 (function (M) {
-    let InnerMod;
+    var InnerMod;
     (function (InnerMod) {
         function someExportedInnerFunc() { return -2; }
         InnerMod.someExportedInnerFunc = someExportedInnerFunc;
     })(InnerMod = M.InnerMod || (M.InnerMod = {}));
-    let E;
+    var E;
     (function (E) {
         E[E["A"] = 0] = "A";
         E[E["B"] = 1] = "B";
@@ -94,22 +94,24 @@ var M;
     })(E = M.E || (M.E = {}));
     M.x = 5;
     var y = M.x + M.x;
-    class B {
-        constructor() {
+    var B = /** @class */ (function () {
+        function B() {
             this.b = 0;
         }
-    }
-    class C {
-        someMethodThatCallsAnOuterMethod() { return OuterInnerAlias.someExportedOuterInnerFunc(); }
-        someMethodThatCallsAnInnerMethod() { return InnerMod.someExportedInnerFunc(); }
-        someMethodThatCallsAnOuterInnerMethod() { return OuterMod.someExportedOuterFunc(); }
-        someMethod() { return 0; }
-        constructor() {
+        return B;
+    }());
+    var C = /** @class */ (function () {
+        function C() {
             this.someProp = 1;
             function someInnerFunc() { return 2; }
             var someInnerVar = 3;
         }
-    }
+        C.prototype.someMethodThatCallsAnOuterMethod = function () { return OuterInnerAlias.someExportedOuterInnerFunc(); };
+        C.prototype.someMethodThatCallsAnInnerMethod = function () { return InnerMod.someExportedInnerFunc(); };
+        C.prototype.someMethodThatCallsAnOuterInnerMethod = function () { return OuterMod.someExportedOuterFunc(); };
+        C.prototype.someMethod = function () { return 0; };
+        return C;
+    }());
     M.C = C;
     var someModuleVar = 4;
     function someModuleFunction() { return 5; }

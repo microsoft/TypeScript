@@ -92,7 +92,7 @@ M = { y: 3 }; // Error
 (M) = { y: 3 }; // Error
 var M2;
 (function (M2) {
-    let M3;
+    var M3;
     (function (M3) {
     })(M3 = M2.M3 || (M2.M3 = {}));
     M3 = { x: 3 }; // Error
@@ -104,8 +104,8 @@ M2.M3 = { x: '' }; // Error
 (M2).M3 = { x: '' }; // Error
 (M2.M3) = { x: '' }; // Error
 function fn() { }
-fn = () => 3; // Bug 823548: Should be error (fn is not a reference)
-(fn) = () => 3; // Should be error
+fn = function () { return 3; }; // Bug 823548: Should be error (fn is not a reference)
+(fn) = function () { return 3; }; // Should be error
 function fn2(x, y) {
     x = 3;
     (x) = 3; // OK
@@ -128,7 +128,10 @@ var E;
 })(E || (E = {}));
 E = undefined; // Error
 (E) = undefined; // Error
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 C = undefined; // Error
 (C) = undefined; // Error

@@ -4,7 +4,7 @@
 let x = <{a: number; a: number}>{};
 
 //// [duplicatePropertiesInTypeAssertions01.js]
-let x = {};
+var x = {};
 
 
 //// [duplicatePropertiesInTypeAssertions01.d.ts]

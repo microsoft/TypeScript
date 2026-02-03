@@ -39,7 +39,7 @@ var Foo;
         return a;
     }
     Foo.c = c;
-    let Test;
+    var Test;
     (function (Test) {
         Test.answer = 42;
     })(Test = Foo.Test || (Foo.Test = {}));

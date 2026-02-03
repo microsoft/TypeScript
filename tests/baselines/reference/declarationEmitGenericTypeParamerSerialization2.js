@@ -42,7 +42,7 @@ export const v = makeV();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.v = exports.x = void 0;
-exports.x = (() => null)();
+exports.x = (function () { return null; })();
 function makeV() {
     return null;
 }

@@ -14,8 +14,11 @@ var x = ext;
 
 //// [ambientExternalModuleInAnotherExternalModule.js]
 "use strict";
-class D {
-}
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());
 // Cannot resolve this ext module reference
 var ext = require("ext");
 var x = ext;

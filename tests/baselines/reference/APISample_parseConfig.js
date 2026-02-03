@@ -58,18 +58,19 @@ function printError(error) {
     if (!error) {
         return;
     }
-    console.log(`${error.file && error.file.fileName}: ${error.messageText}`);
+    console.log("".concat(error.file && error.file.fileName, ": ").concat(error.messageText));
 }
 function createProgram(rootFiles, compilerOptionsJson) {
-    const { config, error } = ts.parseConfigFileTextToJson("tsconfig.json", compilerOptionsJson);
+    var _a = ts.parseConfigFileTextToJson("tsconfig.json", compilerOptionsJson), config = _a.config, error = _a.error;
     if (error) {
         printError(error);
         return undefined;
     }
-    const basePath = process.cwd();
-    const settings = ts.convertCompilerOptionsFromJson(config.config["compilerOptions"], basePath);
+    var basePath = process.cwd();
+    var settings = ts.convertCompilerOptionsFromJson(config.config["compilerOptions"], basePath);
     if (!settings.options) {
-        for (const err of settings.errors) {
+        for (var _i = 0, _b = settings.errors; _i < _b.length; _i++) {
+            var err = _b[_i];
             printError(err);
         }
         return undefined;

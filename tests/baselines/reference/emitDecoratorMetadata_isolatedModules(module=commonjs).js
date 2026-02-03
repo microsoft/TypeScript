@@ -48,8 +48,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C3 = void 0;
-class C3 {
-}
+var C3 = /** @class */ (function () {
+    function C3() {
+    }
+    return C3;
+}());
 exports.C3 = C3;
 //// [index.js]
 "use strict";
@@ -98,12 +101,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var t1 = __importStar(require("./type1"));
 var class3_1 = require("./class3");
-let HelloWorld = (() => {
-    class HelloWorld {
-        handleEvent1(event) { } // Error
-        handleEvent2(event) { } // Ok
-        handleEvent3(event) { return undefined; } // Ok, Error
+var HelloWorld = /** @class */ (function () {
+    function HelloWorld() {
     }
+    HelloWorld.prototype.handleEvent1 = function (event) { }; // Error
+    HelloWorld.prototype.handleEvent2 = function (event) { }; // Ok
+    HelloWorld.prototype.handleEvent3 = function (event) { return undefined; }; // Ok, Error
     __decorate([
         EventListener('1'),
         __metadata("design:type", Function),
@@ -135,4 +138,4 @@ let HelloWorld = (() => {
         __metadata("design:returntype", Object)
     ], HelloWorld.prototype, "handleEvent3", null);
     return HelloWorld;
-})();
+}());

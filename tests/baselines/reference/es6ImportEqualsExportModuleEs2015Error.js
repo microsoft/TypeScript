@@ -12,8 +12,11 @@ a;
 
 
 //// [a.js]
-class a {
-}
+var a = /** @class */ (function () {
+    function a() {
+    }
+    return a;
+}());
 export {};
 //// [main.js]
 import * as a from "./a";

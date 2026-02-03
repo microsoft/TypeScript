@@ -17,11 +17,14 @@ class BufferPool<E extends Enum, M extends TypeMap<E>> {
 //// [deeplyNestedConstraints.js]
 "use strict";
 // Repro from #41931
-class BufferPool {
-    setArray2(_, array) {
-        array.length; // Requires exploration of >5 levels of constraints
+var BufferPool = /** @class */ (function () {
+    function BufferPool() {
     }
-}
+    BufferPool.prototype.setArray2 = function (_, array) {
+        array.length; // Requires exploration of >5 levels of constraints
+    };
+    return BufferPool;
+}());
 
 
 //// [deeplyNestedConstraints.d.ts]

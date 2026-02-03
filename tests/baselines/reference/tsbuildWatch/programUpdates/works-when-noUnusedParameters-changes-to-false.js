@@ -41,7 +41,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/index.js]
-const fn = (a, b) => b;
+var fn = function (a, b) { return b; };
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]

@@ -367,7 +367,7 @@ Found 2 errors in the same file, starting at: tsconfig.json[90m:8[0m
 
 //// [/home/src/projects/component-type-checker/packages/app/dist/app.js]
 import { createButton } from "@component-type-checker/button";
-const button = createButton();
+var button = createButton();
 
 
 

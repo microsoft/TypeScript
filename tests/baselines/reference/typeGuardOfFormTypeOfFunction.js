@@ -145,15 +145,16 @@ function f12(x) {
 }
 // Repro from #18238
 function f100(obj, keys) {
-    for (const k of keys) {
-        const item = obj[k];
+    for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
+        var k = keys_1[_i];
+        var item = obj[k];
         if (typeof item == 'function')
             item.call(obj);
     }
 }
 // Repro from #49316
 function configureStore(reducer) {
-    let rootReducer;
+    var rootReducer;
     if (typeof reducer === 'function') {
         rootReducer = reducer;
     }

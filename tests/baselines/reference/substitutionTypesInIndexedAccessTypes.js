@@ -24,9 +24,9 @@ const withoutBoundaryResult = withoutBoundary({
 //// [substitutionTypesInIndexedAccessTypes.js]
 "use strict";
 // Repro from #31086
-const boundaryResult = withBoundary({
+var boundaryResult = withBoundary({
     select: true,
 });
-const withoutBoundaryResult = withoutBoundary({
+var withoutBoundaryResult = withoutBoundary({
     select: true,
 });

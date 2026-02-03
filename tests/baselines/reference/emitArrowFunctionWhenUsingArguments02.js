@@ -4,4 +4,4 @@
 var a = () => arguments;
 
 //// [emitArrowFunctionWhenUsingArguments02.js]
-var a = () => arguments;
+var a = function () { return arguments; };

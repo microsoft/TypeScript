@@ -32,12 +32,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-let A = (() => {
-    class A {
-        constructor() {
-            this.j = [];
-            this.k = ['foo', 42];
-        }
+var A = /** @class */ (function () {
+    function A() {
+        this.j = [];
+        this.k = ['foo', 42];
     }
     __decorate([
         someDec,
@@ -48,7 +46,7 @@ let A = (() => {
         __metadata("design:type", Array)
     ], A.prototype, "k", void 0);
     return A;
-})();
+}());
 
 
 //// [readonlyArraysAndTuples2.d.ts]

@@ -7,8 +7,9 @@ class C {
 }
 
 //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration2.js]
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.x = 10;
     }
-}
+    return C;
+}());

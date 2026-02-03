@@ -33,8 +33,8 @@ b.foo();
 
 
 //// [autolift3.js]
-class B {
-    constructor() {
+var B = /** @class */ (function () {
+    function B() {
         function foo() { }
         foo();
         var a = 0;
@@ -50,6 +50,7 @@ class B {
             return inner;
         })();
     }
-}
+    return B;
+}());
 var b = new B();
 b.foo();

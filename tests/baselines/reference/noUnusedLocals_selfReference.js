@@ -39,9 +39,12 @@ function f() {
         g;
     }
 }
-class C {
-    m() { C; }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.m = function () { C; };
+    return C;
+}());
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -52,12 +55,18 @@ var N;
 (function (N) {
     N;
 })(N || (N = {}));
-class P {
-    m() { this.m; }
-}
+var P = /** @class */ (function () {
+    function P() {
+    }
+    P.prototype.m = function () { this.m; };
+    return P;
+}());
 P;
 // Does not detect mutual recursion.
 function g() { D; }
-class D {
-    m() { g; }
-}
+var D = /** @class */ (function () {
+    function D() {
+    }
+    D.prototype.m = function () { g; };
+    return D;
+}());

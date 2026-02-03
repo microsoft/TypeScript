@@ -20,10 +20,20 @@ function f2() {
 
 //// [spreadParameterTupleType.js]
 function f1() {
-    return function fn(...args) { };
+    return function fn() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+    };
 }
 function f2() {
-    return function fn(...args) { };
+    return function fn() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+    };
 }
 
 

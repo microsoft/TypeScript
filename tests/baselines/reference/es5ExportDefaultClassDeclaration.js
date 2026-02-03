@@ -9,9 +9,12 @@ export default class C {
 //// [es5ExportDefaultClassDeclaration.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class C {
-    method() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.method = function () { };
+    return C;
+}());
 exports.default = C;
 
 

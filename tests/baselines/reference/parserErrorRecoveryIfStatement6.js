@@ -13,13 +13,16 @@ class Foo {
 
 
 //// [parserErrorRecoveryIfStatement6.js]
-class Foo {
-    f1() {
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    Foo.prototype.f1 = function () {
         if (a.b) {
         }
-    }
-    f2() {
-    }
-    f3() {
-    }
-}
+    };
+    Foo.prototype.f2 = function () {
+    };
+    Foo.prototype.f3 = function () {
+    };
+    return Foo;
+}());

@@ -15,4 +15,4 @@ const regular = 456n;
 
 //// [main.js]
 // Non-ambient for comparison
-const regular = 456n;
+var regular = 456n;

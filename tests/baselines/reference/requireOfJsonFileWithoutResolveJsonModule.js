@@ -13,14 +13,14 @@ if (x) {
 contents Not read
 
 //// [out/b.json]
-{ contents, Not, read }
+({ contents: contents, Not: Not, read: read })
 //// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var b1 = require("./b.json"); // error
-let x = b1.a;
+var x = b1.a;
 var b2 = require("./b.json"); // error
 if (x) {
-    let b = b2.b;
+    var b = b2.b;
     x = (b1.b === b);
 }

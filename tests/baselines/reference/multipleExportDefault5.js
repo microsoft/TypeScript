@@ -9,6 +9,9 @@ export default class C {}
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = bar;
 function bar() { }
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 exports.default = C;

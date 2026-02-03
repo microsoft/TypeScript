@@ -6,5 +6,5 @@ ijs = ijs.concat([[3, 4], [5, 6]]);
 
 
 //// [concatTuples.js]
-let ijs = [[1, 2]];
+var ijs = [[1, 2]];
 ijs = ijs.concat([[3, 4], [5, 6]]);

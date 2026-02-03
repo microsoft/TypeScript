@@ -76,15 +76,16 @@ var MsPortalFx;
 (function (MsPortalFx) {
     var ViewModels;
     (function (ViewModels) {
-        class SomeUsagesOfTheseConsts {
-            constructor() {
+        var SomeUsagesOfTheseConsts = /** @class */ (function () {
+            function SomeUsagesOfTheseConsts() {
                 // these do get replaced by the const value
-                const value1 = 1 /* ReExportedEnum.Cancel */;
+                var value1 = 1 /* ReExportedEnum.Cancel */;
                 console.log(value1);
-                const value2 = 2 /* DialogButtons.OKCancel */;
+                var value2 = 2 /* DialogButtons.OKCancel */;
                 console.log(value2);
             }
-        }
+            return SomeUsagesOfTheseConsts;
+        }());
         ViewModels.SomeUsagesOfTheseConsts = SomeUsagesOfTheseConsts;
     })(ViewModels = MsPortalFx.ViewModels || (MsPortalFx.ViewModels = {}));
 })(MsPortalFx || (MsPortalFx = {}));

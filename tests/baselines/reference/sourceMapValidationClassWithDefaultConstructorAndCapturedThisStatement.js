@@ -7,10 +7,12 @@ class Greeter {
 }
 
 //// [sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js]
-class Greeter {
-    constructor() {
+var Greeter = /** @class */ (function () {
+    function Greeter() {
+        var _this = this;
         this.a = 10;
-        this.returnA = () => this.a;
+        this.returnA = function () { return _this.a; };
     }
-}
+    return Greeter;
+}());
 //# sourceMappingURL=sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js.map

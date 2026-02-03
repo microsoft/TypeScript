@@ -6,5 +6,5 @@ var v = (a: ) => {
 };
 
 //// [ArrowFunction1.js]
-var v = (a) => {
+var v = function (a) {
 };

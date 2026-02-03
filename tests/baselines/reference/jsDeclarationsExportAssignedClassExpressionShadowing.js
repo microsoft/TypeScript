@@ -16,21 +16,24 @@ module.exports.Another = Q;
 
 
 //// [index.js]
-class A {
-    constructor() {
+var A = /** @class */ (function () {
+    function A() {
         this.member = new Q();
     }
-}
-class Q {
-    constructor() {
+    return A;
+}());
+var Q = /** @class */ (function () {
+    function Q() {
         this.x = 42;
     }
-}
-module.exports = class Q {
-    constructor() {
+    return Q;
+}());
+module.exports = /** @class */ (function () {
+    function Q() {
         this.x = new A();
     }
-};
+    return Q;
+}());
 module.exports.Another = Q;
 
 

@@ -27,10 +27,13 @@ export {MyClass};
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
-class db {
-    doSomething() {
+var db = /** @class */ (function () {
+    function db() {
     }
-}
+    db.prototype.doSomething = function () {
+    };
+    return db;
+}());
 exports.db = db;
 //// [service.js]
 "use strict";
@@ -40,18 +43,16 @@ var db_1 = __importDefault(require("./db")); // error no default export
 function someDecorator(target) {
     return target;
 }
-let MyClass = (() => {
+var MyClass = /** @class */ (function () {
+    function MyClass(db) {
+        this.db = db;
+        this.db.doSomething();
+    }
     var _a;
-    let MyClass = class MyClass {
-        constructor(db) {
-            this.db = db;
-            this.db.doSomething();
-        }
-    };
     MyClass = __decorate([
         someDecorator,
         __metadata("design:paramtypes", [typeof (_a = typeof db_1.default !== "undefined" && db_1.default.db) === "function" ? _a : Object])
     ], MyClass);
     return MyClass;
-})();
+}());
 exports.MyClass = MyClass;

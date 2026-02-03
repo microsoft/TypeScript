@@ -12,7 +12,7 @@ module a{
 var a;
 (function (a) {
     var x;
-    let b;
+    var b;
     (function (b) {
         var y = x; // should not be an error
     })(b || (b = {}));

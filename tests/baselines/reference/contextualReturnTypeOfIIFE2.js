@@ -15,7 +15,7 @@ app.foo.bar.someFun(1);
 
 //// [contextualReturnTypeOfIIFE2.js]
 app.foo.bar = (function () {
-    const someFun = (arg) => { };
-    return { someFun };
+    var someFun = function (arg) { };
+    return { someFun: someFun };
 })();
 app.foo.bar.someFun(1);

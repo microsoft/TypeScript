@@ -25,8 +25,8 @@ function getPermissions(user) {
         return 'admin';
     return undefined;
 }
-const admins = ['Mike', 'Joe'].map(e => getPermissions(e));
+var admins = ['Mike', 'Joe'].map(function (e) { return getPermissions(e); });
 function isDefined(a) {
     return a !== undefined;
 }
-const foundAdmins = admins.filter(isDefined); // "admin"[]
+var foundAdmins = admins.filter(isDefined); // "admin"[]

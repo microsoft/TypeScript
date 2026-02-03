@@ -18,13 +18,13 @@ switch (1) {
 //// [nestedBlockScopedBindings11.js]
 var x;
 {
-    let x;
-    () => x;
+    var x_1;
+    (function () { return x_1; });
 }
 var y;
 switch (1) {
     case 1:
-        let y;
-        () => y;
+        var y_1;
+        (function () { return y_1; });
         break;
 }

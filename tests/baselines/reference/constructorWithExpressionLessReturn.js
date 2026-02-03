@@ -27,25 +27,29 @@ class F<T> {
 }
 
 //// [constructorWithExpressionLessReturn.js]
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         return;
     }
-}
-class D {
-    constructor() {
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
         return;
     }
-}
-class E {
-    constructor(x) {
+    return D;
+}());
+var E = /** @class */ (function () {
+    function E(x) {
         this.x = x;
         return;
     }
-}
-class F {
-    constructor(x) {
+    return E;
+}());
+var F = /** @class */ (function () {
+    function F(x) {
         this.x = x;
         return;
     }
-}
+    return F;
+}());

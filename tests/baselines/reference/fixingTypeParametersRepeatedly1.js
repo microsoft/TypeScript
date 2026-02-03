@@ -10,5 +10,5 @@ declare function g();
 g("", x => null, x => x.toLowerCase());
 
 //// [fixingTypeParametersRepeatedly1.js]
-f("", x => null, x => x.toLowerCase());
-g("", x => null, x => x.toLowerCase());
+f("", function (x) { return null; }, function (x) { return x.toLowerCase(); });
+g("", function (x) { return null; }, function (x) { return x.toLowerCase(); });

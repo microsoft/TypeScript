@@ -11,5 +11,8 @@ var x = class C {
 }
 
 //// [classExpressionWithResolutionOfNamespaceOfSameName01.js]
-var x = class C {
-};
+var x = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

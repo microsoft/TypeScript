@@ -56,8 +56,9 @@ for(let f in (Foo.forIn = []) ){
 //// [expandoFunctionNestedAssigments.js]
 function Foo() {
 }
-let d = (Foo.inVariableInit = 1);
-function bar(p = (Foo.inNestedFunction = 1)) {
+var d = (Foo.inVariableInit = 1);
+function bar(p) {
+    if (p === void 0) { p = (Foo.inNestedFunction = 1); }
 }
 (Foo.bla = { foo: 1 }).foo = (Foo.baz = 1) + (Foo.bar = 0);
 if (Foo.fromIf = 1) {
@@ -81,13 +82,14 @@ for (Foo.forInit = 1; (Foo.forCond = 1) > 1; Foo.forIncr = 1) {
         Foo.fromForBodyNested = 1;
     }
 }
-for (let f of (Foo.forOf = [])) {
+for (var _i = 0, _a = (Foo.forOf = []); _i < _a.length; _i++) {
+    var f = _a[_i];
     Foo.fromForOfBody = 1;
     {
         Foo.fromForOfBodyNested = 1;
     }
 }
-for (let f in (Foo.forIn = [])) {
+for (var f in (Foo.forIn = [])) {
     Foo.fromForInBody = 1;
     {
         Foo.fromForInBodyNested = 1;

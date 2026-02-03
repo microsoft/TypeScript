@@ -46,19 +46,19 @@ f({
 // simple inference
 f({
     disc: true,
-    cb: s => parseInt(s)
+    cb: function (s) { return parseInt(s); }
 });
 // simple inference
 f({
     disc: false,
-    cb: n => n.toFixed()
+    cb: function (n) { return n.toFixed(); }
 });
 // simple inference when strict-null-checks are enabled
 f({
     disc: undefined,
-    cb: n => n.toFixed()
+    cb: function (n) { return n.toFixed(); }
 });
 // requires checking type information since discriminator is missing from object
 f({
-    cb: n => n.toFixed()
+    cb: function (n) { return n.toFixed(); }
 });

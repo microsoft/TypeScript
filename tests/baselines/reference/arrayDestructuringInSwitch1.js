@@ -29,16 +29,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.evaluate = evaluate;
 function evaluate(expression) {
     if (Array.isArray(expression)) {
-        const [operator, ...operands] = expression;
+        var operator = expression[0], operands = expression.slice(1);
         switch (operator) {
             case 'and': {
-                return operands.every((child) => evaluate(child));
+                return operands.every(function (child) { return evaluate(child); });
             }
             case 'not': {
                 return !evaluate(operands[0]);
             }
             default: {
-                throw new Error(`${operator} is not a supported operator`);
+                throw new Error("".concat(operator, " is not a supported operator"));
             }
         }
     }

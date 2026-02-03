@@ -8,6 +8,7 @@ var o = {
 };
 
 //// [computedPropertyNames47_ES5.js]
+var _a;
 var E1;
 (function (E1) {
     E1[E1["x"] = 0] = "x";
@@ -16,6 +17,6 @@ var E2;
 (function (E2) {
     E2[E2["x"] = 0] = "x";
 })(E2 || (E2 = {}));
-var o = {
-    [E1.x || E2.x]: 0
-};
+var o = (_a = {},
+    _a[E1.x || E2.x] = 0,
+    _a);

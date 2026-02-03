@@ -16,6 +16,9 @@ class C5 implements I1 {
 
 
 //// [interfaceImplementation4.js]
-class C5 {
-    iFn() { }
-}
+var C5 = /** @class */ (function () {
+    function C5() {
+    }
+    C5.prototype.iFn = function () { };
+    return C5;
+}());

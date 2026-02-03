@@ -21,8 +21,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Services = void 0;
 var Services;
 (function (Services) {
-    class Service {
-    }
+    var Service = /** @class */ (function () {
+        function Service() {
+        }
+        return Service;
+    }());
     Services.Service = Service;
 })(Services || (exports.Services = Services = {}));
 //// [index.js]
@@ -38,13 +41,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = void 0;
-let Main = (() => {
-    class Main {
+var Main = /** @class */ (function () {
+    function Main() {
     }
     __decorate([
         decorator(),
         __metadata("design:type", Function)
     ], Main.prototype, "field", void 0);
     return Main;
-})();
+}());
 exports.Main = Main;

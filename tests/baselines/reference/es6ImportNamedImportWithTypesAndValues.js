@@ -23,17 +23,19 @@ export var cVal = new C();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C2 = exports.C = void 0;
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.prop = "hello";
     }
-}
+    return C;
+}());
 exports.C = C;
-class C2 {
-    constructor() {
+var C2 = /** @class */ (function () {
+    function C2() {
         this.prop2 = "world";
     }
-}
+    return C2;
+}());
 exports.C2 = C2;
 //// [client.js]
 "use strict";

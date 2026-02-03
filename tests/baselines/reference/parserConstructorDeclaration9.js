@@ -6,6 +6,8 @@ class C {
 }
 
 //// [parserConstructorDeclaration9.js]
-class C {
-    constructor<T>() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

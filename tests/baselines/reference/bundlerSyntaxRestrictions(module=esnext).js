@@ -32,10 +32,10 @@ export const a = "a";
 
 
 //// [a.js]
-export const a = "a";
+export var a = "a";
 //// [mainJs.js]
 import("./a");
-const _ = require("./a");
+var _ = require("./a");
 _.a; // any
 export {};
 //// [main.js]

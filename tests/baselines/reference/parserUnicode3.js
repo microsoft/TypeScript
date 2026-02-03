@@ -5,5 +5,8 @@ class 剩下 {
 }
 
 //// [parserUnicode3.js]
-class 剩下 {
-}
+var 剩下 = /** @class */ (function () {
+    function 剩下() {
+    }
+    return 剩下;
+}());

@@ -10,7 +10,7 @@ const array = [
 
 
 //// [commentOnArrayElement16.js]
-const array = [
+var array = [
     // comment start
     1,
     2,

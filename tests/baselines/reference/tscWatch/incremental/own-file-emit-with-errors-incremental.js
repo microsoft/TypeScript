@@ -42,11 +42,11 @@ Found 1 error in file2.ts[90m:1[0m
 
 
 //// [/users/username/projects/project/file1.js]
-const x = 10;
+var x = 10;
 
 
 //// [/users/username/projects/project/file2.js]
-const y = 20;
+var y = 20;
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
@@ -162,7 +162,7 @@ Found 1 error in file2.ts[90m:1[0m
 
 
 //// [/users/username/projects/project/file1.js]
-const z = 10;
+var z = 10;
 
 
 //// [/users/username/projects/project/file2.js] file written with same contents

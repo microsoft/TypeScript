@@ -42,15 +42,15 @@ function g() {
 
 //// [deepComparisons.js]
 function f1() {
-    let v1 = 0; // Error
-    let v2 = 0; // Error
-    let v3 = 0; // No error
+    var v1 = 0; // Error
+    var v2 = 0; // Error
+    var v3 = 0; // No error
 }
 function f2() {
-    let x = 0; // Error, excessive stack depth
+    var x = 0; // Error, excessive stack depth
 }
 function f3() {
-    let x = 0; // No error!
+    var x = 0; // No error!
 }
 function g() {
     return f();

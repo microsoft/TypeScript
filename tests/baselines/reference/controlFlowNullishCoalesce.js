@@ -18,10 +18,10 @@ if (x = o ?? true) {
 //// [controlFlowNullishCoalesce.js]
 "use strict";
 // assignments in shortcutting rhs
-let a;
+var a;
 o !== null && o !== void 0 ? o : (a = 1);
 a.toString();
-let x;
+var x;
 if (x = o !== null && o !== void 0 ? o : true) {
     x;
 }

@@ -13,6 +13,9 @@ var d = new D<number>();
 
 
 //// [constructorInvocationWithTooFewTypeArgs.js]
-class D {
-}
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());
 var d = new D();

@@ -8,6 +8,13 @@ get testProp() { return this.testProp; }
 
 
 //// [recursiveGetterAccess.js]
-class MyClass {
-    get testProp() { return this.testProp; }
-}
+var MyClass = /** @class */ (function () {
+    function MyClass() {
+    }
+    Object.defineProperty(MyClass.prototype, "testProp", {
+        get: function () { return this.testProp; },
+        enumerable: false,
+        configurable: true
+    });
+    return MyClass;
+}());

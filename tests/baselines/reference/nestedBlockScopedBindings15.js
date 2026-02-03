@@ -34,30 +34,36 @@ for (; false;) {
 }
 
 //// [nestedBlockScopedBindings15.js]
-for (; false;) {
+var _loop_1 = function () {
     {
-        let x;
-        () => x;
+        var x_1;
+        (function () { return x_1; });
     }
+};
+for (; false;) {
+    _loop_1();
 }
 for (; false;) {
     {
-        let y;
+        var y = void 0;
         y = 1;
     }
 }
-for (; false;) {
+var _loop_2 = function () {
     switch (1) {
         case 1:
-            let z0;
-            () => z0;
+            var z0_1;
+            (function () { return z0_1; });
             break;
     }
+};
+for (; false;) {
+    _loop_2();
 }
 for (; false;) {
     switch (1) {
         case 1:
-            let z;
+            var z = void 0;
             z = 1;
             break;
     }

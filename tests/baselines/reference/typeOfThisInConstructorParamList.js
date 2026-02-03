@@ -10,7 +10,10 @@ class ErrClass {
 
 //// [typeOfThisInConstructorParamList.js]
 //type of 'this' in constructor param list is the class instance type (error)
-class ErrClass {
+var ErrClass = /** @class */ (function () {
     // Should be an error
-    constructor(f = this) { }
-}
+    function ErrClass(f) {
+        if (f === void 0) { f = this; }
+    }
+    return ErrClass;
+}());

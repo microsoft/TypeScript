@@ -26,10 +26,10 @@ function f<T extends Foo<number>>(x: T) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function f(x) {
-    const abc = x[fooProp]; // expected: 'T[typeof fooProp]'
+    var abc = x[fooProp]; // expected: 'T[typeof fooProp]'
     /**
      * Expected: no error
      */
-    const def = x[fooProp];
-    const def2 = x[barProp];
+    var def = x[fooProp];
+    var def2 = x[barProp];
 }

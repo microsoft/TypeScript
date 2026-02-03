@@ -16,9 +16,9 @@ num = s[null];
 
 
 //// [indexWithUndefinedAndNullStrictNullChecks.js]
-let n;
-let s;
-let str = n[undefined];
+var n;
+var s;
+var str = n[undefined];
 str = n[null];
-let num = s[undefined];
+var num = s[undefined];
 num = s[null];

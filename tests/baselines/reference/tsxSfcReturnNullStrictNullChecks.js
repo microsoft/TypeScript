@@ -16,10 +16,10 @@ const G = <Greet />;
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    const Foo = (props) => null;
+    var Foo = function (props) { return null; };
     function Greet(x) {
         return null;
     }
-    const foo = <Foo />;
-    const G = <Greet />;
+    var foo = <Foo />;
+    var G = <Greet />;
 });

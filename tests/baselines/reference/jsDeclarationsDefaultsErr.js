@@ -31,15 +31,13 @@ export {x as default};
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // merge type alias and alias (should error, see #32367)
-let Cls = (() => {
-    class Cls {
-        constructor() {
-            this.x = 12;
-        }
+var Cls = /** @class */ (function () {
+    function Cls() {
+        this.x = 12;
     }
     Cls.y = "ok";
     return Cls;
-})();
+}());
 exports.default = Cls;
 /**
  * @typedef {string | number} default
@@ -48,8 +46,11 @@ exports.default = Cls;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // merge type alias and class (error message improvement needed, see #32368)
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 exports.default = C;
 ;
 /**
@@ -60,7 +61,7 @@ exports.default = C;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = void 0;
 // merge type alias and variable (behavior is borked, see #32366)
-const x = 12;
+var x = 12;
 exports.default = x;
 /**
  * @typedef {string | number} default

@@ -23,7 +23,7 @@ class Foo {
 }
 
 //// [declarationEmitClassMemberNameConflict2.js]
-const Bar = 'bar';
+var Bar = 'bar';
 var Hello;
 (function (Hello) {
     Hello[Hello["World"] = 0] = "World";
@@ -32,8 +32,8 @@ var Hello1;
 (function (Hello1) {
     Hello1[Hello1["World1"] = 0] = "World1";
 })(Hello1 || (Hello1 = {}));
-class Foo {
-    constructor() {
+var Foo = /** @class */ (function () {
+    function Foo() {
         // Same names + string => OK
         this.Bar = Bar;
         // Same names + enum => OK
@@ -41,7 +41,8 @@ class Foo {
         // Different names + enum => OK
         this.Hello2 = Hello1;
     }
-}
+    return Foo;
+}());
 
 
 //// [declarationEmitClassMemberNameConflict2.d.ts]

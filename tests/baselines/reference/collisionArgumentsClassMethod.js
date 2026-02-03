@@ -51,31 +51,57 @@ class c3 {
 }
 
 //// [collisionArgumentsClassMethod.js]
-class c1 {
-    foo(i, ...arguments) {
+var c1 = /** @class */ (function () {
+    function c1() {
+    }
+    c1.prototype.foo = function (i) {
+        var arguments = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            arguments[_i - 1] = arguments[_i];
+        }
         var arguments; // no error
-    }
-    foo1(arguments, ...rest) {
+    };
+    c1.prototype.foo1 = function (arguments) {
+        var rest = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rest[_i - 1] = arguments[_i];
+        }
         var arguments = 10; // no error
-    }
-    fooNoError(arguments) {
+    };
+    c1.prototype.fooNoError = function (arguments) {
         var arguments = 10; // no error
-    }
-    f4(i, ...arguments) {
+    };
+    c1.prototype.f4 = function (i) {
+        var arguments = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            arguments[_i - 1] = arguments[_i];
+        }
         var arguments; // no error
-    }
-    f41(arguments, ...rest) {
+    };
+    c1.prototype.f41 = function (arguments) {
+        var rest = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rest[_i - 1] = arguments[_i];
+        }
         var arguments; // no error
-    }
-    f4NoError(arguments) {
+    };
+    c1.prototype.f4NoError = function (arguments) {
         var arguments; // no error
+    };
+    return c1;
+}());
+var c3 = /** @class */ (function () {
+    function c3() {
     }
-}
-class c3 {
-    foo(...restParameters) {
+    c3.prototype.foo = function () {
+        var restParameters = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            restParameters[_i] = arguments[_i];
+        }
         var arguments = 10; // no error
-    }
-    fooNoError() {
+    };
+    c3.prototype.fooNoError = function () {
         var arguments = 10; // no error
-    }
-}
+    };
+    return c3;
+}());

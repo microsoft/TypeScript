@@ -29,17 +29,19 @@ b = a;      // should be no error
 c = d;
 
 //// [genericIndexedAccessVarianceComparisonResultCorrect.js]
-class A {
-    constructor() {
+var A = /** @class */ (function () {
+    function A() {
         this.x = 'A';
         this.y = 0;
     }
-}
-class B {
-    constructor() {
+    return A;
+}());
+var B = /** @class */ (function () {
+    function B() {
         this.x = 'B';
         this.z = true;
     }
-}
+    return B;
+}());
 b = a; // should be no error
 c = d;

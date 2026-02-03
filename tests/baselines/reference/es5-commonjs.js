@@ -18,11 +18,12 @@ export default class A
 //// [es5-commonjs.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class A {
-    constructor() {
+var A = /** @class */ (function () {
+    function A() {
     }
-    B() {
+    A.prototype.B = function () {
         return 42;
-    }
-}
+    };
+    return A;
+}());
 exports.default = A;

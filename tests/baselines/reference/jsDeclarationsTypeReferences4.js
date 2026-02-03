@@ -29,10 +29,10 @@ exports.Something = 2; // to show conflict that can occur
 var A;
 (function (A) {
     // @ts-ignore
-    let B;
+    var B;
     (function (B) {
-        const Something = require("fs").Something;
-        const thing = new Something();
+        var Something = require("fs").Something;
+        var thing = new Something();
     })(B = A.B || (A.B = {}));
 })(A || (exports.A = A = {}));
 

@@ -11,10 +11,14 @@ class Bar {
 }
 
 //// [parser553699.js]
-class Foo {
-    constructor() { }
-    banana(x) { }
-}
-class Bar {
-    constructor(c) { }
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    Foo.prototype.banana = function (x) { };
+    return Foo;
+}());
+var Bar = /** @class */ (function () {
+    function Bar(c) {
+    }
+    return Bar;
+}());

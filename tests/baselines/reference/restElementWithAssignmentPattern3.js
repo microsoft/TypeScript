@@ -6,6 +6,7 @@ var tuple: [string, number] = ["", 1];
 [...[a, b = 0]] = tuple;
 
 //// [restElementWithAssignmentPattern3.js]
+var _a, _b;
 var a, b;
 var tuple = ["", 1];
-[...[a, b = 0]] = tuple;
+_a = tuple.slice(0), a = _a[0], _b = _a[1], b = _b === void 0 ? 0 : _b;

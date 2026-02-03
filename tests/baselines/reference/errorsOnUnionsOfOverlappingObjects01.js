@@ -63,6 +63,6 @@ h(exports.x);
 h({ a: '', b: '' });
 addToZoo({ dog: "Barky McBarkface" });
 addToZoo({ man: "Manny", bear: "Coffee" });
-const manBeer = { man: "Manny", beer: "Coffee" };
+var manBeer = { man: "Manny", beer: "Coffee" };
 addToZoo({ man: "Manny", beer: "Coffee" });
 addToZoo(manBeer);

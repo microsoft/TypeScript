@@ -36,25 +36,30 @@ var f2 = function f2(this: A): number {
 };
 
 //// [unusedParametersThis.js]
-class A {
-    method() {
-        return this.a;
+var A = /** @class */ (function () {
+    function A() {
     }
-    method2() {
+    A.prototype.method = function () {
         return this.a;
-    }
-    method3() {
-        var fn = () => this.a;
+    };
+    A.prototype.method2 = function () {
+        return this.a;
+    };
+    A.prototype.method3 = function () {
+        var _this = this;
+        var fn = function () { return _this.a; };
         return fn();
-    }
-    method4() {
-        var fn = () => this.a;
+    };
+    A.prototype.method4 = function () {
+        var _this = this;
+        var fn = function () { return _this.a; };
         return fn();
-    }
-    static staticMethod() {
+    };
+    A.staticMethod = function () {
         return this.a;
-    }
-}
+    };
+    return A;
+}());
 function f() {
     return this.a;
 }

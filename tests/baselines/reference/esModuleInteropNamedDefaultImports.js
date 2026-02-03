@@ -16,11 +16,17 @@ new Foo3();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = void 0;
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 exports.default = Foo;
-class Bar {
-}
+var Bar = /** @class */ (function () {
+    function Bar() {
+    }
+    return Bar;
+}());
 exports.Bar = Bar;
 //// [idx.js]
 "use strict";

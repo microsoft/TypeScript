@@ -55,7 +55,7 @@ interface NextFunction {
 //// [contextualTypingOfTooShortOverloads.js]
 // small repro from #11875
 var use;
-use((req, res) => { });
+use(function (req, res) { });
 // larger repro from #11875
-let app;
-app.use((err, req, res, next) => { return; });
+var app;
+app.use(function (err, req, res, next) { return; });

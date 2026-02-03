@@ -12,12 +12,13 @@ function g() {
 //// [modifierOnClassExpressionMemberInFunction.js]
 function g() {
     var _a;
-    var x = (_a = class C {
-            constructor() {
+    var x = (_a = /** @class */ (function () {
+            function C() {
                 this.prop1 = 1;
             }
-            foo() { }
-        },
+            C.prototype.foo = function () { };
+            return C;
+        }()),
         _a.prop2 = 43,
         _a);
 }

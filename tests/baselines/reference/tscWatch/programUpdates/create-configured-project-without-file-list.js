@@ -44,11 +44,11 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/c/f1.js]
-let x = 1;
+var x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/d/f2.js]
-let y = 1;
+var y = 1;
 
 
 

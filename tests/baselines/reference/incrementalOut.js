@@ -6,4 +6,4 @@ const x = 10;
 
 
 //// [output.js]
-const x = 10;
+var x = 10;

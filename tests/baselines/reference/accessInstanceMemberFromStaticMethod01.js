@@ -10,8 +10,11 @@ class C {
 }
 
 //// [accessInstanceMemberFromStaticMethod01.js]
-class C {
-    bar() {
-        let k = foo;
+var C = /** @class */ (function () {
+    function C() {
     }
-}
+    C.prototype.bar = function () {
+        var k = foo;
+    };
+    return C;
+}());

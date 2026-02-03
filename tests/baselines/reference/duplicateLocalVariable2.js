@@ -38,20 +38,26 @@ export var tests: TestRunner = (function () {
 })();
 
 //// [duplicateLocalVariable2.js]
-export class TestCase {
-    constructor(name, test, errorMessageRegEx) {
+var TestCase = /** @class */ (function () {
+    function TestCase(name, test, errorMessageRegEx) {
         this.name = name;
         this.test = test;
         this.errorMessageRegEx = errorMessageRegEx;
     }
-}
-export class TestRunner {
-    static arrayCompare(arg1, arg2) {
+    return TestCase;
+}());
+export { TestCase };
+var TestRunner = /** @class */ (function () {
+    function TestRunner() {
+    }
+    TestRunner.arrayCompare = function (arg1, arg2) {
         return false;
-    }
-    addTest(test) {
-    }
-}
+    };
+    TestRunner.prototype.addTest = function (test) {
+    };
+    return TestRunner;
+}());
+export { TestRunner };
 export var tests = (function () {
     var testRunner = new TestRunner();
     testRunner.addTest(new TestCase("Check UTF8 encoding", function () {

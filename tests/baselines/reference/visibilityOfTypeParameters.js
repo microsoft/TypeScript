@@ -11,11 +11,14 @@ export class MyClass {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
-class MyClass {
-    myMethod(val) {
-        return val;
+var MyClass = /** @class */ (function () {
+    function MyClass() {
     }
-}
+    MyClass.prototype.myMethod = function (val) {
+        return val;
+    };
+    return MyClass;
+}());
 exports.MyClass = MyClass;
 
 

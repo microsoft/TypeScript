@@ -5,4 +5,4 @@ const array = [1, /* comment */];
 
 
 //// [commentOnArrayElement6.js]
-const array = [1, /* comment */];
+var array = [1, /* comment */];

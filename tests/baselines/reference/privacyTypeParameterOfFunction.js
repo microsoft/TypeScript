@@ -141,55 +141,73 @@ exports.publicClassWithWithPublicTypeParametersWithoutExtends = exports.publicCl
 exports.publicFunctionWithPrivateTypeParameters = publicFunctionWithPrivateTypeParameters;
 exports.publicFunctionWithPublicTypeParameters = publicFunctionWithPublicTypeParameters;
 exports.publicFunctionWithPublicTypeParametersWithoutExtends = publicFunctionWithPublicTypeParametersWithoutExtends;
-class privateClass {
-}
-class publicClass {
-}
+var privateClass = /** @class */ (function () {
+    function privateClass() {
+    }
+    return privateClass;
+}());
+var publicClass = /** @class */ (function () {
+    function publicClass() {
+    }
+    return publicClass;
+}());
 exports.publicClass = publicClass;
-class publicClassWithWithPrivateTypeParameters {
+var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
+    function publicClassWithWithPrivateTypeParameters() {
+    }
     // TypeParameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_type_1
-    static myPublicStaticMethod() {
-    }
-    static myPrivateStaticMethod() {
-    }
+    publicClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
+    };
+    publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod = function () {
+    };
     // TypeParameter_0_of_public_method_from_exported_class_has_or_is_using_private_type_1
-    myPublicMethod() {
-    }
-    myPrivateMethod() {
-    }
-}
+    publicClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
+    };
+    publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod = function () {
+    };
+    return publicClassWithWithPrivateTypeParameters;
+}());
 exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;
-class publicClassWithWithPublicTypeParameters {
-    static myPublicStaticMethod() {
+var publicClassWithWithPublicTypeParameters = /** @class */ (function () {
+    function publicClassWithWithPublicTypeParameters() {
     }
-    static myPrivateStaticMethod() {
-    }
-    myPublicMethod() {
-    }
-    myPrivateMethod() {
-    }
-}
+    publicClassWithWithPublicTypeParameters.myPublicStaticMethod = function () {
+    };
+    publicClassWithWithPublicTypeParameters.myPrivateStaticMethod = function () {
+    };
+    publicClassWithWithPublicTypeParameters.prototype.myPublicMethod = function () {
+    };
+    publicClassWithWithPublicTypeParameters.prototype.myPrivateMethod = function () {
+    };
+    return publicClassWithWithPublicTypeParameters;
+}());
 exports.publicClassWithWithPublicTypeParameters = publicClassWithWithPublicTypeParameters;
-class privateClassWithWithPrivateTypeParameters {
-    static myPublicStaticMethod() {
+var privateClassWithWithPrivateTypeParameters = /** @class */ (function () {
+    function privateClassWithWithPrivateTypeParameters() {
     }
-    static myPrivateStaticMethod() {
+    privateClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
+    };
+    privateClassWithWithPrivateTypeParameters.myPrivateStaticMethod = function () {
+    };
+    privateClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
+    };
+    privateClassWithWithPrivateTypeParameters.prototype.myPrivateMethod = function () {
+    };
+    return privateClassWithWithPrivateTypeParameters;
+}());
+var privateClassWithWithPublicTypeParameters = /** @class */ (function () {
+    function privateClassWithWithPublicTypeParameters() {
     }
-    myPublicMethod() {
-    }
-    myPrivateMethod() {
-    }
-}
-class privateClassWithWithPublicTypeParameters {
-    static myPublicStaticMethod() {
-    }
-    static myPrivateStaticMethod() {
-    }
-    myPublicMethod() {
-    }
-    myPrivateMethod() {
-    }
-}
+    privateClassWithWithPublicTypeParameters.myPublicStaticMethod = function () {
+    };
+    privateClassWithWithPublicTypeParameters.myPrivateStaticMethod = function () {
+    };
+    privateClassWithWithPublicTypeParameters.prototype.myPublicMethod = function () {
+    };
+    privateClassWithWithPublicTypeParameters.prototype.myPrivateMethod = function () {
+    };
+    return privateClassWithWithPublicTypeParameters;
+}());
 // TypeParameter_0_of_exported_function_has_or_is_using_private_type_1
 function publicFunctionWithPrivateTypeParameters() {
 }
@@ -199,27 +217,33 @@ function privateFunctionWithPrivateTypeParameters() {
 }
 function privateFunctionWithPublicTypeParameters() {
 }
-class publicClassWithWithPublicTypeParametersWithoutExtends {
-    static myPublicStaticMethod() {
+var publicClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
+    function publicClassWithWithPublicTypeParametersWithoutExtends() {
     }
-    static myPrivateStaticMethod() {
-    }
-    myPublicMethod() {
-    }
-    myPrivateMethod() {
-    }
-}
+    publicClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod = function () {
+    };
+    publicClassWithWithPublicTypeParametersWithoutExtends.myPrivateStaticMethod = function () {
+    };
+    publicClassWithWithPublicTypeParametersWithoutExtends.prototype.myPublicMethod = function () {
+    };
+    publicClassWithWithPublicTypeParametersWithoutExtends.prototype.myPrivateMethod = function () {
+    };
+    return publicClassWithWithPublicTypeParametersWithoutExtends;
+}());
 exports.publicClassWithWithPublicTypeParametersWithoutExtends = publicClassWithWithPublicTypeParametersWithoutExtends;
-class privateClassWithWithPublicTypeParametersWithoutExtends {
-    static myPublicStaticMethod() {
+var privateClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
+    function privateClassWithWithPublicTypeParametersWithoutExtends() {
     }
-    static myPrivateStaticMethod() {
-    }
-    myPublicMethod() {
-    }
-    myPrivateMethod() {
-    }
-}
+    privateClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod = function () {
+    };
+    privateClassWithWithPublicTypeParametersWithoutExtends.myPrivateStaticMethod = function () {
+    };
+    privateClassWithWithPublicTypeParametersWithoutExtends.prototype.myPublicMethod = function () {
+    };
+    privateClassWithWithPublicTypeParametersWithoutExtends.prototype.myPrivateMethod = function () {
+    };
+    return privateClassWithWithPublicTypeParametersWithoutExtends;
+}());
 function publicFunctionWithPublicTypeParametersWithoutExtends() {
 }
 function privateFunctionWithPublicTypeParametersWithoutExtends() {

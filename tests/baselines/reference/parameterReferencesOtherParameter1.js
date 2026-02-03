@@ -12,9 +12,14 @@ class UI {
 }
 
 //// [parameterReferencesOtherParameter1.js]
-class Model {
-}
-class UI {
-    constructor(model, foo = model.name) {
+var Model = /** @class */ (function () {
+    function Model() {
     }
-}
+    return Model;
+}());
+var UI = /** @class */ (function () {
+    function UI(model, foo) {
+        if (foo === void 0) { foo = model.name; }
+    }
+    return UI;
+}());

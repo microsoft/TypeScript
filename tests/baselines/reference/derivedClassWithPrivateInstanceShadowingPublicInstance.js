@@ -35,21 +35,52 @@ var r6 = Derived.a; // error
 Derived.a = 2; // error
 
 //// [derivedClassWithPrivateInstanceShadowingPublicInstance.js]
-class Base {
-    fn() {
-        return '';
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Base = /** @class */ (function () {
+    function Base() {
     }
-    get a() { return 1; }
-    set a(v) { }
-}
+    Base.prototype.fn = function () {
+        return '';
+    };
+    Object.defineProperty(Base.prototype, "a", {
+        get: function () { return 1; },
+        set: function (v) { },
+        enumerable: false,
+        configurable: true
+    });
+    return Base;
+}());
 // error, not a subtype
-class Derived extends Base {
-    fn() {
-        return '';
+var Derived = /** @class */ (function (_super) {
+    __extends(Derived, _super);
+    function Derived() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    get a() { return 1; }
-    set a(v) { }
-}
+    Derived.prototype.fn = function () {
+        return '';
+    };
+    Object.defineProperty(Derived.prototype, "a", {
+        get: function () { return 1; },
+        set: function (v) { },
+        enumerable: false,
+        configurable: true
+    });
+    return Derived;
+}(Base));
 var r = Base.x; // ok
 var r2 = Derived.x; // error
 var r3 = Base.fn(); // ok

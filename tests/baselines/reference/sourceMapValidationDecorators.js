@@ -66,24 +66,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-let Greeter = (() => {
-    let Greeter = class Greeter {
-        constructor(greeting, ...b) {
-            this.greeting = greeting;
+var Greeter = /** @class */ (function () {
+    function Greeter(greeting) {
+        var b = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            b[_i - 1] = arguments[_i];
         }
-        greet() {
-            return "<h1>" + this.greeting + "</h1>";
-        }
-        fn(x) {
-            return this.greeting;
-        }
-        get greetings() {
-            return this.greeting;
-        }
-        set greetings(greetings) {
-            this.greeting = greetings;
-        }
+        this.greeting = greeting;
+    }
+    Greeter.prototype.greet = function () {
+        return "<h1>" + this.greeting + "</h1>";
     };
+    Greeter.prototype.fn = function (x) {
+        return this.greeting;
+    };
+    Object.defineProperty(Greeter.prototype, "greetings", {
+        get: function () {
+            return this.greeting;
+        },
+        set: function (greetings) {
+            this.greeting = greetings;
+        },
+        enumerable: false,
+        configurable: true
+    });
     Greeter.x1 = 10;
     __decorate([
         PropertyDecorator1,
@@ -116,5 +122,5 @@ let Greeter = (() => {
         __param(1, ParameterDecorator2(30))
     ], Greeter);
     return Greeter;
-})();
+}());
 //# sourceMappingURL=sourceMapValidationDecorators.js.map

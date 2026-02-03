@@ -79,8 +79,11 @@ var B;
 })(B || (B = {}));
 var X;
 (function (X) {
-    class Y {
-    }
+    var Y = /** @class */ (function () {
+        function Y() {
+        }
+        return Y;
+    }());
     X.Y = Y;
 })(X || (X = {}));
 var Z;
@@ -101,5 +104,5 @@ var r;
 })(r || (r = {}));
 var s;
 (function (s) {
-    const Q = 0;
+    var Q = 0;
 })(s || (s = {}));

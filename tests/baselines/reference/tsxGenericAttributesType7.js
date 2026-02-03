@@ -16,9 +16,9 @@ const decorator1 = function <U extends {x: string}>(props: U) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-const decorator = function (props) {
+var decorator = function (props) {
     return <Component {...props}/>;
 };
-const decorator1 = function (props) {
+var decorator1 = function (props) {
     return <Component {...props} x="hi"/>;
 };

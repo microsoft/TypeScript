@@ -181,13 +181,13 @@ type Test2 = Result2<Fruit> // "apple:red" | "banana:yellow" | "orange:orange"
 //// [mappedTypeAsClauses.js]
 "use strict";
 // Mapped type 'as N' clauses
-const e1 = {
+var e1 = {
     foo: "hello"
 };
-const e2 = "foo";
-let primitiveCar; // { name: string; seats: number; }
-let keys; //  "name" | "seats"
-let carKeys; // "name" | "seats"
+var e2 = "foo";
+var primitiveCar; // { name: string; seats: number; }
+var keys; //  "name" | "seats"
+var carKeys; // "name" | "seats"
 function f(x) {
     return x;
 }

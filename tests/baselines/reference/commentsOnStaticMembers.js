@@ -22,8 +22,8 @@ class test {
 }
 
 //// [commentsOnStaticMembers.js]
-let test = (() => {
-    class test {
+var test = /** @class */ (function () {
+    function test() {
     }
     /**
      * p1 comment appears in output
@@ -34,4 +34,4 @@ let test = (() => {
      */
     test.p3 = "";
     return test;
-})();
+}());

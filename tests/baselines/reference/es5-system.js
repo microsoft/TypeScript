@@ -23,13 +23,14 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            A = class A {
-                constructor() {
+            A = /** @class */ (function () {
+                function A() {
                 }
-                B() {
+                A.prototype.B = function () {
                     return 42;
-                }
-            };
+                };
+                return A;
+            }());
             exports_1("default", A);
         }
     };

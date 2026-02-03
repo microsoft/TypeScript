@@ -27,8 +27,11 @@ var w:I={x:null,y:3};
 var x = null;
 var y = 3 + x;
 var z = 3 + null;
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 function f() {
     return null;
     return new C();

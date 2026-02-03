@@ -20,9 +20,10 @@ const elem = <ElemClass x={12} y={24} />
 
 //// [jsxElementClassTooManyParams.jsx]
 "use strict";
-class ElemClass {
-    constructor(props) {
+var ElemClass = /** @class */ (function () {
+    function ElemClass(props) {
         this.props = props;
     }
-}
-const elem = <ElemClass x={12} y={24}/>;
+    return ElemClass;
+}());
+var elem = <ElemClass x={12} y={24}/>;

@@ -17,9 +17,18 @@ class E<T> {
 
 //// [staticIndexers.js]
 // static indexers not allowed
-class C {
-}
-class D {
-}
-class E {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());
+var E = /** @class */ (function () {
+    function E() {
+    }
+    return E;
+}());

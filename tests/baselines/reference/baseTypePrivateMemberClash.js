@@ -11,7 +11,13 @@ class Y {
 interface Z extends X, Y { }
 
 //// [baseTypePrivateMemberClash.js]
-class X {
-}
-class Y {
-}
+var X = /** @class */ (function () {
+    function X() {
+    }
+    return X;
+}());
+var Y = /** @class */ (function () {
+    function Y() {
+    }
+    return Y;
+}());

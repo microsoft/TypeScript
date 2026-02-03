@@ -10,8 +10,10 @@ class MyClass1<T> {
 
 
 //// [thisExpressionOfGenericObject.js]
-class MyClass1 {
-    constructor() {
-        () => this;
+var MyClass1 = /** @class */ (function () {
+    function MyClass1() {
+        var _this = this;
+        (function () { return _this; });
     }
-}
+    return MyClass1;
+}());

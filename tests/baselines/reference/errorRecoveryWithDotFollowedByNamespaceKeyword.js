@@ -18,7 +18,7 @@ var A;
         if (true) {
             B.
             ;
-            let B;
+            var B = void 0;
             (function (B) {
                 function baz() { }
                 B.baz = baz;

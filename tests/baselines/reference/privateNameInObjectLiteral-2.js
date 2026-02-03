@@ -9,7 +9,7 @@ const obj = {
 
 
 //// [privateNameInObjectLiteral-2.js]
-const obj = {
-    () {
+var obj = {
+    : function () {
     }
 };

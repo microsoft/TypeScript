@@ -13,7 +13,10 @@ var x = 10;
 declare var OData: any;
 
 //// [doNotEmitPinnedCommentOnNotEmittedNode.js]
-class C {
-    foo(x, y) { }
-}
+var C = (function () {
+    function C() {
+    }
+    C.prototype.foo = function (x, y) { };
+    return C;
+}());
 var x = 10;

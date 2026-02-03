@@ -16,5 +16,8 @@ class C3 implements I1 {
 
 
 //// [interfaceImplementation2.js]
-class C3 {
-}
+var C3 = /** @class */ (function () {
+    function C3() {
+    }
+    return C3;
+}());

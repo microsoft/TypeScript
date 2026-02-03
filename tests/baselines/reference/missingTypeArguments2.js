@@ -9,9 +9,12 @@ var y: A<A>;
 (): A => null;
 
 //// [missingTypeArguments2.js]
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 var x;
-(a) => { };
+(function (a) { });
 var y;
-() => null;
+(function () { return null; });

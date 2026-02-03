@@ -7,6 +7,9 @@ new b();
 
 
 //// [newAbstractInstance.js]
-class B {
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 new b();

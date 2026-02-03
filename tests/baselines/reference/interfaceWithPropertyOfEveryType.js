@@ -45,8 +45,11 @@ var a: Foo = {
 }
 
 //// [interfaceWithPropertyOfEveryType.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 function f1() { }
 var M;
 (function (M) {
@@ -64,8 +67,8 @@ var a = {
     e: null,
     f: [1],
     g: {},
-    h: (x) => 1,
-    i: (x) => x,
+    h: function (x) { return 1; },
+    i: function (x) { return x; },
     j: null,
     k: new C(),
     l: f1,

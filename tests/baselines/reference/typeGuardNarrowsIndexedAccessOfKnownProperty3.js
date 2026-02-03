@@ -13,8 +13,8 @@ if (foo !== undefined && foo[index] !== undefined && foo[index] >= 0) {
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty3.js]
 "use strict";
-const foo = [1, 2, 3];
-const index = 1;
+var foo = [1, 2, 3];
+var index = 1;
 if (foo !== undefined && foo[index] !== undefined && foo[index] >= 0) {
     foo[index]; // number
 }

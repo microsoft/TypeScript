@@ -36,8 +36,11 @@ C.B = B;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 exports.Foo = Foo;
 //// [index1.js]
 "use strict";
@@ -60,8 +63,11 @@ Example.Foo = foo_1.Foo;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = void 0;
 exports.default = Example;
-class Bar {
-}
+var Bar = /** @class */ (function () {
+    function Bar() {
+    }
+    return Bar;
+}());
 exports.Bar = Bar;
 function Example() { }
 Example.Bar = Bar;

@@ -59,30 +59,35 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testRecFun = exports.updateIfChanged = void 0;
-const updateIfChanged = (t) => {
-    const reduce = (u, update) => {
-        const set = (newU) => Object.is(u, newU) ? t : update(newU);
-        return Object.assign((key) => reduce(u[key], (v) => {
-            return update(Object.assign(Array.isArray(u) ? [] : {}, u, { [key]: v }));
-        }), { map: (updater) => set(updater(u)), set });
+var updateIfChanged = function (t) {
+    var reduce = function (u, update) {
+        var set = function (newU) { return Object.is(u, newU) ? t : update(newU); };
+        return Object.assign(function (key) {
+            return reduce(u[key], function (v) {
+                var _a;
+                return update(Object.assign(Array.isArray(u) ? [] : {}, u, (_a = {}, _a[key] = v, _a)));
+            });
+        }, { map: function (updater) { return set(updater(u)); }, set: set });
     };
-    return reduce(t, (t) => t);
+    return reduce(t, function (t) { return t; });
 };
 exports.updateIfChanged = updateIfChanged;
 // example from https://github.com/microsoft/TypeScript/issues/31605
-const testRecFun = (parent) => {
+var testRecFun = function (parent) {
     return {
         result: parent,
-        deeper: (child) => (0, exports.testRecFun)(__assign(__assign({}, parent), child))
+        deeper: function (child) {
+            return (0, exports.testRecFun)(__assign(__assign({}, parent), child));
+        }
     };
 };
 exports.testRecFun = testRecFun;
-let p1 = (0, exports.testRecFun)({ one: '1' });
+var p1 = (0, exports.testRecFun)({ one: '1' });
 void p1.result.one;
-let p2 = p1.deeper({ two: '2' });
+var p2 = p1.deeper({ two: '2' });
 void p2.result.one;
 void p2.result.two;
-let p3 = p2.deeper({ three: '3' });
+var p3 = p2.deeper({ three: '3' });
 void p3.result.one;
 void p3.result.two;
 void p3.result.three;

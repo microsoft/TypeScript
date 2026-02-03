@@ -352,25 +352,26 @@ export var tests: TestRunner = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tests = exports.TestRunner = exports.TestCase = void 0;
 var TestFileDir = ".\\TempTestFiles";
-class TestCase {
-    constructor(name, test, errorMessageRegEx) {
+var TestCase = /** @class */ (function () {
+    function TestCase(name, test, errorMessageRegEx) {
         this.name = name;
         this.test = test;
         this.errorMessageRegEx = errorMessageRegEx;
     }
-}
+    return TestCase;
+}());
 exports.TestCase = TestCase;
-class TestRunner {
-    constructor() {
+var TestRunner = /** @class */ (function () {
+    function TestRunner() {
         this.tests = [];
     }
-    static arrayCompare(arg1, arg2) {
+    TestRunner.arrayCompare = function (arg1, arg2) {
         return (arg1.every(function (val, index) { return val === arg2[index]; }));
-    }
-    addTest(test) {
+    };
+    TestRunner.prototype.addTest = function (test) {
         this.tests.push(test);
-    }
-    run() {
+    };
+    TestRunner.prototype.run = function () {
         var success = true;
         for (var test in this.tests) {
             var exception = false;
@@ -406,8 +407,9 @@ class TestRunner {
         }
         else {
         }
-    }
-}
+    };
+    return TestRunner;
+}());
 exports.TestRunner = TestRunner;
 exports.tests = (function () {
     var testRunner = new TestRunner();

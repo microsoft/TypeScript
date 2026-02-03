@@ -17,14 +17,18 @@ var c2 = new C2(); // error C2 is private
 var r2: (x: number) => void = c2.constructor;
 
 //// [typesWithPrivateConstructor.js]
-class C {
-    constructor() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var c = new C(); // error C is private
 var r = c.constructor;
-class C2 {
-    constructor(x) { }
-}
+var C2 = /** @class */ (function () {
+    function C2(x) {
+    }
+    return C2;
+}());
 var c2 = new C2(); // error C2 is private
 var r2 = c2.constructor;
 

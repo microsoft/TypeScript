@@ -48,7 +48,7 @@ ONE: for (;;)
     continue TWO;
 // continue from inside function
 TWO: for (;;) {
-    var x = () => {
+    var x = function () {
         continue TWO;
     };
 }

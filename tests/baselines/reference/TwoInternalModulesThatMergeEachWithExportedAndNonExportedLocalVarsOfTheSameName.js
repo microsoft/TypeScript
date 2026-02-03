@@ -44,7 +44,7 @@ var p = new A.Utils.Plane(o, { x: 1, y: 1 });
 //// [part1.js]
 var A;
 (function (A) {
-    let Utils;
+    var Utils;
     (function (Utils) {
         function mirror(p) {
             return { x: p.y, y: p.x };
@@ -58,14 +58,15 @@ var A;
 (function (A) {
     // not a collision, since we don't export
     var Origin = "0,0";
-    let Utils;
+    var Utils;
     (function (Utils) {
-        class Plane {
-            constructor(tl, br) {
+        var Plane = /** @class */ (function () {
+            function Plane(tl, br) {
                 this.tl = tl;
                 this.br = br;
             }
-        }
+            return Plane;
+        }());
         Utils.Plane = Plane;
     })(Utils = A.Utils || (A.Utils = {}));
 })(A || (A = {}));

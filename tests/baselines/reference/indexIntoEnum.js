@@ -11,7 +11,7 @@ module M {
 //// [indexIntoEnum.js]
 var M;
 (function (M) {
-    let E;
+    var E;
     (function (E) {
     })(E || (E = {}));
     var x = E[0];

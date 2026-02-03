@@ -62,53 +62,53 @@ function f7() {
 
 //// [controlFlowDestructuringDeclaration.js]
 function f1() {
-    let x = 1;
+    var x = 1;
     x;
-    let y = "";
+    var y = "";
     y;
 }
 function f2() {
-    let [x] = [1];
+    var x = [1][0];
     x;
-    let [y] = [""];
+    var y = [""][0];
     y;
-    let [z = ""] = [undefined];
+    var _a = [undefined][0], z = _a === void 0 ? "" : _a;
     z;
 }
 function f3() {
-    let [x] = [1];
+    var x = [1][0];
     x;
-    let [y] = [""];
+    var y = [""][0];
     y;
-    let [z = ""] = [undefined];
+    var _a = [undefined][0], z = _a === void 0 ? "" : _a;
     z;
 }
 function f4() {
-    let { x } = { x: 1 };
+    var x = { x: 1 }.x;
     x;
-    let { y } = { y: "" };
+    var y = { y: "" }.y;
     y;
-    let { z = "" } = { z: undefined };
+    var _a = { z: undefined }.z, z = _a === void 0 ? "" : _a;
     z;
 }
 function f5() {
-    let { x } = { x: 1 };
+    var x = { x: 1 }.x;
     x;
-    let { y } = { y: "" };
+    var y = { y: "" }.y;
     y;
-    let { z = "" } = { z: undefined };
+    var _a = { z: undefined }.z, z = _a === void 0 ? "" : _a;
     z;
 }
 function f6() {
-    let { x } = {};
+    var x = {}.x;
     x;
-    let { y } = {};
+    var y = {}.y;
     y;
-    let { z = "" } = {};
+    var _a = {}.z, z = _a === void 0 ? "" : _a;
     z;
 }
 function f7() {
-    let o = { x: 1 };
-    let { x } = o;
+    var o = { x: 1 };
+    var x = o.x;
     x;
 }

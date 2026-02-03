@@ -4,8 +4,11 @@ define("ref/m1", ["require", "exports"], function (require, exports) {
     exports.m1_instance1 = exports.m1_c1 = exports.m1_a1 = void 0;
     exports.m1_f1 = m1_f1;
     exports.m1_a1 = 10;
-    class m1_c1 {
-    }
+    var m1_c1 = /** @class */ (function () {
+        function m1_c1() {
+        }
+        return m1_c1;
+    }());
     exports.m1_c1 = m1_c1;
     exports.m1_instance1 = new m1_c1();
     function m1_f1() {
@@ -18,8 +21,11 @@ define("test", ["require", "exports", "ref/m1"], function (require, exports, m1)
     exports.a2 = exports.instance1 = exports.c1 = exports.a1 = void 0;
     exports.f1 = f1;
     exports.a1 = 10;
-    class c1 {
-    }
+    var c1 = /** @class */ (function () {
+        function c1() {
+        }
+        return c1;
+    }());
     exports.c1 = c1;
     exports.instance1 = new c1();
     function f1() {

@@ -53,38 +53,56 @@ module T {
 var T;
 (function (T) {
     var x = 2;
-    let x;
+    var x;
     (function (x) {
-        class Bar {
-        }
+        var Bar = /** @class */ (function () {
+            function Bar() {
+            }
+            return Bar;
+        }());
         x.Bar = Bar;
     })(x || (x = {}));
-    let z;
+    var z;
     (function (z) {
         var t;
     })(z || (z = {}));
     var z; // error
-    let y;
+    var y;
     (function (y) {
         var b;
     })(y || (y = {}));
-    class y {
-    } // error
+    var y = /** @class */ (function () {
+        function y() {
+        }
+        return y;
+    }()); // error
     var w;
     var f;
     function f() { } //error
     function f2() { }
     var f2; // error
     var i;
-    class C {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
     function C() { } // error
     function C2() { }
-    class C2 {
-    } // error
+    var C2 = /** @class */ (function () {
+        function C2() {
+        }
+        return C2;
+    }()); // error
     function fi() { }
-    class cli {
-    }
-    class cli2 {
-    }
+    var cli = /** @class */ (function () {
+        function cli() {
+        }
+        return cli;
+    }());
+    var cli2 = /** @class */ (function () {
+        function cli2() {
+        }
+        return cli2;
+    }());
 })(T || (T = {}));

@@ -10,9 +10,12 @@ class A {
 }
 
 //// [unusedTypeParameterInLambda1.js]
-class A {
-    f1() {
-        return () => {
-        };
+var A = /** @class */ (function () {
+    function A() {
     }
-}
+    A.prototype.f1 = function () {
+        return function () {
+        };
+    };
+    return A;
+}());

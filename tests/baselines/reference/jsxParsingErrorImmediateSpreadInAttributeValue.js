@@ -15,6 +15,6 @@ const a: any
 
 
 //// [a.js]
-const X;
-const a;
+var X;
+var a;
 React.createElement(X, { a: , a: true });

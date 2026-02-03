@@ -4,4 +4,4 @@
 let x = 1;
 
 //// [a.js]
-let x = 1;
+var x = 1;

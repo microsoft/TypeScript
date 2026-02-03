@@ -13,6 +13,9 @@ function bar() {
 }
 
 //// [a.js]
-class c {
-}
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
 //# sourceMappingURL=a.js.map

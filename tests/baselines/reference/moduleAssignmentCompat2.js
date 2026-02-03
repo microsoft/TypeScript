@@ -18,17 +18,26 @@ b = a; // error
 //// [moduleAssignmentCompat2.js]
 var A;
 (function (A) {
-    class C {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
     A.C = C;
 })(A || (A = {}));
 var B;
 (function (B) {
-    class C {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
     B.C = C;
-    class D {
-    }
+    var D = /** @class */ (function () {
+        function D() {
+        }
+        return D;
+    }());
     B.D = D;
 })(B || (B = {}));
 var a;

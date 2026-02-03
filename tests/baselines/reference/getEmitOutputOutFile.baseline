@@ -3,11 +3,17 @@ EmitSkipped: false
 
 FileName : outFile.js
 var x = 5;
-class Bar {
-}
+var Bar = /** @class */ (function () {
+    function Bar() {
+    }
+    return Bar;
+}());
 var x1 = "hello world";
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 
 FileName : outFile.d.ts
 declare var x: number;

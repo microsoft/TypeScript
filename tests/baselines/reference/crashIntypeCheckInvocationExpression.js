@@ -19,7 +19,7 @@ var nake;
 function doCompile(fileset, moduleType) {
     return undefined;
 }
-export var compileServer = task(() => {
+export var compileServer = task(function () {
     var folder = path.join(), fileset = nake.fileSetSync(folder);
     return doCompile(fileset, moduleType);
 });

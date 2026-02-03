@@ -9,8 +9,11 @@ export default class Foo {}
 //// [exportDefaultClassAndValue.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const foo = 1;
+var foo = 1;
 exports.default = foo;
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 exports.default = Foo;

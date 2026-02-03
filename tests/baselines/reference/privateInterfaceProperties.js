@@ -13,8 +13,14 @@ class c2 implements i1 { public name:string; }
 
 //// [privateInterfaceProperties.js]
 // should be an error 
-class c1 {
-}
+var c1 = /** @class */ (function () {
+    function c1() {
+    }
+    return c1;
+}());
 // should be ok 
-class c2 {
-}
+var c2 = /** @class */ (function () {
+    function c2() {
+    }
+    return c2;
+}());

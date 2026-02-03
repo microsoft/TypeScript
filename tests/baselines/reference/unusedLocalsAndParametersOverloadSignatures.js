@@ -33,14 +33,15 @@ exports.genericFunc = genericFunc;
 function func(details, message) {
     return details + message;
 }
-class C {
-    constructor(details, message) {
+var C = /** @class */ (function () {
+    function C(details, message) {
         details + message;
     }
-    method(details, message) {
+    C.prototype.method = function (details, message) {
         return details + message;
-    }
-}
+    };
+    return C;
+}());
 exports.C = C;
 function genericFunc(details, message) {
     return details + message;

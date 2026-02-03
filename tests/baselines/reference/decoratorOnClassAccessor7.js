@@ -41,63 +41,87 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-let A = (() => {
-    class A {
-        get x() { return 0; }
-        set x(value) { }
+var A = /** @class */ (function () {
+    function A() {
     }
+    Object.defineProperty(A.prototype, "x", {
+        get: function () { return 0; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
     __decorate([
         dec1
     ], A.prototype, "x", null);
     return A;
-})();
-let B = (() => {
-    class B {
-        get x() { return 0; }
-        set x(value) { }
+}());
+var B = /** @class */ (function () {
+    function B() {
     }
+    Object.defineProperty(B.prototype, "x", {
+        get: function () { return 0; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
     __decorate([
         dec2
     ], B.prototype, "x", null);
     return B;
-})();
-let C = (() => {
-    class C {
-        set x(value) { }
-        get x() { return 0; }
+}());
+var C = /** @class */ (function () {
+    function C() {
     }
+    Object.defineProperty(C.prototype, "x", {
+        get: function () { return 0; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
     __decorate([
         dec1
     ], C.prototype, "x", null);
     return C;
-})();
-let D = (() => {
-    class D {
-        set x(value) { }
-        get x() { return 0; }
+}());
+var D = /** @class */ (function () {
+    function D() {
     }
+    Object.defineProperty(D.prototype, "x", {
+        get: function () { return 0; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
     __decorate([
         dec2
     ], D.prototype, "x", null);
     return D;
-})();
-let E = (() => {
-    class E {
-        get x() { return 0; }
-        set x(value) { }
+}());
+var E = /** @class */ (function () {
+    function E() {
     }
+    Object.defineProperty(E.prototype, "x", {
+        get: function () { return 0; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
     __decorate([
         dec1
     ], E.prototype, "x", null);
     return E;
-})();
-let F = (() => {
-    class F {
-        set x(value) { }
-        get x() { return 0; }
+}());
+var F = /** @class */ (function () {
+    function F() {
     }
+    Object.defineProperty(F.prototype, "x", {
+        get: function () { return 0; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
     __decorate([
         dec1
     ], F.prototype, "x", null);
     return F;
-})();
+}());

@@ -11,11 +11,12 @@ let x = class B implements A {
 };
 
 //// [classExpressions.js]
-let x = class B {
-    constructor() {
-        this.func = () => {
+var x = /** @class */ (function () {
+    function B() {
+        this.func = function () {
         };
     }
-    onStart() {
-    }
-};
+    B.prototype.onStart = function () {
+    };
+    return B;
+}());

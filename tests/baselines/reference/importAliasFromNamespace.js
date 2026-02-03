@@ -37,12 +37,13 @@ var SomeOther;
     var Thing;
     (function (Thing) {
         var Internal = My.Internal;
-        class Foo {
-            constructor() {
+        var Foo = /** @class */ (function () {
+            function Foo() {
                 Internal.getThing();
                 0 /* Internal.WhichThing.A */ ? "foo" : "bar";
             }
-        }
+            return Foo;
+        }());
         Thing.Foo = Foo;
     })(Thing = SomeOther.Thing || (SomeOther.Thing = {}));
 })(SomeOther || (SomeOther = {}));

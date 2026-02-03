@@ -41,14 +41,23 @@ var y: (a: string) => string;
 var z: new (a: string) => m.c;
 
 //// [declFileTypeAnnotationTypeLiteral.js]
-class c {
-}
-class g {
-}
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
+var g = /** @class */ (function () {
+    function g() {
+    }
+    return g;
+}());
 var m;
 (function (m) {
-    class c {
-    }
+    var c = /** @class */ (function () {
+        function c() {
+        }
+        return c;
+    }());
     m.c = c;
 })(m || (m = {}));
 // Object literal with everything

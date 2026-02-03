@@ -67,8 +67,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [/home/src/workspaces/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const sym = Symbol();
-const x = 10;
+var sym = Symbol();
+var x = 10;
 
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
@@ -177,7 +177,7 @@ Output::
 //// [/home/src/workspaces/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const sym = Symbol();
+var sym = Symbol();
 
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
@@ -290,8 +290,8 @@ Output::
 //// [/home/src/workspaces/project/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const sym = Symbol();
-const x = 10;
+var sym = Symbol();
+var x = 10;
 
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]

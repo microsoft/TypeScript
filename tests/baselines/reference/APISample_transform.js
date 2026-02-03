@@ -66,6 +66,6 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var ts = __importStar(require("typescript"));
-const source = "let x: string  = 'string'";
-let result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
+var source = "let x: string  = 'string'";
+var result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
 console.log(JSON.stringify(result));

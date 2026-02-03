@@ -37,34 +37,36 @@ export default () => 42;
 
 
 //// [commalist.js]
-export default {
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-    ['foo' + '']: 42,
-};
+var _a;
+export default (_a = {},
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a['foo' + ''] = 42,
+    _a);
 //// [comma.js]
-export default {
-    ['foo']: 42
-};
+var _a;
+export default (_a = {},
+    _a['foo'] = 42,
+    _a);
 //// [functionexpression.js]
-export default () => 42;
+export default (function () { return 42; });

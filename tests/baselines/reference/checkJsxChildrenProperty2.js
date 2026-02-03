@@ -63,30 +63,30 @@ function Comp(p) {
     return <div>{p.b}</div>;
 }
 // Error: missing children
-let k = <Comp a={10} b="hi"/>;
-let k0 = <Comp a={10} b="hi" children="Random">
+var k = <Comp a={10} b="hi"/>;
+var k0 = <Comp a={10} b="hi" children="Random">
         hi hi hi!
     </Comp>;
-let o = {
+var o = {
     children: "Random"
 };
-let k1 = <Comp a={10} b="hi" {...o}>
+var k1 = <Comp a={10} b="hi" {...o}>
         hi hi hi!
     </Comp>;
 // Error: incorrect type
-let k2 = <Comp a={10} b="hi">
+var k2 = <Comp a={10} b="hi">
         <div> My Div </div>
-        {(name) => <div> My name {name} </div>}
+        {function (name) { return <div> My name {name} </div>; }}
     </Comp>;
-let k3 = <Comp a={10} b="hi">
+var k3 = <Comp a={10} b="hi">
         <div> My Div </div>
         {1000000}
     </Comp>;
-let k4 = <Comp a={10} b="hi">
+var k4 = <Comp a={10} b="hi">
         <div> My Div </div>
         hi hi hi!
     </Comp>;
-let k5 = <Comp a={10} b="hi">
+var k5 = <Comp a={10} b="hi">
         <div> My Div </div>
         <div> My Div </div>
     </Comp>;

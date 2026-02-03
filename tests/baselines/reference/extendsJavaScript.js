@@ -13,5 +13,8 @@ class MyClass {
 /**
  * @extends {SomeBase}
  */
-class MyClass {
-}
+var MyClass = /** @class */ (function () {
+    function MyClass() {
+    }
+    return MyClass;
+}());

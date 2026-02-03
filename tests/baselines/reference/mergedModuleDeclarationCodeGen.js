@@ -23,20 +23,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.X = void 0;
 var X;
 (function (X) {
-    let Y;
+    var Y;
     (function (Y_1) {
-        class A {
-            constructor(Y) {
+        var A = /** @class */ (function () {
+            function A(Y) {
                 new Y_1.B();
             }
-        }
+            return A;
+        }());
     })(Y = X.Y || (X.Y = {}));
 })(X || (exports.X = X = {}));
 (function (X) {
-    let Y;
+    var Y;
     (function (Y) {
-        class B {
-        }
+        var B = /** @class */ (function () {
+            function B() {
+            }
+            return B;
+        }());
         Y.B = B;
     })(Y = X.Y || (X.Y = {}));
 })(X || (exports.X = X = {}));

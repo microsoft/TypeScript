@@ -25,8 +25,11 @@ s.subby(12); // error unresolved
 String.fromCharCode(12);
 var M;
 (function (M) {
-    class C {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
     M.C = C;
     var a = new C[];
     a.length;

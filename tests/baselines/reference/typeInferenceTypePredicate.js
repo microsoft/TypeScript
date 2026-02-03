@@ -8,4 +8,4 @@ const res = f((n): n is number => true);
 
 //// [typeInferenceTypePredicate.js]
 // 'res' should be of type 'number'.
-const res = f((n) => true);
+var res = f(function (n) { return true; });

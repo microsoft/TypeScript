@@ -9,6 +9,6 @@ var x = {
 
 //// [objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.js]
 var x = {
-    x, // OK
-    undefinedVariable // Error
+    x: x, // OK
+    undefinedVariable: undefinedVariable // Error
 };

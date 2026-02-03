@@ -24,24 +24,36 @@ var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number
 var y = new g<string>() || new m.g<number>() || (() => new c());
 
 //// [declFileTypeAnnotationUnionType.js]
-class c {
-}
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
 var m;
 (function (m) {
-    class c {
-    }
+    var c = /** @class */ (function () {
+        function c() {
+        }
+        return c;
+    }());
     m.c = c;
-    class g {
-    }
+    var g = /** @class */ (function () {
+        function g() {
+        }
+        return g;
+    }());
     m.g = g;
 })(m || (m = {}));
-class g {
-}
+var g = /** @class */ (function () {
+    function g() {
+    }
+    return g;
+}());
 // Just the name
 var k = new c() || new m.c();
 var l = new c() || new m.c();
-var x = new g() || new m.g() || (() => new c());
-var y = new g() || new m.g() || (() => new c());
+var x = new g() || new m.g() || (function () { return new c(); });
+var y = new g() || new m.g() || (function () { return new c(); });
 
 
 //// [declFileTypeAnnotationUnionType.d.ts]

@@ -66,8 +66,11 @@ module.exports.a = function a() { };
 module.exports.b = function b() { };
 module.exports.b.cat = "cat";
 module.exports.c = function c() { };
-module.exports.c.Cls = class {
-};
+module.exports.c.Cls = /** @class */ (function () {
+    function Cls() {
+    }
+    return Cls;
+}());
 /**
  * @param {number} a
  * @param {number} b

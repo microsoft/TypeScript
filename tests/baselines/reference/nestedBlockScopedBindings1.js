@@ -55,45 +55,45 @@ function a4() {
 //// [nestedBlockScopedBindings1.js]
 function a0() {
     {
-        let x = 1;
+        var x = 1;
     }
     {
-        let x = 1;
+        var x = 1;
     }
 }
 function a1() {
     {
-        let x;
+        var x = void 0;
     }
     {
-        let x = 1;
+        var x = 1;
     }
 }
 function a2() {
     {
-        let x = 1;
+        var x = 1;
     }
     {
-        let x;
+        var x = void 0;
     }
 }
 function a3() {
     {
-        let x = 1;
+        var x = 1;
     }
     switch (1) {
         case 1:
-            let x;
+            var x = void 0;
             break;
     }
 }
 function a4() {
     {
-        let x;
+        var x = void 0;
     }
     switch (1) {
         case 1:
-            let x = 1;
+            var x = 1;
             break;
     }
 }

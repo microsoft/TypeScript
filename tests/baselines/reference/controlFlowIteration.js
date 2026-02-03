@@ -22,9 +22,9 @@ function ff() {
 
 
 //// [controlFlowIteration.js]
-let cond;
+var cond;
 function ff() {
-    let x;
+    var x;
     while (true) {
         if (cond) {
             x = "";

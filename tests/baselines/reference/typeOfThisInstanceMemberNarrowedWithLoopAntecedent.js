@@ -34,23 +34,29 @@ class SomeClass2 {
 }
 
 //// [typeOfThisInstanceMemberNarrowedWithLoopAntecedent.js]
-class SomeClass {
-    method() {
+var SomeClass = /** @class */ (function () {
+    function SomeClass() {
+    }
+    SomeClass.prototype.method = function () {
         while (0) { }
         this.state.data;
         if (this.state.type === "stringVariant") {
-            const s = this.state.data;
+            var s = this.state.data;
         }
+    };
+    return SomeClass;
+}());
+var SomeClass2 = /** @class */ (function () {
+    function SomeClass2() {
     }
-}
-class SomeClass2 {
-    method() {
+    SomeClass2.prototype.method = function () {
         var _a;
-        const c = false;
+        var c = false;
         while (c) { }
         if (this.state.type === "numberVariant") {
             this.state.data;
         }
-        let n = (_a = this.state) === null || _a === void 0 ? void 0 : _a.data; // This should be an error
-    }
-}
+        var n = (_a = this.state) === null || _a === void 0 ? void 0 : _a.data; // This should be an error
+    };
+    return SomeClass2;
+}());

@@ -63,7 +63,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = __importStar(require("./a"));
 var b0 = __importStar(require("./b"));
 var b1 = require("./b");
-let x;
+var x;
 if (a_1.default)
     x = a_1.default;
 if (a_1.a1)

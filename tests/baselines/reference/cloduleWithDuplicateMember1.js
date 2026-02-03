@@ -18,13 +18,24 @@ module C {
 }
 
 //// [cloduleWithDuplicateMember1.js]
-class C {
-    get x() { return 1; }
-    static get x() {
-        return '';
+var C = /** @class */ (function () {
+    function C() {
     }
-    static foo() { }
-}
+    Object.defineProperty(C.prototype, "x", {
+        get: function () { return 1; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(C, "x", {
+        get: function () {
+            return '';
+        },
+        enumerable: false,
+        configurable: true
+    });
+    C.foo = function () { };
+    return C;
+}());
 (function (C) {
     C.x = 1;
 })(C || (C = {}));

@@ -5,5 +5,6 @@ function f(await = await) {
 }
 
 //// [asyncArrowFunction3_es5.js]
-function f(await = await) {
+function f(await) {
+    if (await === void 0) { await = await; }
 }

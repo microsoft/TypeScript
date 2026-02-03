@@ -12,4 +12,4 @@ let y: number = Foo();
 
 //// [a.js]
 /// <reference path="foo.d.ts" />
-let y = Foo();
+var y = Foo();

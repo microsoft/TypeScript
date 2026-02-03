@@ -147,22 +147,25 @@ interface Array<T> {
 // This test case is a condensed version of Angular 2's ListWrapper. Prior to #7448
 // this would cause the compiler to run out of memory.
 function outer(x) {
-    let Inner = (() => {
-        class Inner {
+    var Inner = /** @class */ (function () {
+        function Inner() {
         }
         Inner.y = x;
         return Inner;
-    })();
+    }());
     return Inner;
 }
-let y = outer(5).y;
-class ListWrapper2 {
-    static clone(dit, array) { return array.slice(0); }
-    static reversed(dit, array) {
+var y = outer(5).y;
+var ListWrapper2 = /** @class */ (function () {
+    function ListWrapper2() {
+    }
+    ListWrapper2.clone = function (dit, array) { return array.slice(0); };
+    ListWrapper2.reversed = function (dit, array) {
         var a = ListWrapper2.clone(dit, array);
         return a;
-    }
-}
+    };
+    return ListWrapper2;
+}());
 var tessst;
 (function (tessst) {
     /**
@@ -172,8 +175,8 @@ var tessst;
      */
     function funkyFor(array, callback) {
         if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
-                const result = callback(array[i], i);
+            for (var i = 0, len = array.length; i < len; i++) {
+                var result = callback(array[i], i);
                 if (result) {
                     return result;
                 }
@@ -183,64 +186,69 @@ var tessst;
     }
     tessst.funkyFor = funkyFor;
 })(tessst || (tessst = {}));
-class ListWrapper {
+var ListWrapper = /** @class */ (function () {
+    function ListWrapper() {
+    }
     // JS has no way to express a statically fixed size list, but dart does so we
     // keep both methods.
-    static createFixedSize(dit, size) { return new Array(size); }
-    static createGrowableSize(dit, size) { return new Array(size); }
-    static clone(dit, array) { return array.slice(0); }
-    static forEachWithIndex(dit, array, fn) {
+    ListWrapper.createFixedSize = function (dit, size) { return new Array(size); };
+    ListWrapper.createGrowableSize = function (dit, size) { return new Array(size); };
+    ListWrapper.clone = function (dit, array) { return array.slice(0); };
+    ListWrapper.forEachWithIndex = function (dit, array, fn) {
         for (var i = 0; i < array.length; i++) {
             fn(array[i], i);
         }
-    }
-    static first(dit, array) {
+    };
+    ListWrapper.first = function (dit, array) {
         if (!array)
             return null;
         return array[0];
-    }
-    static last(dit, array) {
+    };
+    ListWrapper.last = function (dit, array) {
         if (!array || array.length == 0)
             return null;
         return array[array.length - 1];
-    }
-    static indexOf(dit, array, value, startIndex = 0) {
+    };
+    ListWrapper.indexOf = function (dit, array, value, startIndex) {
+        if (startIndex === void 0) { startIndex = 0; }
         return array.indexOf(value, startIndex);
-    }
-    static contains(dit, list, el) { return list.indexOf(el) !== -1; }
-    static reversed(dit, array) {
+    };
+    ListWrapper.contains = function (dit, list, el) { return list.indexOf(el) !== -1; };
+    ListWrapper.reversed = function (dit, array) {
         var a = ListWrapper.clone(dit, array);
-        let scanner;
-        scanner.scanRange(3, 5, () => { });
-        return tessst.funkyFor(array, t => t.toString()) ? a.reverse() : a;
-    }
-    static concat(dit, a, b) { return a.concat(b); }
-    static insert(dit, list, index, value) { list.splice(index, 0, value); }
-    static removeAt(dit, list, index) {
+        var scanner;
+        scanner.scanRange(3, 5, function () { });
+        return tessst.funkyFor(array, function (t) { return t.toString(); }) ? a.reverse() : a;
+    };
+    ListWrapper.concat = function (dit, a, b) { return a.concat(b); };
+    ListWrapper.insert = function (dit, list, index, value) { list.splice(index, 0, value); };
+    ListWrapper.removeAt = function (dit, list, index) {
         var res = list[index];
         list.splice(index, 1);
         return res;
-    }
-    static removeAll(dit, list, items) {
+    };
+    ListWrapper.removeAll = function (dit, list, items) {
         for (var i = 0; i < items.length; ++i) {
             var index = list.indexOf(items[i]);
             list.splice(index, 1);
         }
-    }
-    static remove(dit, list, el) {
+    };
+    ListWrapper.remove = function (dit, list, el) {
         var index = list.indexOf(el);
         if (index > -1) {
             list.splice(index, 1);
             return true;
         }
         return false;
-    }
-    static clear(dit, list) { list.length = 0; }
-    static isEmpty(dit, list) { return list.length == 0; }
-    static fill(dit, list, value, start = 0, end = null) {
+    };
+    ListWrapper.clear = function (dit, list) { list.length = 0; };
+    ListWrapper.isEmpty = function (dit, list) { return list.length == 0; };
+    ListWrapper.fill = function (dit, list, value, start, end) {
+        if (start === void 0) { start = 0; }
+        if (end === void 0) { end = null; }
         list.fill(value, start, end === null ? list.length : end);
-    }
-    static equals(dit, a, b) {
+    };
+    ListWrapper.equals = function (dit, a, b) {
         if (a.length != b.length)
             return false;
         for (var i = 0; i < a.length; ++i) {
@@ -248,22 +256,24 @@ class ListWrapper {
                 return false;
         }
         return true;
-    }
-    static slice(dit, l, from = 0, to = null) {
+    };
+    ListWrapper.slice = function (dit, l, from, to) {
+        if (from === void 0) { from = 0; }
+        if (to === void 0) { to = null; }
         return l.slice(from, to === null ? undefined : to);
-    }
-    static splice(dit, l, from, length) { return l.splice(from, length); }
-    static sort(dit, l, compareFn) {
+    };
+    ListWrapper.splice = function (dit, l, from, length) { return l.splice(from, length); };
+    ListWrapper.sort = function (dit, l, compareFn) {
         if (isPresent(compareFn)) {
             l.sort(compareFn);
         }
         else {
             l.sort();
         }
-    }
-    static toString(dit, l) { return l.toString(); }
-    static toJSON(dit, l) { return JSON.stringify(l); }
-    static maximum(dit, list, predicate) {
+    };
+    ListWrapper.toString = function (dit, l) { return l.toString(); };
+    ListWrapper.toJSON = function (dit, l) { return JSON.stringify(l); };
+    ListWrapper.maximum = function (dit, list, predicate) {
         if (list.length == 0) {
             return null;
         }
@@ -281,6 +291,7 @@ class ListWrapper {
             }
         }
         return solution;
-    }
-}
-let cloned = ListWrapper.clone(ListWrapper, [1, 2, 3, 4]);
+    };
+    return ListWrapper;
+}());
+var cloned = ListWrapper.clone(ListWrapper, [1, 2, 3, 4]);

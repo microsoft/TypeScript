@@ -13,10 +13,11 @@ module mod {
 //// [parameterPropertyInConstructor2.js]
 var mod;
 (function (mod) {
-    class Customers {
-        constructor(names, ages) {
+    var Customers = /** @class */ (function () {
+        function Customers(names, ages) {
             this.names = names;
             this.ages = ages;
         }
-    }
+        return Customers;
+    }());
 })(mod || (mod = {}));

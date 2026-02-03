@@ -70,50 +70,50 @@ module okay {
 //// [arrowFunctionsMissingTokens.js]
 var missingArrowsWithCurly;
 (function (missingArrowsWithCurly) {
-    var a = () => { };
-    var b = () => { };
-    var c = (x) => { };
-    var d = (x, y) => { };
-    var e = (x, y) => { };
+    var a = function () { };
+    var b = function () { };
+    var c = function (x) { };
+    var d = function (x, y) { };
+    var e = function (x, y) { };
 })(missingArrowsWithCurly || (missingArrowsWithCurly = {}));
 var missingCurliesWithArrow;
 (function (missingCurliesWithArrow) {
-    let withStatement;
+    var withStatement;
     (function (withStatement) {
-        var a = () => { var k = 10; };
-        var b = () => { var k = 10; };
-        var c = (x) => { var k = 10; };
-        var d = (x, y) => { var k = 10; };
-        var e = (x, y) => { var k = 10; };
-        var f = () => { var k = 10; };
+        var a = function () { var k = 10; };
+        var b = function () { var k = 10; };
+        var c = function (x) { var k = 10; };
+        var d = function (x, y) { var k = 10; };
+        var e = function (x, y) { var k = 10; };
+        var f = function () { var k = 10; };
     })(withStatement || (withStatement = {}));
-    let withoutStatement;
+    var withoutStatement;
     (function (withoutStatement) {
-        var a = () => ;
+        var a = function () { return ; };
     })(withoutStatement || (withoutStatement = {}));
     ;
-    var b = () => ;
+    var b = function () { return ; };
 })(missingCurliesWithArrow || (missingCurliesWithArrow = {}));
-var c = (x) => ;
+var c = function (x) { return ; };
 ;
-var d = (x, y) => ;
+var d = function (x, y) { return ; };
 ;
-var e = (x, y) => ;
+var e = function (x, y) { return ; };
 ;
-var f = () => ;
+var f = function () { return ; };
 var ce_nEst_pas_une_arrow_function;
 (function (ce_nEst_pas_une_arrow_function) {
     var a = ();
-    var b = () => ;
+    var b = function () { return ; };
     var c = (x);
-    var d = (x, y) => ;
-    var e = (x, y) => ;
+    var d = function (x, y) { return ; };
+    var e = function (x, y) { return ; };
 })(ce_nEst_pas_une_arrow_function || (ce_nEst_pas_une_arrow_function = {}));
 var okay;
 (function (okay) {
-    var a = () => { };
-    var b = () => { };
-    var c = (x) => { };
-    var d = (x, y) => { };
-    var e = (x, y) => { };
+    var a = function () { };
+    var b = function () { };
+    var c = function (x) { };
+    var d = function (x, y) { };
+    var e = function (x, y) { };
 })(okay || (okay = {}));

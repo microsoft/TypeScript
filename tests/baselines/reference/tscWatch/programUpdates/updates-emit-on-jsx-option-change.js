@@ -37,7 +37,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/index.jsx]
-const d = <div />;
+var d = <div />;
 
 
 
@@ -106,7 +106,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/index.js]
-const d = React.createElement("div", null);
+var d = React.createElement("div", null);
 
 
 

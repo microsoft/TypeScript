@@ -5,5 +5,5 @@ let exports: number;
 exports = '';
 
 //// [typeCheckExportsVariable.js]
-let exports;
+var exports;
 exports = '';

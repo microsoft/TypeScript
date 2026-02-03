@@ -9,9 +9,11 @@ module foo {
 
 
 //// [genericMergedDeclarationUsingTypeParameter2.js]
-class foo {
-    constructor(x) { }
-}
+var foo = /** @class */ (function () {
+    function foo(x) {
+    }
+    return foo;
+}());
 (function (foo) {
     var y = 1;
 })(foo || (foo = {}));

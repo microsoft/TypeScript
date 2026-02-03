@@ -25,18 +25,18 @@ if (typeof c === 'string') {
 
 
 //// [controlFlowForIndexSignatures.js]
-const boo = { bar: 'bar' };
+var boo = { bar: 'bar' };
 function a(aboo1) {
     if (!aboo1)
         return;
-    const aboo2 = boo;
+    var aboo2 = boo;
 }
 if (b) {
-    const bboo = boo;
+    var bboo_1 = boo;
 }
 b = boo;
-const bboo = boo;
+var bboo = boo;
 if (typeof c === 'string') {
-    const boo1 = { bar: 'works' };
-    const boo2 = { bar: 1 }; // should error
+    var boo1 = { bar: 'works' };
+    var boo2 = { bar: 1 }; // should error
 }

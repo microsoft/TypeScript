@@ -15,10 +15,13 @@ export = b;
 "use strict";
 var m;
 (function (m) {
-    let c;
+    var c;
     (function (c_1) {
-        class c {
-        }
+        var c = /** @class */ (function () {
+            function c() {
+            }
+            return c;
+        }());
         c_1.c = c;
     })(c = m.c || (m.c = {}));
 })(m || (m = {}));

@@ -29,37 +29,41 @@ export class MyClass {
 
 
 //// [index.js]
-const TopLevelSym = Symbol();
-const InnerSym = Symbol();
-module.exports = {
-    [TopLevelSym](x = 12) {
+var _a, _b;
+var TopLevelSym = Symbol();
+var InnerSym = Symbol();
+module.exports = (_a = {},
+    _a[TopLevelSym] = function (x) {
+        if (x === void 0) { x = 12; }
         return x;
     },
-    items: {
-        [InnerSym]: (arg = { x: 12 }) => arg.x
-    }
-};
+    _a.items = (_b = {},
+        _b[InnerSym] = function (arg) {
+            if (arg === void 0) { arg = { x: 12 }; }
+            return arg.x;
+        },
+        _b),
+    _a);
 //// [index2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
-const TopLevelSym = Symbol();
-const InnerSym = Symbol();
-let MyClass = (() => {
-    var _a, _b;
-    class MyClass {
-        /**
-         * @param {typeof TopLevelSym | typeof InnerSym} _p
-         */
-        constructor(_p = InnerSym) {
-            this[_b] = "ok";
-            // switch on _p
-        }
+var TopLevelSym = Symbol();
+var InnerSym = Symbol();
+var MyClass = /** @class */ (function () {
+    /**
+     * @param {typeof TopLevelSym | typeof InnerSym} _p
+     */
+    function MyClass(_p) {
+        if (_p === void 0) { _p = InnerSym; }
+        this[_b] = "ok";
+        // switch on _p
     }
+    var _a, _b;
     _a = TopLevelSym, _b = InnerSym;
     MyClass[_a] = 12;
     return MyClass;
-})();
+}());
 exports.MyClass = MyClass;
 
 

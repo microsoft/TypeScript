@@ -14,11 +14,14 @@ class C {
 
 
 //// [noUnusedLocals_writeOnlyProperty_dynamicNames.js]
-const x = Symbol("x");
-const y = Symbol("y");
-class C {
-    m() {
+var x = Symbol("x");
+var y = Symbol("y");
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.m = function () {
         this[x] = 0; // write-only
         this[y];
-    }
-}
+    };
+    return C;
+}());

@@ -15,12 +15,12 @@ chalk
 
 
 //// [mod1.js]
-const chalk = {
+var chalk = {
     grey: {}
 };
 module.exports.chalk = chalk;
 //// [main.js]
-const { chalk: { grey } } = require('./mod1');
+var grey = require('./mod1').chalk.grey;
 grey;
 chalk;
 

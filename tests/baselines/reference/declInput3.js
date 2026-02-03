@@ -13,11 +13,19 @@ class bar {
 
 
 //// [declInput3.js]
-class bar {
-    f() { return ''; }
-    g() { return { a: null, b: undefined, c: void 4 }; }
-    h(x = 4, y = null, z = '') { x++; }
-}
+var bar = /** @class */ (function () {
+    function bar() {
+    }
+    bar.prototype.f = function () { return ''; };
+    bar.prototype.g = function () { return { a: null, b: undefined, c: void 4 }; };
+    bar.prototype.h = function (x, y, z) {
+        if (x === void 0) { x = 4; }
+        if (y === void 0) { y = null; }
+        if (z === void 0) { z = ''; }
+        x++;
+    };
+    return bar;
+}());
 
 
 //// [declInput3.d.ts]

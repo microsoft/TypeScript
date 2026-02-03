@@ -10,8 +10,11 @@ var logger = Tools.NullLogger();
 //// [forgottenNew.js]
 var Tools;
 (function (Tools) {
-    class NullLogger {
-    }
+    var NullLogger = /** @class */ (function () {
+        function NullLogger() {
+        }
+        return NullLogger;
+    }());
     Tools.NullLogger = NullLogger;
 })(Tools || (Tools = {}));
 var logger = Tools.NullLogger();

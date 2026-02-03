@@ -36,26 +36,29 @@ export class Api<SecurityDataType = unknown> {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HttpClient = void 0;
-class HttpClient {
-    constructor() {
-        this.request = () => {
+var HttpClient = /** @class */ (function () {
+    function HttpClient() {
+        this.request = function () {
             return '';
         };
     }
-}
+    return HttpClient;
+}());
 exports.HttpClient = HttpClient;
 //// [Api.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Api = void 0;
-class Api {
-    constructor(http) {
+var Api = /** @class */ (function () {
+    function Api(http) {
+        var _this = this;
         this.http = http;
-        this.abc1 = () => this.http.request();
-        this.abc2 = () => this.http.request();
-        this.abc3 = () => this.http.request();
+        this.abc1 = function () { return _this.http.request(); };
+        this.abc2 = function () { return _this.http.request(); };
+        this.abc3 = function () { return _this.http.request(); };
     }
-}
+    return Api;
+}());
 exports.Api = Api;
 
 

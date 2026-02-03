@@ -19,11 +19,17 @@ let __: B = new B(); // Error
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = exports.A = void 0;
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 exports.A = A;
-class B {
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 exports.B = B;
 //// [b.js]
 "use strict";
@@ -49,5 +55,5 @@ __exportStar(require("./b"), exports);
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let _ = new A(); // Error
-let __ = new B(); // Error
+var _ = new A(); // Error
+var __ = new B(); // Error

@@ -6,5 +6,5 @@ var v = (a, b) => {
 };
 
 //// [parserX_ArrowFunction4.js]
-var v = (a, b) => {
+var v = function (a, b) {
 };

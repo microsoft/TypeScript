@@ -19,9 +19,9 @@ let c2: N.bar;
 
 
 //// [moduleVisibilityTest4.js]
-let a1;
-let b1;
-let c1;
-let a2;
-let b2;
-let c2;
+var a1;
+var b1;
+var c1;
+var a2;
+var b2;
+var c2;

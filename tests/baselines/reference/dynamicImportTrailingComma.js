@@ -38,5 +38,5 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-const path = './foo';
+var path = './foo';
 Promise.resolve("".concat(path)).then(function (s) { return __importStar(require(s)); });

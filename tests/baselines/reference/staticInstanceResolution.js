@@ -17,12 +17,15 @@ class Comment {
 }
 
 //// [staticInstanceResolution.js]
-class Comment {
-    getDocCommentText() {
+var Comment = /** @class */ (function () {
+    function Comment() {
     }
-    static getDocCommentText(comments) {
+    Comment.prototype.getDocCommentText = function () {
+    };
+    Comment.getDocCommentText = function (comments) {
         comments[0].getDocCommentText();
         var c;
         c.getDocCommentText();
-    }
-}
+    };
+    return Comment;
+}());

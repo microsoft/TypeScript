@@ -182,15 +182,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.glo_v24_public = exports.glo_v22_public = exports.glo_v14_public = exports.glo_v12_public = exports.glo_v4_public = exports.glo_v2_public = exports.glo_C3_public = exports.glo_C1_public = exports.m1 = void 0;
 var m1;
 (function (m1) {
-    class C1_public {
-        f1() {
+    var C1_public = /** @class */ (function () {
+        function C1_public() {
         }
-    }
+        C1_public.prototype.f1 = function () {
+        };
+        return C1_public;
+    }());
     m1.C1_public = C1_public;
-    class C2_private {
-    }
-    class C3_public {
-        constructor() {
+    var C2_private = /** @class */ (function () {
+        function C2_private() {
+        }
+        return C2_private;
+    }());
+    var C3_public = /** @class */ (function () {
+        function C3_public() {
             this.C3_v11_private = new C1_public();
             this.C3_v12_public = new C1_public();
             this.C3_v13_private = new C2_private();
@@ -200,10 +206,11 @@ var m1;
             this.C3_v23_private = new C2_private();
             this.C3_v24_public = new C2_private(); // error
         }
-    }
+        return C3_public;
+    }());
     m1.C3_public = C3_public;
-    class C4_public {
-        constructor() {
+    var C4_public = /** @class */ (function () {
+        function C4_public() {
             this.C4_v11_private = new C1_public();
             this.C4_v12_public = new C1_public();
             this.C4_v13_private = new C2_private();
@@ -213,7 +220,8 @@ var m1;
             this.C4_v23_private = new C2_private();
             this.C4_v24_public = new C2_private();
         }
-    }
+        return C4_public;
+    }());
     var m1_v1_private;
     var m1_v3_private;
     var m1_v11_private = new C1_public();
@@ -227,15 +235,21 @@ var m1;
 })(m1 || (exports.m1 = m1 = {}));
 var m2;
 (function (m2) {
-    class m2_C1_public {
-        f1() {
+    var m2_C1_public = /** @class */ (function () {
+        function m2_C1_public() {
         }
-    }
+        m2_C1_public.prototype.f1 = function () {
+        };
+        return m2_C1_public;
+    }());
     m2.m2_C1_public = m2_C1_public;
-    class m2_C2_private {
-    }
-    class m2_C3_public {
-        constructor() {
+    var m2_C2_private = /** @class */ (function () {
+        function m2_C2_private() {
+        }
+        return m2_C2_private;
+    }());
+    var m2_C3_public = /** @class */ (function () {
+        function m2_C3_public() {
             this.m2_C3_v11_private = new m2_C1_public();
             this.m2_C3_v12_public = new m2_C1_public();
             this.m2_C3_v13_private = new m2_C2_private();
@@ -245,10 +259,11 @@ var m2;
             this.m2_C3_v23_private = new m2_C2_private();
             this.m2_C3_v24_public = new m2_C2_private();
         }
-    }
+        return m2_C3_public;
+    }());
     m2.m2_C3_public = m2_C3_public;
-    class m2_C4_public {
-        constructor() {
+    var m2_C4_public = /** @class */ (function () {
+        function m2_C4_public() {
             this.m2_C4_v11_private = new m2_C1_public();
             this.m2_C4_v12_public = new m2_C1_public();
             this.m2_C4_v13_private = new m2_C2_private();
@@ -258,7 +273,8 @@ var m2;
             this.m2_C4_v23_private = new m2_C2_private();
             this.m2_C4_v24_public = new m2_C2_private();
         }
-    }
+        return m2_C4_public;
+    }());
     var m2_v1_private;
     var m2_v3_private;
     var m2_v11_private = new m2_C1_public();
@@ -270,15 +286,21 @@ var m2;
     var m2_v23_private = new m2_C2_private();
     m2.m2_v24_public = new m2_C2_private();
 })(m2 || (m2 = {}));
-class glo_C1_public {
-    f1() {
+var glo_C1_public = /** @class */ (function () {
+    function glo_C1_public() {
     }
-}
+    glo_C1_public.prototype.f1 = function () {
+    };
+    return glo_C1_public;
+}());
 exports.glo_C1_public = glo_C1_public;
-class glo_C2_private {
-}
-class glo_C3_public {
-    constructor() {
+var glo_C2_private = /** @class */ (function () {
+    function glo_C2_private() {
+    }
+    return glo_C2_private;
+}());
+var glo_C3_public = /** @class */ (function () {
+    function glo_C3_public() {
         this.glo_C3_v11_private = new glo_C1_public();
         this.glo_C3_v12_public = new glo_C1_public();
         this.glo_C3_v13_private = new glo_C2_private();
@@ -288,10 +310,11 @@ class glo_C3_public {
         this.glo_C3_v23_private = new glo_C2_private();
         this.glo_C3_v24_public = new glo_C2_private(); //error
     }
-}
+    return glo_C3_public;
+}());
 exports.glo_C3_public = glo_C3_public;
-class glo_C4_public {
-    constructor() {
+var glo_C4_public = /** @class */ (function () {
+    function glo_C4_public() {
         this.glo_C4_v11_private = new glo_C1_public();
         this.glo_C4_v12_public = new glo_C1_public();
         this.glo_C4_v13_private = new glo_C2_private();
@@ -301,7 +324,8 @@ class glo_C4_public {
         this.glo_C4_v23_private = new glo_C2_private();
         this.glo_C4_v24_public = new glo_C2_private();
     }
-}
+    return glo_C4_public;
+}());
 var glo_v1_private;
 var glo_v3_private;
 var glo_v11_private = new glo_C1_public();

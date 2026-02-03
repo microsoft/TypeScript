@@ -18,10 +18,10 @@ foo.then((x) => {
 
 //// [propagationOfPromiseInitialization.js]
 var foo;
-foo.then((x) => {
+foo.then(function (x) {
     // x is inferred to be a number
     return "asdf";
-}).then((x) => {
+}).then(function (x) {
     // x is inferred to be string
     x.length;
     return 123;

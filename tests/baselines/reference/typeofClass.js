@@ -14,8 +14,11 @@ k2.foo;
 k2.bar;
 
 //// [typeofClass.js]
-class K {
-}
+var K = /** @class */ (function () {
+    function K() {
+    }
+    return K;
+}());
 var k1;
 k1.foo;
 k1.bar;

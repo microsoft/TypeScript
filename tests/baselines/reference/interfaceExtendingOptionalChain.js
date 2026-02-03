@@ -11,7 +11,10 @@ interface C1 extends Foo?.Bar {}
 //// [interfaceExtendingOptionalChain.js]
 var Foo;
 (function (Foo) {
-    class Bar {
-    }
+    var Bar = /** @class */ (function () {
+        function Bar() {
+        }
+        return Bar;
+    }());
     Foo.Bar = Bar;
 })(Foo || (Foo = {}));

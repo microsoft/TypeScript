@@ -30,7 +30,7 @@ x.foo().x;
 "use strict";
 /// <reference path="O.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
-let x;
+var x;
 x.foo().x;
 
 

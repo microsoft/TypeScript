@@ -27,20 +27,22 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = exports.A = void 0;
-    class A {
-        constructor(callback) {
+    var A = /** @class */ (function () {
+        function A(callback) {
             this.callback = callback;
             var child = new B(this);
         }
-        AAA(callback) {
+        A.prototype.AAA = function (callback) {
             var child = new B(this);
-        }
-    }
+        };
+        return A;
+    }());
     exports.A = A;
-    class B {
-        constructor(parent) {
+    var B = /** @class */ (function () {
+        function B(parent) {
             this.parent = parent;
         }
-    }
+        return B;
+    }());
     exports.B = B;
 });

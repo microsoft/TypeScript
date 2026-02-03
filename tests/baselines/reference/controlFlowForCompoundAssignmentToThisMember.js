@@ -21,8 +21,8 @@ class DatasourceCommandWidgetElement {
 }
 
 //// [controlFlowForCompoundAssignmentToThisMember.js]
-class DatasourceCommandWidgetElement {
-    constructor(target) {
+var DatasourceCommandWidgetElement = /** @class */ (function () {
+    function DatasourceCommandWidgetElement(target) {
         if (target instanceof DatasourceCommandWidgetElement) {
             this._commandBased = true;
             this._commandElement = target.commandElement;
@@ -34,4 +34,5 @@ class DatasourceCommandWidgetElement {
             this._commandElement = target.commandElement;
         }
     }
-}
+    return DatasourceCommandWidgetElement;
+}());

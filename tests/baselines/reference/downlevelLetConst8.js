@@ -4,4 +4,4 @@
 let a = 1
 
 //// [downlevelLetConst8.js]
-let a = 1;
+var a = 1;

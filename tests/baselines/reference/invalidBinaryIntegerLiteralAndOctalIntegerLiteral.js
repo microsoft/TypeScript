@@ -9,11 +9,11 @@ var octal = 0O91010;
 
 //// [invalidBinaryIntegerLiteralAndOctalIntegerLiteral.js]
 // Error
-var binary = 0b;
+var binary = 0;
 21010;
-var binary1 = 0B;
+var binary1 = 0;
 21010;
-var octal = 0o;
+var octal = 0;
 81010;
-var octal = 0O;
+var octal = 0;
 91010;

@@ -91,16 +91,19 @@ var D;
 // validate all exportable statements
 var E;
 (function (E) {
-    let Color;
+    var Color;
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
     })(Color = E.Color || (E.Color = {}));
     function fn() { }
     E.fn = fn;
-    class C {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
     E.C = C;
-    let M;
+    var M;
     (function (M) {
         M.x = 42;
     })(M = E.M || (E.M = {}));
@@ -109,14 +112,17 @@ var E;
 // which are not exported
 var F;
 (function (F) {
-    let Color;
+    var Color;
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
     })(Color || (Color = {}));
     function fn() { }
-    class C {
-    }
-    let M;
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
+    var M;
     (function (M) {
         var x = 42;
     })(M || (M = {}));

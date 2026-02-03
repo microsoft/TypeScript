@@ -21,5 +21,5 @@ export interface Row2 {}
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const x = (rowData) => (null);
-const y = { s: '' };
+var x = function (rowData) { return (null); };
+var y = { s: '' };

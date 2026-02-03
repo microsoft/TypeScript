@@ -11,12 +11,13 @@ var one = new Bar({}); // Error
  
 
 //// [noErrorsInCallback.js]
-class Bar {
-    constructor(foo) {
+var Bar = /** @class */ (function () {
+    function Bar(foo) {
         this.foo = foo;
     }
-}
+    return Bar;
+}());
 var one = new Bar({}); // Error
-[].forEach(() => {
+[].forEach(function () {
     var two = new Bar({}); // No error?
 });

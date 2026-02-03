@@ -5,4 +5,4 @@ var x = `\u{DDDDD}`;
 
 
 //// [unicodeExtendedEscapesInTemplates13.js]
-var x = `\u{DDDDD}`;
+var x = "\uDB37\uDDDD";

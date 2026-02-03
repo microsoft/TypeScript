@@ -9,8 +9,11 @@ bar(Foo); // Error, but should be allowed
 
 
 //// [assignmentCompatOnNew.js]
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 ;
 function bar(x) { }
 bar(Foo); // Error, but should be allowed

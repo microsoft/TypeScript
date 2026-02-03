@@ -13,13 +13,15 @@ let Foo = class {
 }
 
 //// [functionsInClassExpressions.js]
-let Foo = class {
-    constructor() {
+var Foo = /** @class */ (function () {
+    function class_1() {
+        var _this = this;
         this.bar = 0;
-        this.inc = () => {
-            this.bar++;
+        this.inc = function () {
+            _this.bar++;
         };
         this.bar++;
     }
-    m() { return this.bar; }
-};
+    class_1.prototype.m = function () { return this.bar; };
+    return class_1;
+}());

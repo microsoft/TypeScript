@@ -6,6 +6,13 @@ class C {
 }
 
 //// [parserMemberAccessorDeclaration9.js]
-class C {
-    static get Foo() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    Object.defineProperty(C, "Foo", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());

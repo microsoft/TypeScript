@@ -16,8 +16,11 @@ var v3: number = (new a<number>()).foo;
 
 //// [externalModuleExportingGenericClass_file0.js]
 "use strict";
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 module.exports = C;
 //// [externalModuleExportingGenericClass_file1.js]
 "use strict";

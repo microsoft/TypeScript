@@ -22,6 +22,6 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-const data = { value: 'foo' };
-const clone = __assign({}, data);
+var data = { value: 'foo' };
+var clone = __assign({}, data);
 clone.value = 'bar';

@@ -29,13 +29,19 @@ let c = x.B.b;
 
 //// [file1.js]
 "use strict";
-class foo {
-}
-(function (foo) {
-    class A {
+var foo = /** @class */ (function () {
+    function foo() {
     }
+    return foo;
+}());
+(function (foo) {
+    var A = /** @class */ (function () {
+        function A() {
+        }
+        return A;
+    }());
     foo.A = A;
-    let B;
+    var B;
     (function (B) {
     })(B = foo.B || (foo.B = {}));
 })(foo || (foo = {}));
@@ -83,6 +89,6 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var x = __importStar(require("./file1"));
 require("./file2");
-let a;
-let b = a.a;
-let c = x.B.b;
+var a;
+var b = a.a;
+var c = x.B.b;

@@ -28,7 +28,7 @@ interface String{
     length: number;
 }
 */
-var lengths = ["a", "b", "c"].map(x => x.length);
+var lengths = ["a", "b", "c"].map(function (x) { return x.length; });
 
 
 //// [genericArray1.d.ts]

@@ -14,8 +14,11 @@ module m1 {
 var m1;
 (function (m1) {
     var x = 10;
-    class c {
-    }
+    var c = /** @class */ (function () {
+        function c() {
+        }
+        return c;
+    }());
     m1.c = c;
 })(m1 || (m1 = {}));
 (function (m1) {

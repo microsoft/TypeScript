@@ -42,8 +42,11 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logger = void 0;
-class logger {
-}
+var logger = /** @class */ (function () {
+    function logger() {
+    }
+    return logger;
+}());
 exports.logger = logger;
 
 

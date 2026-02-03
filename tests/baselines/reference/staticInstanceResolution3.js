@@ -16,11 +16,14 @@ WinJS.Promise.timeout(10);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Promise = void 0;
-class Promise {
-    static timeout(delay) {
-        return null;
+var Promise = /** @class */ (function () {
+    function Promise() {
     }
-}
+    Promise.timeout = function (delay) {
+        return null;
+    };
+    return Promise;
+}());
 exports.Promise = Promise;
 //// [staticInstanceResolution3_1.js]
 "use strict";

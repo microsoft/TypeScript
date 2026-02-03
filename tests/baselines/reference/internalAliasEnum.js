@@ -18,7 +18,7 @@ module c {
 //// [internalAliasEnum.js]
 var a;
 (function (a) {
-    let weekend;
+    var weekend;
     (function (weekend) {
         weekend[weekend["Friday"] = 0] = "Friday";
         weekend[weekend["Saturday"] = 1] = "Saturday";

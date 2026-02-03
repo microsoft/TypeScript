@@ -7,6 +7,9 @@ class Unused {
 
 
 //// [unusedSemicolonInClass.js]
-class Unused {
+var Unused = /** @class */ (function () {
+    function Unused() {
+    }
     ;
-}
+    return Unused;
+}());

@@ -4,4 +4,4 @@
 const a = 1
 
 //// [downlevelLetConst3.js]
-const a = 1;
+var a = 1;

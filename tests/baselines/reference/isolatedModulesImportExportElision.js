@@ -16,6 +16,21 @@ export var z = x;
 
 //// [file1.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -54,10 +69,15 @@ exports.z = exports.c1 = void 0;
 var module_1 = require("module");
 var module_2 = require("module");
 var ns = __importStar(require("module"));
-class C extends module_2.c2.C {
-}
-let x = new module_1.c();
-let y = ns.value;
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return C;
+}(module_2.c2.C));
+var x = new module_1.c();
+var y = ns.value;
 var module_3 = require("module");
 Object.defineProperty(exports, "c1", { enumerable: true, get: function () { return module_3.c1; } });
 exports.z = x;

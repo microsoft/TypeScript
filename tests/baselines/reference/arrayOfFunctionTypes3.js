@@ -30,10 +30,13 @@ var r7 = r6(''); // any not string
 
 //// [arrayOfFunctionTypes3.js]
 // valid uses of arrays of function types
-var x = [() => 1, () => { }];
+var x = [function () { return 1; }, function () { }];
 var r2 = x[0]();
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var y = [C, C];
 var r3 = new y[0]();
 var a;

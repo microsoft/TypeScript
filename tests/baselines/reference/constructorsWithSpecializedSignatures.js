@@ -47,10 +47,14 @@ interface I2 {
 
 //// [constructorsWithSpecializedSignatures.js]
 // errors
-class D {
-    constructor(x) { }
-}
+var D = /** @class */ (function () {
+    function D(x) {
+    }
+    return D;
+}());
 // overloads are ok
-class D2 {
-    constructor(x) { } // error
-}
+var D2 = /** @class */ (function () {
+    function D2(x) {
+    } // error
+    return D2;
+}());

@@ -12,8 +12,14 @@ var x: Foo< { a: string }, { a: string; b: number }>; // Error 2 Type '{ a: stri
 
 
 //// [constraintsThatReferenceOtherContstraints1.js]
-class Foo {
-}
-class Bar {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
+var Bar = /** @class */ (function () {
+    function Bar() {
+    }
+    return Bar;
+}());
 var x; // Error 2 Type '{ a: string; b: number; }' does not satisfy the constraint 'T' for type 

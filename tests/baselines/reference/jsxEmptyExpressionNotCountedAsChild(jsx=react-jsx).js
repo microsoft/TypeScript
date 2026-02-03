@@ -26,4 +26,4 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 function Wrapper(props) {
     return (0, jsx_runtime_1.jsx)("div", { children: props.children });
 }
-const element = ((0, jsx_runtime_1.jsx)(Wrapper, { children: (0, jsx_runtime_1.jsx)("div", { children: "Hello" }) }));
+var element = ((0, jsx_runtime_1.jsx)(Wrapper, { children: (0, jsx_runtime_1.jsx)("div", { children: "Hello" }) }));

@@ -4,4 +4,4 @@
 (a:number => { }
 
 //// [parserErrorRecovery_ParameterList5.js]
-(a, {}) => ;
+(function (a, _a) { return ; });

@@ -5,5 +5,5 @@ let a: number;
 let b: typeof a;
 
 //// [typeofStrictNull.js]
-let a;
-let b;
+var a;
+var b;

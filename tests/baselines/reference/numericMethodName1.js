@@ -7,8 +7,9 @@ class C {
 
 
 //// [numericMethodName1.js]
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this[1] = 2;
     }
-}
+    return C;
+}());

@@ -18,12 +18,13 @@ class Foo {
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty4.js]
 "use strict";
-class Foo {
-    constructor() {
+var Foo = /** @class */ (function () {
+    function Foo() {
         this.x = 5;
         this.x; // number
         this['x']; // number
-        const key = 'x';
+        var key = 'x';
         this[key]; // number
     }
-}
+    return Foo;
+}());

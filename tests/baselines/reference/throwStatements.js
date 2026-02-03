@@ -89,15 +89,24 @@ throw new D<number>();
 
 //// [throwStatements.js]
 // all legal
-class C {
-}
-class D {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());
 function F(x) { return 42; }
 var M;
 (function (M) {
-    class A {
-    }
+    var A = /** @class */ (function () {
+        function A() {
+        }
+        return A;
+    }());
     M.A = A;
     function F2(x) { return x.toString(); }
     M.F2 = F2;
@@ -125,7 +134,7 @@ throw anObjectLiteral;
 var aFunction = F;
 throw aFunction;
 throw aFunction('');
-var aLambda = (x) => 2;
+var aLambda = function (x) { return 2; };
 throw aLambda;
 throw aLambda(1);
 var aModule = M;
@@ -145,7 +154,7 @@ throw null;
 throw undefined;
 throw 'a string';
 throw function () { return 'a string'; };
-throw (x) => 42;
+throw function (x) { return 42; };
 throw { x: 12, y: 13 };
 throw [];
 throw ['a', ['b']];

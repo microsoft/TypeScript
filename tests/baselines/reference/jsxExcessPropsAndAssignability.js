@@ -67,9 +67,9 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(require("react"));
-const myHoc = (ComposedComponent) => {
-    const WrapperComponent = null;
-    const props = null;
+var myHoc = function (ComposedComponent) {
+    var WrapperComponent = null;
+    var props = null;
     React.createElement(WrapperComponent, __assign({}, props, { myProp: '1000000' }));
     React.createElement(WrapperComponent, __assign({}, props, { myProp: 1000000 }));
 };

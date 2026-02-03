@@ -31,7 +31,7 @@ x[0] = { foo: 'hi' }
 
 //// [assignmentToExpandingArrayType.js]
 // Fixes exponential time/space in #14628
-let x = [];
+var x = [];
 x[0] = { foo: 'hi' };
 x[0] = { foo: 'hi' };
 x[0] = { foo: 'hi' };

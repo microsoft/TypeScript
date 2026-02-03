@@ -24,9 +24,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Calculator = void 0;
 exports.test = test;
 exports.default = test2;
-class Calculator {
-    handleChar() { }
-}
+var Calculator = /** @class */ (function () {
+    function Calculator() {
+    }
+    Calculator.prototype.handleChar = function () { };
+    return Calculator;
+}());
 exports.Calculator = Calculator;
 function test() {
 }

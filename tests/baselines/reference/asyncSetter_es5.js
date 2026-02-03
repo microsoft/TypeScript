@@ -7,7 +7,14 @@ class C {
 }
 
 //// [asyncSetter_es5.js]
-class C {
-    set foo(value) {
+var C = /** @class */ (function () {
+    function C() {
     }
-}
+    Object.defineProperty(C.prototype, "foo", {
+        set: function (value) {
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());

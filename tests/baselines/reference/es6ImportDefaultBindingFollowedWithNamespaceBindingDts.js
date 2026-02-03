@@ -11,8 +11,11 @@ export var x = new nameSpaceBinding.a();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
-class a {
-}
+var a = /** @class */ (function () {
+    function a() {
+    }
+    return a;
+}());
 exports.a = a;
 //// [client.js]
 "use strict";

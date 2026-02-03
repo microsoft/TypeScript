@@ -34,26 +34,26 @@ function yes<T extends object | null | undefined>() {
 //// [genericWithNoConstraintComparableWithCurlyCurly.js]
 "use strict";
 function foo() {
-    let x = {};
+    var x = {};
     x;
 }
 function bar() {
-    let x = {};
+    var x = {};
     x;
 }
 function baz() {
-    let x = {};
+    var x = {};
     x;
 }
 function bat() {
-    let x = {};
+    var x = {};
     x;
 }
 function no() {
-    let x = {};
+    var x = {};
     x; // should error
 }
 function yes() {
-    let x = {};
+    var x = {};
     x;
 }

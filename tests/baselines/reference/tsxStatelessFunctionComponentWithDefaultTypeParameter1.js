@@ -23,6 +23,6 @@ define(["require", "exports", "react"], function (require, exports, React) {
         return <div>attr.values</div>;
     }
     // OK
-    let i = <MyComponent values/>; // We infer type arguments here
-    let i1 = <MyComponent values="Hello"/>;
+    var i = <MyComponent values/>; // We infer type arguments here
+    var i1 = <MyComponent values="Hello"/>;
 });

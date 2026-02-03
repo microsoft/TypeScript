@@ -23,8 +23,11 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            TopLevelClass = class TopLevelClass {
-            };
+            TopLevelClass = /** @class */ (function () {
+                function TopLevelClass() {
+                }
+                return TopLevelClass;
+            }());
             exports_1("TopLevelClass", TopLevelClass);
             (function (TopLevelModule) {
                 var v;
@@ -33,16 +36,19 @@ System.register([], function (exports_1, context_1) {
                 TopLevelEnum[TopLevelEnum["E"] = 0] = "E";
             })(TopLevelEnum || (exports_1("TopLevelEnum", TopLevelEnum = {})));
             (function (TopLevelModule2) {
-                class NonTopLevelClass {
-                }
+                var NonTopLevelClass = /** @class */ (function () {
+                    function NonTopLevelClass() {
+                    }
+                    return NonTopLevelClass;
+                }());
                 TopLevelModule2.NonTopLevelClass = NonTopLevelClass;
-                let NonTopLevelModule;
+                var NonTopLevelModule;
                 (function (NonTopLevelModule) {
                     var v;
                 })(NonTopLevelModule = TopLevelModule2.NonTopLevelModule || (TopLevelModule2.NonTopLevelModule = {}));
                 function NonTopLevelFunction() { }
                 TopLevelModule2.NonTopLevelFunction = NonTopLevelFunction;
-                let NonTopLevelEnum;
+                var NonTopLevelEnum;
                 (function (NonTopLevelEnum) {
                     NonTopLevelEnum[NonTopLevelEnum["E"] = 0] = "E";
                 })(NonTopLevelEnum = TopLevelModule2.NonTopLevelEnum || (TopLevelModule2.NonTopLevelEnum = {}));

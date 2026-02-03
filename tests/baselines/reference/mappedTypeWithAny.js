@@ -67,18 +67,18 @@ type Evolver<T extends Evolvable<any> = any> = {
 
 //// [mappedTypeWithAny.js]
 "use strict";
-for (let id in z) {
-    let data = z[id];
-    let x = data.notAValue; // Error
+for (var id in z) {
+    var data = z[id];
+    var x = data.notAValue; // Error
 }
 function bar(arrayish, objectish, indirectArrayish) {
-    let arr;
+    var arr;
     arr = arrayish;
     arr = objectish;
     arr = indirectArrayish;
 }
-let abc = stringifyArray(void 0);
-let def = stringifyPair(void 0);
+var abc = stringifyArray(void 0);
+var def = stringifyPair(void 0);
 
 
 //// [mappedTypeWithAny.d.ts]

@@ -25,14 +25,17 @@ declare class c2 {
 }
 
 //// [declFilePrivateMethodOverloads.js]
-class c1 {
-    _forEachBindingContext(context, fn) {
-        // Function here
+var c1 = /** @class */ (function () {
+    function c1() {
     }
-    overloadWithArityDifference(context) {
+    c1.prototype._forEachBindingContext = function (context, fn) {
         // Function here
-    }
-}
+    };
+    c1.prototype.overloadWithArityDifference = function (context) {
+        // Function here
+    };
+    return c1;
+}());
 
 
 //// [declFilePrivateMethodOverloads.d.ts]

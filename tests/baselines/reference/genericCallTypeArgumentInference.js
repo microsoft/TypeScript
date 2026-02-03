@@ -108,39 +108,40 @@ function foo2b(u) {
 }
 var r2 = foo2('', 1); // number
 var r3 = foo2b(1); // {}
-class C {
-    constructor(t, u) {
+var C = /** @class */ (function () {
+    function C(t, u) {
         this.t = t;
         this.u = u;
     }
-    foo(t, u) {
+    C.prototype.foo = function (t, u) {
         return t;
-    }
-    foo2(t, u) {
+    };
+    C.prototype.foo2 = function (t, u) {
         return u;
-    }
-    foo3(t, u) {
+    };
+    C.prototype.foo3 = function (t, u) {
         return t;
-    }
-    foo4(t, u) {
+    };
+    C.prototype.foo4 = function (t, u) {
         return t;
-    }
-    foo5(t, u) {
+    };
+    C.prototype.foo5 = function (t, u) {
         return t;
-    }
-    foo6() {
+    };
+    C.prototype.foo6 = function () {
         var x;
         return x;
-    }
-    foo7(u) {
+    };
+    C.prototype.foo7 = function (u) {
         var x;
         return x;
-    }
-    foo8() {
+    };
+    C.prototype.foo8 = function () {
         var x;
         return x;
-    }
-}
+    };
+    return C;
+}());
 var c = new C('', 1);
 var r4 = c.foo('', 1); // string
 var r5 = c.foo2('', 1); // number

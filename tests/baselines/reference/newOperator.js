@@ -87,12 +87,22 @@ new ctorUnion("");
 new ctorUnion2("");
 var M;
 (function (M) {
-    class T {
-    }
+    var T = /** @class */ (function () {
+        function T() {
+        }
+        return T;
+    }());
     M.T = T;
 })(M || (M = {}));
-class S {
-    get xs() {
-        return new M.T[];
+var S = /** @class */ (function () {
+    function S() {
     }
-}
+    Object.defineProperty(S.prototype, "xs", {
+        get: function () {
+            return new M.T[];
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return S;
+}());

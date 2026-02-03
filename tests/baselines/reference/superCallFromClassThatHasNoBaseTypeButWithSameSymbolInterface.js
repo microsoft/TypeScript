@@ -11,8 +11,9 @@ class Foo {
 
 
 //// [superCallFromClassThatHasNoBaseTypeButWithSameSymbolInterface.js]
-class Foo {
-    constructor() {
-        super(); // error
+var Foo = /** @class */ (function () {
+    function Foo() {
+        return _super.call(this) || this; // error
     }
-}
+    return Foo;
+}());

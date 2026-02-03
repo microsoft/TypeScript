@@ -52,16 +52,22 @@ define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.A = void 0;
-    class A {
-    }
+    var A = /** @class */ (function () {
+        function A() {
+        }
+        return A;
+    }());
     exports.A = A;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = void 0;
-    class B {
-    }
+    var B = /** @class */ (function () {
+        function B() {
+        }
+        return B;
+    }());
     exports.B = B;
 });
 /// <reference path="c.d.ts"/>
@@ -78,9 +84,9 @@ define("e", ["require", "exports", "a"], function (require, exports, a_2) {
 define("main", ["require", "exports", "d", "e"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    let a;
-    let b = a.getB().x.toFixed();
-    let c = a.getCls().y.toLowerCase();
+    var a;
+    var b = a.getB().x.toFixed();
+    var c = a.getCls().y.toLowerCase();
 });
 
 

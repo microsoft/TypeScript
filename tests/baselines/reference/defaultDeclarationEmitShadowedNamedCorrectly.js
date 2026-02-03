@@ -63,12 +63,15 @@ var me = __importStar(require("./this"));
 function make(x) {
     return null;
 }
-class MyComponent {
-}
+var MyComponent = /** @class */ (function () {
+    function MyComponent() {
+    }
+    return MyComponent;
+}());
 exports.default = MyComponent;
 var Something;
 (function (Something) {
-    let MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
+    var MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
     Something.create = make(me.default);
 })(Something || (exports.Something = Something = {}));
 

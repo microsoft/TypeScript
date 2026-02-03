@@ -22,16 +22,19 @@ var obj: { f: () => any; };
 
 
 //// [thisInObjectLiterals.js]
-class MyClass {
-    fn() {
+var MyClass = /** @class */ (function () {
+    function MyClass() {
+    }
+    MyClass.prototype.fn = function () {
         //type of 'this' in an object literal is the containing scope's this
         var t = { x: this, y: this.t };
         var t;
-    }
-}
+    };
+    return MyClass;
+}());
 //type of 'this' in an object literal method is the type of the object literal
 var obj = {
-    f() {
+    f: function () {
         return this.spaaace;
     }
 };

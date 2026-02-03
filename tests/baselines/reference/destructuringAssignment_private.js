@@ -17,16 +17,18 @@ const nameO = "o";
 
 
 //// [destructuringAssignment_private.js]
-class C {
-    constructor() {
+var _a, _b, _c, _d;
+var C = /** @class */ (function () {
+    function C() {
         this.x = 0;
         this.o = [{ a: 1 }];
     }
-}
-let x;
-([{ a: { x } }] = [{ a: new C() }]);
-({ o: [{ a: x }] } = new C());
-const nameX = "x";
-([{ a: { [nameX]: x } }] = [{ a: new C() }]);
-const nameO = "o";
-({ [nameO]: [{ a: x }] } = new C());
+    return C;
+}());
+var x;
+(x = [{ a: new C() }][0].a.x);
+(x = new C().o[0].a);
+var nameX = "x";
+(_a = [{ a: new C() }], _b = nameX, x = _a[0].a[_b]);
+var nameO = "o";
+(_c = new C(), _d = nameO, x = _c[_d][0].a);

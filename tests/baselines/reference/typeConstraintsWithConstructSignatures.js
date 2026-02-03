@@ -15,13 +15,14 @@ class C<T extends Constructable> {
 
 
 //// [typeConstraintsWithConstructSignatures.js]
-class C {
-    constructor(data, data2) {
+var C = /** @class */ (function () {
+    function C(data, data2) {
         this.data = data;
         this.data2 = data2;
     }
-    create() {
+    C.prototype.create = function () {
         var x = new this.data(); // should not error
         var x2 = new this.data2(); // should not error
-    }
-}
+    };
+    return C;
+}());

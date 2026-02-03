@@ -17,8 +17,11 @@ interface String {}
 
 //// [declarationEmitPreservesHasNoDefaultLibDirective.js]
 /// <reference no-default-lib="true"/>
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 
 
 //// [declarationEmitPreservesHasNoDefaultLibDirective.d.ts]

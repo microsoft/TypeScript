@@ -25,15 +25,15 @@ out2.responseXML.activeElement.className.length
 
 
 //// [mappedTypeRecursiveInference.js]
-const out = foo(a);
+var out = foo(a);
 out.a;
 out.a.a;
 out.a.a.a.a.a.a.a;
-const oub = foo(b);
+var oub = foo(b);
 oub.b;
 oub.b.b;
 oub.b.a.n.a.n.a;
-let xhr;
-const out2 = foo(xhr);
+var xhr;
+var out2 = foo(xhr);
 out2.responseXML;
 out2.responseXML.activeElement.className.length;

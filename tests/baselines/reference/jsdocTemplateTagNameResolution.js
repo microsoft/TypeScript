@@ -18,9 +18,9 @@ const y = "a";
  * @template {keyof T} K
  * @typedef {T[K]} Foo
  */
-const x = { a: 1 };
+var x = { a: 1 };
 /** @type {Foo<typeof x, "a">} */
-const y = "a";
+var y = "a";
 
 
 //// [file.d.ts]

@@ -31,7 +31,7 @@ b = a;
 // Repros from #33872
 Object.defineProperty(exports, "__esModule", { value: true });
 function foo() {
-    const unk = { read: (origin) => unk };
-    const x = unk;
+    var unk = { read: function (origin) { return unk; } };
+    var x = unk;
 }
 b = a;

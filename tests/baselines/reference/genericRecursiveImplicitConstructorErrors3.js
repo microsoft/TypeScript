@@ -33,31 +33,52 @@ module TypeScript {
 
 
 //// [genericRecursiveImplicitConstructorErrors3.js]
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var TypeScript;
 (function (TypeScript) {
-    class MemberName {
-        static create(arg1, arg2, arg3) {
+    var MemberName = /** @class */ (function () {
+        function MemberName() {
         }
-    }
+        MemberName.create = function (arg1, arg2, arg3) {
+        };
+        return MemberName;
+    }());
     TypeScript.MemberName = MemberName;
 })(TypeScript || (TypeScript = {}));
 (function (TypeScript) {
-    class PullSymbol {
-        constructor() {
+    var PullSymbol = /** @class */ (function () {
+        function PullSymbol() {
             this.type = null;
         }
-    }
+        return PullSymbol;
+    }());
     TypeScript.PullSymbol = PullSymbol;
-    class PullTypeSymbol extends PullSymbol {
-        constructor() {
-            super(...arguments);
-            this._elementType = null;
+    var PullTypeSymbol = /** @class */ (function (_super) {
+        __extends(PullTypeSymbol, _super);
+        function PullTypeSymbol() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this._elementType = null;
+            return _this;
         }
-        toString(scopeSymbol, useConstraintInName) {
+        PullTypeSymbol.prototype.toString = function (scopeSymbol, useConstraintInName) {
             var s = this.getScopedNameEx(scopeSymbol, useConstraintInName).toString();
             return s;
-        }
-        getScopedNameEx(scopeSymbol, useConstraintInName, getPrettyTypeName, getTypeParamMarkerInfo) {
+        };
+        PullTypeSymbol.prototype.getScopedNameEx = function (scopeSymbol, useConstraintInName, getPrettyTypeName, getTypeParamMarkerInfo) {
             if (this.isArray()) {
                 var elementMemberName = this._elementType ?
                     (this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ?
@@ -65,7 +86,8 @@ var TypeScript;
                         this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName)) : 1;
                 return TypeScript.MemberName.create(elementMemberName, "", "[]");
             }
-        }
-    }
+        };
+        return PullTypeSymbol;
+    }(PullSymbol));
     TypeScript.PullTypeSymbol = PullTypeSymbol;
 })(TypeScript || (TypeScript = {}));

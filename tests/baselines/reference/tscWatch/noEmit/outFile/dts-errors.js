@@ -166,7 +166,7 @@ Output::
 
 
 //// [/home/src/projects/outFile.js]
-const a = "hello";
+var a = "hello";
 
 
 //// [/home/src/projects/outFile.d.ts]
@@ -344,11 +344,12 @@ Output::
 
 
 //// [/home/src/projects/outFile.js]
-const a = class {
-    constructor() {
+var a = /** @class */ (function () {
+    function class_1() {
         this.p = 10;
     }
-};
+    return class_1;
+}());
 
 
 

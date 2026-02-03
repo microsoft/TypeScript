@@ -47,17 +47,28 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_runtime_1 = require("react/jsx-runtime");
 function Todo(prop) {
     return (0, jsx_runtime_1.jsx)("div", { children: prop.key.toString() + prop.todo });
 }
-function TodoList({ todos }) {
-    return (0, jsx_runtime_1.jsxs)("div", { children: [...(0, jsx_runtime_1.jsx)(Todo, { todo: todos[0].todo }, todos[0].id)] });
+function TodoList(_a) {
+    var todos = _a.todos;
+    return (0, jsx_runtime_1.jsxs)("div", { children: __spreadArray([], (0, jsx_runtime_1.jsx)(Todo, { todo: todos[0].todo }, todos[0].id), true) });
 }
-function TodoListNoError({ todos }) {
+function TodoListNoError(_a) {
+    var todos = _a.todos;
     // any is not checked
-    return (0, jsx_runtime_1.jsxs)("div", { children: [...(0, jsx_runtime_1.jsx)(Todo, { todo: todos[0].todo }, todos[0].id)] });
+    return (0, jsx_runtime_1.jsxs)("div", { children: __spreadArray([], (0, jsx_runtime_1.jsx)(Todo, { todo: todos[0].todo }, todos[0].id), true) });
 }
-let x;
+var x;
 (0, jsx_runtime_1.jsx)(TodoList, __assign({}, x));

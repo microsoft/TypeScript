@@ -12,14 +12,16 @@ class X {
 }
 
 //// [thisCapture1.js]
-class X {
-    constructor() {
+var X = /** @class */ (function () {
+    function X() {
         this.y = 0;
     }
-    getSettings(keys) {
+    X.prototype.getSettings = function (keys) {
+        var _this = this;
         var ret;
-        return ret.always(() => {
-            this.y = 0;
+        return ret.always(function () {
+            _this.y = 0;
         }).promise();
-    }
-}
+    };
+    return X;
+}());

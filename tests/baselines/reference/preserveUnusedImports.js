@@ -20,10 +20,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
-class B {
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 exports.B = B;
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let b;
+var b;

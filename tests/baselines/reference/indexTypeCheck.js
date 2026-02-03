@@ -78,11 +78,12 @@ s[{}]; // ok
 yellow[blue]; // error
 var x;
 x[0];
-class Benchmark {
-    constructor() {
+var Benchmark = /** @class */ (function () {
+    function Benchmark() {
         this.results = {};
     }
-    addTimingFor(name, timing) {
+    Benchmark.prototype.addTimingFor = function (name, timing) {
         this.results[name] = this.results[name];
-    }
-}
+    };
+    return Benchmark;
+}());

@@ -13,9 +13,9 @@ class C {
 
 
 //// [esDecorators-classDeclaration-fields-staticAmbient.js]
-const field3 = "field3";
-let C = (() => {
-    class C {
+var field3 = "field3";
+var C = /** @class */ (function () {
+    function C() {
     }
     return C;
-})();
+}());

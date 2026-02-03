@@ -84,7 +84,7 @@ var A;
 (function (A) {
     while (true)
         ;
-    let x;
+    var x;
 })(A || (A = {}));
 var A1;
 (function (A1) {
@@ -94,7 +94,7 @@ var A2;
 (function (A2) {
     while (true)
         ;
-    let A;
+    var A;
     (function (A) {
         var x = 1;
     })(A || (A = {}));
@@ -108,9 +108,9 @@ var A4;
 (function (A4) {
     while (true)
         ;
-    let A;
+    var A;
     (function (A) {
-        let E;
+        var E;
         (function (E) {
             E[E["X"] = 0] = "X";
         })(E || (E = {}));
@@ -127,8 +127,11 @@ function f1(x) {
 }
 function f2() {
     return;
-    class A {
-    }
+    var A = /** @class */ (function () {
+        function A() {
+        }
+        return A;
+    }());
 }
 var B;
 (function (B) {
@@ -138,7 +141,7 @@ var B;
 function f3() {
     do {
     } while (true);
-    let E;
+    var E;
     (function (E) {
         E[E["X"] = 1] = "X";
     })(E || (E = {}));
@@ -147,7 +150,7 @@ function f4() {
     if (true) {
         throw new Error();
     }
-    let E;
+    var E;
     (function (E) {
         E[E["X"] = 1] = "X";
     })(E || (E = {}));

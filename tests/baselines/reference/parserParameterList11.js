@@ -4,4 +4,10 @@
 (...arg?) => 102;
 
 //// [parserParameterList11.js]
-(...arg) => 102;
+(function () {
+    var arg = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        arg[_i] = arguments[_i];
+    }
+    return 102;
+});

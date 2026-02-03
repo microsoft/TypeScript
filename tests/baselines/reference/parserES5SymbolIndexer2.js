@@ -6,5 +6,8 @@ class C {
 }
 
 //// [parserES5SymbolIndexer2.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

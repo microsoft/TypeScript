@@ -16,10 +16,10 @@ const G = <Greet />;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-const Foo = (props) => undefined;
+var Foo = function (props) { return undefined; };
 function Greet(x) {
     return undefined;
 }
 // Error
-const foo = <Foo />;
-const G = <Greet />;
+var foo = <Foo />;
+var G = <Greet />;

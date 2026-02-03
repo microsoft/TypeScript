@@ -44,31 +44,52 @@ class ClassWithThreeMembers {
 
 //// [asiPublicPrivateProtected.js]
 public;
-class NonPublicClass {
-    s() {
+var NonPublicClass = /** @class */ (function () {
+    function NonPublicClass() {
     }
-}
-class NonPublicClass2 {
-    nonPublicFunction() {
+    NonPublicClass.prototype.s = function () {
+    };
+    return NonPublicClass;
+}());
+var NonPublicClass2 = /** @class */ (function () {
+    function NonPublicClass2() {
     }
-}
+    NonPublicClass2.prototype.nonPublicFunction = function () {
+    };
+    return NonPublicClass2;
+}());
 private;
-class NonPrivateClass {
-    s() {
+var NonPrivateClass = /** @class */ (function () {
+    function NonPrivateClass() {
     }
-}
-class NonPrivateClass2 {
-    nonPrivateFunction() {
+    NonPrivateClass.prototype.s = function () {
+    };
+    return NonPrivateClass;
+}());
+var NonPrivateClass2 = /** @class */ (function () {
+    function NonPrivateClass2() {
     }
-}
+    NonPrivateClass2.prototype.nonPrivateFunction = function () {
+    };
+    return NonPrivateClass2;
+}());
 protected;
-class NonProtectedClass {
-    s() {
+var NonProtectedClass = /** @class */ (function () {
+    function NonProtectedClass() {
     }
-}
-class NonProtectedClass2 {
-    nonProtectedFunction() {
+    NonProtectedClass.prototype.s = function () {
+    };
+    return NonProtectedClass;
+}());
+var NonProtectedClass2 = /** @class */ (function () {
+    function NonProtectedClass2() {
     }
-}
-class ClassWithThreeMembers {
-}
+    NonProtectedClass2.prototype.nonProtectedFunction = function () {
+    };
+    return NonProtectedClass2;
+}());
+var ClassWithThreeMembers = /** @class */ (function () {
+    function ClassWithThreeMembers() {
+    }
+    return ClassWithThreeMembers;
+}());

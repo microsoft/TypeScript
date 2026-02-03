@@ -11,9 +11,12 @@ class List<T extends {}>{
 
 
 //// [genericConstraintDeclaration.js]
-class List {
-    static empty() { return null; }
-}
+var List = /** @class */ (function () {
+    function List() {
+    }
+    List.empty = function () { return null; };
+    return List;
+}());
 
 
 //// [genericConstraintDeclaration.d.ts]

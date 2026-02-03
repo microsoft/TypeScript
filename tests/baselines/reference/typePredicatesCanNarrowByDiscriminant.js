@@ -23,7 +23,7 @@ if (isOneOf(fruit.kind, ['apple', 'banana'])) {
     fruit.kind;
     fruit;
 }
-const kind = fruit2.kind;
+var kind = fruit2.kind;
 if (isOneOf(kind, ['apple', 'banana'])) {
     fruit2.kind;
     fruit2;

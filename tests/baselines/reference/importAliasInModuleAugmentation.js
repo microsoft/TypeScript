@@ -26,6 +26,6 @@ var A;
 (function (A) {
     A.y = 34;
 })(A || (A = {}));
-const m = x;
-let s = { s: "" };
+var m = x;
+var s = { s: "" };
 void s.s;

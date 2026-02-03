@@ -50,7 +50,7 @@ ONE: do
 while (true);
 // break from inside function
 TWO: do {
-    var x = () => {
+    var x = function () {
         break TWO;
     };
 } while (true);

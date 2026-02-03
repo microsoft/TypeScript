@@ -34,12 +34,15 @@ cd = ca;  // Error
 "use strict";
 // Repro from #49607
 ;
-class Dog {
-    run() { }
+var Dog = /** @class */ (function () {
+    function Dog() {
+    }
+    Dog.prototype.run = function () { };
     ;
-    bark() { }
+    Dog.prototype.bark = function () { };
     ;
-}
+    return Dog;
+}());
 ca = cd; // Ok
 cd = ca; // Error
 

@@ -18,13 +18,13 @@ else {
 
 //// [incrementOnNullAssertion.js]
 "use strict";
-const x = 'bar';
-let foo = {};
+var x = 'bar';
+var foo = {};
 if (foo[x] === undefined) {
     foo[x] = 1;
 }
 else {
-    let nu = foo[x];
-    let n = foo[x];
+    var nu = foo[x];
+    var n = foo[x];
     foo[x]++;
 }

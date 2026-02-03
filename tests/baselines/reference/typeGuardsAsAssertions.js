@@ -135,16 +135,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.none = void 0;
 exports.isSome = isSome;
 exports.fn = fn;
-let cond;
+var cond;
 exports.none = { none: '' };
 function isSome(value) {
     return 'some' in value;
 }
 function someFrom(some) {
-    return { some };
+    return { some: some };
 }
 function fn(makeSome) {
-    let result = exports.none;
+    var result = exports.none;
     result; // None
     while (cond) {
         result; // Some<r> | None
@@ -153,7 +153,7 @@ function fn(makeSome) {
     }
 }
 function foo1() {
-    let x = 0;
+    var x = 0;
     x; // number
     while (cond) {
         x; // number, then string | number
@@ -163,7 +163,7 @@ function foo1() {
     x;
 }
 function foo2() {
-    let x = 0;
+    var x = 0;
     x; // number
     while (cond) {
         x; // number, then string | number
@@ -179,7 +179,7 @@ function foo2() {
 }
 // Type guards as assertions
 function f1() {
-    let x = undefined;
+    var x = undefined;
     x; // undefined
     if (x) {
         x; // string | number (guard as assertion)
@@ -187,7 +187,7 @@ function f1() {
     x; // string | number | undefined
 }
 function f2() {
-    let x = undefined;
+    var x = undefined;
     x; // undefined
     if (typeof x === "string") {
         x; // string (guard as assertion)
@@ -195,7 +195,7 @@ function f2() {
     x; // string | undefined
 }
 function f3() {
-    let x = undefined;
+    var x = undefined;
     x; // undefined
     if (!x) {
         return;
@@ -203,7 +203,7 @@ function f3() {
     x; // string | number (guard as assertion)
 }
 function f4() {
-    let x = undefined;
+    var x = undefined;
     x; // undefined
     if (typeof x === "boolean") {
         x; // nothing (boolean not in declared type)
@@ -220,7 +220,7 @@ function f5(x) {
     x; // string | number
 }
 function f6() {
-    let x;
+    var x;
     x.slice();
     x = "";
     x.slice();
@@ -236,6 +236,6 @@ function f6() {
     x.slice();
 }
 function f7() {
-    let x;
+    var x;
     x.slice();
 }

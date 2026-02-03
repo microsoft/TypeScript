@@ -18,10 +18,10 @@ module.exports = {
 
 //// [index.js]
 /// <reference types="node" />
-const Something = require("fs").Something;
-const thing = new Something();
+var Something = require("fs").Something;
+var thing = new Something();
 module.exports = {
-    thing
+    thing: thing
 };
 
 

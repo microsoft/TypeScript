@@ -39,8 +39,11 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 var e = x;
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var f = x;
 var g = x;
 var h = x;

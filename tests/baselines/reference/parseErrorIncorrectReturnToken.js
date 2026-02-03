@@ -18,8 +18,8 @@ let o = {
 //// [parseErrorIncorrectReturnToken.js]
 string; // should be => not :
 // doesn't work in non-type contexts, where the return type is optional
-let f = (n) => string => n.toString();
-let o = {};
+var f = function (n) { return function (string) { return n.toString(); }; };
+var o = {};
 string;
 {
     return n.toString();

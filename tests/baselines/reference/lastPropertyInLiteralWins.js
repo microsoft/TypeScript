@@ -23,10 +23,10 @@ function test(thing) {
     thing.thunk("str");
 }
 test({
-    thunk: (str) => { },
-    thunk: (num) => { }
+    thunk: function (str) { },
+    thunk: function (num) { }
 });
 test({
-    thunk: (num) => { },
-    thunk: (str) => { }
+    thunk: function (num) { },
+    thunk: function (str) { }
 });

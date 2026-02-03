@@ -13,8 +13,11 @@ var d = {
 //// [declFileModuleAssignmentInObjectLiteralProperty.js]
 var m1;
 (function (m1) {
-    class c {
-    }
+    var c = /** @class */ (function () {
+        function c() {
+        }
+        return c;
+    }());
     m1.c = c;
 })(m1 || (m1 = {}));
 var d = {

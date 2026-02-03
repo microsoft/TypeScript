@@ -37,8 +37,11 @@ var selfVar = self;
 module.exports = selfVar;
 //// [recursiveExportAssignmentAndFindAliasedType7_moduleB.js]
 "use strict";
-class ClassB {
-}
+var ClassB = /** @class */ (function () {
+    function ClassB() {
+    }
+    return ClassB;
+}());
 module.exports = ClassB;
 //// [recursiveExportAssignmentAndFindAliasedType7_moduleA.js]
 "use strict";

@@ -87,20 +87,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function doTheThing(x) {
     return { x: "" + x };
 }
-class ExportedThing {
-    constructor() {
+var ExportedThing = /** @class */ (function () {
+    function ExportedThing() {
         this.z = "ok";
     }
-}
+    return ExportedThing;
+}());
 module.exports = {
-    doTheThing,
-    ExportedThing,
+    doTheThing: doTheThing,
+    ExportedThing: ExportedThing,
 };
-class LocalThing {
-    constructor() {
+var LocalThing = /** @class */ (function () {
+    function LocalThing() {
         this.y = "ok";
     }
-}
+    return LocalThing;
+}());
 
 
 //// [index.d.ts]

@@ -9,8 +9,11 @@ var b: C<Y>;
 
 
 //// [generics4NoError.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var a;
 var b;
 

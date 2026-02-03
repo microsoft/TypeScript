@@ -6,7 +6,8 @@ function f([] = [1,2,3,4]) {
 }
 
 //// [emptyArrayBindingPatternParameter04.js]
-function f([] = [1, 2, 3, 4]) {
+function f(_a) {
+    _a = [1, 2, 3, 4];
     var x, y, z;
 }
 

@@ -37,18 +37,18 @@ const res3 = test({
 function test(arg) {
     return arg;
 }
-const res1 = test({
-    foo: true,
-    bar() {
-    }
-});
-const res2 = test({
+var res1 = test({
     foo: true,
     bar: function () {
     }
 });
-const res3 = test({
+var res2 = test({
     foo: true,
-    bar: () => {
+    bar: function () {
+    }
+});
+var res3 = test({
+    foo: true,
+    bar: function () {
     }
 });

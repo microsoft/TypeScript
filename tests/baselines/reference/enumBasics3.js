@@ -23,9 +23,9 @@ module M {
 //// [enumBasics3.js]
 var M;
 (function (M) {
-    let N;
+    var N;
     (function (N) {
-        let E1;
+        var E1;
         (function (E1) {
             E1[E1["a"] = 1] = "a";
             E1[E1["b"] = E1.a.a] = "b";
@@ -33,9 +33,9 @@ var M;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));
 (function (M) {
-    let N;
+    var N;
     (function (N) {
-        let E2;
+        var E2;
         (function (E2) {
             E2[E2["b"] = 1] = "b";
             E2[E2["c"] = M.N.E1.a.a] = "c";

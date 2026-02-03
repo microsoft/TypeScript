@@ -15,7 +15,7 @@ export default x;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 {
-    let obj = true;
+    var obj = true;
 }
 //// [1.js]
 "use strict";

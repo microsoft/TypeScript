@@ -22,11 +22,14 @@ var y = 'y'
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Z = exports.xx = exports.x = void 0;
 exports.default = x;
-const x = 'x';
+var x = 'x';
 exports.x = x;
 exports.xx = x;
-class Y {
-}
+var Y = /** @class */ (function () {
+    function Y() {
+    }
+    return Y;
+}());
 exports.Z = Y;
 //// [exportVars.js]
 "use strict";

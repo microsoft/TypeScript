@@ -4,4 +4,4 @@
 let a
 
 //// [downlevelLetConst7.js]
-let a;
+var a;

@@ -5,4 +5,4 @@ const x = "Hello World";
 
 
 //// [optionsTsBuildInfoFileWithoutIncrementalAndComposite.js]
-const x = "Hello World";
+var x = "Hello World";

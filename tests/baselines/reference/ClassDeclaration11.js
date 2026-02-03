@@ -7,6 +7,9 @@ class C {
 }
 
 //// [ClassDeclaration11.js]
-class C {
-    foo() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.foo = function () { };
+    return C;
+}());

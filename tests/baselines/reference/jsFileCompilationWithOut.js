@@ -10,7 +10,10 @@ function foo() {
 
 
 //// [out.js]
-class c {
-}
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
 function foo() {
 }

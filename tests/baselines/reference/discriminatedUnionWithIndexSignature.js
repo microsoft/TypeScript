@@ -32,12 +32,12 @@ const withAsConst: MapOrSingleton = {
 //// [discriminatedUnionWithIndexSignature.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const withoutAsConst = {
+var withoutAsConst = {
     1: {
         type: 'text' /*as const*/,
     },
 };
-const withAsConst = {
+var withAsConst = {
     1: {
         type: 'text',
     },

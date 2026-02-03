@@ -25,8 +25,10 @@ class Component {
 //// [commentsOnJSXExpressionsArePreserved.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class Component {
-    render() {
+var Component = /** @class */ (function () {
+    function Component() {
+    }
+    Component.prototype.render = function () {
         return <div>
             {/* missing */}
             {null /* preserved */}
@@ -41,5 +43,6 @@ class Component {
             // ??? 4
             /* ??? 5 */ }
         </div>;
-    }
-}
+    };
+    return Component;
+}());

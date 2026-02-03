@@ -85,23 +85,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-let Greeter = (() => {
-    let Greeter = class Greeter {
-        constructor(message) {
-            this.greeting = message;
-        }
-        greet() {
-            return "Hello, " + this.greeting;
-        }
-        greet1() {
-            return "Hello, " + this.greeting;
-        }
-        greet2(param) {
-            return "Hello, " + this.greeting;
-        }
-        greet3(param) {
-            return "Hello, " + this.greeting;
-        }
+var Greeter = /** @class */ (function () {
+    function Greeter(message) {
+        this.greeting = message;
+    }
+    Greeter.prototype.greet = function () {
+        return "Hello, " + this.greeting;
+    };
+    Greeter.prototype.greet1 = function () {
+        return "Hello, " + this.greeting;
+    };
+    Greeter.prototype.greet2 = function (param) {
+        return "Hello, " + this.greeting;
+    };
+    Greeter.prototype.greet3 = function (param) {
+        return "Hello, " + this.greeting;
     };
     __decorate([
         lambda(Enum.No),
@@ -128,31 +126,39 @@ let Greeter = (() => {
         deco(Enum.No)
     ], Greeter);
     return Greeter;
-})();
-function deco(...args) { }
+}());
+function deco() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+}
 var Enum;
 (function (Enum) {
     Enum[Enum["No"] = 0] = "No";
     Enum[Enum["Yes"] = 1] = "Yes";
 })(Enum || (Enum = {}));
-const lambda = (...args) => { };
-let Greeter1 = (() => {
-    let Greeter1 = class Greeter1 {
-        constructor(message) {
-            this.greeting = message;
-        }
-        greet() {
-            return "Hello, " + this.greeting;
-        }
-        greet1() {
-            return "Hello, " + this.greeting;
-        }
-        greet2(param) {
-            return "Hello, " + this.greeting;
-        }
-        greet3(param) {
-            return "Hello, " + this.greeting;
-        }
+var lambda = function () {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+};
+var Greeter1 = /** @class */ (function () {
+    function Greeter1(message) {
+        this.greeting = message;
+    }
+    Greeter1.prototype.greet = function () {
+        return "Hello, " + this.greeting;
+    };
+    Greeter1.prototype.greet1 = function () {
+        return "Hello, " + this.greeting;
+    };
+    Greeter1.prototype.greet2 = function (param) {
+        return "Hello, " + this.greeting;
+    };
+    Greeter1.prototype.greet3 = function (param) {
+        return "Hello, " + this.greeting;
     };
     __decorate([
         lambda(Enum.No),
@@ -179,4 +185,4 @@ let Greeter1 = (() => {
         deco(Enum.No)
     ], Greeter1);
     return Greeter1;
-})();
+}());

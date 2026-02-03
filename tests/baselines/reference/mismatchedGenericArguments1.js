@@ -18,13 +18,19 @@ class C2<T> implements IFoo<T> {
 
 
 //// [mismatchedGenericArguments1.js]
-class C {
-    foo(x) {
-        return null;
+var C = /** @class */ (function () {
+    function C() {
     }
-}
-class C2 {
-    foo(x) {
+    C.prototype.foo = function (x) {
         return null;
+    };
+    return C;
+}());
+var C2 = /** @class */ (function () {
+    function C2() {
     }
-}
+    C2.prototype.foo = function (x) {
+        return null;
+    };
+    return C2;
+}());

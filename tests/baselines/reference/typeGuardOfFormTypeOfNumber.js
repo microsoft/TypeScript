@@ -88,8 +88,11 @@ else {
 
 
 //// [typeGuardOfFormTypeOfNumber.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 ;
 var str;
 var bool;
@@ -131,10 +134,10 @@ else {
     c = numOrC; // C
 }
 if (typeof strOrBool === "number") {
-    let y1 = strOrBool; // {}
+    var y1 = strOrBool; // {}
 }
 else {
-    let y2 = strOrBool; // string | boolean
+    var y2 = strOrBool; // string | boolean
 }
 // A type guard of the form typeof x !== s, where s is a string literal,
 //  - when true, narrows the type of x by typeof x === s when false, or
@@ -164,8 +167,8 @@ else {
     num = numOrC; // number
 }
 if (typeof strOrBool !== "number") {
-    let y1 = strOrBool; // string | boolean
+    var y1 = strOrBool; // string | boolean
 }
 else {
-    let y2 = strOrBool; // {}
+    var y2 = strOrBool; // {}
 }

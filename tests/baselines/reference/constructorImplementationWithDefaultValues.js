@@ -23,18 +23,24 @@ class E<T extends Date> {
 }
 
 //// [constructorImplementationWithDefaultValues.js]
-class C {
-    constructor(x = 1) {
+var C = /** @class */ (function () {
+    function C(x) {
+        if (x === void 0) { x = 1; }
         var y = x;
     }
-}
-class D {
-    constructor(x = null) {
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D(x) {
+        if (x === void 0) { x = null; }
         var y = x;
     }
-}
-class E {
-    constructor(x = null) {
+    return D;
+}());
+var E = /** @class */ (function () {
+    function E(x) {
+        if (x === void 0) { x = null; }
         var y = x;
     }
-}
+    return E;
+}());

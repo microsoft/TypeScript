@@ -17,8 +17,11 @@ list1 = list3; // error
 
 //// [objectTypeWithRecursiveWrappedProperty2.js]
 // Basic recursive type
-class List {
-}
+var List = /** @class */ (function () {
+    function List() {
+    }
+    return List;
+}());
 var list1 = new List();
 var list2 = new List();
 var list3 = new List();

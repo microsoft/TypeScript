@@ -19,8 +19,11 @@ new C[1]; // not an error
 
 //// [createArray.js]
 var na = new number[];
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 new C[];
 var ba = new boolean[];
 var sa = new string[];

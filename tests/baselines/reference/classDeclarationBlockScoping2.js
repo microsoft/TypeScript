@@ -13,13 +13,19 @@ function f() {
 
 //// [classDeclarationBlockScoping2.js]
 function f() {
-    class C {
-    }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
     var c1 = C;
     {
-        class C {
-        }
-        var c2 = C;
+        var C_1 = /** @class */ (function () {
+            function C() {
+            }
+            return C;
+        }());
+        var c2 = C_1;
     }
     return C === c1;
 }

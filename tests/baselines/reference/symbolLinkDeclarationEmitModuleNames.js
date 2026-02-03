@@ -31,11 +31,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BindingKey = void 0;
-class BindingKey {
-    static create(ctor) {
-        return new BindingKey();
+var BindingKey = /** @class */ (function () {
+    function BindingKey() {
     }
-}
+    BindingKey.create = function (ctor) {
+        return new BindingKey();
+    };
+    return BindingKey;
+}());
 exports.BindingKey = BindingKey;
 //// [index.js]
 "use strict";

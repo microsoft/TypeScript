@@ -1,2 +1,4 @@
-const foo = () => /*comment*/
-void 0;
+var foo = function () {
+    /*comment*/
+    return void 0;
+};

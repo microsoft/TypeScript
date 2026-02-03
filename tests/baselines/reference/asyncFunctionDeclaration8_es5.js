@@ -4,4 +4,5 @@
 var v = { [await]: foo }
 
 //// [asyncFunctionDeclaration8_es5.js]
-var v = { [await]: foo };
+var _a;
+var v = (_a = {}, _a[await] = foo, _a);

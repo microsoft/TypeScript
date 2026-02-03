@@ -11,10 +11,10 @@ class C {
 
 
 //// [typeOfThisInStaticMembers13.js]
-let C = (() => {
-    var _a, _b, _c, _d;
-    class C {
+var C = /** @class */ (function () {
+    function C() {
     }
+    var _a, _b, _c, _d;
     _a = C;
     Object.defineProperty(C, "c", {
         enumerable: true,
@@ -26,8 +26,8 @@ let C = (() => {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: (_b = class Inner {
-                constructor() {
+        value: (_b = /** @class */ (function () {
+                function Inner() {
                     Object.defineProperty(this, _d, {
                         enumerable: true,
                         configurable: true,
@@ -35,7 +35,8 @@ let C = (() => {
                         value: 123
                     });
                 }
-            },
+                return Inner;
+            }()),
             _c = _a.c,
             _d = _a.c,
             Object.defineProperty(_b, _c, {
@@ -47,4 +48,4 @@ let C = (() => {
             _b)
     });
     return C;
-})();
+}());

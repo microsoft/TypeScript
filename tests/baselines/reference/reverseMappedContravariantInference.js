@@ -10,4 +10,4 @@ conforms({ foo: (v: string) => false })({ foo: "hello" });
 //// [reverseMappedContravariantInference.js]
 "use strict";
 // Repro from #21273
-conforms({ foo: (v) => false })({ foo: "hello" });
+conforms({ foo: function (v) { return false; } })({ foo: "hello" });

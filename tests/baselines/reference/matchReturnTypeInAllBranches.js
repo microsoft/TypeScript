@@ -39,8 +39,8 @@ cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cooki
 
 //// [matchReturnTypeInAllBranches.js]
 // Represents a monster who enjoys ice cream
-class IceCreamMonster {
-    constructor(iceCreamFlavor, wantsSprinkles, soundsWhenEating, name) {
+var IceCreamMonster = /** @class */ (function () {
+    function IceCreamMonster(iceCreamFlavor, wantsSprinkles, soundsWhenEating, name) {
         this.iceCreamFlavor = iceCreamFlavor;
         this.iceCreamRemaining = 100;
         this.wantsSprinkles = wantsSprinkles;
@@ -53,7 +53,7 @@ class IceCreamMonster {
 * @param {number} amount The amount of ice cream to e    at.
 * @return {boolean} True if ice cream remains, false if there is no more ice cream le    ft.
 */
-    eatIceCream(amount) {
+    IceCreamMonster.prototype.eatIceCream = function (amount) {
         this.iceCreamRemaining -= amount;
         if (this.iceCreamRemaining <= 0) {
             this.iceCreamRemaining = 0;
@@ -62,7 +62,8 @@ class IceCreamMonster {
         else {
             return 12345;
         }
-    }
-}
+    };
+    return IceCreamMonster;
+}());
 var cookieMonster;
 cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cookie Monster");

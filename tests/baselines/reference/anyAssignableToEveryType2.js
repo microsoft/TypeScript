@@ -134,10 +134,16 @@ interface I20 {
 
 //// [anyAssignableToEveryType2.js]
 // any is not a subtype of any other types, but is assignable, all the below should work
-class A {
-}
-class A2 {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
+var A2 = /** @class */ (function () {
+    function A2() {
+    }
+    return A2;
+}());
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -146,8 +152,11 @@ function f() { }
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
-class c {
-}
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));

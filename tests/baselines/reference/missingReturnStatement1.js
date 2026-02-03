@@ -9,8 +9,11 @@ class Foo {
 
 
 //// [missingReturnStatement1.js]
-class Foo {
-    foo() {
-        //return 4;
+var Foo = /** @class */ (function () {
+    function Foo() {
     }
-}
+    Foo.prototype.foo = function () {
+        //return 4;
+    };
+    return Foo;
+}());

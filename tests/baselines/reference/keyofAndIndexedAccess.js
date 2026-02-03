@@ -661,14 +661,52 @@ const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, 
 
 
 //// [keyofAndIndexedAccess.js]
-class Shape {
-}
-class TaggedShape extends Shape {
-}
-class Item {
-}
-class Options {
-}
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
+var Shape = /** @class */ (function () {
+    function Shape() {
+    }
+    return Shape;
+}());
+var TaggedShape = /** @class */ (function (_super) {
+    __extends(TaggedShape, _super);
+    function TaggedShape() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return TaggedShape;
+}(Shape));
+var Item = /** @class */ (function () {
+    function Item() {
+    }
+    return Item;
+}());
+var Options = /** @class */ (function () {
+    function Options() {
+    }
+    return Options;
+}());
 function getProperty(obj, key) {
     return obj[key];
 }
@@ -676,107 +714,113 @@ function setProperty(obj, key, value) {
     obj[key] = value;
 }
 function f10(shape) {
-    let name = getProperty(shape, "name"); // string
-    let widthOrHeight = getProperty(shape, cond ? "width" : "height"); // number
-    let nameOrVisible = getProperty(shape, cond ? "name" : "visible"); // string | boolean
+    var name = getProperty(shape, "name"); // string
+    var widthOrHeight = getProperty(shape, cond ? "width" : "height"); // number
+    var nameOrVisible = getProperty(shape, cond ? "name" : "visible"); // string | boolean
     setProperty(shape, "name", "rectangle");
     setProperty(shape, cond ? "width" : "height", 10);
     setProperty(shape, cond ? "name" : "visible", true); // Technically not safe
 }
 function f11(a) {
-    let len = getProperty(a, "length"); // number
+    var len = getProperty(a, "length"); // number
     setProperty(a, "length", len);
 }
 function f12(t) {
-    let len = getProperty(t, "length");
-    let s2 = getProperty(t, "0"); // Shape
-    let b2 = getProperty(t, "1"); // boolean
+    var len = getProperty(t, "length");
+    var s2 = getProperty(t, "0"); // Shape
+    var b2 = getProperty(t, "1"); // boolean
 }
 function f13(foo, bar) {
-    let x = getProperty(foo, "x"); // any
-    let y = getProperty(foo, "100"); // any
-    let z = getProperty(foo, bar); // any
+    var x = getProperty(foo, "x"); // any
+    var y = getProperty(foo, "100"); // any
+    var z = getProperty(foo, bar); // any
 }
-class Component {
-    getProperty(key) {
+var Component = /** @class */ (function () {
+    function Component() {
+    }
+    Component.prototype.getProperty = function (key) {
         return this.props[key];
-    }
-    setProperty(key, value) {
+    };
+    Component.prototype.setProperty = function (key, value) {
         this.props[key] = value;
-    }
-}
+    };
+    return Component;
+}());
 function f20(component) {
-    let name = component.getProperty("name"); // string
-    let widthOrHeight = component.getProperty(cond ? "width" : "height"); // number
-    let nameOrVisible = component.getProperty(cond ? "name" : "visible"); // string | boolean
+    var name = component.getProperty("name"); // string
+    var widthOrHeight = component.getProperty(cond ? "width" : "height"); // number
+    var nameOrVisible = component.getProperty(cond ? "name" : "visible"); // string | boolean
     component.setProperty("name", "rectangle");
     component.setProperty(cond ? "width" : "height", 10);
     component.setProperty(cond ? "name" : "visible", true); // Technically not safe
 }
 function pluck(array, key) {
-    return array.map(x => x[key]);
+    return array.map(function (x) { return x[key]; });
 }
 function f30(shapes) {
-    let names = pluck(shapes, "name"); // string[]
-    let widths = pluck(shapes, "width"); // number[]
-    let nameOrVisibles = pluck(shapes, cond ? "name" : "visible"); // (string | boolean)[]
+    var names = pluck(shapes, "name"); // string[]
+    var widths = pluck(shapes, "width"); // number[]
+    var nameOrVisibles = pluck(shapes, cond ? "name" : "visible"); // (string | boolean)[]
 }
 function f31(key) {
-    const shape = { name: "foo", width: 5, height: 10, visible: true };
+    var shape = { name: "foo", width: 5, height: 10, visible: true };
     return shape[key]; // Shape[K]
 }
 function f32(key) {
-    const shape = { name: "foo", width: 5, height: 10, visible: true };
+    var shape = { name: "foo", width: 5, height: 10, visible: true };
     return shape[key]; // Shape[K]
 }
 function f33(shape, key) {
-    let name = getProperty(shape, "name");
-    let prop = getProperty(shape, key);
+    var name = getProperty(shape, "name");
+    var prop = getProperty(shape, key);
     return prop;
 }
 function f34(ts) {
-    let tag1 = f33(ts, "tag");
-    let tag2 = getProperty(ts, "tag");
+    var tag1 = f33(ts, "tag");
+    var tag2 = getProperty(ts, "tag");
 }
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 // Indexed access expressions have always permitted access to private and protected members.
 // For consistency we also permit such access in indexed access types.
 function f40(c) {
-    let x = c["x"];
-    let y = c["y"];
-    let z = c["z"];
+    var x = c["x"];
+    var y = c["y"];
+    var z = c["z"];
 }
 function f50(k, s) {
-    const x1 = s;
-    const x2 = k;
+    var x1 = s;
+    var x2 = k;
 }
 function f51(k, s) {
-    const x1 = s;
-    const x2 = k;
+    var x1 = s;
+    var x2 = k;
 }
 function f52(obj, k, s, n) {
-    const x1 = obj[s];
-    const x2 = obj[n];
-    const x3 = obj[k];
+    var x1 = obj[s];
+    var x2 = obj[n];
+    var x3 = obj[k];
 }
 function f53(obj, k, s, n) {
-    const x1 = obj[s];
-    const x2 = obj[n];
-    const x3 = obj[k];
+    var x1 = obj[s];
+    var x2 = obj[n];
+    var x3 = obj[k];
 }
 function f54(obj, key) {
-    for (let s in obj[key]) {
+    for (var s in obj[key]) {
     }
-    const b = "foo" in obj[key];
+    var b = "foo" in obj[key];
 }
 function f55(obj, key) {
-    for (let s in obj[key]) {
+    for (var s in obj[key]) {
     }
-    const b = "foo" in obj[key];
+    var b = "foo" in obj[key];
 }
 function f60(source, target) {
-    for (let k in source) {
+    for (var k in source) {
         target[k] = source[k];
     }
 }
@@ -786,65 +830,68 @@ function f70(func) {
     func('a', 'c');
 }
 function f71(func) {
-    let x = func({ a: 1, b: "hello" }, { c: true });
+    var x = func({ a: 1, b: "hello" }, { c: true });
     x.a; // number | undefined
     x.b; // string | undefined
     x.c; // boolean | undefined
 }
 function f72(func) {
-    let a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
-    let b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
-    let c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
+    var a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
+    var b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
+    var c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
 }
 function f73(func) {
-    let a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
-    let b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
-    let c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
+    var a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
+    var b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
+    var c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
 }
 function f74(func) {
-    let a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a'); // number
-    let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b'); // string | boolean
+    var a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a'); // number
+    var b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b'); // string | boolean
 }
 function f80(obj) {
-    let a1 = obj.a; // { x: any }
-    let a2 = obj['a']; // { x: any }
-    let a3 = obj['a']; // T["a"]
-    let x1 = obj.a.x; // any
-    let x2 = obj['a']['x']; // any
-    let x3 = obj['a']['x']; // T["a"]["x"]
+    var a1 = obj.a; // { x: any }
+    var a2 = obj['a']; // { x: any }
+    var a3 = obj['a']; // T["a"]
+    var x1 = obj.a.x; // any
+    var x2 = obj['a']['x']; // any
+    var x3 = obj['a']['x']; // T["a"]["x"]
 }
 function f81(obj) {
     return obj['a']['x'];
 }
 function f82() {
-    let x1 = f81({ a: { x: "hello" } }); // string
-    let x2 = f81({ a: { x: 42 } }); // number
+    var x1 = f81({ a: { x: "hello" } }); // string
+    var x2 = f81({ a: { x: 42 } }); // number
 }
 function f83(obj, key) {
     return obj[key]['x'];
 }
 function f84() {
-    let x1 = f83({ foo: { x: "hello" } }, "foo"); // string
-    let x2 = f83({ bar: { x: 42 } }, "bar"); // number
+    var x1 = f83({ foo: { x: "hello" } }, "foo"); // string
+    var x2 = f83({ bar: { x: 42 } }, "bar"); // number
 }
-class C1 {
-    get(key) {
+var C1 = /** @class */ (function () {
+    function C1() {
+    }
+    C1.prototype.get = function (key) {
         return this[key];
-    }
-    set(key, value) {
+    };
+    C1.prototype.set = function (key, value) {
         this[key] = value;
-    }
-    foo() {
-        let x1 = this.x; // number
-        let x2 = this["x"]; // number
-        let x3 = this.get("x"); // this["x"]
-        let x4 = getProperty(this, "x"); // this["x"]
+    };
+    C1.prototype.foo = function () {
+        var x1 = this.x; // number
+        var x2 = this["x"]; // number
+        var x3 = this.get("x"); // this["x"]
+        var x4 = getProperty(this, "x"); // this["x"]
         this.x = 42;
         this["x"] = 42;
         this.set("x", 42);
         setProperty(this, "x", 42);
-    }
-}
+    };
+    return C1;
+}());
 function f90(x1, x2, x3) {
     x1 = x2;
     x1 = x3;
@@ -857,73 +904,87 @@ function f90(x1, x2, x3) {
     x3.length;
 }
 function f91(x, y, z) {
-    let a;
+    var a;
     a = x;
     a = y;
     a = z;
 }
 function f92(x, y, z) {
-    let a;
+    var a;
     a = x;
     a = y;
     a = z;
 }
 // Repros from #12011
-class Base {
-    get(prop) {
+var Base = /** @class */ (function () {
+    function Base() {
+    }
+    Base.prototype.get = function (prop) {
         return this[prop];
-    }
-    set(prop, value) {
+    };
+    Base.prototype.set = function (prop, value) {
         this[prop] = value;
+    };
+    return Base;
+}());
+var Person = /** @class */ (function (_super) {
+    __extends(Person, _super);
+    function Person(parts) {
+        var _this = _super.call(this) || this;
+        _this.set("parts", parts);
+        return _this;
     }
-}
-class Person extends Base {
-    constructor(parts) {
-        super();
-        this.set("parts", parts);
-    }
-    getParts() {
+    Person.prototype.getParts = function () {
         return this.get("parts");
-    }
-}
-class OtherPerson {
-    constructor(parts) {
+    };
+    return Person;
+}(Base));
+var OtherPerson = /** @class */ (function () {
+    function OtherPerson(parts) {
         setProperty(this, "parts", parts);
     }
-    getParts() {
+    OtherPerson.prototype.getParts = function () {
         return getProperty(this, "parts");
+    };
+    return OtherPerson;
+}());
+function path(obj) {
+    var keys = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        keys[_i - 1] = arguments[_i];
     }
-}
-function path(obj, ...keys) {
-    let result = obj;
-    for (let k of keys) {
+    var result = obj;
+    for (var _a = 0, keys_1 = keys; _a < keys_1.length; _a++) {
+        var k = keys_1[_a];
         result = result[k];
     }
     return result;
 }
 function f1(thing) {
-    let x1 = path(thing, 'a'); // { x: number, y: string }
-    let x2 = path(thing, 'a', 'y'); // string
-    let x3 = path(thing, 'b'); // boolean
-    let x4 = path(thing, ...['a', 'x']); // any
+    var x1 = path(thing, 'a'); // { x: number, y: string }
+    var x2 = path(thing, 'a', 'y'); // string
+    var x3 = path(thing, 'b'); // boolean
+    var x4 = path.apply(void 0, __spreadArray([thing], ['a', 'x'], false)); // any
 }
 // Repro from comment in #12114
-const assignTo2 = (object, key1, key2) => (value) => object[key1][key2] = value;
-var empty = one(() => { }); // inferred as {}, expected
-var hashOfEmpty1 = on({ test: () => { } }); // {}
-var hashOfEmpty2 = on({ test: (x) => { } }); // { test: boolean }
-let c1 = new Component1({
+var assignTo2 = function (object, key1, key2) {
+    return function (value) { return object[key1][key2] = value; };
+};
+var empty = one(function () { }); // inferred as {}, expected
+var hashOfEmpty1 = on({ test: function () { } }); // {}
+var hashOfEmpty2 = on({ test: function (x) { } }); // { test: boolean }
+var c1 = new Component1({
     data: {
         hello: ""
     }
 });
 c1.get("hello");
 function f(p) {
-    let a;
+    var a;
     a[p].add; // any
 }
-let result = dispatchMethod("someMethod", ["hello", 35]);
-let MyThingy;
+var result = dispatchMethod("someMethod", ["hello", 35]);
+var MyThingy;
 function addToMyThingy(key) {
     MyThingy[key].push("a");
 }
@@ -932,8 +993,9 @@ function onChangeGenericFunction(handler) {
 }
 // Repro from #13285
 function updateIds(obj, idFields, idMapping) {
-    for (const idField of idFields) {
-        const newId = idMapping[obj[idField]];
+    for (var _i = 0, idFields_1 = idFields; _i < idFields_1.length; _i++) {
+        var idField = idFields_1[_i];
+        var newId = idMapping[obj[idField]];
         if (newId) {
             obj[idField] = newId;
         }
@@ -946,38 +1008,52 @@ function updateIds2(obj, key, stringMap) {
     stringMap[x]; // Should be OK.
 }
 // Repro from #13604
-class A {
-}
-class B extends A {
-    f(p) {
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
+var B = /** @class */ (function (_super) {
+    __extends(B, _super);
+    function B() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    B.prototype.f = function (p) {
         p.x;
-    }
-}
+    };
+    return B;
+}(A));
 // Repro from #13749
-class Form {
-    set(prop, value) {
-        this.childFormFactories[prop](value);
+var Form = /** @class */ (function () {
+    function Form() {
     }
-}
+    Form.prototype.set = function (prop, value) {
+        this.childFormFactories[prop](value);
+    };
+    return Form;
+}());
 // Repro from #13787
-class SampleClass {
-    constructor(props) {
+var SampleClass = /** @class */ (function () {
+    function SampleClass(props) {
         this.props = Object.freeze(props);
     }
-}
-class AnotherSampleClass extends SampleClass {
-    constructor(props) {
-        const foo = { foo: "bar" };
-        super(merge(props, foo));
+    return SampleClass;
+}());
+var AnotherSampleClass = /** @class */ (function (_super) {
+    __extends(AnotherSampleClass, _super);
+    function AnotherSampleClass(props) {
+        var foo = { foo: "bar" };
+        return _super.call(this, merge(props, foo)) || this;
     }
-    brokenMethod() {
+    AnotherSampleClass.prototype.brokenMethod = function () {
         this.props.foo.concat;
-    }
-}
+    };
+    return AnotherSampleClass;
+}(SampleClass));
 new AnotherSampleClass({});
 // Positive repro from #17166
 function f3(t, k, tk) {
-    for (let key in t) {
+    for (var key in t) {
         key = k; // ok, K ==> keyof T
         t[key] = tk; // ok, T[K] ==> T[keyof T]
     }
@@ -998,25 +1074,28 @@ function fn(o, k) {
     take(o[k]);
 }
 // Repro from #23133
-class Unbounded {
-    foo(x) {
-        let y = x;
+var Unbounded = /** @class */ (function () {
+    function Unbounded() {
     }
-}
+    Unbounded.prototype.foo = function (x) {
+        var y = x;
+    };
+    return Unbounded;
+}());
 function ff1(dd, k1, k2) {
     return dd[k1][k2];
 }
 function ff2(dd, k1, k2) {
-    const d = dd[k1];
+    var d = dd[k1];
     return d[k2];
 }
 // Repro from #26409
-const cf1 = (t, k) => {
-    const s = t[k];
+var cf1 = function (t, k) {
+    var s = t[k];
     t.cool;
 };
-const cf2 = (t, k) => {
-    const s = t[k];
+var cf2 = function (t, k) {
+    var s = t[k];
     t.cool;
 };
 

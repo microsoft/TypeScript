@@ -10,10 +10,13 @@ class WebControls {
 }
 
 //// [commentOnClassMethod1.js]
-class WebControls {
+var WebControls = /** @class */ (function () {
+    function WebControls() {
+    }
     /**
      * Render a control
      */
-    createControl() {
-    }
-}
+    WebControls.prototype.createControl = function () {
+    };
+    return WebControls;
+}());

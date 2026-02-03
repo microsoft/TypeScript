@@ -35,8 +35,11 @@ export const bar = Cls.bar();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cls = void 0;
-class Cls {
-}
+var Cls = /** @class */ (function () {
+    function Cls() {
+    }
+    return Cls;
+}());
 exports.Cls = Cls;
 //// [mod1.js]
 "use strict";

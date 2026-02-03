@@ -4,4 +4,5 @@
 export var x = () => this.window;
 
 //// [topLevelLambda4.js]
-export var x = () => this.window;
+var _this = this;
+export var x = function () { return _this.window; };

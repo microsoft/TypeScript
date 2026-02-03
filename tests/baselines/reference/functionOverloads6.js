@@ -9,6 +9,9 @@ class foo {
 
 
 //// [functionOverloads6.js]
-class foo {
-    static fnOverload(foo) { }
-}
+var foo = /** @class */ (function () {
+    function foo() {
+    }
+    foo.fnOverload = function (foo) { };
+    return foo;
+}());

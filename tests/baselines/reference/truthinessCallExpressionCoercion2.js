@@ -218,7 +218,7 @@ function test(required1, required2, b, optional) {
     // ok
     required1 && required2 && required1() && required2();
     // ok
-    [].forEach((f) => f && f.apply(parent, []));
+    [].forEach(function (f) { return f && f.apply(parent, []); });
     // error
     required1 && required2 && required1() && console.log('foo');
     // error
@@ -282,9 +282,9 @@ function checksConsole() {
 }
 function checksPropertyAccess() {
     var _a, _b;
-    const x = {
+    var x = {
         foo: {
-            bar() { return true; }
+            bar: function () { return true; }
         }
     };
     // error
@@ -296,13 +296,13 @@ function checksPropertyAccess() {
     // ok
     x.foo.bar && 1 && x.foo.bar();
     // ok
-    const y = A.from && A.from !== B.from ? true : false;
+    var y = A.from && A.from !== B.from ? true : false;
     y;
-    const x1 = {
-        a: { b: { c: () => { } } }
+    var x1 = {
+        a: { b: { c: function () { } } }
     };
-    const x2 = {
-        a: { b: { c: () => { } } }
+    var x2 = {
+        a: { b: { c: function () { } } }
     };
     // error
     x1.a.b.c && x2.a.b.c();
@@ -322,11 +322,13 @@ function checksPropertyAccess() {
     if (((_b = x1.a.b.c) !== null && _b !== void 0 ? _b : x2.a.b.c) && 1) {
     }
 }
-class Foo {
-    required() {
-        return true;
+var Foo = /** @class */ (function () {
+    function Foo() {
     }
-    test() {
+    Foo.prototype.required = function () {
+        return true;
+    };
+    Foo.prototype.test = function () {
         // error
         this.required && console.log('required');
         // error
@@ -337,5 +339,6 @@ class Foo {
         this.required && 1 && this.required();
         // ok
         1 && this.optional && console.log('optional');
-    }
-}
+    };
+    return Foo;
+}());

@@ -30,19 +30,25 @@ class B {
 
 //// [thisInGenericStaticMembers.js]
 // this.call in static generic method not resolved correctly
-class A {
-    static one(source, value) {
+var A = /** @class */ (function () {
+    function A() {
+    }
+    A.one = function (source, value) {
         return source;
-    }
-    static two(source) {
+    };
+    A.two = function (source) {
         return this.one(source, 42);
+    };
+    return A;
+}());
+var B = /** @class */ (function () {
+    function B() {
     }
-}
-class B {
-    static one(source, value) {
+    B.one = function (source, value) {
         return source;
-    }
-    static two(source) {
+    };
+    B.two = function (source) {
         return this.one(source, 42);
-    }
-}
+    };
+    return B;
+}());

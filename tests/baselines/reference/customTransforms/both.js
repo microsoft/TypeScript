@@ -1,9 +1,13 @@
 // [source.js]
 /*@before*/
 function f1() { }
-class c {
-}
-() => { };
+//@after
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
+(function () { });
 //@after
 var e;
 (function (e) {

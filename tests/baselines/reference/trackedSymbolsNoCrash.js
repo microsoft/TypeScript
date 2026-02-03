@@ -229,7 +229,11 @@ var SyntaxKind;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isNodeOfType = void 0;
-const isNodeOfType = (nodeType) => (node) => (node === null || node === void 0 ? void 0 : node.kind) === nodeType;
+var isNodeOfType = function (nodeType) {
+    return function (node) {
+        return (node === null || node === void 0 ? void 0 : node.kind) === nodeType;
+    };
+};
 exports.isNodeOfType = isNodeOfType;
 
 

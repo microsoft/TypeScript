@@ -13,12 +13,21 @@ class C {
 }
 
 //// [computedPropertyNames40_ES5.js]
-class Foo {
-}
-class Foo2 {
-}
-class C {
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
+var Foo2 = /** @class */ (function () {
+    function Foo2() {
+    }
+    return Foo2;
+}());
+var C = /** @class */ (function () {
+    function C() {
+    }
     // Computed properties
-    [""]() { return new Foo; }
-    [""]() { return new Foo2; }
-}
+    C.prototype[""] = function () { return new Foo; };
+    C.prototype[""] = function () { return new Foo2; };
+    return C;
+}());

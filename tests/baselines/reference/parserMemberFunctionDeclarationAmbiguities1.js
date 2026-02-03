@@ -16,13 +16,16 @@ class C {
 }
 
 //// [parserMemberFunctionDeclarationAmbiguities1.js]
-class C {
-    public() { }
-    static() { }
-    public() { }
-    static() { }
-    static public() { }
-    static static() { }
-    static public() { }
-    static static() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.public = function () { };
+    C.prototype.static = function () { };
+    C.prototype.public = function () { };
+    C.prototype.static = function () { };
+    C.public = function () { };
+    C.static = function () { };
+    C.public = function () { };
+    C.static = function () { };
+    return C;
+}());

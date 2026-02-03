@@ -31,8 +31,11 @@ foo({
 
 
 //// [didYouMeanElaborationsForExpressionsWhichCouldBeCalled.js]
-class Bar {
-}
+var Bar = /** @class */ (function () {
+    function Bar() {
+    }
+    return Bar;
+}());
 foo({
     x: Bar,
     y: Date

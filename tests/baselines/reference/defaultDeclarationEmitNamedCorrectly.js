@@ -24,12 +24,12 @@ exports.make = make;
 function make(x) {
     return null;
 }
-let MyComponent = (() => {
-    class MyComponent {
+var MyComponent = /** @class */ (function () {
+    function MyComponent() {
     }
     MyComponent.create = make(MyComponent);
     return MyComponent;
-})();
+}());
 exports.default = MyComponent;
 
 

@@ -10,8 +10,11 @@ class C {
 
 
 //// [noUnusedLocals_writeOnlyProperty.js]
-class C {
-    m() {
-        this.x = 0;
+var C = /** @class */ (function () {
+    function C() {
     }
-}
+    C.prototype.m = function () {
+        this.x = 0;
+    };
+    return C;
+}());

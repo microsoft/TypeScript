@@ -18,9 +18,12 @@ module clodule {
 
 
 //// [ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.js]
-class clodule {
-    static fn(id) { }
-}
+var clodule = /** @class */ (function () {
+    function clodule() {
+    }
+    clodule.fn = function (id) { };
+    return clodule;
+}());
 (function (clodule) {
     // error: duplicate identifier expected
     function fn(x, y) {

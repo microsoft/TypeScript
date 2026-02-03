@@ -16,9 +16,12 @@ var i: I<number,number>;
 //// [tooManyTypeParameters1.js]
 function f() { }
 f();
-var x = () => { };
+var x = function () { };
 x();
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var c = new C();
 var i;

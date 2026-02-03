@@ -26,8 +26,11 @@ exports.Foo = void 0;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
 path_1.default.resolve("", "../");
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 exports.Foo = Foo;
 //// [file2.js]
 "use strict";
@@ -36,8 +39,11 @@ exports.Foo2 = void 0;
 var tslib_1 = require("tslib");
 var path = tslib_1.__importStar(require("path"));
 path.resolve("", "../");
-class Foo2 {
-}
+var Foo2 = /** @class */ (function () {
+    function Foo2() {
+    }
+    return Foo2;
+}());
 exports.Foo2 = Foo2;
 //// [file3.js]
 "use strict";
@@ -46,8 +52,11 @@ exports.Foo3 = void 0;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
 (0, path_1.default)("", "../");
-class Foo3 {
-}
+var Foo3 = /** @class */ (function () {
+    function Foo3() {
+    }
+    return Foo3;
+}());
 exports.Foo3 = Foo3;
 //// [file4.js]
 "use strict";

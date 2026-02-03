@@ -22,27 +22,56 @@ export function Configurable<T extends Constructor<{}>>(base: T): T {
 
 
 //// [dist.js]
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 define("Configurable", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Configurable = Configurable;
     function Configurable(base) {
-        return class extends base {
-            constructor(...args) {
-                super(...args);
+        return /** @class */ (function (_super) {
+            __extends(class_1, _super);
+            function class_1() {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                return _super.apply(this, args) || this;
             }
-        };
+            return class_1;
+        }(base));
     }
 });
 define("Class", ["require", "exports", "Configurable"], function (require, exports, Configurable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ActualClass = exports.HiddenClass = void 0;
-    class HiddenClass {
-    }
+    var HiddenClass = /** @class */ (function () {
+        function HiddenClass() {
+        }
+        return HiddenClass;
+    }());
     exports.HiddenClass = HiddenClass;
-    class ActualClass extends (0, Configurable_1.Configurable)(HiddenClass) {
-    }
+    var ActualClass = /** @class */ (function (_super) {
+        __extends(ActualClass, _super);
+        function ActualClass() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return ActualClass;
+    }((0, Configurable_1.Configurable)(HiddenClass)));
     exports.ActualClass = ActualClass;
 });
 

@@ -8,11 +8,14 @@ class C {
 }
 
 //// [stripInternal1.js]
-class C {
-    foo() { }
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.foo = function () { };
     // @internal
-    bar() { }
-}
+    C.prototype.bar = function () { };
+    return C;
+}());
 
 
 //// [stripInternal1.d.ts]

@@ -16,10 +16,10 @@ function bar<K extends "foo">(key: K) {
 
 //// [assignmentGenericLookupTypeNarrowing.js]
 // Repro from #26130
-let mappedObject = { foo: { x: "hello" } };
+var mappedObject = { foo: { x: "hello" } };
 function bar(key) {
-    const element = foo(mappedObject[key]);
+    var element = foo(mappedObject[key]);
     if (element == null)
         return;
-    const x = element.x;
+    var x = element.x;
 }

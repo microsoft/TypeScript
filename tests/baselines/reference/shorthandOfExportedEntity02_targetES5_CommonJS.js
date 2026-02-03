@@ -15,7 +15,7 @@ exports.test = void 0;
 exports.foo = foo;
 exports.test = "test";
 function foo() {
-    const x = { test: exports.test };
+    var x = { test: exports.test };
 }
 
 

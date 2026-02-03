@@ -313,7 +313,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const a = {
+var a = {
     lastName: 'sdsd'
 };
 
@@ -630,7 +630,7 @@ Output::
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const a = "hello";
+var a = "hello";
 
 
 
@@ -777,12 +777,12 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
-const a = class {
-    constructor() {
+exports.a = /** @class */ (function () {
+    function class_1() {
         this.p = 10;
     }
-};
-exports.a = a;
+    return class_1;
+}());
 
 
 

@@ -7,6 +7,6 @@ let y = true;
 x = y && (a => a);
 
 //// [contextuallyTypeLogicalAnd01.js]
-let x;
-let y = true;
-x = y && (a => a);
+var x;
+var y = true;
+x = y && (function (a) { return a; });

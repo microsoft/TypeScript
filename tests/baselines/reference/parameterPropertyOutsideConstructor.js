@@ -7,7 +7,10 @@ class C {
 }
 
 //// [parameterPropertyOutsideConstructor.js]
-class C {
-    foo(x) {
+var C = /** @class */ (function () {
+    function C() {
     }
-}
+    C.prototype.foo = function (x) {
+    };
+    return C;
+}());

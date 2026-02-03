@@ -9,7 +9,7 @@ var foo: () => [any] = function bar() {
 
 //// [wideningTuples2.js]
 var foo = function bar() {
-    let intermediate = bar();
+    var intermediate = bar();
     intermediate = [""];
     return [undefined];
 };

@@ -7,5 +7,6 @@ function f() {
 
 //// [thisExpressionInIndexExpression.js]
 function f() {
-    return r => r[this];
+    var _this = this;
+    return function (r) { return r[_this]; };
 }

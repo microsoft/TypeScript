@@ -162,7 +162,7 @@ module TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    let CompilerDiagnostics;
+    var CompilerDiagnostics;
     (function (CompilerDiagnostics) {
         CompilerDiagnostics.debug = false;
         CompilerDiagnostics.diagnosticWriter = null;
@@ -188,18 +188,21 @@ var TypeScript;
         }
         CompilerDiagnostics.assert = assert;
     })(CompilerDiagnostics = TypeScript.CompilerDiagnostics || (TypeScript.CompilerDiagnostics = {}));
-    class NullLogger {
-        information() { return false; }
-        debug() { return false; }
-        warning() { return false; }
-        error() { return false; }
-        fatal() { return false; }
-        log(s) {
+    var NullLogger = /** @class */ (function () {
+        function NullLogger() {
         }
-    }
+        NullLogger.prototype.information = function () { return false; };
+        NullLogger.prototype.debug = function () { return false; };
+        NullLogger.prototype.warning = function () { return false; };
+        NullLogger.prototype.error = function () { return false; };
+        NullLogger.prototype.fatal = function () { return false; };
+        NullLogger.prototype.log = function (s) {
+        };
+        return NullLogger;
+    }());
     TypeScript.NullLogger = NullLogger;
-    class LoggerAdapter {
-        constructor(logger) {
+    var LoggerAdapter = /** @class */ (function () {
+        function LoggerAdapter(logger) {
             this.logger = logger;
             this._information = this.logger.information();
             this._debug = this.logger.debug();
@@ -207,29 +210,31 @@ var TypeScript;
             this._error = this.logger.error();
             this._fatal = this.logger.fatal();
         }
-        information() { return this._information; }
-        debug() { return this._debug; }
-        warning() { return this._warning; }
-        error() { return this._error; }
-        fatal() { return this._fatal; }
-        log(s) {
+        LoggerAdapter.prototype.information = function () { return this._information; };
+        LoggerAdapter.prototype.debug = function () { return this._debug; };
+        LoggerAdapter.prototype.warning = function () { return this._warning; };
+        LoggerAdapter.prototype.error = function () { return this._error; };
+        LoggerAdapter.prototype.fatal = function () { return this._fatal; };
+        LoggerAdapter.prototype.log = function (s) {
             this.logger.log(s);
-        }
-    }
+        };
+        return LoggerAdapter;
+    }());
     TypeScript.LoggerAdapter = LoggerAdapter;
-    class BufferedLogger {
-        constructor() {
+    var BufferedLogger = /** @class */ (function () {
+        function BufferedLogger() {
             this.logContents = [];
         }
-        information() { return false; }
-        debug() { return false; }
-        warning() { return false; }
-        error() { return false; }
-        fatal() { return false; }
-        log(s) {
+        BufferedLogger.prototype.information = function () { return false; };
+        BufferedLogger.prototype.debug = function () { return false; };
+        BufferedLogger.prototype.warning = function () { return false; };
+        BufferedLogger.prototype.error = function () { return false; };
+        BufferedLogger.prototype.fatal = function () { return false; };
+        BufferedLogger.prototype.log = function (s) {
             this.logContents.push(s);
-        }
-    }
+        };
+        return BufferedLogger;
+    }());
     TypeScript.BufferedLogger = BufferedLogger;
     function timeFunction(logger, funcDescription, func) {
         var start = +new Date();
@@ -241,7 +246,7 @@ var TypeScript;
     TypeScript.timeFunction = timeFunction;
     function stringToLiteral(value, length) {
         var result = "";
-        var addChar = (index) => {
+        var addChar = function (index) {
             var ch = value.charCodeAt(index);
             switch (ch) {
                 case 0x09: // tab

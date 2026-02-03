@@ -167,22 +167,24 @@ function privateFunctionWithPrivateModuleReturnTypes1() {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpecializedWidget = exports.Widget1 = void 0;
 exports.createWidget1 = createWidget1;
-class Widget1 {
-    constructor() {
+var Widget1 = /** @class */ (function () {
+    function Widget1() {
         this.name = 'one';
     }
-}
+    return Widget1;
+}());
 exports.Widget1 = Widget1;
 function createWidget1() {
     return new Widget1();
 }
 var SpecializedWidget;
 (function (SpecializedWidget) {
-    class Widget2 {
-        constructor() {
+    var Widget2 = /** @class */ (function () {
+        function Widget2() {
             this.name = 'one';
         }
-    }
+        return Widget2;
+    }());
     SpecializedWidget.Widget2 = Widget2;
     function createWidget2() {
         return new Widget2();
@@ -220,71 +222,77 @@ exports.publicFunctionWithPrivateParmeterTypes1 = publicFunctionWithPrivateParme
 exports.publicFunctionWithPrivateModuleReturnTypes = publicFunctionWithPrivateModuleReturnTypes;
 exports.publicFunctionWithPrivateModuleReturnTypes1 = publicFunctionWithPrivateModuleReturnTypes1;
 var exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
-class publicClassWithWithPrivateParmeterTypes {
-    static myPublicStaticMethod() {
-        return exporter.createExportedWidget1();
+var publicClassWithWithPrivateParmeterTypes = /** @class */ (function () {
+    function publicClassWithWithPrivateParmeterTypes() {
     }
-    static myPrivateStaticMethod() {
+    publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
         return exporter.createExportedWidget1();
-        ;
-    }
-    myPublicMethod() {
+    };
+    publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
         return exporter.createExportedWidget1();
         ;
-    }
-    myPrivateMethod() {
+    };
+    publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
         return exporter.createExportedWidget1();
         ;
-    }
-    static myPublicStaticMethod1() {
+    };
+    publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
+        return exporter.createExportedWidget1();
+        ;
+    };
+    publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
         return exporter.createExportedWidget3();
-    }
-    static myPrivateStaticMethod1() {
+    };
+    publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
-    }
-    myPublicMethod1() {
+    };
+    publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
-    }
-    myPrivateMethod1() {
+    };
+    publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
-    }
-}
+    };
+    return publicClassWithWithPrivateParmeterTypes;
+}());
 exports.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
-class privateClassWithWithPrivateParmeterTypes {
-    static myPublicStaticMethod() {
-        return exporter.createExportedWidget1();
+var privateClassWithWithPrivateParmeterTypes = /** @class */ (function () {
+    function privateClassWithWithPrivateParmeterTypes() {
     }
-    static myPrivateStaticMethod() {
+    privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
         return exporter.createExportedWidget1();
-        ;
-    }
-    myPublicMethod() {
+    };
+    privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
         return exporter.createExportedWidget1();
         ;
-    }
-    myPrivateMethod() {
+    };
+    privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
         return exporter.createExportedWidget1();
         ;
-    }
-    static myPublicStaticMethod1() {
+    };
+    privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
+        return exporter.createExportedWidget1();
+        ;
+    };
+    privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
         return exporter.createExportedWidget3();
-    }
-    static myPrivateStaticMethod1() {
+    };
+    privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
-    }
-    myPublicMethod1() {
+    };
+    privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
-    }
-    myPrivateMethod1() {
+    };
+    privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
-    }
-}
+    };
+    return privateClassWithWithPrivateParmeterTypes;
+}());
 function publicFunctionWithPrivateParmeterTypes() {
     return exporter.createExportedWidget1();
 }
@@ -297,20 +305,23 @@ function publicFunctionWithPrivateParmeterTypes1() {
 function privateFunctionWithPrivateParmeterTypes1() {
     return exporter.createExportedWidget3();
 }
-class publicClassWithPrivateModuleReturnTypes {
-    static myPublicStaticMethod() {
+var publicClassWithPrivateModuleReturnTypes = /** @class */ (function () {
+    function publicClassWithPrivateModuleReturnTypes() {
+    }
+    publicClassWithPrivateModuleReturnTypes.myPublicStaticMethod = function () {
         return exporter.createExportedWidget2();
-    }
-    myPublicMethod() {
+    };
+    publicClassWithPrivateModuleReturnTypes.prototype.myPublicMethod = function () {
         return exporter.createExportedWidget2();
-    }
-    static myPublicStaticMethod1() {
+    };
+    publicClassWithPrivateModuleReturnTypes.myPublicStaticMethod1 = function () {
         return exporter.createExportedWidget4();
-    }
-    myPublicMethod1() {
+    };
+    publicClassWithPrivateModuleReturnTypes.prototype.myPublicMethod1 = function () {
         return exporter.createExportedWidget4();
-    }
-}
+    };
+    return publicClassWithPrivateModuleReturnTypes;
+}());
 exports.publicClassWithPrivateModuleReturnTypes = publicClassWithPrivateModuleReturnTypes;
 function publicFunctionWithPrivateModuleReturnTypes() {
     return exporter.createExportedWidget2();
@@ -318,20 +329,23 @@ function publicFunctionWithPrivateModuleReturnTypes() {
 function publicFunctionWithPrivateModuleReturnTypes1() {
     return exporter.createExportedWidget4();
 }
-class privateClassWithPrivateModuleReturnTypes {
-    static myPublicStaticMethod() {
+var privateClassWithPrivateModuleReturnTypes = /** @class */ (function () {
+    function privateClassWithPrivateModuleReturnTypes() {
+    }
+    privateClassWithPrivateModuleReturnTypes.myPublicStaticMethod = function () {
         return exporter.createExportedWidget2();
-    }
-    myPublicMethod() {
+    };
+    privateClassWithPrivateModuleReturnTypes.prototype.myPublicMethod = function () {
         return exporter.createExportedWidget2();
-    }
-    static myPublicStaticMethod1() {
+    };
+    privateClassWithPrivateModuleReturnTypes.myPublicStaticMethod1 = function () {
         return exporter.createExportedWidget4();
-    }
-    myPublicMethod1() {
+    };
+    privateClassWithPrivateModuleReturnTypes.prototype.myPublicMethod1 = function () {
         return exporter.createExportedWidget4();
-    }
-}
+    };
+    return privateClassWithPrivateModuleReturnTypes;
+}());
 function privateFunctionWithPrivateModuleReturnTypes() {
     return exporter.createExportedWidget2();
 }

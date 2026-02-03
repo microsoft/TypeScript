@@ -28,7 +28,7 @@ let broken = [
 //// [enumAssignmentCompat4.js]
 var M;
 (function (M) {
-    let MyEnum;
+    var MyEnum;
     (function (MyEnum) {
         MyEnum[MyEnum["BAR"] = 0] = "BAR";
     })(MyEnum = M.MyEnum || (M.MyEnum = {}));
@@ -38,7 +38,7 @@ var M;
 })(M || (M = {}));
 var N;
 (function (N) {
-    let MyEnum;
+    var MyEnum;
     (function (MyEnum) {
         MyEnum[MyEnum["FOO"] = 0] = "FOO";
     })(MyEnum = N.MyEnum || (N.MyEnum = {}));
@@ -47,7 +47,7 @@ var N;
         foo: MyEnum.FOO
     };
 })(N || (N = {}));
-let broken = [
+var broken = [
     N.object1,
     M.object2
 ];

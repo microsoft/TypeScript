@@ -40,8 +40,8 @@ Output::
 
 
 //// [/users/username/projects/project/out.js]
-const x = 10;
-const y = 20;
+var x = 10;
+var y = 20;
 
 
 //// [/users/username/projects/project/out.tsbuildinfo]

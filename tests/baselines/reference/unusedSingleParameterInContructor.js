@@ -8,8 +8,9 @@ class Dummy {
 }
 
 //// [unusedSingleParameterInContructor.js]
-class Dummy {
-    constructor(person) {
+var Dummy = /** @class */ (function () {
+    function Dummy(person) {
         var unused = 20;
     }
-}
+    return Dummy;
+}());

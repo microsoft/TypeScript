@@ -11,6 +11,6 @@ x = {
 //// [contextualIntersectionType.js]
 var x;
 x = {
-    a: s => s,
-    b: n => n
+    a: function (s) { return s; },
+    b: function (n) { return n; }
 };

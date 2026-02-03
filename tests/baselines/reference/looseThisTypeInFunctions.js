@@ -51,37 +51,40 @@ i.explicitThis = function(m) {
 
 
 //// [looseThisTypeInFunctions.js]
-class C {
-    explicitThis(m) {
-        return this.n + m;
+var C = /** @class */ (function () {
+    function C() {
     }
-    implicitThis(m) {
+    C.prototype.explicitThis = function (m) {
         return this.n + m;
-    }
-    explicitVoid(m) {
+    };
+    C.prototype.implicitThis = function (m) {
+        return this.n + m;
+    };
+    C.prototype.explicitVoid = function (m) {
         return m + 1;
-    }
-}
-let c = new C();
+    };
+    return C;
+}());
+var c = new C();
 c.explicitVoid = c.explicitThis; // error, 'void' is missing everything
-let o = {
+var o = {
     n: 101,
     explicitThis: function (m) {
         return m + this.n.length; // error, 'length' does not exist on 'number'
     },
-    implicitThis(m) { return m; }
+    implicitThis: function (m) { return m; }
 };
-let i = o;
-let o2 = {
+var i = o;
+var o2 = {
     n: 1001,
     explicitThis: function (m) {
         return m + this.n.length; // error, this.n: number, no member 'length'
     },
 };
-let x = i.explicitThis;
-let n = x(12); // callee:void doesn't match this:I
-let u;
-let y = u.implicitNoThis;
+var x = i.explicitThis;
+var n = x(12); // callee:void doesn't match this:I
+var u;
+var y = u.implicitNoThis;
 n = y(12); // ok, callee:void matches this:any
 c.explicitVoid = c.implicitThis; // ok, implicitThis(this:any)
 o.implicitThis = c.implicitThis; // ok, implicitThis(this:any)

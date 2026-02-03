@@ -13,12 +13,15 @@ export class Clazz {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Clazz = void 0;
-class Clazz {
+var Clazz = /** @class */ (function () {
+    function Clazz() {
+    }
     /**
      * @param {function(this:Object, ...*):*} functionDeclaration
      */
-    method(functionDeclaration) { }
-}
+    Clazz.prototype.method = function (functionDeclaration) { };
+    return Clazz;
+}());
 exports.Clazz = Clazz;
 
 

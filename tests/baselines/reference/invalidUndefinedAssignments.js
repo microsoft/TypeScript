@@ -31,8 +31,11 @@ var E;
 })(E || (E = {}));
 E = x;
 E.A = x;
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var f;
 C = x;
 var g;

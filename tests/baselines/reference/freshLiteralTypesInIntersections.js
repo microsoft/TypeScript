@@ -11,5 +11,5 @@ q("x");
 //// [freshLiteralTypesInIntersections.js]
 "use strict";
 // Repro from #19657
-const q = func("x", ["x"]);
+var q = func("x", ["x"]);
 q("x");

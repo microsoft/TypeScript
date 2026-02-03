@@ -10,6 +10,9 @@ class C {
 }
 
 //// [decoratorOnClassMethodOverload1.js]
-class C {
-    method() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.method = function () { };
+    return C;
+}());

@@ -16,12 +16,14 @@ class TestController {
 
 
 //// [invalidThisEmitInContextualObjectLiteral.js]
-class TestController {
-    constructor() {
+var TestController = /** @class */ (function () {
+    function TestController() {
+        var _this = this;
         this.p = this.m({
-            p1: e => { },
-            p2: () => { return vvvvvvvvv => this; },
+            p1: function (e) { },
+            p2: function () { return function (vvvvvvvvv) { return _this; }; },
         });
     }
-    m(def) { }
-}
+    TestController.prototype.m = function (def) { };
+    return TestController;
+}());

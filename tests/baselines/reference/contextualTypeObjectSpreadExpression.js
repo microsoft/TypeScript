@@ -20,5 +20,5 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-let i;
+var i;
 i = __assign({ a: "a" });

@@ -6,6 +6,8 @@ class C {
 }
 
 //// [modifierOnParameter1.js]
-class C {
-    constructor(p) { }
-}
+var C = /** @class */ (function () {
+    function C(p) {
+    }
+    return C;
+}());

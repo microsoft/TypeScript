@@ -17,10 +17,13 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            C = class C {
-            };
+            C = /** @class */ (function () {
+                function C() {
+                }
+                return C;
+            }());
             exports_1("C", C);
-            (() => {
+            (function () {
                 C.x = 1;
             })();
         }

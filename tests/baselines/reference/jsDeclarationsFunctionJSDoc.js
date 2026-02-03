@@ -51,13 +51,13 @@ function foo(a, b) { }
 /**
  * Legacy - DO NOT USE
  */
-class Aleph {
+var Aleph = /** @class */ (function () {
     /**
      * Impossible to construct.
      * @param {Aleph} a
      * @param {null} b
      */
-    constructor(a, b) {
+    function Aleph(a, b) {
         /**
          * Field is always null
          */
@@ -67,8 +67,9 @@ class Aleph {
      * Doesn't actually do anything
      * @returns {void}
      */
-    doIt() { }
-}
+    Aleph.prototype.doIt = function () { };
+    return Aleph;
+}());
 exports.Aleph = Aleph;
 /**
  * Not the speed of light

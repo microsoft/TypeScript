@@ -222,11 +222,14 @@ fc2 = fc1; // Error
 // originate in method declarations
 var n1;
 (function (n1) {
-    class Foo {
-        static f1(x) { throw "wat"; }
-        static f2(x) { throw "wat"; }
+    var Foo = /** @class */ (function () {
+        function Foo() {
+        }
+        Foo.f1 = function (x) { throw "wat"; };
+        Foo.f2 = function (x) { throw "wat"; };
         ;
-    }
+        return Foo;
+    }());
     f1 = f2;
     f2 = f1; // Error
 })(n1 || (n1 = {}));

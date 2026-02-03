@@ -71,6 +71,6 @@ define(["require", "exports", "file1", "file2"], function (require, exports, x) 
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     x = __importStar(x);
-    let a;
-    let b = x.b;
+    var a;
+    var b = x.b;
 });

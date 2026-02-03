@@ -67,5 +67,5 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.pick = void 0;
 var pick = __importStar(require("lodash/pick"));
-const pick = () => (0, exports.pick)();
+var pick = function () { return (0, exports.pick)(); };
 exports.pick = pick;

@@ -12,6 +12,9 @@ class foo { }
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class foo {
-    }
+    var foo = /** @class */ (function () {
+        function foo() {
+        }
+        return foo;
+    }());
 });

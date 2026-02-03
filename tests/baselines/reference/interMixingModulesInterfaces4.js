@@ -20,7 +20,7 @@ var x : number = A.B.createB();
 //// [interMixingModulesInterfaces4.js]
 var A;
 (function (A) {
-    let B;
+    var B;
     (function (B) {
         function createB() {
             return null;

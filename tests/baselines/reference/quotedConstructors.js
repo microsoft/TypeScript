@@ -35,29 +35,36 @@ class F {
 
 
 //// [quotedConstructors.js]
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         console.log(this);
     }
-}
-class D {
-    constructor() {
+    return C;
+}());
+var D = /** @class */ (function () {
+    function D() {
         console.log(this);
     }
-}
-class E {
-    ['constructor']() {
+    return D;
+}());
+var E = /** @class */ (function () {
+    function E() {
+    }
+    E.prototype['constructor'] = function () {
+        console.log(this);
+    };
+    return E;
+}());
+new /** @class */ (function () {
+    function class_1() {
         console.log(this);
     }
-}
-new class {
-    constructor() {
+    return class_1;
+}());
+var o = { "constructor": function () { } };
+var F = /** @class */ (function () {
+    function F() {
         console.log(this);
     }
-};
-var o = { "constructor"() { } };
-class F {
-    constructor() {
-        console.log(this);
-    }
-}
+    return F;
+}());

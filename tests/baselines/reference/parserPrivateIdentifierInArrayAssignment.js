@@ -5,5 +5,4 @@
 
 
 //// [parserPrivateIdentifierInArrayAssignment.js]
-[#abc] =
-;
+#abc = [0];

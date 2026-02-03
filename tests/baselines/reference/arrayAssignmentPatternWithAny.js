@@ -8,4 +8,4 @@ var x: string;
 //// [arrayAssignmentPatternWithAny.js]
 var a;
 var x;
-[x] = a;
+x = a[0];

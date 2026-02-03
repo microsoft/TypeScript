@@ -17,10 +17,11 @@ define("SecondModuleName", ["require", "exports"], function (require, exports) {
     "use strict";
     ///<amd-module name='FirstModuleName'/>
     ///<amd-module name='SecondModuleName'/>
-    class Foo {
-        constructor() {
+    var Foo = /** @class */ (function () {
+        function Foo() {
             this.x = 5;
         }
-    }
+        return Foo;
+    }());
     return Foo;
 });

@@ -10,5 +10,8 @@ class d {
 
 
 //// [out.js]
-class d {
-}
+var d = /** @class */ (function () {
+    function d() {
+    }
+    return d;
+}());

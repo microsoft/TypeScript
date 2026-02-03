@@ -9,10 +9,11 @@ f.privProp;
 
 
 //// [propertyAccessibility1.js]
-class Foo {
-    constructor() {
+var Foo = /** @class */ (function () {
+    function Foo() {
         this.privProp = 0;
     }
-}
+    return Foo;
+}());
 var f = new Foo();
 f.privProp;

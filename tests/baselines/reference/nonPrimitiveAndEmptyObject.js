@@ -21,7 +21,7 @@ fooProps.barProp;
 "use strict";
 // Repro from #49480
 Object.defineProperty(exports, "__esModule", { value: true });
-const { fooProps = {} } = foo;
+var _a = foo.fooProps, fooProps = _a === void 0 ? {} : _a;
 fooProps.barProp;
 
 

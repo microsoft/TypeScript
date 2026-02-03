@@ -99,32 +99,67 @@ class D2 extends D {
 
 
 //// [protectedMembersThisParameter.js]
-class Message {
-    secret() { }
-}
-class MessageWrapper {
-    constructor() {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Message = /** @class */ (function () {
+    function Message() {
+    }
+    Message.prototype.secret = function () { };
+    return Message;
+}());
+var MessageWrapper = /** @class */ (function () {
+    function MessageWrapper() {
         this.message = new Message();
     }
-    wrap() {
-        let m = this.message;
-        let f = function () {
+    MessageWrapper.prototype.wrap = function () {
+        var m = this.message;
+        var f = function () {
             m.secret(); // should error
         };
+    };
+    return MessageWrapper;
+}());
+var A = /** @class */ (function () {
+    function A() {
     }
-}
-class A {
-    a() { }
-}
-class B extends A {
-    b() { }
-}
-class C extends A {
-    c() { }
-}
-class Z {
-    z() { }
-}
+    A.prototype.a = function () { };
+    return A;
+}());
+var B = /** @class */ (function (_super) {
+    __extends(B, _super);
+    function B() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    B.prototype.b = function () { };
+    return B;
+}(A));
+var C = /** @class */ (function (_super) {
+    __extends(C, _super);
+    function C() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    C.prototype.c = function () { };
+    return C;
+}(A));
+var Z = /** @class */ (function () {
+    function Z() {
+    }
+    Z.prototype.z = function () { };
+    return Z;
+}());
 function bA(arg) {
     this.a();
     arg.a();
@@ -156,37 +191,50 @@ function bAny(arg) {
     arg.a(); // should error
     arg.b(); // should error
 }
-class D {
-    d() { }
-    derived1(arg) {
+var D = /** @class */ (function () {
+    function D() {
+    }
+    D.prototype.d = function () { };
+    D.prototype.derived1 = function (arg) {
         arg.d();
         arg.d1(); // should error
-    }
-    derived1ThisD(arg) {
+    };
+    D.prototype.derived1ThisD = function (arg) {
         arg.d();
         arg.d1(); // should error
-    }
-    derived1ThisD1(arg) {
+    };
+    D.prototype.derived1ThisD1 = function (arg) {
         arg.d();
         arg.d1();
-    }
-    derived2(arg) {
+    };
+    D.prototype.derived2 = function (arg) {
         arg.d(); // should error because of overridden method in D2
         arg.d2(); // should error
-    }
-    derived2ThisD(arg) {
+    };
+    D.prototype.derived2ThisD = function (arg) {
         arg.d(); // should error because of overridden method in D2
         arg.d2(); // should error
-    }
-    derived2ThisD2(arg) {
+    };
+    D.prototype.derived2ThisD2 = function (arg) {
         arg.d();
         arg.d2();
+    };
+    return D;
+}());
+var D1 = /** @class */ (function (_super) {
+    __extends(D1, _super);
+    function D1() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
-class D1 extends D {
-    d1() { }
-}
-class D2 extends D {
-    d() { }
-    d2() { }
-}
+    D1.prototype.d1 = function () { };
+    return D1;
+}(D));
+var D2 = /** @class */ (function (_super) {
+    __extends(D2, _super);
+    function D2() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    D2.prototype.d = function () { };
+    D2.prototype.d2 = function () { };
+    return D2;
+}(D));

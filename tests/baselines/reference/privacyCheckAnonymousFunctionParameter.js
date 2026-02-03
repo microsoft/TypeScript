@@ -30,7 +30,7 @@ var Query;
     }
     Query.fromDoWhile = fromDoWhile;
     function fromOrderBy() {
-        return fromDoWhile(test => {
+        return fromDoWhile(function (test) {
             return true;
         });
     }

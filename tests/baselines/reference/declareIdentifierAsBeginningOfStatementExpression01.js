@@ -9,7 +9,10 @@ var declare: any;
 declare instanceof C;
 
 //// [declareIdentifierAsBeginningOfStatementExpression01.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var declare;
 declare instanceof C;

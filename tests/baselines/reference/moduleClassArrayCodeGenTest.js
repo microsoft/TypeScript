@@ -16,11 +16,17 @@ var t2: M.B[] = [];
 // Invalid code gen for Array of Module class
 var M;
 (function (M) {
-    class A {
-    }
+    var A = /** @class */ (function () {
+        function A() {
+        }
+        return A;
+    }());
     M.A = A;
-    class B {
-    }
+    var B = /** @class */ (function () {
+        function B() {
+        }
+        return B;
+    }());
 })(M || (M = {}));
 var t = [];
 var t2 = [];

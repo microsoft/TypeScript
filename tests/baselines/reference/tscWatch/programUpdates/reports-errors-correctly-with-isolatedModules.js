@@ -50,7 +50,7 @@ exports.a = "";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
-const b = a_1.a;
+var b = a_1.a;
 
 
 

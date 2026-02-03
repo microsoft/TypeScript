@@ -21,15 +21,15 @@ if ((o = fn()).done) {
 }
 
 //// [controlFlowAssignmentExpression.js]
-let x;
-let obj;
+var x;
+var obj;
 x = "";
 x = x.length;
 x; // number
 x = true;
 (x = "", obj).foo = (x = x.length);
 x; // number
-let o;
+var o;
 if ((o = fn()).done) {
-    const y = o.value;
+    var y = o.value;
 }

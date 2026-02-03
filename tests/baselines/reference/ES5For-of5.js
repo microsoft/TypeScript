@@ -6,6 +6,7 @@ for (var _a of []) {
 }
 
 //// [ES5For-of5.js]
-for (var _a of []) {
+for (var _i = 0, _b = []; _i < _b.length; _i++) {
+    var _a = _b[_i];
     var x = _a;
 }

@@ -6,6 +6,9 @@ class C {
 }
 
 //// [classMethodWithKeywordName1.js]
-class C {
-    static try() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.try = function () { };
+    return C;
+}());

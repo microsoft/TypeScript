@@ -22,21 +22,22 @@ export class B {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
-class A {
-    constructor() { console.log('new A'); }
-}
+var A = /** @class */ (function () {
+    function A() {
+        console.log('new A');
+    }
+    return A;
+}());
 function decorator(target, propertyKey) {
 }
-let B = (() => {
-    class B {
-        constructor() {
-            this.x = new A();
-        }
+var B = /** @class */ (function () {
+    function B() {
+        this.x = new A();
     }
     __decorate([
         decorator,
         __metadata("design:type", Object)
     ], B.prototype, "x", void 0);
     return B;
-})();
+}());
 exports.B = B;

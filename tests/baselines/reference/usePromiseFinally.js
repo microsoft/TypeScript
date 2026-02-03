@@ -6,5 +6,5 @@ let promise1 = new Promise(function(resolve, reject) {})
 
 
 //// [usePromiseFinally.js]
-let promise1 = new Promise(function (resolve, reject) { })
+var promise1 = new Promise(function (resolve, reject) { })
     .finally(function () { });

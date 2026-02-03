@@ -8,10 +8,11 @@ class C {
 }
 
 //// [ClassDeclaration26.js]
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.foo = 10;
     }
-}
+    return C;
+}());
 var constructor;
-() => { };
+(function () { });

@@ -13,11 +13,17 @@ var a = new Foo.B<Foo.A>();
 //// [genericClassesInModule.js]
 var Foo;
 (function (Foo) {
-    class B {
-    }
+    var B = /** @class */ (function () {
+        function B() {
+        }
+        return B;
+    }());
     Foo.B = B;
-    class A {
-    }
+    var A = /** @class */ (function () {
+        function A() {
+        }
+        return A;
+    }());
     Foo.A = A;
 })(Foo || (Foo = {}));
 var a = new Foo.B();

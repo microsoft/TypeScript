@@ -7,7 +7,18 @@ class C {
 }
 
 //// [accessorParameterAccessibilityModifier.js]
-class C {
-    set X(v) { }
-    static set X(v2) { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    Object.defineProperty(C.prototype, "X", {
+        set: function (v) { },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(C, "X", {
+        set: function (v2) { },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());

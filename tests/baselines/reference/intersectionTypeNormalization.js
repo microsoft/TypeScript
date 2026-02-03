@@ -125,7 +125,7 @@ function getValueAsString(value) {
     return value.str;
 }
 function foo(so) {
-    const val = so;
-    const isGenre = val.genreId;
+    var val = so;
+    var isGenre = val.genreId;
     return isGenre;
 }

@@ -9,8 +9,10 @@ var c = new C(1);
 var c = new C(new C('')); // error
 
 //// [wrappedAndRecursiveConstraints2.js]
-class C {
-    constructor(x) { }
-}
+var C = /** @class */ (function () {
+    function C(x) {
+    }
+    return C;
+}());
 var c = new C(1);
 var c = new C(new C('')); // error

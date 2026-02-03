@@ -54,8 +54,8 @@ Output::
 
 
 //// [/user/username/projects/myproject/index.js]
-let compiler = new Compiler();
-for (let i = 0; j < 5; i++) { }
+var compiler = new Compiler();
+for (var i = 0; j < 5; i++) { }
 
 
 

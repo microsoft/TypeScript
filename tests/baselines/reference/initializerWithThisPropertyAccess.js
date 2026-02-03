@@ -37,37 +37,60 @@ class Bar {
 
 //// [initializerWithThisPropertyAccess.js]
 "use strict";
-class A {
-    constructor() {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var A = /** @class */ (function () {
+    function A() {
+        var _this = this;
         this.b = this.a; // Error
-        this.c = () => this.a;
+        this.c = function () { return _this.a; };
         this.d = (new A()).a;
         this.a = 1;
     }
-}
-class B extends A {
-    constructor() {
-        super(...arguments);
-        this.x = this.a;
+    return A;
+}());
+var B = /** @class */ (function (_super) {
+    __extends(B, _super);
+    function B() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.x = _this.a;
+        return _this;
     }
-}
-class C {
-    constructor() {
+    return B;
+}(A));
+var C = /** @class */ (function () {
+    function C() {
         this.b = this.a;
     }
-}
+    return C;
+}());
 // Repro from #37979
-class Foo {
-    constructor() {
+var Foo = /** @class */ (function () {
+    function Foo() {
         this.barProp = this.bar.prop;
         this.bar = new Bar();
     }
-}
-class Bar {
-    constructor() {
+    return Foo;
+}());
+var Bar = /** @class */ (function () {
+    function Bar() {
         this.prop = false;
     }
-}
+    return Bar;
+}());
 
 
 //// [initializerWithThisPropertyAccess.d.ts]

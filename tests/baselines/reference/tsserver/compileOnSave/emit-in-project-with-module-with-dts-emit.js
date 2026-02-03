@@ -397,7 +397,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/user/username/projects/myproject/file1.js]
-const x = 1;
+var x = 1;
 function foo() {
     return "hello";
 }
@@ -433,7 +433,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/user/username/projects/myproject/file2.js]
-const y = 2;
+var y = 2;
 function bar() {
     return "world";
 }
@@ -469,7 +469,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/user/username/projects/myproject/file3.js]
-const xy = 3;
+var xy = 3;
 
 
 //// [/user/username/projects/myproject/file3.d.ts]
@@ -641,7 +641,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/user/username/projects/myproject/file1.js]
-const x = 1;
+var x = 1;
 function foo() {
     return "world";
 }
@@ -778,7 +778,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/user/username/projects/myproject/file2.js]
-const y = 2;
+var y = 2;
 function bar() {
     return "hello";
 }

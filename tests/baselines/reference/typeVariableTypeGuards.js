@@ -95,31 +95,53 @@ function f6<T extends string | (new () => {})>(a: T) {
 //// [typeVariableTypeGuards.js]
 "use strict";
 // Repro from #14091
-class A {
-    constructor(props) {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var A = /** @class */ (function () {
+    function A(props) {
         this.props = props;
     }
-    doSomething() {
+    A.prototype.doSomething = function () {
         this.props.foo && this.props.foo();
-    }
-}
-class Monkey {
-    constructor(a) {
+    };
+    return A;
+}());
+var Monkey = /** @class */ (function () {
+    function Monkey(a) {
         this.a = a;
     }
-    render() {
+    Monkey.prototype.render = function () {
         if (this.a) {
             this.a.color;
         }
+    };
+    return Monkey;
+}());
+var BigMonkey = /** @class */ (function (_super) {
+    __extends(BigMonkey, _super);
+    function BigMonkey() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
-class BigMonkey extends Monkey {
-    render() {
+    BigMonkey.prototype.render = function () {
         if (this.a) {
             this.a.color;
         }
-    }
-}
+    };
+    return BigMonkey;
+}(Monkey));
 function f1(obj) {
     if (obj) {
         obj.x;

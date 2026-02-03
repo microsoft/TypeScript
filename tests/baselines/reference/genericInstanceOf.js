@@ -14,13 +14,14 @@ class C<T> {
 }
 
 //// [genericInstanceOf.js]
-class C {
-    constructor(a, b) {
+var C = /** @class */ (function () {
+    function C(a, b) {
         this.a = a;
         this.b = b;
     }
-    foo() {
+    C.prototype.foo = function () {
         if (this.a instanceof this.b) {
         }
-    }
-}
+    };
+    return C;
+}());

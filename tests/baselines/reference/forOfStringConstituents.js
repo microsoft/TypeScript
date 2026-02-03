@@ -11,5 +11,7 @@ declare let x: AB, y: CD;
 for (y of x.y);
 
 //// [forOfStringConstituents.js]
-for (y of x.y)
+for (var _i = 0, _a = x.y; _i < _a.length; _i++) {
+    y = _a[_i];
     ;
+}

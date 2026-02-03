@@ -11,13 +11,19 @@ module M {
 //// [moduleReopenedTypeSameBlock.js]
 var M;
 (function (M) {
-    class C1 {
-    }
+    var C1 = /** @class */ (function () {
+        function C1() {
+        }
+        return C1;
+    }());
     M.C1 = C1;
 })(M || (M = {}));
 (function (M) {
-    class C2 {
-        f() { return null; }
-    }
+    var C2 = /** @class */ (function () {
+        function C2() {
+        }
+        C2.prototype.f = function () { return null; };
+        return C2;
+    }());
     M.C2 = C2;
 })(M || (M = {}));

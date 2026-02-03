@@ -73,5 +73,5 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var x = __importStar(require("./file1"));
 require("./file2");
-let a;
-let b = x.b;
+var a;
+var b = x.b;

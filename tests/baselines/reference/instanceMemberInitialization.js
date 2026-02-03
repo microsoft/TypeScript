@@ -20,19 +20,21 @@ class MyMap<K, V> {
 }
 
 //// [instanceMemberInitialization.js]
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.x = 1;
     }
-}
+    return C;
+}());
 var c = new C();
 c.x = 3;
 var c2 = new C();
 var r = c.x === c2.x;
 // #31792
-class MyMap {
-    constructor(Map_) {
+var MyMap = /** @class */ (function () {
+    function MyMap(Map_) {
         this.Map_ = Map_;
         this.store = new this.Map_();
     }
-}
+    return MyMap;
+}());

@@ -26,8 +26,8 @@ function f<T>() {
 stringDictionary = optionalProperties; // ok
 stringDictionary = undefinedProperties; // error
 probablyArray = numberLiteralKeys; // error
-let dict = optionalUndefined; // error
+var dict = optionalUndefined; // error
 function f() {
-    let optional = undefined;
-    let dict = optional; // ok
+    var optional = undefined;
+    var dict = optional; // ok
 }

@@ -15,14 +15,23 @@ new B;
 new C;
 
 //// [classAbstractSingleLineDecl.js]
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 abstract;
-class B {
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 abstract;
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 new A;
 new B;
 new C;

@@ -62,9 +62,9 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 // Repro from #44797
 var React = __importStar(require("react"));
-let props = {
+var props = {
     foo: "",
     "data-yadda": 42, // Error
 };
-let x1 = React.createElement(Yadda, { foo: "hello", "data-yadda": 42 });
-let x2 = React.createElement(Yadda, { bar: "hello", "data-yadda": 42 }); // Error
+var x1 = React.createElement(Yadda, { foo: "hello", "data-yadda": 42 });
+var x2 = React.createElement(Yadda, { bar: "hello", "data-yadda": 42 }); // Error

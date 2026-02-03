@@ -15,8 +15,11 @@ var y: typeof undefined;
 
 
 //// [undefinedTypeAssignment4.js]
-class undefined {
-}
+var undefined = /** @class */ (function () {
+    function undefined() {
+    }
+    return undefined;
+}());
 (function (undefined) {
     undefined.x = 42;
 })(undefined || (undefined = {}));

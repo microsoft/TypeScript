@@ -105,12 +105,13 @@ while (false) {
 for (;; false) {
 }
 /** @typedef {{ i: string }} I */
-for (let i in []) {
+for (var i in []) {
 }
 /** @typedef {{ j: string }} J */
 break;
 /** @typedef {{ k: string }} K */
-for (let k of []) {
+for (var _i = 0, _a = []; _i < _a.length; _i++) {
+    var k = _a[_i];
 }
 /** @typedef {{ l: string }} L */
 continue;

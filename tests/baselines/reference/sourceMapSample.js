@@ -43,20 +43,25 @@ var Foo;
     var Bar;
     (function (Bar) {
         "use strict";
-        class Greeter {
-            constructor(greeting) {
+        var Greeter = /** @class */ (function () {
+            function Greeter(greeting) {
                 this.greeting = greeting;
             }
-            greet() {
+            Greeter.prototype.greet = function () {
                 return "<h1>" + this.greeting + "</h1>";
-            }
-        }
+            };
+            return Greeter;
+        }());
         function foo(greeting) {
             return new Greeter(greeting);
         }
         var greeter = new Greeter("Hello, world!");
         var str = greeter.greet();
-        function foo2(greeting, ...restGreetings) {
+        function foo2(greeting) {
+            var restGreetings = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                restGreetings[_i - 1] = arguments[_i];
+            }
             var greeters = [];
             greeters[0] = new Greeter(greeting);
             for (var i = 0; i < restGreetings.length; i++) {

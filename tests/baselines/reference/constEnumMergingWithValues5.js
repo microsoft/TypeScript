@@ -12,7 +12,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     var foo;
     (function (foo) {
-        let E;
+        var E;
         (function (E) {
             E[E["X"] = 0] = "X";
         })(E || (E = {}));

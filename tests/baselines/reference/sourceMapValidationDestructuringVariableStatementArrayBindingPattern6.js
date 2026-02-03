@@ -4,5 +4,5 @@
 var [x = 20] = [1, 2];
 
 //// [sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.js]
-var [x = 20] = [1, 2];
+var _a = [1, 2][0], x = _a === void 0 ? 20 : _a;
 //# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.js.map

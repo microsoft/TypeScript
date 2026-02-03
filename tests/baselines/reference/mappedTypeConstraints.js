@@ -68,7 +68,7 @@ function f4(obj) {
     obj.a;
     obj.c;
 }
-const modifier = (targetProps) => {
-    let { bar } = targetProps, rest = __rest(targetProps, ["bar"]);
+var modifier = function (targetProps) {
+    var bar = targetProps.bar, rest = __rest(targetProps, ["bar"]);
     rest.foo;
 };

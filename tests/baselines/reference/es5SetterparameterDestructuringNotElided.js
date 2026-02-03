@@ -9,8 +9,9 @@ const foo = {
 };
 
 //// [es5SetterparameterDestructuringNotElided.js]
-const foo = {
-    set foo([start, end]) {
+var foo = {
+    set foo(_a) {
+        var start = _a[0], end = _a[1];
         void start;
         void end;
     },

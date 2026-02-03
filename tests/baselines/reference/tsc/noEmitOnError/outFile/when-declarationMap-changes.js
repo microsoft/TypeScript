@@ -37,8 +37,8 @@ Output::
 
 
 //// [/home/src/workspaces/outFile.js]
-const x = 10;
-const y = 10;
+var x = 10;
+var y = 10;
 
 
 //// [/home/src/workspaces/outFile.d.ts]

@@ -155,7 +155,7 @@ Output::
 
 
 //// [/home/src/projects/project/a.js]
-const a = "hello";
+var a = "hello";
 
 
 

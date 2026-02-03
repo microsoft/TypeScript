@@ -10,19 +10,19 @@ class C2<T> {
 }
 
 //// [typeOfThisInStaticMembers2.js]
-let C = (() => {
-    var _a;
-    class C {
+var C = /** @class */ (function () {
+    function C() {
     }
+    var _a;
     _a = C;
     C.foo = _a; // ok
     return C;
-})();
-let C2 = (() => {
-    var _a;
-    class C2 {
+}());
+var C2 = /** @class */ (function () {
+    function C2() {
     }
-    _a = C2;
-    C2.foo = _a; // ok
+    var _b;
+    _b = C2;
+    C2.foo = _b; // ok
     return C2;
-})();
+}());

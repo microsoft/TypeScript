@@ -126,17 +126,17 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var PropTypes = __importStar(require("prop-types"));
-const innerProps = {
+var innerProps = {
     foo: PropTypes.string.isRequired,
     bar: PropTypes.bool,
     baz: PropTypes.any
 };
-const arrayOfTypes = [PropTypes.string, PropTypes.bool, PropTypes.shape({
+var arrayOfTypes = [PropTypes.string, PropTypes.bool, PropTypes.shape({
         foo: PropTypes.string,
         bar: PropTypes.number.isRequired
     })];
 // TS checking
-const propTypes = {
+var propTypes = {
     any: PropTypes.any,
     array: PropTypes.array.isRequired,
     bool: PropTypes.bool.isRequired,
@@ -144,11 +144,11 @@ const propTypes = {
     oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
 };
 // JS checking
-const propTypesWithoutAnnotation = {
+var propTypesWithoutAnnotation = {
     any: PropTypes.any,
     array: PropTypes.array.isRequired,
     bool: PropTypes.bool.isRequired,
     shape: PropTypes.shape(innerProps).isRequired,
     oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
 };
-const x = null;
+var x = null;

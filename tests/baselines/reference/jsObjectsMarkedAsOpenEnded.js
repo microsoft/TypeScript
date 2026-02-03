@@ -38,13 +38,14 @@ getObj().a = 1;
 //// [output.js]
 var variable = {};
 variable.a = 0;
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.initializedMember = {};
         this.member = {};
         this.member.a = 0;
     }
-}
+    return C;
+}());
 var obj = {
     property: {}
 };

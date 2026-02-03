@@ -15,12 +15,13 @@ class Animal {
 
 
 //// [unusedLocalProperty.js]
-class Animal {
-    constructor(species) {
+var Animal = /** @class */ (function () {
+    function Animal(species) {
         this.species = species;
     }
-    printSpecies() {
-        let { species } = this;
+    Animal.prototype.printSpecies = function () {
+        var species = this.species;
         console.log(species);
-    }
-}
+    };
+    return Animal;
+}());

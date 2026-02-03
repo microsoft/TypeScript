@@ -10,10 +10,11 @@ class greeter {
 }
 
 //// [unusedLocalsinConstructor2.js]
-class greeter {
-    constructor() {
+var greeter = /** @class */ (function () {
+    function greeter() {
         var unused = 20;
         var used = "dummy";
         used = used + "second part";
     }
-}
+    return greeter;
+}());

@@ -13,9 +13,9 @@ c = d;
 
 
 //// [assignmentToConditionalBrandedStringTemplateOrMapping.js]
-let a = null;
-let b = null;
+var a = null;
+var b = null;
 a = b;
-let c = null;
-let d = null;
+var c = null;
+var d = null;
 c = d;

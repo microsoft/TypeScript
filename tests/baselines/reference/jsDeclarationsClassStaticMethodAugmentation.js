@@ -11,9 +11,12 @@ Clazz.method.prop = 5;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Clazz = void 0;
-class Clazz {
-    static method() { }
-}
+var Clazz = /** @class */ (function () {
+    function Clazz() {
+    }
+    Clazz.method = function () { };
+    return Clazz;
+}());
 exports.Clazz = Clazz;
 Clazz.method.prop = 5;
 

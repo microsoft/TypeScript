@@ -6,7 +6,10 @@ function foo() {}
 
 
 //// [classOverloadForFunction.js]
-class foo {
-}
+var foo = /** @class */ (function () {
+    function foo() {
+    }
+    return foo;
+}());
 ;
 function foo() { }

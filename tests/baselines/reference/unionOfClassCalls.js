@@ -86,38 +86,38 @@ switch (tmp.get('t')) {
     case 'B': break;
 }
 // from https://github.com/microsoft/TypeScript/issues/36390
-const arr = []; // Works with Array<number | string>
-const arr1 = [];
-const arr2 = [];
-arr.map((a, index) => {
+var arr = []; // Works with Array<number | string>
+var arr1 = [];
+var arr2 = [];
+arr.map(function (a, index) {
     return index;
 });
 // This case still doesn't work because `reduce` has multiple overloads :(
-arr.reduce((acc, a, index) => {
+arr.reduce(function (acc, a, index) {
     return [];
 }, []);
-arr.forEach((a, index) => {
+arr.forEach(function (a, index) {
     return index;
 });
-arr1.map((a, index) => {
+arr1.map(function (a, index) {
     return index;
 });
-arr1.reduce((acc, a, index) => {
+arr1.reduce(function (acc, a, index) {
     return [a];
 }, []);
-arr1.forEach((a, index) => {
+arr1.forEach(function (a, index) {
     return index;
 });
-arr2.map((a, index) => {
+arr2.map(function (a, index) {
     return index;
 });
-arr2.reduce((acc, a, index) => {
+arr2.reduce(function (acc, a, index) {
     return [];
 }, []);
-arr2.forEach((a, index) => {
+arr2.forEach(function (a, index) {
     return index;
 });
 // note, you must annotate `result` for now
-a.doThing().then((result) => {
+a.doThing().then(function (result) {
     // whatever
 });

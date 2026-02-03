@@ -22,4 +22,4 @@ var exports = {};
  */
 exports.SomeName;
 /** @type {exports.SomeName} */
-const myString = 'str';
+var myString = 'str';

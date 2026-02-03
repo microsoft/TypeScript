@@ -47,7 +47,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = void 0;
 var E = __importStar(require("whatever"));
-const run = (i) => E.something(i);
+var run = function (i) { return E.something(i); };
 exports.run = run;
 
 

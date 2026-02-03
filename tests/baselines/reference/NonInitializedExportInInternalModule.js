@@ -41,14 +41,17 @@ var Inner;
 (function (Inner) {
     var ;
     let;
-    const ;
-    class A {
-    }
-    let B;
+    var ;
+    var A = /** @class */ (function () {
+        function A() {
+        }
+        return A;
+    }());
+    var B;
     (function (B) {
         B.a = 1, B.c = 2;
     })(B || (B = {}));
-    let C;
+    var C;
     (function (C) {
         C.a = 1, C.c = 2;
     })(C || (C = {}));
@@ -57,8 +60,11 @@ var Inner;
     Inner.b1 = 1;
     Inner.c1 = 'a';
     Inner.d1 = 1;
-    class D {
-    }
+    var D = /** @class */ (function () {
+        function D() {
+        }
+        return D;
+    }());
     Inner.e1 = new D;
     Inner.f1 = new D;
     Inner.g1 = new D;

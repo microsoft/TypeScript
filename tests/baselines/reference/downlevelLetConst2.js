@@ -4,4 +4,4 @@
 const a
 
 //// [downlevelLetConst2.js]
-const a;
+var a;

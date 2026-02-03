@@ -43,8 +43,8 @@ const outsideClass: FuncType = function(val) { // compare to errors only on this
 //// [classPropertyErrorOnNameOnly.js]
 "use strict";
 // turn on strictNullChecks
-class Example {
-    constructor() {
+var Example = /** @class */ (function () {
+    function Example() {
         this.insideClass = function (val) {
             switch (val) {
                 case 1:
@@ -61,8 +61,9 @@ class Example {
             }
         }; // all the way to here
     }
-}
-const outsideClass = function (val) {
+    return Example;
+}());
+var outsideClass = function (val) {
     switch (val) {
         case 1:
             return "1";

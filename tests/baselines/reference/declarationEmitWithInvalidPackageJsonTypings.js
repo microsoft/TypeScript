@@ -31,10 +31,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.useCsvParser = void 0;
 exports.useRef = useRef;
 function useRef(current) {
-    return { current };
+    return { current: current };
 }
-const useCsvParser = () => {
-    const parserRef = useRef(null);
+var useCsvParser = function () {
+    var parserRef = useRef(null);
     return parserRef;
 };
 exports.useCsvParser = useCsvParser;

@@ -6,5 +6,5 @@ let x: 1 = +1;
 let y: -1 = -1;
 
 //// [prefixedNumberLiteralAssignToNumberLiteralType.js]
-let x = +1;
-let y = -1;
+var x = +1;
+var y = -1;

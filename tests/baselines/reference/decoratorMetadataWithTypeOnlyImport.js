@@ -22,8 +22,11 @@ class MyComponent {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Service = void 0;
-class Service {
-}
+var Service = /** @class */ (function () {
+    function Service() {
+    }
+    return Service;
+}());
 exports.Service = Service;
 //// [component.js]
 "use strict";
@@ -37,13 +40,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-let MyComponent = (() => {
-    let MyComponent = class MyComponent {
-        constructor(Service) {
-            this.Service = Service;
-        }
-        method(x) {
-        }
+var MyComponent = /** @class */ (function () {
+    function MyComponent(Service) {
+        this.Service = Service;
+    }
+    MyComponent.prototype.method = function (x) {
     };
     __decorate([
         decorator,
@@ -56,4 +57,4 @@ let MyComponent = (() => {
         __metadata("design:paramtypes", [Function])
     ], MyComponent);
     return MyComponent;
-})();
+}());

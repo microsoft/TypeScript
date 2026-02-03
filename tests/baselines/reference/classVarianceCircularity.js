@@ -20,14 +20,15 @@ class Bar<T> {
 "use strict";
 // Issue #52813
 function f() {
-    const b = new Bar();
+    var b = new Bar();
     // Uncomment to create error
     console.log(b.Value);
 }
-class Bar {
-    constructor() {
+var Bar = /** @class */ (function () {
+    function Bar() {
         // Or swap these two lines
         this.Field = this.num;
         this.Value = this.num;
     }
-}
+    return Bar;
+}());

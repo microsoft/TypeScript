@@ -11,6 +11,9 @@ class C {
 declare var OData: any;
 
 //// [doNotEmitPinnedCommentOnNotEmittedNodets.js]
-class C {
-    foo(x, y) { }
-}
+var C = (function () {
+    function C() {
+    }
+    C.prototype.foo = function (x, y) { };
+    return C;
+}());

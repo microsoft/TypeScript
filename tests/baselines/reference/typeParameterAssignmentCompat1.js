@@ -28,11 +28,14 @@ function f() {
     x = y; // should be an error
     return x;
 }
-class C {
-    f() {
+var C = /** @class */ (function () {
+    function C() {
+    }
+    C.prototype.f = function () {
         var x;
         var y;
         x = y; // should be an error
         return x;
-    }
-}
+    };
+    return C;
+}());

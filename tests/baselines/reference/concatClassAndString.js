@@ -9,6 +9,9 @@ f += '';
 
 //// [concatClassAndString.js]
 // Shouldn't compile (the long form f = f + ""; doesn't):
-class f {
-}
+var f = /** @class */ (function () {
+    function f() {
+    }
+    return f;
+}());
 f += '';

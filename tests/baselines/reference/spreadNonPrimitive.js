@@ -17,4 +17,4 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-const x = __assign(__assign({ a: 1 }, o), { b: 2 });
+var x = __assign(__assign({ a: 1 }, o), { b: 2 });

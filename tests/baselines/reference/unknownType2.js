@@ -264,22 +264,22 @@ function notNotEquals(u: unknown)  {
 
 //// [unknownType2.js]
 "use strict";
-let validate = x => (x === 'yes' || x === 'no') ? x : 'idk'; // No error
-const u = undefined;
+var validate = function (x) { return (x === 'yes' || x === 'no') ? x : 'idk'; }; // No error
+var u = undefined;
 if (u === 5) {
-    const y = u.toString(10);
+    var y = u.toString(10);
 }
 if (u === true || u === false) {
-    const someBool = u;
+    var someBool = u;
 }
 if (u === undefined) {
-    const undef = u;
+    var undef = u;
 }
 if (u === null) {
-    const someNull = u;
+    var someNull = u;
 }
 if (u === symb) {
-    const symbolAlias = u;
+    var symbolAlias = u;
 }
 if (!(u === 42)) {
 }
@@ -292,26 +292,26 @@ if (u == true) {
 if (u == Object) {
 }
 if (u === aString) {
-    let uString = u;
+    var uString = u;
 }
 if (u === aBoolean) {
-    let uString = u;
+    var uString = u;
 }
 if (u === aNumber) {
-    let uNumber = u;
+    var uNumber = u;
 }
 if (u === anObject) {
-    let uObject = u;
+    var uObject = u;
 }
 if (u === anObjectLiteral) {
-    let uObjectLiteral = u;
+    var uObjectLiteral = u;
 }
 if (u === aUnion) {
 }
 if (u === anIntersection) {
 }
 if (u === aFunction) {
-    let uFunction = u;
+    var uFunction = u;
 }
 var NumberEnum;
 (function (NumberEnum) {
@@ -326,70 +326,70 @@ var StringEnum;
     StringEnum["C"] = "C";
 })(StringEnum || (StringEnum = {}));
 if (u === NumberEnum || u === StringEnum) {
-    let enumObj = u;
+    var enumObj = u;
 }
 if (u === NumberEnum.A) {
-    let a = u;
+    var a = u;
 }
 if (u === StringEnum.B) {
-    let b = u;
+    var b = u;
 }
 function switchTestEnum(x) {
     switch (x) {
         case StringEnum.A:
-            const a = x;
+            var a = x;
             break;
         case StringEnum.B:
-            const b = x;
+            var b = x;
             break;
         case StringEnum.C:
-            const c = x;
+            var c = x;
             break;
     }
 }
 function switchTestCollectEnum(x) {
     switch (x) {
         case StringEnum.A:
-            const a = x;
+            var a = x;
         case StringEnum.B:
-            const b = x;
+            var b = x;
         case StringEnum.C:
-            const c = x;
-            const all = x;
+            var c = x;
+            var all = x;
             return;
     }
 }
 function switchTestLiterals(x) {
     switch (x) {
         case 1:
-            const one = x;
+            var one = x;
             break;
         case 2:
-            const two = x;
+            var two = x;
             break;
         case 3:
-            const three = x;
+            var three = x;
             break;
         case true:
-            const t = x;
+            var t = x;
             break;
         case false:
-            const f = x;
+            var f = x;
             break;
         case "A":
-            const a = x;
+            var a = x;
             break;
         case undefined:
-            const undef = x;
+            var undef = x;
             break;
         case null:
-            const llun = x;
+            var llun = x;
             break;
         case symb:
-            const anotherSymbol = x;
+            var anotherSymbol = x;
             break;
         case symbNonUnique:
-            const nonUniqueSymbol = x;
+            var nonUniqueSymbol = x;
             break;
     }
 }
@@ -397,13 +397,13 @@ function switchTestObjects(x, y, z) {
     switch (x) {
         case true:
         case false:
-            const bool = x;
+            var bool = x;
             break;
         case y:
-            const obj1 = x;
+            var obj1 = x;
             break;
         case z:
-            const obj2 = x;
+            var obj2 = x;
             break;
     }
 }
@@ -437,19 +437,19 @@ function f2(x) {
 function notNotEquals(u) {
     if (u !== NumberEnum) { }
     else {
-        const o = u;
+        var o = u;
     }
     if (u !== NumberEnum.A) { }
     else {
-        const a = u;
+        var a = u;
     }
     if (u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A) { }
     else {
-        const aOrB = u;
+        var aOrB = u;
     }
     // equivalent to
     if (!(u === NumberEnum.A || u === NumberEnum.B || u === StringEnum.A)) { }
     else {
-        const aOrB = u;
+        var aOrB = u;
     }
 }

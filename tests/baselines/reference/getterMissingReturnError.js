@@ -9,7 +9,14 @@ class test {
 
 
 //// [getterMissingReturnError.js]
-class test {
-    get p2() {
+var test = /** @class */ (function () {
+    function test() {
     }
-}
+    Object.defineProperty(test.prototype, "p2", {
+        get: function () {
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return test;
+}());

@@ -30,19 +30,23 @@ const toThenableInferred = <Result, Input>(fn: (input: Input) => Result | Thenab
 
 //// [genericCallWithinOwnBodyCastTypeParameterIdentity.js]
 "use strict";
-const toThenable = (fn) => (input) => {
-    const result = fn(input);
-    return {
-        then(onFulfilled) {
-            return toThenable(onFulfilled)(result);
-        }
+var toThenable = function (fn) {
+    return function (input) {
+        var result = fn(input);
+        return {
+            then: function (onFulfilled) {
+                return toThenable(onFulfilled)(result);
+            }
+        };
     };
 };
-const toThenableInferred = (fn) => (input) => {
-    const result = fn(input);
-    return {
-        then(onFulfilled) {
-            return toThenableInferred(onFulfilled)(result);
-        }
+var toThenableInferred = function (fn) {
+    return function (input) {
+        var result = fn(input);
+        return {
+            then: function (onFulfilled) {
+                return toThenableInferred(onFulfilled)(result);
+            }
+        };
     };
 };

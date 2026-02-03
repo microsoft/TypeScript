@@ -24,8 +24,11 @@ var b = {
 }
 
 //// [stringNamedPropertyDuplicates.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var a;
 var b = {
     "a b": 1,

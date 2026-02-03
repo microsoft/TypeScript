@@ -46,13 +46,13 @@ Output::
 //// [/home/src/workspaces/project/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let b = 1 /* A.ONE */;
+var b = 1 /* A.ONE */;
 
 
 //// [/home/src/workspaces/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let a = 1 /* A.ONE */;
+var a = 1 /* A.ONE */;
 
 
 //// [/home/src/workspaces/project/a.tsbuildinfo]
@@ -138,13 +138,13 @@ Output::
 //// [/home/src/workspaces/project/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let b = 2 /* A.ONE */;
+var b = 2 /* A.ONE */;
 
 
 //// [/home/src/workspaces/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let a = 2 /* A.ONE */;
+var a = 2 /* A.ONE */;
 
 
 //// [/home/src/workspaces/project/a.tsbuildinfo]
@@ -238,13 +238,13 @@ Output::
 //// [/home/src/workspaces/project/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let b = 3 /* A.ONE */;
+var b = 3 /* A.ONE */;
 
 
 //// [/home/src/workspaces/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let a = 3 /* A.ONE */;
+var a = 3 /* A.ONE */;
 
 
 //// [/home/src/workspaces/project/a.tsbuildinfo]

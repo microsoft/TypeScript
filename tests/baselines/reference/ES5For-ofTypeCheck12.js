@@ -4,4 +4,6 @@
 for (const v of 0) { }
 
 //// [ES5For-ofTypeCheck12.js]
-for (const v of 0) { }
+for (var _i = 0, _a = 0; _i < _a.length; _i++) {
+    var v = _a[_i];
+}

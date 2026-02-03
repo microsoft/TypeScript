@@ -17,10 +17,13 @@ b.foo();
 //// [genericCloduleInModule.js]
 var A;
 (function (A) {
-    class B {
-        foo() { }
-        static bar() { }
-    }
+    var B = /** @class */ (function () {
+        function B() {
+        }
+        B.prototype.foo = function () { };
+        B.bar = function () { };
+        return B;
+    }());
     A.B = B;
     (function (B) {
         B.x = 1;

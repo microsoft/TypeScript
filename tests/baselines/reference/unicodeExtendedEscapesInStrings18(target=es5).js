@@ -5,4 +5,4 @@ var x = "\u{65}\u{65}";
 
 
 //// [unicodeExtendedEscapesInStrings18.js]
-var x = "\u{65}\u{65}";
+var x = "ee";

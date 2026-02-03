@@ -30,24 +30,26 @@ if (!(a instanceof b)) {
 
 
 //// [doesNotNarrowUnionOfConstructorsWithInstanceof.js]
-class A {
-    constructor() {
+var A = /** @class */ (function () {
+    function A() {
         this.length = 1;
     }
-}
-class B {
-    constructor() {
+    return A;
+}());
+var B = /** @class */ (function () {
+    function B() {
         this.length = 2;
     }
-}
+    return B;
+}());
 function getTypedArray(flag) {
     return flag ? new A() : new B();
 }
 function getTypedArrayConstructor(flag) {
     return flag ? A : B;
 }
-const a = getTypedArray(true); // A | B
-const b = getTypedArrayConstructor(false); // A constructor | B constructor
+var a = getTypedArray(true); // A | B
+var b = getTypedArrayConstructor(false); // A constructor | B constructor
 if (!(a instanceof b)) {
     console.log(a.length); // Used to be property 'length' does not exist on type 'never'.
 }

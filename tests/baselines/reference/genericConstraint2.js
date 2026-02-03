@@ -31,14 +31,15 @@ function compare(x, y) {
         return 1;
     return x.comparer(y);
 }
-class ComparableString {
-    constructor(currentValue) {
+var ComparableString = /** @class */ (function () {
+    function ComparableString(currentValue) {
         this.currentValue = currentValue;
     }
-    localeCompare(other) {
+    ComparableString.prototype.localeCompare = function (other) {
         return 0;
-    }
-}
+    };
+    return ComparableString;
+}());
 var a = new ComparableString("a");
 var b = new ComparableString("b");
 var c = compare(a, b);

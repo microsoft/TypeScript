@@ -13,11 +13,13 @@ class TestFile {
 }
 
 //// [detachedCommentAtStartOfConstructor1.js]
-class TestFile {
-    constructor(message) {
+var TestFile = /** @class */ (function () {
+    function TestFile(message) {
+        var _this = this;
         /// <summary>Test summary</summary>
         /// <param name="message" type="String" />
-        var getMessage = () => message + this.name;
+        var getMessage = function () { return message + _this.name; };
         this.message = getMessage();
     }
-}
+    return TestFile;
+}());

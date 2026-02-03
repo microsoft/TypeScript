@@ -5,4 +5,4 @@ var x = "\u{00}";
 
 
 //// [unicodeExtendedEscapesInStrings02.js]
-var x = "\u{00}";
+var x = "\0";

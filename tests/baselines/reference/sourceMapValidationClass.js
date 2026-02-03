@@ -21,22 +21,31 @@ class Greeter {
 }
 
 //// [sourceMapValidationClass.js]
-class Greeter {
-    constructor(greeting, ...b) {
+var Greeter = /** @class */ (function () {
+    function Greeter(greeting) {
+        var b = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            b[_i - 1] = arguments[_i];
+        }
         this.greeting = greeting;
         this.x1 = 10;
     }
-    greet() {
+    Greeter.prototype.greet = function () {
         return "<h1>" + this.greeting + "</h1>";
-    }
-    fn() {
+    };
+    Greeter.prototype.fn = function () {
         return this.greeting;
-    }
-    get greetings() {
-        return this.greeting;
-    }
-    set greetings(greetings) {
-        this.greeting = greetings;
-    }
-}
+    };
+    Object.defineProperty(Greeter.prototype, "greetings", {
+        get: function () {
+            return this.greeting;
+        },
+        set: function (greetings) {
+            this.greeting = greetings;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return Greeter;
+}());
 //# sourceMappingURL=sourceMapValidationClass.js.map

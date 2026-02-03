@@ -240,7 +240,7 @@ function createDog() {
     return ({
         size: "medium",
         woof: function () {
-            console.log(`${this.name} says "Woof"!`);
+            console.log("".concat(this.name, " says \"Woof\"!"));
         },
         name: (0, utilities_1.makeRandomName)()
     });
@@ -443,7 +443,7 @@ function createDog() {
     return ({
         size: "medium",
         woof: function () {
-            console.log(`${this.name} says "Woof"!`);
+            console.log("".concat(this.name, " says \"Woof\"!"));
         },
         name: (0, utilities_1.makeRandomName)()
     });

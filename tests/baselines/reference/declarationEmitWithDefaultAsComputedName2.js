@@ -58,12 +58,13 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.obj = void 0;
 var other2 = __importStar(require("./other"));
-exports.obj = {
-    [other2.default.name]: 1
-};
+exports.obj = (_a = {},
+    _a[other2.default.name] = 1,
+    _a);
 
 
 //// [other.d.ts]

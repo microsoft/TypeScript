@@ -15,7 +15,8 @@ var x = foo([{a: "str"}]);
 var y = foo([{a: 100}]);
 
 //// [functionOverloads43.js]
-function foo([x]) {
+function foo(_a) {
+    var x = _a[0];
     if (x) {
         return x.a;
     }

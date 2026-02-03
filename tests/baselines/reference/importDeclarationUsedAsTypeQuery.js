@@ -15,8 +15,11 @@ export var x: typeof a;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
-class B {
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 exports.B = B;
 //// [importDeclarationUsedAsTypeQuery_1.js]
 "use strict";

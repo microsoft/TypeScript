@@ -43,19 +43,25 @@ class C {
 //// [privateInstanceVisibility.js]
 var Test;
 (function (Test) {
-    class Example {
-        doSomething() {
+    var Example = /** @class */ (function () {
+        function Example() {
+        }
+        Example.prototype.doSomething = function () {
             var that = this;
             function innerFunction() {
                 var num = that.someNumber;
             }
-        }
-    }
+        };
+        return Example;
+    }());
     Test.Example = Example;
 })(Test || (Test = {}));
-class C {
-    getX() { return this.x; }
-    clone(other) {
-        this.x = other.x;
+var C = /** @class */ (function () {
+    function C() {
     }
-}
+    C.prototype.getX = function () { return this.x; };
+    C.prototype.clone = function (other) {
+        this.x = other.x;
+    };
+    return C;
+}());

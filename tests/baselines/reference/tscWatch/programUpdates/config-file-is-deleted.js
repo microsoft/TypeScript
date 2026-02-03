@@ -35,11 +35,11 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/f1.js]
-let x = 1;
+var x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/f2.js]
-let y = 2;
+var y = 2;
 
 
 

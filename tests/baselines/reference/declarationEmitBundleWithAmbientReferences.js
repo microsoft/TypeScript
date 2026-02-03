@@ -29,7 +29,7 @@ define("conditional_directive_field", ["require", "exports"], function (require,
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.build = void 0;
-    const build = () => {
+    var build = function () {
         return null;
     };
     exports.build = build;

@@ -25,31 +25,27 @@ module A {
 }
 
 //// [ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.js]
-let Point = (() => {
-    class Point {
-        constructor(x, y) {
-            this.x = x;
-            this.y = y;
-        }
+var Point = /** @class */ (function () {
+    function Point(x, y) {
+        this.x = x;
+        this.y = y;
     }
     Point.Origin = { x: 0, y: 0 };
     return Point;
-})();
+}());
 (function (Point) {
     Point.Origin = ""; //expected duplicate identifier error
 })(Point || (Point = {}));
 var A;
 (function (A) {
-    let Point = (() => {
-        class Point {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-            }
+    var Point = /** @class */ (function () {
+        function Point(x, y) {
+            this.x = x;
+            this.y = y;
         }
         Point.Origin = { x: 0, y: 0 };
         return Point;
-    })();
+    }());
     A.Point = Point;
     (function (Point) {
         Point.Origin = ""; //expected duplicate identifier error

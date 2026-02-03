@@ -17,12 +17,17 @@ module M{
 //// [unexportedInstanceClassVariables.js]
 var M;
 (function (M) {
-    class A {
-        constructor(val) { }
-    }
+    var A = /** @class */ (function () {
+        function A(val) {
+        }
+        return A;
+    }());
 })(M || (M = {}));
 (function (M) {
-    class A {
-    }
+    var A = /** @class */ (function () {
+        function A() {
+        }
+        return A;
+    }());
     var a = new A();
 })(M || (M = {}));

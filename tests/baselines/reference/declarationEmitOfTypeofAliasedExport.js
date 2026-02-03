@@ -13,8 +13,11 @@ export default a.D;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 exports.D = C;
 //// [b.js]
 "use strict";

@@ -43,37 +43,55 @@ class D extends C {
 
 
 //// [typeRelationships.js]
-class C {
-    constructor() {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var C = /** @class */ (function () {
+    function C() {
         this.self = this;
         this.c = new C();
     }
-    foo() {
+    C.prototype.foo = function () {
         return this;
-    }
-    f1() {
+    };
+    C.prototype.f1 = function () {
         this.c = this.self;
         this.self = this.c; // Error
-    }
-    f2() {
+    };
+    C.prototype.f2 = function () {
         var a;
         var a = [this, this.c]; // C[] since this is subtype of C
         var b;
         var b = [this, this.self, null, undefined];
-    }
-    f3(b) {
+    };
+    C.prototype.f3 = function (b) {
         return b ? this.c : this.self; // Should be C
+    };
+    return C;
+}());
+var D = /** @class */ (function (_super) {
+    __extends(D, _super);
+    function D() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.self1 = _this;
+        _this.self2 = _this.self;
+        _this.self3 = _this.foo();
+        _this.d = new D();
+        return _this;
     }
-}
-class D extends C {
-    constructor() {
-        super(...arguments);
-        this.self1 = this;
-        this.self2 = this.self;
-        this.self3 = this.foo();
-        this.d = new D();
-    }
-    bar() {
+    D.prototype.bar = function () {
         this.self = this.self1;
         this.self = this.self2;
         this.self = this.self3;
@@ -84,5 +102,6 @@ class D extends C {
         this.d = this.c; // Error
         this.self = this.d; // Error
         this.c = this.d;
-    }
-}
+    };
+    return D;
+}(C));

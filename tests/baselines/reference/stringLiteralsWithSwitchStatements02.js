@@ -18,9 +18,9 @@ b = "foo" != "bar";
 
 
 //// [stringLiteralsWithSwitchStatements02.js]
-let x;
-let y;
-let b;
+var x;
+var y;
+var b;
 b = x == y;
 b = "foo" == y;
 b = y == "foo";

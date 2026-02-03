@@ -18,6 +18,6 @@ function foo() {
     try {
     }
     catch (e) {
-        let s = e.message;
+        var s = e.message;
     }
 }

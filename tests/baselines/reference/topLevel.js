@@ -30,20 +30,21 @@ result+=(M.origin.move(1,1));
 
 
 //// [topLevel.js]
-class Point {
-    constructor(x, y) {
+var Point = /** @class */ (function () {
+    function Point(x, y) {
         this.x = x;
         this.y = y;
     }
-    move(xo, yo) {
+    Point.prototype.move = function (xo, yo) {
         this.x += xo;
         this.y += yo;
         return this;
-    }
-    toString() {
+    };
+    Point.prototype.toString = function () {
         return ("(" + this.x + "," + this.y + ")");
-    }
-}
+    };
+    return Point;
+}());
 var result = "";
 result += (new Point(3, 4).move(2, 2));
 var M;

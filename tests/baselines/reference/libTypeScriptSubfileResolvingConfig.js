@@ -15,7 +15,7 @@ window.localStorage
 
 //// [index.js]
 /// <reference lib="dom.iterable" />
-const a = { abc: "Hello" };
+var a = { abc: "Hello" };
 // This should fail because libdom has been replaced
 // by the module above ^
 window.localStorage;

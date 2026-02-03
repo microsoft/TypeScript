@@ -14,11 +14,11 @@ z == y // error
 //// [index.js]
 "use strict";
 /** @type {unique symbol} */
-const x = Symbol();
+var x = Symbol();
 /** @type {unique symbol} */
-const y = Symbol();
+var y = Symbol();
 /** @type {typeof x} */
-let z = x;
+var z = x;
 z == y; // error
 
 

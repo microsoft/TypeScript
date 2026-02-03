@@ -6,7 +6,7 @@ function f({}, a) {
 }
 
 //// [emptyObjectBindingPatternParameter03.js]
-function f({}, a) {
+function f(_a, a) {
     var x, y, z;
 }
 

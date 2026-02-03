@@ -14,10 +14,15 @@ B.hasOwnProperty('foo');
 
 
 //// [staticInstanceResolution2.js]
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 A.hasOwnProperty('foo');
-class B {
-    constructor() { }
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 B.hasOwnProperty('foo');

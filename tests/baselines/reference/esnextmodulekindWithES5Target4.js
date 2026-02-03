@@ -5,6 +5,9 @@ class E { }
 export default E;
 
 //// [esnextmodulekindWithES5Target4.js]
-class E {
-}
+var E = /** @class */ (function () {
+    function E() {
+    }
+    return E;
+}());
 export default E;

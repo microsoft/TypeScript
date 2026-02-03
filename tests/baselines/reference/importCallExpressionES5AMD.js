@@ -75,22 +75,28 @@ define(["require", "exports"], function (require, exports) {
     exports.D = exports.p2 = void 0;
     new Promise(function (resolve_1, reject_1) { require(["./0"], resolve_1, reject_1); }).then(__importStar);
     var p1 = new Promise(function (resolve_2, reject_2) { require(["./0"], resolve_2, reject_2); }).then(__importStar);
-    p1.then(zero => {
+    p1.then(function (zero) {
         return zero.foo();
     });
     exports.p2 = new Promise(function (resolve_3, reject_3) { require(["./0"], resolve_3, reject_3); }).then(__importStar);
     function foo() {
-        const p2 = new Promise(function (resolve_4, reject_4) { require(["./0"], resolve_4, reject_4); }).then(__importStar);
+        var p2 = new Promise(function (resolve_4, reject_4) { require(["./0"], resolve_4, reject_4); }).then(__importStar);
     }
-    class C {
-        method() {
-            const loadAsync = new Promise(function (resolve_5, reject_5) { require(["./0"], resolve_5, reject_5); }).then(__importStar);
+    var C = /** @class */ (function () {
+        function C() {
         }
-    }
-    class D {
-        method() {
-            const loadAsync = new Promise(function (resolve_6, reject_6) { require(["./0"], resolve_6, reject_6); }).then(__importStar);
+        C.prototype.method = function () {
+            var loadAsync = new Promise(function (resolve_5, reject_5) { require(["./0"], resolve_5, reject_5); }).then(__importStar);
+        };
+        return C;
+    }());
+    var D = /** @class */ (function () {
+        function D() {
         }
-    }
+        D.prototype.method = function () {
+            var loadAsync = new Promise(function (resolve_6, reject_6) { require(["./0"], resolve_6, reject_6); }).then(__importStar);
+        };
+        return D;
+    }());
     exports.D = D;
 });

@@ -9,6 +9,6 @@ f((input): string => {
  
 
 //// [untypedArgumentInLambdaExpression.js]
-f((input) => {
+f(function (input) {
     return "." + input;
 });

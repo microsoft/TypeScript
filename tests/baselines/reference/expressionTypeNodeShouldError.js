@@ -48,29 +48,38 @@ type ItemType3 = true.typeof(nodes.item(0));
 
 
 //// [string.js]
-class C {
-    foo() {
-        const x;
-        typeof (this.foo);
+var C = /** @class */ (function () {
+    function C() {
     }
-}
-const nodes = document.getElementsByTagName("li");
+    C.prototype.foo = function () {
+        var x;
+        typeof (this.foo);
+    };
+    return C;
+}());
+var nodes = document.getElementsByTagName("li");
 typeof (nodes.item(0));
 //// [number.js]
-class C2 {
-    foo() {
-        const x;
-        typeof (this.foo);
+var C2 = /** @class */ (function () {
+    function C2() {
     }
-}
-const nodes2 = document.getElementsByTagName("li");
+    C2.prototype.foo = function () {
+        var x;
+        typeof (this.foo);
+    };
+    return C2;
+}());
+var nodes2 = document.getElementsByTagName("li");
 typeof (nodes.item(0));
 //// [boolean.js]
-class C3 {
-    foo() {
-        const x;
-        typeof (this.foo);
+var C3 = /** @class */ (function () {
+    function C3() {
     }
-}
-const nodes3 = document.getElementsByTagName("li");
+    C3.prototype.foo = function () {
+        var x;
+        typeof (this.foo);
+    };
+    return C3;
+}());
+var nodes3 = document.getElementsByTagName("li");
 typeof (nodes.item(0));

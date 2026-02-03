@@ -6,6 +6,18 @@ class C {
 }
 
 //// [parserMemberAccessorDeclaration18.js]
-class C {
-    set Foo(...a) { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    Object.defineProperty(C.prototype, "Foo", {
+        set: function () {
+            var a = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                a[_i] = arguments[_i];
+            }
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());

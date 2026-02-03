@@ -21,5 +21,5 @@ getMaxId(nodes);
 // Repro from #35804
 function getMaxId(items) {
 }
-const nodes = [];
+var nodes = [];
 getMaxId(nodes);

@@ -11,5 +11,6 @@ function test(p: any) {
 function test(p) {
     'use strict';
     'use strong';
-    p = { prop: p } = p;
+    var _a;
+    p = (_a = p, p = _a.prop, _a);
 }

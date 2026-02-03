@@ -10,4 +10,4 @@ let foo: LiteralType = dearray(alt);
 
 
 //// [doNotInferUnrelatedTypes.js]
-let foo = dearray(alt);
+var foo = dearray(alt);

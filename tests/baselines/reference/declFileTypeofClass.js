@@ -18,13 +18,19 @@ var genericX = genericC;
 
 
 //// [declFileTypeofClass.js]
-class c {
-}
+var c = /** @class */ (function () {
+    function c() {
+    }
+    return c;
+}());
 var x;
 var y = c;
 var z;
-class genericC {
-}
+var genericC = /** @class */ (function () {
+    function genericC() {
+    }
+    return genericC;
+}());
 var genericX = genericC;
 
 

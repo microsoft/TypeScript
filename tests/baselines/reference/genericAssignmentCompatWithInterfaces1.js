@@ -22,9 +22,12 @@ var a4: I<string> = <K<number>>z;
 
 
 //// [genericAssignmentCompatWithInterfaces1.js]
-class A {
-    compareTo(other) { return 1; }
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    A.prototype.compareTo = function (other) { return 1; };
+    return A;
+}());
 var z = { x: new A() };
 var a1 = { x: new A() };
 var a2 = function () {

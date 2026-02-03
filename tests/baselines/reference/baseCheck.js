@@ -32,40 +32,70 @@ function f() {
 
 
 //// [baseCheck.js]
-class C {
-    constructor(x, y) { }
-}
-class ELoc extends C {
-    constructor(x) {
-        super(0, x);
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var C = /** @class */ (function () {
+    function C(x, y) {
     }
-}
-class ELocVar extends C {
-    constructor(x) {
-        super(0, loc);
+    return C;
+}());
+var ELoc = /** @class */ (function (_super) {
+    __extends(ELoc, _super);
+    function ELoc(x) {
+        return _super.call(this, 0, x) || this;
     }
-    m() {
+    return ELoc;
+}(C));
+var ELocVar = /** @class */ (function (_super) {
+    __extends(ELocVar, _super);
+    function ELocVar(x) {
+        return _super.call(this, 0, loc) || this;
+    }
+    ELocVar.prototype.m = function () {
         var loc = 10;
+    };
+    return ELocVar;
+}(C));
+var D = /** @class */ (function (_super) {
+    __extends(D, _super);
+    function D(z) {
+        var _this = _super.call(this, _this.z) || this;
+        _this.z = z;
+        return _this;
     }
-}
-class D extends C {
-    constructor(z) {
-        super(this.z);
-        this.z = z;
+    return D;
+}(C)); // too few params
+var E = /** @class */ (function (_super) {
+    __extends(E, _super);
+    function E(z) {
+        var _this = _super.call(this, 0, _this.z) || this;
+        _this.z = z;
+        return _this;
     }
-} // too few params
-class E extends C {
-    constructor(z) {
-        super(0, this.z);
-        this.z = z;
+    return E;
+}(C));
+var F = /** @class */ (function (_super) {
+    __extends(F, _super);
+    function F(z) {
+        var _this = _super.call(this, "hello", _this.z) || this;
+        _this.z = z;
+        return _this;
     }
-}
-class F extends C {
-    constructor(z) {
-        super("hello", this.z);
-        this.z = z;
-    }
-} // first param type
+    return F;
+}(C)); // first param type
 function f() {
     if (x < 10) {
         x = 11;

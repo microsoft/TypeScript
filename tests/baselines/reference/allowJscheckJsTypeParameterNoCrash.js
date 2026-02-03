@@ -32,9 +32,9 @@ var func_1 = require("./func");
 // hover on vextend
 exports.a = (0, func_1.vextend)({
     watch: {
-        data1(val) {
+        data1: function (val) {
             this.data2 = 1;
         },
-        data2(val) { },
+        data2: function (val) { },
     }
 });

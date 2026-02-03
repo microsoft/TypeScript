@@ -9,7 +9,10 @@ List.prototype.add("abc"); // Valid because T is instantiated to any
 
 
 //// [typedGenericPrototypeMember.js]
-class List {
-    add(item) { }
-}
+var List = /** @class */ (function () {
+    function List() {
+    }
+    List.prototype.add = function (item) { };
+    return List;
+}());
 List.prototype.add("abc"); // Valid because T is instantiated to any

@@ -27,8 +27,8 @@ function f(x: string | number | boolean) {
 
 //// [controlFlowCommaOperator.js]
 function f(x) {
-    let y = false;
-    let z = false;
+    var y = false;
+    var z = false;
     if (y = "", typeof x === "string") {
         x; // string
         y; // string

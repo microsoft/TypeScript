@@ -35,21 +35,30 @@ module M {
 //// [declFileTypeAnnotationTypeAlias.js]
 var M;
 (function (M) {
-    class c {
-    }
-    M.c = c;
-    let m;
-    (function (m) {
-        class c {
+    var c = /** @class */ (function () {
+        function c() {
         }
+        return c;
+    }());
+    M.c = c;
+    var m;
+    (function (m) {
+        var c = /** @class */ (function () {
+            function c() {
+            }
+            return c;
+        }());
         m.c = c;
     })(m = M.m || (M.m = {}));
 })(M || (M = {}));
 (function (M) {
-    let N;
+    var N;
     (function (N) {
-        class Window {
-        }
+        var Window = /** @class */ (function () {
+            function Window() {
+            }
+            return Window;
+        }());
         N.Window = Window;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));

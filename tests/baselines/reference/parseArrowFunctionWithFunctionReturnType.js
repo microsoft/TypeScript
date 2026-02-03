@@ -5,4 +5,4 @@ const fn = <T>(): (() => T) => null as any;
 
 
 //// [parseArrowFunctionWithFunctionReturnType.js]
-const fn = () => null;
+var fn = function () { return null; };

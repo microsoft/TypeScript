@@ -6,5 +6,8 @@ class foo<T> {
 } 
 
 //// [typeParametersInStaticProperties.js]
-class foo {
-}
+var foo = /** @class */ (function () {
+    function foo() {
+    }
+    return foo;
+}());

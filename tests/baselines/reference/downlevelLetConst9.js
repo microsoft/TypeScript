@@ -4,4 +4,4 @@
 let a: number
 
 //// [downlevelLetConst9.js]
-let a;
+var a;

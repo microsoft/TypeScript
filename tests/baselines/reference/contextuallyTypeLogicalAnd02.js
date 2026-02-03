@@ -10,9 +10,9 @@ x = y && (a => {
 });
 
 //// [contextuallyTypeLogicalAnd02.js]
-let x;
-let y = true;
-x = y && (a => {
-    const b = a;
+var x;
+var y = true;
+x = y && (function (a) {
+    var b = a;
     return b;
 });

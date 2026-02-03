@@ -11,11 +11,11 @@ module A {
 }
 
 //// [letKeepNamesOfTopLevelItems.js]
-let x;
+var x;
 function foo() {
-    let x;
+    var x;
 }
 var A;
 (function (A) {
-    let x;
+    var x;
 })(A || (A = {}));

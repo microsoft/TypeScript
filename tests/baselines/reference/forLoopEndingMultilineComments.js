@@ -27,7 +27,8 @@ exports.consoleTestResultHandler = consoleTestResultHandler;
 function consoleTestResultHandler(testResult) {
     // needed to get colors to show up when passing through Grunt
     void a;
-    for (const q of a) {
+    for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
+        var q = a_1[_i];
         void a;
         /* eslint-disable no-console */
         if (a) {

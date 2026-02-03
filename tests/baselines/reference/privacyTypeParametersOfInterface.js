@@ -64,13 +64,25 @@ interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicClassT = exports.publicClass = void 0;
-class privateClass {
-}
-class publicClass {
-}
+var privateClass = /** @class */ (function () {
+    function privateClass() {
+    }
+    return privateClass;
+}());
+var publicClass = /** @class */ (function () {
+    function publicClass() {
+    }
+    return publicClass;
+}());
 exports.publicClass = publicClass;
-class privateClassT {
-}
-class publicClassT {
-}
+var privateClassT = /** @class */ (function () {
+    function privateClassT() {
+    }
+    return privateClassT;
+}());
+var publicClassT = /** @class */ (function () {
+    function publicClassT() {
+    }
+    return publicClassT;
+}());
 exports.publicClassT = publicClassT;

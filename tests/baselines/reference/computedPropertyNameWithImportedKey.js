@@ -20,7 +20,8 @@ exports.a = Symbol();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn = fn;
 var a_1 = require("./a");
-function fn({ [a_1.a]: value }) {
+function fn(_a) {
+    var _b = a_1.a, value = _a[_b];
     return value;
 }
 

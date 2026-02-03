@@ -10,12 +10,14 @@ class C {
 }
 
 //// [selfInCallback.js]
-class C {
-    constructor() {
+var C = /** @class */ (function () {
+    function C() {
         this.p1 = 0;
     }
-    callback(cb) { cb(); }
-    doit() {
-        this.callback(() => { this.p1 + 1; });
-    }
-}
+    C.prototype.callback = function (cb) { cb(); };
+    C.prototype.doit = function () {
+        var _this = this;
+        this.callback(function () { _this.p1 + 1; });
+    };
+    return C;
+}());

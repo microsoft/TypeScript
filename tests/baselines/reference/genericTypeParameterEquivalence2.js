@@ -76,7 +76,7 @@ function forEach(list, f) {
 // filter :: (a->bool) -> [a] -> [a]
 function filter(f, ar) {
     var ret = [];
-    forEach(ar, (el) => {
+    forEach(ar, function (el) {
         if (f(el)) {
             ret.push(el);
         }

@@ -32,7 +32,7 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/app.js]
-let x = 10;
+var x = 10;
 
 
 

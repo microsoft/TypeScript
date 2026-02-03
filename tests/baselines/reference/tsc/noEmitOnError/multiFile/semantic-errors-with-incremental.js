@@ -308,7 +308,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const a = "hello";
+var a = "hello";
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.js]

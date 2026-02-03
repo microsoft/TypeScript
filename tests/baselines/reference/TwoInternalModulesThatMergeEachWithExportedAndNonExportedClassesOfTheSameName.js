@@ -45,16 +45,22 @@ var l: X.Y.Z.Line;
 //// [TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.js]
 var A;
 (function (A) {
-    class Point {
-    }
+    var Point = /** @class */ (function () {
+        function Point() {
+        }
+        return Point;
+    }());
     A.Point = Point;
 })(A || (A = {}));
 (function (A) {
-    class Point {
-        fromCarthesian(p) {
-            return { x: p.x, y: p.y };
+    var Point = /** @class */ (function () {
+        function Point() {
         }
-    }
+        Point.prototype.fromCarthesian = function (p) {
+            return { x: p.x, y: p.y };
+        };
+        return Point;
+    }());
 })(A || (A = {}));
 // ensure merges as expected
 var p;
@@ -65,19 +71,25 @@ var X;
     (function (Y) {
         var Z;
         (function (Z) {
-            class Line {
-            }
+            var Line = /** @class */ (function () {
+                function Line() {
+                }
+                return Line;
+            }());
             Z.Line = Line;
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 (function (X) {
-    let Y;
+    var Y;
     (function (Y) {
-        let Z;
+        var Z;
         (function (Z) {
-            class Line {
-            }
+            var Line = /** @class */ (function () {
+                function Line() {
+                }
+                return Line;
+            }());
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));

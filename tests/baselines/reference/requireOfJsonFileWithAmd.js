@@ -24,9 +24,9 @@ if (x) {
 define(["require", "exports", "./b", "./b.json"], function (require, exports, b1, b2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    let x = b1.a;
+    var x = b1.a;
     if (x) {
-        let b = b2.b;
+        var b = b2.b;
         x = (b1.b === b);
     }
 });

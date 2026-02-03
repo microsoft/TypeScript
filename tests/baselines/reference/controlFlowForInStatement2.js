@@ -28,15 +28,15 @@ if ((stringB as ('a' | 'b')) in c) {
 }
 
 //// [controlFlowForInStatement2.js]
-const keywordA = 'a';
-const keywordB = 'b';
+var keywordA = 'a';
+var keywordB = 'b';
 if ('a' in c) {
     c; // narrowed to `A`
 }
 if (keywordA in c) {
     c; // also narrowed to `A`
 }
-let stringB = 'b';
+var stringB = 'b';
 if (stringB in c) {
     c; // narrowed to `B`
 }

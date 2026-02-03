@@ -57,36 +57,36 @@ var __rest = (this && this.__rest) || function (s, e) {
 function func(value) {
     if (value.kind === "a") {
         value.a;
-        const { a } = value;
+        var a = value.a;
     }
     else {
         value.b;
-        const { b } = value;
+        var b = value.b;
     }
 }
 function func2(value) {
     if (value.kind === "f") {
-        const { f: f1 } = value;
-        const _a = value.f, { a } = _a, spread = __rest(_a, ["a"]);
+        var f1 = value.f;
+        var _a = value.f, a = _a.a, spread = __rest(_a, ["a"]);
         value.f;
     }
     else {
-        const _b = value.g, { c } = _b, spread = __rest(_b, ["c"]);
+        var _b = value.g, c = _b.c, spread = __rest(_b, ["c"]);
         value.g;
     }
 }
 function func3(t) {
     if (t.kind === "a") {
-        const { kind } = t, r1 = __rest(t, ["kind"]);
-        const r2 = ((_a) => {
-            var { kind } = _a, rest = __rest(_a, ["kind"]);
+        var kind = t.kind, r1 = __rest(t, ["kind"]);
+        var r2 = (function (_a) {
+            var kind = _a.kind, rest = __rest(_a, ["kind"]);
             return rest;
         })(t);
     }
 }
 function farr(x) {
-    const [head, ...tail] = x;
+    var head = x[0], tail = x.slice(1);
     if (typeof x[0] === 'number') {
-        const [head, ...tail] = x;
+        var head_1 = x[0], tail_1 = x.slice(1);
     }
 }

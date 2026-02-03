@@ -17,15 +17,18 @@ export class ExportedClass2 {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExportedClass2 = exports.ExportedClass1 = void 0;
-class ExportedClass1 {
-    constructor(data) {
+var ExportedClass1 = /** @class */ (function () {
+    function ExportedClass1(data) {
         this.data = data;
     }
-}
+    return ExportedClass1;
+}());
 exports.ExportedClass1 = ExportedClass1;
-class ExportedClass2 {
-    constructor(data) { }
-}
+var ExportedClass2 = /** @class */ (function () {
+    function ExportedClass2(data) {
+    }
+    return ExportedClass2;
+}());
 exports.ExportedClass2 = ExportedClass2;
 
 

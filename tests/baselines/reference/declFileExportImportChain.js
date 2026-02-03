@@ -28,10 +28,13 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     var m1;
     (function (m1) {
-        let m2;
+        var m2;
         (function (m2) {
-            class c1 {
-            }
+            var c1 = /** @class */ (function () {
+                function c1() {
+                }
+                return c1;
+            }());
             m2.c1 = c1;
         })(m2 = m1.m2 || (m1.m2 = {}));
     })(m1 || (m1 = {}));

@@ -9,7 +9,7 @@ export const y = (x: Foo<string>) => 1
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
-const y = (x) => 1;
+var y = function (x) { return 1; };
 exports.y = y;
 
 

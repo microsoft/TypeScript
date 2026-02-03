@@ -1,4 +1,5 @@
 import {
+    AccessorDeclaration,
     addEmitFlags,
     addInternalEmitFlags,
     AdditiveOperator,
@@ -22,6 +23,7 @@ import {
     CompilerOptions,
     ComputedPropertyName,
     Debug,
+    Declaration,
     DefaultKeyword,
     EmitFlags,
     EmitHelperFactory,
@@ -47,6 +49,7 @@ import {
     GeneratedNamePart,
     GeneratedPrivateIdentifier,
     GetAccessorDeclaration,
+    getAllAccessorDeclarations,
     getEmitFlags,
     getEmitHelpers,
     getEmitModuleFormatOfFileWorker,
@@ -57,6 +60,7 @@ import {
     getImpliedNodeFormatForEmitWorker,
     getJSDocType,
     getJSDocTypeTag,
+    getModifiers,
     getNamespaceDeclarationNode,
     getOrCreateEmitNode,
     getOriginalNode,
@@ -119,6 +123,7 @@ import {
     LogicalOperatorOrHigher,
     map,
     MemberExpression,
+    MethodDeclaration,
     MinusToken,
     Modifier,
     ModifiersArray,
@@ -132,6 +137,8 @@ import {
     NodeFactory,
     nodeIsSynthesized,
     NumericLiteral,
+    ObjectLiteralElementLike,
+    ObjectLiteralExpression,
     OuterExpression,
     OuterExpressionKinds,
     ParenthesizedExpression,
@@ -140,6 +147,7 @@ import {
     PostfixUnaryExpression,
     PrefixUnaryExpression,
     PrivateIdentifier,
+    PropertyAssignment,
     PropertyDeclaration,
     PropertyName,
     pushIfUnique,
@@ -148,11 +156,13 @@ import {
     RelationalOperator,
     RelationalOperatorOrHigher,
     SetAccessorDeclaration,
+    setOriginalNode,
     setParent,
     setStartsOnNewLine,
     setTextRange,
     ShiftOperator,
     ShiftOperatorOrHigher,
+    ShorthandPropertyAssignment,
     some,
     SourceFile,
     Statement,
@@ -334,6 +344,141 @@ export function createExpressionFromEntityName(factory: NodeFactory, node: Entit
     }
 }
 
+/** @internal */
+export function createExpressionForPropertyName(factory: NodeFactory, memberName: Exclude<PropertyName, PrivateIdentifier>): Expression {
+    if (isIdentifier(memberName)) {
+        return factory.createStringLiteralFromNode(memberName);
+    }
+    else if (isComputedPropertyName(memberName)) {
+        // TODO(rbuckton): Does this need to be parented?
+        return setParent(setTextRange(factory.cloneNode(memberName.expression), memberName.expression), memberName.expression.parent);
+    }
+    else {
+        // TODO(rbuckton): Does this need to be parented?
+        return setParent(setTextRange(factory.cloneNode(memberName), memberName), memberName.parent);
+    }
+}
+
+function createExpressionForAccessorDeclaration(factory: NodeFactory, properties: NodeArray<Declaration>, property: AccessorDeclaration & { readonly name: Exclude<PropertyName, PrivateIdentifier>; }, receiver: Expression, multiLine: boolean) {
+    const { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(properties, property);
+    if (property === firstAccessor) {
+        return setTextRange(
+            factory.createObjectDefinePropertyCall(
+                receiver,
+                createExpressionForPropertyName(factory, property.name),
+                factory.createPropertyDescriptor({
+                    enumerable: factory.createFalse(),
+                    configurable: true,
+                    get: getAccessor && setTextRange(
+                        setOriginalNode(
+                            factory.createFunctionExpression(
+                                getModifiers(getAccessor),
+                                /*asteriskToken*/ undefined,
+                                /*name*/ undefined,
+                                /*typeParameters*/ undefined,
+                                getAccessor.parameters,
+                                /*type*/ undefined,
+                                getAccessor.body!, // TODO: GH#18217
+                            ),
+                            getAccessor,
+                        ),
+                        getAccessor,
+                    ),
+                    set: setAccessor && setTextRange(
+                        setOriginalNode(
+                            factory.createFunctionExpression(
+                                getModifiers(setAccessor),
+                                /*asteriskToken*/ undefined,
+                                /*name*/ undefined,
+                                /*typeParameters*/ undefined,
+                                setAccessor.parameters,
+                                /*type*/ undefined,
+                                setAccessor.body!, // TODO: GH#18217
+                            ),
+                            setAccessor,
+                        ),
+                        setAccessor,
+                    ),
+                }, !multiLine),
+            ),
+            firstAccessor,
+        );
+    }
+
+    return undefined;
+}
+
+function createExpressionForPropertyAssignment(factory: NodeFactory, property: PropertyAssignment, receiver: Expression) {
+    return setOriginalNode(
+        setTextRange(
+            factory.createAssignment(
+                createMemberAccessForPropertyName(factory, receiver, property.name, /*location*/ property.name),
+                property.initializer,
+            ),
+            property,
+        ),
+        property,
+    );
+}
+
+function createExpressionForShorthandPropertyAssignment(factory: NodeFactory, property: ShorthandPropertyAssignment, receiver: Expression) {
+    return setOriginalNode(
+        setTextRange(
+            factory.createAssignment(
+                createMemberAccessForPropertyName(factory, receiver, property.name, /*location*/ property.name),
+                factory.cloneNode(property.name),
+            ),
+            /*location*/ property,
+        ),
+        /*original*/ property,
+    );
+}
+
+function createExpressionForMethodDeclaration(factory: NodeFactory, method: MethodDeclaration, receiver: Expression) {
+    return setOriginalNode(
+        setTextRange(
+            factory.createAssignment(
+                createMemberAccessForPropertyName(factory, receiver, method.name, /*location*/ method.name),
+                setOriginalNode(
+                    setTextRange(
+                        factory.createFunctionExpression(
+                            getModifiers(method),
+                            method.asteriskToken,
+                            /*name*/ undefined,
+                            /*typeParameters*/ undefined,
+                            method.parameters,
+                            /*type*/ undefined,
+                            method.body!, // TODO: GH#18217
+                        ),
+                        /*location*/ method,
+                    ),
+                    /*original*/ method,
+                ),
+            ),
+            /*location*/ method,
+        ),
+        /*original*/ method,
+    );
+}
+
+/** @internal */
+export function createExpressionForObjectLiteralElementLike(factory: NodeFactory, node: ObjectLiteralExpression, property: ObjectLiteralElementLike, receiver: Expression): Expression | undefined {
+    if (property.name && isPrivateIdentifier(property.name)) {
+        Debug.failBadSyntaxKind(property.name, "Private identifiers are not allowed in object literals.");
+    }
+    switch (property.kind) {
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+            return createExpressionForAccessorDeclaration(factory, node.properties, property as typeof property & { readonly name: Exclude<PropertyName, PrivateIdentifier>; }, receiver, !!node.multiLine);
+        case SyntaxKind.PropertyAssignment:
+            return createExpressionForPropertyAssignment(factory, property, receiver);
+        case SyntaxKind.ShorthandPropertyAssignment:
+            return createExpressionForShorthandPropertyAssignment(factory, property, receiver);
+        case SyntaxKind.MethodDeclaration:
+            return createExpressionForMethodDeclaration(factory, property, receiver);
+    }
+}
+
 /**
  * Expand the read and increment/decrement operations a pre- or post-increment or pre- or post-decrement expression.
  *
@@ -401,6 +546,15 @@ export function expandPreOrPostfixIncrementOrDecrementExpression(
     }
 
     return expression;
+}
+
+/**
+ * Gets whether an identifier should only be referred to by its internal name.
+ *
+ * @internal
+ */
+export function isInternalName(node: Identifier): boolean {
+    return (getEmitFlags(node) & EmitFlags.InternalName) !== 0;
 }
 
 /**

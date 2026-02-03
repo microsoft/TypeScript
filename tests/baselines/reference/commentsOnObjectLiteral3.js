@@ -28,7 +28,7 @@ var v = {
     func: function () {
     },
     //PropertyName + CallSignature
-    func1() { },
+    func1: function () { },
     //getter
     get a() {
         return this.prop;

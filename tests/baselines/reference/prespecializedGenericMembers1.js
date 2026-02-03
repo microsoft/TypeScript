@@ -26,15 +26,17 @@ var catBag = new CatBag(catThing);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CatBag = exports.Cat = void 0;
-class Cat {
-    constructor() {
+var Cat = /** @class */ (function () {
+    function Cat() {
     }
-}
+    return Cat;
+}());
 exports.Cat = Cat;
-class CatBag {
-    constructor(cats) {
+var CatBag = /** @class */ (function () {
+    function CatBag(cats) {
     }
-}
+    return CatBag;
+}());
 exports.CatBag = CatBag;
 var cat = new Cat();
 var catThing = {

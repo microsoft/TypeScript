@@ -35,7 +35,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var A;
 (function (A) {
-    let Utils;
+    var Utils;
     (function (Utils) {
         function mirror(p) {
             return { x: p.y, y: p.x };
@@ -52,14 +52,15 @@ var A;
 (function (A) {
     // collision with 'Origin' var in other part of merged module
     A.Origin = { x: 0, y: 0 };
-    let Utils;
+    var Utils;
     (function (Utils) {
-        class Plane {
-            constructor(tl, br) {
+        var Plane = /** @class */ (function () {
+            function Plane(tl, br) {
                 this.tl = tl;
                 this.br = br;
             }
-        }
+            return Plane;
+        }());
         Utils.Plane = Plane;
     })(Utils = A.Utils || (A.Utils = {}));
 })(A || (exports.A = A = {}));

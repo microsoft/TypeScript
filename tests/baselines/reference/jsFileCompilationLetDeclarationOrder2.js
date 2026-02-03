@@ -9,9 +9,9 @@ b = 30;
 
 
 //// [out.js]
-let b = 30;
+var b = 30;
 a = 10;
-let a = 10;
+var a = 10;
 b = 30;
 
 

@@ -11,4 +11,4 @@ foo.getFoo = bar => { };
 
 //// [contextualTypingOfLambdaWithMultipleSignatures.js]
 var foo;
-foo.getFoo = bar => { };
+foo.getFoo = function (bar) { };

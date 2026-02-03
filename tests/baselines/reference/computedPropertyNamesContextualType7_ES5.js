@@ -22,10 +22,12 @@ g({ p: "" });
 
 
 //// [computedPropertyNamesContextualType7_ES5.js]
-foo({
-    0: () => { },
-    ["hi" + "bye"]: true,
-    [0 + 1]: 0,
-    [+"hi"]: [0]
-});
+var _a;
+foo((_a = {
+        0: function () { }
+    },
+    _a["hi" + "bye"] = true,
+    _a[0 + 1] = 0,
+    _a[+"hi"] = [0],
+    _a));
 g({ p: "" });

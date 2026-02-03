@@ -50,24 +50,30 @@ function fail(s: Shapes) {
 
 //// [partiallyDiscriminantedUnions.js]
 // Repro from #10586
-const ab = {};
+var ab = {};
 if (ab.type === 'a') {
     if (ab.subtype === 2) {
         ab.foo;
     }
 }
 // Repro from #11185
-class Square {
-}
-class Circle {
-}
+var Square = /** @class */ (function () {
+    function Square() {
+    }
+    return Square;
+}());
+var Circle = /** @class */ (function () {
+    function Circle() {
+    }
+    return Circle;
+}());
 function isShape(s) {
     return !Array.isArray(s);
 }
 function fail(s) {
     if (isShape(s)) {
         if (s.kind === "circle") {
-            let c = s;
+            var c = s;
         }
     }
 }

@@ -29,21 +29,28 @@ var person = new ObjectField({
 person.fields.id;
 
 //// [inferentialTypingUsingApparentType3.js]
-class CharField {
-    clean(input) {
+var CharField = /** @class */ (function () {
+    function CharField() {
+    }
+    CharField.prototype.clean = function (input) {
         return "Yup";
+    };
+    return CharField;
+}());
+var NumberField = /** @class */ (function () {
+    function NumberField() {
     }
-}
-class NumberField {
-    clean(input) {
+    NumberField.prototype.clean = function (input) {
         return 123;
-    }
-}
-class ObjectField {
-    constructor(fields) {
+    };
+    return NumberField;
+}());
+var ObjectField = /** @class */ (function () {
+    function ObjectField(fields) {
         this.fields = fields;
     }
-}
+    return ObjectField;
+}());
 var person = new ObjectField({
     id: new NumberField(),
     name: new CharField()

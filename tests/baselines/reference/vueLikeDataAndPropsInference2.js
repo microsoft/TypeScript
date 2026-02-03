@@ -53,13 +53,13 @@ test({
     props: {
         foo: ''
     },
-    data() {
+    data: function () {
         return {
             bar: true
         };
     },
     watch: {
-        foo(newVal, oldVal) {
+        foo: function (newVal, oldVal) {
             this.bar = false;
         }
     }

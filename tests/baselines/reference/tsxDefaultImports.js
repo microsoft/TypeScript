@@ -20,12 +20,12 @@ var SomeEnum;
 (function (SomeEnum) {
     SomeEnum[SomeEnum["one"] = 0] = "one";
 })(SomeEnum || (SomeEnum = {}));
-let SomeClass = (() => {
-    class SomeClass {
+var SomeClass = /** @class */ (function () {
+    function SomeClass() {
     }
     SomeClass.E = SomeEnum;
     return SomeClass;
-})();
+}());
 exports.default = SomeClass;
 //// [b.js]
 "use strict";
@@ -34,4 +34,4 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = __importDefault(require("./a"));
-let a = a_1.default.E.one;
+var a = a_1.default.E.one;

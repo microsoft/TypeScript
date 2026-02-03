@@ -8,8 +8,11 @@ class C {
 }
 
 //// [emitArrowFunctionWhenUsingArguments12.js]
-class C {
-    f(arguments) {
-        var a = () => arguments;
+var C = /** @class */ (function () {
+    function C() {
     }
-}
+    C.prototype.f = function (arguments) {
+        var a = function () { return arguments; };
+    };
+    return C;
+}());

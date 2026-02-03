@@ -37,11 +37,11 @@ Output::
 
 
 //// [/home/src/projects/a/a.js]
-let x = 1;
+var x = 1;
 
 
 //// [/home/src/projects/a/b.js]
-let y = 1;
+var y = 1;
 
 
 
@@ -116,7 +116,7 @@ Output::
 
 
 //// [/home/src/projects/a/a.js]
-let x = 11;
+var x = 11;
 
 
 //// [/home/src/projects/a/b.js] file written with same contents
@@ -172,7 +172,7 @@ Output::
 
 
 //// [/home/src/projects/a/a.js]
-let xy = 11;
+var xy = 11;
 
 
 //// [/home/src/projects/a/b.js] file written with same contents

@@ -16,6 +16,6 @@ obj[x];
 
 //// [duplicateErrorAssignability.js]
 "use strict";
-const x = a = b;
-let obj = { 3: "three" };
+var x = a = b;
+var obj = { 3: "three" };
 obj[x];

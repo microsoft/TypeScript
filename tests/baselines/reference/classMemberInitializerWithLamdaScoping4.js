@@ -23,12 +23,13 @@ exports.field1 = void 0;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test1 = void 0;
-class Test1 {
-    constructor(field1) {
+var Test1 = /** @class */ (function () {
+    function Test1(field1) {
         this.field1 = field1;
-        this.messageHandler = () => {
+        this.messageHandler = function () {
             console.log(field1); // Should be error that couldnt find symbol field1
         };
     }
-}
+    return Test1;
+}());
 exports.Test1 = Test1;

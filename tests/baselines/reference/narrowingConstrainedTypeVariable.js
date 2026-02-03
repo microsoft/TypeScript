@@ -40,33 +40,42 @@ function f3<T extends E>(v: T | { x: string }) {
 //// [narrowingConstrainedTypeVariable.js]
 "use strict";
 // Repro from #20138
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 function f1(v) {
     if (v instanceof C) {
-        const x = v;
+        var x = v;
     }
     else {
-        const s = v;
+        var s = v;
     }
 }
-class D {
-}
+var D = /** @class */ (function () {
+    function D() {
+    }
+    return D;
+}());
 function f2(v) {
     if (v instanceof C) {
-        const x = v;
+        var x = v;
     }
     else {
-        const y = v;
+        var y = v;
     }
 }
-class E {
-}
+var E = /** @class */ (function () {
+    function E() {
+    }
+    return E;
+}());
 function f3(v) {
     if (v instanceof E) {
-        const x = v;
+        var x = v;
     }
     else {
-        const y = v;
+        var y = v;
     }
 }

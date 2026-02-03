@@ -69,62 +69,117 @@ module Base4 {
 
 
 //// [super1.js]
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // Case 1
-class Base1 {
-    foo() {
+var Base1 = /** @class */ (function () {
+    function Base1() {
+    }
+    Base1.prototype.foo = function () {
         return "base";
+    };
+    return Base1;
+}());
+var Sub1 = /** @class */ (function (_super) {
+    __extends(Sub1, _super);
+    function Sub1() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
-class Sub1 extends Base1 {
-    bar() {
+    Sub1.prototype.bar = function () {
         return "base";
+    };
+    return Sub1;
+}(Base1));
+var SubSub1 = /** @class */ (function (_super) {
+    __extends(SubSub1, _super);
+    function SubSub1() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
-class SubSub1 extends Sub1 {
-    bar() {
-        return super.super.foo;
-    }
-}
+    SubSub1.prototype.bar = function () {
+        return _super.prototype.super.foo;
+    };
+    return SubSub1;
+}(Sub1));
 // Case 2
-class Base2 {
-    foo() {
+var Base2 = /** @class */ (function () {
+    function Base2() {
+    }
+    Base2.prototype.foo = function () {
         return "base";
+    };
+    return Base2;
+}());
+var SubE2 = /** @class */ (function (_super) {
+    __extends(SubE2, _super);
+    function SubE2() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
-class SubE2 extends Base2 {
-    bar() {
-        return super.prototype.foo = null;
-    }
-}
+    SubE2.prototype.bar = function () {
+        return _super.prototype.prototype.foo = null;
+    };
+    return SubE2;
+}(Base2));
 // Case 3
-class Base3 {
-    foo() {
+var Base3 = /** @class */ (function () {
+    function Base3() {
+    }
+    Base3.prototype.foo = function () {
         return "base";
+    };
+    return Base3;
+}());
+var SubE3 = /** @class */ (function (_super) {
+    __extends(SubE3, _super);
+    function SubE3() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
-class SubE3 extends Base3 {
-    bar() {
-        return super.bar();
-    }
-}
+    SubE3.prototype.bar = function () {
+        return _super.prototype.bar.call(this);
+    };
+    return SubE3;
+}(Base3));
 // Case 4
 var Base4;
 (function (Base4) {
-    class Sub4 {
-        x() {
+    var Sub4 = /** @class */ (function () {
+        function Sub4() {
+        }
+        Sub4.prototype.x = function () {
             return "hello";
+        };
+        return Sub4;
+    }());
+    var SubSub4 = /** @class */ (function (_super) {
+        __extends(SubSub4, _super);
+        function SubSub4() {
+            return _super !== null && _super.apply(this, arguments) || this;
         }
-    }
-    class SubSub4 extends Sub4 {
-        x() {
-            return super.x();
-        }
-    }
+        SubSub4.prototype.x = function () {
+            return _super.prototype.x.call(this);
+        };
+        return SubSub4;
+    }(Sub4));
     Base4.SubSub4 = SubSub4;
-    class Sub4E {
-        x() {
-            return super.x();
+    var Sub4E = /** @class */ (function () {
+        function Sub4E() {
         }
-    }
+        Sub4E.prototype.x = function () {
+            return _super.prototype.x.call(this);
+        };
+        return Sub4E;
+    }());
     Base4.Sub4E = Sub4E;
 })(Base4 || (Base4 = {}));

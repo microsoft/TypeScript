@@ -6,5 +6,8 @@ class C {
 }
 
 //// [parserIndexMemberDeclaration5.js]
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

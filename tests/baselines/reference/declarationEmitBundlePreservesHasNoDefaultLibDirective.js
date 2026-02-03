@@ -18,8 +18,11 @@ interface String {}
 
 //// [mylib.js]
 /// <reference no-default-lib="true"/>
-class Foo {
-}
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    return Foo;
+}());
 
 
 //// [mylib.d.ts]

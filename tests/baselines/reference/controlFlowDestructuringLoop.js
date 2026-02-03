@@ -31,13 +31,14 @@ function isNumVal(x) {
     return typeof x.val === 'number';
 }
 function foo(things) {
-    for (const thing of things) {
+    for (var _i = 0, things_1 = things; _i < things_1.length; _i++) {
+        var thing = things_1[_i];
         if (isNumVal(thing)) {
-            const { val } = thing;
+            var val = thing.val;
             val.toFixed(2);
         }
         else {
-            const { val } = thing;
+            var val = thing.val;
             val.length;
         }
     }

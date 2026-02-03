@@ -3,9 +3,15 @@ EmitSkipped: false
 
 FileName : declSingleFile.js
 var x = 5;
-class Bar {
-}
+var Bar = /** @class */ (function () {
+    function Bar() {
+    }
+    return Bar;
+}());
 var x = "world";
-class Bar2 {
-}
+var Bar2 = /** @class */ (function () {
+    function Bar2() {
+    }
+    return Bar2;
+}());
 

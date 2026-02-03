@@ -31,8 +31,11 @@ var TypeScript;
     (function (Strasse) {
         var Street;
         (function (Street) {
-            class Rue {
-            }
+            var Rue = /** @class */ (function () {
+                function Rue() {
+                }
+                return Rue;
+            }());
             Street.Rue = Rue;
         })(Street = Strasse.Street || (Strasse.Street = {}));
     })(Strasse = TypeScript.Strasse || (TypeScript.Strasse = {}));

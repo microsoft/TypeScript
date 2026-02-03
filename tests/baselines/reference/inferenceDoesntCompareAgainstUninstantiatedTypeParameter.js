@@ -38,30 +38,32 @@ var thisIsOk = new ClassA<ConcreteClass>(new ConcreteClass(), {
 //// [inferenceDoesntCompareAgainstUninstantiatedTypeParameter.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class ClassA {
-    constructor(entity, settings) {
+var ClassA = /** @class */ (function () {
+    function ClassA(entity, settings) {
         this.entity = entity;
         this.settings = settings;
     }
-}
-class ConcreteClass {
-    constructor() {
+    return ClassA;
+}());
+var ConcreteClass = /** @class */ (function () {
+    function ConcreteClass() {
         this.theName = 'myClass';
     }
-}
+    return ConcreteClass;
+}());
 var thisGetsTheFalseError = new ClassA(new ConcreteClass(), {
-    values: o => [
+    values: function (o) { return [
         {
             value: o.theName,
-            func: x => 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj'
+            func: function (x) { return 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj'; }
         }
-    ]
+    ]; }
 });
 var thisIsOk = new ClassA(new ConcreteClass(), {
-    values: o => [
+    values: function (o) { return [
         {
             value: o.theName,
-            func: x => 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj'
+            func: function (x) { return 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj'; }
         }
-    ]
+    ]; }
 });

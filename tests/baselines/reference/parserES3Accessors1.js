@@ -6,6 +6,13 @@ class C {
 }
 
 //// [parserES3Accessors1.js]
-class C {
-    get Foo() { }
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    Object.defineProperty(C.prototype, "Foo", {
+        get: function () { },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());

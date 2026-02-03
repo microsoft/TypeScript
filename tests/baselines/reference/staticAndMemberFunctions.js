@@ -7,7 +7,10 @@ class T {
 }
 
 //// [staticAndMemberFunctions.js]
-class T {
-    static x() { }
-    y() { }
-}
+var T = /** @class */ (function () {
+    function T() {
+    }
+    T.x = function () { };
+    T.prototype.y = function () { };
+    return T;
+}());

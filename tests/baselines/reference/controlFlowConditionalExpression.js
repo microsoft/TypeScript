@@ -9,7 +9,7 @@ x; // string | number
 
 
 //// [controlFlowConditionalExpression.js]
-let x;
-let cond;
+var x;
+var cond;
 cond ? x = "" : x = 3;
 x; // string | number

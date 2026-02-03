@@ -24,8 +24,11 @@ var X;
         (function (B) {
             var C;
             (function (C) {
-                class W {
-                }
+                var W = /** @class */ (function () {
+                    function W() {
+                    }
+                    return W;
+                }());
                 C.W = W;
             })(C = B.C || (B.C = {}));
         })(B = A.B || (A.B = {}));

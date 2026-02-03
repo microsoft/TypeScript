@@ -44,9 +44,11 @@ fooLength + 1;
 Object.defineProperty(exports, "__esModule", { value: true });
 var A;
 (function (A) {
-    class B {
-        constructor(b) { }
-    }
+    var B = /** @class */ (function () {
+        function B(b) {
+        }
+        return B;
+    }());
     A.B = B;
     (function (B) {
         B.b = 0;
@@ -67,9 +69,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var foobar_1 = __importDefault(require("foobar"));
 var X = foobar_1.default.X;
 var foobarx_1 = __importDefault(require("foobarx"));
-const x = X;
-const x2 = foobarx_1.default;
+var x = X;
+var x2 = foobarx_1.default;
 var a_1 = __importDefault(require("./a"));
-const b = new a_1.default(a_1.default.b);
+var b = new a_1.default(a_1.default.b);
 var b_1 = __importDefault(require("./b"));
 b_1.default + 1;

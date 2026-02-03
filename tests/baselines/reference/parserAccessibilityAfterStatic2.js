@@ -8,5 +8,8 @@ static public;
 
 
 //// [parserAccessibilityAfterStatic2.js]
-class Outer {
-}
+var Outer = /** @class */ (function () {
+    function Outer() {
+    }
+    return Outer;
+}());

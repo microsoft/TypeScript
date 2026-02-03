@@ -31,5 +31,5 @@ interface Entry {
 function makeEntityStore(config) {
     return {};
 }
-const myTest = makeEntityStore({ test: { fields: { id: {} } } });
+var myTest = makeEntityStore({ test: { fields: { id: {} } } });
 myTest.test;

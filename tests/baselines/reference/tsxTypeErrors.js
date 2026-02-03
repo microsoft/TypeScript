@@ -46,8 +46,11 @@ var a3 = <div id={thing}/>;
 // Mistyped html name (error)
 var e1 = <imag src="bar.jpg"/>;
 // A custom type
-class MyClass {
-}
+var MyClass = /** @class */ (function () {
+    function MyClass() {
+    }
+    return MyClass;
+}());
 // Let's use it
 // TODO: Error on missing 'reqd'
 var b1 = <MyClass reqd={true}/>;

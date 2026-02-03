@@ -18,6 +18,6 @@ app.foo.bar.someFun(1);
 
 //// [contextualReturnTypeOfIIFE3.js]
 app.foo.bar = (function () {
-    return { someFun(arg) { } };
+    return { someFun: function (arg) { } };
 })();
 app.foo.bar.someFun(1);

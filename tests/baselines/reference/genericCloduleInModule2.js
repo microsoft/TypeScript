@@ -20,14 +20,17 @@ b.foo();
 //// [genericCloduleInModule2.js]
 var A;
 (function (A) {
-    class B {
-        foo() { }
-        static bar() { }
-    }
+    var B = /** @class */ (function () {
+        function B() {
+        }
+        B.prototype.foo = function () { };
+        B.bar = function () { };
+        return B;
+    }());
     A.B = B;
 })(A || (A = {}));
 (function (A) {
-    let B;
+    var B;
     (function (B) {
         B.x = 1;
     })(B = A.B || (A.B = {}));

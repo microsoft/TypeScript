@@ -12,8 +12,11 @@ module Salt {
 //// [memberScope.js]
 var Salt;
 (function (Salt) {
-    class Pepper {
-    }
+    var Pepper = /** @class */ (function () {
+        function Pepper() {
+        }
+        return Pepper;
+    }());
     Salt.Pepper = Pepper;
     var z = Basil.Pepper;
 })(Salt || (Salt = {}));

@@ -16,7 +16,7 @@ function foo() {
     var a = 10;
     var b = "Hello";
     return {
-        a,
-        b
+        a: a,
+        b: b
     };
 }

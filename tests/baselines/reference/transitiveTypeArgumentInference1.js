@@ -17,8 +17,9 @@ var c = new C(i);
 
 //// [transitiveTypeArgumentInference1.js]
 var i = null;
-class C {
-    constructor(p) {
+var C = /** @class */ (function () {
+    function C(p) {
     }
-}
+    return C;
+}());
 var c = new C(i);

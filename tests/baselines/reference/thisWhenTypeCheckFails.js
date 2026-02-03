@@ -11,10 +11,14 @@ class c {
 
 
 //// [thisWhenTypeCheckFails.js]
-class c {
-    n() {
-        var k = () => {
-            var s = this.n();
-        };
+var c = /** @class */ (function () {
+    function c() {
     }
-}
+    c.prototype.n = function () {
+        var _this = this;
+        var k = function () {
+            var s = _this.n();
+        };
+    };
+    return c;
+}());

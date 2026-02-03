@@ -39,11 +39,18 @@ function makePoint(x, y) {
         }
     };
 }
-class C {
-    get x() {
-        return 0;
+var C = /** @class */ (function () {
+    function C() {
     }
-}
+    Object.defineProperty(C.prototype, "x", {
+        get: function () {
+            return 0;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());
 function foo(test) { }
 var x;
 var y;

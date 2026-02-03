@@ -18,5 +18,8 @@ type T3<T> = { x: T }
 
 
 //// [typeAliasesForObjectTypes.js]
-class C1 {
-}
+var C1 = /** @class */ (function () {
+    function C1() {
+    }
+    return C1;
+}());

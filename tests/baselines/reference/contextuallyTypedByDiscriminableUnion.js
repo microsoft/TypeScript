@@ -46,14 +46,14 @@ function invoke(item) {
 }
 invoke({
     kind: "a",
-    method(a) {
+    method: function (a) {
         return +a;
     }
 });
-const kind = "a";
+var kind = "a";
 invoke({
-    kind,
-    method(a) {
+    kind: kind,
+    method: function (a) {
         return +a;
     }
 });

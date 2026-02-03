@@ -28,7 +28,10 @@ namespace Validation {
 //// [unusedInterfaceinNamespace5.js]
 var Validation;
 (function (Validation) {
-    class c1 {
-    }
+    var c1 = /** @class */ (function () {
+        function c1() {
+        }
+        return c1;
+    }());
     Validation.c1 = c1;
 })(Validation || (Validation = {}));

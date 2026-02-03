@@ -33,8 +33,11 @@ a = b1; // error
 b1 = a; // error
 var Generics;
 (function (Generics) {
-    class A {
-    }
+    var A = /** @class */ (function () {
+        function A() {
+        }
+        return A;
+    }());
     function foo() {
         var a;
         var b;

@@ -44,9 +44,9 @@ var SyntaxKind;
 Object.defineProperty(exports, "__esModule", { value: true });
 SyntaxKind.ImportClause;
 "Type" /* SymbolFlags.Type */;
-let kind;
-let flags;
+var kind;
+var flags;
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const flags = "Type" /* SymbolFlags.Type */;
+var flags = "Type" /* SymbolFlags.Type */;

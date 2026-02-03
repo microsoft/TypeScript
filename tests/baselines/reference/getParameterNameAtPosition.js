@@ -15,4 +15,4 @@ cases(fn(opts => { }));
 //// [getParameterNameAtPosition.js]
 "use strict";
 // Repro from #30171
-cases(fn(opts => { }));
+cases(fn(function (opts) { }));

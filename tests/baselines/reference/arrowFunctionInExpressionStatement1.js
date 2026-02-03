@@ -4,4 +4,4 @@
 () => 0;
 
 //// [arrowFunctionInExpressionStatement1.js]
-() => 0;
+(function () { return 0; });

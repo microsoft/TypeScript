@@ -18,17 +18,34 @@ class Test2 {
 }
 
 //// [accessorsEmit.js]
-class Result {
-}
-class Test {
-    get Property() {
-        var x = 1;
-        return null;
+var Result = /** @class */ (function () {
+    function Result() {
     }
-}
-class Test2 {
-    get Property() {
-        var x = 1;
-        return null;
+    return Result;
+}());
+var Test = /** @class */ (function () {
+    function Test() {
     }
-}
+    Object.defineProperty(Test.prototype, "Property", {
+        get: function () {
+            var x = 1;
+            return null;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return Test;
+}());
+var Test2 = /** @class */ (function () {
+    function Test2() {
+    }
+    Object.defineProperty(Test2.prototype, "Property", {
+        get: function () {
+            var x = 1;
+            return null;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return Test2;
+}());

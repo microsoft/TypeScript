@@ -60,5 +60,5 @@ var React = __importStar(require("react"));
 function Wrapper(props) {
     return React.createElement("div", null, props.children);
 }
-const element = (React.createElement(Wrapper, null,
+var element = (React.createElement(Wrapper, null,
     React.createElement("div", null, "Hello")));

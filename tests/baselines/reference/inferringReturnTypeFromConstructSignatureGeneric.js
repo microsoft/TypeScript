@@ -37,32 +37,44 @@ const g4 = g(C);
 
 
 //// [inferringReturnTypeFromConstructSignatureGeneric.js]
-class GenericObject {
-    give(value) {
-        return value;
+var GenericObject = /** @class */ (function () {
+    function GenericObject() {
     }
-}
-class GenericNumber {
-    give(value) {
+    GenericObject.prototype.give = function (value) {
         return value;
+    };
+    return GenericObject;
+}());
+var GenericNumber = /** @class */ (function () {
+    function GenericNumber() {
     }
-}
-class GenericNumberOrString {
-    give(value) {
+    GenericNumber.prototype.give = function (value) {
         return value;
+    };
+    return GenericNumber;
+}());
+var GenericNumberOrString = /** @class */ (function () {
+    function GenericNumberOrString() {
     }
-}
+    GenericNumberOrString.prototype.give = function (value) {
+        return value;
+    };
+    return GenericNumberOrString;
+}());
 function g(type) {
     return new type();
 }
-const g1 = g(GenericObject);
+var g1 = g(GenericObject);
 g1.give({});
-const g2 = g(GenericNumber);
+var g2 = g(GenericNumber);
 g2.give(1);
-const g3 = g(GenericNumberOrString);
+var g3 = g(GenericNumberOrString);
 g3.give(1);
 g3.give('1');
 // repro from #35636
-class C {
-}
-const g4 = g(C);
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+var g4 = g(C);

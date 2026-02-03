@@ -24,21 +24,22 @@ c.data = c.foo();
 
 
 //// [typeParametersAvailableInNestedScope.js]
-class C {
-    constructor() {
-        this.x = (a) => {
+var C = /** @class */ (function () {
+    function C() {
+        this.x = function (a) {
             var y;
             return y;
         };
     }
-    foo() {
+    C.prototype.foo = function () {
         function temp(a) {
             var y;
             return y;
         }
         return temp(null);
-    }
-}
+    };
+    return C;
+}());
 var c = new C();
 c.data = c.x(null);
 c.data = c.foo();

@@ -16,9 +16,9 @@ const f = <div { ...c } />
 
 //// [a.jsx]
 "use strict";
-const a = {};
-const b = null;
-const c = undefined;
-const d = <div {...a}/>;
-const e = <div {...b}/>;
-const f = <div {...c}/>;
+var a = {};
+var b = null;
+var c = undefined;
+var d = <div {...a}/>;
+var e = <div {...b}/>;
+var f = <div {...c}/>;

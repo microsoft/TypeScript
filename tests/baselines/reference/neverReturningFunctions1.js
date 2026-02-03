@@ -267,6 +267,21 @@ function foo(services: Readonly<Services>, s: string | null): string {
 
 //// [neverReturningFunctions1.js]
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 function fail(message) {
     throw new Error(message);
@@ -327,27 +342,30 @@ function f24(x) {
     ((Debug).fail)();
     x; // Unreachable
 }
-class Test {
-    fail(message) {
-        throw new Error(message);
+var Test = /** @class */ (function () {
+    function Test() {
     }
-    f1(x) {
+    Test.prototype.fail = function (message) {
+        throw new Error(message);
+    };
+    Test.prototype.f1 = function (x) {
         if (x === undefined)
             this.fail("undefined argument");
         x.length; // string
-    }
-    f2(x) {
+    };
+    Test.prototype.f2 = function (x) {
         if (x >= 0)
             return x;
         this.fail("negative number");
         x; // Unreachable
-    }
-    f3(x) {
+    };
+    Test.prototype.f3 = function (x) {
         x; // string
         this.fail();
         x; // Unreachable
-    }
-}
+    };
+    return Test;
+}());
 function f30(x) {
     if (typeof x === "string") {
         fail();
@@ -414,51 +432,59 @@ function f42(x) {
     x; // Unreachable
 }
 function f43() {
-    const fail = () => { throw new Error(); };
-    const f = [fail];
+    var fail = function () { throw new Error(); };
+    var f = [fail];
     fail(); // No effect (missing type annotation)
     f[0](); // No effect (not a dotted name)
     f;
 }
-const Component = registerComponent('test-component', {
+var Component = registerComponent('test-component', {
     schema: {
         myProperty: {
             default: [],
-            parse() {
+            parse: function () {
                 return [true];
             }
         },
         string: { type: 'string' },
         num: 0
     },
-    init() {
+    init: function () {
         this.data.num = 0;
         this.el.setAttribute('custom-attribute', 'custom-value');
     },
-    update() { },
-    tick() { },
-    remove() { },
-    pause() { },
-    play() { },
-    multiply(f) {
+    update: function () { },
+    tick: function () { },
+    remove: function () { },
+    pause: function () { },
+    play: function () { },
+    multiply: function (f) {
         // Reference to system because both were registered with the same name.
         return f * this.data.num * this.system.data.counter;
     }
 });
 // Repro from #36147
-class MyThrowable {
-    throw() {
+var MyThrowable = /** @class */ (function () {
+    function MyThrowable() {
+    }
+    MyThrowable.prototype.throw = function () {
         throw new Error();
+    };
+    return MyThrowable;
+}());
+var SuperThrowable = /** @class */ (function (_super) {
+    __extends(SuperThrowable, _super);
+    function SuperThrowable() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-}
-class SuperThrowable extends MyThrowable {
-    err(msg) {
-        super.throw();
-    }
-    ok() {
+    SuperThrowable.prototype.err = function (msg) {
+        _super.prototype.throw.call(this);
+    };
+    SuperThrowable.prototype.ok = function () {
         this.throw();
-    }
-}
+    };
+    return SuperThrowable;
+}(MyThrowable));
 function foo(services, s) {
     if (s === null) {
         services.panic("ouch");

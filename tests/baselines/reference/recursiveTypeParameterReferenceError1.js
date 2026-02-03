@@ -20,11 +20,17 @@ var r2 = f2.ofC4;
 
 
 //// [recursiveTypeParameterReferenceError1.js]
-class X {
-}
+var X = /** @class */ (function () {
+    function X() {
+    }
+    return X;
+}());
 var f;
 var r = f.z;
-class C2 {
-}
+var C2 = /** @class */ (function () {
+    function C2() {
+    }
+    return C2;
+}());
 var f2;
 var r2 = f2.ofC4;

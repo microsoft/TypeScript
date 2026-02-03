@@ -23,21 +23,33 @@ let ___: C = new C(); // Ok
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = exports.A = void 0;
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 exports.A = A;
-class B {
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 exports.B = B;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = exports.B = void 0;
-class B {
-}
+var B = /** @class */ (function () {
+    function B() {
+    }
+    return B;
+}());
 exports.B = B;
-class C {
-}
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 exports.C = C;
 //// [c.js]
 "use strict";
@@ -61,6 +73,6 @@ __exportStar(require("./b"), exports); // Collision error
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var c_1 = require("./c");
-let _ = new A(); // Error
-let __ = new c_1.B(); // Ok
-let ___ = new c_1.C(); // Ok
+var _ = new A(); // Error
+var __ = new c_1.B(); // Ok
+var ___ = new c_1.C(); // Ok

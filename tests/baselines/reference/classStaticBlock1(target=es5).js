@@ -13,10 +13,13 @@ class C {
 
 
 //// [classStaticBlock1.js]
-const a = 2;
-class C {
-}
-(() => {
-    const a = 1;
+var a = 2;
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+(function () {
+    var a = 1;
     a;
 })();

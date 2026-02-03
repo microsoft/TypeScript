@@ -133,28 +133,33 @@ var WinJS;
 })(WinJS || (WinJS = {}));
 var Errors;
 (function (Errors) {
-    class ConnectionError /* extends Error */ {
-        constructor(request) {
+    var ConnectionError /* extends Error */ = /** @class */ (function () {
+        function ConnectionError(request) {
         }
-    }
+        return ConnectionError;
+    }());
     Errors.ConnectionError = ConnectionError;
 })(Errors || (Errors = {}));
-class FileService {
-    uploadData() {
+var FileService = /** @class */ (function () {
+    function FileService() {
+    }
+    FileService.prototype.uploadData = function () {
+        var _this = this;
         var path = "";
         return this.requestService.makeRequest({
             url: this.requestService.getRequestUrl('root', path),
             type: 'POST',
             headers: {},
             data: "someData"
-        }).then((response) => {
+        }).then(function (response) {
             var result = {
-                stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file
+                stat: _this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file
                 isNew: response.status === 201
             };
             return WinJS.TPromise.as(result);
-        }, (xhr) => {
+        }, function (xhr) {
             return WinJS.Promise.wrapError(new Errors.ConnectionError(xhr));
         });
-    }
-}
+    };
+    return FileService;
+}());

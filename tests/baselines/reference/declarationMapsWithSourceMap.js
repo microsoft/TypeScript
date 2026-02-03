@@ -17,17 +17,20 @@ let x = c.doThing({a: 12});
 
 
 //// [bundle.js]
-class Foo {
-    doThing(x) {
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    Foo.prototype.doThing = function (x) {
         return { b: x.a };
-    }
-    static make() {
+    };
+    Foo.make = function () {
         return new Foo();
-    }
-}
-const c = new Foo();
+    };
+    return Foo;
+}());
+var c = new Foo();
 c.doThing({ a: 42 });
-let x = c.doThing({ a: 12 });
+var x = c.doThing({ a: 12 });
 //# sourceMappingURL=bundle.js.map
 
 //// [bundle.d.ts]

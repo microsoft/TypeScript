@@ -16,7 +16,7 @@ const unreachable = (x: unknown): number => {
 }
 
 //// [unreachable.js]
-const unreachable = (x) => {
+var unreachable = function (x) {
     switch (typeof x) {
         case 'string': return 0;
         case 'number': return 0;

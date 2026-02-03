@@ -45,8 +45,11 @@ objA.a--, M.n--;
 // -- operator on number type
 var NUMBER;
 var NUMBER1 = [1, 2];
-class A {
-}
+var A = /** @class */ (function () {
+    function A() {
+    }
+    return A;
+}());
 var M;
 (function (M) {
 })(M || (M = {}));

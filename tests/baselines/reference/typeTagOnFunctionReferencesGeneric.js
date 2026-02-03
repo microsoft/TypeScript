@@ -31,7 +31,7 @@ function inJs(l) {
 }
 inJs(1); // lints error. Why?
 /**@type {IFn}*/
-const inJsArrow = (j) => {
+var inJsArrow = function (j) {
     return j;
 };
 inJsArrow(2); // no error gets linted as expected

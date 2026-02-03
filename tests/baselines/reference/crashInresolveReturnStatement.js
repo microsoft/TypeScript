@@ -21,20 +21,29 @@ class WITDialogs {
 
 
 //// [crashInresolveReturnStatement.js]
-class WorkItemToolbar {
-    onToolbarItemClick() {
+var WorkItemToolbar = /** @class */ (function () {
+    function WorkItemToolbar() {
+    }
+    WorkItemToolbar.prototype.onToolbarItemClick = function () {
         WITDialogs.createCopyOfWorkItem();
+    };
+    return WorkItemToolbar;
+}());
+var CreateCopyOfWorkItemDialog = /** @class */ (function () {
+    function CreateCopyOfWorkItemDialog() {
     }
-}
-class CreateCopyOfWorkItemDialog {
-    getDialogResult() {
+    CreateCopyOfWorkItemDialog.prototype.getDialogResult = function () {
         return null;
-    }
-}
+    };
+    return CreateCopyOfWorkItemDialog;
+}());
 function createWorkItemDialog(dialogType) {
 }
-class WITDialogs {
-    static createCopyOfWorkItem() {
-        createWorkItemDialog(CreateCopyOfWorkItemDialog);
+var WITDialogs = /** @class */ (function () {
+    function WITDialogs() {
     }
-}
+    WITDialogs.createCopyOfWorkItem = function () {
+        createWorkItemDialog(CreateCopyOfWorkItemDialog);
+    };
+    return WITDialogs;
+}());

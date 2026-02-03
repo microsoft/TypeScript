@@ -4,5 +4,8 @@
 var v = class C {};
 
 //// [classExpression1.js]
-var v = class C {
-};
+var v = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());

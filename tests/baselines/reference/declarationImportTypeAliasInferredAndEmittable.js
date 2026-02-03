@@ -22,22 +22,25 @@ export class Wrap {
 
 //// [foo.js]
 "use strict";
-class Conn {
-    constructor() {
+var Conn = /** @class */ (function () {
+    function Conn() {
         this.item = 3;
     }
-    method() { }
-}
+    Conn.prototype.method = function () { };
+    return Conn;
+}());
 module.exports = Conn;
 //// [usage.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Wrap = void 0;
-class Wrap {
-    constructor(c = x) {
+var Wrap = /** @class */ (function () {
+    function Wrap(c) {
+        if (c === void 0) { c = x; }
         this.connItem = c.item;
     }
-}
+    return Wrap;
+}());
 exports.Wrap = Wrap;
 
 

@@ -1,7 +1,10 @@
 var test;
 (function (test) {
-    class ClassA {
-        method() { }
-    }
+    var ClassA = /** @class */ (function () {
+        function ClassA() {
+        }
+        ClassA.prototype.method = function () { };
+        return ClassA;
+    }());
     test.ClassA = ClassA;
 })(test || (test = {}));

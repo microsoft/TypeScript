@@ -4,4 +4,4 @@
 const a: number
 
 //// [downlevelLetConst4.js]
-const a;
+var a;
