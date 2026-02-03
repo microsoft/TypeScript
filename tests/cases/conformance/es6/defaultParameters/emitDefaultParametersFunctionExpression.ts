@@ -1,4 +1,5 @@
-﻿// @target: es5, es2015
+﻿// @strict: false
+// @target: es5, es2015
 var lambda1 = (y = "hello") => { }
 var lambda2 = (x: number, y = "hello") => { }
 var lambda3 = (x: number, y = "hello", ...rest) => { }

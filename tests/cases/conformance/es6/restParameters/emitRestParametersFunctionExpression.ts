@@ -1,4 +1,5 @@
-﻿// @target: es5, es2015
+﻿// @strict: false
+// @target: es5, es2015
 var funcExp = (...rest) => { }
 var funcExp1 = (X: number, ...rest) => { }
 var funcExp2 = function (...rest) { }
