@@ -968,7 +968,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Ensure_types_are_ordered_stably_and_deterministically_across_compilations,
-        defaultValueDescription: true,
+        defaultValueDescription: false,
     },
     {
         name: "noImplicitThis",

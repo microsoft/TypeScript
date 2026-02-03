@@ -1504,8 +1504,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     var scanner: Scanner | undefined;
 
-    var fileIndexMap = new Map(host.getSourceFiles().map((file, i) => [file, i]));
-
     var Symbol = objectAllocator.getSymbolConstructor();
     var Type = objectAllocator.getTypeConstructor();
     var Signature = objectAllocator.getSignatureConstructor();
@@ -1543,6 +1541,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
     var noUncheckedSideEffectImports = compilerOptions.noUncheckedSideEffectImports !== false;
     var stableTypeOrdering = !!compilerOptions.stableTypeOrdering;
+
+    var fileIndexMap = stableTypeOrdering ? new Map(host.getSourceFiles().map((file, i) => [file, i])) : undefined;
 
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
@@ -53819,8 +53819,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const s1 = getSourceFileOfNode(n1);
         const s2 = getSourceFileOfNode(n2);
         if (s1 !== s2) {
-            const f1 = fileIndexMap.get(s1)!;
-            const f2 = fileIndexMap.get(s2)!;
+            const f1 = fileIndexMap!.get(s1)!;
+            const f2 = fileIndexMap!.get(s2)!;
             // Order by index of file in the containing program
             return f1 - f2;
         }
