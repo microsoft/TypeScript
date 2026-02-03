@@ -9034,9 +9034,23 @@ const _computedOptions = createComputedCompilerOptions({
     module: {
         dependencies: ["target"],
         computeValue: (compilerOptions): ModuleKind => {
-            return typeof compilerOptions.module === "number" ?
-                compilerOptions.module :
-                _computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
+            if (typeof compilerOptions.module === "number") {
+                return compilerOptions.module;
+            }
+            const target = _computedOptions.target.computeValue(compilerOptions);
+            if (target === ScriptTarget.ESNext) {
+                return ModuleKind.ESNext;
+            }
+            if (target >= ScriptTarget.ES2022) {
+                return ModuleKind.ES2022;
+            }
+            if (target >= ScriptTarget.ES2020) {
+                return ModuleKind.ES2020;
+            }
+            if (target >= ScriptTarget.ES2015) {
+                return ModuleKind.ES2015;
+            }
+            return ModuleKind.CommonJS;
         },
     },
     moduleResolution: {

@@ -110,8 +110,6 @@ function getMultiRobots() {
 }
 
 for (let [, nameA = "noName"] of robots) {
-> : undefined
-> : ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 >"noName" : "noName"
@@ -132,8 +130,6 @@ for (let [, nameA = "noName"] of robots) {
 >      : ^^^^^^
 }
 for (let [, nameA = "noName"] of getRobots()) {
-> : undefined
-> : ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 >"noName" : "noName"
@@ -156,8 +152,6 @@ for (let [, nameA = "noName"] of getRobots()) {
 >      : ^^^^^^
 }
 for (let [, nameA = "noName"] of [robotA, robotB]) {
-> : undefined
-> : ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 >"noName" : "noName"
@@ -182,9 +176,6 @@ for (let [, nameA = "noName"] of [robotA, robotB]) {
 >      : ^^^^^^
 }
 for (let [, [
-> : undefined
-> : ^^^^^^^^^
-
     primarySkillA = "primary",
 >primarySkillA : string
 >              : ^^^^^^
@@ -220,9 +211,6 @@ for (let [, [
 >              : ^^^^^^
 }
 for (let [, [
-> : undefined
-> : ^^^^^^^^^
-
     primarySkillA = "primary",
 >primarySkillA : string
 >              : ^^^^^^
@@ -260,9 +248,6 @@ for (let [, [
 >              : ^^^^^^
 }
 for (let [, [
-> : undefined
-> : ^^^^^^^^^
-
     primarySkillA = "primary",
 >primarySkillA : string
 >              : ^^^^^^

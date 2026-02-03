@@ -879,7 +879,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
 
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
         const facts = getClassFacts(node);
-        const promoteToIIFE = languageVersion <= ScriptTarget.ES5 &&
+        const promoteToIIFE = languageVersion < ScriptTarget.ES2015 &&
             !!(facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression);
 
         if (

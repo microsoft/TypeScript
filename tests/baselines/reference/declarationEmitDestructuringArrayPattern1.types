@@ -32,10 +32,6 @@ var [x1, y1] = [1, "hello"]; // emit x1: number, y1: string
 >        : ^^^^^^^
 
 var [, , z1] = [0, 1, 2]; // emit z1: number
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >z1 : number
 >   : ^^^^^^
 >[0, 1, 2] : [number, number, number]

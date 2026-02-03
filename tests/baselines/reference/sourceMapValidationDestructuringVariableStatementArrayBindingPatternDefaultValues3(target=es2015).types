@@ -103,8 +103,6 @@ let multiRobotAInfo: (string | string[])[];
 >                                   : ^^^^^
 >[, nameA = "helloNoName"] : [undefined, string]
 >                          : ^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameA = "helloNoName" : "helloNoName"
 >                      : ^^^^^^^^^^^^^
 >nameA : string
@@ -119,8 +117,6 @@ let multiRobotAInfo: (string | string[])[];
 >                                        : ^^^^^
 >[, nameB = "helloNoName"] : [undefined, string]
 >                          : ^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameB = "helloNoName" : "helloNoName"
 >                      : ^^^^^^^^^^^^^
 >nameB : string
@@ -137,8 +133,6 @@ let multiRobotAInfo: (string | string[])[];
 >                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[, nameB = "helloNoName"] : [undefined, string]
 >                          : ^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameB = "helloNoName" : "helloNoName"
 >                      : ^^^^^^^^^^^^^
 >nameB : string
@@ -159,8 +153,6 @@ let multiRobotAInfo: (string | string[])[];
 >                                   : ^^^^^^^^^^^^^^^^^
 >[, multiSkillB = []] : [undefined, undefined[]]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >multiSkillB = [] : undefined[]
 >                 : ^^^^^^^^^^^
 >multiSkillB : string[]
@@ -175,8 +167,6 @@ let multiRobotAInfo: (string | string[])[];
 >                                        : ^^^^^^^^^^^^^^^^^
 >[, multiSkillB = []] : [undefined, undefined[]]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >multiSkillB = [] : undefined[]
 >                 : ^^^^^^^^^^^
 >multiSkillB : string[]
@@ -193,8 +183,6 @@ let multiRobotAInfo: (string | string[])[];
 >                                                         : ^^^^^^^^^^^^^^^^^^
 >[, multiSkillB = []] : [undefined, undefined[]]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >multiSkillB = [] : undefined[]
 >                 : ^^^^^^^^^^^
 >multiSkillB : string[]

@@ -80,8 +80,6 @@ const repro_43249 = (value: unknown) => {
 >   : ^^
 
     const [, extracted] = match;
-> : undefined
-> : ^^^^^^^^^
 >extracted : string
 >          : ^^^^^^
 >match : [] | RegExpMatchArray

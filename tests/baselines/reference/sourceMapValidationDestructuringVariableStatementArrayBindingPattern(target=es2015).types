@@ -41,8 +41,6 @@ var robotB: Robot = [2, "trimmer", "trimming"];
 
 
 let [, nameA] = robotA;
-> : undefined
-> : ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 >robotA : Robot

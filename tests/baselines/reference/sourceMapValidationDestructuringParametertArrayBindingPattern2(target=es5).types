@@ -32,8 +32,6 @@ var robotA: Robot = ["trimmer", ["trimming", "edging"]];
 function foo1([, skillA]: Robot) {
 >foo1 : ([, skillA]: Robot) => void
 >     : ^          ^^     ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >skillA : [string, string]
 >       : ^^^^^^^^^^^^^^^^
 

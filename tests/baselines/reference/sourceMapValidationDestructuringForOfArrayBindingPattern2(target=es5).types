@@ -144,8 +144,6 @@ let numberA3: number, robotAInfo: (number | string)[], multiRobotAInfo: (string 
 for ([, nameA] of robots) {
 >[, nameA] : [undefined, string]
 >          : ^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 >robots : Robot[]
@@ -166,8 +164,6 @@ for ([, nameA] of robots) {
 for ([, nameA] of getRobots()) {
 >[, nameA] : [undefined, string]
 >          : ^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 >getRobots() : Robot[]
@@ -190,8 +186,6 @@ for ([, nameA] of getRobots()) {
 for ([, nameA] of [robotA, robotB]) {
 >[, nameA] : [undefined, string]
 >          : ^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 >[robotA, robotB] : Robot[]
@@ -216,8 +210,6 @@ for ([, nameA] of [robotA, robotB]) {
 for ([, [primarySkillA, secondarySkillA]] of multiRobots) {
 >[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >[primarySkillA, secondarySkillA] : [string, string]
 >                                 : ^^^^^^^^^^^^^^^^
 >primarySkillA : string
@@ -242,8 +234,6 @@ for ([, [primarySkillA, secondarySkillA]] of multiRobots) {
 for ([, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
 >[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >[primarySkillA, secondarySkillA] : [string, string]
 >                                 : ^^^^^^^^^^^^^^^^
 >primarySkillA : string
@@ -270,8 +260,6 @@ for ([, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
 for ([, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
 >[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >[primarySkillA, secondarySkillA] : [string, string]
 >                                 : ^^^^^^^^^^^^^^^^
 >primarySkillA : string
