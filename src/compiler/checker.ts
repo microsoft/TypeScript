@@ -53893,7 +53893,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Order unnamed non-reference object types by kind associated type mappers. Reverse mapped types have
                 // neither symbols nor mappers so they're ultimately ordered by unstable type IDs, but given their rarity
                 // this should be fine.
-                let c = getObjectFlags(t1) & ObjectFlags.ObjectTypeKindMask - getObjectFlags(t2) & ObjectFlags.ObjectTypeKindMask;
+                let c = (getObjectFlags(t1) & ObjectFlags.ObjectTypeKindMask) - (getObjectFlags(t2) & ObjectFlags.ObjectTypeKindMask);
                 if (c !== 0) {
                     return c;
                 }
@@ -54087,7 +54087,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (t1 === t2) {
             return 0;
         }
-        if (t1.readonly === t2.readonly) {
+        if (t1.readonly !== t2.readonly) {
             return t1.readonly ? 1 : -1;
         }
         if (t1.elementFlags.length !== t2.elementFlags.length) {
