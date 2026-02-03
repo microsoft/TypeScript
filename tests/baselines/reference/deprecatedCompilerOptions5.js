@@ -5,4 +5,4 @@ const a = 1;
 
 
 //// [a.js]
-var a = 1;
+const a = 1;

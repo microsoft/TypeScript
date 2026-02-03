@@ -14,7 +14,7 @@ class C {
 >  : ^^^^^^
 }
 
-var c: C;
+declare var c: C;
 >c : C
 >  : ^
 
@@ -41,7 +41,7 @@ class D {
 >  : ^^^^^^
 }
 
-var d: D;
+declare var d: D;
 >d : D
 >  : ^
 
@@ -68,7 +68,7 @@ class E {
 >  : ^^^^^^
 }
 
-var e: E;
+declare var e: E;
 >e : E
 >  : ^
 
@@ -95,7 +95,7 @@ class F {
 >  : ^^^^^^
 }
 
-var f: F;
+declare var f: F;
 >f : F
 >  : ^
 

@@ -12,7 +12,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     function foo() {
     	return "test";
     }
-    module foo {
+    namespace foo {
     	export var answer = 42;
     }
     export = foo;

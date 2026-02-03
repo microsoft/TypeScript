@@ -1,3 +1,4 @@
+// @target: es2015
 var f: <T, U>(x: T, y: U) => T;
 var f: <T, U>(x: any, y: any) => any;
 

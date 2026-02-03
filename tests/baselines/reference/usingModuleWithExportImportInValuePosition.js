@@ -1,18 +1,18 @@
 //// [tests/cases/compiler/usingModuleWithExportImportInValuePosition.ts] ////
 
 //// [usingModuleWithExportImportInValuePosition.ts]
-module A {
+namespace A {
 export var x = 'hello world'
 export class Point {
         constructor(public x: number, public y: number) { }
     }
-    export module B {
+    export namespace B {
         export interface Id {
             name: string;
         }
     }
 }
-module C {
+namespace C {
     export import a = A;
 }
 
@@ -25,13 +25,12 @@ var c: C.a.B.Id;
 var A;
 (function (A) {
     A.x = 'hello world';
-    var Point = /** @class */ (function () {
-        function Point(x, y) {
+    class Point {
+        constructor(x, y) {
             this.x = x;
             this.y = y;
         }
-        return Point;
-    }());
+    }
     A.Point = Point;
 })(A || (A = {}));
 var C;

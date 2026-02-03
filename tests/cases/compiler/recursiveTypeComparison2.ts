@@ -1,6 +1,7 @@
+// @target: es2015
 // Before fix this would cause compiler to hang (#1170)
 
-declare module Bacon {
+declare namespace Bacon {
     interface Event<T> {
     }
     interface Error<T> extends Event<T> {

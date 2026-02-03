@@ -1,3 +1,4 @@
+// @target: es2015
 // @noimplicitany: true
 
 var a = {}["hello"];
@@ -74,12 +75,12 @@ declare const sym : unique symbol;
 o[sym];
 
 enum NumEnum { a, b }
-let numEnumKey: NumEnum;
+declare let numEnumKey: NumEnum;
 o[numEnumKey];
 
 
 enum StrEnum { a = "a", b = "b" }
-let strEnumKey: StrEnum;
+declare let strEnumKey: StrEnum;
 o[strEnumKey];
 
 

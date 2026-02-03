@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @lib: es6
 // @noEmitHelpers: true
 async function fn1() {

@@ -178,7 +178,7 @@ describe("unittests:: tsbuild:: with resolveJsonModule:: option on project impor
                 }),
                 "/home/src/workspaces/solution/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
-                        target: "es5",
+                        target: "es2015",
                         module: "commonjs",
                         rootDir: "./",
                         composite: true,

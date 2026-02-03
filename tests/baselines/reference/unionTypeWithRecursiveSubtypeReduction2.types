@@ -37,11 +37,11 @@ class Property {
 >       : ^^^^^^^^^^^^^^
 }
 
-var c: Class;
+declare var c: Class;
 >c : Class
 >  : ^^^^^
 
-var p: Property;
+declare var p: Property;
 >p : Property
 >  : ^^^^^^^^
 

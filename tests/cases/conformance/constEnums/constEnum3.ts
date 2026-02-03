@@ -1,3 +1,4 @@
+// @target: es2015
 const enum TestType { foo, bar }
 type TestTypeStr = keyof typeof TestType;
 

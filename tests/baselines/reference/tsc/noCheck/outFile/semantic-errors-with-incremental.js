@@ -17,7 +17,6 @@ export const b = 10;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -39,10 +38,17 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
 
 
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
+
+
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
@@ -69,17 +75,17 @@ declare module "b" {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-11705693502-export const a: number = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;"
   },
@@ -100,7 +106,7 @@ declare module "b" {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -114,7 +120,7 @@ declare module "b" {
   ],
   "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 782
+  "size": 754
 }
 
 
@@ -132,7 +138,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -153,8 +159,13 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
@@ -173,7 +184,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -197,8 +208,13 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
@@ -213,17 +229,17 @@ declare module "b" {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-16641552193-export const a = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;"
   },
@@ -244,7 +260,7 @@ declare module "b" {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -258,7 +274,7 @@ declare module "b" {
   ],
   "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 774
+  "size": 746
 }
 
 
@@ -276,7 +292,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -297,8 +313,13 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
@@ -317,7 +338,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -338,23 +359,28 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-16641552193-export const a = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;"
   },
@@ -375,7 +401,7 @@ Found 1 error in tsconfig.json[90m:5[0m
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -388,7 +414,7 @@ Found 1 error in tsconfig.json[90m:5[0m
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 754
+  "size": 726
 }
 
 
@@ -405,7 +431,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -426,8 +452,13 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
@@ -445,7 +476,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -466,23 +497,28 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-16641552193-export const a = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;"
   },
@@ -503,7 +539,7 @@ Found 1 error in tsconfig.json[90m:5[0m
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -517,7 +553,7 @@ Found 1 error in tsconfig.json[90m:5[0m
   ],
   "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 774
+  "size": 746
 }
 
 
@@ -535,7 +571,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -559,8 +595,13 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
@@ -575,17 +616,17 @@ declare module "b" {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-11705693502-export const a: number = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;"
   },
@@ -606,7 +647,7 @@ declare module "b" {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -620,7 +661,7 @@ declare module "b" {
   ],
   "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 782
+  "size": 754
 }
 
 
@@ -638,7 +679,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -659,8 +700,13 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
@@ -679,7 +725,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -700,23 +746,28 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-11705693502-export const a: number = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;"
   },
@@ -737,7 +788,7 @@ Found 1 error in tsconfig.json[90m:5[0m
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -750,7 +801,7 @@ Found 1 error in tsconfig.json[90m:5[0m
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 762
+  "size": 734
 }
 
 
@@ -767,7 +818,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -791,8 +842,13 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
@@ -807,17 +863,17 @@ declare module "b" {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-16641552193-export const a = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;"
   },
@@ -838,7 +894,7 @@ declare module "b" {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -852,7 +908,7 @@ declare module "b" {
   ],
   "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 774
+  "size": 746
 }
 
 
@@ -870,7 +926,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -891,23 +947,28 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;"],"root":[2,3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-16641552193-export const a = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;"
   },
@@ -928,7 +989,7 @@ Found 1 error in tsconfig.json[90m:5[0m
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -941,7 +1002,7 @@ Found 1 error in tsconfig.json[90m:5[0m
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 754
+  "size": 726
 }
 
 
@@ -958,7 +1019,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -982,8 +1043,13 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
@@ -1021,18 +1087,18 @@ declare module "c" {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts",
     "./project/c.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-16641552193-export const a = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;",
     "./project/c.ts": "-9150421116-export const c: number = \"hello\";"
@@ -1057,7 +1123,7 @@ declare module "c" {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -1074,7 +1140,7 @@ declare module "c" {
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 825
+  "size": 797
 }
 
 
@@ -1092,7 +1158,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -1117,8 +1183,13 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
@@ -1136,18 +1207,18 @@ declare module "c" {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"checkPending":true,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11705693502-export const a: number = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts",
     "./project/c.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-11705693502-export const a: number = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;",
     "./project/c.ts": "-9150421116-export const c: number = \"hello\";"
@@ -1172,7 +1243,7 @@ declare module "c" {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -1190,7 +1261,7 @@ declare module "c" {
   ],
   "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 853
+  "size": 825
 }
 
 
@@ -1209,7 +1280,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -1234,8 +1305,13 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
@@ -1253,18 +1329,18 @@ declare module "c" {
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"checkPending":true,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts",
     "./project/c.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-16641552193-export const a = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;",
     "./project/c.ts": "-9150421116-export const c: number = \"hello\";"
@@ -1289,7 +1365,7 @@ declare module "c" {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -1307,7 +1383,7 @@ declare module "c" {
   ],
   "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 845
+  "size": 817
 }
 
 
@@ -1326,7 +1402,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -1348,24 +1424,29 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts",
     "./project/c.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-16641552193-export const a = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;",
     "./project/c.ts": "-9150421116-export const c: number = \"hello\";"
@@ -1390,7 +1471,7 @@ Found 1 error in tsconfig.json[90m:5[0m
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -1407,7 +1488,7 @@ Found 1 error in tsconfig.json[90m:5[0m
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 825
+  "size": 797
 }
 
 
@@ -1425,7 +1506,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -1447,24 +1528,29 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"checkPending":true,"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"checkPending":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts",
     "./project/c.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-16641552193-export const a = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;",
     "./project/c.ts": "-9150421116-export const c: number = \"hello\";"
@@ -1489,7 +1575,7 @@ Found 1 error in tsconfig.json[90m:5[0m
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -1507,7 +1593,7 @@ Found 1 error in tsconfig.json[90m:5[0m
   ],
   "checkPending": true,
   "version": "FakeTSVersion",
-  "size": 845
+  "size": 817
 }
 
 
@@ -1526,7 +1612,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -1548,24 +1634,29 @@ Output::
 [7m5[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error in tsconfig.json[90m:5[0m
+[7m6[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 
 //// [/home/src/workspaces/outFile.tsbuildinfo]
-{"fileNames":["../tslibs/ts/lib/lib.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
+{"fileNames":["../tslibs/ts/lib/lib.es2024.full.d.ts","./project/a.ts","./project/b.ts","./project/c.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16641552193-export const a = \"hello\";","-13368947479-export const b = 10;","-9150421116-export const c: number = \"hello\";"],"root":[[2,4]],"options":{"declaration":true,"module":2,"outFile":"./outFile.js"},"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/outFile.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../tslibs/ts/lib/lib.d.ts",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts",
     "./project/a.ts",
     "./project/b.ts",
     "./project/c.ts"
   ],
   "fileInfos": {
-    "../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./project/a.ts": "-16641552193-export const a = \"hello\";",
     "./project/b.ts": "-13368947479-export const b = 10;",
     "./project/c.ts": "-9150421116-export const c: number = \"hello\";"
@@ -1590,7 +1681,7 @@ Found 1 error in tsconfig.json[90m:5[0m
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../tslibs/ts/lib/lib.d.ts",
+      "../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -1607,7 +1698,7 @@ Found 1 error in tsconfig.json[90m:5[0m
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 825
+  "size": 797
 }
 
 
@@ -1625,7 +1716,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts

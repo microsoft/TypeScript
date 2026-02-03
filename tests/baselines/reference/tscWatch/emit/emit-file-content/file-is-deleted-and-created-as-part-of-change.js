@@ -11,7 +11,6 @@ var a = 10;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -35,6 +34,8 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/username/projects/project/app/file.js]
 var a = 10;
 
@@ -47,7 +48,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /home/username/projects/project/app/file.ts: *new*
   {}
@@ -67,15 +68,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/username/projects/project/app/file.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/username/projects/project/app/file.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts (used version)
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts (used version)
 /home/username/projects/project/app/file.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -120,14 +121,15 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/username/projects/project/app/file.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/username/projects/project/app/file.ts
 
 Shape signatures in builder refreshed for::
 /home/username/projects/project/app/file.ts (computed .d.ts)
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts (used version)
 
 exitCode:: ExitStatus.undefined

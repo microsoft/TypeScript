@@ -33,7 +33,7 @@ const x: Large = {
 
 
 //// [deeplyNestedAssignabilityIssue.js]
-var x = {
+const x = {
     something: {
         another: {
             more: {

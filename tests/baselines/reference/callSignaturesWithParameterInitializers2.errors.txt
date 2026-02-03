@@ -23,7 +23,7 @@ callSignaturesWithParameterInitializers2.ts(20,15): error TS1005: '{' expected.
         foo(x = 1) { }
     }
     
-    var c: C;
+    declare var c: C;
     c.foo();
     c.foo(1);
     

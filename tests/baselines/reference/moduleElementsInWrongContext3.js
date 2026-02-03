@@ -1,9 +1,9 @@
 //// [tests/cases/compiler/moduleElementsInWrongContext3.ts] ////
 
 //// [moduleElementsInWrongContext3.ts]
-module P {
+namespace P {
     {
-        module M { }
+        namespace M { }
         export namespace N {
             export interface I { }
         }
@@ -44,12 +44,8 @@ var P;
         export { foo };
         export { baz as b } from "ambient";
         export default v;
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
-        export default C;
+        export default class C {
+        }
         export function bee() { }
         import I2 = require("foo");
         import * as Foo from "ambient";

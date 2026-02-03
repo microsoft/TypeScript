@@ -1,3 +1,4 @@
+// @target: es2015
 var a = 42;
 var b = 0xFA34;
 var c = 0.1715;

@@ -17,7 +17,7 @@ genericCallWithObjectTypeArgs.ts(20,17): error TS2345: Argument of type 'X<D>' i
     }
     
     function foo<T>(t: X<T>, t2: X<T>) {
-        var x: T;
+        var x!: T;
         return x;
     }
     

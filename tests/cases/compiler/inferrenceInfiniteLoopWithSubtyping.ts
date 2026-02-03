@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: graphql-compose.d.ts
 // @declaration: true
 export type ObjMapReadOnly<T> = Readonly<{ [key: string]: Readonly<T> }>;

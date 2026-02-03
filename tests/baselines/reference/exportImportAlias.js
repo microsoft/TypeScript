@@ -3,20 +3,20 @@
 //// [exportImportAlias.ts]
 // expect no errors here
 
-module A {
+namespace A {
 
     export var x = 'hello world'
     export class Point {
         constructor(public x: number, public y: number) { }
     }
-    export module B {
+    export namespace B {
         export interface Id {
             name: string;
         }
     }
 }
 
-module C {
+namespace C {
     export import a = A;
 }
 
@@ -25,19 +25,19 @@ var b: { x: number; y: number; } = new C.a.Point(0, 0);
 var c: { name: string };
 var c: C.a.B.Id;
 
-module X {
+namespace X {
     export function Y() {
         return 42;
     }
 
-    export module Y {
+    export namespace Y {
         export class Point {
             constructor(public x: number, public y: number) { }
         }
     }
 }
 
-module Z {
+namespace Z {
 
     // 'y' should be a fundule here
     export import y = X.Y;
@@ -46,12 +46,12 @@ module Z {
 var m: number = Z.y();
 var n: { x: number; y: number; } = new Z.y.Point(0, 0);
 
-module K {
+namespace K {
     export class L {
         constructor(public name: string) { }
     }
 
-    export module L {
+    export namespace L {
         export var y = 12;
         export interface Point {
             x: number;
@@ -60,7 +60,7 @@ module K {
     }
 }
 
-module M {
+namespace M {
     export import D = K.L;
 }
 
@@ -75,13 +75,12 @@ var p: M.D.Point;
 var A;
 (function (A) {
     A.x = 'hello world';
-    var Point = /** @class */ (function () {
-        function Point(x, y) {
+    class Point {
+        constructor(x, y) {
             this.x = x;
             this.y = y;
         }
-        return Point;
-    }());
+    }
     A.Point = Point;
 })(A || (A = {}));
 var C;
@@ -99,13 +98,12 @@ var X;
     }
     X.Y = Y;
     (function (Y) {
-        var Point = /** @class */ (function () {
-            function Point(x, y) {
+        class Point {
+            constructor(x, y) {
                 this.x = x;
                 this.y = y;
             }
-            return Point;
-        }());
+        }
         Y.Point = Point;
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
@@ -118,12 +116,11 @@ var m = Z.y();
 var n = new Z.y.Point(0, 0);
 var K;
 (function (K) {
-    var L = /** @class */ (function () {
-        function L(name) {
+    class L {
+        constructor(name) {
             this.name = name;
         }
-        return L;
-    }());
+    }
     K.L = L;
     (function (L) {
         L.y = 12;

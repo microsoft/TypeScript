@@ -133,7 +133,7 @@ interface D3SvgArea extends D3SvgPath {
 >      : ^^^^^^
 }
 
-var area: D3SvgArea;
+declare var area: D3SvgArea;
 >area : D3SvgArea
 >     : ^^^^^^^^^
 

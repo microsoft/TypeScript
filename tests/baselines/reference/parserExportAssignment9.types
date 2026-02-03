@@ -10,7 +10,7 @@ namespace Foo {
 >    : ^^^
 }
 
-module Bar {
+namespace Bar {
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 

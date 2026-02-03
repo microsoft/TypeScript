@@ -9,7 +9,6 @@ const a = class { private p = 10; };
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -28,6 +27,8 @@ declare const console: { log(msg: any): void; };
 Output::
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 Program root files: [
   "/home/src/projects/project/a.ts"
@@ -39,7 +40,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -63,7 +64,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -90,7 +91,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -114,7 +115,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -128,7 +129,7 @@ Output::
 
 
 //// [/home/src/projects/project/a.js]
-var a = "hello";
+const a = "hello";
 
 
 
@@ -141,7 +142,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -165,7 +166,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -192,7 +193,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -206,12 +207,9 @@ Output::
 
 
 //// [/home/src/projects/project/a.js]
-var a = /** @class */ (function () {
-    function class_1() {
-        this.p = 10;
-    }
-    return class_1;
-}());
+const a = class {
+    p = 10;
+};
 
 
 
@@ -224,7 +222,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -248,7 +246,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success

@@ -48,10 +48,10 @@ var E1;
     E1[E1["TWO"] = 1] = "TWO";
     E1[E1["THREE"] = 2] = "THREE";
 })(E1 || (E1 = {}));
-var b1 = {};
-var b2 = {};
-var e1 = E1.ONE;
-var e2 = E2.ONE;
+const b1 = {};
+const b2 = {};
+const e1 = E1.ONE;
+const e2 = E2.ONE;
 b1[1] = "a";
 b1[e1] = "b";
 b2[1] = "a";
@@ -66,8 +66,8 @@ var N2;
     N2[N2["C"] = val()] = "C";
     N2[N2["D"] = val()] = "D";
 })(N2 || (N2 = {}));
-var e = E.ONE;
-var x = e;
+const e = E.ONE;
+const x = e;
 
 
 //// [numericEnumMappedType.d.ts]

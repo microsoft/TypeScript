@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 ////interface I {
 ////    [|[|{| "contextRangeIndex": 0 |}property1|]: number;|]
 ////    property2: string;

@@ -1,3 +1,4 @@
+// @target: es2015
 function makeArray<T>(items: T[]): T[] { return items; }
 var b = [1, ""];
 var b1G = makeArray(1, ""); // any, no error

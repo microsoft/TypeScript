@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @filename: file.d.ts
 declare namespace Foo {
     interface Whatever {

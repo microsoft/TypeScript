@@ -1,3 +1,4 @@
+// @target: es2015
 interface Entity<T extends Entity<T>> {
    X: T;
    Y: T;

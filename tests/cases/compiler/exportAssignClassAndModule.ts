@@ -1,9 +1,10 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: exportAssignClassAndModule_0.ts
 class Foo {
     x: Foo.Bar;
 }
-module Foo {
+namespace Foo {
     export interface Bar {
     }
 }

@@ -1,7 +1,8 @@
+// @target: es2015
 //@module: amd
 // @Filename: ambientExternalModuleWithoutInternalImportDeclaration_0.ts
 declare module 'M' {
-    module C {
+    namespace C {
         export var f: number;
     }
     class C {

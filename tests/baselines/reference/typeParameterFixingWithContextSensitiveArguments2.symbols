@@ -33,17 +33,17 @@ interface B extends A { b; }
 >A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 93))
 >b : Symbol(B.b, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 2, 23))
 
-var a: A, b: B;
->a : Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 4, 3))
+declare var a: A, b: B;
+>a : Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 4, 11))
 >A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 93))
->b : Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 4, 9))
+>b : Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 4, 17))
 >B : Symbol(B, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 1, 21))
 
 var d = f(a, b, x => x, x => x); // A => A not assignable to A => B
 >d : Symbol(d, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 6, 3))
 >f : Symbol(f, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 0, 0))
->a : Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 4, 3))
->b : Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 4, 9))
+>a : Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 4, 11))
+>b : Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 4, 17))
 >x : Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 6, 15))
 >x : Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 6, 15))
 >x : Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments2.ts, 6, 23))

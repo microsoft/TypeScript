@@ -22,7 +22,7 @@ var g: I;
 g = null; // ok
 I = null; // error
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 M = null; // error
 
 var h: { f(): void } = null;
@@ -44,11 +44,8 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 E.A = null; // error
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var f;
 f = null; // ok
 C = null; // error

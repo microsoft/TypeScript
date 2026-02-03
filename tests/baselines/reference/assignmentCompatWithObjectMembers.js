@@ -4,7 +4,7 @@
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 // no errors expected
 
-module SimpleTypes {
+namespace SimpleTypes {
     class S { foo: string; }
     class T { foo: string; }
     var s: S;
@@ -45,7 +45,7 @@ module SimpleTypes {
     a2 = t;
 }
 
-module ObjectTypes {
+namespace ObjectTypes {
     class S { foo: S; }
     class T { foo: T; }
     var s: S;
@@ -92,16 +92,10 @@ module ObjectTypes {
 // no errors expected
 var SimpleTypes;
 (function (SimpleTypes) {
-    var S = /** @class */ (function () {
-        function S() {
-        }
-        return S;
-    }());
-    var T = /** @class */ (function () {
-        function T() {
-        }
-        return T;
-    }());
+    class S {
+    }
+    class T {
+    }
     var s;
     var t;
     var s2;
@@ -132,16 +126,10 @@ var SimpleTypes;
 })(SimpleTypes || (SimpleTypes = {}));
 var ObjectTypes;
 (function (ObjectTypes) {
-    var S = /** @class */ (function () {
-        function S() {
-        }
-        return S;
-    }());
-    var T = /** @class */ (function () {
-        function T() {
-        }
-        return T;
-    }());
+    class S {
+    }
+    class T {
+    }
     var s;
     var t;
     var s2;

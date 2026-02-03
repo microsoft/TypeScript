@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // reserved ES5 future in strict mode
 
 var constructor = 0;
@@ -287,7 +289,7 @@ enum bigEnum {
     with,
 }
 
-module bigModule {
+namespace bigModule {
     class constructor { }
     class implements { }
     class interface { }

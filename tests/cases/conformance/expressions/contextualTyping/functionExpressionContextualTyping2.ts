@@ -1,4 +1,5 @@
-﻿// A contextual signature S is extracted from a function type T as follows:
+﻿// @target: es2015
+// A contextual signature S is extracted from a function type T as follows:
 //      If T is a function type with exactly one call signature, and if that call signature is non- generic, S is that signature.
 //      If T is a union type, let U be the set of element types in T that have call signatures.
 //          If each type in U has exactly one call signature and that call signature is non- generic,

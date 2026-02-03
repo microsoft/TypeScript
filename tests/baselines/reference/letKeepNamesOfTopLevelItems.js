@@ -6,16 +6,16 @@ function foo() {
     let x;
 }
 
-module A {
+namespace A {
     let x;
 }
 
 //// [letKeepNamesOfTopLevelItems.js]
-var x;
+let x;
 function foo() {
-    var x;
+    let x;
 }
 var A;
 (function (A) {
-    var x;
+    let x;
 })(A || (A = {}));

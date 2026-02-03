@@ -23,7 +23,7 @@ var x=1,y=2,z=3;
 >3 : 3
 >  : ^
 
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 

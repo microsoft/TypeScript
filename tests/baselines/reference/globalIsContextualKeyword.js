@@ -20,17 +20,14 @@ let obj = {
 
 //// [globalIsContextualKeyword.js]
 function a() {
-    var global = 1;
+    let global = 1;
 }
 function b() {
-    var global = /** @class */ (function () {
-        function global() {
-        }
-        return global;
-    }());
+    class global {
+    }
 }
 function foo(global) {
 }
-var obj = {
+let obj = {
     global: "123"
 };

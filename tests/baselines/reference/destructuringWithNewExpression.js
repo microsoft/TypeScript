@@ -8,10 +8,9 @@ class C {
 var { x } = new C;
 
 //// [destructuringWithNewExpression.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.x = 0;
     }
-    return C;
-}());
-var x = (new C).x;
+}
+var { x } = new C;

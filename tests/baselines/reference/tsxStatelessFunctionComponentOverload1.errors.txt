@@ -1,9 +1,11 @@
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-file.tsx(17,39): error TS2842: 'string' is an unused renaming of 'y1'. Did you intend to use it as a type annotation?
+file.tsx(19,39): error TS2842: 'string' is an unused renaming of 'y1'. Did you intend to use it as a type annotation?
 
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== file.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react')
     
     declare function OneThing(k: {yxx: string}): JSX.Element;
@@ -23,7 +25,7 @@ file.tsx(17,39): error TS2842: 'string' is an unused renaming of 'y1'. Did you i
     declare function TestingOneThing({y1: string}): JSX.Element;
                                           ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of 'y1'. Did you intend to use it as a type annotation?
-!!! related TS2843 file.tsx:17:46: We can only write a type for 'y1' by adding a type for the entire parameter here.
+!!! related TS2843 file.tsx:19:46: We can only write a type for 'y1' by adding a type for the entire parameter here.
     declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.Element;
     declare function TestingOneThing(n: {yy: number, direction?: number}): JSX.Element;
     declare function TestingOneThing(n: {yy: string, name: string}): JSX.Element;

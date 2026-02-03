@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitReferences: true
 
 // @Filename: /node_modules/@types/.a/index.d.ts

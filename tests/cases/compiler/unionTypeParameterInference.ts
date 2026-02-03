@@ -1,3 +1,4 @@
+// @target: es2015
 // Regression test for #5861
 
 interface Foo<T> { prop: T; }

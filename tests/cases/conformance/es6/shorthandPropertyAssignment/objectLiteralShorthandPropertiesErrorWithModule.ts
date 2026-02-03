@@ -1,10 +1,12 @@
+// @target: es2015
+// @strict: false
 // module export
 var x = "Foo";
-module m {
+namespace m {
     export var x;
 }
 
-module n {
+namespace n {
     var z = 10000;
     export var y = {
         m.x  // error

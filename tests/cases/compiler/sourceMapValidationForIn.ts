@@ -1,3 +1,4 @@
+// @target: es2015
 // @sourcemap: true
 for (var x in String) {
     WScript.Echo(x);

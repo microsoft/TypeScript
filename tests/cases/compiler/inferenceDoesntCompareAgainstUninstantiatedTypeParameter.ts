@@ -1,3 +1,4 @@
+// @target: es2015
 class ClassA<TEntityClass>  {
     constructor(private entity?: TEntityClass, public settings?: SettingsInterface<TEntityClass>) {
 

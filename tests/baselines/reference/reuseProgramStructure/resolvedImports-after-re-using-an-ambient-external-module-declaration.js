@@ -93,9 +93,7 @@ a: esnext: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 home/src/workspaces/project/a.ts(3,20): error TS2307: Cannot find module 'a' or its corresponding type declarations.
 
@@ -196,9 +194,7 @@ a: esnext: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 home/src/workspaces/project/a.ts(3,21): error TS2307: Cannot find module 'a' or its corresponding type declarations.
 

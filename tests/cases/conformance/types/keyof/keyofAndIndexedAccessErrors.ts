@@ -1,3 +1,4 @@
+// @target: es2015
 class Shape {
     name: string;
     width: number;

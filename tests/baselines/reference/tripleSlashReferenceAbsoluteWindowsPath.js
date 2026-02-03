@@ -8,7 +8,7 @@ const x = 5;
 const y = x + 3;
 
 //// [c.js]
-var x = 5;
+const x = 5;
 //// [d.js]
 /// <reference path="C:\a\b\c.ts" />
-var y = x + 3;
+const y = x + 3;

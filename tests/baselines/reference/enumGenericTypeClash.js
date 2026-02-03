@@ -6,11 +6,8 @@ enum X { MyVal }
 
 
 //// [enumGenericTypeClash.js]
-var X = /** @class */ (function () {
-    function X() {
-    }
-    return X;
-}());
+class X {
+}
 (function (X) {
     X[X["MyVal"] = 0] = "MyVal";
 })(X || (X = {}));

@@ -8,7 +8,7 @@ foo((()=>{})()); // error
 
 
 //// [voidArrayLit.js]
-var va = [(function () { })()]; // ok
-(function () { })(); // ok
+var va = [(() => { })()]; // ok
+(() => { })(); // ok
 function foo(s) { }
-foo((function () { })()); // error
+foo((() => { })()); // error

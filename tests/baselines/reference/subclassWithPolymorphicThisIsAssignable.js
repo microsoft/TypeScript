@@ -20,15 +20,10 @@ export class Example<Z extends CustomDocument> {
 
 
 //// [subclassWithPolymorphicThisIsAssignable.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Example = void 0;
-var Example = /** @class */ (function () {
-    function Example() {
+export class Example {
+    constructor() {
         // types of increment not compatible??
         this.test();
     }
-    Example.prototype.test = function () { };
-    return Example;
-}());
-exports.Example = Example;
+    test() { }
+}

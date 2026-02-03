@@ -3,7 +3,7 @@
 //// [module_augmentExistingVariable.ts]
 var console: any;
 
-module console {
+namespace console {
     export var x = 2;
 }
 

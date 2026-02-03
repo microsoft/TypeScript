@@ -59,7 +59,6 @@ export { a } from 'a';
 //// [/home/src/workspaces/project/node_modules/a] symlink(/home/src/workspaces/project/packages/a)
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -110,8 +109,8 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
-../../tslibs/TS/Lib/lib.esnext.full.d.ts
-  Default library for target 'esnext'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 packages/a/index.js
   Matched by default include pattern '**/*'
   Imported via 'a' from file 'packages/a/test/index.js' with packageId 'a/index.js@0.0.0'
@@ -141,8 +140,8 @@ File '/home/src/tslibs/package.json' does not exist according to earlier cached 
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-../../tslibs/TS/Lib/lib.esnext.full.d.ts
-  Default library for target 'esnext'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 packages/a/types/index.d.ts
   Imported via 'a' from file 'packages/b/index.js' with packageId 'a/index.js@0.0.0'
   File is output of project reference source 'packages/a/index.js'
@@ -152,7 +151,7 @@ packages/b/index.js
   File is ECMAScript module because 'packages/b/package.json' has field "type" with value "module"
 
 
-//// [/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/packages/a/types/index.d.ts]
 export const a: "a";
@@ -163,12 +162,12 @@ export {};
 
 
 //// [/home/src/workspaces/project/packages/a/types/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../tslibs/ts/lib/lib.esnext.full.d.ts","../index.js","../test/index.js"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15642581130-export const a = 'a';","signature":"-13259723213-export const a: \"a\";\n","impliedFormat":99},{"version":"-3920874422-import 'a';","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[2,3],"options":{"checkJs":true,"composite":true,"declaration":true,"emitDeclarationOnly":true,"module":199,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./test/index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../tslibs/ts/lib/lib.es2024.full.d.ts","../index.js","../test/index.js"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15642581130-export const a = 'a';","signature":"-13259723213-export const a: \"a\";\n","impliedFormat":99},{"version":"-3920874422-import 'a';","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[2,3],"options":{"checkJs":true,"composite":true,"declaration":true,"emitDeclarationOnly":true,"module":199,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./test/index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/packages/a/types/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../tslibs/ts/lib/lib.esnext.full.d.ts",
+    "../../../../../tslibs/ts/lib/lib.es2024.full.d.ts",
     "../index.js",
     "../test/index.js"
   ],
@@ -178,14 +177,14 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../../../../tslibs/ts/lib/lib.esnext.full.d.ts": {
+    "../../../../../tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": 1
       },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
       "impliedFormat": "commonjs"
     },
@@ -235,7 +234,7 @@ export {};
   },
   "latestChangedDtsFile": "./test/index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1070
+  "size": 1030
 }
 
 //// [/home/src/workspaces/project/packages/b/tsconfig.tsbuildinfo]

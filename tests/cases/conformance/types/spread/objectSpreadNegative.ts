@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @strictNullChecks: true
 let o = { a: 1, b: 'no' }
 
@@ -7,7 +7,7 @@ class PrivateOptionalX {
     private x?: number;
 }
 class PublicX {
-    public x: number;
+    public x: number = 42;
 }
 declare let publicX: PublicX;
 declare let privateOptionalX: PrivateOptionalX;

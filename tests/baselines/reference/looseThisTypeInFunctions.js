@@ -9,7 +9,7 @@ interface Unused {
     implicitNoThis(m: number): number;
 }
 class C implements I {
-    n: number;
+    n!: number;
     explicitThis(this: this, m: number): number {
         return this.n + m;
     }
@@ -38,7 +38,7 @@ let o2: I = {
 }
 let x = i.explicitThis;
 let n = x(12); // callee:void doesn't match this:I
-let u: Unused;
+declare let u: Unused;
 let y = u.implicitNoThis;
 n = y(12); // ok, callee:void matches this:any
 c.explicitVoid = c.implicitThis // ok, implicitThis(this:any)
@@ -51,40 +51,36 @@ i.explicitThis = function(m) {
 
 
 //// [looseThisTypeInFunctions.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    explicitThis(m) {
+        return this.n + m;
     }
-    C.prototype.explicitThis = function (m) {
+    implicitThis(m) {
         return this.n + m;
-    };
-    C.prototype.implicitThis = function (m) {
-        return this.n + m;
-    };
-    C.prototype.explicitVoid = function (m) {
+    }
+    explicitVoid(m) {
         return m + 1;
-    };
-    return C;
-}());
-var c = new C();
+    }
+}
+let c = new C();
 c.explicitVoid = c.explicitThis; // error, 'void' is missing everything
-var o = {
+let o = {
     n: 101,
     explicitThis: function (m) {
         return m + this.n.length; // error, 'length' does not exist on 'number'
     },
-    implicitThis: function (m) { return m; }
+    implicitThis(m) { return m; }
 };
-var i = o;
-var o2 = {
+let i = o;
+let o2 = {
     n: 1001,
     explicitThis: function (m) {
         return m + this.n.length; // error, this.n: number, no member 'length'
     },
 };
-var x = i.explicitThis;
-var n = x(12); // callee:void doesn't match this:I
-var u;
-var y = u.implicitNoThis;
+let x = i.explicitThis;
+let n = x(12); // callee:void doesn't match this:I
+let y = u.implicitNoThis;
 n = y(12); // ok, callee:void matches this:any
 c.explicitVoid = c.implicitThis; // ok, implicitThis(this:any)
 o.implicitThis = c.implicitThis; // ok, implicitThis(this:any)

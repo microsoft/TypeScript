@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/es6/Symbols/symbolProperty51.ts] ////
 
 //// [symbolProperty51.ts]
-module M {
-    module Symbol { }
+namespace M {
+    namespace Symbol { }
 
     class C {
         [Symbol.iterator]() { }

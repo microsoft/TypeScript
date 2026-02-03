@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/es6ClassTest3.ts] ////
 
 //// [es6ClassTest3.ts]
-module M {	
+namespace M {	
 	class Visibility {
 	    public foo() { };
 	    private bar() { };
@@ -19,15 +19,14 @@ module M {
 //// [es6ClassTest3.js]
 var M;
 (function (M) {
-    var Visibility = /** @class */ (function () {
-        function Visibility() {
+    class Visibility {
+        foo() { }
+        ;
+        bar() { }
+        ;
+        constructor() {
             this.x = 1;
             this.y = 2;
         }
-        Visibility.prototype.foo = function () { };
-        ;
-        Visibility.prototype.bar = function () { };
-        ;
-        return Visibility;
-    }());
+    }
 })(M || (M = {}));

@@ -1,9 +1,10 @@
+// @target: es2015
 class Foo<T extends Foo.Bar> {
   constructor() {
   }
 }
 
-module Foo {
+namespace Foo {
   export interface Bar {
     bar(): void;
   }

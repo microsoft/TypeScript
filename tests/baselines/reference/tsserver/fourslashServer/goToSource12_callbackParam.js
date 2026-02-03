@@ -1,16 +1,32 @@
 Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
 Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
 Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
-Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
-//// [/home/src/tslibs/TS/Lib/lib.d.ts]
-lib.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.decorators.d.ts]
-lib.decorators.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts]
-lib.decorators.legacy.d.ts-Text
-
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "arguments": {
+        "options": {
+          "target": "es2024",
+          "newLine": "crlf",
+          "lib": [
+            "es5"
+          ],
+          "moduleResolution": "bundler",
+          "skipDefaultLibCheck": true
+        }
+      },
+      "command": "compilerOptionsForInferredProjects"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "compilerOptionsForInferredProjects",
+      "request_seq": 0,
+      "success": true,
+      "body": true
+    }
 //// [/home/src/workspaces/project/index.ts]
 import { command } from "yargs";
 command("foo", yargs => {
@@ -41,7 +57,7 @@ export function command(cmd, cb) { cb({ positional: "This is obviously not even 
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 0,
+      "seq": 1,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/node_modules/@types/yargs/package.json"
@@ -63,9 +79,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspa
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/index.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es5.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -81,19 +95,19 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/node_modules/@types/yargs/package.json SVC-1-0 "{\n    \"name\": \"@types/yargs\",\n    \"version\": \"1.0.0\",\n    \"types\": \"./index.d.ts\"\n}"
 	/home/src/workspaces/project/node_modules/@types/yargs/index.d.ts Text-1 "export interface Yargs { positional(): Yargs; }\nexport declare function command(command: string, cb: (yargs: Yargs) => void): void;"
 
 
-	../../../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../tslibs/TS/Lib/lib.es5.d.ts
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../../../tslibs/TS/Lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators' from file '../../../../../tslibs/TS/Lib/lib.es5.d.ts'
 	../../../../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators.legacy' from file '../../../../../tslibs/TS/Lib/lib.es5.d.ts'
 	package.json
 	  Root file specified for compilation
 	index.d.ts
@@ -112,7 +126,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 0,
+      "request_seq": 1,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -120,11 +134,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts: *new*
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/@types/jsconfig.json: *new*
   {"pollingInterval":2000}
@@ -144,8 +158,6 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules: *new*
-  {}
 /home/src/workspaces/node_modules/@types: *new*
   {}
 /home/src/workspaces/project/node_modules: *new*
@@ -167,15 +179,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -190,7 +202,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 1,
+      "seq": 2,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/index.ts"
@@ -203,12 +215,10 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/yargs/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
@@ -219,19 +229,19 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/node_modules/@types/yargs/index.d.ts Text-1 "export interface Yargs { positional(): Yargs; }\nexport declare function command(command: string, cb: (yargs: Yargs) => void): void;"
 	/home/src/workspaces/project/index.ts SVC-1-0 "import { command } from \"yargs\";\ncommand(\"foo\", yargs => {\n    yargs.positional();\n});"
 
 
-	../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../tslibs/TS/Lib/lib.es5.d.ts
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../tslibs/TS/Lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators' from file '../../tslibs/TS/Lib/lib.es5.d.ts'
 	../../tslibs/TS/Lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators.legacy' from file '../../tslibs/TS/Lib/lib.es5.d.ts'
 	node_modules/@types/yargs/index.d.ts
 	  Imported via "yargs" from file 'index.ts' with packageId '@types/yargs/index.d.ts@1.0.0'
 	  Entry point for implicit type library 'yargs' with packageId '@types/yargs/index.d.ts@1.0.0'
@@ -257,7 +267,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 1,
+      "request_seq": 2,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -265,11 +275,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/jsconfig.json: *new*
   {"pollingInterval":2000}
@@ -302,9 +312,6 @@ watchedDirectories::
   {}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules:
-  {}
-  {} *new*
 /home/src/workspaces/node_modules/@types:
   {}
   {} *new*
@@ -333,17 +340,17 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
-        /dev/null/inferredProject2* *new*
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /dev/null/inferredProject2* *new*
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
@@ -364,7 +371,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 2,
+      "seq": 3,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/index.ts",
@@ -403,7 +410,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "findSourceDefinition",
-      "request_seq": 2,
+      "request_seq": 3,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -433,11 +440,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {"pollingInterval":500}
 /home/src/workspaces/project/jsconfig.json:
   {"pollingInterval":2000}
@@ -475,10 +482,8 @@ watchedDirectories::
   {} *new*
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules:
+/home/src/workspaces/node_modules: *new*
   {}
-  {}
-  {} *new*
 /home/src/workspaces/node_modules/@types:
   {}
   {}
@@ -514,17 +519,17 @@ Projects::
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
-    version: Text-1
-    containingProjects: 2
-        /dev/null/inferredProject1*
-        /dev/null/inferredProject2*
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 2
         /dev/null/inferredProject1*
         /dev/null/inferredProject2*
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 2
         /dev/null/inferredProject1*

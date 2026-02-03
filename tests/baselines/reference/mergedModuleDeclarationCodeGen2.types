@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/mergedModuleDeclarationCodeGen2.ts] ////
 
 === mergedModuleDeclarationCodeGen2.ts ===
-module my.data.foo {
+namespace my.data.foo {
 >my : typeof my
 >   : ^^^^^^^^^
 >data : typeof data
@@ -13,7 +13,7 @@ module my.data.foo {
 >buz : () => void
 >    : ^^^^^^^^^^
 }
-module my.data {
+namespace my.data {
 >my : typeof my
 >   : ^^^^^^^^^
 >data : typeof my.data

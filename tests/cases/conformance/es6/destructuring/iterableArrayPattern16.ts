@@ -1,3 +1,4 @@
+// @strict: false
 //@target: ES6
 function fun(...[a, b]: [Bar, Bar][]) { }
 fun(...new FooIteratorIterator);

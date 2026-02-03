@@ -8,20 +8,20 @@ export const enum C { One, Two }
 
 //// [b.ts]
 import { A, B } from './a'; // Error
-let a: A;
-let b: B;
+declare let a: A;
+declare let b: B;
 console.log(a, b);
 
 //// [c.ts]
 import Default, * as named from './a'; // Error
-let a: Default;
-let b: named.B;
+declare let a: Default;
+declare let b: named.B;
 console.log(a, b);
 
 //// [d.ts]
 import Default, { A } from './a';
 const a = A;
-let b: Default;
+declare let b: Default;
 console.log(a, b);
 
 //// [e.ts]
@@ -37,8 +37,8 @@ console.log(c, d);
 
 //// [g.ts]
 import { C } from './a';
-let c: C;
-let d: C.Two;
+declare let c: C;
+declare let d: C.Two;
 console.log(c, d);
 
 //// [h.ts]
@@ -68,36 +68,25 @@ K.One;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var default_1 = /** @class */ (function () {
-    function default_1() {
-    }
-    return default_1;
-}());
+class default_1 {
+}
 exports.default = default_1;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.A = A;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a;
-var b;
 console.log(a, b);
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a;
-var b;
 console.log(a, b);
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("./a");
-var a = a_1.A;
-var b;
+const a_1 = require("./a");
+const a = a_1.A;
 console.log(a, b);
 //// [e.js]
 "use strict";
@@ -106,27 +95,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 0 /* C.One */;
-var c = 1 /* C.Two */;
-var d = 1 /* C.Two */;
+let c = 1 /* C.Two */;
+let d = 1 /* C.Two */;
 console.log(c, d);
 //// [g.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var c;
-var d;
 console.log(c, d);
 //// [h.js]
 "use strict";
-var H = /** @class */ (function () {
-    function H() {
-    }
-    return H;
-}());
+class H {
+}
 module.exports = H;
 //// [i.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var h = {};
+let h = {};
 console.log(h);
 //// [j.js]
 // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207

@@ -11,7 +11,7 @@ functionSignatureAssignmentCompat1.ts(10,21): error TS2322: Type '(delimiter?: s
         raw: ParserFunc;
         readline(delimiter?: string): ParserFunc;
     }
-    var parsers: Parsers;
+    declare var parsers: Parsers;
     var c: ParserFunc = parsers.raw; // ok!
     var d: ParserFunc = parsers.readline; // not ok
                         ~~~~~~~~~~~~~~~~

@@ -4,7 +4,7 @@ moduleVisibilityTest3.ts(21,22): error TS2724: '_modes' has no exported member n
 
 
 ==== moduleVisibilityTest3.ts (3 errors) ====
-    module _modes {
+    namespace _modes {
      export interface IMode {
       
      }
@@ -16,7 +16,7 @@ moduleVisibilityTest3.ts(21,22): error TS2724: '_modes' has no exported member n
     
     //_modes. // produces an internal error - please implement in derived class
     
-    module editor {
+    namespace editor {
      import modes = _modes;
      
      var i : modes.IMode;

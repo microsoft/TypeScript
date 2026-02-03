@@ -35,7 +35,7 @@ assignmentToParenthesizedIdentifiers.ts(70,2): error TS2629: Cannot assign to 'C
     ~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     
-    module M {
+    namespace M {
         export var y: number;
     }
     M.y = 3; // OK
@@ -58,8 +58,8 @@ assignmentToParenthesizedIdentifiers.ts(70,2): error TS2629: Cannot assign to 'C
      ~
 !!! error TS2631: Cannot assign to 'M' because it is a namespace.
     
-    module M2 {
-        export module M3 {
+    namespace M2 {
+        export namespace M3 {
             export var x: number;
         }
     

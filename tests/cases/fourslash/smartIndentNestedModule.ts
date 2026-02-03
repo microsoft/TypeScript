@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
-////module Foo {
-////    module Foo2 {
+////namespace Foo {
+////    namespace Foo2 {
 ////        {| "indentation": 8 |}
 ////        function f() {
 ////        }

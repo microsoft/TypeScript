@@ -26,9 +26,7 @@ b: esnext: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 a.ts(2,17): error TS2307: Cannot find module 'b' or its corresponding type declarations.
 
@@ -62,9 +60,7 @@ b: esnext: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 a.ts(2,17): error TS2307: Cannot find module 'b' or its corresponding type declarations.
 
@@ -77,9 +73,7 @@ File: a.ts
 var x = 2
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 
 
@@ -134,9 +128,7 @@ c: esnext: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 a.ts(2,15): error TS2307: Cannot find module 'b' or its corresponding type declarations.
 a.ts(3,31): error TS2307: Cannot find module 'c' or its corresponding type declarations.

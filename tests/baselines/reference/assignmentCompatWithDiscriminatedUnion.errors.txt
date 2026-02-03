@@ -131,7 +131,7 @@ assignmentCompatWithDiscriminatedUnion.ts(82,5): error TS2322: Type 'S' is not a
         }
     
         const a: Style2 = { type: "A", data: "whatevs" };
-        let b: Style1;
+        declare let b: Style1;
         a.type; // "A" | "B"
         b.type; // "A" | "B"
         b = a; // should be assignable

@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: a.ts
 class A {
     protected foo() {}

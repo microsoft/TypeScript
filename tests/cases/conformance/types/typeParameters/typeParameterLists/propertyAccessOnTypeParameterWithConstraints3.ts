@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // generic types should behave as if they have properties of their constraint type
 
 class A {

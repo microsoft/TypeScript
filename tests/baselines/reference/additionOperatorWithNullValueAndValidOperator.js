@@ -5,10 +5,10 @@
 
 enum E { a, b, c }
 
-var a: any;
-var b: number;
-var c: E;
-var d: string;
+declare var a: any;
+declare var b: number;
+declare var c: E;
+declare var d: string;
 
 // null + any
 var r1: any = null + a;
@@ -40,10 +40,6 @@ var E;
     E[E["b"] = 1] = "b";
     E[E["c"] = 2] = "c";
 })(E || (E = {}));
-var a;
-var b;
-var c;
-var d;
 // null + any
 var r1 = null + a;
 var r2 = a + null;

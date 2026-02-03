@@ -11,7 +11,7 @@ functionCalls.ts(34,1): error TS2347: Untyped function calls may not accept type
 
 ==== functionCalls.ts (9 errors) ====
     // Invoke function call on value of type 'any' with no type arguments
-    var anyVar: any;
+    declare var anyVar: any;
     anyVar(0);
     anyVar('');
     
@@ -32,7 +32,7 @@ functionCalls.ts(34,1): error TS2347: Untyped function calls may not accept type
     interface SubFunc extends Function {
         prop: number;
     }
-    var subFunc: SubFunc;
+    declare var subFunc: SubFunc;
     subFunc(0);
     subFunc('');
     subFunc();
@@ -52,7 +52,7 @@ functionCalls.ts(34,1): error TS2347: Untyped function calls may not accept type
     
     // Invoke function call on value of type Function with no call signatures with type arguments
     // These should be errors
-    var func: Function;
+    declare var func: Function;
     func<number>(0);
     ~~~~~~~~~~~~~~~
 !!! error TS2347: Untyped function calls may not accept type arguments.

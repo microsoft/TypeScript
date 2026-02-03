@@ -1,3 +1,4 @@
+// @target: es2015
 //@noimplicitany: true
 //@declaration: true
 // generates function fn1(): number;

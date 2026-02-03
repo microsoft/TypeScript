@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 ////const x; // this is x
 ////
 ////// this is E

@@ -3,7 +3,7 @@
 //// [intrinsics.ts]
 var hasOwnProperty: hasOwnProperty; // Error
 
-module m1 {
+namespace m1 {
     export var __proto__;
     interface __proto__ {}
 
@@ -20,19 +20,13 @@ var foo: (__proto__: number) => void;
 var hasOwnProperty; // Error
 var m1;
 (function (m1) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
 })(m1 || (m1 = {}));
 __proto__ = 0; // Error, __proto__ not defined
 m1.__proto__ = 0;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 var foo;
 
 

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 declare class Point
 {
     x: number;

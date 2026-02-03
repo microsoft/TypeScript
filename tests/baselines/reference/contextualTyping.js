@@ -20,8 +20,8 @@ class C1T5 {
     }
 }
 
-// CONTEXT: Module property declaration
-module C2T5 {
+// CONTEXT: Namespace property declaration
+namespace C2T5 {
     export var foo: (i: number, s: string) => number = function(i) {
         return i;
     }
@@ -65,8 +65,8 @@ class C4T5 {
     }
 }
 
-// CONTEXT: Module property assignment
-module C5T5 {
+// CONTEXT: Namespace property assignment
+namespace C5T5 {
     export var foo: (i: number, s: string) => string;
     foo = function(i, s) {
         return s;
@@ -78,7 +78,7 @@ var c6t5: (n: number) => IFoo;
 c6t5 = <(n: number) => IFoo>function(n) { return <IFoo>({}) };
 
 // CONTEXT: Array index assignment
-var c7t2: IFoo[];
+var c7t2: IFoo[] = [];
 c7t2[0] = <IFoo>({n: 1});
 
 // CONTEXT: Object property assignment
@@ -228,15 +228,14 @@ var x: B = { };
 
 //// [contextualTyping.js]
 // CONTEXT: Class property declaration
-var C1T5 = /** @class */ (function () {
-    function C1T5() {
+class C1T5 {
+    constructor() {
         this.foo = function (i) {
             return i;
         };
     }
-    return C1T5;
-}());
-// CONTEXT: Module property declaration
+}
+// CONTEXT: Namespace property declaration
 var C2T5;
 (function (C2T5) {
     C2T5.foo = function (i) {
@@ -267,15 +266,14 @@ var c3t14 = ({
     a: []
 });
 // CONTEXT: Class property assignment
-var C4T5 = /** @class */ (function () {
-    function C4T5() {
+class C4T5 {
+    constructor() {
         this.foo = function (i, s) {
             return s;
         };
     }
-    return C4T5;
-}());
-// CONTEXT: Module property assignment
+}
+// CONTEXT: Namespace property assignment
 var C5T5;
 (function (C5T5) {
     C5T5.foo = function (i, s) {
@@ -286,7 +284,7 @@ var C5T5;
 var c6t5;
 c6t5 = function (n) { return ({}); };
 // CONTEXT: Array index assignment
-var c7t2;
+var c7t2 = [];
 c7t2[0] = ({ n: 1 });
 var objc8 = ({});
 objc8.t1 = (function (s) { return s; });
@@ -320,11 +318,9 @@ c9t5(function (n) {
 // CONTEXT: Return statement
 var c10t5 = function () { return function (n) { return ({}); }; };
 // CONTEXT: Newing a class
-var C11t5 = /** @class */ (function () {
-    function C11t5(f) {
-    }
-    return C11t5;
-}());
+class C11t5 {
+    constructor(f) { }
+}
 ;
 var i = new C11t5(function (n) { return ({}); });
 // CONTEXT: Type annotated expression

@@ -229,7 +229,7 @@ var derived2: Derived2;
 >derived2 : Derived2
 >         : ^^^^^^^^
 
-module Derived {
+namespace Derived {
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
 
@@ -392,7 +392,7 @@ module Derived {
 >        : ^^^^^^^
 }
 
-module WithContextualType {
+namespace WithContextualType {
 >WithContextualType : typeof WithContextualType
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

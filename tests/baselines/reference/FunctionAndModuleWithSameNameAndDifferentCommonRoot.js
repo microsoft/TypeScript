@@ -1,15 +1,15 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/FunctionAndModuleWithSameNameAndDifferentCommonRoot.ts] ////
 
 //// [function.ts]
-module A {
+namespace A {
     export function Point() {
         return { x: 0, y: 0 };
     }
 }
 
 //// [module.ts]
-module B {
-    export module Point {
+namespace B {
+    export namespace Point {
         export var Origin = { x: 0, y: 0 };
     }
 }
@@ -33,7 +33,7 @@ var A;
 //// [module.js]
 var B;
 (function (B) {
-    var Point;
+    let Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
     })(Point = B.Point || (B.Point = {}));

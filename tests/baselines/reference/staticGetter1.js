@@ -11,15 +11,8 @@ class C {
 
 //// [staticGetter1.js]
 // once caused stack overflow
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    static get x() {
+        return this;
     }
-    Object.defineProperty(C, "x", {
-        get: function () {
-            return this;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+}

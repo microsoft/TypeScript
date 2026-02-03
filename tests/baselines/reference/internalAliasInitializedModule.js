@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/internalAliasInitializedModule.ts] ////
 
 //// [internalAliasInitializedModule.ts]
-module a {
-    export module b {
+namespace a {
+    export namespace b {
         export class c {
         }
     }
 }
 
-module c {
+namespace c {
     import b = a.b;
     export var x: b.c = new b.c();
 }
@@ -16,13 +16,10 @@ module c {
 //// [internalAliasInitializedModule.js]
 var a;
 (function (a) {
-    var b;
+    let b;
     (function (b) {
-        var c = /** @class */ (function () {
-            function c() {
-            }
-            return c;
-        }());
+        class c {
+        }
         b.c = c;
     })(b = a.b || (a.b = {}));
 })(a || (a = {}));

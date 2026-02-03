@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @noTypesAndSymbols: true
 
 // GH#32358

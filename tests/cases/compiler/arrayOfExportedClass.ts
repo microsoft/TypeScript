@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: arrayOfExportedClass_0.ts
 class Car {

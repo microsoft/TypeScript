@@ -2,8 +2,8 @@ moduleAndInterfaceWithSameName.ts(21,15): error TS2339: Property 'Bar' does not 
 
 
 ==== moduleAndInterfaceWithSameName.ts (1 errors) ====
-    module Foo1 {
-        export module Bar {
+    namespace Foo1 {
+        export namespace Bar {
             export var x = 42;
         }
     
@@ -12,8 +12,8 @@ moduleAndInterfaceWithSameName.ts(21,15): error TS2339: Property 'Bar' does not 
         }
     }
     
-    module Foo2 {
-        module Bar {
+    namespace Foo2 {
+        namespace Bar {
             export var x = 42;
         }
     
@@ -26,8 +26,8 @@ moduleAndInterfaceWithSameName.ts(21,15): error TS2339: Property 'Bar' does not 
                   ~~~
 !!! error TS2339: Property 'Bar' does not exist on type 'typeof Foo2'.
     
-    module Foo3 {
-        export module Bar {
+    namespace Foo3 {
+        export namespace Bar {
             export var x = 42;
         }
     

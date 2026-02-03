@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofModuleWithoutExports.ts] ////
 
 //// [typeofModuleWithoutExports.ts]
-module M {
+namespace M {
     var x = 1;
     class C {
         foo: number;
@@ -14,10 +14,7 @@ var r: typeof M;
 var M;
 (function (M) {
     var x = 1;
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
 })(M || (M = {}));
 var r;

@@ -26,7 +26,6 @@ export { }
 
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -58,6 +57,8 @@ Found 1 error in src/main.ts[90m:2[0m
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
@@ -72,7 +73,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -114,7 +115,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -135,8 +136,7 @@ Output::
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts]
@@ -146,15 +146,9 @@ export interface A {
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = /** @class */ (function () {
-    function class_1() {
-        this.p = 10;
-    }
-    return class_1;
-}());
+export const a = class {
+    p = 10;
+};
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts]
@@ -166,9 +160,8 @@ export declare const a: {
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 console.log("hi");
+export {};
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.d.ts]
@@ -189,7 +182,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -224,7 +217,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts

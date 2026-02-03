@@ -25,7 +25,7 @@ export enum exports { // Error
 >_thisVal2 : exports._thisVal2
 >          : ^^^^^^^^^^^^^^^^^
 }
-module m1 {
+namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -54,7 +54,7 @@ module m1 {
 >          : ^^^^^^^^^^^^^^^^^
     }
 }
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
@@ -109,7 +109,7 @@ enum exports {
 >_thisVal2 : exports._thisVal2
 >          : ^^^^^^^^^^^^^^^^^
 }
-module m3 {
+namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
@@ -138,7 +138,7 @@ module m3 {
 >          : ^^^^^^^^^^^^^^^^^
     }
 }
-module m4 {
+namespace m4 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 

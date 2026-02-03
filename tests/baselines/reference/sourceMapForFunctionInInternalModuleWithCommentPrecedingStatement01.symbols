@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts] ////
 
 === sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts ===
-module Q {
+namespace Q {
 >Q : Symbol(Q, Decl(sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts, 0, 0))
 
     function P() {
->P : Symbol(P, Decl(sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts, 0, 10))
+>P : Symbol(P, Decl(sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts, 0, 13))
 
         // Test this
         var a = 1;

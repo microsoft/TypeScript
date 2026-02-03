@@ -248,6 +248,7 @@ const libEntries: [string, string][] = [
     ["esnext.iterator", "lib.esnext.iterator.d.ts"],
     ["esnext.promise", "lib.esnext.promise.d.ts"],
     ["esnext.float16", "lib.esnext.float16.d.ts"],
+    ["esnext.typedarrays", "lib.esnext.typedarrays.d.ts"],
     ["esnext.error", "lib.esnext.error.d.ts"],
     ["esnext.sharedmemory", "lib.esnext.sharedmemory.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
@@ -578,12 +579,12 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     affectsModuleResolution: true,
     affectsEmit: true,
     affectsBuildInfo: true,
-    deprecatedKeys: new Set(["es3"]),
+    deprecatedKeys: new Set(["es3", "es5"]),
     paramType: Diagnostics.VERSION,
     showInSimplifiedHelpView: true,
     category: Diagnostics.Language_and_Environment,
     description: Diagnostics.Set_the_JavaScript_language_version_for_emitted_JavaScript_and_include_compatible_library_declarations,
-    defaultValueDescription: ScriptTarget.ES5,
+    defaultValueDescription: ScriptTarget.LatestStandard,
 };
 
 /** @internal */
@@ -673,6 +674,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing,
         defaultValueDescription: false,
     },
+    {
+        name: "ignoreConfig",
+        type: "boolean",
+        showInSimplifiedHelpView: true,
+        category: Diagnostics.Command_line_Options,
+        isCommandLineOnly: true,
+        description: Diagnostics.Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files,
+        defaultValueDescription: false,
+    },
 
     // Basic
     targetOptionDeclaration,
@@ -699,7 +709,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these_files,
-        defaultValueDescription: false,
+        defaultValueDescription: Diagnostics.false_unless_checkJs_is_set,
     },
     {
         name: "checkJs",
@@ -874,7 +884,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsProgramStructure: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Enable_lib_replacement,
-        defaultValueDescription: true,
+        defaultValueDescription: false,
     },
 
     // Strict Type Checks
@@ -1244,7 +1254,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Check_side_effect_imports,
-        defaultValueDescription: false,
+        defaultValueDescription: true,
     },
 
     // Source Maps

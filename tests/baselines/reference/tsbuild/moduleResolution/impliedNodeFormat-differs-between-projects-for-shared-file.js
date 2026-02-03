@@ -39,7 +39,6 @@ export function foo(): void;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -75,8 +74,8 @@ File '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts' exists - u
 Resolving real path for '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', result '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts'.
 ======== Type reference directive 'pg' was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', primary: true. ========
 File '/home/src/workspaces/project/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 a/src/index.ts
   Matched by default include pattern '**/*'
 node_modules/@types/pg/index.d.ts
@@ -118,8 +117,8 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
-../../tslibs/TS/Lib/lib.es2022.full.d.ts
-  Default library for target 'es2022'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 node_modules/@types/pg/index.d.ts
   Imported via "pg" from file 'b/src/index.ts'
   Entry point for implicit type library 'pg'
@@ -129,7 +128,7 @@ b/src/index.ts
   File is ECMAScript module because 'b/package.json' has field "type" with value "module"
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/a/src/index.js]
 "use strict";

@@ -74,7 +74,7 @@ class cls {
 }
 
 //Function overloads with differing export
-module M {
+namespace M {
     export function fn1();
     function fn1(n: string);
     function fn1() { } 
@@ -137,13 +137,10 @@ function fn10() { }
 function fn11() { }
 function fn12() { }
 //Function overloads that differ by accessibility
-var cls = /** @class */ (function () {
-    function cls() {
-    }
-    cls.prototype.f = function () { };
-    cls.prototype.g = function () { };
-    return cls;
-}());
+class cls {
+    f() { }
+    g() { }
+}
 //Function overloads with differing export
 var M;
 (function (M) {

@@ -217,7 +217,7 @@ parserRealSource12.ts(524,30): error TS2304: Cannot find name 'ASTList'.
                         ~~~~~~~~~~~~~
 !!! error TS6053: File 'typescript.ts' not found.
     
-    module TypeScript {
+    namespace TypeScript {
         export interface IAstWalker {
             walk(ast: AST, parent: AST): AST;
                       ~~~
@@ -673,7 +673,7 @@ parserRealSource12.ts(524,30): error TS2304: Cannot find name 'ASTList'.
             return globalAstWalkerFactory;
         }
     
-        module ChildrenWalkers {
+        namespace ChildrenWalkers {
             export function walkNone(preAst: ASTList, parent: AST, walker: IAstWalker): void {
                                              ~~~~~~~
 !!! error TS2304: Cannot find name 'ASTList'.

@@ -19,4 +19,4 @@ const m = THREE
 
 
 //// [test.js]
-var m = THREE;
+const m = THREE;

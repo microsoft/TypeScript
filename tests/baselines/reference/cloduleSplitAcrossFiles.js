@@ -4,17 +4,14 @@
 class D { }
 
 //// [cloduleSplitAcrossFiles_module.ts]
-module D {
+namespace D {
     export var y = "hi";
 }
 D.y;
 
 //// [cloduleSplitAcrossFiles_class.js]
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class D {
+}
 //// [cloduleSplitAcrossFiles_module.js]
 var D;
 (function (D) {

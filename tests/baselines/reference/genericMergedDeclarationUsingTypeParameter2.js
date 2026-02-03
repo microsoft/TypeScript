@@ -2,18 +2,16 @@
 
 //// [genericMergedDeclarationUsingTypeParameter2.ts]
 class foo<T> { constructor(x: T) { } }
-module foo {
+namespace foo {
     export var x: T;
     var y = <T>1;
 }
 
 
 //// [genericMergedDeclarationUsingTypeParameter2.js]
-var foo = /** @class */ (function () {
-    function foo(x) {
-    }
-    return foo;
-}());
+class foo {
+    constructor(x) { }
+}
 (function (foo) {
     var y = 1;
 })(foo || (foo = {}));

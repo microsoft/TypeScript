@@ -20,14 +20,11 @@ new Builder()
     .method("a");
 
 //// [methodChainError.js]
-var Builder = /** @class */ (function () {
-    function Builder() {
-    }
-    Builder.prototype.method = function (param) {
+class Builder {
+    method(param) {
         return this;
-    };
-    return Builder;
-}());
+    }
+}
 new Builder()
     .method("a")
     .method()

@@ -7,7 +7,7 @@ class C {
     }
 }
 
-module M1.M2 {
+namespace M1.M2 {
     class C {
         private foo() {
             super.foo();
@@ -16,25 +16,19 @@ module M1.M2 {
 }
 
 //// [parserSuperExpression1.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    foo() {
+        super.foo();
     }
-    C.prototype.foo = function () {
-        _super.prototype.foo.call(this);
-    };
-    return C;
-}());
+}
 var M1;
 (function (M1) {
     var M2;
     (function (M2) {
-        var C = /** @class */ (function () {
-            function C() {
+        class C {
+            foo() {
+                super.foo();
             }
-            C.prototype.foo = function () {
-                _super.prototype.foo.call(this);
-            };
-            return C;
-        }());
+        }
     })(M2 = M1.M2 || (M1.M2 = {}));
 })(M1 || (M1 = {}));

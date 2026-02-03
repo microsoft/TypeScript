@@ -11,6 +11,6 @@ error TS5107: Option 'module=System' is deprecated and will stop functioning in 
         use(M.NonTopLevelConstEnum.X);
     }
     
-    module M {
+    namespace M {
         export const enum NonTopLevelConstEnum { X }
     }

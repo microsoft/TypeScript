@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
+
 ////var x: string[] = [];
 ////x.forEach(function (y) { y/*1*/
 ////x.forEach(y => y/*2*/

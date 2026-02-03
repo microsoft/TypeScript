@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es5
 class Control {
     private state: any;

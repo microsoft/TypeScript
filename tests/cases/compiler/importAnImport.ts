@@ -1,7 +1,8 @@
-module c.a.b {
+// @target: es2015
+namespace c.a.b {
     import ma = a;
 }
 
-module m0 {
+namespace m0 {
     import m8 = c.a.b.ma;
 }

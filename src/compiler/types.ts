@@ -4363,14 +4363,7 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */
     renamedDependencies?: ReadonlyMap<string, string>;
 
-    /**
-     * lib.d.ts should have a reference comment like
-     *
-     *  /// <reference no-default-lib="true"/>
-     *
-     * If any other file has this comment, it signals not to include lib.d.ts
-     * because this containing file is intended to act as a default library.
-     */
+    /** @deprecated Always false. Use a Program to determine if a file is a lib file. */
     hasNoDefaultLib: boolean;
 
     languageVersion: ScriptTarget;
@@ -4471,7 +4464,6 @@ export interface ReadonlyPragmaContext {
     typeReferenceDirectives: readonly FileReference[];
     libReferenceDirectives: readonly FileReference[];
     amdDependencies: readonly AmdDependency[];
-    hasNoDefaultLib?: boolean;
     moduleName?: string;
 }
 
@@ -4505,7 +4497,6 @@ export interface Bundle extends Node {
     /** @internal */ syntheticFileReferences?: readonly FileReference[];
     /** @internal */ syntheticTypeReferences?: readonly FileReference[];
     /** @internal */ syntheticLibReferences?: readonly FileReference[];
-    /** @internal */ hasNoDefaultLib?: boolean;
 }
 
 export interface JsonSourceFile extends SourceFile {
@@ -5524,11 +5515,11 @@ export const enum IntersectionFlags {
 // dprint-ignore
 /** @internal */
 export const enum ContextFlags {
-    None           = 0,
-    Signature      = 1 << 0, // Obtaining contextual signature
-    NoConstraints  = 1 << 1, // Don't obtain type variable constraints
-    Completions    = 1 << 2, // Ignore inference to current node and parent nodes out to the containing call for completions
-    SkipBindingPatterns = 1 << 3, // Ignore contextual types applied by binding patterns
+    None                 = 0,
+    Signature            = 1 << 0, // Obtaining contextual signature
+    NoConstraints        = 1 << 1, // Don't obtain type variable constraints
+    IgnoreNodeInferences = 1 << 2, // Ignore inference to current node and parent nodes out to the containing call for, for example, completions
+    SkipBindingPatterns  = 1 << 3, // Ignore contextual types applied by binding patterns
 }
 
 // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
@@ -6410,7 +6401,7 @@ export const enum TypeFlags {
     /** @internal */
     ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
     /** @internal */
-    Simplifiable = IndexedAccess | Conditional,
+    Simplifiable = IndexedAccess | Conditional | Index,
     /** @internal */
     Singleton = Any | Unknown | String | Number | Boolean | BigInt | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
     // 'Narrowable' types are types where narrowing actually narrows.
@@ -6542,7 +6533,7 @@ export const enum ObjectFlags {
     /** @internal */
     ContainsObjectOrArrayLiteral = 1 << 17, // Type is or contains object literal type
     /** @internal */
-    NonInferrableType = 1 << 18, // Type is or contains anyFunctionType or silentNeverType
+    NonInferrableType = 1 << 18, // Type is or contains anyFunctionType or silentNeverType, or it's a context free `returnTypeOnly`
     /** @internal */
     CouldContainTypeVariablesComputed = 1 << 19, // CouldContainTypeVariables flag has been computed
     /** @internal */
@@ -7570,6 +7561,7 @@ export interface CompilerOptions {
     /** @internal */ watch?: boolean;
     esModuleInterop?: boolean;
     /** @internal */ showConfig?: boolean;
+    /** @internal */ ignoreConfig?: boolean;
     useDefineForClassFields?: boolean;
     /** @internal */ tscBuild?: boolean;
 
@@ -7676,6 +7668,7 @@ export const enum ScriptKind {
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
+    /** @deprecated */
     ES5 = 1,
     ES2015 = 2,
     ES2016 = 3,
@@ -7690,6 +7683,7 @@ export const enum ScriptTarget {
     ESNext = 99,
     JSON = 100,
     Latest = ESNext,
+    LatestStandard = ES2024,
 }
 
 export const enum LanguageVariant {

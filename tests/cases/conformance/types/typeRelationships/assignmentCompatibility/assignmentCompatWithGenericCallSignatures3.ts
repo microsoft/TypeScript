@@ -1,3 +1,4 @@
+// @target: es2015
 // some complex cases of assignment compat of generic signatures that stress contextual signature instantiation
 
 interface I<T, S> {

@@ -1,6 +1,6 @@
 // @module: commonjs
 // @declaration: true
-// @target: ES5
+// @target: ES5, ES2015
 
 // @filename: server.ts
 class a { }

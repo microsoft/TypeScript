@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: umd
 // @moduleResolution: bundler
 // @outdir: out/

@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 // @Filename: recursiveExportAssignmentAndFindAliasedType6_moduleC.ts
 import self = require("./recursiveExportAssignmentAndFindAliasedType6_moduleD");

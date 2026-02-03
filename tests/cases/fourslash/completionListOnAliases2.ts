@@ -1,6 +1,8 @@
 /// <reference path='fourslash.ts' />
 
-////module M {
+// @lib: es5
+
+////namespace M {
 ////    export interface I { }
 ////    export class C {
 ////        static property;
@@ -8,7 +10,7 @@
 ////    export enum E {
 ////        value = 0
 ////    }
-////    export module N {
+////    export namespace N {
 ////        export var v;
 ////    }
 ////    export var V = 0;

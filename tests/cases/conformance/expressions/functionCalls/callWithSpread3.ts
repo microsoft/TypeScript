@@ -1,3 +1,4 @@
+// @target: es2015
 declare const s2: [string, string];
 declare const s3: [string, string, string];
 declare const s2_: [string, string, ...string[]];

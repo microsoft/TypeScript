@@ -1,4 +1,5 @@
-﻿interface T1 { }
+﻿// @target: es2015
+interface T1 { }
 interface T2 { z }
 
 class C1<T> {

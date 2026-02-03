@@ -68,7 +68,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Debug = void 0;
-var Debug = __importStar(require("../debug"));
+const Debug = __importStar(require("../debug"));
 exports.Debug = Debug;
 //// [foo.js]
 "use strict";
@@ -106,8 +106,8 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts = __importStar(require("./_namespaces/ts"));
-var ts_1 = require("./_namespaces/ts");
+const ts = __importStar(require("./_namespaces/ts"));
+const ts_1 = require("./_namespaces/ts");
 ts.Debug.assert(true);
 ts_1.Debug.assert(true);
 //// [ts.js]
@@ -164,7 +164,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts = __importStar(require("./_namespaces/ts"));
-var ts_1 = require("./_namespaces/ts");
+const ts = __importStar(require("./_namespaces/ts"));
+const ts_1 = require("./_namespaces/ts");
 ts.Debug.assert(true);
 ts_1.Debug.assert(true);

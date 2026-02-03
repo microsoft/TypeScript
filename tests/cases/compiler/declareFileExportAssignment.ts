@@ -1,6 +1,8 @@
+// @target: es2015
+// @strict: false
 //@module: commonjs
 // @declaration: true
-module m2 {
+namespace m2 {
     export interface connectModule {
         (res, req, next): void;
     }

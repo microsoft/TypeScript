@@ -39,7 +39,7 @@ class B2 implements A {
 >  : ^^^^^^
 }
 
-module Generics {
+namespace Generics {
 >Generics : typeof Generics
 >         : ^^^^^^^^^^^^^^^
 

@@ -1,4 +1,4 @@
-//@target: ES5
+//@target: ES5, ES2015
 
 // In ES3/5, you cannot for...of over an arbitrary iterable.
 class MyStringIterator {

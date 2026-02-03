@@ -1,4 +1,5 @@
-module M {
+// @target: es2015
+namespace M {
     export class C {
         public f(x:string,...rest:number[]) {
             var sum=0;

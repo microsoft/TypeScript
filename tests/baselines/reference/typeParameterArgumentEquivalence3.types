@@ -5,32 +5,32 @@ function foo<T,U>() {
 >foo : <T, U>() => void
 >    : ^ ^^ ^^^^^^^^^^^
 
-    var x: (item) => T;
+    var x!: (item: any) => T;
 >x : (item: any) => T
->  : ^    ^^^^^^^^^^ 
+>  : ^    ^^   ^^^^^ 
 >item : any
 >     : ^^^
 
-    var y: (item) => boolean;
+    var y!: (item: any) => boolean;
 >y : (item: any) => boolean
->  : ^    ^^^^^^^^^^       
+>  : ^    ^^   ^^^^^       
 >item : any
 >     : ^^^
 
     x = y;  // Should be an error
 >x = y : (item: any) => boolean
->      : ^    ^^^^^^^^^^       
+>      : ^    ^^   ^^^^^       
 >x : (item: any) => T
->  : ^    ^^^^^^^^^^ 
+>  : ^    ^^   ^^^^^ 
 >y : (item: any) => boolean
->  : ^    ^^^^^^^^^^       
+>  : ^    ^^   ^^^^^       
 
     y = x;  // Shound be an error
 >y = x : (item: any) => T
->      : ^    ^^^^^^^^^^ 
+>      : ^    ^^   ^^^^^ 
 >y : (item: any) => boolean
->  : ^    ^^^^^^^^^^       
+>  : ^    ^^   ^^^^^       
 >x : (item: any) => T
->  : ^    ^^^^^^^^^^ 
+>  : ^    ^^   ^^^^^ 
 }
 

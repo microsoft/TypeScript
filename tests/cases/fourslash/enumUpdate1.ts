@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-//// module M {
+//// namespace M {
 //// 	export enum E {
 //// 		A = 1,
 //// 		B = 2,
@@ -8,7 +8,7 @@
 //// 		/*1*/
 //// 	}
 //// }
-//// module M {
+//// namespace M {
 //// 	function foo(): M.E {
 //// 		return M.E.A;
 //// 	}

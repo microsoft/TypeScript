@@ -6,7 +6,8 @@ interface I<T, U> {
 } 
 
 var i1: I<string, number>;
-var i2: I<{}, {}>;
+declare var i1: I<string, number>;
+declare var i2: I<{}, {}>;
 
 // no error
 i1.tuple1 = ["foo", 5];
@@ -29,7 +30,6 @@ i2.tuple1 = [{}];
 
 //// [genericCallWithTupleType.js]
 var i1;
-var i2;
 // no error
 i1.tuple1 = ["foo", 5];
 var e1 = i1.tuple1[0]; // string

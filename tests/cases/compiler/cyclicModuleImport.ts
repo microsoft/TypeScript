@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 declare module "SubModule" {
     import MainModule = require('MainModule');

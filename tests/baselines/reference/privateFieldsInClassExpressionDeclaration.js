@@ -42,20 +42,3 @@ export const ClassExpressionStatic = (_b = class {
     __setFunctionName(_b, "ClassExpressionStatic"),
     _ClassExpressionStatic_staticPrivate = { value: "hidden" },
     _b);
-
-
-//// [privateFieldsInClassExpressionDeclaration.d.ts]
-export declare const ClassExpression: {
-    new (): {
-        "__#private@#context": number;
-        "__#private@#method"(): number;
-        value: number;
-    };
-};
-export declare const ClassExpressionStatic: {
-    new (): {
-        "__#private@#instancePrivate": boolean;
-        exposed: string;
-    };
-    "__#private@#staticPrivate": string;
-};

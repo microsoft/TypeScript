@@ -1,3 +1,4 @@
+// @target: es2015
 let a: (<T>() => T extends `${'a' & { a: 1 }}` ? 1 : 2) = null!;
 let b: (<T>() => T extends `${'a' & { a: 1 }}` ? 1 : 2) = null!;
 

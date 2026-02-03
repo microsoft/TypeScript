@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 //// class C<T> {
 ////     constructor(){}
 ////     foo(a: T) {

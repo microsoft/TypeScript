@@ -1,7 +1,9 @@
+// @target: es2015
+// @strict: false
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 // no errors expected
 
-module SimpleTypes {
+namespace SimpleTypes {
     class S { foo: string; }
     class T { foo: string; }
     var s: S;
@@ -42,7 +44,7 @@ module SimpleTypes {
     a2 = t;
 }
 
-module ObjectTypes {
+namespace ObjectTypes {
     class S { foo: S; }
     class T { foo: T; }
     var s: S;

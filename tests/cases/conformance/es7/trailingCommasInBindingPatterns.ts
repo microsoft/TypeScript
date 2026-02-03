@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 const [...a,] = [];
 const {...b,} = {};
 let c, d;

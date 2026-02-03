@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @strict: false
 // @declaration: true
 // @newLine: lf
 // @outFile: out.js

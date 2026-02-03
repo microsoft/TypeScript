@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/internalAliasInterface.ts] ////
 
 === internalAliasInterface.ts ===
-module a {
+namespace a {
     export interface I {
     }
 }
 
-module c {
+namespace c {
 >c : typeof c
 >  : ^^^^^^^^
 

@@ -24,7 +24,7 @@ class C {
 >x : number
 >  : ^^^^^^
 }
-module C {
+namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -67,7 +67,7 @@ class C2<T> {
 >x : T
 >  : ^
 }
-module C2 {
+namespace C2 {
 >C2 : typeof C2
 >   : ^^^^^^^^^
 
@@ -119,7 +119,7 @@ interface I<T> {
 >  : ^^^^^^
 }
 
-var i2: I<number>;
+declare var i2: I<number>;
 >i2 : I<number>
 >   : ^^^^^^^^^
 

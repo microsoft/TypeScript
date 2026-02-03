@@ -10,6 +10,7 @@
     "baselineCheck": true,
     "mapRoot": "tests/cases/projects/outputdir_module_subfolder/mapFiles",
     "resolveMapRoot": true,
+    "strict": false,
     "resolvedInputFiles": [
         "lib.es5.d.ts",
         "lib.decorators.d.ts",

@@ -1,4 +1,5 @@
-﻿// Error
+﻿// @target: es2015
+// Error
 var {h?} = { h?: 1 };
 var {i}: string | number = { i: 2 };
 var {i1}: string | number| {} = { i1: 2 };

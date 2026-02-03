@@ -2,7 +2,7 @@
 
 //// [cloduleWithPriorInstantiatedModule.ts]
 // Non-ambient & instantiated module.
-module Moclodule {
+namespace Moclodule {
     export interface Someinterface {
         foo(): void;
     }
@@ -13,7 +13,7 @@ class Moclodule {
 }
 
 // Instantiated module.
-module Moclodule {
+namespace Moclodule {
     export class Manager {
     }
 }
@@ -24,17 +24,11 @@ var Moclodule;
 (function (Moclodule) {
     var x = 10;
 })(Moclodule || (Moclodule = {}));
-var Moclodule = /** @class */ (function () {
-    function Moclodule() {
-    }
-    return Moclodule;
-}());
+class Moclodule {
+}
 // Instantiated module.
 (function (Moclodule) {
-    var Manager = /** @class */ (function () {
-        function Manager() {
-        }
-        return Manager;
-    }());
+    class Manager {
+    }
     Moclodule.Manager = Manager;
 })(Moclodule || (Moclodule = {}));

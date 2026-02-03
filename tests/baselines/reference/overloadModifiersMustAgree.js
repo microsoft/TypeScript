@@ -20,10 +20,7 @@ interface I {
 //// [overloadModifiersMustAgree.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var baz = /** @class */ (function () {
-    function baz() {
-    }
-    baz.prototype.foo = function (bar) { }; // error - access modifiers do not agree
-    return baz;
-}());
+class baz {
+    foo(bar) { } // error - access modifiers do not agree
+}
 function bar(s) { }

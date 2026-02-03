@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/arrayTypeInSignatureOfInterfaceAndClass.ts] ////
 
 //// [arrayTypeInSignatureOfInterfaceAndClass.ts]
-declare module WinJS {
+declare namespace WinJS {
     class Promise<T> {
         then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
     }
 }
-declare module Data {
+declare namespace Data {
     export interface IListItem<T> {
         itemIndex: number;
         key: any;

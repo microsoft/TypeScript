@@ -16,10 +16,10 @@
 //// { "private": true, "dependencies": { "common-dependency": "*" } }
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "files": [], "references": [{ "path": "packages/a" }] }
+//// { "compilerOptions": { "lib": ["es5"] }, "files": [], "references": [{ "path": "packages/a" }] }
 
 // @Filename: /home/src/workspaces/project/packages/a/tsconfig.json
-//// { "compilerOptions": { "target": "esnext", "composite": true } }
+//// { "compilerOptions": { "lib": ["es5"], "target": "esnext", "composite": true } }
 
 // @Filename: /home/src/workspaces/project/packages/a/package.json
 //// { "peerDependencies": { "package-dependency": "*" } }

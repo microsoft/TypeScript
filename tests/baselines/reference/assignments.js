@@ -10,7 +10,7 @@
 //  Assign to a parameter
 //  Assign to an interface
 
-module M { }
+namespace M { }
 M = null; // Error
 
 class C { }
@@ -43,11 +43,8 @@ I = null; // Error
 //  Assign to a parameter
 //  Assign to an interface
 M = null; // Error
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 C = null; // Error
 var E;
 (function (E) {

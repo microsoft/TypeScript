@@ -1,3 +1,4 @@
+// @target: es5, es2015
 class Base {
     protected static x: string;
     static staticMethod() {

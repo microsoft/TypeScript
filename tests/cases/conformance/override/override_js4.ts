@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitOverride: true
 // @allowJs: true
 // @checkJs: true

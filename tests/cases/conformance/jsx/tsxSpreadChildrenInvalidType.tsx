@@ -1,6 +1,6 @@
 // @jsx: react,react-jsx
 // @target: es2015,es5
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -29,5 +29,5 @@ function TodoListNoError({ todos }: TodoListProps) {
         {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
     </div>;
 }
-let x: TodoListProps;
+declare let x: TodoListProps;
     <TodoList {...x}/>

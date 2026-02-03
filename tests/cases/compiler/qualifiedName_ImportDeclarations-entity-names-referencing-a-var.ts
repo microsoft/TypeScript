@@ -1,8 +1,9 @@
-module Alpha {
+// @target: es2015
+namespace Alpha {
     export var x = 100;
 }
 
-module Beta {
+namespace Beta {
     import p = Alpha.x;
 }
 

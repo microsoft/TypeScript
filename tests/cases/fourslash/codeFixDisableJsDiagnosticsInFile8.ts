@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 // @allowjs: true
 // @noEmit: true
 // @checkJs: true

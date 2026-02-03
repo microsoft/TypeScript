@@ -60,10 +60,10 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = __importStar(require("./a"));
-var b0 = __importStar(require("./b"));
-var b1 = require("./b");
-var x;
+const a_1 = __importStar(require("./a"));
+const b0 = __importStar(require("./b"));
+const b1 = require("./b");
+let x;
 if (a_1.default)
     x = a_1.default;
 if (a_1.a1)

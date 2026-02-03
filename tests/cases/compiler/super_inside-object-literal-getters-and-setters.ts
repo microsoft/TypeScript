@@ -1,4 +1,5 @@
-module ObjectLiteral {
+// @target: es5, es2015
+namespace ObjectLiteral {
     var ThisInObjectLiteral = {
         _foo: '1',
         get foo(): string {

@@ -8,7 +8,6 @@ global.x // should suggest `globals` (GH#42209)
 
 
 //// [spellingSuggestionGlobal2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var globals = { x: true };
+const globals = { x: true };
 global.x; // should suggest `globals` (GH#42209)
+export {};

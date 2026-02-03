@@ -37,24 +37,24 @@ type T01 = keyof Object;
 >    : ^^^^^^^^^^^^
 
 type T02 = keyof keyof Object;
->T02 : number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>T02 : number | "anchor" | "big" | "blink" | "bold" | "charAt" | "charCodeAt" | "codePointAt" | "concat" | "endsWith" | "fixed" | "fontcolor" | "fontsize" | "includes" | "indexOf" | "italics" | "lastIndexOf" | "length" | "link" | "localeCompare" | "match" | "normalize" | "repeat" | "replace" | "search" | "slice" | "small" | "split" | "startsWith" | "strike" | "sub" | "substr" | "substring" | "sup" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf" | unique symbol
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T03 = keyof keyof keyof Object;
 >T03 : "toString" | "valueOf"
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
 type T04 = keyof keyof keyof keyof Object;
->T04 : number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>T04 : number | "anchor" | "big" | "blink" | "bold" | "charAt" | "charCodeAt" | "codePointAt" | "concat" | "endsWith" | "fixed" | "fontcolor" | "fontsize" | "includes" | "indexOf" | "italics" | "lastIndexOf" | "length" | "link" | "localeCompare" | "match" | "normalize" | "repeat" | "replace" | "search" | "slice" | "small" | "split" | "startsWith" | "strike" | "sub" | "substr" | "substring" | "sup" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf" | unique symbol
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T05 = keyof keyof keyof keyof keyof Object;
 >T05 : "toString" | "valueOf"
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
 type T06 = keyof keyof keyof keyof keyof keyof Object;
->T06 : number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>T06 : number | "anchor" | "big" | "blink" | "bold" | "charAt" | "charCodeAt" | "codePointAt" | "concat" | "endsWith" | "fixed" | "fontcolor" | "fontsize" | "includes" | "indexOf" | "italics" | "lastIndexOf" | "length" | "link" | "localeCompare" | "match" | "normalize" | "repeat" | "replace" | "search" | "slice" | "small" | "split" | "startsWith" | "strike" | "sub" | "substr" | "substring" | "sup" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf" | unique symbol
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T10 = Shape["name"];
 >T10 : string

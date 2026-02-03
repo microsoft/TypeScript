@@ -1,3 +1,4 @@
+// @target: es2015
 // Basic uses of optional properties
 
 var a: {

@@ -58,7 +58,7 @@ result = bigInt !== num;
 num = "3" & 5; num = 2 ** false; // should error, but infer number
 "3" & 5n; 2n ** false; // should error, result in any
 num = ~"3"; num = -false; // should infer number
-let bigIntOrNumber: bigint | number;
+declare let bigIntOrNumber: bigint | number;
 bigIntOrNumber + bigIntOrNumber; // should error, result in any
 bigIntOrNumber << bigIntOrNumber; // should error, result in any
 if (typeof bigIntOrNumber === "bigint") {
@@ -85,14 +85,14 @@ anyValue--; // should infer number
 // Distinguishing numbers from bigints with typeof
 const isBigInt: (x: 0n | 1n) => bigint = (x: 0n | 1n) => x;
 const isNumber: (x: 0 | 1) => number = (x: 0 | 1) => x;
-const zeroOrBigOne: 0 | 1n;
+declare const zeroOrBigOne: 0 | 1n;
 if (typeof zeroOrBigOne === "bigint") isBigInt(zeroOrBigOne);
 else isNumber(zeroOrBigOne);
 
 // Distinguishing truthy from falsy
 const isOne = (x: 1 | 1n) => x;
 if (zeroOrBigOne) isOne(zeroOrBigOne);
-const bigZeroOrOne: 0n | 1;
+declare const bigZeroOrOne: 0n | 1;
 if (bigZeroOrOne) isOne(bigZeroOrOne);
 
 type NumberOrBigint = number | bigint;

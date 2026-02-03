@@ -1,3 +1,4 @@
+// @target: es2015
 // @esModuleInterop: true
 // @moduleResolution: bundler
 // @module: es2015

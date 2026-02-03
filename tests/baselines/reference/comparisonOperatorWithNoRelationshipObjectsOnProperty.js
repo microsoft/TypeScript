@@ -17,10 +17,10 @@ class B2 {
     private a: string;
 }
 
-var a1: A1;
-var b1: B1;
-var a2: A2;
-var b2: B2;
+declare var a1: A1;
+declare var b1: B1;
+declare var a2: A2;
+declare var b2: B2;
 
 // operator <
 var r1a1 = a1 < b1;
@@ -79,30 +79,14 @@ var r8b1 = b1 !== a1;
 var r8b2 = b2 !== a2;
 
 //// [comparisonOperatorWithNoRelationshipObjectsOnProperty.js]
-var A1 = /** @class */ (function () {
-    function A1() {
-    }
-    return A1;
-}());
-var B1 = /** @class */ (function () {
-    function B1() {
-    }
-    return B1;
-}());
-var A2 = /** @class */ (function () {
-    function A2() {
-    }
-    return A2;
-}());
-var B2 = /** @class */ (function () {
-    function B2() {
-    }
-    return B2;
-}());
-var a1;
-var b1;
-var a2;
-var b2;
+class A1 {
+}
+class B1 {
+}
+class A2 {
+}
+class B2 {
+}
 // operator <
 var r1a1 = a1 < b1;
 var r1a2 = a2 < b2;

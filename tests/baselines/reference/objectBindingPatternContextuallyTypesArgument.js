@@ -6,4 +6,4 @@ const { f = (x: string) => x.length } = id({ f: x => x.charAt });
 
 
 //// [objectBindingPatternContextuallyTypesArgument.js]
-var _a = id({ f: function (x) { return x.charAt; } }).f, f = _a === void 0 ? function (x) { return x.length; } : _a;
+const { f = (x) => x.length } = id({ f: x => x.charAt });

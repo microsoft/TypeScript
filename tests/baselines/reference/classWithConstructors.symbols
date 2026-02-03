@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts] ////
 
 === classWithConstructors.ts ===
-module NonGeneric {
+namespace NonGeneric {
 >NonGeneric : Symbol(NonGeneric, Decl(classWithConstructors.ts, 0, 0))
 
     class C {
->C : Symbol(C, Decl(classWithConstructors.ts, 0, 19))
+>C : Symbol(C, Decl(classWithConstructors.ts, 0, 22))
 
         constructor(x: string) { }
 >x : Symbol(x, Decl(classWithConstructors.ts, 2, 20))
@@ -13,11 +13,11 @@ module NonGeneric {
 
     var c = new C(); // error
 >c : Symbol(c, Decl(classWithConstructors.ts, 5, 7))
->C : Symbol(C, Decl(classWithConstructors.ts, 0, 19))
+>C : Symbol(C, Decl(classWithConstructors.ts, 0, 22))
 
     var c2 = new C(''); // ok
 >c2 : Symbol(c2, Decl(classWithConstructors.ts, 6, 7))
->C : Symbol(C, Decl(classWithConstructors.ts, 0, 19))
+>C : Symbol(C, Decl(classWithConstructors.ts, 0, 22))
 
     class C2 {
 >C2 : Symbol(C2, Decl(classWithConstructors.ts, 6, 23))
@@ -61,11 +61,11 @@ module NonGeneric {
 >D : Symbol(D, Decl(classWithConstructors.ts, 16, 23))
 }
 
-module Generics {
+namespace Generics {
 >Generics : Symbol(Generics, Decl(classWithConstructors.ts, 23, 1))
 
     class C<T> {
->C : Symbol(C, Decl(classWithConstructors.ts, 25, 17))
+>C : Symbol(C, Decl(classWithConstructors.ts, 25, 20))
 >T : Symbol(T, Decl(classWithConstructors.ts, 26, 12))
 
         constructor(x: T) { }
@@ -75,11 +75,11 @@ module Generics {
 
     var c = new C(); // error
 >c : Symbol(c, Decl(classWithConstructors.ts, 30, 7))
->C : Symbol(C, Decl(classWithConstructors.ts, 25, 17))
+>C : Symbol(C, Decl(classWithConstructors.ts, 25, 20))
 
     var c2 = new C(''); // ok
 >c2 : Symbol(c2, Decl(classWithConstructors.ts, 31, 7))
->C : Symbol(C, Decl(classWithConstructors.ts, 25, 17))
+>C : Symbol(C, Decl(classWithConstructors.ts, 25, 20))
 
     class C2<T,U> {
 >C2 : Symbol(C2, Decl(classWithConstructors.ts, 31, 23))

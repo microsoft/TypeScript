@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // indexer in B is a subtype of indexer in A
 interface A {
     [s: string]: {

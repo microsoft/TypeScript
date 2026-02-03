@@ -1,7 +1,7 @@
 // @esModuleInterop: true
 // @checkJs: true
 // @module: commonjs
-// @target: es5
+// @target: es5, es2015
 // @outDir: ./out
 
 // @Filename: ./test.js

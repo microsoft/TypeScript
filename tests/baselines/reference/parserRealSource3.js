@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     // Note: Any addition to the NodeType should also be supported with addition to AstWalkerDetailCallback
     export enum NodeType {
         None,
@@ -128,7 +128,7 @@ module TypeScript {
 var TypeScript;
 (function (TypeScript) {
     // Note: Any addition to the NodeType should also be supported with addition to AstWalkerDetailCallback
-    var NodeType;
+    let NodeType;
     (function (NodeType) {
         NodeType[NodeType["None"] = 0] = "None";
         NodeType[NodeType["Empty"] = 1] = "Empty";

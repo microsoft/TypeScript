@@ -137,11 +137,11 @@ class privateClassWithTypeParametersFromPrivateModule<T extends privateModule.pu
     }
 }
 
-export module publicModule {
+export namespace publicModule {
 >publicModule : Symbol(publicModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 52, 1))
 
     class privateClassInPublicModule {
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 54, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 54, 31))
     }
 
     export class publicClassInPublicModule {
@@ -151,7 +151,7 @@ export module publicModule {
     export class publicClassWithPrivateTypeParameters<T extends privateClassInPublicModule> { // Error
 >publicClassWithPrivateTypeParameters : Symbol(publicClassWithPrivateTypeParameters, Decl(privacyTypeParametersOfClassDeclFile.ts, 59, 5))
 >T : Symbol(T, Decl(privacyTypeParametersOfClassDeclFile.ts, 61, 54))
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 54, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 54, 31))
 
         myMethod(val: T): T {
 >myMethod : Symbol(publicClassWithPrivateTypeParameters.myMethod, Decl(privacyTypeParametersOfClassDeclFile.ts, 61, 93))
@@ -183,7 +183,7 @@ export module publicModule {
     class privateClassWithPrivateTypeParameters<T extends privateClassInPublicModule> {
 >privateClassWithPrivateTypeParameters : Symbol(privateClassWithPrivateTypeParameters, Decl(privacyTypeParametersOfClassDeclFile.ts, 71, 5))
 >T : Symbol(T, Decl(privacyTypeParametersOfClassDeclFile.ts, 73, 48))
->privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 54, 28))
+>privateClassInPublicModule : Symbol(privateClassInPublicModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 54, 31))
 
         myMethod(val: T): T {
 >myMethod : Symbol(privateClassWithPrivateTypeParameters.myMethod, Decl(privacyTypeParametersOfClassDeclFile.ts, 73, 87))
@@ -277,11 +277,11 @@ export module publicModule {
     }
 }
 
-module privateModule {
+namespace privateModule {
 >privateModule : Symbol(privateModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 108, 1))
 
     class privateClassInPrivateModule {
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 110, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 110, 25))
     }
 
     export class publicClassInPrivateModule {
@@ -291,7 +291,7 @@ module privateModule {
     export class publicClassWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
 >publicClassWithPrivateTypeParameters : Symbol(publicClassWithPrivateTypeParameters, Decl(privacyTypeParametersOfClassDeclFile.ts, 115, 5))
 >T : Symbol(T, Decl(privacyTypeParametersOfClassDeclFile.ts, 117, 54))
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 110, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 110, 25))
 
         myMethod(val: T): T {
 >myMethod : Symbol(publicClassWithPrivateTypeParameters.myMethod, Decl(privacyTypeParametersOfClassDeclFile.ts, 117, 94))
@@ -323,7 +323,7 @@ module privateModule {
     class privateClassWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
 >privateClassWithPrivateTypeParameters : Symbol(privateClassWithPrivateTypeParameters, Decl(privacyTypeParametersOfClassDeclFile.ts, 127, 5))
 >T : Symbol(T, Decl(privacyTypeParametersOfClassDeclFile.ts, 129, 48))
->privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 110, 22))
+>privateClassInPrivateModule : Symbol(privateClassInPrivateModule, Decl(privacyTypeParametersOfClassDeclFile.ts, 110, 25))
 
         myMethod(val: T): T {
 >myMethod : Symbol(privateClassWithPrivateTypeParameters.myMethod, Decl(privacyTypeParametersOfClassDeclFile.ts, 129, 88))

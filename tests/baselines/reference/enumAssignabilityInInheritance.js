@@ -84,7 +84,7 @@ declare function foo13(x: E): E;
 var r4 = foo13(E.A);
 
 function f() { }
-module f {
+namespace f {
     export var bar = 1;
 }
 declare function foo14(x: typeof f): typeof f;
@@ -93,7 +93,7 @@ declare function foo14(x: E): E;
 var r4 = foo14(E.A);
 
 class CC { baz: string }
-module CC {
+namespace CC {
     export var bar = 1;
 }
 declare function foo15(x: CC): CC;
@@ -127,17 +127,11 @@ var r4 = foo5(E.A);
 var r4 = foo6(E.A);
 var r4 = foo7(E.A);
 var r4 = foo8(E.A);
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 var r4 = foo9(E.A);
-var A2 = /** @class */ (function () {
-    function A2() {
-    }
-    return A2;
-}());
+class A2 {
+}
 var r4 = foo10(E.A);
 var r4 = foo11(E.A);
 var r4 = foo12(E.A);
@@ -151,11 +145,8 @@ function f() { }
     f.bar = 1;
 })(f || (f = {}));
 var r4 = foo14(E.A);
-var CC = /** @class */ (function () {
-    function CC() {
-    }
-    return CC;
-}());
+class CC {
+}
 (function (CC) {
     CC.bar = 1;
 })(CC || (CC = {}));

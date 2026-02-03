@@ -1,12 +1,12 @@
 //// [tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts] ////
 
 //// [invalidInstantiatedModule.ts]
-module M {
+namespace M {
     export class Point { x: number; y: number }
     export var Point = 1;  // Error
 }
 
-module M2 {
+namespace M2 {
     export interface Point { x: number; y: number }
     export var Point = 1;
 }
@@ -20,11 +20,8 @@ var p: m.Point; // Error
 //// [invalidInstantiatedModule.js]
 var M;
 (function (M) {
-    var Point = /** @class */ (function () {
-        function Point() {
-        }
-        return Point;
-    }());
+    class Point {
+    }
     M.Point = Point;
     M.Point = 1; // Error
 })(M || (M = {}));

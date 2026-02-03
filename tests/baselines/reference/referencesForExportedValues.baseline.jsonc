@@ -1,6 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExportedValues.ts ===
-// module M {
+// namespace M {
 //     /*FIND ALL REFS*/export var variable = 0;
 // 
 //     // local use
@@ -11,7 +11,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExportedValues.ts ===
-// module M {
+// namespace M {
 //     <|export var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}variable|] = 0;|>
 // 
 //     // local use
@@ -23,7 +23,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForExportedValues.ts ===
-  // module M {
+  // namespace M {
   //     <|export var /*FIND ALL REFS*/[|variable|] = 0;|>
   // 
   //     // local use
@@ -78,7 +78,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExportedValues.ts ===
-// module M {
+// namespace M {
 //     <|export var [|{| isWriteAccess: true |}variable|] = 0;|>
 // 
 //     // local use
@@ -90,7 +90,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForExportedValues.ts ===
-  // module M {
+  // namespace M {
   //     <|export var [|variable|] = 0;|>
   // 
   //     // local use
@@ -148,7 +148,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExportedValues.ts ===
-// module M {
+// namespace M {
 //     <|export var [|{| isWriteAccess: true |}variable|] = 0;|>
 // 
 //     // local use
@@ -160,7 +160,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForExportedValues.ts ===
-  // module M {
+  // namespace M {
   //     <|export var [|variable|] = 0;|>
   // 
   //     // local use

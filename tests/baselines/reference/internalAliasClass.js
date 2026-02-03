@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/internalAliasClass.ts] ////
 
 //// [internalAliasClass.ts]
-module a {
+namespace a {
     export class c {
     }
 }
 
-module c {
+namespace c {
     import b = a.c;
     export var x: b = new b();
 }
@@ -14,11 +14,8 @@ module c {
 //// [internalAliasClass.js]
 var a;
 (function (a) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        return c;
-    }());
+    class c {
+    }
     a.c = c;
 })(a || (a = {}));
 var c;

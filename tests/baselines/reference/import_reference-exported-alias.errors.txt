@@ -9,8 +9,8 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     var x = new UserServices().getUserName();
     
 ==== file1.ts (0 errors) ====
-    module App {
-        export module Services {
+    namespace App {
+        export namespace Services {
             export class UserServices {
                 public getUserName(): string {
                     return "Bill Gates";

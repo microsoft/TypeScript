@@ -1,3 +1,4 @@
+// @target: es2015
 // using a type parameter as a constraint for a type parameter is valid
 // no errors expected except illegal constraints
 

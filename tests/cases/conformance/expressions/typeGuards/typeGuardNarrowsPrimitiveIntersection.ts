@@ -1,3 +1,4 @@
+// @target: es2015
 type Tag = {__tag: any};
 declare function isNonBlank(value: string) : value is (string & Tag);
 declare function doThis(value: string & Tag): void;

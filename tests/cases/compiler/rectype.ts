@@ -1,4 +1,5 @@
-module M {
+// @target: es2015
+namespace M {
     interface I { (i:I):I; }
 
     export function f(p: I) { return f };

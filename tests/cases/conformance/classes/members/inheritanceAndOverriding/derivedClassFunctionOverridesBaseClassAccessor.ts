@@ -1,3 +1,4 @@
+// @target: es2015
 class Base {
     get x() {
         return 1;

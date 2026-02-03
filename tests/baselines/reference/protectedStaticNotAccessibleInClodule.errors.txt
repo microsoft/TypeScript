@@ -9,7 +9,7 @@ protectedStaticNotAccessibleInClodule.ts(10,22): error TS2445: Property 'bar' is
         protected static bar: string;
     }
     
-    module C {
+    namespace C {
         export var f = C.foo; // OK
         export var b = C.bar; // error
                          ~~~

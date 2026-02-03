@@ -2,7 +2,7 @@ qualifiedName_entity-name-resolution-does-not-affect-class-heritage.ts(5,20): er
 
 
 ==== qualifiedName_entity-name-resolution-does-not-affect-class-heritage.ts (1 errors) ====
-    module Alpha {
+    namespace Alpha {
         export var x = 100;
     }
     

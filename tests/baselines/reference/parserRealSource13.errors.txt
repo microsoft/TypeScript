@@ -124,7 +124,7 @@ parserRealSource13.ts(135,36): error TS2304: Cannot find name 'NodeType'.
                         ~~~~~~~~~~~~~
 !!! error TS6053: File 'typescript.ts' not found.
     
-    module TypeScript.AstWalkerWithDetailCallback {
+    namespace TypeScript.AstWalkerWithDetailCallback {
         export interface AstWalkerDetailCallback {
             EmptyCallback? (pre, ast: AST): boolean;
                                       ~~~

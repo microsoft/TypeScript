@@ -1,3 +1,4 @@
+// @target: es2015
 declare function tag(template: TemplateStringsArray, ...substitutions: any[]): string;
 
 `\u`;

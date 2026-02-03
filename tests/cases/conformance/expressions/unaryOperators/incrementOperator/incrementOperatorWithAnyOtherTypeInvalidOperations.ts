@@ -1,8 +1,10 @@
+// @target: es2015
+// @strict: false
 // ++ operator on any type
 var ANY1: any;
 var ANY2: any[] = [1, 2];
 
-var obj: () => {}
+declare var obj: () => {}
 var obj1 = { x: "", y: () => { } };
 function foo(): any {
     var a;
@@ -15,7 +17,7 @@ class A {
         return a;
     }
 }
-module M {
+namespace M {
     export var n: any;
 }
 var objA = new A();

@@ -1,3 +1,4 @@
+// @strict: false
 // @declaration: true
 // @isolatedDeclarations: true
 // @target: ESNext

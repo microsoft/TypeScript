@@ -22,4 +22,4 @@
 //// });
 
 verify.completions({ marker: ["ts"], exact: ["bar", "foo"] });
-verify.completions({ marker: ["ts2"], includes: ['"foo"', '"bar"'], isNewIdentifierLocation: false });
+verify.completions({ marker: ["ts2"], includes: ['"bar"', '"foo"'], isNewIdentifierLocation: false });

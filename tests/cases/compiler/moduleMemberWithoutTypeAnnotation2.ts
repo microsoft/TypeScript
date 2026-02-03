@@ -1,5 +1,7 @@
-module TypeScript {
-    export module CompilerDiagnostics {
+// @target: es2015
+// @strict: false
+namespace TypeScript {
+    export namespace CompilerDiagnostics {
 
         export interface IDiagnosticWriter {
             Alert(output: string): void;

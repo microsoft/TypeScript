@@ -11,4 +11,4 @@ var v = f({ q: x => x });
 function f(p) {
     return p;
 }
-var v = f({ q: function (x) { return x; } });
+var v = f({ q: x => x });

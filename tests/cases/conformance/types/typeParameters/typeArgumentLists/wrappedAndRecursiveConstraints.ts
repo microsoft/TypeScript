@@ -1,3 +1,4 @@
+// @target: es2015
 // no errors expected
 
 class C<T extends Date> {
@@ -11,6 +12,6 @@ interface Foo extends Date {
     foo: string;
 }
 
-var y: Foo = null;
+var y: Foo = {} as Foo;
 var c = new C(y);
 var r = c.foo(y);

@@ -2,7 +2,7 @@
 
 //// [declFileAliasUseBeforeDeclaration2.ts]
 declare module "test" {
-    module A {
+    namespace A {
         class C {
         }
     }

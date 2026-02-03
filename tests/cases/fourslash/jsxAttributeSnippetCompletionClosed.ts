@@ -1,4 +1,5 @@
 /// <reference path="fourslash.ts" />
+// @strict: false
 //@Filename: file.tsx
 ////interface NestedInterface {
 ////    Foo: NestedInterface;

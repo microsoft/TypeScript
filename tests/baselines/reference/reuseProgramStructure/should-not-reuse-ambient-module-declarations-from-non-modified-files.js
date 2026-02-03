@@ -246,9 +246,7 @@ File '/node_modules/fs/index.js' does not exist.
 File '/node_modules/fs/index.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 
 
@@ -501,9 +499,7 @@ File '/node_modules/fs/index.js' does not exist.
 File '/node_modules/fs/index.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 
 
@@ -756,9 +752,7 @@ File '/node_modules/fs/index.js' does not exist.
 File '/node_modules/fs/index.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 home/src/workspaces/project/a/b/app.ts(2,21): error TS2307: Cannot find module 'fs' or its corresponding type declarations.
 

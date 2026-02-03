@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module Bar {
+////namespace Bar {
 ////    export class Bleah {
 ////    }
 ////    export class Foo extends Bleah {

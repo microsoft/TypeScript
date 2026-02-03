@@ -1,4 +1,6 @@
-module Bugs {
+// @target: es2015
+// @strict: false
+namespace Bugs {
   class A {
   }
   

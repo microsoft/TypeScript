@@ -1,4 +1,5 @@
-module ts {
+// @target: es2015
+namespace ts {
     interface Map<T> {
         [index: string]: T;
     }

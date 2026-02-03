@@ -1,9 +1,10 @@
+// @target: es2015
 //@module: amd
 //@declaration: true
 
 // @Filename: declFileExportImportChain_a.ts
-module m1 {
-    export module m2 {
+namespace m1 {
+    export namespace m2 {
         export class c1 {
         }
     }

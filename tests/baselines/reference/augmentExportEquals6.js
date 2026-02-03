@@ -29,19 +29,13 @@ let c = x.B.b;
 
 //// [file1.js]
 "use strict";
-var foo = /** @class */ (function () {
-    function foo() {
-    }
-    return foo;
-}());
+class foo {
+}
 (function (foo) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     foo.A = A;
-    var B;
+    let B;
     (function (B) {
     })(B = foo.B || (foo.B = {}));
 })(foo || (foo = {}));
@@ -49,7 +43,7 @@ module.exports = foo;
 //// [file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var x = require("./file1");
+const x = require("./file1");
 x.B.b = 1;
 //// [file3.js]
 "use strict";
@@ -87,8 +81,8 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var x = __importStar(require("./file1"));
+const x = __importStar(require("./file1"));
 require("./file2");
-var a;
-var b = a.a;
-var c = x.B.b;
+let a;
+let b = a.a;
+let c = x.B.b;

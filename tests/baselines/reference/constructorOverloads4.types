@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/constructorOverloads4.ts] ////
 
 === constructorOverloads4.ts ===
-declare module M {    
+declare namespace M {    
 >M : typeof M
 >  : ^^^^^^^^
 

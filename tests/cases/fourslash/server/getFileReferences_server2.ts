@@ -4,13 +4,13 @@
 //// { "files": [], "references": [{ "path": "packages/server" }, { "path": "packages/client" }] }
 
 // @Filename: /home/src/workspaces/project/packages/shared/tsconfig.json
-//// { "compilerOptions": { "rootDir": "src", "outDir": "dist", "composite": true } }
+//// { "compilerOptions": { "lib": ["es5"], "rootDir": "src", "outDir": "dist", "composite": true } }
 
 // @Filename: /home/src/workspaces/project/packages/shared/src/referenced.ts
 //// export {};
 
 // @Filename: /home/src/workspaces/project/packages/server/tsconfig.json
-//// { "compilerOptions": { "checkJs": true }, "references": [{ "path": "../shared" }] }
+//// { "compilerOptions": { "lib": ["es5"], "checkJs": true }, "references": [{ "path": "../shared" }] }
 
 // @Filename: /home/src/workspaces/project/packages/server/index.js
 //// const mod = require("../shared/src/referenced");
@@ -19,7 +19,7 @@
 //// const blah = require("../shared/dist/referenced");
 
 // @Filename: /home/src/workspaces/project/packages/client/tsconfig.json
-//// { "compilerOptions": { "paths": { "@shared/*": ["../shared/src/*"] } }, "references": [{ "path": "../shared" }] }
+//// { "compilerOptions": { "lib": ["es5"], "paths": { "@shared/*": ["../shared/src/*"] } }, "references": [{ "path": "../shared" }] }
 
 // @Filename: /home/src/workspaces/project/packages/client/index.ts
 //// import "@shared/referenced";

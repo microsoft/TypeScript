@@ -10,11 +10,8 @@ import type from './a';
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.default = A;
 //// [b.js]
 "use strict";

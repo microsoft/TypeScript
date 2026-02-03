@@ -10,7 +10,6 @@ import * as a from "foo";import * as x from "fooo";
 export var x: string;
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -27,11 +26,31 @@ declare const console: { log(msg: any): void; };
 
 Info seq  [hh:mm:ss:mss] request:
     {
+      "command": "compilerOptionsForInferredProjects",
+      "arguments": {
+        "options": {
+          "module": 1
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
       "command": "open",
       "arguments": {
         "file": "/home/src/projects/project/app.js"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/app.js ProjectRootPath: undefined:: Result: undefined
@@ -41,7 +60,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/pro
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
@@ -61,13 +80,13 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/node_modules/fooo/index.d.ts Text-1 "export var x: string;"
 	/home/src/projects/project/app.js SVC-1-0 "import * as a from \"foo\";import * as x from \"fooo\";"
 
 
-	../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	node_modules/fooo/index.d.ts
 	  Imported via "fooo" from file 'app.js'
 	app.js
@@ -75,6 +94,8 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/projects/node_modules: *new*
@@ -101,7 +122,7 @@ FsWatches::
   {}
 /home/src/projects/project: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -122,7 +143,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -162,16 +183,15 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "/home/src/projects/project/app.js"
       ],
       "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
+        "module": 1,
         "allowNonTsExtensions": true,
-        "allowJs": true,
         "noEmitForJsFiles": true,
-        "maxNodeModuleJsDepth": 2
+        "maxNodeModuleJsDepth": 2,
+        "allowJs": true
       },
       "typeAcquisition": {
         "enable": true,
@@ -246,7 +266,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 1,
+      "request_seq": 2,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -281,7 +301,7 @@ FsWatches::
   {}
 /home/src/projects/project:
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -328,12 +348,11 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
+        "module": 1,
         "allowNonTsExtensions": true,
-        "allowJs": true,
         "noEmitForJsFiles": true,
-        "maxNodeModuleJsDepth": 2
+        "maxNodeModuleJsDepth": 2,
+        "allowJs": true
       },
       "typings": [
         "/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts"
@@ -358,12 +377,11 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
-          "jsx": 1,
+          "module": 1,
           "allowNonTsExtensions": true,
-          "allowJs": true,
           "noEmitForJsFiles": true,
-          "maxNodeModuleJsDepth": 2
+          "maxNodeModuleJsDepth": 2,
+          "allowJs": true
         },
         "typings": [
           "/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts"
@@ -425,14 +443,14 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Cach
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts Text-1 "export function a(): void;"
 	/home/src/projects/project/node_modules/fooo/index.d.ts Text-1 "export var x: string;"
 	/home/src/projects/project/app.js SVC-1-0 "import * as a from \"foo\";import * as x from \"fooo\";"
 
 
-	../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../../Library/Caches/typescript/node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'app.js'
 	  Root file specified for compilation
@@ -446,17 +464,16 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts",
         "/home/src/projects/project/app.js"
       ],
       "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
+        "module": 1,
         "allowNonTsExtensions": true,
-        "allowJs": true,
         "noEmitForJsFiles": true,
-        "maxNodeModuleJsDepth": 2
+        "maxNodeModuleJsDepth": 2,
+        "allowJs": true
       },
       "typeAcquisition": {
         "enable": true,
@@ -494,12 +511,11 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
+        "module": 1,
         "allowNonTsExtensions": true,
-        "allowJs": true,
         "noEmitForJsFiles": true,
-        "maxNodeModuleJsDepth": 2
+        "maxNodeModuleJsDepth": 2,
+        "allowJs": true
       },
       "typings": [],
       "unresolvedImports": [],
@@ -520,12 +536,11 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
-          "jsx": 1,
+          "module": 1,
           "allowNonTsExtensions": true,
-          "allowJs": true,
           "noEmitForJsFiles": true,
-          "maxNodeModuleJsDepth": 2
+          "maxNodeModuleJsDepth": 2,
+          "allowJs": true
         },
         "typings": [],
         "unresolvedImports": [],
@@ -568,7 +583,7 @@ FsWatches::
   {}
 /home/src/projects/project:
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -601,7 +616,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -610,14 +625,14 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts Text-1 "export function a(): void;"
 	/home/src/projects/project/node_modules/fooo/index.d.ts Text-1 "export var x: string;"
 	/home/src/projects/project/app.js SVC-1-0 "import * as a from \"foo\";import * as x from \"fooo\";"
 
 
-	../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../../Library/Caches/typescript/node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'app.js'
 	node_modules/fooo/index.d.ts
@@ -630,16 +645,15 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "/home/src/projects/project/app.js"
       ],
       "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
+        "module": 1,
         "allowNonTsExtensions": true,
-        "allowJs": true,
         "noEmitForJsFiles": true,
-        "maxNodeModuleJsDepth": 2
+        "maxNodeModuleJsDepth": 2,
+        "allowJs": true
       },
       "typeAcquisition": {
         "enable": true,
@@ -677,12 +691,11 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
+        "module": 1,
         "allowNonTsExtensions": true,
-        "allowJs": true,
         "noEmitForJsFiles": true,
-        "maxNodeModuleJsDepth": 2
+        "maxNodeModuleJsDepth": 2,
+        "allowJs": true
       },
       "typings": [],
       "unresolvedImports": [],
@@ -701,12 +714,11 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
-          "jsx": 1,
+          "module": 1,
           "allowNonTsExtensions": true,
-          "allowJs": true,
           "noEmitForJsFiles": true,
-          "maxNodeModuleJsDepth": 2
+          "maxNodeModuleJsDepth": 2,
+          "allowJs": true
         },
         "typings": [],
         "unresolvedImports": [],
@@ -741,7 +753,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -765,7 +777,7 @@ Info seq  [hh:mm:ss:mss] request:
           }
         ]
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
@@ -794,7 +806,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -808,7 +820,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/Library/Caches/typescript/node_modules/foo/index.d.ts Text-1 "export function a(): void;"
 	/home/src/projects/project/node_modules/fooo/index.d.ts Text-1 "export var x: string;"
 	/home/src/projects/project/app.js SVC-1-1 "import * as bar from \"bar\";import * as a from \"foo\";import * as x from \"fooo\";"
@@ -818,16 +830,15 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "/home/src/projects/project/app.js"
       ],
       "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
+        "module": 1,
         "allowNonTsExtensions": true,
-        "allowJs": true,
         "noEmitForJsFiles": true,
-        "maxNodeModuleJsDepth": 2
+        "maxNodeModuleJsDepth": 2,
+        "allowJs": true
       },
       "typeAcquisition": {
         "enable": true,
@@ -872,12 +883,11 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
+        "module": 1,
         "allowNonTsExtensions": true,
-        "allowJs": true,
         "noEmitForJsFiles": true,
-        "maxNodeModuleJsDepth": 2
+        "maxNodeModuleJsDepth": 2,
+        "allowJs": true
       },
       "typings": [],
       "unresolvedImports": [
@@ -898,12 +908,11 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
-          "jsx": 1,
+          "module": 1,
           "allowNonTsExtensions": true,
-          "allowJs": true,
           "noEmitForJsFiles": true,
-          "maxNodeModuleJsDepth": 2
+          "maxNodeModuleJsDepth": 2,
+          "allowJs": true
         },
         "typings": [],
         "unresolvedImports": [

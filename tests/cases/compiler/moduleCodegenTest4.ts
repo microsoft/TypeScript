@@ -1,5 +1,6 @@
+// @target: es2015
 //@module: commonjs
-export module Baz { export var x = "hello"; }
+export namespace Baz { export var x = "hello"; }
 
 Baz.x = "goodbye";
 void 0;

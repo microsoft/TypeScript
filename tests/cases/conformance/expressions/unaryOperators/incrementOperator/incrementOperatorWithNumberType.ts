@@ -1,3 +1,4 @@
+// @target: es2015
 // ++ operator on number type
 var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
@@ -5,7 +6,7 @@ var NUMBER1: number[] = [1, 2];
 class A {
     public a: number;
 }
-module M {
+namespace M {
     export var n: number;
 }
 

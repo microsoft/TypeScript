@@ -10,11 +10,11 @@ interface Iterator<T> { x: T }
 >x : Symbol(Iterator.x, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 23))
 >T : Symbol(T, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 19))
 
-module Q {
+namespace Q {
 >Q : Symbol(Q, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 30), Decl(privacyCheckAnonymousFunctionParameter2.ts, 7, 1))
 
     export function foo<T>(x: (a: Iterator<T>) => number) {
->foo : Symbol(foo, Decl(privacyCheckAnonymousFunctionParameter2.ts, 3, 10))
+>foo : Symbol(foo, Decl(privacyCheckAnonymousFunctionParameter2.ts, 3, 13))
 >T : Symbol(T, Decl(privacyCheckAnonymousFunctionParameter2.ts, 4, 24))
 >x : Symbol(x, Decl(privacyCheckAnonymousFunctionParameter2.ts, 4, 27))
 >a : Symbol(a, Decl(privacyCheckAnonymousFunctionParameter2.ts, 4, 31))
@@ -26,13 +26,13 @@ module Q {
     }
 }
 
-module Q {
+namespace Q {
 >Q : Symbol(Q, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 30), Decl(privacyCheckAnonymousFunctionParameter2.ts, 7, 1))
 
     function bar() {
->bar : Symbol(bar, Decl(privacyCheckAnonymousFunctionParameter2.ts, 9, 10))
+>bar : Symbol(bar, Decl(privacyCheckAnonymousFunctionParameter2.ts, 9, 13))
 
         foo(null);
->foo : Symbol(foo, Decl(privacyCheckAnonymousFunctionParameter2.ts, 3, 10))
+>foo : Symbol(foo, Decl(privacyCheckAnonymousFunctionParameter2.ts, 3, 13))
     }
 }

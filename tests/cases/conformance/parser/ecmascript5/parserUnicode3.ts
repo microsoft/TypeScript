@@ -1,2 +1,3 @@
-﻿class 剩下 {
+﻿// @target: es2015
+class 剩下 {
 }

@@ -1,5 +1,6 @@
-// @target: es5
-var b: boolean;
+// @strict: false
+// @target: es5, es2015
+declare var b: boolean;
 var v = {
     [b]: 0,
     [true]: 1,

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleMemberWithoutTypeAnnotation1.ts] ////
 
 //// [moduleMemberWithoutTypeAnnotation1.ts]
-module TypeScript.Parser {
+namespace TypeScript.Parser {
     class SyntaxCursor {
         public currentNode(): SyntaxNode {
             return null;
@@ -9,7 +9,7 @@ module TypeScript.Parser {
     }
 }
 
-module TypeScript {
+namespace TypeScript {
     export interface ISyntaxElement { };
     export interface ISyntaxToken { };
 
@@ -25,7 +25,7 @@ module TypeScript {
     }
 }
 
-module TypeScript {
+namespace TypeScript {
     export class SyntaxNode {
         public findToken(position: number, includeSkippedTokens: boolean = false): PositionedToken {
             var positionedToken = this.findTokenInternal(null, position, 0);
@@ -37,7 +37,7 @@ module TypeScript {
     }
 }
 
-module TypeScript.Syntax {
+namespace TypeScript.Syntax {
     export function childIndex() { }
 
     export class VariableWidthTokenWithTrailingTrivia implements ISyntaxToken {
@@ -53,49 +53,38 @@ var TypeScript;
 (function (TypeScript) {
     var Parser;
     (function (Parser) {
-        var SyntaxCursor = /** @class */ (function () {
-            function SyntaxCursor() {
-            }
-            SyntaxCursor.prototype.currentNode = function () {
+        class SyntaxCursor {
+            currentNode() {
                 return null;
-            };
-            return SyntaxCursor;
-        }());
+            }
+        }
     })(Parser = TypeScript.Parser || (TypeScript.Parser = {}));
 })(TypeScript || (TypeScript = {}));
 (function (TypeScript) {
     ;
     ;
-    var PositionedElement = /** @class */ (function () {
-        function PositionedElement() {
-        }
-        PositionedElement.prototype.childIndex = function (child) {
+    class PositionedElement {
+        childIndex(child) {
             return TypeScript.Syntax.childIndex();
-        };
-        return PositionedElement;
-    }());
-    TypeScript.PositionedElement = PositionedElement;
-    var PositionedToken = /** @class */ (function () {
-        function PositionedToken(parent, token, fullStart) {
         }
-        return PositionedToken;
-    }());
+    }
+    TypeScript.PositionedElement = PositionedElement;
+    class PositionedToken {
+        constructor(parent, token, fullStart) {
+        }
+    }
     TypeScript.PositionedToken = PositionedToken;
 })(TypeScript || (TypeScript = {}));
 (function (TypeScript) {
-    var SyntaxNode = /** @class */ (function () {
-        function SyntaxNode() {
-        }
-        SyntaxNode.prototype.findToken = function (position, includeSkippedTokens) {
-            if (includeSkippedTokens === void 0) { includeSkippedTokens = false; }
+    class SyntaxNode {
+        findToken(position, includeSkippedTokens = false) {
             var positionedToken = this.findTokenInternal(null, position, 0);
             return null;
-        };
-        SyntaxNode.prototype.findTokenInternal = function (x, y, z) {
+        }
+        findTokenInternal(x, y, z) {
             return null;
-        };
-        return SyntaxNode;
-    }());
+        }
+    }
     TypeScript.SyntaxNode = SyntaxNode;
 })(TypeScript || (TypeScript = {}));
 (function (TypeScript) {
@@ -103,14 +92,11 @@ var TypeScript;
     (function (Syntax) {
         function childIndex() { }
         Syntax.childIndex = childIndex;
-        var VariableWidthTokenWithTrailingTrivia = /** @class */ (function () {
-            function VariableWidthTokenWithTrailingTrivia() {
-            }
-            VariableWidthTokenWithTrailingTrivia.prototype.findTokenInternal = function (parent, position, fullStart) {
+        class VariableWidthTokenWithTrailingTrivia {
+            findTokenInternal(parent, position, fullStart) {
                 return new TypeScript.PositionedToken(parent, this, fullStart);
-            };
-            return VariableWidthTokenWithTrailingTrivia;
-        }());
+            }
+        }
         Syntax.VariableWidthTokenWithTrailingTrivia = VariableWidthTokenWithTrailingTrivia;
     })(Syntax = TypeScript.Syntax || (TypeScript.Syntax = {}));
 })(TypeScript || (TypeScript = {}));

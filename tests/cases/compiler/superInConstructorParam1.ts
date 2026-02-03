@@ -1,3 +1,4 @@
+// @target: es2015
 class B {
   public foo(): number {
     return 0;

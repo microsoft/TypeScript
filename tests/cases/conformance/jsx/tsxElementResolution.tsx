@@ -1,3 +1,4 @@
+// @target: es2015
 //@jsx: preserve
 
 declare namespace JSX {
@@ -11,7 +12,7 @@ declare namespace JSX {
 class foundFirst { }
 class Other {}
 
-module Dotted {
+namespace Dotted {
 	export class Name { }
 }
 

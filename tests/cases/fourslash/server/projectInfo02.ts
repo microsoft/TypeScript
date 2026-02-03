@@ -7,7 +7,7 @@
 ////export var test2 = "test String"
 
 // @Filename: tsconfig.json
-////{ "files": ["a.ts", "b.ts"] }
+////{ "files": ["a.ts", "b.ts"], "compilerOptions": { "lib": ["es5"] } }
 
 goTo.file("a.ts")
-verify.ProjectInfo(["/home/src/tslibs/TS/Lib/lib.d.ts", "/home/src/tslibs/TS/Lib/lib.decorators.d.ts", "/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts", "a.ts", "b.ts", "tsconfig.json"])
+verify.ProjectInfo(["/home/src/tslibs/TS/Lib/lib.es5.d.ts", "/home/src/tslibs/TS/Lib/lib.decorators.d.ts", "/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts", "a.ts", "b.ts", "tsconfig.json"])

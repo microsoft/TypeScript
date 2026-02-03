@@ -6,7 +6,7 @@ s.substring(0);
 s.substring(3,4);
 s.subby(12);   // error unresolved
 String.fromCharCode(12);
-module M {
+namespace M {
     export class C {
     }
     var a=new C[];
@@ -25,11 +25,8 @@ s.subby(12); // error unresolved
 String.fromCharCode(12);
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     M.C = C;
     var a = new C[];
     a.length;

@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript.AstWalkerWithDetailCallback {
+namespace TypeScript.AstWalkerWithDetailCallback {
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 >AstWalkerWithDetailCallback : typeof AstWalkerWithDetailCallback

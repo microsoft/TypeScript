@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/sourceMapWithMultipleFilesWithFileEndingWithInterface.ts] ////
 
 //// [a.ts]
-module M {
+namespace M {
     export var X = 1;
 }
 interface Navigator {
@@ -12,7 +12,7 @@ interface Navigator {
 }
 
 //// [b.ts]
-module m1 {
+namespace m1 {
     export class c1 {
     }
 }
@@ -25,11 +25,8 @@ var M;
 })(M || (M = {}));
 var m1;
 (function (m1) {
-    var c1 = /** @class */ (function () {
-        function c1() {
-        }
-        return c1;
-    }());
+    class c1 {
+    }
     m1.c1 = c1;
 })(m1 || (m1 = {}));
 //# sourceMappingURL=fooResult.js.map

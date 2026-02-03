@@ -1,12 +1,13 @@
-module Outer {
+// @target: es2015
+namespace Outer {
     export var x = 1;
 }
 
-module Outer {
+namespace Outer {
     export const enum A { X }
 }
 
-module B {
+namespace B {
     import O = Outer;
     var x = O.A.X;
     var y = O.x;

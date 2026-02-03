@@ -1,4 +1,6 @@
-module Foo {
+// @module: commonjs
+// @target: es5, es2015
+namespace Foo {
 
     export class Object {
 

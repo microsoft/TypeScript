@@ -3,7 +3,7 @@
 //// [invalidModuleWithStatementsOfEveryKind.ts]
 // All of these should be an error
 
-module Y {
+namespace Y {
     public class A { s: string }
 
     public class BB<T> extends A {
@@ -11,24 +11,24 @@ module Y {
     }
 }
 
-module Y2 {
+namespace Y2 {
     public class AA<T> { s: T }
     public interface I { id: number }
 
     public class B extends AA<string> implements I { id: number }
 }
 
-module Y3 {
-    public module Module {
+namespace Y3 {
+    public namespace Module {
         class A { s: string }
     }
 }
 
-module Y4 {
+namespace Y4 {
     public enum Color { Blue, Red }
 }
 
-module YY {
+namespace YY {
     private class A { s: string }
 
     private class BB<T> extends A {
@@ -36,25 +36,25 @@ module YY {
     }
 }
 
-module YY2 {
+namespace YY2 {
     private class AA<T> { s: T }
     private interface I { id: number }
 
     private class B extends AA<string> implements I { id: number }
 }
 
-module YY3 {
-    private module Module {
+namespace YY3 {
+    private namespace Module {
         class A { s: string }
     }
 }
 
-module YY4 {
+namespace YY4 {
     private enum Color { Blue, Red }
 }
 
 
-module YYY {
+namespace YYY {
     static class A { s: string }
 
     static class BB<T> extends A {
@@ -62,85 +62,51 @@ module YYY {
     }
 }
 
-module YYY2 {
+namespace YYY2 {
     static class AA<T> { s: T }
     static interface I { id: number }
 
     static class B extends AA<string> implements I { id: number }
 }
 
-module YYY3 {
-    static module Module {
+namespace YYY3 {
+    static namespace Module {
         class A { s: string }
     }
 }
 
-module YYY4 {
+namespace YYY4 {
     static enum Color { Blue, Red }
 }
 
 
 //// [invalidModuleWithStatementsOfEveryKind.js]
 // All of these should be an error
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Y;
 (function (Y) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
-    var BB = /** @class */ (function (_super) {
-        __extends(BB, _super);
-        function BB() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return BB;
-    }(A));
+    class A {
+    }
+    class BB extends A {
+    }
 })(Y || (Y = {}));
 var Y2;
 (function (Y2) {
-    var AA = /** @class */ (function () {
-        function AA() {
-        }
-        return AA;
-    }());
-    var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return B;
-    }(AA));
+    class AA {
+    }
+    class B extends AA {
+    }
 })(Y2 || (Y2 = {}));
 var Y3;
 (function (Y3) {
-    var Module;
+    let Module;
     (function (Module) {
-        var A = /** @class */ (function () {
-            function A() {
-            }
-            return A;
-        }());
+        class A {
+        }
     })(Module || (Module = {}));
 })(Y3 || (Y3 = {}));
 var Y4;
 (function (Y4) {
-    var Color;
+    let Color;
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
@@ -148,48 +114,29 @@ var Y4;
 })(Y4 || (Y4 = {}));
 var YY;
 (function (YY) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
-    var BB = /** @class */ (function (_super) {
-        __extends(BB, _super);
-        function BB() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return BB;
-    }(A));
+    class A {
+    }
+    class BB extends A {
+    }
 })(YY || (YY = {}));
 var YY2;
 (function (YY2) {
-    var AA = /** @class */ (function () {
-        function AA() {
-        }
-        return AA;
-    }());
-    var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return B;
-    }(AA));
+    class AA {
+    }
+    class B extends AA {
+    }
 })(YY2 || (YY2 = {}));
 var YY3;
 (function (YY3) {
-    var Module;
+    let Module;
     (function (Module) {
-        var A = /** @class */ (function () {
-            function A() {
-            }
-            return A;
-        }());
+        class A {
+        }
     })(Module || (Module = {}));
 })(YY3 || (YY3 = {}));
 var YY4;
 (function (YY4) {
-    var Color;
+    let Color;
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
@@ -197,48 +144,29 @@ var YY4;
 })(YY4 || (YY4 = {}));
 var YYY;
 (function (YYY) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
-    var BB = /** @class */ (function (_super) {
-        __extends(BB, _super);
-        function BB() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return BB;
-    }(A));
+    static class A {
+    }
+    static class BB extends A {
+    }
 })(YYY || (YYY = {}));
 var YYY2;
 (function (YYY2) {
-    var AA = /** @class */ (function () {
-        function AA() {
-        }
-        return AA;
-    }());
-    var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return B;
-    }(AA));
+    static class AA {
+    }
+    static class B extends AA {
+    }
 })(YYY2 || (YYY2 = {}));
 var YYY3;
 (function (YYY3) {
-    var Module;
+    static let Module;
     (function (Module) {
-        var A = /** @class */ (function () {
-            function A() {
-            }
-            return A;
-        }());
+        class A {
+        }
     })(Module || (Module = {}));
 })(YYY3 || (YYY3 = {}));
 var YYY4;
 (function (YYY4) {
-    var Color;
+    static let Color;
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";

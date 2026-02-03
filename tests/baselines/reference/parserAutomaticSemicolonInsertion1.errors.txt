@@ -11,7 +11,7 @@ parserAutomaticSemicolonInsertion1.ts(14,1): error TS2322: Type 'Object' is not 
         (): void;
     }
      
-    var i: I;
+    declare var i: I;
     var o: Object;
     o = i;
     i = o;
@@ -20,7 +20,7 @@ parserAutomaticSemicolonInsertion1.ts(14,1): error TS2322: Type 'Object' is not 
 !!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 !!! error TS2322:     Type 'Object' provides no match for the signature '(): void'.
      
-    var a: {
+    declare var a: {
         (): void
     }
     o = a;

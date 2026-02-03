@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: duplicateVarsAcrossFileBoundaries_0.ts
 var x = 3;
 var y = "";
@@ -17,11 +18,11 @@ var y = "";
 var z = 0;
 
 // @Filename: duplicateVarsAcrossFileBoundaries_4.ts
-module P { }
+namespace P { }
 import p = P;
 var q;
 
 // @Filename: duplicateVarsAcrossFileBoundaries_5.ts
-module Q { }
+namespace Q { }
 import q = Q;
 var p;

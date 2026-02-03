@@ -56,7 +56,7 @@ function F(x: string): number { return 42; }
 >42 : 42
 >   : ^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

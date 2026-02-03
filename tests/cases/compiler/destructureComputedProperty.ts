@@ -1,3 +1,4 @@
+// @target: es2015
 declare const ab: { n: number } | { n: string };
 const nameN = "n";
 const { [nameN]: n } = ab;

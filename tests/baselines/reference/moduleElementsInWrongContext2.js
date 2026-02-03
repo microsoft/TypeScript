@@ -2,7 +2,7 @@
 
 //// [moduleElementsInWrongContext2.ts]
 function blah () {
-    module M { }
+    namespace M { }
     export namespace N {
         export interface I { }
     }
@@ -41,12 +41,8 @@ function blah() {
     export { foo };
     export { baz as b } from "ambient";
     export default v;
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    export default C;
+    export default class C {
+    }
     export function bee() { }
     import I2 = require("foo");
     import * as Foo from "ambient";

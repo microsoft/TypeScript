@@ -40,6 +40,6 @@ asyncAwaitIsolatedModules_es2017.ts(1,27): error TS2307: Cannot find module 'mis
     	static async m6(): MyPromise<void> { }
     }
     
-    module M {
+    namespace M {
     	export async function f1() { }
     }

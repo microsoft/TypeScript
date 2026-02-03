@@ -84,6 +84,6 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var ns = __importStar(require("./reexport"));
-var g = ns.Root.A;
+const ns = __importStar(require("./reexport"));
+const g = ns.Root.A;
 f.x;

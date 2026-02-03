@@ -7,15 +7,11 @@ class EventAggregator
     publish<T>(event: T): void {}
 }
 
-var ea: EventAggregator;
+declare var ea: EventAggregator;
 ea.publish([1,2,3]);
 
 //// [overloadErrorMatchesImplementationElaboaration.js]
-var EventAggregator = /** @class */ (function () {
-    function EventAggregator() {
-    }
-    EventAggregator.prototype.publish = function (event) { };
-    return EventAggregator;
-}());
-var ea;
+class EventAggregator {
+    publish(event) { }
+}
 ea.publish([1, 2, 3]);

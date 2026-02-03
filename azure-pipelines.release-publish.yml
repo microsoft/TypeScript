@@ -45,7 +45,7 @@ extends:
   parameters:
     pool:
       name: TypeScript-AzurePipelines-EO
-      image: 1ESPT-Mariner2.0
+      image: 1ESPT-AzureLinux3
       os: linux
 
     sdl:
@@ -106,6 +106,29 @@ extends:
                   targetPath: '$(Pipeline.Workspace)/tgz'
             steps:
               - checkout: none
+
+              - task: NodeTool@0
+                inputs:
+                  versionSpec: 20.x
+                displayName: 'Install Node'
+
+              - task: CmdLine@2
+                displayName: Get commit hash
+                inputs:
+                  script: |
+                    # Read package.json and get gitHead
+                    pushd $(Pipeline.Workspace)/tgz
+                    ls -lhR
+                    tar -zxvf typescript-*.tgz
+                    cd package
+                    GIT_COMMIT_HASH=$(node -e "console.log(JSON.parse(require('fs').readFileSync('package.json', 'utf-8')).gitHead)")
+                    if [ -z "$GIT_COMMIT_HASH" ]; then
+                      echo "Failed to get git commit hash from package.json"
+                      exit 1
+                    fi
+                    echo "##vso[task.setvariable variable=GIT_COMMIT_HASH]$GIT_COMMIT_HASH"
+                    echo "Git commit hash: $GIT_COMMIT_HASH"
+
               - task: GitHubRelease@1
                 displayName: GitHub release (create)
                 inputs:
@@ -115,6 +138,7 @@ extends:
                   tagSource: userSpecifiedTag
                   tag: $(TAG_NAME)
                   title: TypeScript $(RELEASE_TITLE_NAME)
+                  target: $(GIT_COMMIT_HASH)
                   releaseNotesSource: inline
                   releaseNotesInline: |
                     <!---

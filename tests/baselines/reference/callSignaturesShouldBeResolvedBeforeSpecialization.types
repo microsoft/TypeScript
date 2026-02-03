@@ -15,7 +15,7 @@ function foo() {
 >foo : () => void
 >    : ^^^^^^^^^^
 
-    var test: I1<string>;
+    var test!: I1<string>;
 >test : I1<string>
 >     : ^^^^^^^^^^
 

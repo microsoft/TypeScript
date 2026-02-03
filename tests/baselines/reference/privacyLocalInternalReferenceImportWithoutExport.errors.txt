@@ -4,7 +4,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== privacyLocalInternalReferenceImportWithoutExport.ts (0 errors) ====
     // private elements
-    module m_private {
+    namespace m_private {
         export class c_private {
         }
         export enum e_private {
@@ -17,18 +17,18 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
         export var v_private = new c_private();
         export interface i_private {
         }
-        export module mi_private {
+        export namespace mi_private {
             export class c {
             }
         }
-        export module mu_private {
+        export namespace mu_private {
             export interface i {
             }
         }
     }
     
     // Public elements
-    export module m_public {
+    export namespace m_public {
         export class c_public {
         }
         export enum e_public {
@@ -41,17 +41,17 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
         export var v_public = 10;
         export interface i_public {
         }
-        export module mi_public {
+        export namespace mi_public {
             export class c {
             }
         }
-        export module mu_public {
+        export namespace mu_public {
             export interface i {
             }
         }
     }
     
-    export module import_public {
+    export namespace import_public {
         // No Privacy errors - importing private elements
         import im_private_c_private = m_private.c_private;
         import im_private_e_private = m_private.e_private;
@@ -104,7 +104,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
         export var publicUse_im_private_mu_public: im_private_mu_public.i;
     }
     
-    module import_private {
+    namespace import_private {
         // No Privacy errors - importing private elements
         import im_private_c_private = m_private.c_private;
         import im_private_e_private = m_private.e_private;

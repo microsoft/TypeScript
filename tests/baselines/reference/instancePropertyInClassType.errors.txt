@@ -5,7 +5,7 @@ instancePropertyInClassType.ts(37,16): error TS6234: This expression is not call
 
 
 ==== instancePropertyInClassType.ts (2 errors) ====
-    module NonGeneric {
+    namespace NonGeneric {
         class C {
             x: string;
             get y() {
@@ -28,7 +28,7 @@ instancePropertyInClassType.ts(37,16): error TS6234: This expression is not call
     
     }
     
-    module Generic {
+    namespace Generic {
         class C<T,U> {
             x: T;
             get y() {

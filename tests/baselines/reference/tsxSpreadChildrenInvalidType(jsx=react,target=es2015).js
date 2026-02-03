@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx] ////
 
 //// [tsxSpreadChildrenInvalidType.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -30,7 +30,7 @@ function TodoListNoError({ todos }: TodoListProps) {
         {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
     </div>;
 }
-let x: TodoListProps;
+declare let x: TodoListProps;
     <TodoList {...x}/>
 
 
@@ -45,5 +45,4 @@ function TodoListNoError({ todos }) {
     // any is not checked
     return React.createElement("div", null, ...React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }));
 }
-let x;
 React.createElement(TodoList, Object.assign({}, x));

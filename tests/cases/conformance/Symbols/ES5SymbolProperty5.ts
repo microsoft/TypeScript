@@ -1,5 +1,5 @@
-//@target: ES5
-var Symbol: { iterator: symbol };
+//@target: ES5, ES2015
+declare var Symbol: { iterator: symbol };
 
 class C {
     [Symbol.iterator]() { }

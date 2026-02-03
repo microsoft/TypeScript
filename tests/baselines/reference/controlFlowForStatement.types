@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/controlFlow/controlFlowForStatement.ts] ////
 
 === controlFlowForStatement.ts ===
-let cond: boolean;
+declare let cond: boolean;
 >cond : boolean
 >     : ^^^^^^^
 

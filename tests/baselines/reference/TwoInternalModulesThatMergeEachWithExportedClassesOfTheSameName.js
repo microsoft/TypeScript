@@ -1,14 +1,14 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts] ////
 
 //// [TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts]
-module A {
+namespace A {
     export class Point {
         x: number;
         y: number;
     }
 }
 
-module A{
+namespace A{
     // expected error
     export class Point {
         origin: number;
@@ -16,15 +16,15 @@ module A{
     }
 }
 
-module X.Y.Z {
+namespace X.Y.Z {
     export class Line {
         length: number;
     }
 }
 
-module X {
-    export module Y {
-        export module Z {
+namespace X {
+    export namespace Y {
+        export namespace Z {
             // expected error
             export class Line {
                 name: string;
@@ -37,20 +37,14 @@ module X {
 //// [TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.js]
 var A;
 (function (A) {
-    var Point = /** @class */ (function () {
-        function Point() {
-        }
-        return Point;
-    }());
+    class Point {
+    }
     A.Point = Point;
 })(A || (A = {}));
 (function (A) {
     // expected error
-    var Point = /** @class */ (function () {
-        function Point() {
-        }
-        return Point;
-    }());
+    class Point {
+    }
     A.Point = Point;
 })(A || (A = {}));
 var X;
@@ -59,26 +53,20 @@ var X;
     (function (Y) {
         var Z;
         (function (Z) {
-            var Line = /** @class */ (function () {
-                function Line() {
-                }
-                return Line;
-            }());
+            class Line {
+            }
             Z.Line = Line;
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 (function (X) {
-    var Y;
+    let Y;
     (function (Y) {
-        var Z;
+        let Z;
         (function (Z) {
             // expected error
-            var Line = /** @class */ (function () {
-                function Line() {
-                }
-                return Line;
-            }());
+            class Line {
+            }
             Z.Line = Line;
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class C { private v; public p; static s; }
 class D extends C {
    static c() {

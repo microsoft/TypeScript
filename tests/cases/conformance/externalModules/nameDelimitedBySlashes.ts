@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: test/foo_0.ts
 export var foo = 42;

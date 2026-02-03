@@ -1,7 +1,8 @@
+// @target: es2015
 //@module: commonjs
 // @declaration: true
-export module a {
-    export module b {
+export namespace a {
+    export namespace b {
         export class c {
         }
     }

@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution12.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
 	interface Element { }
->Element : Symbol(Element, Decl(file.tsx, 0, 20))
+>Element : Symbol(Element, Decl(file.tsx, 0, 23))
 
 	interface ElementAttributesProperty { pr: any; }
 >ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(file.tsx, 1, 22))
@@ -21,12 +21,12 @@ interface Obj1type {
 	new(n: string): any;
 >n : Symbol(n, Decl(file.tsx, 7, 5))
 }
-var Obj1: Obj1type;
->Obj1 : Symbol(Obj1, Decl(file.tsx, 9, 3))
+declare var Obj1: Obj1type;
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 9, 11))
 >Obj1type : Symbol(Obj1type, Decl(file.tsx, 4, 1))
 
 <Obj1 x={10} />; // OK
->Obj1 : Symbol(Obj1, Decl(file.tsx, 9, 3))
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 9, 11))
 >x : Symbol(x, Decl(file.tsx, 10, 5))
 
 interface Obj2type {
@@ -37,12 +37,12 @@ interface Obj2type {
 >q : Symbol(q, Decl(file.tsx, 13, 18))
 >pr : Symbol(pr, Decl(file.tsx, 13, 30))
 }
-var Obj2: Obj2type;
->Obj2 : Symbol(Obj2, Decl(file.tsx, 15, 3))
+declare var Obj2: Obj2type;
+>Obj2 : Symbol(Obj2, Decl(file.tsx, 15, 11))
 >Obj2type : Symbol(Obj2type, Decl(file.tsx, 10, 16))
 
 <Obj2 x={10} />; // OK
->Obj2 : Symbol(Obj2, Decl(file.tsx, 15, 3))
+>Obj2 : Symbol(Obj2, Decl(file.tsx, 15, 11))
 >x : Symbol(x, Decl(file.tsx, 16, 5))
 
 interface Obj3type {
@@ -52,23 +52,23 @@ interface Obj3type {
 >n : Symbol(n, Decl(file.tsx, 19, 5))
 >x : Symbol(x, Decl(file.tsx, 19, 18))
 }
-var Obj3: Obj3type;
->Obj3 : Symbol(Obj3, Decl(file.tsx, 21, 3))
+declare var Obj3: Obj3type;
+>Obj3 : Symbol(Obj3, Decl(file.tsx, 21, 11))
 >Obj3type : Symbol(Obj3type, Decl(file.tsx, 16, 16))
 
 <Obj3 x={10} />; // Error
->Obj3 : Symbol(Obj3, Decl(file.tsx, 21, 3))
+>Obj3 : Symbol(Obj3, Decl(file.tsx, 21, 11))
 >x : Symbol(x, Decl(file.tsx, 22, 5))
 
 var attributes: any;
 >attributes : Symbol(attributes, Decl(file.tsx, 23, 3))
 
 <Obj3 {...attributes} />; // Error
->Obj3 : Symbol(Obj3, Decl(file.tsx, 21, 3))
+>Obj3 : Symbol(Obj3, Decl(file.tsx, 21, 11))
 >attributes : Symbol(attributes, Decl(file.tsx, 23, 3))
 
 <Obj3 {...{}} />; // OK
->Obj3 : Symbol(Obj3, Decl(file.tsx, 21, 3))
+>Obj3 : Symbol(Obj3, Decl(file.tsx, 21, 11))
 
 interface Obj4type {
 >Obj4type : Symbol(Obj4type, Decl(file.tsx, 25, 17))
@@ -79,15 +79,15 @@ interface Obj4type {
 >pr : Symbol(pr, Decl(file.tsx, 28, 29))
 >x : Symbol(x, Decl(file.tsx, 28, 35))
 }
-var Obj4: Obj4type;
->Obj4 : Symbol(Obj4, Decl(file.tsx, 30, 3))
+declare var Obj4: Obj4type;
+>Obj4 : Symbol(Obj4, Decl(file.tsx, 30, 11))
 >Obj4type : Symbol(Obj4type, Decl(file.tsx, 25, 17))
 
 <Obj4 x={10} />; // OK
->Obj4 : Symbol(Obj4, Decl(file.tsx, 30, 3))
+>Obj4 : Symbol(Obj4, Decl(file.tsx, 30, 11))
 >x : Symbol(x, Decl(file.tsx, 31, 5))
 
 <Obj4 x={'10'} />; // Error
->Obj4 : Symbol(Obj4, Decl(file.tsx, 30, 3))
+>Obj4 : Symbol(Obj4, Decl(file.tsx, 30, 11))
 >x : Symbol(x, Decl(file.tsx, 32, 5))
 

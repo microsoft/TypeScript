@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution11.tsx] ////
 
 //// [react.d.ts]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 	}
@@ -29,12 +29,9 @@ var x = <MyComponent bar='world' />;
 
 
 //// [file.jsx]
-var MyComponent = /** @class */ (function () {
-    function MyComponent() {
+class MyComponent {
+    render() {
     }
-    MyComponent.prototype.render = function () {
-    };
-    return MyComponent;
-}());
+}
 // Should be an OK
 var x = <MyComponent bar='world'/>;

@@ -287,8 +287,8 @@ namespace GH14865 {
 >type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 99, 23))
 >data : Symbol(data, Decl(assignmentCompatWithDiscriminatedUnion.ts, 99, 34))
 
-    let b: Style1;
->b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 100, 7))
+    declare let b: Style1;
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 100, 15))
 >Style1 : Symbol(Style1, Decl(assignmentCompatWithDiscriminatedUnion.ts, 85, 19))
 
     a.type; // "A" | "B"
@@ -298,11 +298,11 @@ namespace GH14865 {
 
     b.type; // "A" | "B"
 >b.type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 86, 19), Decl(assignmentCompatWithDiscriminatedUnion.ts, 89, 9))
->b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 100, 7))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 100, 15))
 >type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 86, 19), Decl(assignmentCompatWithDiscriminatedUnion.ts, 89, 9))
 
     b = a; // should be assignable
->b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 100, 7))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 100, 15))
 >a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 99, 9))
 }
 

@@ -1,4 +1,5 @@
-module A {
+// @target: es2015
+namespace A {
     export class A {
         id: number;
         name: string;

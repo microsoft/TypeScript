@@ -47,29 +47,21 @@ let gResult2 = g(world);
 let gResult3 = g(helloOrWorld);
 
 //// [stringLiteralTypesOverloads03.js]
-var hello;
-var world;
-var helloOrWorld;
-function f() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
+let hello;
+let world;
+let helloOrWorld;
+function f(...args) {
     return undefined;
 }
-var fResult1 = f(hello);
-var fResult2 = f(world);
-var fResult3 = f(helloOrWorld);
-function g() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
+let fResult1 = f(hello);
+let fResult2 = f(world);
+let fResult3 = f(helloOrWorld);
+function g(...args) {
     return undefined;
 }
-var gResult1 = g(hello);
-var gResult2 = g(world);
-var gResult3 = g(helloOrWorld);
+let gResult1 = g(hello);
+let gResult2 = g(world);
+let gResult3 = g(helloOrWorld);
 
 
 //// [stringLiteralTypesOverloads03.d.ts]

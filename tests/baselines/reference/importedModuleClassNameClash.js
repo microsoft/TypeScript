@@ -3,7 +3,7 @@
 //// [importedModuleClassNameClash.ts]
 import foo = m1;
  
-export module m1 { }
+export namespace m1 { }
  
 class foo { }
 
@@ -12,9 +12,6 @@ class foo { }
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var foo = /** @class */ (function () {
-        function foo() {
-        }
-        return foo;
-    }());
+    class foo {
+    }
 });

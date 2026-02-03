@@ -6,9 +6,9 @@ interface I8 { [x: string]: number[]; }
 class A { foo: number; }
 class A2<T> { foo: T; }
 function f() { }
-module f { export var bar = 1; }
+namespace f { export var bar = 1; }
 class c { baz: string }
-module c { export var bar = 1; }
+namespace c { export var bar = 1; }
 
 // A type T is a subtype of a union type U if T is a subtype of any type in U.
 interface I1<T> {
@@ -60,25 +60,16 @@ var E;
     E[E["e1"] = 0] = "e1";
     E[E["e2"] = 1] = "e2";
 })(E || (E = {}));
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var A2 = /** @class */ (function () {
-    function A2() {
-    }
-    return A2;
-}());
+class A {
+}
+class A2 {
+}
 function f() { }
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));

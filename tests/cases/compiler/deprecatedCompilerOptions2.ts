@@ -1,3 +1,4 @@
+// @target: es2015
 // @typeScriptVersion: 5.0
 // @filename: /foo/tsconfig.json
 {

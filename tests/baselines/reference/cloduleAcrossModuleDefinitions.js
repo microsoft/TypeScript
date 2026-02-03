@@ -1,15 +1,15 @@
 //// [tests/cases/compiler/cloduleAcrossModuleDefinitions.ts] ////
 
 //// [cloduleAcrossModuleDefinitions.ts]
-module A {
+namespace A {
     export class B {
         foo() { }
         static bar() { }
     }
 }
 
-module A {
-    export module B {
+namespace A {
+    export namespace B {
         export var x = 1;
     }
 }
@@ -20,17 +20,14 @@ var b: A.B; // ok
 //// [cloduleAcrossModuleDefinitions.js]
 var A;
 (function (A) {
-    var B = /** @class */ (function () {
-        function B() {
-        }
-        B.prototype.foo = function () { };
-        B.bar = function () { };
-        return B;
-    }());
+    class B {
+        foo() { }
+        static bar() { }
+    }
     A.B = B;
 })(A || (A = {}));
 (function (A) {
-    var B;
+    let B;
     (function (B) {
         B.x = 1;
     })(B = A.B || (A.B = {}));

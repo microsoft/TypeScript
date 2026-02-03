@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts] ////
 
 //// [ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts]
-module A {
+namespace A {
 
     class Point {
         x: number;
@@ -20,15 +20,9 @@ module A {
 //// [ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.js]
 var A;
 (function (A) {
-    var Point = /** @class */ (function () {
-        function Point() {
-        }
-        return Point;
-    }());
-    var points = /** @class */ (function () {
-        function points() {
-        }
-        return points;
-    }());
+    class Point {
+    }
+    class points {
+    }
     A.points = points;
 })(A || (A = {}));

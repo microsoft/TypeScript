@@ -1,3 +1,4 @@
+// @target: es2015
 // Check that type parameter constraints are properly instantiated
 
 interface Mapper<T> {

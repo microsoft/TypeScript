@@ -4,6 +4,4 @@
 function f([a, b]: [number, any]) { }
 
 //// [tupleElementTypes2.js]
-function f(_a) {
-    var a = _a[0], b = _a[1];
-}
+function f([a, b]) { }

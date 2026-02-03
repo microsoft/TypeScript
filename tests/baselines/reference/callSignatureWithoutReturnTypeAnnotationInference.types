@@ -248,7 +248,7 @@ var r10 = foo10(1);
 >1 : 1
 >  : ^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -317,7 +317,7 @@ function m1() { return 1; }
 >1 : 1
 >  : ^
 
-module m1 { export var y = 2; }
+namespace m1 { export var y = 2; }
 >m1 : typeof m1
 >   : ^^^^^^^^^
 >y : number
@@ -352,7 +352,7 @@ class c1 {
     constructor(x) { }
 >x : any
 }
-module c1 {
+namespace c1 {
 >c1 : typeof c1
 >   : ^^^^^^^^^
 
@@ -384,7 +384,7 @@ enum e1 { A }
 >A : e1.A
 >  : ^^^^
 
-module e1 { export var y = 1; }
+namespace e1 { export var y = 1; }
 >e1 : typeof e1
 >   : ^^^^^^^^^
 >y : number

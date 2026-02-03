@@ -106,9 +106,7 @@ b: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 home/src/workspaces/project/a.ts(3,3): error TS2345: Argument of type 'X' is not assignable to parameter of type 'import("/home/src/workspaces/project/node_modules/a/node_modules/x/index").default'.
   Types have separate declarations of a private property 'x'.
@@ -224,9 +222,7 @@ b: {
 }
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 
 

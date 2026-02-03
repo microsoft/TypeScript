@@ -2,7 +2,7 @@
 
 === decrementOperatorWithNumberTypeInvalidOperations.ts ===
 // -- operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 >NUMBER : number
 >       : ^^^^^^
 
@@ -36,7 +36,7 @@ class A {
 >1 : 1
 >  : ^
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

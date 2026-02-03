@@ -276,11 +276,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array__1355" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";A_const_assertion_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_o_1355" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.]]></Val>
+          <Val><![CDATA[A 'const' assertion can only be applied to references to enum members, or string, number, boolean, array, or object literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Kontrolní výrazy const se dají použít jen pro odkazy na členy výčtu, řetězec, číslo, logickou hodnotu, pole nebo literály objektů.]]></Val>
+            <Val><![CDATA[Kontrolní výraz „const“ lze použít pouze na odkazy na členy výčtu nebo na řetězce, čísla, logické hodnoty, pole nebo objektové literály.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3378,6 +3378,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Cannot_find_module_or_type_declarations_for_side_effect_import_of_0_2882" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find module or type declarations for side-effect import of '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nelze najít deklarace modulu nebo typu pro import vedlejšího efektu {0}.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Cannot_find_name_0_2304" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'.]]></Val>
@@ -6069,20 +6078,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve_1293" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_1286" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.]]></Val>
+          <Val><![CDATA[ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Když je možnost „module“ nastavená na „preserve“, v modulu CommonJS se nepovoluje syntaxe ESM.]]></Val>
+            <Val><![CDATA[Importy a exporty ECMAScript nelze zapsat do souboru CommonJS v části verbatimModuleSyntax.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled_1286" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ECMAScript_imports_and_exports_cannot_be_written_in_a_CommonJS_file_under_verbatimModuleSyntax_Adjus_1295" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.]]></Val>
+          <Val><![CDATA[ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Když je povolená syntaxe „verbatimModuleSyntax“, není v modulu CommonJS povolená syntaxe ESM.]]></Val>
+            <Val><![CDATA[Importy a exporty ECMAScript nelze zapsat do souboru CommonJS v části verbatimModuleSyntax. Upravte pole type v nejbližším souboru package.json tak, aby tento soubor byl modulem ECMAScript, případně upravte nastavení verbatimModuleSyntax, module a moduleResolution v TypeScriptu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ECMAScript_module_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve_1293" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[ECMAScript module syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Syntaxe modulu ECMAScript není v modulu CommonJS povolená, pokud je možnost module nastavená na preserve.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8177,6 +8195,15 @@
           <Val><![CDATA[If the '{0}' package actually exposes this module, try adding a new declaration (.d.ts) file containing `declare module '{1}';`]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Pokud balíček {0} skutečně zpřístupňuje tento modul, zkuste přidat nový soubor deklarace (.d.ts), který obsahuje declare module {1};]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files_1549" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Ignore the tsconfig found and build with commandline options and files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ignorujte nalezenou konfiguraci tsconfig a sestavte pomocí možností příkazového řádku a souborů.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10554,11 +10581,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Option_0_can_only_be_used_when_module_is_set_to_preserve_or_to_es2015_or_later_5095" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Option_0_can_only_be_used_when_module_is_set_to_preserve_commonjs_or_es2015_or_later_5095" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Option '{0}' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.]]></Val>
+          <Val><![CDATA[Option '{0}' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Možnost „{0}“ se dá použít jenom v případě, že je možnost „modul“ nastavená na „preserve“ nebo na „es2015“ a novější.]]></Val>
+            <Val><![CDATA[Možnost „{0}“ se dá použít jenom v případě, že je možnost „modul“ nastavená na „preserve“, „commonjs“ nebo na „es2015“ a novější.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10626,11 +10653,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Option_allowImportingTsExtensions_can_only_be_used_when_either_noEmit_or_emitDeclarationOnly_is_set_5096" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Option_allowImportingTsExtensions_can_only_be_used_when_one_of_noEmit_emitDeclarationOnly_or_rewrite_5096" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.]]></Val>
+          <Val><![CDATA[Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Možnost „allowImportingTsExtensions“ se dá použít jenom v případě, že je nastavená možnost „noEmit“ nebo „emitDeclarationOnly“.]]></Val>
+            <Val><![CDATA[Možnost allowImportingTsExtensions se dá použít jenom v případě, že je nastavená možnost noEmit, emitDeclarationOnly nebo rewriteRelativeImportExtensions.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17463,6 +17490,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information_5111" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Visit https://aka.ms/ts6 for migration information.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Informace o migraci najdete na https://aka.ms/ts6.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file_95110" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Visit https://aka.ms/tsconfig to read more about this file]]></Val>
@@ -18612,6 +18648,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";await_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block_1548" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['await using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deklarace await using nejsou povoleny v klauzulích case ani default, pokud nejsou obsaženy v bloku.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";await_using_statements_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_th_2853" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['await using' statements are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.]]></Val>
@@ -18834,6 +18879,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";false_unless_checkJs_is_set_6932" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`false`, unless `checkJs` is set]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[„false“, pokud není nastavené „checkJs“.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";false_unless_composite_is_set_6906" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[`false`, unless `composite` is set]]></Val>
@@ -18960,24 +19014,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node_69010" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";module_system_or_esModuleInterop_6904" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[module === "system" or esModuleInterop]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[module === "system" or esModuleInterop]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type_7009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['new' expression, whose target lacks a construct signature, implicitly has an 'any' type.]]></Val>
@@ -18992,6 +19028,15 @@
           <Val><![CDATA[`["node_modules", "bower_components", "jspm_packages"]5D;`, plus the value of `outDir` if one is specified.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[["node_modules", "bower_components", "jspm_packages"]5D; a hodnotu „outDir“, pokud je zadána.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler_69010" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[`nodenext`, pokud je `module` nastaveno na `nodenext`; `node16`, pokud je `module` nastaveno na `node16` nebo `node18`; jinak `bundler`.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19413,6 +19458,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConf_5112" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[tsconfig.json je k dispozici, ale nebude načten, pokud jsou soubory zadány v příkazovém řádku. K přeskočení této chyby použijte --ignoreConfig.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";type_Colon_6902" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[type:]]></Val>
@@ -19472,6 +19526,15 @@
           <Val><![CDATA['using' declarations are not allowed in ambient contexts.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Deklarace using nejsou v ambientní kontextech povolené.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block_1547" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deklarace using nejsou povoleny v klauzulích case ani default, pokud nejsou obsaženy v bloku.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -96,7 +96,7 @@ function bar(target: any, Promise: any) {
 
 class PersonMixin extends Function {
 >PersonMixin : Symbol(PersonMixin, Decl(narrowByInstanceof.ts, 38, 1))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     public check(o: any) {
 >check : Symbol(PersonMixin.check, Decl(narrowByInstanceof.ts, 42, 36))

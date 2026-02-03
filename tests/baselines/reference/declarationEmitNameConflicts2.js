@@ -1,16 +1,16 @@
 //// [tests/cases/compiler/declarationEmitNameConflicts2.ts] ////
 
 //// [declarationEmitNameConflicts2.ts]
-module X.Y.base {
+namespace X.Y.base {
     export function f() { }
     export class C { }
-    export module M {
+    export namespace M {
         export var v;
     }
     export enum E { }
 }
 
-module X.Y.base.Z {
+namespace X.Y.base.Z {
     export var f = X.Y.base.f; // Should be base.f
     export var C = X.Y.base.C; // Should be base.C
     export var M = X.Y.base.M; // Should be base.M
@@ -26,16 +26,13 @@ var X;
         (function (base) {
             function f() { }
             base.f = f;
-            var C = /** @class */ (function () {
-                function C() {
-                }
-                return C;
-            }());
+            class C {
+            }
             base.C = C;
-            var M;
+            let M;
             (function (M) {
             })(M = base.M || (base.M = {}));
-            var E;
+            let E;
             (function (E) {
             })(E = base.E || (base.E = {}));
         })(base = Y.base || (Y.base = {}));

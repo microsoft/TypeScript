@@ -1,3 +1,4 @@
+// @target: es2015
 interface Field<T> {
     clean(input: T): T
 }

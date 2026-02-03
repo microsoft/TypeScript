@@ -3,7 +3,7 @@
 //// [binopAssignmentShouldHaveType.ts]
 declare var console;
 "use strict";
-module Test {
+namespace Test {
  export class Bug {
   getName():string {
    return "name";
@@ -25,19 +25,16 @@ module Test {
 "use strict";
 var Test;
 (function (Test) {
-    var Bug = /** @class */ (function () {
-        function Bug() {
-        }
-        Bug.prototype.getName = function () {
+    class Bug {
+        getName() {
             return "name";
-        };
-        Bug.prototype.bug = function () {
+        }
+        bug() {
             var name = null;
             if ((name = this.getName()).length > 0) {
                 console.log(name);
             }
-        };
-        return Bug;
-    }());
+        }
+    }
     Test.Bug = Bug;
 })(Test || (Test = {}));

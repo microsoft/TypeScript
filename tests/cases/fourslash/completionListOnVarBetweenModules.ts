@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts' />
 
-////module M1 {
+////namespace M1 {
 ////    export class C1 {
 ////    }
 ////    export class C2 {
 ////    }
 ////}
 ////var x: M1./**/
-////module M2 {
+////namespace M2 {
 ////    export class Test3 {
 ////    }
 ////}

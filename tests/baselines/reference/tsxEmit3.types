@@ -1,12 +1,12 @@
 //// [tests/cases/conformance/jsx/tsxEmit3.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements { }
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -14,7 +14,7 @@ module M {
 >Foo : Foo
 >    : ^^^
 
-	export module S {
+	export namespace S {
 >S : typeof S
 >  : ^^^^^^^^
 
@@ -27,7 +27,7 @@ module M {
 	}
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -42,7 +42,7 @@ module M {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
-	export module S {
+	export namespace S {
 >S : typeof S
 >  : ^^^^^^^^
 
@@ -71,7 +71,7 @@ module M {
 
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -95,7 +95,7 @@ module M {
 >    : ^^^^^^^^^^^^
 }
 
-module M {
+namespace M {
 >M : typeof globalThis.M
 >  : ^^^^^^^^^^^^^^^^^^^
 

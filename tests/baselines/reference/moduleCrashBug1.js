@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleCrashBug1.ts] ////
 
 //// [moduleCrashBug1.ts]
-module _modes {
+namespace _modes {
  export interface IMode {
   
  }
@@ -13,7 +13,7 @@ module _modes {
 
 //_modes. // produces an internal error - please implement in derived class
 
-module editor {
+namespace editor {
  import modes = _modes;
 
 }
@@ -26,10 +26,7 @@ var m : _modes;
 //// [moduleCrashBug1.js]
 var _modes;
 (function (_modes) {
-    var Mode = /** @class */ (function () {
-        function Mode() {
-        }
-        return Mode;
-    }());
+    class Mode {
+    }
 })(_modes || (_modes = {}));
 var m;

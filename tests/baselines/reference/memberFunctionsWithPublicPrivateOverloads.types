@@ -305,7 +305,7 @@ class D<T> {
 >  : ^^^
 }
 
-var c: C;
+declare var c: C;
 >c : C
 >  : ^
 
@@ -323,7 +323,7 @@ var r = c.foo(1); // error
 >1 : 1
 >  : ^
 
-var d: D<number>;
+declare var d: D<number>;
 >d : D<number>
 >  : ^^^^^^^^^
 

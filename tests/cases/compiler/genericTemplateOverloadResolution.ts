@@ -1,3 +1,4 @@
+// @target: es2015
 interface IFooFn {
     (strings: TemplateStringsArray): Promise<{}>;
     <T>(strings: TemplateStringsArray): Promise<T>;

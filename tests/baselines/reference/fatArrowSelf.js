@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/fatArrowSelf.ts] ////
 
 //// [fatArrowSelf.ts]
-module Events {
+namespace Events {
     export interface ListenerCallback {
         (value:any):void;
     }
@@ -11,7 +11,7 @@ module Events {
     }
 }
 
-module Consumer {
+namespace Consumer {
     class EventEmitterConsummer {
         constructor (private emitter: Events.EventEmitter) { }
 
@@ -29,29 +29,24 @@ module Consumer {
 //// [fatArrowSelf.js]
 var Events;
 (function (Events) {
-    var EventEmitter = /** @class */ (function () {
-        function EventEmitter() {
+    class EventEmitter {
+        addListener(type, listener) {
         }
-        EventEmitter.prototype.addListener = function (type, listener) {
-        };
-        return EventEmitter;
-    }());
+    }
     Events.EventEmitter = EventEmitter;
 })(Events || (Events = {}));
 var Consumer;
 (function (Consumer) {
-    var EventEmitterConsummer = /** @class */ (function () {
-        function EventEmitterConsummer(emitter) {
+    class EventEmitterConsummer {
+        constructor(emitter) {
             this.emitter = emitter;
         }
-        EventEmitterConsummer.prototype.register = function () {
-            var _this = this;
-            this.emitter.addListener('change', function (e) {
-                _this.changed();
+        register() {
+            this.emitter.addListener('change', (e) => {
+                this.changed();
             });
-        };
-        EventEmitterConsummer.prototype.changed = function () {
-        };
-        return EventEmitterConsummer;
-    }());
+        }
+        changed() {
+        }
+    }
 })(Consumer || (Consumer = {}));

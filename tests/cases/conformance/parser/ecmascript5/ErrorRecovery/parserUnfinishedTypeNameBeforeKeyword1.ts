@@ -1,3 +1,4 @@
+// @target: es2015
 var x: TypeModule1.
-module TypeModule2 {
+namespace TypeModule2 {
 }

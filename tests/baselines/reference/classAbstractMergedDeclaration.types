@@ -5,9 +5,9 @@ abstract class CM {}
 >CM : CM
 >   : ^^
 
-module CM {}
+namespace CM {}
 
-module MC {}
+namespace MC {}
 abstract class MC {}
 >MC : MC
 >   : ^^

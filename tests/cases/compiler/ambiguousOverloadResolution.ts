@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class A { }
 class B extends A { x: number; }
 

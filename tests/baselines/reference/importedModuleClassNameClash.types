@@ -7,7 +7,7 @@ import foo = m1;
 >m1 : any
 >   : ^^^
  
-export module m1 { }
+export namespace m1 { }
  
 class foo { }
 >foo : foo

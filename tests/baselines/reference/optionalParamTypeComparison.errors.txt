@@ -7,8 +7,8 @@ optionalParamTypeComparison.ts(5,1): error TS2322: Type '(s: string, n?: number)
 
 
 ==== optionalParamTypeComparison.ts (2 errors) ====
-    var f: (s: string, n?: number) => void;
-    var g: (s: string, b?: boolean) => void;
+    declare var f: (s: string, n?: number) => void;
+    declare var g: (s: string, b?: boolean) => void;
     
     f = g;
     ~

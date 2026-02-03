@@ -52,7 +52,7 @@ interface I {
 >       : ^^^^^^    
     }
 }
-var E: I;
+declare var E: I;
 >E : I
 >  : ^
 

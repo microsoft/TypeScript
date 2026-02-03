@@ -51,16 +51,13 @@ if (!(result instanceof RegExp)) {
 }
 else if (!result.global) {
 }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.validate = function () {
+class C {
+    validate() {
         return {};
-    };
-    return C;
-}());
+    }
+}
 function foo() {
-    var v = null;
+    let v = null;
     if (v instanceof C) {
         v; // Validator & Partial<OnChanges> & C
     }

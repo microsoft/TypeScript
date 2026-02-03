@@ -15,5 +15,5 @@ function exist() { }
 //// [sample.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var utils_js_1 = require("./utils.js");
+const utils_js_1 = require("./utils.js");
 (0, utils_js_1.exit)();

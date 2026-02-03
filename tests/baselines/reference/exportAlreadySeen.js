@@ -1,21 +1,21 @@
 //// [tests/cases/compiler/exportAlreadySeen.ts] ////
 
 //// [exportAlreadySeen.ts]
-module M {
+namespace M {
     export export var x = 1;
     export export function f() { }
 
-    export export module N {
+    export export namespace N {
         export export class C { }
         export export interface I { }
     }  
 }
 
-declare module A {
+declare namespace A {
     export export var x;
     export export function f()
 
-    export export module N {
+    export export namespace N {
         export export class C { }
         export export interface I { }
     }
@@ -27,13 +27,10 @@ var M;
     M.x = 1;
     function f() { }
     M.f = f;
-    var N;
+    let N;
     (function (N) {
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
         N.C = C;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));

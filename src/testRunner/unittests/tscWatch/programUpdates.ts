@@ -985,7 +985,7 @@ declare const eval: any`,
                     {
                         compilerOptions: {
                             module: "commonjs",
-                            target: "es5",
+                            target: "es2015",
                             noImplicitAny: true,
                             sourceMap: false,
                             lib: [
@@ -1010,7 +1010,7 @@ declare const eval: any`,
                             {
                                 compilerOptions: {
                                     module: "commonjs",
-                                    target: "es5",
+                                    target: "es2015",
                                     noImplicitAny: true,
                                     sourceMap: false,
                                     lib: [

@@ -1,4 +1,5 @@
-declare module Foo {
+// @target: es2015
+declare namespace Foo {
     enum Bar {
         a = `1`,
         b = '2',

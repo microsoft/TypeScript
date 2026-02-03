@@ -1,4 +1,6 @@
-declare module linq {
+// @target: es2015
+// @strict: false
+declare namespace linq {
 
     interface Enumerable<T> {
         OrderByDescending(keySelector?: string): OrderedEnumerable<T>;

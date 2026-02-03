@@ -9,7 +9,7 @@ function ff<T, U>(x: T, y: U) {
 >y : U
 >  : ^
 
-    var z: Object;
+    var z!: Object;
 >z : Object
 >  : ^^^^^^
 

@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/assignmentCompatability40.ts] ////
 
 //// [assignmentCompatability40.ts]
-module __test1__ {
+namespace __test1__ {
     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
     export var __val__obj4 = obj4;
 }
-module __test2__ {
+namespace __test2__ {
     export           class classWithPrivate<T> { constructor(private one: T) {} }                       var x5 = new classWithPrivate(1);;
     export var __val__x5 = x5;
 }
@@ -21,12 +21,11 @@ var __test1__;
 })(__test1__ || (__test1__ = {}));
 var __test2__;
 (function (__test2__) {
-    var classWithPrivate = /** @class */ (function () {
-        function classWithPrivate(one) {
+    class classWithPrivate {
+        constructor(one) {
             this.one = one;
         }
-        return classWithPrivate;
-    }());
+    }
     __test2__.classWithPrivate = classWithPrivate;
     var x5 = new classWithPrivate(1);
     ;

@@ -1,4 +1,5 @@
-﻿// error
+﻿// @target: es2015
+// error
 var oct1 = 0O13334823;
 var oct2 = 0o34318592;
 

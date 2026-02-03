@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 // @noImplicitAny: true
 ////declare const a: string
 ////function wat([|b |]) {

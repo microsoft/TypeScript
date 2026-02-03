@@ -44,7 +44,7 @@ var a: { Foo?: Base; };
 var b = { Foo: <Derived>null };
 var r = true ? a : b;
 
-module TwoLevels {
+namespace TwoLevels {
     interface T {
         Foo?: Base;
     }

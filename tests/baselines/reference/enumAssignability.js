@@ -16,7 +16,7 @@ f = 1; // ok
 var x: number = e; // ok
 x = f; // ok
 
-module Others {
+namespace Others {
     var a: any = e; // ok
 
     class C {
@@ -77,11 +77,8 @@ x = f; // ok
 var Others;
 (function (Others) {
     var a = e; // ok
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     var ac;
     var ai;
     var b = e; // ok

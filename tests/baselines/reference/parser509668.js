@@ -7,14 +7,9 @@ class Foo3 {
 }
 
 //// [parser509668.js]
-var Foo3 = /** @class */ (function () {
+class Foo3 {
     // Doesn't work, but should
-    function Foo3() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
+    constructor(...args) {
         this.args = args;
     }
-    return Foo3;
-}());
+}

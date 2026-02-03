@@ -25,14 +25,11 @@ function dec() {
         //propKey has three underscores as prefix, but the method has only two underscores
     };
 }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.__foo = function (bar) {
+class A {
+    __foo(bar) {
         // do something with bar
-    };
-    __decorate([
-        dec()
-    ], A.prototype, "__foo", null);
-    return A;
-}());
+    }
+}
+__decorate([
+    dec()
+], A.prototype, "__foo", null);

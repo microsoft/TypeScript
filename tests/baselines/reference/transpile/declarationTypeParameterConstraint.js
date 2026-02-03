@@ -11,7 +11,7 @@ export const object = {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.object = void 0;
 exports.object = {
-    doThing: function (_t, _in) {
+    doThing(_t, _in) {
         return;
     },
 };

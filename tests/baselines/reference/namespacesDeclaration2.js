@@ -4,7 +4,7 @@
 namespace N {
     function S() {}
 }
-module M {
+namespace M {
     function F() {}
 }
 
@@ -27,7 +27,7 @@ var M;
 })(M || (M = {}));
 var foge;
 var foo;
-var x;
+let x;
 
 
 //// [namespacesDeclaration2.d.ts]

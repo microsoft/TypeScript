@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/externalModules/importNonExternalModule.ts] ////
 
 //// [foo_0.ts]
-module foo {
+namespace foo {
 	export var answer = 42;
 }
 
@@ -21,7 +21,7 @@ var foo;
 //// [foo_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo = require("./foo_0");
+const foo = require("./foo_0");
 // Import should fail.  foo_0 not an external module
 if (foo.answer === 42) {
 }

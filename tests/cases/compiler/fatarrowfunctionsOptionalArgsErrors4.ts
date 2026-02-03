@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
     false ? (arg?: number = 0) => 47 : null;
     false ? ((arg?: number = 0) => 57) : null;
     false ? null : (arg?: number = 0) => 67;

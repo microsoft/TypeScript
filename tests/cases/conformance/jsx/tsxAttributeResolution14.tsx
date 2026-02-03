@@ -1,8 +1,9 @@
-﻿//@jsx: preserve
+﻿// @target: es2015
+//@jsx: preserve
 //@module: commonjs
 
 //@filename: react.d.ts
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
         div: any;

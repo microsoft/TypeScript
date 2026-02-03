@@ -22,7 +22,7 @@ class Sammy {
 >  : ^
    }
 }
-module Sammy {
+namespace Sammy {
 >Sammy : typeof Sammy
 >      : ^^^^^^^^^^^^
 
@@ -37,7 +37,7 @@ interface JQueryStatic {
 >sammy : Sammy
 >      : ^^^^^
 }
-var $: JQueryStatic;
+declare var $: JQueryStatic;
 >$ : JQueryStatic
 >  : ^^^^^^^^^^^^
 

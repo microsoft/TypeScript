@@ -1,3 +1,4 @@
+// @target: es2015
 class BiMap<K, V> {
     private inverseBiMap: BiMap<V, K>;
     public get(key: K): V { return null; }

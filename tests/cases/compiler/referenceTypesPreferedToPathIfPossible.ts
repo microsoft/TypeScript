@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 // @noImplicitReferences: true
 // @filename: /.src/node_modules/@types/node/index.d.ts

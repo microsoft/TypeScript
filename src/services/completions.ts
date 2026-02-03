@@ -256,7 +256,6 @@ import {
     isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
     isTypeParameterDeclaration,
-    isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
     isVariableLike,
@@ -3281,7 +3280,7 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
                 isEqualityOperatorKind(previousToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind) ?
                 // completion at `x ===/**/` should be for the right side
                 checker.getTypeAtLocation(parent.left) :
-                checker.getContextualType(previousToken as Expression, ContextFlags.Completions) || checker.getContextualType(previousToken as Expression);
+                checker.getContextualType(previousToken as Expression, ContextFlags.IgnoreNodeInferences) || checker.getContextualType(previousToken as Expression);
     }
 }
 
@@ -3626,17 +3625,20 @@ function getCompletionData(
     }
 
     log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
-    const contextualType = previousToken && getContextualType(previousToken, position, sourceFile, typeChecker);
+    const contextualTypeOrConstraint = previousToken && (
+        getContextualType(previousToken, position, sourceFile, typeChecker) ??
+            getConstraintOfTypeArgumentProperty(previousToken, typeChecker)
+    );
 
     // exclude literal suggestions after <input type="text" [||] /> (#51667) and after closing quote (#52675)
     // for strings getStringLiteralCompletions handles completions
     const isLiteralExpected = !tryCast(previousToken, isStringLiteralLike) && !isJsxIdentifierExpected;
     const literals = !isLiteralExpected ? [] : mapDefined(
-        contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]),
+        contextualTypeOrConstraint && (contextualTypeOrConstraint.isUnion() ? contextualTypeOrConstraint.types : [contextualTypeOrConstraint]),
         t => t.isLiteral() && !(t.flags & TypeFlags.EnumLiteral) ? t.value : undefined,
     );
 
-    const recommendedCompletion = previousToken && contextualType && getRecommendedCompletion(previousToken, contextualType, typeChecker);
+    const recommendedCompletion = previousToken && contextualTypeOrConstraint && getRecommendedCompletion(previousToken, contextualTypeOrConstraint, typeChecker);
     return {
         kind: CompletionDataKind.Data,
         symbols,
@@ -3964,7 +3966,7 @@ function getCompletionData(
         // Cursor is inside a JSX self-closing element or opening element
         const attrsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes);
         if (!attrsType) return GlobalsSearch.Continue;
-        const completionsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes, ContextFlags.Completions);
+        const completionsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes, ContextFlags.IgnoreNodeInferences);
         symbols = concatenate(symbols, filterJsxAttributes(getPropertiesForObjectExpression(attrsType, completionsType, jsxContainer.attributes, typeChecker), jsxContainer.attributes.properties));
         setSortTextToOptionalMember();
         completionKind = CompletionKind.MemberLike;
@@ -4562,7 +4564,7 @@ function getCompletionData(
                 }
                 return GlobalsSearch.Continue;
             }
-            const completionsType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completions);
+            const completionsType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.IgnoreNodeInferences);
             const hasStringIndexType = (completionsType || instantiatedType).getStringIndexType();
             const hasNumberIndextype = (completionsType || instantiatedType).getNumberIndexType();
             isNewIdentifierLocation = !!hasStringIndexType || !!hasNumberIndextype;
@@ -5766,11 +5768,13 @@ function tryGetTypeLiteralNode(node: Node): TypeLiteralNode | undefined {
     return undefined;
 }
 
-function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): Type | undefined {
+/** @internal */
+export function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): Type | undefined {
     if (!node) return undefined;
 
-    if (isTypeNode(node) && isTypeReferenceType(node.parent)) {
-        return checker.getTypeArgumentConstraint(node);
+    if (isTypeNode(node)) {
+        const constraint = checker.getTypeArgumentConstraint(node);
+        if (constraint) return constraint;
     }
 
     const t = getConstraintOfTypeArgumentProperty(node.parent, checker);
@@ -5779,10 +5783,19 @@ function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): 
     switch (node.kind) {
         case SyntaxKind.PropertySignature:
             return checker.getTypeOfPropertyOfContextualType(t, (node as PropertySignature).symbol.escapedName);
+        case SyntaxKind.ColonToken:
+            if (node.parent.kind === SyntaxKind.PropertySignature) {
+                // The cursor is at a property value location like `Foo<{ x: | }`.
+                // `t` already refers to the appropriate property type.
+                return t;
+            }
+            break;
         case SyntaxKind.IntersectionType:
         case SyntaxKind.TypeLiteral:
         case SyntaxKind.UnionType:
             return t;
+        case SyntaxKind.OpenBracketToken:
+            return checker.getElementTypeOfArrayType(t);
     }
 }
 

@@ -17,7 +17,7 @@ class Clod {
 >10 : 10
 >   : ^^
 }
-module Clod {
+namespace Clod {
 >Clod : typeof Clod
 >     : ^^^^^^^^^^^
 

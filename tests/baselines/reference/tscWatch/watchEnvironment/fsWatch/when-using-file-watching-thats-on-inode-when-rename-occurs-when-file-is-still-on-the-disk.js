@@ -18,7 +18,6 @@ export declare function foo(): string;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 13
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -45,7 +44,7 @@ CreatingProgramWith::
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":4} Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"watchFile":4} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 {"watchFile":4} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":4} Type roots
@@ -54,16 +53,15 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
-//// [/user/username/projects/myproject/foo.js] Inode:: 113
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 15
+
+//// [/user/username/projects/myproject/foo.js] Inode:: 114
+export {};
 
 
-//// [/user/username/projects/myproject/main.js] Inode:: 114
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var foo_1 = require("./foo");
-(0, foo_1.foo)();
+//// [/user/username/projects/myproject/main.js] Inode:: 115
+import { foo } from "./foo";
+foo();
 
 
 
@@ -74,8 +72,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+  {"inode":15}
 /user/username/projects/myproject/foo.ts: *new*
   {"inode":6}
 /user/username/projects/myproject/main.ts: *new*
@@ -94,17 +92,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/foo.ts
 /user/username/projects/myproject/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/foo.ts
 /user/username/projects/myproject/main.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/foo.ts (used version)
 /user/username/projects/myproject/main.ts (used version)
 
@@ -113,7 +111,7 @@ exitCode:: ExitStatus.undefined
 Change:: Introduce error such that when callback happens file is already appeared
 
 Input::
-//// [/user/username/projects/myproject/foo.ts] Inode:: 115
+//// [/user/username/projects/myproject/foo.ts] Inode:: 116
 export declare function foo2(): string;
 
 
@@ -131,8 +129,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":15}
 /user/username/projects/myproject/foo.ts:
   {} *new*
 /user/username/projects/myproject/main.ts:
@@ -173,8 +171,8 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 113
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 114
+//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 114
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 115
 
 
 Program root files: [
@@ -188,7 +186,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/foo.ts
 /user/username/projects/myproject/main.ts
 
@@ -205,7 +203,7 @@ exitCode:: ExitStatus.undefined
 Change:: Replace file with rename event that fixes error
 
 Input::
-//// [/user/username/projects/myproject/foo.ts] Inode:: 116
+//// [/user/username/projects/myproject/foo.ts] Inode:: 117
 export declare function foo(): string;
 
 
@@ -231,10 +229,10 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":15}
 /user/username/projects/myproject/foo.ts:
-  {"inode":116} *new*
+  {"inode":117} *new*
 /user/username/projects/myproject/main.ts:
   {"inode":5}
 /user/username/projects/myproject/tsconfig.json:
@@ -263,8 +261,8 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 113
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 114
+//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 114
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 115
 
 
 Program root files: [
@@ -278,7 +276,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/foo.ts
 /user/username/projects/myproject/main.ts
 

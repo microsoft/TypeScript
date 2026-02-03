@@ -1,14 +1,14 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/ModuleAndClassWithSameNameAndCommonRoot.ts] ////
 
 //// [module.ts]
-module X.Y {
-    export module Point {
+namespace X.Y {
+    export namespace Point {
         export var Origin = new Point(0, 0);
     }
 }
 
 //// [classPoint.ts]
-module X.Y {
+namespace X.Y {
     // duplicate identifier
     export class Point {
         constructor(x: number, y: number) {
@@ -21,7 +21,7 @@ module X.Y {
 }
 
 //// [simple.ts]
-module A {
+namespace A {
     export var Instance = new A();
 }
 
@@ -36,7 +36,7 @@ var X;
 (function (X) {
     var Y;
     (function (Y) {
-        var Point;
+        let Point;
         (function (Point) {
             Point.Origin = new Point(0, 0);
         })(Point = Y.Point || (Y.Point = {}));
@@ -48,13 +48,12 @@ var X;
     var Y;
     (function (Y) {
         // duplicate identifier
-        var Point = /** @class */ (function () {
-            function Point(x, y) {
+        class Point {
+            constructor(x, y) {
                 this.x = x;
                 this.y = y;
             }
-            return Point;
-        }());
+        }
         Y.Point = Point;
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
@@ -64,8 +63,5 @@ var A;
     A.Instance = new A();
 })(A || (A = {}));
 // duplicate identifier
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}

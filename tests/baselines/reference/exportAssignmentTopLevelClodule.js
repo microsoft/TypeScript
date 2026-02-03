@@ -4,7 +4,7 @@
 class Foo {
 	test = "test";
 }
-module Foo {
+namespace Foo {
 	export var answer = 42;
 }
 export = Foo;
@@ -19,12 +19,11 @@ if(foo.answer === 42){
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var Foo = /** @class */ (function () {
-        function Foo() {
+    class Foo {
+        constructor() {
             this.test = "test";
         }
-        return Foo;
-    }());
+    }
     (function (Foo) {
         Foo.answer = 42;
     })(Foo || (Foo = {}));

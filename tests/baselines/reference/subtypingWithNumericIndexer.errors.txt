@@ -27,7 +27,7 @@ subtypingWithNumericIndexer.ts(36,11): error TS2415: Class 'B4<T>' incorrectly e
         [x: number]: Derived2; // ok
     }
     
-    module Generics {
+    namespace Generics {
         class A<T extends Base> {
             [x: number]: T;
         }

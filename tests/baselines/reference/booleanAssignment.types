@@ -55,7 +55,7 @@ b = true; // OK
 >true : true
 >     : ^^^^
 
-var b2:boolean;
+declare var b2:boolean;
 >b2 : boolean
 >   : ^^^^^^^
 

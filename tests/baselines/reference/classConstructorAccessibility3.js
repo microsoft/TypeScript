@@ -36,42 +36,38 @@ c = Bar;
 c = Baz;
 
 //// [classConstructorAccessibility3.js]
-var Foo = /** @class */ (function () {
-    function Foo(x) {
+class Foo {
+    constructor(x) {
         this.x = x;
     }
-    return Foo;
-}());
-var Bar = /** @class */ (function () {
-    function Bar(x) {
+}
+class Bar {
+    constructor(x) {
         this.x = x;
     }
-    return Bar;
-}());
-var Baz = /** @class */ (function () {
-    function Baz(x) {
+}
+class Baz {
+    constructor(x) {
         this.x = x;
     }
-    return Baz;
-}());
-var Qux = /** @class */ (function () {
-    function Qux(x) {
+}
+class Qux {
+    constructor(x) {
         this.x = x;
     }
-    return Qux;
-}());
+}
 // b is public
-var a = Foo;
+let a = Foo;
 a = Bar;
 a = Baz; // error Baz is protected
 a = Qux; // error Qux is private
 // b is protected
-var b = Baz;
+let b = Baz;
 b = Foo;
 b = Bar;
 b = Qux; // error Qux is private
 // c is private
-var c = Qux;
+let c = Qux;
 c = Foo;
 c = Bar;
 c = Baz;

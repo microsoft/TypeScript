@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/crashRegressionTest.ts] ////
 
 //// [crashRegressionTest.ts]
-module MsPortal.Util.TemplateEngine {
+namespace MsPortal.Util.TemplateEngine {
     "use strict";
  
     interface TemplateKeyValue {
@@ -35,22 +35,20 @@ var MsPortal;
         var TemplateEngine;
         (function (TemplateEngine) {
             "use strict";
-            var StringTemplate = /** @class */ (function () {
-                function StringTemplate(templateStorage) {
+            class StringTemplate {
+                constructor(templateStorage) {
                     this._templateStorage = templateStorage;
                 }
-                StringTemplate.prototype.text = function (value) {
+                text(value) {
                     this._templateStorage.templateSources[this._name] = value;
-                };
-                return StringTemplate;
-            }());
-            var TemplateStorage = /** @class */ (function () {
-                function TemplateStorage() {
+                }
+            }
+            class TemplateStorage {
+                constructor() {
                     this.templateSources = {};
                     this.templateData = {};
                 }
-                return TemplateStorage;
-            }());
+            }
             TemplateEngine.TemplateStorage = TemplateStorage;
         })(TemplateEngine = Util.TemplateEngine || (Util.TemplateEngine = {}));
     })(Util = MsPortal.Util || (MsPortal.Util = {}));

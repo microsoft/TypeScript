@@ -30,18 +30,15 @@ function B() {
     var someLocal = {};
     return someLocal;
 }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.A = function () {
+class C {
+    A() {
         return "";
-    };
-    C.prototype.B = function () {
+    }
+    B() {
         var someLocal = {};
         return someLocal;
-    };
-    return C;
-}());
+    }
+}
 
 
 //// [implicitAnyAnyReturningFunction.d.ts]

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @module: esnext
 const foo = foo; // compile error
 export const bar = bar; // should be compile error

@@ -2,8 +2,8 @@
 
 === logicalNotOperatorWithNumberType.ts ===
 // ! operator on number type
-var NUMBER: number;
->NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 3))
+declare var NUMBER: number;
+>NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 11))
 
 var NUMBER1: number[] = [1, 2];
 >NUMBER1 : Symbol(NUMBER1, Decl(logicalNotOperatorWithNumberType.ts, 2, 3))
@@ -14,17 +14,17 @@ function foo(): number { return 1; }
 class A {
 >A : Symbol(A, Decl(logicalNotOperatorWithNumberType.ts, 4, 36))
 
-    public a: number;
+    public a!: number;
 >a : Symbol(A.a, Decl(logicalNotOperatorWithNumberType.ts, 6, 9))
 
     static foo() { return 1; }
->foo : Symbol(A.foo, Decl(logicalNotOperatorWithNumberType.ts, 7, 21))
+>foo : Symbol(A.foo, Decl(logicalNotOperatorWithNumberType.ts, 7, 22))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(logicalNotOperatorWithNumberType.ts, 9, 1))
 
-    export var n: number;
->n : Symbol(n, Decl(logicalNotOperatorWithNumberType.ts, 11, 14))
+    export declare var n: number;
+>n : Symbol(n, Decl(logicalNotOperatorWithNumberType.ts, 11, 22))
 }
 
 var objA = new A();
@@ -34,7 +34,7 @@ var objA = new A();
 // number type var
 var ResultIsBoolean1 = !NUMBER;
 >ResultIsBoolean1 : Symbol(ResultIsBoolean1, Decl(logicalNotOperatorWithNumberType.ts, 17, 3))
->NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 11))
 
 var ResultIsBoolean2 = !NUMBER1;
 >ResultIsBoolean2 : Symbol(ResultIsBoolean2, Decl(logicalNotOperatorWithNumberType.ts, 18, 3))
@@ -65,9 +65,9 @@ var ResultIsBoolean6 = !objA.a;
 
 var ResultIsBoolean7 = !M.n;
 >ResultIsBoolean7 : Symbol(ResultIsBoolean7, Decl(logicalNotOperatorWithNumberType.ts, 27, 3))
->M.n : Symbol(M.n, Decl(logicalNotOperatorWithNumberType.ts, 11, 14))
+>M.n : Symbol(M.n, Decl(logicalNotOperatorWithNumberType.ts, 11, 22))
 >M : Symbol(M, Decl(logicalNotOperatorWithNumberType.ts, 9, 1))
->n : Symbol(M.n, Decl(logicalNotOperatorWithNumberType.ts, 11, 14))
+>n : Symbol(M.n, Decl(logicalNotOperatorWithNumberType.ts, 11, 22))
 
 var ResultIsBoolean8 = !NUMBER1[0];
 >ResultIsBoolean8 : Symbol(ResultIsBoolean8, Decl(logicalNotOperatorWithNumberType.ts, 28, 3))
@@ -79,29 +79,29 @@ var ResultIsBoolean9 = !foo();
 
 var ResultIsBoolean10 = !A.foo();
 >ResultIsBoolean10 : Symbol(ResultIsBoolean10, Decl(logicalNotOperatorWithNumberType.ts, 30, 3))
->A.foo : Symbol(A.foo, Decl(logicalNotOperatorWithNumberType.ts, 7, 21))
+>A.foo : Symbol(A.foo, Decl(logicalNotOperatorWithNumberType.ts, 7, 22))
 >A : Symbol(A, Decl(logicalNotOperatorWithNumberType.ts, 4, 36))
->foo : Symbol(A.foo, Decl(logicalNotOperatorWithNumberType.ts, 7, 21))
+>foo : Symbol(A.foo, Decl(logicalNotOperatorWithNumberType.ts, 7, 22))
 
 var ResultIsBoolean11 = !(NUMBER + NUMBER);
 >ResultIsBoolean11 : Symbol(ResultIsBoolean11, Decl(logicalNotOperatorWithNumberType.ts, 31, 3))
->NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 3))
->NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 11))
+>NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 11))
 
 // multiple ! operator
 var ResultIsBoolean12 = !!NUMBER;
 >ResultIsBoolean12 : Symbol(ResultIsBoolean12, Decl(logicalNotOperatorWithNumberType.ts, 34, 3))
->NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 11))
 
 var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
 >ResultIsBoolean13 : Symbol(ResultIsBoolean13, Decl(logicalNotOperatorWithNumberType.ts, 35, 3))
->NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 3))
->NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 11))
+>NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 11))
 
 // miss assignment operators
 !1;
 !NUMBER;
->NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(logicalNotOperatorWithNumberType.ts, 1, 11))
 
 !NUMBER1;
 >NUMBER1 : Symbol(NUMBER1, Decl(logicalNotOperatorWithNumberType.ts, 2, 3))
@@ -115,15 +115,15 @@ var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
 >a : Symbol(A.a, Decl(logicalNotOperatorWithNumberType.ts, 6, 9))
 
 !M.n;
->M.n : Symbol(M.n, Decl(logicalNotOperatorWithNumberType.ts, 11, 14))
+>M.n : Symbol(M.n, Decl(logicalNotOperatorWithNumberType.ts, 11, 22))
 >M : Symbol(M, Decl(logicalNotOperatorWithNumberType.ts, 9, 1))
->n : Symbol(M.n, Decl(logicalNotOperatorWithNumberType.ts, 11, 14))
+>n : Symbol(M.n, Decl(logicalNotOperatorWithNumberType.ts, 11, 22))
 
 !objA.a, M.n;
 >objA.a : Symbol(A.a, Decl(logicalNotOperatorWithNumberType.ts, 6, 9))
 >objA : Symbol(objA, Decl(logicalNotOperatorWithNumberType.ts, 14, 3))
 >a : Symbol(A.a, Decl(logicalNotOperatorWithNumberType.ts, 6, 9))
->M.n : Symbol(M.n, Decl(logicalNotOperatorWithNumberType.ts, 11, 14))
+>M.n : Symbol(M.n, Decl(logicalNotOperatorWithNumberType.ts, 11, 22))
 >M : Symbol(M, Decl(logicalNotOperatorWithNumberType.ts, 9, 1))
->n : Symbol(M.n, Decl(logicalNotOperatorWithNumberType.ts, 11, 14))
+>n : Symbol(M.n, Decl(logicalNotOperatorWithNumberType.ts, 11, 22))
 

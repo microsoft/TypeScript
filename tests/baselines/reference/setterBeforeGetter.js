@@ -15,19 +15,12 @@ class Foo {
 
 
 //// [setterBeforeGetter.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+class Foo {
+    // should not be an error to order them this way
+    set bar(thing) {
+        this._bar = thing;
     }
-    Object.defineProperty(Foo.prototype, "bar", {
-        get: function () {
-            return this._bar;
-        },
-        // should not be an error to order them this way
-        set: function (thing) {
-            this._bar = thing;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Foo;
-}());
+    get bar() {
+        return this._bar;
+    }
+}

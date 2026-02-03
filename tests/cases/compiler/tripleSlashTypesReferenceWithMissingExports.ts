@@ -1,3 +1,4 @@
+// @target: es2022
 // @module: commonjs,node16,node18,node20,nodenext
 // @filename: node_modules/pkg/index.d.ts
 interface GlobalThing { a: number }

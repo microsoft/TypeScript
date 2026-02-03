@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 public
 class NonPublicClass {
     public s() {
