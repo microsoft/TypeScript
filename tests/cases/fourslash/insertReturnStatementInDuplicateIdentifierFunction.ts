@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @strict: true
 //// class foo { };
 //// function foo() { /**/ }
 
