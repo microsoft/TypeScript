@@ -5583,10 +5583,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let result: Symbol[] | undefined;
             members.forEach((symbol, id) => {
                 if (isNamedMember(symbol, id)) {
-                    (result || (result = [])).push(symbol);
+                    (result ??= []).push(symbol);
                 }
             });
-            return result || emptyArray;
+            return result ?? emptyArray;
         }
 
         if (members.size === 0) {
@@ -5614,12 +5614,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         contained?.sort(compareSymbols);
         nonContained?.sort(compareSymbols);
-        return concatenate(contained, nonContained) || emptyArray;
+        return concatenate(contained, nonContained) ?? emptyArray;
 
         function isDeclarationContainedBy(symbol: Symbol, container: Symbol): boolean {
             const declaration = symbol.valueDeclaration;
-            if (declaration) {
-                return some(container.declarations, d => containedBy(declaration, d));
+            if (declaration && container.declarations) {
+                for (const d of container.declarations) {
+                    if (containedBy(declaration, d)) {
+                        return true;
+                    }
+                }
             }
             return false;
 
