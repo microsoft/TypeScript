@@ -1,5 +1,11 @@
 //// [tests/cases/conformance/importAttributes/importAttributes10.ts] ////
 
+=== a.json ===
+{ "key": "value" }
+>{ "key": "value" } : { key: string; }
+>"key" : string
+>"value" : "value"
+
 === b.ts ===
 declare global {
 >global : any
@@ -11,7 +17,7 @@ declare global {
 }
 
 export type Test1 = typeof import("./a.json", {
->Test1 : any
+>Test1 : { key: string; }
 
   with: {
     type: "json"
@@ -21,7 +27,7 @@ export type Test1 = typeof import("./a.json", {
 });
 
 export type Test2 = typeof import("./a.json", {
->Test2 : any
+>Test2 : { key: string; }
 
   with: {
     type: "json",
@@ -30,7 +36,7 @@ export type Test2 = typeof import("./a.json", {
 });
 
 export type Test3 = typeof import("./a.json", {
->Test3 : any
+>Test3 : { key: string; }
 
   with: {
     type: "json"
@@ -40,7 +46,7 @@ export type Test3 = typeof import("./a.json", {
 });
 
 export type Test4 = typeof import("./a.json", {
->Test4 : any
+>Test4 : { key: string; }
 
   with: {
     type: "json",,

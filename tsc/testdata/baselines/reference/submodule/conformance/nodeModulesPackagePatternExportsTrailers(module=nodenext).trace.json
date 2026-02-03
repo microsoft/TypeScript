@@ -2,7 +2,7 @@
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
 Found 'package.json' at '/.src/package.json'.
-Loading module 'inner/cjs/index.cjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Loading module 'inner/cjs/index.cjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/.src/node_modules/inner/package.json'.
 Using 'exports' subpath './cjs/*.cjs' with target './index.cjs'.
@@ -15,7 +15,7 @@ Resolving real path for '/.src/node_modules/inner/index.d.cts', result '/.src/no
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
-Loading module 'inner/mjs/index.mjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Loading module 'inner/mjs/index.mjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './mjs/*.mjs' with target './index.mjs'.
@@ -28,7 +28,7 @@ Resolving real path for '/.src/node_modules/inner/index.d.mts', result '/.src/no
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
-Loading module 'inner/js/index.js' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Loading module 'inner/js/index.js' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './js/*.js' with target './index.js'.
@@ -42,7 +42,7 @@ Resolving real path for '/.src/node_modules/inner/index.d.ts', result '/.src/nod
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
-Loading module 'inner/cjs/index.cjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Loading module 'inner/cjs/index.cjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './cjs/*.cjs' with target './index.cjs'.
@@ -55,7 +55,7 @@ Resolving real path for '/.src/node_modules/inner/index.d.cts', result '/.src/no
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
-Loading module 'inner/mjs/index.mjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Loading module 'inner/mjs/index.mjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './mjs/*.mjs' with target './index.mjs'.
@@ -68,7 +68,7 @@ Resolving real path for '/.src/node_modules/inner/index.d.mts', result '/.src/no
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
-Loading module 'inner/js/index.js' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Loading module 'inner/js/index.js' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './js/*.js' with target './index.js'.
@@ -82,7 +82,7 @@ Resolving real path for '/.src/node_modules/inner/index.d.ts', result '/.src/nod
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
-Loading module 'inner/cjs/index.cjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Loading module 'inner/cjs/index.cjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './cjs/*.cjs' with target './index.cjs'.
@@ -95,7 +95,7 @@ Resolving real path for '/.src/node_modules/inner/index.d.cts', result '/.src/no
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
-Loading module 'inner/mjs/index.mjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Loading module 'inner/mjs/index.mjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './mjs/*.mjs' with target './index.mjs'.
@@ -108,7 +108,7 @@ Resolving real path for '/.src/node_modules/inner/index.d.mts', result '/.src/no
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
 File '/.src/package.json' exists according to earlier cached lookups.
-Loading module 'inner/js/index.js' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Loading module 'inner/js/index.js' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/.src/node_modules/inner/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath './js/*.js' with target './index.js'.

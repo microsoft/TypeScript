@@ -275,7 +275,7 @@ func (options *CompilerOptions) GetResolveJsonModule() bool {
 	}
 	switch options.GetEmitModuleKind() {
 	// TODO in 6.0: add Node16/Node18
-	case ModuleKindNode20, ModuleKindESNext:
+	case ModuleKindNode20, ModuleKindNodeNext:
 		return true
 	}
 	return options.GetModuleResolutionKind() == ModuleResolutionKindBundler

@@ -73,7 +73,7 @@ File '/home/src/workspaces/project/common.d.ts' exists - use it as a name resolu
 ======== Resolving module './in-js' from '/home/src/workspaces/project/producer/index.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
-Loading module as file / folder, candidate module location '/home/src/workspaces/project/producer/in-js', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/home/src/workspaces/project/producer/in-js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/workspaces/project/producer/in-js.ts' does not exist.
 File '/home/src/workspaces/project/producer/in-js.tsx' does not exist.
 File '/home/src/workspaces/project/producer/in-js.d.ts' exists - use it as a name resolution result.
@@ -96,14 +96,14 @@ Resolving in CJS mode with conditions 'require', 'types', 'node'.
 'paths' option is specified, looking for a pattern to match module name '@producer'.
 Module name '@producer', matched pattern '@producer'.
 Trying substitution '../producer/index', candidate module location: '../producer/index'.
-Loading module as file / folder, candidate module location '/home/src/workspaces/project/producer/index', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/home/src/workspaces/project/producer/index', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/workspaces/project/producer/index.ts' exists - use it as a name resolution result.
 ======== Module name '@producer' was successfully resolved to '/home/src/workspaces/project/producer/index.ts'. ========
 ======== Resolving module './in-js' from '/home/src/workspaces/project/producer/index.ts'. ========
 Using compiler options of project reference redirect '/home/src/workspaces/project/producer/tsconfig.json'.
 Explicitly specified module resolution kind: 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
-Loading module as file / folder, candidate module location '/home/src/workspaces/project/producer/in-js', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/home/src/workspaces/project/producer/in-js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/workspaces/project/producer/in-js.ts' does not exist.
 File '/home/src/workspaces/project/producer/in-js.tsx' does not exist.
 File '/home/src/workspaces/project/producer/in-js.d.ts' exists - use it as a name resolution result.

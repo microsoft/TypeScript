@@ -4,9 +4,10 @@
  //// [tests/cases/conformance/importAttributes/importAttributes10.ts] ////
 
 -=== ./a.json ===
--{ "key": "value" }
-->"key" : Symbol("key", Decl(a.json, 0, 1))
--
++=== a.json ===
+ { "key": "value" }
+ >"key" : Symbol("key", Decl(a.json, 0, 1))
+
 -=== ./b.ts ===
 +=== b.ts ===
  declare global {

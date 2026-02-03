@@ -1,17 +1,13 @@
-b.ts(7,35): error TS2732: Cannot find module './a.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
-b.ts(13,35): error TS2732: Cannot find module './a.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
-b.ts(19,35): error TS2732: Cannot find module './a.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 b.ts(22,5): error TS1005: '}' expected.
 b.ts(23,1): error TS1128: Declaration or statement expected.
 b.ts(23,2): error TS1128: Declaration or statement expected.
-b.ts(25,35): error TS2732: Cannot find module './a.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 b.ts(27,18): error TS1478: Identifier or string literal expected.
 
 
 ==== a.json (0 errors) ====
     { "key": "value" }
     
-==== b.ts (8 errors) ====
+==== b.ts (4 errors) ====
     declare global {
         interface ImportAttributes {
             type: "json"
@@ -19,24 +15,18 @@ b.ts(27,18): error TS1478: Identifier or string literal expected.
     }
     
     export type Test1 = typeof import("./a.json", {
-                                      ~~~~~~~~~~
-!!! error TS2732: Cannot find module './a.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
       with: {
         type: "json"
       },
     });
     
     export type Test2 = typeof import("./a.json", {
-                                      ~~~~~~~~~~
-!!! error TS2732: Cannot find module './a.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
       with: {
         type: "json",
       }
     });
     
     export type Test3 = typeof import("./a.json", {
-                                      ~~~~~~~~~~
-!!! error TS2732: Cannot find module './a.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
       with: {
         type: "json"
       },,
@@ -50,8 +40,6 @@ b.ts(27,18): error TS1478: Identifier or string literal expected.
 !!! error TS1128: Declaration or statement expected.
     
     export type Test4 = typeof import("./a.json", {
-                                      ~~~~~~~~~~
-!!! error TS2732: Cannot find module './a.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
       with: {
         type: "json",,
                      ~

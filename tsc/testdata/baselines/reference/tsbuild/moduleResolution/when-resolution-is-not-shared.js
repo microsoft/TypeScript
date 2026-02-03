@@ -222,7 +222,7 @@ Output::
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
 Found 'package.json' at '/home/src/workspaces/project/packages/b/package.json'.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/workspaces/project/packages/b/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/packages/b/node_modules/@types' does not exist, skipping all lookups in it.

@@ -2,7 +2,7 @@
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
 Found 'package.json' at '/.src/package.json'.
-Loading module 'react/jsx-runtime' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Loading module 'react/jsx-runtime' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/.src/node_modules/@types/react/package.json'.
 Using 'exports' subpath './*' with target './jsx-runtime.js'.
@@ -14,7 +14,7 @@ Resolving real path for '/.src/node_modules/@types/react/jsx-runtime.d.ts', resu
 ======== Resolving module './' from '/.src/node_modules/@types/react/jsx-runtime.d.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
-Loading module as file / folder, candidate module location '/.src/node_modules/@types/react/', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/.src/node_modules/@types/react/', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/.src/node_modules/@types/react/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
@@ -24,7 +24,7 @@ File '/.src/node_modules/@types/react/index.d.ts' exists - use it as a name reso
 ======== Resolving module './' from '/.src/node_modules/@types/react/jsx-dev-runtime.d.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
-Loading module as file / folder, candidate module location '/.src/node_modules/@types/react/', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/.src/node_modules/@types/react/', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/.src/node_modules/@types/react/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
