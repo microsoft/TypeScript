@@ -13,8 +13,8 @@ declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": string}): JSX
 >prop : Symbol(prop, Decl(file.tsx, 4, 43))
 >U : Symbol(U, Decl(file.tsx, 4, 36))
 >"ignore-prop" : Symbol("ignore-prop", Decl(file.tsx, 4, 51))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 declare function ComponentSpecific2<U>(l: {prop: U}): JSX.Element;
 >ComponentSpecific2 : Symbol(ComponentSpecific2, Decl(file.tsx, 4, 89))
@@ -22,8 +22,8 @@ declare function ComponentSpecific2<U>(l: {prop: U}): JSX.Element;
 >l : Symbol(l, Decl(file.tsx, 5, 39))
 >prop : Symbol(prop, Decl(file.tsx, 5, 43))
 >U : Symbol(U, Decl(file.tsx, 5, 36))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 // Error
 function Bar<T extends {prop: number}>(arg: T) {
@@ -60,8 +60,8 @@ declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 >func : Symbol(func, Decl(file.tsx, 17, 29))
 >arg : Symbol(arg, Decl(file.tsx, 17, 36))
 >U : Symbol(U, Decl(file.tsx, 17, 22))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 // Error
 function createLink(func: (a: number, b: string)=>void) {
@@ -98,8 +98,8 @@ declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 >attr : Symbol(attr, Decl(file.tsx, 29, 40))
 >InferParamProp : Symbol(InferParamProp, Decl(file.tsx, 22, 1))
 >T : Symbol(T, Decl(file.tsx, 29, 37))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 // Error
 let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} />;

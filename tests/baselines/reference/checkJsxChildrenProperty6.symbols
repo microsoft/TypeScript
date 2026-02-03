@@ -17,10 +17,10 @@ interface Prop {
 
     children: JSX.Element | JSX.Element[];
 >children : Symbol(Prop.children, Decl(file.tsx, 6, 14))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 }
 
 class Button extends React.Component<any, any> {
@@ -33,8 +33,8 @@ class Button extends React.Component<any, any> {
 >render : Symbol(Button.render, Decl(file.tsx, 10, 48))
 
         return (<div>My Button</div>)
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
     }
 }
 
@@ -43,8 +43,8 @@ function AnotherButton(p: any) {
 >p : Symbol(p, Decl(file.tsx, 16, 23))
 
     return <h1>Just Another Button</h1>;
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2412, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2412, 47))
 }
 
 function Comp(p: Prop) {
@@ -53,11 +53,11 @@ function Comp(p: Prop) {
 >Prop : Symbol(Prop, Decl(file.tsx, 2, 32))
 
     return <div>{p.b}</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 >p.b : Symbol(Prop.b, Decl(file.tsx, 5, 14))
 >p : Symbol(p, Decl(file.tsx, 20, 14))
 >b : Symbol(Prop.b, Decl(file.tsx, 5, 14))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 }
 
 // Ok

@@ -21,8 +21,8 @@ function MyComponent1<T extends MyComponentProp>(attr: T) {
 >T : Symbol(T, Decl(file.tsx, 8, 22))
 
     return <div>attr.values</div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 }
 
 
