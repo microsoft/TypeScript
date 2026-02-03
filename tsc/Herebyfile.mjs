@@ -8,12 +8,13 @@ import { task } from "hereby";
 import assert from "node:assert";
 import crypto from "node:crypto";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import url from "node:url";
 import { parseArgs } from "node:util";
-import os from "os";
 import pLimit from "p-limit";
 import pc from "picocolors";
+import tmp from "tmp";
 import which from "which";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
@@ -302,10 +303,63 @@ const goTestEnv = {
     ...(process.platform === "win32" ? { GOFLAGS: "-count=1" } : {}),
 };
 
+const baselineTrackingEnabled = isTypeScriptSubmoduleCloned() && ![
+    options.tests,
+    options.noembed,
+    options.concurrentTestPrograms,
+    options.race,
+    options.dirty,
+].some(Boolean);
+
 const goTestSumFlags = [
     "--format-hide-empty-pkg",
     ...(!isCI ? ["--hide-summary", "skipped"] : []),
 ];
+
+/**
+ * Collects all baseline files that were used during the test run.
+ * @param {string} trackingDir
+ * @returns {Promise<Set<string>>}
+ */
+async function collectUsedBaselines(trackingDir) {
+    /** @type {Set<string>} */
+    const usedBaselines = new Set();
+    if (!fs.existsSync(trackingDir)) {
+        return usedBaselines;
+    }
+
+    const trackingFiles = await fs.promises.readdir(trackingDir);
+    for (const file of trackingFiles) {
+        const content = await fs.promises.readFile(path.join(trackingDir, file), "utf-8");
+        for (const line of content.split("\n")) {
+            const trimmed = line.trim();
+            if (trimmed) {
+                usedBaselines.add(trimmed);
+            }
+        }
+    }
+    return usedBaselines;
+}
+
+/**
+ * Checks for unused baseline files and reports them.
+ * @param {string} trackingDir
+ * @returns {Promise<string[]>} List of unused baseline file paths.
+ */
+async function checkUnusedBaselines(trackingDir) {
+    const usedBaselines = await collectUsedBaselines(trackingDir);
+    if (usedBaselines.size === 0) {
+        // No baselines recorded - either no tests ran or tracking wasn't set up properly
+        return [];
+    }
+
+    const allBaselines = await glob(`${refBaseline}/**`, { nodir: true });
+    const unusedBaselines = allBaselines
+        .map(p => path.relative(refBaseline, p))
+        .filter(p => !usedBaselines.has(p));
+
+    return unusedBaselines;
+}
 
 const $test = $({ env: goTestEnv });
 
@@ -332,7 +386,55 @@ async function runTests() {
         await fs.promises.mkdir(localBaseline, { recursive: true });
     }
 
-    await $test`${gotestsum("tests")} ./... ${isCI ? ["--timeout=45m"] : []}`;
+    // Create a tmp directory for baseline tracking if enabled
+    /** @type {string | undefined} */
+    let trackingDir;
+    /** @type {(() => void) | undefined} */
+    let cleanupTracking;
+
+    if (baselineTrackingEnabled) {
+        const tmpDir = tmp.dirSync({ prefix: "tsgo-baseline-tracking-", unsafeCleanup: true });
+        trackingDir = tmpDir.name;
+        cleanupTracking = tmpDir.removeCallback;
+    }
+
+    try {
+        const testEnv = {
+            ...goTestEnv,
+            ...(trackingDir ? { TSGO_BASELINE_TRACKING_DIR: trackingDir } : {}),
+        };
+        const $testWithTracking = $({ env: testEnv });
+        await $testWithTracking`${gotestsum("tests")} ./... ${isCI ? ["--timeout=45m"] : []}`;
+
+        // Check for unused baselines after tests complete
+        if (trackingDir) {
+            const unusedBaselines = await checkUnusedBaselines(trackingDir);
+            if (unusedBaselines.length > 0) {
+                console.error(pc.red(`\nFound ${unusedBaselines.length} unused baseline file(s):`));
+                for (const baseline of unusedBaselines.slice(0, 20)) {
+                    console.error(pc.red(`  ${baseline}`));
+                }
+                if (unusedBaselines.length > 20) {
+                    console.error(pc.red(`  ... and ${unusedBaselines.length - 20} more`));
+                }
+
+                // Create .delete files for each unused baseline so baseline-accept can remove them
+                for (const baseline of unusedBaselines) {
+                    const deleteFilePath = path.join(localBaseline, baseline + ".delete");
+                    await fs.promises.mkdir(path.dirname(deleteFilePath), { recursive: true });
+                    await fs.promises.writeFile(deleteFilePath, "");
+                }
+                console.error(pc.red(`\nRun 'hereby baseline-accept' to delete them.`));
+
+                throw new Error(`Found ${unusedBaselines.length} unused baseline file(s). Run 'hereby baseline-accept' to delete them.`);
+            }
+        }
+    }
+    finally {
+        if (cleanupTracking) {
+            cleanupTracking();
+        }
+    }
 }
 
 export const test = task({

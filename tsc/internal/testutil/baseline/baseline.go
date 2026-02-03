@@ -39,6 +39,9 @@ func Run(t *testing.T, fileName string, actual string, opts Options) {
 		localPath := filepath.Join(localRoot, subfolder, fileName)
 		referencePath := filepath.Join(referenceRoot, subfolder, fileName)
 
+		// Record this baseline for tracking unused baselines
+		recordBaseline(t, filepath.Join(subfolder, fileName))
+
 		writeComparison(t, actual, localPath, referencePath, false)
 	}
 
@@ -65,6 +68,9 @@ func Run(t *testing.T, fileName string, actual string, opts Options) {
 		localPath := filepath.Join(localRoot, outRoot, origSubfolder, diffFileName)
 		referencePath := filepath.Join(referenceRoot, outRoot, origSubfolder, diffFileName)
 
+		// Record this diff baseline for tracking unused baselines
+		recordBaseline(t, filepath.Join(outRoot, origSubfolder, diffFileName))
+
 		diff := getBaselineDiff(t, actual, submoduleExpected, fileName, opts.DiffFixupOld, opts.DiffFixupNew)
 		writeComparison(t, diff, localPath, referencePath, false)
 	}
@@ -73,6 +79,10 @@ func Run(t *testing.T, fileName string, actual string, opts Options) {
 	{
 		localPath := filepath.Join(localRoot, unusedOutRoot, origSubfolder, diffFileName)
 		referencePath := filepath.Join(referenceRoot, unusedOutRoot, origSubfolder, diffFileName)
+
+		// Record this potential diff baseline for tracking unused baselines
+		recordBaseline(t, filepath.Join(unusedOutRoot, origSubfolder, diffFileName))
+
 		writeComparison(t, NoContent, localPath, referencePath, false)
 	}
 }
@@ -157,6 +167,9 @@ func getBaselineDiff(t *testing.T, actual string, expected string, fileName stri
 var fixUnifiedDiff = regexp.MustCompile(`@@ -\d+,\d+ \+\d+,\d+ @@`)
 
 func RunAgainstSubmodule(t *testing.T, fileName string, actual string, opts Options) {
+	// Record this baseline for tracking unused baselines
+	recordBaseline(t, filepath.Join(opts.Subfolder, fileName))
+
 	local := filepath.Join(localRoot, opts.Subfolder, fileName)
 	reference := filepath.Join(submoduleReferenceRoot, opts.Subfolder, fileName)
 	writeComparison(t, actual, local, reference, true)

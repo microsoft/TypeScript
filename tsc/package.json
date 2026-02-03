@@ -9,6 +9,7 @@
     "devDependencies": {
         "@types/adm-zip": "^0.5.7",
         "@types/node": "latest",
+        "@types/tmp": "^0.2.6",
         "@types/which": "^3.0.4",
         "adm-zip": "^0.5.16",
         "chokidar": "^5.0.0",
@@ -18,6 +19,7 @@
         "hereby": "^1.11.1",
         "p-limit": "^7.2.0",
         "picocolors": "^1.1.1",
+        "tmp": "^0.2.5",
         "typescript": "^5.9.3",
         "which": "^6.0.0"
     },
