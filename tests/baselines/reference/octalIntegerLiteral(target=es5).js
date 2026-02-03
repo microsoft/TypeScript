@@ -43,6 +43,7 @@ obj2["5.462437423415177e+244"];  // boolean
 obj2["Infinity"];  // any
 
 //// [octalIntegerLiteral.js]
+"use strict";
 var oct1 = 19230;
 var oct2 = 19230;
 var oct3 = Infinity;

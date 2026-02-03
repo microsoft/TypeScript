@@ -13,6 +13,7 @@ var obj1 = {
 
 
 //// [octalIntegerLiteralError.js]
+"use strict";
 // error
 var oct1 = 0O13334;
 823;

@@ -1,4 +1,3 @@
-error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 octalIntegerLiteral.ts(23,1): error TS7053: Element implicitly has an 'any' type because expression of type '"0o45436"' can't be used to index type '{ 19230: string; a: number; b: number; oct1: number; Infinity: boolean; }'.
   Property '0o45436' does not exist on type '{ 19230: string; a: number; b: number; oct1: number; Infinity: boolean; }'.
 octalIntegerLiteral.ts(32,1): error TS7053: Element implicitly has an 'any' type because expression of type '"0O45436"' can't be used to index type '{ 19230: string; a: number; b: number; oct2: number; 5.462437423415177e+244: boolean; }'.
@@ -7,7 +6,6 @@ octalIntegerLiteral.ts(40,1): error TS7053: Element implicitly has an 'any' type
   Property 'Infinity' does not exist on type '{ 19230: string; a: number; b: number; oct2: number; 5.462437423415177e+244: boolean; }'.
 
 
-!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== octalIntegerLiteral.ts (3 errors) ====
     var oct1 = 0o45436;
     var oct2 = 0O45436;
