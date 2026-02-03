@@ -1719,13 +1719,25 @@ func (p *Program) collectPackageNames() {
 							if !resolvedModule.IsExternalLibraryImport {
 								continue
 							}
+							// Priority order for getting package name:
+							// 1. PackageId.Name (requires both name and version in package.json)
 							name := resolvedModule.PackageId.Name
 							if name == "" {
-								// node_modules package, but no name in package.json - this can happen in a monorepo package,
-								// and unfortunately in lots of fourslash tests
+								// 2. GetPackageScopeForPath - get name from package.json in the package directory
+								if packageScope := p.resolver.GetPackageScopeForPath(resolvedModule.ResolvedFileName); packageScope != nil && packageScope.Exists() {
+									if scopeName, ok := packageScope.Contents.Name.GetValue(); ok {
+										name = scopeName
+									}
+								}
+							}
+							if name == "" {
+								// 3. GetPackageNameFromDirectory - extract from node_modules path
 								name = modulespecifiers.GetPackageNameFromDirectory(resolvedModule.ResolvedFileName)
 							}
-							p.resolvedPackageNames.Add(name)
+							// 4. If all fail, don't add empty string
+							if name != "" {
+								p.resolvedPackageNames.Add(name)
+							}
 							continue
 						}
 					}
