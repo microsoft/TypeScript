@@ -130,7 +130,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    const ns = __importStar(require("./0"));
+    var ns = __importStar(require("./0"));
     exports.default = ns;
 });
 //// [2.js]
@@ -148,8 +148,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    const _1_1 = __importDefault(require("./1"));
-    const _11_1 = __importDefault(require("./11"));
+    var _1_1 = __importDefault(require("./1"));
+    var _11_1 = __importDefault(require("./11"));
     _1_1.default.a;
     _11_1.default.a;
     _1_1.default.b;

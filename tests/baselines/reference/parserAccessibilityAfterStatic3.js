@@ -8,6 +8,9 @@ static public = 1;
 
 
 //// [parserAccessibilityAfterStatic3.js]
-class Outer {
-}
-Outer.public = 1;
+let Outer = (() => {
+    class Outer {
+    }
+    Outer.public = 1;
+    return Outer;
+})();

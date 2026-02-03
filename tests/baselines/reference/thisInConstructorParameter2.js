@@ -14,15 +14,18 @@ class P {
 }
 
 //// [thisInConstructorParameter2.js]
-var _a;
-class P {
-    constructor(z = this, zz = this, zzz = (p = this) => this) {
-        this.z = z;
-        this.x = this;
-        zzz = (p = this) => this;
+let P = (() => {
+    var _a;
+    class P {
+        constructor(z = this, zz = this, zzz = (p = this) => this) {
+            this.z = z;
+            this.x = this;
+            zzz = (p = this) => this;
+        }
+        foo(zz = this) { zz.x; }
+        static bar(zz = this) { zz.y; }
     }
-    foo(zz = this) { zz.x; }
-    static bar(zz = this) { zz.y; }
-}
-_a = P;
-P.y = _a;
+    _a = P;
+    P.y = _a;
+    return P;
+})();

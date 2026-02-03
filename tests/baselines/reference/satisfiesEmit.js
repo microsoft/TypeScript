@@ -10,5 +10,5 @@ const p = a satisfies bleh;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // This import should not be elided in the emitted JS
-const a = require("foo");
+var a = require("foo");
 const p = a;

@@ -27,5 +27,5 @@ exports.Enum = void 0;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const merge_1 = require("./merge");
+var merge_1 = require("./merge");
 1 /* Enum.One */;

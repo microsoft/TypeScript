@@ -23,10 +23,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Y = exports.A = void 0;
 class X {
 }
-class A {
-}
+let A = (() => {
+    class A {
+    }
+    A.X = X;
+    return A;
+})();
 exports.A = A;
-A.X = X;
 class Y {
 }
 exports.Y = Y;

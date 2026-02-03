@@ -26,5 +26,5 @@ module.exports = M2;
 //// [consumer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const x = require("./foo");
+var x = require("./foo");
 x.Y; // .ts should be picked

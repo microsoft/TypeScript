@@ -9,9 +9,12 @@ class C {
 }
 
 //// [staticsInConstructorBodies.js]
-class C {
-    constructor() {
+let C = (() => {
+    class C {
+        constructor() {
+        }
+        static m1() { } // ERROR
     }
-    static m1() { } // ERROR
-}
-C.p1 = 0; // ERROR
+    C.p1 = 0; // ERROR
+    return C;
+})();

@@ -58,11 +58,11 @@ module.exports = "foo".length;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="declarations.d.ts" />
-const foobar_1 = require("foobar");
-const X2 = require("foobarx");
+var foobar_1 = require("foobar");
+var X2 = require("foobarx");
 const x = foobar_1.X;
 const x2 = X2;
-const B = require("./a");
+var B = require("./a");
 const b = new B(B.b);
-const fooLength = require("./b");
+var fooLength = require("./b");
 fooLength + 1;

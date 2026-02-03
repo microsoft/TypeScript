@@ -8,16 +8,16 @@ var a = 1;
 >  : ^
 
 function strange(x = a, y = b) { 
->strange : (x?: number, y?: any) => any
->        : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^
+>strange : (x?: number, y?: string) => string
+>        : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >a : number
 >  : ^^^^^^
->y : any
->  : ^^^
->b : any
->  : ^^^
+>y : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
 
     var b = "";
 >b : string
@@ -26,6 +26,6 @@ function strange(x = a, y = b) {
 >   : ^^
 
     return y;
->y : any
->  : ^^^
+>y : string
+>  : ^^^^^^
 }

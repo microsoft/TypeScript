@@ -31,13 +31,13 @@ exports.Model = Model;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VisualizationModel = void 0;
-const Backbone = require("./aliasUsageInFunctionExpression_backbone");
+var Backbone = require("./aliasUsageInFunctionExpression_backbone");
 class VisualizationModel extends Backbone.Model {
 }
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInFunctionExpression_main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const moduleA = require("./aliasUsageInFunctionExpression_moduleA");
+var moduleA = require("./aliasUsageInFunctionExpression_moduleA");
 var f = (x) => x;
 f = (x) => moduleA;

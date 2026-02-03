@@ -16,13 +16,16 @@ class MyDerived extends MyBase {
 }
 
 //// [superAccess.js]
-class MyBase {
-    constructor() {
-        this.S2 = "test";
-        this.f = () => 5;
+let MyBase = (() => {
+    class MyBase {
+        constructor() {
+            this.S2 = "test";
+            this.f = () => 5;
+        }
     }
-}
-MyBase.S1 = 5;
+    MyBase.S1 = 5;
+    return MyBase;
+})();
 class MyDerived extends MyBase {
     foo() {
         var l3 = super.S1; // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword

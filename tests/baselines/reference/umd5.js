@@ -51,7 +51,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const Bar = __importStar(require("./foo"));
+var Bar = __importStar(require("./foo"));
 Bar.fn();
 let x;
 let y = x.n;

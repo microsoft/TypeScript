@@ -149,7 +149,7 @@ Point2D.prototype = {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.origin = void 0;
-const source_1 = require("./source");
+var source_1 = require("./source");
 exports.origin = new source_1.Point2D(0, 0);
 // export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this
 

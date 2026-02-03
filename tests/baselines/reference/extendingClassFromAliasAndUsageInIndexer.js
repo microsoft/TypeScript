@@ -43,7 +43,7 @@ exports.Model = Model;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VisualizationModel = void 0;
-const Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
+var Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 class VisualizationModel extends Backbone.Model {
 }
 exports.VisualizationModel = VisualizationModel;
@@ -51,15 +51,15 @@ exports.VisualizationModel = VisualizationModel;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VisualizationModel = void 0;
-const Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
+var Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 class VisualizationModel extends Backbone.Model {
 }
 exports.VisualizationModel = VisualizationModel;
 //// [extendingClassFromAliasAndUsageInIndexer_main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const moduleA = require("./extendingClassFromAliasAndUsageInIndexer_moduleA");
-const moduleB = require("./extendingClassFromAliasAndUsageInIndexer_moduleB");
+var moduleA = require("./extendingClassFromAliasAndUsageInIndexer_moduleA");
+var moduleB = require("./extendingClassFromAliasAndUsageInIndexer_moduleB");
 var moduleATyped = moduleA;
 var moduleMap = {
     "moduleA": moduleA,

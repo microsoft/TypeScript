@@ -35,6 +35,8 @@ import {
     FunctionLikeDeclaration,
     GeneratedIdentifierFlags,
     GetAccessorDeclaration,
+    getEmitScriptTarget,
+    getEntityNameFromTypeNode,
     getFunctionFlags,
     getInitializedVariables,
     getNodeId,
@@ -45,8 +47,10 @@ import {
     isBlock,
     isConciseBody,
     isEffectiveStrictModeSourceFile,
+    isEntityName,
     isExpression,
     isForInitializer,
+    isFunctionLike,
     isFunctionLikeDeclaration,
     isIdentifier,
     isModifier,
@@ -69,6 +73,7 @@ import {
     ParameterDeclaration,
     PropertyAccessExpression,
     PropertyAssignment,
+    ScriptTarget,
     SetAccessorDeclaration,
     setEmitFlags,
     setOriginalNode,
@@ -81,6 +86,8 @@ import {
     TextRange,
     TransformationContext,
     TransformFlags,
+    TypeNode,
+    TypeReferenceSerializationKind,
     unescapeLeadingUnderscores,
     VariableDeclaration,
     VariableDeclarationList,
@@ -120,6 +127,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
 
     const resolver = context.getEmitResolver();
     const compilerOptions = context.getCompilerOptions();
+    const languageVersion = getEmitScriptTarget(compilerOptions);
 
     /**
      * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -651,7 +659,8 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
         // This step isn't needed if we eventually transform this to ES5.
         const originalMethod = getOriginalNode(node, isFunctionLikeDeclaration);
-        const emitSuperHelpers = (resolver.hasNodeCheckFlag(node, NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) || resolver.hasNodeCheckFlag(node, NodeCheckFlags.MethodWithSuperPropertyAccessInAsync)) &&
+        const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 &&
+            (resolver.hasNodeCheckFlag(node, NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) || resolver.hasNodeCheckFlag(node, NodeCheckFlags.MethodWithSuperPropertyAccessInAsync)) &&
             (getFunctionFlags(originalMethod) & FunctionFlags.AsyncGenerator) !== FunctionFlags.AsyncGenerator;
 
         if (emitSuperHelpers) {
@@ -730,6 +739,9 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         const innerParameters = !isSimpleParameterList(node.parameters) ? visitParameterList(node.parameters, visitor, context) : undefined;
         resumeLexicalEnvironment();
 
+        const original = getOriginalNode(node, isFunctionLike);
+        const nodeType = original.type;
+        const promiseConstructor = languageVersion < ScriptTarget.ES2015 ? getPromiseConstructor(nodeType) : undefined;
         const isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
         const savedLexicalArgumentsBinding = lexicalArgumentsBinding;
         const hasLexicalArguments = resolver.hasNodeCheckFlag(node, NodeCheckFlags.CaptureArguments);
@@ -796,7 +808,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                     emitHelpers().createAwaiterHelper(
                         hasLexicalThis,
                         argumentsExpression,
-                        /*promiseConstructor*/ undefined,
+                        promiseConstructor,
                         innerParameters,
                         asyncBody,
                     ),
@@ -805,7 +817,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
 
             // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
             // This step isn't needed if we eventually transform this to ES5.
-            const emitSuperHelpers = resolver.hasNodeCheckFlag(node, NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) || resolver.hasNodeCheckFlag(node, NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
+            const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 && (resolver.hasNodeCheckFlag(node, NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) || resolver.hasNodeCheckFlag(node, NodeCheckFlags.MethodWithSuperPropertyAccessInAsync));
 
             if (emitSuperHelpers) {
                 enableSubstitutionForAsyncMethodsWithSuper();
@@ -839,7 +851,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             result = emitHelpers().createAwaiterHelper(
                 hasLexicalThis,
                 argumentsExpression,
-                /*promiseConstructor*/ undefined,
+                promiseConstructor,
                 innerParameters,
                 asyncBody,
             );
@@ -866,6 +878,21 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         else {
             return factory.converters.convertToFunctionBlock(Debug.checkDefined(visitNode(body, asyncBodyVisitor, isConciseBody)));
         }
+    }
+
+    function getPromiseConstructor(type: TypeNode | undefined) {
+        const typeName = type && getEntityNameFromTypeNode(type);
+        if (typeName && isEntityName(typeName)) {
+            const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
+            if (
+                serializationKind === TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
+                || serializationKind === TypeReferenceSerializationKind.Unknown
+            ) {
+                return typeName;
+            }
+        }
+
+        return undefined;
     }
 
     function enableSubstitutionForAsyncMethodsWithSuper() {

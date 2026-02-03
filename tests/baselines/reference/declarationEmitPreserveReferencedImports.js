@@ -27,7 +27,7 @@ exports.o = o;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = void 0;
-const decl_1 = require("./decl");
+var decl_1 = require("./decl");
 exports.f = { o: (0, decl_1.o)({ v: null }) };
 
 

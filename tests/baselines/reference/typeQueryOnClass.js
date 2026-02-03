@@ -59,34 +59,37 @@ var r3: typeof D;
 var r4: typeof d;
 
 //// [typeQueryOnClass.js]
-class C {
-    constructor(x) {
-        this.x = x;
-        this.ia = 1;
-        this.ib = () => this.ia;
+let C = (() => {
+    class C {
+        constructor(x) {
+            this.x = x;
+            this.ia = 1;
+            this.ib = () => this.ia;
+        }
+        static foo(x) { }
+        static bar(x) { }
+        static get sc() {
+            return 1;
+        }
+        static set sc(x) {
+        }
+        static get sd() {
+            return 1;
+        }
+        baz(x) { return ''; }
+        get ic() {
+            return 1;
+        }
+        set ic(x) {
+        }
+        get id() {
+            return 1;
+        }
     }
-    static foo(x) { }
-    static bar(x) { }
-    static get sc() {
-        return 1;
-    }
-    static set sc(x) {
-    }
-    static get sd() {
-        return 1;
-    }
-    baz(x) { return ''; }
-    get ic() {
-        return 1;
-    }
-    set ic(x) {
-    }
-    get id() {
-        return 1;
-    }
-}
-C.sa = 1;
-C.sb = () => 1;
+    C.sa = 1;
+    C.sb = () => 1;
+    return C;
+})();
 var c;
 // BUG 820454
 var r1;

@@ -62,7 +62,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [/user/username/projects/myproject/main.js] Inode:: 114
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const foo_1 = require("./foo");
+var foo_1 = require("./foo");
 (0, foo_1.foo)();
 
 

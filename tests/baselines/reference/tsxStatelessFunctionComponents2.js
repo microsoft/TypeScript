@@ -42,7 +42,7 @@ let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = require("react");
+var React = require("react");
 function Greet(x) {
     return <div>Hello, {x}</div>;
 }

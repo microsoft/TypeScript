@@ -53,14 +53,17 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
-const React = __importStar(require("react"));
-class TestComponent extends React.Component {
-    // Type guard is defined as a static class property
-    static isAny(obj) {
-        return true;
+var React = __importStar(require("react"));
+let TestComponent = (() => {
+    class TestComponent extends React.Component {
+        // Type guard is defined as a static class property
+        static isAny(obj) {
+            return true;
+        }
     }
-}
-TestComponent.defaultProps = {
-    isAny: TestComponent.isAny
-};
+    TestComponent.defaultProps = {
+        isAny: TestComponent.isAny
+    };
+    return TestComponent;
+})();
 const TestRender = () => React.createElement(TestComponent, null);

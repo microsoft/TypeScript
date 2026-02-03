@@ -62,7 +62,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyComponent = MyComponent;
-const React = __importStar(require("react"));
+var React = __importStar(require("react"));
 function MyComponent(_props) {
     return React.createElement("span", null, "my component");
 }
@@ -103,8 +103,8 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.result = void 0;
-const React = __importStar(require("react"));
-const my_component_1 = require("./my-component");
+var React = __importStar(require("react"));
+var my_component_1 = require("./my-component");
 exports.result = React.createElement(my_component_1.MyComponent, { x: "yes", y: {
         value: 42
     } });

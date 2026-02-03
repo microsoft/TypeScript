@@ -17,21 +17,24 @@ using after = null;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 let C = (() => {
-    let _classDecorators = [dec];
-    let _classDescriptor;
-    let _classExtraInitializers = [];
-    let _classThis;
-    var C = _classThis = class {
-    };
-    __setFunctionName(_classThis, "C");
-    (() => {
-        const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-        C = _classThis = _classDescriptor.value;
-        if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-        __runInitializers(_classThis, _classExtraInitializers);
+    let C = (() => {
+        let _classDecorators = [dec];
+        let _classDescriptor;
+        let _classExtraInitializers = [];
+        let _classThis;
+        var C = _classThis = class {
+        };
+        __setFunctionName(_classThis, "C");
+        (() => {
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+            C = _classThis = _classDescriptor.value;
+            if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+            __runInitializers(_classThis, _classExtraInitializers);
+        })();
+        return C = _classThis;
     })();
-    return C = _classThis;
+    return C;
 })();
 exports.C = C;
 var after;

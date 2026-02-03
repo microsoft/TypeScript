@@ -89,7 +89,7 @@ console.log(a, b);
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const a_1 = require("./a");
+var a_1 = require("./a");
 const a = a_1.A;
 let b;
 console.log(a, b);

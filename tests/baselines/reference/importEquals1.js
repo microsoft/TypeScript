@@ -73,7 +73,7 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-const types = __importStar(require("./a"));
+var types = __importStar(require("./a"));
 module.exports = types;
 //// [d.js]
 "use strict";

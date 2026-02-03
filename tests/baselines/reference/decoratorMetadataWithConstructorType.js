@@ -27,13 +27,16 @@ class A {
 }
 function decorator(target, propertyKey) {
 }
-class B {
-    constructor() {
-        this.x = new A();
+let B = (() => {
+    class B {
+        constructor() {
+            this.x = new A();
+        }
     }
-}
+    __decorate([
+        decorator,
+        __metadata("design:type", A)
+    ], B.prototype, "x", void 0);
+    return B;
+})();
 exports.B = B;
-__decorate([
-    decorator,
-    __metadata("design:type", A)
-], B.prototype, "x", void 0);

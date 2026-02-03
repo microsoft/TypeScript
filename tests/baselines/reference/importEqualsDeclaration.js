@@ -31,7 +31,7 @@ module.exports = SomeClass;
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const type = require("./b"); // Ok
+var type = require("./b"); // Ok
 A.prototype; // Error
 const a = { a: 'a' }; // Ok
 void type; // Ok

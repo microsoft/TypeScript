@@ -5,6 +5,7 @@ import {
     addRange,
     append,
     arrayFrom,
+    ArrowFunction,
     BinaryExpression,
     BindingElement,
     Block,
@@ -38,6 +39,7 @@ import {
     ForOfStatement,
     ForStatement,
     FunctionDeclaration,
+    FunctionExpression,
     GeneratedIdentifierFlags,
     getEmitFlags,
     getEmitModuleKind,
@@ -1215,18 +1217,19 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             : firstArgument && rewriteOrShim
             ? isStringLiteral(firstArgument) ? rewriteModuleSpecifier(firstArgument, compilerOptions) : emitHelpers().createRewriteRelativeImportExtensionsHelper(firstArgument)
             : firstArgument;
+        const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
         switch (compilerOptions.module) {
             case ModuleKind.AMD:
-                return createImportCallExpressionAMD(argument);
+                return createImportCallExpressionAMD(argument, containsLexicalThis);
             case ModuleKind.UMD:
-                return createImportCallExpressionUMD(argument ?? factory.createVoidZero());
+                return createImportCallExpressionUMD(argument ?? factory.createVoidZero(), containsLexicalThis);
             case ModuleKind.CommonJS:
             default:
                 return createImportCallExpressionCommonJS(argument);
         }
     }
 
-    function createImportCallExpressionUMD(arg: Expression): Expression {
+    function createImportCallExpressionUMD(arg: Expression, containsLexicalThis: boolean): Expression {
         // (function (factory) {
         //      ... (regular UMD)
         // }
@@ -1248,7 +1251,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 /*questionToken*/ undefined,
                 /*whenTrue*/ createImportCallExpressionCommonJS(arg),
                 /*colonToken*/ undefined,
-                /*whenFalse*/ createImportCallExpressionAMD(argClone),
+                /*whenFalse*/ createImportCallExpressionAMD(argClone, containsLexicalThis),
             );
         }
         else {
@@ -1260,13 +1263,13 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     /*questionToken*/ undefined,
                     /*whenTrue*/ createImportCallExpressionCommonJS(temp, /*isInlineable*/ true),
                     /*colonToken*/ undefined,
-                    /*whenFalse*/ createImportCallExpressionAMD(temp),
+                    /*whenFalse*/ createImportCallExpressionAMD(temp, containsLexicalThis),
                 ),
             );
         }
     }
 
-    function createImportCallExpressionAMD(arg: Expression | undefined): Expression {
+    function createImportCallExpressionAMD(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
         // improt("./blah")
         // emit as
         // define(["require", "exports", "blah"], function (require, exports) {
@@ -1289,14 +1292,35 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             ),
         ]);
 
-        const func = factory.createArrowFunction(
-            /*modifiers*/ undefined,
-            /*typeParameters*/ undefined,
-            parameters,
-            /*type*/ undefined,
-            /*equalsGreaterThanToken*/ undefined,
-            body,
-        );
+        let func: FunctionExpression | ArrowFunction;
+        if (languageVersion >= ScriptTarget.ES2015) {
+            func = factory.createArrowFunction(
+                /*modifiers*/ undefined,
+                /*typeParameters*/ undefined,
+                parameters,
+                /*type*/ undefined,
+                /*equalsGreaterThanToken*/ undefined,
+                body,
+            );
+        }
+        else {
+            func = factory.createFunctionExpression(
+                /*modifiers*/ undefined,
+                /*asteriskToken*/ undefined,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined,
+                parameters,
+                /*type*/ undefined,
+                body,
+            );
+
+            // if there is a lexical 'this' in the import call arguments, ensure we indicate
+            // that this new function expression indicates it captures 'this' so that the
+            // es2015 transformer will properly substitute 'this' with '_this'.
+            if (containsLexicalThis) {
+                setEmitFlags(func, EmitFlags.CapturesThis);
+            }
+        }
 
         const promise = factory.createNewExpression(factory.createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
         if (getESModuleInterop(compilerOptions)) {
@@ -1319,11 +1343,19 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"),
             /*typeArguments*/ undefined,
             /*argumentsArray*/ needSyncEval
-                ? [
-                    factory.createTemplateExpression(factory.createTemplateHead(""), [
-                        factory.createTemplateSpan(arg, factory.createTemplateTail("")),
-                    ]),
-                ]
+                ? languageVersion >= ScriptTarget.ES2015
+                    ? [
+                        factory.createTemplateExpression(factory.createTemplateHead(""), [
+                            factory.createTemplateSpan(arg, factory.createTemplateTail("")),
+                        ]),
+                    ]
+                    : [
+                        factory.createCallExpression(
+                            factory.createPropertyAccessExpression(factory.createStringLiteral(""), "concat"),
+                            /*typeArguments*/ undefined,
+                            [arg],
+                        ),
+                    ]
                 : [],
         );
 
@@ -1346,14 +1378,28 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             ]
             : [];
 
-        const func = factory.createArrowFunction(
-            /*modifiers*/ undefined,
-            /*typeParameters*/ undefined,
-            /*parameters*/ parameters,
-            /*type*/ undefined,
-            /*equalsGreaterThanToken*/ undefined,
-            requireCall,
-        );
+        let func: FunctionExpression | ArrowFunction;
+        if (languageVersion >= ScriptTarget.ES2015) {
+            func = factory.createArrowFunction(
+                /*modifiers*/ undefined,
+                /*typeParameters*/ undefined,
+                /*parameters*/ parameters,
+                /*type*/ undefined,
+                /*equalsGreaterThanToken*/ undefined,
+                requireCall,
+            );
+        }
+        else {
+            func = factory.createFunctionExpression(
+                /*modifiers*/ undefined,
+                /*asteriskToken*/ undefined,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined,
+                /*parameters*/ parameters,
+                /*type*/ undefined,
+                factory.createBlock([factory.createReturnStatement(requireCall)]),
+            );
+        }
 
         const downleveledImport = factory.createCallExpression(factory.createPropertyAccessExpression(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
 
@@ -1443,7 +1489,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                 /*modifiers*/ undefined,
                                 factory.createVariableDeclarationList(
                                     variables,
-                                    NodeFlags.Const,
+                                    languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None,
                                 ),
                             ),
                             /*location*/ node,
@@ -1474,7 +1520,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                 /*original*/ node,
                             ),
                         ],
-                        NodeFlags.Const,
+                        languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None,
                     ),
                 ),
             );
@@ -1542,7 +1588,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                             createRequireCall(node),
                                         ),
                                     ],
-                                    NodeFlags.Const,
+                                    /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None,
                                 ),
                             ),
                             node,

@@ -53,7 +53,7 @@ Output::
 //// [/home/src/workspaces/solution/project/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("../utils");
+var utils_1 = require("../utils");
 utils_1.E.A;
 
 

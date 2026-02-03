@@ -77,7 +77,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const hello_json_1 = __importDefault(require("../hello.json"));
+var hello_json_1 = __importDefault(require("../hello.json"));
 exports.default = hello_json_1.default.hello;
 
 

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const mod = require("decl");
-const x = require("lib/foo/a");
-const y = require("lib/bar/a");
+var mod = require("decl");
+var x = require("lib/foo/a");
+var y = require("lib/bar/a");
 x.hello();
 y.hello();
 var str = mod.call();

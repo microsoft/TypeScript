@@ -53,7 +53,7 @@ export function createProgram(rootFiles: string[], compilerOptionsJson: string):
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createProgram = createProgram;
-const ts = require("typescript");
+var ts = require("typescript");
 function printError(error) {
     if (!error) {
         return;

@@ -17,5 +17,5 @@ var undefined;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const a_1 = require("./a");
+var a_1 = require("./a");
 use(a_1.undefined);

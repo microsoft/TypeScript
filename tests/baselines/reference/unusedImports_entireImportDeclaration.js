@@ -63,9 +63,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const a_1 = __importDefault(require("./a"));
+var a_1 = __importDefault(require("./a"));
 a_1.default;
-const a_2 = __importDefault(require("./a"));
+var a_2 = __importDefault(require("./a"));
 a_2.default;
-const ns3 = __importStar(require("./a"));
+var ns3 = __importStar(require("./a"));
 ns3;

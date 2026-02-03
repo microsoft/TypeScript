@@ -327,7 +327,11 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         const location = moveRangePastModifiers(node);
         const classAlias = getClassAliasIfNeeded(node);
 
-        const declName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+        // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
+        // without any block-scoped variable collision handling
+        const declName = languageVersion < ScriptTarget.ES2015 ?
+            factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
+            factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
         //  ... = class ${name} ${heritageClauses} {
         //      ${members}
@@ -683,7 +687,11 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
 
         const classAlias = classAliases && classAliases[getOriginalNodeId(node)];
 
-        const localName = factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+        // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
+        // without any block-scoped variable collision handling
+        const localName = languageVersion < ScriptTarget.ES2015 ?
+            factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
+            factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
         const decorate = emitHelpers().createDecorateHelper(decoratorExpressions, localName);
         const expression = factory.createAssignment(localName, classAlias ? factory.createAssignment(classAlias, decorate) : decorate);
         setEmitFlags(expression, EmitFlags.NoComments);

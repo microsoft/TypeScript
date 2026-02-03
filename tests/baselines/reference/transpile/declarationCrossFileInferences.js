@@ -24,7 +24,7 @@ exports.A = A;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create = create;
-const defines_js_1 = require("./defines.js");
+var defines_js_1 = require("./defines.js");
 function create() {
     return new defines_js_1.A();
 }
@@ -32,5 +32,5 @@ function create() {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.value = void 0;
-const consumes_js_1 = require("./consumes.js");
+var consumes_js_1 = require("./consumes.js");
 exports.value = (0, consumes_js_1.create)();

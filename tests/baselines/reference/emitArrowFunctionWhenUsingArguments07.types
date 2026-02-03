@@ -5,14 +5,17 @@ function f(arguments) {
 >f : (arguments: any) => void
 >  : ^         ^^^^^^^^^^^^^^
 >arguments : any
+>          : ^^^
 
     var a = (arguments) => () => arguments;
->a : (arguments: any) => () => any
->  : ^         ^^^^^^^^^^^^^^^^^^^
->(arguments) => () => arguments : (arguments: any) => () => any
->                               : ^         ^^^^^^^^^^^^^^^^^^^
+>a : (arguments: any) => () => IArguments
+>  : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(arguments) => () => arguments : (arguments: any) => () => IArguments
+>                               : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arguments : any
->() => arguments : () => any
->                : ^^^^^^^^^
->arguments : any
+>          : ^^^
+>() => arguments : () => IArguments
+>                : ^^^^^^^^^^^^^^^^
+>arguments : IArguments
+>          : ^^^^^^^^^^
 }

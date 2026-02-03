@@ -30,7 +30,7 @@ let a = <AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" />
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AddressComp = void 0;
-const React = require("react");
+var React = require("react");
 class AddressComp extends React.Component {
     render() {
         return null;

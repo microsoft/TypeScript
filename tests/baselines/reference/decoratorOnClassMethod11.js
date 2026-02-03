@@ -19,11 +19,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var M;
 (function (M) {
-    class C {
-        decorator(target, key) { }
-        method() { }
-    }
-    __decorate([
-        (this.decorator)
-    ], C.prototype, "method", null);
+    let C = (() => {
+        class C {
+            decorator(target, key) { }
+            method() { }
+        }
+        __decorate([
+            (this.decorator)
+        ], C.prototype, "method", null);
+        return C;
+    })();
 })(M || (M = {}));

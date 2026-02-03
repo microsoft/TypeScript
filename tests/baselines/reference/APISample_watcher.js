@@ -160,7 +160,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const ts = __importStar(require("typescript"));
+var ts = __importStar(require("typescript"));
 function watch(rootFileNames, options) {
     const files = {};
     // initialize the list of files

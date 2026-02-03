@@ -55,26 +55,26 @@ exports.aaaa = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.z2 = exports.z111 = exports.xxxx = void 0;
-const server_1 = require("./server");
+var server_1 = require("./server");
 exports.xxxx = server_1.a;
-const server_2 = require("./server");
+var server_2 = require("./server");
 exports.xxxx = server_2.a;
-const server_3 = require("./server");
+var server_3 = require("./server");
 exports.xxxx = server_3.x;
 exports.xxxx = server_3.a;
-const server_4 = require("./server");
+var server_4 = require("./server");
 exports.xxxx = server_4.x;
-const server_5 = require("./server");
+var server_5 = require("./server");
 exports.xxxx = server_5.m;
-const server_6 = require("./server");
+var server_6 = require("./server");
 exports.xxxx = server_6.a1;
 exports.xxxx = server_6.x1;
-const server_7 = require("./server");
+var server_7 = require("./server");
 exports.xxxx = server_7.a1;
 exports.xxxx = server_7.x1;
-const server_8 = require("./server");
+var server_8 = require("./server");
 exports.z111 = server_8.z1;
-const server_9 = require("./server");
+var server_9 = require("./server");
 exports.z2 = server_9.z2; // z2 shouldn't give redeclare error
 
 

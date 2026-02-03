@@ -63,7 +63,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = __importStar(require("react"));
+var React = __importStar(require("react"));
 function MyComp4(props, context, bad, verybad) {
     return React.createElement("div", null);
 }

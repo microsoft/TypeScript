@@ -9,10 +9,13 @@ Foo.prototype.bar = undefined; // Should be OK
 
 
 //// [typeOfPrototype.js]
-class Foo {
-    constructor() {
-        this.bar = 3;
+let Foo = (() => {
+    class Foo {
+        constructor() {
+            this.bar = 3;
+        }
     }
-}
-Foo.bar = '';
+    Foo.bar = '';
+    return Foo;
+})();
 Foo.prototype.bar = undefined; // Should be OK

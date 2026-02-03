@@ -12,7 +12,7 @@ new myModule.c();
 //// [test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const myModule = require("myModule");
+var myModule = require("myModule");
 new myModule.c();
 
 

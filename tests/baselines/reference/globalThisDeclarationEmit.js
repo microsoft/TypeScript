@@ -16,7 +16,7 @@ exports.variable = globalThis;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.globalThis = void 0;
-const variable_1 = require("./variable");
+var variable_1 = require("./variable");
 exports.globalThis = variable_1.variable;
 
 

@@ -6,6 +6,9 @@ class AtomicNumbers {
 }
 
 //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration.js]
-class AtomicNumbers {
-}
-AtomicNumbers.H = 1;
+let AtomicNumbers = (() => {
+    class AtomicNumbers {
+    }
+    AtomicNumbers.H = 1;
+    return AtomicNumbers;
+})();

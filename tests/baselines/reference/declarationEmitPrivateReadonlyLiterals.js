@@ -10,14 +10,17 @@ class Foo {
 
 
 //// [declarationEmitPrivateReadonlyLiterals.js]
-class Foo {
-    constructor() {
-        this.B = "b";
-        this.D = 42;
+let Foo = (() => {
+    class Foo {
+        constructor() {
+            this.B = "b";
+            this.D = 42;
+        }
     }
-}
-Foo.A = "a";
-Foo.C = 42;
+    Foo.A = "a";
+    Foo.C = 42;
+    return Foo;
+})();
 
 
 //// [declarationEmitPrivateReadonlyLiterals.d.ts]

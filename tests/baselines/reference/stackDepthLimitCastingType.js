@@ -75,6 +75,6 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const Backbone = __importStar(require("backbone"));
+var Backbone = __importStar(require("backbone"));
 const hoge = new Backbone.Model();
 hoge.fetch(null);

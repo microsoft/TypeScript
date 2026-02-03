@@ -63,7 +63,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CONTROLLER_CLASS = void 0;
-const context_1 = require("@loopback/context");
+var context_1 = require("@loopback/context");
 exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in question
 
 

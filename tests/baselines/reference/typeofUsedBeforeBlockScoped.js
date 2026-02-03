@@ -11,8 +11,11 @@ let o = { n: 12 };
 
 
 //// [typeofUsedBeforeBlockScoped.js]
-class C {
-}
-C.s = 2;
+let C = (() => {
+    class C {
+    }
+    C.s = 2;
+    return C;
+})();
 let o2;
 let o = { n: 12 };

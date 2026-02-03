@@ -8,11 +8,11 @@ let foo: string = "";
 >   : ^^
 
 function f1 (bar = foo) { // unexpected compiler error; works at runtime
->f1 : (bar?: string) => string
+>f1 : (bar?: number) => number
 >   : ^   ^^^^^^^^^^^^^^^^^^^^
->bar : string
+>bar : number
 >    : ^^^^^^
->foo : string
+>foo : number
 >    : ^^^^^^
 
     var foo: number = 2;
@@ -22,22 +22,22 @@ function f1 (bar = foo) { // unexpected compiler error; works at runtime
 >  : ^
 
     return bar; // returns 1
->bar : string
+>bar : number
 >    : ^^^^^^
 }
 
 function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at runtime
->f2 : (bar?: (baz?: string) => string) => string
+>f2 : (bar?: (baz?: number) => number) => number
 >   : ^   ^^^^   ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->bar : (baz?: string) => string
+>bar : (baz?: number) => number
 >    : ^   ^^^^^^^^^^^^^^^^^^^^
->(baz = foo) => baz : (baz?: string) => string
+>(baz = foo) => baz : (baz?: number) => number
 >                   : ^   ^^^^^^^^^^^^^^^^^^^^
->baz : string
+>baz : number
 >    : ^^^^^^
->foo : string
+>foo : number
 >    : ^^^^^^
->baz : string
+>baz : number
 >    : ^^^^^^
 
     var foo: number = 2;
@@ -47,9 +47,9 @@ function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at 
 >  : ^
 
     return bar(); // returns 1
->bar() : string
+>bar() : number
 >      : ^^^^^^
->bar : (baz?: string) => string
+>bar : (baz?: number) => number
 >    : ^   ^^^^^^^^^^^^^^^^^^^^
 }
 
@@ -114,7 +114,7 @@ function f6 (async = async) {
 function f7({[foo]: bar}: any[]) {
 >f7 : ({ [foo]: bar }: any[]) => void
 >   : ^              ^^     ^^^^^^^^^
->foo : string
+>foo : number
 >    : ^^^^^^
 >bar : any
 >    : ^^^

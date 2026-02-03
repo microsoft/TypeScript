@@ -35,17 +35,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const a_1 = require("./a");
+var a_1 = require("./a");
 function filter(handler) {
     return function (target, propertyKey) {
         // ...
     };
 }
-class Wat {
-    static whatever() {
-        // ...
+let Wat = (() => {
+    class Wat {
+        static whatever() {
+            // ...
+        }
     }
-}
-__decorate([
-    filter(() => a_1.test == 'abc')
-], Wat, "whatever", null);
+    __decorate([
+        filter(() => a_1.test == 'abc')
+    ], Wat, "whatever", null);
+    return Wat;
+})();

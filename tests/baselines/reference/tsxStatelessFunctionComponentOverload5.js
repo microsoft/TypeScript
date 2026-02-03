@@ -62,7 +62,7 @@ const b8 = <MainButton data-format />;  // incorrect type for specified hyphanat
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MainButton = MainButton;
-const React = require("react");
+var React = require("react");
 let obj0 = {
     to: "world"
 };

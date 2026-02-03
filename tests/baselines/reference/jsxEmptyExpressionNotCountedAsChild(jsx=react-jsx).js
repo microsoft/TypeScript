@@ -22,7 +22,7 @@ const element = (
 //// [jsxEmptyExpressionNotCountedAsChild.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsx_runtime_1 = require("react/jsx-runtime");
+var jsx_runtime_1 = require("react/jsx-runtime");
 function Wrapper(props) {
     return (0, jsx_runtime_1.jsx)("div", { children: props.children });
 }

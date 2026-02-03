@@ -28,6 +28,6 @@ function foo() { }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path='externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts'/>
-const file1 = require("./externalModuleRefernceResolutionOrderInImportDeclaration_file1");
+var file1 = require("./externalModuleRefernceResolutionOrderInImportDeclaration_file1");
 file1.foo();
 file1.bar();

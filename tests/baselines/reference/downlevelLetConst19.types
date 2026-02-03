@@ -9,9 +9,11 @@ declare function use(a: any);
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >a : any
+>  : ^^^
 
 var x;
 >x : any
+>  : ^^^
 
 function a() {
 >a : () => void
@@ -19,12 +21,15 @@ function a() {
   {
     let x;
 >x : any
+>  : ^^^
 
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
 
     function b() {
 >b : () => void
@@ -32,29 +37,38 @@ function a() {
         {
             let x;
 >x : any
+>  : ^^^
 
             use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
         }
         use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
     }
   }
   use(x)
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
 }
 use(x)
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >x : any
+>  : ^^^
 

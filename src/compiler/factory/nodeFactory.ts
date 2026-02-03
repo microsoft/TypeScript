@@ -6665,7 +6665,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         }
         else if (isSuperKeyword(callee)) {
             thisArg = createThis();
-            target = callee as PrimaryExpression;
+            target = languageVersion !== undefined && languageVersion < ScriptTarget.ES2015
+                ? setTextRange(createIdentifier("_super"), callee)
+                : callee as PrimaryExpression;
         }
         else if (getEmitFlags(callee) & EmitFlags.HelperName) {
             thisArg = createVoidZero();

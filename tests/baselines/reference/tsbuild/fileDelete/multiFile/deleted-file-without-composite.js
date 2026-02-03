@@ -69,7 +69,7 @@ function child2() {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.child = child;
-const child2_1 = require("../child/child2");
+var child2_1 = require("../child/child2");
 function child() {
     (0, child2_1.child2)();
 }

@@ -25,7 +25,7 @@ module.exports = x;
 //// [bar.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const foo_1 = require("./foo");
+var foo_1 = require("./foo");
 (0, foo_1.foo)();
-const foo2_1 = require("./foo2");
+var foo2_1 = require("./foo2");
 foo2_1.c;

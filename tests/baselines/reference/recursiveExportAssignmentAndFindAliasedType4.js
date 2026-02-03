@@ -15,7 +15,7 @@ export var b: ClassB; // This should result in type ClassB
 
 //// [recursiveExportAssignmentAndFindAliasedType4_moduleC.js]
 "use strict";
-const self = require("./recursiveExportAssignmentAndFindAliasedType4_moduleC");
+var self = require("./recursiveExportAssignmentAndFindAliasedType4_moduleC");
 module.exports = self;
 //// [recursiveExportAssignmentAndFindAliasedType4_moduleB.js]
 "use strict";

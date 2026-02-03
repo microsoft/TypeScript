@@ -36,7 +36,10 @@ const s2 = "x";
 const s3 = "x";
 const s4 = "x";
 const s5 = "x";
-class Cls2 {
-}
-Cls2.b = "b";
+let Cls2 = (() => {
+    class Cls2 {
+    }
+    Cls2.b = "b";
+    return Cls2;
+})();
 const obj2 = { d: 'd' };

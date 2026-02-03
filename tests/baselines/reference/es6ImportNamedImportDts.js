@@ -95,26 +95,26 @@ exports.aaaa1 = aaaa1;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.z2 = exports.z111 = exports.xxxx9 = exports.xxxx8 = exports.xxxx7 = exports.xxxx6 = exports.xxxx5 = exports.xxxx4 = exports.xxxx3 = exports.xxxx2 = exports.xxxx1 = exports.xxxx = void 0;
-const server_1 = require("./server");
+var server_1 = require("./server");
 exports.xxxx = new server_1.a();
-const server_2 = require("./server");
+var server_2 = require("./server");
 exports.xxxx1 = new server_2.a11();
-const server_3 = require("./server");
+var server_3 = require("./server");
 exports.xxxx2 = new server_3.x();
 exports.xxxx3 = new server_3.a12();
-const server_4 = require("./server");
+var server_4 = require("./server");
 exports.xxxx4 = new server_4.x11();
-const server_5 = require("./server");
+var server_5 = require("./server");
 exports.xxxx5 = new server_5.m();
-const server_6 = require("./server");
+var server_6 = require("./server");
 exports.xxxx6 = new server_6.a1();
 exports.xxxx7 = new server_6.x1();
-const server_7 = require("./server");
+var server_7 = require("./server");
 exports.xxxx8 = new server_7.a111();
 exports.xxxx9 = new server_7.x111();
-const server_8 = require("./server");
+var server_8 = require("./server");
 exports.z111 = new server_8.z1();
-const server_9 = require("./server");
+var server_9 = require("./server");
 exports.z2 = new server_9.z2(); // z2 shouldn't give redeclare error
 
 

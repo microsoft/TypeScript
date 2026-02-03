@@ -45,7 +45,7 @@ exports.x = 1;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = exports.A = void 0;
-const tslib_1 = require("tslib");
+var tslib_1 = require("tslib");
 tslib_1.__exportStar(require("./other"), exports);
 class A {
 }
@@ -53,21 +53,24 @@ exports.A = A;
 class B extends A {
 }
 exports.B = B;
-let C = class C {
-    method(x) {
-    }
-};
-tslib_1.__decorate([
-    tslib_1.__param(0, dec),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Number]),
-    tslib_1.__metadata("design:returntype", void 0)
-], C.prototype, "method", null);
-C = tslib_1.__decorate([
-    dec
-], C);
+let C = (() => {
+    let C = class C {
+        method(x) {
+        }
+    };
+    tslib_1.__decorate([
+        tslib_1.__param(0, dec),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [Number]),
+        tslib_1.__metadata("design:returntype", void 0)
+    ], C.prototype, "method", null);
+    C = tslib_1.__decorate([
+        dec
+    ], C);
+    return C;
+})();
 const o = { a: 1 };
-const y = Object.assign({}, o);
+const y = tslib_1.__assign({}, o);
 const x = tslib_1.__rest(y, []);
 //// [script.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -86,16 +89,19 @@ class A {
 }
 class B extends A {
 }
-let C = class C {
-    method(x) {
-    }
-};
-__decorate([
-    __param(0, dec),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", void 0)
-], C.prototype, "method", null);
-C = __decorate([
-    dec
-], C);
+let C = (() => {
+    let C = class C {
+        method(x) {
+        }
+    };
+    __decorate([
+        __param(0, dec),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Number]),
+        __metadata("design:returntype", void 0)
+    ], C.prototype, "method", null);
+    C = __decorate([
+        dec
+    ], C);
+    return C;
+})();

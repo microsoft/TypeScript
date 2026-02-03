@@ -15,13 +15,16 @@ C.sunknown.length; // ok: sunknown: any
 
 
 //// [extendFromAny.js]
-class C extends Base {
-    constructor() {
-        super(...arguments);
-        this.known = 1;
+let C = (() => {
+    class C extends Base {
+        constructor() {
+            super(...arguments);
+            this.known = 1;
+        }
     }
-}
-C.sknown = 2;
+    C.sknown = 2;
+    return C;
+})();
 let c = new C();
 c.known.length; // error, 'known' has no 'length' property
 C.sknown.length; // error, 'sknown' has no 'length' property

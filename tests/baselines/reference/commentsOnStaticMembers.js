@@ -22,13 +22,16 @@ class test {
 }
 
 //// [commentsOnStaticMembers.js]
-class test {
-}
-/**
- * p1 comment appears in output
- */
-test.p1 = "";
-/**
- * p3 comment appears in output
- */
-test.p3 = "";
+let test = (() => {
+    class test {
+    }
+    /**
+     * p1 comment appears in output
+     */
+    test.p1 = "";
+    /**
+     * p3 comment appears in output
+     */
+    test.p3 = "";
+    return test;
+})();

@@ -54,12 +54,12 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const foo = __importStar(require("foo"));
+var foo = __importStar(require("foo"));
 foo.bar();
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const foo = require("foo");
+var foo = require("foo");
 foo();
 //// [c.js]
 "use strict";
@@ -97,7 +97,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const foo_1 = __importStar(require("foo"));
+var foo_1 = __importStar(require("foo"));
 require("./a");
 require("./b");
 (0, foo_1.default)((0, foo_1.bar)());

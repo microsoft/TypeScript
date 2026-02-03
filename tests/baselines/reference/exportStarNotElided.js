@@ -67,5 +67,5 @@ exports.aliased = __importStar(require("./data1"));
 //// [data1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const _1 = require("./");
+var _1 = require("./");
 (0, _1.register)("ok");

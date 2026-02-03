@@ -28,7 +28,7 @@ let y3 = <Opt x />;
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = require("react");
+var React = require("react");
 class Opt extends React.Component {
     render() {
         return <div>Hello</div>;

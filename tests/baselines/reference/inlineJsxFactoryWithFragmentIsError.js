@@ -56,13 +56,13 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx React.createElement */
-const React = __importStar(require("./renderer"));
+var React = __importStar(require("./renderer"));
 React.createElement(React.Fragment, null,
     React.createElement("h", null));
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx dom */
-const renderer_1 = require("./renderer");
+var renderer_1 = require("./renderer");
 (0, renderer_1.dom)(React.Fragment, null,
     (0, renderer_1.dom)("h", null));

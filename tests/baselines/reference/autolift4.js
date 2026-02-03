@@ -26,16 +26,19 @@ class Point3D extends Point {
 
 
 //// [autolift4.js]
-class Point {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
+let Point = (() => {
+    class Point {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+        getDist() {
+            return Math.sqrt(this.x * this.x + this.y * this.y);
+        }
     }
-    getDist() {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
-    }
-}
-Point.origin = new Point(0, 0);
+    Point.origin = new Point(0, 0);
+    return Point;
+})();
 class Point3D extends Point {
     constructor(x, y, z, m) {
         super(x, y);

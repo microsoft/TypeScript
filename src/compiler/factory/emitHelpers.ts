@@ -16,6 +16,7 @@ import {
     FunctionExpression,
     GeneratedIdentifierFlags,
     getEmitFlags,
+    getEmitScriptTarget,
     getPropertyNameOfBindingOrAssignmentElement,
     Identifier,
     InternalEmitFlags,
@@ -27,6 +28,7 @@ import {
     ObjectLiteralElementLike,
     ParameterDeclaration,
     PrivateIdentifier,
+    ScriptTarget,
     setEmitFlags,
     setInternalEmitFlags,
     setTextRange,
@@ -398,7 +400,15 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     // ES2018 Helpers
 
     function createAssignHelper(attributesSegments: Expression[]) {
-        return factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"), /*typeArguments*/ undefined, attributesSegments);
+        if (getEmitScriptTarget(context.getCompilerOptions()) >= ScriptTarget.ES2015) {
+            return factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"), /*typeArguments*/ undefined, attributesSegments);
+        }
+        context.requestEmitHelper(assignHelper);
+        return factory.createCallExpression(
+            getUnscopedHelperName("__assign"),
+            /*typeArguments*/ undefined,
+            attributesSegments,
+        );
     }
 
     function createAwaitHelper(expression: Expression) {
@@ -805,6 +815,25 @@ const runInitializersHelper: UnscopedEmitHelper = {
 };
 
 // ES2018 Helpers
+
+const assignHelper: UnscopedEmitHelper = {
+    name: "typescript:assign",
+    importName: "__assign",
+    scoped: false,
+    priority: 1,
+    text: `
+            var __assign = (this && this.__assign) || function () {
+                __assign = Object.assign || function(t) {
+                    for (var s, i = 1, n = arguments.length; i < n; i++) {
+                        s = arguments[i];
+                        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                            t[p] = s[p];
+                    }
+                    return t;
+                };
+                return __assign.apply(this, arguments);
+            };`,
+};
 
 const awaitHelper: UnscopedEmitHelper = {
     name: "typescript:await",

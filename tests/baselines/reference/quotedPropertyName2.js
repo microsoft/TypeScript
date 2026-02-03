@@ -6,6 +6,9 @@ class Test1 {
 }
 
 //// [quotedPropertyName2.js]
-class Test1 {
-}
-Test1["prop1"] = 0;
+let Test1 = (() => {
+    class Test1 {
+    }
+    Test1["prop1"] = 0;
+    return Test1;
+})();

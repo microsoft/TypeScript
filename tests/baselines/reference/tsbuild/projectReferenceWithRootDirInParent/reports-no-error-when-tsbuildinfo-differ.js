@@ -148,7 +148,7 @@ export declare const b = 0;
 //// [/home/src/workspaces/solution/dist/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const b_1 = require("./b");
+var b_1 = require("./b");
 const a = b_1.b;
 
 

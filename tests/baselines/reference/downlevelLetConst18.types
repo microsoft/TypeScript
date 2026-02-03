@@ -7,24 +7,29 @@
 
 for (let x; ;) {
 >x : any
+>  : ^^^
 
     function foo() { x };
 >foo : () => void
 >    : ^^^^^^^^^^
 >x : any
+>  : ^^^
 }
 
 for (let x; ;) {
 >x : any
+>  : ^^^
 
     function foo1() { x };
 >foo1 : () => void
 >     : ^^^^^^^^^^
 >x : any
+>  : ^^^
 }
 
 for (let x; ;) {
 >x : any
+>  : ^^^
 
     (() => { x })();
 >(() => { x })() : never
@@ -34,6 +39,7 @@ for (let x; ;) {
 >() => { x } : () => never
 >            : ^^^^^^^^^^^
 >x : any
+>  : ^^^
 }
 
 for (const x = 1; ;) {
@@ -55,6 +61,7 @@ for (const x = 1; ;) {
 
 for (let x; ;) {
 >x : any
+>  : ^^^
 
     ({ foo() { x }})
 >({ foo() { x }}) : { foo(): void; }
@@ -64,10 +71,12 @@ for (let x; ;) {
 >foo : () => void
 >    : ^^^^^^^^^^
 >x : any
+>  : ^^^
 }
 
 for (let x; ;) {
 >x : any
+>  : ^^^
 
     ({ get foo() { return x } })
 >({ get foo() { return x } }) : { readonly foo: any; }
@@ -75,11 +84,14 @@ for (let x; ;) {
 >{ get foo() { return x } } : { readonly foo: any; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 >x : any
+>  : ^^^
 }
 
 for (let x; ;) {
 >x : any
+>  : ^^^
 
     ({ set foo(v) { x } })
 >({ set foo(v) { x } }) : { foo: any; }
@@ -87,7 +99,10 @@ for (let x; ;) {
 >{ set foo(v) { x } } : { foo: any; }
 >                     : ^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 >v : any
+>  : ^^^
 >x : any
+>  : ^^^
 }
 

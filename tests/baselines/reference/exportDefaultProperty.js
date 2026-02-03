@@ -64,12 +64,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="declarations.d.ts" />
-const foobar_1 = __importDefault(require("foobar"));
+var foobar_1 = __importDefault(require("foobar"));
 var X = foobar_1.default.X;
-const foobarx_1 = __importDefault(require("foobarx"));
+var foobarx_1 = __importDefault(require("foobarx"));
 const x = X;
 const x2 = foobarx_1.default;
-const a_1 = __importDefault(require("./a"));
+var a_1 = __importDefault(require("./a"));
 const b = new a_1.default(a_1.default.b);
-const b_1 = __importDefault(require("./b"));
+var b_1 = __importDefault(require("./b"));
 b_1.default + 1;

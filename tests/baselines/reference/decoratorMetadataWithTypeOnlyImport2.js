@@ -38,10 +38,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = void 0;
-class Main {
-}
+let Main = (() => {
+    class Main {
+    }
+    __decorate([
+        decorator(),
+        __metadata("design:type", Function)
+    ], Main.prototype, "field", void 0);
+    return Main;
+})();
 exports.Main = Main;
-__decorate([
-    decorator(),
-    __metadata("design:type", Function)
-], Main.prototype, "field", void 0);

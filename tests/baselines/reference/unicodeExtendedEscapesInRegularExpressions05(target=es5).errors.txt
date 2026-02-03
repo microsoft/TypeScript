@@ -1,0 +1,8 @@
+unicodeExtendedEscapesInRegularExpressions05.ts(1,78): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
+
+
+==== unicodeExtendedEscapesInRegularExpressions05.ts (1 errors) ====
+    var x = /\u{48}\u{65}\u{6c}\u{6c}\u{6f}\u{20}\u{77}\u{6f}\u{72}\u{6c}\u{64}/gu;
+                                                                                 ~
+!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
+    

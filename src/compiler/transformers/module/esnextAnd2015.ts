@@ -18,6 +18,7 @@ import {
     GeneratedIdentifierFlags,
     getEmitFlags,
     getEmitModuleKind,
+    getEmitScriptTarget,
     getExternalHelpersModuleName,
     getExternalModuleNameLiteral,
     getIsolatedModules,
@@ -45,6 +46,7 @@ import {
     NodeId,
     rangeContainsRange,
     rewriteModuleSpecifier,
+    ScriptTarget,
     setOriginalNode,
     setTextRange,
     shouldRewriteModuleSpecifier,
@@ -70,6 +72,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     const host = context.getEmitHost();
     const resolver = context.getEmitResolver();
     const compilerOptions = context.getCompilerOptions();
+    const languageVersion = getEmitScriptTarget(compilerOptions);
     const previousOnEmitNode = context.onEmitNode;
     const previousOnSubstituteNode = context.onSubstituteNode;
     context.onEmitNode = onEmitNode;
@@ -239,7 +242,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                             ]),
                         ),
                     ],
-                    NodeFlags.Const,
+                    /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None,
                 ),
             );
             importRequireStatements = [importStatement, requireStatement];
@@ -274,7 +277,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                                     createRequireCall(node),
                                 ),
                             ],
-                            NodeFlags.Const,
+                            /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None,
                         ),
                     ),
                     node,

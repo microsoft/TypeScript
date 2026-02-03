@@ -9,9 +9,12 @@ class Vector {
 }
 
 //// [unqualifiedCallToClassStatic1.js]
-class Vector {
-}
-Vector.foo = () => {
-    // 'foo' cannot be called in an unqualified manner.
-    foo();
-};
+let Vector = (() => {
+    class Vector {
+    }
+    Vector.foo = () => {
+        // 'foo' cannot be called in an unqualified manner.
+        foo();
+    };
+    return Vector;
+})();

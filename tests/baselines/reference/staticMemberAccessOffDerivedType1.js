@@ -17,6 +17,9 @@ class SomeBase {
         return 2;
     }
 }
-class P extends SomeBase {
-}
-P.SomeNumber = P.GetNumber();
+let P = (() => {
+    class P extends SomeBase {
+    }
+    P.SomeNumber = P.GetNumber();
+    return P;
+})();

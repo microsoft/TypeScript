@@ -2,8 +2,8 @@
 
 === emitArrowFunctionWhenUsingArguments14.ts ===
 function f() {
->f : () => () => number
->  : ^^^^^^^^^^^^^^^^^^
+>f : () => () => IArguments
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 
     if (Math.random()) {
 >Math.random() : number
@@ -22,9 +22,9 @@ function f() {
 >    : ^^^
 
         return () => arguments;
->() => arguments : () => number
->                : ^^^^^^^^^^^^
->arguments : 100
->          : ^^^
+>() => arguments : () => IArguments
+>                : ^^^^^^^^^^^^^^^^
+>arguments : IArguments
+>          : ^^^^^^^^^^
     }
 }

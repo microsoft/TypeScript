@@ -52,7 +52,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const a = __importStar(require("./a"));
+var a = __importStar(require("./a"));
 exports.default = a.D;
 
 

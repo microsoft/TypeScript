@@ -35,18 +35,21 @@ exports.default = db;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
-const db_1 = __importDefault(require("./db"));
+var db_1 = __importDefault(require("./db"));
 function someDecorator(target) {
     return target;
 }
-let MyClass = class MyClass {
-    constructor(db) {
-        this.db = db;
-        this.db.doSomething();
-    }
-};
+let MyClass = (() => {
+    let MyClass = class MyClass {
+        constructor(db) {
+            this.db = db;
+            this.db.doSomething();
+        }
+    };
+    MyClass = __decorate([
+        someDecorator,
+        __metadata("design:paramtypes", [db_1.default])
+    ], MyClass);
+    return MyClass;
+})();
 exports.MyClass = MyClass;
-exports.MyClass = MyClass = __decorate([
-    someDecorator,
-    __metadata("design:paramtypes", [db_1.default])
-], MyClass);

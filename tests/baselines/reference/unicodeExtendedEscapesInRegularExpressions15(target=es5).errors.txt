@@ -1,0 +1,8 @@
+unicodeExtendedEscapesInRegularExpressions15.ts(1,44): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
+
+
+==== unicodeExtendedEscapesInRegularExpressions15.ts (1 errors) ====
+    var x = /\u{abcd}\u{ef12}\u{3456}\u{7890}/gu;
+                                               ~
+!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
+    

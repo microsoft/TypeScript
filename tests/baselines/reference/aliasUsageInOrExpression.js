@@ -35,14 +35,14 @@ exports.Model = Model;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VisualizationModel = void 0;
-const Backbone = require("./aliasUsageInOrExpression_backbone");
+var Backbone = require("./aliasUsageInOrExpression_backbone");
 class VisualizationModel extends Backbone.Model {
 }
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInOrExpression_main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const moduleA = require("./aliasUsageInOrExpression_moduleA");
+var moduleA = require("./aliasUsageInOrExpression_moduleA");
 var i;
 var d1 = i || moduleA;
 var d2 = i || moduleA;

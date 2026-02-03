@@ -10,12 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 class B {
 }
-let C = class C {
-    constructor(b) { }
-};
-C = __decorate([
-    dec,
-    __metadata("design:paramtypes", [B])
-], C);
+let C = (() => {
+    let C = class C {
+        constructor(b) { }
+    };
+    C = __decorate([
+        dec,
+        __metadata("design:paramtypes", [B])
+    ], C);
+    return C;
+})();
 export { C };
 "changed";

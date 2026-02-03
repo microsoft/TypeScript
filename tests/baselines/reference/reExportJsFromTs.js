@@ -50,5 +50,5 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tsConstants = void 0;
-const tsConstants = __importStar(require("../lib/constants"));
+var tsConstants = __importStar(require("../lib/constants"));
 exports.tsConstants = tsConstants;

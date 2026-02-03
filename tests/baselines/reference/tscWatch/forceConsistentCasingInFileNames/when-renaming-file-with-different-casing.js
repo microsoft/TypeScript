@@ -50,7 +50,7 @@ exports.logger = logger;
 //// [/user/username/projects/myproject/another.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const logger_1 = require("./logger");
+var logger_1 = require("./logger");
 new logger_1.logger();
 
 

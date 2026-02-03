@@ -12,11 +12,11 @@ class C {
 >          : ^^^
 
         var a = () => arguments;
->a : () => any
->  : ^^^^^^^^^
->() => arguments : () => any
->                : ^^^^^^^^^
->arguments : any
->          : ^^^
+>a : () => IArguments
+>  : ^^^^^^^^^^^^^^^^
+>() => arguments : () => IArguments
+>                : ^^^^^^^^^^^^^^^^
+>arguments : IArguments
+>          : ^^^^^^^^^^
     }
 }

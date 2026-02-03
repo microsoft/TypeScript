@@ -24,15 +24,15 @@ export var b: ClassB; // This should result in type ClassB
 
 //// [recursiveExportAssignmentAndFindAliasedType7_moduleE.js]
 "use strict";
-const self = require("./recursiveExportAssignmentAndFindAliasedType7_moduleC");
+var self = require("./recursiveExportAssignmentAndFindAliasedType7_moduleC");
 module.exports = self;
 //// [recursiveExportAssignmentAndFindAliasedType7_moduleD.js]
 "use strict";
-const self = require("./recursiveExportAssignmentAndFindAliasedType7_moduleE");
+var self = require("./recursiveExportAssignmentAndFindAliasedType7_moduleE");
 module.exports = self;
 //// [recursiveExportAssignmentAndFindAliasedType7_moduleC.js]
 "use strict";
-const self = require("./recursiveExportAssignmentAndFindAliasedType7_moduleD");
+var self = require("./recursiveExportAssignmentAndFindAliasedType7_moduleD");
 var selfVar = self;
 module.exports = selfVar;
 //// [recursiveExportAssignmentAndFindAliasedType7_moduleB.js]

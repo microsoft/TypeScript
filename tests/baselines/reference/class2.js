@@ -4,7 +4,10 @@
 class foo { constructor() { static f = 3; } }
 
 //// [class2.js]
-class foo {
-    constructor() { }
-}
-foo.f = 3;
+let foo = (() => {
+    class foo {
+        constructor() { }
+    }
+    foo.f = 3;
+    return foo;
+})();

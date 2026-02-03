@@ -16,15 +16,18 @@ class MyClass {
 
 
 //// [decoratorMetadataForMethodWithNoReturnTypeAnnotation01.js]
-class MyClass {
-    constructor(test, test2) {
+let MyClass = (() => {
+    class MyClass {
+        constructor(test, test2) {
+        }
+        doSomething() {
+        }
     }
-    doSomething() {
-    }
-}
-__decorate([
-    decorator,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], MyClass.prototype, "doSomething", null);
+    __decorate([
+        decorator,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], MyClass.prototype, "doSomething", null);
+    return MyClass;
+})();

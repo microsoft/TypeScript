@@ -28,7 +28,7 @@ foo + bar + baz;
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const foo = require("foo");
-const bar = require("bar");
-const baz = require("baz");
+var foo = require("foo");
+var bar = require("bar");
+var baz = require("baz");
 foo + bar + baz;

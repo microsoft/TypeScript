@@ -159,7 +159,7 @@ export declare class A {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
-const a_1 = require("@ref/a");
+var a_1 = require("@ref/a");
 exports.b = new a_1.A();
 
 
@@ -253,8 +253,8 @@ export declare const b: A;
 //// [/user/username/projects/transitiveReferences/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const b_1 = require("./b");
-const a_1 = require("@ref/a");
+var b_1 = require("./b");
+var a_1 = require("@ref/a");
 b_1.b;
 a_1.X;
 
@@ -466,7 +466,7 @@ export function gfoo() { }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.gfoo = gfoo;
-const a_1 = require("@ref/a");
+var a_1 = require("@ref/a");
 exports.b = new a_1.A();
 function gfoo() { }
 

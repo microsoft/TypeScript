@@ -41,6 +41,6 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const A = __importStar(require(""));
+var A = __importStar(require(""));
 class B extends A {
 }

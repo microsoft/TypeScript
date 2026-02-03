@@ -31,12 +31,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Input, TemplateRef } from './deps';
-export class MyComponent {
-    get ref() { return this._ref; }
-    set ref(value) { this._ref = value; }
-}
-__decorate([
-    Input(),
-    __metadata("design:type", TemplateRef),
-    __metadata("design:paramtypes", [TemplateRef])
-], MyComponent.prototype, "ref", null);
+let MyComponent = (() => {
+    class MyComponent {
+        get ref() { return this._ref; }
+        set ref(value) { this._ref = value; }
+    }
+    __decorate([
+        Input(),
+        __metadata("design:type", TemplateRef),
+        __metadata("design:paramtypes", [TemplateRef])
+    ], MyComponent.prototype, "ref", null);
+    return MyComponent;
+})();
+export { MyComponent };

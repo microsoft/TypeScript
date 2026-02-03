@@ -65,7 +65,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const asserts = __importStar(require("./asserts"));
+var asserts = __importStar(require("./asserts"));
 function test(obj) {
     asserts.isNonNullable(obj);
     obj.trim();

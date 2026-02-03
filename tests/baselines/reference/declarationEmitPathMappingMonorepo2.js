@@ -32,7 +32,7 @@ export default createSvgIcon("Hello", "ArrowLeft");
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("@ts-bug/core/utils");
+var utils_1 = require("@ts-bug/core/utils");
 exports.default = (0, utils_1.createSvgIcon)("Hello", "ArrowLeft");
 
 

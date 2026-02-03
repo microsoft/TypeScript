@@ -64,7 +64,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = __importStar(require("react"));
+var React = __importStar(require("react"));
 const RandomComponent = () => {
     const Component = condition1
         ? Radio

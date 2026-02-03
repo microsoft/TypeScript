@@ -66,7 +66,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const Foo = __importStar(require("./foo"));
+var Foo = __importStar(require("./foo"));
 function check(x) {
     switch (x) {
         case Foo.ConstFooEnum.Some:

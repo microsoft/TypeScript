@@ -17,7 +17,7 @@ greeter.start();
 * (c) Copyright - Important
 ****************************/
 Object.defineProperty(exports, "__esModule", { value: true });
-const model = require("./greeter");
+var model = require("./greeter");
 var el = document.getElementById('content');
 var greeter = new model.Greeter(el);
 /** things */

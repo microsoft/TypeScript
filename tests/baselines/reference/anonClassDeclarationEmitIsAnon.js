@@ -58,7 +58,7 @@ function Timestamped(Base) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TimestampedUser = exports.User = void 0;
-const wrapClass_1 = require("./wrapClass");
+var wrapClass_1 = require("./wrapClass");
 exports.default = (0, wrapClass_1.wrapClass)(0);
 // Simple class
 class User {

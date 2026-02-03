@@ -28,7 +28,7 @@ class MyButtonComponent extends React.Component<{},{}> {
 //// [file.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = require("react");
+var React = require("react");
 class MyComponent extends React.Component {
     render() {
         const { AnyComponent } = this.props;

@@ -21,7 +21,7 @@ class ElementsArray extends Array {
 ElementsArray.isArray(new ElementsArray());
 
 //// [a.js]
-var _a, _b, _c;
+var _a, _b;
 class Thing {
 }
 _a = Thing;
@@ -30,11 +30,11 @@ _a = Thing;
 })();
 Thing.doSomething();
 // GH#46468
-class ElementsArray extends (_c = Array) {
+class ElementsArray extends Array {
 }
 _b = ElementsArray;
 (() => {
-    const superisArray = Reflect.get(_c, "isArray", _b);
+    const superisArray = super.isArray;
     const customIsArray = (arg) => superisArray(arg);
     _b.isArray = customIsArray;
 })();

@@ -43,7 +43,7 @@ module.exports = foo;
 //// [file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const x = require("./file1");
+var x = require("./file1");
 x.B.b = 1;
 //// [file3.js]
 "use strict";
@@ -81,7 +81,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const x = __importStar(require("./file1"));
+var x = __importStar(require("./file1"));
 require("./file2");
 let a;
 let b = a.a;

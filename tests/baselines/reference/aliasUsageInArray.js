@@ -32,13 +32,13 @@ exports.Model = Model;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VisualizationModel = void 0;
-const Backbone = require("./aliasUsageInArray_backbone");
+var Backbone = require("./aliasUsageInArray_backbone");
 class VisualizationModel extends Backbone.Model {
 }
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInArray_main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const moduleA = require("./aliasUsageInArray_moduleA");
+var moduleA = require("./aliasUsageInArray_moduleA");
 var xs = [moduleA];
 var xs2 = [moduleA];

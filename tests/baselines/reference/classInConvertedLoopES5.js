@@ -14,11 +14,14 @@ for (const row of ['1', '2', '3', '4', '5']) {
 //// [classInConvertedLoopES5.js]
 const classesByRow = {};
 for (const row of ['1', '2', '3', '4', '5']) {
-    class RowClass {
-        constructor() {
-            this.row = row;
+    let RowClass = (() => {
+        class RowClass {
+            constructor() {
+                this.row = row;
+            }
         }
-    }
-    RowClass.factory = () => new RowClass();
+        RowClass.factory = () => new RowClass();
+        return RowClass;
+    })();
     classesByRow[row] = RowClass;
 }

@@ -69,7 +69,7 @@ export declare class C {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
-const c_1 = require("./c");
+var c_1 = require("./c");
 class B {
     constructor() {
         this.c = new c_1.C();
@@ -88,7 +88,7 @@ export declare class B {
 //// [/user/username/projects/myproject/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const b_1 = require("./b");
+var b_1 = require("./b");
 let b = new b_1.B();
 console.log(b.c.d);
 

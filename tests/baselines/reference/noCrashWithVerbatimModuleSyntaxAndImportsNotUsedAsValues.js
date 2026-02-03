@@ -17,5 +17,5 @@ exports.A = A;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const file_1 = require("./file");
+var file_1 = require("./file");
 const a = null;

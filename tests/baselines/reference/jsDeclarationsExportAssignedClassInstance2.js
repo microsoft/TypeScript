@@ -9,12 +9,15 @@ class Foo {
 module.exports = new Foo();
 
 //// [index.js]
-class Foo {
-    constructor() {
-        this.member = 10;
+let Foo = (() => {
+    class Foo {
+        constructor() {
+            this.member = 10;
+        }
     }
-}
-Foo.stat = 10;
+    Foo.stat = 10;
+    return Foo;
+})();
 module.exports = new Foo();
 
 

@@ -10,9 +10,12 @@ void def;
 //// [code.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class C {
-}
-C.x = 0;
+let C = (() => {
+    class C {
+    }
+    C.x = 0;
+    return C;
+})();
 ;
 exports.default = C.x;
 //// [usage.js]
@@ -21,5 +24,5 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const code_1 = __importDefault(require("./code"));
+var code_1 = __importDefault(require("./code"));
 void code_1.default;

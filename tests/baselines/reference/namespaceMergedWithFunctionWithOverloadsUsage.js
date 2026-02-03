@@ -19,5 +19,5 @@ X(0); // shouldn't cause a crash
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const X = require("./file");
+var X = require("./file");
 X(0); // shouldn't cause a crash

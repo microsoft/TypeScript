@@ -34,7 +34,7 @@ exports.arr = arr;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo2 = exports.sec = exports.bee = exports.one = exports.ibaz = exports.baz = exports.arr = exports.foo = void 0;
-const foo_1 = require("./foo");
+var foo_1 = require("./foo");
 Object.defineProperty(exports, "foo", { enumerable: true, get: function () { return foo_1.foo; } });
 Object.defineProperty(exports, "arr", { enumerable: true, get: function () { return foo_1.arr; } });
 const { bar: baz, bat, bam: { bork: { bar: ibar, baz: ibaz } } } = foo_1.foo;

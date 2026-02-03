@@ -33,7 +33,7 @@ var A;
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const b_1 = require("./b");
+var b_1 = require("./b");
 A;
 A.displayName;
 A();

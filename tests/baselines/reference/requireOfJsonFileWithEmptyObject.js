@@ -17,9 +17,9 @@ if (x) {
 //// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const b1 = require("./b.json");
+var b1 = require("./b.json");
 let x = b1;
-const b2 = require("./b.json");
+var b2 = require("./b.json");
 if (x) {
     x = b2;
 }

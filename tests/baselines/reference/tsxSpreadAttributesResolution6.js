@@ -22,7 +22,7 @@ const textProps: TextProps = {
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = require("react");
+var React = require("react");
 class TextComponent extends React.Component {
     render() {
         return <span>Some Text..</span>;

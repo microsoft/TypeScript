@@ -248,9 +248,12 @@ function foo9() {
     let x;
 }
 function foo10() {
-    class A {
-    }
-    A.a = x;
+    let A = (() => {
+        class A {
+        }
+        A.a = x;
+        return A;
+    })();
     let x;
 }
 function foo11() {

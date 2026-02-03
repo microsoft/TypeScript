@@ -64,7 +64,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
-const pkg = __importStar(require("package-b"));
+var pkg = __importStar(require("package-b"));
 exports.a = pkg.invoke();
 
 

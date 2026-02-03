@@ -37,10 +37,13 @@ exports.ClassA = void 0;
 function annotation() {
     return (target) => { };
 }
-class ClassA {
-}
+let ClassA = (() => {
+    class ClassA {
+    }
+    __decorate([
+        annotation(),
+        __metadata("design:type", Object)
+    ], ClassA.prototype, "array", void 0);
+    return ClassA;
+})();
 exports.ClassA = ClassA;
-__decorate([
-    annotation(),
-    __metadata("design:type", Object)
-], ClassA.prototype, "array", void 0);

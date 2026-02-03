@@ -50,7 +50,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const nameSpaceBinding = __importStar(require("./es6ImportNameSpaceImportInEs5_0"));
+var nameSpaceBinding = __importStar(require("./es6ImportNameSpaceImportInEs5_0"));
 var x = nameSpaceBinding.a;
 
 

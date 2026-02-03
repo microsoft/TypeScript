@@ -1,20 +1,23 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
-const db_1 = require("./db");
+var db_1 = require("./db");
 function someDecorator(target) {
     return target;
 }
-let MyClass = class MyClass {
-    constructor(db) {
-        this.db = db;
-        this.db.doSomething();
-    }
-};
+let MyClass = (() => {
+    var _a;
+    let MyClass = class MyClass {
+        constructor(db) {
+            this.db = db;
+            this.db.doSomething();
+        }
+    };
+    MyClass = __decorate([
+        someDecorator,
+        __metadata("design:paramtypes", [typeof (_a = typeof db_1.db !== "undefined" && db_1.db) === "function" ? _a : Object])
+    ], MyClass);
+    return MyClass;
+})();
 exports.MyClass = MyClass;
-exports.MyClass = MyClass = __decorate([
-    someDecorator,
-    __metadata("design:paramtypes", [typeof (_a = typeof db_1.db !== "undefined" && db_1.db) === "function" ? _a : Object])
-], MyClass);
 //# sourceMappingURL=file.js.map

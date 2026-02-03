@@ -128,7 +128,7 @@ export declare function getPoint(): PointWrapper;
 //// [/user/username/projects/myproject/d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const c_1 = require("./c");
+var c_1 = require("./c");
 (0, c_1.getPoint)().c.x;
 
 

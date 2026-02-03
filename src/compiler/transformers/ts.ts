@@ -24,6 +24,7 @@ import {
     createExpressionFromEntityName,
     createRange,
     createRuntimeTypeSerializer,
+    createTokenRange,
     Debug,
     Declaration,
     Decorator,
@@ -49,6 +50,7 @@ import {
     getEffectiveBaseTypeNode,
     getEmitFlags,
     getEmitModuleKind,
+    getEmitScriptTarget,
     getFirstConstructorWithBody,
     getInitializedVariables,
     getIsolatedModules,
@@ -68,6 +70,7 @@ import {
     ImportSpecifier,
     InitializedVariableDeclaration,
     insertStatementsAfterStandardPrologue,
+    InternalEmitFlags,
     isAccessExpression,
     isArray,
     isAssertionExpression,
@@ -132,6 +135,7 @@ import {
     ModuleBlock,
     ModuleDeclaration,
     ModuleKind,
+    moveRangePastDecorators,
     moveRangePastModifiers,
     moveRangePos,
     NamedExportBindings,
@@ -156,21 +160,26 @@ import {
     PropertyName,
     removeAllComments,
     SatisfiesExpression,
+    ScriptTarget,
     SetAccessorDeclaration,
     setCommentRange,
     setConstantValue,
     setEmitFlags,
+    setInternalEmitFlags,
     setOriginalNode,
     setParent,
     setSourceMapRange,
     setSyntheticLeadingComments,
     setSyntheticTrailingComments,
     setTextRange,
+    setTextRangeEnd,
+    setTextRangePos,
     setTypeNode,
     ShorthandPropertyAssignment,
     shouldPreserveConstEnums,
     skipOuterExpressions,
     skipPartiallyEmittedExpressions,
+    skipTrivia,
     skipWhile,
     some,
     SourceFile,
@@ -235,6 +244,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
 
     const resolver = context.getEmitResolver();
     const compilerOptions = context.getCompilerOptions();
+    const languageVersion = getEmitScriptTarget(compilerOptions);
     const moduleKind = getEmitModuleKind(compilerOptions);
     const legacyDecorators = !!compilerOptions.experimentalDecorators;
     const typeSerializer = compilerOptions.emitDecoratorMetadata ? createRuntimeTypeSerializer(context) : undefined;
@@ -869,6 +879,8 @@ export function transformTypeScript(context: TransformationContext): Transformer
 
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
         const facts = getClassFacts(node);
+        const promoteToIIFE = languageVersion <= ScriptTarget.ES5 &&
+            !!(facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression);
 
         if (
             !isClassLikeDeclarationWithTypeScriptSyntax(node) &&
@@ -885,7 +897,12 @@ export function transformTypeScript(context: TransformationContext): Transformer
             );
         }
 
-        const moveModifiers = facts & ClassFacts.IsExportOfNamespace;
+        if (promoteToIIFE) {
+            context.startLexicalEnvironment();
+        }
+
+        const moveModifiers = promoteToIIFE ||
+            facts & ClassFacts.IsExportOfNamespace;
 
         // elide modifiers on the declaration if we are emitting an IIFE or the class is
         // a namespace export
@@ -927,7 +944,61 @@ export function transformTypeScript(context: TransformationContext): Transformer
 
         setEmitFlags(classDeclaration, emitFlags);
 
-        const statement = classDeclaration;
+        let statement: VariableStatement | ClassDeclaration;
+        if (promoteToIIFE) {
+            // When we emit a TypeScript class down to ES5, we must wrap it in an IIFE so that the
+            // 'es2015' transformer can properly nest static initializers and decorators. The result
+            // looks something like:
+            //
+            //  var C = function () {
+            //      class C {
+            //      }
+            //      C.static_prop = 1;
+            //      return C;
+            //  }();
+            //
+            const statements: Statement[] = [classDeclaration];
+            const closingBraceLocation = createTokenRange(skipTrivia(currentSourceFile.text, node.members.end), SyntaxKind.CloseBraceToken);
+            const localName = factory.getInternalName(node);
+
+            // The following partially-emitted expression exists purely to align our sourcemap
+            // emit with the original emitter.
+            const outer = factory.createPartiallyEmittedExpression(localName);
+            setTextRangeEnd(outer, closingBraceLocation.end);
+            setEmitFlags(outer, EmitFlags.NoComments);
+
+            const returnStatement = factory.createReturnStatement(outer);
+            setTextRangePos(returnStatement, closingBraceLocation.pos);
+            setEmitFlags(returnStatement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
+            statements.push(returnStatement);
+
+            insertStatementsAfterStandardPrologue(statements, context.endLexicalEnvironment());
+
+            const iife = factory.createImmediatelyInvokedArrowFunction(statements);
+            setInternalEmitFlags(iife, InternalEmitFlags.TypeScriptClassWrapper);
+
+            //  let C = (() => { ... })();
+            const varDecl = factory.createVariableDeclaration(
+                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                iife,
+            );
+            setOriginalNode(varDecl, node);
+
+            const varStatement = factory.createVariableStatement(
+                /*modifiers*/ undefined,
+                factory.createVariableDeclarationList([varDecl], NodeFlags.Let),
+            );
+            setOriginalNode(varStatement, node);
+            setCommentRange(varStatement, node);
+            setSourceMapRange(varStatement, moveRangePastDecorators(node));
+            startOnNewLine(varStatement);
+            statement = varStatement;
+        }
+        else {
+            statement = classDeclaration;
+        }
 
         if (moveModifiers) {
             if (facts & ClassFacts.IsExportOfNamespace) {

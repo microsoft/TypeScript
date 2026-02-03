@@ -49,7 +49,7 @@ exports.a = "";
 //// [/user/username/projects/myproject/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const a_1 = require("./a");
+var a_1 = require("./a");
 const b = a_1.a;
 
 

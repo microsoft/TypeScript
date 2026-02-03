@@ -21,6 +21,6 @@ exports.Greeter = Greeter;
 //// [importAsBaseClass_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Greeter = require("./importAsBaseClass_0");
+var Greeter = require("./importAsBaseClass_0");
 class Hello extends Greeter {
 }

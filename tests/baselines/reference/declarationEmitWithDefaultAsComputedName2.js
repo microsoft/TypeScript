@@ -60,7 +60,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.obj = void 0;
-const other2 = __importStar(require("./other"));
+var other2 = __importStar(require("./other"));
 exports.obj = {
     [other2.default.name]: 1
 };

@@ -11,10 +11,13 @@ class A {
 
 
 //// [classStaticBlock9.js]
-class A {
-}
-A.bar = A.foo + 1;
-(() => {
-    A.foo + 2;
+let A = (() => {
+    class A {
+    }
+    A.bar = A.foo + 1;
+    (() => {
+        A.foo + 2;
+    })();
+    A.foo = 1;
+    return A;
 })();
-A.foo = 1;

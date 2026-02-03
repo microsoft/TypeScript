@@ -134,7 +134,7 @@ Output::
 
 //// [/home/src/workspaces/solution/common/index.js]
 "use strict";
-const x = require("./obj.json");
+var x = require("./obj.json");
 module.exports = x;
 
 
@@ -214,7 +214,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
-const common_1 = __importDefault(require("../common"));
+var common_1 = __importDefault(require("../common"));
 exports.m = common_1.default;
 
 
@@ -303,7 +303,7 @@ export const m: {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getVar = getVar;
-const index_1 = require("../sub-project/index");
+var index_1 = require("../sub-project/index");
 const variable = {
     key: index_1.m,
 };

@@ -6,6 +6,7 @@ import {
     factory,
     FunctionBody,
     getEmitFlags,
+    getEmitScriptTarget,
     HasChildren,
     Identifier,
     isArray,
@@ -92,6 +93,7 @@ import {
     NodeVisitor,
     nullTransformationContext,
     ParameterDeclaration,
+    ScriptTarget,
     setEmitFlags,
     setTextRange,
     setTextRangePosEnd,
@@ -403,7 +405,10 @@ export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | unde
         // exists in a different lexical scope. To address this, we move any binding patterns and initializers
         // in a parameter list to the body if we detect a variable being hoisted while visiting a parameter list
         // when the emit target is greater than ES2015.
-        if (context.getLexicalEnvironmentFlags() & LexicalEnvironmentFlags.VariablesHoistedInParameters) {
+        if (
+            context.getLexicalEnvironmentFlags() & LexicalEnvironmentFlags.VariablesHoistedInParameters &&
+            getEmitScriptTarget(context.getCompilerOptions()) >= ScriptTarget.ES2015
+        ) {
             updated = addDefaultValueAssignmentsIfNeeded(updated, context);
         }
         context.setLexicalEnvironmentFlags(LexicalEnvironmentFlags.InParameters, false);

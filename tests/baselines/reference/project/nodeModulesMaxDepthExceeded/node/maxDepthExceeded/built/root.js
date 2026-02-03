@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const m1 = __importStar(require("m1"));
+var m1 = __importStar(require("m1"));
 m1.f1("test");
 m1.f2.a = "10"; // Error: Should be number
 m1.rel = 42; // Error: Should be boolean

@@ -89,6 +89,7 @@ import {
     getContainingClass,
     getEffectiveContainerForJSDocTemplateTag,
     getElementOrPropertyAccessName,
+    getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
     getEnclosingContainer,
     getErrorSpanForNode,
@@ -272,6 +273,7 @@ import {
     QualifiedName,
     removeFileExtension,
     ReturnStatement,
+    ScriptTarget,
     SetAccessorDeclaration,
     setParent,
     setParentRecursive,
@@ -509,6 +511,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     /* eslint-disable no-var */
     var file: SourceFile;
     var options: CompilerOptions;
+    var languageVersion: ScriptTarget;
     var parent: Node;
     var container: IsContainer | EntityNameExpression;
     var thisParentContainer: IsContainer | EntityNameExpression; // Container one level up
@@ -567,6 +570,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
         file = f;
         options = opts;
+        languageVersion = getEmitScriptTarget(options);
         inStrictMode = bindInStrictMode(file, opts);
         classifiableNames = new Set();
         symbolCount = 0;
@@ -588,6 +592,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
         file = undefined!;
         options = undefined!;
+        languageVersion = undefined!;
         parent = undefined!;
         container = undefined!;
         thisParentContainer = undefined!;
@@ -2660,6 +2665,36 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
+    function getStrictModeBlockScopeFunctionDeclarationMessage(node: Node) {
+        // Provide specialized messages to help the user understand why we think they're in
+        // strict mode.
+        if (getContainingClass(node)) {
+            return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES5_Class_definitions_are_automatically_in_strict_mode;
+        }
+
+        if (file.externalModuleIndicator) {
+            return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES5_Modules_are_automatically_in_strict_mode;
+        }
+
+        return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES5;
+    }
+
+    function checkStrictModeFunctionDeclaration(node: FunctionDeclaration) {
+        if (languageVersion < ScriptTarget.ES2015) {
+            // Report error if function is not top level function declaration
+            if (
+                blockScopeContainer.kind !== SyntaxKind.SourceFile &&
+                blockScopeContainer.kind !== SyntaxKind.ModuleDeclaration &&
+                !isFunctionLikeOrClassStaticBlockDeclaration(blockScopeContainer)
+            ) {
+                // We check first if the name is inside class declaration or class expression; if so give explicit message
+                // otherwise report generic error message.
+                const errorSpan = getErrorSpanForNode(file, node);
+                file.bindDiagnostics.push(createFileDiagnostic(file, errorSpan.start, errorSpan.length, getStrictModeBlockScopeFunctionDeclarationMessage(node)));
+            }
+        }
+    }
+
     function checkStrictModePostfixUnaryExpression(node: PostfixUnaryExpression) {
         // Grammar checking
         // The identifier eval or arguments may not appear as the LeftHandSideExpression of an
@@ -2688,7 +2723,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function checkStrictModeLabeledStatement(node: LabeledStatement) {
         // Grammar checking for labeledStatement
-        if (inStrictMode) {
+        if (inStrictMode && getEmitScriptTarget(options) >= ScriptTarget.ES2015) {
             if (isDeclarationStatement(node.statement) || isVariableStatement(node.statement)) {
                 errorOnFirstToken(node.label, Diagnostics.A_label_is_not_allowed_here);
             }
@@ -3664,6 +3699,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
         checkStrictModeFunctionName(node);
         if (inStrictMode) {
+            checkStrictModeFunctionDeclaration(node);
             bindBlockScopedDeclaration(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
         }
         else {

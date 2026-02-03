@@ -42,7 +42,7 @@ Output::
 //// [/user/username/workspace/solution/projects/project/c/app.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const module_1 = require("./module");
+var module_1 = require("./module");
 console.log(module_1.f);
 
 

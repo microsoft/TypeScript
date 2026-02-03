@@ -89,25 +89,34 @@ class D extends A {
         "use strict";
     }
 }
-class Bs extends A {
-    constructor() {
-        "use strict"; // No error
-        super();
+let Bs = (() => {
+    class Bs extends A {
+        constructor() {
+            "use strict"; // No error
+            super();
+        }
     }
-}
-Bs.s = 9;
-class Cs extends A {
-    constructor() {
-        super(); // No error
-        "use strict";
+    Bs.s = 9;
+    return Bs;
+})();
+let Cs = (() => {
+    class Cs extends A {
+        constructor() {
+            super(); // No error
+            "use strict";
+        }
     }
-}
-Cs.s = 9;
-class Ds extends A {
-    constructor() {
-        var x = 1; // no Error
-        super();
-        "use strict";
+    Cs.s = 9;
+    return Cs;
+})();
+let Ds = (() => {
+    class Ds extends A {
+        constructor() {
+            var x = 1; // no Error
+            super();
+            "use strict";
+        }
     }
-}
-Ds.s = 9;
+    Ds.s = 9;
+    return Ds;
+})();

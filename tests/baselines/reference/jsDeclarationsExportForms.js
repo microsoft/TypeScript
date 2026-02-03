@@ -111,7 +111,7 @@ __exportStar(require("./cls"), exports);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-const cls_1 = require("./cls");
+var cls_1 = require("./cls");
 Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return cls_1.Foo; } });
 //// [bat.js]
 "use strict";
@@ -149,7 +149,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const ns = __importStar(require("./cls"));
+var ns = __importStar(require("./cls"));
 exports.default = ns;
 //// [ban.js]
 "use strict";
@@ -188,7 +188,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ns = void 0;
-const ns = __importStar(require("./cls"));
+var ns = __importStar(require("./cls"));
 exports.ns = ns;
 //// [bol.js]
 "use strict";
@@ -227,7 +227,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.classContainer = void 0;
-const ns = __importStar(require("./cls"));
+var ns = __importStar(require("./cls"));
 exports.classContainer = ns;
 //// [cjs.js]
 const ns = require("./cls");

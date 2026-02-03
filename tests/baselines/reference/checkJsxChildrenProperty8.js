@@ -34,7 +34,7 @@ let k4 = <Comp a={10} b="hi"><Button />  </Comp>;
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = require("react");
+var React = require("react");
 class Button extends React.Component {
     render() {
         return (<div>My Button</div>);

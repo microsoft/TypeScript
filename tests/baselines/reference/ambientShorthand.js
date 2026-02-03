@@ -50,7 +50,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path="declarations.d.ts"/>
-const jquery_1 = __importStar(require("jquery"));
-const baz = __importStar(require("fs"));
-const boom = require("jquery");
+var jquery_1 = __importStar(require("jquery"));
+var baz = __importStar(require("fs"));
+var boom = require("jquery");
 (0, jquery_1.default)(jquery_1.bar, baz, boom);

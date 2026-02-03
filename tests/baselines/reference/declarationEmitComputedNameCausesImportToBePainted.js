@@ -23,7 +23,7 @@ exports.Key = Symbol();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.withContext = exports.context = void 0;
-const context_1 = require("./context");
+var context_1 = require("./context");
 exports.context = {
     [context_1.Key]: 'bar',
 };

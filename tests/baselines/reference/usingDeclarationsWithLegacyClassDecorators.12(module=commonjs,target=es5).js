@@ -18,12 +18,15 @@ using after = null;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
-let C = class C {
-};
+let C = (() => {
+    let C = class C {
+    };
+    C = __decorate([
+        dec
+    ], C);
+    return C;
+})();
 exports.D = C;
-exports.D = C = __decorate([
-    dec
-], C);
 var after;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {

@@ -248,12 +248,15 @@ class SuperChild extends SuperParent {
         super.c();
     }
 }
-class Statics {
-    static baz() {
-        return "";
+let Statics = (() => {
+    class Statics {
+        static baz() {
+            return "";
+        }
     }
-}
-Statics.foo = 1;
+    Statics.foo = 1;
+    return Statics;
+})();
 var stat = new Statics();
 class ImplementsInterface {
     constructor() {

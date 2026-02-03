@@ -37,7 +37,7 @@ void foo;
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /// <amd-dependency name="name_of_foo" path="./foo" />
-    const foo_1 = require("name_of_foo");
+    var foo_1 = require("name_of_foo");
     void foo_1.foo;
 });
 

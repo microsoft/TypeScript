@@ -19,7 +19,7 @@ let y = <Poisoned />;
 //// [file.jsx]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = require("react");
+var React = require("react");
 class Poisoned extends React.Component {
     render() {
         return <div>Hello</div>;

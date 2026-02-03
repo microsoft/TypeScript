@@ -48,7 +48,7 @@ import {Fragment} from "./react";
 //// [reacty.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = require("./react");
+var react_1 = require("./react");
 (0, react_1.createElement)(react_1.Fragment, null,
     (0, react_1.createElement)("span", null));
 //// [preacty.js]
@@ -58,7 +58,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @jsx h
  * @jsxFrag Frag
  */
-const preact_1 = require("./preact");
+var preact_1 = require("./preact");
 (0, preact_1.h)(preact_1.Frag, null,
     (0, preact_1.h)("div", null));
 //// [snabbdomy.js]
@@ -68,7 +68,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @jsx h
  * @jsxfrag null
  */
-const snabbdom_1 = require("./snabbdom");
+var snabbdom_1 = require("./snabbdom");
 (0, snabbdom_1.h)(null, null,
     (0, snabbdom_1.h)("div", null));
 //// [mix-n-match.js]
@@ -76,7 +76,7 @@ const snabbdom_1 = require("./snabbdom");
 Object.defineProperty(exports, "__esModule", { value: true });
 /* @jsx h */
 /* @jsxFrag Fragment */
-const preact_1 = require("./preact");
-const react_1 = require("./react");
+var preact_1 = require("./preact");
+var react_1 = require("./react");
 (0, preact_1.h)(react_1.Fragment, null,
     (0, preact_1.h)("span", null));

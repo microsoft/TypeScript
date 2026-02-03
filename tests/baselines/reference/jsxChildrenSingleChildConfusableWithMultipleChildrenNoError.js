@@ -64,7 +64,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
-const React = __importStar(require("react"));
+var React = __importStar(require("react"));
 function TabLayout(props) {
     return React.createElement("div", null);
 }

@@ -16,16 +16,19 @@ class C {
 }
 
 //// [declFilePrivateStatic.js]
-class C {
-    static a() { }
-    static b() { }
-    static get c() { return 1; }
-    static get d() { return 1; }
-    static set e(v) { }
-    static set f(v) { }
-}
-C.x = 1;
-C.y = 1;
+let C = (() => {
+    class C {
+        static a() { }
+        static b() { }
+        static get c() { return 1; }
+        static get d() { return 1; }
+        static set e(v) { }
+        static set f(v) { }
+    }
+    C.x = 1;
+    C.y = 1;
+    return C;
+})();
 
 
 //// [declFilePrivateStatic.d.ts]

@@ -22,7 +22,7 @@ function foo() {
 //// [file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const f = require("./file1");
+var f = require("./file1");
 f.foo();
 
 

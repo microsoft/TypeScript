@@ -26,10 +26,13 @@ exports.C = void 0;
 // Unused, but could collide with the named type argument below.
 class TypeVariable {
 }
-class C {
-}
+let C = (() => {
+    class C {
+    }
+    __decorate([
+        Decorate,
+        __metadata("design:type", Object)
+    ], C.prototype, "member", void 0);
+    return C;
+})();
 exports.C = C;
-__decorate([
-    Decorate,
-    __metadata("design:type", Object)
-], C.prototype, "member", void 0);

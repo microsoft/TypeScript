@@ -70,7 +70,7 @@ watchMain();
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const ts = require("typescript");
+var ts = require("typescript");
 function watchMain() {
     // get list of files and compiler options somehow
     const files = [];

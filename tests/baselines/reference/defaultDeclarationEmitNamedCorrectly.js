@@ -24,9 +24,12 @@ exports.make = make;
 function make(x) {
     return null;
 }
-class MyComponent {
-}
-MyComponent.create = make(MyComponent);
+let MyComponent = (() => {
+    class MyComponent {
+    }
+    MyComponent.create = make(MyComponent);
+    return MyComponent;
+})();
 exports.default = MyComponent;
 
 

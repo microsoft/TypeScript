@@ -56,6 +56,6 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const types = __importStar(require("./types"));
+var types = __importStar(require("./types"));
 console.log(c); // Fails as expected, import is still allowed though.
 console.log(types.c); // Expected an error here.

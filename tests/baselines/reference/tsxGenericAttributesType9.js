@@ -19,7 +19,7 @@ export function makeP<P>(Ctor: React.ComponentClass<P>) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.makeP = makeP;
-const React = require("react");
+var React = require("react");
 function makeP(Ctor) {
     return class extends React.PureComponent {
         render() {

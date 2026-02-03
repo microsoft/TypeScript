@@ -8,6 +8,9 @@ class B { static NOT_NULL = new B(); }
 class A {
     foo() { return B.NULL; }
 }
-class B {
-}
-B.NOT_NULL = new B();
+let B = (() => {
+    class B {
+    }
+    B.NOT_NULL = new B();
+    return B;
+})();

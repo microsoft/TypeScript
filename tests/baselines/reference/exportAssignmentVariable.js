@@ -17,5 +17,5 @@ module.exports = x;
 //// [exportAssignmentVariable_B.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const y = require("./exportAssignmentVariable_A");
+var y = require("./exportAssignmentVariable_A");
 var n = y;

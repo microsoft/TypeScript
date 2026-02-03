@@ -22,10 +22,13 @@ declare namespace A {
 //// [out.js]
 var C;
 (function (C) {
-    class Name {
-        constructor(parameters) { }
-    }
-    Name.funcData = A.AA.func();
-    Name.someConst = A.AA.foo;
+    let Name = (() => {
+        class Name {
+            constructor(parameters) { }
+        }
+        Name.funcData = A.AA.func();
+        Name.someConst = A.AA.foo;
+        return Name;
+    })();
     C.Name = Name;
 })(C || (C = {}));

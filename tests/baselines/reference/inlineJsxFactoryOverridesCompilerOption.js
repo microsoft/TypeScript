@@ -23,10 +23,10 @@ import { p } from "./renderer";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx dom */
-const renderer_1 = require("./renderer");
+var renderer_1 = require("./renderer");
 (0, renderer_1.dom)("h", null);
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const renderer_1 = require("./renderer");
+var renderer_1 = require("./renderer");
 (0, renderer_1.p)("h", null);

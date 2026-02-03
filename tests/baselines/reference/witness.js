@@ -251,9 +251,12 @@ class C2 {
 var c2inst = new C2().n;
 var c2inst;
 // Constructor function property access
-class C3 {
-}
-C3.q = C3.q;
+let C3 = (() => {
+    class C3 {
+    }
+    C3.q = C3.q;
+    return C3;
+})();
 var qq = C3.q;
 var qq;
 // Parentheses - tested a bunch above

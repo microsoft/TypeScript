@@ -34,7 +34,7 @@ class Adder {
 module.exports = Adder;
 //// [Math.js]
 "use strict";
-const Adder = require("./Adder");
+var Adder = require("./Adder");
 var Math = {
     Adder: Adder
 };
@@ -46,7 +46,7 @@ exports.Math = require("./Math/Math");
 //// [consumer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Drawing = require("./Drawing");
+var Drawing = require("./Drawing");
 var addr = new Drawing.Math.Adder();
 
 

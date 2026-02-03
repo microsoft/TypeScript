@@ -25,7 +25,7 @@ let b = <SFC2AndEmptyComp x />
 //// [file.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const React = require("react");
+var React = require("react");
 function EmptySFC1() {
     return React.createElement("div", null, "hello");
 }

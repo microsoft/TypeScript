@@ -33,7 +33,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [map.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const observable_1 = require("./observable");
+var observable_1 = require("./observable");
 observable_1.Observable.prototype.map = function () { };
 //// [main.js]
 "use strict";
