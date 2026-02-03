@@ -904,6 +904,7 @@ func TestSession(t *testing.T) {
 		assert.Equal(t, len(codeLensRefreshCalls), 1, "expected one RefreshCodeLens call after code lens preference change")
 		assert.Equal(t, len(inlayHintsRefreshCalls), 1, "expected one RefreshInlayHints call after inlay hints preference change")
 	})
+
 	t.Run("config parsing", func(t *testing.T) {
 		t.Parallel()
 		files := map[string]any{
