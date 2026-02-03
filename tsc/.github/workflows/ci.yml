@@ -277,6 +277,8 @@ jobs:
           npx hereby test >/dev/null || true
           npx hereby baseline-accept || true
           npx hereby test || true
+          npx hereby baseline-accept || true
+          npx hereby test
 
       - run: git add .
       - run: git diff --staged --exit-code --stat
