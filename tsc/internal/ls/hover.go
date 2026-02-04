@@ -174,7 +174,7 @@ func formatQuickInfo(quickInfo string) string {
 func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol, node *ast.Node) (string, *ast.Node) {
 	container := getContainerNode(node)
 	if node.Kind == ast.KindThisKeyword && ast.IsInExpressionContext(node) || ast.IsThisInTypeQuery(node) {
-		return c.TypeToStringEx(c.GetTypeAtLocation(node), container, typeFormatFlags), nil
+		return "this: " + c.TypeToStringEx(c.GetTypeAtLocation(node), container, typeFormatFlags), nil
 	}
 	if symbol == nil {
 		return "", nil
