@@ -1,0 +1,123 @@
+// === documentHighlights ===
+// === /getOccurrencesReturn4.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             [|return|]/*HIGHLIGHTS*/;
+//             [|return|];
+//             [|return|];
+// 
+//             if (false) {
+//                 [|return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturn4.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             [|return|];
+//             [|return|]/*HIGHLIGHTS*/;
+//             [|return|];
+// 
+//             if (false) {
+//                 [|return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturn4.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             [|return|];
+//             [|return|];
+//             [|return|]/*HIGHLIGHTS*/;
+// 
+//             if (false) {
+//                 [|return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturn4.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             [|return|];
+//             [|return|];
+//             [|return|];
+// 
+//             if (false) {
+//                 [|return|]/*HIGHLIGHTS*/ true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturn4.ts ===
+// --- (line: 10) skipped ---
+//         })() || true;
+//     }
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { [|return|]/*HIGHLIGHTS*/ 4 })
+// 
+//     return;
+//     return true;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturn4.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         [|return|] (function () {
+//             return;
+//             return;
+//             return;
+// --- (line: 7) skipped ---
+
+// --- (line: 12) skipped ---
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     [|return|]/*HIGHLIGHTS*/;
+//     [|return|] true;
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesReturn4.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         [|return|] (function () {
+//             return;
+//             return;
+//             return;
+// --- (line: 7) skipped ---
+
+// --- (line: 12) skipped ---
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     [|return|];
+//     [|return|]/*HIGHLIGHTS*/ true;
+// }

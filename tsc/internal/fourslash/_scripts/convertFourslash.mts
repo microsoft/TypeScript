@@ -1352,6 +1352,9 @@ function parseBaselineDocumentHighlightsArgs(args: readonly ts.Expression[]): [V
         else if (strArg = parseBaselineMarkerOrRangeArg(arg)) {
             newArgs.push(strArg);
         }
+        else if (arg.getText() === "test.markers()") {
+            newArgs.push("ToAny(f.Markers())...");
+        }
         else {
             console.error(`Unrecognized argument in verify.baselineDocumentHighlights: ${arg.getText()}`);
             return undefined;

@@ -1,0 +1,32 @@
+// === documentHighlights ===
+// === /getOccurrencesTryCatchFinally2.ts ===
+// try {
+//     [|t/*HIGHLIGHTS*/ry|] {
+//     }
+//     catch (x) {
+//     }
+// --- (line: 6) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesTryCatchFinally2.ts ===
+// try {
+//     [|tr/*HIGHLIGHTS*/y|] {
+//     }
+//     catch (x) {
+//     }
+// --- (line: 6) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesTryCatchFinally2.ts ===
+// try {
+//     [|try|] {
+//     }
+//     c/*HIGHLIGHTS*/atch (x) {
+//     }
+// 
+//     try {
+// --- (line: 8) skipped ---

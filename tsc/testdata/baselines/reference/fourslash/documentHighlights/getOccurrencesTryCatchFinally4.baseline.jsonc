@@ -1,0 +1,120 @@
+// === documentHighlights ===
+// === /getOccurrencesTryCatchFinally4.ts ===
+// [|try|]/*HIGHLIGHTS*/ {
+//     try {
+//     }
+//     catch (x) {
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+// }
+// catch (e) {
+// }
+// [|finally|] {
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesTryCatchFinally4.ts ===
+// try {
+//     [|try|]/*HIGHLIGHTS*/ {
+//     }
+//     catch (x) {
+//     }
+// --- (line: 6) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesTryCatchFinally4.ts ===
+// try {
+//     [|try|] {
+//     }
+//     catch/*HIGHLIGHTS*/ (x) {
+//     }
+// 
+//     try {
+// --- (line: 8) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesTryCatchFinally4.ts ===
+// --- (line: 3) skipped ---
+//     catch (x) {
+//     }
+// 
+//     [|try|]/*HIGHLIGHTS*/ {
+//     }
+//     [|finally|] {
+//     }
+// }
+// catch (e) {
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesTryCatchFinally4.ts ===
+// --- (line: 3) skipped ---
+//     catch (x) {
+//     }
+// 
+//     [|try|] {
+//     }
+//     [|finally|]/*HIGHLIGHTS*/ {
+//     }
+// }
+// catch (e) {
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesTryCatchFinally4.ts ===
+// --- (line: 5) skipped ---
+// 
+//     try {
+//     }
+//     finally {/*HIGHLIGHTS*/
+//     }
+// }
+// catch (e) {
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesTryCatchFinally4.ts ===
+// [|try|] {
+//     try {
+//     }
+//     catch (x) {
+// --- (line: 5) skipped ---
+
+// --- (line: 8) skipped ---
+//     finally {
+//     }
+// }
+// catch/*HIGHLIGHTS*/ (e) {
+// }
+// [|finally|] {
+// }
+
+
+
+// === documentHighlights ===
+// === /getOccurrencesTryCatchFinally4.ts ===
+// [|try|] {
+//     try {
+//     }
+//     catch (x) {
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+// }
+// catch (e) {
+// }
+// [|finally|]/*HIGHLIGHTS*/ {
+// }
