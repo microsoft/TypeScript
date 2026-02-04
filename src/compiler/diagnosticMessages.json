@@ -6607,7 +6607,7 @@
         "code": 6903
     },
 
-    "`true`, unless `strict` is disabled": {
+    "`true`, unless `strict` is `false`": {
         "category": "Message",
         "code": 6905
     },
