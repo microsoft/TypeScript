@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/decoratorRestNoCrash1.ts] ////
+
+=== decoratorRestNoCrash1.ts ===
+class Greeter {
+>Greeter : Greeter
+>        : ^^^^^^^
+
+  @deco
+>deco : (args_0: any, args_1: any, args_2: any) => any
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+
+  greet1() {
+>greet1 : () => string
+>       : ^^^^^^^^^^^^
+
+    return "Hello, " + this.greeting;
+>"Hello, " + this.greeting : string
+>                          : ^^^^^^
+>"Hello, " : "Hello, "
+>          : ^^^^^^^^^
+>this.greeting : any
+>              : ^^^
+>this : this
+>     : ^^^^
+>greeting : any
+>         : ^^^
+  }
+}
+
+declare function deco(...args: [any, any, any]): any;
+>deco : (args_0: any, args_1: any, args_2: any) => any
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>args : [any, any, any]
+>     : ^^^^^^^^^^^^^^^
+
