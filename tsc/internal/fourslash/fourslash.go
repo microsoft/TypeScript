@@ -736,11 +736,20 @@ func (f *FourslashTest) writeMsg(t *testing.T, msg *lsproto.Message) {
 
 func sendRequest[Params, Resp any](t *testing.T, f *FourslashTest, info lsproto.RequestInfo[Params, Resp], params Params) Resp {
 	t.Helper()
+	return sendRequestAndBaselineWorker(t, f, info, params, true)
+}
+
+func sendRequestAndBaselineWorker[Params, Resp any](t *testing.T, f *FourslashTest, info lsproto.RequestInfo[Params, Resp], params Params, baselineProjects bool) Resp {
+	t.Helper()
 	prefix := f.getCurrentPositionPrefix()
-	f.baselineState(t)
+	if baselineProjects {
+		f.baselineState(t)
+	}
 	f.baselineRequestOrNotification(t, info.Method, params)
 	resMsg, result, resultOk := sendRequestWorker(t, f, info, params)
-	f.baselineState(t)
+	if baselineProjects {
+		f.baselineState(t)
+	}
 	switch info.Method {
 	case lsproto.MethodTextDocumentOnTypeFormatting:
 		if !f.reportFormatOnTypeCrash {
@@ -764,8 +773,14 @@ func sendRequest[Params, Resp any](t *testing.T, f *FourslashTest, info lsproto.
 
 func sendNotification[Params any](t *testing.T, f *FourslashTest, info lsproto.NotificationInfo[Params], params Params) {
 	t.Helper()
-	f.baselineState(t)
-	f.updateState(info.Method, params)
+	if info.Method != lsproto.MethodTextDocumentDidChange {
+		// This is called eg when doing typeText = which is series of edits and formatting - which becomes non deterministic "after state"
+		// The notification can only guarantee before state and thats what it baselines, but in case of type it creates
+		// multiple edits which results in getting different state -based on if the snapshot was updated or not at the time of formatting requests
+		// So this is used for all the incremental edits - to baseline only request data but not project state between those edits
+		f.baselineState(t)
+		f.updateState(info.Method, params)
+	}
 	f.baselineRequestOrNotification(t, info.Method, params)
 	sendNotificationWorker(t, f, info, params)
 }
@@ -1665,7 +1680,6 @@ func (f *FourslashTest) VerifyImportFixAtPosition(t *testing.T, expectedTexts []
 	// Save the original content before any edits
 	script := f.getScriptInfo(f.activeFilename)
 	originalContent := script.content
-
 	// For each import action, apply it and check the result
 	actualTextArray := make([]string, 0, len(importActions))
 	for _, action := range importActions {
@@ -2809,12 +2823,14 @@ func roundtripThroughJson[T any](value any) (T, error) {
 // Insert text at the current caret position.
 func (f *FourslashTest) Insert(t *testing.T, text string) {
 	t.Helper()
+	f.baselineState(t)
 	f.typeText(t, text)
 }
 
 // Insert text and a new line at the current caret position.
 func (f *FourslashTest) InsertLine(t *testing.T, text string) {
 	t.Helper()
+	f.baselineState(t)
 	f.typeText(t, text+"\n")
 }
 
@@ -2822,6 +2838,7 @@ func (f *FourslashTest) InsertLine(t *testing.T, text string) {
 func (f *FourslashTest) Backspace(t *testing.T, count int) {
 	script := f.getScriptInfo(f.activeFilename)
 	offset := int(f.converters.LineAndCharacterToPosition(script, f.currentCaretPosition))
+	f.baselineState(t)
 
 	for range count {
 		offset--
@@ -2837,6 +2854,7 @@ func (f *FourslashTest) Backspace(t *testing.T, count int) {
 func (f *FourslashTest) DeleteAtCaret(t *testing.T, count int) {
 	script := f.getScriptInfo(f.activeFilename)
 	offset := int(f.converters.LineAndCharacterToPosition(script, f.currentCaretPosition))
+	f.baselineState(t)
 
 	for range count {
 		f.editScriptAndUpdateMarkers(t, f.activeFilename, offset, offset+1, "")
@@ -2848,11 +2866,12 @@ func (f *FourslashTest) DeleteAtCaret(t *testing.T, count int) {
 func (f *FourslashTest) Paste(t *testing.T, text string) {
 	script := f.getScriptInfo(f.activeFilename)
 	start := int(f.converters.LineAndCharacterToPosition(script, f.currentCaretPosition))
+	f.baselineState(t)
 	f.editScriptAndUpdateMarkers(t, f.activeFilename, start, start, text)
 
 	// post-paste fomatting
 	if f.stateEnableFormatting {
-		result := sendRequest(t, f, lsproto.TextDocumentRangeFormattingInfo, &lsproto.DocumentRangeFormattingParams{
+		result := sendRequestAndBaselineWorker(t, f, lsproto.TextDocumentRangeFormattingInfo, &lsproto.DocumentRangeFormattingParams{
 			TextDocument: lsproto.TextDocumentIdentifier{
 				Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
 			},
@@ -2861,7 +2880,7 @@ func (f *FourslashTest) Paste(t *testing.T, text string) {
 				End:   f.converters.PositionToLineAndCharacter(script, core.TextPos(start+len(text))),
 			},
 			Options: f.userPreferences.FormatCodeSettings.ToLSFormatOptions(),
-		})
+		}, false)
 		if result.TextEdits != nil {
 			f.applyTextEdits(t, *result.TextEdits)
 		}
@@ -2871,6 +2890,7 @@ func (f *FourslashTest) Paste(t *testing.T, text string) {
 
 // Selects a line and replaces it with a new text.
 func (f *FourslashTest) ReplaceLine(t *testing.T, lineIndex int, text string) {
+	f.baselineState(t)
 	f.selectLine(t, lineIndex)
 	f.typeText(t, text)
 }
@@ -2944,6 +2964,12 @@ func (f *FourslashTest) applyTextEdits(t *testing.T, edits []*lsproto.TextEdit) 
 }
 
 func (f *FourslashTest) Replace(t *testing.T, start int, length int, text string) {
+	f.baselineState(t)
+	f.replaceWorker(t, start, length, text)
+}
+
+func (f *FourslashTest) replaceWorker(t *testing.T, start int, length int, text string) {
+	t.Helper()
 	f.editScriptAndUpdateMarkers(t, f.activeFilename, start, start+length, text)
 	// f.checkPostEditInvariants() // !!! do we need this?
 }
@@ -2958,7 +2984,7 @@ func (f *FourslashTest) typeText(t *testing.T, text string) {
 
 	script := f.getScriptInfo(f.activeFilename)
 	selection := f.getSelection()
-	f.Replace(t, selection.Pos(), selection.End()-selection.Pos(), "")
+	f.replaceWorker(t, selection.Pos(), selection.End()-selection.Pos(), "")
 
 	totalSize := 0
 
@@ -2973,14 +2999,14 @@ func (f *FourslashTest) typeText(t *testing.T, text string) {
 
 		// Handle post-keystroke formatting
 		if f.stateEnableFormatting {
-			result := sendRequest(t, f, lsproto.TextDocumentOnTypeFormattingInfo, &lsproto.DocumentOnTypeFormattingParams{
+			result := sendRequestAndBaselineWorker(t, f, lsproto.TextDocumentOnTypeFormattingInfo, &lsproto.DocumentOnTypeFormattingParams{
 				TextDocument: lsproto.TextDocumentIdentifier{
 					Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
 				},
 				Position: f.currentCaretPosition,
 				Ch:       string(r),
 				Options:  f.userPreferences.FormatCodeSettings.ToLSFormatOptions(),
-			})
+			}, false)
 			if result.TextEdits != nil {
 				offset += f.applyTextEdits(t, *result.TextEdits)
 			}

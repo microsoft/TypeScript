@@ -195,21 +195,6 @@ Config File Names::
   }
 }
 
-Projects::
-  [/packages/babel-loader/tsconfig.json] *modified*
-    /packages/babel-loader/src/index.ts      *modified*
-    /packages/core/src/loading-indicator.ts  *deleted*
-    /packages/core/src/index.ts              *deleted*
-  [/packages/core/tsconfig.json] 
-    /packages/core/src/loading-indicator.ts  
-    /packages/core/src/index.ts              
-Open Files::
-  [/packages/babel-loader/src/index.ts] 
-    /packages/babel-loader/tsconfig.json  (default) 
-  [/packages/core/src/index.ts] *modified*
-    /packages/babel-loader/tsconfig.json  *deleted*
-    /packages/core/tsconfig.json          (default) 
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -253,13 +238,6 @@ Open Files::
     }
   }
 }
-
-Projects::
-  [/packages/babel-loader/tsconfig.json] *modified*
-    /packages/babel-loader/src/index.ts  *modified*
-  [/packages/core/tsconfig.json] 
-    /packages/core/src/loading-indicator.ts  
-    /packages/core/src/index.ts              
 
 {
   "method": "textDocument/didChange",
@@ -305,13 +283,6 @@ Projects::
   }
 }
 
-Projects::
-  [/packages/babel-loader/tsconfig.json] *modified*
-    /packages/babel-loader/src/index.ts  *modified*
-  [/packages/core/tsconfig.json] 
-    /packages/core/src/loading-indicator.ts  
-    /packages/core/src/index.ts              
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -355,13 +326,6 @@ Projects::
     }
   }
 }
-
-Projects::
-  [/packages/babel-loader/tsconfig.json] *modified*
-    /packages/babel-loader/src/index.ts  *modified*
-  [/packages/core/tsconfig.json] 
-    /packages/core/src/loading-indicator.ts  
-    /packages/core/src/index.ts              
 
 {
   "method": "textDocument/didChange",
@@ -407,13 +371,6 @@ Projects::
   }
 }
 
-Projects::
-  [/packages/babel-loader/tsconfig.json] *modified*
-    /packages/babel-loader/src/index.ts  *modified*
-  [/packages/core/tsconfig.json] 
-    /packages/core/src/loading-indicator.ts  
-    /packages/core/src/index.ts              
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -457,13 +414,6 @@ Projects::
     }
   }
 }
-
-Projects::
-  [/packages/babel-loader/tsconfig.json] *modified*
-    /packages/babel-loader/src/index.ts  *modified*
-  [/packages/core/tsconfig.json] 
-    /packages/core/src/loading-indicator.ts  
-    /packages/core/src/index.ts              
 
 {
   "method": "textDocument/didChange",
@@ -509,13 +459,6 @@ Projects::
   }
 }
 
-Projects::
-  [/packages/babel-loader/tsconfig.json] *modified*
-    /packages/babel-loader/src/index.ts  *modified*
-  [/packages/core/tsconfig.json] 
-    /packages/core/src/loading-indicator.ts  
-    /packages/core/src/index.ts              
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -560,13 +503,6 @@ Projects::
   }
 }
 
-Projects::
-  [/packages/babel-loader/tsconfig.json] *modified*
-    /packages/babel-loader/src/index.ts  *modified*
-  [/packages/core/tsconfig.json] 
-    /packages/core/src/loading-indicator.ts  
-    /packages/core/src/index.ts              
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -610,13 +546,6 @@ Projects::
     }
   }
 }
-
-Projects::
-  [/packages/babel-loader/tsconfig.json] *modified*
-    /packages/babel-loader/src/index.ts  *modified*
-  [/packages/core/tsconfig.json] 
-    /packages/core/src/loading-indicator.ts  
-    /packages/core/src/index.ts              
 
 {
   "method": "textDocument/didChange",
@@ -664,10 +593,18 @@ Projects::
 
 Projects::
   [/packages/babel-loader/tsconfig.json] *modified*
-    /packages/babel-loader/src/index.ts  *modified*
+    /packages/babel-loader/src/index.ts      *modified*
+    /packages/core/src/loading-indicator.ts  *deleted*
+    /packages/core/src/index.ts              *deleted*
   [/packages/core/tsconfig.json] 
     /packages/core/src/loading-indicator.ts  
     /packages/core/src/index.ts              
+Open Files::
+  [/packages/babel-loader/src/index.ts] 
+    /packages/babel-loader/tsconfig.json  (default) 
+  [/packages/core/src/index.ts] *modified*
+    /packages/babel-loader/tsconfig.json  *deleted*
+    /packages/core/tsconfig.json          (default) 
 
 {
   "method": "textDocument/references",

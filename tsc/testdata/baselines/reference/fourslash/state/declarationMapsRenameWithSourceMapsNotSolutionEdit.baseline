@@ -377,16 +377,6 @@ Config::
   }
 }
 
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -430,16 +420,6 @@ Projects::
     }
   }
 }
-
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
 
 {
   "method": "textDocument/didChange",
@@ -485,16 +465,6 @@ Projects::
   }
 }
 
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -538,16 +508,6 @@ Projects::
     }
   }
 }
-
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
 
 {
   "method": "textDocument/didChange",
@@ -593,16 +553,6 @@ Projects::
   }
 }
 
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -646,16 +596,6 @@ Projects::
     }
   }
 }
-
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
 
 {
   "method": "textDocument/didChange",
@@ -701,16 +641,6 @@ Projects::
   }
 }
 
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -754,16 +684,6 @@ Projects::
     }
   }
 }
-
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
 
 {
   "method": "textDocument/didChange",
@@ -809,16 +729,6 @@ Projects::
   }
 }
 
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -862,16 +772,6 @@ Projects::
     }
   }
 }
-
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
 
 {
   "method": "textDocument/didChange",
@@ -917,16 +817,6 @@ Projects::
   }
 }
 
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -970,16 +860,6 @@ Projects::
     }
   }
 }
-
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
 
 {
   "method": "textDocument/didChange",
@@ -1025,16 +905,6 @@ Projects::
   }
 }
 
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -1078,16 +948,6 @@ Projects::
     }
   }
 }
-
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
 
 {
   "method": "textDocument/didChange",
@@ -1133,16 +993,6 @@ Projects::
   }
 }
 
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -1186,16 +1036,6 @@ Projects::
     }
   }
 }
-
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
 
 {
   "method": "textDocument/didChange",
@@ -1241,16 +1081,6 @@ Projects::
   }
 }
 
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -1294,16 +1124,6 @@ Projects::
     }
   }
 }
-
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
 
 {
   "method": "textDocument/didChange",
@@ -1349,16 +1169,6 @@ Projects::
   }
 }
 
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -1403,16 +1213,6 @@ Projects::
   }
 }
 
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -1456,16 +1256,6 @@ Projects::
     }
   }
 }
-
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
 
 {
   "method": "textDocument/didChange",
@@ -1536,16 +1326,6 @@ Projects::
   }
 }
 
-Projects::
-  [/myproject/dependency/tsconfig.json] *modified*
-    /myproject/dependency/FnS.ts  *modified*
-  [/myproject/main/tsconfig.json] 
-    /myproject/decls/FnS.d.ts  
-    /myproject/main/main.ts    
-  [/myproject/tsconfig.json] 
-    /myproject/dependency/FnS.ts  
-    /myproject/main/main.ts       
-
 {
   "method": "textDocument/didChange",
   "params": {
@@ -1570,6 +1350,16 @@ Projects::
     ]
   }
 }
+
+Projects::
+  [/myproject/dependency/tsconfig.json] *modified*
+    /myproject/dependency/FnS.ts  *modified*
+  [/myproject/main/tsconfig.json] 
+    /myproject/decls/FnS.d.ts  
+    /myproject/main/main.ts    
+  [/myproject/tsconfig.json] 
+    /myproject/dependency/FnS.ts  
+    /myproject/main/main.ts       
 
 {
   "method": "textDocument/rename",
