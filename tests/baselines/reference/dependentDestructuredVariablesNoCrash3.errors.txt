@@ -1,0 +1,26 @@
+dependentDestructuredVariablesNoCrash3.ts(3,7): error TS2488: Type 'boolean' must have a '[Symbol.iterator]()' method that returns an iterator.
+dependentDestructuredVariablesNoCrash3.ts(3,30): error TS7022: 'string' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+dependentDestructuredVariablesNoCrash3.ts(3,69): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+dependentDestructuredVariablesNoCrash3.ts(3,86): error TS2448: Block-scoped variable 'string' used before its declaration.
+dependentDestructuredVariablesNoCrash3.ts(3,95): error TS1109: Expression expected.
+dependentDestructuredVariablesNoCrash3.ts(3,97): error TS2339: Property 'ranges' does not exist on type 'boolean'.
+
+
+==== dependentDestructuredVariablesNoCrash3.ts (6 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/63093
+    
+    const [r0Def, r0, r1Def, as, string, r1, r2, r3Def, r3]: boolean = (test as number < string > ).ranges();
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'boolean' must have a '[Symbol.iterator]()' method that returns an iterator.
+                                 ~~~~~~
+!!! error TS7022: 'string' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                                                                        ~~~~
+!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+                                                                                         ~~~~~~
+!!! error TS2448: Block-scoped variable 'string' used before its declaration.
+!!! related TS2728 dependentDestructuredVariablesNoCrash3.ts:3:30: 'string' is declared here.
+                                                                                                  ~
+!!! error TS1109: Expression expected.
+                                                                                                    ~~~~~~
+!!! error TS2339: Property 'ranges' does not exist on type 'boolean'.
+    
