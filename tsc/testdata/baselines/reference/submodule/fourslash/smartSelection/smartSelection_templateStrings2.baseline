@@ -1,5 +1,5 @@
 // === Smart Selection ===
 `a ${b} /**/c`
 
-     b} c`
+ a ${b} c 
 `a ${b} c`

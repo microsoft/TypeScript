@@ -142,10 +142,35 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 						}
 					}
 
+					// Synthesize a stop for '${ ... }' since '${' and '}' actually belong to siblings.
+					if ast.IsTemplateSpan(parent) {
+						templateSpan := parent.AsTemplateSpan()
+						if templateSpan.Literal != nil {
+							// Start from just before the '${' and end after the '}'
+							// The '${' is 2 characters before the expression start
+							spanStart := node.Pos() - 2
+							// The '}' is the first character of the template literal (middle or tail)
+							spanEnd := astnav.GetStartOfNode(templateSpan.Literal, sourceFile, false) + 1
+							// Validate the positions are reasonable
+							text := sourceFile.Text()
+							if spanStart >= 0 && spanEnd <= len(text) && spanStart < spanEnd {
+								result = pushSelectionRange(result, spanStart, spanEnd)
+							}
+						}
+					}
+
 					if !shouldSkipNode(node, parent) {
 						start := astnav.GetStartOfNode(node, sourceFile, false)
 						end := node.End()
 						result = pushSelectionRange(result, start, end)
+
+						// String literals should have a stop both inside and outside their quotes.
+						if ast.IsStringLiteral(node) || node.Kind == ast.KindTemplateExpression || node.Kind == ast.KindNoSubstitutionTemplateLiteral {
+							// Only add inner content range if there's actually content (handles unterminated literals)
+							if start+1 < end-1 {
+								result = pushSelectionRange(result, start+1, end-1)
+							}
+						}
 					}
 
 					next = node
@@ -156,7 +181,7 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 
 		visitNodes := func(nodes *ast.NodeList, v *ast.NodeVisitor) *ast.NodeList {
 			if nodes != nil && len(nodes.Nodes) > 0 {
-				shouldSkipList := parent != nil && ast.IsVariableDeclarationList(parent)
+				shouldSkipList := parent != nil && (ast.IsVariableDeclarationList(parent) || ast.IsTemplateExpression(parent))
 
 				if !shouldSkipList {
 					start := astnav.GetStartOfNode(nodes.Nodes[0], sourceFile, false)
