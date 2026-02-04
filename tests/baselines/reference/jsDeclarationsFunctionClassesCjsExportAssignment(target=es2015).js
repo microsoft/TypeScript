@@ -182,7 +182,7 @@ export = Context;
  * @class
  * @param {Input} input
  */
-declare function Context(input: Input): Context;
+declare function Context(input: Input): Context | undefined;
 declare class Context {
     /**
      * Imports
@@ -212,7 +212,7 @@ declare class Context {
      * @param {Input} input
      */
     constructor(input: Input);
-    state: State;
+    state: State | undefined;
     /**
      * @param {Input} input
      * @param {HookHandler=} handle

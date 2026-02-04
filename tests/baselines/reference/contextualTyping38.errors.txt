@@ -1,0 +1,7 @@
+contextualTyping38.ts(1,38): error TS7006: Parameter 'a' implicitly has an 'any' type.
+
+
+==== contextualTyping38.ts (1 errors) ====
+    var foo = <{ (): number; }> function(a) { return a };
+                                         ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.

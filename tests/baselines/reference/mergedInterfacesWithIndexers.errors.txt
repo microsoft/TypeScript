@@ -1,0 +1,27 @@
+mergedInterfacesWithIndexers.ts(13,9): error TS2454: Variable 'a' is used before being assigned.
+mergedInterfacesWithIndexers.ts(14,10): error TS2454: Variable 'a' is used before being assigned.
+mergedInterfacesWithIndexers.ts(15,10): error TS2454: Variable 'a' is used before being assigned.
+
+
+==== mergedInterfacesWithIndexers.ts (3 errors) ====
+    // indexers should behave like other members when merging interface declarations
+    
+    interface A {
+        [x: number]: string;
+    }
+    
+    
+    interface A {
+        [x: string]: { length: number };
+    }
+    
+    var a: A;
+    var r = a[1];
+            ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var r2 = a['1'];
+             ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var r3 = a['hi'];
+             ~
+!!! error TS2454: Variable 'a' is used before being assigned.

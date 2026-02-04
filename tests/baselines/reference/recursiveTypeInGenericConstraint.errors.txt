@@ -1,0 +1,25 @@
+recursiveTypeInGenericConstraint.ts(2,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+recursiveTypeInGenericConstraint.ts(6,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+recursiveTypeInGenericConstraint.ts(10,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== recursiveTypeInGenericConstraint.ts (3 errors) ====
+    class G<T> {
+        x: G<G<T>>; // infinitely expanding type reference
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class Foo<T extends G<T>> { // error, constraint referencing itself
+        bar: T;
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class D<T> {
+        x: G<G<T>>; 
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var c1 = new Foo<D<string>>(); // ok, circularity in assignment compat check causes success

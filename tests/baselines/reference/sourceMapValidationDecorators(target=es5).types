@@ -22,8 +22,8 @@ declare function PropertyDecorator1(target: Object, key: string | symbol, descri
 >       : ^^^^^^
 >key : string | symbol
 >    : ^^^^^^^^^^^^^^^
->descriptor : PropertyDescriptor
->           : ^^^^^^^^^^^^^^^^^^
+>descriptor : PropertyDescriptor | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
 >PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
@@ -34,8 +34,8 @@ declare function PropertyDecorator2(x: number): (target: Object, key: string | s
 >       : ^^^^^^
 >key : string | symbol
 >    : ^^^^^^^^^^^^^^^
->descriptor : PropertyDescriptor
->           : ^^^^^^^^^^^^^^^^^^
+>descriptor : PropertyDescriptor | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function ParameterDecorator1(target: Object, key: string | symbol, paramIndex: number): void;
 >ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void

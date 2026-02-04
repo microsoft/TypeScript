@@ -135,8 +135,8 @@
     const ns: number[][] = [];
 >ns : number[][]
 >   : ^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     for (var {} of ns) {
 >ns : number[][]

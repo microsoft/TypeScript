@@ -1,10 +1,14 @@
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+genericWithIndexerOfTypeParameterType2.ts(2,5): error TS2564: Property '_itemsByKey' has no initializer and is not definitely assigned in the constructor.
+genericWithIndexerOfTypeParameterType2.ts(12,5): error TS2564: Property '__isNew' has no initializer and is not definitely assigned in the constructor.
 
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== genericWithIndexerOfTypeParameterType2.ts (0 errors) ====
+==== genericWithIndexerOfTypeParameterType2.ts (2 errors) ====
     export class Collection<TItem extends CollectionItem> {
         _itemsByKey: { [key: string]: TItem; };
+        ~~~~~~~~~~~
+!!! error TS2564: Property '_itemsByKey' has no initializer and is not definitely assigned in the constructor.
     }
     
     export class List extends Collection<ListItem>{
@@ -15,5 +19,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     
     export class ListItem extends CollectionItem {
         __isNew: boolean;
+        ~~~~~~~
+!!! error TS2564: Property '__isNew' has no initializer and is not definitely assigned in the constructor.
     }
     

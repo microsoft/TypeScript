@@ -1,14 +1,18 @@
 error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+commentsOnJSXExpressionsArePreserved.tsx(5,16): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 commentsOnJSXExpressionsArePreserved.tsx(5,16): error TS2792: Cannot find module 'react/jsx-dev-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+commentsOnJSXExpressionsArePreserved.tsx(18,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
 !!! error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== commentsOnJSXExpressionsArePreserved.tsx (1 errors) ====
+==== commentsOnJSXExpressionsArePreserved.tsx (3 errors) ====
     // file is intentionally not a module - this tests for a crash in the module/system transforms alongside the `react-jsx` and `react-jsxdev` outputs
     namespace JSX {}
     class Component {
         render() {
             return <div>
+                   ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                    ~~~~~
                 {/* missing */}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,5 +41,7 @@ commentsOnJSXExpressionsArePreserved.tsx(5,16): error TS2792: Cannot find module
             </div>;
     ~~~~~~~~~~~~~~
 !!! error TS2792: Cannot find module 'react/jsx-dev-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+            ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
         }
     }

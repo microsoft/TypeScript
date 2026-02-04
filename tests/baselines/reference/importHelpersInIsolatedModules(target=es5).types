@@ -90,8 +90,8 @@ export declare function __decorate(decorators: Function[], target: any, key?: st
 >           : ^^^^^^^^^^
 >target : any
 >       : ^^^
->key : string | symbol
->    : ^^^^^^^^^^^^^^^
+>key : string | symbol | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >desc : any
 >     : ^^^
 

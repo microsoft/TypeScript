@@ -294,8 +294,8 @@ function foo7(x: number | string | boolean) {
 >   : ^^
 }
 function foo8(x: number | string | boolean) {
->foo8 : (x: number | string | boolean) => boolean
->     : ^ ^^                         ^^^^^^^^^^^^
+>foo8 : (x: number | string | boolean) => boolean | 0
+>     : ^ ^^                         ^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -304,8 +304,8 @@ function foo8(x: number | string | boolean) {
 >  : ^^^^^^^^^^^^^^^^
 
     return typeof x === "string"
->typeof x === "string"        ? x === "hello"        : ((b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : boolean
->                                                                                                                                                               : ^^^^^^^
+>typeof x === "string"        ? x === "hello"        : ((b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : boolean | 0
+>                                                                                                                                                               : ^^^^^^^^^^^
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -324,10 +324,10 @@ function foo8(x: number | string | boolean) {
 >        : ^^^^^^^
 
         : ((b = x) && //  number | boolean
->((b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : boolean
->                                                                                                         : ^^^^^^^
->(b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10) : boolean
->                                                                                                       : ^^^^^^^
+>((b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : boolean | 0
+>                                                                                                         : ^^^^^^^^^^^
+>(b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10) : boolean | 0
+>                                                                                                       : ^^^^^^^^^^^
 >(b = x) : number | boolean
 >        : ^^^^^^^^^^^^^^^^
 >b = x : number | boolean
@@ -364,8 +364,8 @@ function foo8(x: number | string | boolean) {
 >   : ^^
 }
 function foo9(x: number | string) {
->foo9 : (x: number | string) => boolean
->     : ^ ^^               ^^^^^^^^^^^^
+>foo9 : (x: number | string) => boolean | 0
+>     : ^ ^^               ^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -377,8 +377,8 @@ function foo9(x: number | string) {
 
     // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
     return typeof x === "string"
->typeof x === "string"        ? ((y = x.length) && x === "hello") // boolean        : x === 10 : boolean
->                                                                                              : ^^^^^^^
+>typeof x === "string"        ? ((y = x.length) && x === "hello") // boolean        : x === 10 : boolean | 0
+>                                                                                              : ^^^^^^^^^^^
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -389,10 +389,10 @@ function foo9(x: number | string) {
 >         : ^^^^^^^^
 
         ? ((y = x.length) && x === "hello") // boolean
->((y = x.length) && x === "hello") : boolean
->                                  : ^^^^^^^
->(y = x.length) && x === "hello" : boolean
->                                : ^^^^^^^
+>((y = x.length) && x === "hello") : boolean | 0
+>                                  : ^^^^^^^^^^^
+>(y = x.length) && x === "hello" : boolean | 0
+>                                : ^^^^^^^^^^^
 >(y = x.length) : number
 >               : ^^^^^^
 >y = x.length : number
@@ -421,8 +421,8 @@ function foo9(x: number | string) {
 >   : ^^
 }
 function foo10(x: number | string | boolean) {
->foo10 : (x: number | string | boolean) => string
->      : ^ ^^                         ^^^^^^^^^^^
+>foo10 : (x: number | string | boolean) => string | false | 0
+>      : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -432,8 +432,8 @@ function foo10(x: number | string | boolean) {
 >  : ^^^^^^^^^^^^^^^^
 
     return typeof x === "string"
->typeof x === "string"        ? x // string        : ((b = x) // x is number | boolean        && typeof x === "number"        && x.toString()) : string
->                                                                                                                                              : ^^^^^^
+>typeof x === "string"        ? x // string        : ((b = x) // x is number | boolean        && typeof x === "number"        && x.toString()) : string | false | 0
+>                                                                                                                                              : ^^^^^^^^^^^^^^^^^^
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -448,12 +448,12 @@ function foo10(x: number | string | boolean) {
 >  : ^^^^^^
 
         : ((b = x) // x is number | boolean
->((b = x) // x is number | boolean        && typeof x === "number"        && x.toString()) : string
->                                                                                          : ^^^^^^
->(b = x) // x is number | boolean        && typeof x === "number"        && x.toString() : string
->                                                                                        : ^^^^^^
->(b = x) // x is number | boolean        && typeof x === "number" : boolean
->                                                                 : ^^^^^^^
+>((b = x) // x is number | boolean        && typeof x === "number"        && x.toString()) : string | false | 0
+>                                                                                          : ^^^^^^^^^^^^^^^^^^
+>(b = x) // x is number | boolean        && typeof x === "number"        && x.toString() : string | false | 0
+>                                                                                        : ^^^^^^^^^^^^^^^^^^
+>(b = x) // x is number | boolean        && typeof x === "number" : boolean | 0
+>                                                                 : ^^^^^^^^^^^
 >(b = x) : number | boolean
 >        : ^^^^^^^^^^^^^^^^
 >b = x : number | boolean
@@ -484,8 +484,8 @@ function foo10(x: number | string | boolean) {
 >         : ^     ^^^      ^^^^^      
 }
 function foo11(x: number | string | boolean) {
->foo11 : (x: number | string | boolean) => string | number
->      : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^
+>foo11 : (x: number | string | boolean) => string | number | false
+>      : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -495,8 +495,8 @@ function foo11(x: number | string | boolean) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return typeof x === "string"
->typeof x === "string"        ? x // string        : ((b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x) : string | number
->                                                                                                                                                                         : ^^^^^^^^^^^^^^^
+>typeof x === "string"        ? x // string        : ((b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x) : string | number | false
+>                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -511,14 +511,14 @@ function foo11(x: number | string | boolean) {
 >  : ^^^^^^
 
         : ((b = x) // x is number | boolean
->((b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x) : number
->                                                                                                                     : ^^^^^^
->(b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x : number
->                                                                                                                   : ^^^^^^
->(b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) : 0 | 10
->                                                                                    : ^^^^^^
->(b = x) // x is number | boolean        && typeof x === "number" : boolean
->                                                                 : ^^^^^^^
+>((b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x) : number | false
+>                                                                                                                     : ^^^^^^^^^^^^^^
+>(b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x : number | false
+>                                                                                                                   : ^^^^^^^^^^^^^^
+>(b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) : false | 0 | 10
+>                                                                                    : ^^^^^^^^^^^^^^
+>(b = x) // x is number | boolean        && typeof x === "number" : boolean | 0
+>                                                                 : ^^^^^^^^^^^
 >(b = x) : number | boolean
 >        : ^^^^^^^^^^^^^^^^
 >b = x : number | boolean
@@ -553,8 +553,8 @@ function foo11(x: number | string | boolean) {
 >  : ^^^^^^
 }
 function foo12(x: number | string | boolean) {
->foo12 : (x: number | string | boolean) => number
->      : ^ ^^                         ^^^^^^^^^^^
+>foo12 : (x: number | string | boolean) => number | false
+>      : ^ ^^                         ^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -564,8 +564,8 @@ function foo12(x: number | string | boolean) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return typeof x === "string"
->typeof x === "string"        ? ((x = 10) && x.toString().length) // number        : ((b = x) // x is number | boolean        && typeof x === "number"        && x) : number
->                                                                                                                                                                   : ^^^^^^
+>typeof x === "string"        ? ((x = 10) && x.toString().length) // number        : ((b = x) // x is number | boolean        && typeof x === "number"        && x) : number | false
+>                                                                                                                                                                   : ^^^^^^^^^^^^^^
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -602,12 +602,12 @@ function foo12(x: number | string | boolean) {
 >       : ^^^^^^
 
         : ((b = x) // x is number | boolean
->((b = x) // x is number | boolean        && typeof x === "number"        && x) : number
->                                                                               : ^^^^^^
->(b = x) // x is number | boolean        && typeof x === "number"        && x : number
->                                                                             : ^^^^^^
->(b = x) // x is number | boolean        && typeof x === "number" : boolean
->                                                                 : ^^^^^^^
+>((b = x) // x is number | boolean        && typeof x === "number"        && x) : number | false
+>                                                                               : ^^^^^^^^^^^^^^
+>(b = x) // x is number | boolean        && typeof x === "number"        && x : number | false
+>                                                                             : ^^^^^^^^^^^^^^
+>(b = x) // x is number | boolean        && typeof x === "number" : boolean | 0
+>                                                                 : ^^^^^^^^^^^
 >(b = x) : number | boolean
 >        : ^^^^^^^^^^^^^^^^
 >b = x : number | boolean

@@ -65,16 +65,16 @@ var a3: { fn<T>(x?: T): T };
 >   : ^^^^^ ^^ ^^^ ^^^ ^^^
 >fn : <T>(x?: T) => T
 >   : ^ ^^ ^^^ ^^^^^ 
->x : T
->  : ^
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
 
 var b3: { fn(x?: string): number };
 >b3 : { fn(x?: string): number; }
 >   : ^^^^^ ^^^      ^^^      ^^^
 >fn : (x?: string) => number
 >   : ^ ^^^      ^^^^^      
->x : string
->  : ^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 var a4: { fn<T>(...x: T[]): T };
 >a4 : { fn<T>(...x: T[]): T; }

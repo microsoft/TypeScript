@@ -184,9 +184,6 @@ Program files::
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-/user/username/workspace/solution/projects/project/commonFile1.ts
-/user/username/workspace/solution/projects/project/commonFile2.ts
 
 No shapes updated in the builder::
 

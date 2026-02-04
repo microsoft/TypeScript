@@ -249,8 +249,8 @@ export declare class ConstructorWithPrivateParameterProperty {
     constructor(x: string);
 }
 export declare class ConstructorWithOptionalParameterProperty {
-    x?: string;
-    constructor(x?: string);
+    x?: string | undefined;
+    constructor(x?: string | undefined);
 }
 export declare class ConstructorWithParameterInitializer {
     x: string;
@@ -283,8 +283,8 @@ declare class GlobalConstructorWithPrivateParameterProperty {
     constructor(x: string);
 }
 declare class GlobalConstructorWithOptionalParameterProperty {
-    x?: string;
-    constructor(x?: string);
+    x?: string | undefined;
+    constructor(x?: string | undefined);
 }
 declare class GlobalConstructorWithParameterInitializer {
     x: string;

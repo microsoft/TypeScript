@@ -3,7 +3,7 @@
 === Performance Stats ===
 Assignability cache: 2,500
 Type Count: 10,000
-Instantiation count: 50,000
+Instantiation count: 100,000
 Symbol count: 50,000
 
 === spellingSuggestionJSXAttribute.tsx ===
@@ -13,18 +13,18 @@ import * as React from "react";
 >      : ^^^^^^^^^^^^
 
 function MyComp2(props: { className?: string, htmlFor?: string }) {
->MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
->        : ^     ^^                                         ^^^^^^^^
+>MyComp2 : (props: { className?: string; htmlFor?: string; }) => never
+>        : ^     ^^                                         ^^^^^^^^^^
 >props : { className?: string; htmlFor?: string; }
 >      : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^
->className : string
->          : ^^^^^^
->htmlFor : string
->        : ^^^^^^
+>className : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+>htmlFor : string | undefined
+>        : ^^^^^^^^^^^^^^^^^^
 
     return null!;
->null! : null
->      : ^^^^
+>null! : never
+>      : ^^^^^
 }
 class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
 >MyComp : MyComp
@@ -35,10 +35,10 @@ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> {
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component
 >          : ^^^^^^^^^^^^^^^^^^^^^^
->className : string
->          : ^^^^^^
->htmlFor : string
->        : ^^^^^^
+>className : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+>htmlFor : string | undefined
+>        : ^^^^^^^^^^^^^^^^^^
 
 <a class="" />;
 ><a class="" /> : JSX.Element
@@ -85,8 +85,8 @@ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> {
 <MyComp2 class="" />;
 ><MyComp2 class="" /> : JSX.Element
 >                     : ^^^^^^^^^^^
->MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
->        : ^     ^^                                         ^^^^^^^^
+>MyComp2 : (props: { className?: string; htmlFor?: string; }) => never
+>        : ^     ^^                                         ^^^^^^^^^^
 >class : string
 >      : ^^^^^^
 
@@ -101,8 +101,8 @@ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> {
 <MyComp2 for="" />;
 ><MyComp2 for="" /> : JSX.Element
 >                   : ^^^^^^^^^^^
->MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
->        : ^     ^^                                         ^^^^^^^^
+>MyComp2 : (props: { className?: string; htmlFor?: string; }) => never
+>        : ^     ^^                                         ^^^^^^^^^^
 >for : string
 >    : ^^^^^^
 

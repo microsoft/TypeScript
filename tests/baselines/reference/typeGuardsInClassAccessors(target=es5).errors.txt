@@ -1,8 +1,56 @@
 error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+typeGuardsInClassAccessors.ts(12,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(16,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(16,22): error TS2454: Variable 'var2' is used before being assigned.
+typeGuardsInClassAccessors.ts(23,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(26,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(30,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(30,22): error TS2454: Variable 'var2' is used before being assigned.
+typeGuardsInClassAccessors.ts(35,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(39,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(39,22): error TS2454: Variable 'var2' is used before being assigned.
+typeGuardsInClassAccessors.ts(46,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(49,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(53,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(53,22): error TS2454: Variable 'var2' is used before being assigned.
+typeGuardsInClassAccessors.ts(58,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(62,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(62,22): error TS2454: Variable 'var2' is used before being assigned.
+typeGuardsInClassAccessors.ts(69,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(72,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(76,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(76,22): error TS2454: Variable 'var2' is used before being assigned.
+typeGuardsInClassAccessors.ts(81,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(85,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(85,22): error TS2454: Variable 'var2' is used before being assigned.
+typeGuardsInClassAccessors.ts(92,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(95,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(99,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInClassAccessors.ts(99,22): error TS2454: Variable 'var2' is used before being assigned.
 
 
 !!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== typeGuardsInClassAccessors.ts (0 errors) ====
+==== typeGuardsInClassAccessors.ts (28 errors) ====
     // Note that type guards affect types of variables and parameters only and 
     // have no effect on members of objects such as properties. 
     
@@ -15,10 +63,18 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         get p1() {
             // global vars in function declaration
             num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
     
             // variables in function declaration
             var var2: string | number;
             num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+                         ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
     
             return strOrNum;
         }
@@ -26,22 +82,41 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         set p1(param: string | number) {
             // global vars in function declaration
             num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
     
             // parameter of function declaration
             num = typeof param === "string" && param.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
     
             // variables in function declaration
             var var2: string | number;
             num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+                         ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
         }
         // Inside private accessor getter
         private get pp1() {
             // global vars in function declaration
             num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
     
             // variables in function declaration
             var var2: string | number;
             num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+                         ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
     
             return strOrNum;
         }
@@ -49,22 +124,41 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         private set pp1(param: string | number) {
             // global vars in function declaration
             num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
     
             // parameter of function declaration
             num = typeof param === "string" && param.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
     
             // variables in function declaration
             var var2: string | number;
             num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+                         ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
         }
         // Inside static accessor getter
         static get s1() {
             // global vars in function declaration
             num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
     
             // variables in function declaration
             var var2: string | number;
             num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+                         ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
     
             return strOrNum;
         }
@@ -72,22 +166,41 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         static set s1(param: string | number) {
             // global vars in function declaration
             num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
     
             // parameter of function declaration
             num = typeof param === "string" && param.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
     
             // variables in function declaration
             var var2: string | number;
             num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+                         ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
         }
         // Inside private static accessor getter
         private static get ss1() {
             // global vars in function declaration
             num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
     
             // variables in function declaration
             var var2: string | number;
             num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+                         ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
     
             return strOrNum;
         }
@@ -95,13 +208,24 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         private static set ss1(param: string | number) {
             // global vars in function declaration
             num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
     
             // parameter of function declaration
             num = typeof param === "string" && param.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
     
             // variables in function declaration
             var var2: string | number;
             num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+                         ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
         }
     }
     

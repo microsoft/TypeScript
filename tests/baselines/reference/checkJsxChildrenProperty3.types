@@ -34,12 +34,12 @@ class FetchUser extends React.Component<IFetchUserProps, any> {
 >          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
->render : () => JSX.Element
->       : ^^^^^^^^^^^^^^^^^
+>render : () => JSX.Element | null
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         return this.state
->this.state            ? this.props.children(this.state.result)            : null : JSX.Element
->                                                                                 : ^^^^^^^^^^^
+>this.state            ? this.props.children(this.state.result)            : null : JSX.Element | null
+>                                                                                 : ^^^^^^^^^^^^^^^^^^
 >this.state : any
 >this : this
 >     : ^^^^
@@ -49,16 +49,16 @@ class FetchUser extends React.Component<IFetchUserProps, any> {
             ? this.props.children(this.state.result)
 >this.props.children(this.state.result) : JSX.Element
 >                                       : ^^^^^^^^^^^
->this.props.children : ((user: IUser) => JSX.Element) & React.ReactNode
->                    : ^^    ^^     ^^^^^           ^^^^^^^^^^^^^^^^^^^
+>this.props.children : ((user: IUser) => JSX.Element) & (React.ReactNode | undefined)
+>                    : ^^    ^^     ^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props : IFetchUserProps & { children?: React.ReactNode; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >props : IFetchUserProps & { children?: React.ReactNode; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->children : ((user: IUser) => JSX.Element) & React.ReactNode
->         : ^^    ^^     ^^^^^           ^^^^^^^^^^^^^^^^^^^
+>children : ((user: IUser) => JSX.Element) & (React.ReactNode | undefined)
+>         : ^^    ^^     ^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.state.result : any
 >this.state : any
 >           : ^^^

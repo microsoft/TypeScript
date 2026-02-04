@@ -1,0 +1,43 @@
+a.js(15,5): error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
+a.js(22,5): error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
+a.js(29,5): error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
+
+
+==== a.js (3 errors) ====
+    /**
+     * @typedef A
+     * @property {string} a
+     */
+    
+    /**
+     * @typedef B
+     * @property {number} b
+     */
+    
+     class C1 {
+        /**
+         * @type {A}
+         */
+        value;
+        ~~~~~
+!!! error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class C2 extends C1 {
+        /**
+         * @type {A}
+         */
+        value;
+        ~~~~~
+!!! error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class C3 extends C1 {
+        /**
+         * @type {A & B}
+         */
+        value;
+        ~~~~~
+!!! error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
+    }
+    

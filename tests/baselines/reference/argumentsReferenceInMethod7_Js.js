@@ -19,5 +19,5 @@ declare class A {
     /**
      * @type Function
      */
-    callee: Function;
+    callee: Function | undefined;
 }

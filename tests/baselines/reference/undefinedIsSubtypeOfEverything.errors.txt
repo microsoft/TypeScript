@@ -1,0 +1,289 @@
+undefinedIsSubtypeOfEverything.ts(16,5): error TS2416: Property 'foo' in type 'D1' is not assignable to the same property in base type 'Base'.
+  Type 'string' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(16,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(20,5): error TS2416: Property 'foo' in type 'D1A' is not assignable to the same property in base type 'Base'.
+  Type 'String' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(20,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(25,5): error TS2416: Property 'foo' in type 'D2' is not assignable to the same property in base type 'Base'.
+  Type 'number' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(25,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(29,5): error TS2416: Property 'foo' in type 'D2A' is not assignable to the same property in base type 'Base'.
+  Type 'Number' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(29,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(34,5): error TS2416: Property 'foo' in type 'D3' is not assignable to the same property in base type 'Base'.
+  Type 'boolean' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(34,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(38,5): error TS2416: Property 'foo' in type 'D3A' is not assignable to the same property in base type 'Base'.
+  Type 'Boolean' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(38,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(43,5): error TS2416: Property 'foo' in type 'D4' is not assignable to the same property in base type 'Base'.
+  Type 'RegExp' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(43,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(47,5): error TS2416: Property 'foo' in type 'D5' is not assignable to the same property in base type 'Base'.
+  Type 'Date' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(47,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(52,5): error TS2416: Property 'foo' in type 'D6' is not assignable to the same property in base type 'Base'.
+  Type 'number[]' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(52,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(56,5): error TS2416: Property 'foo' in type 'D7' is not assignable to the same property in base type 'Base'.
+  Type '{ bar: number; }' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(56,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(61,5): error TS2416: Property 'foo' in type 'D8' is not assignable to the same property in base type 'Base'.
+  Type 'D7' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(61,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(68,5): error TS2416: Property 'foo' in type 'D9' is not assignable to the same property in base type 'Base'.
+  Type 'I1' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(68,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(73,5): error TS2416: Property 'foo' in type 'D10' is not assignable to the same property in base type 'Base'.
+  Type '() => number' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(73,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(78,5): error TS2416: Property 'foo' in type 'D11' is not assignable to the same property in base type 'Base'.
+  Type 'E' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(78,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(86,5): error TS2416: Property 'foo' in type 'D12' is not assignable to the same property in base type 'Base'.
+  Type 'typeof f' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(86,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(90,11): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(95,5): error TS2416: Property 'foo' in type 'D13' is not assignable to the same property in base type 'Base'.
+  Type 'typeof c' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(95,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(100,5): error TS2416: Property 'foo' in type 'D14<T>' is not assignable to the same property in base type 'Base'.
+  Type 'T' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(100,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(105,5): error TS2416: Property 'foo' in type 'D15<T, U>' is not assignable to the same property in base type 'Base'.
+  Type 'U' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(105,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(114,5): error TS2416: Property 'foo' in type 'D16' is not assignable to the same property in base type 'Base'.
+  Type 'Object' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(114,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedIsSubtypeOfEverything.ts(119,5): error TS2416: Property 'foo' in type 'D17' is not assignable to the same property in base type 'Base'.
+  Type '{}' is not assignable to type 'undefined'.
+undefinedIsSubtypeOfEverything.ts(119,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+
+
+==== undefinedIsSubtypeOfEverything.ts (41 errors) ====
+    // undefined is a subtype of every other types, no errors expected below
+    
+    class Base {
+        foo: typeof undefined;
+    } 
+    
+    class D0 extends Base {
+        foo: any;
+    }
+    
+    class DA extends Base {
+        foo: typeof undefined; 
+    }
+    
+    class D1 extends Base {
+        foo: string;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D1' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'string' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class D1A extends Base {
+        foo: String;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D1A' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'String' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    
+    class D2 extends Base {
+        foo: number;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D2' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'number' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class D2A extends Base {
+        foo: Number;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D2A' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'Number' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    
+    class D3 extends Base {
+        foo: boolean;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D3' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'boolean' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class D3A extends Base {
+        foo: Boolean;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D3A' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'Boolean' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    
+    class D4 extends Base {
+        foo: RegExp;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D4' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'RegExp' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class D5 extends Base {
+        foo: Date;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D5' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'Date' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    
+    class D6 extends Base {
+        foo: number[];
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D6' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'number[]' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class D7 extends Base {
+        foo: { bar: number };
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D7' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type '{ bar: number; }' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    
+    class D8 extends Base {
+        foo: D7;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D8' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'D7' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    interface I1 {
+        bar: string;
+    }
+    class D9 extends Base {
+        foo: I1;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D9' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'I1' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    
+    class D10 extends Base {
+        foo: () => number;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D10' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type '() => number' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    enum E { A }
+    class D11 extends Base {
+        foo: E;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D11' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'E' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    function f() { }
+    namespace f {
+        export var bar = 1;
+    }
+    class D12 extends Base {
+        foo: typeof f;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D12' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'typeof f' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    
+    class c { baz: string }
+              ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+    namespace c {
+        export var bar = 1;
+    }
+    class D13 extends Base {
+        foo: typeof c;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D13' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'typeof c' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    
+    class D14<T> extends Base {
+        foo: T;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D14<T>' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'T' is not assignable to type 'undefined'.
+!!! related TS2208 undefinedIsSubtypeOfEverything.ts:99:11: This type parameter might need an `extends undefined` constraint.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    
+    class D15<T, U> extends Base {
+        foo: U;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D15<T, U>' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'U' is not assignable to type 'undefined'.
+!!! related TS2208 undefinedIsSubtypeOfEverything.ts:104:14: This type parameter might need an `extends undefined` constraint.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    //class D15<T, U extends T> extends Base {
+    //    foo: U;
+    //}
+    
+    
+    class D16 extends Base {
+        foo: Object;
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D16' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type 'Object' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    
+    class D17 extends Base {
+        foo: {};
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D17' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type '{}' is not assignable to type 'undefined'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    

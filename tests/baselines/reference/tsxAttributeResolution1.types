@@ -23,12 +23,12 @@ declare namespace JSX {
 }
 interface Attribs1 {
 	x?: number;
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 	s?: string;
->s : string
->  : ^^^^^^
+>s : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 // OK

@@ -338,8 +338,8 @@ var endOfIdent2 = <a attr:={"value"} />;
 >            : ^^^
 ><a attr:={"value"} /> : any
 >                      : ^^^
->a : any
->  : ^^^
+>a : undefined
+>  : ^^^^^^^^^
 >attr: : string
 >      : ^^^^^^
 >attr : any

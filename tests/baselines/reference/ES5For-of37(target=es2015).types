@@ -63,7 +63,8 @@ for (const i of [0, 1, 2, 3, 4]) {
 >  : ^^^^^^
 
     } catch (err) {
->err : any
+>err : unknown
+>    : ^^^^^^^
 
         console.log('E %s %s', i, err);
 >console.log('E %s %s', i, err) : void
@@ -78,6 +79,7 @@ for (const i of [0, 1, 2, 3, 4]) {
 >          : ^^^^^^^^^
 >i : number
 >  : ^^^^^^
->err : any
+>err : unknown
+>    : ^^^^^^^
     }
 }

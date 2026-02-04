@@ -149,7 +149,6 @@ export interface C<T, U> {
     method<Q>(a: T & Q): Q & number;
     method(a?: number): number;
     method(...args: any[]): number;
-    optMethod?(): number;
 }
 export interface I {
 }

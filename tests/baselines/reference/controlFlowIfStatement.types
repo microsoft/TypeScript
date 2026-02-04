@@ -45,8 +45,8 @@ if (x /* RegExp */, (x = true)) {
 }
 else {
     x; // boolean
->x : true
->  : ^^^^
+>x : never
+>  : ^^^^^
 
     x = 42;
 >x = 42 : 42

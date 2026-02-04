@@ -11,8 +11,8 @@ declare namespace JSX {
 }
 interface Attribs1 {
 	c1?: (x: string) => void;
->c1 : (x: string) => void
->   : ^ ^^      ^^^^^    
+>c1 : ((x: string) => void) | undefined
+>   : ^^ ^^      ^^^^^    ^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 }

@@ -49,6 +49,7 @@ declare module "some-module" {
 
         accessor value: any;
 >value : any
+>      : ^^^
     }
 }
 

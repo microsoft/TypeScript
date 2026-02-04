@@ -6,8 +6,8 @@ function foo(a:string, b?:string, ...c:number[]){}
 >    : ^ ^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
 >a : string
 >  : ^^^^^^
->b : string
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >c : number[]
 >  : ^^^^^^^^
 

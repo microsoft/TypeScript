@@ -10,8 +10,8 @@ function f1(s: string) { }
 function f2(s?: string) { }
 >f2 : (s?: string) => void
 >   : ^ ^^^      ^^^^^^^^^
->s : string
->  : ^^^^^^
+>s : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 function f3(...s: string[]) { }
 >f3 : (...s: string[]) => void
@@ -24,22 +24,22 @@ function f4(s: string, s2?: string) { }
 >   : ^ ^^      ^^  ^^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
->s2 : string
->   : ^^^^^^
+>s2 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
 function f5(s?: string, n?: number) { }
 >f5 : (s?: string, n?: number) => void
 >   : ^ ^^^      ^^ ^^^      ^^^^^^^^^
->s : string
->  : ^^^^^^
->n : number
->  : ^^^^^^
+>s : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>n : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 function f6(s?: string, ...n: number[]) { }
 >f6 : (s?: string, ...n: number[]) => void
 >   : ^ ^^^      ^^^^^ ^^        ^^^^^^^^^
->s : string
->  : ^^^^^^
+>s : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >n : number[]
 >  : ^^^^^^^^
 

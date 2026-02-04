@@ -10,12 +10,15 @@ declare namespace JSX {
 	interface IntrinsicElements { 
 		div: any;
 >div : any
+>    : ^^^
 
 		h2: any;
 >h2 : any
+>   : ^^^
 
 		h1: any;
 >h1 : any
+>   : ^^^
 	}
 }
 
@@ -82,11 +85,13 @@ let k2 = <div> <h2> Hello </h2> {(user: any) => <h2>{user.name}</h2>}</div>;
 >(user: any) => <h2>{user.name}</h2> : (user: any) => JSX.Element
 >                                    : ^    ^^   ^^^^^^^^^^^^^^^^
 >user : any
+>     : ^^^
 ><h2>{user.name}</h2> : JSX.Element
 >                     : ^^^^^^^^^^^
 >h2 : any
 >   : ^^^
 >user.name : any
+>          : ^^^
 >user : any
 >     : ^^^
 >name : any

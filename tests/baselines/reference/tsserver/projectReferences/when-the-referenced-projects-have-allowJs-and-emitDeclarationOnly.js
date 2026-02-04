@@ -383,15 +383,15 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": [
           {
             "start": {
-              "line": 3,
-              "offset": 42
+              "line": 1,
+              "offset": 10
             },
             "end": {
-              "line": 3,
-              "offset": 44
+              "line": 1,
+              "offset": 31
             },
-            "text": "Expected 1 arguments, but got 2.",
-            "code": 2554,
+            "text": "Module '\"emit-composite\"' has no exported member 'testCompositeFunction'.",
+            "code": 2305,
             "category": "error"
           }
         ]

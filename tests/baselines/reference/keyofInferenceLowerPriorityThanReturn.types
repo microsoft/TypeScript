@@ -76,8 +76,8 @@ interface BookDef {
 >       : ^^^^^^
 
     readonly numPages: number | null;
->numPages : number
->         : ^^^^^^
+>numPages : number | null
+>         : ^^^^^^^^^^^^^
 }
 
 

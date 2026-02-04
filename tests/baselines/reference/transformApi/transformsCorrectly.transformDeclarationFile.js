@@ -1,1 +1,1 @@
-declare var newName: any;
+declare var newName: undefined;

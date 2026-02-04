@@ -1,9 +1,12 @@
-voidOperatorWithAnyOtherType.ts(46,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
-voidOperatorWithAnyOtherType.ts(47,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
-voidOperatorWithAnyOtherType.ts(48,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+voidOperatorWithAnyOtherType.ts(46,27): error TS18050: The value 'null' cannot be used here.
+voidOperatorWithAnyOtherType.ts(46,34): error TS18050: The value 'undefined' cannot be used here.
+voidOperatorWithAnyOtherType.ts(47,27): error TS18050: The value 'null' cannot be used here.
+voidOperatorWithAnyOtherType.ts(47,34): error TS18050: The value 'null' cannot be used here.
+voidOperatorWithAnyOtherType.ts(48,27): error TS18050: The value 'undefined' cannot be used here.
+voidOperatorWithAnyOtherType.ts(48,39): error TS18050: The value 'undefined' cannot be used here.
 
 
-==== voidOperatorWithAnyOtherType.ts (3 errors) ====
+==== voidOperatorWithAnyOtherType.ts (6 errors) ====
     // void  operator on any type
     
     declare var ANY: any;
@@ -50,14 +53,20 @@ voidOperatorWithAnyOtherType.ts(48,27): error TS2365: Operator '+' cannot be app
     var ResultIsAny15 = void A.foo();
     var ResultIsAny16 = void (ANY + ANY1);
     var ResultIsAny17 = void (null + undefined);
-                              ~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
+                              ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
+                                     ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ResultIsAny18 = void (null + null);
-                              ~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+                              ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
+                                     ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
     var ResultIsAny19 = void (undefined + undefined);
-                              ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+                              ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.
+                                          ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.
     
     // multiple void  operators
     var ResultIsAny20 = void void ANY;

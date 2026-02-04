@@ -76,8 +76,8 @@ typeof Symbol.toStringTag;
 >       : ^^^^^^^^^^^^^^^^^
 
 ! Symbol();
->! Symbol() : boolean
->           : ^^^^^^^
+>! Symbol() : false
+>           : ^^^^^
 >Symbol() : symbol
 >         : ^^^^^^
 >Symbol : SymbolConstructor
@@ -86,10 +86,10 @@ typeof Symbol.toStringTag;
 +(Symbol() || 0);
 >+(Symbol() || 0) : number
 >                 : ^^^^^^
->(Symbol() || 0) : symbol | 0
->                : ^^^^^^^^^^
->Symbol() || 0 : symbol | 0
->              : ^^^^^^^^^^
+>(Symbol() || 0) : symbol
+>                : ^^^^^^
+>Symbol() || 0 : symbol
+>              : ^^^^^^
 >Symbol() : symbol
 >         : ^^^^^^
 >Symbol : SymbolConstructor

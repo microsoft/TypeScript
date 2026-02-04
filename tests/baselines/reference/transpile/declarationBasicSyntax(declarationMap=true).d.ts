@@ -45,13 +45,13 @@ export type A<T> = { x: T };
 export declare const a = 1;
 export declare let b: number;
 export declare var c: number;
-declare const d: any;
+declare const d: undefined;
 export { d };
-declare const e: any;
+declare const e: undefined;
 export { e };
 //# sourceMappingURL=variables.d.ts.map
 //// [variables.d.ts.map] ////
-{"version":3,"file":"variables.d.ts","sourceRoot":"","sources":["variables.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,CAAC,IAAI,CAAC;AACnB,eAAO,IAAI,CAAC,QAAI,CAAC;AACjB,eAAO,IAAI,CAAC,QAAI,CAAC;AACjB,QAAA,MAAM,CAAC,KAAY,CAAC;AACpB,OAAO,EAAE,CAAC,EAAE,CAAC;AACb,QAAA,MAAY,CAAC,KAAY,CAAC;AAC1B,OAAO,EAAE,CAAC,EAAE,CAAC"}
+{"version":3,"file":"variables.d.ts","sourceRoot":"","sources":["variables.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,CAAC,IAAI,CAAC;AACnB,eAAO,IAAI,CAAC,QAAI,CAAC;AACjB,eAAO,IAAI,CAAC,QAAI,CAAC;AACjB,QAAA,MAAM,CAAC,WAAY,CAAC;AACpB,OAAO,EAAE,CAAC,EAAE,CAAC;AACb,QAAA,MAAY,CAAC,WAAY,CAAC;AAC1B,OAAO,EAAE,CAAC,EAAE,CAAC"}
 //// [interface.d.ts] ////
 export interface Foo {
     a: string;

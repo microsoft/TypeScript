@@ -9,9 +9,10 @@ restInvalidArgumentType.ts(46,13): error TS2700: Rest types may only be created 
 restInvalidArgumentType.ts(50,13): error TS2700: Rest types may only be created from object types.
 restInvalidArgumentType.ts(51,13): error TS2700: Rest types may only be created from object types.
 restInvalidArgumentType.ts(53,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(53,20): error TS2454: Variable 'e' is used before being assigned.
 
 
-==== restInvalidArgumentType.ts (11 errors) ====
+==== restInvalidArgumentType.ts (12 errors) ====
     enum E { v1, v2 };
     
     function f<T extends { b: string }>(p1: T, p2: T[]) {
@@ -87,5 +88,7 @@ restInvalidArgumentType.ts(53,13): error TS2700: Rest types may only be created 
         var {...r19} = e;  // Error, enum
                 ~~~
 !!! error TS2700: Rest types may only be created from object types.
+                       ~
+!!! error TS2454: Variable 'e' is used before being assigned.
     }
     

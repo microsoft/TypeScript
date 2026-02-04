@@ -23,6 +23,7 @@ function annotation(): PropertyDecorator {
 >(target: any): void => { } : (target: any) => void
 >                           : ^      ^^   ^^^^^    
 >target : any
+>       : ^^^
 }
 export class ClassA {
 >ClassA : ClassA
@@ -33,6 +34,6 @@ export class ClassA {
 >             : ^^^^^^^^^^^^^^^^^
 >annotation : () => PropertyDecorator
 >           : ^^^^^^                 
->array : string | SomeClass
->      : ^^^^^^^^^^^^^^^^^^
+>array : string | SomeClass | null
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }

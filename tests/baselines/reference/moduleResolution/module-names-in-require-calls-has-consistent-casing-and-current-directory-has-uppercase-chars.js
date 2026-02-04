@@ -14,4 +14,5 @@ import b = require("./moduleB");
                 
 
 Diagnostics::
+moduleC.ts(1,12): error TS7005: Variable 'x' implicitly has an 'any' type.
 

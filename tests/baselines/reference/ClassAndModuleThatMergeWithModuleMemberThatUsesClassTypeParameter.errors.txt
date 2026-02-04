@@ -1,17 +1,31 @@
+ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(5,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(6,5): error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
 ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(10,19): error TS2304: Cannot find name 'T'.
+ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(15,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(16,5): error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
 ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(20,12): error TS2304: Cannot find name 'T'.
 ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(22,23): error TS2304: Cannot find name 'T'.
+ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(23,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(24,9): error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
+ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(30,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(31,5): error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
 ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(35,26): error TS2304: Cannot find name 'T'.
+ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(40,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(41,5): error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
 ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(46,15): error TS2304: Cannot find name 'T'.
 
 
-==== ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts (5 errors) ====
+==== ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts (15 errors) ====
     // all expected to be errors
     
     class clodule1<T>{
     
         id: string;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         value: T;
+        ~~~~~
+!!! error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
     }
     
     namespace clodule1 {
@@ -23,7 +37,11 @@ ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(46,15): err
     class clodule2<T>{
     
         id: string;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         value: T;
+        ~~~~~
+!!! error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
     }
     
     namespace clodule2 {
@@ -35,14 +53,22 @@ ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(46,15): err
                           ~
 !!! error TS2304: Cannot find name 'T'.
             id: string;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
             value: U;
+            ~~~~~
+!!! error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
         }
     }
     
     class clodule3<T>{
     
         id: string;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         value: T;
+        ~~~~~
+!!! error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
     }
     
     namespace clodule3 {
@@ -54,7 +80,11 @@ ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(46,15): err
     class clodule4<T>{
     
         id: string;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         value: T;
+        ~~~~~
+!!! error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
     }
     
     namespace clodule4 {

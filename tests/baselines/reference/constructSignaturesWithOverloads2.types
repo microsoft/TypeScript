@@ -11,8 +11,8 @@ class C {
     constructor(x: number, y?: string);
 >x : number
 >  : ^^^^^^
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     constructor(x: number, y: string);
 >x : number
@@ -54,8 +54,8 @@ class C2<T> {
     constructor(x: T, y?: string);
 >x : T
 >  : ^
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     constructor(x: T, y: string);
 >x : T
@@ -95,8 +95,8 @@ interface I {
     new (x: number, y?: string): C;
 >x : number
 >  : ^^^^^^
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     new (x: number, y: string): C;
 >x : number
@@ -109,8 +109,8 @@ interface I<T> {
     new (x: T, y?: number): C2<T>;
 >x : T
 >  : ^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     new (x: T, y: number): C2<T>;
 >x : T

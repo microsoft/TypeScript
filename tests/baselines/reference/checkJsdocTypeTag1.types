@@ -142,8 +142,8 @@ x2(0);
  * @type {object}
  */
 var props = {};
->props : any
->      : ^^^
+>props : object
+>      : ^^^^^^
 >{} : {}
 >   : ^^
 
@@ -151,8 +151,8 @@ var props = {};
  * @type {Object}
  */
 var props = {};
->props : any
->      : ^^^
+>props : object
+>      : ^^^^^^
 >{} : {}
 >   : ^^
 

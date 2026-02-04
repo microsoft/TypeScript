@@ -222,8 +222,8 @@ const f31: () => undefined = () => {
 const f32: () => undefined | number = () => {
 >f32 : () => undefined | number
 >    : ^^^^^^                  
->() => {    // Error, contextual type for implicit return isn't just `undefined`} : () => void
->                                                                                 : ^^^^^^^^^^
+>() => {    // Error, contextual type for implicit return isn't just `undefined`} : () => undefined
+>                                                                                 : ^^^^^^^^^^^^^^^
 
     // Error, contextual type for implicit return isn't just `undefined`
 }
@@ -231,8 +231,8 @@ const f32: () => undefined | number = () => {
 const f33: () => undefined | number = () => {
 >f33 : () => undefined | number
 >    : ^^^^^^                  
->() => {    // Error, contextual type for expression-less return isn't just `undefined`    return;} : () => void
->                                                                                                   : ^^^^^^^^^^
+>() => {    // Error, contextual type for expression-less return isn't just `undefined`    return;} : () => undefined
+>                                                                                                   : ^^^^^^^^^^^^^^^
 
     // Error, contextual type for expression-less return isn't just `undefined`
     return;

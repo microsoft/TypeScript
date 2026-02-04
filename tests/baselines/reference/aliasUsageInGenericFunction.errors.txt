@@ -1,0 +1,31 @@
+aliasUsageInGenericFunction_backbone.ts(2,12): error TS2564: Property 'someData' has no initializer and is not definitely assigned in the constructor.
+aliasUsageInGenericFunction_main.ts(10,19): error TS2352: Conversion of type 'null' to type 'IHasVisualizationModel' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== aliasUsageInGenericFunction_main.ts (1 errors) ====
+    import Backbone = require("./aliasUsageInGenericFunction_backbone");
+    import moduleA = require("./aliasUsageInGenericFunction_moduleA");
+    interface IHasVisualizationModel {
+        VisualizationModel: typeof Backbone.Model;
+    }
+    function foo<T extends { a: IHasVisualizationModel }>(x: T) {
+        return x;
+    }
+    var r = foo({ a: moduleA });
+    var r2 = foo({ a: <IHasVisualizationModel>null });
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'null' to type 'IHasVisualizationModel' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    
+==== aliasUsageInGenericFunction_backbone.ts (1 errors) ====
+    export class Model {
+        public someData: string;
+               ~~~~~~~~
+!!! error TS2564: Property 'someData' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+==== aliasUsageInGenericFunction_moduleA.ts (0 errors) ====
+    import Backbone = require("./aliasUsageInGenericFunction_backbone");
+    export class VisualizationModel extends Backbone.Model {
+        // interesting stuff here
+    }
+    

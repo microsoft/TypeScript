@@ -62,9 +62,11 @@ class C {
 
     set ["computedname3"](x: any) {
 >["computedname3"] : any
+>                  : ^^^
 >"computedname3" : "computedname3"
 >                : ^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
     }
     set ["computedname4"](y: string) {
 >["computedname4"] : string

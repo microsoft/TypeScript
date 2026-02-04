@@ -1,6 +1,7 @@
 tsconfig.json(4,15): error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 tsconfig.json(6,25): error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 main.ts(1,21): error TS2792: Cannot find module 'angular2/core'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+main.ts(3,18): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
 
 
 ==== tsconfig.json (2 errors) ====
@@ -22,12 +23,14 @@ main.ts(1,21): error TS2792: Cannot find module 'angular2/core'. Did you mean to
         "main.ts"
       ]
     }
-==== main.ts (1 errors) ====
+==== main.ts (2 errors) ====
     import * as ng from "angular2/core";
                         ~~~~~~~~~~~~~~~
 !!! error TS2792: Cannot find module 'angular2/core'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
     declare function foo(...args: any[]);
+                     ~~~
+!!! error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
     
     @foo
     export class MyClass1 {

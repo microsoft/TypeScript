@@ -28,12 +28,12 @@ function run(configuration: commands.IConfiguration) {
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >toAbsolutePath : (server: import("visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
 >               : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^                     ^^^      ^^^^^      
->configuration.server : import("visibilityOfCrossModuleTypeUsage_server").IServer
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>configuration.server : import("visibilityOfCrossModuleTypeUsage_server").IServer | undefined
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >configuration : commands.IConfiguration
 >              : ^^^^^^^^^^^^^^^^^^^^^^^
->server : import("visibilityOfCrossModuleTypeUsage_server").IServer
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>server : import("visibilityOfCrossModuleTypeUsage_server").IServer | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 === visibilityOfCrossModuleTypeUsage_commands.ts ===
 import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
@@ -52,8 +52,8 @@ export interface IConfiguration {
 >       : ^^^
 
     server?: server.IServer;
->server : server.IServer
->       : ^^^^^^^^^^^^^^
+>server : server.IServer | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >server : any
 >       : ^^^
 }
@@ -68,7 +68,7 @@ export interface IWorkspace {
 >               : ^      ^^       ^^                     ^^^      ^^^^^      
 >server : IServer
 >       : ^^^^^^^
->workspaceRelativePath : string
->                      : ^^^^^^
+>workspaceRelativePath : string | undefined
+>                      : ^^^^^^^^^^^^^^^^^^
 }
 

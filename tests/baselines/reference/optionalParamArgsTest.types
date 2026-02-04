@@ -23,18 +23,18 @@ interface I1 {
     C1M3(C1M3A1?:number,C1M3A2?:number):number;
 >C1M3 : (C1M3A1?: number, C1M3A2?: number) => number
 >     : ^      ^^^      ^^      ^^^      ^^^^^      
->C1M3A1 : number
->       : ^^^^^^
->C1M3A2 : number
->       : ^^^^^^
+>C1M3A1 : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+>C1M3A2 : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 
     C1M4(C1M4A1:number,C1M4A2?:number):number;
 >C1M4 : (C1M4A1: number, C1M4A2?: number) => number
 >     : ^      ^^      ^^      ^^^      ^^^^^      
 >C1M4A1 : number
 >       : ^^^^^^
->C1M4A2 : number
->       : ^^^^^^
+>C1M4A2 : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 }
 
 // test basic configurations
@@ -97,14 +97,14 @@ class C1 {
 >     : ^      ^^      ^^      ^^^      ^^^^^^^^^^^
 >C1M4A1 : number
 >       : ^^^^^^
->C1M4A2 : number
->       : ^^^^^^
+>C1M4A2 : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >C1M4A1 + C1M4A2 : number
 >                : ^^^^^^
 >C1M4A1 : number
 >       : ^^^^^^
->C1M4A2 : number
->       : ^^^^^^
+>C1M4A2 : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 
     public C1M5(C1M5A1:number,C1M5A2:number=0,C1M5A3?:number) { return C1M5A1 + C1M5A2; }
 >C1M5 : (C1M5A1: number, C1M5A2?: number, C1M5A3?: number) => number
@@ -115,8 +115,8 @@ class C1 {
 >       : ^^^^^^
 >0 : 0
 >  : ^
->C1M5A3 : number
->       : ^^^^^^
+>C1M5A3 : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >C1M5A1 + C1M5A2 : number
 >                : ^^^^^^
 >C1M5A1 : number
@@ -204,14 +204,14 @@ function F4(F4A1:number,F4A2?:number) { return F4A1 + F4A2; }
 >   : ^    ^^      ^^    ^^^      ^^^^^^^^^^^
 >F4A1 : number
 >     : ^^^^^^
->F4A2 : number
->     : ^^^^^^
+>F4A2 : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >F4A1 + F4A2 : number
 >            : ^^^^^^
 >F4A1 : number
 >     : ^^^^^^
->F4A2 : number
->     : ^^^^^^
+>F4A2 : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 
 var L1 = function() {return 0;}
 >L1 : () => number
@@ -258,14 +258,14 @@ var L4 = function (L4A1:number,L4A2?:number) { return L4A1 + L4A2; }
 >                                                            : ^    ^^      ^^    ^^^      ^^^^^^^^^^^
 >L4A1 : number
 >     : ^^^^^^
->L4A2 : number
->     : ^^^^^^
+>L4A2 : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >L4A1 + L4A2 : number
 >            : ^^^^^^
 >L4A1 : number
 >     : ^^^^^^
->L4A2 : number
->     : ^^^^^^
+>L4A2 : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 
 var c1o1:C1 = new C1(5);
 >c1o1 : C1
@@ -808,26 +808,26 @@ function fnOpt1(id: number, children: number[] = [], expectedPath: number[] = []
 >   : ^^^^^^
 >children : number[]
 >         : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >expectedPath : number[]
 >             : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
->isRoot : boolean
->       : ^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+>isRoot : boolean | undefined
+>       : ^^^^^^^^^^^^^^^^^^^
 
 function fnOpt2(id: number, children?: number[], expectedPath?: number[], isRoot?: boolean): void {}
 >fnOpt2 : (id: number, children?: number[], expectedPath?: number[], isRoot?: boolean) => void
 >       : ^  ^^      ^^        ^^^        ^^            ^^^        ^^      ^^^       ^^^^^    
 >id : number
 >   : ^^^^^^
->children : number[]
->         : ^^^^^^^^
->expectedPath : number[]
->             : ^^^^^^^^
->isRoot : boolean
->       : ^^^^^^^
+>children : number[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^
+>expectedPath : number[] | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^
+>isRoot : boolean | undefined
+>       : ^^^^^^^^^^^^^^^^^^^
 
 fnOpt1(1, [2, 3], [1], true);
 >fnOpt1(1, [2, 3], [1], true) : void

@@ -10,7 +10,9 @@ interface I {
 >apply : (a: any, b?: any) => void
 >      : ^ ^^   ^^ ^^^   ^^^^^    
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
     call(thisArg: number, ...argArray: number[]): any;
 >call : (thisArg: number, ...argArray: number[]) => any
@@ -29,7 +31,9 @@ var r1: (a: any, b?: any) => void = i.apply;
 >r1 : (a: any, b?: any) => void
 >   : ^ ^^   ^^ ^^^   ^^^^^    
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >i.apply : (a: any, b?: any) => void
 >        : ^ ^^   ^^ ^^^   ^^^^^    
 >i : I
@@ -53,7 +57,9 @@ var r1b: (thisArg: number, ...argArray: number[]) => void = i.call;
 
 var r1c = i.arguments;
 >r1c : any
+>    : ^^^
 >i.arguments : any
+>            : ^^^
 >i : I
 >  : ^
 >arguments : any
@@ -68,7 +74,9 @@ var x: {
 >apply : (a: any, b?: any) => void
 >      : ^ ^^   ^^ ^^^   ^^^^^    
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
     call(thisArg: number, ...argArray: number[]): any;
 >call : (thisArg: number, ...argArray: number[]) => any
@@ -83,7 +91,9 @@ var r2: (a: any, b?: any) => void = x.apply;
 >r2 : (a: any, b?: any) => void
 >   : ^ ^^   ^^ ^^^   ^^^^^    
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >x.apply : (a: any, b?: any) => void
 >        : ^ ^^   ^^ ^^^   ^^^^^    
 >x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
@@ -107,7 +117,9 @@ var r2b: (thisArg: number, ...argArray: number[]) => void = x.call;
 
 var r2c = x.arguments;
 >r2c : any
+>    : ^^^
 >x.arguments : any
+>            : ^^^
 >x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 >  : ^^^^^^    ^^^^^^^^ ^^   ^^ ^^^   ^^^    ^^^^^^^       ^^      ^^^^^        ^^        ^^^   ^^^
 >arguments : any

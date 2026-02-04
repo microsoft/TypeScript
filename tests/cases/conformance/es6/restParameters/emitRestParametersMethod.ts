@@ -1,4 +1,5 @@
-﻿// @target: es5, es2015
+﻿// @strict: false
+// @target: es5, es2015
 class C {
     constructor(name: string, ...rest) { }
 

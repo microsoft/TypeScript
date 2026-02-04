@@ -1,4 +1,5 @@
-﻿// @target: es5, es2015
+﻿// @strict: false
+// @target: es5, es2015
 var obj2 = {
     func1(y = 10, ...rest) { },
     func2(x = "hello") { },

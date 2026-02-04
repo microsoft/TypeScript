@@ -1,0 +1,234 @@
+jsxReactTestSuite.tsx(14,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(14,10): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(16,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(17,9): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+jsxReactTestSuite.tsx(18,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(20,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(21,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(21,8): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(21,14): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(22,19): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(23,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(24,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(28,11): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+jsxReactTestSuite.tsx(36,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(51,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(54,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(57,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(59,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(61,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(64,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(68,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(72,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(75,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(78,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(78,12): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(80,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(80,13): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(82,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(82,24): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(94,14): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+jsxReactTestSuite.tsx(96,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxReactTestSuite.tsx(100,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== jsxReactTestSuite.tsx (32 errors) ====
+    declare var React: any;
+    declare var Component:any;
+    declare var Composite:any;
+    declare var Composite2:any;
+    declare var Child:any;
+    declare var Namespace:any;
+    declare var foo: any;
+    declare var bar: any;
+    declare var y:any;
+    declare var x:any;
+    declare var z:any;
+    declare var hasOwnProperty:any;
+    
+    <div>text</div>;
+    ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+             ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
+    <div>
+    ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+      {this.props.children}
+            ~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+    </div>;
+    ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
+    <div>
+    ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+      <div><br /></div>
+      ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+           ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                 ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+      <Component>{foo}<br />{bar}</Component>
+                      ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+      <br />
+      ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    </div>;
+    ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
+    
+    <Composite>
+        {this.props.children}
+              ~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+    </Composite>;
+    
+    <Composite>
+        <Composite2 />
+    </Composite>;
+    
+    var x =
+      <div
+      ~~~~
+        attr1={
+    ~~~~~~~~~~~
+          "foo" + "bar"
+    ~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+        attr2={
+    ~~~~~~~~~~~
+          "foo" + "bar" +
+    ~~~~~~~~~~~~~~~~~~~~~
+          
+    ~~~~~~
+          "baz" + "bug"
+    ~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+        attr3={
+    ~~~~~~~~~~~
+          "foo" + "bar" +
+    ~~~~~~~~~~~~~~~~~~~~~
+          "baz" + "bug"
+    ~~~~~~~~~~~~~~~~~~~
+          // Extra line here.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+        attr4="baz">
+    ~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+      </div>;
+      ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
+    (
+      <div>
+      ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+        {/* A comment at the beginning */}
+        {/* A second comment at the beginning */}
+        <span>
+        ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+          {/* A nested comment */}
+        </span>
+        ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+        {/* A sandwiched comment */}
+        <br />
+        ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+        {/* A comment at the end */}
+        {/* A second comment at the end */}
+      </div>
+      ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    );
+    
+    (
+      <div
+      ~~~~
+        /* a multi-line
+    ~~~~~~~~~~~~~~~~~~~
+           comment */
+    ~~~~~~~~~~~~~~~~~
+        attr1="foo">
+    ~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+        <span // a double-slash comment
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          attr2="bar"
+    ~~~~~~~~~~~~~~~~~
+        />
+    ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+      </div>
+      ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    );
+    
+    <div>&nbsp;</div>;
+    ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+               ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
+    <div>&nbsp; </div>;
+    ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
+    <hasOwnProperty>testing</hasOwnProperty>;
+    ~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                           ~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
+    <Component constructor="foo" />;
+    
+    <Namespace.Component />;
+    
+    <Namespace.DeepNamespace.Component />;
+    
+    <Component { ... x } y
+    ={2 } z />;
+    
+    <Component
+        {...this.props} sound="moo" />;
+                 ~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+    
+    <font-face />;
+    ~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
+    <Component x={y} />;
+    
+    <x-component />;
+    ~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
+    <Component {...x} />;
+    
+    <Component { ...x } y={2} />;
+    
+    <Component { ... x } y={2} z />;
+    
+    <Component x={1} {...y} />;
+    
+    
+    <Component x={1} y="2" {...z} {...z}><Child /></Component>;
+    
+    <Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;
+    
+    
+    

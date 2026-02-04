@@ -145,7 +145,7 @@ export function g(a: {
         (): void;
         cat: string;
     };
-}): void;
+}): void | "";
 /**
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
@@ -157,5 +157,5 @@ declare function hh(a: {
         (): void;
         cat: string;
     };
-}): void;
+}): void | "";
 export { hh as h, i as ii, j as jj };

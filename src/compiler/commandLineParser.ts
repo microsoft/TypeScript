@@ -899,7 +899,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         showInSimplifiedHelpView: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Enable_all_strict_type_checking_options,
-        defaultValueDescription: false,
+        defaultValueDescription: true,
     },
     {
         name: "noImplicitAny",

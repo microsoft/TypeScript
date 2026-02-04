@@ -24,5 +24,5 @@ export default x;
 //// [0.d.ts]
 export {};
 //// [1.d.ts]
-declare var x: string | number;
+declare var x: string;
 export default x;

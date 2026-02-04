@@ -1,11 +1,12 @@
 typeRelationships.ts(9,9): error TS2322: Type 'C' is not assignable to type 'this'.
   'C' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'C'.
+typeRelationships.ts(15,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'this[]', but here has type '(this | null | undefined)[]'.
 typeRelationships.ts(35,9): error TS2739: Type 'C' is missing the following properties from type 'D': self1, self2, self3, d, bar
 typeRelationships.ts(36,9): error TS2322: Type 'D' is not assignable to type 'this'.
   'D' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'D'.
 
 
-==== typeRelationships.ts (3 errors) ====
+==== typeRelationships.ts (4 errors) ====
     class C {
         self = this;
         c = new C();
@@ -24,6 +25,9 @@ typeRelationships.ts(36,9): error TS2322: Type 'D' is not assignable to type 'th
             var a = [this, this.c];  // C[] since this is subtype of C
             var b: this[];
             var b = [this, this.self, null, undefined];
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'this[]', but here has type '(this | null | undefined)[]'.
+!!! related TS6203 typeRelationships.ts:14:13: 'b' was also declared here.
         }
         f3(b: boolean) {
             return b ? this.c : this.self;  // Should be C

@@ -7,10 +7,10 @@ declare namespace JSX {
 		test1: { n?: boolean; s?: string};
 >test1 : { n?: boolean; s?: string; }
 >      : ^^^^^^       ^^^^^^      ^^^
->n : boolean
->  : ^^^^^^^
->s : string
->  : ^^^^^^
+>n : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
+>s : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 		test2: { n: boolean; };
 >test2 : { n: boolean; }

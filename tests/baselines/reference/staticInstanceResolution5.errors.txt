@@ -1,3 +1,4 @@
+staticInstanceResolution5_0.ts(3,9): error TS2322: Type 'null' is not assignable to type 'Promise'.
 staticInstanceResolution5_1.ts(4,14): error TS2709: Cannot use namespace 'WinJS' as a type.
 staticInstanceResolution5_1.ts(5,23): error TS2709: Cannot use namespace 'WinJS' as a type.
 staticInstanceResolution5_1.ts(6,16): error TS2709: Cannot use namespace 'WinJS' as a type.
@@ -17,10 +18,12 @@ staticInstanceResolution5_1.ts(6,16): error TS2709: Cannot use namespace 'WinJS'
                    ~~~~~
 !!! error TS2709: Cannot use namespace 'WinJS' as a type.
     
-==== staticInstanceResolution5_0.ts (0 errors) ====
+==== staticInstanceResolution5_0.ts (1 errors) ====
     export class Promise {
         static timeout(delay: number): Promise {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Promise'.
         }
     }
     

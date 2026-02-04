@@ -2,7 +2,7 @@
     bar: function (x?): void {
                      ^
 {
-  "text": ": boolean",
+  "text": ": boolean | undefined",
   "position": 87,
   "kind": "Type",
   "whitespaceBefore": true

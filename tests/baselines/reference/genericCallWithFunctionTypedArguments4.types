@@ -70,7 +70,9 @@ var b: {
 
 var r2 = foo4(b); // T is {} (candidates boolean and {}), U is any (candidates any and {})
 >r2 : any
+>   : ^^^
 >foo4(b) : any
+>        : ^^^
 >foo4 : <T, U>(cb: new (x: T) => U) => U
 >     : ^ ^^ ^^  ^^               ^^^^^^
 >b : { new <T>(x: boolean): T; new <T>(x: T): any; }

@@ -43,8 +43,8 @@ function mapValues<T, TResult>(
 >          : ^ ^^       ^^   ^^                                                       ^^        ^^                              ^^^^^                   
 
   obj: Dictionary<T> | NumericDictionary<T> | null | undefined,
->obj : Dictionary<T> | NumericDictionary<T>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : Dictionary<T> | NumericDictionary<T> | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   callback: DictionaryIterator<T, TResult>
 >callback : DictionaryIterator<T, TResult>

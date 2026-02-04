@@ -415,9 +415,9 @@ namespace ts {
 >T : Symbol(T, Decl(unspecializedConstraints.ts, 117, 25))
 
         if (!hasOwnProperty.call(map, key)) return undefined;
->hasOwnProperty.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>hasOwnProperty.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
 >hasOwnProperty : Symbol(hasOwnProperty, Decl(unspecializedConstraints.ts, 115, 7))
->call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
 >map : Symbol(map, Decl(unspecializedConstraints.ts, 117, 28))
 >key : Symbol(key, Decl(unspecializedConstraints.ts, 117, 40))
 >undefined : Symbol(undefined)
@@ -436,9 +436,9 @@ namespace ts {
 >key : Symbol(key, Decl(unspecializedConstraints.ts, 122, 40))
 
         return hasOwnProperty.call(map, key);
->hasOwnProperty.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>hasOwnProperty.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
 >hasOwnProperty : Symbol(hasOwnProperty, Decl(unspecializedConstraints.ts, 115, 7))
->call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
 >map : Symbol(map, Decl(unspecializedConstraints.ts, 122, 28))
 >key : Symbol(key, Decl(unspecializedConstraints.ts, 122, 40))
     }

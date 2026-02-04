@@ -9,6 +9,7 @@ declare var console: {
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
 >msg : any
+>    : ^^^
 }
 interface Robot {
     name: string;

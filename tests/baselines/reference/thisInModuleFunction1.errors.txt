@@ -1,0 +1,12 @@
+thisInModuleFunction1.ts(3,10): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+==== thisInModuleFunction1.ts (1 errors) ====
+    namespace bar {
+     export function bar() {
+      return this;
+             ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+     } 
+    } 
+    var z = bar.bar();

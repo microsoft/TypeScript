@@ -6,18 +6,18 @@ type F1 = (a: string, b?: string) => void;
 >   : ^^
 >a : string
 >  : ^^^^^^
->b : string
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 type F2 = (a: string, b?: string, c?: string) => void;
 >F2 : F2
 >   : ^^
 >a : string
 >  : ^^^^^^
->b : string
->  : ^^^^^^
->c : string
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 type F3 = (a: string, ...rest: string[]) => void;
 >F3 : F3
@@ -32,8 +32,8 @@ type F4 = (a: string, b?: string, ...rest: string[]) => void;
 >   : ^^
 >a : string
 >  : ^^^^^^
->b : string
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >rest : string[]
 >     : ^^^^^^^^
 

@@ -24,5 +24,5 @@ declare function myRandBool(): boolean;
 declare let a: "foo";
 declare let b: "foo";
 declare let c: "foo";
-declare let d: string;
+declare let d: "foo";
 declare let e: "foo" | "bar";

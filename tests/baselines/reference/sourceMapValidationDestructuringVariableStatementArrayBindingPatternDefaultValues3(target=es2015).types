@@ -151,28 +151,28 @@ let multiRobotAInfo: (string | string[])[];
 [, multiSkillB = []] = multiRobotB;
 >[, multiSkillB = []] = multiRobotB : MultiSkilledRobot
 >                                   : ^^^^^^^^^^^^^^^^^
->[, multiSkillB = []] : [undefined, undefined[]]
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^
->multiSkillB = [] : undefined[]
->                 : ^^^^^^^^^^^
+>[, multiSkillB = []] : [undefined, never[]]
+>                     : ^^^^^^^^^^^^^^^^^^^^
+>multiSkillB = [] : never[]
+>                 : ^^^^^^^
 >multiSkillB : string[]
 >            : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >multiRobotB : MultiSkilledRobot
 >            : ^^^^^^^^^^^^^^^^^
 
 [, multiSkillB = []] = getMultiRobotB();
 >[, multiSkillB = []] = getMultiRobotB() : MultiSkilledRobot
 >                                        : ^^^^^^^^^^^^^^^^^
->[, multiSkillB = []] : [undefined, undefined[]]
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^
->multiSkillB = [] : undefined[]
->                 : ^^^^^^^^^^^
+>[, multiSkillB = []] : [undefined, never[]]
+>                     : ^^^^^^^^^^^^^^^^^^^^
+>multiSkillB = [] : never[]
+>                 : ^^^^^^^
 >multiSkillB : string[]
 >            : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >getMultiRobotB() : MultiSkilledRobot
 >                 : ^^^^^^^^^^^^^^^^^
 >getMultiRobotB : () => MultiSkilledRobot
@@ -181,14 +181,14 @@ let multiRobotAInfo: (string | string[])[];
 [, multiSkillB = []] = ["roomba", ["vacuum", "mopping"]];
 >[, multiSkillB = []] = ["roomba", ["vacuum", "mopping"]] : [string, string[]]
 >                                                         : ^^^^^^^^^^^^^^^^^^
->[, multiSkillB = []] : [undefined, undefined[]]
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^
->multiSkillB = [] : undefined[]
->                 : ^^^^^^^^^^^
+>[, multiSkillB = []] : [undefined, never[]]
+>                     : ^^^^^^^^^^^^^^^^^^^^
+>multiSkillB = [] : never[]
+>                 : ^^^^^^^
 >multiSkillB : string[]
 >            : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, string[]]
 >                                  : ^^^^^^^^^^^^^^^^^^
 >"roomba" : "roomba"

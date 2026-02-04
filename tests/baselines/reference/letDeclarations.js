@@ -32,4 +32,4 @@ declare let l2: number;
 declare let l3: any, l4: any, l5: string, l6: any;
 declare let l7: boolean;
 declare let l8: number;
-declare let l9: number, l10: string, l11: any;
+declare let l9: number, l10: string, l11: null;
