@@ -29,6 +29,7 @@ class D4 extends AB {
 }
 
 //// [override2.js]
+"use strict";
 class AB {
 }
 class AD1 extends AB {

@@ -11,6 +11,7 @@ for (const comp of list) {
 }
 
 //// [optionalChainingInLoop.js]
+"use strict";
 var _a;
 // https://github.com/microsoft/TypeScript/issues/40643
 const list = [];

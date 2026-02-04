@@ -28,6 +28,7 @@ function foo2<T extends A>(x: T) {
 }
 
 //// [genericTypeAssertions4.js]
+"use strict";
 class A {
     foo() { return ""; }
 }

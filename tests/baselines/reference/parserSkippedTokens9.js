@@ -5,4 +5,5 @@
 /*foo*/ \ /*bar*/
 
 //// [parserSkippedTokens9.js]
+"use strict";
 ; // existing trivia

@@ -53,6 +53,7 @@ x = b; // expected error
 
 
 //// [assignFromStringInterface2.js]
+"use strict";
 var x = '';
 a = x;
 a = b;

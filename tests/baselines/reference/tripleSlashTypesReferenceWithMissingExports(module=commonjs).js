@@ -14,5 +14,6 @@ interface GlobalThing { a: number }
 const a: GlobalThing = { a: 0 };
 
 //// [usage.js]
+"use strict";
 /// <reference types="pkg" />
 const a = { a: 0 };

@@ -57,6 +57,7 @@ var aFunctionInModule: typeof M.F2 = F2;
 
 
 //// [everyTypeWithAnnotationAndInvalidInitializer.js]
+"use strict";
 class C {
 }
 class D {

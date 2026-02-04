@@ -59,6 +59,7 @@ declare let h: () => <T>(...args: any) => any;
 
 
 //// [esDecorators-decoratorExpression.2.js]
+"use strict";
 {
     let C = class C {
     };

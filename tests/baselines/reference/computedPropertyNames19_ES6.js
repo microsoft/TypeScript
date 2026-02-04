@@ -8,6 +8,7 @@ namespace M {
 }
 
 //// [computedPropertyNames19_ES6.js]
+"use strict";
 var M;
 (function (M) {
     var obj = {

@@ -47,6 +47,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/a.js]
+"use strict";
 v === 'foo';
 
 

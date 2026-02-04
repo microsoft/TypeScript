@@ -7,6 +7,7 @@ var x = {
 }
 
 //// [templateStringInObjectLiteral.js]
+"use strict";
 var x = {
     a: `abc${123}def`,
 } `b`;

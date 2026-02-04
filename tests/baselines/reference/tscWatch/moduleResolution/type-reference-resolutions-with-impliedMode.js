@@ -115,6 +115,7 @@ index.ts
 
 
 //// [/user/username/projects/myproject/index.js]
+"use strict";
 /// <reference types="pkg"/>
 
 

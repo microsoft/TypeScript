@@ -121,6 +121,7 @@ Output::
 
 
 //// [/user/username/projects/project/commonFile1.js]
+"use strict";
 let x = 1;
 
 
@@ -129,6 +130,7 @@ declare let x: number;
 
 
 //// [/user/username/projects/project/commonFile2.js]
+"use strict";
 let y = 1;
 
 
@@ -196,6 +198,7 @@ declare let y: number;
 }
 
 //// [/user/username/projects/project/other.js]
+"use strict";
 let z = 0;
 
 
@@ -248,6 +251,7 @@ declare let z: number;
 }
 
 //// [/user/username/projects/project/other2.js]
+"use strict";
 let k = 0;
 
 
@@ -391,78 +395,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/project/project1.tsconfig.json'...
 
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/user/username/projects/project/project1.tsconfig.json'...
 
 
-//// [/user/username/projects/project/commonFile1.js]
-"use strict";
-let x = 1;
 
-
-//// [/user/username/projects/project/commonFile2.js]
-"use strict";
-let y = 1;
-
-
-//// [/user/username/projects/project/project1.tsconfig.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true,"strict":true},"latestChangedDtsFile":"./commonFile2.d.ts","version":"FakeTSVersion"}
-
-//// [/user/username/projects/project/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts",
-    "./commonfile1.ts",
-    "./commonfile2.ts"
-  ],
-  "fileInfos": {
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
-      "original": {
-        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "./commonfile1.ts": {
-      "original": {
-        "version": "2167136208-let x = 1",
-        "signature": "2842409786-declare let x: number;\n",
-        "affectsGlobalScope": true
-      },
-      "version": "2167136208-let x = 1",
-      "signature": "2842409786-declare let x: number;\n",
-      "affectsGlobalScope": true
-    },
-    "./commonfile2.ts": {
-      "original": {
-        "version": "2168322129-let y = 1",
-        "signature": "784887931-declare let y: number;\n",
-        "affectsGlobalScope": true
-      },
-      "version": "2168322129-let y = 1",
-      "signature": "784887931-declare let y: number;\n",
-      "affectsGlobalScope": true
-    }
-  },
-  "root": [
-    [
-      2,
-      "./commonfile1.ts"
-    ],
-    [
-      3,
-      "./commonfile2.ts"
-    ]
-  ],
-  "options": {
-    "composite": true,
-    "strict": true
-  },
-  "latestChangedDtsFile": "./commonFile2.d.ts",
-  "version": "FakeTSVersion",
-  "size": 899
-}
-
+//// [/user/username/projects/project/project1.tsconfig.tsbuildinfo] file changed its modified time
 
 Timeout callback:: count: 1
 3: timerToBuildInvalidatedProject *new*
@@ -486,9 +423,6 @@ Program files::
 /user/username/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/project/commonFile1.ts
-/user/username/projects/project/commonFile2.ts
 
 No shapes updated in the builder::
 
@@ -508,60 +442,13 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/project/project2.tsconfig.json'...
 
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/user/username/projects/project/project2.tsconfig.json'...
+
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/user/username/projects/project/other.js]
-"use strict";
-let z = 0;
-
-
-//// [/user/username/projects/project/project2.tsconfig.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"strict":true},"latestChangedDtsFile":"./other.d.ts","version":"FakeTSVersion"}
-
-//// [/user/username/projects/project/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts",
-    "./other.ts"
-  ],
-  "fileInfos": {
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
-      "original": {
-        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "./other.ts": {
-      "original": {
-        "version": "2874288940-let z = 0;",
-        "signature": "-1272633924-declare let z: number;\n",
-        "affectsGlobalScope": true
-      },
-      "version": "2874288940-let z = 0;",
-      "signature": "-1272633924-declare let z: number;\n",
-      "affectsGlobalScope": true
-    }
-  },
-  "root": [
-    [
-      2,
-      "./other.ts"
-    ]
-  ],
-  "options": {
-    "composite": true,
-    "strict": true
-  },
-  "latestChangedDtsFile": "./other.d.ts",
-  "version": "FakeTSVersion",
-  "size": 758
-}
-
+//// [/user/username/projects/project/project2.tsconfig.tsbuildinfo] file changed its modified time
 
 
 Program root files: [
@@ -580,8 +467,6 @@ Program files::
 /user/username/projects/project/other.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/project/other.ts
 
 No shapes updated in the builder::
 
@@ -714,7 +599,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'project2.tsconfig.json' is out of date because output 'other2.js' is older than input 'project2.tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'project2.tsconfig.json'
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/project/project2.tsconfig.json'...
 
@@ -744,11 +629,7 @@ let z = 0;
   "size": 101
 }
 
-//// [/user/username/projects/project/other2.js]
-"use strict";
-let k = 0;
-
-
+//// [/user/username/projects/project/other2.js] file written with same contents
 
 FsWatches::
 /user/username/projects/project/alpha.tsconfig.json:
@@ -841,75 +722,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/project/project1.tsconfig.json'...
 
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/user/username/projects/project/project1.tsconfig.json'...
 
 
-//// [/user/username/projects/project/commonFile1.js]
-let x = 1;
 
-
-//// [/user/username/projects/project/commonFile2.js]
-let y = 1;
-
-
-//// [/user/username/projects/project/project1.tsconfig.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true},"latestChangedDtsFile":"./commonFile2.d.ts","version":"FakeTSVersion"}
-
-//// [/user/username/projects/project/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "fileNames": [
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts",
-    "./commonfile1.ts",
-    "./commonfile2.ts"
-  ],
-  "fileInfos": {
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
-      "original": {
-        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true
-    },
-    "./commonfile1.ts": {
-      "original": {
-        "version": "2167136208-let x = 1",
-        "signature": "2842409786-declare let x: number;\n",
-        "affectsGlobalScope": true
-      },
-      "version": "2167136208-let x = 1",
-      "signature": "2842409786-declare let x: number;\n",
-      "affectsGlobalScope": true
-    },
-    "./commonfile2.ts": {
-      "original": {
-        "version": "2168322129-let y = 1",
-        "signature": "784887931-declare let y: number;\n",
-        "affectsGlobalScope": true
-      },
-      "version": "2168322129-let y = 1",
-      "signature": "784887931-declare let y: number;\n",
-      "affectsGlobalScope": true
-    }
-  },
-  "root": [
-    [
-      2,
-      "./commonfile1.ts"
-    ],
-    [
-      3,
-      "./commonfile2.ts"
-    ]
-  ],
-  "options": {
-    "composite": true
-  },
-  "latestChangedDtsFile": "./commonFile2.d.ts",
-  "version": "FakeTSVersion",
-  "size": 885
-}
-
+//// [/user/username/projects/project/project1.tsconfig.tsbuildinfo] file changed its modified time
 
 Timeout callback:: count: 1
 8: timerToBuildInvalidatedProject *new*
@@ -932,9 +749,6 @@ Program files::
 /user/username/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/project/commonFile1.ts
-/user/username/projects/project/commonFile2.ts
 
 No shapes updated in the builder::
 
@@ -954,22 +768,17 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/project/project2.tsconfig.json'...
 
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/user/username/projects/project/project2.tsconfig.json'...
+
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/user/username/projects/project/commonFile1.js] file written with same contents
-//// [/user/username/projects/project/commonFile2.js] file written with same contents
-//// [/user/username/projects/project/other.js]
-let z = 0;
-
-
-//// [/user/username/projects/project/project2.tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/project/project2.tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
-//// [/user/username/projects/project/other2.js]
-let k = 0;
-
-
+//// [/user/username/projects/project/commonFile1.js] file changed its modified time
+//// [/user/username/projects/project/commonFile2.js] file changed its modified time
+//// [/user/username/projects/project/other.js] file changed its modified time
+//// [/user/username/projects/project/project2.tsconfig.tsbuildinfo] file changed its modified time
+//// [/user/username/projects/project/other2.js] file changed its modified time
 
 
 Program root files: [
@@ -992,11 +801,6 @@ Program files::
 /user/username/projects/project/other2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/project/commonFile1.ts
-/user/username/projects/project/commonFile2.ts
-/user/username/projects/project/other.ts
-/user/username/projects/project/other2.ts
 
 No shapes updated in the builder::
 
@@ -1105,8 +909,7 @@ Output::
 
 
 //// [/user/username/projects/project/other2.js] file changed its modified time
-//// [/user/username/projects/project/project3.tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/project/project3.tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/user/username/projects/project/project3.tsconfig.tsbuildinfo] file changed its modified time
 
 FsWatches::
 /user/username/projects/project/alpha.tsconfig.json:
@@ -1155,8 +958,6 @@ Program files::
 /user/username/projects/project/other2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/project/other2.ts
 
 No shapes updated in the builder::
 

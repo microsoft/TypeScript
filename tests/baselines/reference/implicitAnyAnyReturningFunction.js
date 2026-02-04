@@ -23,6 +23,7 @@ class C {
 
 
 //// [implicitAnyAnyReturningFunction.js]
+"use strict";
 function A() {
     return "";
 }

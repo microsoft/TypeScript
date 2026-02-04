@@ -53,6 +53,7 @@ function foo10() {
 }
 
 //// [declFileTypeAnnotationArrayType.js]
+"use strict";
 class c {
 }
 var m;

@@ -6,5 +6,6 @@ class C {
 }
 
 //// [parserClassDeclarationIndexSignature1.js]
+"use strict";
 class C {
 }

@@ -61,7 +61,7 @@ function test3(a: number | string) {
 >a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 22, 15))
   }
   throw new Error("");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 test3(1)(100);
@@ -89,7 +89,7 @@ function test4(a: number | string) {
 >fn : Symbol(fn, Decl(controlFlowForFunctionLike1.ts, 33, 5))
   }
   throw new Error("");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 test4(1)?.(100);

@@ -18,6 +18,7 @@ namespace C {
 }
 
 //// [cloduleWithDuplicateMember1.js]
+"use strict";
 class C {
     get x() { return 1; }
     static get x() {

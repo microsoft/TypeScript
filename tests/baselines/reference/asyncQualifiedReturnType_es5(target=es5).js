@@ -10,6 +10,7 @@ async function f(): X.MyPromise<void> {
 }
 
 //// [asyncQualifiedReturnType_es5.js]
+"use strict";
 var X;
 (function (X) {
     var MyPromise = /** @class */ (function (_super) {

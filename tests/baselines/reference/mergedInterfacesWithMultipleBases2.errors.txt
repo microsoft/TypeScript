@@ -1,0 +1,141 @@
+mergedInterfacesWithMultipleBases2.ts(5,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(9,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(13,5): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(17,5): error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(30,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(31,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(32,5): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(33,5): error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(34,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(35,5): error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(39,9): error TS2454: Variable 'a' is used before being assigned.
+mergedInterfacesWithMultipleBases2.ts(44,9): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(48,9): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(52,9): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(56,9): error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(68,9): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(69,9): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(70,9): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(71,9): error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(72,9): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithMultipleBases2.ts(73,9): error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+
+
+==== mergedInterfacesWithMultipleBases2.ts (21 errors) ====
+    // merged interfaces behave as if all extends clauses from each declaration are merged together
+    // no errors expected
+    
+    class C {
+        a: number;
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class C2 {
+        b: number;
+        ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class C3 {
+        c: string;
+        ~
+!!! error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class C4 {
+        d: string;
+        ~
+!!! error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    
+    interface A extends C, C3 {
+        y: string;
+    }
+    
+    interface A extends C2, C4 {
+        z: string;
+    }
+    
+    class D implements A {
+        a: number;
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        b: number;
+        ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+        c: string;
+        ~
+!!! error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+        d: string;
+        ~
+!!! error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+        y: string;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+        z: string;
+        ~
+!!! error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var a: A;
+    var r = a.a;
+            ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    // generic interfaces in a module
+    namespace M {
+        class C<T> {
+            a: T;
+            ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        class C2<T> {
+            b: T;
+            ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        class C3<T> {
+            c: T;
+            ~
+!!! error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        class C4<T> {
+            d: T;
+            ~
+!!! error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        interface A<T> extends C<T>, C3<T> {
+            y: T;
+        }
+    
+        interface A<T> extends C2<string>, C4<string> {
+            z: T;
+        }
+    
+        class D implements A<boolean> {
+            a: boolean;
+            ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+            b: string;
+            ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+            c: boolean;
+            ~
+!!! error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+            d: string;
+            ~
+!!! error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+            y: boolean;
+            ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+            z: boolean;
+            ~
+!!! error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+        }
+    }

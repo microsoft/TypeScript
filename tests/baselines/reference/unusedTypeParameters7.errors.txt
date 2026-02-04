@@ -1,0 +1,10 @@
+a.ts(1,14): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+
+
+==== a.ts (1 errors) ====
+    class C<T> { a: T; }
+                 ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+    
+==== b.ts (0 errors) ====
+    interface C<T> { }

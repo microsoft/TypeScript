@@ -14,6 +14,7 @@ x = Colors.FancyPink;
 
 
 //// [commentsEnums.js]
+"use strict";
 /** Enum of colors*/
 var Colors;
 (function (Colors) {

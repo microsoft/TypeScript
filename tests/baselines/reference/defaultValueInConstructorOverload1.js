@@ -8,6 +8,7 @@ class C {
 }
 
 //// [defaultValueInConstructorOverload1.js]
+"use strict";
 class C {
     constructor(x = '') {
     }

@@ -34,6 +34,7 @@
 (2 / 3) ** 4;
 
 //// [emitExponentiationOperator1.js]
+"use strict";
 Math.pow(1, -2);
 Math.pow(1, 2);
 Math.pow((-1), 2);

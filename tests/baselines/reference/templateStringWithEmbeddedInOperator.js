@@ -4,4 +4,5 @@
 var x = `abc${ "hi" in { hi: 10, hello: 20} }def`;
 
 //// [templateStringWithEmbeddedInOperator.js]
+"use strict";
 var x = `abc${"hi" in { hi: 10, hello: 20 }}def`;

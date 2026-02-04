@@ -9,6 +9,7 @@ class George extends class { reset() { return this.y; } } {
 
 
 //// [missingPropertiesOfClassExpression.js]
+"use strict";
 class George extends class {
     reset() { return this.y; }
 } {

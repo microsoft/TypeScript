@@ -19,6 +19,7 @@ var a = Color.namedColors["pale blue"]; // should not error
 
 
 //// [propertyNamesWithStringLiteral.js]
+"use strict";
 class _Color {
 }
 var Color;

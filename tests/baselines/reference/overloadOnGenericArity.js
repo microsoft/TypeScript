@@ -9,3 +9,4 @@ interface Test {
 
 
 //// [overloadOnGenericArity.js]
+"use strict";

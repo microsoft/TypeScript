@@ -16,6 +16,7 @@ namespace App {
 }
 
 //// [localImportNameVsGlobalName.js]
+"use strict";
 var Keyboard;
 (function (Keyboard) {
     let Key;

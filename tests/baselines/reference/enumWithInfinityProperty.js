@@ -7,6 +7,7 @@ enum A {
 
 
 //// [enumWithInfinityProperty.js]
+"use strict";
 var A;
 (function (A) {
     A[A["Infinity"] = 1] = "Infinity";

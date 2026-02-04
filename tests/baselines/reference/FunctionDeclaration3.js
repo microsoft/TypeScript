@@ -4,3 +4,4 @@
 function foo();
 
 //// [FunctionDeclaration3.js]
+"use strict";

@@ -11,6 +11,7 @@ foo('foo', 'bar', 3);
 
 
 //// [functionCall16.js]
+"use strict";
 function foo(a, b, ...c) { }
 foo('foo', 1);
 foo('foo');

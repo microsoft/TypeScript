@@ -13,6 +13,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-classThisReference.es5.js]
+"use strict";
 var C = function () {
     var _classDecorators = [dec];
     var _classDescriptor;

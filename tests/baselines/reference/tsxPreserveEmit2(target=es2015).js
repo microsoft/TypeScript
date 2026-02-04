@@ -6,5 +6,6 @@ var routes1 = <Route />;
 
 
 //// [test.jsx]
+"use strict";
 var Route;
 var routes1 = <Route />;

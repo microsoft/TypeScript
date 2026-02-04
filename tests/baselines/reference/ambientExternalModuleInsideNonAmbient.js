@@ -6,3 +6,4 @@ namespace M {
 }
 
 //// [ambientExternalModuleInsideNonAmbient.js]
+"use strict";

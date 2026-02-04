@@ -40,10 +40,12 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/f1.js]
+"use strict";
 let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/f2.js]
+"use strict";
 let y = 1;
 
 
@@ -131,6 +133,7 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/out.js]
+"use strict";
 let x = 1;
 let y = 1;
 

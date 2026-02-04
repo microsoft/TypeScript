@@ -102,6 +102,7 @@ namespace m {
 
 
 //// [declFileTypeAnnotationVisibilityErrorAccessors.js]
+"use strict";
 var m;
 (function (m) {
     class private1 {

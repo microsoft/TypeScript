@@ -8,5 +8,6 @@ namespace A {
 
 
 //// [moduleRedifinitionErrors.js]
+"use strict";
 class A {
 }

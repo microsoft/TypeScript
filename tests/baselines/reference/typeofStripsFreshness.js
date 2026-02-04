@@ -23,6 +23,7 @@ const result2: Collection<Both> = new Collection();
 
 
 //// [typeofStripsFreshness.js]
+"use strict";
 const ALL = "all";
 const result = new Collection();
 const ANOTHER = "another";

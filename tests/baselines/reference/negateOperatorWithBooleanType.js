@@ -38,6 +38,7 @@ var ResultIsNumber7 = -A.foo();
 -M.n;
 
 //// [negateOperatorWithBooleanType.js]
+"use strict";
 function foo() { return true; }
 class A {
     static foo() { return false; }

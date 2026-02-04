@@ -41,6 +41,7 @@ namespace M {
 }
 
 //// [mergedInterfacesWithInheritedPrivates3.js]
+"use strict";
 class C {
 }
 class C2 {

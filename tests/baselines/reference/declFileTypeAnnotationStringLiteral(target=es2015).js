@@ -13,6 +13,7 @@ function foo(a: string): string | number {
 }
 
 //// [declFileTypeAnnotationStringLiteral.js]
+"use strict";
 function foo(a) {
     if (a === "hello") {
         return a.length;

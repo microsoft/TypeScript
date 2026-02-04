@@ -21,6 +21,7 @@ class A {
 
 
 //// [genericStaticAnyTypeFunction.js]
+"use strict";
 class A {
     static one(source, value) {
         return source;

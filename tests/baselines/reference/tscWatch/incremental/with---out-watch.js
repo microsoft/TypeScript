@@ -44,6 +44,7 @@ Output::
 
 
 //// [/users/username/projects/project/out.js]
+"use strict";
 const x = 10;
 const y = 20;
 

@@ -15,6 +15,7 @@ function foo(set: any) {
 };
 
 //// [newLexicalEnvironmentForConvertedLoop.js]
+"use strict";
 function baz(x) {
     return [[x, x]];
 }

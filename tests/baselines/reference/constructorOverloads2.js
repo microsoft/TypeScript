@@ -28,6 +28,7 @@ f1.bar1();
 
 
 //// [constructorOverloads2.js]
+"use strict";
 class FooBase {
     constructor(x) {
     }

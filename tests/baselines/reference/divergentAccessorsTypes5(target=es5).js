@@ -40,6 +40,7 @@ i.prop2 = "hello"; // error
 
 
 //// [divergentAccessorsTypes5.js]
+"use strict";
 // Not really different from divergentAccessorsTypes4.ts,
 // but goes through the deferred type code
 var One = /** @class */ (function () {

@@ -11,6 +11,7 @@ namespace foo {
 
 
 //// [declarationFunctionTypeNonlocalShouldNotBeAnError.js]
+"use strict";
 var foo;
 (function (foo) {
     function bar() { }

@@ -1,16 +1,26 @@
 TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(2,18): error TS2300: Duplicate identifier 'Point'.
+TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(3,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(4,9): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(10,18): error TS2300: Duplicate identifier 'Point'.
+TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(11,9): error TS2564: Property 'origin' has no initializer and is not definitely assigned in the constructor.
+TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(12,9): error TS2564: Property 'angle' has no initializer and is not definitely assigned in the constructor.
 TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(17,18): error TS2300: Duplicate identifier 'Line'.
+TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(18,9): error TS2564: Property 'length' has no initializer and is not definitely assigned in the constructor.
 TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error TS2300: Duplicate identifier 'Line'.
+TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(27,17): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
 
 
-==== TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts (4 errors) ====
+==== TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts (10 errors) ====
     namespace A {
         export class Point {
                      ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
             x: number;
+            ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
             y: number;
+            ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
         }
     }
     
@@ -20,7 +30,11 @@ TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error
                      ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
             origin: number;
+            ~~~~~~
+!!! error TS2564: Property 'origin' has no initializer and is not definitely assigned in the constructor.
             angle: number;
+            ~~~~~
+!!! error TS2564: Property 'angle' has no initializer and is not definitely assigned in the constructor.
         }
     }
     
@@ -29,6 +43,8 @@ TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error
                      ~~~~
 !!! error TS2300: Duplicate identifier 'Line'.
             length: number;
+            ~~~~~~
+!!! error TS2564: Property 'length' has no initializer and is not definitely assigned in the constructor.
         }
     }
     
@@ -40,6 +56,8 @@ TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error
                              ~~~~
 !!! error TS2300: Duplicate identifier 'Line'.
                     name: string;
+                    ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
                 }
             }
         }

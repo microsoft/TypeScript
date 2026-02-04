@@ -14,6 +14,7 @@ namespace M2 {
 
 
 //// [typeValueConflict1.js]
+"use strict";
 var M1;
 (function (M1) {
     class A {

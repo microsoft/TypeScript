@@ -2,6 +2,7 @@
 EmitSkipped: false
 
 FileName : declSingleFile.js
+"use strict";
 var x = 5;
 class Bar {
     x;

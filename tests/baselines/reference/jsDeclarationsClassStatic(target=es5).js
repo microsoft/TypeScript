@@ -26,6 +26,7 @@ module.exports.Strings = Strings
 
 
 //// [source.js]
+"use strict";
 var Handler = /** @class */ (function () {
     function Handler() {
     }

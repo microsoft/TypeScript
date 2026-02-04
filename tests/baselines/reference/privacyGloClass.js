@@ -63,6 +63,7 @@ class glo_C11_public extends glo_c_public implements glo_i_public {
 
 
 //// [privacyGloClass.js]
+"use strict";
 var m1;
 (function (m1) {
     class m1_c_public {

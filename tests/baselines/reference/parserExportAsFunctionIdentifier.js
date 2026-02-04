@@ -10,5 +10,6 @@ var x = f.export();
 
 
 //// [parserExportAsFunctionIdentifier.js]
+"use strict";
 var f;
 var x = f.export();

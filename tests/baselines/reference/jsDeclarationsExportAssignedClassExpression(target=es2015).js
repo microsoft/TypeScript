@@ -11,6 +11,7 @@ module.exports = class Thing {
 }
 
 //// [index.js]
+"use strict";
 module.exports = class Thing {
     /**
      * @param {number} p

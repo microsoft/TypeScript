@@ -7,6 +7,8 @@ class C<T> { a: T; }
 interface C<T> { }
 
 //// [a.js]
+"use strict";
 class C {
 }
 //// [b.js]
+"use strict";

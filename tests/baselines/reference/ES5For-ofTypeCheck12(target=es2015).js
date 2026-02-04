@@ -4,4 +4,5 @@
 for (const v of 0) { }
 
 //// [ES5For-ofTypeCheck12.js]
+"use strict";
 for (const v of 0) { }

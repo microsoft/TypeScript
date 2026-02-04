@@ -58,6 +58,7 @@ namespace B1 {
 
 
 //// [moduleAliasInterface.js]
+"use strict";
 var _modes;
 (function (_modes) {
     class Mode {

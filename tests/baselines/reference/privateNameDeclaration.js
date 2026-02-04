@@ -13,6 +13,7 @@ class A {
 
 
 //// [privateNameDeclaration.js]
+"use strict";
 var _A_foo, _A_bar;
 class A {
     constructor() {

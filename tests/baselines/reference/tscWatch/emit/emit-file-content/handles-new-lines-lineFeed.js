@@ -29,6 +29,7 @@ Output::
 
 
 //// [/home/src/projects/a/app.js]
+"use strict";
 var x = 1;
 var y = 2;
 
@@ -93,6 +94,7 @@ Output::
 
 
 //// [/home/src/projects/a/app.js]
+"use strict";
 var x = 1;
 var y = 2;
 var z = 3;

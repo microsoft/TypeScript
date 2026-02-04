@@ -14,7 +14,6 @@ System.register([], function (exports_1, context_1) {
         setters: [],
         execute: function () {
             exports_1("test", test = "TEST");
-            //some comment
         }
     };
 });

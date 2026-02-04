@@ -18,6 +18,7 @@ function example2(parameters: Params) {
 
 
 //// [templateExpressionNoInlininingOfConstantBindingWithInitializer.js]
+"use strict";
 function example(parameters) {
     const { value = '123' } = parameters;
     return `${value}` === '345';

@@ -43,6 +43,7 @@ var obj7 = { x: 'foo' };
 
 
 //// [file.jsx]
+"use strict";
 // OK
 var obj1 = { x: 'foo' };
 <test1 {...obj1}/>;

@@ -55,6 +55,7 @@ M.test();
 
 
 //// [interfaceAssignmentCompat.js]
+"use strict";
 var M;
 (function (M) {
     let Color;

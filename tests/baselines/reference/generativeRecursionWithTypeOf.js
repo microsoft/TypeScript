@@ -13,6 +13,7 @@ namespace M {
 }
 
 //// [generativeRecursionWithTypeOf.js]
+"use strict";
 class C {
     static foo(x) { }
 }

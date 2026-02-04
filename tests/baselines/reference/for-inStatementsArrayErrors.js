@@ -21,6 +21,7 @@ for (var j in a ) {
 
 
 //// [for-inStatementsArrayErrors.js]
+"use strict";
 for (let x in a) {
     let a1 = a[x + 1];
     let a2 = a[x - 1];

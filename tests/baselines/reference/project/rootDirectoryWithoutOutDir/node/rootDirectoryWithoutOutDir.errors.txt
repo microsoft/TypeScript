@@ -2,6 +2,7 @@ error TS5107: Option 'moduleResolution=classic' is deprecated and will stop func
 error TS6059: File 'FolderA/FolderB/fileB.ts' is not under 'rootDir' 'FolderA/FolderB/FolderC'. 'rootDir' is expected to contain all source files.
   The file is in the program because:
     Root file specified for compilation
+FolderA/FolderB/fileB.ts(3,12): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
 
 
 !!! error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
@@ -12,9 +13,11 @@ error TS6059: File 'FolderA/FolderB/fileB.ts' is not under 'rootDir' 'FolderA/Fo
     class C {
     }
     
-==== FolderA/FolderB/fileB.ts (0 errors) ====
+==== FolderA/FolderB/fileB.ts (1 errors) ====
     /// <reference path='FolderC/fileC.ts'/>
     class B {
         public c: C;
+               ~
+!!! error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
     }
     

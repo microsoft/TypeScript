@@ -9,6 +9,7 @@ for (foo().x of ['a', 'b', 'c']) {
 }
 
 //// [ES5For-of34.js]
+"use strict";
 function foo() {
     return { x: 0 };
 }

@@ -17,6 +17,7 @@ var c2 = new C2(); // error C2 is protected
 var r2: (x: number) => void = c2.constructor;
 
 //// [typesWithProtectedConstructor.js]
+"use strict";
 class C {
     constructor() { }
 }

@@ -59,6 +59,7 @@ xx = (0, xx['fn'])();
 xx = (0, xx.fn)``;
 
 //// [commaOperatorLeftSideUnused.js]
+"use strict";
 var xx;
 var yy;
 function fn() {

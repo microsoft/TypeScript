@@ -12,6 +12,7 @@ class D {
 }
 
 //// [staticPropertyAndFunctionWithSameName.js]
+"use strict";
 class C {
 }
 class D {

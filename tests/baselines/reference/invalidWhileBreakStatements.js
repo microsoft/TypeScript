@@ -41,6 +41,7 @@ while (true) {
 }
 
 //// [invalidWhileBreakStatements.js]
+"use strict";
 // All errors
 // naked break not allowed
 break;

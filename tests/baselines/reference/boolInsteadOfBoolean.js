@@ -6,6 +6,7 @@ var a: boolean = x;
 x = a;
 
 //// [boolInsteadOfBoolean.js]
+"use strict";
 var x;
 var a = x;
 x = a;

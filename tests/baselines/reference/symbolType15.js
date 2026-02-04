@@ -8,6 +8,7 @@ symObj = sym;
 sym = symObj;
 
 //// [symbolType15.js]
+"use strict";
 var symObj;
 symObj = sym;
 sym = symObj;

@@ -45,6 +45,7 @@ function t3(NaN: number) {
 
 
 //// [nanEquality.js]
+"use strict";
 if (x === NaN) { }
 if (NaN === x) { }
 if (x == NaN) { }

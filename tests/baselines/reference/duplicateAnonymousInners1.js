@@ -28,6 +28,7 @@ namespace Foo {
 
 
 //// [duplicateAnonymousInners1.js]
+"use strict";
 var Foo;
 (function (Foo) {
     class Helper {

@@ -9,6 +9,7 @@ namespace m1 {
 }
 
 //// [collisionCodeGenModuleWithEnumMemberConflict.js]
+"use strict";
 var m1;
 (function (m1) {
     let e;

@@ -18,6 +18,7 @@ declare var React: any;
 <>#</>; // # would cause scanning error if not in jsxtext
 
 //// [file.js]
+"use strict";
 React.createElement(React.Fragment, null); // no whitespace
 React.createElement(React.Fragment, null); // lots of whitespace
 React.createElement(React.Fragment, null); // comments in the tags

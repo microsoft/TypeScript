@@ -36,6 +36,7 @@ var ag2 = new A.A2<string, number>();
 
 
 //// [ModuleWithExportedAndNonExportedClasses.js]
+"use strict";
 var A;
 (function (A_1) {
     class A {

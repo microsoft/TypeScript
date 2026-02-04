@@ -1,11 +1,14 @@
+emitCapturingThisInTupleDestructuring2.ts(4,5): error TS2564: Property 'test' has no initializer and is not definitely assigned in the constructor.
 emitCapturingThisInTupleDestructuring2.ts(8,39): error TS2493: Tuple type '[number, number]' of length '2' has no element at index '2'.
 
 
-==== emitCapturingThisInTupleDestructuring2.ts (1 errors) ====
+==== emitCapturingThisInTupleDestructuring2.ts (2 errors) ====
     var array1: [number, number] = [1, 2];
     
     class B {
         test: number;
+        ~~~~
+!!! error TS2564: Property 'test' has no initializer and is not definitely assigned in the constructor.
         test1: any;
         test2: any;
         method() {

@@ -14,6 +14,7 @@ class TestFile {
 }
 
 //// [detachedCommentAtStartOfConstructor2.js]
+"use strict";
 class TestFile {
     constructor(message) {
         /// <summary>Test summary</summary>

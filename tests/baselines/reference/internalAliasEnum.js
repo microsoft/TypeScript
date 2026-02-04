@@ -16,6 +16,7 @@ namespace c {
 
 
 //// [internalAliasEnum.js]
+"use strict";
 var a;
 (function (a) {
     let weekend;

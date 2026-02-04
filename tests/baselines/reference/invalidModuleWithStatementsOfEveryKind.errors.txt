@@ -1,38 +1,57 @@
 invalidModuleWithStatementsOfEveryKind.ts(4,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(4,22): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(6,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(7,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(12,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(12,26): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(13,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
 invalidModuleWithStatementsOfEveryKind.ts(15,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(15,54): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(19,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(20,19): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(25,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
 invalidModuleWithStatementsOfEveryKind.ts(29,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(29,23): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(31,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(32,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(37,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(37,27): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(38,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
 invalidModuleWithStatementsOfEveryKind.ts(40,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(40,55): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(44,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(45,19): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(50,5): error TS1044: 'private' modifier cannot appear on a module or namespace element.
 invalidModuleWithStatementsOfEveryKind.ts(55,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(55,22): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(57,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(58,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(63,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(63,26): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(64,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
 invalidModuleWithStatementsOfEveryKind.ts(66,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(66,54): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(70,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
+invalidModuleWithStatementsOfEveryKind.ts(71,19): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
 invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.
 
 
-==== invalidModuleWithStatementsOfEveryKind.ts (21 errors) ====
+==== invalidModuleWithStatementsOfEveryKind.ts (36 errors) ====
     // All of these should be an error
     
     namespace Y {
         public class A { s: string }
         ~~~~~~
 !!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
+                         ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
     
         public class BB<T> extends A {
         ~~~~~~
 !!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
             id: number;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         }
     }
     
@@ -40,6 +59,8 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         public class AA<T> { s: T }
         ~~~~~~
 !!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
+                             ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
         public interface I { id: number }
         ~~~~~~
 !!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
@@ -47,6 +68,8 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         public class B extends AA<string> implements I { id: number }
         ~~~~~~
 !!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
+                                                         ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
     }
     
     namespace Y3 {
@@ -54,6 +77,8 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         ~~~~~~
 !!! error TS1044: 'public' modifier cannot appear on a module or namespace element.
             class A { s: string }
+                      ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
         }
     }
     
@@ -67,11 +92,15 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         private class A { s: string }
         ~~~~~~~
 !!! error TS1044: 'private' modifier cannot appear on a module or namespace element.
+                          ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
     
         private class BB<T> extends A {
         ~~~~~~~
 !!! error TS1044: 'private' modifier cannot appear on a module or namespace element.
             id: number;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         }
     }
     
@@ -79,6 +108,8 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         private class AA<T> { s: T }
         ~~~~~~~
 !!! error TS1044: 'private' modifier cannot appear on a module or namespace element.
+                              ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
         private interface I { id: number }
         ~~~~~~~
 !!! error TS1044: 'private' modifier cannot appear on a module or namespace element.
@@ -86,6 +117,8 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         private class B extends AA<string> implements I { id: number }
         ~~~~~~~
 !!! error TS1044: 'private' modifier cannot appear on a module or namespace element.
+                                                          ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
     }
     
     namespace YY3 {
@@ -93,6 +126,8 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         ~~~~~~~
 !!! error TS1044: 'private' modifier cannot appear on a module or namespace element.
             class A { s: string }
+                      ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
         }
     }
     
@@ -107,11 +142,15 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         static class A { s: string }
         ~~~~~~
 !!! error TS1044: 'static' modifier cannot appear on a module or namespace element.
+                         ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
     
         static class BB<T> extends A {
         ~~~~~~
 !!! error TS1044: 'static' modifier cannot appear on a module or namespace element.
             id: number;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         }
     }
     
@@ -119,6 +158,8 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         static class AA<T> { s: T }
         ~~~~~~
 !!! error TS1044: 'static' modifier cannot appear on a module or namespace element.
+                             ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
         static interface I { id: number }
         ~~~~~~
 !!! error TS1044: 'static' modifier cannot appear on a module or namespace element.
@@ -126,6 +167,8 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         static class B extends AA<string> implements I { id: number }
         ~~~~~~
 !!! error TS1044: 'static' modifier cannot appear on a module or namespace element.
+                                                         ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
     }
     
     namespace YYY3 {
@@ -133,6 +176,8 @@ invalidModuleWithStatementsOfEveryKind.ts(76,5): error TS1044: 'static' modifier
         ~~~~~~
 !!! error TS1044: 'static' modifier cannot appear on a module or namespace element.
             class A { s: string }
+                      ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
         }
     }
     

@@ -1,9 +1,11 @@
 contextuallyTypedIifeStrict.ts(14,10): error TS18048: 'j' is possibly 'undefined'.
 contextuallyTypedIifeStrict.ts(15,10): error TS18048: 'k' is possibly 'undefined'.
 contextuallyTypedIifeStrict.ts(16,17): error TS18048: 'o' is possibly 'undefined'.
+contextuallyTypedIifeStrict.ts(28,27): error TS7006: Parameter 'i' implicitly has an 'any' type.
+contextuallyTypedIifeStrict.ts(29,43): error TS7006: Parameter 'n' implicitly has an 'any' type.
 
 
-==== contextuallyTypedIifeStrict.ts (3 errors) ====
+==== contextuallyTypedIifeStrict.ts (5 errors) ====
     // arrow
     (jake => { })("build");
     // function expression
@@ -38,7 +40,11 @@ contextuallyTypedIifeStrict.ts(16,17): error TS18048: 'o' is possibly 'undefined
     (({ u = 22 } = { u: 23 }) => u)();
     // contextually typed parameters.
     let twelve = (f => f(12))(i => i);
+                              ~
+!!! error TS7006: Parameter 'i' implicitly has an 'any' type.
     let eleven = (o => o.a(11))({ a: function(n) { return n; } });
+                                              ~
+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
     // missing arguments
     (function(x, undefined) { return x; })(42);
     ((x, y, z) => 42)();

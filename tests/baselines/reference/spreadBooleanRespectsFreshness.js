@@ -10,4 +10,5 @@ declare let foo2: Foo;
 foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]];
 
 //// [spreadBooleanRespectsFreshness.js]
+"use strict";
 foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]];

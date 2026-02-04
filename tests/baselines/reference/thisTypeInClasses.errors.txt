@@ -1,0 +1,101 @@
+thisTypeInClasses.ts(2,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+thisTypeInClasses.ts(3,24): error TS2322: Type 'undefined' is not assignable to type 'this'.
+  'this' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+thisTypeInClasses.ts(16,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+thisTypeInClasses.ts(17,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+thisTypeInClasses.ts(18,5): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+thisTypeInClasses.ts(19,5): error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+thisTypeInClasses.ts(20,5): error TS2564: Property 'e' has no initializer and is not definitely assigned in the constructor.
+thisTypeInClasses.ts(21,5): error TS2564: Property 'f' has no initializer and is not definitely assigned in the constructor.
+thisTypeInClasses.ts(22,5): error TS2564: Property 'g' has no initializer and is not definitely assigned in the constructor.
+thisTypeInClasses.ts(23,5): error TS2564: Property 'h' has no initializer and is not definitely assigned in the constructor.
+thisTypeInClasses.ts(24,5): error TS2564: Property 'i' has no initializer and is not definitely assigned in the constructor.
+thisTypeInClasses.ts(25,5): error TS2564: Property 'j' has no initializer and is not definitely assigned in the constructor.
+thisTypeInClasses.ts(46,18): error TS2352: Conversion of type 'undefined' to type 'this' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  'this' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+thisTypeInClasses.ts(47,18): error TS2352: Conversion of type 'undefined' to type 'this' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  'this' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+
+
+==== thisTypeInClasses.ts (14 errors) ====
+    class C1 {
+        x: this;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+        f(x: this): this { return undefined; }
+                           ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'this'.
+!!! error TS2322:   'this' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+    }
+    
+    class C2 {
+        [x: string]: this;
+    }
+    
+    interface Foo<T> {
+        x: T;
+        y: this;
+    }
+    
+    class C3 {
+        a: this[];
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        b: [this, this];
+        ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+        c: this | Date;
+        ~
+!!! error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+        d: this & Date;
+        ~
+!!! error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+        e: (((this)));
+        ~
+!!! error TS2564: Property 'e' has no initializer and is not definitely assigned in the constructor.
+        f: (x: this) => this;
+        ~
+!!! error TS2564: Property 'f' has no initializer and is not definitely assigned in the constructor.
+        g: new (x: this) => this;
+        ~
+!!! error TS2564: Property 'g' has no initializer and is not definitely assigned in the constructor.
+        h: Foo<this>;
+        ~
+!!! error TS2564: Property 'h' has no initializer and is not definitely assigned in the constructor.
+        i: Foo<this | (() => this)>;
+        ~
+!!! error TS2564: Property 'i' has no initializer and is not definitely assigned in the constructor.
+        j: (x: any) => x is this;
+        ~
+!!! error TS2564: Property 'j' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    declare class C4 {
+        x: this;
+        f(x: this): this;
+    }
+    
+    class C5 {
+        foo() {
+            let f1 = (x: this): this => this;
+            let f2 = (x: this) => this;
+            let f3 = (x: this) => (y: this) => this;
+            let f4 = (x: this) => {
+                let g = (y: this) => {
+                    return () => this;
+                }
+                return g(this);
+            }
+        }
+        bar() {
+            let x1 = <this>undefined;
+                     ~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'undefined' to type 'this' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   'this' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+            let x2 = undefined as this;
+                     ~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'undefined' to type 'this' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   'this' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+        }
+    }
+    

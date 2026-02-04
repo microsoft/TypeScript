@@ -1,0 +1,16 @@
+generics3.ts(1,22): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+generics3.ts(7,5): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== generics3.ts (2 errors) ====
+    class C<T> { private x: T; }
+                         ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    interface X { f(): string; }
+    interface Y { f(): string; }
+    var a: C<X>;
+    var b: C<Y>;
+    
+    a = b; // Ok - should be identical
+        ~
+!!! error TS2454: Variable 'b' is used before being assigned.

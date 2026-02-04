@@ -29,6 +29,7 @@ class RegularClass {
 }
 
 //// [accessorInAmbientContextES5.js]
+"use strict";
 // Should allow accessor in ambient contexts even when targeting ES5
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

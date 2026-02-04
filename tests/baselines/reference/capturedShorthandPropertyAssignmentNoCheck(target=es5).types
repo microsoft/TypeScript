@@ -4,8 +4,8 @@
 const fns = [];
 >fns : any[]
 >    : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 for (const value of [1, 2, 3]) {
 >value : number
@@ -38,24 +38,24 @@ for (const value of [1, 2, 3]) {
 >      : ^^^^^^
 }
 const result = fns.map(fn => fn());
->result : any[]
->       : ^^^^^
->fns.map(fn => fn()) : any[]
->                    : ^^^^^
->fns.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->        : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
->fns : any[]
->    : ^^^^^
->map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
->fn => fn() : (fn: any) => any
->           : ^  ^^^^^^^^^^^^^
->fn : any
->   : ^^^
->fn() : any
->     : ^^^
->fn : any
->   : ^^^
+>result : { value: number; }[]
+>       : ^^^^^^^^^^^^^^^^^^^^
+>fns.map(fn => fn()) : { value: number; }[]
+>                    : ^^^^^^^^^^^^^^^^^^^^
+>fns.map : <U>(callbackfn: (value: () => { value: number; }, index: number, array: (() => { value: number; })[]) => U, thisArg?: any) => U[]
+>        : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>fns : (() => { value: number; })[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : <U>(callbackfn: (value: () => { value: number; }, index: number, array: (() => { value: number; })[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>fn => fn() : (fn: () => { value: number; }) => { value: number; }
+>           : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn : () => { value: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>fn() : { value: number; }
+>     : ^^^^^^^^^^^^^^^^^^
+>fn : () => { value: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 console.log(result)
 >console.log(result) : void
@@ -66,6 +66,6 @@ console.log(result)
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->result : any[]
->       : ^^^^^
+>result : { value: number; }[]
+>       : ^^^^^^^^^^^^^^^^^^^^
 

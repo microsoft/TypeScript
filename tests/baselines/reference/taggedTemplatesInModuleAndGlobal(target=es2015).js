@@ -24,6 +24,7 @@ let result = templateObjectFactory() === templateObjectFactory();
 
 
 //// [global.js]
+"use strict";
 var n;
 (function (n) {
     function id(x) {

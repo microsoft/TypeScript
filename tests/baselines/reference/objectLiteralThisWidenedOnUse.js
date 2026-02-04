@@ -16,6 +16,7 @@ var GlobalIns = {
 };
 
 //// [objectLiteralThisWidenedOnUse.js]
+"use strict";
 var GlobalIns = {
     prop1: 1,
     prop2: 2,

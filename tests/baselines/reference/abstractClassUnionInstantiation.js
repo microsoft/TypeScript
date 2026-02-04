@@ -24,6 +24,7 @@ new cls3(); // should work
 [AbstractA, AbstractB].map(cls => new cls()); // should error
 
 //// [abstractClassUnionInstantiation.js]
+"use strict";
 class ConcreteA {
 }
 class ConcreteB {

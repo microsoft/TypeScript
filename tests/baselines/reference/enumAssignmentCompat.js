@@ -41,6 +41,7 @@ W.D;
 var p: W.D;
 
 //// [enumAssignmentCompat.js]
+"use strict";
 var W;
 (function (W) {
     class D {

@@ -26,6 +26,7 @@ c = new D.inner.Class1();
 
 
 //// [innerAliases.js]
+"use strict";
 var A;
 (function (A) {
     let B;

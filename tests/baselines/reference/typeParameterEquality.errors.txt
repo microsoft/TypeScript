@@ -1,0 +1,10 @@
+typeParameterEquality.ts(2,31): error TS2322: Type 'null' is not assignable to type '<T>(a: T) => T'.
+
+
+==== typeParameterEquality.ts (1 errors) ====
+    class C {
+        get x(): <T>(a: T) => T { return null; }
+                                  ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type '<T>(a: T) => T'.
+        set x(p: <U>(a: U) => U) {}
+    }

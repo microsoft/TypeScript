@@ -1,3 +1,4 @@
+error TS-1: Pre-emit (93) and post-emit (94) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2503: Cannot find namespace 'module'.
 constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 constructorWithIncompleteTypeAnnotation.ts(11,19): error TS1005: ';' expected.
@@ -7,6 +8,8 @@ constructorWithIncompleteTypeAnnotation.ts(24,28): error TS1005: ':' expected.
 constructorWithIncompleteTypeAnnotation.ts(24,29): error TS1005: ',' expected.
 constructorWithIncompleteTypeAnnotation.ts(27,18): error TS1128: Declaration or statement expected.
 constructorWithIncompleteTypeAnnotation.ts(27,26): error TS2304: Cannot find name 'bfs'.
+constructorWithIncompleteTypeAnnotation.ts(28,17): error TS7010: 'if', which lacks return-type annotation, implicitly has an 'any' return type.
+constructorWithIncompleteTypeAnnotation.ts(28,21): error TS7006: Parameter 'retValue' implicitly has an 'any' type.
 constructorWithIncompleteTypeAnnotation.ts(28,30): error TS1005: ',' expected.
 constructorWithIncompleteTypeAnnotation.ts(28,34): error TS1005: ';' expected.
 constructorWithIncompleteTypeAnnotation.ts(31,18): error TS1109: Expression expected.
@@ -27,6 +30,7 @@ constructorWithIncompleteTypeAnnotation.ts(58,5): error TS1128: Declaration or s
 constructorWithIncompleteTypeAnnotation.ts(69,13): error TS1109: Expression expected.
 constructorWithIncompleteTypeAnnotation.ts(72,37): error TS1127: Invalid character.
 constructorWithIncompleteTypeAnnotation.ts(81,13): error TS1109: Expression expected.
+constructorWithIncompleteTypeAnnotation.ts(83,66): error TS7006: Parameter 'x' implicitly has an 'any' type.
 constructorWithIncompleteTypeAnnotation.ts(89,23): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 constructorWithIncompleteTypeAnnotation.ts(90,13): error TS1109: Expression expected.
 constructorWithIncompleteTypeAnnotation.ts(105,29): error TS1109: Expression expected.
@@ -90,7 +94,10 @@ constructorWithIncompleteTypeAnnotation.ts(259,55): error TS1005: ';' expected.
 constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or statement expected.
 
 
-==== constructorWithIncompleteTypeAnnotation.ts (90 errors) ====
+!!! error TS-1: Pre-emit (93) and post-emit (94) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS7017 constructorWithIncompleteTypeAnnotation.ts:239:29: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+==== constructorWithIncompleteTypeAnnotation.ts (93 errors) ====
     declare module "fs" {
         export class File {
             constructor(filename: string);
@@ -141,6 +148,10 @@ constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or 
                              ~~~
 !!! error TS2304: Cannot find name 'bfs'.
                     if (retValue != 0) {
+                    ~~
+!!! error TS7010: 'if', which lacks return-type annotation, implicitly has an 'any' return type.
+                        ~~~~~~~~
+!!! error TS7006: Parameter 'retValue' implicitly has an 'any' type.
                                  ~~
 !!! error TS1005: ',' expected.
                                      ~
@@ -236,6 +247,8 @@ constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or 
 !!! error TS1109: Expression expected.
                 var reg = /\w*/;
                 var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' };
+                                                                     ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
                 var weekday = Weekdays.Monday;
     
                 var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;

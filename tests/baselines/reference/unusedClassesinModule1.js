@@ -9,6 +9,7 @@ namespace A {
 }
 
 //// [unusedClassesinModule1.js]
+"use strict";
 var A;
 (function (A) {
     class Calculator {

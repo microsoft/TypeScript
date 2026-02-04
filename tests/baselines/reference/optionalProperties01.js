@@ -12,6 +12,7 @@ const foo2 = { required1: "hello", optional: "bar" } as Foo;
 
 
 //// [optionalProperties01.js]
+"use strict";
 const foo1 = { required1: "hello" };
 const foo2 = { required1: "hello", optional: "bar" };
 

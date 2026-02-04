@@ -993,6 +993,7 @@ var privateModule;
     }
 })(privateModule || (privateModule = {}));
 //// [privacyFunctionParameterDeclFile_GlobalFile.js]
+"use strict";
 class publicClassInGlobal {
 }
 class publicClassWithWithPublicParmeterTypesInGlobal {

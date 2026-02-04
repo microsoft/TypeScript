@@ -12,12 +12,12 @@ var [a], {b}, c, d; // error
 >  : ^^^
 
 var [a1 = undefined], {b1 = null}, c1 = undefined, d1 = null; // error
->a1 : any
->   : ^^^
+>a1 : undefined
+>   : ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->b1 : any
->   : ^^^
+>b1 : null
+>   : ^^^^
 >c1 : any
 >   : ^^^
 >undefined : undefined
@@ -48,14 +48,14 @@ var {b3}: { b3 }, c3: { b3 }; // error in type instead
 >   : ^^^
 
 var [a4] = [undefined], {b4} = { b4: null }, c4 = undefined, d4 = null; // error
->a4 : any
->   : ^^^
+>a4 : undefined
+>   : ^^^^^^^^^
 >[undefined] : [undefined]
 >            : ^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->b4 : any
->   : ^^^
+>b4 : null
+>   : ^^^^
 >{ b4: null } : { b4: null; }
 >             : ^^^^^^^^^^^^^
 >b4 : null
@@ -68,8 +68,8 @@ var [a4] = [undefined], {b4} = { b4: null }, c4 = undefined, d4 = null; // error
 >   : ^^^
 
 var [a5 = undefined] = []; // error
->a5 : any
->   : ^^^
+>a5 : undefined
+>   : ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >[] : []

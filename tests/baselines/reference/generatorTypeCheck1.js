@@ -4,4 +4,5 @@
 function* g1(): Iterator<string> { }
 
 //// [generatorTypeCheck1.js]
+"use strict";
 function* g1() { }

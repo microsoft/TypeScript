@@ -9,5 +9,6 @@ x.getOwnPropertyNamess();
 Object.getOwnPropertyNamess(null);
 
 //// [errorMessageOnObjectLiteralType.js]
+"use strict";
 x.getOwnPropertyNamess();
 Object.getOwnPropertyNamess(null);

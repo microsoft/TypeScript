@@ -1,0 +1,64 @@
+taggedTemplateStringsWithTypedTagsES6.ts(12,1): error TS2454: Variable 'f' is used before being assigned.
+taggedTemplateStringsWithTypedTagsES6.ts(14,1): error TS2454: Variable 'f' is used before being assigned.
+taggedTemplateStringsWithTypedTagsES6.ts(16,1): error TS2454: Variable 'f' is used before being assigned.
+taggedTemplateStringsWithTypedTagsES6.ts(18,1): error TS2454: Variable 'f' is used before being assigned.
+taggedTemplateStringsWithTypedTagsES6.ts(20,1): error TS2454: Variable 'f' is used before being assigned.
+taggedTemplateStringsWithTypedTagsES6.ts(22,1): error TS2454: Variable 'f' is used before being assigned.
+taggedTemplateStringsWithTypedTagsES6.ts(24,1): error TS2454: Variable 'f' is used before being assigned.
+taggedTemplateStringsWithTypedTagsES6.ts(26,1): error TS2454: Variable 'f' is used before being assigned.
+taggedTemplateStringsWithTypedTagsES6.ts(28,1): error TS2454: Variable 'f' is used before being assigned.
+taggedTemplateStringsWithTypedTagsES6.ts(30,1): error TS2454: Variable 'f' is used before being assigned.
+
+
+==== taggedTemplateStringsWithTypedTagsES6.ts (10 errors) ====
+    interface I {
+        (stringParts: TemplateStringsArray, ...rest: number[]): I;
+        g: I;
+        h: I;
+        member: I;
+        thisIsNotATag(x: string): void
+        [x: number]: I;
+    }
+    
+    var f: I;
+    
+    f `abc`
+    ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    
+    f `abc${1}def${2}ghi`;
+    ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    
+    f `abc`.member
+    ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    
+    f `abc${1}def${2}ghi`.member;
+    ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    
+    f `abc`["member"];
+    ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    
+    f `abc${1}def${2}ghi`["member"];
+    ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    
+    f `abc`[0].member `abc${1}def${2}ghi`;
+    ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    
+    f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
+    ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    
+    f.thisIsNotATag(`abc`);
+    ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    
+    f.thisIsNotATag(`abc${1}def${2}ghi`);
+    ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    

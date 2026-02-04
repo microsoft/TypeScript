@@ -4,4 +4,5 @@
 new `abc${0}abc`(`hello ${0} world`, `   `, `1${2}3`);
 
 //// [templateStringInNewExpressionES6.js]
+"use strict";
 new `abc${0}abc`(`hello ${0} world`, `   `, `1${2}3`);

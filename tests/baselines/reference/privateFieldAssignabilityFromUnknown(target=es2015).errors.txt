@@ -1,4 +1,4 @@
-privateFieldAssignabilityFromUnknown.ts(5,7): error TS2741: Property '#field' is missing in type '{}' but required in type 'Class'.
+privateFieldAssignabilityFromUnknown.ts(5,7): error TS2322: Type 'unknown' is not assignable to type 'Class'.
 
 
 ==== privateFieldAssignabilityFromUnknown.ts (1 errors) ====
@@ -8,6 +8,5 @@ privateFieldAssignabilityFromUnknown.ts(5,7): error TS2741: Property '#field' is
     
     const task: Class = {} as unknown;
           ~~~~
-!!! error TS2741: Property '#field' is missing in type '{}' but required in type 'Class'.
-!!! related TS2728 privateFieldAssignabilityFromUnknown.ts:2:3: '#field' is declared here.
+!!! error TS2322: Type 'unknown' is not assignable to type 'Class'.
     

@@ -40,10 +40,12 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
+"use strict";
 let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
 let y = 1;
 
 

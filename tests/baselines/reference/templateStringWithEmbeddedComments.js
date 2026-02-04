@@ -15,6 +15,7 @@ middle${
 tail`;
 
 //// [templateStringWithEmbeddedComments.js]
+"use strict";
 `head${ // single line comment
 10}
 middle${

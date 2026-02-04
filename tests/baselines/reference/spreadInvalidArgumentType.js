@@ -59,6 +59,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
 
 //// [spreadInvalidArgumentType.js]
+"use strict";
 var E;
 (function (E) {
     E[E["v1"] = 0] = "v1";

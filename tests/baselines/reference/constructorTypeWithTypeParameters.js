@@ -10,6 +10,7 @@ declare var Y: {
 var anotherVar: new <T>() => number;
 
 //// [constructorTypeWithTypeParameters.js]
+"use strict";
 var anotherVar;
 
 

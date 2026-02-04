@@ -29,14 +29,14 @@ export function mkdirSync(path: string, mode?: number): void;
 >          : ^    ^^      ^^    ^^^      ^^^^^    
 >path : string
 >     : ^^^^^^
->mode : number
->     : ^^^^^^
+>mode : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 
 export function mkdirSync(path: string, mode?: string): void {}
 >mkdirSync : (path: string, mode?: number) => void
 >          : ^    ^^      ^^    ^^^      ^^^^^    
 >path : string
 >     : ^^^^^^
->mode : string
->     : ^^^^^^
+>mode : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 

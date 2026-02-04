@@ -20,3 +20,4 @@ declare class C {
 }
 
 //// [accessorsInAmbientContext.js]
+"use strict";

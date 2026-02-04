@@ -33,6 +33,7 @@ Output::
 
 
 //// [/users/username/projects/project/f1.js]
+"use strict";
 foo();
 
 

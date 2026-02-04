@@ -16,6 +16,7 @@ namespace M1.M2 {
 }
 
 //// [parserSuperExpression1.js]
+"use strict";
 class C {
     foo() {
         super.foo();

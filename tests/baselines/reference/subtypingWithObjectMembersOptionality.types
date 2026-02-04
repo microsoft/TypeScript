@@ -25,8 +25,8 @@ interface Derived2 extends Derived { baz: string; }
 //      - M is an optional property and S' contains no property of the same name as M.
 interface T {
     Foo?: Base;
->Foo : Base
->    : ^^^^
+>Foo : Base | undefined
+>    : ^^^^^^^^^^^^^^^^
 }
 
 interface S extends T {
@@ -37,8 +37,8 @@ interface S extends T {
 
 interface T2 {
     1?: Base; 
->1 : Base
->  : ^^^^
+>1 : Base | undefined
+>  : ^^^^^^^^^^^^^^^^
 }
 
 interface S2 extends T2 {
@@ -49,8 +49,8 @@ interface S2 extends T2 {
 
 interface T3 {
     '1'?: Base;
->'1' : Base
->    : ^^^^
+>'1' : Base | undefined
+>    : ^^^^^^^^^^^^^^^^
 }
 
 interface S3 extends T3 {
@@ -63,8 +63,8 @@ interface S3 extends T3 {
 var a: { Foo?: Base; };
 >a : { Foo?: Base; }
 >  : ^^^^^^^^    ^^^
->Foo : Base
->    : ^^^^
+>Foo : Base | undefined
+>    : ^^^^^^^^^^^^^^^^
 
 var b = { Foo: <Derived>null };
 >b : { Foo: Derived; }
@@ -94,8 +94,8 @@ namespace TwoLevels {
 
     interface T {
         Foo?: Base;
->Foo : Base
->    : ^^^^
+>Foo : Base | undefined
+>    : ^^^^^^^^^^^^^^^^
     }
 
     interface S extends T {
@@ -106,8 +106,8 @@ namespace TwoLevels {
 
     interface T2 {
         1?: Base;
->1 : Base
->  : ^^^^
+>1 : Base | undefined
+>  : ^^^^^^^^^^^^^^^^
     }
 
     interface S2 extends T2 {
@@ -118,8 +118,8 @@ namespace TwoLevels {
 
     interface T3 {
         '1'?: Base;
->'1' : Base
->    : ^^^^
+>'1' : Base | undefined
+>    : ^^^^^^^^^^^^^^^^
     }
 
     interface S3 extends T3 {
@@ -132,8 +132,8 @@ namespace TwoLevels {
     var a: { Foo?: Base; };
 >a : { Foo?: Base; }
 >  : ^^^^^^^^    ^^^
->Foo : Base
->    : ^^^^
+>Foo : Base | undefined
+>    : ^^^^^^^^^^^^^^^^
 
     var b = { Foo: <Derived2>null };
 >b : { Foo: Derived2; }

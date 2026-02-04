@@ -29,6 +29,7 @@ var y3: C1 = <C1> {};
 
 
 //// [m7Bugs.js]
+"use strict";
 var s = ({});
 var x = {};
 class C1 {

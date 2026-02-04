@@ -17,6 +17,7 @@ namespace foo.Baz {
 }
 
 //// [functionMergedWithModule.js]
+"use strict";
 function foo(title) {
     var x = 10;
 }

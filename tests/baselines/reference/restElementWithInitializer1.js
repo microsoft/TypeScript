@@ -6,4 +6,5 @@ var [...x = a] = a;  // Error, rest element cannot have initializer
 
 
 //// [restElementWithInitializer1.js]
+"use strict";
 var [...x = a] = a; // Error, rest element cannot have initializer

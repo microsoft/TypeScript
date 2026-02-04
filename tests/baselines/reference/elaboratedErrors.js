@@ -29,6 +29,7 @@ y = x;
 
 
 //// [elaboratedErrors.js]
+"use strict";
 function fn(s) { }
 // This should issue a large error, not a small one
 class WorkerFS {

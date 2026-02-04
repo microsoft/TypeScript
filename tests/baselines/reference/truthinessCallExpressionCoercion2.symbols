@@ -87,9 +87,9 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >f : Symbol(f, Decl(truthinessCallExpressionCoercion2.ts, 37, 16))
 >f : Symbol(f, Decl(truthinessCallExpressionCoercion2.ts, 37, 16))
->f.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>f.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >f : Symbol(f, Decl(truthinessCallExpressionCoercion2.ts, 37, 16))
->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >parent : Symbol(parent, Decl(lib.dom.d.ts, --, --))
 
     // error

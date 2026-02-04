@@ -18,6 +18,7 @@ if (true) {
 }
 
 //// [initializePropertiesWithRenamedLet.js]
+"use strict";
 var x0;
 if (true) {
     var x0_1;

@@ -61,6 +61,7 @@ foo();
 import { Foo } from "unkown";
 new Foo();
 //// [callAny.js]
+"use strict";
 g();
 g(); // Should get error for type argument
 //// [super.js]

@@ -3,6 +3,7 @@
 === commaOperatorWithSecondOperandStringType.ts ===
 var ANY: any;
 >ANY : any
+>    : ^^^
 
 var BOOLEAN: boolean;
 >BOOLEAN : boolean
@@ -29,6 +30,7 @@ ANY, STRING;
 >ANY, STRING : string
 >            : ^^^^^^
 >ANY : any
+>    : ^^^
 >STRING : string
 >       : ^^^^^^
 
@@ -73,6 +75,7 @@ var resultIsString1 = (ANY, STRING);
 >ANY, STRING : string
 >            : ^^^^^^
 >ANY : any
+>    : ^^^
 >STRING : string
 >       : ^^^^^^
 
@@ -137,6 +140,7 @@ ANY = new Date(), STRING;
 >ANY = new Date() : Date
 >                 : ^^^^
 >ANY : any
+>    : ^^^
 >new Date() : Date
 >           : ^^^^
 >Date : DateConstructor
@@ -220,6 +224,7 @@ var resultIsString7 = (ANY = new Date(), STRING);
 >ANY = new Date() : Date
 >                 : ^^^^
 >ANY : any
+>    : ^^^
 >new Date() : Date
 >           : ^^^^
 >Date : DateConstructor

@@ -24,6 +24,7 @@ s2 = s1;
 
 
 //// [recursiveGenericUnionType2.js]
+"use strict";
 var x;
 var s1;
 var s2;

@@ -11,4 +11,5 @@ declare var i: I;
 var it = i[Symbol.iterator];
 
 //// [symbolProperty17.js]
+"use strict";
 var it = i[Symbol.iterator];

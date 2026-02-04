@@ -12,6 +12,7 @@
 })();
 
 //// [emptyVariableDeclarationBindingPatterns02_ES5.js]
+"use strict";
 (function () {
     var {};
     let {};

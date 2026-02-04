@@ -1,8 +1,9 @@
+classAbstractClinterfaceAssignability.ts(15,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 classAbstractClinterfaceAssignability.ts(23,1): error TS2322: Type 'typeof A' is not assignable to type 'IConstructor'.
   Cannot assign an abstract constructor type to a non-abstract constructor type.
 
 
-==== classAbstractClinterfaceAssignability.ts (1 errors) ====
+==== classAbstractClinterfaceAssignability.ts (2 errors) ====
     interface I {
         x: number;
     }
@@ -18,6 +19,8 @@ classAbstractClinterfaceAssignability.ts(23,1): error TS2322: Type 'typeof A' is
     
     abstract class A {
         x: number;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         static y: number;
     }
     

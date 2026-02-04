@@ -14,6 +14,7 @@ module.exports.Sub.prototype = { }
 
 
 //// [jsDeclarationsExportAssignedConstructorFunctionWithSub.js]
+"use strict";
 /**
  * @param {number} p
  */

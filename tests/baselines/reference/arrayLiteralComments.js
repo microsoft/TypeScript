@@ -17,6 +17,7 @@ var testArrayWithFunc = [
 ]
 
 //// [arrayLiteralComments.js]
+"use strict";
 var testArrayWithFunc = [
     // Function comment
     function () {

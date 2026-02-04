@@ -36,6 +36,7 @@ function other<T, U extends T>() {
 
 
 //// [genericCallWithObjectTypeArgsAndConstraints4.js]
+"use strict";
 // Generic call with constraints infering type parameter from object member properties
 class C {
 }

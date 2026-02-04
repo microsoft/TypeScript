@@ -34,6 +34,7 @@ s.genericVar = 12;
 
 
 //// [genericClassExpressionInFunction.js]
+"use strict";
 class A {
 }
 function B1() {

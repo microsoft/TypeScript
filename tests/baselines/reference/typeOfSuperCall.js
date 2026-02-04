@@ -11,6 +11,7 @@ class D extends C {
 }
 
 //// [typeOfSuperCall.js]
+"use strict";
 class C {
 }
 class D extends C {

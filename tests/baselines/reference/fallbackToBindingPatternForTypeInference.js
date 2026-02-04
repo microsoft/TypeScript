@@ -10,6 +10,7 @@ trans(({a, b = 10}) => a);
 
 
 //// [fallbackToBindingPatternForTypeInference.js]
+"use strict";
 trans(({ a }) => a);
 trans(([b, c]) => 'foo');
 trans(({ d: [e, f] }) => 'foo');

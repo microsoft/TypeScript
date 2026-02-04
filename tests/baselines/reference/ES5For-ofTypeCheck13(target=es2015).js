@@ -7,6 +7,7 @@ strSet.add('World')
 for (const str of strSet) { }
 
 //// [ES5For-ofTypeCheck13.js]
+"use strict";
 const strSet = new Set();
 strSet.add('Hello');
 strSet.add('World');

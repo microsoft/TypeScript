@@ -175,10 +175,10 @@ function foo3<T, U>(x: T, cb: new(a: T) => U, y: U) {
 }
 
 var r7 = foo3(null, i, ''); // any
->r7 : any
->   : ^^^
->foo3(null, i, '') : any
->                  : ^^^
+>r7 : string | null
+>   : ^^^^^^^^^^^^^
+>foo3(null, i, '') : "" | null
+>                  : ^^^^^^^^^
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
 >     : ^ ^^ ^^ ^^ ^^  ^^               ^^ ^^ ^^^^^^
 >i : I
@@ -187,10 +187,10 @@ var r7 = foo3(null, i, ''); // any
 >   : ^^
 
 var r7b = foo3(null, a, ''); // any
->r7b : any
->    : ^^^
->foo3(null, a, '') : any
->                  : ^^^
+>r7b : string | null
+>    : ^^^^^^^^^^^^^
+>foo3(null, a, '') : "" | null
+>                  : ^^^^^^^^^
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
 >     : ^ ^^ ^^ ^^ ^^  ^^               ^^ ^^ ^^^^^^
 >a : new <T>(x: T) => T

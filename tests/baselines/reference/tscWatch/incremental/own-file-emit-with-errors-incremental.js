@@ -41,10 +41,12 @@ Found 1 error in file2.ts[90m:1[0m
 
 
 //// [/users/username/projects/project/file1.js]
+"use strict";
 const x = 10;
 
 
 //// [/users/username/projects/project/file2.js]
+"use strict";
 const y = 20;
 
 
@@ -161,6 +163,7 @@ Found 1 error in file2.ts[90m:1[0m
 
 
 //// [/users/username/projects/project/file1.js]
+"use strict";
 const z = 10;
 
 

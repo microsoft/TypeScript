@@ -67,6 +67,7 @@ var resultIsStringOrBoolean3 = typeof condString ? exprString1 : exprBoolean1; /
 var resultIsStringOrBoolean4 = condString.toUpperCase ? exprString1 : exprBoolean1; // union
 
 //// [conditionalOperatorConditoinIsStringType.js]
+"use strict";
 //Cond is a string type variable
 condString ? exprAny1 : exprAny2;
 condString ? exprBoolean1 : exprBoolean2;

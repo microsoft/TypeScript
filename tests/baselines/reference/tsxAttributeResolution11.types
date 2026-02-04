@@ -12,8 +12,8 @@ declare namespace JSX {
 	}
 	interface IntrinsicAttributes {
 		ref?: string;
->ref : string
->    : ^^^^^^
+>ref : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 	}
 }
 
@@ -32,8 +32,8 @@ class MyComponent {
 >      : ^^^^^^^^      ^^^
 
 	  ref?: string;
->ref : string
->    : ^^^^^^
+>ref : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
   }
 }
 

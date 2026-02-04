@@ -19,6 +19,7 @@ let c2: N.bar;
 
 
 //// [moduleVisibilityTest4.js]
+"use strict";
 let a1;
 let b1;
 let c1;

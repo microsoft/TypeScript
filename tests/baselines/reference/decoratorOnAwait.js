@@ -8,4 +8,5 @@ await 1
 
 
 //// [decoratorOnAwait.js]
+"use strict";
 await 1;

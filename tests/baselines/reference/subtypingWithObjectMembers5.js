@@ -66,6 +66,7 @@ namespace Optional {
 
 
 //// [subtypingWithObjectMembers5.js]
+"use strict";
 // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
 // foo properties are valid, bar properties cause errors in the derived class declarations
 var NotOptional;

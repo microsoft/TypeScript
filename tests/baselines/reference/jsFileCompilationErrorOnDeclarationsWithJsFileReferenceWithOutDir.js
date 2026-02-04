@@ -14,12 +14,15 @@ function bar() {
 }
 
 //// [a.js]
+"use strict";
 class c {
 }
 //// [c.js]
+"use strict";
 function bar() {
 }
 //// [b.js]
+"use strict";
 /// <reference path="c.js"/>
 function foo() {
 }

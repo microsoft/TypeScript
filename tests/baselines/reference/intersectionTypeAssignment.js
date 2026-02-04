@@ -21,6 +21,7 @@ y = x;
 
 
 //// [intersectionTypeAssignment.js]
+"use strict";
 a = x;
 a = y;
 x = a; // Error

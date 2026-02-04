@@ -44,6 +44,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 
 
 //// [/user/username/projects/myproject/index.js]
+"use strict";
 
 
 

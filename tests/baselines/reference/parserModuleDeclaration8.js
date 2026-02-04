@@ -5,3 +5,4 @@ namespace a.number {
 }
 
 //// [parserModuleDeclaration8.js]
+"use strict";

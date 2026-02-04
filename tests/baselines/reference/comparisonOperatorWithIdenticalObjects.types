@@ -19,6 +19,7 @@ class A1 {
 
     public d: any;
 >d : any
+>  : ^^^
 
     public e: Object;
 >e : Object
@@ -51,6 +52,7 @@ class B1 {
 
     public d: any;
 >d : any
+>  : ^^^
 
     public e: Object;
 >e : Object

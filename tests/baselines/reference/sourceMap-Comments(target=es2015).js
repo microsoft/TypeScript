@@ -23,6 +23,7 @@ namespace sas.tools {
 
 
 //// [sourceMap-Comments.js]
+"use strict";
 var sas;
 (function (sas) {
     var tools;

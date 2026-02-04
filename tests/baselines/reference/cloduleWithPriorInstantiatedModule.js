@@ -19,6 +19,7 @@ namespace Moclodule {
 }
 
 //// [cloduleWithPriorInstantiatedModule.js]
+"use strict";
 // Non-ambient & instantiated module.
 var Moclodule;
 (function (Moclodule) {

@@ -94,6 +94,7 @@ class C {
 }
 
 //// [noImplicitAnyParametersInClass.js]
+"use strict";
 class C {
     constructor() {
         // No implicit-'any' errors.

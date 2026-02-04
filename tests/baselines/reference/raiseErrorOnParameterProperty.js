@@ -10,6 +10,7 @@ var c1 = new C1(0);
 
 
 //// [raiseErrorOnParameterProperty.js]
+"use strict";
 class C1 {
     constructor(x) {
         this.x = x;

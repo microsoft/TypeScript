@@ -12,6 +12,7 @@ class Super extends Base {
 }
 
 //// [checkSuperCallBeforeThisAccessing7.js]
+"use strict";
 class Base {
     constructor(func) {
     }

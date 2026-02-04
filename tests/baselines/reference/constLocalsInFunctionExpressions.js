@@ -41,6 +41,7 @@ function f5() {
 }
 
 //// [constLocalsInFunctionExpressions.js]
+"use strict";
 function f1() {
     const x = getStringOrNumber();
     if (typeof x === "string") {

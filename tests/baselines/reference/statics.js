@@ -34,6 +34,7 @@ M.f();
 
 
 //// [statics.js]
+"use strict";
 var M;
 (function (M) {
     class C {

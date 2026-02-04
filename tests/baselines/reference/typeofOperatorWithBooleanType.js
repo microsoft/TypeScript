@@ -53,6 +53,7 @@ z: typeof A.foo;
 z: typeof M.n;
 
 //// [typeofOperatorWithBooleanType.js]
+"use strict";
 function foo() { return true; }
 class A {
     static foo() { return false; }

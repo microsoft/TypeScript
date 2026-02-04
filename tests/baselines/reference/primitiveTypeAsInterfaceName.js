@@ -4,3 +4,4 @@
 interface number {}
 
 //// [primitiveTypeAsInterfaceName.js]
+"use strict";

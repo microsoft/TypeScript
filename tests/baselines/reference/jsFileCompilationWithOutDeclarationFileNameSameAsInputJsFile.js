@@ -9,5 +9,6 @@ declare function foo(): boolean;
 
 
 //// [b.js]
+"use strict";
 class c {
 }

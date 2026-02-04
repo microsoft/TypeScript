@@ -7,5 +7,6 @@ declare namespace foo {
 class foo { } // Legal, because module is ambient
 
 //// [partiallyAmbientClodule.js]
+"use strict";
 class foo {
 } // Legal, because module is ambient

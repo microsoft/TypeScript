@@ -8,6 +8,7 @@ function f<T>(x: T): T {
 }
 
 //// [typeofTypeParameter.js]
+"use strict";
 function f(x) {
     var a;
     var y;

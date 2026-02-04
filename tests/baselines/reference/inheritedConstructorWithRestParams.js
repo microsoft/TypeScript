@@ -17,6 +17,7 @@ new Derived("", 3);
 new Derived(3);
 
 //// [inheritedConstructorWithRestParams.js]
+"use strict";
 class Base {
     constructor(...a) { }
 }

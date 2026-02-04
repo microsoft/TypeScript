@@ -27,6 +27,7 @@ x7 = importInst;
 
 
 //// [typeofInternalModules.js]
+"use strict";
 var Outer;
 (function (Outer) {
     let instantiated;

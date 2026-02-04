@@ -15,6 +15,7 @@ var b: A.B<number>;
 b.foo();
 
 //// [genericCloduleInModule.js]
+"use strict";
 var A;
 (function (A) {
     class B {

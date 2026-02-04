@@ -10,6 +10,7 @@ namespace A {
 
 
 //// [testContainerList.js]
+"use strict";
 // Regression test for #325
 var A;
 (function (A) {

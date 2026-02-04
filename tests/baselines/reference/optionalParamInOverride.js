@@ -10,6 +10,7 @@ class Y extends Z {
 
 
 //// [optionalParamInOverride.js]
+"use strict";
 class Z {
     func() { }
 }

@@ -95,8 +95,8 @@ namespace GenericParameter {
 >  : ^
 >x : T
 >  : ^
->y : T
->  : ^
+>y : T | undefined
+>  : ^^^^^^^^^^^^^
 
         return cb;
 >cb : { new (x: T): string; new (x: T, y?: T): string; }
@@ -132,8 +132,8 @@ namespace GenericParameter {
 >  : ^
 >x : T
 >  : ^
->y : T
->  : ^
+>y : T | undefined
+>  : ^^^^^^^^^^^^^
 
         return cb;
 >cb : { new (x: T): string; new (x: T, y?: T): string; }
@@ -141,10 +141,10 @@ namespace GenericParameter {
     }
 
     var r13 = foo7(1, a); // ok
->r13 : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
->    : ^^^^^^^ ^^^^^^^^^^^^      ^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^      ^^^
->foo7(1, a) : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
->           : ^^^^^^^ ^^^^^^^^^^^^      ^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^      ^^^
+>r13 : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+>    : ^^^^^^^ ^^^^^^      ^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^      ^^^
+>foo7(1, a) : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+>           : ^^^^^^^ ^^^^^^      ^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^      ^^^
 >foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
 >     : ^ ^^ ^^ ^^  ^^                                                  ^^^^^^^^^^^^ ^^ ^^^      ^^^^^^^ ^^ ^^ ^^^ ^^^      ^^^
 >1 : 1
@@ -161,10 +161,10 @@ namespace GenericParameter {
 >  : ^^^^^^
 
     var r14 = foo7(1, c); // ok
->r14 : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
->    : ^^^^^^^ ^^^^^^^^^^^^      ^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^      ^^^
->foo7(1, c) : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
->           : ^^^^^^^ ^^^^^^^^^^^^      ^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^      ^^^
+>r14 : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+>    : ^^^^^^^ ^^^^^^      ^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^      ^^^
+>foo7(1, c) : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+>           : ^^^^^^^ ^^^^^^      ^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^      ^^^
 >foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
 >     : ^ ^^ ^^ ^^  ^^                                                  ^^^^^^^^^^^^ ^^ ^^^      ^^^^^^^ ^^ ^^ ^^^ ^^^      ^^^
 >1 : 1

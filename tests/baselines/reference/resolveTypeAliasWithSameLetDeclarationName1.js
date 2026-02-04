@@ -7,6 +7,7 @@ let baz: baz;
 
 
 //// [resolveTypeAliasWithSameLetDeclarationName1.js]
+"use strict";
 class C {
 }
 let baz;

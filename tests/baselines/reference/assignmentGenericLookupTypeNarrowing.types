@@ -4,8 +4,8 @@
 // Repro from #26130
 
 let mappedObject: {[K in "foo"]: null | {x: string}} = {foo: {x: "hello"}};
->mappedObject : { foo: { x: string; }; }
->             : ^^^^^^^^^^^^      ^^^^^^
+>mappedObject : { foo: { x: string; } | null; }
+>             : ^^^^^^^^^^^^      ^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >{foo: {x: "hello"}} : { foo: { x: string; }; }
@@ -32,24 +32,24 @@ function bar<K extends "foo">(key: K) {
 >    : ^
 
   const element = foo(mappedObject[key]);
->element : { foo: { x: string; }; }[K]
->        : ^^^^^^^^^^^^      ^^^^^^^^^
->foo(mappedObject[key]) : { foo: { x: string; }; }[K]
->                       : ^^^^^^^^^^^^      ^^^^^^^^^
+>element : { foo: { x: string; } | null; }[K] | null
+>        : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>foo(mappedObject[key]) : { foo: { x: string; } | null; }[K] | null
+>                       : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T) => null | T
 >    : ^ ^^ ^^ ^^^^^        
->mappedObject[key] : { foo: { x: string; }; }[K]
->                  : ^^^^^^^^^^^^      ^^^^^^^^^
->mappedObject : { foo: { x: string; }; }
->             : ^^^^^^^^^^^^      ^^^^^^
+>mappedObject[key] : { foo: { x: string; } | null; }[K]
+>                  : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^
+>mappedObject : { foo: { x: string; } | null; }
+>             : ^^^^^^^^^^^^      ^^^^^^^^^^^^^
 >key : K
 >    : ^
 
   if (element == null)
 >element == null : boolean
 >                : ^^^^^^^
->element : { foo: { x: string; }; }[K]
->        : ^^^^^^^^^^^^      ^^^^^^^^^
+>element : { foo: { x: string; } | null; }[K] | null
+>        : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
 
     return;
   const x = element.x;
@@ -57,8 +57,8 @@ function bar<K extends "foo">(key: K) {
 >  : ^^^^^^
 >element.x : string
 >          : ^^^^^^
->element : { foo: { x: string; }; }[K]
->        : ^^^^^^^^^^^^      ^^^^^^^^^
+>element : { x: string; }
+>        : ^^^^^      ^^^
 >x : string
 >  : ^^^^^^
 }

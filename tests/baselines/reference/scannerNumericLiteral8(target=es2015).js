@@ -4,4 +4,5 @@
 -03
 
 //// [scannerNumericLiteral8.js]
+"use strict";
 -3;

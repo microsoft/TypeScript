@@ -15,6 +15,7 @@ let x: E[] = enumValues(E);
 
 
 //// [mappedToToIndexSignatureInference.js]
+"use strict";
 fn(a);
 var E;
 (function (E) {

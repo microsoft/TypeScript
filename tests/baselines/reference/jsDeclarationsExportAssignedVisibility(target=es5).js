@@ -18,6 +18,7 @@ class Container {
 module.exports = Container;
 
 //// [obj.js]
+"use strict";
 module.exports = /** @class */ (function () {
     function Obj() {
         this.x = 12;
@@ -25,6 +26,7 @@ module.exports = /** @class */ (function () {
     return Obj;
 }());
 //// [index.js]
+"use strict";
 var Obj = require("./obj");
 var Container = /** @class */ (function () {
     function Container() {

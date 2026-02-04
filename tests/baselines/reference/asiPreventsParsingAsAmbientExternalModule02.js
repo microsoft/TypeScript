@@ -12,6 +12,7 @@ namespace container {
 }
 
 //// [asiPreventsParsingAsAmbientExternalModule02.js]
+"use strict";
 var declare;
 var module;
 var container;

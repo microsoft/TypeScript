@@ -99,6 +99,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 //// [/user/username/projects/container/built/local/lib.js]
+"use strict";
 var container;
 (function (container) {
     container.myConst = 30;
@@ -155,6 +156,7 @@ declare namespace container {
 }
 
 //// [/user/username/projects/container/built/local/exec.js]
+"use strict";
 var container;
 (function (container) {
     function getMyConst() {
@@ -178,6 +180,7 @@ var container;
 }
 
 //// [/user/username/projects/container/built/local/compositeExec.js]
+"use strict";
 var container;
 (function (container) {
     function getMyConst() {

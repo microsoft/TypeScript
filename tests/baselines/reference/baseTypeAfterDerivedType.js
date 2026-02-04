@@ -19,6 +19,7 @@ interface Base2 {
 
 
 //// [baseTypeAfterDerivedType.js]
+"use strict";
 class Derived2 {
     method(...args) { }
 }

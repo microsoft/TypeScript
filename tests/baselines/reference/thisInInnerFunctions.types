@@ -23,6 +23,7 @@ class Foo {
 >this.y = "hi" : "hi"
 >              : ^^^^
 >this.y : any
+>       : ^^^
 >this : any
 >     : ^^^
 >y : any
@@ -36,6 +37,7 @@ class Foo {
 >() => this.y : () => any
 >             : ^^^^^^^^^
 >this.y : any
+>       : ^^^
 >this : any
 >     : ^^^
 >y : any
@@ -56,14 +58,17 @@ function test() {
 
         (() => this)();
 >(() => this)() : any
+>               : ^^^
 >(() => this) : () => any
 >             : ^^^^^^^^^
 >() => this : () => any
 >           : ^^^^^^^^^
 >this : any
+>     : ^^^
 
         this;
 >this : any
+>     : ^^^
 
     };
 }

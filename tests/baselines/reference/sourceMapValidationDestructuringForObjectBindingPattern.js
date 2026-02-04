@@ -69,6 +69,7 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } =
 }
 
 //// [sourceMapValidationDestructuringForObjectBindingPattern.js]
+"use strict";
 let robot = { name: "mower", skill: "mowing" };
 let multiRobot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 function getRobot() {

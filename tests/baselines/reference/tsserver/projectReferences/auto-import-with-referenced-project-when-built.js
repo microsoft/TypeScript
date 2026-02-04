@@ -130,6 +130,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/app/bld/program/index.js]
+"use strict";
 foo;
 
 

@@ -18,6 +18,7 @@ var j0 = 0, j1 = 1;
 array3[j0++] **= array3[j1++] **= array3[j0++] **= 1;
 
 //// [emitCompoundExponentiationAssignmentWithIndexingOnLHS1.js]
+"use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
 var array0 = [1, 2, 3];
 var i0 = 0;

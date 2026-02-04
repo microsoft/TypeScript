@@ -14,6 +14,7 @@ console.log(s);
 
 
 //// [genericFunctionCallSignatureReturnTypeMismatch.js]
+"use strict";
 f = g;
 var s = f("str").toUpperCase();
 console.log(s);

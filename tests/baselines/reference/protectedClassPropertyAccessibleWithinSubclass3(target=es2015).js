@@ -16,6 +16,7 @@ class Derived extends Base {
 }
 
 //// [protectedClassPropertyAccessibleWithinSubclass3.js]
+"use strict";
 class Base {
     method() {
         this.x; // OK, accessed within their declaring class

@@ -26,6 +26,7 @@ module.exports.Strings = Strings
 
 
 //// [source.js]
+"use strict";
 class Handler {
     static get OPTIONS() {
         return 1;

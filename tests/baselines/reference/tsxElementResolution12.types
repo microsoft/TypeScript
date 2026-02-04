@@ -33,8 +33,8 @@ interface Obj2type {
 	new(n: string): { q?: number; pr: any };
 >n : string
 >  : ^^^^^^
->q : number
->  : ^^^^^^
+>q : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >pr : any
 >   : ^^^
 }

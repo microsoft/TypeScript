@@ -25,6 +25,7 @@ function baz(normal: NormalToString) {
 
 
 //// [instanceofOperatorWithInvalidStaticToString.js]
+"use strict";
 function foo(staticToString) {
     return staticToString instanceof StaticToString;
 }

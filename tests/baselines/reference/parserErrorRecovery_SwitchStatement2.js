@@ -9,6 +9,7 @@ class D {
 }
 
 //// [parserErrorRecovery_SwitchStatement2.js]
+"use strict";
 class C {
     constructor() {
         switch (e) {

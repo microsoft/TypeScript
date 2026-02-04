@@ -144,6 +144,7 @@ Found 2 errors.
 
 
 //// [/home/src/workspaces/lib/common/nominal.js]
+"use strict";
 /**
  * @template T, Name
  * @typedef {T & {[Symbol.species]: Name}} Nominal

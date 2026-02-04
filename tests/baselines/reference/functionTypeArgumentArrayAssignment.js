@@ -14,6 +14,7 @@ namespace test {
 
 
 //// [functionTypeArgumentArrayAssignment.js]
+"use strict";
 var test;
 (function (test) {
     function map() {

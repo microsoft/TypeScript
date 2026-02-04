@@ -8,6 +8,7 @@ let x, y, z, a1, a2, a3;
 ([ a1, a2, a3] = [] = a);
 
 //// [emptyAssignmentPatterns04_ES6.js]
+"use strict";
 var a;
 let x, y, z, a1, a2, a3;
 ({ x, y, z } = {} = a);

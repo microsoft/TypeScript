@@ -64,8 +64,8 @@ export class Point {
      * @param {number} y
      */
     constructor(x: number, y: number);
-    x: number;
-    y: number;
+    x: number | undefined;
+    y: number | undefined;
 }
 //// [referencer.d.ts]
 /**

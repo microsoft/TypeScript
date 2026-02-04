@@ -9,6 +9,7 @@ class C {
 }
 
 //// [staticsInConstructorBodies.js]
+"use strict";
 class C {
     constructor() {
     }

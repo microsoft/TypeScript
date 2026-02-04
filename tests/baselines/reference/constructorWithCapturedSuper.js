@@ -55,6 +55,7 @@ class D extends A {
 }
 
 //// [constructorWithCapturedSuper.js]
+"use strict";
 let oneA;
 class A {
     constructor() {

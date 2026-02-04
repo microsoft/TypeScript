@@ -20,7 +20,9 @@ var r = f();
 
 var r2 = new f();
 >r2 : any
+>   : ^^^
 >new f() : any
+>        : ^^^
 >f : Foo
 >  : ^^^
 

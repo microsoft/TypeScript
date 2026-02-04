@@ -40,6 +40,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/index.js]
+"use strict";
 const fn = (a, b) => b;
 
 

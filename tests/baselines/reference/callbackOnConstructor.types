@@ -24,8 +24,8 @@ export class Preferences {
 var ooscope2 = s => s.length > 0
 >ooscope2 : (name: string) => boolean | number | string | undefined
 >         : ^    ^^      ^^^^^                                     
->s => s.length > 0 : (s: string) => string | number | boolean
->                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>s => s.length > 0 : (s: string) => string | number | boolean | undefined
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s.length > 0 : boolean

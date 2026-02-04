@@ -10,6 +10,7 @@ const array = [
 
 
 //// [commentOnArrayElement5.js]
+"use strict";
 const array = [
     /* element 1 */
     1,

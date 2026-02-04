@@ -26,12 +26,12 @@ export interface GetLocalesOptions<T extends LocaleData> {
 >        : ^^^^^^^^^^^^^^^^^^^^^^
 
     config?: LocaleConfig<T> | undefined;
->config : LocaleConfig<T>
->       : ^^^^^^^^^^^^^^^
+>config : LocaleConfig<T> | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     name?: string;
->name : string
->     : ^^^^^^
+>name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 }
 
 export const getLocales = <T extends LocaleData>({
@@ -45,8 +45,8 @@ export const getLocales = <T extends LocaleData>({
 >    : ^^^^^^^
 
     name,
->name : string
->     : ^^^^^^
+>name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 
     default: defaultLocalesConfig,
 >default : any

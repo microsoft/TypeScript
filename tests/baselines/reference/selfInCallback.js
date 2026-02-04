@@ -10,6 +10,7 @@ class C {
 }
 
 //// [selfInCallback.js]
+"use strict";
 class C {
     constructor() {
         this.p1 = 0;

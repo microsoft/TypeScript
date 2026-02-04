@@ -11,6 +11,7 @@ var bar: any;
 var { foo, baz } = foo;
 
 //// [destructuringReassignsRightHandSide.js]
+"use strict";
 var _a;
 var foo = { foo: 1, bar: 2 };
 var bar;

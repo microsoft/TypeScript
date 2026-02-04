@@ -14,6 +14,7 @@ function main1() : number {
 }
 
 //// [noImplicitReturnsWithProtectedBlocks1.js]
+"use strict";
 function main1() {
     try {
         return get();

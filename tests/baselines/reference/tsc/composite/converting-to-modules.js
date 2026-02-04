@@ -39,6 +39,7 @@ Found 1 error in tsconfig.json[90m:3[0m
 
 
 //// [/home/src/workspaces/project/src/main.js]
+"use strict";
 const x = 10;
 
 

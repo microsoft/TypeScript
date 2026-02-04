@@ -132,8 +132,8 @@ try {
 >  : ^
 }
 catch (e) {
->e : any
->  : ^^^
+>e : unknown
+>  : ^^^^^^^
 
     let l11 = 0;
 >l11 : number

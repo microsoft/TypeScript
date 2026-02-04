@@ -10,6 +10,7 @@ class C {
 }
 
 //// [errorRecoveryInClassDeclaration.js]
+"use strict";
 class C {
     bar() {
         var v = foo(public, blaz(), {});

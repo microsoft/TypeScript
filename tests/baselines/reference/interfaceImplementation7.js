@@ -13,6 +13,7 @@ class C1 implements i4 {
 
 
 //// [interfaceImplementation7.js]
+"use strict";
 class C1 {
     name() { return ""; }
 }

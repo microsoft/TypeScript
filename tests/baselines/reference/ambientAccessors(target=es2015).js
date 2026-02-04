@@ -17,6 +17,7 @@ declare class C {
 }
 
 //// [ambientAccessors.js]
+"use strict";
 
 
 //// [ambientAccessors.d.ts]

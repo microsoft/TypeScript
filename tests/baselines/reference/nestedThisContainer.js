@@ -15,6 +15,7 @@ foo.zab = (function () {
 
 
 //// [nestedThisContainer.js]
+"use strict";
 const foo = {};
 foo.bar = function () {
     const self = this;

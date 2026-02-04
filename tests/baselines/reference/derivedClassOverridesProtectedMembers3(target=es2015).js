@@ -73,6 +73,7 @@ class Derived10 extends Base {
 }
 
 //// [derivedClassOverridesProtectedMembers3.js]
+"use strict";
 var x;
 var y;
 class Base {

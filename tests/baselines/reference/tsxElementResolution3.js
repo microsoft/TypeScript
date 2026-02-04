@@ -15,6 +15,7 @@ declare namespace JSX {
 <span w='err' />;
 
 //// [file.jsx]
+"use strict";
 // OK
 <div n='x'/>;
 // Error

@@ -12,6 +12,7 @@ var x: Foo< { a: string }, { a: string; b: number }>; // Error 2 Type '{ a: stri
 
 
 //// [constraintsThatReferenceOtherContstraints1.js]
+"use strict";
 class Foo {
 }
 class Bar {

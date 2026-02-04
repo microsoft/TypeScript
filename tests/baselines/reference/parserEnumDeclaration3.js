@@ -6,3 +6,4 @@ declare enum E {
 }
 
 //// [parserEnumDeclaration3.js]
+"use strict";

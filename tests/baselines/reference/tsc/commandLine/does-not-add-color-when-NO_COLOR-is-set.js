@@ -148,7 +148,7 @@ default: false
 --strict
 Enable all strict type-checking options.
 type: boolean
-default: false
+default: true
 
 --types
 Specify type package names to be included without being referenced in a source file.

@@ -2,10 +2,10 @@
 
 === parserArrayLiteralExpression8.ts ===
 var v = [,1,];
->v : number[]
->  : ^^^^^^^^
->[,1,] : number[]
->      : ^^^^^^^^
+>v : (number | undefined)[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>[,1,] : (number | undefined)[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 

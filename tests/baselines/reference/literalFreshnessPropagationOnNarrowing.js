@@ -64,6 +64,7 @@ function f5() {
 }
 
 //// [literalFreshnessPropagationOnNarrowing.js]
+"use strict";
 function f1() {
     let b = true;
     let obj = { b };

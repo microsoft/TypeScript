@@ -11,6 +11,7 @@ namespace mod {
 
 
 //// [parameterPropertyInConstructor2.js]
+"use strict";
 var mod;
 (function (mod) {
     class Customers {

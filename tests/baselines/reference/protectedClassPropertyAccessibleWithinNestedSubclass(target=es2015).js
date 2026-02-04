@@ -40,6 +40,7 @@ class E extends C {
 }
 
 //// [protectedClassPropertyAccessibleWithinNestedSubclass.js]
+"use strict";
 class B {
 }
 class C extends B {

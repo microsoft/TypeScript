@@ -20,6 +20,7 @@ class C {
 }
 
 //// [privateNameBadDeclaration.js]
+"use strict";
 function A() { }
 A.prototype = {
     : 1, // Error

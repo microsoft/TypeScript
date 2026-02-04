@@ -9,6 +9,7 @@ for ([a = 1, b = ""] of tuple) {
 }
 
 //// [ES5For-of30.js]
+"use strict";
 var _a, _b, _c;
 var a, b;
 var tuple = [2, "3"];

@@ -33,10 +33,12 @@ Output::
 
 
 //// [/users/username/projects/project/file1.js]
+"use strict";
 const x = 10;
 
 
 //// [/users/username/projects/project/file2.js]
+"use strict";
 const y = 20;
 
 
@@ -133,6 +135,7 @@ Output::
 
 //// [/users/username/projects/project/file1.js] file written with same contents
 //// [/users/username/projects/project/file2.js]
+"use strict";
 const z = 10;
 
 

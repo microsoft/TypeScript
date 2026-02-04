@@ -59,6 +59,7 @@ function getMultiRobotB() {
 }
 
 //// [sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js]
+"use strict";
 var robotA = [1, "mower", "mowing"];
 var robotB = [2, "trimmer", "trimming"];
 var multiRobotA = ["mower", ["mowing", ""]];

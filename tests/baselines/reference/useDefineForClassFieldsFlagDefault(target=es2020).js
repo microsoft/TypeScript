@@ -8,6 +8,7 @@ class Foo {
 }
 
 //// [useDefineForClassFieldsFlagDefault.js]
+"use strict";
 class Foo {
 }
 // For esNext should be emitted 'as is' because useDefineForClassFields defaults to true 

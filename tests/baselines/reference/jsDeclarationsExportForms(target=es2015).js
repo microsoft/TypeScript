@@ -230,15 +230,19 @@ exports.classContainer = void 0;
 const ns = __importStar(require("./cls"));
 exports.classContainer = ns;
 //// [cjs.js]
+"use strict";
 const ns = require("./cls");
 module.exports = { ns };
 //// [cjs2.js]
+"use strict";
 const ns = require("./cls");
 module.exports = ns;
 //// [cjs3.js]
+"use strict";
 const ns = require("./cls");
 module.exports.ns = ns;
 //// [cjs4.js]
+"use strict";
 const ns = require("./cls");
 module.exports.names = ns;
 //// [includeAll.js]

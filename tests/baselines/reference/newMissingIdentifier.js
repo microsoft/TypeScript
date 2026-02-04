@@ -5,4 +5,5 @@ var x = new ();
 
 
 //// [newMissingIdentifier.js]
+"use strict";
 var x = new ();

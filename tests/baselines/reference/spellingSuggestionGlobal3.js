@@ -6,5 +6,6 @@ globals.x // should suggest `global` (GH#42209)
 
 
 //// [spellingSuggestionGlobal3.js]
+"use strict";
 const global = { x: true };
 globals.x; // should suggest `global` (GH#42209)

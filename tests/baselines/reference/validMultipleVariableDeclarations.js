@@ -42,6 +42,7 @@ var a: typeof a;
 
 
 //// [validMultipleVariableDeclarations.js]
+"use strict";
 // all expected to be valid
 var x;
 var x = 2;

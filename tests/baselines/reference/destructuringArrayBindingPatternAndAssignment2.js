@@ -37,6 +37,7 @@ function foo(idx: number): F {
 var [c4, c5, c6] = foo(1);  // Error
 
 //// [destructuringArrayBindingPatternAndAssignment2.js]
+"use strict";
 // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is the type Any, or
 var [[a0], [[a1]]] = []; // Error

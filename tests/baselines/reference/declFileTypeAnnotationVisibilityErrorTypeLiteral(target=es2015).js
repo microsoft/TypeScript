@@ -36,6 +36,7 @@ namespace m {
 }
 
 //// [declFileTypeAnnotationVisibilityErrorTypeLiteral.js]
+"use strict";
 var m;
 (function (m) {
     class private1 {

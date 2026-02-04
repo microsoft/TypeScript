@@ -15,6 +15,7 @@ namespace B {
 
 
 //// [internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.js]
+"use strict";
 class A {
 }
 (function (A) {

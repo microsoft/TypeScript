@@ -6,4 +6,5 @@ const x: { a: number, b: number } = { a: 1, ...o, b: 2 };
 
 
 //// [spreadNonPrimitive.js]
+"use strict";
 const x = Object.assign(Object.assign({ a: 1 }, o), { b: 2 });

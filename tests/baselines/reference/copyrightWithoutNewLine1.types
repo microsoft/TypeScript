@@ -9,10 +9,10 @@ import model = require("./greeter")
 >      : ^^^
 
 var el = document.getElementById('content');
->el : HTMLElement
->   : ^^^^^^^^^^^
->document.getElementById('content') : HTMLElement
->                                   : ^^^^^^^^^^^
+>el : HTMLElement | null
+>   : ^^^^^^^^^^^^^^^^^^
+>document.getElementById('content') : HTMLElement | null
+>                                   : ^^^^^^^^^^^^^^^^^^
 >document.getElementById : (elementId: string) => HTMLElement | null
 >                        : ^         ^^      ^^^^^                  
 >document : Document
@@ -33,8 +33,8 @@ var greeter = new model.Greeter(el);
 >      : ^^^
 >Greeter : any
 >        : ^^^
->el : HTMLElement
->   : ^^^^^^^^^^^
+>el : HTMLElement | null
+>   : ^^^^^^^^^^^^^^^^^^
 
 /** things */
 greeter.start();

@@ -4,4 +4,5 @@
 var x = `abc${ 1 % 1 }def`;
 
 //// [templateStringWithEmbeddedModulo.js]
+"use strict";
 var x = `abc${1 % 1}def`;

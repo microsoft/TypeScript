@@ -6,6 +6,7 @@ var v = {
 ;
 
 //// [objectLiteralWithSemicolons4.js]
+"use strict";
 var v = {
     a
 };

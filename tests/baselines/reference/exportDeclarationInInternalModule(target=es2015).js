@@ -20,6 +20,7 @@ var a: Bbb.SomeType;
 
 
 //// [exportDeclarationInInternalModule.js]
+"use strict";
 class Bbb {
 }
 class Aaa extends Bbb {

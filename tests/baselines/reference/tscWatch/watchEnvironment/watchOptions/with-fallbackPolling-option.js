@@ -43,10 +43,12 @@ sysLog:: /user/username/projects/project:: Changing to watchFile
 
 
 //// [/user/username/projects/project/commonFile1.js] Inode:: 118
+"use strict";
 let x = 1;
 
 
 //// [/user/username/projects/project/commonFile2.js] Inode:: 119
+"use strict";
 let y = 1;
 
 

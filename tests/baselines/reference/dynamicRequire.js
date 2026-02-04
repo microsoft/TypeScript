@@ -7,6 +7,7 @@ function foo(name) {
 
 
 //// [a_out.js]
+"use strict";
 function foo(name) {
     var s = require("t/" + name);
 }

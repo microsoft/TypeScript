@@ -70,6 +70,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 //// [/user/username/projects/myproject/buttonClass/Source.js]
+"use strict";
 var Hmi;
 (function (Hmi) {
     class Button {
@@ -129,6 +130,7 @@ declare namespace Hmi {
 }
 
 //// [/user/username/projects/myproject/SiblingClass/Source.js]
+"use strict";
 var Hmi;
 (function (Hmi) {
     class Sibling {

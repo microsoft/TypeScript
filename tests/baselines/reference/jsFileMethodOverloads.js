@@ -50,6 +50,7 @@
 
 
 //// [jsFileMethodOverloads.js]
+"use strict";
 /**
  * @template T
  */

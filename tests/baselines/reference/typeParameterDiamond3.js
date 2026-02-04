@@ -16,6 +16,7 @@ function diamondTop<Top>() {
 }
 
 //// [typeParameterDiamond3.js]
+"use strict";
 function diamondTop() {
     function diamondMiddle() {
         function diamondBottom() {

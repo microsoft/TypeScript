@@ -5,6 +5,7 @@ interface I extends Function { }
 
 var x: any;
 >x : any
+>  : ^^^
 
 var f1: Function;
 >f1 : Function
@@ -28,6 +29,7 @@ var r1 = x instanceof f1;
 >x instanceof f1 : boolean
 >                : ^^^^^^^
 >x : any
+>  : ^^^
 >f1 : Function
 >   : ^^^^^^^^
 
@@ -37,6 +39,7 @@ var r2 = x instanceof f2;
 >x instanceof f2 : boolean
 >                : ^^^^^^^
 >x : any
+>  : ^^^
 >f2 : I
 >   : ^
 
@@ -46,6 +49,7 @@ var r3 = x instanceof f3;
 >x instanceof f3 : boolean
 >                : ^^^^^^^
 >x : any
+>  : ^^^
 >f3 : () => void
 >   : ^^^^^^    
 
@@ -55,6 +59,7 @@ var r4 = x instanceof f4;
 >x instanceof f4 : boolean
 >                : ^^^^^^^
 >x : any
+>  : ^^^
 >f4 : new () => number
 >   : ^^^^^^^^^^      
 
@@ -64,6 +69,7 @@ var r5 = x instanceof null;
 >x instanceof null : boolean
 >                  : ^^^^^^^
 >x : any
+>  : ^^^
 
 var r6 = x instanceof undefined;
 >r6 : boolean
@@ -71,6 +77,7 @@ var r6 = x instanceof undefined;
 >x instanceof undefined : boolean
 >                       : ^^^^^^^
 >x : any
+>  : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

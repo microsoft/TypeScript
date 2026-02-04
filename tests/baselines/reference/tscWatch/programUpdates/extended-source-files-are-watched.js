@@ -52,10 +52,12 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
+"use strict";
 let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
 let y = 1;
 
 
@@ -137,16 +139,6 @@ Output::
 
 
 
-//// [/user/username/workspace/solution/projects/project/commonFile1.js]
-"use strict";
-let x = 1;
-
-
-//// [/user/username/workspace/solution/projects/project/commonFile2.js]
-"use strict";
-let y = 1;
-
-
 
 PolledWatches::
 /user/username/workspace/node_modules/@types:
@@ -190,9 +182,6 @@ Program files::
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/workspace/solution/projects/project/commonFile1.ts
-/user/username/workspace/solution/projects/project/commonFile2.ts
 
 No shapes updated in the builder::
 
@@ -343,6 +332,16 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/workspace/solution/projects/project/commonFile1.js]
+"use strict";
+let x = 1;
+
+
+//// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
+let y = 1;
 
 
 

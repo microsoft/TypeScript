@@ -16,6 +16,7 @@ foo({
 });
 
 //// [computedPropertyNamesContextualType6_ES5.js]
+"use strict";
 var _a;
 foo((_a = {
         p: "",

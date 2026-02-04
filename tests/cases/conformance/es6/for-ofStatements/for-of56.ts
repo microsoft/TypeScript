@@ -1,2 +1,3 @@
-﻿//@target: ES6
+﻿// @strict: false
+//@target: ES6
 for (var let of []) {}

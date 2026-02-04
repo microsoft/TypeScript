@@ -6,6 +6,7 @@ const enum E {
 }
 
 //// [preserveConstEnums.js]
+"use strict";
 var E;
 (function (E) {
     E[E["Value"] = 1] = "Value";

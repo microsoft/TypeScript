@@ -25,6 +25,7 @@ exports.o = {
     m: 1
 };
 //// [index.js]
+"use strict";
 var _a = require("./something").o, a = _a.a, m = _a.m;
 var thing = a + m;
 module.exports = {

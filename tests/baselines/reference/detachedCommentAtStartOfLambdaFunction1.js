@@ -13,6 +13,7 @@ class TestFile {
 }
 
 //// [detachedCommentAtStartOfLambdaFunction1.js]
+"use strict";
 class TestFile {
     foo(message) {
         return (...x) => 

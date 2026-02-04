@@ -28,6 +28,7 @@ namespace Generic {
 }
 
 //// [genericSetterInClassType.js]
+"use strict";
 var Generic;
 (function (Generic) {
     class C {

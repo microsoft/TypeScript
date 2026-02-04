@@ -13,6 +13,7 @@ class C2 implements A?.B {}
 
 
 //// [classExtendingOptionalChain.js]
+"use strict";
 var A;
 (function (A) {
     class B {

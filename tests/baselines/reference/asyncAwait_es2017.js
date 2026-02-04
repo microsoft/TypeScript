@@ -49,6 +49,7 @@ async function f14() {
 }
 
 //// [asyncAwait_es2017.js]
+"use strict";
 async function f0() { }
 async function f1() { }
 async function f3() { }

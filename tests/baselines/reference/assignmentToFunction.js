@@ -13,6 +13,7 @@ namespace foo {
 }
 
 //// [assignmentToFunction.js]
+"use strict";
 function fn() { }
 fn = () => 3;
 var foo;

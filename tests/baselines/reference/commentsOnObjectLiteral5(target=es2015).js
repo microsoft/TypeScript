@@ -10,6 +10,7 @@ const a = {
 
 
 //// [commentsOnObjectLiteral5.js]
+"use strict";
 const a = {
     p0: 0, // Comment 0
     p1: 0, /* Comment 1

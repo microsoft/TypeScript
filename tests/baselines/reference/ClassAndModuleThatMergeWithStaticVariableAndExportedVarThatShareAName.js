@@ -25,6 +25,7 @@ namespace A {
 }
 
 //// [ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.js]
+"use strict";
 class Point {
     constructor(x, y) {
         this.x = x;

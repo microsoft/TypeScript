@@ -4,4 +4,5 @@
 "\
 
 //// [unterminatedStringLiteralWithBackslash1.js]
+"use strict";
 "\;

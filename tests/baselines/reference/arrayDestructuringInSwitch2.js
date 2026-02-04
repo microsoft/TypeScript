@@ -17,6 +17,7 @@ function foo(x: X): 1 {
 }
 
 //// [arrayDestructuringInSwitch2.js]
+"use strict";
 function foo(x) {
     const { kind, a } = x;
     switch (kind) {

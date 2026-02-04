@@ -12,6 +12,7 @@ a.b.c
 }
 
 //// [asiPreventsParsingAsNamespace05.js]
+"use strict";
 let namespace = 10;
 var a;
 (function (a) {

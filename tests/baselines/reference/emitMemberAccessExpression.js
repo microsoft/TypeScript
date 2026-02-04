@@ -46,6 +46,7 @@ var Microsoft;
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
 //// [emitMemberAccessExpression_file3.js]
+"use strict";
 /// <reference path="emitMemberAccessExpression_file2.ts" />
 /// <reference path="emitMemberAccessExpression_file1.ts" />
 var Microsoft;

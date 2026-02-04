@@ -153,6 +153,7 @@ i2_i = i3_i;
 
 
 //// [commentsInheritance.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

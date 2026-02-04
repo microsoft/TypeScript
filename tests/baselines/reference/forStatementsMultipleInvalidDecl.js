@@ -56,6 +56,7 @@ for(var m: typeof M;;){}
 for( var m = M.A;;){}
 
 //// [forStatementsMultipleInvalidDecl.js]
+"use strict";
 class C {
 }
 class C2 extends C {

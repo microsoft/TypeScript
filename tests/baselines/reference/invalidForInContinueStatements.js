@@ -41,6 +41,7 @@ for (var x in {}) {
 }
 
 //// [invalidForInContinueStatements.js]
+"use strict";
 // All errors
 // naked continue not allowed
 continue;

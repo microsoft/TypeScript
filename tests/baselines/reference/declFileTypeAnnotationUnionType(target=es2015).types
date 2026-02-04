@@ -45,8 +45,8 @@ var k: c | m.c = new c() || new m.c();
 >  : ^^^^^^^
 >m : any
 >  : ^^^
->new c() || new m.c() : c | m.c
->                     : ^^^^^^^
+>new c() || new m.c() : c
+>                     : ^
 >new c() : c
 >        : ^
 >c : typeof c
@@ -61,10 +61,10 @@ var k: c | m.c = new c() || new m.c();
 >  : ^^^^^^^^^^
 
 var l = new c() || new m.c();
->l : c | m.c
->  : ^^^^^^^
->new c() || new m.c() : c | m.c
->                     : ^^^^^^^
+>l : c
+>  : ^
+>new c() || new m.c() : c
+>                     : ^
 >new c() : c
 >        : ^
 >c : typeof c
@@ -83,10 +83,10 @@ var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^
 >m : any
 >  : ^^^
->new g<string>() ||  new m.g<number>() || (() => new c()) : g<string> | m.g<number> | (() => c)
->                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->new g<string>() ||  new m.g<number>() : g<string> | m.g<number>
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^
+>new g<string>() ||  new m.g<number>() || (() => new c()) : g<string>
+>                                                         : ^^^^^^^^^
+>new g<string>() ||  new m.g<number>() : g<string>
+>                                      : ^^^^^^^^^
 >new g<string>() : g<string>
 >                : ^^^^^^^^^
 >g : typeof g
@@ -109,12 +109,12 @@ var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number
 >  : ^^^^^^^^
 
 var y = new g<string>() || new m.g<number>() || (() => new c());
->y : g<string> | m.g<number> | (() => c)
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->new g<string>() || new m.g<number>() || (() => new c()) : g<string> | m.g<number> | (() => c)
->                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->new g<string>() || new m.g<number>() : g<string> | m.g<number>
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^
+>y : g<string>
+>  : ^^^^^^^^^
+>new g<string>() || new m.g<number>() || (() => new c()) : g<string>
+>                                                        : ^^^^^^^^^
+>new g<string>() || new m.g<number>() : g<string>
+>                                     : ^^^^^^^^^
 >new g<string>() : g<string>
 >                : ^^^^^^^^^
 >g : typeof g

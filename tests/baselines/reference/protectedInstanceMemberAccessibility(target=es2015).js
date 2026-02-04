@@ -47,6 +47,7 @@ class C extends A {
 
 
 //// [protectedInstanceMemberAccessibility.js]
+"use strict";
 class A {
     f() {
         return "hello";

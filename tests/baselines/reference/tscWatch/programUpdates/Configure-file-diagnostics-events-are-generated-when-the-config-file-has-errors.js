@@ -46,6 +46,7 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/app.js]
+"use strict";
 let x = 10;
 
 

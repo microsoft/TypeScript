@@ -19,6 +19,7 @@ namespace ConstructSignature {
 >foo1 : { (cb: new (x: number) => void): typeof cb; (cb: any): any; }
 >     : ^^^  ^^                       ^^^         ^^^  ^^   ^^^   ^^^
 >cb : any
+>   : ^^^
 
     var rarg1: new (x: number) => number;
 >rarg1 : new (x: number) => number
@@ -68,6 +69,7 @@ namespace ConstructSignature {
 >foo2 : { (cb: new (x: number, y: number) => void): typeof cb; (cb: any): any; }
 >     : ^^^  ^^                                  ^^^         ^^^  ^^   ^^^   ^^^
 >cb : any
+>   : ^^^
 
     var r3arg1: new (x: number, y: number) => number;
 >r3arg1 : new (x: number, y: number) => number

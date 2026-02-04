@@ -10,6 +10,7 @@ class C<T> {
 }
 
 //// [computedPropertyNames32_ES5.js]
+"use strict";
 function foo() { return ''; }
 var C = /** @class */ (function () {
     function C() {

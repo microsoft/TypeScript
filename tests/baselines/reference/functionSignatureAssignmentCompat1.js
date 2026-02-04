@@ -14,6 +14,7 @@ var d: ParserFunc = parsers.readline; // not ok
 var e: ParserFunc = parsers.readline(); // ok
 
 //// [functionSignatureAssignmentCompat1.js]
+"use strict";
 var c = parsers.raw; // ok!
 var d = parsers.readline; // not ok
 var e = parsers.readline(); // ok

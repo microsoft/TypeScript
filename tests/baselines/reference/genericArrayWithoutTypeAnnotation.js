@@ -10,6 +10,7 @@ class Bar {
 
 
 //// [genericArrayWithoutTypeAnnotation.js]
+"use strict";
 class Bar {
     getBar(foo) {
     }

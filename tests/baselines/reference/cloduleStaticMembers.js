@@ -15,6 +15,7 @@ namespace Clod {
 
 
 //// [cloduleStaticMembers.js]
+"use strict";
 class Clod {
 }
 Clod.x = 10;

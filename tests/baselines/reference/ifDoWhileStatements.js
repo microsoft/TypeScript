@@ -165,6 +165,7 @@ do { }while(fn)
 
 
 //// [ifDoWhileStatements.js]
+"use strict";
 class C {
 }
 class C2 extends C {

@@ -29,6 +29,7 @@ export class MyClass {
 
 
 //// [index.js]
+"use strict";
 var _a, _b;
 var TopLevelSym = Symbol();
 var InnerSym = Symbol();

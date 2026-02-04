@@ -25,6 +25,7 @@ class C1 {
 
 
 //// [computedPropertyNamesWithStaticProperty.js]
+"use strict";
 var _a;
 class C1 {
     get [C1.staticProp]() {

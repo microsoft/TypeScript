@@ -23,6 +23,7 @@ namespace Test {
 
 
 //// [arrayAssignmentTest6.js]
+"use strict";
 var Test;
 (function (Test) {
     class Bug {

@@ -40,6 +40,7 @@ var i2: I2<{}>;
 
 
 //// [constraintSatisfactionWithEmptyObject.js]
+"use strict";
 // valid uses of a basic object constraint, no errors expected
 // Object constraint
 function foo(x) { }

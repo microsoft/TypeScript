@@ -8,6 +8,7 @@
 
 
 //// [numericUnderscoredSeparator.js]
+"use strict";
 1000000000000;
 41349;
 41349;

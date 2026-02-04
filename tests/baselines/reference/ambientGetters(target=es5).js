@@ -10,3 +10,4 @@ declare class B {
 }
 
 //// [ambientGetters.js]
+"use strict";

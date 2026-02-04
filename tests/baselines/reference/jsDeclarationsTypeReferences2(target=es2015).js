@@ -25,6 +25,7 @@ exports.o = {
     m: 1
 };
 //// [index.js]
+"use strict";
 const { a, m } = require("./something").o;
 const thing = a + m;
 module.exports = {

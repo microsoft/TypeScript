@@ -6,10 +6,10 @@ function foo(a:string, b?:string, c?:number, ...d:number[]){}
 >    : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
 >a : string
 >  : ^^^^^^
->b : string
->  : ^^^^^^
->c : number
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >d : number[]
 >  : ^^^^^^^^
 

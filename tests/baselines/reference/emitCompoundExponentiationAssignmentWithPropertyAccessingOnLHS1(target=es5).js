@@ -14,6 +14,7 @@ foo().prop **= foo().prop ** 2;
 var result2 = foo().prop **= foo().prop ** 2;
 
 //// [emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.js]
+"use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h;
 var globalCounter = 0;
 function foo() {

@@ -1,0 +1,27 @@
+interfaceContextualType.ts(10,12): error TS2564: Property 'values' has no initializer and is not definitely assigned in the constructor.
+
+
+==== interfaceContextualType.ts (1 errors) ====
+    export interface IOptions {
+        italic?: boolean;
+        bold?: boolean;
+    }
+    export interface IMap {
+        [s: string]: IOptions;
+    }
+    
+    class Bug {
+        public values: IMap;
+               ~~~~~~
+!!! error TS2564: Property 'values' has no initializer and is not definitely assigned in the constructor.
+        ok() {
+            this.values = {};
+            this.values['comments'] = { italic: true };
+        }
+        shouldBeOK() {
+            this.values = {
+                comments: { italic: true }
+            };
+        }
+    }
+    

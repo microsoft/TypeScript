@@ -23,6 +23,7 @@ var r = c.foo(1);
 var r2 = e.foo('');
 
 //// [derivedClassTransitivity.js]
+"use strict";
 // subclassing is not transitive when you can remove required parameters and add optional parameters
 class C {
     foo(x) { }

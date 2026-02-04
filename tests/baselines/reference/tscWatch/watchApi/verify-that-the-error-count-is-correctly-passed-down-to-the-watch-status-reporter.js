@@ -53,6 +53,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/index.js]
+"use strict";
 let compiler = new Compiler();
 for (let i = 0; j < 5; i++) { }
 

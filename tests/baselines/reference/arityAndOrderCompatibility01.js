@@ -39,6 +39,7 @@ var o3: [string, number] = y;
 
 
 //// [arityAndOrderCompatibility01.js]
+"use strict";
 var [a, b, c] = x;
 var [d, e, f] = y;
 var [g, h, i] = z;

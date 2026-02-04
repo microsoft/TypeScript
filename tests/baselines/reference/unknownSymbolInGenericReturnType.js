@@ -15,6 +15,7 @@ class Linq {
 
 
 //// [unknownSymbolInGenericReturnType.js]
+"use strict";
 class Linq {
     static select(values, func) {
         var result = new Array(values.length);

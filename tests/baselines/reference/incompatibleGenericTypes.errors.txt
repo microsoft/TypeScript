@@ -1,8 +1,9 @@
 incompatibleGenericTypes.ts(9,5): error TS2322: Type 'I1<boolean>' is not assignable to type 'I1<number>'.
   Type 'boolean' is not assignable to type 'number'.
+incompatibleGenericTypes.ts(9,22): error TS2454: Variable 'v1' is used before being assigned.
 
 
-==== incompatibleGenericTypes.ts (1 errors) ====
+==== incompatibleGenericTypes.ts (2 errors) ====
     interface I1<T> {
     
       m1<U>(callback: (p: T) => U): I1<U>;
@@ -15,3 +16,5 @@ incompatibleGenericTypes.ts(9,5): error TS2322: Type 'I1<boolean>' is not assign
         ~~
 !!! error TS2322: Type 'I1<boolean>' is not assignable to type 'I1<number>'.
 !!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+                         ~~
+!!! error TS2454: Variable 'v1' is used before being assigned.

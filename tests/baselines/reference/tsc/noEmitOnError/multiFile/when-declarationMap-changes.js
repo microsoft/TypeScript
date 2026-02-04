@@ -35,6 +35,7 @@ Output::
 
 
 //// [/home/src/workspaces/project/a.js]
+"use strict";
 const x = 10;
 
 
@@ -43,6 +44,7 @@ declare const x = 10;
 
 
 //// [/home/src/workspaces/project/b.js]
+"use strict";
 const y = 10;
 
 

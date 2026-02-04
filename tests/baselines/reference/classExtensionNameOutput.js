@@ -11,6 +11,7 @@ if (true) {
 }
 
 //// [classExtensionNameOutput.js]
+"use strict";
 class A {
 }
 if (true) {

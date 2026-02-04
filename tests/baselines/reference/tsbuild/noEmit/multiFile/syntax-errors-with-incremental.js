@@ -313,6 +313,7 @@ Output::
 }
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 const a = "hello";
 
 
@@ -513,6 +514,7 @@ Found 1 error.
 }
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 const a = "hello;
 
 

@@ -38,6 +38,7 @@ namespace e6b { export var y = 2; } // should be error
 //import e7 = require(''); // should be error
 
 //// [augmentedTypesEnum.js]
+"use strict";
 // enum then var
 var e1111;
 (function (e1111) {

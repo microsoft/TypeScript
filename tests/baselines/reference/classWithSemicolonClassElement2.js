@@ -7,6 +7,7 @@ class C {
 }
 
 //// [classWithSemicolonClassElement2.js]
+"use strict";
 class C {
     ;
     ;

@@ -12,3 +12,4 @@ interface Deriver extends Base {
 
 
 //// [overloadOnConstInheritance1.js]
+"use strict";

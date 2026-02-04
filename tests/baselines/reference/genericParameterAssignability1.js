@@ -6,6 +6,7 @@ var r = <T>(x: T) => x;
 r = f; // should be allowed
 
 //// [genericParameterAssignability1.js]
+"use strict";
 function f(x) { return null; }
 var r = (x) => x;
 r = f; // should be allowed

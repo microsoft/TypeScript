@@ -12,6 +12,7 @@ var i: I = x; // Should not be allowed -- type of 'f' is incompatible with 'I'
 
 
 //// [genericTypeWithNonGenericBaseMisMatch.js]
+"use strict";
 class X {
     f(a) { }
 }

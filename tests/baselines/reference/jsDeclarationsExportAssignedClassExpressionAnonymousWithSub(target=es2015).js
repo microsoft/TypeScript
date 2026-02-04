@@ -17,6 +17,7 @@ module.exports.Sub = class {
 
 
 //// [index.js]
+"use strict";
 module.exports = class {
     /**
      * @param {number} p

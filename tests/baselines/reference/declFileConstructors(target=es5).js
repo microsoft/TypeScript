@@ -164,6 +164,7 @@ var ConstructorWithParameterInitializer = /** @class */ (function () {
 }());
 exports.ConstructorWithParameterInitializer = ConstructorWithParameterInitializer;
 //// [declFileConstructors_1.js]
+"use strict";
 var GlobalSimpleConstructor = /** @class */ (function () {
     /** This comment should appear for foo*/
     function GlobalSimpleConstructor() {
@@ -248,8 +249,8 @@ export declare class ConstructorWithPrivateParameterProperty {
     constructor(x: string);
 }
 export declare class ConstructorWithOptionalParameterProperty {
-    x?: string;
-    constructor(x?: string);
+    x?: string | undefined;
+    constructor(x?: string | undefined);
 }
 export declare class ConstructorWithParameterInitializer {
     x: string;
@@ -282,8 +283,8 @@ declare class GlobalConstructorWithPrivateParameterProperty {
     constructor(x: string);
 }
 declare class GlobalConstructorWithOptionalParameterProperty {
-    x?: string;
-    constructor(x?: string);
+    x?: string | undefined;
+    constructor(x?: string | undefined);
 }
 declare class GlobalConstructorWithParameterInitializer {
     x: string;

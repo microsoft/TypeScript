@@ -5,6 +5,7 @@ class A { }
 interface Class extends (typeof A) { }
 
 //// [declarationEmitInterfaceWithNonEntityNameExpressionHeritage.js]
+"use strict";
 class A {
 }
 

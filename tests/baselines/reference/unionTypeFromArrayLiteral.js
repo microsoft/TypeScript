@@ -26,6 +26,7 @@ var arr8 = [c, e]; // C[]
 var arr9 = [e, f]; // (E|F)[]
 
 //// [unionTypeFromArrayLiteral.js]
+"use strict";
 // The resulting type an array literal expression is determined as follows:
 // If the array literal is empty, the resulting type is an array type with the element type Undefined.
 // Otherwise, if the array literal is contextually typed by a type that has a property with the numeric name ‘0’, the resulting type is a tuple type constructed from the types of the element expressions.

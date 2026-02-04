@@ -18,6 +18,7 @@ try {
 
 
 //// [es2016IntlAPIs.js]
+"use strict";
 // Sample from
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/getCanonicalLocales
 console.log(Intl.getCanonicalLocales('EN-US'));

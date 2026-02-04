@@ -5,3 +5,4 @@ async namespace M {
 }
 
 //// [asyncModule_es5.js]
+"use strict";

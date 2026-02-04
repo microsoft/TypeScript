@@ -54,6 +54,7 @@ function fn() {
 
 
 //// [foo.js]
+"use strict";
 /**
  * @typedef {any} Any
  */

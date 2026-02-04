@@ -14,6 +14,7 @@ class foo {
 
 
 //// [reassignStaticProp.js]
+"use strict";
 class foo {
 }
 foo.bar = 1;

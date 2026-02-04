@@ -8,6 +8,7 @@ if (ArrayBuffer.isView(obj)) {
 }
 
 //// [arrayBufferIsViewNarrowsType.js]
+"use strict";
 var obj;
 if (ArrayBuffer.isView(obj)) {
     // isView should be a guard that narrows type to ArrayBufferView.

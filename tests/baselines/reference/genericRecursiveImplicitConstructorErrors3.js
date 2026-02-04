@@ -33,6 +33,7 @@ namespace TypeScript {
 
 
 //// [genericRecursiveImplicitConstructorErrors3.js]
+"use strict";
 var TypeScript;
 (function (TypeScript) {
     class MemberName {

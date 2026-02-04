@@ -15,6 +15,7 @@ class C {
 }
 
 //// [staticMemberWithStringAndNumberNames.js]
+"use strict";
 class C {
     constructor() {
         this.x = C['foo'];

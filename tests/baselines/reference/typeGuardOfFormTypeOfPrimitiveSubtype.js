@@ -25,6 +25,7 @@ if (typeof b === "boolean") {
 
 
 //// [typeGuardOfFormTypeOfPrimitiveSubtype.js]
+"use strict";
 let a;
 let b;
 if (typeof a === "number") {

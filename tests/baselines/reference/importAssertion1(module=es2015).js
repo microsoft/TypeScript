@@ -54,6 +54,7 @@ b;
 c;
 d;
 //// [3.js]
+"use strict";
 const a = import('./0');
 const b = import('./0', { with: { type: "json" } });
 const c = import('./0', { with: { type: "json", ttype: "typo" } });

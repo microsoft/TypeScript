@@ -7,6 +7,7 @@ class List<T extends {}> {
 
 
 //// [noConstraintInReturnType1.js]
+"use strict";
 class List {
     static empty() { return null; }
 }

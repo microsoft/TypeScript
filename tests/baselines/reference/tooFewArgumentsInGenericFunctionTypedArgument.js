@@ -19,6 +19,7 @@ var r1b = _.map(c2, rf1);
 
 
 //// [tooFewArgumentsInGenericFunctionTypedArgument.js]
+"use strict";
 var c2;
 var _;
 var r1a = _.map(c2, (x) => { return x.toFixed(); });

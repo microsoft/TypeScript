@@ -4,4 +4,5 @@
 var v = ()({});
 
 //// [parser566700.js]
+"use strict";
 var v = ()({});

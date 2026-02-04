@@ -14,6 +14,7 @@ class Child extends Parent {
 }
 
 //// [noImplicitAnyMissingGetAccessor.js]
+"use strict";
 class Parent {
 }
 class Child extends Parent {

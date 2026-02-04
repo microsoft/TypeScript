@@ -4,4 +4,5 @@
 function let() {}
 
 //// [letAsIdentifier2.js]
+"use strict";
 function let() { }

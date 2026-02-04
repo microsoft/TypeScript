@@ -18,6 +18,7 @@ namespace clodule {
 
 
 //// [ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.js]
+"use strict";
 class clodule {
     static fn(id) { }
 }

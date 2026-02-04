@@ -47,6 +47,7 @@ class C extends A {
 
 
 //// [protectedInstanceMemberAccessibility.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

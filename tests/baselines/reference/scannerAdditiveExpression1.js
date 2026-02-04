@@ -4,4 +4,5 @@
 m.index+1+m[0].length;
 
 //// [scannerAdditiveExpression1.js]
+"use strict";
 m.index + 1 + m[0].length;

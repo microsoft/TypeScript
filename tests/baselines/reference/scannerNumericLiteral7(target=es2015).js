@@ -4,4 +4,5 @@
 1e+0
 
 //// [scannerNumericLiteral7.js]
+"use strict";
 1e+0;

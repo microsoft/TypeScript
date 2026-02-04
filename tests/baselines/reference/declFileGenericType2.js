@@ -44,6 +44,7 @@ namespace templa.dom.mvc.composite {
 
 
 //// [declFileGenericType2.js]
+"use strict";
 // Module
 var templa;
 (function (templa) {

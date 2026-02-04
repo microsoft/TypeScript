@@ -51,6 +51,7 @@ class D {
 
 
 //// [implicitAnyFromCircularInference.js]
+"use strict";
 // Error expected
 var a;
 // Error expected on b or c

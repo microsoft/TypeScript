@@ -14,6 +14,7 @@ var BOOLEAN2 = !b + b;
 var BOOLEAN3 =!;
 
 //// [logicalNotOperatorInvalidOperations.js]
+"use strict";
 // operand before !
 var BOOLEAN1 = b; //expect error
 // miss parentheses

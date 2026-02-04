@@ -61,6 +61,7 @@ class D5 extends getBadBase() {
 
 
 //// [classExtendingClassLikeType.js]
+"use strict";
 // Error, no Base constructor function
 class D0 extends Base {
 }

@@ -17,12 +17,12 @@ type Disjoint =
  | { readonly value: string; readonly err?: never; }
 >value : string
 >      : ^^^^^^
->err : never
->    : ^^^^^
+>err : undefined
+>    : ^^^^^^^^^
 
  | { readonly value?: never; readonly err: FooAndBaz; };
->value : never
->      : ^^^^^
+>value : undefined
+>      : ^^^^^^^^^
 >err : FooAndBaz
 >    : ^^^^^^^^^
 
@@ -33,18 +33,18 @@ function test1(result: Disjoint): string {
 >       : ^^^^^^^^
 
     if (result.err) {
->result.err : FooAndBaz
->           : ^^^^^^^^^
+>result.err : FooAndBaz | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >result : Disjoint
 >       : ^^^^^^^^
->err : FooAndBaz
->    : ^^^^^^^^^
+>err : FooAndBaz | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^
 
         throw result.err;
 >result.err : FooAndBaz
 >           : ^^^^^^^^^
->result : Disjoint
->       : ^^^^^^^^
+>result : { readonly value?: never; readonly err: FooAndBaz; }
+>       : ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^         ^^^
 >err : FooAndBaz
 >    : ^^^^^^^^^
     }
@@ -52,8 +52,8 @@ function test1(result: Disjoint): string {
     return result.value;
 >result.value : string
 >             : ^^^^^^
->result : Disjoint
->       : ^^^^^^^^
+>result : { readonly value: string; readonly err?: never; }
+>       : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^     ^^^
 >value : string
 >      : ^^^^^^
 }

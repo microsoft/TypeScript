@@ -4,5 +4,6 @@
 function f() => 4;
 
 //// [parserErrantEqualsGreaterThanAfterFunction1.js]
+"use strict";
 function f() { }
 4;

@@ -11,6 +11,7 @@ var x = new M.C<string>();
 
 
 //// [specializationOfExportedClass.js]
+"use strict";
 var M;
 (function (M) {
     class C {

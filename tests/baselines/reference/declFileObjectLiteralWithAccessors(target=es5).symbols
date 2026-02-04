@@ -16,6 +16,9 @@ function /*1*/makePoint(x: number) {
         set x(a: number) { this.b = a; }
 >x : Symbol(x, Decl(declFileObjectLiteralWithAccessors.ts, 2, 14), Decl(declFileObjectLiteralWithAccessors.ts, 3, 30))
 >a : Symbol(a, Decl(declFileObjectLiteralWithAccessors.ts, 4, 14))
+>this.b : Symbol(b, Decl(declFileObjectLiteralWithAccessors.ts, 1, 12))
+>this : Symbol(__object, Decl(declFileObjectLiteralWithAccessors.ts, 1, 10))
+>b : Symbol(b, Decl(declFileObjectLiteralWithAccessors.ts, 1, 12))
 >a : Symbol(a, Decl(declFileObjectLiteralWithAccessors.ts, 4, 14))
 
     };

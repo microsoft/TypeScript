@@ -8,6 +8,7 @@ sources: sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 emittedFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js
 sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>class AbstractGreeter {
 1 >
 2 >^^^^^^
@@ -15,16 +16,16 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 1 >
 2 >class 
 3 >      AbstractGreeter
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
-3 >Emitted(1, 22) Source(1, 22) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(2, 22) Source(1, 22) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > {
   >}
-1 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
+1 >Emitted(3, 2) Source(2, 2) + SourceIndex(0)
 ---
 >>>class Greeter extends AbstractGreeter {
 1->
@@ -39,17 +40,17 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 3 >      Greeter 
 4 >             extends 
 5 >                      AbstractGreeter
-1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
-2 >Emitted(3, 7) Source(4, 7) + SourceIndex(0)
-3 >Emitted(3, 14) Source(4, 15) + SourceIndex(0)
-4 >Emitted(3, 23) Source(4, 23) + SourceIndex(0)
-5 >Emitted(3, 38) Source(4, 38) + SourceIndex(0)
+1->Emitted(4, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 7) Source(4, 7) + SourceIndex(0)
+3 >Emitted(4, 14) Source(4, 15) + SourceIndex(0)
+4 >Emitted(4, 23) Source(4, 23) + SourceIndex(0)
+5 >Emitted(4, 38) Source(4, 38) + SourceIndex(0)
 ---
 >>>    constructor() {
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-1 >Emitted(4, 5) Source(4, 1) + SourceIndex(0)
+1 >Emitted(5, 5) Source(4, 1) + SourceIndex(0)
 ---
 >>>        super(...arguments);
 >>>        this.a = 10;
@@ -65,11 +66,11 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 3 >               = 
 4 >                 10
 5 >                   ;
-1->Emitted(6, 9) Source(5, 12) + SourceIndex(0)
-2 >Emitted(6, 15) Source(5, 13) + SourceIndex(0)
-3 >Emitted(6, 18) Source(5, 16) + SourceIndex(0)
-4 >Emitted(6, 20) Source(5, 18) + SourceIndex(0)
-5 >Emitted(6, 21) Source(5, 19) + SourceIndex(0)
+1->Emitted(7, 9) Source(5, 12) + SourceIndex(0)
+2 >Emitted(7, 15) Source(5, 13) + SourceIndex(0)
+3 >Emitted(7, 18) Source(5, 16) + SourceIndex(0)
+4 >Emitted(7, 20) Source(5, 18) + SourceIndex(0)
+5 >Emitted(7, 21) Source(5, 19) + SourceIndex(0)
 ---
 >>>        this.nameA = "Ten";
 1->^^^^^^^^
@@ -83,11 +84,11 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 3 >                   = 
 4 >                     "Ten"
 5 >                          ;
-1->Emitted(7, 9) Source(6, 12) + SourceIndex(0)
-2 >Emitted(7, 19) Source(6, 17) + SourceIndex(0)
-3 >Emitted(7, 22) Source(6, 20) + SourceIndex(0)
-4 >Emitted(7, 27) Source(6, 25) + SourceIndex(0)
-5 >Emitted(7, 28) Source(6, 26) + SourceIndex(0)
+1->Emitted(8, 9) Source(6, 12) + SourceIndex(0)
+2 >Emitted(8, 19) Source(6, 17) + SourceIndex(0)
+3 >Emitted(8, 22) Source(6, 20) + SourceIndex(0)
+4 >Emitted(8, 27) Source(6, 25) + SourceIndex(0)
+5 >Emitted(8, 28) Source(6, 26) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -95,13 +96,13 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 1 >
   >
 2 >    }
-1 >Emitted(8, 5) Source(7, 1) + SourceIndex(0)
-2 >Emitted(8, 6) Source(7, 2) + SourceIndex(0)
+1 >Emitted(9, 5) Source(7, 1) + SourceIndex(0)
+2 >Emitted(9, 6) Source(7, 2) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-1 >Emitted(9, 2) Source(7, 2) + SourceIndex(0)
+1 >Emitted(10, 2) Source(7, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js.map

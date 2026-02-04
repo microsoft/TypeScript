@@ -9,6 +9,7 @@ while (1) {
 
 
 //// [noImplicitAnyLoopCrash.js]
+"use strict";
 let foo = () => { };
 let bar;
 while (1) {

@@ -7,6 +7,7 @@ class C { }
 
 
 //// [foo.js]
+"use strict";
 let foo;
 class C {
 }

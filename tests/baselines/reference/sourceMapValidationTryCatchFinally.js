@@ -24,6 +24,7 @@ finally
 }
 
 //// [sourceMapValidationTryCatchFinally.js]
+"use strict";
 var x = 10;
 try {
     x = x + 1;

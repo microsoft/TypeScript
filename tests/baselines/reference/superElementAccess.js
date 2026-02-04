@@ -38,6 +38,7 @@ class MyDerived extends MyBase {
 }
 
 //// [superElementAccess.js]
+"use strict";
 class MyBase {
     constructor() {
         this.m2 = function () { };
