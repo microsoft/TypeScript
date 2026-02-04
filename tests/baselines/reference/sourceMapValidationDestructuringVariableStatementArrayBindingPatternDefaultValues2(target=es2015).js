@@ -20,6 +20,7 @@ if (nameMB == nameMA) {
 }
 
 //// [sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.js]
+"use strict";
 var multiRobotA = ["mower", ["mowing", ""]];
 var multiRobotB = ["trimmer", ["trimming", "edging"]];
 let [, skillA = ["noSkill", "noSkill"]] = multiRobotA;

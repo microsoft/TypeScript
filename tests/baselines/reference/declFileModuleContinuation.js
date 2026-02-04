@@ -12,6 +12,7 @@ namespace A.B.C {
 }
 
 //// [declFileModuleContinuation.js]
+"use strict";
 var A;
 (function (A) {
     var B;

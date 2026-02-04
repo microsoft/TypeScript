@@ -27,6 +27,7 @@ abstract class B {
 }
 
 //// [classAbstractOverloads.js]
+"use strict";
 class A {
     baz() { }
 }

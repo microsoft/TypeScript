@@ -15,6 +15,7 @@ class Baz implements IBar<Baz> {
 
 
 //// [declFileGenericClassWithGenericExtendedClass.js]
+"use strict";
 class Base {
 }
 class Derived extends Base {

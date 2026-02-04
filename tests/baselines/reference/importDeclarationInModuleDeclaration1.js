@@ -6,3 +6,4 @@ namespace m2 {
 }
 
 //// [importDeclarationInModuleDeclaration1.js]
+"use strict";

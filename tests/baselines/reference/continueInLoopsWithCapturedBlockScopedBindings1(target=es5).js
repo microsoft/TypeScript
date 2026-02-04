@@ -15,6 +15,7 @@ function foo() {
 }
 
 //// [continueInLoopsWithCapturedBlockScopedBindings1.js]
+"use strict";
 function foo() {
     var _loop_1 = function (i) {
         if (i === 0) {

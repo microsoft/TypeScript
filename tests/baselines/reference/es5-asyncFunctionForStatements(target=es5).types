@@ -3,11 +3,17 @@
 === es5-asyncFunctionForStatements.ts ===
 declare var x, y, z, a, b, c;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 async function forStatement0() {
 >forStatement0 : () => Promise<void>
@@ -15,9 +21,13 @@ async function forStatement0() {
 
     for (x; y; z) { a; }
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 }
 
 async function forStatement1() {
@@ -26,10 +36,15 @@ async function forStatement1() {
 
     for (await x; y; z) { a; }
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 }
 
 async function forStatement2() {
@@ -38,10 +53,15 @@ async function forStatement2() {
 
     for (x; await y; z) { a; }
 >x : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 }
 
 async function forStatement3() {
@@ -50,10 +70,15 @@ async function forStatement3() {
 
     for (x; y; await z) { a; }
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 }
 
 async function forStatement4() {
@@ -62,10 +87,15 @@ async function forStatement4() {
 
     for (x; y; z) { await a; }
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >await a : any
+>        : ^^^
 >a : any
+>  : ^^^
 }
 
 async function forStatement5() {
@@ -74,9 +104,13 @@ async function forStatement5() {
 
     for (var b; y; z) { a; }
 >b : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 }
 
 async function forStatement6() {
@@ -85,8 +119,13 @@ async function forStatement6() {
 
     for (var c = x; y; z) { a; }
 >c : any
+>  : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 }

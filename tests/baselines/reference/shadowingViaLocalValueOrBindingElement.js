@@ -13,6 +13,7 @@ if (true) {
 }
 
 //// [shadowingViaLocalValueOrBindingElement.js]
+"use strict";
 if (true) {
     let x;
     if (true) {

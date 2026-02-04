@@ -33,4 +33,5 @@ declare var E: I;
 
 
 //// [tsxIntrinsicAttributeErrors.jsx]
+"use strict";
 <E x={10}/>;

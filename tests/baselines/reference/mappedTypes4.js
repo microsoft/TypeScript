@@ -74,6 +74,7 @@ var z1: Clone<Z>;
 
 
 //// [mappedTypes4.js]
+"use strict";
 function boxify(obj) {
     if (typeof obj === "object") {
         let result = {};

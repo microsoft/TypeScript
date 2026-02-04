@@ -13,6 +13,7 @@ var obj = {
 obj[Symbol.foo];
 
 //// [ES5SymbolProperty1.js]
+"use strict";
 var Symbol;
 var obj = {
     [Symbol.foo]: 0

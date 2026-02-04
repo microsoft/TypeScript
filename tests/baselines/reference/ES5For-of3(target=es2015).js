@@ -5,6 +5,7 @@ for (var v of ['a', 'b', 'c'])
     var x = v;
 
 //// [ES5For-of3.js]
+"use strict";
 for (var v of ['a', 'b', 'c'])
     var x = v;
 //# sourceMappingURL=ES5For-of3.js.map

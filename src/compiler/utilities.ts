@@ -2132,7 +2132,7 @@ export function isEffectiveStrictModeSourceFile(node: SourceFile, compilerOption
         return false;
     }
     // If `alwaysStrict` is set, then treat the file as strict.
-    if (getStrictOptionValue(compilerOptions, "alwaysStrict")) {
+    if (getAlwaysStrict(compilerOptions)) {
         return true;
     }
     // Starting with a "use strict" directive indicates the file is strict.
@@ -8999,23 +8999,32 @@ const _computedOptions = createComputedCompilerOptions({
         },
     },
     target: {
-        dependencies: ["module"],
+        dependencies: [],
         computeValue: compilerOptions => {
             const target = compilerOptions.target === ScriptTarget.ES3 ? undefined : compilerOptions.target;
-            return target ??
-                ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
-                    (compilerOptions.module === ModuleKind.Node18 && ScriptTarget.ES2022) ||
-                    (compilerOptions.module === ModuleKind.Node20 && ScriptTarget.ES2023) ||
-                    (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
-                    ScriptTarget.ES5);
+            return target ?? ScriptTarget.LatestStandard;
         },
     },
     module: {
         dependencies: ["target"],
         computeValue: (compilerOptions): ModuleKind => {
-            return typeof compilerOptions.module === "number" ?
-                compilerOptions.module :
-                _computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
+            if (typeof compilerOptions.module === "number") {
+                return compilerOptions.module;
+            }
+            const target = _computedOptions.target.computeValue(compilerOptions);
+            if (target === ScriptTarget.ESNext) {
+                return ModuleKind.ESNext;
+            }
+            if (target >= ScriptTarget.ES2022) {
+                return ModuleKind.ES2022;
+            }
+            if (target >= ScriptTarget.ES2020) {
+                return ModuleKind.ES2020;
+            }
+            if (target >= ScriptTarget.ES2015) {
+                return ModuleKind.ES2015;
+            }
+            return ModuleKind.CommonJS;
         },
     },
     moduleResolution: {
@@ -9211,10 +9220,11 @@ const _computedOptions = createComputedCompilerOptions({
             return getStrictOptionValue(compilerOptions, "strictBuiltinIteratorReturn");
         },
     },
+    // Previously a strict-mode flag, but no longer.
     alwaysStrict: {
-        dependencies: ["strict"],
+        dependencies: [],
         computeValue: compilerOptions => {
-            return getStrictOptionValue(compilerOptions, "alwaysStrict");
+            return compilerOptions.alwaysStrict !== false;
         },
     },
     useUnknownInCatchVariables: {
@@ -9262,6 +9272,8 @@ export const getAreDeclarationMapsEnabled: (compilerOptions: CompilerOptions) =>
 export const getAllowJSCompilerOption: (compilerOptions: CompilerOptions) => boolean = _computedOptions.allowJs.computeValue;
 /** @internal */
 export const getUseDefineForClassFields: (compilerOptions: CompilerOptions) => boolean = _computedOptions.useDefineForClassFields.computeValue;
+/** @internal */
+export const getAlwaysStrict: (compilerOptions: CompilerOptions) => boolean = _computedOptions.alwaysStrict.computeValue;
 
 /** @internal */
 export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean {
@@ -9304,12 +9316,11 @@ export type StrictOptionName =
     | "strictBindCallApply"
     | "strictPropertyInitialization"
     | "strictBuiltinIteratorReturn"
-    | "alwaysStrict"
     | "useUnknownInCatchVariables";
 
 /** @internal */
 export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
-    return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
+    return compilerOptions[flag] === undefined ? (compilerOptions.strict !== false) : !!compilerOptions[flag];
 }
 
 /** @internal */

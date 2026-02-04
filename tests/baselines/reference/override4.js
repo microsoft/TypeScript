@@ -27,6 +27,7 @@ class DD extends B {
 }
 
 //// [override4.js]
+"use strict";
 class B {
     constructor() {
         this.p1 = 1;

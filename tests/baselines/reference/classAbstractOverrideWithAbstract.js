@@ -26,6 +26,7 @@ class DD extends BB {
 }
 
 //// [classAbstractOverrideWithAbstract.js]
+"use strict";
 class A {
     foo() { }
 }

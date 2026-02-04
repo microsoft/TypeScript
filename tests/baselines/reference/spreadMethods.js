@@ -44,6 +44,7 @@ sso.g; // ok
 
 
 //// [spreadMethods.js]
+"use strict";
 class K {
     constructor() {
         this.p = 12;

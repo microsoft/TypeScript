@@ -16,6 +16,7 @@ class LanguageSpec_section_4_5_error_cases {
 }
 
 //// [accessors_spec_section-4.5_error-cases.js]
+"use strict";
 class LanguageSpec_section_4_5_error_cases {
     set AnnotatedSetter_SetterFirst(a) { }
     get AnnotatedSetter_SetterFirst() { return ""; }

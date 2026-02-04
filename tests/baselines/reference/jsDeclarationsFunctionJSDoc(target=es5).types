@@ -39,6 +39,7 @@ export class Aleph {
 >this.field = b : null
 >               : ^^^^
 >this.field : any
+>           : ^^^
 >this : this
 >     : ^^^^
 >field : any

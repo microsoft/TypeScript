@@ -10,6 +10,7 @@ namespace bar {
 
 
 //// [genericClassImplementingGenericInterfaceFromAnotherModule.js]
+"use strict";
 var bar;
 (function (bar) {
     class Foo {

@@ -60,6 +60,7 @@ z: typeof A.foo;
 z: typeof M.n;
 
 //// [typeofOperatorWithStringType.js]
+"use strict";
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
 class A {

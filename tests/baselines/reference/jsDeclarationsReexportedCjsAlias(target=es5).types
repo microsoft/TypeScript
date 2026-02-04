@@ -11,6 +11,7 @@ const { SomeClass, SomeClass: Another } = require('./lib');
 >require('./lib') : typeof import("lib")
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
+>        : ^^^
 >'./lib' : "./lib"
 >        : ^^^^^^^
 

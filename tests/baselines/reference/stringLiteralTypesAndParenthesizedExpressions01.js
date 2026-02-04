@@ -10,6 +10,7 @@ let d: "foo" | "bar" = (myRandBool ? "foo" : ("bar"));
 
 
 //// [stringLiteralTypesAndParenthesizedExpressions01.js]
+"use strict";
 let a = ("foo");
 let b = ("foo");
 let c = (myRandBool ? "foo" : ("foo"));

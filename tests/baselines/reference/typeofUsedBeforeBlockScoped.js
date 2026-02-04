@@ -11,6 +11,7 @@ let o = { n: 12 };
 
 
 //// [typeofUsedBeforeBlockScoped.js]
+"use strict";
 class C {
 }
 C.s = 2;

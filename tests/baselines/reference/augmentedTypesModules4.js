@@ -25,6 +25,7 @@ namespace m5 { export interface I { foo(): void } } // should already be reasona
 
 
 //// [augmentedTypesModules4.js]
+"use strict";
 var m4;
 (function (m4) {
 })(m4 || (m4 = {}));

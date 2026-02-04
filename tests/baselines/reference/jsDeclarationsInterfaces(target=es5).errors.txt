@@ -1,3 +1,4 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 index.js(4,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
 index.js(6,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
 index.js(10,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
@@ -30,6 +31,7 @@ index.js(111,18): error TS8006: 'interface' declarations can only be used in Typ
 index.js(115,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== index.js (30 errors) ====
     // Pretty much all of this should be an error, (since interfaces are forbidden in js),
     // but we should be able to synthesize declarations from the symbols regardless

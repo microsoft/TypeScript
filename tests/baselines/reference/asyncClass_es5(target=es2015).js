@@ -5,5 +5,6 @@ async class C {
 }
 
 //// [asyncClass_es5.js]
+"use strict";
 class C {
 }

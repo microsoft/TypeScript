@@ -1,3 +1,4 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 strictNullEmptyDestructuring.ts(3,5): error TS2461: Type 'null' is not an array type.
 strictNullEmptyDestructuring.ts(3,5): error TS2531: Object is possibly 'null'.
 strictNullEmptyDestructuring.ts(5,5): error TS2531: Object is possibly 'null'.
@@ -12,6 +13,7 @@ strictNullEmptyDestructuring.ts(21,5): error TS2533: Object is possibly 'null' o
 strictNullEmptyDestructuring.ts(23,2): error TS2533: Object is possibly 'null' or 'undefined'.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== strictNullEmptyDestructuring.ts (12 errors) ====
     // Repro from #20873
     

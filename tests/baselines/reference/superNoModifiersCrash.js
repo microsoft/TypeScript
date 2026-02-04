@@ -14,6 +14,7 @@ class Child extends Parent {
 }
 
 //// [File.js]
+"use strict";
 class Parent {
     initialize() {
         super.initialize(...arguments);

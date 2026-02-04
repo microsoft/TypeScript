@@ -51,6 +51,7 @@ class MyView extends View {
 
 
 //// [underscoreMapFirst.js]
+"use strict";
 class MyView extends View {
     getDataSeries() {
         var data = this.model.get("data");

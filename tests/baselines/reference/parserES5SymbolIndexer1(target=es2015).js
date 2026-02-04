@@ -6,3 +6,4 @@ interface I {
 }
 
 //// [parserES5SymbolIndexer1.js]
+"use strict";

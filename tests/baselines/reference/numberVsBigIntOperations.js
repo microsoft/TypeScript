@@ -104,6 +104,7 @@ function getKey<S extends NumberOrBigint>(key: S) {
 
 
 //// [numberVsBigIntOperations.js]
+"use strict";
 // Cannot mix bigints and numbers
 let bigInt = 1n, num = 2;
 bigInt = 1n;

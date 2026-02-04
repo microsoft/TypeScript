@@ -160,6 +160,7 @@ namespace M2 {
 }
 
 //// [subtypesOfTypeParameterWithRecursiveConstraints.js]
+"use strict";
 // checking whether other types are subtypes of type parameters with constraints
 class Foo {
 }

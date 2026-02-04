@@ -18,6 +18,7 @@ if (ba[14]) {
 new C[1]; // not an error
 
 //// [createArray.js]
+"use strict";
 var na = new number[];
 class C {
 }

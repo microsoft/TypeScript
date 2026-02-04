@@ -1,3 +1,4 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 es6modulekindWithES5Target9.ts(1,15): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
 es6modulekindWithES5Target9.ts(3,17): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
 es6modulekindWithES5Target9.ts(5,20): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
@@ -5,6 +6,7 @@ es6modulekindWithES5Target9.ts(13,15): error TS2307: Cannot find module 'mod' or
 es6modulekindWithES5Target9.ts(15,17): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== es6modulekindWithES5Target9.ts (5 errors) ====
     import d from "mod";
                   ~~~~~

@@ -31,6 +31,7 @@ class B extends A {
 }
 
 //// [superPropertyAccess_ES5.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

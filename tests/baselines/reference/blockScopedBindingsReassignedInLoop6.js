@@ -32,6 +32,7 @@ function f2() {
 
 
 //// [blockScopedBindingsReassignedInLoop6.js]
+"use strict";
 function f1() {
     for (let [x, y] = [1, 2]; x < y; ++x, --y) {
         let a = () => x++ + y++;

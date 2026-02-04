@@ -8,8 +8,8 @@ async function fn1() {
     let ar = [];
 >ar : any[]
 >   : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     for (let i = 0; i < 1; i++) {
 >i : number
@@ -56,8 +56,8 @@ async function fn2() {
     let ar = [];
 >ar : any[]
 >   : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     for (let i = 0; i < 1; i++) {
 >i : number
@@ -106,8 +106,8 @@ async function fn3() {
     let ar = [];
 >ar : any[]
 >   : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     for (let i = 0; i < 1; i++) {
 >i : number
@@ -156,8 +156,8 @@ async function fn4(): Promise<number> {
     let ar = [];
 >ar : any[]
 >   : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     for (let i = 0; i < 1; i++) {
 >i : number

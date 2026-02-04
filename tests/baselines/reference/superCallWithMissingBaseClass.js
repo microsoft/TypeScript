@@ -12,6 +12,7 @@ class Foo extends Bar {
 }
 
 //// [superCallWithMissingBaseClass.js]
+"use strict";
 class Foo extends Bar {
     m1() {
         return super.m1();

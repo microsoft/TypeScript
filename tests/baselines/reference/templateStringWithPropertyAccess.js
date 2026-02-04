@@ -4,4 +4,5 @@
 `abc${0}abc`.indexOf(`abc`);
 
 //// [templateStringWithPropertyAccess.js]
+"use strict";
 `abc${0}abc`.indexOf(`abc`);

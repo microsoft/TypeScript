@@ -13,6 +13,7 @@ export {default as Foob} from "./cls";
 
 
 //// [cls.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

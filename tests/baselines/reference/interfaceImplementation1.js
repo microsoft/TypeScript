@@ -49,6 +49,7 @@ c["foo"];
 
 
 //// [interfaceImplementation1.js]
+"use strict";
 class C1 {
     iFn(n, s) { }
 }

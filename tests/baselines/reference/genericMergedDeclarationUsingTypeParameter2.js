@@ -9,6 +9,7 @@ namespace foo {
 
 
 //// [genericMergedDeclarationUsingTypeParameter2.js]
+"use strict";
 class foo {
     constructor(x) { }
 }

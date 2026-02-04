@@ -89,6 +89,7 @@ namespace m6 {
 
 
 //// [genericCallToOverloadedMethodWithOverloadedArguments.js]
+"use strict";
 var m1;
 (function (m1) {
     var newPromise = numPromise.then(testFunction);

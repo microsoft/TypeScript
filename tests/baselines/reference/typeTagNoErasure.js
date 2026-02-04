@@ -11,6 +11,7 @@ test('hi') // error, T=number
 
 
 //// [typeTagNoErasure.js]
+"use strict";
 /** @template T @typedef {<T1 extends T>(data: T1) => T1} Test */
 /** @type {Test<number>} */
 const test = dibbity => dibbity;

@@ -148,8 +148,8 @@ export interface ListWidget {
 >                : ^^^^^^
 
     "collapsable"?: boolean, //default to false, means all expanded
->"collapsable" : boolean
->              : ^^^^^^^
+>"collapsable" : boolean | undefined
+>              : ^^^^^^^^^^^^^^^^^^^
 
     "each": Child<ListWidget>;
 >"each" : any

@@ -47,26 +47,26 @@ class X {
 
     constructor() {
         this.m = this.m.bind(this);
->this.m = this.m.bind(this) : any
->                           : ^^^
+>this.m = this.m.bind(this) : () => void
+>                           : ^^^^^^^^^^
 >this.m : () => void
 >       : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 >m : () => void
 >  : ^^^^^^^^^^
->this.m.bind(this) : any
->                  : ^^^
->this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->            : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
+>this.m.bind(this) : () => void
+>                  : ^^^^^^^^^^
+>this.m.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>            : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >this.m : () => void
 >       : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 >m : () => void
 >  : ^^^^^^^^^^
->bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >this : this
 >     : ^^^^
 
@@ -147,26 +147,26 @@ class Y {
     }
     constructor() {
         this.m = this.m.bind(this);
->this.m = this.m.bind(this) : any
->                           : ^^^
+>this.m = this.m.bind(this) : () => void
+>                           : ^^^^^^^^^^
 >this.m : () => void
 >       : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 >m : () => void
 >  : ^^^^^^^^^^
->this.m.bind(this) : any
->                  : ^^^
->this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->            : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
+>this.m.bind(this) : () => void
+>                  : ^^^^^^^^^^
+>this.m.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>            : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >this.m : () => void
 >       : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 >m : () => void
 >  : ^^^^^^^^^^
->bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
+>bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
+>     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >this : this
 >     : ^^^^
 

@@ -21,6 +21,7 @@ class Foo {
 >x => this : (x: any) => this
 >          : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >this : this
 >     : ^^^^
         }
@@ -41,6 +42,7 @@ class Foo {
 >x => this : (x: any) => this
 >          : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >this : this
 >     : ^^^^
         }
@@ -74,6 +76,7 @@ class Foo2 extends Foo {
 >x => this : (x: any) => this
 >          : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >this : this
 >     : ^^^^
         }
@@ -94,6 +97,7 @@ class Foo2 extends Foo {
 >x => this : (x: any) => this
 >          : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >this : this
 >     : ^^^^
         }
@@ -192,6 +196,7 @@ class Foo4 extends Foo {
 
     constructor(_super: any) { // should be error
 >_super : any
+>       : ^^^
 
         super();
 >super() : void
@@ -215,6 +220,7 @@ class Foo4 extends Foo {
 >y : { (_super: number): any; (_super: string): any; }
 >  : ^^^      ^^      ^^^^^^^^^      ^^      ^^^^^^^^^
 >_super : any
+>       : ^^^
 
         var lambda = () => {
 >lambda : () => (x: any) => this
@@ -226,6 +232,7 @@ class Foo4 extends Foo {
 >x => this : (x: any) => this
 >          : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >this : this
 >     : ^^^^
         }

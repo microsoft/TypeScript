@@ -76,6 +76,7 @@ var f13 = () => {
 
 
 //// [functionImplementationErrors.js]
+"use strict";
 // FunctionExpression with no return type annotation with multiple return statements with unrelated types
 var f1 = function () {
     return '';

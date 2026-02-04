@@ -1,0 +1,20 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== server.ts (0 errors) ====
+    class c {
+    }
+    interface i {
+    }
+    namespace m {
+        export var x = 10;
+    }
+    var x = 10;
+    namespace uninstantiated {
+    }
+    export { c };
+    export { c as c2 };
+    export { i, m as instantiatedModule };
+    export { uninstantiated };
+    export { x };

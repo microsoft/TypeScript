@@ -1,0 +1,22 @@
+reactNamespaceJSXEmit.tsx(7,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+reactNamespaceJSXEmit.tsx(9,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== reactNamespaceJSXEmit.tsx (2 errors) ====
+    declare var myReactLib: any;
+    declare var foo: any;
+    declare var Bar: any;
+    declare var _Bar: any;
+    declare var x: any;
+    
+    <foo data/>;
+    ~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    <Bar x={x} />;
+    <x-component />;
+    ~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    <Bar {...x} />;
+    <Bar { ...x } y={2} />;
+    <_Bar { ...x } />;
+    

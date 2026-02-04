@@ -4,4 +4,5 @@
 var x = `abc${ 10 + 10 }def`;
 
 //// [templateStringWithEmbeddedAddition.js]
+"use strict";
 var x = `abc${10 + 10}def`;

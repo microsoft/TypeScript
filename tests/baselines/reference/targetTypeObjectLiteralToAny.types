@@ -11,6 +11,7 @@ function suggest(){
 
 	var result:any;	
 >result : any
+>       : ^^^
 					
 	TypeScriptKeywords.forEach(function(keyword) {						
 >TypeScriptKeywords.forEach(function(keyword) {								result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any	}) : void
@@ -28,7 +29,9 @@ function suggest(){
 
 		result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any
 >result.push({text:keyword, type:"keyword"}) : any
+>                                            : ^^^
 >result.push : any
+>            : ^^^
 >result : any
 >       : ^^^
 >push : any

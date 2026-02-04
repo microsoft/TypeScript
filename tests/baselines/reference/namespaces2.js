@@ -10,6 +10,7 @@ namespace A {
 var c: A.B.C = new A.B.C();
 
 //// [namespaces2.js]
+"use strict";
 var A;
 (function (A) {
     let B;

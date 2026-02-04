@@ -11,6 +11,7 @@ var v = {
 }
 
 //// [computedPropertyNames6_ES5.js]
+"use strict";
 var v = {
     [p1]: 0,
     [p2]: 1,

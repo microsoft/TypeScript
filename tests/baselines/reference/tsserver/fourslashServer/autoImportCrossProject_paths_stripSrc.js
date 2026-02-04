@@ -13,7 +13,7 @@ Info seq  [hh:mm:ss:mss] request:
           "outDir": "/home/src/workspaces/project/packages/dep/dist",
           "rootDir": "/home/src/workspaces/project/packages/dep/src",
           "module": "commonjs",
-          "target": "es5",
+          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true,
           "baseUrl": "/home/src/workspaces/project/packages/app",

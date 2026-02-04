@@ -12,6 +12,7 @@ class Scoobyd extends Dood {}
 
 //// [outFile.js]
 #!/usr/bin/env gjs
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

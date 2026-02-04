@@ -7,5 +7,7 @@ class C {
 
     set Foo(a) { }
 >Foo : any
+>    : ^^^
 >a : any
+>  : ^^^
 }

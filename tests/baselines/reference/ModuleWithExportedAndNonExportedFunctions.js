@@ -32,6 +32,7 @@ var fn2 = A.fn2;
 var fng2 = A.fng2;
 
 //// [ModuleWithExportedAndNonExportedFunctions.js]
+"use strict";
 var A;
 (function (A) {
     function fn(s) {

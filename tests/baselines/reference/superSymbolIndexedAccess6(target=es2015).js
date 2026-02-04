@@ -16,6 +16,7 @@ class Bar extends Foo {
 }
 
 //// [superSymbolIndexedAccess6.js]
+"use strict";
 var symbol;
 class Foo {
     static [symbol]() {

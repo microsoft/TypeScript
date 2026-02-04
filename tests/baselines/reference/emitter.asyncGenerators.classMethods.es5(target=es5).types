@@ -21,7 +21,9 @@ class C2 {
 
         const x = yield;
 >x : any
+>  : ^^^
 >yield : any
+>      : ^^^
     }
 }
 === C3.ts ===
@@ -35,7 +37,9 @@ class C3 {
 
         const x = yield 1;
 >x : any
+>  : ^^^
 >yield 1 : any
+>        : ^^^
 >1 : 1
 >  : ^
     }
@@ -51,7 +55,9 @@ class C4 {
 
         const x = yield* [1];
 >x : any
+>  : ^^^
 >yield* [1] : any
+>           : ^^^
 >[1] : number[]
 >    : ^^^^^^^^
 >1 : 1
@@ -79,6 +85,7 @@ class C5 {
 >async function*() { yield 1; } : () => AsyncGenerator<number, void, unknown>
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield 1 : any
+>        : ^^^
 >1 : 1
 >  : ^
     }

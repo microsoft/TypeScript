@@ -125,6 +125,7 @@ foo() += value;
 (foo()) += value;
 
 //// [compoundAssignmentLHSIsValue.js]
+"use strict";
 // expected error for all the LHS of compound assignments (arithmetic and addition)
 var value;
 // this

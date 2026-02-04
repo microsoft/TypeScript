@@ -6,8 +6,8 @@ declare var console: { log(msg?: string): void; };
 >        : ^^^^^^   ^^^      ^^^    ^^^
 >log : (msg?: string) => void
 >    : ^   ^^^      ^^^^^    
->msg : string
->    : ^^^^^^
+>msg : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
 var _i = "This is what I'd expect to see";
 >_i : string

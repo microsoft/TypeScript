@@ -9,6 +9,12 @@
     },
     {
       "text": "boolean"
+    },
+    {
+      "text": " | "
+    },
+    {
+      "text": "undefined"
     }
   ],
   "position": 87,

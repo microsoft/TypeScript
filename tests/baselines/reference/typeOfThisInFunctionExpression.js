@@ -48,6 +48,7 @@ namespace M {
 }
 
 //// [typeOfThisInFunctionExpression.js]
+"use strict";
 // type of 'this' in FunctionExpression is Any
 function fn() {
     var p = this;

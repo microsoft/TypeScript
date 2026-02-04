@@ -21,6 +21,7 @@ class WITDialogs {
 
 
 //// [crashInresolveReturnStatement.js]
+"use strict";
 class WorkItemToolbar {
     onToolbarItemClick() {
         WITDialogs.createCopyOfWorkItem();

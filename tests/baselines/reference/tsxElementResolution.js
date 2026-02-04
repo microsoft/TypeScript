@@ -27,6 +27,7 @@ var e = <Dotted.Name />;
 
 
 //// [tsxElementResolution.jsx]
+"use strict";
 class foundFirst {
 }
 class Other {

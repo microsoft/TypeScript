@@ -43,6 +43,7 @@ function fff<T extends { (): void }, U extends T>(x: T, y: U) {
 
 
 //// [functionConstraintSatisfaction2.js]
+"use strict";
 // satisfaction of a constraint to Function, all of these invocations are errors unless otherwise noted
 function foo(x) { return x; }
 foo(1);

@@ -17,6 +17,7 @@ var v = class C {
 
     static b
 >b : any
+>  : ^^^
 
     static c = {
 >c : { x: string; }

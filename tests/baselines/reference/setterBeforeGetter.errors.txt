@@ -1,0 +1,18 @@
+setterBeforeGetter.ts(3,13): error TS2564: Property '_bar' has no initializer and is not definitely assigned in the constructor.
+
+
+==== setterBeforeGetter.ts (1 errors) ====
+    class Foo {
+    
+        private _bar: { a: string; };
+                ~~~~
+!!! error TS2564: Property '_bar' has no initializer and is not definitely assigned in the constructor.
+        // should not be an error to order them this way
+        set bar(thing: { a: string; }) {
+            this._bar = thing;
+        }
+        get bar(): { a: string; } {
+            return this._bar;
+        }
+    }
+    

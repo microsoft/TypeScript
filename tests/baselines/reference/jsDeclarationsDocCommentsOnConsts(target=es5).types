@@ -10,6 +10,7 @@ const x = (a) => {
 >(a) => {    return '';} : (a: any) => string
 >                        : ^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
     return '';
 >'' : ""

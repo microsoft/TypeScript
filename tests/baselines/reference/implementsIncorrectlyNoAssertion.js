@@ -15,5 +15,6 @@ class Baz implements Wrapper {
 
 
 //// [implementsIncorrectlyNoAssertion.js]
+"use strict";
 class Baz {
 }

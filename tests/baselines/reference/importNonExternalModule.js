@@ -14,6 +14,7 @@ if(foo.answer === 42){
 
 
 //// [foo_0.js]
+"use strict";
 var foo;
 (function (foo) {
     foo.answer = 42;

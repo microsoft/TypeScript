@@ -9,6 +9,7 @@ namespace MyModule {
 >inject : (target: any, key: string) => void
 >       : ^      ^^   ^^   ^^      ^^^^^    
 >target : any
+>       : ^^^
 >key : string
 >    : ^^^^^^
 

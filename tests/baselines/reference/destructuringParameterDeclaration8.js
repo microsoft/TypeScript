@@ -22,6 +22,7 @@ test({ method: 'one', nested: { p: 'a' } })
 
 
 //// [destructuringParameterDeclaration8.js]
+"use strict";
 // explicit type annotation should cause `method` to have type 'x' | 'y'
 // both inside and outside `test`.
 function test({ method = 'z', nested: { p = 'c' } }) {

@@ -3,6 +3,7 @@
 === es5-asyncFunctionHoisting.ts ===
 declare var y;
 >y : any
+>  : ^^^
 
 async function hoisting() {
 >hoisting : () => Promise<void>
@@ -10,6 +11,7 @@ async function hoisting() {
 
     var a0, a1 = 1;
 >a0 : any
+>   : ^^^
 >a1 : number
 >   : ^^^^^^
 >1 : 1
@@ -21,6 +23,7 @@ async function hoisting() {
 
         var b0, b1 = 1;
 >b0 : any
+>   : ^^^
 >b1 : number
 >   : ^^^^^^
 >1 : 1
@@ -33,6 +36,7 @@ async function hoisting() {
 
         var c0, c1 = 1;
 >c0 : any
+>   : ^^^
 >c1 : number
 >   : ^^^^^^
 >1 : 1
@@ -45,6 +49,7 @@ async function hoisting() {
 >0 : 0
 >  : ^
 >y : any
+>  : ^^^
 
     }
 
@@ -52,12 +57,15 @@ async function hoisting() {
 >b : string
 >  : ^^^^^^
 >y : any
+>  : ^^^
 
     }
 
     for (var c of y) {
 >c : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     }
 }
@@ -68,6 +76,7 @@ async function hoistingWithAwait() {
 
     var a0, a1 = 1;
 >a0 : any
+>   : ^^^
 >a1 : number
 >   : ^^^^^^
 >1 : 1
@@ -79,6 +88,7 @@ async function hoistingWithAwait() {
 
         var b0, b1 = 1;
 >b0 : any
+>   : ^^^
 >b1 : number
 >   : ^^^^^^
 >1 : 1
@@ -97,6 +107,7 @@ async function hoistingWithAwait() {
 
         var c0, c1 = 1;
 >c0 : any
+>   : ^^^
 >c1 : number
 >   : ^^^^^^
 >1 : 1
@@ -109,6 +120,7 @@ async function hoistingWithAwait() {
 >0 : 0
 >  : ^
 >y : any
+>  : ^^^
 
     }
 
@@ -116,12 +128,15 @@ async function hoistingWithAwait() {
 >b : string
 >  : ^^^^^^
 >y : any
+>  : ^^^
 
     }
 
     for (var c of y) {
 >c : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     }
 }

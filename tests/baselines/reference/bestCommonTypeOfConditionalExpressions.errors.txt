@@ -1,0 +1,67 @@
+bestCommonTypeOfConditionalExpressions.ts(7,14): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+bestCommonTypeOfConditionalExpressions.ts(8,30): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+bestCommonTypeOfConditionalExpressions.ts(9,31): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+bestCommonTypeOfConditionalExpressions.ts(16,17): error TS2454: Variable 'a' is used before being assigned.
+bestCommonTypeOfConditionalExpressions.ts(17,17): error TS2454: Variable 'b' is used before being assigned.
+bestCommonTypeOfConditionalExpressions.ts(19,5): error TS2322: Type '((x: number) => void) | ((x: Object) => void)' is not assignable to type '(x: Object) => void'.
+  Type '(x: number) => void' is not assignable to type '(x: Object) => void'.
+    Types of parameters 'x' and 'x' are incompatible.
+      Type 'Object' is not assignable to type 'number'.
+bestCommonTypeOfConditionalExpressions.ts(21,24): error TS2454: Variable 'derived' is used before being assigned.
+bestCommonTypeOfConditionalExpressions.ts(22,18): error TS2454: Variable 'base' is used before being assigned.
+bestCommonTypeOfConditionalExpressions.ts(25,19): error TS2322: Type 'T' is not assignable to type 'Object'.
+bestCommonTypeOfConditionalExpressions.ts(25,23): error TS2322: Type 'U' is not assignable to type 'Object'.
+
+
+==== bestCommonTypeOfConditionalExpressions.ts (10 errors) ====
+    // conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
+    // no errors expected here
+    
+    var a: { x: number; y?: number };
+    var b: { x: number; z?: number };
+    
+    class Base { foo: string; }
+                 ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    class Derived extends Base { bar: string; }
+                                 ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+    class Derived2 extends Base { baz: string; }
+                                  ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+    var base: Base;
+    var derived: Derived;
+    var derived2: Derived2;
+    
+    var r = true ? 1 : 2;
+    var r3 = true ? 1 : {};
+    var r4 = true ? a : b; // typeof a
+                    ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var r5 = true ? b : a; // typeof b
+                    ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var r6 = true ? (x: number) => { } : (x: Object) => { }; // returns number => void
+    var r7: (x: Object) => void = true ? (x: number) => { } : (x: Object) => { }; 
+        ~~
+!!! error TS2322: Type '((x: number) => void) | ((x: Object) => void)' is not assignable to type '(x: Object) => void'.
+!!! error TS2322:   Type '(x: number) => void' is not assignable to type '(x: Object) => void'.
+!!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:       Type 'Object' is not assignable to type 'number'.
+    var r8 = true ? (x: Object) => { } : (x: number) => { }; // returns Object => void
+    var r10: Base = true ? derived : derived2; // no error since we use the contextual type in BCT
+                           ~~~~~~~
+!!! error TS2454: Variable 'derived' is used before being assigned.
+    var r11 = true ? base : derived2;
+                     ~~~~
+!!! error TS2454: Variable 'base' is used before being assigned.
+    
+    function foo5<T, U>(t: T, u: U): Object {
+        return true ? t : u; // BCT is Object
+                      ~
+!!! error TS2322: Type 'T' is not assignable to type 'Object'.
+!!! related TS2208 bestCommonTypeOfConditionalExpressions.ts:24:15: This type parameter might need an `extends Object` constraint.
+                          ~
+!!! error TS2322: Type 'U' is not assignable to type 'Object'.
+!!! related TS2208 bestCommonTypeOfConditionalExpressions.ts:24:18: This type parameter might need an `extends Object` constraint.
+    }

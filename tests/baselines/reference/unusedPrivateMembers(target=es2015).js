@@ -66,6 +66,7 @@ class Test6 {
 
 
 //// [unusedPrivateMembers.js]
+"use strict";
 class Test1 {
     initializeInternal() {
     }

@@ -7,6 +7,7 @@ class C {
 
 
 //// [optionalProperty.js]
+"use strict";
 class C {
     prop;
 }

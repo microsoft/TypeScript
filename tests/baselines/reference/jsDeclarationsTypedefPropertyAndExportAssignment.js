@@ -55,6 +55,7 @@ class MainThreadTasks {
 module.exports = MainThreadTasks;
 
 //// [module.js]
+"use strict";
 /** @typedef {'parseHTML'|'styleLayout'} TaskGroupIds */
 /**
  * @typedef TaskGroup
@@ -82,6 +83,7 @@ module.exports = {
     taskNameToGroup,
 };
 //// [index.js]
+"use strict";
 const { taskGroups, taskNameToGroup } = require('./module.js');
 /** @typedef {import('./module.js').TaskGroup} TaskGroup */
 /**

@@ -4,4 +4,5 @@
 var x = (`abc${0}abc`);
 
 //// [templateStringInParentheses.js]
+"use strict";
 var x = (`abc${0}abc`);

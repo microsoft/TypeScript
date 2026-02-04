@@ -24,6 +24,7 @@ namespace Bugs {
 }
 
 //// [overloadResolutionOverNonCTObjectLit.js]
+"use strict";
 var Bugs;
 (function (Bugs) {
     function bug3() {

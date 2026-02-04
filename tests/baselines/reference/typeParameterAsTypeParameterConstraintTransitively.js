@@ -27,6 +27,7 @@ foo(a, b, c);
 foo(b, b, { foo: 1, bar: '', hm: '' });
 
 //// [typeParameterAsTypeParameterConstraintTransitively.js]
+"use strict";
 // using a type parameter as a constraint for a type parameter is valid
 // no errors expected
 var a;

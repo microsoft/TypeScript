@@ -24,7 +24,8 @@ class A {
 	 * @param {object} [foo={}]
 	 */
 	constructor(foo = {}) {
->foo : any
+>foo : object | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 
@@ -32,13 +33,16 @@ class A {
 		 * @type object
 		 */
 		this.foo = foo;
->this.foo = foo : any
->this.foo : any
+>this.foo = foo : object
+>               : ^^^^^^
+>this.foo : object
+>         : ^^^^^^
 >this : this
 >     : ^^^^
->foo : any
->    : ^^^
->foo : any
+>foo : object
+>    : ^^^^^^
+>foo : object
+>    : ^^^^^^
 
 		/**
 		 * @type object
@@ -46,11 +50,12 @@ class A {
 		this.bar = bar.arguments;
 >this.bar = bar.arguments : {}
 >                         : ^^
->this.bar : any
+>this.bar : object
+>         : ^^^^^^
 >this : this
 >     : ^^^^
->bar : any
->    : ^^^
+>bar : object
+>    : ^^^^^^
 >bar.arguments : {}
 >              : ^^
 >bar : { arguments: {}; }

@@ -3,6 +3,7 @@
 === decoratorOnClass9.ts ===
 declare var dec: any;
 >dec : any
+>    : ^^^
 
 class A {}
 >A : A
@@ -11,6 +12,7 @@ class A {}
 // https://github.com/Microsoft/TypeScript/issues/16417
 @dec
 >dec : any
+>    : ^^^
 
 class B extends A {
 >B : B

@@ -9,6 +9,7 @@ interface C1 extends Foo?.Bar {}
 
 
 //// [interfaceExtendingOptionalChain.js]
+"use strict";
 var Foo;
 (function (Foo) {
     class Bar {

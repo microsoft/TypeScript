@@ -24,6 +24,7 @@ class C extends B {
 }
 
 //// [abstractPropertyBasics.js]
+"use strict";
 class B {
 }
 class C extends B {

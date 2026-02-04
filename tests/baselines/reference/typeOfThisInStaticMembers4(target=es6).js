@@ -14,6 +14,7 @@ class D extends C {
 
 
 //// [typeOfThisInStaticMembers4.js]
+"use strict";
 var _a, _b, _c;
 class C {
 }

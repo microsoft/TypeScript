@@ -3,10 +3,13 @@
 === jsxMultilineAttributeValuesReact.tsx ===
 declare var React: any;
 >React : any
+>      : ^^^
 
 const a = <input value="
->a : error
-><input value="foo: 23"></input> : error
+>a : any
+>  : ^^^
+><input value="foo: 23"></input> : any
+>                                : ^^^
 >input : any
 >      : ^^^
 >value : string
@@ -18,8 +21,10 @@ foo: 23
 >      : ^^^
 
 const b = <input value='
->b : error
-><input value='foo: 23'></input> : error
+>b : any
+>  : ^^^
+><input value='foo: 23'></input> : any
+>                                : ^^^
 >input : any
 >      : ^^^
 >value : string
@@ -31,8 +36,10 @@ foo: 23
 >      : ^^^
 
 const c = <input value='
->c : error
-><input value='foo: 23\n'></input> : error
+>c : any
+>  : ^^^
+><input value='foo: 23\n'></input> : any
+>                                  : ^^^
 >input : any
 >      : ^^^
 >value : string

@@ -11,11 +11,14 @@ namespace bar {
 
   return this;
 >this : any
+>     : ^^^
  } 
 } 
 var z = bar.bar();
 >z : any
+>  : ^^^
 >bar.bar() : any
+>          : ^^^
 >bar.bar : () => any
 >        : ^^^^^^^^^
 >bar : typeof bar

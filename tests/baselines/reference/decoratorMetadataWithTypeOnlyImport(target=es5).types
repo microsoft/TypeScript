@@ -12,9 +12,11 @@ import type { Service } from "./service";
 
 declare var decorator: any;
 >decorator : any
+>          : ^^^
 
 @decorator
 >decorator : any
+>          : ^^^
 
 class MyComponent {
 >MyComponent : MyComponent
@@ -27,6 +29,7 @@ class MyComponent {
 
     @decorator
 >decorator : any
+>          : ^^^
 
     method(x: this) {
 >method : (x: this) => void

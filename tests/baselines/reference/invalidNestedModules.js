@@ -32,6 +32,7 @@ namespace M2 {
 
 
 //// [invalidNestedModules.js]
+"use strict";
 var A;
 (function (A) {
     var B;

@@ -9,6 +9,7 @@ x.a<string>(1); // bug was that this caused 'Could not find symbol T' on return 
 x.b<string>(); // error
 
 //// [typeAssertionToGenericFunctionType.js]
+"use strict";
 var x = {
     a: ((x) => 1),
     b: (x) => { x; }

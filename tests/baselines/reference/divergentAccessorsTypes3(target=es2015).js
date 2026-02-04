@@ -46,6 +46,7 @@ u1.prop4 = true;
 
 
 //// [divergentAccessorsTypes3.js]
+"use strict";
 class One {
     get prop1() { return ""; }
     set prop1(s) { }

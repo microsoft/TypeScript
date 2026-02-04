@@ -12,6 +12,7 @@ function g<T>(x: T) {
 }
 
 //// [declarationEmitNestedGenerics.js]
+"use strict";
 function f(p) {
     let g = null;
     return g;

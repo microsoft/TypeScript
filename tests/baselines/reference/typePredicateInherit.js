@@ -56,6 +56,7 @@ class D extends C {
 }
 
 //// [typePredicateInherit.js]
+"use strict";
 class B {
     method1() { } // should error
     method2() { } // should error

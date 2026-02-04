@@ -51,6 +51,8 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/out.tsbuildinfo]
 {"root":["./myproject/a.js","./myproject/b.ts"],"errors":true,"version":"FakeTSVersion"}
 
@@ -92,7 +94,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 
@@ -148,7 +150,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 
@@ -208,7 +210,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 

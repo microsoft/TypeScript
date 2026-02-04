@@ -136,6 +136,7 @@ interface I20 {
 }
 
 //// [subtypesOfAny.js]
+"use strict";
 // every type is a subtype of any, no errors expected
 class A {
 }

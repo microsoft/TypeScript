@@ -18,6 +18,7 @@ var y = x.a(x);
 
 
 //// [contextualThisType.js]
+"use strict";
 var x = {
     a(p) {
         return p;

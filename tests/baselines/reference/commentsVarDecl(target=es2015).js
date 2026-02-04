@@ -45,6 +45,7 @@ var n4: (x: number) => string;
 n4 = z2;
 
 //// [commentsVarDecl.js]
+"use strict";
 /** Variable comments*/
 var myVariable = 10; // This trailing Comment1
 /** This is another variable comment*/

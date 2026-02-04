@@ -1654,6 +1654,7 @@ var privateModule;
     }
 })(privateModule || (privateModule = {}));
 //// [privacyAccessorDeclFile_GlobalFile.js]
+"use strict";
 class publicClassInGlobal {
 }
 class publicClassInGlobalWithPublicGetAccessorTypes {

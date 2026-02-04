@@ -21,6 +21,7 @@ export class B {
     print() { return "I am B"; }
 }
 //// [2.js]
+"use strict";
 function foo(x) {
     x.then(value => {
         let b = new value.B();

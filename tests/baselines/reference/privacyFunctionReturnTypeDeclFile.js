@@ -1749,6 +1749,7 @@ var privateModule;
     }
 })(privateModule || (privateModule = {}));
 //// [privacyFunctionReturnTypeDeclFile_GlobalFile.js]
+"use strict";
 class publicClassInGlobal {
 }
 class publicClassWithWithPublicParmeterTypesInGlobal {

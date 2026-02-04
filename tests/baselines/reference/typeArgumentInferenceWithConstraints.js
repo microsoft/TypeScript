@@ -108,6 +108,7 @@ var arr: any[];
 
 
 //// [typeArgumentInferenceWithConstraints.js]
+"use strict";
 // Generic call with no parameters
 function noParams() { }
 noParams();

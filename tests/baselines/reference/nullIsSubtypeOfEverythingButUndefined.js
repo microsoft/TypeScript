@@ -94,6 +94,7 @@ var r20 = true ? null : {};
 
 
 //// [nullIsSubtypeOfEverythingButUndefined.js]
+"use strict";
 // null is a subtype of any other types except undefined
 var r0 = true ? null : null;
 var r0 = true ? null : null;

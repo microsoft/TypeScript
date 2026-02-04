@@ -11,6 +11,7 @@ class Bar {
 }
 
 //// [parser553699.js]
+"use strict";
 class Foo {
     constructor() { }
     banana(x) { }

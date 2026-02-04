@@ -8,6 +8,7 @@ namespace Tools {
 var logger = Tools.NullLogger();
 
 //// [forgottenNew.js]
+"use strict";
 var Tools;
 (function (Tools) {
     class NullLogger {

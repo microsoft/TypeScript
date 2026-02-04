@@ -20,6 +20,7 @@ var z = v2.b;
 
 
 //// [genericClasses3.js]
+"use strict";
 class B {
 }
 class C extends B {

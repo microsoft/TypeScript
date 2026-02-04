@@ -22,6 +22,7 @@ var N=new f();  // ok with void fn
 
 
 //// [avoid.js]
+"use strict";
 function f() {
     var x = 1;
 }

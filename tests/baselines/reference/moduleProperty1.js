@@ -14,6 +14,7 @@ namespace M2 {
 }
 
 //// [moduleProperty1.js]
+"use strict";
 var M;
 (function (M) {
     var x = 10; // variable local to this module body

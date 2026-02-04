@@ -10,5 +10,6 @@ var foo: Foo;
 foo.getFoo = bar => { };
 
 //// [contextualTypingOfLambdaWithMultipleSignatures.js]
+"use strict";
 var foo;
 foo.getFoo = bar => { };

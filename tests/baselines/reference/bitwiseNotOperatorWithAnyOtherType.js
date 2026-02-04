@@ -65,6 +65,7 @@ var ResultIsNumber20 = ~~~(ANY + ANY1);
 ~~obj1.x;
 
 //// [bitwiseNotOperatorWithAnyOtherType.js]
+"use strict";
 // ~ operator on any type
 function foo() {
     var a;

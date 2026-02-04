@@ -90,6 +90,7 @@ declare var x;
 
 
 //// [commentsemitComments.js]
+"use strict";
 /** Variable comments*/
 var myVariable = 10;
 /** function comments*/

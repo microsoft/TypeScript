@@ -6,6 +6,7 @@ async enum E {
 }
 
 //// [asyncEnum_es6.js]
+"use strict";
 var E;
 (function (E) {
     E[E["Value"] = 0] = "Value";

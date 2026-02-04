@@ -7,6 +7,7 @@ let foo = (async bar => bar);
 
 
 //// [parenthesizedAsyncArrowFunction.js]
+"use strict";
 // Repro from #20096
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -17,4 +18,4 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-let foo = ((bar) => __awaiter(this, void 0, void 0, function* () { return bar; }));
+let foo = ((bar) => __awaiter(void 0, void 0, void 0, function* () { return bar; }));

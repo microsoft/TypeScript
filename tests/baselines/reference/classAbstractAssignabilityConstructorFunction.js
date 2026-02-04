@@ -11,6 +11,7 @@ AAA = A; // error.
 AAA = "asdf";
 
 //// [classAbstractAssignabilityConstructorFunction.js]
+"use strict";
 class A {
 }
 // var AA: typeof A;

@@ -1,3 +1,4 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 collisionArgumentsClassConstructor.ts(3,28): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 collisionArgumentsClassConstructor.ts(3,31): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 collisionArgumentsClassConstructor.ts(4,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
@@ -29,6 +30,7 @@ collisionArgumentsClassConstructor.ts(69,17): error TS1210: Code contained in a 
 collisionArgumentsClassConstructor.ts(70,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== collisionArgumentsClassConstructor.ts (29 errors) ====
     // Constructors
     class c1 {

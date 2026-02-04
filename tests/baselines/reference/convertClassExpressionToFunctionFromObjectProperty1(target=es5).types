@@ -3,6 +3,7 @@
 === convertClassExpressionToFunctionFromObjectProperty1.ts ===
 const foo: any = {};
 >foo : any
+>    : ^^^
 >{} : {}
 >   : ^^
 
@@ -11,6 +12,7 @@ foo.x = class {
 >foo.x = class {    constructor () {}} : typeof x
 >                                      : ^^^^^^^^
 >foo.x : any
+>      : ^^^
 >foo : any
 >    : ^^^
 >x : any
@@ -24,6 +26,7 @@ foo.y = class {
 >foo.y = class {    constructor () {}} : typeof y
 >                                      : ^^^^^^^^
 >foo.y : any
+>      : ^^^
 >foo : any
 >    : ^^^
 >y : any
@@ -39,6 +42,7 @@ foo.break = class {
 >foo.break = class {    constructor () {}} : typeof break
 >                                          : ^^^^^^^^^^^^
 >foo.break : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >break : any
@@ -52,6 +56,7 @@ foo.case = class {
 >foo.case = class {    constructor () {}} : typeof case
 >                                         : ^^^^^^^^^^^
 >foo.case : any
+>         : ^^^
 >foo : any
 >    : ^^^
 >case : any
@@ -65,6 +70,7 @@ foo.catch = class {
 >foo.catch = class {    constructor () {}} : typeof catch
 >                                          : ^^^^^^^^^^^^
 >foo.catch : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >catch : any
@@ -78,6 +84,7 @@ foo.class = class {
 >foo.class = class {    constructor () {}} : typeof class
 >                                          : ^^^^^^^^^^^^
 >foo.class : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >class : any
@@ -91,6 +98,7 @@ foo.const = class {
 >foo.const = class {    constructor () {}} : typeof const
 >                                          : ^^^^^^^^^^^^
 >foo.const : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >const : any
@@ -104,6 +112,7 @@ foo.continue = class {
 >foo.continue = class {    constructor () {}} : typeof continue
 >                                             : ^^^^^^^^^^^^^^^
 >foo.continue : any
+>             : ^^^
 >foo : any
 >    : ^^^
 >continue : any
@@ -117,6 +126,7 @@ foo.debugger = class {
 >foo.debugger = class {    constructor () {}} : typeof debugger
 >                                             : ^^^^^^^^^^^^^^^
 >foo.debugger : any
+>             : ^^^
 >foo : any
 >    : ^^^
 >debugger : any
@@ -130,6 +140,7 @@ foo.default = class {
 >foo.default = class {    constructor () {}} : typeof default
 >                                            : ^^^^^^^^^^^^^^
 >foo.default : any
+>            : ^^^
 >foo : any
 >    : ^^^
 >default : any
@@ -143,6 +154,7 @@ foo.delete = class {
 >foo.delete = class {    constructor () {}} : typeof delete
 >                                           : ^^^^^^^^^^^^^
 >foo.delete : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >delete : any
@@ -156,6 +168,7 @@ foo.do = class {
 >foo.do = class {    constructor () {}} : typeof do
 >                                       : ^^^^^^^^^
 >foo.do : any
+>       : ^^^
 >foo : any
 >    : ^^^
 >do : any
@@ -169,6 +182,7 @@ foo.else = class {
 >foo.else = class {    constructor () {}} : typeof else
 >                                         : ^^^^^^^^^^^
 >foo.else : any
+>         : ^^^
 >foo : any
 >    : ^^^
 >else : any
@@ -182,6 +196,7 @@ foo.enum = class {
 >foo.enum = class {    constructor () {}} : typeof enum
 >                                         : ^^^^^^^^^^^
 >foo.enum : any
+>         : ^^^
 >foo : any
 >    : ^^^
 >enum : any
@@ -195,6 +210,7 @@ foo.export = class {
 >foo.export = class {    constructor () {}} : typeof export
 >                                           : ^^^^^^^^^^^^^
 >foo.export : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >export : any
@@ -208,6 +224,7 @@ foo.extends = class {
 >foo.extends = class {    constructor () {}} : typeof extends
 >                                            : ^^^^^^^^^^^^^^
 >foo.extends : any
+>            : ^^^
 >foo : any
 >    : ^^^
 >extends : any
@@ -221,6 +238,7 @@ foo.false = class {
 >foo.false = class {    constructor () {}} : typeof false
 >                                          : ^^^^^^^^^^^^
 >foo.false : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >false : any
@@ -234,6 +252,7 @@ foo.finally = class {
 >foo.finally = class {    constructor () {}} : typeof finally
 >                                            : ^^^^^^^^^^^^^^
 >foo.finally : any
+>            : ^^^
 >foo : any
 >    : ^^^
 >finally : any
@@ -247,6 +266,7 @@ foo.for = class {
 >foo.for = class {    constructor () {}} : typeof for
 >                                        : ^^^^^^^^^^
 >foo.for : any
+>        : ^^^
 >foo : any
 >    : ^^^
 >for : any
@@ -260,6 +280,7 @@ foo.function = class {
 >foo.function = class {    constructor () {}} : typeof function
 >                                             : ^^^^^^^^^^^^^^^
 >foo.function : any
+>             : ^^^
 >foo : any
 >    : ^^^
 >function : any
@@ -273,6 +294,7 @@ foo.if = class {
 >foo.if = class {    constructor () {}} : typeof if
 >                                       : ^^^^^^^^^
 >foo.if : any
+>       : ^^^
 >foo : any
 >    : ^^^
 >if : any
@@ -286,6 +308,7 @@ foo.import = class {
 >foo.import = class {    constructor () {}} : typeof import
 >                                           : ^^^^^^^^^^^^^
 >foo.import : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >import : any
@@ -299,6 +322,7 @@ foo.in = class {
 >foo.in = class {    constructor () {}} : typeof in
 >                                       : ^^^^^^^^^
 >foo.in : any
+>       : ^^^
 >foo : any
 >    : ^^^
 >in : any
@@ -312,6 +336,7 @@ foo.instanceof = class {
 >foo.instanceof = class {    constructor () {}} : typeof instanceof
 >                                               : ^^^^^^^^^^^^^^^^^
 >foo.instanceof : any
+>               : ^^^
 >foo : any
 >    : ^^^
 >instanceof : any
@@ -325,6 +350,7 @@ foo.new = class {
 >foo.new = class {    constructor () {}} : typeof new
 >                                        : ^^^^^^^^^^
 >foo.new : any
+>        : ^^^
 >foo : any
 >    : ^^^
 >new : any
@@ -338,6 +364,7 @@ foo.null = class {
 >foo.null = class {    constructor () {}} : typeof null
 >                                         : ^^^^^^^^^^^
 >foo.null : any
+>         : ^^^
 >foo : any
 >    : ^^^
 >null : any
@@ -351,6 +378,7 @@ foo.return = class {
 >foo.return = class {    constructor () {}} : typeof return
 >                                           : ^^^^^^^^^^^^^
 >foo.return : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >return : any
@@ -364,6 +392,7 @@ foo.super = class {
 >foo.super = class {    constructor () {}} : typeof super
 >                                          : ^^^^^^^^^^^^
 >foo.super : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >super : any
@@ -377,6 +406,7 @@ foo.switch = class {
 >foo.switch = class {    constructor () {}} : typeof switch
 >                                           : ^^^^^^^^^^^^^
 >foo.switch : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >switch : any
@@ -390,6 +420,7 @@ foo.this = class {
 >foo.this = class {    constructor () {}} : typeof this
 >                                         : ^^^^^^^^^^^
 >foo.this : any
+>         : ^^^
 >foo : any
 >    : ^^^
 >this : any
@@ -403,6 +434,7 @@ foo.throw = class {
 >foo.throw = class {    constructor () {}} : typeof throw
 >                                          : ^^^^^^^^^^^^
 >foo.throw : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >throw : any
@@ -416,6 +448,7 @@ foo.true = class {
 >foo.true = class {    constructor () {}} : typeof true
 >                                         : ^^^^^^^^^^^
 >foo.true : any
+>         : ^^^
 >foo : any
 >    : ^^^
 >true : any
@@ -429,6 +462,7 @@ foo.try = class {
 >foo.try = class {    constructor () {}} : typeof try
 >                                        : ^^^^^^^^^^
 >foo.try : any
+>        : ^^^
 >foo : any
 >    : ^^^
 >try : any
@@ -442,6 +476,7 @@ foo.typeof = class {
 >foo.typeof = class {    constructor () {}} : typeof typeof
 >                                           : ^^^^^^^^^^^^^
 >foo.typeof : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >typeof : any
@@ -455,6 +490,7 @@ foo.var = class {
 >foo.var = class {    constructor () {}} : typeof var
 >                                        : ^^^^^^^^^^
 >foo.var : any
+>        : ^^^
 >foo : any
 >    : ^^^
 >var : any
@@ -468,6 +504,7 @@ foo.void = class {
 >foo.void = class {    constructor () {}} : typeof void
 >                                         : ^^^^^^^^^^^
 >foo.void : any
+>         : ^^^
 >foo : any
 >    : ^^^
 >void : any
@@ -481,6 +518,7 @@ foo.while = class {
 >foo.while = class {    constructor () {}} : typeof while
 >                                          : ^^^^^^^^^^^^
 >foo.while : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >while : any
@@ -494,6 +532,7 @@ foo.with = class {
 >foo.with = class {    constructor () {}} : typeof with
 >                                         : ^^^^^^^^^^^
 >foo.with : any
+>         : ^^^
 >foo : any
 >    : ^^^
 >with : any
@@ -507,6 +546,7 @@ foo.implements = class {
 >foo.implements = class {    constructor () {}} : typeof implements
 >                                               : ^^^^^^^^^^^^^^^^^
 >foo.implements : any
+>               : ^^^
 >foo : any
 >    : ^^^
 >implements : any
@@ -520,6 +560,7 @@ foo.interface = class {
 >foo.interface = class {    constructor () {}} : typeof interface
 >                                              : ^^^^^^^^^^^^^^^^
 >foo.interface : any
+>              : ^^^
 >foo : any
 >    : ^^^
 >interface : any
@@ -533,6 +574,7 @@ foo.let = class {
 >foo.let = class {    constructor () {}} : typeof let
 >                                        : ^^^^^^^^^^
 >foo.let : any
+>        : ^^^
 >foo : any
 >    : ^^^
 >let : any
@@ -546,6 +588,7 @@ foo.package = class {
 >foo.package = class {    constructor () {}} : typeof package
 >                                            : ^^^^^^^^^^^^^^
 >foo.package : any
+>            : ^^^
 >foo : any
 >    : ^^^
 >package : any
@@ -559,6 +602,7 @@ foo.private = class {
 >foo.private = class {    constructor () {}} : typeof private
 >                                            : ^^^^^^^^^^^^^^
 >foo.private : any
+>            : ^^^
 >foo : any
 >    : ^^^
 >private : any
@@ -572,6 +616,7 @@ foo.protected = class {
 >foo.protected = class {    constructor () {}} : typeof protected
 >                                              : ^^^^^^^^^^^^^^^^
 >foo.protected : any
+>              : ^^^
 >foo : any
 >    : ^^^
 >protected : any
@@ -585,6 +630,7 @@ foo.public = class {
 >foo.public = class {    constructor () {}} : typeof public
 >                                           : ^^^^^^^^^^^^^
 >foo.public : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >public : any
@@ -598,6 +644,7 @@ foo.static = class {
 >foo.static = class {    constructor () {}} : typeof static
 >                                           : ^^^^^^^^^^^^^
 >foo.static : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >static : any
@@ -611,6 +658,7 @@ foo.yield = class {
 >foo.yield = class {    constructor () {}} : typeof yield
 >                                          : ^^^^^^^^^^^^
 >foo.yield : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >yield : any
@@ -624,6 +672,7 @@ foo.abstract = class {
 >foo.abstract = class {    constructor () {}} : typeof abstract
 >                                             : ^^^^^^^^^^^^^^^
 >foo.abstract : any
+>             : ^^^
 >foo : any
 >    : ^^^
 >abstract : any
@@ -637,6 +686,7 @@ foo.as = class {
 >foo.as = class {    constructor () {}} : typeof as
 >                                       : ^^^^^^^^^
 >foo.as : any
+>       : ^^^
 >foo : any
 >    : ^^^
 >as : any
@@ -650,6 +700,7 @@ foo.asserts = class {
 >foo.asserts = class {    constructor () {}} : typeof asserts
 >                                            : ^^^^^^^^^^^^^^
 >foo.asserts : any
+>            : ^^^
 >foo : any
 >    : ^^^
 >asserts : any
@@ -663,6 +714,7 @@ foo.any = class {
 >foo.any = class {    constructor () {}} : typeof any
 >                                        : ^^^^^^^^^^
 >foo.any : any
+>        : ^^^
 >foo : any
 >    : ^^^
 >any : any
@@ -676,6 +728,7 @@ foo.async = class {
 >foo.async = class {    constructor () {}} : typeof async
 >                                          : ^^^^^^^^^^^^
 >foo.async : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >async : any
@@ -689,6 +742,7 @@ foo.await = class {
 >foo.await = class {    constructor () {}} : typeof await
 >                                          : ^^^^^^^^^^^^
 >foo.await : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >await : any
@@ -702,6 +756,7 @@ foo.boolean = class {
 >foo.boolean = class {    constructor () {}} : typeof boolean
 >                                            : ^^^^^^^^^^^^^^
 >foo.boolean : any
+>            : ^^^
 >foo : any
 >    : ^^^
 >boolean : any
@@ -715,6 +770,7 @@ foo.constructor = class {
 >foo.constructor = class {    constructor () {}} : typeof constructor
 >                                                : ^^^^^^^^^^^^^^^^^^
 >foo.constructor : any
+>                : ^^^
 >foo : any
 >    : ^^^
 >constructor : any
@@ -728,6 +784,7 @@ foo.declare = class {
 >foo.declare = class {    constructor () {}} : typeof declare
 >                                            : ^^^^^^^^^^^^^^
 >foo.declare : any
+>            : ^^^
 >foo : any
 >    : ^^^
 >declare : any
@@ -741,6 +798,7 @@ foo.get = class {
 >foo.get = class {    constructor () {}} : typeof get
 >                                        : ^^^^^^^^^^
 >foo.get : any
+>        : ^^^
 >foo : any
 >    : ^^^
 >get : any
@@ -754,6 +812,7 @@ foo.infer = class {
 >foo.infer = class {    constructor () {}} : typeof infer
 >                                          : ^^^^^^^^^^^^
 >foo.infer : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >infer : any
@@ -767,6 +826,7 @@ foo.is = class {
 >foo.is = class {    constructor () {}} : typeof is
 >                                       : ^^^^^^^^^
 >foo.is : any
+>       : ^^^
 >foo : any
 >    : ^^^
 >is : any
@@ -780,6 +840,7 @@ foo.keyof = class {
 >foo.keyof = class {    constructor () {}} : typeof keyof
 >                                          : ^^^^^^^^^^^^
 >foo.keyof : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >keyof : any
@@ -793,6 +854,7 @@ foo.module = class {
 >foo.module = class {    constructor () {}} : typeof module
 >                                           : ^^^^^^^^^^^^^
 >foo.module : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >module : any
@@ -806,6 +868,7 @@ foo.namespace = class {
 >foo.namespace = class {    constructor () {}} : typeof namespace
 >                                              : ^^^^^^^^^^^^^^^^
 >foo.namespace : any
+>              : ^^^
 >foo : any
 >    : ^^^
 >namespace : any
@@ -819,6 +882,7 @@ foo.never = class {
 >foo.never = class {    constructor () {}} : typeof never
 >                                          : ^^^^^^^^^^^^
 >foo.never : any
+>          : ^^^
 >foo : any
 >    : ^^^
 >never : any
@@ -832,6 +896,7 @@ foo.readonly = class {
 >foo.readonly = class {    constructor () {}} : typeof readonly
 >                                             : ^^^^^^^^^^^^^^^
 >foo.readonly : any
+>             : ^^^
 >foo : any
 >    : ^^^
 >readonly : any
@@ -845,6 +910,7 @@ foo.require = class {
 >foo.require = class {    constructor () {}} : typeof require
 >                                            : ^^^^^^^^^^^^^^
 >foo.require : any
+>            : ^^^
 >foo : any
 >    : ^^^
 >require : any
@@ -858,6 +924,7 @@ foo.number = class {
 >foo.number = class {    constructor () {}} : typeof number
 >                                           : ^^^^^^^^^^^^^
 >foo.number : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >number : any
@@ -871,6 +938,7 @@ foo.object = class {
 >foo.object = class {    constructor () {}} : typeof object
 >                                           : ^^^^^^^^^^^^^
 >foo.object : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >object : any
@@ -884,6 +952,7 @@ foo.set = class {
 >foo.set = class {    constructor () {}} : typeof set
 >                                        : ^^^^^^^^^^
 >foo.set : any
+>        : ^^^
 >foo : any
 >    : ^^^
 >set : any
@@ -897,6 +966,7 @@ foo.string = class {
 >foo.string = class {    constructor () {}} : typeof string
 >                                           : ^^^^^^^^^^^^^
 >foo.string : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >string : any
@@ -910,6 +980,7 @@ foo.symbol = class {
 >foo.symbol = class {    constructor () {}} : typeof symbol
 >                                           : ^^^^^^^^^^^^^
 >foo.symbol : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >symbol : any
@@ -923,6 +994,7 @@ foo.type = class {
 >foo.type = class {    constructor () {}} : typeof type
 >                                         : ^^^^^^^^^^^
 >foo.type : any
+>         : ^^^
 >foo : any
 >    : ^^^
 >type : any
@@ -936,6 +1008,7 @@ foo.undefined = class {
 >foo.undefined = class {    constructor () {}} : typeof undefined
 >                                              : ^^^^^^^^^^^^^^^^
 >foo.undefined : any
+>              : ^^^
 >foo : any
 >    : ^^^
 >undefined : any
@@ -949,6 +1022,7 @@ foo.unique = class {
 >foo.unique = class {    constructor () {}} : typeof unique
 >                                           : ^^^^^^^^^^^^^
 >foo.unique : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >unique : any
@@ -962,6 +1036,7 @@ foo.unknown = class {
 >foo.unknown = class {    constructor () {}} : typeof unknown
 >                                            : ^^^^^^^^^^^^^^
 >foo.unknown : any
+>            : ^^^
 >foo : any
 >    : ^^^
 >unknown : any
@@ -975,6 +1050,7 @@ foo.from = class {
 >foo.from = class {    constructor () {}} : typeof from
 >                                         : ^^^^^^^^^^^
 >foo.from : any
+>         : ^^^
 >foo : any
 >    : ^^^
 >from : any
@@ -988,6 +1064,7 @@ foo.global = class {
 >foo.global = class {    constructor () {}} : typeof global
 >                                           : ^^^^^^^^^^^^^
 >foo.global : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >global : any
@@ -1001,6 +1078,7 @@ foo.bigint = class {
 >foo.bigint = class {    constructor () {}} : typeof bigint
 >                                           : ^^^^^^^^^^^^^
 >foo.bigint : any
+>           : ^^^
 >foo : any
 >    : ^^^
 >bigint : any
@@ -1014,6 +1092,7 @@ foo.of = class {
 >foo.of = class {    constructor () {}} : typeof of
 >                                       : ^^^^^^^^^
 >foo.of : any
+>       : ^^^
 >foo : any
 >    : ^^^
 >of : any

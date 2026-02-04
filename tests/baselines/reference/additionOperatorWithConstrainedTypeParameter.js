@@ -15,6 +15,7 @@ function realSum<T extends Record<K, number>, K extends string>(n: number, vs: T
 
 
 //// [additionOperatorWithConstrainedTypeParameter.js]
+"use strict";
 // test for #17069
 function sum(n, v, k) {
     n = n + v[k];

@@ -9,6 +9,7 @@ var r4 = undefined ** undefined;
 
 
 //// [exponentiationOperatorWithOnlyNullValueOrUndefinedValue.js]
+"use strict";
 // operator **
 var r1 = Math.pow(null, null);
 var r2 = Math.pow(null, undefined);

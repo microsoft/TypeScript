@@ -128,4 +128,5 @@ interface Promise3<TR, TJ, TN,
 type T = Awaited<Promise3<string, Error, number, {}, string, boolean, any, Element, never>>; // string
 
 //// [awaitedTypeJQuery.js]
+"use strict";
 /// <reference lib="dom" />

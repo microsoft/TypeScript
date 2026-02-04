@@ -3,11 +3,17 @@
 === es5-asyncFunctionObjectLiterals.ts ===
 declare var x, y, z, a, b, c;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 async function objectLiteral0() {
 >objectLiteral0 : () => Promise<void>
@@ -17,17 +23,23 @@ async function objectLiteral0() {
 >x = {        a: await y,        b: z    } : { a: any; b: any; }
 >                                          : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >{        a: await y,        b: z    } : { a: any; b: any; }
 >                                      : ^^^^^^^^^^^^^^^^^^^
 
         a: await y,
 >a : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 
         b: z
 >b : any
+>  : ^^^
 >z : any
+>  : ^^^
 
     };
 }
@@ -40,17 +52,23 @@ async function objectLiteral1() {
 >x = {        a: y,        b: await z    } : { a: any; b: any; }
 >                                          : ^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >{        a: y,        b: await z    } : { a: any; b: any; }
 >                                      : ^^^^^^^^^^^^^^^^^^^
 
         a: y,
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 
         b: await z
 >b : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 
     };
 }
@@ -63,18 +81,25 @@ async function objectLiteral2() {
 >x = {        [await a]: y,        b: z    } : { [x: number]: any; b: any; }
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >{        [await a]: y,        b: z    } : { [x: number]: any; b: any; }
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         [await a]: y,
 >[await a] : any
+>          : ^^^
 >await a : any
+>        : ^^^
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 
         b: z
 >b : any
+>  : ^^^
 >z : any
+>  : ^^^
 
     };
 }
@@ -87,18 +112,25 @@ async function objectLiteral3() {
 >x = {        [a]: await y,        b: z    } : { [a]: any; b: any; }
 >                                            : ^^     ^^^ ^^^^^^^^^^
 >x : any
+>  : ^^^
 >{        [a]: await y,        b: z    } : { [a]: any; b: any; }
 >                                        : ^^     ^^^ ^^^^^^^^^^
 
         [a]: await y,
 >[a] : any
+>    : ^^^
 >a : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 
         b: z
 >b : any
+>  : ^^^
 >z : any
+>  : ^^^
 
     };
 }
@@ -111,18 +143,25 @@ async function objectLiteral4() {
 >x = {        a: await y,        [b]: z    } : { [b]: any; a: any; }
 >                                            : ^^     ^^^ ^^^^^^^^^^
 >x : any
+>  : ^^^
 >{        a: await y,        [b]: z    } : { [b]: any; a: any; }
 >                                        : ^^     ^^^ ^^^^^^^^^^
 
         a: await y,
 >a : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 
         [b]: z
 >[b] : any
+>    : ^^^
 >b : any
+>  : ^^^
 >z : any
+>  : ^^^
 
     };
 }
@@ -135,18 +174,25 @@ async function objectLiteral5() {
 >x = {        a: y,        [await b]: z    } : { [x: number]: any; a: any; }
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >{        a: y,        [await b]: z    } : { [x: number]: any; a: any; }
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         a: y,
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 
         [await b]: z
 >[await b] : any
+>          : ^^^
 >await b : any
+>        : ^^^
 >b : any
+>  : ^^^
 >z : any
+>  : ^^^
 
     };
 }
@@ -159,18 +205,25 @@ async function objectLiteral6() {
 >x = {        a: y,        [b]: await z    } : { [b]: any; a: any; }
 >                                            : ^^     ^^^ ^^^^^^^^^^
 >x : any
+>  : ^^^
 >{        a: y,        [b]: await z    } : { [b]: any; a: any; }
 >                                        : ^^     ^^^ ^^^^^^^^^^
 
         a: y,
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 
         [b]: await z
 >[b] : any
+>    : ^^^
 >b : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 
     };
 }

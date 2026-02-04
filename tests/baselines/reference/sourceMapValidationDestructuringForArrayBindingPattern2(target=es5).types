@@ -9,6 +9,7 @@ declare var console: {
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
 >msg : any
+>    : ^^^
 }
 type Robot = [number, string, string];
 >Robot : Robot
@@ -119,8 +120,6 @@ for ([, nameA] = robotA, i = 0; i < 1; i++) {
 >                   : ^^^^^
 >[, nameA] : [undefined, string]
 >          : ^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 >robotA : Robot
@@ -161,8 +160,6 @@ for ([, nameA] = getRobot(), i = 0; i < 1; i++) {
 >                       : ^^^^^
 >[, nameA] : [undefined, string]
 >          : ^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 >getRobot() : Robot
@@ -205,8 +202,6 @@ for ([, nameA] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[, nameA] : [undefined, string]
 >          : ^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
@@ -253,8 +248,6 @@ for ([, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0; i < 1; i++) {
 >                                                   : ^^^^^^^^^^^^^^^^^
 >[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >[primarySkillA, secondarySkillA] : [string, string]
 >                                 : ^^^^^^^^^^^^^^^^
 >primarySkillA : string
@@ -299,8 +292,6 @@ for ([, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1; i++) 
 >                                                       : ^^^^^^^^^^^^^^^^^
 >[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >[primarySkillA, secondarySkillA] : [string, string]
 >                                 : ^^^^^^^^^^^^^^^^
 >primarySkillA : string
@@ -347,8 +338,6 @@ for ([, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]],
 >                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >[primarySkillA, secondarySkillA] : [string, string]
 >                                 : ^^^^^^^^^^^^^^^^
 >primarySkillA : string

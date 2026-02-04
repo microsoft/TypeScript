@@ -21,7 +21,9 @@ class D {
 
     set x(v) {
 >x : any
+>  : ^^^
 >v : any
+>  : ^^^
     }
 }
 
@@ -46,5 +48,7 @@ var y = {
 
     set b(v) { }
 >b : any
+>  : ^^^
 >v : any
+>  : ^^^
 }

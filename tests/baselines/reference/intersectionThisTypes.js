@@ -44,6 +44,7 @@ function test(label: Label) {
 
 
 //// [intersectionThisTypes.js]
+"use strict";
 function f1(t) {
     t = t.self();
     t = t.me().self().me();

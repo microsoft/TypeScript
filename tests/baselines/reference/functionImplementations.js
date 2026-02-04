@@ -159,6 +159,7 @@ var f12: (x: number) => any = x => { // should be (x: number) => Base | AnotherC
 }
 
 //// [functionImplementations.js]
+"use strict";
 // FunctionExpression with no return type annotation and no return statement returns void
 var v = function () { }();
 // FunctionExpression f with no return type annotation and directly references f in its body returns any

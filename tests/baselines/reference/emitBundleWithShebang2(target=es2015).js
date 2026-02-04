@@ -12,6 +12,7 @@ class Scoobyd extends Dood {}
 
 //// [outFile.js]
 #!/usr/bin/env gjs
+"use strict";
 class Doo {
 }
 class Scooby extends Doo {

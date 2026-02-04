@@ -101,9 +101,10 @@ Found 2 errors.
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/project/packages/pkg1/lib/src/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/home/src/workspaces/project/packages/pkg1/lib/src/index.d.ts]
@@ -116,16 +117,16 @@ export interface IThings {
 
 
 //// [/home/src/workspaces/project/packages/pkg1/lib/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../tslibs/ts/lib/lib.d.ts","../src/index.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2072077482-export interface IThing {\n  a: string;\n}\nexport interface IThings {\n  thing1: IThing;\n}","signature":"-6291959392-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n"}],"root":[2],"options":{"composite":true,"outDir":"./"},"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./src/index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../tslibs/ts/lib/lib.es2024.full.d.ts","../src/index.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2072077482-export interface IThing {\n  a: string;\n}\nexport interface IThings {\n  thing1: IThing;\n}","signature":"-6291959392-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n"}],"root":[2],"options":{"composite":true,"outDir":"./"},"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./src/index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/packages/pkg1/lib/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../tslibs/ts/lib/lib.d.ts",
+    "../../../../../tslibs/ts/lib/lib.es2024.full.d.ts",
     "../src/index.ts"
   ],
   "fileInfos": {
-    "../../../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../../../tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -155,7 +156,7 @@ export interface IThings {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../../tslibs/ts/lib/lib.d.ts",
+      "../../../../../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -165,15 +166,12 @@ export interface IThings {
   ],
   "latestChangedDtsFile": "./src/index.d.ts",
   "version": "FakeTSVersion",
-  "size": 927
+  "size": 939
 }
 
 //// [/home/src/workspaces/project/packages/pkg2/lib/src/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fn4 = fn4;
-function fn4() {
-    var a = { thing1: { a: 'b' } };
+export function fn4() {
+    const a = { thing1: { a: 'b' } };
     return a.thing1;
 }
 
@@ -183,12 +181,12 @@ export declare function fn4(): import("@fluentui/pkg1").IThing;
 
 
 //// [/home/src/workspaces/project/packages/pkg2/lib/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../tslibs/ts/lib/lib.d.ts","../../pkg1/lib/src/index.d.ts","../src/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-6291959392-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n",{"version":"8515046367-import { IThings } from '@fluentui/pkg1';\nexport function fn4() {\n  const a: IThings = { thing1: { a: 'b' } };\n  return a.thing1;\n}","signature":"-8485768540-export declare function fn4(): import(\"@fluentui/pkg1\").IThing;\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./src/index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../tslibs/ts/lib/lib.es2024.full.d.ts","../../pkg1/lib/src/index.d.ts","../src/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-6291959392-export interface IThing {\n    a: string;\n}\nexport interface IThings {\n    thing1: IThing;\n}\n",{"version":"8515046367-import { IThings } from '@fluentui/pkg1';\nexport function fn4() {\n  const a: IThings = { thing1: { a: 'b' } };\n  return a.thing1;\n}","signature":"-8485768540-export declare function fn4(): import(\"@fluentui/pkg1\").IThing;\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./src/index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/packages/pkg2/lib/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../tslibs/ts/lib/lib.d.ts",
+    "../../../../../tslibs/ts/lib/lib.es2024.full.d.ts",
     "../../pkg1/lib/src/index.d.ts",
     "../src/index.ts"
   ],
@@ -198,7 +196,7 @@ export declare function fn4(): import("@fluentui/pkg1").IThing;
     ]
   ],
   "fileInfos": {
-    "../../../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../../../tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -237,7 +235,7 @@ export declare function fn4(): import("@fluentui/pkg1").IThing;
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../../tslibs/ts/lib/lib.d.ts",
+      "../../../../../tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -251,7 +249,7 @@ export declare function fn4(): import("@fluentui/pkg1").IThing;
   ],
   "latestChangedDtsFile": "./src/index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1129
+  "size": 1141
 }
 
 

@@ -13,6 +13,7 @@ f({ x: (() => 1)(), ...{ y: 1 } })``;
 
 
 //// [taggedTemplateStringsWithCurriedFunction.js]
+"use strict";
 // Originated from #38558
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }

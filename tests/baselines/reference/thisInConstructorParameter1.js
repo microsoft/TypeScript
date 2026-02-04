@@ -7,6 +7,7 @@ class Foo {
 }
 
 //// [thisInConstructorParameter1.js]
+"use strict";
 class Foo {
     constructor(x = this.y) { }
 }

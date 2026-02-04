@@ -8,6 +8,7 @@ class C1 {
 }
 
 //// [ParameterList7.js]
+"use strict";
 class C1 {
     constructor(p3) {
         this.p3 = p3;

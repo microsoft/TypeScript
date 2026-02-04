@@ -1,10 +1,12 @@
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 collisionExportsRequireAndModule_externalmodule.ts(1,18): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+collisionExportsRequireAndModule_externalmodule.ts(8,5): error TS2322: Type 'null' is not assignable to type 'I'.
 collisionExportsRequireAndModule_externalmodule.ts(10,18): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+collisionExportsRequireAndModule_externalmodule.ts(17,5): error TS2322: Type 'null' is not assignable to type 'I'.
 
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== collisionExportsRequireAndModule_externalmodule.ts (2 errors) ====
+==== collisionExportsRequireAndModule_externalmodule.ts (4 errors) ====
     export namespace require {
                      ~~~~~~~
 !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
@@ -15,6 +17,8 @@ collisionExportsRequireAndModule_externalmodule.ts(10,18): error TS2441: Duplica
     }
     export function foo(): require.I {
         return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'I'.
     }
     export namespace exports {
                      ~~~~~~~
@@ -26,6 +30,8 @@ collisionExportsRequireAndModule_externalmodule.ts(10,18): error TS2441: Duplica
     }
     export function foo2(): exports.I {
         return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'I'.
     }
     namespace m1 {
         namespace require {

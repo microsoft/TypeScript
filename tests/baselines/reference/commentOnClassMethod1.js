@@ -10,6 +10,7 @@ class WebControls {
 }
 
 //// [commentOnClassMethod1.js]
+"use strict";
 class WebControls {
     /**
      * Render a control

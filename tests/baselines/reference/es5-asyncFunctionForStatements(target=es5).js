@@ -32,6 +32,7 @@ async function forStatement6() {
 }
 
 //// [es5-asyncFunctionForStatements.js]
+"use strict";
 function forStatement0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

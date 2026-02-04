@@ -42,6 +42,7 @@ var line = Geometry.Lines.Line;
 
 
 //// [ModuleWithExportedAndNonExportedImportAlias.js]
+"use strict";
 var B;
 (function (B) {
     class Line {

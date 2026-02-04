@@ -8,6 +8,6 @@ class C {
    set Foo(a?: number) { }
 >Foo : number
 >    : ^^^^^^
->a : number
->  : ^^^^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }

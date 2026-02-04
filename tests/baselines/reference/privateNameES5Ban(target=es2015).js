@@ -16,6 +16,7 @@ class A {
 
 
 //// [privateNameES5Ban.js]
+"use strict";
 var _A_instances, _a, _A_field, _A_method, _A_sField, _A_sMethod, _A_acc_get, _A_acc_set, _A_sAcc_get, _A_sAcc_set;
 class A {
     constructor() {

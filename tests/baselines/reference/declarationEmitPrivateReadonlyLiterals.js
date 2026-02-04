@@ -10,6 +10,7 @@ class Foo {
 
 
 //// [declarationEmitPrivateReadonlyLiterals.js]
+"use strict";
 class Foo {
     constructor() {
         this.B = "b";

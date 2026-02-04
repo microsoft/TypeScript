@@ -11,7 +11,7 @@ Info seq  [hh:mm:ss:mss] request:
           "lib": [
             "es5"
           ],
-          "target": "es5",
+          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }
@@ -148,12 +148,22 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "error"
           },
           {
+            "text": "Cannot find global type 'CallableFunction'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
             "text": "Cannot find global type 'Function'.",
             "code": 2318,
             "category": "error"
           },
           {
             "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'NewableFunction'.",
             "code": 2318,
             "category": "error"
           },

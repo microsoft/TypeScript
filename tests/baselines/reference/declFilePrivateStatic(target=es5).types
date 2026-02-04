@@ -39,9 +39,13 @@ class C {
 
     private static set e(v) { }
 >e : any
+>  : ^^^
 >v : any
+>  : ^^^
 
     static set f(v) { }
 >f : any
+>  : ^^^
 >v : any
+>  : ^^^
 }

@@ -16,10 +16,12 @@ var cl = Point();
 var cl = Point.Origin;
 
 //// [function.js]
+"use strict";
 function Point() {
     return { x: 0, y: 0 };
 }
 //// [test.js]
+"use strict";
 var cl;
 var cl = Point();
 var cl = Point.Origin;

@@ -3,11 +3,17 @@
 === es5-asyncFunctionCallExpressions.ts ===
 declare var x, y, z, a, b, c;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 async function callExpression0() {
 >callExpression0 : () => Promise<void>
@@ -15,10 +21,15 @@ async function callExpression0() {
 
     await x(y, z);
 >await x(y, z) : any
+>              : ^^^
 >x(y, z) : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression1() {
@@ -27,11 +38,17 @@ async function callExpression1() {
 
     (await x)(y, z);
 >(await x)(y, z) : any
+>                : ^^^
 >(await x) : any
+>          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression2() {
@@ -40,10 +57,15 @@ async function callExpression2() {
 
     x(await y, z);
 >x(await y, z) : any
+>              : ^^^
 >x : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression3() {
@@ -52,10 +74,15 @@ async function callExpression3() {
 
     x(y, await z);
 >x(y, await z) : any
+>              : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression4() {
@@ -64,11 +91,17 @@ async function callExpression4() {
 
     await x(...y, z);
 >await x(...y, z) : any
+>                 : ^^^
 >x(...y, z) : any
+>           : ^^^
 >x : any
+>  : ^^^
 >...y : any
+>     : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression5() {
@@ -77,12 +110,19 @@ async function callExpression5() {
 
     (await x)(...y, z);
 >(await x)(...y, z) : any
+>                   : ^^^
 >(await x) : any
+>          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >...y : any
+>     : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression6() {
@@ -91,12 +131,19 @@ async function callExpression6() {
 
     x(...(await y), z);
 >x(...(await y), z) : any
+>                   : ^^^
 >x : any
+>  : ^^^
 >...(await y) : any
+>             : ^^^
 >(await y) : any
+>          : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression7() {
@@ -105,11 +152,17 @@ async function callExpression7() {
 
     x(...y, await z);
 >x(...y, await z) : any
+>                 : ^^^
 >x : any
+>  : ^^^
 >...y : any
+>     : ^^^
 >y : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression8() {
@@ -118,11 +171,17 @@ async function callExpression8() {
 
     x(await y, ...z);
 >x(await y, ...z) : any
+>                 : ^^^
 >x : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >...z : any
+>     : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression9() {
@@ -131,12 +190,19 @@ async function callExpression9() {
 
     x(y, ...(await z));
 >x(y, ...(await z)) : any
+>                   : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >...(await z) : any
+>             : ^^^
 >(await z) : any
+>          : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression10() {
@@ -145,14 +211,19 @@ async function callExpression10() {
 
     await x.a(y, z);
 >await x.a(y, z) : any
+>                : ^^^
 >x.a(y, z) : any
+>          : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
 >  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression11() {
@@ -161,15 +232,21 @@ async function callExpression11() {
 
     (await x.a)(y, z);
 >(await x.a)(y, z) : any
+>                  : ^^^
 >(await x.a) : any
+>            : ^^^
 >await x.a : any
+>          : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
 >  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression12() {
@@ -178,15 +255,21 @@ async function callExpression12() {
 
     (await x).a(y, z);
 >(await x).a(y, z) : any
+>                  : ^^^
 >(await x).a : any
+>            : ^^^
 >(await x) : any
 >          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >a : any
 >  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression13() {
@@ -195,14 +278,19 @@ async function callExpression13() {
 
     x.a(await y, z);
 >x.a(await y, z) : any
+>                : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
 >  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression14() {
@@ -211,14 +299,19 @@ async function callExpression14() {
 
     x.a(y, await z);
 >x.a(y, await z) : any
+>                : ^^^
 >x.a : any
+>    : ^^^
 >x : any
 >  : ^^^
 >a : any
 >  : ^^^
 >y : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression15() {
@@ -227,12 +320,19 @@ async function callExpression15() {
 
     await x[a](y, z);
 >await x[a](y, z) : any
+>                 : ^^^
 >x[a](y, z) : any
+>           : ^^^
 >x[a] : any
+>     : ^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression16() {
@@ -241,13 +341,21 @@ async function callExpression16() {
 
     (await x[a])(y, z);
 >(await x[a])(y, z) : any
+>                   : ^^^
 >(await x[a]) : any
+>             : ^^^
 >await x[a] : any
+>           : ^^^
 >x[a] : any
+>     : ^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression17() {
@@ -256,13 +364,21 @@ async function callExpression17() {
 
     (await x)[a](y, z);
 >(await x)[a](y, z) : any
+>                   : ^^^
 >(await x)[a] : any
+>             : ^^^
 >(await x) : any
+>          : ^^^
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression18() {
@@ -271,12 +387,19 @@ async function callExpression18() {
 
     x[await a](y, z);
 >x[await a](y, z) : any
+>                 : ^^^
 >x[await a] : any
+>           : ^^^
 >x : any
+>  : ^^^
 >await a : any
+>        : ^^^
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression19() {
@@ -285,12 +408,19 @@ async function callExpression19() {
 
     x[a](await y, z);
 >x[a](await y, z) : any
+>                 : ^^^
 >x[a] : any
+>     : ^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 }
 
 async function callExpression20() {
@@ -299,11 +429,18 @@ async function callExpression20() {
 
     x[a](y, await z);
 >x[a](y, await z) : any
+>                 : ^^^
 >x[a] : any
+>     : ^^^
 >x : any
+>  : ^^^
 >a : any
+>  : ^^^
 >y : any
+>  : ^^^
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 }
 

@@ -25,6 +25,7 @@ namespace Path.Utils {
 
 
 //// [clodulesDerivedClasses.js]
+"use strict";
 class Shape {
 }
 (function (Shape) {

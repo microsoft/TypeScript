@@ -59,6 +59,7 @@ bar.workaround("a", "1", true); // ok - true is not allowed
 
 
 //// [deepKeysIndexing.js]
+"use strict";
 class Bar {
     broken(k1, k2, value) { }
     working(k1, k2, value) { }

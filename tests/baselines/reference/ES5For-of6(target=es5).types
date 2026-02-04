@@ -3,11 +3,13 @@
 === ES5For-of6.ts ===
 for (var w of []) {
 >w : any
+>  : ^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
     for (var v of []) {
 >v : any
+>  : ^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
@@ -17,6 +19,8 @@ for (var w of []) {
 >[w, v] : any[]
 >       : ^^^^^
 >w : any
+>  : ^^^
 >v : any
+>  : ^^^
     }
 }

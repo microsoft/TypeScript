@@ -45,6 +45,7 @@ c = e;
 var r = c.foo(); // e.foo would return string
 
 //// [derivedGenericClassWithAny.js]
+"use strict";
 class C {
     get X() { return null; }
     foo() {

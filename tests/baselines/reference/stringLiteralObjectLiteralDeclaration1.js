@@ -7,6 +7,7 @@ namespace m1 {
 
 
 //// [stringLiteralObjectLiteralDeclaration1.js]
+"use strict";
 var m1;
 (function (m1) {
     m1.n = { 'foo bar': 4 };

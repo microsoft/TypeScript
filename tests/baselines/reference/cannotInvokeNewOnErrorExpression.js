@@ -8,6 +8,7 @@ namespace M
 var t = new M.ClassA[];
 
 //// [cannotInvokeNewOnErrorExpression.js]
+"use strict";
 var M;
 (function (M) {
     class ClassA {

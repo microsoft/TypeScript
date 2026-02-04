@@ -29,6 +29,7 @@ interface A extends Base {
 
     yar: any;
 >yar : any
+>    : ^^^
 }
 
 interface B extends Base {
@@ -40,6 +41,7 @@ interface B extends Base {
 
     gar: any;
 >gar : any
+>    : ^^^
 }
 
 type Both = A | B;

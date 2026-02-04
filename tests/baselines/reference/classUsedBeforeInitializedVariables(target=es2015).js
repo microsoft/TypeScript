@@ -50,6 +50,7 @@ class Test {
 
 
 //// [classUsedBeforeInitializedVariables.js]
+"use strict";
 class Test {
     constructor() {
         this.p1 = 0;

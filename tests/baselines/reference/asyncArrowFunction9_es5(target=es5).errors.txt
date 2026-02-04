@@ -1,3 +1,4 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 asyncArrowFunction9_es5.ts(1,11): error TS2304: Cannot find name 'async'.
 asyncArrowFunction9_es5.ts(1,18): error TS2304: Cannot find name 'a'.
 asyncArrowFunction9_es5.ts(1,37): error TS1005: ',' expected.
@@ -6,6 +7,7 @@ asyncArrowFunction9_es5.ts(1,46): error TS1005: ',' expected.
 asyncArrowFunction9_es5.ts(1,53): error TS1109: Expression expected.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== asyncArrowFunction9_es5.ts (6 errors) ====
     var foo = async (a = await => await): Promise<void> => {
               ~~~~~

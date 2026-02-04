@@ -14,6 +14,7 @@ var a5 = [1, , ];
 var a6 = [, , ];
 
 //// [trailingCommasES5.js]
+"use strict";
 var o1 = { a: 1, b: 2 };
 var o2 = { a: 1, b: 2, };
 var o3 = { a: 1, };

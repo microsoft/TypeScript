@@ -35,6 +35,7 @@ var p: M2.X.Point;
 
 
 //// [nestedModules.js]
+"use strict";
 var A;
 (function (A) {
     let B;

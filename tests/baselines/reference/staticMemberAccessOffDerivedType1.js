@@ -12,6 +12,7 @@ class P extends SomeBase {
 
 
 //// [staticMemberAccessOffDerivedType1.js]
+"use strict";
 class SomeBase {
     static GetNumber() {
         return 2;

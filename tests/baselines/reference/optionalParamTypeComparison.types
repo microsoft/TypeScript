@@ -6,16 +6,16 @@ declare var f: (s: string, n?: number) => void;
 >  : ^ ^^      ^^ ^^^      ^^^^^    
 >s : string
 >  : ^^^^^^
->n : number
->  : ^^^^^^
+>n : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare var g: (s: string, b?: boolean) => void;
 >g : (s: string, b?: boolean) => void
 >  : ^ ^^      ^^ ^^^       ^^^^^    
 >s : string
 >  : ^^^^^^
->b : boolean
->  : ^^^^^^^
+>b : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 
 f = g;
 >f = g : (s: string, b?: boolean) => void

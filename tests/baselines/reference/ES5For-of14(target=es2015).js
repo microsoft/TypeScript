@@ -6,6 +6,7 @@ for (const v of []) {
 }
 
 //// [ES5For-of14.js]
+"use strict";
 for (const v of []) {
     var x = v;
 }

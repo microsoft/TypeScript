@@ -34,6 +34,7 @@ new X(1,);
 
 
 //// [trailingCommasInFunctionParametersAndArguments.js]
+"use strict";
 function f1(x) { }
 f1(1);
 function f2(...args) { }

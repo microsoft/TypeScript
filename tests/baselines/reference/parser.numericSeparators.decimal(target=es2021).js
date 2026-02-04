@@ -18,6 +18,7 @@
 
 
 //// [parser.numericSeparators.decimal.js]
+"use strict";
 1_000_000_000;
 1.1_00_01;
 1e1_0;

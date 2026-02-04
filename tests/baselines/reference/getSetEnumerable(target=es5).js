@@ -29,6 +29,7 @@ const GetSetEnumerableObjectGetSet = {
 
 
 //// [getSetEnumerable.js]
+"use strict";
 var GetSetEnumerableClassGet = /** @class */ (function () {
     function GetSetEnumerableClassGet() {
     }

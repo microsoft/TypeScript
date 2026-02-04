@@ -12,6 +12,7 @@ var a = (x?=0) => { return 1; };
 var b = (x, y?:number = 2) => { x; };
 
 //// [optionalArgsWithDefaultValues.js]
+"use strict";
 function foo(x, y = false, z = 0) { }
 class CCC {
     foo(x, y = false, z = 0) { }

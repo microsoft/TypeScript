@@ -16,3 +16,4 @@ declare namespace Box2D.Dynamics {
 
 
 //// [recursiveBaseCheck2.js]
+"use strict";

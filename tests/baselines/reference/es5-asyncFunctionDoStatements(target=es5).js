@@ -80,6 +80,7 @@ async function doStatement18() {
 }
 
 //// [es5-asyncFunctionDoStatements.js]
+"use strict";
 function doStatement0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

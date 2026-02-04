@@ -119,6 +119,7 @@ class C2 {
 
     protected get y() { () => this.x; return null; }
 >y : any
+>  : ^^^
 >() => this.x : () => string
 >             : ^^^^^^^^^^^^
 >this.x : string
@@ -130,12 +131,15 @@ class C2 {
 
     protected set y(x) { () => { this.y = this.x; } }
 >y : any
+>  : ^^^
 >x : any
+>  : ^^^
 >() => { this.y = this.x; } : () => void
 >                           : ^^^^^^^^^^
 >this.y = this.x : string
 >                : ^^^^^^
 >this.y : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >y : any
@@ -165,6 +169,7 @@ class C2 {
 
     protected static get y() { () => this.x; return null; }
 >y : any
+>  : ^^^
 >() => this.x : () => string
 >             : ^^^^^^^^^^^^
 >this.x : string
@@ -176,7 +181,9 @@ class C2 {
 
     protected static set y(x) {
 >y : any
+>  : ^^^
 >x : any
+>  : ^^^
 
         () => { this.y = this.x; }
 >() => { this.y = this.x; } : () => void
@@ -184,6 +191,7 @@ class C2 {
 >this.y = this.x : string
 >                : ^^^^^^
 >this.y : any
+>       : ^^^
 >this : typeof C2
 >     : ^^^^^^^^^
 >y : any

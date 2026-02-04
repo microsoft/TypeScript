@@ -20,6 +20,7 @@ var x: [g<string>, m.g<number>, () => c] = [new g<string>(), new m.g<number>(), 
 var y = x;
 
 //// [declFileTypeAnnotationTupleType.js]
+"use strict";
 var c = /** @class */ (function () {
     function c() {
     }

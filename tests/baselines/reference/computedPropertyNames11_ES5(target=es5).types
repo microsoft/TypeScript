@@ -11,6 +11,7 @@ var n: number;
 
 var a: any;
 >a : any
+>  : ^^^
 
 var v = {
 >v : { [x: string]: any; [x: number]: any; "": any; readonly 0: number; "hello bye": any; }
@@ -28,9 +29,11 @@ var v = {
 
     set [n](v) { },
 >[n] : any
+>    : ^^^
 >n : number
 >  : ^^^^^^
 >v : any
+>  : ^^^
 
     get [s + s]() { return 0; },
 >[s + s] : number
@@ -46,6 +49,7 @@ var v = {
 
     set [s + n](v) { },
 >[s + n] : any
+>        : ^^^
 >s + n : string
 >      : ^^^^^^
 >s : string
@@ -53,6 +57,7 @@ var v = {
 >n : number
 >  : ^^^^^^
 >v : any
+>  : ^^^
 
     get [+s]() { return 0; },
 >[+s] : number
@@ -66,9 +71,11 @@ var v = {
 
     set [""](v) { },
 >[""] : any
+>     : ^^^
 >"" : ""
 >   : ^^
 >v : any
+>  : ^^^
 
     get [0]() { return 0; },
 >[0] : number
@@ -80,13 +87,17 @@ var v = {
 
     set [a](v) { },
 >[a] : any
+>    : ^^^
 >a : any
+>  : ^^^
 >v : any
+>  : ^^^
 
     get [<any>true]() { return 0; },
 >[<any>true] : number
 >            : ^^^^^^
 ><any>true : any
+>          : ^^^
 >true : true
 >     : ^^^^
 >0 : 0
@@ -94,9 +105,11 @@ var v = {
 
     set [`hello bye`](v) { },
 >[`hello bye`] : any
+>              : ^^^
 >`hello bye` : "hello bye"
 >            : ^^^^^^^^^^^
 >v : any
+>  : ^^^
 
     get [`hello ${a} bye`]() { return 0; }
 >[`hello ${a} bye`] : number
@@ -104,6 +117,7 @@ var v = {
 >`hello ${a} bye` : string
 >                 : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
 >  : ^
 }

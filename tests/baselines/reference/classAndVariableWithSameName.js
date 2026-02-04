@@ -13,6 +13,7 @@ namespace M {
 }
 
 //// [classAndVariableWithSameName.js]
+"use strict";
 class C {
 } // error
 var C = ''; // error

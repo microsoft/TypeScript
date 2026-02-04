@@ -55,6 +55,7 @@ declare var a5: new (x?: number, y?: number) => number;
 
 
 //// [assignmentCompatWithConstructSignaturesWithOptionalParameters.js]
+"use strict";
 // call signatures in derived types must have the same or fewer optional parameters as the base type
 a = b.a; // ok
 a = b.a2; // ok

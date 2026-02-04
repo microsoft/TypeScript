@@ -105,6 +105,7 @@ var s = new fn5((n) => n.substr(0));
 
 
 //// [overloadResolutionConstructors.js]
+"use strict";
 class SomeBase {
 }
 class SomeDerived1 extends SomeBase {

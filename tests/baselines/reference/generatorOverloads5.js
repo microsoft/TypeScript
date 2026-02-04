@@ -8,6 +8,7 @@ namespace M {
 }
 
 //// [generatorOverloads5.js]
+"use strict";
 var M;
 (function (M) {
     function* f(s) { }

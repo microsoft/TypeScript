@@ -14,7 +14,8 @@ class A {}
  * @type {module:A}
  */
 export let el = null;
->el : error
+>el : any
+>   : ^^^
 
 export default A;
 >A : A

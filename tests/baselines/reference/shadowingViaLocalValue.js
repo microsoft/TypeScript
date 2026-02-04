@@ -18,6 +18,7 @@
 
 
 //// [shadowingViaLocalValue.js]
+"use strict";
 {
     let x;
     {

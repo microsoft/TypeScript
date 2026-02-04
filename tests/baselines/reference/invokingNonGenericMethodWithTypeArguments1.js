@@ -9,6 +9,7 @@ class Foo {
 
 
 //// [invokingNonGenericMethodWithTypeArguments1.js]
+"use strict";
 class Foo {
     constructor() {
         this.foo();

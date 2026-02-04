@@ -15,7 +15,7 @@ Info seq  [hh:mm:ss:mss] request:
           "rootDir": "/tests/cases/fourslash/server/src",
           "outDir": "/tests/cases/fourslash/server/dist",
           "rewriteRelativeImportExtensions": true,
-          "target": "es5",
+          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

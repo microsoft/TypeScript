@@ -27,6 +27,7 @@ class C extends B {
 
 
 //// [defineProperty.js]
+"use strict";
 var x = "p";
 class A {
     y;

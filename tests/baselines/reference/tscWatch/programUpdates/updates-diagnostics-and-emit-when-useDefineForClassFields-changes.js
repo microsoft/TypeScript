@@ -43,6 +43,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es6.d.ts] *Lib*
 
 //// [/user/username/projects/project/a.js]
+"use strict";
 class C {
     get prop() { return 1; }
 }
@@ -124,6 +125,7 @@ Output::
 
 
 //// [/user/username/projects/project/a.js]
+"use strict";
 class C {
     get prop() { return 1; }
 }

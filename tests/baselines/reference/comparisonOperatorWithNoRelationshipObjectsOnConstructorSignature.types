@@ -81,14 +81,14 @@ declare var b4: { new (): C };
 declare var a5: { new (a?: Base): Base };
 >a5 : new (a?: Base) => Base
 >   : ^^^^^ ^^^    ^^^^^    
->a : Base
->  : ^^^^
+>a : Base | undefined
+>  : ^^^^^^^^^^^^^^^^
 
 declare var b5: { new (a?: C): Base };
 >b5 : new (a?: C) => Base
 >   : ^^^^^ ^^^ ^^^^^    
->a : C
->  : ^
+>a : C | undefined
+>  : ^^^^^^^^^^^^^
 
 declare var a6: { new (...a: Base[]): Base };
 >a6 : new (...a: Base[]) => Base

@@ -15,6 +15,7 @@ class C2<T extends C2<any> = any> {}
 
 
 //// [typeArgumentDefaultUsesConstraintOnCircularDefault.js]
+"use strict";
 let zz = { foo: "abc" }; // should error on comparison with Test<string>
 let zzy = { value: {} };
 // Simplified repro from #28873

@@ -9,6 +9,7 @@ declare function use(a: any);
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >a : any
+>  : ^^^
 
 var x = 10;
 >x : number
@@ -18,9 +19,13 @@ var x = 10;
 
 var z0, z1, z2, z3;
 >z0 : any
+>   : ^^^
 >z1 : any
+>   : ^^^
 >z2 : any
+>   : ^^^
 >z3 : any
+>   : ^^^
 {
     let x = 20;
 >x : number
@@ -30,6 +35,7 @@ var z0, z1, z2, z3;
 
     use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >x : number
@@ -45,6 +51,7 @@ var z0, z1, z2, z3;
 
     use(z0);
 >use(z0) : any
+>        : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >z0 : number
@@ -60,6 +67,7 @@ var z0, z1, z2, z3;
 
     use(z1);
 >use(z1) : any
+>        : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >z1 : number
@@ -79,6 +87,7 @@ var z0, z1, z2, z3;
 
     use(z2);
 >use(z2) : any
+>        : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >z2 : number
@@ -98,6 +107,7 @@ var z0, z1, z2, z3;
 
     use(z3);
 >use(z3) : any
+>        : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >z3 : number
@@ -105,6 +115,7 @@ var z0, z1, z2, z3;
 }
 use(x);
 >use(x) : any
+>       : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >x : number
@@ -112,30 +123,39 @@ use(x);
 
 use(z0);
 >use(z0) : any
+>        : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >z0 : any
+>   : ^^^
 
 use(z1);
 >use(z1) : any
+>        : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >z1 : any
+>   : ^^^
 
 use(z2);
 >use(z2) : any
+>        : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >z2 : any
+>   : ^^^
 
 use(z3);
 >use(z3) : any
+>        : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >z3 : any
+>   : ^^^
 
 var z6;
 >z6 : any
+>   : ^^^
 
 var y = true;
 >y : boolean
@@ -177,6 +197,7 @@ var y = true;
 
         use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >y : number
@@ -184,6 +205,7 @@ var y = true;
 
         use(z6);
 >use(z6) : any
+>        : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >z6 : number
@@ -191,6 +213,7 @@ var y = true;
     }
     use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >y : string
@@ -198,6 +221,7 @@ var y = true;
 
     use(z6);
 >use(z6) : any
+>        : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >z6 : boolean
@@ -205,6 +229,7 @@ var y = true;
 }
 use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >y : true
@@ -212,9 +237,11 @@ use(y);
 
 use(z6);
 >use(z6) : any
+>        : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >z6 : any
+>   : ^^^
 
 var z = false;
 >z : boolean
@@ -263,6 +290,7 @@ var z5 = 1;
         // try to step on generated name
         use(_z);
 >use(_z) : any
+>        : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >_z : number
@@ -270,6 +298,7 @@ var z5 = 1;
     }
     use(z);
 >use(z) : any
+>       : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >z : string
@@ -277,6 +306,7 @@ var z5 = 1;
 }
 use(y);
 >use(y) : any
+>       : ^^^
 >use : (a: any) => any
 >    : ^ ^^   ^^^^^^^^
 >y : true

@@ -12,3 +12,4 @@ declare const value: SomeInterface;
 
 
 //// [main.js]
+"use strict";

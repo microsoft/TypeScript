@@ -13,18 +13,18 @@ var x1 = undefined;		             // error at "x1"
 >          : ^^^^^^^^^
 
 var widenArray = [null, undefined];  // error at "widenArray"
->widenArray : any[]
->           : ^^^^^
->[null, undefined] : null[]
->                  : ^^^^^^
+>widenArray : (null | undefined)[]
+>           : ^^^^^^^^^^^^^^^^^^^^
+>[null, undefined] : (null | undefined)[]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 var emptyArray = [];
 >emptyArray : any[]
 >           : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 // these should not be error
 class AnimalObj {
@@ -84,22 +84,22 @@ var array1 = ["Bob",2];
 var array2: any[] = [];
 >array2 : any[]
 >       : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 var array3: any[] = [null, undefined];
 >array3 : any[]
 >       : ^^^^^
->[null, undefined] : null[]
->                  : ^^^^^^
+>[null, undefined] : (null | undefined)[]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 var array4: number[] = [null, undefined];
 >array4 : number[]
 >       : ^^^^^^^^
->[null, undefined] : null[]
->                  : ^^^^^^
+>[null, undefined] : (null | undefined)[]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -108,8 +108,8 @@ var array5 = <any[]>[null, undefined];
 >       : ^^^^^
 ><any[]>[null, undefined] : any[]
 >                         : ^^^^^
->[null, undefined] : null[]
->                  : ^^^^^^
+>[null, undefined] : (null | undefined)[]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

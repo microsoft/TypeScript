@@ -24,6 +24,7 @@ var r = foo(c1, d1); // error
 var r2 = foo(c1, c1); // ok
 
 //// [genericCallWithObjectTypeArgs.js]
+"use strict";
 class C {
 }
 class D {

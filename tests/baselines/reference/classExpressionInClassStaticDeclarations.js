@@ -6,6 +6,7 @@ class C {
 }
 
 //// [classExpressionInClassStaticDeclarations.js]
+"use strict";
 class C {
 }
 C.D = class extends C {

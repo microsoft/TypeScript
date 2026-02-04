@@ -11,4 +11,5 @@ const b = ({ [`key`]: renamed }) => renamed;
 >renamed : any
 >        : ^^^
 >renamed : any
+>        : ^^^
 

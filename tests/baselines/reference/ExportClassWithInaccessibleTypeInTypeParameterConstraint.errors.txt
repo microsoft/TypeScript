@@ -1,0 +1,39 @@
+ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts(4,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts(5,9): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts(11,9): error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts(20,13): error TS2322: Type 'null' is not assignable to type 'Line<Point>'.
+
+
+==== ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts (4 errors) ====
+    namespace A {
+    
+        class Point {
+            x: number;
+            ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+            y: number;
+            ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        export var Origin: Point = { x: 0, y: 0 };
+    
+        export class Point3d extends Point {
+            z: number;
+            ~
+!!! error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
+    
+        export class Line<TPoint extends Point>{
+            constructor(public start: TPoint, public end: TPoint) { }
+    
+            static fromorigin2d(p: Point): Line<Point>{
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Line<Point>'.
+            }
+        }
+    }
+    

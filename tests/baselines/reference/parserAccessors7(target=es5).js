@@ -4,4 +4,5 @@
 var v = { get foo(v: number) { } };
 
 //// [parserAccessors7.js]
+"use strict";
 var v = { get foo(v) { } };

@@ -1,9 +1,12 @@
+genericGetter.ts(2,5): error TS2564: Property 'data' has no initializer and is not definitely assigned in the constructor.
 genericGetter.ts(9,5): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== genericGetter.ts (1 errors) ====
+==== genericGetter.ts (2 errors) ====
     class C<T> {
         data: T;
+        ~~~~
+!!! error TS2564: Property 'data' has no initializer and is not definitely assigned in the constructor.
         get x(): T {
             return this.data;
         }

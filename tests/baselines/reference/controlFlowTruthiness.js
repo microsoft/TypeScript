@@ -98,6 +98,7 @@ function f9<T extends object>(x: T) {
 }
 
 //// [controlFlowTruthiness.js]
+"use strict";
 function f1() {
     let x = foo();
     if (x) {

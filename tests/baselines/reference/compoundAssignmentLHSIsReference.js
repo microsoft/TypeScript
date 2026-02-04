@@ -37,6 +37,7 @@ function fn2(x4: number) {
 (x3['a']) += value;
 
 //// [compoundAssignmentLHSIsReference.js]
+"use strict";
 var value;
 // identifiers: variable and parameter
 var x1;

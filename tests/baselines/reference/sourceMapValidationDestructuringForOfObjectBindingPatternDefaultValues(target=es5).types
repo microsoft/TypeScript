@@ -9,6 +9,7 @@ declare var console: {
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
 >msg : any
+>    : ^^^
 }
 interface Robot {
     name: string;
@@ -30,12 +31,12 @@ interface MultiRobot {
 >       : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^
 
         primary?: string;
->primary : string
->        : ^^^^^^
+>primary : string | undefined
+>        : ^^^^^^^^^^^^^^^^^^
 
         secondary?: string;
->secondary : string
->          : ^^^^^^
+>secondary : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 
     };
 }

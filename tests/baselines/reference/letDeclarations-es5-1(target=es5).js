@@ -9,6 +9,7 @@
     let l9 = 0, l10 :string = "", l11 = null;
 
 //// [letDeclarations-es5-1.js]
+"use strict";
 var l1;
 var l2;
 var l3, l4, l5, l6;

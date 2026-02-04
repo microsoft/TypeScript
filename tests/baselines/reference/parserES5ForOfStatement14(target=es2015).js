@@ -5,5 +5,6 @@ for (let [a, b] of X) {
 }
 
 //// [parserES5ForOfStatement14.js]
+"use strict";
 for (let [a, b] of X) {
 }

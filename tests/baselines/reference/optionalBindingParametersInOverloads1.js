@@ -11,6 +11,7 @@ foo(["", 0, false]);
 foo([false, 0, ""]);
 
 //// [optionalBindingParametersInOverloads1.js]
+"use strict";
 function foo(...rest) {
 }
 foo(["", 0, false]);

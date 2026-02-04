@@ -14,12 +14,19 @@ namespace ObjectLiteral {
 >foo : Symbol(foo, Decl(this_inside-object-literal-getters-and-setters.ts, 2, 18), Decl(this_inside-object-literal-getters-and-setters.ts, 5, 10))
 
             return this._foo;
+>this._foo : Symbol(_foo, Decl(this_inside-object-literal-getters-and-setters.ts, 1, 31))
+>this : Symbol(ThisInObjectLiteral, Decl(this_inside-object-literal-getters-and-setters.ts, 1, 29))
+>_foo : Symbol(_foo, Decl(this_inside-object-literal-getters-and-setters.ts, 1, 31))
+
         },
         set foo(value: string) {
 >foo : Symbol(foo, Decl(this_inside-object-literal-getters-and-setters.ts, 2, 18), Decl(this_inside-object-literal-getters-and-setters.ts, 5, 10))
 >value : Symbol(value, Decl(this_inside-object-literal-getters-and-setters.ts, 6, 16))
 
             this._foo = value;
+>this._foo : Symbol(_foo, Decl(this_inside-object-literal-getters-and-setters.ts, 1, 31))
+>this : Symbol(ThisInObjectLiteral, Decl(this_inside-object-literal-getters-and-setters.ts, 1, 29))
+>_foo : Symbol(_foo, Decl(this_inside-object-literal-getters-and-setters.ts, 1, 31))
 >value : Symbol(value, Decl(this_inside-object-literal-getters-and-setters.ts, 6, 16))
 
         },
@@ -27,6 +34,9 @@ namespace ObjectLiteral {
 >test : Symbol(test, Decl(this_inside-object-literal-getters-and-setters.ts, 8, 10))
 
             return this._foo;
+>this._foo : Symbol(_foo, Decl(this_inside-object-literal-getters-and-setters.ts, 1, 31))
+>this : Symbol(ThisInObjectLiteral, Decl(this_inside-object-literal-getters-and-setters.ts, 1, 29))
+>_foo : Symbol(_foo, Decl(this_inside-object-literal-getters-and-setters.ts, 1, 31))
         }
     }
 }

@@ -11,6 +11,7 @@ export type 100 {}
 
 
 //// [parseInvalidNames.js]
+"use strict";
 namespace;
 100;
 { }

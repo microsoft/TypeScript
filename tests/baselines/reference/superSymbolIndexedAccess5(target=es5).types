@@ -3,6 +3,7 @@
 === superSymbolIndexedAccess5.ts ===
 var symbol: any;
 >symbol : any
+>       : ^^^
 
 class Foo {
 >Foo : Foo
@@ -12,6 +13,7 @@ class Foo {
 >[symbol] : () => number
 >         : ^^^^^^^^^^^^
 >symbol : any
+>       : ^^^
 
         return 0;
 >0 : 0
@@ -29,6 +31,7 @@ class Bar extends Foo {
 >[symbol] : () => number
 >         : ^^^^^^^^^^^^
 >symbol : any
+>       : ^^^
 
         return super[symbol]();
 >super[symbol]() : number
@@ -38,5 +41,6 @@ class Bar extends Foo {
 >super : Foo
 >      : ^^^
 >symbol : any
+>       : ^^^
     }
 }

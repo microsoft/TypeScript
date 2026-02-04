@@ -15,6 +15,7 @@ if (typeof stringOrNumber === "number" && typeof stringOrNumber !== "number") {
 
 
 //// [typeGuardTautologicalConsistiency.js]
+"use strict";
 let stringOrNumber;
 if (typeof stringOrNumber === "number") {
     if (typeof stringOrNumber !== "number") {

@@ -43,8 +43,8 @@ export declare function doSomething_Expected<T extends {
     [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P];
 };
 export declare let a: {
-    prop?: string;
+    prop?: string | undefined;
 };
 export declare let b: {
-    prop?: string;
+    prop?: string | undefined;
 };

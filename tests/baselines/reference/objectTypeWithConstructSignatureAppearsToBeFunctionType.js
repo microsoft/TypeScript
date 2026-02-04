@@ -21,6 +21,7 @@ var r4b: number = new b();
 var r4c: (x: any, y?: any) => any = b.apply;
 
 //// [objectTypeWithConstructSignatureAppearsToBeFunctionType.js]
+"use strict";
 // no errors expected below 
 var r2 = i();
 var r2b = new i();

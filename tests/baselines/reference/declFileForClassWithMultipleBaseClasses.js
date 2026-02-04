@@ -29,6 +29,7 @@ interface I extends A, B {
 }
 
 //// [declFileForClassWithMultipleBaseClasses.js]
+"use strict";
 class A {
     foo() { }
 }

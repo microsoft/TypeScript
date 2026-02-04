@@ -21,6 +21,7 @@ var c = new C(C.x);
 c.foo = C.foo;
 
 //// [multiModuleClodule1.js]
+"use strict";
 class C {
     constructor(x) { }
     foo() { }

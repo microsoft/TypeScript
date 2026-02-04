@@ -11,6 +11,7 @@ var n: number;
 
 var a: any;
 >a : any
+>  : ^^^
 
 class C {
 >C : C
@@ -26,9 +27,11 @@ class C {
 
     set [n](v) { }
 >[n] : any
+>    : ^^^
 >n : number
 >  : ^^^^^^
 >v : any
+>  : ^^^
 
     static get [s + s]() { return 0; }
 >[s + s] : number
@@ -44,6 +47,7 @@ class C {
 
     set [s + n](v) { }
 >[s + n] : any
+>        : ^^^
 >s + n : string
 >      : ^^^^^^
 >s : string
@@ -51,6 +55,7 @@ class C {
 >n : number
 >  : ^^^^^^
 >v : any
+>  : ^^^
 
     get [+s]() { return 0; }
 >[+s] : number
@@ -64,9 +69,11 @@ class C {
 
     static set [""](v) { }
 >[""] : any
+>     : ^^^
 >"" : ""
 >   : ^^
 >v : any
+>  : ^^^
 
     get [0]() { return 0; }
 >[0] : number
@@ -78,13 +85,17 @@ class C {
 
     set [a](v) { }
 >[a] : any
+>    : ^^^
 >a : any
+>  : ^^^
 >v : any
+>  : ^^^
 
     static get [<any>true]() { return 0; }
 >[<any>true] : number
 >            : ^^^^^^
 ><any>true : any
+>          : ^^^
 >true : true
 >     : ^^^^
 >0 : 0
@@ -92,9 +103,11 @@ class C {
 
     set [`hello bye`](v) { }
 >[`hello bye`] : any
+>              : ^^^
 >`hello bye` : "hello bye"
 >            : ^^^^^^^^^^^
 >v : any
+>  : ^^^
 
     get [`hello ${a} bye`]() { return 0; }
 >[`hello ${a} bye`] : number
@@ -102,6 +115,7 @@ class C {
 >`hello ${a} bye` : string
 >                 : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
 >  : ^
 }

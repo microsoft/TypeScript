@@ -156,6 +156,7 @@ namespace ts {
 
 
 //// [unspecializedConstraints.js]
+"use strict";
 var ts;
 (function (ts) {
     class Symbol {

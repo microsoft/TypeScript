@@ -5,4 +5,5 @@ var x = /\u{FFFFFFFF}/gu;
 
 
 //// [unicodeExtendedEscapesInRegularExpressions12.js]
+"use strict";
 var x = /\u{FFFFFFFF}/gu;

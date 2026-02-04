@@ -11,6 +11,7 @@ function f<T, U extends string>() {
 }
 
 //// [computedPropertyNames8_ES5.js]
+"use strict";
 function f() {
     var t;
     var u;

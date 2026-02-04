@@ -32,6 +32,7 @@ class Hola {
 
 
 //// [test1.js]
+"use strict";
 /*! Copyright 2015 MyCompany Inc. */
 /**
  * Hello class
@@ -42,6 +43,7 @@ var Hello = /** @class */ (function () {
     return Hello;
 }());
 //// [test2.js]
+"use strict";
 /* A comment at the top of the file. */
 /**
  * Hi class
@@ -52,6 +54,7 @@ var Hi = /** @class */ (function () {
     return Hi;
 }());
 //// [test3.js]
+"use strict";
 // A one-line comment at the top of the file.
 /**
  * Hola class

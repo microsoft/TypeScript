@@ -51,6 +51,7 @@ i.explicitThis = function(m) {
 
 
 //// [looseThisTypeInFunctions.js]
+"use strict";
 class C {
     explicitThis(m) {
         return this.n + m;

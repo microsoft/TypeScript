@@ -2,22 +2,16 @@
 
 === omittedExpressionForOfLoop.ts ===
 for (const [,] of doesNotExist) {
-> : undefined
-> : ^^^^^^^^^
 >doesNotExist : any
 >             : ^^^
 }
 
 for (const [,] of undefined) {
-> : undefined
-> : ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 }
 
 for (const [,] of []) {
-> : undefined
-> : ^^^^^^^^^
 >[] : never[]
 >   : ^^^^^^^
 }

@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserMemberFunctionDeclaration2.js]
+"use strict";
 class C {
     Foo() { }
 }

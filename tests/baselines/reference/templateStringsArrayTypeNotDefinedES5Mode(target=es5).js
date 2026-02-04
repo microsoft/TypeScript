@@ -9,6 +9,7 @@ f({}, 10, 10);
 f `abcdef${ 1234 }${ 5678 }ghijkl`;
 
 //// [templateStringsArrayTypeNotDefinedES5Mode.js]
+"use strict";
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;

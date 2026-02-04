@@ -56,6 +56,7 @@ var m: typeof M;
 var m = M.A;
 
 //// [invalidMultipleVariableDeclarations.js]
+"use strict";
 class C {
 }
 class C2 extends C {

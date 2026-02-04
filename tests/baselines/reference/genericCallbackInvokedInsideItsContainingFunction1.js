@@ -19,6 +19,7 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 }
 
 //// [genericCallbackInvokedInsideItsContainingFunction1.js]
+"use strict";
 function foo(x, y, f) {
     var r1 = f(1);
     var r2 = f(1);

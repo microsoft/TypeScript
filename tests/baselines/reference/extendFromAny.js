@@ -15,6 +15,7 @@ C.sunknown.length; // ok: sunknown: any
 
 
 //// [extendFromAny.js]
+"use strict";
 class C extends Base {
     constructor() {
         super(...arguments);

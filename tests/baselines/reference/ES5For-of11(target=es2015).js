@@ -5,5 +5,6 @@ var v;
 for (v of []) { }
 
 //// [ES5For-of11.js]
+"use strict";
 var v;
 for (v of []) { }

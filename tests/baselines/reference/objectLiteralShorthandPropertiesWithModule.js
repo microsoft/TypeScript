@@ -17,6 +17,7 @@ namespace m {
 
 
 //// [objectLiteralShorthandPropertiesWithModule.js]
+"use strict";
 // module export
 var m;
 (function (m) {

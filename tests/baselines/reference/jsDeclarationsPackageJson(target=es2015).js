@@ -70,6 +70,7 @@ module.exports = j;
     }
 }
 //// [index.js]
+"use strict";
 const j = require("./package.json");
 module.exports = j;
 

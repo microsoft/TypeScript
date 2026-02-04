@@ -55,6 +55,7 @@ async function hoistingWithAwait() {
 
 
 //// [es5-asyncFunctionHoisting.js]
+"use strict";
 function hoisting() {
     return __awaiter(this, void 0, void 0, function* () {
         var a0, a1 = 1;

@@ -4,23 +4,23 @@
 
 
 ==== /index.ts (3 errors) ====
-    import type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };
-    import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+    import type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+    import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
     
     export interface LocalInterface extends RequireInterface, ImportInterface {}
     
-    import {type RequireInterface as Req} from "pkg" assert { "resolution-mode": "require" };
+    import {type RequireInterface as Req} from "pkg" with { "resolution-mode": "require" };
                  ~~~~~~~~~~~~~~~~
 !!! error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
-                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1454: `resolution-mode` can only be set for type-only imports.
-    import {type ImportInterface as Imp} from "pkg" assert { "resolution-mode": "import" };
-                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    import {type ImportInterface as Imp} from "pkg" with { "resolution-mode": "import" };
+                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1454: `resolution-mode` can only be set for type-only imports.
     export interface Loc extends Req, Imp {}
     
-    export type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };
-    export type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+    export type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+    export type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
     
 ==== /node_modules/pkg/package.json (0 errors) ====
     {

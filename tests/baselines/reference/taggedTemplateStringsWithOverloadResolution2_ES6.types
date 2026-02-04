@@ -47,8 +47,8 @@ var b = foo1([], 1);
 >            : ^^^^^^
 >foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
 >     : ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^        ^^ ^^      ^^^      ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >1 : 1
 >  : ^
 
@@ -98,8 +98,8 @@ var d = foo2([], 1);
 >            : ^^^^^^
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
 >     : ^^^    ^^        ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^^      ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >1 : 1
 >  : ^
 

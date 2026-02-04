@@ -15,6 +15,7 @@ selected = "z"; // should fail
 
 
 //// [file.js]
+"use strict";
 // @ts-check
 const obj = {
     x: 1,

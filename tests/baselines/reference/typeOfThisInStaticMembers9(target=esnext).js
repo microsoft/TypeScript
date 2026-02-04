@@ -24,6 +24,7 @@ class D extends C {
 
 
 //// [typeOfThisInStaticMembers9.js]
+"use strict";
 class C {
     static f = 1;
 }

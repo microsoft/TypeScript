@@ -64,6 +64,7 @@ const ns = require("./cls");
 >require("./cls") : typeof ns
 >                 : ^^^^^^^^^
 >require : any
+>        : ^^^
 >"./cls" : "./cls"
 >        : ^^^^^^^
 
@@ -88,6 +89,7 @@ const ns = require("./cls");
 >require("./cls") : typeof ns
 >                 : ^^^^^^^^^
 >require : any
+>        : ^^^
 >"./cls" : "./cls"
 >        : ^^^^^^^
 
@@ -110,6 +112,7 @@ const ns = require("./cls");
 >require("./cls") : typeof ns
 >                 : ^^^^^^^^^
 >require : any
+>        : ^^^
 >"./cls" : "./cls"
 >        : ^^^^^^^
 
@@ -136,6 +139,7 @@ const ns = require("./cls");
 >require("./cls") : typeof ns
 >                 : ^^^^^^^^^
 >require : any
+>        : ^^^
 >"./cls" : "./cls"
 >        : ^^^^^^^
 

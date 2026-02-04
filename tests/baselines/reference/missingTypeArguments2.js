@@ -9,6 +9,7 @@ var y: A<A>;
 (): A => null;
 
 //// [missingTypeArguments2.js]
+"use strict";
 class A {
 }
 var x;

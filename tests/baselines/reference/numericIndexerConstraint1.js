@@ -7,6 +7,7 @@ var result: Foo = x["one"]; // error
 
 
 //// [numericIndexerConstraint1.js]
+"use strict";
 class Foo {
     foo() { }
 }

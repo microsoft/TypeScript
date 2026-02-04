@@ -20,6 +20,7 @@ namespace Validation {
 }
 
 //// [unusedInterfaceinNamespace4.js]
+"use strict";
 var Validation;
 (function (Validation) {
     class c1 {

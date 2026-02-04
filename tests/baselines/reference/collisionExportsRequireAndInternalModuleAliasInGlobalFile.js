@@ -25,6 +25,7 @@ namespace m2 {
 }
 
 //// [collisionExportsRequireAndInternalModuleAliasInGlobalFile.js]
+"use strict";
 var mOfGloalFile;
 (function (mOfGloalFile) {
     class c {

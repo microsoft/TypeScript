@@ -48,6 +48,7 @@ void M.n;
 void objA.a, M.n;
 
 //// [voidOperatorWithNumberType.js]
+"use strict";
 // void  operator on number type
 var NUMBER;
 var NUMBER1 = [1, 2];

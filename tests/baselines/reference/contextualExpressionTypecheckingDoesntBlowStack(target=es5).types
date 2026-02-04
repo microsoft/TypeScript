@@ -16,6 +16,7 @@ export default class Operation {
 >validateParameters : (parameterValues: any) => IValidationError[] | null
 >                   : ^               ^^   ^^^^^                         
 >parameterValues : any
+>                : ^^^
 
         let result: IValidationError[] | null = null;
 >result : IValidationError[] | null
@@ -33,14 +34,19 @@ export default class Operation {
 >keys : { (o: object): string[]; (o: {}): string[]; }
 >     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >parameterValues : any
+>                : ^^^
 
             const parameter: any = (this as any).getParameter();;
 >parameter : any
+>          : ^^^
 >(this as any).getParameter() : any
+>                             : ^^^
 >(this as any).getParameter : any
+>                           : ^^^
 >(this as any) : any
 >              : ^^^
 >this as any : any
+>            : ^^^
 >this : this
 >     : ^^^^
 >getParameter : any
@@ -48,11 +54,15 @@ export default class Operation {
 
             const values = (this as any).getValues();
 >values : any
+>       : ^^^
 >(this as any).getValues() : any
+>                          : ^^^
 >(this as any).getValues : any
+>                        : ^^^
 >(this as any) : any
 >              : ^^^
 >this as any : any
+>            : ^^^
 >this : this
 >     : ^^^^
 >getValues : any
@@ -60,15 +70,21 @@ export default class Operation {
 
             const innerResult = parameter.validate(values[parameter.oaParameter.name]);
 >innerResult : any
+>            : ^^^
 >parameter.validate(values[parameter.oaParameter.name]) : any
+>                                                       : ^^^
 >parameter.validate : any
+>                   : ^^^
 >parameter : any
 >          : ^^^
 >validate : any
 >         : ^^^
 >values[parameter.oaParameter.name] : any
+>                                   : ^^^
 >values : any
+>       : ^^^
 >parameter.oaParameter.name : any
+>                           : ^^^
 >parameter.oaParameter : any
 >                      : ^^^
 >parameter : any
@@ -80,10 +96,13 @@ export default class Operation {
 
             if(innerResult && innerResult.length > 0) {
 >innerResult && innerResult.length > 0 : any
+>                                      : ^^^
 >innerResult : any
+>            : ^^^
 >innerResult.length > 0 : boolean
 >                       : ^^^^^^^
 >innerResult.length : any
+>                   : ^^^
 >innerResult : any
 >            : ^^^
 >length : any
@@ -112,6 +131,7 @@ export default class Operation {
 >concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
 >       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >innerResult : any
+>            : ^^^
             }
         }
 

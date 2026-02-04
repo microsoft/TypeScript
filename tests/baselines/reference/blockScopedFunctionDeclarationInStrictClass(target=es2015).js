@@ -12,6 +12,7 @@ class c {
 }
 
 //// [blockScopedFunctionDeclarationInStrictClass.js]
+"use strict";
 class c {
     method() {
         if (true) {

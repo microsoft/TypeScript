@@ -21,6 +21,7 @@ class C extends CreateMixin(Context, A) {
 
 
 //// [override19.js]
+"use strict";
 class Context {
 }
 class A {

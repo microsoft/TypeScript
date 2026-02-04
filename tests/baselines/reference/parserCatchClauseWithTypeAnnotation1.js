@@ -7,6 +7,7 @@ try {
 
 
 //// [parserCatchClauseWithTypeAnnotation1.js]
+"use strict";
 try {
 }
 catch (e) {

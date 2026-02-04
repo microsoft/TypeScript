@@ -29,22 +29,30 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
+[96mindex.tsx[0m:[93m2[0m:[93m11[0m - [91merror[0m[90m TS7026: [0mJSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+[7m2[0m const d = <div />;
+[7m [0m [91m          ~~~~~~~[0m
+
 [96mindex.tsx[0m:[93m2[0m:[93m11[0m - [91merror[0m[90m TS17004: [0mCannot use JSX unless the '--jsx' flag is provided.
 
 [7m2[0m const d = <div />;
 [7m [0m [91m          ~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/index.js]
-var d = <div />;
+"use strict";
+const d = <div />;
 
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/index.tsx: *new*
   {}
@@ -64,15 +72,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/index.tsx
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/index.tsx
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/index.tsx (used version)
 
 exitCode:: ExitStatus.undefined
@@ -96,12 +104,18 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mindex.tsx[0m:[93m2[0m:[93m11[0m - [91merror[0m[90m TS7026: [0mJSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+[7m2[0m const d = <div />;
+[7m [0m [91m          ~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
 //// [/user/username/projects/myproject/index.jsx]
-var d = <div />;
+"use strict";
+const d = <div />;
 
 
 
@@ -116,11 +130,11 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/index.tsx
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/index.tsx
 
 No shapes updated in the builder::

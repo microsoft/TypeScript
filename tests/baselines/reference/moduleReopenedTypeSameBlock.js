@@ -9,6 +9,7 @@ namespace M {
 
 
 //// [moduleReopenedTypeSameBlock.js]
+"use strict";
 var M;
 (function (M) {
     class C1 {

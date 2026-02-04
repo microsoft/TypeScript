@@ -9,6 +9,7 @@ class Dummy {
 }
 
 //// [unusedMultipleParameters1InMethodDeclaration.js]
+"use strict";
 class Dummy {
     greeter(person, person2) {
         var unused = 20;

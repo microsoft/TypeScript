@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserES5SymbolProperty5.js]
+"use strict";
 class C {
 }
 Symbol.isRegExp;

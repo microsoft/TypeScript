@@ -41,6 +41,7 @@ function f8(foo1: string, bar = foo1) { }
 
 
 //// [parameterInitializersForwardReferencing1.js]
+"use strict";
 let foo = "";
 function f1(bar = foo) {
     var foo = 2;

@@ -8,6 +8,7 @@ sources: ES5For-of35.ts
 emittedFile:ES5For-of35.js
 sourceFile:ES5For-of35.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>for (const { x: a = 0, y: b = 1 } of [2, 3]) {
 1 >
 2 >^^^^^
@@ -57,30 +58,30 @@ sourceFile:ES5For-of35.ts
 22>                                          ]
 23>                                           ) 
 24>                                             {
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
-3 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
-4 >Emitted(1, 14) Source(1, 13) + SourceIndex(0)
-5 >Emitted(1, 15) Source(1, 14) + SourceIndex(0)
-6 >Emitted(1, 17) Source(1, 16) + SourceIndex(0)
-7 >Emitted(1, 18) Source(1, 17) + SourceIndex(0)
-8 >Emitted(1, 21) Source(1, 20) + SourceIndex(0)
-9 >Emitted(1, 22) Source(1, 21) + SourceIndex(0)
-10>Emitted(1, 24) Source(1, 23) + SourceIndex(0)
-11>Emitted(1, 25) Source(1, 24) + SourceIndex(0)
-12>Emitted(1, 27) Source(1, 26) + SourceIndex(0)
-13>Emitted(1, 28) Source(1, 27) + SourceIndex(0)
-14>Emitted(1, 31) Source(1, 30) + SourceIndex(0)
-15>Emitted(1, 32) Source(1, 31) + SourceIndex(0)
-16>Emitted(1, 34) Source(1, 32) + SourceIndex(0)
-17>Emitted(1, 38) Source(1, 36) + SourceIndex(0)
-18>Emitted(1, 39) Source(1, 37) + SourceIndex(0)
-19>Emitted(1, 40) Source(1, 38) + SourceIndex(0)
-20>Emitted(1, 42) Source(1, 40) + SourceIndex(0)
-21>Emitted(1, 43) Source(1, 41) + SourceIndex(0)
-22>Emitted(1, 44) Source(1, 42) + SourceIndex(0)
-23>Emitted(1, 46) Source(1, 44) + SourceIndex(0)
-24>Emitted(1, 47) Source(1, 45) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 6) Source(1, 6) + SourceIndex(0)
+3 >Emitted(2, 12) Source(1, 12) + SourceIndex(0)
+4 >Emitted(2, 14) Source(1, 13) + SourceIndex(0)
+5 >Emitted(2, 15) Source(1, 14) + SourceIndex(0)
+6 >Emitted(2, 17) Source(1, 16) + SourceIndex(0)
+7 >Emitted(2, 18) Source(1, 17) + SourceIndex(0)
+8 >Emitted(2, 21) Source(1, 20) + SourceIndex(0)
+9 >Emitted(2, 22) Source(1, 21) + SourceIndex(0)
+10>Emitted(2, 24) Source(1, 23) + SourceIndex(0)
+11>Emitted(2, 25) Source(1, 24) + SourceIndex(0)
+12>Emitted(2, 27) Source(1, 26) + SourceIndex(0)
+13>Emitted(2, 28) Source(1, 27) + SourceIndex(0)
+14>Emitted(2, 31) Source(1, 30) + SourceIndex(0)
+15>Emitted(2, 32) Source(1, 31) + SourceIndex(0)
+16>Emitted(2, 34) Source(1, 32) + SourceIndex(0)
+17>Emitted(2, 38) Source(1, 36) + SourceIndex(0)
+18>Emitted(2, 39) Source(1, 37) + SourceIndex(0)
+19>Emitted(2, 40) Source(1, 38) + SourceIndex(0)
+20>Emitted(2, 42) Source(1, 40) + SourceIndex(0)
+21>Emitted(2, 43) Source(1, 41) + SourceIndex(0)
+22>Emitted(2, 44) Source(1, 42) + SourceIndex(0)
+23>Emitted(2, 46) Source(1, 44) + SourceIndex(0)
+24>Emitted(2, 47) Source(1, 45) + SourceIndex(0)
 ---
 >>>    a;
 1 >^^^^
@@ -91,9 +92,9 @@ sourceFile:ES5For-of35.ts
   >    
 2 >    a
 3 >     ;
-1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
-2 >Emitted(2, 6) Source(2, 6) + SourceIndex(0)
-3 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+1 >Emitted(3, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(3, 6) Source(2, 6) + SourceIndex(0)
+3 >Emitted(3, 7) Source(2, 7) + SourceIndex(0)
 ---
 >>>    b;
 1->^^^^
@@ -103,9 +104,9 @@ sourceFile:ES5For-of35.ts
   >    
 2 >    b
 3 >     ;
-1->Emitted(3, 5) Source(3, 5) + SourceIndex(0)
-2 >Emitted(3, 6) Source(3, 6) + SourceIndex(0)
-3 >Emitted(3, 7) Source(3, 7) + SourceIndex(0)
+1->Emitted(4, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(4, 6) Source(3, 6) + SourceIndex(0)
+3 >Emitted(4, 7) Source(3, 7) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -114,7 +115,7 @@ sourceFile:ES5For-of35.ts
 1 >
   >
 2 >}
-1 >Emitted(4, 1) Source(4, 1) + SourceIndex(0)
-2 >Emitted(4, 2) Source(4, 2) + SourceIndex(0)
+1 >Emitted(5, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(5, 2) Source(4, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=ES5For-of35.js.map

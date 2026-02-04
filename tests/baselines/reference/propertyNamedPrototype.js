@@ -7,5 +7,6 @@ class C {
 }
 
 //// [propertyNamedPrototype.js]
+"use strict";
 class C {
 }

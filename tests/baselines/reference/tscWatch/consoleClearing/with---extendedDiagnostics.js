@@ -28,17 +28,20 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/f.ts"]
   options: {"watch":true,"extendedDiagnostics":true}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/f.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/f.js]
+"use strict";
 
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/f.ts: *new*
   {}
@@ -52,15 +55,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/f.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/f.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/f.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -98,6 +101,7 @@ CreatingProgramWith::
 
 
 //// [/user/username/projects/myproject/f.js]
+"use strict";
 //
 
 
@@ -112,7 +116,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/f.ts
 
 Semantic diagnostics in builder refreshed for::

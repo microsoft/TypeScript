@@ -14,7 +14,7 @@ Info seq  [hh:mm:ss:mss] request:
           "moduleResolution": "node10",
           "noEmit": true,
           "baseUrl": "/home/src/workspaces/project/web",
-          "target": "es5",
+          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true,
           "outDir": "/home/src/workspaces/project/common/dist",

@@ -19,6 +19,7 @@ namespace One {
 
 
 //// [nonExportedElementsOfMergedModules.js]
+"use strict";
 var One;
 (function (One) {
     let A;

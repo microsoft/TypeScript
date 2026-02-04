@@ -15,6 +15,7 @@ const car = {
 
 
 //// [typeSatisfaction_ensureInterfaceImpl.js]
+"use strict";
 const car = {
     start() { },
     move(d) {

@@ -22,6 +22,7 @@ namespace N {
 
 
 //// [extBaseClass1.js]
+"use strict";
 var M;
 (function (M) {
     class B {

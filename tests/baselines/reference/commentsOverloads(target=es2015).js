@@ -177,6 +177,7 @@ var c5_i_2 = new c5("hello");
 
 
 //// [commentsOverloads.js]
+"use strict";
 function f1(aOrb) {
     return 10;
 }

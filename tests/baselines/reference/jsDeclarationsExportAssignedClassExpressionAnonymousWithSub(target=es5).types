@@ -24,6 +24,7 @@ module.exports = class {
 >this.t = 12 + p : number
 >                : ^^^^^^
 >this.t : any
+>       : ^^^
 >this : this
 >     : ^^^^
 >t : any
@@ -57,6 +58,7 @@ module.exports.Sub = class {
 >this.instance = new module.exports(10) : import("index")
 >                                       : ^^^^^^^^^^^^^^^
 >this.instance : any
+>              : ^^^
 >this : this
 >     : ^^^^
 >instance : any

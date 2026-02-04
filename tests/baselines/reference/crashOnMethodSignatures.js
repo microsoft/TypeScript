@@ -7,5 +7,6 @@ class A {
 
 
 //// [crashOnMethodSignatures.js]
+"use strict";
 class A {
 }

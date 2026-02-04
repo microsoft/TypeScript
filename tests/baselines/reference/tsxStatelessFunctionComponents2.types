@@ -12,8 +12,8 @@ function Greet(x: {name?: string}) {
 >      : ^ ^^                  ^^^^^^^^^^^^^^^^
 >x : { name?: string; }
 >  : ^^^^^^^^^      ^^^
->name : string
->     : ^^^^^^
+>name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 
 	return <div>Hello, {x}</div>;
 ><div>Hello, {x}</div> : JSX.Element
@@ -35,8 +35,8 @@ class BigGreeter extends React.Component<{ name?: string }, {}> {
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component
 >          : ^^^^^^^^^^^^^^^^^^^^^^
->name : string
->     : ^^^^^^
+>name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 
 	render() {
 >render : () => JSX.Element

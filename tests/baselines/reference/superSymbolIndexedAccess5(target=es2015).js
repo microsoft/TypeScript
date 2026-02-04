@@ -16,6 +16,7 @@ class Bar extends Foo {
 }
 
 //// [superSymbolIndexedAccess5.js]
+"use strict";
 var symbol;
 class Foo {
     [symbol]() {

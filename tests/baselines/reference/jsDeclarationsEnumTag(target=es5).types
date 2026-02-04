@@ -66,8 +66,11 @@ export const Fs = {
 >n => n + 1 : (n: any) => any
 >           : ^ ^^^^^^^^^^^^^
 >n : any
+>  : ^^^
 >n + 1 : any
+>      : ^^^
 >n : any
+>  : ^^^
 >1 : 1
 >  : ^
 
@@ -77,7 +80,9 @@ export const Fs = {
 >n => n : (n: any) => any
 >       : ^ ^^^^^^^^^^^^^
 >n : any
+>  : ^^^
 >n : any
+>  : ^^^
 
     SUB1: n => n - 1
 >SUB1 : (n: any) => number
@@ -85,9 +90,11 @@ export const Fs = {
 >n => n - 1 : (n: any) => number
 >           : ^ ^^^^^^^^^^^^^^^^
 >n : any
+>  : ^^^
 >n - 1 : number
 >      : ^^^^^^
 >n : any
+>  : ^^^
 >1 : 1
 >  : ^
 }
@@ -158,7 +165,8 @@ export function ff(s) {
     if (!Target[s]) {
 >!Target[s] : boolean
 >           : ^^^^^^^
->Target[s] : error
+>Target[s] : any
+>          : ^^^
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >s : string
@@ -168,7 +176,8 @@ export function ff(s) {
     }
     else {
         return Target[s]
->Target[s] : error
+>Target[s] : any
+>          : ^^^
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >s : string

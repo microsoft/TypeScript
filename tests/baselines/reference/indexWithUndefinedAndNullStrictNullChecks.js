@@ -16,6 +16,7 @@ num = s[null];
 
 
 //// [indexWithUndefinedAndNullStrictNullChecks.js]
+"use strict";
 let n;
 let s;
 let str = n[undefined];

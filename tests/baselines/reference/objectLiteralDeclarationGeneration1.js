@@ -4,6 +4,7 @@
 class y<T extends {}>{ }
 
 //// [objectLiteralDeclarationGeneration1.js]
+"use strict";
 class y {
 }
 

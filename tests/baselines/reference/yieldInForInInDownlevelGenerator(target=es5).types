@@ -8,6 +8,7 @@ function* gen() {
 
   var obj: any = { foo: 1, bar: 2 };
 >obj : any
+>    : ^^^
 >{ foo: 1, bar: 2 } : { foo: number; bar: number; }
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
@@ -23,9 +24,11 @@ function* gen() {
 >key : string
 >    : ^^^^^^
 >obj : any
+>    : ^^^
 
       yield key;
 >yield key : any
+>          : ^^^
 >key : string
 >    : ^^^^^^
 
@@ -33,6 +36,7 @@ function* gen() {
 >delete obj.bar : boolean
 >               : ^^^^^^^
 >obj.bar : any
+>        : ^^^
 >obj : any
 >    : ^^^
 >bar : any

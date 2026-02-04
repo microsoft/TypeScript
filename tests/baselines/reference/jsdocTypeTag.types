@@ -78,7 +78,7 @@ var A;
 
 /** @type {array} */
 var a;
->a : any[]
+>a : array
 >  : ^^^^^
 
 /** @type {Promise} */
@@ -88,8 +88,8 @@ var P;
 
 /** @type {promise} */
 var p;
->p : Promise<any>
->  : ^^^^^^^^^^^^
+>p : promise
+>  : ^^^^^^^
 
 /** @type {?number} */
 var nullable;
@@ -98,11 +98,13 @@ var nullable;
 
 /** @type {Object} */
 var Obj;
->Obj : any
+>Obj : Object
+>    : ^^^^^^
 
 /** @type {object} */
 var obj;
->obj : any
+>obj : object
+>    : ^^^^^^
 
 /** @type {Function} */
 var Func;
@@ -181,7 +183,7 @@ var A: any[];
 >  : ^^^^^
 
 var a: any[];
->a : any[]
+>a : array
 >  : ^^^^^
 
 var P: Promise<any>;
@@ -189,18 +191,20 @@ var P: Promise<any>;
 >  : ^^^^^^^^^^^^
 
 var p: Promise<any>;
->p : Promise<any>
->  : ^^^^^^^^^^^^
+>p : promise
+>  : ^^^^^^^
 
 var nullable: number | null;
 >nullable : number | null
 >         : ^^^^^^^^^^^^^
 
 var Obj: any;
->Obj : any
+>Obj : Object
+>    : ^^^^^^
 
 var obj: any;
->obj : any
+>obj : object
+>    : ^^^^^^
 
 var Func: Function;
 >Func : Function

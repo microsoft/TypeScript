@@ -1,0 +1,16 @@
+generativeRecursionWithTypeOf.ts(3,5): error TS2564: Property 'type' has no initializer and is not definitely assigned in the constructor.
+
+
+==== generativeRecursionWithTypeOf.ts (1 errors) ====
+    class C<T> {
+        static foo(x: number) { }
+        type: T;
+        ~~~~
+!!! error TS2564: Property 'type' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    namespace M {
+        export function f(x: typeof C) {   
+            return new x<typeof x>();     
+        }
+    }

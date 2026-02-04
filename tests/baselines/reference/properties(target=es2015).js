@@ -15,6 +15,7 @@ class MyClass
 }
 
 //// [properties.js]
+"use strict";
 class MyClass {
     get Count() {
         return 42;

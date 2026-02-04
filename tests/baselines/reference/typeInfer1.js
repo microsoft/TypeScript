@@ -16,6 +16,7 @@ var yyyyyyyy: ITextWriter2 = {
 }
 
 //// [typeInfer1.js]
+"use strict";
 var x = {
     Write: function (s) { },
     WriteLine: function (s) { }

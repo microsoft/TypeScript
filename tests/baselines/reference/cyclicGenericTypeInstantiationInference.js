@@ -25,6 +25,7 @@ function test<T>(x: typeof a): void { }
 test(b);
 
 //// [cyclicGenericTypeInstantiationInference.js]
+"use strict";
 function foo() {
     var z = foo();
     var y;

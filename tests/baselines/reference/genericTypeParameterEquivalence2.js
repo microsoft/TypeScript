@@ -61,6 +61,7 @@ function countWhere_2<A>(pred: (a: A) => boolean): (a: A[]) => number {
 }
 
 //// [genericTypeParameterEquivalence2.js]
+"use strict";
 // compose :: (b->c) -> (a->b) -> (a->c)
 function compose(f, g) {
     return function (a) {

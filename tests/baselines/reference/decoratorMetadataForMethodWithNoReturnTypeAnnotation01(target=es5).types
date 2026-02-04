@@ -3,6 +3,7 @@
 === decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts ===
 declare var decorator: any;
 >decorator : any
+>          : ^^^
 
 class MyClass {
 >MyClass : MyClass
@@ -18,6 +19,7 @@ class MyClass {
 
     @decorator
 >decorator : any
+>          : ^^^
 
     doSomething() {
 >doSomething : () => void

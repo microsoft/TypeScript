@@ -6,6 +6,7 @@ class Test1 {
 }
 
 //// [quotedPropertyName1.js]
+"use strict";
 class Test1 {
     constructor() {
         this["prop1"] = 0;

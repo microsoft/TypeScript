@@ -7,5 +7,6 @@ panic([], 'one', 'two');
 
 
 //// [arrayLiteralInNonVarArgParameter.js]
+"use strict";
 function panic(val, ...opt) { }
 panic([], 'one', 'two');

@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserConstructorDeclaration6.js]
+"use strict";
 class C {
     constructor() { }
 }

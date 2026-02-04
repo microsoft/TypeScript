@@ -16,6 +16,7 @@ a = b;
 b = a; // error
 
 //// [moduleAssignmentCompat2.js]
+"use strict";
 var A;
 (function (A) {
     class C {

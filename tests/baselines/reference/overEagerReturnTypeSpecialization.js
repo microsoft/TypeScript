@@ -17,6 +17,7 @@ var r2: I1<number> = v1.func(num => num.toString()) // Correctly returns an I1<s
  
 
 //// [overEagerReturnTypeSpecialization.js]
+"use strict";
 //Note: Below simpler repro
 var r1 = v1.func(num => num.toString()) // Correctly returns an I1<string>
     .func(str => str.length); // should error

@@ -5,5 +5,6 @@ for (var {a, b} of X) {
 }
 
 //// [parserES5ForOfStatement16.js]
+"use strict";
 for (var { a, b } of X) {
 }

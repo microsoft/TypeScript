@@ -12,10 +12,10 @@ for (let [x = 'a' in {}] of [[]]) console.log(x)
 >    : ^^^
 >{} : {}
 >   : ^^
->[[]] : undefined[][]
->     : ^^^^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[[]] : never[][]
+>     : ^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >console.log(x) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void

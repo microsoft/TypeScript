@@ -26,6 +26,7 @@ arr.collect = function (fn) {
 
 
 //// [extendArray.js]
+"use strict";
 var a = [1, 2];
 a.forEach(function (v, i, a) { });
 var arr = Array.prototype;

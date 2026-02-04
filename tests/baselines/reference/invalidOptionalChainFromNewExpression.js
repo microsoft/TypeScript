@@ -10,6 +10,7 @@ new A()?.b() // ok
 
 
 //// [invalidOptionalChainFromNewExpression.js]
+"use strict";
 var _a, _b;
 class A {
     b() { }

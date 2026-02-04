@@ -6,5 +6,6 @@ var v: symbol;
 for (v of union) { }
 
 //// [ES5For-ofTypeCheck8.js]
+"use strict";
 var v;
 for (v of union) { }

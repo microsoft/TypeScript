@@ -30,6 +30,7 @@ var s;
 
 
 //// [exponentiationOperatorInTemplateStringWithSyntaxError2.js]
+"use strict";
 var t1 = 10;
 var t2 = 10;
 var s;

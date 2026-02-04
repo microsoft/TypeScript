@@ -16,6 +16,7 @@ var I4:number;
 
 
 //// [interfaceDeclaration2.js]
+"use strict";
 class I2 {
 }
 function I3() { }

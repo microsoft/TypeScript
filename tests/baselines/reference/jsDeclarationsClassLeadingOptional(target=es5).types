@@ -13,6 +13,7 @@ export class Z {
 >1 : 1
 >  : ^
 >y : any
+>  : ^^^
 
         return [x, y];
 >[x, y] : any[]
@@ -20,5 +21,6 @@ export class Z {
 >x : number
 >  : ^^^^^^
 >y : any
+>  : ^^^
     }
 }

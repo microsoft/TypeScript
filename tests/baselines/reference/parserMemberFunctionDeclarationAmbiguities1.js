@@ -16,6 +16,7 @@ class C {
 }
 
 //// [parserMemberFunctionDeclarationAmbiguities1.js]
+"use strict";
 class C {
     public() { }
     static() { }

@@ -11,6 +11,7 @@ var v = {
 }
 
 //// [computedPropertyNamesSourceMap2_ES6.js]
+"use strict";
 var v = {
     ["hello"]() {
         debugger;

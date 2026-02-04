@@ -12,6 +12,7 @@ namespace TypeScript2 {
 var a = new TypeScript2.MemberNameArray()
 
 //// [recursiveClassInstantiationsWithDefaultConstructors.js]
+"use strict";
 var TypeScript2;
 (function (TypeScript2) {
     class MemberName {

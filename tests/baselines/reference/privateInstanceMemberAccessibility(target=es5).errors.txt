@@ -1,3 +1,4 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 privateInstanceMemberAccessibility.ts(5,7): error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
   Property 'foo' is private in type 'Base' but not in type 'Derived'.
 privateInstanceMemberAccessibility.ts(6,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
@@ -6,6 +7,7 @@ privateInstanceMemberAccessibility.ts(10,15): error TS2304: Cannot find name 'su
 privateInstanceMemberAccessibility.ts(12,12): error TS1442: Expected '=' for property initializer.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== privateInstanceMemberAccessibility.ts (5 errors) ====
     class Base {
         private foo: string;

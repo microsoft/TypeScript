@@ -30,6 +30,7 @@ switch (x) {
 
 
 //// [stringLiteralsWithSwitchStatements03.js]
+"use strict";
 switch (x) {
     case randBool() ? "foo" : "baz":
         break;

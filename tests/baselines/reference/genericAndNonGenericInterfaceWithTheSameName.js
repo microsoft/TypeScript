@@ -46,4 +46,5 @@ namespace M3 {
 }
 
 //// [genericAndNonGenericInterfaceWithTheSameName.js]
+"use strict";
 // generic and non-generic interfaces with the same name do not merge

@@ -27,6 +27,7 @@ namespace A {
 
 
 //// [ExportClassWithInaccessibleTypeInTypeParameterConstraint.js]
+"use strict";
 var A;
 (function (A) {
     class Point {

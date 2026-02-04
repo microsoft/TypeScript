@@ -179,6 +179,7 @@ var r10d2 = '' | undefined;
 var r10d3 = {} | undefined;
 
 //// [arithmeticOperatorWithUndefinedValueAndInvalidOperands.js]
+"use strict";
 // If one operand is the undefined or undefined value, it is treated as having the type of the
 // other operand.
 // operator *

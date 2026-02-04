@@ -4,4 +4,5 @@
 `abc${0}abc`[`0`];
 
 //// [templateStringInIndexExpression.js]
+"use strict";
 `abc${0}abc`[`0`];

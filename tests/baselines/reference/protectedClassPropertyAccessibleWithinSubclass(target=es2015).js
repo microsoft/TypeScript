@@ -22,6 +22,7 @@ class C extends B {
 
 
 //// [protectedClassPropertyAccessibleWithinSubclass.js]
+"use strict";
 // no errors
 class B {
 }

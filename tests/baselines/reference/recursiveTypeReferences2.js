@@ -29,6 +29,7 @@ const p = {};
 
 
 //// [bug39372.js]
+"use strict";
 /** @typedef {ReadonlyArray<Json>} JsonArray */
 /** @typedef {{ readonly [key: string]: Json }} JsonRecord */
 /** @typedef {boolean | number | string | null | JsonRecord | JsonArray | readonly []} Json */

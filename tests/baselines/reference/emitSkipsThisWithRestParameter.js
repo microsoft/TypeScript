@@ -9,6 +9,7 @@ function rebase(fn: (base: any, ...args: any[]) => any): (...args: any[]) => any
 
 
 //// [emitSkipsThisWithRestParameter.js]
+"use strict";
 function rebase(fn) {
     return function (...args) {
         return fn.apply(this, [this].concat(args));

@@ -24,6 +24,7 @@ const t2: T2 = null; // Assert that T2 is the null type.
 
 
 //// [typeAliasDeclareKeywordNewlines.js]
+"use strict";
 const t1 = null; // Assert that T1 is the null type.
 let T = null;
 // The following should use a variable named 'declare', use a variable named

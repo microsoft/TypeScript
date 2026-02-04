@@ -40,6 +40,7 @@ var p = new A.Utils.Plane(o, { x: 1, y: 1 });
 
 
 //// [part1.js]
+"use strict";
 var A;
 (function (A) {
     let Utils;
@@ -51,6 +52,7 @@ var A;
     })(Utils = A.Utils || (A.Utils = {}));
 })(A || (A = {}));
 //// [part2.js]
+"use strict";
 var A;
 (function (A) {
     A.Origin = { x: 0, y: 0 };
@@ -66,6 +68,7 @@ var A;
     })(Utils = A.Utils || (A.Utils = {}));
 })(A || (A = {}));
 //// [part3.js]
+"use strict";
 // test the merging actually worked
 var o;
 var o;

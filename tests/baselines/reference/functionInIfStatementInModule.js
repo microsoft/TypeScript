@@ -13,6 +13,7 @@ namespace Midori
 
 
 //// [functionInIfStatementInModule.js]
+"use strict";
 var Midori;
 (function (Midori) {
     if (false) {

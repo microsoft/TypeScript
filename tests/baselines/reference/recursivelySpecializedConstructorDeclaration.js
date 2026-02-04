@@ -32,6 +32,7 @@ declare namespace MsPortal.Controls.Base.ItemList {
 */
 
 //// [recursivelySpecializedConstructorDeclaration.js]
+"use strict";
 var MsPortal;
 (function (MsPortal) {
     var Controls;

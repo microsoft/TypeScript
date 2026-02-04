@@ -7,6 +7,7 @@ class Greeter {
 }
 
 //// [sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js]
+"use strict";
 class Greeter {
     constructor() {
         this.a = 10;

@@ -6,6 +6,7 @@ function foo() {
 }
 
 //// [classInsideBlock.js]
+"use strict";
 function foo() {
     class C {
     }

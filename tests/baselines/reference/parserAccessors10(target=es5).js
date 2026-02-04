@@ -6,6 +6,7 @@ var v = {
 };
 
 //// [parserAccessors10.js]
+"use strict";
 var v = {
     get foo() { }
 };

@@ -8,6 +8,7 @@ f += '';
 
 
 //// [concatClassAndString.js]
+"use strict";
 // Shouldn't compile (the long form f = f + ""; doesn't):
 class f {
 }

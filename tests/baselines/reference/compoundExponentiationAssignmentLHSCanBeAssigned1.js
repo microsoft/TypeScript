@@ -29,6 +29,7 @@ x3 **= null;
 x3 **= undefined;
 
 //// [compoundExponentiationAssignmentLHSCanBeAssigned1.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

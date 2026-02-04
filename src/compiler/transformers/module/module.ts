@@ -41,6 +41,7 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     GeneratedIdentifierFlags,
+    getAlwaysStrict,
     getEmitFlags,
     getEmitModuleKind,
     getEmitScriptTarget,
@@ -55,7 +56,6 @@ import {
     getNamespaceDeclarationNode,
     getNodeId,
     getOriginalNodeId,
-    getStrictOptionValue,
     getTextOfIdentifierOrLiteral,
     hasJSFileExtension,
     hasJsonModuleEmitEnabled,
@@ -277,7 +277,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         startLexicalEnvironment();
 
         const statements: Statement[] = [];
-        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || isExternalModule(currentSourceFile);
+        const ensureUseStrict = getAlwaysStrict(compilerOptions) || isExternalModule(currentSourceFile);
         const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict && !isJsonSourceFile(node), topLevelVisitor);
 
         if (shouldEmitUnderscoreUnderscoreESModule()) {

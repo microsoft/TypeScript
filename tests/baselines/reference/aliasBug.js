@@ -22,6 +22,7 @@ function use() {
 
 
 //// [aliasBug.js]
+"use strict";
 var foo;
 (function (foo) {
     class Provide {

@@ -25,9 +25,11 @@ declare namespace E {
 }
 
 //// [a.js]
+"use strict";
 /*!=========
     Keep this pinned comment
    =========
 */
 //// [b.js]
+"use strict";
 ///<reference path="a.ts"/>

@@ -26,6 +26,7 @@ class CrashTrigger extends Mixin(Empty) {
 }
 
 //// [noCrashOnMixin.js]
+"use strict";
 class Abstract {
     constructor() {
     }

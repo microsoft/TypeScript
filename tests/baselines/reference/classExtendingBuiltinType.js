@@ -14,6 +14,7 @@ class C10 extends Array<number> { }
 
 
 //// [classExtendingBuiltinType.js]
+"use strict";
 class C1 extends Object {
 }
 class C2 extends Function {

@@ -1,3 +1,4 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 classStaticPropertyAccess.ts(10,1): error TS2576: Property '"' does not exist on type 'A'. Did you mean to access the static member 'A["\""]' instead?
 classStaticPropertyAccess.ts(11,1): error TS2576: Property 'y' does not exist on type 'A'. Did you mean to access the static member 'A['y']' instead?
 classStaticPropertyAccess.ts(12,3): error TS2576: Property 'y' does not exist on type 'A'. Did you mean to access the static member 'A.y' instead?
@@ -5,6 +6,7 @@ classStaticPropertyAccess.ts(13,3): error TS2341: Property '_b' is private and o
 classStaticPropertyAccess.ts(14,3): error TS2339: Property 'a' does not exist on type 'typeof A'.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== classStaticPropertyAccess.ts (5 errors) ====
     class A {
         public static "\""() {}

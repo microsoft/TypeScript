@@ -27,6 +27,7 @@ module.exports = {
 }
 
 //// [lib.js]
+"use strict";
 /**
  * @param {string} a
  */
@@ -46,6 +47,7 @@ module.exports = {
     SomeClass: SomeClass
 };
 //// [main.js]
+"use strict";
 var _a = require('./lib'), SomeClass = _a.SomeClass, Another = _a.SomeClass;
 module.exports = {
     SomeClass: SomeClass,

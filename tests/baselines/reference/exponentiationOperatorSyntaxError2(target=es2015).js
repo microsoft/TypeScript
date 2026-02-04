@@ -70,6 +70,7 @@ void temp-- ** 4;
 <number>temp-- ** 3;
 
 //// [exponentiationOperatorSyntaxError2.js]
+"use strict";
 // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
 var temp;
 Math.pow(delete --temp, 3);

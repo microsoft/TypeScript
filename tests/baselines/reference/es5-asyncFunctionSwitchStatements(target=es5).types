@@ -3,11 +3,17 @@
 === es5-asyncFunctionSwitchStatements.ts ===
 declare var x, y, z, a, b, c;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >z : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 async function switchStatement0() {
 >switchStatement0 : () => Promise<void>
@@ -15,13 +21,17 @@ async function switchStatement0() {
 
     switch (x) {
 >x : any
+>  : ^^^
 
         case y: a; break;
 >y : any
+>  : ^^^
 >a : any
+>  : ^^^
 
         default: b; break;
 >b : any
+>  : ^^^
     }
 }
 
@@ -31,14 +41,19 @@ async function switchStatement1() {
 
     switch (await x) {
 >await x : any
+>        : ^^^
 >x : any
+>  : ^^^
 
         case y: a; break;
 >y : any
+>  : ^^^
 >a : any
+>  : ^^^
 
         default: b; break;
 >b : any
+>  : ^^^
     }
 }
 
@@ -48,14 +63,19 @@ async function switchStatement2() {
 
     switch (x) {
 >x : any
+>  : ^^^
 
         case await y: a; break;
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >a : any
+>  : ^^^
 
         default: b; break;
 >b : any
+>  : ^^^
     }
 }
 
@@ -65,14 +85,19 @@ async function switchStatement3() {
 
     switch (x) {
 >x : any
+>  : ^^^
 
         case y: await a; break;
 >y : any
+>  : ^^^
 >await a : any
+>        : ^^^
 >a : any
+>  : ^^^
 
         default: b; break;
 >b : any
+>  : ^^^
     }
 }
 
@@ -82,14 +107,19 @@ async function switchStatement4() {
 
     switch (x) {
 >x : any
+>  : ^^^
 
         case y: a; break;
 >y : any
+>  : ^^^
 >a : any
+>  : ^^^
 
         default: await b; break;
 >await b : any
+>        : ^^^
 >b : any
+>  : ^^^
     }
 }
 
@@ -99,15 +129,21 @@ async function switchStatement5() {
 
     switch (x) {
 >x : any
+>  : ^^^
 
         case y: a; break;
 >y : any
+>  : ^^^
 >a : any
+>  : ^^^
 
         case await z: b; break;
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 >b : any
+>  : ^^^
     }
 }
 
@@ -117,18 +153,25 @@ async function switchStatement6() {
 
     switch (x) {
 >x : any
+>  : ^^^
 
         default: c; break;
 >c : any
+>  : ^^^
 
         case await y: a; break;
 >await y : any
+>        : ^^^
 >y : any
+>  : ^^^
 >a : any
+>  : ^^^
 
         case z: b; break;
 >z : any
+>  : ^^^
 >b : any
+>  : ^^^
     }
 }
 
@@ -138,18 +181,25 @@ async function switchStatement7() {
 
     switch (x) {
 >x : any
+>  : ^^^
 
         default: c; break;
 >c : any
+>  : ^^^
 
         case y: a; break;
 >y : any
+>  : ^^^
 >a : any
+>  : ^^^
 
         case await z: b; break;
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 >b : any
+>  : ^^^
     }
 }
 
@@ -159,17 +209,24 @@ async function switchStatement8() {
 
     switch (x) {
 >x : any
+>  : ^^^
 
         default: c;
 >c : any
+>  : ^^^
 
         case y: a; break;
 >y : any
+>  : ^^^
 >a : any
+>  : ^^^
 
         case await z: b; break;
 >await z : any
+>        : ^^^
 >z : any
+>  : ^^^
 >b : any
+>  : ^^^
     }
 }

@@ -13,6 +13,7 @@ export {default as Foob} from "./cls";
 
 
 //// [cls.js]
+"use strict";
 class Foo {
 }
 module.exports = Foo;

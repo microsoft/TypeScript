@@ -1,5 +1,7 @@
 // @target: es5, es2015
+// @ignoreDeprecations: 6.0
 // @strict: false
+// @alwaysStrict: true, false
 // Functions
 function f1(arguments: number, ...restParameters) { //arguments is error
     var arguments = 10; // no error

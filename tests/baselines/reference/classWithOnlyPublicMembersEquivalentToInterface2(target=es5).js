@@ -30,6 +30,7 @@ c = i;
 i = c;
 
 //// [classWithOnlyPublicMembersEquivalentToInterface2.js]
+"use strict";
 // no errors expected
 var C = /** @class */ (function () {
     function C() {

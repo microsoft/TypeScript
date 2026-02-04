@@ -13,6 +13,7 @@ class C {
 }
 
 //// [thisInStatics.js]
+"use strict";
 class C {
     static f() {
         var y /*1*/ = this;

@@ -1,0 +1,28 @@
+recursiveIdenticalOverloadResolution.ts(9,6): error TS2454: Variable 'i' is used before being assigned.
+recursiveIdenticalOverloadResolution.ts(11,8): error TS2454: Variable 'i' is used before being assigned.
+recursiveIdenticalOverloadResolution.ts(13,11): error TS2454: Variable 'i' is used before being assigned.
+
+
+==== recursiveIdenticalOverloadResolution.ts (3 errors) ====
+    namespace M {
+    
+       interface I { (i: I): I; }
+    
+       function f(p: I) { return f };
+    
+       var i: I;
+    
+       f(i);
+         ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    
+       f(f(i));
+           ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    
+       f((f(f(i))));
+              ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    
+    }
+    

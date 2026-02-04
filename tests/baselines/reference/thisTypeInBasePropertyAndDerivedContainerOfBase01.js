@@ -14,6 +14,7 @@ interface Bar extends Foo {
 }
 
 //// [thisTypeInBasePropertyAndDerivedContainerOfBase01.js]
+"use strict";
 
 
 //// [thisTypeInBasePropertyAndDerivedContainerOfBase01.d.ts]

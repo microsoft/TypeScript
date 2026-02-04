@@ -15,6 +15,7 @@ function f2(fetcherParams: object | (() => object)) {
 
 
 //// [unionOfFunctionAndSignatureIsCallable.js]
+"use strict";
 function f1(c1, c2, callable) {
     const a = c1();
     const b = c2();

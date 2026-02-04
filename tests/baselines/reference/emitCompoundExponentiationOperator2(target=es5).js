@@ -27,6 +27,7 @@ comp **= comp **= (1 / 2) ** 6;
 
 
 //// [emitCompoundExponentiationOperator2.js]
+"use strict";
 var comp;
 comp = Math.pow(comp, 1);
 comp = Math.pow(comp, comp = Math.pow(comp, 1));

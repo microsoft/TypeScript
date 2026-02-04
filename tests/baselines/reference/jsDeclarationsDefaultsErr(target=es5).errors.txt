@@ -1,7 +1,9 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 index2.js(2,22): error TS2300: Duplicate identifier 'C'.
 index2.js(4,31): error TS2300: Duplicate identifier 'default'.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== index1.js (0 errors) ====
     // merge type alias and alias (should error, see #32367)
     class Cls {

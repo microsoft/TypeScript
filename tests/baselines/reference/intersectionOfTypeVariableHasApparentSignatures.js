@@ -18,6 +18,7 @@ f({
 });
 
 //// [intersectionOfTypeVariableHasApparentSignatures.js]
+"use strict";
 f({
     props: {
         children: (({ x }) => { })

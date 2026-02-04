@@ -11,6 +11,7 @@ var n: number;
 
 var a: any;
 >a : any
+>  : ^^^
 
 class C {
 >C : C
@@ -72,11 +73,13 @@ class C {
 >[a] : () => void
 >    : ^^^^^^^^^^
 >a : any
+>  : ^^^
 
     static [<any>true]() { }
 >[<any>true] : () => void
 >            : ^^^^^^^^^^
 ><any>true : any
+>          : ^^^
 >true : true
 >     : ^^^^
 
@@ -92,4 +95,5 @@ class C {
 >`hello ${a} bye` : string
 >                 : ^^^^^^
 >a : any
+>  : ^^^
 }

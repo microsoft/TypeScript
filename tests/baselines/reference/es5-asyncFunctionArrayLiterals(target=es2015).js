@@ -36,6 +36,7 @@ async function arrayLiteral7() {
 }
 
 //// [es5-asyncFunctionArrayLiterals.js]
+"use strict";
 function arrayLiteral0() {
     return __awaiter(this, void 0, void 0, function* () {
         x = [yield y, z];

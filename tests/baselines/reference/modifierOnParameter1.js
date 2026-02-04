@@ -6,6 +6,7 @@ class C {
 }
 
 //// [modifierOnParameter1.js]
+"use strict";
 class C {
     constructor(p) { }
 }

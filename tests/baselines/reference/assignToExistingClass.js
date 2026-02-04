@@ -18,6 +18,7 @@ namespace Test {
 
 
 //// [assignToExistingClass.js]
+"use strict";
 var Test;
 (function (Test) {
     class Mocked {

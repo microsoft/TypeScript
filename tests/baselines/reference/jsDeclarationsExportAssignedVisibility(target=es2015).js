@@ -18,12 +18,14 @@ class Container {
 module.exports = Container;
 
 //// [obj.js]
+"use strict";
 module.exports = class Obj {
     constructor() {
         this.x = 12;
     }
 };
 //// [index.js]
+"use strict";
 const Obj = require("./obj");
 class Container {
     constructor() {

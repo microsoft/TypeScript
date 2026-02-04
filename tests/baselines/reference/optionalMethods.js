@@ -59,6 +59,7 @@ class Derived extends Base {
 
 
 //// [optionalMethods.js]
+"use strict";
 function test1(x) {
     x.a;
     x.b;

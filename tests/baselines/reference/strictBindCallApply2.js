@@ -12,6 +12,7 @@ const fb = fn.bind({ blub: "blub" });
 
 
 //// [strictBindCallApply2.js]
+"use strict";
 // Repro from #32964
 ;
 function fn() { }

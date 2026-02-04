@@ -12,6 +12,7 @@ for (const row of ['1', '2', '3', '4', '5']) {
 }
 
 //// [classInConvertedLoopES5.js]
+"use strict";
 const classesByRow = {};
 for (const row of ['1', '2', '3', '4', '5']) {
     class RowClass {

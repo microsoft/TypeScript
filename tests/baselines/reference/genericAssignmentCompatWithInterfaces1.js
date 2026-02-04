@@ -22,6 +22,7 @@ var a4: I<string> = <K<number>>z;
 
 
 //// [genericAssignmentCompatWithInterfaces1.js]
+"use strict";
 class A {
     compareTo(other) { return 1; }
 }

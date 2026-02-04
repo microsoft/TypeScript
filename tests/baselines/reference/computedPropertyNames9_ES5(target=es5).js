@@ -13,6 +13,7 @@ var v = {
 }
 
 //// [computedPropertyNames9_ES5.js]
+"use strict";
 var _a;
 function f(x) { }
 var v = (_a = {},

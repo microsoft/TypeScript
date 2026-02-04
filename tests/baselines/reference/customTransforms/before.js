@@ -1,12 +1,10 @@
 // [source.js]
+"use strict";
 /*@before*/
 function f1() { }
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
-(function () { });
+class c {
+}
+() => { };
 var e;
 (function (e) {
 })(e || (e = {}));

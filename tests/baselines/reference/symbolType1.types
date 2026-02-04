@@ -24,10 +24,10 @@ Symbol instanceof Symbol();
 (Symbol() || {}) instanceof Object; // This one should be okay, it's a valid way of distinguishing types
 >(Symbol() || {}) instanceof Object : boolean
 >                                   : ^^^^^^^
->(Symbol() || {}) : symbol | {}
->                 : ^^^^^^^^^^^
->Symbol() || {} : symbol | {}
->               : ^^^^^^^^^^^
+>(Symbol() || {}) : symbol
+>                 : ^^^^^^
+>Symbol() || {} : symbol
+>               : ^^^^^^
 >Symbol() : symbol
 >         : ^^^^^^
 >Symbol : SymbolConstructor
@@ -42,10 +42,10 @@ Symbol instanceof (Symbol() || {});
 >                                   : ^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->(Symbol() || {}) : symbol | {}
->                 : ^^^^^^^^^^^
->Symbol() || {} : symbol | {}
->               : ^^^^^^^^^^^
+>(Symbol() || {}) : symbol
+>                 : ^^^^^^
+>Symbol() || {} : symbol
+>               : ^^^^^^
 >Symbol() : symbol
 >         : ^^^^^^
 >Symbol : SymbolConstructor

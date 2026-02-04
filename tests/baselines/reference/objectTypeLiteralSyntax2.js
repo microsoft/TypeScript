@@ -15,6 +15,7 @@ var y: {
 var z: { foo: string bar: string }
 
 //// [objectTypeLiteralSyntax2.js]
+"use strict";
 var x;
 // ASI makes this work
 var y;

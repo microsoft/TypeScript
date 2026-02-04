@@ -16,6 +16,7 @@ o.b = o.a.toString();
 
 
 //// [objectFreeze.js]
+"use strict";
 const f = Object.freeze(function foo(a, b) { return false; });
 f(1, "") === false;
 class C {

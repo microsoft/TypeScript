@@ -21,6 +21,7 @@ namespace ts {
 
 
 //// [test.js]
+"use strict";
 var ts;
 (function (ts) {
     function printVersion() {

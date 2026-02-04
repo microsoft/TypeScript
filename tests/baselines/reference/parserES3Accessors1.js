@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserES3Accessors1.js]
+"use strict";
 class C {
     get Foo() { }
 }

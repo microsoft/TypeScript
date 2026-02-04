@@ -14,6 +14,7 @@ class b extends a {
 }
 
 //// [inheritanceStaticFuncOverridingMethod.js]
+"use strict";
 class a {
     static x() {
         return "10";

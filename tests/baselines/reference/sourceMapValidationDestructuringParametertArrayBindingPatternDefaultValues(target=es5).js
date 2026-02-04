@@ -36,6 +36,7 @@ foo4(robotA);
 foo4([2, "trimmer", "trimming"]);
 
 //// [sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.js]
+"use strict";
 var robotA = [1, "mower", "mowing"];
 function foo1(_a) {
     var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[1], nameA = _c === void 0 ? "noName" : _c;

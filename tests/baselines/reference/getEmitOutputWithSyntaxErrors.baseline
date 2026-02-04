@@ -2,5 +2,6 @@
 EmitSkipped: false
 
 FileName : /tests/cases/fourslash/inputFile.js
+"use strict";
 var x;
 

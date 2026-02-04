@@ -10,6 +10,7 @@ class Bar {
 }
 
 //// [superSymbolIndexedAccess4.js]
+"use strict";
 var symbol = Symbol.for('myThing');
 class Bar {
     [symbol]() {

@@ -4,4 +4,5 @@
 var x = `abc${ true ? false : " " }def`;
 
 //// [templateStringWithEmbeddedConditional.js]
+"use strict";
 var x = `abc${true ? false : " "}def`;

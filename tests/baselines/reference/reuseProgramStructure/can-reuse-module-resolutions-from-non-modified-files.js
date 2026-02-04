@@ -126,6 +126,8 @@ MissingPaths:: []
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
+b1.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+b2.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 node_modules/@types/typerefs1/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.
 node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.
 
@@ -246,6 +248,8 @@ MissingPaths:: []
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
+b1.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+b2.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 node_modules/@types/typerefs1/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.
 node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.
 
@@ -360,6 +364,8 @@ MissingPaths:: []
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
+b1.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+b2.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 node_modules/@types/typerefs1/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.
 node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.
 
@@ -474,6 +480,8 @@ MissingPaths:: []
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
+b1.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+b2.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 node_modules/@types/typerefs1/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.
 node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.
 
@@ -576,6 +584,8 @@ MissingPaths:: []
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
+b1.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+b2.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 f2.ts(4,10): error TS2305: Module '"./f1"' has no exported member 'BB'.
 node_modules/@types/typerefs1/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.
 node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.
@@ -690,6 +700,8 @@ MissingPaths:: []
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
+b1.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+b2.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 f2.ts(4,10): error TS2305: Module '"./f1"' has no exported member 'BB'.
 node_modules/@types/typerefs1/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.
 node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.
@@ -791,6 +803,8 @@ MissingPaths:: []
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
+b1.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+b2.ts(2,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 f2.ts(4,20): error TS2306: File 'f1.ts' is not a module.
 node_modules/@types/typerefs1/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.
 node_modules/@types/typerefs2/index.d.ts(3,13): error TS2451: Cannot redeclare block-scoped variable 'z'.

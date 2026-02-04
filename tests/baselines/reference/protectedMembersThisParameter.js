@@ -99,6 +99,7 @@ class D2 extends D {
 
 
 //// [protectedMembersThisParameter.js]
+"use strict";
 class Message {
     secret() { }
 }

@@ -7,4 +7,5 @@ var f = (await) => {
 >(await) => {} : (await: any) => void
 >              : ^     ^^^^^^^^^^^^^^
 >await : any
+>      : ^^^
 }

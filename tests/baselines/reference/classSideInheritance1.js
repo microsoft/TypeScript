@@ -18,6 +18,7 @@ A.bar(); // valid
 C2.bar(); // valid
 
 //// [classSideInheritance1.js]
+"use strict";
 class A {
     static bar() {
         return "";

@@ -33,6 +33,7 @@ namespace M {
 
 
 //// [fuzzy.js]
+"use strict";
 var M;
 (function (M) {
     class C {

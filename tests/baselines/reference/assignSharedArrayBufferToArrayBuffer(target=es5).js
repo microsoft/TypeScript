@@ -4,4 +4,5 @@
 var foo: ArrayBuffer = new SharedArrayBuffer(1024); // should error
 
 //// [assignSharedArrayBufferToArrayBuffer.js]
+"use strict";
 var foo = new SharedArrayBuffer(1024); // should error

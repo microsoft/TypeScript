@@ -6,4 +6,5 @@ function foo(bar:{a:string;}) { return {a:""} }
 
 
 //// [functionOverloads18.js]
+"use strict";
 function foo(bar) { return { a: "" }; }

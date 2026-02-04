@@ -23,6 +23,7 @@ class Derived extends Base {
 }
 
 //// [illegalSuperCallsInConstructor.js]
+"use strict";
 class Base {
 }
 class Derived extends Base {

@@ -9,6 +9,7 @@ const regexes: RegExp[] = [
 
 
 //// [regExpWithOpenBracketInCharClass.js]
+"use strict";
 const regexes = [
     /[[]/, // Valid
     /[[]/u, // Valid

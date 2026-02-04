@@ -4,6 +4,7 @@
 ////{
 ////    "compilerOptions": {
 ////        "module": "commonjs",
+////        "target": "es2015",
 ////        "lib": ["es5"],
 ////        "strict": false,
 ////        "outDir": "./dist",
@@ -41,18 +42,15 @@
 ////"use strict";
 ////Object.defineProperty(exports, "__esModule", { value: true });
 ////exports.Foo = void 0;
-////var Foo = /** @class */ (function () {
-////    function Foo() {
-////    }
-////    Foo.prototype.methodName = function (propName) { return propName; };
-////    Foo.prototype.otherMethod = function () {
+////class Foo {
+////    methodName(propName) { return propName; }
+////    otherMethod() {
 ////        if (Math.random() > 0.5) {
 ////            return { x: 42 };
 ////        }
 ////        return { y: "yes" };
-////    };
-////    return Foo;
-////}());
+////    }
+////}
 ////exports.Foo = Foo;
 ////
 

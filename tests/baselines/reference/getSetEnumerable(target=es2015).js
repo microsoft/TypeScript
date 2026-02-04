@@ -29,6 +29,7 @@ const GetSetEnumerableObjectGetSet = {
 
 
 //// [getSetEnumerable.js]
+"use strict";
 class GetSetEnumerableClassGet {
     get prop() { return true; }
 }

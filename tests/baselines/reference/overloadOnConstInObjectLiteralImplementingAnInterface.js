@@ -8,4 +8,5 @@ interface I {
 var i2: I = { x1: (a: number, cb: (x: 'hi') => number) => { } }; // error
 
 //// [overloadOnConstInObjectLiteralImplementingAnInterface.js]
+"use strict";
 var i2 = { x1: (a, cb) => { } }; // error

@@ -1,8 +1,10 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 decoratorOnClassMethod10.ts(4,6): error TS1241: Unable to resolve signature of method decorator when called as an expression.
   Argument of type 'C' is not assignable to parameter of type 'Function'.
     Type 'C' is missing the following properties from type 'Function': apply, call, bind, prototype, and 5 more.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== decoratorOnClassMethod10.ts (1 errors) ====
     declare function dec(target: Function, paramIndex: number): void;
     

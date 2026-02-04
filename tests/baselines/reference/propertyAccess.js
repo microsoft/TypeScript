@@ -153,6 +153,7 @@ var x3: A;
 
 
 //// [propertyAccess.js]
+"use strict";
 class A {
 }
 class B extends A {

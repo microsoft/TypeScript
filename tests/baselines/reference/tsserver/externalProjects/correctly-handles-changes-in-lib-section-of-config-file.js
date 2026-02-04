@@ -162,6 +162,20 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/home/src/projects/project/src/tsconfig.json",
         "diagnostics": [
           {
+            "start": {
+              "line": 4,
+              "offset": 15
+            },
+            "end": {
+              "line": 4,
+              "offset": 20
+            },
+            "text": "Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/home/src/projects/project/src/tsconfig.json"
+          },
+          {
             "text": "Cannot find global type 'Array'.",
             "code": 2318,
             "category": "error"
@@ -172,12 +186,22 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "error"
           },
           {
+            "text": "Cannot find global type 'CallableFunction'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
             "text": "Cannot find global type 'Function'.",
             "code": 2318,
             "category": "error"
           },
           {
             "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'NewableFunction'.",
             "code": 2318,
             "category": "error"
           },
@@ -348,6 +372,20 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/home/src/projects/project/src/tsconfig.json",
         "diagnostics": [
           {
+            "start": {
+              "line": 4,
+              "offset": 15
+            },
+            "end": {
+              "line": 4,
+              "offset": 20
+            },
+            "text": "Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/home/src/projects/project/src/tsconfig.json"
+          },
+          {
             "text": "Cannot find global type 'Array'.",
             "code": 2318,
             "category": "error"
@@ -358,12 +396,22 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "error"
           },
           {
+            "text": "Cannot find global type 'CallableFunction'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
             "text": "Cannot find global type 'Function'.",
             "code": 2318,
             "category": "error"
           },
           {
             "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'NewableFunction'.",
             "code": 2318,
             "category": "error"
           },

@@ -24,6 +24,7 @@ p = c;
 
 
 //// [unionTypeWithRecursiveSubtypeReduction2.js]
+"use strict";
 class Module {
 }
 class Namespace {

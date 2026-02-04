@@ -40,6 +40,7 @@ callb((a) =>{ a.length; });
 
 
 //// [functionAssignment.js]
+"use strict";
 function f(n) { }
 f(function () { });
 test.get(function (param) {

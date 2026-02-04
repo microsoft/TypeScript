@@ -55,11 +55,15 @@ export class Test  {
 >(newValue, oldValue) => {                    let x = outer + inner + newValue;                } : (newValue: any, oldValue: any) => void
 >                                                                                                : ^        ^^^^^^^        ^^^^^^^^^^^^^^
 >newValue : any
+>         : ^^^
 >oldValue : any
+>         : ^^^
 
                     let x = outer + inner + newValue;
 >x : any
+>  : ^^^
 >outer + inner + newValue : any
+>                         : ^^^
 >outer + inner : number
 >              : ^^^^^^
 >outer : number
@@ -67,6 +71,7 @@ export class Test  {
 >inner : number
 >      : ^^^^^^
 >newValue : any
+>         : ^^^
 
                 });
             }
@@ -78,6 +83,8 @@ export class Test  {
 >func : (newValue: any, oldValue: any) => void
 >     : ^        ^^   ^^        ^^   ^^^^^    
 >newValue : any
+>         : ^^^
 >oldValue : any
+>         : ^^^
     }
 }

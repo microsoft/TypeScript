@@ -18,6 +18,7 @@ class e {
 }
 
 //// [functionOverloadsOutOfOrder.js]
+"use strict";
 class d {
     foo(ns) {
         return ns.toString();

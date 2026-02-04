@@ -58,7 +58,7 @@ Output::
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -81,7 +81,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not exist.
@@ -92,11 +92,10 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists -
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.theNum = void 0;
-exports.theNum = 42;
+export const theNum = 42;
 
 
 
@@ -107,7 +106,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts: *new*
   {}
@@ -144,19 +143,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts (used version)
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
@@ -197,7 +196,7 @@ Output::
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -236,7 +235,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {}
@@ -280,7 +279,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/other.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
@@ -328,7 +327,7 @@ Output::
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -351,7 +350,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not exist.
@@ -371,7 +370,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {}
@@ -413,7 +412,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts

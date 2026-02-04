@@ -14,6 +14,7 @@ const fs = require("fs");
 const text = fs.readFileSync("/a/b/c");
 
 //// [app.js]
+"use strict";
 /// <reference path="node.d.ts"/>
 const fs = require("fs");
 const text = fs.readFileSync("/a/b/c");

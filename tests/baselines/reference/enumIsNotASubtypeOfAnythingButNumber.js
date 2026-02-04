@@ -133,6 +133,7 @@ interface I20 {
 }
 
 //// [enumIsNotASubtypeOfAnythingButNumber.js]
+"use strict";
 // enums are only subtypes of number, any and no other types
 var E;
 (function (E) {

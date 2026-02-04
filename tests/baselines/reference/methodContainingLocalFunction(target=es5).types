@@ -34,6 +34,7 @@ class BugExhibition2<T> {
 
     private static get exhibitBug() {
 >exhibitBug : any
+>           : ^^^
 
         function localFunction() { }
 >localFunction : () => void

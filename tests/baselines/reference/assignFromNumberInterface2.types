@@ -11,26 +11,26 @@ interface NotNumber {
     toString(radix?: number): string;
 >toString : (radix?: number) => string
 >         : ^     ^^^      ^^^^^      
->radix : number
->      : ^^^^^^
+>radix : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
     toFixed(fractionDigits?: number): string;
 >toFixed : (fractionDigits?: number) => string
 >        : ^              ^^^      ^^^^^      
->fractionDigits : number
->               : ^^^^^^
+>fractionDigits : number | undefined
+>               : ^^^^^^^^^^^^^^^^^^
 
     toExponential(fractionDigits?: number): string;
 >toExponential : (fractionDigits?: number) => string
 >              : ^              ^^^      ^^^^^      
->fractionDigits : number
->               : ^^^^^^
+>fractionDigits : number | undefined
+>               : ^^^^^^^^^^^^^^^^^^
 
     toPrecision(precision?: number): string;
 >toPrecision : (precision?: number) => string
 >            : ^         ^^^      ^^^^^      
->precision : number
->          : ^^^^^^
+>precision : number | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 
     valueOf(): number;
 >valueOf : () => number

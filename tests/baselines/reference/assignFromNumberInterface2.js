@@ -30,6 +30,7 @@ x = b; // expected error
 
 
 //// [assignFromNumberInterface2.js]
+"use strict";
 var x = 1;
 a = x;
 a = b;

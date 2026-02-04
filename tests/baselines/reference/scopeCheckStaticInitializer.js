@@ -18,6 +18,7 @@ class After {
 
 
 //// [scopeCheckStaticInitializer.js]
+"use strict";
 class X {
     static method() { }
 }

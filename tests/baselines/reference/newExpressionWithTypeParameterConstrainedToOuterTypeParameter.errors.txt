@@ -1,0 +1,11 @@
+newExpressionWithTypeParameterConstrainedToOuterTypeParameter.ts(5,13): error TS2454: Variable 'i' is used before being assigned.
+
+
+==== newExpressionWithTypeParameterConstrainedToOuterTypeParameter.ts (1 errors) ====
+    interface I<T> {
+        new <U extends T>(u: U): U;
+    }
+    var i: I<string>;
+    var y = new i(""); // y should be string
+                ~
+!!! error TS2454: Variable 'i' is used before being assigned.

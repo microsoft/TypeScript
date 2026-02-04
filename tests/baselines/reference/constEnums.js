@@ -181,6 +181,7 @@ function baz(c: Comments) {
 
 
 //// [constEnums.js]
+"use strict";
 var A2;
 (function (A2) {
     let B;

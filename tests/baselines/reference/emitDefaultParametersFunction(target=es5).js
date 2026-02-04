@@ -7,6 +7,7 @@ function bar(y = 10) { }
 function bar1(y = 10, ...rest) { }
 
 //// [emitDefaultParametersFunction.js]
+"use strict";
 function foo(x, y) {
     if (y === void 0) { y = 10; }
 }

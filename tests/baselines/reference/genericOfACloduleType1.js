@@ -15,6 +15,7 @@ namespace M {
 var g2 = new G<M.C>() // was: error Type reference cannot refer to container 'M.C'.
 
 //// [genericOfACloduleType1.js]
+"use strict";
 class G {
     bar(x) { return x; }
 }

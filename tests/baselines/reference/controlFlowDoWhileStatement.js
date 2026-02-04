@@ -80,6 +80,7 @@ function g() {
 
 
 //// [controlFlowDoWhileStatement.js]
+"use strict";
 let cond;
 function a() {
     let x;

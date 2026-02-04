@@ -38,17 +38,16 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 project/src/main.tsx
   Matched by include pattern 'src/**/*.tsx' in 'project/tsconfig.json'
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/solution/project/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+export const x = 10;
 
 
 //// [/home/src/workspaces/solution/project/src/main.d.ts]

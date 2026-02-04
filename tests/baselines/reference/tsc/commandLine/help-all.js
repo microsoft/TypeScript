@@ -219,7 +219,7 @@ default: undefined
 [94m--alwaysStrict[39m
 Ensure 'use strict' is always emitted.
 type: boolean
-default: `false`, unless `strict` is set
+default: true
 
 [94m--exactOptionalPropertyTypes[39m
 Interpret optional property types as written, rather than adding 'undefined'.
@@ -274,7 +274,7 @@ default: false
 [94m--strict[39m
 Enable all strict type-checking options.
 type: boolean
-default: false
+default: true
 
 [94m--strictBindCallApply[39m
 Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.
@@ -602,8 +602,8 @@ default: `React`
 
 [94m--target, -t[39m
 Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
-one of: es5, es6/es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, esnext
-default: es5
+one of: es6/es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, esnext
+default: es2024
 
 [94m--useDefineForClassFields[39m
 Emit ECMAScript-standard-compliant class fields.

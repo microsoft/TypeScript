@@ -6776,7 +6776,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return parentName;
                     }
                     const memberName = symbolName(type.symbol);
-                    if (isIdentifierText(memberName, ScriptTarget.ES5)) {
+                    if (isIdentifierText(memberName, ScriptTarget.ESNext)) {
                         return appendReferenceToType(
                             parentName as TypeReferenceNode | ImportTypeNode,
                             factory.createTypeReferenceNode(memberName, /*typeArguments*/ undefined),
@@ -45637,7 +45637,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return undefined;
         }
 
-        const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
+        const iterableExists = getGlobalIterableType(/*reportErrors*/ false) !== emptyGenericType;
+        const uplevelIteration = languageVersion >= ScriptTarget.ES2015 && iterableExists;
         const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
         const possibleOutOfBounds = compilerOptions.noUncheckedIndexedAccess && !!(use & IterationUse.PossiblyOutOfBounds);
 
@@ -46789,7 +46790,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function checkClassNameCollisionWithObject(name: Identifier): void {
         if (
-            languageVersion >= ScriptTarget.ES5 && name.escapedText === "Object"
+            name.escapedText === "Object"
             && host.getEmitModuleFormatOfFile(getSourceFileOfNode(name)) < ModuleKind.ES2015
         ) {
             error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_and_above_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
@@ -48567,6 +48568,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (ModuleKind.Node20 <= moduleKind && moduleKind <= ModuleKind.NodeNext && !isImportAttributes) {
                 return grammarErrorOnFirstToken(node, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert);
+            }
+
+            if (!isImportAttributes && compilerOptions.ignoreDeprecations !== "6.0") {
+                grammarErrorOnFirstToken(node, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert);
             }
 
             if (declaration.moduleSpecifier && getEmitSyntaxForModuleSpecifierExpression(declaration.moduleSpecifier) === ModuleKind.CommonJS) {

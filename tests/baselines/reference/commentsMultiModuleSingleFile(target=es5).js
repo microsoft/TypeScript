@@ -26,6 +26,7 @@ new multiM.b();
 new multiM.c();
 
 //// [commentsMultiModuleSingleFile.js]
+"use strict";
 /** this is multi declare module*/
 var multiM;
 (function (multiM) {

@@ -8,6 +8,7 @@ export { X };
 export declare function foo(): X.bar;
 
 //// [exportSpecifierReferencingOuterDeclaration2_A.js]
+"use strict";
 //// [exportSpecifierReferencingOuterDeclaration2_B.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

@@ -32,6 +32,7 @@ class A {
 
 
 //// [module.js]
+"use strict";
 var X;
 (function (X) {
     var Y;
@@ -43,6 +44,7 @@ var X;
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 //// [classPoint.js]
+"use strict";
 var X;
 (function (X) {
     var Y;
@@ -58,6 +60,7 @@ var X;
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 //// [simple.js]
+"use strict";
 var A;
 (function (A) {
     A.Instance = new A();

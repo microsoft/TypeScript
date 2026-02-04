@@ -13,7 +13,11 @@ async ({ foo, bar, ...rest }) => bar(await foo);
 >rest : { [x: string]: any; }
 >     : ^^^^^^^^^^^^^^^^^^^^^
 >bar(await foo) : any
+>               : ^^^
 >bar : any
+>    : ^^^
 >await foo : any
+>          : ^^^
 >foo : any
+>    : ^^^
 

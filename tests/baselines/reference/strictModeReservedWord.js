@@ -30,6 +30,7 @@ function foo() {
 
 
 //// [strictModeReservedWord.js]
+"use strict";
 let let = 10;
 function foo() {
     "use strict";

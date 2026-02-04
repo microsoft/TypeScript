@@ -22,6 +22,7 @@ namespace M.N {
 
 
 //// [dottedModuleName.js]
+"use strict";
 var M;
 (function (M) {
     let N;

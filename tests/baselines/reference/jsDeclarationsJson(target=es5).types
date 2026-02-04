@@ -7,6 +7,7 @@ const j = require("./obj.json");
 >require("./obj.json") : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
+>        : ^^^
 >"./obj.json" : "./obj.json"
 >             : ^^^^^^^^^^^^
 

@@ -7,6 +7,7 @@ enum E {
 }
 
 //// [es5-oldStyleOctalLiteralInEnums.js]
+"use strict";
 var E;
 (function (E) {
     E[E["x"] = -1] = "x";

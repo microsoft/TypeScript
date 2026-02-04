@@ -7,6 +7,7 @@ var a = x.toString();
 var b = x['toString']();
 
 //// [booleanPropertyAccess.js]
+"use strict";
 var x = true;
 var a = x.toString();
 var b = x['toString']();

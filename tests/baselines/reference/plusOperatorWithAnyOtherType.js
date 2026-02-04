@@ -59,6 +59,7 @@ var ResultIsNumber19 = +(undefined + undefined);
 +M.n;
 
 //// [plusOperatorWithAnyOtherType.js]
+"use strict";
 // + operator on any type
 var ANY2 = ["", ""];
 var obj1 = { x: (s) => { }, y: (s1) => { } };

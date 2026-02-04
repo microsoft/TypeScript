@@ -29,6 +29,7 @@ namespace M.P {
 }
 
 //// [declarationEmitNameConflicts3.js]
+"use strict";
 var M;
 (function (M) {
     let D;

@@ -46,6 +46,7 @@ var ResultIsNumber14 = ~~~(STRING + STRING);
 ~objA.a,M.n;
 
 //// [bitwiseNotOperatorWithStringType.js]
+"use strict";
 // ~ operator on string type
 var STRING;
 var STRING1 = ["", "abc"];

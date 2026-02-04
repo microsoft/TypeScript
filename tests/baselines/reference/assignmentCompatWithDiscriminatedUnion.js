@@ -229,6 +229,7 @@ namespace GH58603 {
 
 
 //// [assignmentCompatWithDiscriminatedUnion.js]
+"use strict";
 // see 'typeRelatedToDiscriminatedType' in checker.ts:
 // IteratorResult
 var Example1;

@@ -13,6 +13,7 @@ declare namespace JSX {
 === test.d.ts ===
 export var React;
 >React : any
+>      : ^^^
 
 === react-consumer.tsx ===
 import {React} from "./test";
@@ -23,6 +24,7 @@ import {React} from "./test";
 //  and React.__spread
 var foo: any;
 >foo : any
+>    : ^^^
 
 var spread1 = <div x='' {...foo} y='' />;
 >spread1 : JSX.Element
@@ -34,6 +36,7 @@ var spread1 = <div x='' {...foo} y='' />;
 >x : string
 >  : ^^^^^^
 >foo : any
+>    : ^^^
 >y : string
 >  : ^^^^^^
 

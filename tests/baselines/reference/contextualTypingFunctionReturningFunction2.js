@@ -8,4 +8,5 @@ f(() => n => n);
 
 
 //// [contextualTypingFunctionReturningFunction2.js]
+"use strict";
 f(() => n => n);

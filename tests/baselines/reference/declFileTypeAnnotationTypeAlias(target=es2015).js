@@ -33,6 +33,7 @@ namespace M {
 }
 
 //// [declFileTypeAnnotationTypeAlias.js]
+"use strict";
 var M;
 (function (M) {
     class c {

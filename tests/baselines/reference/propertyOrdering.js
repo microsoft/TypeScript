@@ -26,6 +26,7 @@ class Bar {
 
 
 //// [propertyOrdering.js]
+"use strict";
 class Foo {
     constructor(store) {
         this._store = store; // no repro if this is first line in class body

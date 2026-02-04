@@ -2625,7 +2625,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
 
         const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
-        const allowTrailingComma = currentSourceFile && currentSourceFile.languageVersion >= ScriptTarget.ES5 && !isJsonSourceFile(currentSourceFile) ? ListFormat.AllowTrailingComma : ListFormat.None;
+        const allowTrailingComma = currentSourceFile && !isJsonSourceFile(currentSourceFile) ? ListFormat.AllowTrailingComma : ListFormat.None;
         emitList(node, node.properties, ListFormat.ObjectLiteralExpressionProperties | allowTrailingComma | preferNewLine);
 
         if (indentedFlag) {

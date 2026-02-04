@@ -13,6 +13,7 @@ for (const item of arr) {
 
 
 //// [for-of58.js]
+"use strict";
 for (const item of arr) {
     item.x;
     item.y;

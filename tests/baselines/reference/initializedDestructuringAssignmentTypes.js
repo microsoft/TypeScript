@@ -6,5 +6,6 @@ const [, a = ''] = ''.match('') || [];
 a.toFixed()
 
 //// [initializedDestructuringAssignmentTypes.js]
+"use strict";
 const [, a = ''] = ''.match('') || [];
 a.toFixed();

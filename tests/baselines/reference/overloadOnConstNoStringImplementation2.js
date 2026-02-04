@@ -23,6 +23,7 @@ c.x1(1, (x: string) => { return 1; } );
 c.x1(1, (x: number) => { return 1; } );
 
 //// [overloadOnConstNoStringImplementation2.js]
+"use strict";
 class C {
     x1(a, callback) {
         callback('hi');

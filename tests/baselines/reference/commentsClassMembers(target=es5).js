@@ -220,6 +220,7 @@ cProperties_i.nc_p2 = cProperties_i.nc_p1;
 
 
 //// [commentsClassMembers.js]
+"use strict";
 /** This is comment for c1*/
 var c1 = /** @class */ (function () {
     /** Constructor method*/

@@ -9,7 +9,6 @@ declare var console: {
 >log : (msg: any) => void
 >    : ^   ^^   ^^^^^    
 >msg : any
->    : ^^^
 }
 type Robot = [number, string, string];
 >Robot : Robot
@@ -30,8 +29,6 @@ var robotA: Robot = [1, "mower", "mowing"];
 function foo1([, nameA = "noName"]: Robot = [-1, "name", "skill"]) {
 >foo1 : ([, nameA]?: Robot) => void
 >     : ^         ^^^     ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 >"noName" : "noName"

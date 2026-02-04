@@ -29,6 +29,7 @@ async function returnStatement5(): Promise<any>{
 }
 
 //// [es5-asyncFunctionReturnStatements.js]
+"use strict";
 function returnStatement0() {
     return __awaiter(this, void 0, void 0, function* () {
         return;

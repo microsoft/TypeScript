@@ -19,6 +19,7 @@ a = b;
 b = a; // error
 
 //// [moduleAssignmentCompat4.js]
+"use strict";
 var A;
 (function (A) {
     let M;

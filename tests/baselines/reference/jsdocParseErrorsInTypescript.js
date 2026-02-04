@@ -6,5 +6,6 @@ function parse1(n: number=) { }
 
 
 //// [jsdocParseErrorsInTypescript.js]
+"use strict";
 // parse error (blocks grammar errors from checker)
 function parse1(n = ) { }

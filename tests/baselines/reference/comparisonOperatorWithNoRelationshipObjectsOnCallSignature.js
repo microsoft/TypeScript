@@ -171,6 +171,7 @@ var r8b6 = b6 !== a6;
 var r8b7 = b7 !== a7;
 
 //// [comparisonOperatorWithNoRelationshipObjectsOnCallSignature.js]
+"use strict";
 class Base {
 }
 class Derived extends Base {

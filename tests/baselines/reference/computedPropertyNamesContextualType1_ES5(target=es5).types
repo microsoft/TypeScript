@@ -12,6 +12,7 @@ interface I {
 >s : number
 >  : ^^^^^^
 >x : any
+>  : ^^^
 }
 
 var o: I = {

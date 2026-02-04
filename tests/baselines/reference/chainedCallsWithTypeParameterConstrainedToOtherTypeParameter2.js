@@ -44,6 +44,7 @@ class Chain2<T extends I> {
 }
 
 //// [chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.js]
+"use strict";
 class Chain {
     constructor(value) {
         this.value = value;

@@ -5,6 +5,7 @@ declare function someOtherFunction(i: any): Promise<void>;
 >someOtherFunction : (i: any) => Promise<void>
 >                  : ^ ^^   ^^^^^             
 >i : any
+>  : ^^^
 
 const x = async i => await someOtherFunction(i)
 >x : (i: any) => Promise<void>
@@ -12,6 +13,7 @@ const x = async i => await someOtherFunction(i)
 >async i => await someOtherFunction(i) : (i: any) => Promise<void>
 >                                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >i : any
+>  : ^^^
 >await someOtherFunction(i) : void
 >                           : ^^^^
 >someOtherFunction(i) : Promise<void>
@@ -19,6 +21,7 @@ const x = async i => await someOtherFunction(i)
 >someOtherFunction : (i: any) => Promise<void>
 >                  : ^ ^^   ^^^^^             
 >i : any
+>  : ^^^
 
 const x1 = async (i) => await someOtherFunction(i);
 >x1 : (i: any) => Promise<void>
@@ -26,6 +29,7 @@ const x1 = async (i) => await someOtherFunction(i);
 >async (i) => await someOtherFunction(i) : (i: any) => Promise<void>
 >                                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >i : any
+>  : ^^^
 >await someOtherFunction(i) : void
 >                           : ^^^^
 >someOtherFunction(i) : Promise<void>
@@ -33,4 +37,5 @@ const x1 = async (i) => await someOtherFunction(i);
 >someOtherFunction : (i: any) => Promise<void>
 >                  : ^ ^^   ^^^^^             
 >i : any
+>  : ^^^
 

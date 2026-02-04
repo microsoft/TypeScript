@@ -17,14 +17,14 @@ export interface ImportInterface {}
 // @filename: /node_modules/pkg/require.d.ts
 export interface RequireInterface {}
 // @filename: /index.ts
-import type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };
-import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+import type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
 
 export interface LocalInterface extends RequireInterface, ImportInterface {}
 
-import {type RequireInterface as Req} from "pkg" assert { "resolution-mode": "require" };
-import {type ImportInterface as Imp} from "pkg" assert { "resolution-mode": "import" };
+import {type RequireInterface as Req} from "pkg" with { "resolution-mode": "require" };
+import {type ImportInterface as Imp} from "pkg" with { "resolution-mode": "import" };
 export interface Loc extends Req, Imp {}
 
-export type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };
-export type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+export type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+export type { ImportInterface } from "pkg" with { "resolution-mode": "import" };

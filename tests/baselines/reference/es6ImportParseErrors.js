@@ -4,4 +4,5 @@
 import 10;
 
 //// [es6ImportParseErrors.js]
+"use strict";
 10;

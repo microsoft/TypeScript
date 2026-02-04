@@ -32,5 +32,5 @@ interface Symbol {
 `;
 
 export function getProjectConfigWithNodeNext(withNodeNext: boolean | undefined): object | undefined {
-    return withNodeNext ? { module: "nodenext", target: "es5" } : undefined;
+    return withNodeNext ? { module: "nodenext", target: "es2015" } : undefined;
 }

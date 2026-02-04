@@ -1,0 +1,13 @@
+generics0.ts(7,9): error TS2454: Variable 'v2' is used before being assigned.
+
+
+==== generics0.ts (1 errors) ====
+    interface G<T> {
+        x: T;
+    }
+    
+    var v2: G<string>;
+    
+    var z = v2.x; // 'y' should be of type 'string'
+            ~~
+!!! error TS2454: Variable 'v2' is used before being assigned.

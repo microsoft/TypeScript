@@ -9,6 +9,7 @@ namespace Foo {
 
 
 //// [classExtendsClauseClassNotReferringConstructor.js]
+"use strict";
 class A {
 }
 var Foo;

@@ -33,6 +33,7 @@ switch (s) {
 
 
 //// [switchCasesExpressionTypeMismatch.js]
+"use strict";
 class Foo {
 }
 switch (0) {

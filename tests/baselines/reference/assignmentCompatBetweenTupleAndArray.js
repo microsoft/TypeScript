@@ -22,6 +22,7 @@ emptyObjTuple = emptyObjArray;
 
 
 //// [assignmentCompatBetweenTupleAndArray.js]
+"use strict";
 // no error
 numArray = numNumTuple;
 emptyObjArray = emptyObjTuple;

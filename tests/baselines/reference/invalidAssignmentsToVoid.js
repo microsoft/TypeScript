@@ -25,6 +25,7 @@ function f<T>(a: T) {
 x = f;
 
 //// [invalidAssignmentsToVoid.js]
+"use strict";
 var x;
 x = 1;
 x = true;

@@ -4,4 +4,5 @@
 var a = () => arguments;
 
 //// [emitArrowFunctionWhenUsingArguments02.js]
+"use strict";
 var a = () => arguments;

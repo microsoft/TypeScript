@@ -100,6 +100,7 @@ namespace m7.m8 {
 new m7.m8.m9.c();
 
 //// [commentsModules.js]
+"use strict";
 /** Module comment*/
 var m1;
 (function (m1) {

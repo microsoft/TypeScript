@@ -6,5 +6,6 @@ class greeter<typeparameter1> {
 }
 
 //// [unusedTypeParameters1.js]
+"use strict";
 class greeter {
 }

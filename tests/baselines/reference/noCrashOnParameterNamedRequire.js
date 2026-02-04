@@ -7,6 +7,7 @@
 })(null, null, null);
 
 //// [index.js]
+"use strict";
 (function (require, module, exports) {
     const mod = require("./mod");
     mod.foo;

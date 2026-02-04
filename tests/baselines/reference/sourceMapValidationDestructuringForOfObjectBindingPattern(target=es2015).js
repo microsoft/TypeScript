@@ -70,6 +70,7 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of
 }
 
 //// [sourceMapValidationDestructuringForOfObjectBindingPattern.js]
+"use strict";
 let robots = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }];
 let multiRobots = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }];

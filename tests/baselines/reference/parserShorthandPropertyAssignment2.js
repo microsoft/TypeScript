@@ -4,4 +4,5 @@
 var v = { class };
 
 //// [parserShorthandPropertyAssignment2.js]
+"use strict";
 var v = { class:  };

@@ -20,6 +20,7 @@ class E {
 
 
 //// [emitDefaultParametersMethod.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(t, z, x, y) {
         if (y === void 0) { y = "hello"; }

@@ -12,6 +12,7 @@ namespace A {
 }
 
 //// [errorRecoveryWithDotFollowedByNamespaceKeyword.js]
+"use strict";
 var A;
 (function (A) {
     function foo() {

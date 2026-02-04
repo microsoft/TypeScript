@@ -8,6 +8,7 @@ class C99 {
 
 
 //// [gettersAndSettersAccessibility.js]
+"use strict";
 class C99 {
     get Baz() { return 0; }
     set Baz(n) { } // error - accessors do not agree in visibility

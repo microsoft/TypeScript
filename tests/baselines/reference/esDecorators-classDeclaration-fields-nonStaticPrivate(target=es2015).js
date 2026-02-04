@@ -9,6 +9,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-fields-nonStaticPrivate.js]
+"use strict";
 let C = (() => {
     var _a, _C_field1;
     let _private_field1_decorators;

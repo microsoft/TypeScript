@@ -159,6 +159,7 @@ var o = {
 }
 
 //// [letDeclarations-scopes.js]
+"use strict";
 // global
 let l = "string";
 var n;

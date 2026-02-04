@@ -6,6 +6,7 @@ namespace M {
 }
 
 //// [generatorInAmbientContext6.js]
+"use strict";
 var M;
 (function (M) {
     function* generator() { }

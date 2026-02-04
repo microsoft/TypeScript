@@ -187,6 +187,7 @@ var c1 = /** @class */ (function () {
 }());
 exports.c1 = c1;
 //// [declFileAccessors_1.js]
+"use strict";
 /** This is comment for c2 - the global class*/
 var c2 = /** @class */ (function () {
     function c2() {

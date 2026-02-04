@@ -15,7 +15,7 @@ Info seq  [hh:mm:ss:mss] request:
               "name": "create-thrower"
             }
           ],
-          "target": "es5",
+          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

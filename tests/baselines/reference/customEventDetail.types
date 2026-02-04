@@ -34,7 +34,9 @@ x.initCustomEvent('hello', true, true, { id: 12, name: 'hello' });
 
 var y = x.detail.name;
 >y : any
+>  : ^^^
 >x.detail.name : any
+>              : ^^^
 >x.detail : any
 >         : ^^^
 >x : CustomEvent<any>

@@ -243,6 +243,7 @@ foo.of = class {
 
 
 //// [convertClassExpressionToFunctionFromObjectProperty1.js]
+"use strict";
 const foo = {};
 // properties
 foo.x = class {

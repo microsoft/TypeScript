@@ -504,6 +504,7 @@ var privateModule;
     var privateVarWithPrivateModulePropertyTypes;
 })(privateModule || (privateModule = {}));
 //// [privacyVarDeclFile_GlobalFile.js]
+"use strict";
 class publicClassInGlobal {
 }
 class publicClassWithWithPublicPropertyTypesInGlobal {

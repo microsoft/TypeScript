@@ -23,6 +23,7 @@ export const obj = {
 
         let dis = this as {} as Foo;
 >dis : Symbol(dis, Decl(declarationEmitThisPredicates02.ts, 8, 11))
+>this : Symbol(obj, Decl(declarationEmitThisPredicates02.ts, 6, 18))
 >Foo : Symbol(Foo, Decl(declarationEmitThisPredicates02.ts, 0, 0))
 
         return dis.a != null && dis.b != null && dis.c != null;

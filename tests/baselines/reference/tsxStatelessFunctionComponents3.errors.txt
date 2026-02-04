@@ -1,8 +1,9 @@
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+file.tsx(15,37): error TS7008: Member 'children' implicitly has an 'any' type.
 
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== file.tsx (0 errors) ====
+==== file.tsx (1 errors) ====
     /// <reference path="/.lib/react.d.ts" />
     
     import React = require('react');
@@ -18,6 +19,8 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     </div>);
     
     var App: React.StatelessComponent<{ children }> = ({children}) => (
+                                        ~~~~~~~~
+!!! error TS7008: Member 'children' implicitly has an 'any' type.
         <div >
             <MainMenu/>
     	</div>

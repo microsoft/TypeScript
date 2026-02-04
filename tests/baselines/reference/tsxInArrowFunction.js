@@ -25,6 +25,7 @@ declare namespace JSX {
 
 
 //// [tsxInArrowFunction.jsx]
+"use strict";
 // didn't work
 <div>{() => <div text="wat"/>}</div>;
 // didn't work

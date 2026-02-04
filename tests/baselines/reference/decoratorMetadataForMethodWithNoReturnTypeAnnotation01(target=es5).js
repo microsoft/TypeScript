@@ -16,6 +16,7 @@ class MyClass {
 
 
 //// [decoratorMetadataForMethodWithNoReturnTypeAnnotation01.js]
+"use strict";
 var MyClass = /** @class */ (function () {
     function MyClass(test, test2) {
     }

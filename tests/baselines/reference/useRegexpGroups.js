@@ -18,6 +18,7 @@ let day2 = result[3];
 let foo = "foo".match(/(?<bar>foo)/)!.groups.foo;
 
 //// [useRegexpGroups.js]
+"use strict";
 let re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/u;
 let result = re.exec("2015-01-02");
 let date = result[0];

@@ -18,6 +18,7 @@ class A {
 A.B.C.func();
 
 //// [asyncAwaitNestedClasses_es5.js]
+"use strict";
 var _a;
 // https://github.com/Microsoft/TypeScript/issues/20744
 class A {

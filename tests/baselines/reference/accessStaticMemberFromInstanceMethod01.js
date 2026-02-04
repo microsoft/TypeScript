@@ -10,6 +10,7 @@ class C {
 }
 
 //// [accessStaticMemberFromInstanceMethod01.js]
+"use strict";
 class C {
     static bar() {
         let k = foo;

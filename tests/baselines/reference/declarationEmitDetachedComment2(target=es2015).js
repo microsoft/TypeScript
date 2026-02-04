@@ -32,13 +32,16 @@ class Hola {
 
 
 //// [test1.js]
+"use strict";
 /*! Copyright 2015 MyCompany Inc. */
 class Hello {
 }
 //// [test2.js]
+"use strict";
 class Hi {
 }
 //// [test3.js]
+"use strict";
 class Hola {
 }
 

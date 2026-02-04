@@ -10,6 +10,7 @@ class MyClass {
 
 
 //// [extendsJavaScript.js]
+"use strict";
 /**
  * @extends {SomeBase}
  */

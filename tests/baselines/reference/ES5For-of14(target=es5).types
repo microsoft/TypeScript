@@ -3,10 +3,13 @@
 === ES5For-of14.ts ===
 for (const v of []) {
 >v : any
+>  : ^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
     var x = v;
 >x : any
+>  : ^^^
 >v : any
+>  : ^^^
 }

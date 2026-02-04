@@ -15,6 +15,7 @@ var t2 = 10;
 
 var s;
 >s : any
+>  : ^^^
 
 // With templateHead
 `hello ${t1 ** t2}`;

@@ -63,6 +63,7 @@ var p3 = m3.Color.Blue;
 
 
 //// [instantiatedModule.js]
+"use strict";
 // adding the var makes this an instantiated module
 var M;
 (function (M) {

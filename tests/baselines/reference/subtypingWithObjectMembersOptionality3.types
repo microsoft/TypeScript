@@ -13,8 +13,8 @@ interface Derived extends Base { bar: string; }
 
 interface T {
     Foo?: Base;
->Foo : Base
->    : ^^^^
+>Foo : Base | undefined
+>    : ^^^^^^^^^^^^^^^^
 }
 
 interface S extends T {
@@ -25,8 +25,8 @@ interface S extends T {
 
 interface T2 {
     1?: Base;
->1 : Base
->  : ^^^^
+>1 : Base | undefined
+>  : ^^^^^^^^^^^^^^^^
 }
 
 interface S2 extends T2 {
@@ -37,8 +37,8 @@ interface S2 extends T2 {
 
 interface T3 {
     '1'?: Base;
->'1' : Base
->    : ^^^^
+>'1' : Base | undefined
+>    : ^^^^^^^^^^^^^^^^
 }
 
 interface S3 extends T3 {
@@ -51,8 +51,8 @@ interface S3 extends T3 {
 var a: { Foo?: Base; }
 >a : { Foo?: Base; }
 >  : ^^^^^^^^    ^^^
->Foo : Base
->    : ^^^^
+>Foo : Base | undefined
+>    : ^^^^^^^^^^^^^^^^
 
 var b: { Foo2: Derived; }
 >b : { Foo2: Derived; }

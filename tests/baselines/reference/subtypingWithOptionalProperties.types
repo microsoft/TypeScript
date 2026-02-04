@@ -13,8 +13,8 @@ function f<T>(a: T) {
     var b: { s?: number } = a;
 >b : { s?: number; }
 >  : ^^^^^^      ^^^
->s : number
->  : ^^^^^^
+>s : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >a : T
 >  : ^
 
@@ -40,14 +40,14 @@ var r = f({ s: new Object() }); // ok
 >       : ^^^^^^^^^^^^^^^^^
 
 r.s && r.s.toFixed(); // would blow up at runtime
->r.s && r.s.toFixed() : string
->                     : ^^^^^^
->r.s : number
->    : ^^^^^^
+>r.s && r.s.toFixed() : string | 0 | undefined
+>                     : ^^^^^^^^^^^^^^^^^^^^^^
+>r.s : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >r : { s?: number; }
 >  : ^^^^^^      ^^^
->s : number
->  : ^^^^^^
+>s : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >r.s.toFixed() : string
 >              : ^^^^^^
 >r.s.toFixed : (fractionDigits?: number) => string

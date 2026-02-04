@@ -1,0 +1,15 @@
+genericFunctions3.ts(7,5): error TS2322: Type 'undefined' is not assignable to type 'Query<T>'.
+
+
+==== genericFunctions3.ts (1 errors) ====
+    interface Query<T> {
+        foo(x: string): Query<T[]>;
+    }
+     
+    function from<T>(arg: boolean): Query<T>; // was Error: Overload signature is not compatible with function definition.
+    function from<T>(arg: any): Query<T> {
+        return undefined;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Query<T>'.
+    }
+    

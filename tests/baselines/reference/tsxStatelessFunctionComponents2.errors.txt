@@ -1,11 +1,12 @@
-file.tsx(21,16): error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
-  Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+file.tsx(13,2): error TS2564: Property 'greeting' has no initializer and is not definitely assigned in the constructor.
+file.tsx(21,16): error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string | undefined; }'.
+  Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string | undefined; }'.
 file.tsx(27,42): error TS2551: Property 'subtr' does not exist on type 'string'. Did you mean 'substr'?
 file.tsx(29,33): error TS2339: Property 'notARealProperty' does not exist on type 'BigGreeter'.
 file.tsx(37,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not exist on type 'HTMLDivElement'.
 
 
-==== file.tsx (4 errors) ====
+==== file.tsx (5 errors) ====
     /// <reference path="/.lib/react.d.ts" />
     
     import React = require('react');
@@ -19,6 +20,8 @@ file.tsx(37,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not e
     		return <div></div>;
     	}
     	greeting: string;
+    	~~~~~~~~
+!!! error TS2564: Property 'greeting' has no initializer and is not definitely assigned in the constructor.
     }
     
     // OK
@@ -28,8 +31,8 @@ file.tsx(37,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not e
     // Error - not allowed to specify 'ref' on SFCs
     let c = <Greet ref="myRef" />;
                    ~~~
-!!! error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
-!!! error TS2322:   Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+!!! error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string | undefined; }'.
+!!! error TS2322:   Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string | undefined; }'.
     
     
     // OK - ref is valid for classes

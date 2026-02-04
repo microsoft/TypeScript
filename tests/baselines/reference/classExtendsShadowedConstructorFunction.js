@@ -11,6 +11,7 @@ namespace M {
 }
 
 //// [classExtendsShadowedConstructorFunction.js]
+"use strict";
 class C {
 }
 var M;

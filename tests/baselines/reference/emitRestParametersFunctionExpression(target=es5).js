@@ -8,6 +8,7 @@ var funcExp3 = (function (...rest) { })()
 
 
 //// [emitRestParametersFunctionExpression.js]
+"use strict";
 var funcExp = function () {
     var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {

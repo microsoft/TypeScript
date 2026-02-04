@@ -1,3 +1,4 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 privateNameJsPrototype.js(3,3): error TS18016: Private identifiers are not allowed outside class bodies.
 privateNameJsPrototype.js(4,3): error TS18016: Private identifiers are not allowed outside class bodies.
 privateNameJsPrototype.js(5,7): error TS18016: Private identifiers are not allowed outside class bodies.
@@ -9,6 +10,7 @@ privateNameJsPrototype.js(11,7): error TS18028: Private identifiers are only ava
 privateNameJsPrototype.js(15,10): error TS2339: Property '#z' does not exist on type 'C'.
 
 
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== privateNameJsPrototype.js (9 errors) ====
     function A() { }
     A.prototype = {

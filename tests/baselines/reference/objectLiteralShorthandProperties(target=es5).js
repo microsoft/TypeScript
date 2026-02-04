@@ -23,6 +23,7 @@ var x3 = {
 
 
 //// [objectLiteralShorthandProperties.js]
+"use strict";
 var a, b, c;
 var x1 = {
     a: a

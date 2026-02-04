@@ -3,6 +3,7 @@
 === destructuringReassignsRightHandSide.ts ===
 var foo: any = { foo: 1, bar: 2 };
 >foo : any
+>    : ^^^
 >{ foo: 1, bar: 2 } : { foo: number; bar: number; }
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
@@ -16,16 +17,22 @@ var foo: any = { foo: 1, bar: 2 };
 
 var bar: any;
 >bar : any
+>    : ^^^
 
 // reassignment in destructuring pattern
 ({ foo, bar } = foo);
 >({ foo, bar } = foo) : any
+>                     : ^^^
 >{ foo, bar } = foo : any
+>                   : ^^^
 >{ foo, bar } : { foo: any; bar: any; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 >bar : any
+>    : ^^^
 >foo : any
+>    : ^^^
 
 // reassignment in subsequent var
 var { foo, baz } = foo;
@@ -34,4 +41,5 @@ var { foo, baz } = foo;
 >baz : any
 >    : ^^^
 >foo : any
+>    : ^^^
 

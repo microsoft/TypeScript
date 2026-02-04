@@ -1,0 +1,18 @@
+asOperator1.ts(2,9): error TS2352: Conversion of type 'undefined' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+asOperator1.ts(3,10): error TS2352: Conversion of type 'null' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== asOperator1.ts (2 errors) ====
+    var as = 43;
+    var x = undefined as number;
+            ~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'undefined' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    var y = (null as string).length;
+             ~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'null' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    var z = Date as any as string;
+    
+    // Should parse as a union type, not a bitwise 'or' of (32 as number) and 'string'
+    var j = 32 as number|string;
+    j = '';
+    

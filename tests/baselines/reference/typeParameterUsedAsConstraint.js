@@ -38,6 +38,7 @@ var a6: { <T, U extends T, V extends U>(): void }
 
 
 //// [typeParameterUsedAsConstraint.js]
+"use strict";
 class C {
 }
 class C2 {

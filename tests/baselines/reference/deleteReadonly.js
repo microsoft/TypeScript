@@ -24,6 +24,7 @@ delete ((((b['test']))));
 
 
 //// [deleteReadonly.js]
+"use strict";
 var a = {
     b: 123
 };

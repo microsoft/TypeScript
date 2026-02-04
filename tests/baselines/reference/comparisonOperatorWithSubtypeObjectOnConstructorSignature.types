@@ -110,14 +110,14 @@ var b7: { new (): Derived };
 var a8: { new (a?: Base): Base };
 >a8 : new (a?: Base) => Base
 >   : ^^^^^ ^^^    ^^^^^    
->a : Base
->  : ^^^^
+>a : Base | undefined
+>  : ^^^^^^^^^^^^^^^^
 
 var b8: { new (a?: Derived): Base };
 >b8 : new (a?: Derived) => Base
 >   : ^^^^^ ^^^       ^^^^^    
->a : Derived
->  : ^^^^^^^
+>a : Derived | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 
 var a9: { new (...a: Base[]): Base };
 >a9 : new (...a: Base[]) => Base

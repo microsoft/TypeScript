@@ -7,6 +7,7 @@ class C {
 }
 
 //// [parserSetAccessorWithTypeAnnotation1.js]
+"use strict";
 class C {
     set foo(v): number {
     }

@@ -22,6 +22,7 @@ class e2 { // error
 //enum then import - covered
 
 //// [augmentedTypesEnum2.js]
+"use strict";
 // enum then interface
 var e1;
 (function (e1) {

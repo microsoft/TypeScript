@@ -18,6 +18,7 @@ namespace clodule {
 
 
 //// [ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.js]
+"use strict";
 class clodule {
     static sfn(id) { return 42; }
 }

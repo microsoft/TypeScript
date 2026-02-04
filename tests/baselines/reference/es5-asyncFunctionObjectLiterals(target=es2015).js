@@ -53,6 +53,7 @@ async function objectLiteral6() {
 }
 
 //// [es5-asyncFunctionObjectLiterals.js]
+"use strict";
 function objectLiteral0() {
     return __awaiter(this, void 0, void 0, function* () {
         x = {

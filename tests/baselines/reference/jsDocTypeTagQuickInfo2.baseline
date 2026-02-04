@@ -46,21 +46,21 @@
 // var a;
 //     ^
 // | ----------------------------------------------------------------------
-// | var a: any[]
+// | var a: array
 // | @type {array}
 // | ----------------------------------------------------------------------
 // /** @type {promise} */
 // var p;
 //     ^
 // | ----------------------------------------------------------------------
-// | var p: Promise<any>
+// | var p: promise
 // | @type {promise}
 // | ----------------------------------------------------------------------
 // /** @type {?number} */
 // var nullable;
 //     ^^^^^^^^
 // | ----------------------------------------------------------------------
-// | var nullable: number
+// | var nullable: number | null
 // | @type {?number}
 // | ----------------------------------------------------------------------
 // /** @type {function} */
@@ -439,16 +439,8 @@
           "kind": "space"
         },
         {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
+          "text": "array",
+          "kind": "text"
         }
       ],
       "documentation": [],
@@ -500,20 +492,8 @@
           "kind": "space"
         },
         {
-          "text": "Promise",
-          "kind": "interfaceName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
+          "text": "promise",
+          "kind": "text"
         }
       ],
       "documentation": [],
@@ -566,6 +546,22 @@
         },
         {
           "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "null",
           "kind": "keyword"
         }
       ],

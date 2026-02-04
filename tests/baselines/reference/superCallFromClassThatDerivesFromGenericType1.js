@@ -14,6 +14,7 @@ class D extends B<any> {
 
 
 //// [superCallFromClassThatDerivesFromGenericType1.js]
+"use strict";
 class D extends B {
     constructor() {
         super();

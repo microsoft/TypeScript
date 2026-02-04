@@ -8,6 +8,7 @@ class Dummy {
 }
 
 //// [unusedSingleParameterInMethodDeclaration.js]
+"use strict";
 class Dummy {
     greeter(person) {
         var unused = 20;

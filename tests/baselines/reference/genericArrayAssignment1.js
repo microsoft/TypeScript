@@ -7,4 +7,5 @@ declare var n: number[];
 s = n;
 
 //// [genericArrayAssignment1.js]
+"use strict";
 s = n;

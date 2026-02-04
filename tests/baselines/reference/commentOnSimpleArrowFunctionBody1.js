@@ -11,6 +11,7 @@ Foo(() =>
 
 
 //// [commentOnSimpleArrowFunctionBody1.js]
+"use strict";
 function Foo(x) {
 }
 Foo(() => 

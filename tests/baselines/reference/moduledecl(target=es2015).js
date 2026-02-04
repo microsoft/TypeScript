@@ -235,6 +235,7 @@ var m3eVar: mAmbient.m3.e;
 
 
 //// [moduledecl.js]
+"use strict";
 var m0;
 (function (m0) {
     function f1() {

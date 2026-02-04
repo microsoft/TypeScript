@@ -18,6 +18,7 @@ for (const i of [0, 1, 2, 3, 4]) {
 }
 
 //// [ES5For-of37.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/30083
 for (const i of [0, 1, 2, 3, 4]) {
     try {

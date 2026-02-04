@@ -1,0 +1,35 @@
+contextualTypeArrayReturnType.ts(14,5): error TS2322: Type '(width: number) => { ry: null; }[]' is not assignable to type '(width: number) => NamedTransform[]'.
+  Type '{ ry: null; }[]' is not assignable to type 'NamedTransform[]'.
+    Type '{ ry: null; }' is not assignable to type 'NamedTransform'.
+      Property ''ry'' is incompatible with index signature.
+        Type 'null' is not assignable to type 'Transform3D'.
+
+
+==== contextualTypeArrayReturnType.ts (1 errors) ====
+    interface IBookStyle {
+        initialLeftPageTransforms?: (width: number) => NamedTransform[];
+    }
+    
+    interface NamedTransform {
+        [name: string]: Transform3D;
+    }
+    
+    interface Transform3D {
+        cachedCss: string;
+    }
+    
+    var style: IBookStyle = {
+        initialLeftPageTransforms: (width: number) => {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(width: number) => { ry: null; }[]' is not assignable to type '(width: number) => NamedTransform[]'.
+!!! error TS2322:   Type '{ ry: null; }[]' is not assignable to type 'NamedTransform[]'.
+!!! error TS2322:     Type '{ ry: null; }' is not assignable to type 'NamedTransform'.
+!!! error TS2322:       Property ''ry'' is incompatible with index signature.
+!!! error TS2322:         Type 'null' is not assignable to type 'Transform3D'.
+!!! related TS6500 contextualTypeArrayReturnType.ts:2:5: The expected type comes from property 'initialLeftPageTransforms' which is declared here on type 'IBookStyle'
+            return [
+                {'ry': null }
+            ];
+        }
+    }
+    

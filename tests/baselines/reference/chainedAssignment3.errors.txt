@@ -1,23 +1,41 @@
+chainedAssignment3.ts(2,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+chainedAssignment3.ts(6,5): error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
+chainedAssignment3.ts(11,1): error TS2322: Type 'null' is not assignable to type 'A'.
+chainedAssignment3.ts(11,5): error TS2322: Type 'null' is not assignable to type 'B'.
+chainedAssignment3.ts(15,1): error TS2322: Type 'null' is not assignable to type 'number'.
+chainedAssignment3.ts(15,8): error TS2322: Type 'null' is not assignable to type 'string'.
 chainedAssignment3.ts(18,1): error TS2741: Property 'value' is missing in type 'A' but required in type 'B'.
 chainedAssignment3.ts(19,5): error TS2741: Property 'value' is missing in type 'A' but required in type 'B'.
 
 
-==== chainedAssignment3.ts (2 errors) ====
+==== chainedAssignment3.ts (8 errors) ====
     class A {
         id: number;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
     }
     
     class B extends A {
         value: string;
+        ~~~~~
+!!! error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
     }
     
     var a: A;
     var b: B;
     a = b = null;
+    ~
+!!! error TS2322: Type 'null' is not assignable to type 'A'.
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'B'.
     a = b = new B();
     b = a = new B();
     
     a.id = b.value = null;
+    ~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'number'.
+           ~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'string'.
     
     // error cases
     b = a = new A();

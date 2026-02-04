@@ -43,6 +43,7 @@ namespace M2 {
 
 
 //// [declFileTypeAnnotationVisibilityErrorTypeAlias.js]
+"use strict";
 var M;
 (function (M) {
     var N;

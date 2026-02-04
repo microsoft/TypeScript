@@ -25,6 +25,7 @@ if (typeof c === 'string') {
 
 
 //// [controlFlowForIndexSignatures.js]
+"use strict";
 const boo = { bar: 'bar' };
 function a(aboo1) {
     if (!aboo1)

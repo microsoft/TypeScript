@@ -7,6 +7,7 @@ namespace myMod {
 }
 
 //// [thisInModule.js]
+"use strict";
 var myMod;
 (function (myMod) {
     var x;

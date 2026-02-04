@@ -8,6 +8,7 @@ async function foo(): Promise<void> {
 
 
 //// [asyncFunctionDeclaration13_es5.js]
+"use strict";
 function foo() {
     return __awaiter(this, void 0, void 0, function* () {
         // Legal to use 'await' in a type context.

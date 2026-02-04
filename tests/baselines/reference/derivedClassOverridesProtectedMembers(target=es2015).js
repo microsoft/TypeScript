@@ -38,6 +38,7 @@ class Derived extends Base {
 
 
 //// [derivedClassOverridesProtectedMembers.js]
+"use strict";
 var x;
 var y;
 class Base {

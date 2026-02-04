@@ -18,6 +18,7 @@ namespace C {
 var c: C; // error
 
 //// [moduleWithNoValuesAsType.js]
+"use strict";
 var a; // error
 var b; // error
 var c; // error

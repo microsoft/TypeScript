@@ -7,3 +7,4 @@ namespace A {
 }
 
 //// [unusedNamespaceInModule.js]
+"use strict";

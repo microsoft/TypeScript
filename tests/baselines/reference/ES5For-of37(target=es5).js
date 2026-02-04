@@ -18,6 +18,7 @@ for (const i of [0, 1, 2, 3, 4]) {
 }
 
 //// [ES5For-of37.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/30083
 var __values = (this && this.__values) || function(o) {
     var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;

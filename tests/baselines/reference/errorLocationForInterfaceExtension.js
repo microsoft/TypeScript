@@ -7,4 +7,5 @@ interface x extends string { }
 
 
 //// [errorLocationForInterfaceExtension.js]
+"use strict";
 var n = '';

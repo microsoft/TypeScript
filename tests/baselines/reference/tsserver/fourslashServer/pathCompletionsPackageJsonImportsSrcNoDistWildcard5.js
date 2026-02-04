@@ -14,7 +14,7 @@ Info seq  [hh:mm:ss:mss] request:
           "rootDir": "/home/src/workspaces/project/src",
           "outDir": "/home/src/workspaces/project/dist/esm",
           "declarationDir": "/home/src/workspaces/project/dist/types",
-          "target": "es5",
+          "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }
