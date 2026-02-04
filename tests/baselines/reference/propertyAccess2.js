@@ -5,4 +5,5 @@ declare var foo: number;
 foo.toBAZ();
 
 //// [propertyAccess2.js]
+"use strict";
 foo.toBAZ();

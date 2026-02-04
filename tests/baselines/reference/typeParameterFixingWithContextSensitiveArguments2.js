@@ -10,5 +10,6 @@ declare var a: A, b: B;
 var d = f(a, b, x => x, x => x); // A => A not assignable to A => B
 
 //// [typeParameterFixingWithContextSensitiveArguments2.js]
+"use strict";
 function f(y, y1, p, p1) { return [y, p1(y)]; }
 var d = f(a, b, x => x, x => x); // A => A not assignable to A => B

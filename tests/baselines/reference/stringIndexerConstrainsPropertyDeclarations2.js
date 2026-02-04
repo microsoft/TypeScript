@@ -42,6 +42,7 @@ var b: { [x: string]: A } = {
 }
 
 //// [stringIndexerConstrainsPropertyDeclarations2.js]
+"use strict";
 // String indexer providing a constraint of a user defined type
 class A {
     foo() { return ''; }

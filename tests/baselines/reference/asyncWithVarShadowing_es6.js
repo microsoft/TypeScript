@@ -225,6 +225,7 @@ async function fn40(x) {
 
 
 //// [asyncWithVarShadowing_es6.js]
+"use strict";
 function fn1(x) {
     return __awaiter(this, void 0, void 0, function* () {
         var x;

@@ -52,6 +52,7 @@ var r3 = C.foo(1); // error
 var r4 = D.bar(''); // error
 
 //// [memberFunctionsWithPrivateOverloads.js]
+"use strict";
 class C {
     foo(x, y) { }
     bar(x, y) { }

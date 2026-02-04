@@ -14,6 +14,7 @@ class D extends C {
 }
 
 //// [scopeTests.js]
+"use strict";
 class C {
 }
 class D extends C {

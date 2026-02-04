@@ -133,6 +133,7 @@ namespace GenericSignaturesValid {
 }
 
 //// [assignmentCompatWithGenericCallSignaturesWithOptionalParameters.js]
+"use strict";
 // call signatures in derived types must have the same or fewer optional parameters as the target for assignment
 var ClassTypeParam;
 (function (ClassTypeParam) {

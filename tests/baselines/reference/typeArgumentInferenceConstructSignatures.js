@@ -141,6 +141,7 @@ declare var arr: any[];
 
 
 //// [typeArgumentInferenceConstructSignatures.js]
+"use strict";
 new noParams();
 new noParams();
 new noParams();

@@ -68,6 +68,7 @@ namespace okay {
 }
 
 //// [arrowFunctionsMissingTokens.js]
+"use strict";
 var missingArrowsWithCurly;
 (function (missingArrowsWithCurly) {
     var a = () => { };

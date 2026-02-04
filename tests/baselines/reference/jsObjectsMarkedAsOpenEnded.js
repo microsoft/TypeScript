@@ -36,6 +36,7 @@ getObj().a = 1;
 
 
 //// [output.js]
+"use strict";
 var variable = {};
 variable.a = 0;
 class C {

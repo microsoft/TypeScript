@@ -54,6 +54,7 @@ if((numOrStr === undefined) as numOrStr is string) { // Error
 
 
 //// [typeAssertions.js]
+"use strict";
 // Function call whose argument is a 1 arg generic function call with explicit type arguments
 function fn1(t) { }
 function fn2(t) { }

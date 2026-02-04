@@ -11,6 +11,7 @@ function x(x) {}
 function y(x) {}
 
 //// [file.js]
+"use strict";
 /**
  * @param {Array} x
  */

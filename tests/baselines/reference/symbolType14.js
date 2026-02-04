@@ -4,4 +4,5 @@
 new Symbol();
 
 //// [symbolType14.js]
+"use strict";
 new Symbol();

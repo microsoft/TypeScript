@@ -10,5 +10,6 @@ class C {
 }
 
 //// [indexerSignatureWithRestParam.js]
+"use strict";
 class C {
 }

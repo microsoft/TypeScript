@@ -7,4 +7,5 @@ function foo(foo:{a:string; b?:number;}):any { return "" }
 
 
 //// [functionOverloads15.js]
+"use strict";
 function foo(foo) { return ""; }

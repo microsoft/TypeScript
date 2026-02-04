@@ -216,14 +216,6 @@ Output::
 
 
 
-//// [/user/username/workspace/solution/projects/project/commonFile1.js]
-let x = 1;
-
-
-//// [/user/username/workspace/solution/projects/project/commonFile2.js]
-let y = 1;
-
-
 
 
 Program root files: [
@@ -334,16 +326,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-
-
-//// [/user/username/workspace/solution/projects/project/commonFile1.js]
-"use strict";
-let x = 1;
-
-
-//// [/user/username/workspace/solution/projects/project/commonFile2.js]
-"use strict";
-let y = 1;
 
 
 

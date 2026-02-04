@@ -12,3 +12,4 @@ interface B {
 interface C extends B, A<string> { } // Should succeed
 
 //// [inheritedMembersAndIndexSignaturesFromDifferentBases2.js]
+"use strict";

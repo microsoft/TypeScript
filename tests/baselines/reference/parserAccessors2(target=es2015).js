@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserAccessors2.js]
+"use strict";
 class C {
     set Foo(a) { }
 }

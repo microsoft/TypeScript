@@ -6,6 +6,7 @@ for (let v of []) {
 }
 
 //// [ES5For-of21.js]
+"use strict";
 for (let v of []) {
     for (let _i of []) { }
 }

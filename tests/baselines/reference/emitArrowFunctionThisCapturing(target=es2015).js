@@ -17,6 +17,7 @@ foo(() => {
 
 
 //// [emitArrowFunctionThisCapturing.js]
+"use strict";
 var f1 = () => {
     this.age = 10;
 };

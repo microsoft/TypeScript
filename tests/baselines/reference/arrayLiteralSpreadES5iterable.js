@@ -26,6 +26,7 @@ function f2() {
 
 
 //// [arrayLiteralSpreadES5iterable.js]
+"use strict";
 function f0() {
     var a = [1, 2, 3];
     var a1 = [...a];

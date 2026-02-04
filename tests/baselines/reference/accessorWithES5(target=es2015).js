@@ -21,6 +21,7 @@ var y = {
 }
 
 //// [accessorWithES5.js]
+"use strict";
 class C {
     get x() {
         return 1;

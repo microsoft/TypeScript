@@ -18,6 +18,7 @@ namespace M2 {
 }
 
 //// [ambientInsideNonAmbient.js]
+"use strict";
 var M;
 (function (M) {
 })(M || (M = {}));

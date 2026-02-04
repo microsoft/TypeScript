@@ -42,6 +42,7 @@ x.toString();
 
 
 //// [constDeclarations-access2.js]
+"use strict";
 const x = 0;
 // Errors
 x = 1;

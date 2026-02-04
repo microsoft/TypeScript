@@ -13,6 +13,7 @@ f(g < A, B > +(7));
 
 
 //// [grammarAmbiguities1.js]
+"use strict";
 class A {
     foo() { }
 }

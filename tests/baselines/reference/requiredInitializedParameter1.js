@@ -22,6 +22,7 @@ f3(0);
 f4(0);
 
 //// [requiredInitializedParameter1.js]
+"use strict";
 function f1(a, b = 0, c) { }
 function f2(a, b = 0, c = 0) { }
 function f3(a, b = 0, c) { }

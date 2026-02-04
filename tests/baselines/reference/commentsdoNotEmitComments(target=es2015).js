@@ -95,6 +95,7 @@ var shade: color = color.green;
 
 
 //// [commentsdoNotEmitComments.js]
+"use strict";
 var myVariable = 10;
 function foo(p) {
 }

@@ -5,4 +5,5 @@ function foo(x: string = '');
 function foo(x = '') { }
 
 //// [defaultValueInFunctionOverload1.js]
+"use strict";
 function foo(x = '') { }

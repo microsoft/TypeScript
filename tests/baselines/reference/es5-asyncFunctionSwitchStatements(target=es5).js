@@ -70,6 +70,7 @@ async function switchStatement8() {
 }
 
 //// [es5-asyncFunctionSwitchStatements.js]
+"use strict";
 function switchStatement0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

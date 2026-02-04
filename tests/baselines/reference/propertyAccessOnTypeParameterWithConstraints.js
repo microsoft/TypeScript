@@ -37,6 +37,7 @@ var b = {
 var r4 = b.foo(new Date());
 
 //// [propertyAccessOnTypeParameterWithConstraints.js]
+"use strict";
 // generic types should behave as if they have properties of their constraint type
 // no errors expected 
 class C {

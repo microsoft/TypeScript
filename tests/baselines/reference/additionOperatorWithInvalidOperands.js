@@ -43,6 +43,7 @@ var r19 = E.a + C.foo();
 var r20 = E.a + M;
 
 //// [additionOperatorWithInvalidOperands.js]
+"use strict";
 function foo() { }
 class C {
     static foo() { }

@@ -24,6 +24,7 @@ const t6 = <Comp
 
 
 //// [a.js]
+"use strict";
 const t1 = React.createElement("div", { ...React.createElement("span", null) });
 const t2 = React.createElement("div", { ...React.createElement("span", { className: "foo" }) });
 const t3 = React.createElement(Comp, { right: React.createElement("div", null, "x"), wrong: React.createElement("div", null, "x") });

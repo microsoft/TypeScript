@@ -53,6 +53,7 @@ new (<any>A());
 
 
 //// [castExpressionParentheses.js]
+"use strict";
 // parentheses should be omitted
 // literals
 ({ a: 0 });

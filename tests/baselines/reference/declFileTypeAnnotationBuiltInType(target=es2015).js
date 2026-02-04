@@ -42,6 +42,7 @@ function foo10() {
 }
 
 //// [declFileTypeAnnotationBuiltInType.js]
+"use strict";
 // string
 function foo() {
     return "";

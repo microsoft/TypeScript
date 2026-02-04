@@ -62,6 +62,7 @@ else {
 }
 
 //// [typeGuardFunctionOfFormThisErrors.js]
+"use strict";
 class RoyalGuard {
     isLeader() {
         return this instanceof LeadGuard;

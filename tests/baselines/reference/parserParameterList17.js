@@ -7,6 +7,7 @@ class C {
 }
 
 //// [parserParameterList17.js]
+"use strict";
 class C {
     constructor(a, b) { }
 }

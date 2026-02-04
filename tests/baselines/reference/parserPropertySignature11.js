@@ -6,3 +6,4 @@ interface I {
 }
 
 //// [parserPropertySignature11.js]
+"use strict";

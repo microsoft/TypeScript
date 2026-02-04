@@ -44,6 +44,7 @@ function f(a, b = function () { return c; }, c = b()) {
 }
 
 //// [parameterInitializersForwardReferencing.js]
+"use strict";
 function left(a, b, c) {
     if (b === void 0) { b = a; }
     if (c === void 0) { c = b; }

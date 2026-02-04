@@ -52,6 +52,7 @@ class C4 {
 }
 
 //// [declarationEmitProtectedMembers.js]
+"use strict";
 // Class with protected members
 class C1 {
     f() {

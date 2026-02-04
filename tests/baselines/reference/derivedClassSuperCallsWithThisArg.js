@@ -31,6 +31,7 @@ class Derived4 extends Base {
 }
 
 //// [derivedClassSuperCallsWithThisArg.js]
+"use strict";
 class Base {
     constructor(a) { }
 }

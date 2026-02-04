@@ -9,6 +9,7 @@ class A {
 }
 
 //// [unusedParametersInLambda1.js]
+"use strict";
 class A {
     f1() {
         return (X) => {

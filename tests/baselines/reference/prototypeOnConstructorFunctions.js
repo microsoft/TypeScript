@@ -13,5 +13,6 @@ i.const.prototype.prop = "yo";
 
 
 //// [prototypeOnConstructorFunctions.js]
+"use strict";
 var i;
 i.const.prototype.prop = "yo";

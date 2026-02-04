@@ -13,6 +13,7 @@ f2(1, 2, 3);
 
 
 //// [a.js]
+"use strict";
 const foo = {
     f1: (params) => { }
 };

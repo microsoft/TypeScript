@@ -10,6 +10,7 @@ namespace M {
 }
 
 //// [symbolProperty48.js]
+"use strict";
 var M;
 (function (M) {
     var Symbol;

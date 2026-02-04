@@ -7,5 +7,6 @@ class C {
 } 
 
 //// [autoAsiForStaticsInClassDeclaration.js]
+"use strict";
 class C {
 }

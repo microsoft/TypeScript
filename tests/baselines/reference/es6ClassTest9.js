@@ -6,5 +6,6 @@ function foo() {}
 
 
 //// [es6ClassTest9.js]
+"use strict";
 ();
 function foo() { }

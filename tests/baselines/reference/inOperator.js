@@ -15,6 +15,7 @@ if (y in c) { }
 
 
 //// [inOperator.js]
+"use strict";
 var a = [];
 for (var x in a) { }
 if (3 in a) { }

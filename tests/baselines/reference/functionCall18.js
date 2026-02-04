@@ -8,4 +8,5 @@ foo<string>("hello");
 
 
 //// [functionCall18.js]
+"use strict";
 foo("hello");
