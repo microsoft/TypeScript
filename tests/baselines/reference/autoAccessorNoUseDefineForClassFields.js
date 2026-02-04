@@ -41,23 +41,28 @@ class C6 {
 
 
 //// [file1.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/51528
 class C1 {
     static accessor x = 0;
 }
 //// [file2.js]
+"use strict";
 class C2 {
     static accessor #x = 0;
 }
 //// [file3.js]
+"use strict";
 class C3 {
     accessor x = 0;
 }
 //// [file4.js]
+"use strict";
 class C4 {
     accessor #x = 0;
 }
 //// [file5.js]
+"use strict";
 class C5 {
     constructor() {
         this.x = 0;
@@ -68,6 +73,7 @@ class C5 {
     set #x(value) { this.#x_accessor_storage = value; }
 }
 //// [file6.js]
+"use strict";
 class C6 {
     constructor() {
         this.#x_accessor_storage = 0;

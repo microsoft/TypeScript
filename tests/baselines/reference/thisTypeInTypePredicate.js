@@ -6,4 +6,5 @@ const numbers = filter<number>((x): x is number => 'number' == typeof x)
 
 
 //// [thisTypeInTypePredicate.js]
+"use strict";
 const numbers = filter((x) => 'number' == typeof x);

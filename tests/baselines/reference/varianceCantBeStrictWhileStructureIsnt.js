@@ -29,6 +29,7 @@ a2 = b;
 b2 = a;
 
 //// [varianceCantBeStrictWhileStructureIsnt.js]
+"use strict";
 a = b;
 b = a;
 a2 = b2;

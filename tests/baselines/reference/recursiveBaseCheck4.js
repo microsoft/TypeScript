@@ -5,6 +5,7 @@ class M<T> extends M<string> { }
 (new M).blah;
 
 //// [recursiveBaseCheck4.js]
+"use strict";
 class M extends M {
 }
 (new M).blah;

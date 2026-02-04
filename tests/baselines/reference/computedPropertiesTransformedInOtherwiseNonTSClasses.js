@@ -11,6 +11,7 @@ namespace NS {
 
 
 //// [computedPropertiesTransformedInOtherwiseNonTSClasses.js]
+"use strict";
 var NS;
 (function (NS) {
     NS.x = Symbol();

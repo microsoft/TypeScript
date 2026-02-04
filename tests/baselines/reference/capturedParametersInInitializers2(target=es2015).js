@@ -17,6 +17,7 @@ function foo2(y = class {[x] = x}, x = 1) {
 }
 
 //// [capturedParametersInInitializers2.js]
+"use strict";
 var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });

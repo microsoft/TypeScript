@@ -56,6 +56,7 @@ function g() {
 }
 
 //// [readonlyInDeclarationFile.js]
+"use strict";
 class C {
     get b1() { return 1; }
     get b2() { return 1; }

@@ -18,6 +18,7 @@ export class Test1 {
 }
 
 //// [classMemberInitializerWithLamdaScoping3_0.js]
+"use strict";
 var field1;
 //// [classMemberInitializerWithLamdaScoping3_1.js]
 export class Test1 {

@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserMemberAccessorDeclaration12.js]
+"use strict";
 class C {
     get Foo(a) { }
 }

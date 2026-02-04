@@ -186,6 +186,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/home/src/workspace/projects/b/dist.js]
+"use strict";
 consonle.log('file1');
 
 

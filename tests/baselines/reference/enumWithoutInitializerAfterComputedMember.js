@@ -8,6 +8,7 @@ enum E {
 }
 
 //// [enumWithoutInitializerAfterComputedMember.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

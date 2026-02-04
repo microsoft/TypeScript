@@ -899,7 +899,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         showInSimplifiedHelpView: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Enable_all_strict_type_checking_options,
-        defaultValueDescription: false,
+        defaultValueDescription: true,
     },
     {
         name: "noImplicitAny",
@@ -987,10 +987,9 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsSourceFile: true,
         affectsEmit: true,
         affectsBuildInfo: true,
-        strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Ensure_use_strict_is_always_emitted,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: true,
     },
 
     // Additional Checks

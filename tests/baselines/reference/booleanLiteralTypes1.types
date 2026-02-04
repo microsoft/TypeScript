@@ -153,10 +153,10 @@ function f4(t: true, f: false) {
 >  : ^^^^
 
     var x3 = t || f;
->x3 : boolean
->   : ^^^^^^^
->t || f : boolean
->       : ^^^^^^^
+>x3 : true
+>   : ^^^^
+>t || f : true
+>       : ^^^^
 >t : true
 >  : ^^^^
 >f : false
@@ -175,8 +175,8 @@ function f4(t: true, f: false) {
     var x5 = !t;
 >x5 : boolean
 >   : ^^^^^^^
->!t : boolean
->   : ^^^^^^^
+>!t : false
+>   : ^^^^^
 >t : true
 >  : ^^^^
 
@@ -346,8 +346,8 @@ function f12(x: true | false) {
     }
     else {
         x;
->x : boolean
->  : ^^^^^^^
+>x : false
+>  : ^^^^^
     }
 }
 

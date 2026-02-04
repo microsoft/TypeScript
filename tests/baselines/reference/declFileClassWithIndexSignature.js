@@ -6,6 +6,7 @@ class BlockIntrinsics {
 }
 
 //// [declFileClassWithIndexSignature.js]
+"use strict";
 class BlockIntrinsics {
 }
 

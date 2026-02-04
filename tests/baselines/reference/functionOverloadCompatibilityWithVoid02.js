@@ -7,6 +7,7 @@ function f(x: string): number {
 } 
 
 //// [functionOverloadCompatibilityWithVoid02.js]
+"use strict";
 function f(x) {
     return 0;
 }

@@ -20,6 +20,7 @@ extractIndexer({
 }); // Should return any (widened form of undefined)
 
 //// [computedPropertyNames48_ES5.js]
+"use strict";
 var E;
 (function (E) {
     E[E["x"] = 0] = "x";

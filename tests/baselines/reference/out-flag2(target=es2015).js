@@ -8,6 +8,7 @@ class B { }
 
 
 //// [c.js]
+"use strict";
 class A {
 }
 class B {

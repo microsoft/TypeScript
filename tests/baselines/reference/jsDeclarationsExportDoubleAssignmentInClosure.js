@@ -14,6 +14,7 @@ function foo() {
 
 
 //// [index.js]
+"use strict";
 // @ts-nocheck
 function foo() {
     module.exports = exports = function (o) {

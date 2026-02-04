@@ -13,6 +13,7 @@ class Child extends Parent {
 }
 
 //// [noImplicitAnyMissingSetAccessor.js]
+"use strict";
 class Parent {
 }
 class Child extends Parent {

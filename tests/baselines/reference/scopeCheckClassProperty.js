@@ -13,6 +13,7 @@ class A {
 
 
 //// [scopeCheckClassProperty.js]
+"use strict";
 class C {
     constructor() {
         this.x = new A().p; // should also be ok

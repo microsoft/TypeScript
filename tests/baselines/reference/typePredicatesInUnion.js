@@ -18,6 +18,7 @@ function f(o: Or, x: {}) {
 
 
 //// [typePredicatesInUnion.js]
+"use strict";
 function f(o, x) {
     if (o.pred(x)) {
         x;

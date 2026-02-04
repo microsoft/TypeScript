@@ -4,18 +4,18 @@
 function f18(a?:string, ...b:number[]){}
 >f18 : (a?: string, ...b: number[]) => void
 >    : ^ ^^^      ^^^^^ ^^        ^^^^^^^^^
->a : string
->  : ^^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : number[]
 >  : ^^^^^^^^
  
 function f19(a?:string, b?:number, ...c:number[]){}
 >f19 : (a?: string, b?: number, ...c: number[]) => void
 >    : ^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
->a : string
->  : ^^^^^^
->b : number
->  : ^^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >c : number[]
 >  : ^^^^^^^^
  
@@ -24,8 +24,8 @@ function f20(a:string, b?:string, ...c:number[]){}
 >    : ^ ^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
 >a : string
 >  : ^^^^^^
->b : string
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >c : number[]
 >  : ^^^^^^^^
  
@@ -34,10 +34,10 @@ function f21(a:string, b?:string, c?:number, ...d:number[]){}
 >    : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
 >a : string
 >  : ^^^^^^
->b : string
->  : ^^^^^^
->c : number
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >d : number[]
 >  : ^^^^^^^^
 

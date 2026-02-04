@@ -62,6 +62,7 @@ class S {
 
 
 //// [newOperator.js]
+"use strict";
 // Attempting to 'new' an interface yields poor error
 var i = new ifc();
 // Parens are optional

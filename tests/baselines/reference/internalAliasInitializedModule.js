@@ -14,6 +14,7 @@ namespace c {
 }
 
 //// [internalAliasInitializedModule.js]
+"use strict";
 var a;
 (function (a) {
     let b;

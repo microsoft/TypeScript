@@ -27,6 +27,7 @@ declare var b: B<Date, Date>;
 var c: A<Date, Date> = <A<Date, Date>>b;
 
 //// [genericTypeAssertions6.js]
+"use strict";
 class A {
     constructor(x) {
         var y = x;

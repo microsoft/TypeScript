@@ -7,6 +7,7 @@ function foo() {
 }
 
 //// [parserErrorRecovery_ArgumentList4.js]
+"use strict";
 function foo() {
     bar(a, b);
     return;

@@ -1,21 +1,33 @@
 error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+declFileTypeAnnotationUnionType.ts(2,13): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+declFileTypeAnnotationUnionType.ts(6,17): error TS2564: Property 'q' has no initializer and is not definitely assigned in the constructor.
+declFileTypeAnnotationUnionType.ts(9,17): error TS2564: Property 'r' has no initializer and is not definitely assigned in the constructor.
+declFileTypeAnnotationUnionType.ts(13,13): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
 
 
 !!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== declFileTypeAnnotationUnionType.ts (0 errors) ====
+==== declFileTypeAnnotationUnionType.ts (4 errors) ====
     class c {
         private p: string;
+                ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
     }
     namespace m {
         export class c {
             private q: string;
+                    ~
+!!! error TS2564: Property 'q' has no initializer and is not definitely assigned in the constructor.
         }
         export class g<T> {
             private r: string;
+                    ~
+!!! error TS2564: Property 'r' has no initializer and is not definitely assigned in the constructor.
         }
     }
     class g<T> {
         private s: string;
+                ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
     }
     
     // Just the name

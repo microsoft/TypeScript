@@ -33,6 +33,7 @@
 
 
 //// [doNotEmitDetachedCommentsAtStartOfLambdaFunction.js]
+"use strict";
 () => {
     return 0;
 };

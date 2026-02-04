@@ -10,6 +10,7 @@ namespace M {
 }
 
 //// [classExtendingQualifiedName2.js]
+"use strict";
 var M;
 (function (M) {
     class C {

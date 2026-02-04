@@ -30,6 +30,7 @@ let u = abc === abcOrXyz;
 let v = abcOrXyz === abcOrXyzOrNumber;
 
 //// [stringLiteralTypesWithVariousOperators01.js]
+"use strict";
 let a = "" + abc;
 let b = abc + "";
 let c = 10 + abc;

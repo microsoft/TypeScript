@@ -20,5 +20,6 @@ declare function bar<T>(x: T, func: (p: T) => T): T;
 var result = bar(derived, d => d.toBase());
 
 //// [fixingTypeParametersRepeatedly2.js]
+"use strict";
 var result = foo(derived, d => d.toBase());
 var result = bar(derived, d => d.toBase());

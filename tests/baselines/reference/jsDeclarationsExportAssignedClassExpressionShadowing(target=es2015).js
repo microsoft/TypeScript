@@ -16,6 +16,7 @@ module.exports.Another = Q;
 
 
 //// [index.js]
+"use strict";
 class A {
     constructor() {
         this.member = new Q();

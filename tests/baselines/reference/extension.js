@@ -31,6 +31,7 @@ i.y;
 
 
 //// [extension.js]
+"use strict";
 var c = new M.C();
 c.pe;
 c.p;

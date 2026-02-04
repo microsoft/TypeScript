@@ -12,6 +12,7 @@ class D<T> {
 }
 
 //// [classWithTwoConstructorDefinitions.js]
+"use strict";
 class C {
     constructor() { } // error
     constructor(x) { } // error

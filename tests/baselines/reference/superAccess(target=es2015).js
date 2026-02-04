@@ -16,6 +16,7 @@ class MyDerived extends MyBase {
 }
 
 //// [superAccess.js]
+"use strict";
 class MyBase {
     constructor() {
         this.S2 = "test";

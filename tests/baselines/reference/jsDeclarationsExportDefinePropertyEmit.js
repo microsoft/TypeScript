@@ -62,6 +62,7 @@ Object.defineProperty(module.exports, "j", { value: function j() {} });
 
 
 //// [index.js]
+"use strict";
 Object.defineProperty(module.exports, "a", { value: function a() { } });
 Object.defineProperty(module.exports, "b", { value: function b() { } });
 Object.defineProperty(module.exports.b, "cat", { value: "cat" });
@@ -151,7 +152,7 @@ export function g(a: {
     x: string;
 }, b: {
     y: () => void;
-}): void;
+}): void | "";
 /**
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
@@ -160,7 +161,7 @@ export function h(a: {
     x: string;
 }, b: {
     y: () => void;
-}): void;
+}): void | "";
 export function i(): void;
 export function ii(): void;
 export function jj(): void;

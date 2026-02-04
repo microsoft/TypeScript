@@ -27,6 +27,7 @@ namespace Consumer {
 }
 
 //// [fatArrowSelf.js]
+"use strict";
 var Events;
 (function (Events) {
     class EventEmitter {

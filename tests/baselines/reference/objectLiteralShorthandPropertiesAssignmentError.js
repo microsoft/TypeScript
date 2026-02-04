@@ -13,6 +13,7 @@ bar({ name, id });  // error
 
 
 //// [objectLiteralShorthandPropertiesAssignmentError.js]
+"use strict";
 var id = 10000;
 var name = "my name";
 var person = { name, id }; // error

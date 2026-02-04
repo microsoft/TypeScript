@@ -18,6 +18,7 @@ namespace ConstructSignature {
 }
 
 //// [subtypingWithConstructSignatures.js]
+"use strict";
 var ConstructSignature;
 (function (ConstructSignature) {
     var rarg1;

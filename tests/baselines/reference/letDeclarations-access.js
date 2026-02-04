@@ -40,6 +40,7 @@ x.toString();
 
 
 //// [letDeclarations-access.js]
+"use strict";
 let x = 0;
 // No errors
 x = 1;

@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserES5ComputedPropertyName10.js]
+"use strict";
 var _a;
 var C = /** @class */ (function () {
     function C() {

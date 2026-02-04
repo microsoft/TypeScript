@@ -33,6 +33,7 @@ b.foo();
 
 
 //// [autolift3.js]
+"use strict";
 class B {
     constructor() {
         function foo() { }

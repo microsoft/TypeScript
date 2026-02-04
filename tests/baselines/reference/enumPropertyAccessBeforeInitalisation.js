@@ -10,6 +10,7 @@ enum E {
 
 
 //// [enumPropertyAccessBeforeInitalisation.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = E.A] = "A";

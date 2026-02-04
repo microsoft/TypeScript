@@ -31,6 +31,7 @@ var dist = p.getDist();
 
 
 //// [parserErrorRecovery_IncompleteMemberVariable1.js]
+"use strict";
 // Module
 var Shapes;
 (function (Shapes) {

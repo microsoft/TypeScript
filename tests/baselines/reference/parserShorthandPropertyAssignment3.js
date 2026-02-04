@@ -4,4 +4,5 @@
 var v = { "" };
 
 //// [parserShorthandPropertyAssignment3.js]
+"use strict";
 var v = { "":  };

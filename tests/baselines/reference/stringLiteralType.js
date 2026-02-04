@@ -9,6 +9,7 @@ function f(x: any) {
 }
 
 //// [stringLiteralType.js]
+"use strict";
 var x;
 function f(x) {
 }

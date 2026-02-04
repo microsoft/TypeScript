@@ -1,0 +1,30 @@
+classDoesNotDependOnBaseTypes.ts(9,12): error TS2454: Variable 'x' is used before being assigned.
+classDoesNotDependOnBaseTypes.ts(10,5): error TS2454: Variable 'x' is used before being assigned.
+classDoesNotDependOnBaseTypes.ts(10,5): error TS2542: Index signature in type 'StringTree' only permits reading.
+classDoesNotDependOnBaseTypes.ts(11,5): error TS2454: Variable 'x' is used before being assigned.
+classDoesNotDependOnBaseTypes.ts(11,5): error TS2542: Index signature in type 'StringTree' only permits reading.
+
+
+==== classDoesNotDependOnBaseTypes.ts (5 errors) ====
+    type StringTree = string | StringTreeCollection;
+    class StringTreeCollectionBase {
+        [n: number]: StringTree;
+    }
+    
+    class StringTreeCollection extends StringTreeCollectionBase { }
+    
+    var x: StringTree;
+    if (typeof x !== "string") {
+               ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+        x[0] = "";
+        ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+        ~~~~
+!!! error TS2542: Index signature in type 'StringTree' only permits reading.
+        x[0] = new StringTreeCollection;
+        ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+        ~~~~
+!!! error TS2542: Index signature in type 'StringTree' only permits reading.
+    }

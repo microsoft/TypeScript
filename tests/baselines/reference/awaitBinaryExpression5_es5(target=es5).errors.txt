@@ -1,8 +1,9 @@
 error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+awaitBinaryExpression5_es5.ts(8,5): error TS2454: Variable 'o' is used before being assigned.
 
 
 !!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== awaitBinaryExpression5_es5.ts (0 errors) ====
+==== awaitBinaryExpression5_es5.ts (1 errors) ====
     declare var a: boolean;
     declare var p: Promise<boolean>;
     declare function before(): void;
@@ -11,5 +12,7 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         before();
         var o: { a: boolean; };
         o.a = await p;
+        ~
+!!! error TS2454: Variable 'o' is used before being assigned.
         after();
     }

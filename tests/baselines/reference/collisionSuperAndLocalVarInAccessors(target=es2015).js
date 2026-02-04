@@ -35,6 +35,7 @@ class c extends Foo {
 }
 
 //// [collisionSuperAndLocalVarInAccessors.js]
+"use strict";
 var _super = 10; // No Error
 class Foo {
     get prop1() {

@@ -6,6 +6,7 @@ class C {
 }
 
 //// [Protected9.js]
+"use strict";
 class C {
     constructor(p) {
         this.p = p;

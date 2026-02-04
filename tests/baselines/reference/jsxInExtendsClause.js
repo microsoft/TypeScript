@@ -14,6 +14,7 @@ class Foo extends createComponentClass(() => class extends React.Component<{}, {
 }) {}
 
 //// [jsxInExtendsClause.js]
+"use strict";
 class Foo extends createComponentClass(() => class extends React.Component {
     render() {
         return React.createElement("span", null, "Hello, world!");

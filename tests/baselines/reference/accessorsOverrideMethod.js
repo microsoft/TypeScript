@@ -10,6 +10,7 @@ class B extends A {
 
 
 //// [accessorsOverrideMethod.js]
+"use strict";
 class A {
     m() { }
 }

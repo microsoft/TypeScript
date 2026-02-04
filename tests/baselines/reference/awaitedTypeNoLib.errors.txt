@@ -1,8 +1,10 @@
 error TS2318: Cannot find global type 'Array'.
 error TS2318: Cannot find global type 'Awaited'.
 error TS2318: Cannot find global type 'Boolean'.
+error TS2318: Cannot find global type 'CallableFunction'.
 error TS2318: Cannot find global type 'Function'.
 error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'NewableFunction'.
 error TS2318: Cannot find global type 'Number'.
 error TS2318: Cannot find global type 'Object'.
 error TS2318: Cannot find global type 'RegExp'.
@@ -19,8 +21,10 @@ awaitedTypeNoLib.ts(18,27): error TS2345: Argument of type 'Thenable<NotPromise<
 !!! error TS2318: Cannot find global type 'Array'.
 !!! error TS2318: Cannot find global type 'Awaited'.
 !!! error TS2318: Cannot find global type 'Boolean'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
 !!! error TS2318: Cannot find global type 'Function'.
 !!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
 !!! error TS2318: Cannot find global type 'Number'.
 !!! error TS2318: Cannot find global type 'Object'.
 !!! error TS2318: Cannot find global type 'RegExp'.

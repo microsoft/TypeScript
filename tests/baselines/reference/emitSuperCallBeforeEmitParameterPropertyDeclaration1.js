@@ -16,6 +16,7 @@ class B extends A {
 
 
 //// [emitSuperCallBeforeEmitParameterPropertyDeclaration1.js]
+"use strict";
 class A {
     constructor() {
         this.blub = 6;

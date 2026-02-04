@@ -10,6 +10,7 @@ declare var d: { m(boolean, C, object, undefined): void }
 
 
 //// [noImplicitAnyNamelessParameter.js]
+"use strict";
 class C {
 }
 // note: null and void do not parse correctly without a preceding parameter name

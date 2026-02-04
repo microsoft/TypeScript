@@ -650,16 +650,16 @@ type MyType = {a: string, b: string | undefined}
 >       : ^^^^^^
 >a : string
 >  : ^^^^^^
->b : string
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 type Result1 = UndefinedKeys<MyType>;
 >Result1 : UndefinedKeys<MyType>
 >        : ^^^^^^^^^^^^^^^^^^^^^
 
 const a1: Result1['a'] = 'a';  // Error
->a1 : "a"
->   : ^^^
+>a1 : never
+>   : ^^^^^
 >'a' : "a"
 >    : ^^^
 

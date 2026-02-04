@@ -202,16 +202,16 @@ do { }while(/[a-z]/)
 >        : ^^^^^^
 
 if ([]) { }
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 while ([]) { }
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 do { }while([])
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 if ([1, 2]) { }
 >[1, 2] : number[]
@@ -467,8 +467,8 @@ do { }while(g)
 var h = [];
 >h : any[]
 >  : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 if (h) { }
 >h : any[]
@@ -551,8 +551,8 @@ do { }while(k)
 function fn(x?: string): I { return null; }
 >fn : (x?: string) => I
 >   : ^ ^^^      ^^^^^ 
->x : string
->  : ^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 if (fn()) { }
 >fn() : I

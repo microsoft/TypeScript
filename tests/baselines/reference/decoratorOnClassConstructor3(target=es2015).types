@@ -35,6 +35,7 @@ export class C  extends base{
 >foo : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
 >    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^^^^^
 >prop : any
+>     : ^^^
 
         super();
 >super() : void

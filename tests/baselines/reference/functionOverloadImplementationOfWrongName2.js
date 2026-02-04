@@ -6,4 +6,5 @@ function bar() { }
 function foo(x, y);
 
 //// [functionOverloadImplementationOfWrongName2.js]
+"use strict";
 function bar() { }

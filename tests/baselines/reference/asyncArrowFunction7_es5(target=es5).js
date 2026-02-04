@@ -8,17 +8,16 @@ var bar = async (): Promise<void> => {
 }
 
 //// [asyncArrowFunction7_es5.js]
-var _this = this;
-var bar = function () { return __awaiter(_this, void 0, void 0, function () {
+"use strict";
+var bar = function () { return __awaiter(void 0, void 0, void 0, function () {
     var foo;
-    var _this = this;
     return __generator(this, function (_a) {
         foo = function () {
             var args_1 = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args_1[_i] = arguments[_i];
             }
-            return __awaiter(_this, __spreadArray([], args_1, true), void 0, function (a) {
+            return __awaiter(void 0, __spreadArray([], args_1, true), void 0, function (a) {
                 if (a === void 0) { a = _a.sent(); }
                 return __generator(this, function (_a) {
                     switch (_a.label) {

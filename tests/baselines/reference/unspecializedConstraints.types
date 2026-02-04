@@ -266,8 +266,8 @@ namespace ts {
 >              : ^^^^^^          
 
             return [];
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
         }
         getProperty(index: number): Property {
 >getProperty : (index: number) => Property
@@ -320,8 +320,8 @@ namespace ts {
 >              : ^^^^^^           
 
             return [];
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
         }
         isPrimitive(): boolean {
 >isPrimitive : () => boolean
@@ -741,14 +741,14 @@ namespace ts {
         if (!hasOwnProperty.call(map, key)) return undefined;
 >!hasOwnProperty.call(map, key) : boolean
 >                               : ^^^^^^^
->hasOwnProperty.call(map, key) : any
->                              : ^^^
->hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->                    : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
+>hasOwnProperty.call(map, key) : boolean
+>                              : ^^^^^^^
+>hasOwnProperty.call : <T_1, A extends any[], R>(this: (this: T_1, ...args: A) => R, thisArg: T_1, ...args: A) => R
+>                    : ^^^^^^ ^^^^^^^^^     ^^ ^^    ^^                            ^^       ^^   ^^^^^    ^^ ^^^^^ 
 >hasOwnProperty : (v: PropertyKey) => boolean
 >               : ^ ^^           ^^^^^       
->call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
+>call : <T_1, A extends any[], R>(this: (this: T_1, ...args: A) => R, thisArg: T_1, ...args: A) => R
+>     : ^^^^^^ ^^^^^^^^^     ^^ ^^    ^^                            ^^       ^^   ^^^^^    ^^ ^^^^^ 
 >map : Map<T>
 >    : ^^^^^^
 >key : string
@@ -774,14 +774,14 @@ namespace ts {
 >    : ^^^^^^
 
         return hasOwnProperty.call(map, key);
->hasOwnProperty.call(map, key) : any
->                              : ^^^
->hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->                    : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
+>hasOwnProperty.call(map, key) : boolean
+>                              : ^^^^^^^
+>hasOwnProperty.call : <T_1, A extends any[], R>(this: (this: T_1, ...args: A) => R, thisArg: T_1, ...args: A) => R
+>                    : ^^^^^^ ^^^^^^^^^     ^^ ^^    ^^                            ^^       ^^   ^^^^^    ^^ ^^^^^ 
 >hasOwnProperty : (v: PropertyKey) => boolean
 >               : ^ ^^           ^^^^^       
->call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
+>call : <T_1, A extends any[], R>(this: (this: T_1, ...args: A) => R, thisArg: T_1, ...args: A) => R
+>     : ^^^^^^ ^^^^^^^^^     ^^ ^^    ^^                            ^^       ^^   ^^^^^    ^^ ^^^^^ 
 >map : Map<T>
 >    : ^^^^^^
 >key : string

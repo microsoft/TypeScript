@@ -6,5 +6,6 @@
 )
 
 //// [sourceMapValidationLambdaSpanningMultipleLines.js]
+"use strict";
 ((item) => item);
 //# sourceMappingURL=sourceMapValidationLambdaSpanningMultipleLines.js.map

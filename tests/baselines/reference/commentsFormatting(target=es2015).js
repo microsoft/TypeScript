@@ -88,6 +88,7 @@ this is 4 spaces left aligned but above line is empty
 }
 
 //// [commentsFormatting.js]
+"use strict";
 var m;
 (function (m) {
     /** this is first line - aligned to class declaration

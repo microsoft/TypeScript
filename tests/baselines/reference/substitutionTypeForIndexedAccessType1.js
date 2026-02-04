@@ -8,3 +8,4 @@ type AddPropToObject<Obj extends object, Prop extends string> = Prop extends key
   : never
 
 //// [substitutionTypeForIndexedAccessType1.js]
+"use strict";

@@ -247,6 +247,7 @@ Found 1 error.
 //// [/home/src/projects/outFile.tsbuildinfo] file written with same contents
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/outFile.js]
+"use strict";
 const a = "hello";
 
 

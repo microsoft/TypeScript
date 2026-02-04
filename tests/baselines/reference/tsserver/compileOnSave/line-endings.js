@@ -124,6 +124,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/home/src/workspace/projects/app.js]
+"use strict";
 var x = 1;
 var y = 2;
 
@@ -255,6 +256,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/home/src/workspace/projects/app.js]
+"use strict";
 var x = 1;
 var y = 2;
 

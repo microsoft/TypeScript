@@ -19,6 +19,7 @@ class E {
 
 
 //// [gettersAndSettersErrors.js]
+"use strict";
 class C {
     constructor() {
         this.Foo = 0; // error - duplicate identifier Foo - confirmed

@@ -29,6 +29,7 @@ i2.tuple1 = [{}];
 
 
 //// [genericCallWithTupleType.js]
+"use strict";
 var i1;
 // no error
 i1.tuple1 = ["foo", 5];

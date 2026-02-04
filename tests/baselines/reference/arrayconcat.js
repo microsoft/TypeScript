@@ -31,6 +31,7 @@ class parser {
 }
 
 //// [arrayconcat.js]
+"use strict";
 class parser {
     m() {
         this.options = this.options.sort(function (a, b) {

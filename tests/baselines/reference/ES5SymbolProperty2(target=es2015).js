@@ -13,6 +13,7 @@ namespace M {
 (new M.C)[Symbol.iterator];
 
 //// [ES5SymbolProperty2.js]
+"use strict";
 var M;
 (function (M) {
     var Symbol;

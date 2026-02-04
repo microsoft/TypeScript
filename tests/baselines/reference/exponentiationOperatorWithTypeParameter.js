@@ -23,6 +23,7 @@ function foo<T>(t: T) {
 }
 
 //// [exponentiationOperatorWithTypeParameter.js]
+"use strict";
 // type parameter type is not valid for arithmetic operand
 function foo(t) {
     var a;

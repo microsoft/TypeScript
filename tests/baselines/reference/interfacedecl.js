@@ -49,6 +49,7 @@ class c1 implements a {
 var instance2 = new c1();
 
 //// [interfacedecl.js]
+"use strict";
 class c1 {
 }
 var instance2 = new c1();

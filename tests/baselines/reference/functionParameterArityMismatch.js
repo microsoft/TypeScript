@@ -19,6 +19,7 @@ f2(1, 2, 3, 4, 5, ...[6, 7]);
 
 
 //// [functionParameterArityMismatch.js]
+"use strict";
 f1();
 f1(1, 2);
 f1(1, 2, 3, 4);

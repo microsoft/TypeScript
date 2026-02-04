@@ -58,6 +58,7 @@ class B extends A {
 
 
 //// [asyncMethodWithSuper_es5.js]
+"use strict";
 class A {
     x() {
     }

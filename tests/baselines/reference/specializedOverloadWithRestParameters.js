@@ -15,6 +15,7 @@ function g(tagName: any): Base {
 }
 
 //// [specializedOverloadWithRestParameters.js]
+"use strict";
 class Base {
     foo() { }
 }

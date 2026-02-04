@@ -8,6 +8,7 @@ class C {
 
 
 //// [nestedGlobalNamespaceInClass.js]
+"use strict";
 // should not crash - from #35717
 class C {
 }

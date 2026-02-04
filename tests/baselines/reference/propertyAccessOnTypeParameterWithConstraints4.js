@@ -35,6 +35,7 @@ var b = {
 var r4 = b.foo(new Date());
 
 //// [propertyAccessOnTypeParameterWithConstraints4.js]
+"use strict";
 class C {
     f() {
         var x = {};

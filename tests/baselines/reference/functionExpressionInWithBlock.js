@@ -10,6 +10,7 @@ function x() {
 }
 
 //// [functionExpressionInWithBlock.js]
+"use strict";
 function x() {
     with ({}) {
         function f() {

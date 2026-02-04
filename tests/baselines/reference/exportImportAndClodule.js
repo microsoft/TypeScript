@@ -22,6 +22,7 @@ var p: { x: number; y: number; }
 var p: M.D.Point;
 
 //// [exportImportAndClodule.js]
+"use strict";
 var K;
 (function (K) {
     class L {

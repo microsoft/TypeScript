@@ -1,0 +1,8 @@
+taggedTemplateUntypedTagCall01.ts(2,1): error TS2454: Variable 'tag' is used before being assigned.
+
+
+==== taggedTemplateUntypedTagCall01.ts (1 errors) ====
+    var tag: Function;
+    tag `Hello world!`;
+    ~~~
+!!! error TS2454: Variable 'tag' is used before being assigned.

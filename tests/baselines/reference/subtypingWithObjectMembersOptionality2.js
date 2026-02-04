@@ -36,5 +36,6 @@ declare var b: { Foo?: Derived; }
 var r = true ? a : b; // ok
 
 //// [subtypingWithObjectMembersOptionality2.js]
+"use strict";
 // Derived member is optional but base member is not, should be an error
 var r = true ? a : b; // ok

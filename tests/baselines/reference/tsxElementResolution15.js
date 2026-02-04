@@ -15,4 +15,5 @@ declare var Obj1: Obj1type;
 
 
 //// [file.jsx]
+"use strict";
 <Obj1 x={10}/>; // Error

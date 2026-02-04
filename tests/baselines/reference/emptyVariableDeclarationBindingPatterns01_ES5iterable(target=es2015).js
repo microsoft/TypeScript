@@ -51,6 +51,7 @@
 })();
 
 //// [emptyVariableDeclarationBindingPatterns01_ES5iterable.js]
+"use strict";
 (function () {
     var a;
     var {} = a;

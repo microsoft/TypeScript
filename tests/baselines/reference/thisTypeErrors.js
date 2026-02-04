@@ -59,6 +59,7 @@ class C3 {
 
 
 //// [thisTypeErrors.js]
+"use strict";
 var x1;
 var x2;
 var x3;

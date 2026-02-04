@@ -5,6 +5,7 @@ class Foo<T extends number, U, V extends string> { }
 Foo.prototype; // Foo<any, any, any>
 
 //// [constraintsUsedInPrototypeProperty.js]
+"use strict";
 class Foo {
 }
 Foo.prototype; // Foo<any, any, any>

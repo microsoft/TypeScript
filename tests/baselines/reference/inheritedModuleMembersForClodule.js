@@ -24,6 +24,7 @@ class E extends D {
 
 
 //// [inheritedModuleMembersForClodule.js]
+"use strict";
 class C {
     static foo() {
         return "123";

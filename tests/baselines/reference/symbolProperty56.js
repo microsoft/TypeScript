@@ -13,6 +13,7 @@ namespace M {
 }
 
 //// [symbolProperty56.js]
+"use strict";
 var obj = {
     [Symbol.iterator]: 0
 };

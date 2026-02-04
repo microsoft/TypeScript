@@ -18,6 +18,7 @@ class foo {
 
 
 //// [overloadCallTest.js]
+"use strict";
 class foo {
     constructor() {
         function bar(foo) { return "foo"; }

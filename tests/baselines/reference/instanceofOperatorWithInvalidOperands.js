@@ -49,6 +49,7 @@ var rb10 = x instanceof o3;
 var rc1 = '' instanceof {};
 
 //// [instanceofOperatorWithInvalidOperands.js]
+"use strict";
 class C {
     foo() { }
 }

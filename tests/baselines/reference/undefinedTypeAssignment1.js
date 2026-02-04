@@ -8,6 +8,7 @@ function p(undefined = "wat") {
 
 
 //// [undefinedTypeAssignment1.js]
+"use strict";
 function p(undefined = "wat") {
     return undefined;
 }

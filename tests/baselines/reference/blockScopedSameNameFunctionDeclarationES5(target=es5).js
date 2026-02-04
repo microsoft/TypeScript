@@ -19,6 +19,7 @@ foo(10);
 foo(); // not ok - needs number
 
 //// [blockScopedSameNameFunctionDeclarationES5.js]
+"use strict";
 function foo(a) {
     if (a === 1) {
         function foo() { } // duplicate function

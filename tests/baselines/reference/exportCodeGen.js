@@ -56,6 +56,7 @@ namespace F {
 }
 
 //// [exportCodeGen.js]
+"use strict";
 // should replace all refs to 'x' in the body,
 // with fully qualified
 var A;

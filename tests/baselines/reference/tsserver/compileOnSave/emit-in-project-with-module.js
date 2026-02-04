@@ -395,6 +395,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/user/username/projects/myproject/file1.js]
+"use strict";
 const x = 1;
 function foo() {
     return "hello";
@@ -423,6 +424,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/user/username/projects/myproject/file2.js]
+"use strict";
 const y = 2;
 function bar() {
     return "world";
@@ -451,6 +453,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/user/username/projects/myproject/file3.js]
+"use strict";
 const xy = 3;
 
 
@@ -609,6 +612,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/user/username/projects/myproject/file1.js]
+"use strict";
 const x = 1;
 function foo() {
     return "world";
@@ -749,6 +753,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 //// [/user/username/projects/myproject/file2.js]
+"use strict";
 const y = 2;
 function bar() {
     return "hello";

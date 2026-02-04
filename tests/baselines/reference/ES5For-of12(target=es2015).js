@@ -4,4 +4,5 @@
 for ([""] of [[""]]) { }
 
 //// [ES5For-of12.js]
+"use strict";
 for ([""] of [[""]]) { }

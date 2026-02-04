@@ -14,6 +14,7 @@ as(Foo); // should emit
 
 
 //// [asOperatorASI.js]
+"use strict";
 class Foo {
 }
 // Example 1

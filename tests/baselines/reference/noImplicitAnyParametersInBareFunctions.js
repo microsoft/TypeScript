@@ -46,6 +46,7 @@ var f13 = (...r) => "";
 var f14 = (x, ...r) => "";
 
 //// [noImplicitAnyParametersInBareFunctions.js]
+"use strict";
 // No implicit-'any' errors.
 function f1() { }
 // Implicit-'any' error for x.

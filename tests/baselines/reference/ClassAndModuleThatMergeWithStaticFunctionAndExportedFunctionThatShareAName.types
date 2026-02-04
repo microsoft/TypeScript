@@ -31,8 +31,8 @@ namespace Point {
 >      : ^^^^^^^^^^^^
 
     export function Origin() { return null; } //expected duplicate identifier error
->Origin : () => any
->       : ^^^^^^^^^
+>Origin : () => null
+>       : ^^^^^^^^^^
 }
 
 

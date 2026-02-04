@@ -49,6 +49,7 @@ namespace D {
 }
 
 //// [nameCollision.js]
+"use strict";
 var A;
 (function (A_1) {
     // these 2 statements force an underscore before the 'A' 

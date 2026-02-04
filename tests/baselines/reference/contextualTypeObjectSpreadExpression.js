@@ -9,5 +9,6 @@ i = { ...{ a: "a" } };
 
 
 //// [contextualTypeObjectSpreadExpression.js]
+"use strict";
 let i;
 i = Object.assign({ a: "a" });

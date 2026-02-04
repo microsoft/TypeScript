@@ -7,5 +7,6 @@ var x: number[];
 
 
 //// [restElementWithInitializer2.js]
+"use strict";
 var x;
 [...x = a] = a; // Error, rest element cannot have initializer

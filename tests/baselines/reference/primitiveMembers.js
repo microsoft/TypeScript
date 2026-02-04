@@ -34,6 +34,7 @@ class foo extends baz { public bar(){ return undefined}; }
 
 
 //// [primitiveMembers.js]
+"use strict";
 var x = 5;
 var r = /yo/;
 r.source;

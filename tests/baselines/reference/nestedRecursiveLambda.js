@@ -9,6 +9,7 @@ void(r =>(r => r));
 [(r =>(r => r))]
 
 //// [nestedRecursiveLambda.js]
+"use strict";
 function f(a) {
     void (r => (r => r));
 }

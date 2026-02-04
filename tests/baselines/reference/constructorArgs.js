@@ -18,6 +18,7 @@ class Sub extends Super {
 
 
 //// [constructorArgs.js]
+"use strict";
 class Super {
     constructor(value) {
     }

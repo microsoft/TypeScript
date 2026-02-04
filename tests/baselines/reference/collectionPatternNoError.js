@@ -40,6 +40,7 @@ function f<
 
 
 //// [collectionPatternNoError.js]
+"use strict";
 class Message {
     clone() {
         return this;

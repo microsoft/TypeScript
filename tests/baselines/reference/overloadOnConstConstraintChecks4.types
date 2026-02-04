@@ -53,6 +53,7 @@ function foo(name: any): Z {
 >foo : { (name: "hi"): B; (name: "bye"): C; (name: string): A; }
 >    : ^^^    ^^    ^^^ ^^^    ^^     ^^^ ^^^    ^^      ^^^ ^^^
 >name : any
+>     : ^^^
 
     return null;
 }

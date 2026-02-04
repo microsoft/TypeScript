@@ -6,6 +6,7 @@ function f() {
 }
 
 //// [thisExpressionInIndexExpression.js]
+"use strict";
 function f() {
     return r => r[this];
 }

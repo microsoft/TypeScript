@@ -8,6 +8,7 @@ class C {
 }
 
 //// [generatorOverloads4.js]
+"use strict";
 class C {
     *f(s) { }
 }

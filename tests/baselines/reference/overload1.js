@@ -42,6 +42,7 @@ var v=x.g;
 
 
 //// [overload1.js]
+"use strict";
 var O;
 (function (O) {
     class A {

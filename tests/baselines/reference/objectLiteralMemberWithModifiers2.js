@@ -4,4 +4,5 @@
 var v = { public get foo() { } }
 
 //// [objectLiteralMemberWithModifiers2.js]
+"use strict";
 var v = { get foo() { } };

@@ -23,6 +23,7 @@ class Component {
 }
 
 //// [commentsOnJSXExpressionsArePreserved.js]
+"use strict";
 class Component {
     render() {
         return React.createElement("div", null, null /* preserved */);

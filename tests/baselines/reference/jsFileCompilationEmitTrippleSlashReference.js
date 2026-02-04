@@ -15,6 +15,7 @@ function bar() {
 
 
 //// [out.js]
+"use strict";
 class c {
 }
 function bar() {

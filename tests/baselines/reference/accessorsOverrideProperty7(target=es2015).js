@@ -10,6 +10,7 @@ class B extends A {
 
 
 //// [accessorsOverrideProperty7.js]
+"use strict";
 class A {
 }
 class B extends A {

@@ -13,6 +13,7 @@ namespace B {
 }
 
 //// [importOnAliasedIdentifiers.js]
+"use strict";
 var A;
 (function (A) {
 })(A || (A = {}));

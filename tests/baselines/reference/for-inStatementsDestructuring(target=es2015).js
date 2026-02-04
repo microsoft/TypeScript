@@ -4,4 +4,5 @@
 for (var [a, b] in []) {}
 
 //// [for-inStatementsDestructuring.js]
+"use strict";
 for (var [a, b] in []) { }

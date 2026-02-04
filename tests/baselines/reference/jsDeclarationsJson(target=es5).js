@@ -21,6 +21,7 @@ module.exports = j;
     }
 }
 //// [index.js]
+"use strict";
 var j = require("./obj.json");
 module.exports = j;
 

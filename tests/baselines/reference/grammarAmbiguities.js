@@ -14,6 +14,7 @@ f(g < A, B > +(7)); // Should error
 
 
 //// [grammarAmbiguities.js]
+"use strict";
 function f(n) { return null; }
 function g(x) { return null; }
 var A, B;

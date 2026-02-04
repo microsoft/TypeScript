@@ -5,4 +5,5 @@ interface Foo { }
 var xx = <Foo> new Object();
 
 //// [castNewObjectBug.js]
+"use strict";
 var xx = new Object();

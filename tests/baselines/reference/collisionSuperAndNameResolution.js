@@ -14,6 +14,7 @@ class Foo extends base {
 }
 
 //// [collisionSuperAndNameResolution.js]
+"use strict";
 var console;
 var _super = 10; // No error
 class base {

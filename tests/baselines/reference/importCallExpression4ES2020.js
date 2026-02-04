@@ -35,6 +35,7 @@ export function foo() { return "foo"; }
 //// [1.js]
 export function backup() { return "backup"; }
 //// [2.js]
+"use strict";
 class C {
     constructor() {
         this.myModule = import("./0");

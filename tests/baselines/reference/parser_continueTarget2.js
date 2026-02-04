@@ -7,6 +7,7 @@ while (true) {
 }
 
 //// [parser_continueTarget2.js]
+"use strict";
 target: while (true) {
     continue target;
 }

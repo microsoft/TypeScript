@@ -63,6 +63,7 @@ Errors  Files
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/src/filePresent.js]
+"use strict";
 function something() { return 10; }
 
 
@@ -71,6 +72,7 @@ declare function something(): number;
 
 
 //// [/home/src/workspaces/project/src/anotherFileWithSameReferenes.js]
+"use strict";
 /// <reference path="./filePresent.ts"/>
 /// <reference path="./fileNotFound.ts"/>
 function anotherFileWithSameReferenes() { }
@@ -81,6 +83,7 @@ declare function anotherFileWithSameReferenes(): void;
 
 
 //// [/home/src/workspaces/project/src/main.js]
+"use strict";
 /// <reference path="./filePresent.ts"/>
 /// <reference path="./fileNotFound.ts"/>
 function main() { }
@@ -290,6 +293,7 @@ Errors  Files
 
 
 //// [/home/src/workspaces/project/src/main.js]
+"use strict";
 /// <reference path="./filePresent.ts"/>
 /// <reference path="./fileNotFound.ts"/>
 function main() { }
@@ -443,6 +447,7 @@ Errors  Files
 
 
 //// [/home/src/workspaces/project/src/main.js]
+"use strict";
 /// <reference path="./filePresent.ts"/>
 /// <reference path="./fileNotFound.ts"/>
 function main() { }
@@ -603,6 +608,7 @@ Errors  Files
 //// [/home/src/workspaces/project/src/filePresent.js] file written with same contents
 //// [/home/src/workspaces/project/src/anotherFileWithSameReferenes.js] file written with same contents
 //// [/home/src/workspaces/project/src/main.js]
+"use strict";
 /// <reference path="./newFile.ts"/>
 /// <reference path="./filePresent.ts"/>
 /// <reference path="./fileNotFound.ts"/>
@@ -722,6 +728,7 @@ foo();
 }
 
 //// [/home/src/workspaces/project/src/newFile.js]
+"use strict";
 function foo() { return 20; }
 
 
@@ -898,6 +905,7 @@ Output::
 
 //// [/home/src/workspaces/project/src/newFile.js] file written with same contents
 //// [/home/src/workspaces/project/src/fileNotFound.js]
+"use strict";
 function something2() { return 20; }
 
 
@@ -959,6 +967,7 @@ Output::
 
 
 //// [/home/src/workspaces/project/src/main.js]
+"use strict";
 /// <reference path="./newFile.ts"/>
 /// <reference path="./filePresent.ts"/>
 /// <reference path="./fileNotFound.ts"/>

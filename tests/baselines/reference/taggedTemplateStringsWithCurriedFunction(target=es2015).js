@@ -13,6 +13,7 @@ f({ x: (() => 1)(), ...{ y: 1 } })``;
 
 
 //// [taggedTemplateStringsWithCurriedFunction.js]
+"use strict";
 // Originated from #38558
 const f = _ => (..._) => "";
 f(Object.assign({ x: 0 })) ``;

@@ -1,4 +1,5 @@
-﻿// @target: es2015
+﻿// @strict: false
+// @target: es2015
 class Base {
     constructor(c) { }
 }

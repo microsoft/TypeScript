@@ -1,12 +1,16 @@
 error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+actual.ts(12,1): error TS18047: 'top' is possibly 'null'.
 actual.ts(12,5): error TS2339: Property 'a' does not exist on type 'Window'.
+actual.ts(13,1): error TS18047: 'top' is possibly 'null'.
 actual.ts(13,5): error TS2339: Property 'b' does not exist on type 'Window'.
+b.js(12,1): error TS18047: 'top' is possibly 'null'.
 b.js(12,5): error TS2339: Property 'a' does not exist on type 'Window'.
+b.js(13,1): error TS18047: 'top' is possibly 'null'.
 b.js(13,5): error TS2339: Property 'b' does not exist on type 'Window'.
 
 
 !!! error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== b.js (2 errors) ====
+==== b.js (4 errors) ====
     var a = 10;
     this.a;
     this.b;
@@ -19,13 +23,17 @@ b.js(13,5): error TS2339: Property 'b' does not exist on type 'Window'.
     window.a;
     window.b;
     top.a;
+    ~~~
+!!! error TS18047: 'top' is possibly 'null'.
         ~
 !!! error TS2339: Property 'a' does not exist on type 'Window'.
     top.b;
+    ~~~
+!!! error TS18047: 'top' is possibly 'null'.
         ~
 !!! error TS2339: Property 'b' does not exist on type 'Window'.
     
-==== actual.ts (2 errors) ====
+==== actual.ts (4 errors) ====
     var b = 10;
     this.a;
     this.b;
@@ -38,9 +46,13 @@ b.js(13,5): error TS2339: Property 'b' does not exist on type 'Window'.
     window.a;
     window.b;
     top.a;
+    ~~~
+!!! error TS18047: 'top' is possibly 'null'.
         ~
 !!! error TS2339: Property 'a' does not exist on type 'Window'.
     top.b;
+    ~~~
+!!! error TS18047: 'top' is possibly 'null'.
         ~
 !!! error TS2339: Property 'b' does not exist on type 'Window'.
     

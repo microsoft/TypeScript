@@ -41,6 +41,7 @@ class C {
 
 
 //// [foo.js]
+"use strict";
 class Protected {
     /** @protected */
     constructor(c) {

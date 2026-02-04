@@ -12,6 +12,7 @@ class X {
 }
 
 //// [thisCapture1.js]
+"use strict";
 class X {
     constructor() {
         this.y = 0;

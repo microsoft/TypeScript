@@ -34,6 +34,7 @@ class Baz extends Object {
 
 
 //// [checkForObjectTooStrict.js]
+"use strict";
 var Foo;
 (function (Foo) {
     class Object {

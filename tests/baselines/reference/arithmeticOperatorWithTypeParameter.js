@@ -132,6 +132,7 @@ function foo<T>(t: T) {
 }
 
 //// [arithmeticOperatorWithTypeParameter.js]
+"use strict";
 // type parameter type is not valid for arithmetic operand
 function foo(t) {
     let a;

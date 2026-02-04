@@ -5,5 +5,6 @@ var v: string;
 for (v of [""].values()) { }
 
 //// [for-of13.js]
+"use strict";
 var v;
 for (v of [""].values()) { }

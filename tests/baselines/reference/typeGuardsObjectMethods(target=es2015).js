@@ -52,6 +52,7 @@ strOrNum = typeof obj1.method(strOrNum) === "string" && obj1.method(strOrNum);
 strOrNum = typeof obj1.prop === "string" && obj1.prop; 
 
 //// [typeGuardsObjectMethods.js]
+"use strict";
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
 // variables in global

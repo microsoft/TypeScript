@@ -35,6 +35,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/a.js]
+"use strict";
 
 
 
@@ -125,6 +126,7 @@ Output::
 
 //// [/user/username/projects/myproject/a.js] file written with same contents
 //// [/user/username/projects/myproject/b.js]
+"use strict";
 
 
 

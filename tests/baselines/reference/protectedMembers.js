@@ -118,6 +118,7 @@ class B3 extends A3 {
 
 
 //// [protectedMembers.js]
+"use strict";
 // Class with protected members
 class C1 {
     f() {

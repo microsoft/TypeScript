@@ -19,6 +19,7 @@ const so3: string = { 0: "1" };
 
 
 //// [assignmentIndexedToPrimitives.js]
+"use strict";
 const n1 = [0];
 const n2 = ["0"];
 const n3 = [0, "1"];

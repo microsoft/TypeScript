@@ -134,6 +134,7 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 //}
 
 //// [heterogeneousArrayLiterals.js]
+"use strict";
 // type of an array is the best common type of its elements (plus its contextual type if it exists)
 var a = [1, '']; // {}[]
 var b = [1, null]; // number[]

@@ -31,12 +31,12 @@ function attr(nameOrMap: any, value?: string): any {
 >     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^        ^^^   ^^   ^^^        ^^^
 >nameOrMap : any
 >          : ^^^
->value : string
->      : ^^^^^^
+>value : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
     if (nameOrMap && typeof nameOrMap === "object") {
->nameOrMap && typeof nameOrMap === "object" : boolean
->                                           : ^^^^^^^
+>nameOrMap && typeof nameOrMap === "object" : any
+>                                           : ^^^
 >nameOrMap : any
 >          : ^^^
 >typeof nameOrMap === "object" : boolean
@@ -89,12 +89,12 @@ function attr2(nameOrMap: any, value?: string): string {
 >      : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^        ^^^   ^^   ^^^        ^^^
 >nameOrMap : any
 >          : ^^^
->value : string
->      : ^^^^^^
+>value : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
     if (nameOrMap && typeof nameOrMap === "object") {
->nameOrMap && typeof nameOrMap === "object" : boolean
->                                           : ^^^^^^^
+>nameOrMap && typeof nameOrMap === "object" : any
+>                                           : ^^^
 >nameOrMap : any
 >          : ^^^
 >typeof nameOrMap === "object" : boolean

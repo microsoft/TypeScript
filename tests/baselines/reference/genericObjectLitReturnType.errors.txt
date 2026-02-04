@@ -1,0 +1,17 @@
+genericObjectLitReturnType.ts(8,10): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== genericObjectLitReturnType.ts (1 errors) ====
+    class X<T>
+    {
+        f(t: T) { return { a: t }; }
+    }
+    
+     
+    var x: X<number>;
+    var t1 = x.f(5);
+             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    t1.a = 5; // Should not error: t1 should have type {a: number}, instead has type {a: T}
+     
+    

@@ -24,6 +24,7 @@ sequence(
 
 
 //// [varArgParamTypeCheck.js]
+"use strict";
 function sequence(...sequences) {
 }
 function callback(clb) {

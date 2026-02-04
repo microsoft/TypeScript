@@ -4,4 +4,5 @@
 1 >>/**/> 2;
 
 //// [parserGreaterThanTokenAmbiguity8.js]
+"use strict";
 1 >>  /**/ > 2;

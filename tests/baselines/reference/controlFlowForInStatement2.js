@@ -28,6 +28,7 @@ if ((stringB as ('a' | 'b')) in c) {
 }
 
 //// [controlFlowForInStatement2.js]
+"use strict";
 const keywordA = 'a';
 const keywordB = 'b';
 if ('a' in c) {

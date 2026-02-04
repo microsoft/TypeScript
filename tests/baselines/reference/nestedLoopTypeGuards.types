@@ -59,8 +59,8 @@ function f1() {
 >                      : ^^^^^^^
 >typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a : string | number
->  : ^^^^^^^^^^^^^^^
+>a : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >'string' : "string"
 >         : ^^^^^^^^
 

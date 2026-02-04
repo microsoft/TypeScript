@@ -8,6 +8,7 @@
 
 
 //// [usingDeclarations.2.js]
+"use strict";
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
         if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");

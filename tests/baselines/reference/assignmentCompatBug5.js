@@ -14,6 +14,7 @@ foo3((n) => { return; });
 
 
 //// [assignmentCompatBug5.js]
+"use strict";
 function foo1(x) { }
 foo1({ b: 5 });
 function foo2(x) { }

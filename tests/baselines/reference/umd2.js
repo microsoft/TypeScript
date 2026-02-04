@@ -12,6 +12,7 @@ let y: number = x.n;
 
 
 //// [a.js]
+"use strict";
 Foo.fn();
 let x;
 let y = x.n;

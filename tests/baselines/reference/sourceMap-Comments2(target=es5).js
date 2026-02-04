@@ -22,6 +22,7 @@ function qat(str: string, num: number): void {
 }
 
 //// [sourceMap-Comments2.js]
+"use strict";
 function foo(str, num) {
     return;
 }

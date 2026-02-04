@@ -8,6 +8,7 @@ namespace console {
 }
 
 //// [module_augmentExistingVariable.js]
+"use strict";
 var console;
 var console;
 (function (console) {

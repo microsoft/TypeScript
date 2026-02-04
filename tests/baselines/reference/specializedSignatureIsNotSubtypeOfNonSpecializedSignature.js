@@ -66,6 +66,7 @@ var a3: {
 
 
 //// [specializedSignatureIsNotSubtypeOfNonSpecializedSignature.js]
+"use strict";
 function foo(x) { }
 class C {
     foo(x) { }

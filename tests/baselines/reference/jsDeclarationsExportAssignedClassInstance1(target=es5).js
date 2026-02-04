@@ -6,6 +6,7 @@ class Foo {}
 module.exports = new Foo();
 
 //// [index.js]
+"use strict";
 var Foo = /** @class */ (function () {
     function Foo() {
     }

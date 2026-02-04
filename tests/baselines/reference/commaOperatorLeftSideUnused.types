@@ -16,8 +16,8 @@ function fn() {
   let arr: any[] = [];
 >arr : any[]
 >    : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
   switch(arr.length) {
 >arr.length : number

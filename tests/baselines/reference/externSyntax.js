@@ -17,3 +17,4 @@ declare namespace M {
 
 
 //// [externSyntax.js]
+"use strict";

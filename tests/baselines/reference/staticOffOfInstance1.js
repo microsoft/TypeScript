@@ -9,6 +9,7 @@ class List {
 }
 
 //// [staticOffOfInstance1.js]
+"use strict";
 class List {
     Blah() {
         this.Foo();

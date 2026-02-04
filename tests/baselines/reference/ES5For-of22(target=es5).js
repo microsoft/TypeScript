@@ -7,6 +7,7 @@ for (var x of [1, 2, 3]) {
 }
 
 //// [ES5For-of22.js]
+"use strict";
 for (var _i = 0, _b = [1, 2, 3]; _i < _b.length; _i++) {
     var x = _b[_i];
     var _a = 0;

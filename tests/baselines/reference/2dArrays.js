@@ -18,6 +18,7 @@ class Board {
 }
 
 //// [2dArrays.js]
+"use strict";
 class Cell {
 }
 class Ship {

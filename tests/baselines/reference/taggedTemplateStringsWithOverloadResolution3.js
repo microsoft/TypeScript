@@ -75,6 +75,7 @@ fn5 `${ (n) => n.substr(0) }`;
 
 
 //// [taggedTemplateStringsWithOverloadResolution3.js]
+"use strict";
 function fn1() { return null; }
 var s = fn1 `${undefined}`;
 // No candidate overloads found

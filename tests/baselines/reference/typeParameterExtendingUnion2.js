@@ -15,6 +15,7 @@ function f<T extends Cat | Dog>(a: T) {
 }
 
 //// [typeParameterExtendingUnion2.js]
+"use strict";
 class Animal {
     run() { }
 }

@@ -10,6 +10,7 @@ abstract class A {
 
 
 //// [classAbstractAccessor.js]
+"use strict";
 class A {
     get aa() { return 1; } // error
     set bb(x) { } // error

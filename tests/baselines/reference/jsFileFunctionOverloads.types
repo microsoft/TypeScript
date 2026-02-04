@@ -81,8 +81,8 @@ function flatMap(array, iterable = identity) {
   const result = [];
 >result : unknown[]
 >       : ^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
   for (let i = 0; i < array.length; i += 1) {
 >i : number

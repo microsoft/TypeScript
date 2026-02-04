@@ -34,6 +34,7 @@ namespace Generic {
 }
 
 //// [constructorHasPrototypeProperty.js]
+"use strict";
 var NonGeneric;
 (function (NonGeneric) {
     class C {

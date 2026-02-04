@@ -1022,6 +1022,7 @@ namespace caurinus {
 
 
 //// [resolvingClassDeclarationWhenInBaseTypeResolution.js]
+"use strict";
 var rionegrensis;
 (function (rionegrensis) {
     class caniventer extends Lanthanum.nitidus {

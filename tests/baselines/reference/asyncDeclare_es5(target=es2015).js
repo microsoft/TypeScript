@@ -4,3 +4,4 @@
 declare async function foo(): Promise<void>;
 
 //// [asyncDeclare_es5.js]
+"use strict";

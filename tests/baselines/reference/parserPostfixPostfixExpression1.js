@@ -4,5 +4,6 @@
 a++ ++;
 
 //// [parserPostfixPostfixExpression1.js]
+"use strict";
 a++;
 ++;

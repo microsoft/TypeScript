@@ -9,6 +9,7 @@ function f() {
 }
 
 //// [emitArrowFunctionWhenUsingArguments18.js]
+"use strict";
 function f() {
     var args = { arguments: arguments }.arguments;
     if (Math.random()) {

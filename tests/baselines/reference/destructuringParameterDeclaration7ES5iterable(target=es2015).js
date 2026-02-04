@@ -16,6 +16,7 @@ function two([], [a, b, c]: number[]) {}
 
 
 //// [destructuringParameterDeclaration7ES5iterable.js]
+"use strict";
 function foo({}, { foo, bar }) { }
 function baz([], { foo, bar }) { }
 function one([], {}) { }

@@ -38,6 +38,7 @@ var resultIsBoolean11 = (OBJECT = [1, 2, 3], BOOLEAN = false);
 
 
 //// [commaOperatorWithSecondOperandBooleanType.js]
+"use strict";
 var ANY;
 var BOOLEAN;
 var NUMBER;

@@ -49,6 +49,7 @@ var p: fundule.Point;
 var p: { x: number; y: number; };
 
 //// [importAliasIdentifiers.js]
+"use strict";
 var moduleA;
 (function (moduleA) {
     class Point {

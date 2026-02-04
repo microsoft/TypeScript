@@ -158,19 +158,29 @@ Input::
 //// [/users/username/projects/project/node_modules/react/package.json] deleted
 
 Output::
+[96mindex.tsx[0m:[93m1[0m:[93m26[0m - [91merror[0m[90m TS7026: [0mJSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+[7m1[0m export const App = () => <div propA={true}></div>;
+[7m [0m [91m                         ~~~~~~~~~~~~~~~~~~[0m
+
 [96mindex.tsx[0m:[93m1[0m:[93m26[0m - [91merror[0m[90m TS2875: [0mThis JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
 
 [7m1[0m export const App = () => <div propA={true}></div>;
 [7m [0m [91m                         ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
+[96mindex.tsx[0m:[93m1[0m:[93m44[0m - [91merror[0m[90m TS7026: [0mJSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
-Found 1 error in index.tsx[90m:1[0m
+[7m1[0m export const App = () => <div propA={true}></div>;
+[7m [0m [91m                                           ~~~~~~[0m
+
+
+Found 3 errors in the same file, starting at: index.tsx[90m:1[0m
 
 
 
 //// [/users/username/projects/project/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./index.tsx"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14760199789-export const App = () => <div propA={true}></div>;","signature":"-11175433774-export declare const App: () => any;\n"}],"root":[2],"options":{"jsx":4,"jsxImportSource":"react","module":1},"semanticDiagnosticsPerFile":[[2,[{"start":25,"length":24,"messageText":"This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.","category":1,"code":2875}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./index.tsx"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14760199789-export const App = () => <div propA={true}></div>;","signature":"-11175433774-export declare const App: () => any;\n"}],"root":[2],"options":{"jsx":4,"jsxImportSource":"react","module":1},"semanticDiagnosticsPerFile":[[2,[{"start":25,"length":18,"messageText":"JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.","category":1,"code":7026},{"start":25,"length":24,"messageText":"This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.","category":1,"code":2875},{"start":43,"length":6,"messageText":"JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.","category":1,"code":7026}]]],"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -214,16 +224,30 @@ Found 1 error in index.tsx[90m:1[0m
       [
         {
           "start": 25,
+          "length": 18,
+          "messageText": "JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.",
+          "category": 1,
+          "code": 7026
+        },
+        {
+          "start": 25,
           "length": 24,
           "messageText": "This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.",
           "category": 1,
           "code": 2875
+        },
+        {
+          "start": 43,
+          "length": 6,
+          "messageText": "JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.",
+          "category": 1,
+          "code": 7026
         }
       ]
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1038
+  "size": 1351
 }
 
 

@@ -18,16 +18,16 @@ export interface C<T, U> {
 >      : ^^^^^
 
     optionalField?: T;
->optionalField : T
->              : ^
+>optionalField : T | undefined
+>              : ^^^^^^^^^^^^^
 
     readonly readonlyField: T & U;
 >readonlyField : T & U
 >              : ^^^^^
 
     readonly readonlyOptionalField?: U;
->readonlyOptionalField : U
->                      : ^
+>readonlyOptionalField : U | undefined
+>                      : ^^^^^^^^^^^^^
 
     (): number;
     (x: T): U;
@@ -60,8 +60,8 @@ export interface C<T, U> {
     method(a?: number): number;
 >method : { <Q = number>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
 >       : ^^^ ^^^^^^^^^^^^^^      ^^^ ^^ ^^     ^^^          ^^^ ^^^      ^^^      ^^^^^^    ^^     ^^^      ^^^
->a : number
->  : ^^^^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     method(...args: any[]): number;
 >method : { <Q = number>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
@@ -70,8 +70,8 @@ export interface C<T, U> {
 >     : ^^^^^
 
     optMethod?(): number;
->optMethod : () => number
->          : ^^^^^^      
+>optMethod : (() => number) | undefined
+>          : ^^^^^^^      ^^^^^^^^^^^^^
 }
 
 interface G {}

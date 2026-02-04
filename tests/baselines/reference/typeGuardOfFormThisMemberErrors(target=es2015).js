@@ -35,6 +35,7 @@ namespace Test {
 }
 
 //// [typeGuardOfFormThisMemberErrors.js]
+"use strict";
 // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
 var Test;
 (function (Test) {

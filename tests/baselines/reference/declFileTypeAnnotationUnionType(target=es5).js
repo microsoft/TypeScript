@@ -24,6 +24,7 @@ var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number
 var y = new g<string>() || new m.g<number>() || (() => new c());
 
 //// [declFileTypeAnnotationUnionType.js]
+"use strict";
 var c = /** @class */ (function () {
     function c() {
     }
@@ -72,6 +73,6 @@ declare class g<T> {
     private s;
 }
 declare var k: c | m.c;
-declare var l: c | m.c;
+declare var l: c;
 declare var x: g<string> | m.g<number> | (() => c);
-declare var y: m.g<number> | g<string> | (() => c);
+declare var y: g<string>;

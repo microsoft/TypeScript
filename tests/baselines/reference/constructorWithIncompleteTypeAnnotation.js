@@ -282,6 +282,7 @@ TypeScriptAllInOne.Program.Main();
 
 
 //// [constructorWithIncompleteTypeAnnotation.js]
+"use strict";
 var fs = module;
 ("fs");
 var TypeScriptAllInOne;

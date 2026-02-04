@@ -330,6 +330,7 @@ Found 1 error.
 }
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 const a = class {
     p = 10;
 };

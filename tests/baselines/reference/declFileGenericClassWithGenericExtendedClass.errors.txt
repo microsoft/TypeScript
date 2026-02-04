@@ -1,0 +1,18 @@
+declFileGenericClassWithGenericExtendedClass.ts(10,5): error TS2564: Property 'derived' has no initializer and is not definitely assigned in the constructor.
+
+
+==== declFileGenericClassWithGenericExtendedClass.ts (1 errors) ====
+    interface IFoo {
+        baz: Baz;
+    }
+    class Base<T> { }
+    class Derived<T> extends Base<T> { }
+    interface IBar<T> {
+        derived: Derived<T>;
+    }
+    class Baz implements IBar<Baz> {
+        derived: Derived<Baz>;
+        ~~~~~~~
+!!! error TS2564: Property 'derived' has no initializer and is not definitely assigned in the constructor.
+    }
+    

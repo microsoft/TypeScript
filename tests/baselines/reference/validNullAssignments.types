@@ -18,16 +18,16 @@ var d: void = null;
 >  : ^^^^
 
 var e: typeof undefined = null;
->e : any
->  : ^^^
+>e : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 e = null; // ok
 >e = null : null
 >         : ^^^^
->e : any
->  : ^^^
+>e : undefined
+>  : ^^^^^^^^^
 
 enum E { A }
 >E : E

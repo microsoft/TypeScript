@@ -4,20 +4,22 @@
 /** @type {?} */
 export const a = null;
 >a : any
+>  : ^^^
 
 /** @type {*} */
 export const b = null;
 >b : any
+>  : ^^^
 
 /** @type {string?} */
 export const c = null;
->c : string
->  : ^^^^^^
+>c : string | null
+>  : ^^^^^^^^^^^^^
 
 /** @type {string=} */
 export const d = null;
->d : string
->  : ^^^^^^
+>d : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 /** @type {string!} */
 export const e = null;

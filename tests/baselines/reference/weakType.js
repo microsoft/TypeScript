@@ -67,6 +67,7 @@ let weak: Weak & Spoiler = propertiesWrong
 
 
 //// [weakType.js]
+"use strict";
 function getDefaultSettings() {
     return { timeout: 1000 };
 }

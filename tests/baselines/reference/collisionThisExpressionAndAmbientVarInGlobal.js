@@ -6,5 +6,6 @@ var f = () => this;
 _this = 10; // Error
 
 //// [collisionThisExpressionAndAmbientVarInGlobal.js]
+"use strict";
 var f = () => this;
 _this = 10; // Error

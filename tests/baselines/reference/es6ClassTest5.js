@@ -15,6 +15,7 @@ class  bigClass {
 
 
 //// [es6ClassTest5.js]
+"use strict";
 class C1T5 {
     constructor() {
         this.foo = (i) => {

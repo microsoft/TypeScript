@@ -129,6 +129,7 @@ var r13 = i[-01]
 
 
 //// [objectTypeWithStringNamedNumericProperty.js]
+"use strict";
 // string named numeric properties are legal and distinct when indexed by string values
 // indexed numerically the value is converted to a number
 // no errors expected below

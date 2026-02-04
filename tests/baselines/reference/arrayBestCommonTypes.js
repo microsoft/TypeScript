@@ -110,6 +110,7 @@ namespace NonEmptyTypes {
 
 
 //// [arrayBestCommonTypes.js]
+"use strict";
 var EmptyTypes;
 (function (EmptyTypes) {
     class base {

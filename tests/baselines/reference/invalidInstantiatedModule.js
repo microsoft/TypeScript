@@ -18,6 +18,7 @@ var p: m.Point; // Error
  
 
 //// [invalidInstantiatedModule.js]
+"use strict";
 var M;
 (function (M) {
     class Point {

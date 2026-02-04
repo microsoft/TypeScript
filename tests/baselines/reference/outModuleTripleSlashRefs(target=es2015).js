@@ -30,6 +30,7 @@ export class B extends A { }
 
 
 //// [all.js]
+"use strict";
 /// <reference path="./c.d.ts" />
 class Foo {
 }

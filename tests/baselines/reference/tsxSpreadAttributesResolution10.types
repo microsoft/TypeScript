@@ -9,8 +9,8 @@ import React = require('react');
 
 interface OptionProp {
     x?: 2
->x : 2
->  : ^
+>x : 2 | undefined
+>  : ^^^^^^^^^^^^^
 }
 
 class Opt extends React.Component<OptionProp, {}> {

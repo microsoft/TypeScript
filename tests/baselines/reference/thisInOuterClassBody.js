@@ -23,6 +23,7 @@ class Foo {
 }
 
 //// [thisInOuterClassBody.js]
+"use strict";
 var _a;
 class Foo {
     constructor() {

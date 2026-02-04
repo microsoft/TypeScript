@@ -42,6 +42,7 @@ var r19 = a + { a: '' };
 var r20 = a + ((a: string) => { return a });
 
 //// [additionOperatorWithAnyAndEveryType.js]
+"use strict";
 function foo() { }
 class C {
     static foo() { }

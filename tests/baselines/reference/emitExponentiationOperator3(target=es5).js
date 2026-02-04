@@ -42,6 +42,7 @@ var temp = 10;
 
 
 //// [emitExponentiationOperator3.js]
+"use strict";
 var temp = 10;
 Math.pow((-++temp), 3);
 Math.pow((+--temp), 3);

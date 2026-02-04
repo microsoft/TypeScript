@@ -4,4 +4,5 @@
 for (var v of [true]) { }
 
 //// [ES3For-ofTypeCheck2.js]
+"use strict";
 for (var v of [true]) { }

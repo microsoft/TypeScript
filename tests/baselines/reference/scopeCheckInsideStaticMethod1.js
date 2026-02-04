@@ -13,6 +13,7 @@ class C {
 }
 
 //// [scopeCheckInsideStaticMethod1.js]
+"use strict";
 class C {
     static b() {
         v = 1; // ERR

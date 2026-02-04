@@ -11,6 +11,7 @@ class A {
 }
 
 //// [nonMergedDeclarationsAndOverloads.js]
+"use strict";
 class A {
     f() { }
     m1(a) {

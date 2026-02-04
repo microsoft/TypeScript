@@ -49,6 +49,7 @@ async function f14() {
 }
 
 //// [asyncAwait_es6.js]
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -76,13 +77,13 @@ let f5 = function () {
 let f6 = function () {
     return __awaiter(this, void 0, void 0, function* () { });
 };
-let f7 = () => __awaiter(this, void 0, void 0, function* () { });
-let f8 = () => __awaiter(this, void 0, void 0, function* () { });
-let f9 = () => __awaiter(this, void 0, void 0, function* () { });
-let f10 = () => __awaiter(this, void 0, void 0, function* () { return p; });
-let f11 = () => __awaiter(this, void 0, void 0, function* () { return mp; });
-let f12 = () => __awaiter(this, void 0, void 0, function* () { return mp; });
-let f13 = () => __awaiter(this, void 0, void 0, function* () { return p; });
+let f7 = () => __awaiter(void 0, void 0, void 0, function* () { });
+let f8 = () => __awaiter(void 0, void 0, void 0, function* () { });
+let f9 = () => __awaiter(void 0, void 0, void 0, function* () { });
+let f10 = () => __awaiter(void 0, void 0, void 0, function* () { return p; });
+let f11 = () => __awaiter(void 0, void 0, void 0, function* () { return mp; });
+let f12 = () => __awaiter(void 0, void 0, void 0, function* () { return mp; });
+let f13 = () => __awaiter(void 0, void 0, void 0, function* () { return p; });
 let o = {
     m1() {
         return __awaiter(this, void 0, void 0, function* () { });

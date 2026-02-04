@@ -40,6 +40,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/project/main.js]
+"use strict";
 let a = "Hello";
 
 
@@ -111,6 +112,7 @@ CreatingProgramWith::
 
 
 //// [/user/username/projects/project/main.js]
+"use strict";
 let a = "Hello World";
 
 
@@ -197,6 +199,7 @@ CreatingProgramWith::
 
 
 //// [/user/username/projects/project/main.js]
+"use strict";
 
 
 

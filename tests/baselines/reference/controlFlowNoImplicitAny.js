@@ -130,6 +130,7 @@ function f10() {
 }
 
 //// [controlFlowNoImplicitAny.js]
+"use strict";
 // CFA for 'let' with no type annotation and initializer
 function f1() {
     let x;

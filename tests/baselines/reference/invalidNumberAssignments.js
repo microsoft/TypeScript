@@ -26,6 +26,7 @@ function i<T>(a: T) {
 i = x;
 
 //// [invalidNumberAssignments.js]
+"use strict";
 var x = 1;
 var a = x;
 var b = x;

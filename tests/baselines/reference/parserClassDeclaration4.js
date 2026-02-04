@@ -5,5 +5,6 @@ class C extends A implements B extends C {
 }
 
 //// [parserClassDeclaration4.js]
+"use strict";
 class C extends A extends C {
 }

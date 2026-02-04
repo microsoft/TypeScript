@@ -30,6 +30,7 @@ c = d;
 d = c; // error
 
 //// [interfaceExtendsClassWithPrivate1.js]
+"use strict";
 class C {
     constructor() {
         this.x = 1;

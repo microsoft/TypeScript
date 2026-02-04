@@ -12,6 +12,7 @@ class Employee {
 }
 
 //// [unusedGetterInClass.js]
+"use strict";
 var Employee = /** @class */ (function () {
     function Employee() {
     }

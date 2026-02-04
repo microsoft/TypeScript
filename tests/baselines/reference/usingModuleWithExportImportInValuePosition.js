@@ -22,6 +22,7 @@ var c: { name: string };
 var c: C.a.B.Id;
 
 //// [usingModuleWithExportImportInValuePosition.js]
+"use strict";
 var A;
 (function (A) {
     A.x = 'hello world';

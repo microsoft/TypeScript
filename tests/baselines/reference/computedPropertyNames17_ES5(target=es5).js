@@ -12,6 +12,7 @@ class C {
 }
 
 //// [computedPropertyNames17_ES5.js]
+"use strict";
 var b;
 var C = /** @class */ (function () {
     function C() {

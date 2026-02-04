@@ -7,6 +7,7 @@ for (let [a = 0, b = 1] of [2, 3]) {
 }
 
 //// [ES5For-of36.js]
+"use strict";
 var __values = (this && this.__values) || function(o) {
     var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
     if (m) return m.call(o);

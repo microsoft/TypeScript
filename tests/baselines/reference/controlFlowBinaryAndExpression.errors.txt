@@ -1,0 +1,16 @@
+controlFlowBinaryAndExpression.ts(8,1): error TS2454: Variable 'cond' is used before being assigned.
+
+
+==== controlFlowBinaryAndExpression.ts (1 errors) ====
+    let x: string | number | boolean;
+    let cond: boolean;
+    
+    (x = "") && (x = 0);
+    x; // string | number
+    
+    x = "";
+    cond && (x = 0);
+    ~~~~
+!!! error TS2454: Variable 'cond' is used before being assigned.
+    x; // string | number
+    

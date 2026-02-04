@@ -43,8 +43,8 @@ export = void; // Error, void operator requires an argument
 
 === foo7.ts ===
 export = Date || String; // Ok
->Date || String : DateConstructor | StringConstructor
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Date || String : DateConstructor
+>               : ^^^^^^^^^^^^^^^
 >Date : DateConstructor
 >     : ^^^^^^^^^^^^^^^
 >String : StringConstructor

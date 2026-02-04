@@ -5,5 +5,6 @@ with (1)
   return;
 
 //// [parserWithStatement2.js]
+"use strict";
 with (1)
     return;

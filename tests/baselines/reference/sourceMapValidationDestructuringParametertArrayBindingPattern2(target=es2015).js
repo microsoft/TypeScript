@@ -36,6 +36,7 @@ foo4(robotA);
 foo4(["roomba", ["vacuum", "mopping"]]);
 
 //// [sourceMapValidationDestructuringParametertArrayBindingPattern2.js]
+"use strict";
 var robotA = ["trimmer", ["trimming", "edging"]];
 function foo1([, skillA]) {
     console.log(skillA);

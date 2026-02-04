@@ -32,6 +32,7 @@ const e5: Ka.Foo | boolean = Z.Foo.A; // ok
 
 
 //// [enumLiteralAssignableToEnumInsideUnion.js]
+"use strict";
 var X;
 (function (X) {
     let Foo;

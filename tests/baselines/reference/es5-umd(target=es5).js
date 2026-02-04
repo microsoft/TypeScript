@@ -16,6 +16,7 @@ class A
 
 
 //// [es5-umd.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

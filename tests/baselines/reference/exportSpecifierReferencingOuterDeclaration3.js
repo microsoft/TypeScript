@@ -10,3 +10,4 @@ declare module "m" {
 }
 
 //// [exportSpecifierReferencingOuterDeclaration3.js]
+"use strict";

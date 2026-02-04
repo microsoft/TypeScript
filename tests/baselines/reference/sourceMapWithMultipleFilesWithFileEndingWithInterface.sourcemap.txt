@@ -8,6 +8,7 @@ sources: a.ts,b.ts
 emittedFile:fooResult.js
 sourceFile:a.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>var M;
 1 >
 2 >^^^^
@@ -20,10 +21,10 @@ sourceFile:a.ts
 4 >      {
   >         export var X = 1;
   >     }
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 11) + SourceIndex(0)
-3 >Emitted(1, 6) Source(1, 12) + SourceIndex(0)
-4 >Emitted(1, 7) Source(3, 2) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(1, 11) + SourceIndex(0)
+3 >Emitted(2, 6) Source(1, 12) + SourceIndex(0)
+4 >Emitted(2, 7) Source(3, 2) + SourceIndex(0)
 ---
 >>>(function (M) {
 1->
@@ -33,9 +34,9 @@ sourceFile:a.ts
 1->
 2 >namespace 
 3 >           M
-1->Emitted(2, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(2, 12) Source(1, 11) + SourceIndex(0)
-3 >Emitted(2, 13) Source(1, 12) + SourceIndex(0)
+1->Emitted(3, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(3, 12) Source(1, 11) + SourceIndex(0)
+3 >Emitted(3, 13) Source(1, 12) + SourceIndex(0)
 ---
 >>>    M.X = 1;
 1->^^^^
@@ -50,11 +51,11 @@ sourceFile:a.ts
 3 >        = 
 4 >          1
 5 >           ;
-1->Emitted(3, 5) Source(2, 16) + SourceIndex(0)
-2 >Emitted(3, 8) Source(2, 17) + SourceIndex(0)
-3 >Emitted(3, 11) Source(2, 20) + SourceIndex(0)
-4 >Emitted(3, 12) Source(2, 21) + SourceIndex(0)
-5 >Emitted(3, 13) Source(2, 22) + SourceIndex(0)
+1->Emitted(4, 5) Source(2, 16) + SourceIndex(0)
+2 >Emitted(4, 8) Source(2, 17) + SourceIndex(0)
+3 >Emitted(4, 11) Source(2, 20) + SourceIndex(0)
+4 >Emitted(4, 12) Source(2, 21) + SourceIndex(0)
+5 >Emitted(4, 13) Source(2, 22) + SourceIndex(0)
 ---
 >>>})(M || (M = {}));
 1->
@@ -74,13 +75,13 @@ sourceFile:a.ts
 7 >           {
   >              export var X = 1;
   >          }
-1->Emitted(4, 1) Source(3, 1) + SourceIndex(0)
-2 >Emitted(4, 2) Source(3, 2) + SourceIndex(0)
-3 >Emitted(4, 4) Source(1, 11) + SourceIndex(0)
-4 >Emitted(4, 5) Source(1, 12) + SourceIndex(0)
-5 >Emitted(4, 10) Source(1, 11) + SourceIndex(0)
-6 >Emitted(4, 11) Source(1, 12) + SourceIndex(0)
-7 >Emitted(4, 19) Source(3, 2) + SourceIndex(0)
+1->Emitted(5, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(5, 2) Source(3, 2) + SourceIndex(0)
+3 >Emitted(5, 4) Source(1, 11) + SourceIndex(0)
+4 >Emitted(5, 5) Source(1, 12) + SourceIndex(0)
+5 >Emitted(5, 10) Source(1, 11) + SourceIndex(0)
+6 >Emitted(5, 11) Source(1, 12) + SourceIndex(0)
+7 >Emitted(5, 19) Source(3, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:fooResult.js
@@ -99,10 +100,10 @@ sourceFile:b.ts
   >          export class c1 {
   >          }
   >      }
-1 >Emitted(5, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(5, 5) Source(1, 11) + SourceIndex(1)
-3 >Emitted(5, 7) Source(1, 13) + SourceIndex(1)
-4 >Emitted(5, 8) Source(4, 2) + SourceIndex(1)
+1 >Emitted(6, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(6, 5) Source(1, 11) + SourceIndex(1)
+3 >Emitted(6, 7) Source(1, 13) + SourceIndex(1)
+4 >Emitted(6, 8) Source(4, 2) + SourceIndex(1)
 ---
 >>>(function (m1) {
 1->
@@ -112,9 +113,9 @@ sourceFile:b.ts
 1->
 2 >namespace 
 3 >           m1
-1->Emitted(6, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(6, 12) Source(1, 11) + SourceIndex(1)
-3 >Emitted(6, 14) Source(1, 13) + SourceIndex(1)
+1->Emitted(7, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(7, 12) Source(1, 11) + SourceIndex(1)
+3 >Emitted(7, 14) Source(1, 13) + SourceIndex(1)
 ---
 >>>    class c1 {
 1->^^^^
@@ -124,16 +125,16 @@ sourceFile:b.ts
   >    
 2 >    export class 
 3 >          c1
-1->Emitted(7, 5) Source(2, 5) + SourceIndex(1)
-2 >Emitted(7, 11) Source(2, 18) + SourceIndex(1)
-3 >Emitted(7, 13) Source(2, 20) + SourceIndex(1)
+1->Emitted(8, 5) Source(2, 5) + SourceIndex(1)
+2 >Emitted(8, 11) Source(2, 18) + SourceIndex(1)
+3 >Emitted(8, 13) Source(2, 20) + SourceIndex(1)
 ---
 >>>    }
 1 >^^^^^
 2 >     ^^^^^^^^^^^->
 1 > {
   >    }
-1 >Emitted(8, 6) Source(3, 6) + SourceIndex(1)
+1 >Emitted(9, 6) Source(3, 6) + SourceIndex(1)
 ---
 >>>    m1.c1 = c1;
 1->^^^^
@@ -146,10 +147,10 @@ sourceFile:b.ts
 3 >          {
   >             }
 4 >              
-1->Emitted(9, 5) Source(2, 18) + SourceIndex(1)
-2 >Emitted(9, 10) Source(2, 20) + SourceIndex(1)
-3 >Emitted(9, 15) Source(3, 6) + SourceIndex(1)
-4 >Emitted(9, 16) Source(3, 6) + SourceIndex(1)
+1->Emitted(10, 5) Source(2, 18) + SourceIndex(1)
+2 >Emitted(10, 10) Source(2, 20) + SourceIndex(1)
+3 >Emitted(10, 15) Source(3, 6) + SourceIndex(1)
+4 >Emitted(10, 16) Source(3, 6) + SourceIndex(1)
 ---
 >>>})(m1 || (m1 = {}));
 1->
@@ -171,12 +172,12 @@ sourceFile:b.ts
   >                export class c1 {
   >                }
   >            }
-1->Emitted(10, 1) Source(4, 1) + SourceIndex(1)
-2 >Emitted(10, 2) Source(4, 2) + SourceIndex(1)
-3 >Emitted(10, 4) Source(1, 11) + SourceIndex(1)
-4 >Emitted(10, 6) Source(1, 13) + SourceIndex(1)
-5 >Emitted(10, 11) Source(1, 11) + SourceIndex(1)
-6 >Emitted(10, 13) Source(1, 13) + SourceIndex(1)
-7 >Emitted(10, 21) Source(4, 2) + SourceIndex(1)
+1->Emitted(11, 1) Source(4, 1) + SourceIndex(1)
+2 >Emitted(11, 2) Source(4, 2) + SourceIndex(1)
+3 >Emitted(11, 4) Source(1, 11) + SourceIndex(1)
+4 >Emitted(11, 6) Source(1, 13) + SourceIndex(1)
+5 >Emitted(11, 11) Source(1, 11) + SourceIndex(1)
+6 >Emitted(11, 13) Source(1, 13) + SourceIndex(1)
+7 >Emitted(11, 21) Source(4, 2) + SourceIndex(1)
 ---
 >>>//# sourceMappingURL=fooResult.js.map

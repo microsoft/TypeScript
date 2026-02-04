@@ -38,6 +38,7 @@ class E extends A {
 }
 
 //// [staticPropSuper.js]
+"use strict";
 class A {
 }
 class B extends A {

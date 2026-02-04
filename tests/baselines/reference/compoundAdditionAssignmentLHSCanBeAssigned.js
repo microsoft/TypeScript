@@ -53,6 +53,7 @@ declare var x7: void;
 x7 += a;
 
 //// [compoundAdditionAssignmentLHSCanBeAssigned.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

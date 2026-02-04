@@ -40,6 +40,7 @@ var temp: any;
 1 ** (~ temp--) ** 4;
 
 //// [emitExponentiationOperator4.js]
+"use strict";
 var temp;
 Math.pow(temp, 3);
 Math.pow(--temp, 3);

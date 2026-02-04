@@ -18,4 +18,5 @@ moduleB.ts(1,20): error TS1149: File name 'moduleC.ts' differs from already incl
     Imported via "./ModuleC" from file 'moduleA.ts'
     Imported via "./moduleC" from file 'moduleB.ts'
     Root file specified for compilation
+ModuleC.ts(1,12): error TS7005: Variable 'x' implicitly has an 'any' type.
 

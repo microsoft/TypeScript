@@ -5,3 +5,4 @@ namespace A.string {
 }
 
 //// [parserModuleDeclaration12.js]
+"use strict";

@@ -37,6 +37,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/workspace/solution/projects/project/a.js]
+"use strict";
 label: while (1) { }
 
 

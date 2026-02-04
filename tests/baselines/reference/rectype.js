@@ -16,6 +16,7 @@ namespace M {
 
 
 //// [rectype.js]
+"use strict";
 var M;
 (function (M) {
     function f(p) { return f; }

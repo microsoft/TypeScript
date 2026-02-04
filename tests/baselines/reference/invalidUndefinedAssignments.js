@@ -24,6 +24,7 @@ function i<T>(a: T) { }
 i = x; 
 
 //// [invalidUndefinedAssignments.js]
+"use strict";
 var x;
 var E;
 (function (E) {

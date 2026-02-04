@@ -16,5 +16,6 @@ nodes.map(n => n.name);
 
 
 //// [typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.js]
+"use strict";
 var nodes;
 nodes.map(n => n.name);

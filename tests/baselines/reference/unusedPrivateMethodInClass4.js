@@ -17,6 +17,7 @@ class greeter {
 }
 
 //// [unusedPrivateMethodInClass4.js]
+"use strict";
 class greeter {
     function1() {
         var y = 10;

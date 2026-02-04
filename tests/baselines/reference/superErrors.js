@@ -54,6 +54,7 @@ class RegisteredUser extends User {
 }
 
 //// [superErrors.js]
+"use strict";
 function foo() {
     // super in a non class context
     var x = super.;

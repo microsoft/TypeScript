@@ -11,6 +11,7 @@ interface I extends X<() => number> {
 
 
 //// [declFileForFunctionTypeAsTypeParameter.js]
+"use strict";
 class X {
 }
 class C extends X {

@@ -146,8 +146,8 @@ declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.El
 >  : ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >"extra-data" : string
 >             : ^^^^^^
->yy : string
->   : ^^^^^^
+>yy : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >JSX : any
 >    : ^^^
 
@@ -158,8 +158,8 @@ declare function TestingOneThing(n: {yy: number, direction?: number}): JSX.Eleme
 >  : ^^^^^^      ^^^^^^^^^^^^^^      ^^^
 >yy : number
 >   : ^^^^^^
->direction : number
->          : ^^^^^^
+>direction : number | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 >JSX : any
 >    : ^^^
 
@@ -248,10 +248,10 @@ declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
 >                : ^^^ ^^                             ^^^           ^^^ ^^                                          ^^^           ^^^
 >a : { y1?: string; y2?: number; }
 >  : ^^^^^^^      ^^^^^^^      ^^^
->y1 : string
->   : ^^^^^^
->y2 : number
->   : ^^^^^^
+>y1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+>y2 : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >JSX : any
 >    : ^^^
 
@@ -262,8 +262,8 @@ declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JS
 >  : ^^^^^^       ^^^^^^^      ^^^^^^       ^^^
 >y1 : boolean
 >   : ^^^^^^^
->y2 : number
->   : ^^^^^^
+>y2 : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >y3 : boolean
 >   : ^^^^^^^
 >JSX : any

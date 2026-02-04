@@ -6,3 +6,4 @@ declare class C {
 }
 
 //// [parserES5ComputedPropertyName1.js]
+"use strict";

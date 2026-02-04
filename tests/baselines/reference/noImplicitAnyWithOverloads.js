@@ -12,5 +12,6 @@ function callb(a) { }
 callb((a) => { a.foo; }); // error, chose first overload
 
 //// [noImplicitAnyWithOverloads.js]
+"use strict";
 function callb(a) { }
 callb((a) => { a.foo; }); // error, chose first overload

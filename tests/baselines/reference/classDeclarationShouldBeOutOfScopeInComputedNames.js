@@ -13,6 +13,7 @@ class A {
 
 
 //// [classDeclarationShouldBeOutOfScopeInComputedNames.js]
+"use strict";
 var _a, _b;
 class A {
     constructor() {

@@ -61,6 +61,7 @@ namespace Y {
 
 
 //// [moduleWithStatementsOfEveryKind.js]
+"use strict";
 var A;
 (function (A_1) {
     class A {

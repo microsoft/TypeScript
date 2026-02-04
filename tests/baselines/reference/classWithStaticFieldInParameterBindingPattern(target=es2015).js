@@ -5,6 +5,7 @@
 (({ [class { static x = 1 }.x]: b = "" }) => {})();
 
 //// [classWithStaticFieldInParameterBindingPattern.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/36295
 ((_a) => { var _b; var { [(_b = class {
     },

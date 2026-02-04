@@ -69,6 +69,7 @@ if (let4.constructor === C8) {
 
 
 //// [typeGuardConstructorDerivedClass.js]
+"use strict";
 // Derived class with different structures
 class C1 {
 }

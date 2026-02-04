@@ -112,6 +112,7 @@ for ([numberA3 = -1, ...robotAInfo] of [robotA, robotB]) {
 }
 
 //// [sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues2.js]
+"use strict";
 let robotA = [1, "mower", "mowing"];
 let robotB = [2, "trimmer", "trimming"];
 let robots = [robotA, robotB];

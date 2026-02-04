@@ -4,4 +4,5 @@ mapUrl: sourceMap-EmptyFile1.js.map
 sourceRoot: 
 sources: sourceMap-EmptyFile1.ts
 ===================================================================
+>>>"use strict";
 >>>//# sourceMappingURL=sourceMap-EmptyFile1.js.map

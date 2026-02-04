@@ -50,6 +50,7 @@ const testStringReplaceAll = "".replaceAll();
 
 
 //// [doYouNeedToChangeYourTargetLibraryES2016Plus.js]
+"use strict";
 // es2016
 const testIncludes = ["hello"].includes("world");
 // es2017

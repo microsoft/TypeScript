@@ -15,6 +15,7 @@ namespace M {
 }
 
 //// [classAndInterfaceWithSameName.js]
+"use strict";
 class C {
 }
 var M;

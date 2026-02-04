@@ -32,14 +32,14 @@ export declare class TPromise<V> {
 	public then<U>(success?: (value:V)=>TPromise<U>, error?: (err:any)=>TPromise<U>, progress?:ProgressCallback): TPromise<U>;
 >then : <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback) => TPromise<U>
 >     : ^ ^^       ^^^                         ^^     ^^^                         ^^        ^^^                ^^^^^           
->success : (value: V) => TPromise<U>
->        : ^     ^^ ^^^^^           
+>success : ((value: V) => TPromise<U>) | undefined
+>        : ^^     ^^ ^^^^^           ^^^^^^^^^^^^^
 >value : V
 >      : ^
->error : (err: any) => TPromise<U>
->      : ^   ^^   ^^^^^           
+>error : ((err: any) => TPromise<U>) | undefined
+>      : ^^   ^^   ^^^^^           ^^^^^^^^^^^^^
 >err : any
 >    : ^^^
->progress : ProgressCallback
->         : ^^^^^^^^^^^^^^^^
+>progress : ProgressCallback | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

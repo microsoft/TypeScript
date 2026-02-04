@@ -37,6 +37,7 @@ namespace Generic {
 
 
 //// [classConstructorAccessibility.js]
+"use strict";
 class C {
     constructor(x) {
         this.x = x;

@@ -1,0 +1,36 @@
+baseIndexSignatureResolution.ts(1,22): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+baseIndexSignatureResolution.ts(2,38): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+baseIndexSignatureResolution.ts(11,5): error TS2322: Type 'null' is not assignable to type 'FooOf<Derived>'.
+
+
+==== baseIndexSignatureResolution.ts (3 errors) ====
+    class Base { private a: string; }
+                         ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+    class Derived extends Base { private b: string; }
+                                         ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+    
+    // Note - commmenting "extends Foo" prevents the error
+    interface Foo {
+        [i: number]: Base;
+    }
+    interface FooOf<TBase extends Base> extends Foo {
+        [i: number]: TBase;
+    }
+    var x: FooOf<Derived> = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'FooOf<Derived>'.
+    var y: Derived = x[0];
+    
+    /*
+    // Note - the equivalent for normal interface methods works fine:
+    interface A {
+        foo(): Base;
+    }
+    interface B<TBase extends Base> extends A {
+        foo(): TBase;
+    }
+    var b: B<Derived> = null;
+    var z: Derived = b.foo();
+    */

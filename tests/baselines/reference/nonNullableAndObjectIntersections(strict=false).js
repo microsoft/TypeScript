@@ -20,4 +20,5 @@ type TestOld = NonNullableOld<null>;
 
 
 //// [nonNullableAndObjectIntersections.js]
+"use strict";
 // These should all resolve to never

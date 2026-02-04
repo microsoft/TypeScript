@@ -32,6 +32,7 @@ foo3({ name: "Edger", skill: "cutting edges" });
 
 
 //// [sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.js]
+"use strict";
 var hello = "hello";
 var robotA = { name: "mower", skill: "mowing" };
 function foo1({ name: nameA = "<NoName>" } = {}) {

@@ -57,6 +57,7 @@ declare var b: {
 var r4: void = b.valueOf();
 
 //// [objectTypeHidingMembersOfExtendedObject.js]
+"use strict";
 class A {
 }
 class B extends A {

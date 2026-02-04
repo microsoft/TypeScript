@@ -246,6 +246,7 @@ Found 2 errors.
 }
 
 //// [/home/src/workspaces/outFile.js]
+"use strict";
 define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -422,6 +423,7 @@ Found 2 errors.
 }
 
 //// [/home/src/workspaces/outFile.js]
+"use strict";
 define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -682,6 +684,7 @@ Found 2 errors.
 }
 
 //// [/home/src/workspaces/outFile.js]
+"use strict";
 define("src/class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

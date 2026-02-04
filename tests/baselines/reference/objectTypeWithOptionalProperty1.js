@@ -6,6 +6,7 @@
     }
 
 //// [objectTypeWithOptionalProperty1.js]
+"use strict";
 var b = {
     x: 1 // error
 };

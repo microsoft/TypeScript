@@ -13,6 +13,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-methods-nonStatic.js]
+"use strict";
 const method3 = "method3";
 class C {
     @dec(1)

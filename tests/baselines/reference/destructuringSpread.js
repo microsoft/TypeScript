@@ -31,6 +31,7 @@ const { c, d, e, f, g } = {
 
 
 //// [destructuringSpread.js]
+"use strict";
 const { x } = Object.assign({}, { x: 0 });
 const { y } = Object.assign({ y: 0 }, {});
 const { z, a, b } = Object.assign({ z: 0 }, { a: 0, b: 0 });

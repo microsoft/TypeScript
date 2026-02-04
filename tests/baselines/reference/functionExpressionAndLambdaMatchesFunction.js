@@ -12,6 +12,7 @@ class CDoc {
 
 
 //// [functionExpressionAndLambdaMatchesFunction.js]
+"use strict";
 class CDoc {
     constructor() {
         function doSomething(a) {

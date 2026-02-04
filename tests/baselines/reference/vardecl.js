@@ -113,6 +113,7 @@ var b = 10;
 
 
 //// [vardecl.js]
+"use strict";
 var simpleVar;
 var anotherVar;
 var varWithSimpleType;

@@ -72,6 +72,7 @@ module.exports = Context;
 
 
 //// [timer.js]
+"use strict";
 /**
  * @param {number} timeout
  */
@@ -80,6 +81,7 @@ function Timer(timeout) {
 }
 module.exports = Timer;
 //// [context.js]
+"use strict";
 /**
  * Imports
  *
@@ -126,6 +128,7 @@ Context.prototype = {
 };
 module.exports = Context;
 //// [hook.js]
+"use strict";
 /**
  * @typedef {(arg: import("./context")) => void} HookHandler
  */
@@ -180,7 +183,7 @@ export = Context;
  * @class
  * @param {Input} input
  */
-declare function Context(input: Input): Context;
+declare function Context(input: Input): Context | undefined;
 declare class Context {
     /**
      * Imports
@@ -210,7 +213,7 @@ declare class Context {
      * @param {Input} input
      */
     constructor(input: Input);
-    state: State;
+    state: State | undefined;
     /**
      * @param {Input} input
      * @param {HookHandler=} handle

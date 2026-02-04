@@ -16,6 +16,7 @@ var z: { new (x: number): number; };
 var z: new (x: number) => number;
 
 //// [functionLiteral.js]
+"use strict";
 // basic valid forms of function literals
 var x = () => 1;
 var x;

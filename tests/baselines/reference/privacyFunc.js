@@ -231,6 +231,7 @@ function f10_public(): C6_public {
 
 
 //// [privacyFunc.js]
+"use strict";
 var m1;
 (function (m1) {
     class C1_public {

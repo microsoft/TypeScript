@@ -33,6 +33,7 @@ var r15 = d + null;
 var r16 = '' + null;
 
 //// [additionOperatorWithNullValueAndValidOperator.js]
+"use strict";
 // If one operand is the null or undefined value, it is treated as having the type of the other operand.
 var E;
 (function (E) {

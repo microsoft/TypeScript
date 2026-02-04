@@ -67,6 +67,7 @@ var resultIsStringOrBoolean3 = C.doIt() ? exprString1 : exprBoolean1; // union
 
 
 //// [conditionalOperatorConditionIsObjectType.js]
+"use strict";
 function foo() { }
 ;
 class C {

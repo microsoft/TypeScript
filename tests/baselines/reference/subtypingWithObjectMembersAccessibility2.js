@@ -64,6 +64,7 @@ namespace ImplicitPublic {
 }
 
 //// [subtypingWithObjectMembersAccessibility2.js]
+"use strict";
 // Derived member is private, base member is not causes errors
 class Base {
 }

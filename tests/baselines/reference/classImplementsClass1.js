@@ -5,6 +5,7 @@ class A { }
 class C implements A { }
 
 //// [classImplementsClass1.js]
+"use strict";
 class A {
 }
 class C {

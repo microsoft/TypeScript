@@ -13,6 +13,7 @@ abstract class C {
 
 
 //// [esDecorators-classDeclaration-methods-nonStaticAbstract.js]
+"use strict";
 var method3 = "method3";
 var C = /** @class */ (function () {
     function C() {

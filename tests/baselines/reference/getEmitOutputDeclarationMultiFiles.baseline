@@ -2,6 +2,7 @@
 EmitSkipped: false
 
 FileName : /tests/cases/fourslash/inputFile1.js
+"use strict";
 var x = 5;
 class Bar {
     x;
@@ -18,6 +19,7 @@ declare class Bar {
 EmitSkipped: false
 
 FileName : /tests/cases/fourslash/inputFile2.js
+"use strict";
 var x1 = "hello world";
 class Foo {
     x;

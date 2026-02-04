@@ -75,6 +75,7 @@ class c9 {
 
 
 //// [commentsClass.js]
+"use strict";
 /** This is class c2 without constuctor*/
 var c2 = /** @class */ (function () {
     function c2() {

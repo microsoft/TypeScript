@@ -992,6 +992,7 @@ define(function () {
 
 
 //// [fixSignatureCaching.js]
+"use strict";
 // Repro from #10697
 (function (define, undefined) {
     define(function () {

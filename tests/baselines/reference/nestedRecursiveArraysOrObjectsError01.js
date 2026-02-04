@@ -17,6 +17,7 @@ const blah: Style = [
 
 
 //// [nestedRecursiveArraysOrObjectsError01.js]
+"use strict";
 const blah = [
     [[{
                 foo: 'asdf',

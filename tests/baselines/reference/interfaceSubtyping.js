@@ -12,6 +12,7 @@ class Camera implements iface{
 
 
 //// [interfaceSubtyping.js]
+"use strict";
 class Camera {
     constructor(str) {
         this.str = str;

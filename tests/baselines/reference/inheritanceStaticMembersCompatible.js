@@ -10,6 +10,7 @@ class b extends a {
 }
 
 //// [inheritanceStaticMembersCompatible.js]
+"use strict";
 class a {
 }
 class b extends a {

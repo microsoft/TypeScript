@@ -6,6 +6,7 @@
 }
 
 //// [usingDeclarations.4.js]
+"use strict";
 {
     using[a] = null;
 }

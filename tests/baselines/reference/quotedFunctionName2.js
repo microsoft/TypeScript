@@ -6,6 +6,7 @@ class Test1 {
 }
 
 //// [quotedFunctionName2.js]
+"use strict";
 class Test1 {
     static "prop1"() { }
 }

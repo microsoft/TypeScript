@@ -42,6 +42,7 @@ class c extends Foo {
 }
 
 //// [collisionSuperAndLocalFunctionInAccessors.js]
+"use strict";
 function _super() {
 }
 class Foo {

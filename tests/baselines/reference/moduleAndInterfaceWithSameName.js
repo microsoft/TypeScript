@@ -34,6 +34,7 @@ namespace Foo3 {
 }
 
 //// [moduleAndInterfaceWithSameName.js]
+"use strict";
 var Foo1;
 (function (Foo1) {
     let Bar;

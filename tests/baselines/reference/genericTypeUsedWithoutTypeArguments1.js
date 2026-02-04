@@ -6,5 +6,6 @@ class Bar<T> implements Foo { }
 
 
 //// [genericTypeUsedWithoutTypeArguments1.js]
+"use strict";
 class Bar {
 }

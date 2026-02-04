@@ -29,6 +29,7 @@ e = 1.0;
 e = -1;
 
 //// [validEnumAssignments.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";

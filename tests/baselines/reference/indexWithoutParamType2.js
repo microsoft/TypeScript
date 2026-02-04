@@ -7,5 +7,6 @@ class C {
 }
 
 //// [indexWithoutParamType2.js]
+"use strict";
 class C {
 }

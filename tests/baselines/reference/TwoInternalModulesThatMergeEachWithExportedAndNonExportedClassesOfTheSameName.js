@@ -43,6 +43,7 @@ var l: X.Y.Z.Line;
 
 
 //// [TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.js]
+"use strict";
 var A;
 (function (A) {
     class Point {

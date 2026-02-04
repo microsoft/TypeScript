@@ -3,14 +3,14 @@
 === comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts ===
 interface A1 {
     b?: number;
->b : number
->  : ^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface B1 {
     b?: string;
->b : string
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 declare var a: A1;

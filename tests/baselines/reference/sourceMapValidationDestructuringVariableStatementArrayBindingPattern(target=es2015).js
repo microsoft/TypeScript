@@ -23,6 +23,7 @@ if (nameA == nameA2) {
 }
 
 //// [sourceMapValidationDestructuringVariableStatementArrayBindingPattern.js]
+"use strict";
 var robotA = [1, "mower", "mowing"];
 var robotB = [2, "trimmer", "trimming"];
 let [, nameA] = robotA;

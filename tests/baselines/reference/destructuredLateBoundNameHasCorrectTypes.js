@@ -15,6 +15,7 @@ let { [notPresent]: computed2 } = { prop: "b" };
 
 
 //// [destructuredLateBoundNameHasCorrectTypes.js]
+"use strict";
 let { [Symbol.iterator]: destructured } = [];
 void destructured;
 const named = "prop";

@@ -17,6 +17,7 @@ var test = new Test.MyClass(func); // Should be OK
 
 
 //// [constructorArgWithGenericCallSignature.js]
+"use strict";
 var Test;
 (function (Test) {
     class MyClass {

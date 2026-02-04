@@ -24,6 +24,7 @@ class Derived2 extends Derived1 {
 }
 
 //// [protectedStaticClassPropertyAccessibleWithinSubclass2.js]
+"use strict";
 class Base {
     static staticMethod() {
         this.x; // OK, accessed within their declaring class

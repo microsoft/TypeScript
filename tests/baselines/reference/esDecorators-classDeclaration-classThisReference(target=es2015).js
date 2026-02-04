@@ -14,6 +14,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-classThisReference.js]
+"use strict";
 let C = (() => {
     var _C_a_accessor_storage;
     let _classDecorators = [dec];

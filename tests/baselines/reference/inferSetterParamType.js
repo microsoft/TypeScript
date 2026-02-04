@@ -21,6 +21,7 @@ class Foo2 {
 
 
 //// [inferSetterParamType.js]
+"use strict";
 class Foo {
     get bar() {
         return 0;

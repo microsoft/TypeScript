@@ -30,6 +30,7 @@ class SuperObjectTest extends F {
 
 
 //// [super_inside-object-literal-getters-and-setters.js]
+"use strict";
 var ObjectLiteral;
 (function (ObjectLiteral) {
     var ThisInObjectLiteral = {

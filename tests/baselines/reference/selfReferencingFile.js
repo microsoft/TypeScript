@@ -8,6 +8,7 @@ class selfReferencingFile {
 }
 
 //// [selfReferencingFile.js]
+"use strict";
 ///<reference path='selfReferencingFile.ts'/>
 class selfReferencingFile {
 }

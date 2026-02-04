@@ -414,6 +414,7 @@ Output::
 
 
 //// [/user/username/projects/sample1/tests/index.js]
+"use strict";
 const m = 10;
 
 

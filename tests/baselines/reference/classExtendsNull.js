@@ -15,6 +15,7 @@ class D extends null {
 }
 
 //// [classExtendsNull.js]
+"use strict";
 class C extends null {
     constructor() {
         super();

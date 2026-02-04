@@ -6,5 +6,6 @@ f10('', () => a => a.foo, ''); // a is ""
 var r9 = f10('', () => (a => a.foo), 1); // error
 
 //// [contextualTypingWithFixedTypeParameters1.js]
+"use strict";
 f10('', () => a => a.foo, ''); // a is ""
 var r9 = f10('', () => (a => a.foo), 1); // error

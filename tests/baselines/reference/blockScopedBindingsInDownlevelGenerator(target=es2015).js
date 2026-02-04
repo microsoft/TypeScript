@@ -9,6 +9,7 @@ function* a() {
 }
 
 //// [blockScopedBindingsInDownlevelGenerator.js]
+"use strict";
 function* a() {
     for (const i of [1, 2, 3]) {
         (() => i)();

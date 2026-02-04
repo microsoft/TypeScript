@@ -1,10 +1,18 @@
+typeArgumentInference.ts(32,27): error TS2322: Type 'undefined' is not assignable to type 'Date'.
+typeArgumentInference.ts(39,31): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
+typeArgumentInference.ts(45,31): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
+typeArgumentInference.ts(62,27): error TS2345: Argument of type 'null' is not assignable to parameter of type '(a: string) => string'.
+typeArgumentInference.ts(66,5): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 typeArgumentInference.ts(68,29): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
 typeArgumentInference.ts(69,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
-typeArgumentInference.ts(83,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; }', but here has type '{}'.
-typeArgumentInference.ts(84,74): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
+typeArgumentInference.ts(70,75): error TS2345: Argument of type 'null' is not assignable to parameter of type '{ a?: number | undefined; b?: string | undefined; }'.
+typeArgumentInference.ts(83,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; } | undefined', but here has type '{}'.
+typeArgumentInference.ts(84,30): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'A92'.
+typeArgumentInference.ts(98,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'never[] | null | undefined', but here has type 'any[]'.
 
 
-==== typeArgumentInference.ts (4 errors) ====
+==== typeArgumentInference.ts (11 errors) ====
     // Generic call with no parameters
     function noParams<T>() { }
     noParams();
@@ -37,6 +45,9 @@ typeArgumentInference.ts(84,74): error TS2353: Object literal may only specify k
     function someGenerics3<T>(producer: () => T) { }
     someGenerics3(() => '');
     someGenerics3<Date>(() => undefined);
+                              ~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Date'.
+!!! related TS6502 typeArgumentInference.ts:30:37: The expected type comes from the return type of this signature.
     someGenerics3<number>(() => 3);
     
     // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
@@ -44,12 +55,16 @@ typeArgumentInference.ts(84,74): error TS2353: Object literal may only specify k
     someGenerics4(4, () => null);
     someGenerics4<string, number>('', () => 3);
     someGenerics4<string, number>(null, null);
+                                  ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
     
     // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
     function someGenerics5<U, T>(n: T, f: (x: U) => void) { }
     someGenerics5(4, () => null);
     someGenerics5<number, string>('', () => 3);
     someGenerics5<string, number>(null, null);
+                                  ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
     
     // Generic call with multiple arguments of function types that each have parameters of the same generic type
     function someGenerics6<A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
@@ -67,10 +82,15 @@ typeArgumentInference.ts(84,74): error TS2353: Object literal may only specify k
     function someGenerics8<T>(n: T): T { return n; }
     var x = someGenerics8(someGenerics7);
     x<string, string, string>(null, null, null);
+                              ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type '(a: string) => string'.
     
     // Generic call with multiple parameters of generic type passed arguments with no best common type
     function someGenerics9<T>(a: T, b: T, c: T): T {
         return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
     }
     var a9a = someGenerics9('', 0, []);
                                 ~
@@ -80,6 +100,8 @@ typeArgumentInference.ts(84,74): error TS2353: Object literal may only specify k
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
 !!! related TS6203 typeArgumentInference.ts:68:5: 'a9a' was also declared here.
     var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
+                                                                              ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type '{ a?: number | undefined; b?: string | undefined; }'.
     var a9b: { a?: number; b?: string; };
     
     // Generic call with multiple parameters of generic type passed arguments with multiple best common types
@@ -94,11 +116,11 @@ typeArgumentInference.ts(84,74): error TS2353: Object literal may only specify k
     var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
     var a9e: {};
         ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; }', but here has type '{}'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; } | undefined', but here has type '{}'.
 !!! related TS6203 typeArgumentInference.ts:82:5: 'a9e' was also declared here.
     var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
-                                                                             ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
+                                 ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'A92'.
     var a9f: A92;
     
     // Generic call with multiple parameters of generic type passed arguments with a single best common type
@@ -113,5 +135,8 @@ typeArgumentInference.ts(84,74): error TS2353: Object literal may only specify k
     // Generic call with multiple parameters of generic type where one argument is [] and the other is not 'any'
     var arr = someGenerics9([], null, undefined);
     var arr: any[];
+        ~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'never[] | null | undefined', but here has type 'any[]'.
+!!! related TS6203 typeArgumentInference.ts:97:5: 'arr' was also declared here.
     
     

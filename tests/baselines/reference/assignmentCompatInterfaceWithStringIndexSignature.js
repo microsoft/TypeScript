@@ -19,6 +19,7 @@ Biz(new Foo());
 
 
 //// [assignmentCompatInterfaceWithStringIndexSignature.js]
+"use strict";
 class Foo {
     Boz() { }
 }

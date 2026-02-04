@@ -4,4 +4,5 @@
 for (var of in of) { }
 
 //// [parserES5ForOfStatement19.js]
+"use strict";
 for (var of in of) { }

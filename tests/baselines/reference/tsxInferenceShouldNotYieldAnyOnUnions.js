@@ -30,6 +30,7 @@ const f2 = <ShouldInferFromData data={"1"} convert={n => "" + n} />;
 const f3 = <ShouldInferFromData data={2} convert={n => "" + n} />;
 
 //// [index.jsx]
+"use strict";
 function ShouldInferFromData(props) {
     return <div />;
 }

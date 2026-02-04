@@ -12,6 +12,7 @@ namespace c {
 }
 
 //// [internalAliasClass.js]
+"use strict";
 var a;
 (function (a) {
     class c {

@@ -8,6 +8,7 @@ with (x) {
 }
 
 //// [withStatements.js]
+"use strict";
 var x = 12;
 with (x) {
     name = 'twelve';

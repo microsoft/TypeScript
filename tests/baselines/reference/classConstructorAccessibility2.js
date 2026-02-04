@@ -48,6 +48,7 @@ var dc = new DerivedC(1);
 
 
 //// [classConstructorAccessibility2.js]
+"use strict";
 class BaseA {
     constructor(x) {
         this.x = x;

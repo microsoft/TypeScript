@@ -35,6 +35,7 @@ function foo5(x: number) {
 }
 
 //// [declFileTypeofFunction.js]
+"use strict";
 function f() { return undefined; }
 function g() { return undefined; }
 var b;

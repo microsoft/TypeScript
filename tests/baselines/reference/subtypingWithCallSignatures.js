@@ -14,6 +14,7 @@ namespace CallSignature {
 }
 
 //// [subtypingWithCallSignatures.js]
+"use strict";
 var CallSignature;
 (function (CallSignature) {
     var r = foo1((x) => 1); // ok because base returns void

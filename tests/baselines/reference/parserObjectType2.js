@@ -4,4 +4,5 @@
 var v: { x: number };
 
 //// [parserObjectType2.js]
+"use strict";
 var v;

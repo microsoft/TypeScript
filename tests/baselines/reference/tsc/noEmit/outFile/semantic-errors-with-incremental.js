@@ -292,6 +292,7 @@ Found 1 error in tsconfig.json[90m:3[0m
 }
 
 //// [/home/src/projects/outFile.js]
+"use strict";
 const a = "hello";
 
 

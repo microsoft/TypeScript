@@ -33,6 +33,7 @@ var A = /** @class */ (function () {
 }());
 exports.A = A;
 //// [exportStarFromEmptyModule_module2.js]
+"use strict";
 // empty
 //// [exportStarFromEmptyModule_module3.js]
 "use strict";

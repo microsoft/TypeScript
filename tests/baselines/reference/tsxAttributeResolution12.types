@@ -12,8 +12,8 @@ declare namespace JSX {
 	}
 	interface IntrinsicAttributes {
 		ref?: string;
->ref : string
->    : ^^^^^^
+>ref : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 	}
 }
 
@@ -23,8 +23,8 @@ declare class Component<P, S>  {
 >          : ^^^^^^^^^^^^^^^
 
 	constructor(props?: P, context?: any);
->props : P
->      : ^
+>props : P | undefined
+>      : ^^^^^^^^^^^^^
 >context : any
 >        : ^^^
 
@@ -37,22 +37,22 @@ declare class Component<P, S>  {
 >          : ^
 >props : P
 >      : ^
->callback : () => any
->         : ^^^^^^   
+>callback : (() => any) | undefined
+>         : ^^^^^^^   ^^^^^^^^^^^^^
 
 	setState(state: S, callback?: () => any): void;
 >setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
 >         : ^^^ ^^                             ^^        ^^^         ^^^    ^^^     ^^ ^^        ^^^         ^^^    ^^^
 >state : S
 >      : ^
->callback : () => any
->         : ^^^^^^   
+>callback : (() => any) | undefined
+>         : ^^^^^^^   ^^^^^^^^^^^^^
 
 	forceUpdate(callBack?: () => any): void;
 >forceUpdate : (callBack?: () => any) => void
 >            : ^        ^^^         ^^^^^    
->callBack : () => any
->         : ^^^^^^   
+>callBack : (() => any) | undefined
+>         : ^^^^^^^   ^^^^^^^^^^^^^
 
 	render(): JSX.Element;
 >render : () => JSX.Element
@@ -76,8 +76,8 @@ declare class Component<P, S>  {
 
 interface ComponentClass<P> {
 	new (props?: P, context?: any): Component<P, any>;
->props : P
->      : ^
+>props : P | undefined
+>      : ^^^^^^^^^^^^^
 >context : any
 >        : ^^^
 }

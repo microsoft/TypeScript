@@ -5,4 +5,5 @@ module.exports = 1;
 
 
 //// [a.js]
+"use strict";
 module.exports = 1;

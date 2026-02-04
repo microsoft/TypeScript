@@ -4,5 +4,6 @@
 a--.toString()
 
 //// [parserMemberAccessAfterPostfixExpression1.js]
+"use strict";
 a--;
 toString();

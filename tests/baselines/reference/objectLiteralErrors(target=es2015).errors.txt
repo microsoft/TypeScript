@@ -71,12 +71,13 @@ objectLiteralErrors.ts(39,13): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(39,46): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(39,46): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(43,22): error TS2322: Type 'number' is not assignable to type 'string'.
+objectLiteralErrors.ts(44,30): error TS2322: Type 'undefined' is not assignable to type 'number'.
 objectLiteralErrors.ts(48,7): error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
 objectLiteralErrors.ts(49,7): error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
 objectLiteralErrors.ts(50,5): error TS18016: Private identifiers are not allowed outside class bodies.
 
 
-==== objectLiteralErrors.ts (76 errors) ====
+==== objectLiteralErrors.ts (77 errors) ====
     // Multiple properties with the same name
     var e1 = { a: 0, a: 0 };
                      ~
@@ -267,6 +268,8 @@ objectLiteralErrors.ts(50,5): error TS18016: Private identifiers are not allowed
                          ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
+                                 ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'number'.
     
     // did you mean colon errors
     var h1 = {

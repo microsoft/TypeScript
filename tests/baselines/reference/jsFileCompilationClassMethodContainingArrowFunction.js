@@ -9,6 +9,7 @@ class c {
 
 
 //// [out.js]
+"use strict";
 class c {
     method(a) {
         let x = a => this.method(a);

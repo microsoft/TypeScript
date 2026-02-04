@@ -6,5 +6,6 @@ var v: string;
 for (v of union) { }
 
 //// [ES5For-ofTypeCheck11.js]
+"use strict";
 var v;
 for (v of union) { }

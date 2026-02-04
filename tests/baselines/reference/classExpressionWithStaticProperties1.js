@@ -8,6 +8,7 @@ var v = class C {
 };
 
 //// [classExpressionWithStaticProperties1.js]
+"use strict";
 var _a;
 var v = (_a = class C {
     },

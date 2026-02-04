@@ -39,6 +39,7 @@ namespace Foo.Bar {
 }
 
 //// [sourceMapValidationClasses.js]
+"use strict";
 var Foo;
 (function (Foo) {
     var Bar;

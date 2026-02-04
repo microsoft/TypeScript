@@ -30,6 +30,7 @@ function g2<
 
 
 //// [genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.js]
+"use strict";
 function g(a2, x) {
     x = a2;
 }

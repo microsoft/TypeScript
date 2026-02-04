@@ -6,4 +6,5 @@ var x = function () { }
 
 
 //// [parserNoASIOnCallAfterFunctionExpression1.js]
+"use strict";
 var x = function () { }(window).foo;

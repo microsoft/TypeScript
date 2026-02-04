@@ -10,6 +10,7 @@ var v = {
 
 
 //// [computedPropertyNamesDeclarationEmit6_ES5.js]
+"use strict";
 var _a;
 var v = (_a = {},
     _a[-1] = {},

@@ -1,23 +1,34 @@
+deleteOperatorWithNumberType.ts(8,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+deleteOperatorWithNumberType.ts(18,31): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 deleteOperatorWithNumberType.ts(18,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithNumberType.ts(19,31): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 deleteOperatorWithNumberType.ts(19,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(22,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(23,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(24,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithNumberType.ts(27,31): error TS2790: The operand of a 'delete' operator must be optional.
+deleteOperatorWithNumberType.ts(28,31): error TS2790: The operand of a 'delete' operator must be optional.
 deleteOperatorWithNumberType.ts(30,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(31,32): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(32,33): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(35,32): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithNumberType.ts(35,39): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 deleteOperatorWithNumberType.ts(35,39): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(36,32): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(36,39): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(36,47): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(39,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithNumberType.ts(40,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 deleteOperatorWithNumberType.ts(40,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithNumberType.ts(41,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 deleteOperatorWithNumberType.ts(41,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(42,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithNumberType.ts(43,8): error TS2790: The operand of a 'delete' operator must be optional.
+deleteOperatorWithNumberType.ts(44,8): error TS2790: The operand of a 'delete' operator must be optional.
+deleteOperatorWithNumberType.ts(45,8): error TS2790: The operand of a 'delete' operator must be optional.
 
 
-==== deleteOperatorWithNumberType.ts (17 errors) ====
+==== deleteOperatorWithNumberType.ts (28 errors) ====
     // delete  operator on number type
     declare var NUMBER: number;
     var NUMBER1: number[] = [1, 2];
@@ -26,6 +37,8 @@ deleteOperatorWithNumberType.ts(42,8): error TS2703: The operand of a 'delete' o
     
     class A {
         public a: number;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
         static foo() { return 1; }
     }
     namespace M {
@@ -37,8 +50,12 @@ deleteOperatorWithNumberType.ts(42,8): error TS2703: The operand of a 'delete' o
     // number type var
     var ResultIsBoolean1 = delete NUMBER;
                                   ~~~~~~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
+                                  ~~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     var ResultIsBoolean2 = delete NUMBER1;
+                                  ~~~~~~~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
                                   ~~~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     
@@ -55,7 +72,11 @@ deleteOperatorWithNumberType.ts(42,8): error TS2703: The operand of a 'delete' o
     
     // number type expressions
     var ResultIsBoolean6 = delete objA.a;
+                                  ~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
     var ResultIsBoolean7 = delete M.n;
+                                  ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
     var ResultIsBoolean8 = delete NUMBER1[0];
     var ResultIsBoolean9 = delete foo();
                                   ~~~~~
@@ -72,6 +93,8 @@ deleteOperatorWithNumberType.ts(42,8): error TS2703: The operand of a 'delete' o
                                    ~~~~~~~~~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
                                           ~~~~~~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
+                                          ~~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     var ResultIsBoolean13 = delete delete delete (NUMBER + NUMBER);
                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -87,13 +110,23 @@ deleteOperatorWithNumberType.ts(42,8): error TS2703: The operand of a 'delete' o
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     delete NUMBER;
            ~~~~~~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
+           ~~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     delete NUMBER1;
+           ~~~~~~~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
            ~~~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     delete foo();
            ~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     delete objA.a;
+           ~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
     delete M.n;
+           ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
     delete objA.a, M.n;
+           ~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.

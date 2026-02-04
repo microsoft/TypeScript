@@ -6,5 +6,6 @@ let xx: { a, b }  = { a: 1, ...x, z: 3 } // error for 'z', no error for 'extra'
 
 
 //// [objectLiteralFreshnessWithSpread.js]
+"use strict";
 let x = { b: 1, extra: 2 };
 let xx = Object.assign(Object.assign({ a: 1 }, x), { z: 3 }); // error for 'z', no error for 'extra'

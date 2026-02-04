@@ -7,6 +7,7 @@ function bar(a = false) {
 }
 
 //// [functionWithDefaultParameterWithNoStatements7.js]
+"use strict";
 function foo(a = false) { }
 function bar(a = false) {
 }

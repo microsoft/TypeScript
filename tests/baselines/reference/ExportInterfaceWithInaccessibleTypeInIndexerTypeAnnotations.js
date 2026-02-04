@@ -18,3 +18,4 @@ namespace A {
 
 
 //// [ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.js]
+"use strict";

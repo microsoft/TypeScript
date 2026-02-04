@@ -21,6 +21,7 @@ class D extends C {
 }
 
 //// [underscoreThisInDerivedClass02.js]
+"use strict";
 // @target es5
 // Original test intent:
 // Errors on '_this' should be reported in derived constructors,

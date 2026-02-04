@@ -11,5 +11,6 @@ class Bar extends M.Foo {
 
 
 //// [es6ClassTest7.js]
+"use strict";
 class Bar extends M.Foo {
 }

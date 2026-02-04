@@ -71,6 +71,7 @@ var r1h5 = e ** E.b;
 var r1h6 = f ** E.b
 
 //// [exponentiationOperatorWithInvalidOperands.js]
+"use strict";
 // these operators require their operands to be of type Any, the Number primitive type, or
 // an enum type
 var E;

@@ -357,6 +357,7 @@ var x355 = function(n: (s: Base[]) => any) { }; x355(n => { var n: Base[]; retur
 var x356 = function(n: Genric<Base>) { }; x356({ func: n => { return [d1, d2]; } });
 
 //// [generatedContextualTyping.js]
+"use strict";
 class Base {
 }
 class Derived1 extends Base {

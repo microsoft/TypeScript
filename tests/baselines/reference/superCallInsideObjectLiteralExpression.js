@@ -15,6 +15,7 @@ class B extends A {
 }
 
 //// [superCallInsideObjectLiteralExpression.js]
+"use strict";
 class A {
     foo() {
     }

@@ -69,6 +69,7 @@ function uniqueID_54790_3(id: string | number, seenIDs: object) {
 
 
 //// [controlFlowInOperator.js]
+"use strict";
 const a = 'a';
 const b = 'b';
 const d = 'd';

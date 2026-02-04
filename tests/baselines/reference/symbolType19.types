@@ -29,6 +29,6 @@ if (typeof x === "number") {
 }
 else {
     x;
->x : symbol
->  : ^^^^^^
+>x : symbol | E
+>  : ^^^^^^^^^^
 }

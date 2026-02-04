@@ -40,6 +40,7 @@ for(;;) {
 }
 
 //// [invalidForBreakStatements.js]
+"use strict";
 // All errors
 // naked break not allowed
 break;

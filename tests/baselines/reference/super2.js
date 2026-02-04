@@ -53,6 +53,7 @@ results1.x() + results1.y() + results2.y();
 
 
 //// [super2.js]
+"use strict";
 // Case 5
 class Base5 {
     x() {

@@ -11,6 +11,7 @@ var /*3*/point = makePoint(2);
 point./*2*/x = 30;
 
 //// [declFileObjectLiteralWithOnlySetter.js]
+"use strict";
 function makePoint(x) {
     return {
         b: 10,

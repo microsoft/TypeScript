@@ -10,6 +10,7 @@ a.test("bar", null); // ok, null is assignable to number | null | undefined
 
 
 //// [optionalParameterRetainsNull.js]
+"use strict";
 let a = {
     test(a, b) { }
 };

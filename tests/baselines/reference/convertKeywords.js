@@ -7,4 +7,5 @@ var abstract;
 
 
 //// [convertKeywords.js]
+"use strict";
 var abstract;

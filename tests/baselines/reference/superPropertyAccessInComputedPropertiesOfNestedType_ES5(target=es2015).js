@@ -17,6 +17,7 @@ class B extends A {
 }
 
 //// [superPropertyAccessInComputedPropertiesOfNestedType_ES5.js]
+"use strict";
 class A {
     foo() { return 1; }
 }

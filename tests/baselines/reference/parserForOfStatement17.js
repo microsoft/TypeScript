@@ -4,4 +4,5 @@
 for (var of; ;) { }
 
 //// [parserForOfStatement17.js]
+"use strict";
 for (var of;;) { }

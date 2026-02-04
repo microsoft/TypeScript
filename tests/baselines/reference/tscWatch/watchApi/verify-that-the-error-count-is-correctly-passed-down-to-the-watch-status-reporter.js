@@ -55,6 +55,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/index.js]
+"use strict";
 let compiler = new Compiler();
 for (let i = 0; j < 5; i++) { }
 

@@ -29,13 +29,19 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96ma.ts[0m:[93m2[0m:[93m1[0m - [91merror[0m[90m TS2531: [0mObject is possibly 'null'.
+
+[7m2[0m foo().hello
+[7m [0m [91m~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/a.js]
+"use strict";
 foo().hello;
 
 
@@ -128,8 +134,6 @@ Program files::
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-/user/username/projects/myproject/a.ts
 
 No shapes updated in the builder::
 
@@ -142,7 +146,8 @@ Input::
 {
   "compilerOptions": {
     "strict": true,
-    "alwaysStrict": false
+    "alwaysStrict": false,
+    "ignoreDeprecations": "6.0"
   }
 }
 
@@ -168,6 +173,10 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/a.js]
+foo().hello;
+
+
 
 
 Program root files: [
@@ -176,6 +185,7 @@ Program root files: [
 Program options: {
   "strict": true,
   "alwaysStrict": false,
+  "ignoreDeprecations": "6.0",
   "watch": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
@@ -185,8 +195,6 @@ Program files::
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-/user/username/projects/myproject/a.ts
 
 No shapes updated in the builder::
 
@@ -213,8 +221,18 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96ma.ts[0m:[93m2[0m:[93m1[0m - [91merror[0m[90m TS2531: [0mObject is possibly 'null'.
 
+[7m2[0m foo().hello
+[7m [0m [91m~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+foo().hello;
 
 
 
@@ -232,8 +250,6 @@ Program files::
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-/user/username/projects/myproject/a.ts
 
 No shapes updated in the builder::
 

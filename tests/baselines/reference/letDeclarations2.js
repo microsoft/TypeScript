@@ -7,6 +7,7 @@ namespace M {
 }
 
 //// [letDeclarations2.js]
+"use strict";
 var M;
 (function (M) {
     let l1 = "s";

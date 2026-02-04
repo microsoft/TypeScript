@@ -13,6 +13,7 @@ var e: E = new E(1);
 
 
 //// [extendConstructSignatureInInterface.js]
+"use strict";
 var CStatic;
 class E extends CStatic {
 }

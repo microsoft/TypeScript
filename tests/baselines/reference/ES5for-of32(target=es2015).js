@@ -13,6 +13,7 @@ for (let num of array) {
 }
 
 //// [ES5for-of32.js]
+"use strict";
 var array = [1, 2, 3];
 var sum = 0;
 for (let num of array) {

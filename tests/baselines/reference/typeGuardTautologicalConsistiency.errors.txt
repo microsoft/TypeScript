@@ -1,0 +1,21 @@
+typeGuardTautologicalConsistiency.ts(3,12): error TS2454: Variable 'stringOrNumber' is used before being assigned.
+typeGuardTautologicalConsistiency.ts(9,12): error TS2454: Variable 'stringOrNumber' is used before being assigned.
+
+
+==== typeGuardTautologicalConsistiency.ts (2 errors) ====
+    let stringOrNumber: string | number;
+    
+    if (typeof stringOrNumber === "number") {
+               ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'stringOrNumber' is used before being assigned.
+        if (typeof stringOrNumber !== "number") {
+            stringOrNumber;
+        }
+    }
+    
+    if (typeof stringOrNumber === "number" && typeof stringOrNumber !== "number") {
+               ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'stringOrNumber' is used before being assigned.
+        stringOrNumber;
+    }
+    

@@ -11,6 +11,7 @@ class Lion extends Animal {
 
 
 //// [propertyOverridesAccessors4.js]
+"use strict";
 class Lion extends Animal {
     constructor() {
         super(...arguments);

@@ -10,6 +10,7 @@ s & 0;
 0 | s;
 
 //// [symbolType10.js]
+"use strict";
 var s = Symbol.for("bitwise");
 s & s;
 s | s;

@@ -59,6 +59,7 @@ export {};
 
 
 //// [/home/src/projects/a/b/globalFile3.js]
+"use strict";
 
 
 //// [/home/src/projects/a/b/moduleFile2.js]

@@ -10,6 +10,7 @@ declare module "bar" {
 }
 
 //// [es5ExportDefaultFunctionDeclaration4.js]
+"use strict";
 
 
 //// [es5ExportDefaultFunctionDeclaration4.d.ts]

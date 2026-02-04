@@ -12,6 +12,7 @@ namespace ModuleEnum {
 }
 
 //// [this_inside-enum-should-not-be-allowed.js]
+"use strict";
 var TopLevelEnum;
 (function (TopLevelEnum) {
     TopLevelEnum[TopLevelEnum["ThisWasAllowedButShouldNotBe"] = this] = "ThisWasAllowedButShouldNotBe"; // Should not be allowed

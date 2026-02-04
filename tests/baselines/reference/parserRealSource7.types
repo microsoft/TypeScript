@@ -46,8 +46,8 @@ namespace TypeScript {
 >                     : ^^^
 >bases.members : any
 >              : ^^^
->bases : ASTList
->      : ^^^^^^^
+>bases : any
+>      : ^^^
 >members : any
 >        : ^^^
 >length : any
@@ -96,8 +96,8 @@ namespace TypeScript {
 >                 : ^^^
 >bases.members : any
 >              : ^^^
->bases : ASTList
->      : ^^^^^^^
+>bases : any
+>      : ^^^
 >members : any
 >        : ^^^
 >i : number
@@ -436,16 +436,16 @@ namespace TypeScript {
 >             : ^^^
 
         signature.parameters = [];
->signature.parameters = [] : undefined[]
->                          : ^^^^^^^^^^^
+>signature.parameters = [] : never[]
+>                          : ^^^^^^^
 >signature.parameters : any
 >                     : ^^^
 >signature : any
 >          : ^^^
 >parameters : any
 >           : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
         type.construct = new SignatureGroup();
 >type.construct = new SignatureGroup() : any
@@ -887,12 +887,12 @@ namespace TypeScript {
 >                             : ^^^
 >context.members.lookup : any
 >                       : ^^^
->context.members : IHashTable
->                : ^^^^^^^^^^
+>context.members : any
+>                : ^^^
 >context : IAliasScopeContext
 >        : ^^^^^^^^^^^^^^^^^^
->members : IHashTable
->        : ^^^^^^^^^^
+>members : any
+>        : ^^^
 >lookup : any
 >       : ^^^
 >name : any
@@ -2007,8 +2007,8 @@ namespace TypeScript {
         }
         else {
             if (symbol && symbol.declAST && symbol.declAST.nodeType != NodeType.ModuleDeclaration) {
->symbol && symbol.declAST && symbol.declAST.nodeType != NodeType.ModuleDeclaration : boolean
->                                                                                  : ^^^^^^^
+>symbol && symbol.declAST && symbol.declAST.nodeType != NodeType.ModuleDeclaration : any
+>                                                                                  : ^^^
 >symbol && symbol.declAST : any
 >                         : ^^^
 >symbol : any
@@ -2791,8 +2791,8 @@ namespace TypeScript {
             if (valTypeSymbol &&
 >valTypeSymbol &&                valTypeSymbol.isType() &&                valTypeSymbol.declAST &&                valTypeSymbol.declAST.nodeType == NodeType.FuncDecl &&                (<FuncDecl>valTypeSymbol.declAST).isSignature() : any
 >                                                                                                                                                                                                                                       : ^^^
->valTypeSymbol &&                valTypeSymbol.isType() &&                valTypeSymbol.declAST &&                valTypeSymbol.declAST.nodeType == NodeType.FuncDecl : boolean
->                                                                                                                                                                     : ^^^^^^^
+>valTypeSymbol &&                valTypeSymbol.isType() &&                valTypeSymbol.declAST &&                valTypeSymbol.declAST.nodeType == NodeType.FuncDecl : any
+>                                                                                                                                                                     : ^^^
 >valTypeSymbol &&                valTypeSymbol.isType() &&                valTypeSymbol.declAST : any
 >                                                                                               : ^^^
 >valTypeSymbol &&                valTypeSymbol.isType() : any
@@ -2974,10 +2974,10 @@ namespace TypeScript {
         }
         
         if (typeSymbol && !foundValSymbol && (typeSymbol.declAST != classDecl)) {
->typeSymbol && !foundValSymbol && (typeSymbol.declAST != classDecl) : boolean
->                                                                   : ^^^^^^^
->typeSymbol && !foundValSymbol : boolean
->                              : ^^^^^^^
+>typeSymbol && !foundValSymbol && (typeSymbol.declAST != classDecl) : any
+>                                                                   : ^^^
+>typeSymbol && !foundValSymbol : any
+>                              : ^^^
 >typeSymbol : TypeSymbol
 >           : ^^^^^^^^^^
 >!foundValSymbol : boolean
@@ -2990,8 +2990,8 @@ namespace TypeScript {
 >                                : ^^^^^^^
 >typeSymbol.declAST : any
 >                   : ^^^
->typeSymbol : TypeSymbol
->           : ^^^^^^^^^^
+>typeSymbol : any
+>           : ^^^
 >declAST : any
 >        : ^^^
 >classDecl : ClassDeclaration
@@ -3714,8 +3714,8 @@ namespace TypeScript {
 >                : ^^^
 
             if (typeSymbol && typeSymbol.declAST && typeSymbol.declAST.type && typeSymbol.declAST.type.call && !(<FuncDecl>typeSymbol.declAST).isOverload) {
->typeSymbol && typeSymbol.declAST && typeSymbol.declAST.type && typeSymbol.declAST.type.call && !(<FuncDecl>typeSymbol.declAST).isOverload : boolean
->                                                                                                                                          : ^^^^^^^
+>typeSymbol && typeSymbol.declAST && typeSymbol.declAST.type && typeSymbol.declAST.type.call && !(<FuncDecl>typeSymbol.declAST).isOverload : any
+>                                                                                                                                          : ^^^
 >typeSymbol && typeSymbol.declAST && typeSymbol.declAST.type && typeSymbol.declAST.type.call : any
 >                                                                                            : ^^^
 >typeSymbol && typeSymbol.declAST && typeSymbol.declAST.type : any
@@ -3726,16 +3726,16 @@ namespace TypeScript {
 >           : ^^^^^^^^^^
 >typeSymbol.declAST : any
 >                   : ^^^
->typeSymbol : TypeSymbol
->           : ^^^^^^^^^^
+>typeSymbol : any
+>           : ^^^
 >declAST : any
 >        : ^^^
 >typeSymbol.declAST.type : any
 >                        : ^^^
 >typeSymbol.declAST : any
 >                   : ^^^
->typeSymbol : TypeSymbol
->           : ^^^^^^^^^^
+>typeSymbol : any
+>           : ^^^
 >declAST : any
 >        : ^^^
 >type : any
@@ -3746,8 +3746,8 @@ namespace TypeScript {
 >                        : ^^^
 >typeSymbol.declAST : any
 >                   : ^^^
->typeSymbol : TypeSymbol
->           : ^^^^^^^^^^
+>typeSymbol : any
+>           : ^^^
 >declAST : any
 >        : ^^^
 >type : any
@@ -3764,8 +3764,8 @@ namespace TypeScript {
 >                             : ^^^^^^^^
 >typeSymbol.declAST : any
 >                   : ^^^
->typeSymbol : TypeSymbol
->           : ^^^^^^^^^^
+>typeSymbol : any
+>           : ^^^
 >declAST : any
 >        : ^^^
 >isOverload : any
@@ -3790,14 +3790,14 @@ namespace TypeScript {
 >                    : ^^^
 >typeSymbol.declAST : any
 >                   : ^^^
->typeSymbol : TypeSymbol
->           : ^^^^^^^^^^
+>typeSymbol : any
+>           : ^^^
 >declAST : any
 >        : ^^^
 >typeSymbol.name : any
 >                : ^^^
->typeSymbol : TypeSymbol
->           : ^^^^^^^^^^
+>typeSymbol : any
+>           : ^^^
 >name : any
 >     : ^^^
             }
@@ -4997,16 +4997,16 @@ namespace TypeScript {
 >            : ^^^^^^^^^^^
 
                     varDecl.sym = existingSym;
->varDecl.sym = existingSym : FieldSymbol
->                          : ^^^^^^^^^^^
+>varDecl.sym = existingSym : any
+>                          : ^^^
 >varDecl.sym : any
 >            : ^^^
 >varDecl : VarDecl
 >        : ^^^^^^^
 >sym : any
 >    : ^^^
->existingSym : FieldSymbol
->            : ^^^^^^^^^^^
+>existingSym : any
+>            : ^^^
 
                     return false;
 >false : false
@@ -5960,12 +5960,12 @@ namespace TypeScript {
         // That way, we'll set the type during scope assignment, and can be sure that the
         // function will be placed in the constructor-local scope
         if (!funcDecl.isConstructor &&
->!funcDecl.isConstructor &&            containerSym &&            containerSym.declAST &&            containerSym.declAST.nodeType == NodeType.FuncDecl &&            (<FuncDecl>containerSym.declAST).isConstructor &&            !funcDecl.isMethod() : boolean
->                                                                                                                                                                                                                                                       : ^^^^^^^
+>!funcDecl.isConstructor &&            containerSym &&            containerSym.declAST &&            containerSym.declAST.nodeType == NodeType.FuncDecl &&            (<FuncDecl>containerSym.declAST).isConstructor &&            !funcDecl.isMethod() : any
+>                                                                                                                                                                                                                                                       : ^^^
 >!funcDecl.isConstructor &&            containerSym &&            containerSym.declAST &&            containerSym.declAST.nodeType == NodeType.FuncDecl &&            (<FuncDecl>containerSym.declAST).isConstructor : any
 >                                                                                                                                                                                                                    : ^^^
->!funcDecl.isConstructor &&            containerSym &&            containerSym.declAST &&            containerSym.declAST.nodeType == NodeType.FuncDecl : boolean
->                                                                                                                                                       : ^^^^^^^
+>!funcDecl.isConstructor &&            containerSym &&            containerSym.declAST &&            containerSym.declAST.nodeType == NodeType.FuncDecl : any
+>                                                                                                                                                       : ^^^
 >!funcDecl.isConstructor &&            containerSym &&            containerSym.declAST : any
 >                                                                                      : ^^^
 >!funcDecl.isConstructor &&            containerSym : any
@@ -5986,8 +5986,8 @@ namespace TypeScript {
             containerSym.declAST &&
 >containerSym.declAST : any
 >                     : ^^^
->containerSym : TypeSymbol
->             : ^^^^^^^^^^
+>containerSym : any
+>             : ^^^
 >declAST : any
 >        : ^^^
 
@@ -5998,8 +5998,8 @@ namespace TypeScript {
 >                              : ^^^
 >containerSym.declAST : any
 >                     : ^^^
->containerSym : TypeSymbol
->             : ^^^^^^^^^^
+>containerSym : any
+>             : ^^^
 >declAST : any
 >        : ^^^
 >nodeType : any
@@ -6020,8 +6020,8 @@ namespace TypeScript {
 >                               : ^^^^^^^^
 >containerSym.declAST : any
 >                     : ^^^
->containerSym : TypeSymbol
->             : ^^^^^^^^^^
+>containerSym : any
+>             : ^^^
 >declAST : any
 >        : ^^^
 >isConstructor : any
@@ -6079,8 +6079,8 @@ namespace TypeScript {
 
             // If the function is static, search in the class type's
             if (nameText && nameText != "__missing") {
->nameText && nameText != "__missing" : boolean
->                                    : ^^^^^^^
+>nameText && nameText != "__missing" : any
+>                                    : ^^^
 >nameText : any
 >         : ^^^
 >nameText != "__missing" : boolean
@@ -6233,8 +6233,8 @@ namespace TypeScript {
 >        : ^^^
 >fgSym.flags : any
 >            : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >flags : any
 >      : ^^^
 >SymbolFlags.Ambient : any
@@ -6502,8 +6502,8 @@ namespace TypeScript {
             }
          
             if (funcDecl.isSpecialFn() && !isStatic) {
->funcDecl.isSpecialFn() && !isStatic : boolean
->                                    : ^^^^^^^
+>funcDecl.isSpecialFn() && !isStatic : any
+>                                    : ^^^
 >funcDecl.isSpecialFn() : any
 >                       : ^^^
 >funcDecl.isSpecialFn : any
@@ -6711,8 +6711,8 @@ namespace TypeScript {
 >                       : ^^^
 >fgSym.declAST : any
 >              : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >declAST : any
 >        : ^^^
 >nodeType : any
@@ -6735,8 +6735,8 @@ namespace TypeScript {
 >                        : ^^^^^^^^
 >fgSym.declAST : any
 >              : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >declAST : any
 >        : ^^^
 >isAccessor : any
@@ -6753,8 +6753,8 @@ namespace TypeScript {
 >                        : ^^^^^^^^
 >fgSym.declAST : any
 >              : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >declAST : any
 >        : ^^^
 >isSignature : any
@@ -6779,18 +6779,18 @@ namespace TypeScript {
 
             // REVIEW: Move this check into the typecheck phase?  It's only being run over properties...
             if (fgSym &&
->fgSym &&                !fgSym.isAccessor() &&                fgSym.type &&                fgSym.type.construct &&                fgSym.type.construct.signatures != [] &&                (fgSym.type.construct.signatures[0].declAST == null ||                    !hasFlag(fgSym.type.construct.signatures[0].declAST.fncFlags, FncFlags.Ambient)) &&                !funcDecl.isConstructor : boolean
->                                                                                                                                                                                                                                                                                                                                                                                               : ^^^^^^^
->fgSym &&                !fgSym.isAccessor() &&                fgSym.type &&                fgSym.type.construct &&                fgSym.type.construct.signatures != [] &&                (fgSym.type.construct.signatures[0].declAST == null ||                    !hasFlag(fgSym.type.construct.signatures[0].declAST.fncFlags, FncFlags.Ambient)) : boolean
->                                                                                                                                                                                                                                                                                                                                                     : ^^^^^^^
->fgSym &&                !fgSym.isAccessor() &&                fgSym.type &&                fgSym.type.construct &&                fgSym.type.construct.signatures != [] : boolean
->                                                                                                                                                                        : ^^^^^^^
+>fgSym &&                !fgSym.isAccessor() &&                fgSym.type &&                fgSym.type.construct &&                fgSym.type.construct.signatures != [] &&                (fgSym.type.construct.signatures[0].declAST == null ||                    !hasFlag(fgSym.type.construct.signatures[0].declAST.fncFlags, FncFlags.Ambient)) &&                !funcDecl.isConstructor : any
+>                                                                                                                                                                                                                                                                                                                                                                                               : ^^^
+>fgSym &&                !fgSym.isAccessor() &&                fgSym.type &&                fgSym.type.construct &&                fgSym.type.construct.signatures != [] &&                (fgSym.type.construct.signatures[0].declAST == null ||                    !hasFlag(fgSym.type.construct.signatures[0].declAST.fncFlags, FncFlags.Ambient)) : any
+>                                                                                                                                                                                                                                                                                                                                                     : ^^^
+>fgSym &&                !fgSym.isAccessor() &&                fgSym.type &&                fgSym.type.construct &&                fgSym.type.construct.signatures != [] : any
+>                                                                                                                                                                        : ^^^
 >fgSym &&                !fgSym.isAccessor() &&                fgSym.type &&                fgSym.type.construct : any
 >                                                                                                                : ^^^
 >fgSym &&                !fgSym.isAccessor() &&                fgSym.type : any
 >                                                                         : ^^^
->fgSym &&                !fgSym.isAccessor() : boolean
->                                            : ^^^^^^^
+>fgSym &&                !fgSym.isAccessor() : any
+>                                            : ^^^
 >fgSym : TypeSymbol
 >      : ^^^^^^^^^^
 
@@ -6801,16 +6801,16 @@ namespace TypeScript {
 >                   : ^^^
 >fgSym.isAccessor : any
 >                 : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >isAccessor : any
 >           : ^^^
 
                 fgSym.type &&
 >fgSym.type : any
 >           : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >type : any
 >     : ^^^
 
@@ -6819,8 +6819,8 @@ namespace TypeScript {
 >                     : ^^^
 >fgSym.type : any
 >           : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >type : any
 >     : ^^^
 >construct : any
@@ -6835,16 +6835,16 @@ namespace TypeScript {
 >                     : ^^^
 >fgSym.type : any
 >           : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >type : any
 >     : ^^^
 >construct : any
 >          : ^^^
 >signatures : any
 >           : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
                 (fgSym.type.construct.signatures[0].declAST == null ||
 >(fgSym.type.construct.signatures[0].declAST == null ||                    !hasFlag(fgSym.type.construct.signatures[0].declAST.fncFlags, FncFlags.Ambient)) : boolean
@@ -6863,8 +6863,8 @@ namespace TypeScript {
 >                     : ^^^
 >fgSym.type : any
 >           : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >type : any
 >     : ^^^
 >construct : any
@@ -6895,8 +6895,8 @@ namespace TypeScript {
 >                     : ^^^
 >fgSym.type : any
 >           : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >type : any
 >     : ^^^
 >construct : any
@@ -6950,14 +6950,14 @@ namespace TypeScript {
             }
 
             if (fgSym && !(fgSym.kind() == SymbolKind.Type) && funcDecl.isMethod() && !funcDecl.isAccessor() && !funcDecl.isConstructor) {
->fgSym && !(fgSym.kind() == SymbolKind.Type) && funcDecl.isMethod() && !funcDecl.isAccessor() && !funcDecl.isConstructor : boolean
->                                                                                                                        : ^^^^^^^
->fgSym && !(fgSym.kind() == SymbolKind.Type) && funcDecl.isMethod() && !funcDecl.isAccessor() : boolean
->                                                                                             : ^^^^^^^
+>fgSym && !(fgSym.kind() == SymbolKind.Type) && funcDecl.isMethod() && !funcDecl.isAccessor() && !funcDecl.isConstructor : any
+>                                                                                                                        : ^^^
+>fgSym && !(fgSym.kind() == SymbolKind.Type) && funcDecl.isMethod() && !funcDecl.isAccessor() : any
+>                                                                                             : ^^^
 >fgSym && !(fgSym.kind() == SymbolKind.Type) && funcDecl.isMethod() : any
 >                                                                   : ^^^
->fgSym && !(fgSym.kind() == SymbolKind.Type) : boolean
->                                            : ^^^^^^^
+>fgSym && !(fgSym.kind() == SymbolKind.Type) : any
+>                                            : ^^^
 >fgSym : TypeSymbol
 >      : ^^^^^^^^^^
 >!(fgSym.kind() == SymbolKind.Type) : boolean
@@ -6970,8 +6970,8 @@ namespace TypeScript {
 >             : ^^^
 >fgSym.kind : any
 >           : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >kind : any
 >     : ^^^
 >SymbolKind.Type : any
@@ -7050,8 +7050,8 @@ namespace TypeScript {
 >                                     : ^^^
 >fgSym.type : any
 >           : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >type : any
 >     : ^^^
 >context.checker.anyType : any
@@ -7115,8 +7115,8 @@ namespace TypeScript {
 >                       : ^^^
 >fgSym.declAST : any
 >              : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >declAST : any
 >        : ^^^
 >nodeType : any
@@ -7145,8 +7145,8 @@ namespace TypeScript {
 >                   : ^^^
 >fgSym.isAccessor : any
 >                 : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >isAccessor : any
 >           : ^^^
 
@@ -7286,10 +7286,10 @@ namespace TypeScript {
             if (fgSym && !fgSym.isAccessor() && fgSym.kind() == SymbolKind.Type && fgSym.type.call) {
 >fgSym && !fgSym.isAccessor() && fgSym.kind() == SymbolKind.Type && fgSym.type.call : any
 >                                                                                   : ^^^
->fgSym && !fgSym.isAccessor() && fgSym.kind() == SymbolKind.Type : boolean
->                                                                : ^^^^^^^
->fgSym && !fgSym.isAccessor() : boolean
->                             : ^^^^^^^
+>fgSym && !fgSym.isAccessor() && fgSym.kind() == SymbolKind.Type : any
+>                                                                : ^^^
+>fgSym && !fgSym.isAccessor() : any
+>                             : ^^^
 >fgSym : TypeSymbol
 >      : ^^^^^^^^^^
 >!fgSym.isAccessor() : boolean
@@ -7298,8 +7298,8 @@ namespace TypeScript {
 >                   : ^^^
 >fgSym.isAccessor : any
 >                 : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >isAccessor : any
 >           : ^^^
 >fgSym.kind() == SymbolKind.Type : boolean
@@ -7308,8 +7308,8 @@ namespace TypeScript {
 >             : ^^^
 >fgSym.kind : any
 >           : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >kind : any
 >     : ^^^
 >SymbolKind.Type : any
@@ -7322,8 +7322,8 @@ namespace TypeScript {
 >                : ^^^
 >fgSym.type : any
 >           : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >type : any
 >     : ^^^
 >call : any
@@ -7334,8 +7334,8 @@ namespace TypeScript {
 >                                    : ^^^^^^
 >fgSym.flags : any
 >            : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >flags : any
 >      : ^^^
 >SymbolFlags.Exported : any
@@ -7347,8 +7347,8 @@ namespace TypeScript {
             }
         }
         if (context.scopeChain.moduleDecl && !funcDecl.isSpecialFn()) {
->context.scopeChain.moduleDecl && !funcDecl.isSpecialFn() : boolean
->                                                         : ^^^^^^^
+>context.scopeChain.moduleDecl && !funcDecl.isSpecialFn() : any
+>                                                         : ^^^
 >context.scopeChain.moduleDecl : any
 >                              : ^^^
 >context.scopeChain : any
@@ -7436,8 +7436,8 @@ namespace TypeScript {
 >                                    : ^^^^^^
 >fgSym.flags : any
 >            : ^^^
->fgSym : TypeSymbol
->      : ^^^^^^^^^^
+>fgSym : any
+>      : ^^^
 >flags : any
 >      : ^^^
 >SymbolFlags.Optional : any

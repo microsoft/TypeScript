@@ -12,5 +12,6 @@ var x: X.Y.Z;
 var x2: X.Y;
 
 //// [namespaces1.js]
+"use strict";
 var x;
 var x2;

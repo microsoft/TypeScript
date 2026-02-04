@@ -8,6 +8,7 @@ function strange(x = a, y = b) {
 }
 
 //// [optionalParamReferencingOtherParams2.js]
+"use strict";
 var a = 1;
 function strange(x, y) {
     if (x === void 0) { x = a; }

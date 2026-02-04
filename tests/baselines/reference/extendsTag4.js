@@ -14,6 +14,7 @@ class A {
 
 
 //// [foo.js]
+"use strict";
 /**
  * @constructor
  */

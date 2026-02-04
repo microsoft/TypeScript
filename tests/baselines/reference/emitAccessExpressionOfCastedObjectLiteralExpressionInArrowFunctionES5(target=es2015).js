@@ -5,5 +5,6 @@
 (x) => ({ "1": "one", "2": "two" } as { [key: string]: string }).x;
 
 //// [emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.js]
+"use strict";
 (x) => ({ "1": "one", "2": "two" }[x]);
 (x) => ({ "1": "one", "2": "two" }.x);

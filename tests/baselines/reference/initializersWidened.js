@@ -27,6 +27,7 @@ var y5 = undefined || y2;
 var z5 = void 0 || y2;
 
 //// [initializersWidened.js]
+"use strict";
 // these are widened to any at the point of assignment
 var x1 = null;
 var y1 = undefined;

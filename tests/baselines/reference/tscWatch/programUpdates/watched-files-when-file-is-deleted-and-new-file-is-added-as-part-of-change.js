@@ -33,6 +33,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/username/workspaces/project/src/file1.js]
+"use strict";
 var a = 10;
 
 
@@ -102,6 +103,7 @@ Output::
 
 
 //// [/home/username/workspaces/project/src/file2.js]
+"use strict";
 var a = 10;
 
 

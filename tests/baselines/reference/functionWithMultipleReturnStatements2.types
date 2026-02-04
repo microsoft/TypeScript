@@ -5,8 +5,8 @@
 // no errors expected here
 
 function f1() {
->f1 : () => number
->   : ^^^^^^^^^^^^
+>f1 : () => 1 | null
+>   : ^^^^^^^^^^^^^^
 
     if (true) {
 >true : true
@@ -22,8 +22,8 @@ function f1() {
 }
 
 function f2() {
->f2 : () => 1 | 2
->   : ^^^^^^^^^^^
+>f2 : () => 1 | 2 | null
+>   : ^^^^^^^^^^^^^^^^^^
 
     if (true) {
 >true : true
@@ -46,8 +46,8 @@ function f2() {
 }
 
 function f4() {
->f4 : () => number
->   : ^^^^^^^^^^^^
+>f4 : () => 1 | undefined
+>   : ^^^^^^^^^^^^^^^^^^^
 
     try {
         return 1;
@@ -55,7 +55,8 @@ function f4() {
 >  : ^
     }
     catch (e) {
->e : any
+>e : unknown
+>  : ^^^^^^^
 
         return undefined;
 >undefined : undefined
@@ -84,8 +85,8 @@ function f5() {
 }
 
 function f6<T>(x: T) {
->f6 : <T>(x: T) => T
->   : ^ ^^ ^^ ^^^^^^
+>f6 : <T>(x: T) => T | null
+>   : ^ ^^ ^^ ^^^^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -115,16 +116,16 @@ var a: { x: number; y?: number };
 >  : ^^^^^      ^^^^^^      ^^^
 >x : number
 >  : ^^^^^^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 var b: { x: number; z?: number };
 >b : { x: number; z?: number; }
 >  : ^^^^^      ^^^^^^      ^^^
 >x : number
 >  : ^^^^^^
->z : number
->  : ^^^^^^
+>z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 // returns typeof a
 function f9() {

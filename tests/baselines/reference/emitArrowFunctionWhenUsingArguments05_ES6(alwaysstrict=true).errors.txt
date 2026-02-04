@@ -1,0 +1,9 @@
+emitArrowFunctionWhenUsingArguments05_ES6.ts(1,12): error TS1100: Invalid use of 'arguments' in strict mode.
+
+
+==== emitArrowFunctionWhenUsingArguments05_ES6.ts (1 errors) ====
+    function f(arguments) {
+               ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        var a = () => arguments;
+    }

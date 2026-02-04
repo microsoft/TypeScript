@@ -9,5 +9,6 @@ class A implements I {
 }
 
 //// [classImplementingInterfaceIndexer.js]
+"use strict";
 class A {
 }

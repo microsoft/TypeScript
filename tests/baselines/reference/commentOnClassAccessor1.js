@@ -9,6 +9,7 @@ class C {
 }
 
 //// [commentOnClassAccessor1.js]
+"use strict";
 class C {
     /**
      * @type {number}

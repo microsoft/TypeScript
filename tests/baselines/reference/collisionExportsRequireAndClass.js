@@ -65,6 +65,7 @@ define(["require", "exports"], function (require, exports) {
     })(m2 || (m2 = {}));
 });
 //// [collisionExportsRequireAndClass_globalFile.js]
+"use strict";
 class require {
 }
 class exports {

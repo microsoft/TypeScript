@@ -1,0 +1,29 @@
+recursiveTypeParameterReferenceError1.ts(6,9): error TS2454: Variable 'f' is used before being assigned.
+recursiveTypeParameterReferenceError1.ts(10,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+recursiveTypeParameterReferenceError1.ts(16,10): error TS2454: Variable 'f2' is used before being assigned.
+
+
+==== recursiveTypeParameterReferenceError1.ts (3 errors) ====
+    class X<T> { }
+    interface Foo<T> {
+        z: Foo<X<T>>; // error
+    }
+    var f: Foo<number>;
+    var r = f.z; 
+            ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    
+    
+    class C2<T> {
+        x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    interface Foo2<T> {
+        ofC4: C2<{ x: T }> // ok
+    }
+    var f2: Foo2<number>;
+    var r2 = f2.ofC4;
+             ~~
+!!! error TS2454: Variable 'f2' is used before being assigned.
+    

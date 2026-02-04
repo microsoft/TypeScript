@@ -41,6 +41,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
+"use strict";
 /// <reference path="commonFile2.ts"/>
 let x = y;
 
@@ -130,6 +131,7 @@ Output::
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
 let y = 1;
 
 

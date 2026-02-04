@@ -11,6 +11,7 @@ var x = {
 alert(x.doStuff(x => alert(x)));
 
 //// [noCollisionThisExpressionAndLocalVarInLambda.js]
+"use strict";
 var x = {
     doStuff: (callback) => () => {
         var _this = 2;

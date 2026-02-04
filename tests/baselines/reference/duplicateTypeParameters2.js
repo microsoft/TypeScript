@@ -7,6 +7,7 @@ class B { public bar() { } }
 interface I<T extends A, T extends B> {}
 
 //// [duplicateTypeParameters2.js]
+"use strict";
 class A {
     foo() { }
 }

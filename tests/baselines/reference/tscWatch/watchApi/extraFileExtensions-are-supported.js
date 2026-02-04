@@ -36,10 +36,12 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/main.js]
+"use strict";
 const x = 10;
 
 
 //// [/user/username/projects/myproject/other.vue.js]
+"use strict";
 
 
 
@@ -113,6 +115,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/other2.vue.js]
+"use strict";
 
 
 

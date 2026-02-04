@@ -41,6 +41,7 @@ class c3 {
 }
 
 //// [collisionRestParameterClassMethod.js]
+"use strict";
 class c1 {
     foo(_i, ...restParameters) {
         var _i = 10; // no error

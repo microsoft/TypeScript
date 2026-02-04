@@ -17,6 +17,7 @@ let y = () => x
 
 
 //// [app.js]
+"use strict";
 /// <reference path="./ref.d.ts"/>
 /// <reference types="lib"/>
 let x;

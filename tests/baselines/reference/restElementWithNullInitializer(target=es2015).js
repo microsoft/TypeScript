@@ -15,6 +15,7 @@ function foo4([...r] = []) {
 
 
 //// [restElementWithNullInitializer.js]
+"use strict";
 function foo1([...r] = null) {
 }
 function foo2([...r] = undefined) {

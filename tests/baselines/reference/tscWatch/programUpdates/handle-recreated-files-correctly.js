@@ -42,10 +42,12 @@ commonFile2.ts
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
+"use strict";
 let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
 let y = 1;
 
 
@@ -132,6 +134,7 @@ commonFile2.ts
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
 let y = 1;
 let xy = 10;
 
@@ -271,6 +274,7 @@ commonFile2.ts
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
 let y = 1;
 
 

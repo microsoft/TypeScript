@@ -38,8 +38,8 @@ var objStrOrNum1: { prop: string } | { prop: number } = objStr || objNum;
 >     : ^^^^^^
 >prop : number
 >     : ^^^^^^
->objStr || objNum : { prop: string; } | { prop: number; }
->                 : ^^^^^^^^      ^^^^^^^^^^^^^^      ^^^
+>objStr || objNum : { prop: string; }
+>                 : ^^^^^^^^      ^^^
 >objStr : { prop: string; }
 >       : ^^^^^^^^      ^^^
 >objNum : { prop: number; }
@@ -50,8 +50,8 @@ var objStrOrNum2: { prop: string | number } = objStr || objNum;
 >             : ^^^^^^^^               ^^^
 >prop : string | number
 >     : ^^^^^^^^^^^^^^^
->objStr || objNum : { prop: string; } | { prop: number; }
->                 : ^^^^^^^^      ^^^^^^^^^^^^^^      ^^^
+>objStr || objNum : { prop: string; }
+>                 : ^^^^^^^^      ^^^
 >objStr : { prop: string; }
 >       : ^^^^^^^^      ^^^
 >objNum : { prop: number; }

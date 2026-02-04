@@ -7,14 +7,14 @@ interface Utils {
 >     : ^ ^^ ^^ ^^        ^^      ^^^                 ^^    ^^^ ^^^^^ 
 >c : T[]
 >  : ^^^
->folder : (s: S, t: T) => T
->       : ^ ^^ ^^ ^^ ^^^^^ 
+>folder : ((s: S, t: T) => T) | undefined
+>       : ^^ ^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 >s : S
 >  : ^
 >t : T
 >  : ^
->init : S
->     : ^
+>init : S | undefined
+>     : ^^^^^^^^^^^^^
 }
 
 declare var utils: Utils;

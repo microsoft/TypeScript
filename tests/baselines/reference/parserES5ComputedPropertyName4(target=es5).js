@@ -4,6 +4,7 @@
 var v = { get [e]() { } };
 
 //// [parserES5ComputedPropertyName4.js]
+"use strict";
 var _a;
 var v = (_a = {}, Object.defineProperty(_a, e, {
     get: function () { },

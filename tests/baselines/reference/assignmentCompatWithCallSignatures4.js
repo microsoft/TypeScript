@@ -101,6 +101,7 @@ namespace Errors {
 }
 
 //// [assignmentCompatWithCallSignatures4.js]
+"use strict";
 // These are mostly permitted with the current loose rules. All ok unless otherwise noted.
 var Errors;
 (function (Errors) {

@@ -28,6 +28,7 @@ new Bar();
 
 
 //// [nestedSuperCallEmit.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/55646
 class Foo {
     constructor(shouldThrow) {

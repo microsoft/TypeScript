@@ -17,6 +17,7 @@ class D extends B {
 
 
 //// [override6.js]
+"use strict";
 class B {
     constructor(foo, bar) {
         this.foo = foo;

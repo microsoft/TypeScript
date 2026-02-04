@@ -10,6 +10,7 @@ namespace Clod {
 }
 
 //// [staticsNotInScopeInClodule.js]
+"use strict";
 class Clod {
 }
 Clod.x = 10;

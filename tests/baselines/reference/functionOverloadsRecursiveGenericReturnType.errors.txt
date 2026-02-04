@@ -1,0 +1,23 @@
+functionOverloadsRecursiveGenericReturnType.ts(2,13): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+functionOverloadsRecursiveGenericReturnType.ts(6,5): error TS2564: Property 'GetEnumerator' has no initializer and is not definitely assigned in the constructor.
+
+
+==== functionOverloadsRecursiveGenericReturnType.ts (2 errors) ====
+    class B<V>{
+        private id: V;
+                ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class A<U>{
+        GetEnumerator: () => B<U>;
+        ~~~~~~~~~~~~~
+!!! error TS2564: Property 'GetEnumerator' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    function Choice<T>(args: T[]): A<T>;
+    function Choice<T>(...v_args: T[]): A<T>;
+    function Choice<T>(...v_args: any[]): A<T>{
+        return new A<T>();
+    }
+    

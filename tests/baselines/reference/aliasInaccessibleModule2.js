@@ -12,6 +12,7 @@ namespace M {
 }
 
 //// [aliasInaccessibleModule2.js]
+"use strict";
 var M;
 (function (M) {
     let N;

@@ -37,6 +37,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 15
 
 //// [/a/username/projects/project/src/file1.js] Inode:: 114
+"use strict";
 
 
 
@@ -131,6 +132,7 @@ Output::
 
 
 //// [/a/username/projects/project/src/file2.js] Inode:: 116
+"use strict";
 
 
 

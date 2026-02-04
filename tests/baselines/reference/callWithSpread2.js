@@ -40,6 +40,7 @@ prefix2("g", ...ns);
 
 
 //// [callWithSpread2.js]
+"use strict";
 // good
 all(...ns);
 weird(...ns);

@@ -9,6 +9,7 @@ if (y instanceof UnknownType) {
 }
 
 //// [errorHandlingInInstanceOf.js]
+"use strict";
 if (x instanceof String) {
 }
 var y;

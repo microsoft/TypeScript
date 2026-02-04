@@ -8,6 +8,7 @@ class B { }
 
 
 //// [d.js]
+"use strict";
 class A {
 }
 class B {

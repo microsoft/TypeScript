@@ -30,6 +30,7 @@
 
 
 //// [emitCommentsOnlyFile.js]
+"use strict";
 /**
 * @name Foo
 * @class

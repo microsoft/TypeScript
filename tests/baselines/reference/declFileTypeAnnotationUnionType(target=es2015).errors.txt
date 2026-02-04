@@ -1,0 +1,36 @@
+declFileTypeAnnotationUnionType.ts(2,13): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+declFileTypeAnnotationUnionType.ts(6,17): error TS2564: Property 'q' has no initializer and is not definitely assigned in the constructor.
+declFileTypeAnnotationUnionType.ts(9,17): error TS2564: Property 'r' has no initializer and is not definitely assigned in the constructor.
+declFileTypeAnnotationUnionType.ts(13,13): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+
+
+==== declFileTypeAnnotationUnionType.ts (4 errors) ====
+    class c {
+        private p: string;
+                ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+    }
+    namespace m {
+        export class c {
+            private q: string;
+                    ~
+!!! error TS2564: Property 'q' has no initializer and is not definitely assigned in the constructor.
+        }
+        export class g<T> {
+            private r: string;
+                    ~
+!!! error TS2564: Property 'r' has no initializer and is not definitely assigned in the constructor.
+        }
+    }
+    class g<T> {
+        private s: string;
+                ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    // Just the name
+    var k: c | m.c = new c() || new m.c();
+    var l = new c() || new m.c();
+    
+    var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number>() || (() => new c());
+    var y = new g<string>() || new m.g<number>() || (() => new c());

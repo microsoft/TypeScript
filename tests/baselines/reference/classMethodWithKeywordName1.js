@@ -6,6 +6,7 @@ class C {
 }
 
 //// [classMethodWithKeywordName1.js]
+"use strict";
 class C {
     static try() { }
 }

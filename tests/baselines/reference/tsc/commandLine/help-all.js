@@ -219,7 +219,7 @@ default: undefined
 [94m--alwaysStrict[39m
 Ensure 'use strict' is always emitted.
 type: boolean
-default: `false`, unless `strict` is set
+default: true
 
 [94m--exactOptionalPropertyTypes[39m
 Interpret optional property types as written, rather than adding 'undefined'.
@@ -274,7 +274,7 @@ default: false
 [94m--strict[39m
 Enable all strict type-checking options.
 type: boolean
-default: false
+default: true
 
 [94m--strictBindCallApply[39m
 Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.

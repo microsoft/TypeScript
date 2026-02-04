@@ -28,6 +28,7 @@ class D extends C {
 }
 
 //// [underscoreThisInDerivedClass01.js]
+"use strict";
 // @target es5
 // Original test intent:
 // When arrow functions capture 'this', the lexical 'this' owner

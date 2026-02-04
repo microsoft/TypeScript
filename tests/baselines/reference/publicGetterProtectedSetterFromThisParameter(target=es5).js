@@ -39,6 +39,7 @@ function bar(this: A, a: A, b: B) {
 
 
 //// [publicGetterProtectedSetterFromThisParameter.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

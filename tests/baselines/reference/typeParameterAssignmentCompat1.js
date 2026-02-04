@@ -22,6 +22,7 @@ class C<T> {
 }
 
 //// [typeParameterAssignmentCompat1.js]
+"use strict";
 function f() {
     var x;
     var y;

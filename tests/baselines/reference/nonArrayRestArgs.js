@@ -7,6 +7,7 @@ function foo(...rest: number) { // error
 }
 
 //// [nonArrayRestArgs.js]
+"use strict";
 function foo(...rest) {
     var x = rest[0];
     return x;

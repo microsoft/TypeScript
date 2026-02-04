@@ -13,6 +13,7 @@ namespace Test {
 }
 
 //// [implicitAnyInAmbientDeclaration.js]
+"use strict";
 var Test;
 (function (Test) {
 })(Test || (Test = {}));

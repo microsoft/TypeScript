@@ -9,6 +9,7 @@ i = x;
 x = i;
 
 //// [i3.js]
+"use strict";
 ;
 i = x;
 x = i;

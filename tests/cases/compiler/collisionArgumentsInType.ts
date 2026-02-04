@@ -1,5 +1,7 @@
 // @target: es2015
+// @ignoreDeprecations: 6.0
 // @strict: false
+// @alwaysStrict: true, false
 var v1: (i: number, ...arguments) => void; // no error - no code gen
 var v12: (arguments: number, ...restParameters) => void; // no error - no code gen
 var v2: {

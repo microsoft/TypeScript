@@ -11,6 +11,7 @@ class C {
 }
 
 //// [commentBeforeStaticMethod1.js]
+"use strict";
 class C {
     /**
      * Returns bar

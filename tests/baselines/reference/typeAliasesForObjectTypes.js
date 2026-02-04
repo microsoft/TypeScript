@@ -18,5 +18,6 @@ type T3<T> = { x: T }
 
 
 //// [typeAliasesForObjectTypes.js]
+"use strict";
 class C1 {
 }

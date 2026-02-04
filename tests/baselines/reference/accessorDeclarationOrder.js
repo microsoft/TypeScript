@@ -37,6 +37,7 @@ c2.name;
 
 
 //// [accessorDeclarationOrder.js]
+"use strict";
 class C1 {
     #name;
     get name() {

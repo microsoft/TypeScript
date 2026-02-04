@@ -2,8 +2,9 @@
 EmitSkipped: false
 
 FileName : /tests/cases/fourslash/inputFile.js.map
-{"version":3,"file":"inputFile.js","sourceRoot":"","sources":["inputFile.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,GAAG,CAAC;AACZ,IAAI,GAAG,GAAG,aAAa,CAAC;AACxB,MAAM,CAAC;IACL,CAAC,CAAS;IACV,CAAC,CAAS;CACX"}
+{"version":3,"file":"inputFile.js","sourceRoot":"","sources":["inputFile.ts"],"names":[],"mappings":";AAAA,IAAI,CAAC,GAAG,GAAG,CAAC;AACZ,IAAI,GAAG,GAAG,aAAa,CAAC;AACxB,MAAM,CAAC;IACL,CAAC,CAAS;IACV,CAAC,CAAS;CACX"}
 FileName : /tests/cases/fourslash/inputFile.js
+"use strict";
 var x = 109;
 var foo = "hello world";
 class M {

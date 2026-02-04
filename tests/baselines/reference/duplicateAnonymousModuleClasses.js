@@ -59,6 +59,7 @@ namespace Gar {
 
 
 //// [duplicateAnonymousModuleClasses.js]
+"use strict";
 var F;
 (function (F) {
     class Helper {

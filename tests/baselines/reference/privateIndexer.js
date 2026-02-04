@@ -16,6 +16,7 @@ class E<T> {
 }
 
 //// [privateIndexer.js]
+"use strict";
 // private indexers not allowed
 class C {
 }

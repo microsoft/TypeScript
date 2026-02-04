@@ -96,6 +96,7 @@ class e {
 }
 
 //// [classdecl.js]
+"use strict";
 class a {
     constructor(ns) {
     }

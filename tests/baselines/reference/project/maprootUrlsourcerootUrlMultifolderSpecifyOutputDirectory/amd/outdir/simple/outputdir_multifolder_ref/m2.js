@@ -1,3 +1,4 @@
+"use strict";
 var m2_a1 = 10;
 class m2_c1 {
     m2_c1_p1;

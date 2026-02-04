@@ -17,6 +17,7 @@ var e: Ellement;
 (c || e).dummy;
 
 //// [nonContextuallyTypedLogicalOr.js]
+"use strict";
 var c;
 var e;
 (c || e).dummy;

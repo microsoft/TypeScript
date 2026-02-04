@@ -43,6 +43,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/workspace/solution/projects/project/app.js]
+"use strict";
 
 
 

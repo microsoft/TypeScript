@@ -29,3 +29,4 @@ declare namespace m {
 }
 
 //// [implicitAnyAmbients.js]
+"use strict";

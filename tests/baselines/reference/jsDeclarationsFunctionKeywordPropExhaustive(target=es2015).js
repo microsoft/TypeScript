@@ -85,6 +85,7 @@ foo.bigint = 1;
 foo.of = 1;
 
 //// [source.js]
+"use strict";
 function foo() { }
 // properties
 foo.x = 1;

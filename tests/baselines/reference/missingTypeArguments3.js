@@ -44,3 +44,4 @@ declare namespace linq {
 
 
 //// [missingTypeArguments3.js]
+"use strict";

@@ -34,6 +34,7 @@ var x = {
 }
 
 //// [typeOfThisInAccessor.js]
+"use strict";
 class C {
     get x() {
         var r = this; // C

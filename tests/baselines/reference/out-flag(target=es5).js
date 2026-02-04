@@ -20,6 +20,7 @@ class MyClass
 
 
 //// [out-flag.js]
+"use strict";
 //// @outFile: bin\
 // my class comments
 var MyClass = /** @class */ (function () {

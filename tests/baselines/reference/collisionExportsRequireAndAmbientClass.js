@@ -44,6 +44,7 @@ var m2;
 (function (m2) {
 })(m2 || (m2 = {}));
 //// [collisionExportsRequireAndAmbientClass_globalFile.js]
+"use strict";
 var m4;
 (function (m4) {
     var a = 10;

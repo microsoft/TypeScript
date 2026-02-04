@@ -8,6 +8,7 @@ static public<T>() {}
 
 
 //// [parserAccessibilityAfterStatic14.js]
+"use strict";
 class Outer {
     static public() { }
 }

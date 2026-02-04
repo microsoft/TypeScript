@@ -6,6 +6,7 @@ class X {
 }
 
 //// [arrayReferenceWithoutTypeArgs.js]
+"use strict";
 class X {
     f(a) { }
 }

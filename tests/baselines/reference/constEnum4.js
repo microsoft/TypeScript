@@ -10,6 +10,7 @@ else
 
 
 //// [constEnum4.js]
+"use strict";
 if (1)
     ;
 else if (2)
