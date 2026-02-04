@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariablesNoCrash2.ts] ////
+
+=== dependentDestructuredVariablesNoCrash2.ts ===
+// https://github.com/microsoft/TypeScript/issues/63091
+
+function ([undefined, unknown]: string | undefined = undefined)
+> : ([undefined, unknown]?: string | undefined) => any
+> : ^                    ^^^                  ^^^^^^^^
+>undefined : any
+>          : ^^^
+>unknown : any
+>        : ^^^
+>undefined : any
+>          : ^^^
+
