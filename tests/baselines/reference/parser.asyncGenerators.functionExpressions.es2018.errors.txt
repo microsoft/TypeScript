@@ -1,3 +1,4 @@
+error TS5107: Option 'alwaysStrict=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 awaitInParameterInitializerIsError.ts(1,34): error TS2524: 'await' expressions cannot be used in a parameter initializer.
 awaitMissingValueIsError.ts(2,10): error TS1109: Expression expected.
 awaitNameIsError.ts(1,29): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
@@ -12,6 +13,7 @@ yieldParameterIsError.ts(1,30): error TS1359: Identifier expected. 'yield' is a 
 yieldStarMissingValueIsError.ts(2,12): error TS1109: Expression expected.
 
 
+!!! error TS5107: Option 'alwaysStrict=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== functionExpressionIsOk.ts (0 errors) ====
     const f1 = async function * f() {
     };

@@ -1,3 +1,4 @@
+error TS5107: Option 'alwaysStrict=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 convertKeywordsYes.ts(175,12): error TS18006: Classes may not have a field named 'constructor'.
 convertKeywordsYes.ts(292,11): error TS1213: Identifier expected. 'implements' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 convertKeywordsYes.ts(293,11): error TS1213: Identifier expected. 'interface' is a reserved word in strict mode. Class definitions are automatically in strict mode.
@@ -10,6 +11,7 @@ convertKeywordsYes.ts(301,11): error TS1213: Identifier expected. 'static' is a 
 convertKeywordsYes.ts(303,11): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 
 
+!!! error TS5107: Option 'alwaysStrict=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== convertKeywordsYes.ts (10 errors) ====
     // reserved ES5 future in strict mode
     

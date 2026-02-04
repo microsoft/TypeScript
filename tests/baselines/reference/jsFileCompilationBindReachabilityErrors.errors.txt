@@ -1,8 +1,10 @@
+error TS5107: Option 'alwaysStrict=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 a.js(3,9): error TS7029: Fallthrough case in switch.
 a.js(16,5): error TS7027: Unreachable code detected.
 a.js(19,1): error TS7028: Unused label.
 
 
+!!! error TS5107: Option 'alwaysStrict=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== a.js (3 errors) ====
     function foo(a, b) {
         switch (a) {

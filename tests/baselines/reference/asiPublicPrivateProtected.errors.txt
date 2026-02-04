@@ -1,8 +1,10 @@
+error TS5107: Option 'alwaysStrict=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 asiPublicPrivateProtected.ts(1,1): error TS2304: Cannot find name 'public'.
 asiPublicPrivateProtected.ts(12,1): error TS2304: Cannot find name 'private'.
 asiPublicPrivateProtected.ts(23,1): error TS2304: Cannot find name 'protected'.
 
 
+!!! error TS5107: Option 'alwaysStrict=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== asiPublicPrivateProtected.ts (3 errors) ====
     public
     ~~~~~~

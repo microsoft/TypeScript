@@ -1,3 +1,4 @@
+error TS5107: Option 'alwaysStrict=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 constDeclarations-invalidContexts.ts(3,5): error TS1156: 'const' declarations can only be declared inside a block.
 constDeclarations-invalidContexts.ts(5,5): error TS1156: 'const' declarations can only be declared inside a block.
 constDeclarations-invalidContexts.ts(8,5): error TS1156: 'const' declarations can only be declared inside a block.
@@ -9,6 +10,7 @@ constDeclarations-invalidContexts.ts(25,12): error TS1156: 'const' declarations 
 constDeclarations-invalidContexts.ts(28,29): error TS1156: 'const' declarations can only be declared inside a block.
 
 
+!!! error TS5107: Option 'alwaysStrict=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== constDeclarations-invalidContexts.ts (9 errors) ====
     // Errors, const must be defined inside a block
     if (true) 
