@@ -1939,10 +1939,8 @@ func kindModifiersFromExtension(extension string) lsutil.ScriptElementKindModifi
 		return lsutil.ScriptElementKindModifierCts
 	case tspath.ExtensionTsBuildInfo:
 		panic(fmt.Sprintf("Extension %v is unsupported.", tspath.ExtensionTsBuildInfo))
-	case "":
-		return lsutil.ScriptElementKindModifierNone
 	default:
-		panic(fmt.Sprintf("Unexpected extension: %v", extension))
+		return lsutil.ScriptElementKindModifierNone
 	}
 }
 
