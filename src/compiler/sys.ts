@@ -1487,6 +1487,7 @@ export let sys: System = (() => {
         const statSyncOptions = { throwIfNoEntry: false } as const;
 
         const platform: string = _os.platform();
+        const getCurrentDirectory = memoize(() => process.cwd());
         const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
         const fsRealpath = !!_fs.realpathSync.native ? process.platform === "win32" ? fsRealPathHandlingLongPath : _fs.realpathSync.native : _fs.realpathSync;
 
@@ -1498,7 +1499,6 @@ export let sys: System = (() => {
         const executingFilePath = __filename.endsWith("sys.js") ? _path.join(_path.dirname(__dirname), "__fake__.js") : __filename;
 
         const fsSupportsRecursiveFsWatch = process.platform === "win32" || isMacOs;
-        const getCurrentDirectory = memoize(() => process.cwd());
         const { watchFile, watchDirectory } = createSystemWatchFunctions({
             pollingWatchFileWorker: fsWatchFileWorker,
             getModifiedTime,
@@ -1725,7 +1725,7 @@ export let sys: System = (() => {
                 return false;
             }
             // If this file exists under a different case, we must be case-insensitve.
-            return !fileExists(swapCase(__filename));
+            return !fileExists(swapCase(getCurrentDirectory()));
         }
 
         /** Convert all lowercase chars to uppercase, and vice-versa */
