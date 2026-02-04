@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/importUrlNodeModulesExist.ts] ////
+
+=== /node_modules/foo/index.d.ts ===
+export declare function useFoo(): string;
+>useFoo : () => string
+
+=== /src/index.ts ===
+
+import "https://deno.land/std@0.208.0/path/mod.ts"
+
+

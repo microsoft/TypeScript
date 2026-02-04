@@ -159,3 +159,26 @@ x++;`
 	// We expect to find 4 references
 	assert.Assert(t, len(refs) == 4, "Expected 4 references, got %d", len(refs))
 }
+
+func TestImportsInUntitled(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	files := map[string]any{
+		// Make sure typings directory exists so it would actually try to fetch typings from this location
+		projecttestutil.TestTypingsLocation + "/node_modules/@types/somelib/index.d.ts": `export const x: number;`,
+	}
+	session, _ := projecttestutil.Setup(files)
+	content := `import "https://deno.land/std@0.208.0/path/mod.ts"
+		import  "./relative"
+`
+	uri1 := lsproto.DocumentUri("untitled:Untitled-1")
+	session.DidOpenFile(context.Background(), uri1, 1, content, lsproto.LanguageKindTypeScript)
+
+	// 2) Wait for ATA/background tasks to finish, then get a language service for the first file
+	session.WaitForBackgroundTasks()
+	_, err := session.GetLanguageService(context.Background(), uri1)
+	assert.NilError(t, err)
+}

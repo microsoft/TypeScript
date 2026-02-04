@@ -19,8 +19,10 @@ type Common struct {
 
 func RootLength(p string) int {
 	l := tspath.GetEncodedRootLength(p)
-	if l <= 0 {
+	if l == 0 {
 		panic(fmt.Sprintf("vfs: path %q is not absolute", p))
+	} else if l < 0 {
+		return ^l
 	}
 	return l
 }

@@ -112,6 +112,9 @@ func From(fsys fs.FS, useCaseSensitiveFileNames bool) FsWithSys {
 				p := tspath.RemoveTrailingDirectorySeparator(root)
 				sub, err := fs.Sub(fsys, p)
 				if err != nil {
+					if tspath.IsUrl(root) {
+						return nil
+					}
 					panic(fmt.Sprintf("vfs: failed to create sub file system for %q: %v", p, err))
 				}
 				return sub
