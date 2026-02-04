@@ -53979,7 +53979,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (c !== 0) {
                 return c;
             }
-            c = (t1 as IndexType).flags - (t2 as IndexType).flags;
+            c = (t1 as IndexType).indexFlags - (t2 as IndexType).indexFlags;
             if (c !== 0) {
                 return c;
             }
