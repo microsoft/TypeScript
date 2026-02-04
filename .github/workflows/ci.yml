@@ -30,7 +30,7 @@ jobs:
       matrix:
         config:
           # PRs only check the newest and oldest Node versions.
-          # macOS is never checked in PR, as that resource is limited.
+          # macOS only ever checks the neest and oldest Node versions, but never in PR runs.
           - os: ubuntu-latest
             node-version: '24'
             bundle: true
