@@ -15,7 +15,7 @@ if (isFoo(value)) {
 
 //// [typeGuardNarrowsToLiteralTypeUnion.js]
 "use strict";
-var value;
+let value;
 if (isFoo(value)) {
     doThis(value);
 }

@@ -1,3 +1,4 @@
+// @target: es2015
 // - operator on any type
 
 var ANY: any;

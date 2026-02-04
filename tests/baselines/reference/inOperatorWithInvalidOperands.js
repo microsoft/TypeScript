@@ -51,11 +51,8 @@ var rc1 = {} in '';
 
 //// [inOperatorWithInvalidOperands.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

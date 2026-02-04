@@ -18,20 +18,17 @@ let x = c.doThing({a: 12});
 
 //// [bundle.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.doThing = function (x) {
+class Foo {
+    doThing(x) {
         return { b: x.a };
-    };
-    Foo.make = function () {
+    }
+    static make() {
         return new Foo();
-    };
-    return Foo;
-}());
-var c = new Foo();
+    }
+}
+const c = new Foo();
 c.doThing({ a: 42 });
-var x = c.doThing({ a: 12 });
+let x = c.doThing({ a: 12 });
 //# sourceMappingURL=bundle.js.map
 
 //// [bundle.d.ts]

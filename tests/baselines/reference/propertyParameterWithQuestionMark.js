@@ -13,12 +13,11 @@ var v3: { x } = new C; // Should fail
 
 //// [propertyParameterWithQuestionMark.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C(x) {
+class C {
+    constructor(x) {
         this.x = x;
     }
-    return C;
-}());
+}
 // x should be an optional property
 var v = {}; // Should succeed
 v = v2; // Should succeed

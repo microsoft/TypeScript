@@ -12,4 +12,4 @@ foo.getFoo = bar => { };
 //// [contextualTypingOfLambdaWithMultipleSignatures.js]
 "use strict";
 var foo;
-foo.getFoo = function (bar) { };
+foo.getFoo = bar => { };

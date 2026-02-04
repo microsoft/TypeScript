@@ -18,17 +18,14 @@ class C {
 
 //// [classStaticBlock20.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-(function () {
+class C {
+}
+(() => {
     // something
 })();
-(function () {
+(() => {
     // something
 })();
-(function () {
+(() => {
     // something
 })();

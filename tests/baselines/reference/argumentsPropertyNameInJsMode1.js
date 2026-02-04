@@ -14,11 +14,11 @@ f2(1, 2, 3);
 
 //// [a.js]
 "use strict";
-var foo = {
-    f1: function (params) { }
+const foo = {
+    f1: (params) => { }
 };
 function f2(x) {
-    foo.f1({ x: x, arguments: [] });
+    foo.f1({ x, arguments: [] });
 }
 f2(1, 2, 3);
 

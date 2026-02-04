@@ -6,4 +6,4 @@ var r5 = foo3((x: number) => ''); // error
 
 //// [subtypingWithCallSignaturesA.js]
 "use strict";
-var r5 = foo3(function (x) { return ''; }); // error
+var r5 = foo3((x) => ''); // error

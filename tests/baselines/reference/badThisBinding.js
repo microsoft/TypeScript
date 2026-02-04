@@ -17,14 +17,12 @@ class Greeter {
 
 //// [badThisBinding.js]
 "use strict";
-var Greeter = /** @class */ (function () {
-    function Greeter() {
-        var _this = this;
-        foo(function () {
-            bar(function () {
-                var x = _this;
+class Greeter {
+    constructor() {
+        foo(() => {
+            bar(() => {
+                var x = this;
             });
         });
     }
-    return Greeter;
-}());
+}

@@ -1,3 +1,4 @@
+// @target: es2015
 // @preserveValueImports: true
 // @isolatedModules: true
 // @module: es2015

@@ -11,11 +11,8 @@ function foo() {
 
 //// [out.js]
 "use strict";
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 function foo() {
 }
 

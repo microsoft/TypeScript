@@ -8,11 +8,9 @@ function foo1( { x, y, z }?: { x: string; y: number; z: boolean }) {
 
 //// [declarationEmitDestructuringWithOptionalBindingParameters.js]
 "use strict";
-function foo(_a) {
-    var x = _a[0], y = _a[1], z = _a[2];
+function foo([x, y, z]) {
 }
-function foo1(_a) {
-    var x = _a.x, y = _a.y, z = _a.z;
+function foo1({ x, y, z }) {
 }
 
 

@@ -96,12 +96,12 @@ function h4() {
 
 //// [controlFlowIterationErrors.js]
 "use strict";
-var cond;
+let cond;
 function len(s) {
     return s.length;
 }
 function f1() {
-    var x;
+    let x;
     x = "";
     while (cond) {
         x = len(x);
@@ -110,7 +110,7 @@ function f1() {
     x;
 }
 function f2() {
-    var x;
+    let x;
     x = "";
     while (cond) {
         x;
@@ -119,7 +119,7 @@ function f2() {
     x;
 }
 function g1() {
-    var x;
+    let x;
     x = "";
     while (cond) {
         x = foo(x);
@@ -128,7 +128,7 @@ function g1() {
     x;
 }
 function g2() {
-    var x;
+    let x;
     x = "";
     while (cond) {
         x;
@@ -140,7 +140,7 @@ function asNumber(x) {
     return +x;
 }
 function h1() {
-    var x;
+    let x;
     x = "0";
     while (cond) {
         x = +x + 1;
@@ -148,7 +148,7 @@ function h1() {
     }
 }
 function h2() {
-    var x;
+    let x;
     x = "0";
     while (cond) {
         x = asNumber(x) + 1;
@@ -156,20 +156,20 @@ function h2() {
     }
 }
 function h3() {
-    var x;
+    let x;
     x = "0";
     while (cond) {
-        var y = asNumber(x);
+        let y = asNumber(x);
         x = y + 1;
         x;
     }
 }
 function h4() {
-    var x;
+    let x;
     x = "0";
     while (cond) {
         x;
-        var y = asNumber(x);
+        let y = asNumber(x);
         x = y + 1;
         x;
     }

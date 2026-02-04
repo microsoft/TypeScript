@@ -13,7 +13,7 @@ data.foo + data.bar + data.baz + data.noWay
 
 //// [modifiersInObjectLiterals.js]
 "use strict";
-var data = {
+let data = {
     foo: 'hey',
     bar: 'nay',
     baz: 'oh my',

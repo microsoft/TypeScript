@@ -17,12 +17,9 @@ var i: I<number,number>;
 "use strict";
 function f() { }
 f();
-var x = function () { };
+var x = () => { };
 x();
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c = new C();
 var i;

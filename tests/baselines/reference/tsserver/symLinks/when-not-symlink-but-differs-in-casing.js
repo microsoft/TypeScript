@@ -77,7 +77,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-s
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -91,12 +91,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	C:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/temp/replay/axios-src/lib/core/AxiosHeaders.js SVC-1-0 "export const b = 10;\n\n"
 
 
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	AxiosHeaders.js
 	  Root file specified for compilation
 
@@ -142,6 +142,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
 c:/temp/node_modules/@types: *new*
@@ -172,7 +174,7 @@ c:/temp/replay/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-C:/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 C:/temp/replay/axios-src/node_modules/follow-redirects/package.json: *new*
   {}
@@ -193,7 +195,7 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
-C:/home/src/tslibs/TS/Lib/lib.d.ts *new*
+C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -252,7 +254,7 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
-C:/home/src/tslibs/TS/Lib/lib.d.ts
+C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -309,15 +311,15 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	C:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/temp/replay/axios-src/lib/core/AxiosHeaders.js SVC-1-1 "export const b = 10;\n//comment\n"
 	c:/temp/replay/axios-src/lib/core/settle.js Text-1 "export const b2 = 10;\n"
 	c:/temp/replay/axios-src/node_modules/follow-redirects/index.js Text-1 "export const x = 10;"
 	c:/temp/replay/axios-src/lib/core/dispatchRequest.js SVC-1-0 "import { b } from \"./AxiosHeaders.js\";\nimport { b2 } from \"./settle.js\";\nimport { x } from \"follow-redirects\";\nexport const y = 10;\n"
 
 
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	AxiosHeaders.js
 	  Imported via "./AxiosHeaders.js" from file 'dispatchRequest.js'
 	settle.js
@@ -331,12 +333,12 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	C:/home/src/tslibs/TS/Lib/lib.d.ts
+	C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 	c:/temp/replay/axios-src/lib/core/AxiosHeaders.js
 
 
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	AxiosHeaders.js
 	  Root file specified for compilation
 
@@ -416,7 +418,7 @@ c:/temp/replay/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-C:/home/src/tslibs/TS/Lib/lib.d.ts:
+C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 C:/temp/replay/axios-src/node_modules/follow-redirects/package.json:
   {}
@@ -451,7 +453,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-C:/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
         /dev/null/inferredProject2* *new*
@@ -504,13 +506,13 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject3* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject3*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	C:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/temp/replay/axios-src/lib/core/AxiosHeaders.js SVC-1-1 "export const b = 10;\n//comment\n"
 	c:/temp/replay/axios-src/lib/core/mergeConfig.js SVC-1-0 "import { b } from \"./AxiosHeaders.js\";\nexport const y = 10;\n"
 
 
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	AxiosHeaders.js
 	  Imported via "./AxiosHeaders.js" from file 'mergeConfig.js'
 	mergeConfig.js
@@ -578,7 +580,7 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject2*
 
 ScriptInfos::
-C:/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /dev/null/inferredProject2*
@@ -682,7 +684,7 @@ c:/temp/replay/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-C:/home/src/tslibs/TS/Lib/lib.d.ts:
+C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 C:/temp/replay/axios-src/node_modules/follow-redirects/package.json:
   {}
@@ -717,7 +719,7 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject2*
 
 ScriptInfos::
-C:/home/src/tslibs/TS/Lib/lib.d.ts
+C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 2
         /dev/null/inferredProject2*
@@ -764,7 +766,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	C:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/temp/replay/axios-src/lib/core/AxiosHeaders.js Text-2 "export const b = 10;\n\n"
 	c:/temp/replay/axios-src/lib/core/settle.js Text-1 "export const b2 = 10;\n"
 	c:/temp/replay/axios-src/node_modules/follow-redirects/index.js Text-1 "export const x = 10;"
@@ -840,7 +842,7 @@ c:/temp/replay/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-C:/home/src/tslibs/TS/Lib/lib.d.ts:
+C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 C:/temp/replay/axios-src/node_modules/follow-redirects/package.json:
   {}
@@ -877,7 +879,7 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject2*
 
 ScriptInfos::
-C:/home/src/tslibs/TS/Lib/lib.d.ts
+C:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 2
         /dev/null/inferredProject2*

@@ -33,7 +33,7 @@ namespace B {
 "use strict";
 var A;
 (function (A) {
-    var Point;
+    let Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
     })(Point = A.Point || (A.Point = {}));
@@ -52,7 +52,7 @@ var A;
 "use strict";
 var B;
 (function (B) {
-    var Point;
+    let Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
     })(Point = B.Point || (B.Point = {}));

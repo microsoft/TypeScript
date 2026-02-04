@@ -1,4 +1,6 @@
-﻿// @declaration: true
+﻿// @module: commonjs
+// @target: es2015
+// @declaration: true
 
 type Foo<T, Y> = {
     foo<U, J>(): Foo<U, J>

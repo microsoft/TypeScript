@@ -6,8 +6,5 @@ class foo {
 
 //// [parser512084.js]
 "use strict";
-var foo = /** @class */ (function () {
-    function foo() {
-    }
-    return foo;
-}());
+class foo {
+}

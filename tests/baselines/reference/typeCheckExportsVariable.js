@@ -6,5 +6,5 @@ exports = '';
 
 //// [typeCheckExportsVariable.js]
 "use strict";
-var exports;
+let exports;
 exports = '';

@@ -7,4 +7,4 @@ var f = () => _this;
 //// [noCollisionThisExpressionAndVarInGlobal.js]
 "use strict";
 var _this = 1;
-var f = function () { return _this; };
+var f = () => _this;

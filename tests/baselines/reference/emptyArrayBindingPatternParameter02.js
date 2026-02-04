@@ -7,10 +7,10 @@ function f(a, []) {
 
 //// [emptyArrayBindingPatternParameter02.js]
 "use strict";
-function f(a, _a) {
+function f(a, []) {
     var x, y, z;
 }
 
 
 //// [emptyArrayBindingPatternParameter02.d.ts]
-declare function f(a: any, []: any[]): void;
+declare function f(a: any, []: Iterable<any, void, undefined>): void;

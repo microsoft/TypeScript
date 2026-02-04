@@ -10,11 +10,10 @@ Foo.prototype.bar = undefined; // Should be OK
 
 //// [typeOfPrototype.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
+class Foo {
+    constructor() {
         this.bar = 3;
     }
-    Foo.bar = '';
-    return Foo;
-}());
+}
+Foo.bar = '';
 Foo.prototype.bar = undefined; // Should be OK

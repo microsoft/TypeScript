@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 ////namespace some.really.long.generated.type.goes.here.you.know.this_.should.be.pretty.simple {
 ////  export interface Yah {}
 ////}

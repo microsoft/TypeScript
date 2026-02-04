@@ -8,6 +8,5 @@ var a = new _this(); // Error
 
 //// [collisionThisExpressionAndAmbientClassInGlobal.js]
 "use strict";
-var _this_1 = this;
-var f = function () { return _this_1; };
+var f = () => this;
 var a = new _this(); // Error

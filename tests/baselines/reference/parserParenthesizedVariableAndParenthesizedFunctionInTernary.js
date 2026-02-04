@@ -8,6 +8,6 @@ const d = true ? (a) : ((function() {}));
 
 //// [parserParenthesizedVariableAndParenthesizedFunctionInTernary.js]
 "use strict";
-var a;
-var c = true ? (a) : (function () { });
-var d = true ? (a) : ((function () { }));
+let a;
+const c = true ? (a) : (function () { });
+const d = true ? (a) : ((function () { }));

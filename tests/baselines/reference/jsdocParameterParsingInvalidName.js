@@ -11,13 +11,10 @@ class c {
 
 //// [jsdocParameterParsingInvalidName.js]
 "use strict";
-var c = /** @class */ (function () {
-    function c() {
-    }
+class c {
     /**
      * @param {string} [`foo]
      */
-    c.prototype.method = function (foo) {
-    };
-    return c;
-}());
+    method(foo) {
+    }
+}

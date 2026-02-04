@@ -5,4 +5,4 @@
 
 //// [genericInference1.js]
 "use strict";
-['a', 'b', 'c'].map(function (x) { return x.length; });
+['a', 'b', 'c'].map(x => x.length);

@@ -579,12 +579,12 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     affectsModuleResolution: true,
     affectsEmit: true,
     affectsBuildInfo: true,
-    deprecatedKeys: new Set(["es3"]),
+    deprecatedKeys: new Set(["es3", "es5"]),
     paramType: Diagnostics.VERSION,
     showInSimplifiedHelpView: true,
     category: Diagnostics.Language_and_Environment,
     description: Diagnostics.Set_the_JavaScript_language_version_for_emitted_JavaScript_and_include_compatible_library_declarations,
-    defaultValueDescription: ScriptTarget.ES5,
+    defaultValueDescription: ScriptTarget.LatestStandard,
 };
 
 /** @internal */

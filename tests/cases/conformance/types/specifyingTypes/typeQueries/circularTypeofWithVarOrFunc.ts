@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 type typeAlias1 = typeof varOfAliasedType1;
 var varOfAliasedType1: typeAlias1;

@@ -13,13 +13,12 @@ function g() {
 "use strict";
 function g() {
     var _a;
-    var x = (_a = /** @class */ (function () {
-            function C() {
+    var x = (_a = class C {
+            constructor() {
                 this.prop1 = 1;
             }
-            C.prototype.foo = function () { };
-            return C;
-        }()),
+            foo() { }
+        },
         _a.prop2 = 43,
         _a);
 }

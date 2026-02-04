@@ -11,11 +11,8 @@ D.y;
 
 //// [cloduleSplitAcrossFiles_class.js]
 "use strict";
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class D {
+}
 //// [cloduleSplitAcrossFiles_module.js]
 "use strict";
 var D;

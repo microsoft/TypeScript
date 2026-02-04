@@ -111,16 +111,16 @@ function h3() {
 
 //// [controlFlowWhileStatement.js]
 "use strict";
-var cond;
+let cond;
 function a() {
-    var x;
+    let x;
     x = "";
     while (cond) {
         x; // string
     }
 }
 function b() {
-    var x;
+    let x;
     x = "";
     while (cond) {
         x; // string
@@ -129,7 +129,7 @@ function b() {
     }
 }
 function c() {
-    var x;
+    let x;
     x = "";
     while (cond) {
         x; // string
@@ -140,7 +140,7 @@ function c() {
     }
 }
 function d() {
-    var x;
+    let x;
     x = "";
     while (x = x.length) {
         x; // number
@@ -148,7 +148,7 @@ function d() {
     }
 }
 function e() {
-    var x;
+    let x;
     x = "";
     while (cond) {
         x; // string | number
@@ -158,7 +158,7 @@ function e() {
     x; // string | number
 }
 function f() {
-    var x;
+    let x;
     x = "";
     while (cond) {
         if (cond) {
@@ -174,7 +174,7 @@ function f() {
     x; // string | number | boolean | RegExp
 }
 function g() {
-    var x;
+    let x;
     x = "";
     while (true) {
         if (cond) {
@@ -190,7 +190,7 @@ function g() {
     x; // number
 }
 function h1() {
-    var x;
+    let x;
     x = "";
     while (x > 1) {
         x; // string | number
@@ -200,7 +200,7 @@ function h1() {
     x; // string | number
 }
 function h2() {
-    var x;
+    let x;
     x = "";
     while (cond) {
         x = len(x);
@@ -209,7 +209,7 @@ function h2() {
     x; // string | number
 }
 function h3() {
-    var x;
+    let x;
     x = "";
     while (cond) {
         x; // string | number

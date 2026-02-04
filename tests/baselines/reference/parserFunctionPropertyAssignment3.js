@@ -5,4 +5,4 @@ var v = { "foo"() { } };
 
 //// [parserFunctionPropertyAssignment3.js]
 "use strict";
-var v = { "foo": function () { } };
+var v = { "foo"() { } };

@@ -1,4 +1,5 @@
-﻿declare var numStrTuple: [number, string];
+﻿// @target: es2015
+declare var numStrTuple: [number, string];
 declare var numNumTuple: [number, number];
 declare var numEmptyObjTuple: [number, {}];
 declare var emptyObjTuple: [{}];

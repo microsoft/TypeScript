@@ -39,14 +39,13 @@ getObj().a = 1;
 "use strict";
 var variable = {};
 variable.a = 0;
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.initializedMember = {};
         this.member = {};
         this.member.a = 0;
     }
-    return C;
-}());
+}
 var obj = {
     property: {}
 };

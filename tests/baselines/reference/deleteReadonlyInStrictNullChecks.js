@@ -8,9 +8,6 @@ delete Foo.name;
 
 //// [deleteReadonlyInStrictNullChecks.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 delete Foo.name;

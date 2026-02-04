@@ -40,19 +40,9 @@ needsComponentOfSomeProps2({ renderAs: comp2 });
 
 //// [identicalTypesNoDifferByCheckOrder.js]
 "use strict";
-function needsComponentOfSomeProps3() {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i] = arguments[_i];
-    }
-}
-var comp3 = null;
+function needsComponentOfSomeProps3(...x) { }
+const comp3 = null;
 needsComponentOfSomeProps3({ renderAs: comp3 });
-function needsComponentOfSomeProps2() {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i] = arguments[_i];
-    }
-}
-var comp2 = null;
+function needsComponentOfSomeProps2(...x) { }
+const comp2 = null;
 needsComponentOfSomeProps2({ renderAs: comp2 });

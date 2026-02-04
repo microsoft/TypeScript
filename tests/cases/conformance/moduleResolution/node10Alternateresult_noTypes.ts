@@ -1,3 +1,4 @@
+// @target: es2015
 // @moduleResolution: node10
 // @noImplicitAny: true
 // @traceResolution: true

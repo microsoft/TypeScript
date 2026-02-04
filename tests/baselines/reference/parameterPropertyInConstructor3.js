@@ -8,9 +8,8 @@ class Foo {
 
 //// [parameterPropertyInConstructor3.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo(constructor) {
+class Foo {
+    constructor(constructor) {
         this.constructor = constructor;
     }
-    return Foo;
-}());
+}

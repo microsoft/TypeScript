@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @filename: index.d.ts
 export declare function foo({a}?: {

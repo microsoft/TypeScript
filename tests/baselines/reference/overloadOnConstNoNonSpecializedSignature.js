@@ -9,9 +9,6 @@ class C {
 
 //// [overloadOnConstNoNonSpecializedSignature.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.x1 = function (a) { };
-    return C;
-}());
+class C {
+    x1(a) { }
+}

@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #15310
 
 interface Foo {

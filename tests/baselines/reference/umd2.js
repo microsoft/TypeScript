@@ -14,5 +14,5 @@ let y: number = x.n;
 //// [a.js]
 "use strict";
 Foo.fn();
-var x;
-var y = x.n;
+let x;
+let y = x.n;

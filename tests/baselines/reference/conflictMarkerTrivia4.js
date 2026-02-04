@@ -6,4 +6,4 @@ const x = <div>
 
 //// [conflictMarkerTrivia4.js]
 "use strict";
-var x = ;
+const x = ;

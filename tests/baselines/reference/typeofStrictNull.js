@@ -6,5 +6,5 @@ let b: typeof a;
 
 //// [typeofStrictNull.js]
 "use strict";
-var a;
-var b;
+let a;
+let b;

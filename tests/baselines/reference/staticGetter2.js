@@ -12,12 +12,9 @@ class C {
 //// [staticGetter2.js]
 "use strict";
 // once caused stack overflow
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.x = function () {
+class C {
+    static x() {
         var r = this;
         return this;
-    };
-    return C;
-}());
+    }
+}

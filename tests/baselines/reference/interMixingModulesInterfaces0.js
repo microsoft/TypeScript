@@ -21,7 +21,7 @@ var x: A.B = A.B.createB();
 "use strict";
 var A;
 (function (A) {
-    var B;
+    let B;
     (function (B) {
         function createB() {
             return null;

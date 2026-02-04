@@ -23,4 +23,4 @@ var exports = {};
  */
 exports.SomeName;
 /** @type {exports.SomeName} */
-var myString = 'str';
+const myString = 'str';

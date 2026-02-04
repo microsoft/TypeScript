@@ -7,7 +7,6 @@ var tuple: [string, number] = ["", 1];
 
 //// [restElementWithAssignmentPattern4.js]
 "use strict";
-var _a, _b;
 var a, b;
 var tuple = ["", 1];
-_a = tuple.slice(0), _b = _a[0], a = _b === void 0 ? "" : _b, b = _a.b;
+[...{ 0: a = "", b }] = tuple;

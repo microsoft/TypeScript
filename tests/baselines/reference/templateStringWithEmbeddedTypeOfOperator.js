@@ -5,4 +5,4 @@ var x = `abc${ typeof "hi" }def`;
 
 //// [templateStringWithEmbeddedTypeOfOperator.js]
 "use strict";
-var x = "abc".concat(typeof "hi", "def");
+var x = `abc${typeof "hi"}def`;

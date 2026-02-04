@@ -14,9 +14,6 @@ function bar() {
 
 //// [a.js]
 "use strict";
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBO0lBQUE7SUFDQSxDQUFDO0lBQUQsUUFBQztBQUFELENBQUMsQUFERCxJQUNDIn0=
+class c {
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBLE1BQU0sQ0FBQztDQUNOIn0=

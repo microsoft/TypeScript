@@ -1,3 +1,4 @@
+// @target: es2015
 let a = 10;
 --(a satisfies number);
 ++(a satisfies number);

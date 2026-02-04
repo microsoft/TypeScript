@@ -16,11 +16,8 @@ function bar() {
 
 //// [a.js]
 "use strict";
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 //// [b.js]
 "use strict";
 /// <reference path="c.js"/>

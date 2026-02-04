@@ -5,4 +5,4 @@ var foo = () => undefined;
 
 //// [typeCheckReturnExpression.js]
 "use strict";
-var foo = function () { return undefined; };
+var foo = () => undefined;

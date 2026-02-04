@@ -1,3 +1,4 @@
+// @target: es2015
 interface A {}
 
 function factory(a: any): {new(): Object} {

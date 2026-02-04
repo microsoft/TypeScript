@@ -10,10 +10,9 @@ class Dummy {
 
 //// [unusedMultipleParameter2InContructor.js]
 "use strict";
-var Dummy = /** @class */ (function () {
-    function Dummy(person, person2, person3) {
+class Dummy {
+    constructor(person, person2, person3) {
         var unused = 20;
         person2 = "Dummy value";
     }
-    return Dummy;
-}());
+}

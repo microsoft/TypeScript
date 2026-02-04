@@ -9,10 +9,7 @@ A.foo();
 
 //// [staticInstanceResolution4.js]
 "use strict";
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.foo = function () { };
-    return A;
-}());
+class A {
+    foo() { }
+}
 A.foo();

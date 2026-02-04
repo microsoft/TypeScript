@@ -6,7 +6,7 @@ const x = "Hello World";
 
 //// [optionsCompositeWithIncrementalFalse.js]
 "use strict";
-var x = "Hello World";
+const x = "Hello World";
 
 
 //// [optionsCompositeWithIncrementalFalse.d.ts]

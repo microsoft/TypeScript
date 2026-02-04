@@ -25,21 +25,12 @@ var r2 = foo(c1, c1); // ok
 
 //// [genericCallWithObjectTypeArgs.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
-var X = /** @class */ (function () {
-    function X() {
-    }
-    return X;
-}());
+class C {
+}
+class D {
+}
+class X {
+}
 function foo(t, t2) {
     var x;
     return x;

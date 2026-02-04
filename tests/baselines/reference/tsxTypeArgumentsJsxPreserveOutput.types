@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxTypeArgumentsJsxPreserveOutput.tsx] ////
 
 === foo.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : typeof React
 >      : ^^^^^^^^^^^^

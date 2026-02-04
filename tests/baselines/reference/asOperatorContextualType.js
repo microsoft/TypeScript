@@ -7,4 +7,4 @@ var x = (v => v) as (x: number) => string;
 //// [asOperatorContextualType.js]
 "use strict";
 // should error
-var x = (function (v) { return v; });
+var x = (v => v);

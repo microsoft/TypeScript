@@ -11,12 +11,9 @@ namespace Clod {
 
 //// [staticsNotInScopeInClodule.js]
 "use strict";
-var Clod = /** @class */ (function () {
-    function Clod() {
-    }
-    Clod.x = 10;
-    return Clod;
-}());
+class Clod {
+}
+Clod.x = 10;
 (function (Clod) {
     var p = x; // x isn't in scope here
 })(Clod || (Clod = {}));

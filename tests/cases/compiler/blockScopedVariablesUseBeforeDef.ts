@@ -1,5 +1,5 @@
 // @strict: false
-// @target: ES5
+// @target: ES5, ES2015
 // @lib: esnext, dom
 function foo0() {
     let a = x;

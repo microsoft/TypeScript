@@ -41,8 +41,5 @@ interface I4<T extends Foo<T>> { // Should not be error
 
 //// [interfaceWithMultipleDeclarations.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}

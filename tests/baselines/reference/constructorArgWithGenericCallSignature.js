@@ -20,11 +20,9 @@ var test = new Test.MyClass(func); // Should be OK
 "use strict";
 var Test;
 (function (Test) {
-    var MyClass = /** @class */ (function () {
-        function MyClass(func) {
-        }
-        return MyClass;
-    }());
+    class MyClass {
+        constructor(func) { }
+    }
     Test.MyClass = MyClass;
     function F(func) { }
     Test.F = F;

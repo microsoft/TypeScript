@@ -12,4 +12,4 @@ Q.try(() => { });
 
 //// [exportDeclarationsInAmbientNamespaces.js]
 "use strict";
-Q.try(function () { });
+Q.try(() => { });

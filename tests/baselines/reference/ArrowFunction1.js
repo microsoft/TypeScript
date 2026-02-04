@@ -7,5 +7,5 @@ var v = (a: ) => {
 
 //// [ArrowFunction1.js]
 "use strict";
-var v = function (a) {
+var v = (a) => {
 };

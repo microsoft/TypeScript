@@ -28,14 +28,8 @@ abstract class B {
 
 //// [classAbstractOverloads.js]
 "use strict";
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.baz = function () { };
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class A {
+    baz() { }
+}
+class B {
+}

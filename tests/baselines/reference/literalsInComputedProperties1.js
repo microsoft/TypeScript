@@ -54,14 +54,12 @@ let a0 = X["bar"];
 
 //// [literalsInComputedProperties1.js]
 "use strict";
-var _a;
-var x = (_a = {
-        1: 1
-    },
-    _a[2] = 1,
-    _a["3"] = 1,
-    _a["4"] = 1,
-    _a);
+let x = {
+    1: 1,
+    [2]: 1,
+    "3": 1,
+    ["4"]: 1
+};
 x[1].toExponential();
 x[2].toExponential();
 x[3].toExponential();
@@ -70,11 +68,8 @@ y[1].toExponential();
 y[2].toExponential();
 y[3].toExponential();
 y[4].toExponential();
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 z[1].toExponential();
 z[2].toExponential();
 z[3].toExponential();
@@ -88,6 +83,6 @@ var X;
     X[X["foo"] = 5] = "foo";
     X[X["bar"] = 6] = "bar";
 })(X || (X = {}));
-var a = X["foo"];
-var a0 = X["bar"];
+let a = X["foo"];
+let a0 = X["bar"];
 // TODO: make sure that enum still disallow template literals as member names

@@ -1,3 +1,4 @@
+// @target: es2015
 // var then var
 var x1 = 1;
 var x1 = 2;

@@ -14,4 +14,4 @@ new P<string>(r => { r('foo') });
 "use strict";
 //// [second.js]
 "use strict";
-new P(function (r) { r('foo'); });
+new P(r => { r('foo'); });

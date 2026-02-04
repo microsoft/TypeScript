@@ -5,4 +5,4 @@ var { while } = { while: 1 }
 
 //// [objectBindingPatternKeywordIdentifiers01.js]
 "use strict";
-var  = { while: 1 }.while;
+var { while:  } = { while: 1 };

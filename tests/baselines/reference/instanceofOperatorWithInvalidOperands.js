@@ -50,12 +50,9 @@ var rc1 = '' instanceof {};
 
 //// [instanceofOperatorWithInvalidOperands.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function () { };
-    return C;
-}());
+class C {
+    foo() { }
+}
 var x;
 var a4;
 var ra1 = a1 instanceof x;

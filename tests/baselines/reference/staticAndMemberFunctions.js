@@ -8,10 +8,7 @@ class T {
 
 //// [staticAndMemberFunctions.js]
 "use strict";
-var T = /** @class */ (function () {
-    function T() {
-    }
-    T.x = function () { };
-    T.prototype.y = function () { };
-    return T;
-}());
+class T {
+    static x() { }
+    y() { }
+}

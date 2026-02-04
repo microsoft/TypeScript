@@ -5,4 +5,4 @@
 
 //// [templateStringInIndexExpression.js]
 "use strict";
-"abc".concat(0, "abc")["0"];
+`abc${0}abc`[`0`];

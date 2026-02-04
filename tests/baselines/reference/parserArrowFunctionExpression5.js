@@ -10,4 +10,4 @@
 
 //// [parserArrowFunctionExpression5.js]
 "use strict";
-(bar(x, function () { }, function () { }));
+(bar(x, () => { }, () => { }));

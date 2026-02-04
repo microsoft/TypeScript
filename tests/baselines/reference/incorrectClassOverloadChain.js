@@ -9,9 +9,8 @@ class C {
 
 //// [incorrectClassOverloadChain.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.x = 1;
     }
-    return C;
-}());
+}

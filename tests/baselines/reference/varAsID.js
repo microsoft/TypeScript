@@ -22,17 +22,15 @@ var f2 = new Foo2();
 
 //// [varAsID.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
+class Foo {
+    constructor() {
         this.x = 1;
     }
-    return Foo;
-}());
+}
 var f = new Foo();
-var Foo2 = /** @class */ (function () {
-    function Foo2() {
+class Foo2 {
+    constructor() {
         this.x = 1;
     }
-    return Foo2;
-}());
+}
 var f2 = new Foo2();

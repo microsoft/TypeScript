@@ -1,3 +1,4 @@
+// @target: es2015
 function foo1<T extends any>(test: T) { }
 function foo2<T extends number>(test: T) { }
 function foo3<T extends string>(test: T) { }

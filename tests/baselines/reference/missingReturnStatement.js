@@ -13,12 +13,9 @@ namespace Test {
 "use strict";
 var Test;
 (function (Test) {
-    var Bug = /** @class */ (function () {
-        function Bug() {
+    class Bug {
+        foo() {
         }
-        Bug.prototype.foo = function () {
-        };
-        return Bug;
-    }());
+    }
     Test.Bug = Bug;
 })(Test || (Test = {}));

@@ -10,16 +10,9 @@ class C {
 
 //// [commentOnClassAccessor1.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    Object.defineProperty(C.prototype, "bar", {
-        /**
-         * @type {number}
-         */
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+class C {
+    /**
+     * @type {number}
+     */
+    get bar() { return 1; }
+}

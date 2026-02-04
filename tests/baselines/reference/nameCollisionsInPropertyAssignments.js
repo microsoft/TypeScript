@@ -7,4 +7,4 @@ var y = { x() { x++; } };
 //// [nameCollisionsInPropertyAssignments.js]
 "use strict";
 var x = 1;
-var y = { x: function () { x++; } };
+var y = { x() { x++; } };

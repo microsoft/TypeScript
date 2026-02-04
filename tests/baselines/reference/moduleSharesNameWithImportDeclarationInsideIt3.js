@@ -22,7 +22,7 @@ namespace A.M {
 "use strict";
 var Z;
 (function (Z) {
-    var M;
+    let M;
     (function (M) {
         function bar() {
             return "";

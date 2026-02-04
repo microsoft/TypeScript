@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // checking subtype relations for function types as it relates to contextual signature instantiation
 

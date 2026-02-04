@@ -18,13 +18,11 @@ try {
 
 //// [flowInFinally1.js]
 "use strict";
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.method = function () { };
-    return A;
-}());
-var a = null;
+class A {
+    constructor() { }
+    method() { }
+}
+let a = null;
 try {
     a = new A();
 }

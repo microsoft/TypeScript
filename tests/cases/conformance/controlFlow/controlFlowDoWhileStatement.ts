@@ -1,3 +1,4 @@
+// @target: es2015
 let cond: boolean;
 function a() {
     let x: string | number;

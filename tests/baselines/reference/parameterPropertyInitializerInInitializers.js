@@ -7,11 +7,9 @@ class Foo {
 
 //// [parameterPropertyInitializerInInitializers.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo(x, y) {
-        if (y === void 0) { y = x; }
+class Foo {
+    constructor(x, y = x) {
         this.x = x;
         this.y = y;
     }
-    return Foo;
-}());
+}

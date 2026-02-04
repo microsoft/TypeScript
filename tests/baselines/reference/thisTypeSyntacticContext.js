@@ -20,7 +20,7 @@ o.test!!!();
 "use strict";
 function f() {
 }
-var o = { n: 1 };
+const o = { n: 1 };
 o.test = f;
 o.test();
 o.test();

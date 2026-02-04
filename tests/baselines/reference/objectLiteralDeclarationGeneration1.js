@@ -5,11 +5,8 @@ class y<T extends {}>{ }
 
 //// [objectLiteralDeclarationGeneration1.js]
 "use strict";
-var y = /** @class */ (function () {
-    function y() {
-    }
-    return y;
-}());
+class y {
+}
 
 
 //// [objectLiteralDeclarationGeneration1.d.ts]

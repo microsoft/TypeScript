@@ -5,4 +5,4 @@ var x = `abc${ 0 }def` instanceof String;
 
 //// [templateStringInInstanceOf.js]
 "use strict";
-var x = "abc".concat(0, "def") instanceof String;
+var x = `abc${0}def` instanceof String;

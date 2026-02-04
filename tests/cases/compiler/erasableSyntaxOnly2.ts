@@ -1,3 +1,4 @@
+// @target: es2015
 // @erasableSyntaxOnly: true
 
 // @filename: index.ts

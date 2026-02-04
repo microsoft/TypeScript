@@ -16,4 +16,4 @@ foo(n => n.length, () => 'hi');
 "use strict";
 function foo(o, i) { }
 // Infer string from second argument because it isn't context sensitive
-foo(function (n) { return n.length; }, function () { return 'hi'; });
+foo(n => n.length, () => 'hi');

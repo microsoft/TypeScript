@@ -14,7 +14,6 @@ namespace Midori
 >Foo : (src: any) => void
 >    : ^   ^^^^^^^^^^^^^^
 >src : any
->    : ^^^
         {
         }
     }

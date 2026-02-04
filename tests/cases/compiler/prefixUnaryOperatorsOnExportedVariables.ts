@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @module: system
 
 export var x = false;

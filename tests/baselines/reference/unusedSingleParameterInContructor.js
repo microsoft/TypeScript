@@ -9,9 +9,8 @@ class Dummy {
 
 //// [unusedSingleParameterInContructor.js]
 "use strict";
-var Dummy = /** @class */ (function () {
-    function Dummy(person) {
+class Dummy {
+    constructor(person) {
         var unused = 20;
     }
-    return Dummy;
-}());
+}

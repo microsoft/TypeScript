@@ -1,5 +1,6 @@
+// @module: commonjs
+// @target: es5, es2015
 // @declaration: true
-// @target: es5
 // @baseUrl: .
 // @outDir: ./dist
 // @rootDir: ./src

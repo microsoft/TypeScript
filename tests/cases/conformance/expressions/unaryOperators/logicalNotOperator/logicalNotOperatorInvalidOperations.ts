@@ -1,3 +1,4 @@
+// @target: es2015
 // Unary operator !
 declare var b: number;
 

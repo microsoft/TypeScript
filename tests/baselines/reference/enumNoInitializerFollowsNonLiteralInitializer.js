@@ -49,7 +49,7 @@ exports.foo = 2;
 //// [bad.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var helpers_1 = require("./helpers");
+const helpers_1 = require("./helpers");
 var A;
 (function (A) {
     A[A["a"] = 2] = "a";
@@ -61,7 +61,7 @@ var A;
 //// [good.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var helpers_1 = require("./helpers");
+const helpers_1 = require("./helpers");
 var A;
 (function (A) {
     A[A["a"] = 2] = "a";

@@ -1,3 +1,4 @@
+// @target: es2015
 // delete  operator on number type
 declare var NUMBER: number;
 var NUMBER1: number[] = [1, 2];

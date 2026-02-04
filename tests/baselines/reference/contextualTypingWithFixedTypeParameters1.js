@@ -7,5 +7,5 @@ var r9 = f10('', () => (a => a.foo), 1); // error
 
 //// [contextualTypingWithFixedTypeParameters1.js]
 "use strict";
-f10('', function () { return function (a) { return a.foo; }; }, ''); // a is ""
-var r9 = f10('', function () { return (function (a) { return a.foo; }); }, 1); // error
+f10('', () => a => a.foo, ''); // a is ""
+var r9 = f10('', () => (a => a.foo), 1); // error

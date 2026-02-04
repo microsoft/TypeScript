@@ -33,9 +33,9 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var m1 = __importStar(require("m1"));
-var m4 = __importStar(require("m4"));
+const m1 = __importStar(require("m1"));
+const m4 = __importStar(require("m4"));
 m1.f1("test");
 m1.f2.a = 10;
 m1.f2.person.age = "10"; // Should error if loaded the .js files correctly
-var r2 = 3 + m4.foo; // Should be OK if correctly using the @types .d.ts file
+let r2 = 3 + m4.foo; // Should be OK if correctly using the @types .d.ts file

@@ -14,18 +14,12 @@ namespace M {
 
 //// [classAndVariableWithSameName.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}()); // error
+class C {
+} // error
 var C = ''; // error
 var M;
 (function (M) {
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
+    class D {
+    }
     var D = 1; // error
 })(M || (M = {}));

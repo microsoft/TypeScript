@@ -1,3 +1,4 @@
+// @target: es2015
 namespace A {
     class A { s: string }
     class AA<T> { s: T }

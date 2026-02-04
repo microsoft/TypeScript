@@ -8,9 +8,6 @@ class C {
 
 //// [parserClassDeclaration21.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype[1] = function () { };
-    return C;
-}());
+class C {
+    1() { }
+}

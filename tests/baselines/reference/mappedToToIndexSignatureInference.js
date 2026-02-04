@@ -22,4 +22,4 @@ var E;
     E["A"] = "foo";
     E["B"] = "bar";
 })(E || (E = {}));
-var x = enumValues(E);
+let x = enumValues(E);

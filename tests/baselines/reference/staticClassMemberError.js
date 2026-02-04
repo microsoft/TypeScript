@@ -16,16 +16,10 @@ class Foo {
 
 //// [staticClassMemberError.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.a = function () {
+class C {
+    a() {
         s = 1;
-    };
-    return C;
-}());
-var Foo = /** @class */ (function () {
-    function Foo() {
     }
-    return Foo;
-}());
+}
+class Foo {
+}

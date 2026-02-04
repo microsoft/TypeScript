@@ -1,3 +1,4 @@
+// @target: es2015
 namespace 100 {}
 interface 100 {}
 type 100 {}

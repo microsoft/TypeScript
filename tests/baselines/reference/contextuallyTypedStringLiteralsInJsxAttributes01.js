@@ -20,7 +20,7 @@ const FooComponent = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</spa
 
 //// [contextuallyTypedStringLiteralsInJsxAttributes01.jsx]
 "use strict";
-var FooComponent = function (props) { return <span>{props.foo}</span>; };
+const FooComponent = (props) => <span>{props.foo}</span>;
 <FooComponent foo={"A"}/>;
 <FooComponent foo="A"/>;
 <FooComponent foo={"f"}/>;

@@ -10,8 +10,8 @@ f(y => {
 
 //// [stringLiteralTypesOverloads04.js]
 "use strict";
-f(function (y) {
-    var z = y = "foo";
+f(y => {
+    const z = y = "foo";
     return z;
 });
 

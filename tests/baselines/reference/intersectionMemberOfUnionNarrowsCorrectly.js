@@ -8,6 +8,5 @@ x.a
 
 
 //// [intersectionMemberOfUnionNarrowsCorrectly.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 x.a;
+export {};

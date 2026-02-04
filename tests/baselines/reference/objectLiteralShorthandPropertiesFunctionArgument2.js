@@ -14,6 +14,6 @@ foo(person);  // error
 "use strict";
 var id = 10000;
 var name = "my name";
-var person = { name: name, id: id };
+var person = { name, id };
 function foo(p) { }
 foo(person); // error

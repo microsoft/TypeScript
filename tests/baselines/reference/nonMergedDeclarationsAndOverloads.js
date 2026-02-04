@@ -12,11 +12,8 @@ class A {
 
 //// [nonMergedDeclarationsAndOverloads.js]
 "use strict";
-var A = /** @class */ (function () {
-    function A() {
+class A {
+    f() { }
+    m1(a) {
     }
-    A.prototype.f = function () { };
-    A.prototype.m1 = function (a) {
-    };
-    return A;
-}());
+}

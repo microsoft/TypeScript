@@ -493,10 +493,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@type
 
 
 //// [/home/src/workspace/projects/project1/file.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.file = void 0;
-exports.file = 10;
+export const file = 10;
 
 
 //// [/home/src/workspace/projects/project1/file.d.ts]
@@ -514,10 +511,7 @@ export declare const file = 10;
 
 
 //// [/home/src/workspace/projects/project1/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "type1";
+export const x = "type1";
 
 
 //// [/home/src/workspace/projects/project1/index.d.ts]
@@ -648,10 +642,7 @@ export declare const x = "type1";
 }
 
 //// [/home/src/workspace/projects/project2/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
+export const y = 10;
 
 
 //// [/home/src/workspace/projects/project2/index.d.ts]
@@ -724,10 +715,7 @@ export declare const y = 10;
 }
 
 //// [/home/src/workspace/projects/project3/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.z = void 0;
-exports.z = 10;
+export const z = 10;
 
 
 //// [/home/src/workspace/projects/project3/index.d.ts]
@@ -800,10 +788,7 @@ export declare const z = 10;
 }
 
 //// [/home/src/workspace/projects/project4/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.z = void 0;
-exports.z = 10;
+export const z = 10;
 
 
 //// [/home/src/workspace/projects/project4/index.d.ts]

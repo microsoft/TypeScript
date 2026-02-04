@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro for #24694
 // @noImplicitAny: true
 

@@ -5,10 +5,4 @@
 
 //// [parserParameterList11.js]
 "use strict";
-(function () {
-    var arg = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i] = arguments[_i];
-    }
-    return 102;
-});
+(...arg) => 102;

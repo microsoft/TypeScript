@@ -9,4 +9,4 @@ f(() => n => n);
 
 //// [contextualTypingFunctionReturningFunction2.js]
 "use strict";
-f(function () { return function (n) { return n; }; });
+f(() => n => n);

@@ -27,11 +27,8 @@ var r4 = b["a b"];
 
 //// [stringNamedPropertyAccess.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c;
 var r1 = c["a b"];
 var r1b = C['c d'];

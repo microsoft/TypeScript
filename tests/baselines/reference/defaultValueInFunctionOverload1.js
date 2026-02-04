@@ -6,6 +6,4 @@ function foo(x = '') { }
 
 //// [defaultValueInFunctionOverload1.js]
 "use strict";
-function foo(x) {
-    if (x === void 0) { x = ''; }
-}
+function foo(x = '') { }

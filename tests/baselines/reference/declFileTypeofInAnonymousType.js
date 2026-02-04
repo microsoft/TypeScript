@@ -27,13 +27,10 @@ var d = {
 "use strict";
 var m1;
 (function (m1) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        return c;
-    }());
+    class c {
+    }
     m1.c = c;
-    var e;
+    let e;
     (function (e) {
         e[e["weekday"] = 0] = "weekday";
         e[e["weekend"] = 1] = "weekend";

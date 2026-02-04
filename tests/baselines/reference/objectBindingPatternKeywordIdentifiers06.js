@@ -5,4 +5,4 @@ var { as: as } = { as: 1 }
 
 //// [objectBindingPatternKeywordIdentifiers06.js]
 "use strict";
-var as = { as: 1 }.as;
+var { as: as } = { as: 1 };

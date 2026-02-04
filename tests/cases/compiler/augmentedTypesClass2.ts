@@ -1,3 +1,4 @@
+// @target: es2015
 // Checking class with other things in type space not value space
 
 // class then interface

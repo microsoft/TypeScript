@@ -26,11 +26,9 @@ export = MainModule;
 "use strict";
 //// [missingImportAfterModuleImport_1.js]
 "use strict";
-var MainModule = /** @class */ (function () {
-    function MainModule() {
-    }
-    return MainModule;
-}());
+class MainModule {
+    constructor() { }
+}
 module.exports = MainModule;
 
 

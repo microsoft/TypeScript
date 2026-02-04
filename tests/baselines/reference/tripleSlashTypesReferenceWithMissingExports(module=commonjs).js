@@ -16,4 +16,4 @@ const a: GlobalThing = { a: 0 };
 //// [usage.js]
 "use strict";
 /// <reference types="pkg" />
-var a = { a: 0 };
+const a = { a: 0 };

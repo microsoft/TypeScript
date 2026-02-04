@@ -9,8 +9,6 @@ class C {
 
 //// [duplicateConstructorOverloadSignature.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C(x) {
-    }
-    return C;
-}());
+class C {
+    constructor(x) { }
+}

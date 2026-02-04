@@ -12,4 +12,4 @@ let foo: foo.Bar;
 
 //// [resolveModuleNameWithSameLetDeclarationName1.js]
 "use strict";
-var foo;
+let foo;

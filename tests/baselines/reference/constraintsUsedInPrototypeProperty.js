@@ -6,9 +6,6 @@ Foo.prototype; // Foo<any, any, any>
 
 //// [constraintsUsedInPrototypeProperty.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 Foo.prototype; // Foo<any, any, any>

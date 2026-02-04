@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /globals.ts
 namespace globals {
   export type Foo = {};

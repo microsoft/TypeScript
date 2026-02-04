@@ -20,4 +20,4 @@ var globals;
 var Foo = globals.toString.Blah;
 //// [index.js]
 "use strict";
-var Foo = {};
+const Foo = {};

@@ -25,11 +25,8 @@ var b = {
 
 //// [numericNamedPropertyDuplicates.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var a;
 var b = {
     2: 1,

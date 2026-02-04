@@ -22,11 +22,8 @@ namespace C {
 "use strict";
 var B;
 (function (B_1) {
-    var B = /** @class */ (function () {
-        function B() {
-        }
-        return B;
-    }());
+    class B {
+    }
     B_1.B = B;
 })(B || (B = {}));
 var C;

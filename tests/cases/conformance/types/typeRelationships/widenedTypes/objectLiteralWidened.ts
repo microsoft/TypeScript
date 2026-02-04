@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // object literal properties are widened to any
 

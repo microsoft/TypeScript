@@ -12,12 +12,9 @@ class A { }
 
 //// [propertyAccessOnObjectLiteral.js]
 "use strict";
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 ({}.toString());
-(function () {
+(() => {
     ({}.toString());
 })();

@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace ng {
     interfaceICompiledExpression {
         (context: any, locals?: any): any;

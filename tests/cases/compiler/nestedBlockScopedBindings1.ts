@@ -1,3 +1,4 @@
+// @target: es2015
 function a0() {
     {
         let x = 1;

@@ -14,11 +14,10 @@ namespace mod {
 "use strict";
 var mod;
 (function (mod) {
-    var Customers = /** @class */ (function () {
-        function Customers(names, ages) {
+    class Customers {
+        constructor(names, ages) {
             this.names = names;
             this.ages = ages;
         }
-        return Customers;
-    }());
+    }
 })(mod || (mod = {}));

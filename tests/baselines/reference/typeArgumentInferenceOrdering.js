@@ -18,10 +18,7 @@ var x = foo(new C()).x; // was Error that property x does not exist on type {}
 
 //// [typeArgumentInferenceOrdering.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 function foo(f) { return null; }
 var x = foo(new C()).x; // was Error that property x does not exist on type {}

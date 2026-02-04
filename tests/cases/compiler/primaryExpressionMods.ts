@@ -1,3 +1,4 @@
+// @target: es2015
 namespace M
 {
     export interface P { x: number; y: number; }

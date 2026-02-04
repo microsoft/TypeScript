@@ -22,7 +22,7 @@ type e1 = Explode<typeof data1>;
 
 //// [objectAssignLikeNonUnionResult.js]
 "use strict";
-var defaultValue = { field: 1 };
+const defaultValue = { field: 1 };
 // Displayed type: Interface & { field: number }
 // Underlying type: Something else...
-var data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});
+const data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Optional parameters cannot also have initializer expressions, these are all errors
 

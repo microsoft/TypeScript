@@ -59,8 +59,8 @@ if ([1] != b) {
 
 //// [conditionalEqualityOnLiteralObjects.js]
 "use strict";
-var a = { a: 1 };
-var b = [1];
+const a = { a: 1 };
+const b = [1];
 if ({ a: 1 } === { a: 1 }) {
 }
 if ([1] === [1]) {

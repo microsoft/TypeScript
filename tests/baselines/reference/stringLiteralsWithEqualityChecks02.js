@@ -27,7 +27,7 @@ b = "bar" != y;
 
 //// [stringLiteralsWithEqualityChecks02.js]
 "use strict";
-var b;
+let b;
 b = x == y;
 b = "foo" == y;
 b = y == "foo";

@@ -34,8 +34,8 @@ b.foo();
 
 //// [autolift3.js]
 "use strict";
-var B = /** @class */ (function () {
-    function B() {
+class B {
+    constructor() {
         function foo() { }
         foo();
         var a = 0;
@@ -51,7 +51,6 @@ var B = /** @class */ (function () {
             return inner;
         })();
     }
-    return B;
-}());
+}
 var b = new B();
 b.foo();

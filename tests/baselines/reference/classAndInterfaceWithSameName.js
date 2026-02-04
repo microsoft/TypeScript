@@ -16,16 +16,10 @@ namespace M {
 
 //// [classAndInterfaceWithSameName.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var M;
 (function (M) {
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
+    class D {
+    }
 })(M || (M = {}));

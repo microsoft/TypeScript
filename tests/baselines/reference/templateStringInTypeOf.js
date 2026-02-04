@@ -5,4 +5,4 @@ var x = typeof `abc${ 123 }def`;
 
 //// [templateStringInTypeOf.js]
 "use strict";
-var x = typeof "abc".concat(123, "def");
+var x = typeof `abc${123}def`;

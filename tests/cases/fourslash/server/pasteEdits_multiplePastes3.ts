@@ -22,7 +22,7 @@
 //// export const bb = 2;
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "files": ["file1.ts", "target.ts", "other.ts"] }
+////{ "compilerOptions": { "lib": ["es5"] }, "files": ["file1.ts", "target.ts", "other.ts"] }
 
 const ranges = test.ranges();
 verify.pasteEdits({

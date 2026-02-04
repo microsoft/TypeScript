@@ -24,6 +24,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var point_1 = __importDefault(require("./point"));
-var C = point_1.default;
-var p = new C(1, 2);
+const point_1 = __importDefault(require("./point"));
+const C = point_1.default;
+const p = new C(1, 2);

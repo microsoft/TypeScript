@@ -9,9 +9,6 @@ class baz {
 
 //// [functionOverloads5.js]
 "use strict";
-var baz = /** @class */ (function () {
-    function baz() {
-    }
-    baz.prototype.foo = function (bar) { };
-    return baz;
-}());
+class baz {
+    foo(bar) { }
+}

@@ -1,3 +1,4 @@
+// @target: es2015
 var x: { [index: string]: string; one: string; };
 declare var a: { one: string; };
 declare var b: { one: number; two: string; };

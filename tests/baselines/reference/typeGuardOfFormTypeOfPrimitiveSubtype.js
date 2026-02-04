@@ -26,23 +26,23 @@ if (typeof b === "boolean") {
 
 //// [typeGuardOfFormTypeOfPrimitiveSubtype.js]
 "use strict";
-var a;
-var b;
+let a;
+let b;
 if (typeof a === "number") {
-    var c = a;
+    let c = a;
 }
 if (typeof a === "string") {
-    var c = a;
+    let c = a;
 }
 if (typeof a === "boolean") {
-    var c = a;
+    let c = a;
 }
 if (typeof b === "number") {
-    var c = b;
+    let c = b;
 }
 if (typeof b === "string") {
-    var c = b;
+    let c = b;
 }
 if (typeof b === "boolean") {
-    var c = b;
+    let c = b;
 }

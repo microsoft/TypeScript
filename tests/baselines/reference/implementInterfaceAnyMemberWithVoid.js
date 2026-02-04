@@ -13,10 +13,7 @@ class Bug implements I {
 
 //// [implementInterfaceAnyMemberWithVoid.js]
 "use strict";
-var Bug = /** @class */ (function () {
-    function Bug() {
+class Bug {
+    foo(value) {
     }
-    Bug.prototype.foo = function (value) {
-    };
-    return Bug;
-}());
+}

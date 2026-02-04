@@ -6,9 +6,4 @@ function sum (...) {}
 
 //// [restArgMissingName.js]
 "use strict";
-function sum() {
-    var  = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        [_i] = arguments[_i];
-    }
-}
+function sum(...) { }

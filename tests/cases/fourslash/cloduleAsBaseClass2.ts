@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @module: commonjs
 // @strict: false
 // @Filename: cloduleAsBaseClass2_0.ts
 ////class A {

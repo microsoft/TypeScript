@@ -5,4 +5,4 @@
 
 //// [templateStringTermination5.js]
 "use strict";
-"\\\\\\";
+`\\\\\\`;

@@ -46,19 +46,14 @@ namespace M {
 "use strict";
 var M;
 (function (M) {
-    var Foo = /** @class */ (function () {
-        function Foo() {
-        }
-        return Foo;
-    }());
+    class Foo {
+        constructor() { }
+    }
     M.Foo = Foo;
-    var S;
+    let S;
     (function (S) {
-        var Bar = /** @class */ (function () {
-            function Bar() {
-            }
-            return Bar;
-        }());
+        class Bar {
+        }
         S.Bar = Bar;
         // Emit Foo
         // Foo, <Foo />;
@@ -67,7 +62,7 @@ var M;
 (function (M) {
     // Emit M.Foo
     M.Foo, <M.Foo />;
-    var S;
+    let S;
     (function (S) {
         // Emit M.Foo
         M.Foo, <M.Foo />;

@@ -17,8 +17,5 @@ class C {
     Keep this pinned comment
    =========
 */
-var C = (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}

@@ -8,9 +8,8 @@ class C {
 
 //// [numericMethodName1.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this[1] = 2;
     }
-    return C;
-}());
+}

@@ -10,8 +10,8 @@ x = (100, a => {
 
 //// [contextuallyTypeCommaOperator02.js]
 "use strict";
-var x;
-x = (100, function (a) {
-    var b = a;
+let x;
+x = (100, a => {
+    const b = a;
     return b;
 });

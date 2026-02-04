@@ -19,13 +19,10 @@ class C<T extends Options> {
 
 //// [definiteAssignmentOfDestructuredVariable.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.method = function () {
-        var _a = this.foo, a = _a.a, b = _a.b;
+class C {
+    method() {
+        let { a, b } = this.foo;
         !(a && b);
         a;
-    };
-    return C;
-}());
+    }
+}

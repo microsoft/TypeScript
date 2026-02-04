@@ -2,6 +2,7 @@
 
 // Where the exhaustive case completion appears or not.
 
+// @lib: es5
 // @newline: LF
 // @Filename: /main.ts
 //// enum E {

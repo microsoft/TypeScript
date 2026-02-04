@@ -1,3 +1,4 @@
+// @target: es2015
 class MyClass {
     private p: number = 123;
     protected pp: number = 123;

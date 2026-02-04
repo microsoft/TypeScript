@@ -1,3 +1,4 @@
+// @target: es2015
 type A = { a: string };
 type B = { b: number };
 type C = { c: string };

@@ -6,4 +6,4 @@ const x = "Hello World";
 
 //// [optionsTsBuildInfoFileWithoutIncrementalAndComposite.js]
 "use strict";
-var x = "Hello World";
+const x = "Hello World";

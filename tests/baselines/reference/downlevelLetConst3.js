@@ -5,4 +5,4 @@ const a = 1
 
 //// [downlevelLetConst3.js]
 "use strict";
-var a = 1;
+const a = 1;

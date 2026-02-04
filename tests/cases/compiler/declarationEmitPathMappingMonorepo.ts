@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: packages/a/index.d.ts
 declare module "@ts-bug/a" {
     export type AText = {

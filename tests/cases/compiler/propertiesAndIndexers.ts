@@ -1,3 +1,4 @@
+// @target: es2015
 interface X { }
 interface Y {
     n: number;

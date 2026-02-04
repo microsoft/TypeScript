@@ -83,4 +83,4 @@ interface Base {
 
 //// [pickOfLargeObjectUnionWorks.js]
 "use strict";
-var xyz = { id: 'id' };
+const xyz = { id: 'id' };

@@ -7,9 +7,6 @@ class C {
 
 //// [recursiveFunctionTypes1.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.g = function (t) { };
-    return C;
-}());
+class C {
+    static g(t) { }
+}

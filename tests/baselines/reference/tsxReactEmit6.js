@@ -29,17 +29,6 @@ namespace M {
 "use strict";
 //// [react-consumer.js]
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -47,7 +36,7 @@ var M;
     // Should emit M.React.createElement
     //  and M.React.__spread
     var foo;
-    var spread1 = M.React.createElement("div", __assign({ x: '' }, foo, { y: '' }));
+    var spread1 = M.React.createElement("div", Object.assign({ x: '' }, foo, { y: '' }));
     // Quotes
     var x = M.React.createElement("div", null, "This \"quote\" thing");
 })(M || (M = {}));

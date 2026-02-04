@@ -1,3 +1,4 @@
+// @target: es2015
 const enum Enum1 {
    A0 = 100,
 }

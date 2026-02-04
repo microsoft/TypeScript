@@ -842,13 +842,12 @@ namespace TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    var Continuation = /** @class */ (function () {
-        function Continuation(normalBlock) {
+    class Continuation {
+        constructor(normalBlock) {
             this.normalBlock = normalBlock;
             this.exceptionBlock = -1;
         }
-        return Continuation;
-    }());
+    }
     TypeScript.Continuation = Continuation;
     function getBaseTypeLinks(bases, baseTypeLinks) {
         if (bases) {
@@ -922,7 +921,7 @@ var TypeScript;
             case NodeType.Name:
                 var name = alias.text;
                 var isDynamic = isQuoted(name);
-                var findSym = function (id) {
+                var findSym = (id) => {
                     if (context.members) {
                         return context.members.lookup(name);
                     }

@@ -11,5 +11,5 @@ g("", x => null, x => x.toLowerCase());
 
 //// [fixingTypeParametersRepeatedly1.js]
 "use strict";
-f("", function (x) { return null; }, function (x) { return x.toLowerCase(); });
-g("", function (x) { return null; }, function (x) { return x.toLowerCase(); });
+f("", x => null, x => x.toLowerCase());
+g("", x => null, x => x.toLowerCase());

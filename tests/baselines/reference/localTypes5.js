@@ -20,21 +20,15 @@ var x = foo<void>();
 //// [localTypes5.js]
 "use strict";
 function foo() {
-    var X = /** @class */ (function () {
-        function X() {
-        }
-        X.prototype.m = function () {
+    class X {
+        m() {
             return (function () {
-                var Y = /** @class */ (function () {
-                    function Y() {
-                    }
-                    return Y;
-                }());
+                class Y {
+                }
                 return new Y();
             })();
-        };
-        return X;
-    }());
+        }
+    }
     var x = new X();
     return x.m();
 }

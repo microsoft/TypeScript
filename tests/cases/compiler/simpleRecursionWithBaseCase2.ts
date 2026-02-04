@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @noImplicitAny: true
 // @lib: esnext

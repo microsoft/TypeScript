@@ -8,7 +8,7 @@ const array = [
 
 //// [commentOnArrayElement12.js]
 "use strict";
-var array = [
+const array = [
     ,
     , /* comment */
 ];

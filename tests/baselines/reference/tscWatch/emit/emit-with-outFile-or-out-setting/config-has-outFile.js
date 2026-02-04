@@ -42,10 +42,12 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/projects/a/out.js]
 "use strict";
-var x = 1;
-var y = 1;
+let x = 1;
+let y = 1;
 
 
 
@@ -62,7 +64,7 @@ FsWatches::
   {}
 /home/src/projects/a/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -81,7 +83,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/a/a.ts
 /home/src/projects/a/b.ts
 
@@ -121,8 +123,8 @@ Output::
 
 //// [/home/src/projects/a/out.js]
 "use strict";
-var x = 11;
-var y = 1;
+let x = 11;
+let y = 1;
 
 
 
@@ -139,7 +141,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/a/a.ts
 /home/src/projects/a/b.ts
 
@@ -179,8 +181,8 @@ Output::
 
 //// [/home/src/projects/a/out.js]
 "use strict";
-var xy = 11;
-var y = 1;
+let xy = 11;
+let y = 1;
 
 
 
@@ -197,7 +199,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/a/a.ts
 /home/src/projects/a/b.ts
 

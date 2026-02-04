@@ -20,4 +20,4 @@ var valueModule;
 (function (valueModule) {
     valueModule.val = 1;
 })(valueModule || (valueModule = {}));
-var bad1 = 'ambientModule';
+const bad1 = 'ambientModule';

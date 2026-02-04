@@ -7,4 +7,4 @@ f(n => 3);
 
 //// [typeInferenceFixEarly.js]
 "use strict";
-f(function (n) { return 3; });
+f(n => 3);

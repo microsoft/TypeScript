@@ -24,7 +24,6 @@ var v = { class };  // error
 
 //// [objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.js]
 "use strict";
-var _a;
 // errors
 var y = {
     "stringLiteral": ,
@@ -37,13 +36,9 @@ var y = {
     class: ,
     typeof: 
 };
-var x = (_a = {
-        a: a,
-        : .b,
-        a: a
-    },
-    _a["ss"] = ,
-    _a.a = a,
-    _a[1] = ,
-    _a);
+var x = {
+    a, : .b,
+    a, ["ss"]: ,
+    a, [1]: ,
+};
 var v = { class:  }; // error

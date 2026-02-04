@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
+// @lib: es5
 // @moduleResolution: bundler
 // @Filename: /home/src/workspaces/project/node_modules/foo/package.json
 //// { "name": "foo", "version": "1.0.0", "main": "./lib/main.js" }

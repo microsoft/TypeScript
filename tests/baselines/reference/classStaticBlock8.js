@@ -55,12 +55,9 @@ function foo (v: number) {
 "use strict";
 function foo(v) {
     label: while (v) {
-        var C_1 = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
-        (function () {
+        class C {
+        }
+        (() => {
             if (v === 1) {
                 break label;
             }
@@ -87,12 +84,9 @@ function foo(v) {
             continue;
         }
     }
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    (function () {
+    class C {
+    }
+    (() => {
         outer: break outer; // valid
         loop: while (v) {
             if (v === 1)

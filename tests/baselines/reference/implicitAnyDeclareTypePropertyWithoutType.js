@@ -21,11 +21,9 @@ var x5: () => any;
 
 //// [implicitAnyDeclareTypePropertyWithoutType.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+    constructor() { }
+}
 // this should be an error
 var x; // error at "y,z"
 var x1; // error at "z1" 

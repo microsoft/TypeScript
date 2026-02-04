@@ -31,21 +31,12 @@ var r3 = i.y; // error
 
 //// [interfaceExtendingClassWithProtecteds2.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    return Bar;
-}());
-var Baz = /** @class */ (function () {
-    function Baz() {
-    }
-    return Baz;
-}());
+class Foo {
+}
+class Bar {
+}
+class Baz {
+}
 var r = i.z;
 var r2 = i.x; // error
 var r3 = i.y; // error

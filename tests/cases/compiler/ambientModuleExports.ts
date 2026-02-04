@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace Foo {
 	function a():void;
 	var b:number;

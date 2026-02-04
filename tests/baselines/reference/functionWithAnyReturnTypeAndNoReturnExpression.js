@@ -10,5 +10,5 @@ var f3 = (): any => { };
 "use strict";
 // All should be allowed
 function f() { }
-var f2 = function () { };
-var f3 = function () { };
+var f2 = () => { };
+var f3 = () => { };

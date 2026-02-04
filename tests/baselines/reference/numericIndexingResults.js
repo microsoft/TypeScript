@@ -60,13 +60,12 @@ var r6 = b2[3];
 
 //// [numericIndexingResults.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this[1] = '';
         this["2"] = '';
     }
-    return C;
-}());
+}
 var c;
 var r1 = c['1'];
 var r2 = c['2'];

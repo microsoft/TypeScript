@@ -17,25 +17,19 @@ namespace M1.M2 {
 
 //// [parserSuperExpression4.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    foo() {
+        super.foo = 1;
     }
-    C.prototype.foo = function () {
-        _super.prototype.foo = 1;
-    };
-    return C;
-}());
+}
 var M1;
 (function (M1) {
     var M2;
     (function (M2) {
-        var C = /** @class */ (function () {
-            function C() {
+        class C {
+            foo() {
+                super.foo = 1;
             }
-            C.prototype.foo = function () {
-                _super.prototype.foo = 1;
-            };
-            return C;
-        }());
+        }
     })(M2 = M1.M2 || (M1.M2 = {}));
 })(M1 || (M1 = {}));

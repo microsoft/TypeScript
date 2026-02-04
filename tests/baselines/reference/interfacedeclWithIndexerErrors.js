@@ -57,9 +57,6 @@ var instance2 = new c1();
 
 //// [interfacedeclWithIndexerErrors.js]
 "use strict";
-var c1 = /** @class */ (function () {
-    function c1() {
-    }
-    return c1;
-}());
+class c1 {
+}
 var instance2 = new c1();

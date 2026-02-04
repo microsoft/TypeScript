@@ -15,21 +15,10 @@ namespace C {
 
 //// [cloduleWithDuplicateMember2.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    Object.defineProperty(C.prototype, "x", {
-        set: function (y) { },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "y", {
-        set: function (z) { },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+class C {
+    set x(y) { }
+    static set y(z) { }
+}
 (function (C) {
     C.x = 1;
 })(C || (C = {}));

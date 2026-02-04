@@ -9,10 +9,9 @@ import _this = a; // Error
 
 //// [collisionThisExpressionAndAliasInGlobal.js]
 "use strict";
-var _this_1 = this;
 var a;
 (function (a) {
     a.b = 10;
 })(a || (a = {}));
-var f = function () { return _this_1; };
+var f = () => this;
 var _this = a; // Error

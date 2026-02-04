@@ -1,3 +1,4 @@
+// @target: es2015
 // public is allowed on a constructor but is not meaningful
 
 class C {

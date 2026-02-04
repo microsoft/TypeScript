@@ -11,11 +11,8 @@ class C {
 
 //// [errorRecoveryInClassDeclaration.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.bar = function () {
+class C {
+    bar() {
         var v = foo(public, blaz(), {});
-    };
-    return C;
-}());
+    }
+}

@@ -10,14 +10,7 @@ class test {
 
 //// [getterMissingReturnError.js]
 "use strict";
-var test = /** @class */ (function () {
-    function test() {
+class test {
+    get p2() {
     }
-    Object.defineProperty(test.prototype, "p2", {
-        get: function () {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return test;
-}());
+}

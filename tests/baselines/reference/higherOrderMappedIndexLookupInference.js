@@ -43,4 +43,4 @@ function f3(a, b) {
     a = b;
     b = a;
 }
-var h = f;
+const h = f;

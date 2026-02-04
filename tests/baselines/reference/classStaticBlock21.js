@@ -11,12 +11,9 @@ class C {
 
 //// [classStaticBlock21.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 /* jsdocs */
-(function () {
+(() => {
     // something
 })();

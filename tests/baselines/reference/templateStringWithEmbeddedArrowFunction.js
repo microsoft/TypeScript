@@ -5,4 +5,4 @@ var x = `abc${ x => x }def`;
 
 //// [templateStringWithEmbeddedArrowFunction.js]
 "use strict";
-var x = "abc".concat(function (x) { return x; }, "def");
+var x = `abc${x => x}def`;

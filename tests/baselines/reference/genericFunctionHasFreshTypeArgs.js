@@ -8,4 +8,4 @@ f(x => f(y => x = y));
 "use strict";
 function f(p) { }
 ;
-f(function (x) { return f(function (y) { return x = y; }); });
+f(x => f(y => x = y));

@@ -1,0 +1,42 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== aux.ts (0 errors) ====
+    export class SomeClass {
+        field: string;
+    }
+    
+==== aux1.ts (0 errors) ====
+    export class SomeClass1 {
+        field: string;
+    }
+    
+==== aux2.ts (0 errors) ====
+    export class SomeClass2 {
+        field: string;
+    }
+==== main.ts (0 errors) ====
+    import { SomeClass } from './aux';
+    import { SomeClass1 } from './aux1';
+    
+    function annotation(): ClassDecorator {
+        return (target: any): void => { };
+    }
+    
+    function annotation1(): MethodDecorator {
+        return (target: any): void => { };
+    }
+    
+    @annotation()
+    export class ClassA {
+        array: SomeClass[];
+    
+        constructor(...init: SomeClass[]) {
+            this.array = init;
+        }
+    
+        @annotation1()
+        foo(... args: SomeClass1[]) {
+        }
+    }

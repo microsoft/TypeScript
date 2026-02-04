@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @esModuleInterop: true
 // @lib: es6
 // @Filename: foo.d.ts

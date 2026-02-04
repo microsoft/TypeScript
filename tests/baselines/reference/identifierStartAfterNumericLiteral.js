@@ -31,7 +31,7 @@ let valueIn = 3in[null];
 
 //// [identifierStartAfterNumericLiteral.js]
 "use strict";
-var valueIn = 3 in [null];
+let valueIn = 3 in [null];
 3;
 a[null];
 123;

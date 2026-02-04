@@ -7,4 +7,4 @@ var c = {};
 //// [nonIterableRestElement1.js]
 "use strict";
 var c = {};
-c = ["", 0].slice(0);
+[...c] = ["", 0];

@@ -16,7 +16,7 @@ export const reeexported = item;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reeexported = void 0;
-var somepackage_1 = require("../somepackage");
+const somepackage_1 = require("../somepackage");
 exports.reeexported = somepackage_1.item;
 
 

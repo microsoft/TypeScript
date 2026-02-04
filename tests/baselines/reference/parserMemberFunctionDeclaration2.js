@@ -7,9 +7,6 @@ class C {
 
 //// [parserMemberFunctionDeclaration2.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.Foo = function () { };
-    return C;
-}());
+class C {
+    Foo() { }
+}

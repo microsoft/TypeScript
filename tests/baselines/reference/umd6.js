@@ -15,4 +15,4 @@ let y: number = Foo.fn();
 //// [a.js]
 "use strict";
 /// <reference path="foo.d.ts" />
-var y = Foo.fn();
+let y = Foo.fn();

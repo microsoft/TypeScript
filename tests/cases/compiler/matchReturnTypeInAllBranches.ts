@@ -1,3 +1,4 @@
+// @target: es2015
 // Represents a monster who enjoys ice cream
 class IceCreamMonster {
     private iceCreamFlavor: string;

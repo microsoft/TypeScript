@@ -29,7 +29,7 @@ function c(x: string | number) {
 
 //// [typeGuardsInWhileStatement.js]
 "use strict";
-var cond;
+let cond;
 function a(x) {
     while (typeof x === "string") {
         x; // string

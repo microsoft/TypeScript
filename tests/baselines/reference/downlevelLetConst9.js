@@ -5,4 +5,4 @@ let a: number
 
 //// [downlevelLetConst9.js]
 "use strict";
-var a;
+let a;

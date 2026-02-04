@@ -11,11 +11,8 @@ var logger = Tools.NullLogger();
 "use strict";
 var Tools;
 (function (Tools) {
-    var NullLogger = /** @class */ (function () {
-        function NullLogger() {
-        }
-        return NullLogger;
-    }());
+    class NullLogger {
+    }
     Tools.NullLogger = NullLogger;
 })(Tools || (Tools = {}));
 var logger = Tools.NullLogger();

@@ -21,7 +21,7 @@ x = {
 var x;
 x = {
     get foo() {
-        return function (n) { return n; };
+        return (n) => n;
     },
     set foo(x) { }
 };

@@ -13,19 +13,13 @@ let Bar = 42
 
 //// [file1.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
-var Bar = 3;
+class Foo {
+}
+const Bar = 3;
 //// [file2.js]
 "use strict";
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    return Bar;
-}());
+class Bar {
+}
 //// [file3.js]
 "use strict";
-var Bar = 42;
+let Bar = 42;

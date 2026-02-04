@@ -15,11 +15,11 @@ export interface ImportInterface {}
 export interface RequireInterface {}
 //// [index.ts]
 // incorrect mode
-import type { RequireInterface } from "pkg" assert { "resolution-mode": "foobar" };
+import type { RequireInterface } from "pkg" with { "resolution-mode": "foobar" };
 // not type-only
-import { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+import { ImportInterface } from "pkg" with { "resolution-mode": "import" };
 // not exclusively type-only
-import {type RequireInterface as Req, RequireInterface as Req2} from "pkg" assert { "resolution-mode": "require" };
+import {type RequireInterface as Req, RequireInterface as Req2} from "pkg" with { "resolution-mode": "require" };
 
 export interface LocalInterface extends RequireInterface, ImportInterface {}
 
@@ -34,6 +34,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 //// [index.d.ts]
 import type { RequireInterface } from "pkg";
-import { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+import { ImportInterface } from "pkg" with { "resolution-mode": "import" };
 export interface LocalInterface extends RequireInterface, ImportInterface {
 }

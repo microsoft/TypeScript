@@ -28,7 +28,7 @@ const x2 = {
 
 //// [typeSatisfaction_propertyValueConformance2.js]
 "use strict";
-var x = {
+const x = {
     m: true
 };
 // Should be OK
@@ -37,9 +37,9 @@ checkTruths(x);
 checkM(x);
 console.log(x.z);
 // Should be OK under --noUncheckedIndexedAccess
-var m = x.m;
+const m = x.m;
 // Should be able to detect a failure here
-var x2 = {
+const x2 = {
     m: true,
     s: "false"
 };

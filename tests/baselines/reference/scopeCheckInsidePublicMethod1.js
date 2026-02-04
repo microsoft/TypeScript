@@ -10,11 +10,8 @@ class C {
 
 //// [scopeCheckInsidePublicMethod1.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.a = function () {
+class C {
+    a() {
         s = 1; // ERR
-    };
-    return C;
-}());
+    }
+}

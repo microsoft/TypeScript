@@ -1,3 +1,4 @@
+// @target: es2015
 namespace A {
     export function B<T>(x: T) { return x; }
 }

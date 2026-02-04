@@ -10,8 +10,5 @@ class A implements I {
 
 //// [classImplementingInterfaceIndexer.js]
 "use strict";
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}

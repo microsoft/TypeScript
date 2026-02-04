@@ -10,7 +10,7 @@ x; // string | number
 
 //// [controlFlowConditionalExpression.js]
 "use strict";
-var x;
-var cond;
+let x;
+let cond;
 cond ? x = "" : x = 3;
 x; // string | number

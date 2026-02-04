@@ -4,6 +4,7 @@
         "target": "es5",
         "module": "commonjs",
         "strict": true,
+        "useDefineForClassFields": false,
         "noImplicitAny": true,
         "noImplicitThis": true,
         "strictNullChecks": true,

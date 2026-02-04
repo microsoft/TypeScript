@@ -5,8 +5,5 @@ var v = class C {};
 
 //// [classExpression1.js]
 "use strict";
-var v = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+var v = class C {
+};

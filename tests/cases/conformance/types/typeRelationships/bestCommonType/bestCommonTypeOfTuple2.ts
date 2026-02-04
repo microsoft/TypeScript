@@ -1,4 +1,5 @@
-﻿interface base { }
+﻿// @target: es2015
+interface base { }
 interface base1 { i }
 class C implements base { c }
 class D implements base { d }

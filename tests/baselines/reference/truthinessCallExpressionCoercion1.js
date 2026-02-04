@@ -111,17 +111,17 @@ function onlyErrorsWhenUnusedInBody() {
     test ? test() : undefined;
     // ok
     test
-        ? [function () { return null; }].forEach(function () { test(); })
+        ? [() => null].forEach(() => { test(); })
         : undefined;
     // error
     test
-        ? [function () { return null; }].forEach(function (test) { test(); })
+        ? [() => null].forEach(test => { test(); })
         : undefined;
 }
 function checksPropertyAccess() {
-    var x = {
+    const x = {
         foo: {
-            bar: function () { return true; }
+            bar() { return true; }
         }
     };
     // error
@@ -130,10 +130,10 @@ function checksPropertyAccess() {
     x.foo.bar ? x.foo.bar : undefined;
     var chrome = {
         platformKeys: {
-            subtleCrypto: function () {
+            subtleCrypto() {
                 return {
-                    sign: function () { },
-                    exportKey: function () { return true; }
+                    sign() { },
+                    exportKey() { return true; }
                 };
             }
         }
@@ -143,13 +143,11 @@ function checksPropertyAccess() {
         chrome.platformKeys.subtleCrypto().exportKey;
     }
 }
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.isUser = function () {
+class Foo {
+    isUser() {
         return true;
-    };
-    Foo.prototype.test = function () {
+    }
+    test() {
         // error
         this.isUser ? console.log('this.isUser') : undefined;
         // ok
@@ -158,6 +156,5 @@ var Foo = /** @class */ (function () {
         if (this.isUser) {
             this.isUser();
         }
-    };
-    return Foo;
-}());
+    }
+}

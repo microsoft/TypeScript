@@ -8,10 +8,7 @@ class C {
 
 //// [parameterPropertyOutsideConstructor.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    foo(x) {
     }
-    C.prototype.foo = function (x) {
-    };
-    return C;
-}());
+}

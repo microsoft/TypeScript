@@ -54,11 +54,11 @@
 /**
  * @template T
  */
-var Example = /** @class */ (function () {
+class Example {
     /**
      * @param {T} value
      */
-    function Example(value) {
+    constructor(value) {
         this.value = value;
     }
     /**
@@ -74,9 +74,9 @@ var Example = /** @class */ (function () {
     /**
      * @returns {string}
      */
-    Example.prototype.getTypeName = function () {
+    getTypeName() {
         return typeof this.value;
-    };
+    }
     /**
      * @template U
      * @overload
@@ -91,11 +91,10 @@ var Example = /** @class */ (function () {
      * @param {(y: T) => unknown} [fn]
      * @returns {unknown}
      */
-    Example.prototype.transform = function (fn) {
+    transform(fn) {
         return fn ? fn(this.value) : this.value;
-    };
-    return Example;
-}());
+    }
+}
 
 
 //// [jsFileMethodOverloads.d.ts]

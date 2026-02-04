@@ -1,3 +1,4 @@
+// @target: es2015
 const n1: number = [0];
 const n2: number = ["0"];
 const n3: number = [0, "1"];

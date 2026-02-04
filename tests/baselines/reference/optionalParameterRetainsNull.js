@@ -11,7 +11,7 @@ a.test("bar", null); // ok, null is assignable to number | null | undefined
 
 //// [optionalParameterRetainsNull.js]
 "use strict";
-var a = {
-    test: function (a, b) { }
+let a = {
+    test(a, b) { }
 };
 a.test("bar", null); // ok, null is assignable to number | null | undefined

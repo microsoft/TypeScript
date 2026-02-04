@@ -1,3 +1,4 @@
+// @target: es2015
 // destructuring in variable declarations
 let foo = "bar";
 let {[foo]: bar} = {bar: "bar"};

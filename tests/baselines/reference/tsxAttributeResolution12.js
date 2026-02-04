@@ -48,7 +48,7 @@ var t2 = <TestMod.Test />;
 //// [file.jsx]
 "use strict";
 // Errors correctly
-var T = TestMod.Test;
+const T = TestMod.Test;
 var t1 = <T />;
 // Should error
 var t2 = <TestMod.Test />;

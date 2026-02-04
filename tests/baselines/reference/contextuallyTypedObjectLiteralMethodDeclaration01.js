@@ -51,20 +51,20 @@ function getFoo3(): Foo {
 "use strict";
 function getFoo1() {
     return {
-        method1: function (arg) {
+        method1(arg) {
             arg.numProp = 10;
         },
-        method2: function (arg) {
+        method2(arg) {
             arg.strProp = "hello";
         }
     };
 }
 function getFoo2() {
     return {
-        method1: function (arg) {
+        method1: (arg) => {
             arg.numProp = 10;
         },
-        method2: function (arg) {
+        method2: (arg) => {
             arg.strProp = "hello";
         }
     };

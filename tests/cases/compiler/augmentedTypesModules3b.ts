@@ -1,3 +1,4 @@
+// @target: es2015
 class m3b { foo() { } }
 namespace m3b { var y = 2; }
 

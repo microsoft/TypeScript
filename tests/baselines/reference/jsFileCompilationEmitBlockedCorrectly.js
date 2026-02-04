@@ -17,8 +17,5 @@ function foo() {
 //// [b.js]
 "use strict";
 // this should be emitted
-var d = /** @class */ (function () {
-    function d() {
-    }
-    return d;
-}());
+class d {
+}

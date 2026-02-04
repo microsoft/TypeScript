@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @pretty: true
 // @esModuleInterop: true
 // @filename: foo.d.ts

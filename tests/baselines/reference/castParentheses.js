@@ -15,11 +15,8 @@ var b = (<any>new a).b
 
 //// [castParentheses.js]
 "use strict";
-var a = /** @class */ (function () {
-    function a() {
-    }
-    return a;
-}());
+class a {
+}
 var b = a;
 var b = a.b;
 var b = a.b.c;

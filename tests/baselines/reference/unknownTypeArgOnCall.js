@@ -12,13 +12,10 @@ var r = f.clone<Uhhhh>()
 
 //// [unknownTypeArgOnCall.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.clone = function () {
+class Foo {
+    clone() {
         return null;
-    };
-    return Foo;
-}());
+    }
+}
 var f = new Foo();
 var r = f.clone();

@@ -9,10 +9,7 @@ class C {
 
 //// [parsingClassRecoversWhenHittingUnexpectedSemicolon.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.f = function () { };
+class C {
+    f() { }
     ;
-    return C;
-}());
+}

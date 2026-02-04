@@ -5,7 +5,7 @@ let x = {} as {a: number; a: number};
 
 //// [duplicatePropertiesInTypeAssertions02.js]
 "use strict";
-var x = {};
+let x = {};
 
 
 //// [duplicatePropertiesInTypeAssertions02.d.ts]

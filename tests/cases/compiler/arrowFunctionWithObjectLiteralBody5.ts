@@ -1,3 +1,4 @@
+// @target: es2015
 var a = () => <Error>{ name: "foo", message: "bar" };      
 
 var b = () => (<Error>{ name: "foo", message: "bar" });    

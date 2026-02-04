@@ -17,12 +17,9 @@ class C {
 
 //// [conflictMarkerTrivia2.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function () {
+class C {
+    foo() {
         a();
-    };
-    C.prototype.bar = function () { };
-    return C;
-}());
+    }
+    bar() { }
+}

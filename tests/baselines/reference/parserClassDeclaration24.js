@@ -6,8 +6,5 @@ class any {
 
 //// [parserClassDeclaration24.js]
 "use strict";
-var any = /** @class */ (function () {
-    function any() {
-    }
-    return any;
-}());
+class any {
+}

@@ -7,9 +7,6 @@ class C {
 
 //// [parserParameterList1.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.F = function (B) { };
-    return C;
-}());
+class C {
+    F(...A, B) { }
+}

@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
+
 ////// Interface
 ////interface IPoint {
 ////    getDist(): number;

@@ -10,9 +10,7 @@ const foo: { new(): Foo } = Foo;
 
 //// [assignmentCompatability44.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo(x) {
-    }
-    return Foo;
-}());
-var foo = Foo;
+class Foo {
+    constructor(x) { }
+}
+const foo = Foo;

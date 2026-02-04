@@ -7,11 +7,8 @@ class BlockIntrinsics {
 
 //// [declFileClassWithIndexSignature.js]
 "use strict";
-var BlockIntrinsics = /** @class */ (function () {
-    function BlockIntrinsics() {
-    }
-    return BlockIntrinsics;
-}());
+class BlockIntrinsics {
+}
 
 
 //// [declFileClassWithIndexSignature.d.ts]

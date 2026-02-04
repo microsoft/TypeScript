@@ -1,5 +1,5 @@
 // @strict: false
-// @target: es5
+// @target: es5, es2015
 const a = new.target;
 const b = () => new.target;
 

@@ -9,4 +9,6 @@
 //// [templateStringMultiline2.js]
 "use strict";
 // newlines are <LF>
-"\n";
+`
+\
+`;

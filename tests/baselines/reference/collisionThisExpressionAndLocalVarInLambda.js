@@ -13,11 +13,10 @@ alert(x.doStuff(x => alert(x)));
 
 //// [collisionThisExpressionAndLocalVarInLambda.js]
 "use strict";
-var _this_1 = this;
 var x = {
-    doStuff: function (callback) { return function () {
+    doStuff: (callback) => () => {
         var _this = 2;
-        return callback(_this_1);
-    }; }
+        return callback(this);
+    }
 };
-alert(x.doStuff(function (x) { return alert(x); }));
+alert(x.doStuff(x => alert(x)));

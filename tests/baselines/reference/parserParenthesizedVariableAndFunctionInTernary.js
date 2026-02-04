@@ -7,5 +7,5 @@ const c = true ? (a) : function() {};
 
 //// [parserParenthesizedVariableAndFunctionInTernary.js]
 "use strict";
-var a;
-var c = true ? (a) : function () { };
+let a;
+const c = true ? (a) : function () { };

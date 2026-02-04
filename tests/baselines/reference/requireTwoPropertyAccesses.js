@@ -20,5 +20,5 @@ module.exports = {
 };
 //// [requireTwoPropertyAccesses.js]
 "use strict";
-var value = require("./mod").x.y;
+const value = require("./mod").x.y;
 console.log(value);

@@ -41,27 +41,23 @@ class D {
 
 //// [doNotEmitDetachedCommentsAtStartOfConstructor.js]
 "use strict";
-var A = (function () {
-    function A() {
+class A {
+    constructor() {
         var x = 10;
     }
-    return A;
-}());
-var B = (function () {
-    function B() {
+}
+class B {
+    constructor() {
         var y = 10;
     }
-    return B;
-}());
-var C = (function () {
-    function C() {
+}
+class C {
+    constructor() {
         var x = 10;
     }
-    return C;
-}());
-var D = (function () {
-    function D() {
+}
+class D {
+    constructor() {
         var y = 10;
     }
-    return D;
-}());
+}

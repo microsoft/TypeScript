@@ -7,4 +7,4 @@ let bar: bar;
 
 //// [resolveInterfaceNameWithSameLetDeclarationName1.js]
 "use strict";
-var bar;
+let bar;

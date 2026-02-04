@@ -57,11 +57,8 @@ var r4 = b["~!@#$%^&*()_+{}|:'<>?\/.,`"];
 
 //// [objectTypeWithStringNamedPropertyOfIllegalCharacters.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c;
 var r = c["   "];
 var r2 = c["    "];

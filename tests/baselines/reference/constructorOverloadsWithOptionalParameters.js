@@ -17,13 +17,11 @@ class D<T> {
 
 //// [constructorOverloadsWithOptionalParameters.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
     }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
+}
+class D {
+    constructor() {
     }
-    return D;
-}());
+}

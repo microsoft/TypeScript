@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @noImplicitReferences: true
 // @esModuleInterop: true
 // @filename: node_modules/moment/index.d.ts

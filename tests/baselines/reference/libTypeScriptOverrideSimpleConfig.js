@@ -14,7 +14,7 @@ window.localStorage
 //// [index.js]
 "use strict";
 /// <reference lib="dom" />
-var a = { abc: "Hello" };
+const a = { abc: "Hello" };
 // This should fail because libdom has been replaced
 // by the module above ^
 window.localStorage;

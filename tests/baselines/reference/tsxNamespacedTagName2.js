@@ -11,7 +11,7 @@ const d = <a:foo></a:foo>;
 
 //// [a.js]
 "use strict";
-var a = React.createElement("svg:path", null);
-var b = React.createElement("svg:path", null);
-var c = React.createElement("A:foo", null);
-var d = React.createElement("a:foo", null);
+const a = React.createElement("svg:path", null);
+const b = React.createElement("svg:path", null);
+const c = React.createElement("A:foo", null);
+const d = React.createElement("a:foo", null);

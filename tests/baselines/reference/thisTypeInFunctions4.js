@@ -21,11 +21,10 @@ function problemFunction(this: CorrectObject | WrongObject): void {
 //// [thisTypeInFunctions4.js]
 "use strict";
 function problemFunction() {
-    var _this = this;
     //check type
     if (!isCorrect(this))
         return;
-    callsCallback(function (name) {
-        _this.name = name; //should not error
+    callsCallback((name) => {
+        this.name = name; //should not error
     });
 }

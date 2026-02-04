@@ -21,8 +21,6 @@ f({
 "use strict";
 f({
     props: {
-        children: (function (_a) {
-            var x = _a.x;
-        })
+        children: (({ x }) => { })
     }
 });

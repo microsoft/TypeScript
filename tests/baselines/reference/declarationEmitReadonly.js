@@ -7,12 +7,11 @@ class C {
 
 //// [declarationEmitReadonly.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C(x) {
+class C {
+    constructor(x) {
         this.x = x;
     }
-    return C;
-}());
+}
 
 
 //// [declarationEmitReadonly.d.ts]

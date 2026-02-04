@@ -25,23 +25,17 @@ sequence(
 
 //// [varArgParamTypeCheck.js]
 "use strict";
-function sequence() {
-    var sequences = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        sequences[_i] = arguments[_i];
-    }
+function sequence(...sequences) {
 }
 function callback(clb) {
 }
 sequence(function bar() {
 }, function foo() {
-    var _this = this;
-    callback(function () {
-        _this();
+    callback(() => {
+        this();
     });
 }, function baz() {
-    var _this = this;
-    callback(function () {
-        _this();
+    callback(() => {
+        this();
     });
 });

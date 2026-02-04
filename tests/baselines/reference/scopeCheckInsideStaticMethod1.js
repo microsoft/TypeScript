@@ -14,13 +14,10 @@ class C {
 
 //// [scopeCheckInsideStaticMethod1.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.b = function () {
+class C {
+    static b() {
         v = 1; // ERR
         C.s = 1;
         this.p = 1; // ERR
-    };
-    return C;
-}());
+    }
+}

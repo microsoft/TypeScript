@@ -7,9 +7,6 @@ class AtomicNumbers {
 
 //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration.js]
 "use strict";
-var AtomicNumbers = /** @class */ (function () {
-    function AtomicNumbers() {
-    }
-    AtomicNumbers.H = 1;
-    return AtomicNumbers;
-}());
+class AtomicNumbers {
+}
+AtomicNumbers.H = 1;

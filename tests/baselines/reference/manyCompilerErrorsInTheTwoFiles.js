@@ -14,9 +14,9 @@ limit
 
 //// [a.js]
 "use strict";
-var a = !;
+const a = !;
 !;
-var b = !;
+const b = !;
 !;
 !;
 !OK;

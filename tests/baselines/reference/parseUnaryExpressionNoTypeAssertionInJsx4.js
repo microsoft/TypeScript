@@ -10,8 +10,8 @@ const c = + <1234> x;
 
 //// [index.jsx]
 "use strict";
-var x = "oops";
-var a = +<number> x;
+const x = "oops";
+const a = +<number> x;
 const b = + <> x;
 const c = + < />1234> x;
 </></>;

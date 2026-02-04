@@ -28,11 +28,8 @@ namespace m2 {
 "use strict";
 var mOfGloalFile;
 (function (mOfGloalFile) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        return c;
-    }());
+    class c {
+    }
     mOfGloalFile.c = c;
 })(mOfGloalFile || (mOfGloalFile = {}));
 var exports = mOfGloalFile.c;

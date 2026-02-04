@@ -26,5 +26,5 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var exp_1 = __importDefault(require("./exp"));
+const exp_1 = __importDefault(require("./exp"));
 exp_1.default.toExponential(2);

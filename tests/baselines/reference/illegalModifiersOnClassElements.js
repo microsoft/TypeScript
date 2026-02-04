@@ -8,9 +8,8 @@ class C {
 
 //// [illegalModifiersOnClassElements.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.bar = 1;
     }
-    return C;
-}());
+}

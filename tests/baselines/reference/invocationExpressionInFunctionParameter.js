@@ -10,6 +10,5 @@ function foo3(x = foo1(123)) { //should error, 123 is not string
 "use strict";
 function foo1(val) {
 }
-function foo3(x) {
-    if (x === void 0) { x = foo1(123); }
+function foo3(x = foo1(123)) {
 }

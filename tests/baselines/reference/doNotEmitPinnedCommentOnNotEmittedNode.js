@@ -14,10 +14,7 @@ declare var OData: any;
 
 //// [doNotEmitPinnedCommentOnNotEmittedNode.js]
 "use strict";
-var C = (function () {
-    function C() {
-    }
-    C.prototype.foo = function (x, y) { };
-    return C;
-}());
+class C {
+    foo(x, y) { }
+}
 var x = 10;

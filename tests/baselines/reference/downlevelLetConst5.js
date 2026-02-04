@@ -5,4 +5,4 @@ const a: number = 1
 
 //// [downlevelLetConst5.js]
 "use strict";
-var a = 1;
+const a = 1;

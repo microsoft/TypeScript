@@ -10,13 +10,10 @@ class C {
 
 //// [methodSignatureDeclarationEmit1.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    foo(a) {
     }
-    C.prototype.foo = function (a) {
-    };
-    return C;
-}());
+}
 
 
 //// [methodSignatureDeclarationEmit1.d.ts]

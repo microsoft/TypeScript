@@ -5,5 +5,4 @@ var f = () => {this.window;}
 
 //// [topLevelLambda3.js]
 "use strict";
-var _this = this;
-var f = function () { _this.window; };
+var f = () => { this.window; };

@@ -1,3 +1,4 @@
+// @target: es2015
 // adding the var makes this an instantiated module
 
 namespace M {

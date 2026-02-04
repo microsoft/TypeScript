@@ -9,9 +9,8 @@ class foo {
 
 //// [constructorArgsErrors4.js]
 "use strict";
-var foo = /** @class */ (function () {
-    function foo(a) {
+class foo {
+    constructor(a) {
         this.a = a;
     }
-    return foo;
-}());
+}

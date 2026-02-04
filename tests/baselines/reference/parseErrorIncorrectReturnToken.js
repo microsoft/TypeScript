@@ -19,8 +19,8 @@ let o = {
 "use strict";
 string; // should be => not :
 // doesn't work in non-type contexts, where the return type is optional
-var f = function (n) { return function (string) { return n.toString(); }; };
-var o = {};
+let f = (n) => string => n.toString();
+let o = {};
 string;
 {
     return n.toString();

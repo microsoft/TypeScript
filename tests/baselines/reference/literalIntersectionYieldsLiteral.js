@@ -6,4 +6,4 @@ const x: { type: string } & { type: "string" } = { type: "string" };
 
 //// [literalIntersectionYieldsLiteral.js]
 "use strict";
-var x = { type: "string" };
+const x = { type: "string" };

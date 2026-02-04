@@ -8,5 +8,5 @@ const {  } = pick(['b'], { a: 'a', b: 'b' }); // T: "b" | "a" ??? (before fix)
 
 //// [bindingPatternContextualTypeDoesNotCauseWidening.js]
 "use strict";
-var _ = pick(['b'], { a: 'a', b: 'b' }); // T: "b"
-var _a = pick(['b'], { a: 'a', b: 'b' }); // T: "b" | "a" ??? (before fix)
+const _ = pick(['b'], { a: 'a', b: 'b' }); // T: "b"
+const {} = pick(['b'], { a: 'a', b: 'b' }); // T: "b" | "a" ??? (before fix)

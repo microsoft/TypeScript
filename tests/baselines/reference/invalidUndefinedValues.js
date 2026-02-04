@@ -42,11 +42,8 @@ x = true;
 var a;
 x = a;
 x = null;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var b;
 x = C;
 x = b;
@@ -57,7 +54,7 @@ var M;
     M.x = 1;
 })(M || (M = {}));
 x = M;
-x = { f: function () { } };
+x = { f() { } };
 function f(a) {
     x = a;
 }

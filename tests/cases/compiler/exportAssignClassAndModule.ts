@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: exportAssignClassAndModule_0.ts
 class Foo {

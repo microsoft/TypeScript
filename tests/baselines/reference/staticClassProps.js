@@ -12,11 +12,8 @@ class C
 
 //// [staticClassProps.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    foo() {
     }
-    C.prototype.foo = function () {
-    };
-    C.z = 1;
-    return C;
-}());
+}
+C.z = 1;

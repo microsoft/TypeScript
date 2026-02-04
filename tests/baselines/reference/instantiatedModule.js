@@ -81,14 +81,11 @@ var p1;
 // makes this an instantiated mmodule
 var M2;
 (function (M2) {
-    var Point = /** @class */ (function () {
-        function Point() {
-        }
-        Point.Origin = function () {
+    class Point {
+        static Origin() {
             return { x: 0, y: 0 };
-        };
-        return Point;
-    }());
+        }
+    }
     M2.Point = Point;
 })(M2 || (M2 = {}));
 var m2;
@@ -104,7 +101,7 @@ var p2 = new m2.Point();
 var p2 = new M2.Point();
 var M3;
 (function (M3) {
-    var Color;
+    let Color;
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";

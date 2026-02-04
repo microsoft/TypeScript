@@ -25,11 +25,8 @@ x = <foo>x</foo>, x = <foo/>;
 
 //// [jsxAndTypeAssertion.jsx]
 "use strict";
-var foo = /** @class */ (function () {
-    function foo() {
-    }
-    return foo;
-}());
+class foo {
+}
 var x;
 x = <any> {test}: <any></any> };
 

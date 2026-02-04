@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
+
 ////declare function alert(message?: any): void;
 /////*1*/
 ////interface Foo {

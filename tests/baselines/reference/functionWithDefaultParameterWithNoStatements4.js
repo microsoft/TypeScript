@@ -8,9 +8,6 @@ function bar(a = ``) {
 
 //// [functionWithDefaultParameterWithNoStatements4.js]
 "use strict";
-function foo(a) {
-    if (a === void 0) { a = ""; }
-}
-function bar(a) {
-    if (a === void 0) { a = ""; }
+function foo(a = ``) { }
+function bar(a = ``) {
 }

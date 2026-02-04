@@ -48,6 +48,6 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var mod = __importStar(require("./mod"));
+const mod = __importStar(require("./mod"));
 mod.a;
 mod.b;

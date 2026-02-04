@@ -11,13 +11,10 @@ class WebControls {
 
 //// [commentOnClassMethod1.js]
 "use strict";
-var WebControls = /** @class */ (function () {
-    function WebControls() {
-    }
+class WebControls {
     /**
      * Render a control
      */
-    WebControls.prototype.createControl = function () {
-    };
-    return WebControls;
-}());
+    createControl() {
+    }
+}

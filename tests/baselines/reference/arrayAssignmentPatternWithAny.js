@@ -9,4 +9,4 @@ var x: string;
 "use strict";
 var a;
 var x;
-x = a[0];
+[x] = a;

@@ -6,5 +6,5 @@ let {a: y} = {a: 1};
 
 //// [letInNonStrictMode.js]
 "use strict";
-var x = [1][0];
-var y = { a: 1 }.a;
+let [x] = [1];
+let { a: y } = { a: 1 };

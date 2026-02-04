@@ -14,13 +14,10 @@ class foo {
 
 //// [functionOverloads7.js]
 "use strict";
-var foo = /** @class */ (function () {
-    function foo() {
-    }
-    foo.prototype.bar = function (foo) { return "foo"; };
-    foo.prototype.n = function () {
+class foo {
+    bar(foo) { return "foo"; }
+    n() {
         var foo = this.bar();
         foo = this.bar("test");
-    };
-    return foo;
-}());
+    }
+}

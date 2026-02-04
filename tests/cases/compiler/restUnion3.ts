@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 declare const nullAndUndefinedUnion: null | undefined;
 var rest4: { };

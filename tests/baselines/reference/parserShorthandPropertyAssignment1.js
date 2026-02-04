@@ -9,4 +9,4 @@ foo({ name?, id? });
 "use strict";
 function foo(obj) { }
 var name, id;
-foo({ name: name, id: id });
+foo({ name, id });

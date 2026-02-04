@@ -13,11 +13,8 @@ var i: I = x; // Should not be allowed -- type of 'f' is incompatible with 'I'
 
 //// [genericTypeWithNonGenericBaseMisMatch.js]
 "use strict";
-var X = /** @class */ (function () {
-    function X() {
-    }
-    X.prototype.f = function (a) { };
-    return X;
-}());
+class X {
+    f(a) { }
+}
 var x = new X();
 var i = x; // Should not be allowed -- type of 'f' is incompatible with 'I'

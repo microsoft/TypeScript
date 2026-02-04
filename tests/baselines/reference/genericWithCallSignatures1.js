@@ -23,11 +23,8 @@ class MyClass {
 //// [genericWithCallSignatures_1.js]
 "use strict";
 ///<reference path="genericWithCallSignatures_0.ts"/>
-var MyClass = /** @class */ (function () {
-    function MyClass() {
-    }
-    MyClass.prototype.myMethod = function () {
+class MyClass {
+    myMethod() {
         var x = this.callableThing();
-    };
-    return MyClass;
-}());
+    }
+}

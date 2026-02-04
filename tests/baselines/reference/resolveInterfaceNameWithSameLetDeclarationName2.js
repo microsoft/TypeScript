@@ -8,5 +8,5 @@ let foo: bar | foo;
 
 //// [resolveInterfaceNameWithSameLetDeclarationName2.js]
 "use strict";
-var bar;
-var foo;
+let bar;
+let foo;

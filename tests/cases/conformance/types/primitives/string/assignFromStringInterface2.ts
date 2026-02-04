@@ -1,3 +1,4 @@
+// @target: es2015
 interface String {
     doStuff(): string;
 }

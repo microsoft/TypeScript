@@ -304,6 +304,11 @@ Resolving real path for '/home/src/projects/component-type-checker/node_modules/
 ======== Module name '@component-type-checker/button' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts' with Package ID '@component-type-checker/button/src/index.ts@0.0.2'. ========
 File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/package.json' does not exist.
 Found 'package.json' at '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/package.json'.
+[96mtsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "target": "es5",
+[7m [0m [91m              ~~~~~[0m
+
 [96mtsconfig.json[0m:[93m8[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
   Visit https://aka.ms/ts6 for migration information.
 
@@ -338,7 +343,7 @@ Found 'package.json' at '/home/src/projects/component-type-checker/node_modules/
 src/app.tsx
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 3 errors in the same file, starting at: tsconfig.json[90m:8[0m
+Found 4 errors in the same file, starting at: tsconfig.json[90m:3[0m
 
 
 

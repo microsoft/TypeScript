@@ -81,16 +81,16 @@ function g() {
 
 //// [controlFlowDoWhileStatement.js]
 "use strict";
-var cond;
+let cond;
 function a() {
-    var x;
+    let x;
     x = "";
     do {
         x; // string
     } while (cond);
 }
 function b() {
-    var x;
+    let x;
     x = "";
     do {
         x; // string
@@ -99,7 +99,7 @@ function b() {
     } while (cond);
 }
 function c() {
-    var x;
+    let x;
     x = "";
     do {
         x; // string
@@ -110,7 +110,7 @@ function c() {
     } while (cond);
 }
 function d() {
-    var x;
+    let x;
     x = 1000;
     do {
         x; // number
@@ -119,7 +119,7 @@ function d() {
     x; // number
 }
 function e() {
-    var x;
+    let x;
     x = "";
     do {
         x = 42;
@@ -127,7 +127,7 @@ function e() {
     x; // number
 }
 function f() {
-    var x;
+    let x;
     x = "";
     do {
         if (cond) {
@@ -143,7 +143,7 @@ function f() {
     x; // number | boolean | RegExp
 }
 function g() {
-    var x;
+    let x;
     x = "";
     do {
         if (cond) {

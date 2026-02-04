@@ -11,4 +11,4 @@ f((arg: number, arg2: number) => {});
 //// [signatureLengthMismatchInOverload.js]
 "use strict";
 function f(callback) { }
-f(function (arg, arg2) { });
+f((arg, arg2) => { });

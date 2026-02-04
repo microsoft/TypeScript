@@ -49,7 +49,7 @@ ONE: for (;;)
     break TWO;
 // break from inside function
 TWO: for (;;) {
-    var x = function () {
+    var x = () => {
         break TWO;
     };
 }

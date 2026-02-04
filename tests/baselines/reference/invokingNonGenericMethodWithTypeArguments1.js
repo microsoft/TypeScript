@@ -10,9 +10,8 @@ class Foo {
 
 //// [invokingNonGenericMethodWithTypeArguments1.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
+class Foo {
+    constructor() {
         this.foo();
     }
-    return Foo;
-}());
+}

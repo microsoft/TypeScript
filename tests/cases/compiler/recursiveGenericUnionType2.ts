@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace Test1 {
     export type Container<T> = T | {
         [i: string]: Container<T>[];

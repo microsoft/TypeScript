@@ -13,8 +13,5 @@ class indexSig2 {
 
 //// [indexerAsOptional.js]
 "use strict";
-var indexSig2 = /** @class */ (function () {
-    function indexSig2() {
-    }
-    return indexSig2;
-}());
+class indexSig2 {
+}

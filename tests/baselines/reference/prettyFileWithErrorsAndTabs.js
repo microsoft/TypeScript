@@ -13,8 +13,8 @@ function f() {
 "use strict";
 function f() {
     {
-        var x = 12;
-        var y = 12;
-        var z = 12;
+        const x = 12;
+        const y = 12;
+        const z = 12;
     }
 }

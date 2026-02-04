@@ -7,6 +7,6 @@ b = "";
 
 //// [wideningTuples6.js]
 "use strict";
-var _a = [undefined, null], a = _a[0], b = _a[1];
+var [a, b] = [undefined, null];
 a = "";
 b = "";

@@ -10,11 +10,8 @@ bar(Foo); // Error, but should be allowed
 
 //// [assignmentCompatOnNew.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 ;
 function bar(x) { }
 bar(Foo); // Error, but should be allowed

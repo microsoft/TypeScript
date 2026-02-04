@@ -10,9 +10,8 @@ class C implements I {
 
 //// [implementPublicPropertyAsPrivate.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.x = 0; // should raise error at class decl
     }
-    return C;
-}());
+}

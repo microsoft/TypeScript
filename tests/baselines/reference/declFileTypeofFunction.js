@@ -50,7 +50,7 @@ var foo2 = foo;
 var foo3 = function () {
     return foo3;
 };
-var x = function () {
+var x = () => {
     return x;
 };
 function foo5(x) {

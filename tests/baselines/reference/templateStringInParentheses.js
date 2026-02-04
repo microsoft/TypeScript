@@ -5,4 +5,4 @@ var x = (`abc${0}abc`);
 
 //// [templateStringInParentheses.js]
 "use strict";
-var x = ("abc".concat(0, "abc"));
+var x = (`abc${0}abc`);

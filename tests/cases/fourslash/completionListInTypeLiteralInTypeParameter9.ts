@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
+
 ////interface Foo {
 ////    one: string;
 ////    two: {

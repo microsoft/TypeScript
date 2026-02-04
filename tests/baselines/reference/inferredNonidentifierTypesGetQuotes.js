@@ -7,9 +7,8 @@ var y = [{ ["a-b"]: "string" }, {}];
 
 //// [inferredNonidentifierTypesGetQuotes.js]
 "use strict";
-var _a;
 var x = [{ "a-b": "string" }, {}];
-var y = [(_a = {}, _a["a-b"] = "string", _a), {}];
+var y = [{ ["a-b"]: "string" }, {}];
 
 
 //// [inferredNonidentifierTypesGetQuotes.d.ts]

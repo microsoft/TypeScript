@@ -10,10 +10,7 @@ List.prototype.add("abc"); // Valid because T is instantiated to any
 
 //// [typedGenericPrototypeMember.js]
 "use strict";
-var List = /** @class */ (function () {
-    function List() {
-    }
-    List.prototype.add = function (item) { };
-    return List;
-}());
+class List {
+    add(item) { }
+}
 List.prototype.add("abc"); // Valid because T is instantiated to any

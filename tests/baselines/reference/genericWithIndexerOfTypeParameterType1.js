@@ -12,14 +12,13 @@ var value: string = lazyArray.array()["test"]; // used to be an error
 
 //// [genericWithIndexerOfTypeParameterType1.js]
 "use strict";
-var LazyArray = /** @class */ (function () {
-    function LazyArray() {
+class LazyArray {
+    constructor() {
         this.objects = {};
     }
-    LazyArray.prototype.array = function () {
+    array() {
         return this.objects;
-    };
-    return LazyArray;
-}());
+    }
+}
 var lazyArray = new LazyArray();
 var value = lazyArray.array()["test"]; // used to be an error

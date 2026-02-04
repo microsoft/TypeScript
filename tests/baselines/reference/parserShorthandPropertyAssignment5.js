@@ -7,4 +7,4 @@ var obj = { greet? };
 //// [parserShorthandPropertyAssignment5.js]
 "use strict";
 var greet = "hello";
-var obj = { greet: greet };
+var obj = { greet };

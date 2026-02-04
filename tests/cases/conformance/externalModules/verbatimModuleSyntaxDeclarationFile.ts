@@ -1,3 +1,4 @@
+// @target: es2015
 // @verbatimModuleSyntax: true
 
 // @Filename: type1.d.ts

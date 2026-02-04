@@ -8,6 +8,6 @@ if (true) {
 
 //// [parser512097.js]
 "use strict";
-var tt = { aa: aa };
+var tt = { aa };
 if (true) {
 }

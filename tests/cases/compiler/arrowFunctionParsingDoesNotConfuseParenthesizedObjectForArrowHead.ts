@@ -1,3 +1,4 @@
+// @target: es2015
 // regression test for https://github.com/microsoft/TypeScript/issues/32914
 declare var value: boolean;
 declare var a: any;

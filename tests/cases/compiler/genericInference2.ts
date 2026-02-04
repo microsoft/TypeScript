@@ -1,3 +1,4 @@
+// @target: es2015
     declare namespace ko { 
        export interface Observable<T> { 
            (): T; 

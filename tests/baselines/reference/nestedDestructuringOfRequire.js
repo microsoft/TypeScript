@@ -16,13 +16,13 @@ chalk
 
 //// [mod1.js]
 "use strict";
-var chalk = {
+const chalk = {
     grey: {}
 };
 module.exports.chalk = chalk;
 //// [main.js]
 "use strict";
-var grey = require('./mod1').chalk.grey;
+const { chalk: { grey } } = require('./mod1');
 grey;
 chalk;
 

@@ -13,15 +13,12 @@ class A<T extends T> {
 
 //// [typeParameterWithInvalidConstraintType.js]
 "use strict";
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.foo = function () {
+class A {
+    foo() {
         var x;
         var a = x.foo();
         var b = new x(123);
         var c = x[1];
         var d = x();
-    };
-    return A;
-}());
+    }
+}

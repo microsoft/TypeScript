@@ -6,8 +6,5 @@ class C<T extends List<List<T> > > {
 
 //// [parserGenericConstraint4.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 declare let f: null | ((x: string) => void);

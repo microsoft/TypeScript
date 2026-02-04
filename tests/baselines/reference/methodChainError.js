@@ -21,14 +21,11 @@ new Builder()
 
 //// [methodChainError.js]
 "use strict";
-var Builder = /** @class */ (function () {
-    function Builder() {
-    }
-    Builder.prototype.method = function (param) {
+class Builder {
+    method(param) {
         return this;
-    };
-    return Builder;
-}());
+    }
+}
 new Builder()
     .method("a")
     .method()

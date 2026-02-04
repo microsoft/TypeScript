@@ -13,17 +13,10 @@ var r: string = c.x;
 
 //// [genericGetter.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    get x() {
+        return this.data;
     }
-    Object.defineProperty(C.prototype, "x", {
-        get: function () {
-            return this.data;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+}
 var c = new C();
 var r = c.x;

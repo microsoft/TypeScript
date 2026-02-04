@@ -6,4 +6,4 @@ let b: [string] = a;
 
 //// [assigningFunctionToTupleIssuesError.js]
 "use strict";
-var b = a;
+let b = a;

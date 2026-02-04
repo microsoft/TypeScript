@@ -12,5 +12,5 @@ module.exports = items;
 
 //// [index.js]
 "use strict";
-var items = require("./some-mod")();
+const items = require("./some-mod")();
 module.exports = items;

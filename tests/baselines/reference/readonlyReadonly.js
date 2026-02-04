@@ -8,9 +8,8 @@ class C {
 
 //// [readonlyReadonly.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C(y) {
+class C {
+    constructor(y) {
         this.y = y;
     }
-    return C;
-}());
+}

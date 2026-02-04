@@ -6,6 +6,5 @@ var s: string, s2: string;
 
 //// [restElementWithAssignmentPattern5.js]
 "use strict";
-var _a;
 var s, s2;
-_a = ["", ""].slice(0), s = _a[0], s2 = _a[1];
+[...[s, s2]] = ["", ""];

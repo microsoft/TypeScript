@@ -15,4 +15,4 @@ var $$x = load("something").then(s => convert(s));
 
 //// [promiseTypeInference.js]
 "use strict";
-var $$x = load("something").then(function (s) { return convert(s); });
+var $$x = load("something").then(s => convert(s));

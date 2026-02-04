@@ -27,18 +27,15 @@ acceptsSomeType(someTypeNotFound);
 
 //// [typeUsedAsValueError.js]
 "use strict";
-var SomeClass = /** @class */ (function () {
-    function SomeClass() {
-    }
-    return SomeClass;
-}());
+class SomeClass {
+}
 function acceptsSomeType(a) {
 }
-var one = Interface;
-var two = InterfaceNotFound;
-var three = TypeAliasForSomeClass;
-var four = new TypeAliasForSomeClass();
-var five = new TypeAliasForSomeClassNotFound();
-var six = someType;
+let one = Interface;
+let two = InterfaceNotFound;
+let three = TypeAliasForSomeClass;
+let four = new TypeAliasForSomeClass();
+let five = new TypeAliasForSomeClassNotFound();
+let six = someType;
 acceptsSomeType(someType);
 acceptsSomeType(someTypeNotFound);

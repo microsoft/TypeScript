@@ -18,17 +18,12 @@ namespace M{
 "use strict";
 var M;
 (function (M) {
-    var A = /** @class */ (function () {
-        function A(val) {
-        }
-        return A;
-    }());
+    class A {
+        constructor(val) { }
+    }
 })(M || (M = {}));
 (function (M) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     var a = new A();
 })(M || (M = {}));

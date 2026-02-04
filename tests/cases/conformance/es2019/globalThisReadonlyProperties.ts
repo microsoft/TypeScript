@@ -1,3 +1,4 @@
+// @target: es2015
 globalThis.globalThis = 1 as any // should error
 var x = 1
 const y = 2

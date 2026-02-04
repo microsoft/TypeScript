@@ -1,3 +1,4 @@
+// @target: es2015
 // @removeComments: false
 
 // This is pre comment

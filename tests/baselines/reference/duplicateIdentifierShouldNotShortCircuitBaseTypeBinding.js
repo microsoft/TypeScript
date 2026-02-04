@@ -26,11 +26,8 @@ define(["require", "exports"], function (require, exports) {
     exports.Shapes = void 0;
     var Shapes;
     (function (Shapes) {
-        var Point = /** @class */ (function () {
-            function Point() {
-            }
-            return Point;
-        }());
+        class Point {
+        }
         Shapes.Point = Point;
     })(Shapes || (exports.Shapes = Shapes = {}));
 });

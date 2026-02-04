@@ -1,3 +1,4 @@
+// @target: es2015
 // @noimplicitany: true
 
 var x: (a: any) => void = function <T>(x: T) {

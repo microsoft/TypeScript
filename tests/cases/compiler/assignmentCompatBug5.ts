@@ -1,3 +1,4 @@
+// @target: es2015
 function foo1(x: { a: number; }) { }
 foo1({ b: 5 });
 

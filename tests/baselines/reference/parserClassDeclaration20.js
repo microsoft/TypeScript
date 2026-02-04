@@ -8,9 +8,6 @@ class C {
 
 //// [parserClassDeclaration20.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype["0"] = function () { };
-    return C;
-}());
+class C {
+    "0"() { }
+}

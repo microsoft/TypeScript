@@ -1,3 +1,4 @@
+// @target: es2015
 class C<T> {
   constructor(readonly x: T) {}
 

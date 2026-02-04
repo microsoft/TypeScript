@@ -7,5 +7,5 @@ const y: Object | undefined = { x: 0 };
 
 //// [unknownPropertiesAreAssignableToObjectUnion.js]
 "use strict";
-var x = { x: 0 };
-var y = { x: 0 };
+const x = { x: 0 };
+const y = { x: 0 };

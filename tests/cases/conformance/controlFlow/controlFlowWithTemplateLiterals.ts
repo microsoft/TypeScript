@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 declare const envVar: string | undefined;
 if (typeof envVar === `string`) {

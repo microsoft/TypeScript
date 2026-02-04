@@ -5,4 +5,4 @@ var x = `abc${ 7 * 6 }def`;
 
 //// [templateStringWithEmbeddedMultiplication.js]
 "use strict";
-var x = "abc".concat(7 * 6, "def");
+var x = `abc${7 * 6}def`;

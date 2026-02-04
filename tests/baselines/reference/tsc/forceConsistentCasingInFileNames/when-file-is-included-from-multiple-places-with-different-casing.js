@@ -279,8 +279,8 @@ Output::
     [7m [0m [96m                     ~~~~~~~~~~[0m
     File is included via import here.
 
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/anotherFile.ts'
   Imported via "fp-ts/lib/struct" from file 'src/anotherFile.ts'
@@ -309,14 +309,14 @@ Errors  Files
      2  src/Struct.d.ts[90m:2[0m
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/projects/project/src/anotherFile.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/home/src/projects/project/src/oneMore.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 

@@ -14,9 +14,9 @@ if (`test` in obj) {
 
 //// [controlFlowWithTemplateLiterals.js]
 "use strict";
-if (typeof envVar === "string") {
+if (typeof envVar === `string`) {
     envVar.slice(0);
 }
-if ("test" in obj) {
+if (`test` in obj) {
     obj.test.slice(0);
 }

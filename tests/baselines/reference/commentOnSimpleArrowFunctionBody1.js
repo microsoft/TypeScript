@@ -14,7 +14,6 @@ Foo(() =>
 "use strict";
 function Foo(x) {
 }
-Foo(function () {
-    // do something
-    return 127;
-});
+Foo(() => 
+// do something
+127);

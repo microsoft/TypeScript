@@ -1,3 +1,4 @@
+// @target: es2015
 class Functionality<V> {
     property: Options<V>;
 }

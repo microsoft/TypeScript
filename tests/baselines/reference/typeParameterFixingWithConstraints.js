@@ -15,4 +15,4 @@ foo.foo({ bar: null }, bar => null, bar => null);
 //// [typeParameterFixingWithConstraints.js]
 "use strict";
 var foo;
-foo.foo({ bar: null }, function (bar) { return null; }, function (bar) { return null; });
+foo.foo({ bar: null }, bar => null, bar => null);

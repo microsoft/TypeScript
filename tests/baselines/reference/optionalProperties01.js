@@ -13,8 +13,8 @@ const foo2 = { required1: "hello", optional: "bar" } as Foo;
 
 //// [optionalProperties01.js]
 "use strict";
-var foo1 = { required1: "hello" };
-var foo2 = { required1: "hello", optional: "bar" };
+const foo1 = { required1: "hello" };
+const foo2 = { required1: "hello", optional: "bar" };
 
 
 //// [optionalProperties01.d.ts]

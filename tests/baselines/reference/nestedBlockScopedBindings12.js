@@ -19,13 +19,13 @@ switch (1) {
 "use strict";
 var x;
 {
-    var x_1;
-    x_1 = 1;
+    let x;
+    x = 1;
 }
 var y;
 switch (1) {
     case 1:
-        var y_1;
-        y_1 = 1;
+        let y;
+        y = 1;
         break;
 }

@@ -8,4 +8,4 @@ f((a: any) => "")
 
 //// [functionExpressionContextualTyping3.js]
 "use strict";
-f(function (a) { return ""; });
+f((a) => "");

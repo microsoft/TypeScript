@@ -20,7 +20,7 @@ var y = x.a(x);
 //// [contextualThisType.js]
 "use strict";
 var x = {
-    a: function (p) {
+    a(p) {
         return p;
     }
 };

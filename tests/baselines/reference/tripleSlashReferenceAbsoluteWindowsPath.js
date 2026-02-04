@@ -9,8 +9,8 @@ const y = x + 3;
 
 //// [c.js]
 "use strict";
-var x = 5;
+const x = 5;
 //// [d.js]
 "use strict";
 /// <reference path="C:\a\b\c.ts" />
-var y = x + 3;
+const y = x + 3;

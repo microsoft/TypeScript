@@ -5,4 +5,4 @@
 
 //// [templateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.js]
 "use strict";
-"".concat(function (x) { x = "bad"; });
+`${function (x) { x = "bad"; }}`;

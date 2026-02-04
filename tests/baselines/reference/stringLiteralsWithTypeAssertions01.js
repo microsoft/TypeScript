@@ -12,10 +12,10 @@ let f = "baz" as typeof fooOrBar;
 
 //// [stringLiteralsWithTypeAssertions01.js]
 "use strict";
-var fooOrBar;
-var a = "foo";
-var b = "bar";
-var c = fooOrBar;
-var d = fooOrBar;
-var e = fooOrBar;
-var f = "baz";
+let fooOrBar;
+let a = "foo";
+let b = "bar";
+let c = fooOrBar;
+let d = fooOrBar;
+let e = fooOrBar;
+let f = "baz";

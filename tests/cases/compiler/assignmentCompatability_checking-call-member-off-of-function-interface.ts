@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // 3.8.4 Assignment Compatibility 
 

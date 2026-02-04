@@ -14,12 +14,9 @@ namespace M {
 
 //// [generativeRecursionWithTypeOf.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.foo = function (x) { };
-    return C;
-}());
+class C {
+    static foo(x) { }
+}
 var M;
 (function (M) {
     function f(x) {

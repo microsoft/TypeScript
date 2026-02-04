@@ -24,8 +24,8 @@ var r5b = _.map<number, string>(c2, rf1);
 "use strict";
 var _;
 var c2;
-var rf1 = function (x) { return x.toFixed(); };
-var r1a = _.map(c2, function (x) { return x.toFixed(); });
+var rf1 = (x) => { return x.toFixed(); };
+var r1a = _.map(c2, (x) => { return x.toFixed(); });
 var r1b = _.map(c2, rf1); // this line should not cause the following 2 to have errors 
-var r5a = _.map(c2, function (x) { return x.toFixed(); });
+var r5a = _.map(c2, (x) => { return x.toFixed(); });
 var r5b = _.map(c2, rf1);

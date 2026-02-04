@@ -1,4 +1,5 @@
-﻿class a {
+﻿// @target: es2015
+class a {
     static b: any;
 }
 

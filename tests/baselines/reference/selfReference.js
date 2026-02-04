@@ -6,4 +6,4 @@ asFunction(() => { return 1; });
 
 //// [selfReference.js]
 "use strict";
-asFunction(function () { return 1; });
+asFunction(() => { return 1; });

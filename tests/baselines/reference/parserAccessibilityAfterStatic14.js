@@ -9,9 +9,6 @@ static public<T>() {}
 
 //// [parserAccessibilityAfterStatic14.js]
 "use strict";
-var Outer = /** @class */ (function () {
-    function Outer() {
-    }
-    Outer.public = function () { };
-    return Outer;
-}());
+class Outer {
+    static public() { }
+}

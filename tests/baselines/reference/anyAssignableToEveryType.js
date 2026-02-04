@@ -50,11 +50,8 @@ function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
 //// [anyAssignableToEveryType.js]
 "use strict";
 var a;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var ac;
 var ai;
 var E;

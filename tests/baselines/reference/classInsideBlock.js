@@ -8,9 +8,6 @@ function foo() {
 //// [classInsideBlock.js]
 "use strict";
 function foo() {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
 }

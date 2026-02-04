@@ -37,15 +37,9 @@ interface I<T> {
 //// [multipleNumericIndexers.js]
 "use strict";
 // Multiple indexers of the same type are an error
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var a;
 var b = { 1: '', "2": '' };
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
+class C2 {
+}

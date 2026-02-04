@@ -30,8 +30,6 @@ var b2 = [,];
 >   : ^^^^^^^^^^^
 >[,] : undefined[]
 >    : ^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 
 var b3 = [undefined];
 >b3 : undefined[]
@@ -60,8 +58,6 @@ var b5 = [[], [,]];
 >   : ^^^^^^^
 >[,] : undefined[]
 >    : ^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 
 declare function f<T>(x: T): T;
 >f : <T>(x: T) => T

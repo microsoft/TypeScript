@@ -20,7 +20,7 @@ define(["require", "exports"], function (require, exports) {
     exports.bVal = exports.b = exports.a = void 0;
     var a;
     (function (a) {
-        var weekend;
+        let weekend;
         (function (weekend) {
             weekend[weekend["Friday"] = 0] = "Friday";
             weekend[weekend["Saturday"] = 1] = "Saturday";

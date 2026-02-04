@@ -7,10 +7,6 @@ var f = () => this;
 
 //// [collisionThisExpressionAndClassInGlobal.js]
 "use strict";
-var _this_1 = this;
-var _this = /** @class */ (function () {
-    function _this() {
-    }
-    return _this;
-}());
-var f = function () { return _this_1; };
+class _this {
+}
+var f = () => this;

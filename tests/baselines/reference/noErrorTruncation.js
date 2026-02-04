@@ -21,4 +21,4 @@ const x: SomeLongOptionA
 //// [noErrorTruncation.js]
 "use strict";
 // @noErrorTruncation
-var x = 42;
+const x = 42;

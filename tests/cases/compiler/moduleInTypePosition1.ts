@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: moduleInTypePosition1_0.ts
 export class Promise {

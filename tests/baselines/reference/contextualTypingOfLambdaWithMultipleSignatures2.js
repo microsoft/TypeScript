@@ -11,4 +11,4 @@ f = (a) => { return a.asdf }
 //// [contextualTypingOfLambdaWithMultipleSignatures2.js]
 "use strict";
 var f;
-f = function (a) { return a.asdf; };
+f = (a) => { return a.asdf; };

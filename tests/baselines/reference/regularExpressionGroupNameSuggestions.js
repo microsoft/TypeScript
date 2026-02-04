@@ -6,4 +6,4 @@ const regex = /(?<foo>)\k<Foo>/;
 
 //// [regularExpressionGroupNameSuggestions.js]
 "use strict";
-var regex = /(?<foo>)\k<Foo>/;
+const regex = /(?<foo>)\k<Foo>/;

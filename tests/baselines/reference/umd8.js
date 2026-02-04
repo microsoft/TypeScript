@@ -24,4 +24,4 @@ let x: any = Foo; // Not OK in value position
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 y.foo();
-var x = Foo; // Not OK in value position
+let x = Foo; // Not OK in value position

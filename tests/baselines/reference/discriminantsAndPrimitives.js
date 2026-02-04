@@ -117,7 +117,7 @@ function f4(x) {
         }
     }
 }
-var n;
+let n;
 if (n.type === "Disjunction") {
     n.alternatives.slice();
 }

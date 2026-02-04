@@ -9,9 +9,6 @@ C.prototype.x.boo; // No error, prototype is instantiated to any
 
 //// [prototypeInstantiatedWithBaseConstraint.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 C.prototype.x.boo; // No error, prototype is instantiated to any

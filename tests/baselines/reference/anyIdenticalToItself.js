@@ -17,18 +17,11 @@ class C {
 //// [anyIdenticalToItself.js]
 "use strict";
 function foo(x, y) { }
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    get X() {
+        var y;
+        return y;
     }
-    Object.defineProperty(C.prototype, "X", {
-        get: function () {
-            var y;
-            return y;
-        },
-        set: function (v) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+    set X(v) {
+    }
+}

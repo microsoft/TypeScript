@@ -18,16 +18,14 @@ class B {
 //// [constructorParametersThatShadowExternalNamesInVariableDeclarations.js]
 "use strict";
 var x = 1;
-var A = /** @class */ (function () {
-    function A(x) {
+class A {
+    constructor(x) {
         this.a = x;
     }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
+}
+class B {
+    constructor() {
         this.a = x;
         var x = "";
     }
-    return B;
-}());
+}

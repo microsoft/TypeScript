@@ -13,7 +13,7 @@ export const Foo = (opts: {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-var Foo = function (opts) { return ({}); };
+const Foo = (opts) => ({});
 exports.Foo = Foo;
 
 

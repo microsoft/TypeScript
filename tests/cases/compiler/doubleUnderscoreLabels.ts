@@ -1,3 +1,4 @@
+// @target: es2015
 function doThing() {
     __call: while (true) {
         aLabel: for (let i = 0; i < 10; i++) {

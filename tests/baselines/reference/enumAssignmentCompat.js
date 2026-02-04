@@ -44,11 +44,8 @@ var p: W.D;
 "use strict";
 var W;
 (function (W) {
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
+    class D {
+    }
     W.D = D;
 })(W || (W = {}));
 (function (W) {

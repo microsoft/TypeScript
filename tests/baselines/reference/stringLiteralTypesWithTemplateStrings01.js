@@ -9,10 +9,11 @@ let JK_BACKTICK_L: "JK`L" = `JK\`L`;
 
 //// [stringLiteralTypesWithTemplateStrings01.js]
 "use strict";
-var ABC = "ABC";
-var DE_NEWLINE_F = "DE\nF";
-var G_QUOTE_HI;
-var JK_BACKTICK_L = "JK`L";
+let ABC = `ABC`;
+let DE_NEWLINE_F = `DE
+F`;
+let G_QUOTE_HI;
+let JK_BACKTICK_L = `JK\`L`;
 
 
 //// [stringLiteralTypesWithTemplateStrings01.d.ts]

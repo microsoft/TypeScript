@@ -1,3 +1,4 @@
+// @target: es2015
 // Regression test for #325
 namespace A {
     class C {

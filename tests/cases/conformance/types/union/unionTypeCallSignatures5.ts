@@ -1,3 +1,4 @@
+// @target: es2015
 // #31485
 interface A {
   (this: void, b?: number): void;

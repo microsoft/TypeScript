@@ -29,18 +29,12 @@ c = a;
 
 //// [staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.js]
 "use strict";
-var B = /** @class */ (function () {
-    function B() {
-    }
-    B.prototype.prop = function () { };
-    return B;
-}());
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prop = function () { };
-    return C;
-}());
+class B {
+    prop() { }
+}
+class C {
+    static prop() { }
+}
 var a = new B();
 a = new C(); // error prop is missing
 a = B; // error prop is missing

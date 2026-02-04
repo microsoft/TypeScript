@@ -8,11 +8,10 @@ class Greeter {
 
 //// [sourceMapValidationClassWithDefaultConstructor.js]
 "use strict";
-var Greeter = /** @class */ (function () {
-    function Greeter() {
+class Greeter {
+    constructor() {
         this.a = 10;
         this.nameA = "Ten";
     }
-    return Greeter;
-}());
+}
 //# sourceMappingURL=sourceMapValidationClassWithDefaultConstructor.js.map

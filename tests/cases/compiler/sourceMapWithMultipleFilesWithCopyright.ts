@@ -1,3 +1,4 @@
+// @target: es2015
 // @outFile: a.js
 // @sourcemap: true
 // @declaration: true

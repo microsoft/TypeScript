@@ -40,32 +40,26 @@ let b = a.foo().n;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.A = A;
 //// [f2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class B {
+}
 exports.B = B;
 //// [f3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var f1_1 = require("./f1");
+const f1_1 = require("./f1");
 f1_1.A.prototype.foo = function () { return undefined; };
 //// [f4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./f3");
-var b = a.foo().n;
+let b = a.foo().n;
 
 
 //// [f1.d.ts]

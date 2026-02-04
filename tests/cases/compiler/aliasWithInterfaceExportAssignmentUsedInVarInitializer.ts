@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts
 interface c {

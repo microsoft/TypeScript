@@ -1,17 +1,12 @@
-duplicateIdentifierInCatchBlock.ts(3,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
 duplicateIdentifierInCatchBlock.ts(6,10): error TS2300: Duplicate identifier 'w'.
 duplicateIdentifierInCatchBlock.ts(8,9): error TS2300: Duplicate identifier 'w'.
-duplicateIdentifierInCatchBlock.ts(13,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
-duplicateIdentifierInCatchBlock.ts(14,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
 duplicateIdentifierInCatchBlock.ts(16,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'string', but here has type 'number'.
 
 
-==== duplicateIdentifierInCatchBlock.ts (6 errors) ====
+==== duplicateIdentifierInCatchBlock.ts (3 errors) ====
     var v;
     try { } catch (e) {
         function v() { }
-                 ~
-!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
     }
     
     function w() { }
@@ -26,11 +21,7 @@ duplicateIdentifierInCatchBlock.ts(16,9): error TS2403: Subsequent variable decl
     try { } catch (e) {
         var x;
         function x() { } // error
-                 ~
-!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
         function e() { } // error
-                 ~
-!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
         var p: string;
         var p: number; // error
             ~

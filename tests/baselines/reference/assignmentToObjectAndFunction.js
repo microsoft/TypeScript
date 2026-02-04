@@ -35,7 +35,7 @@ var badFundule: Function = bad; // error
 "use strict";
 var errObj = { toString: 0 }; // Error, incompatible toString
 var goodObj = {
-    toString: function (x) {
+    toString(x) {
         return "";
     }
 }; // Ok, because toString is a subtype of Object's toString

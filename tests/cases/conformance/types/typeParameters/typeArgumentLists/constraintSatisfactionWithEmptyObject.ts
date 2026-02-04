@@ -1,3 +1,4 @@
+// @target: es2015
 // valid uses of a basic object constraint, no errors expected
 
 // Object constraint

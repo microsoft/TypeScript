@@ -26,12 +26,10 @@ var y2 = foo2([{a: 100}]);
 
 //// [functionOverloads45.js]
 "use strict";
-function foo1(_a) {
-    var x = _a[0];
+function foo1([x]) {
     return undefined;
 }
-function foo2(_a) {
-    var x = _a[0];
+function foo2([x]) {
     return undefined;
 }
 var x1 = foo1([{ a: "str" }]);

@@ -1,3 +1,4 @@
+// @target: es2015
 interface MsgConstructor<T extends Message> {
   new(data: Array<{}>): T;
 }

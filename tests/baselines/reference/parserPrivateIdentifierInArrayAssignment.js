@@ -6,4 +6,5 @@
 
 //// [parserPrivateIdentifierInArrayAssignment.js]
 "use strict";
-#abc = [0];
+[#abc] =
+;

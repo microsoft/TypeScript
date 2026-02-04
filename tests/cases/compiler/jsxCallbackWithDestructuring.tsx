@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @jsx: preserve
 // @noImplicitAny: true
 // @strictNullChecks: true

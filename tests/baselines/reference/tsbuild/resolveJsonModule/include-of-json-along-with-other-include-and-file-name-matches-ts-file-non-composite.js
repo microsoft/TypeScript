@@ -66,8 +66,8 @@ Output::
 TSFILE: /home/src/workspaces/solution/project/dist/src/index.json
 TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
 TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 project/src/index.json
   Imported via "./index.json" from file 'project/src/index.ts'
   Matched by include pattern 'src/**/*.json' in 'project/tsconfig.json'
@@ -77,6 +77,8 @@ project/src/index.ts
 Found 2 errors.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/solution/project/dist/src/index.json]
 {
@@ -90,7 +92,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_json_1 = __importDefault(require("./index.json"));
+const index_json_1 = __importDefault(require("./index.json"));
 exports.default = index_json_1.default.hello;
 
 

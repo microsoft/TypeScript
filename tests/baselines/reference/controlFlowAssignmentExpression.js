@@ -22,15 +22,15 @@ if ((o = fn()).done) {
 
 //// [controlFlowAssignmentExpression.js]
 "use strict";
-var x;
-var obj;
+let x;
+let obj;
 x = "";
 x = x.length;
 x; // number
 x = true;
 (x = "", obj).foo = (x = x.length);
 x; // number
-var o;
+let o;
 if ((o = fn()).done) {
-    var y = o.value;
+    const y = o.value;
 }

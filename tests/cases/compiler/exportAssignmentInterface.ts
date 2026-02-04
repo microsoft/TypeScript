@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 // @Filename: exportAssignmentInterface_A.ts
 interface A {

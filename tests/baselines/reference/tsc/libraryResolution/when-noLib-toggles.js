@@ -40,7 +40,7 @@ Output::
 
 //// [/home/src/workspaces/project/b.js]
 "use strict";
-var b = 10;
+const b = 10;
 
 
 //// [/home/src/workspaces/project/b.d.ts]

@@ -5,4 +5,4 @@ var [...[a, b]] = [0, 1];
 
 //// [restElementWithBindingPattern.js]
 "use strict";
-var _a = [0, 1].slice(0), a = _a[0], b = _a[1];
+var [...[a, b]] = [0, 1];

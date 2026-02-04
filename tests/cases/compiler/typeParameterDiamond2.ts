@@ -1,3 +1,4 @@
+// @target: es2015
 function diamondTop<Top>() {
     function diamondMiddle<T extends Top, U>() {
         function diamondBottom<Bottom extends T | U>() {

@@ -138,7 +138,7 @@ sourceFile:sourceMapValidationModule.ts
 2 >Emitted(8, 12) Source(5, 11) + SourceIndex(0)
 3 >Emitted(8, 14) Source(5, 13) + SourceIndex(0)
 ---
->>>    var m4;
+>>>    let m4;
 1 >^^^^
 2 >    ^^^^
 3 >        ^^

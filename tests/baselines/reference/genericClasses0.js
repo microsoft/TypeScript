@@ -11,11 +11,8 @@ var y = v1.x; // should be 'string'
 
 //// [genericClasses0.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var v1;
 var y = v1.x; // should be 'string'
 

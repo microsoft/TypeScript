@@ -14,11 +14,10 @@ class Rule {
 //// [constDeclarationShadowedByVarDeclaration3.js]
 "use strict";
 // Ensure only checking for const declarations shadowed by vars
-var Rule = /** @class */ (function () {
-    function Rule(name) {
+class Rule {
+    constructor(name) {
         this.regex = new RegExp('');
         this.name = '';
         this.name = name;
     }
-    return Rule;
-}());
+}

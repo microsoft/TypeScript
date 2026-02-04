@@ -4,9 +4,8 @@ EmitSkipped: false
 FileName : /tests/cases/fourslash/inputFile.js
 "use strict";
 var x;
-var M = /** @class */ (function () {
-    function M() {
-    }
-    return M;
-}());
+class M {
+    x;
+    y;
+}
 

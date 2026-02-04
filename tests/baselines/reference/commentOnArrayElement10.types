@@ -6,8 +6,4 @@ const array = [,, /* comment */];
 >      : ^^^^^
 >[,, /* comment */] : undefined[]
 >                   : ^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 

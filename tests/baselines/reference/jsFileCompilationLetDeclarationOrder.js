@@ -11,9 +11,9 @@ a = 10;
 
 //// [out.js]
 "use strict";
-var a = 10;
+let a = 10;
 b = 30;
-var b = 30;
+let b = 30;
 a = 10;
 
 

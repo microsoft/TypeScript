@@ -12,12 +12,11 @@ let x = class B implements A {
 
 //// [classExpressions.js]
 "use strict";
-var x = /** @class */ (function () {
-    function B() {
-        this.func = function () {
+let x = class B {
+    constructor() {
+        this.func = () => {
         };
     }
-    B.prototype.onStart = function () {
-    };
-    return B;
-}());
+    onStart() {
+    }
+};

@@ -1,3 +1,4 @@
+// @target: es2015
 type A = 1 | 2;
 function f<T extends A>(a: T): A & T { return a; } // Shouldn't error
 

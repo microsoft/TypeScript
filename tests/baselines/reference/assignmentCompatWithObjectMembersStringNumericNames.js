@@ -93,16 +93,10 @@ namespace NumbersAndStrings {
 // string named numeric properties work correctly, errors below unless otherwise noted
 var JustStrings;
 (function (JustStrings) {
-    var S = /** @class */ (function () {
-        function S() {
-        }
-        return S;
-    }());
-    var T = /** @class */ (function () {
-        function T() {
-        }
-        return T;
-    }());
+    class S {
+    }
+    class T {
+    }
     var a2 = { '1.0': '' };
     var b2 = { '1': '' };
     s = t;
@@ -127,16 +121,10 @@ var JustStrings;
 })(JustStrings || (JustStrings = {}));
 var NumbersAndStrings;
 (function (NumbersAndStrings) {
-    var S = /** @class */ (function () {
-        function S() {
-        }
-        return S;
-    }());
-    var T = /** @class */ (function () {
-        function T() {
-        }
-        return T;
-    }());
+    class S {
+    }
+    class T {
+    }
     var a2 = { '1.0': '' };
     var b2 = { 1.: '' };
     s = t; // ok

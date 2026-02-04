@@ -18,12 +18,9 @@ c.saltbar();	// crash
 "use strict";
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        C.prototype.salt = function () { };
-        return C;
-    }());
+    class C {
+        salt() { }
+    }
     M.C = C;
 })(M || (M = {}));
 var c = new M.C();

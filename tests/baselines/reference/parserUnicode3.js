@@ -6,8 +6,5 @@ class 剩下 {
 
 //// [parserUnicode3.js]
 "use strict";
-var 剩下 = /** @class */ (function () {
-    function 剩下() {
-    }
-    return 剩下;
-}());
+class 剩下 {
+}

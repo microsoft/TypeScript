@@ -33,18 +33,11 @@ namespace MyModule {
 "use strict";
 var MyModule;
 (function (MyModule) {
-    var MyClass = /** @class */ (function () {
-        function MyClass() {
+    class MyClass {
+        get myGetter() {
+            var obj = {};
+            return obj;
         }
-        Object.defineProperty(MyClass.prototype, "myGetter", {
-            get: function () {
-                var obj = {};
-                return obj;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return MyClass;
-    }());
+    }
     MyModule.MyClass = MyClass;
 })(MyModule || (MyModule = {}));

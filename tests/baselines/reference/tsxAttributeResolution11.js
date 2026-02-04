@@ -30,12 +30,9 @@ var x = <MyComponent bar='world' />;
 
 //// [file.jsx]
 "use strict";
-var MyComponent = /** @class */ (function () {
-    function MyComponent() {
+class MyComponent {
+    render() {
     }
-    MyComponent.prototype.render = function () {
-    };
-    return MyComponent;
-}());
+}
 // Should be an OK
 var x = <MyComponent bar='world'/>;

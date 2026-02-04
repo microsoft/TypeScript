@@ -1,3 +1,4 @@
+// @target: es2015
 type A = { a: number };
 type B = { b: number };
 type X<T> = ({ [K in keyof T]: T[K] } & Record<string, void>)[keyof T];

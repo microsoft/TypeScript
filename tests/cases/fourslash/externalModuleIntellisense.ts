@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @module: commonjs
+
 // @Filename: externalModuleIntellisense_file0.ts
 ////export = express;
 ////function express(): express.ExpressServer;

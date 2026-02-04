@@ -21,19 +21,13 @@ namespace Test {
 "use strict";
 var Test;
 (function (Test) {
-    var Mocked = /** @class */ (function () {
-        function Mocked() {
-        }
-        return Mocked;
-    }());
-    var Tester = /** @class */ (function () {
-        function Tester() {
-        }
-        Tester.prototype.willThrowError = function () {
+    class Mocked {
+    }
+    class Tester {
+        willThrowError() {
             Mocked = Mocked || function () {
                 return { myProp: "test" };
             };
-        };
-        return Tester;
-    }());
+        }
+    }
 })(Test || (Test = {}));

@@ -2,13 +2,9 @@
 "use strict";
 /*@before*/
 function f1() { }
-//@after
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
-(function () { });
+class c {
+}
+() => { };
 //@after
 var e;
 (function (e) {

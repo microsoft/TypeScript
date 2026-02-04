@@ -7,4 +7,4 @@ f((n: number) => n);
 
 //// [typeInferenceWithTypeAnnotation.js]
 "use strict";
-f(function (n) { return n; });
+f((n) => n);

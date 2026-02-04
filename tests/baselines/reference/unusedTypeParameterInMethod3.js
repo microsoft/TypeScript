@@ -12,14 +12,11 @@ class A {
 
 //// [unusedTypeParameterInMethod3.js]
 "use strict";
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.f1 = function () {
+class A {
+    f1() {
         var a;
         var b;
         a;
         b;
-    };
-    return A;
-}());
+    }
+}

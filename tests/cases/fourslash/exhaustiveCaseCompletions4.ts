@@ -2,6 +2,7 @@
 
 // Filter existing values.
 
+// @lib: es5
 // @newline: LF
 //// enum E {
 ////     A = 0,

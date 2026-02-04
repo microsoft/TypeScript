@@ -8,4 +8,4 @@ const a = import<string, number>
 //// [importWithTypeArguments.js]
 "use strict";
 import;
-var a = (import);
+const a = (import);

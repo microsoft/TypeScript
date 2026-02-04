@@ -10,10 +10,7 @@ declare instanceof C;
 
 //// [declareIdentifierAsBeginningOfStatementExpression01.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var declare;
 declare instanceof C;

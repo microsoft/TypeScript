@@ -29,10 +29,7 @@ namespace Validation {
 "use strict";
 var Validation;
 (function (Validation) {
-    var c1 = /** @class */ (function () {
-        function c1() {
-        }
-        return c1;
-    }());
+    class c1 {
+    }
     Validation.c1 = c1;
 })(Validation || (Validation = {}));

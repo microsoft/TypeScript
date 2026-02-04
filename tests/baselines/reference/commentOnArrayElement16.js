@@ -11,7 +11,7 @@ const array = [
 
 //// [commentOnArrayElement16.js]
 "use strict";
-var array = [
+const array = [
     // comment start
     1,
     2,

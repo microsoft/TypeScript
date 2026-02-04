@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 function a(a = 10) {
     "use strict";

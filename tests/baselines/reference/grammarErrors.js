@@ -26,10 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 var ns;
 (function (ns) {
-    var Foo = /** @class */ (function () {
-        function Foo() {
-        }
-        return Foo;
-    }());
+    class Foo {
+    }
     ns.Foo = Foo;
 })(ns || (ns = {}));

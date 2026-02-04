@@ -12,15 +12,11 @@ class C {
 
 //// [parserMissingLambdaOpenBrace1.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.where = function (filter) {
-        var _this = this;
-        return fromDoWhile(function (test) {
+class C {
+    where(filter) {
+        return fromDoWhile(test => {
             var index = 0;
-            return _this.doWhile(function (item, i) { return filter(item, i) ? test(item, index++) : true; });
+            return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);
         });
-    };
-    return C;
-}());
+    }
+}

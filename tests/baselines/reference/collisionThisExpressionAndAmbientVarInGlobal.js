@@ -7,6 +7,5 @@ _this = 10; // Error
 
 //// [collisionThisExpressionAndAmbientVarInGlobal.js]
 "use strict";
-var _this_1 = this;
-var f = function () { return _this_1; };
+var f = () => this;
 _this = 10; // Error

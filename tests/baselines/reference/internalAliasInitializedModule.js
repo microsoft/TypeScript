@@ -17,13 +17,10 @@ namespace c {
 "use strict";
 var a;
 (function (a) {
-    var b;
+    let b;
     (function (b) {
-        var c = /** @class */ (function () {
-            function c() {
-            }
-            return c;
-        }());
+        class c {
+        }
         b.c = c;
     })(b = a.b || (a.b = {}));
 })(a || (a = {}));

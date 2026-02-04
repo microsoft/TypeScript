@@ -13,12 +13,9 @@ namespace M {
 "use strict";
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    var E;
+    class C {
+    }
+    let E;
     (function (E) {
     })(E || (E = {}));
 })(M || (M = {}));

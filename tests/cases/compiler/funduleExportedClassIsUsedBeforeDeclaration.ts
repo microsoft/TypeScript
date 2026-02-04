@@ -1,3 +1,4 @@
+// @target: es2015
 interface A {   // interface before module declaration
     (): B.C;    // uses defined below class in module
 }

@@ -284,11 +284,11 @@ function f41(x, y) {
     y = x; // Error
 }
 function f50(obj, key) {
-    var item = obj[key];
+    let item = obj[key];
     return obj[key].name;
 }
 function f51(obj, key) {
-    var item = obj[key];
+    let item = obj[key];
     return obj[key].name;
 }
 function f60(x, y) {
@@ -341,7 +341,7 @@ function f82(t, k1, k2) {
     return t[k1][k2];
 }
 function f90() {
-    var n = { x: 1 };
+    const n = { x: 1 };
 }
 function f() {
     return undefined;

@@ -30,26 +30,17 @@ class Widget<TValue> {
 
 //// [infinitelyExpandingOverloads.js]
 "use strict";
-var Validator2 = /** @class */ (function () {
-    function Validator2() {
-    }
-    return Validator2;
-}());
-var ViewModel = /** @class */ (function () {
-    function ViewModel() {
+class Validator2 {
+}
+class ViewModel {
+    constructor() {
         this.validationPlacements = new Array();
     }
-    return ViewModel;
-}());
-var Widget = /** @class */ (function () {
-    function Widget(viewModelType) {
+}
+class Widget {
+    constructor(viewModelType) {
     }
-    Object.defineProperty(Widget.prototype, "options", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Widget;
-}());
+    get options() {
+        return null;
+    }
+}

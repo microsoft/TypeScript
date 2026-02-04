@@ -5,9 +5,8 @@ class foo { public bar: { (): number; (i: number): number; } = function() { retu
 
 //// [contextualTyping15.js]
 "use strict";
-var foo = /** @class */ (function () {
-    function foo() {
+class foo {
+    constructor() {
         this.bar = function () { return 1; };
     }
-    return foo;
-}());
+}

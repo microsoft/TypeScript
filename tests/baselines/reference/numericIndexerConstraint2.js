@@ -8,11 +8,8 @@ x = a;
 
 //// [numericIndexerConstraint2.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.foo = function () { };
-    return Foo;
-}());
+class Foo {
+    foo() { }
+}
 var a = { one: 1 };
 x = a;

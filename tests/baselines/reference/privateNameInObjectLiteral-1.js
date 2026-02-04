@@ -8,6 +8,6 @@ const obj = {
 
 //// [privateNameInObjectLiteral-1.js]
 "use strict";
-var obj = {
+const obj = {
     : 1
 };

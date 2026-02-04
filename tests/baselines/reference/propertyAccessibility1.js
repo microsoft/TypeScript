@@ -10,11 +10,10 @@ f.privProp;
 
 //// [propertyAccessibility1.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
+class Foo {
+    constructor() {
         this.privProp = 0;
     }
-    return Foo;
-}());
+}
 var f = new Foo();
 f.privProp;

@@ -25,14 +25,14 @@ namespace M.N {
 "use strict";
 var M;
 (function (M) {
-    var N;
+    let N;
     (function (N) {
         2 * x;
-        var X;
+        let X;
         (function (X) {
-            var Y;
+            let Y;
             (function (Y) {
-                var Z;
+                let Z;
                 (function (Z) {
                     Z.v2 = f(Z.v);
                 })(Z = Y.Z || (Y.Z = {}));
@@ -43,11 +43,11 @@ var M;
 (function (M) {
     var N;
     (function (N) {
-        var X;
+        let X;
         (function (X) {
-            var Y;
+            let Y;
             (function (Y) {
-                var Z;
+                let Z;
                 (function (Z) {
                     Z.v = N.f(10);
                 })(Z = Y.Z || (Y.Z = {}));

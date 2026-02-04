@@ -11,5 +11,5 @@ f();
 "use strict";
 null();
 undefined();
-var f;
+let f;
 f();

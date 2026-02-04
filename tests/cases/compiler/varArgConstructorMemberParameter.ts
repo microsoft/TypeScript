@@ -1,3 +1,4 @@
+// @target: es2015
 class Foo1 {
     constructor (...args: string[]) { }
 }

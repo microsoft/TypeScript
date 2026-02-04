@@ -8,4 +8,4 @@ let doesntWork: DoesntWork = { a: 1, c: 2, d: 3 }
 
 //// [excessPropertyErrorForFunctionTypes.js]
 "use strict";
-var doesntWork = { a: 1, c: 2, d: 3 };
+let doesntWork = { a: 1, c: 2, d: 3 };

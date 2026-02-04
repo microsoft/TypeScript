@@ -14,11 +14,8 @@ function bar() {
 
 //// [a.js]
 "use strict";
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 //# sourceMappingURL=a.js.map
 //// [b.js]
 "use strict";

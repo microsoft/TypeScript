@@ -8,4 +8,4 @@ var s = map("", () => { return { x: identity }; });
 
 //// [inferentialTypingWithFunctionTypeNested.js]
 "use strict";
-var s = map("", function () { return { x: identity }; });
+var s = map("", () => { return { x: identity }; });

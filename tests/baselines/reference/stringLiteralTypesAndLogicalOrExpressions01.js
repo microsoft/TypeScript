@@ -12,11 +12,11 @@ let e: "foo" | "bar" = d;
 
 //// [stringLiteralTypesAndLogicalOrExpressions01.js]
 "use strict";
-var a = "foo";
-var b = a || "foo";
-var c = b;
-var d = b || "bar";
-var e = d;
+let a = "foo";
+let b = a || "foo";
+let c = b;
+let d = b || "bar";
+let e = d;
 
 
 //// [stringLiteralTypesAndLogicalOrExpressions01.d.ts]

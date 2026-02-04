@@ -7,4 +7,4 @@ var c = { bogus: 0 };
 //// [nonIterableRestElement3.js]
 "use strict";
 var c = { bogus: 0 };
-c = ["", 0].slice(0);
+[...c] = ["", 0];

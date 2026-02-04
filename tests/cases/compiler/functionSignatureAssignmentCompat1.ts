@@ -1,3 +1,4 @@
+// @target: es2015
 interface ParserFunc {
     (eventEmitter: number, buffer: string): void;
 }

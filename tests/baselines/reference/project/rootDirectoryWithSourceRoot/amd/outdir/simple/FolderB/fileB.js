@@ -1,8 +1,6 @@
 "use strict";
 /// <reference path='FolderC/fileC.ts'/>
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class B {
+    c;
+}
 //# sourceMappingURL=fileB.js.map

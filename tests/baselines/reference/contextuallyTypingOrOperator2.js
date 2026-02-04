@@ -7,5 +7,5 @@ var v2 = (s: string) => s.length || function (s) { s.aaa };
 
 //// [contextuallyTypingOrOperator2.js]
 "use strict";
-var v = { a: function (s) { return s.length; } } || { a: function (s) { return 1; } };
-var v2 = function (s) { return s.length || function (s) { s.aaa; }; };
+var v = { a: s => s.length } || { a: s => 1 };
+var v2 = (s) => s.length || function (s) { s.aaa; };

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @lib: dom,esnext
 // @noEmit: true

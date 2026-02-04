@@ -1,3 +1,4 @@
+// @target: es2015
 namespace A.B.C {
     export interface Point {
         x: number;

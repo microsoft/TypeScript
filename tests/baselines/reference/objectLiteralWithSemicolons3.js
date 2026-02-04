@@ -10,7 +10,7 @@ var v = {
 //// [objectLiteralWithSemicolons3.js]
 "use strict";
 var v = {
-    a: a,
-    b: b,
-    c: c
+    a,
+    b,
+    c
 };

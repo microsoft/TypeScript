@@ -11,10 +11,7 @@ class C {
 
 //// [staticAndNonStaticPropertiesSameName.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.f = function () { };
-    C.f = function () { };
-    return C;
-}());
+class C {
+    f() { }
+    static f() { }
+}

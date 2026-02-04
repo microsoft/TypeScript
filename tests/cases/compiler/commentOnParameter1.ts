@@ -1,4 +1,5 @@
-﻿function commentedParameters(
+﻿// @target: es2015
+function commentedParameters(
 /* Parameter a */
 a
 /* End of parameter a */

@@ -1,11 +1,8 @@
 "use strict";
 var test;
 (function (test) {
-    var ClassA = /** @class */ (function () {
-        function ClassA() {
-        }
-        ClassA.prototype.method = function () { };
-        return ClassA;
-    }());
+    class ClassA {
+        method() { }
+    }
     test.ClassA = ClassA;
 })(test || (test = {}));

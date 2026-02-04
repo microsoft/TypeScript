@@ -1,3 +1,4 @@
+// @target: es2015
 function f1() {
     for (let [x, y] = [1, 2]; x < y; ++x, --y) {
         let a = () => x++ + y++;

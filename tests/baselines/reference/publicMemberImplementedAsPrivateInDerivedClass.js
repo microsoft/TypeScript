@@ -11,8 +11,5 @@ class Foo implements Qux {
 
 //// [publicMemberImplementedAsPrivateInDerivedClass.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}

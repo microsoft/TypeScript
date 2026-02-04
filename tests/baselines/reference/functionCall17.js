@@ -12,12 +12,7 @@ foo('foo', 'bar', 3, 4);
 
 //// [functionCall17.js]
 "use strict";
-function foo(a, b, c) {
-    var d = [];
-    for (var _i = 3; _i < arguments.length; _i++) {
-        d[_i - 3] = arguments[_i];
-    }
-}
+function foo(a, b, c, ...d) { }
 foo('foo', 1);
 foo('foo');
 foo();

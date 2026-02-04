@@ -30,19 +30,17 @@ c = d;
 
 //// [genericIndexedAccessVarianceComparisonResultCorrect.js]
 "use strict";
-var A = /** @class */ (function () {
-    function A() {
+class A {
+    constructor() {
         this.x = 'A';
         this.y = 0;
     }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
+}
+class B {
+    constructor() {
         this.x = 'B';
         this.z = true;
     }
-    return B;
-}());
+}
 b = a; // should be no error
 c = d;

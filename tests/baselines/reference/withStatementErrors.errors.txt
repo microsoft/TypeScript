@@ -1,9 +1,8 @@
 withStatementErrors.ts(3,1): error TS1101: 'with' statements are not allowed in strict mode.
 withStatementErrors.ts(3,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-withStatementErrors.ts(7,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
 
 
-==== withStatementErrors.ts (3 errors) ====
+==== withStatementErrors.ts (2 errors) ====
     declare var ooo:any;
     
     with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
@@ -15,8 +14,6 @@ withStatementErrors.ts(7,14): error TS1250: Function declarations are not allowe
         bang = true; // no error
         
         function bar() {} // no error
-                 ~~~
-!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
     
         bar(); // no error
     

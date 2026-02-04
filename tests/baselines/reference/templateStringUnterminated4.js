@@ -5,4 +5,4 @@
 
 //// [templateStringUnterminated4.js]
 "use strict";
-"\\`";
+`\\\`;

@@ -5,4 +5,4 @@
 
 //// [arrowFunctionInExpressionStatement1.js]
 "use strict";
-(function () { return 0; });
+() => 0;

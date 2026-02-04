@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @Filename: usage.ts
 import { Something } from "./prelude"
 export const myValue: Something<string> = Something.of("abc")

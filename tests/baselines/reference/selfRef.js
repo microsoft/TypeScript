@@ -24,8 +24,8 @@ namespace M
 "use strict";
 var M;
 (function (M) {
-    var Test = /** @class */ (function () {
-        function Test() {
+    class Test {
+        constructor() {
             this.name = "hello";
             this.setName = function (value) {
                 (function () {
@@ -36,7 +36,6 @@ var M;
                 return name;
             };
         }
-        return Test;
-    }());
+    }
     M.Test = Test;
 })(M || (M = {}));

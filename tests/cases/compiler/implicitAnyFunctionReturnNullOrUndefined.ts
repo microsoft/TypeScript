@@ -1,3 +1,4 @@
+// @target: es2015
 //@noimplicitany: true
 // this should be an error
 function nullWidenFunction() { return null;}             // error at "nullWidenFunction"

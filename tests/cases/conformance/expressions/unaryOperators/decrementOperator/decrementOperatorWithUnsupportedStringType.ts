@@ -1,3 +1,4 @@
+// @target: es2015
 // -- operator on string type
 declare var STRING: string;
 var STRING1: string[] = ["", ""];

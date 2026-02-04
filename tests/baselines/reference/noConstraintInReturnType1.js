@@ -8,12 +8,9 @@ class List<T extends {}> {
 
 //// [noConstraintInReturnType1.js]
 "use strict";
-var List = /** @class */ (function () {
-    function List() {
-    }
-    List.empty = function () { return null; };
-    return List;
-}());
+class List {
+    static empty() { return null; }
+}
 
 
 //// [noConstraintInReturnType1.d.ts]

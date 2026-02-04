@@ -5,4 +5,4 @@ var v = (public x: string) => { };
 
 //// [ArrowFunctionExpression1.js]
 "use strict";
-var v = function (x) { };
+var v = (x) => { };

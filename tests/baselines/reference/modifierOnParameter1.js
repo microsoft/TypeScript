@@ -7,8 +7,6 @@ class C {
 
 //// [modifierOnParameter1.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C(p) {
-    }
-    return C;
-}());
+class C {
+    constructor(p) { }
+}

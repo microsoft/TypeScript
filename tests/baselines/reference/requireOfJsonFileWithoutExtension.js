@@ -23,10 +23,10 @@ if (x) {
 //// [out/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var b1 = require("./b"); // This should not resolve
-var x = b1.a;
-var b2 = require("./b.json");
+const b1 = require("./b"); // This should not resolve
+let x = b1.a;
+const b2 = require("./b.json");
 if (x) {
-    var b = b2.b;
+    let b = b2.b;
     x = (b1.b === b);
 }

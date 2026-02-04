@@ -24,11 +24,8 @@ var r2 = new a<number>();
 "use strict";
 // it is an error to provide type arguments to a non-generic call
 // all of these are errors
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c = new C();
 function Foo() { }
 var r = new Foo();

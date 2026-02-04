@@ -17,5 +17,5 @@ console.log(b.a)
 
 //// [classFunctionMerging2.js]
 "use strict";
-var b = new B("Hey");
+let b = new B("Hey");
 console.log(b.a);

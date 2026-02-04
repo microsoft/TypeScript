@@ -9,8 +9,5 @@ static public: number;
 
 //// [parserAccessibilityAfterStatic4.js]
 "use strict";
-var Outer = /** @class */ (function () {
-    function Outer() {
-    }
-    return Outer;
-}());
+class Outer {
+}

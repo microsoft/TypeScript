@@ -7,9 +7,6 @@ class C {
 
 //// [Protected4.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.m = function () { };
-    return C;
-}());
+class C {
+    m() { }
+}

@@ -1,3 +1,4 @@
+// @target: es2015
 // Typical case
 class C1 {
     property1!: string;

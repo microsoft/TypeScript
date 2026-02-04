@@ -8,9 +8,6 @@ class C {
 
 //// [ClassDeclaration13.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.bar = function () { };
-    return C;
-}());
+class C {
+    bar() { }
+}

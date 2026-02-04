@@ -1,3 +1,4 @@
+// @target: es2015
 type Something<T> = { test: string } &  (T extends object ? {
     arg: T
 } : {

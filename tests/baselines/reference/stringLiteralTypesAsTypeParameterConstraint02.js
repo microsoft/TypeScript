@@ -13,8 +13,8 @@ let fResult = f("foo");
 function foo(f) {
     return f;
 }
-var f = foo(function (y) { return y === "foo" ? y : "foo"; });
-var fResult = f("foo");
+let f = foo((y) => y === "foo" ? y : "foo");
+let fResult = f("foo");
 
 
 //// [stringLiteralTypesAsTypeParameterConstraint02.d.ts]

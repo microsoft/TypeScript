@@ -8,9 +8,6 @@ var c = C();
 
 //// [callOnClass.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c = C();

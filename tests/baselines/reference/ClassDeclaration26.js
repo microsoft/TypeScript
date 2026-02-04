@@ -9,11 +9,10 @@ class C {
 
 //// [ClassDeclaration26.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.foo = 10;
     }
-    return C;
-}());
+}
 var constructor;
-(function () { });
+() => { };

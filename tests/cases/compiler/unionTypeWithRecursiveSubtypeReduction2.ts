@@ -1,3 +1,4 @@
+// @target: es2015
 class Module {
     public members: Class[];
 }

@@ -24,11 +24,8 @@ class Component {
 
 //// [commentsOnJSXExpressionsArePreserved.js]
 "use strict";
-var Component = /** @class */ (function () {
-    function Component() {
-    }
-    Component.prototype.render = function () {
+class Component {
+    render() {
         return _jsx("div", { children: null /* preserved */ });
-    };
-    return Component;
-}());
+    }
+}

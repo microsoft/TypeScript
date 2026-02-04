@@ -5,4 +5,4 @@ var v = a => <any><any>{}
 
 //// [arrowFunctionWithObjectLiteralBody2.js]
 "use strict";
-var v = function (a) { return ({}); };
+var v = a => ({});

@@ -10,11 +10,9 @@ namespace foo {
 
 //// [genericMergedDeclarationUsingTypeParameter2.js]
 "use strict";
-var foo = /** @class */ (function () {
-    function foo(x) {
-    }
-    return foo;
-}());
+class foo {
+    constructor(x) { }
+}
 (function (foo) {
     var y = 1;
 })(foo || (foo = {}));

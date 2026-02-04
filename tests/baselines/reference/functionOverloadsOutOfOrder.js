@@ -19,19 +19,13 @@ class e {
 
 //// [functionOverloadsOutOfOrder.js]
 "use strict";
-var d = /** @class */ (function () {
-    function d() {
-    }
-    d.prototype.foo = function (ns) {
+class d {
+    foo(ns) {
         return ns.toString();
-    };
-    return d;
-}());
-var e = /** @class */ (function () {
-    function e() {
     }
-    e.prototype.foo = function (ns) {
+}
+class e {
+    foo(ns) {
         return ns.toString();
-    };
-    return e;
-}());
+    }
+}

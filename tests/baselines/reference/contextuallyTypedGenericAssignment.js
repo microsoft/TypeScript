@@ -10,4 +10,4 @@ foo((t, u: number) => t.a)
 //// [contextuallyTypedGenericAssignment.js]
 "use strict";
 function foo(arg) { }
-foo(function (t, u) { return t.a; });
+foo((t, u) => t.a);

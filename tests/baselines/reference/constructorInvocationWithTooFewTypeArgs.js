@@ -14,9 +14,6 @@ var d = new D<number>();
 
 //// [constructorInvocationWithTooFewTypeArgs.js]
 "use strict";
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class D {
+}
 var d = new D();

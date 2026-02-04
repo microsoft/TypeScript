@@ -1,5 +1,7 @@
 /// <reference path='./fourslash.ts'/>
 
+// @module: commonjs
+// @lib: es5
 // @strict: false
 // @Filename: exportEqualTypes_file0.ts
 ////interface x {

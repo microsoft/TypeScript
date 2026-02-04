@@ -7,4 +7,4 @@ const j = arr2[arr1[0]]; // should error
 
 //// [arrayIndexWithArrayFails.js]
 "use strict";
-var j = arr2[arr1[0]]; // should error
+const j = arr2[arr1[0]]; // should error

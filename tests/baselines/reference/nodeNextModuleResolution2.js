@@ -16,5 +16,4 @@ import {x} from "foo";
 
 
 //// [app.mjs]
-"use strict";
 export {};

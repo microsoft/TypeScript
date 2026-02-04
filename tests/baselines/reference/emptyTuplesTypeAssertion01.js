@@ -6,8 +6,8 @@ let y = x[0];
 
 //// [emptyTuplesTypeAssertion01.js]
 "use strict";
-var x = [];
-var y = x[0];
+let x = [];
+let y = x[0];
 
 
 //// [emptyTuplesTypeAssertion01.d.ts]

@@ -15,13 +15,10 @@ a.foo();
 
 //// [classOrder1.js]
 "use strict";
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.foo = function () {
+class A {
+    foo() {
         /*WScript.Echo("Here!");*/
-    };
-    return A;
-}());
+    }
+}
 var a = new A();
 a.foo();

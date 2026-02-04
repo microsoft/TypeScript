@@ -7,4 +7,4 @@ g("", 3, a => a);
 
 //// [typeInferenceConflictingCandidates.js]
 "use strict";
-g("", 3, function (a) { return a; });
+g("", 3, a => a);

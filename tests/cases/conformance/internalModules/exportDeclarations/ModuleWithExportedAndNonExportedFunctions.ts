@@ -1,3 +1,4 @@
+// @target: es2015
 namespace A {
 
     export function fn(s: string) {

@@ -7,8 +7,7 @@ function f([] = [1,2,3,4]) {
 
 //// [emptyArrayBindingPatternParameter04.js]
 "use strict";
-function f(_a) {
-    _a = [1, 2, 3, 4];
+function f([] = [1, 2, 3, 4]) {
     var x, y, z;
 }
 

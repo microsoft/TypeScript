@@ -11,9 +11,6 @@ declare var d: { m(boolean, C, object, undefined): void }
 
 //// [noImplicitAnyNamelessParameter.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 // note: null and void do not parse correctly without a preceding parameter name

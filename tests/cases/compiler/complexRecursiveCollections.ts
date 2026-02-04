@@ -1,3 +1,4 @@
+// @target: es2015
 // @skipLibCheck: true
 // @lib: es6
 // @Filename: complex.ts

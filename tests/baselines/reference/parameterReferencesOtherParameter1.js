@@ -13,14 +13,9 @@ class UI {
 
 //// [parameterReferencesOtherParameter1.js]
 "use strict";
-var Model = /** @class */ (function () {
-    function Model() {
+class Model {
+}
+class UI {
+    constructor(model, foo = model.name) {
     }
-    return Model;
-}());
-var UI = /** @class */ (function () {
-    function UI(model, foo) {
-        if (foo === void 0) { foo = model.name; }
-    }
-    return UI;
-}());
+}

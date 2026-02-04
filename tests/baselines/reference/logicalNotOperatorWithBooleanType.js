@@ -43,12 +43,9 @@ var ResultIsBoolean = !!BOOLEAN;
 //// [logicalNotOperatorWithBooleanType.js]
 "use strict";
 function foo() { return true; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return false; };
-    return A;
-}());
+class A {
+    static foo() { return false; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));

@@ -1,3 +1,4 @@
+// @target: es2015
 namespace A {
     // these 2 statements force an underscore before the 'A' 
     // in the generated function call.

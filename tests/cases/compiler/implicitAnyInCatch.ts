@@ -1,3 +1,4 @@
+// @target: es2015
 // @noimplicitany: true
 // @useUnknownInCatchVariables: false
 // this should not be an error

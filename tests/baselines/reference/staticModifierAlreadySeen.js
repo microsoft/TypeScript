@@ -8,10 +8,9 @@ class C {
 
 //// [staticModifierAlreadySeen.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.foo = 1;
     }
-    C.prototype.bar = function () { };
-    return C;
-}());
+    bar() { }
+}

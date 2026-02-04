@@ -5,4 +5,4 @@ var x = `abc${ " " }def` ? `abc${ " " }def` : `abc${ " " }def`;
 
 //// [templateStringInConditional.js]
 "use strict";
-var x = "abc".concat(" ", "def") ? "abc".concat(" ", "def") : "abc".concat(" ", "def");
+var x = `abc${" "}def` ? `abc${" "}def` : `abc${" "}def`;

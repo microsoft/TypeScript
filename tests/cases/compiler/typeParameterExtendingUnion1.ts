@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 class Animal { run() { } }
 class Cat extends Animal { meow }

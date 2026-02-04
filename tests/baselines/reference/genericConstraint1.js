@@ -12,13 +12,10 @@ x.bar2<string>(2, "");
 
 //// [genericConstraint1.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.bar2 = function (x, y) {
+class C {
+    bar2(x, y) {
         return null;
-    };
-    return C;
-}());
+    }
+}
 var x = new C();
 x.bar2(2, "");

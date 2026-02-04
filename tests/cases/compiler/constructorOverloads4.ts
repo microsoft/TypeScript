@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace M {    
     export class Function {
         constructor(...args: string[]);

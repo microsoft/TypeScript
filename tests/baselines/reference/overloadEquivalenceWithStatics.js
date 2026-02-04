@@ -12,11 +12,8 @@ return null;
 
 //// [overloadEquivalenceWithStatics.js]
 "use strict";
-var A1 = /** @class */ (function () {
-    function A1() {
-    }
-    A1.B = function (v) {
+class A1 {
+    static B(v) {
         return null;
-    };
-    return A1;
-}());
+    }
+}
