@@ -1,5 +1,7 @@
 // @target: es2015
+// @ignoreDeprecations: 6.0
 // @strict: false
+// @alwaysStrict: true, false
 // reserved ES5 future in strict mode
 
 var constructor = 0;
