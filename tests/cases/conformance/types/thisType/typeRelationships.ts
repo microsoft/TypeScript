@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     self = this;
     c = new C();

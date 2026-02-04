@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Ambient variable with an initializer 
 declare var x = 4;

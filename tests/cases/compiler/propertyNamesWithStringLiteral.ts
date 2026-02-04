@@ -1,3 +1,4 @@
+// @target: es2015
 class _Color {
     a: number; r: number; g: number; b: number;
 }

@@ -1,3 +1,4 @@
+// @target: es2015
 interface List<T> {
     data: T;
     next: List<T>;

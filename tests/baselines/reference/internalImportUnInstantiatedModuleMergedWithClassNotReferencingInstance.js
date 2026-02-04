@@ -15,11 +15,9 @@ namespace B {
 
 
 //// [internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+"use strict";
+class A {
+}
 var B;
 (function (B) {
     var A = 1;

@@ -26,15 +26,13 @@ define(["require", "exports"], function (require, exports) {
     exports.Shapes = void 0;
     var Shapes;
     (function (Shapes) {
-        var Point = /** @class */ (function () {
-            function Point() {
-            }
-            return Point;
-        }());
+        class Point {
+        }
         Shapes.Point = Point;
     })(Shapes || (exports.Shapes = Shapes = {}));
 });
 //// [duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_1.js]
+"use strict";
 //var x = new Shapes.Point();
 //interface IPoint {}
 //namespace Shapes {

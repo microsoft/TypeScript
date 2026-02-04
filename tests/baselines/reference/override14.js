@@ -11,6 +11,7 @@ class SubFoo extends Foo {
 
 
 //// [override14.js]
+"use strict";
 class Foo {
     property = 1;
 }

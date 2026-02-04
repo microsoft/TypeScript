@@ -6,4 +6,5 @@ const { promise, resolve, reject } = Promise.withResolvers<T>();
 
 
 //// [promiseWithResolvers.js]
+"use strict";
 const { promise, resolve, reject } = Promise.withResolvers();

@@ -1,3 +1,4 @@
+// @target: es2015
 var b = new Boolean();
 b = 1; // Error
 b = "a"; // Error

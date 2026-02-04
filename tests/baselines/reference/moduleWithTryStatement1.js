@@ -11,6 +11,7 @@ var v = M;
 
 
 //// [moduleWithTryStatement1.js]
+"use strict";
 var M;
 (function (M) {
     try {

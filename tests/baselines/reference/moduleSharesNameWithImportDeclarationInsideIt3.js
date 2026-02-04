@@ -19,9 +19,10 @@ namespace A.M {
 }
 
 //// [moduleSharesNameWithImportDeclarationInsideIt3.js]
+"use strict";
 var Z;
 (function (Z) {
-    var M;
+    let M;
     (function (M) {
         function bar() {
             return "";

@@ -4,4 +4,5 @@
 ++function(e) { }
 
 //// [parserUnaryExpression2.js]
+"use strict";
 ++function (e) { };

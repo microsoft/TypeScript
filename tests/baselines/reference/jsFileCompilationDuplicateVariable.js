@@ -8,6 +8,7 @@ var x = "hello"; // Error is recorded here, but suppressed because the js file i
 
 
 //// [out.js]
+"use strict";
 var x = 10;
 var x = "hello"; // Error is recorded here, but suppressed because the js file isn't checked
 

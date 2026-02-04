@@ -19,14 +19,13 @@ export function needsRenameForShadowing<T>() {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 exports.needsRenameForShadowing = needsRenameForShadowing;
-var A = /** @class */ (function () {
-    function A() {
-        this.ShadowedButDoesNotRequireRenaming = function () {
+class A {
+    constructor() {
+        this.ShadowedButDoesNotRequireRenaming = () => {
             return null;
         };
     }
-    return A;
-}());
+}
 exports.A = A;
 function needsRenameForShadowing() {
     return function O(t, t2) {

@@ -15,13 +15,14 @@ var b: A.B;
 A.B(1);
 
 //// [genericFunduleInModule2.js]
+"use strict";
 var A;
 (function (A) {
     function B(x) { return x; }
     A.B = B;
 })(A || (A = {}));
 (function (A) {
-    var B;
+    let B;
     (function (B) {
         B.x = 1;
     })(B = A.B || (A.B = {}));

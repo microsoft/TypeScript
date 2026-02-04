@@ -3,9 +3,11 @@
 === jsxEmitAttributeWithPreserve.tsx ===
 declare var React: any;
 >React : any
+>      : ^^^
 
 <foo data/>
-><foo data/> : error
+><foo data/> : any
+>            : ^^^
 >foo : any
 >    : ^^^
 >data : true

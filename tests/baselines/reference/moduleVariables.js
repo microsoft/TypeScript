@@ -20,6 +20,7 @@ namespace M {
 
 
 //// [moduleVariables.js]
+"use strict";
 var x = 1;
 var M;
 (function (M) {

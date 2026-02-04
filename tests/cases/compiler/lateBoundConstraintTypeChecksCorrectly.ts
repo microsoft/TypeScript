@@ -1,3 +1,4 @@
+// @target: es2015
 // @keyofStringsOnly: true
 
 declare const fooProp: unique symbol;

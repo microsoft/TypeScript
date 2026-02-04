@@ -14,8 +14,8 @@ function foo(bar: string): number;
 function foo(bar?: string): any { return "" };
 >foo : { (): string; (bar: string): number; }
 >    : ^^^^^^      ^^^   ^^      ^^^      ^^^
->bar : string
->    : ^^^^^^
+>bar : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 

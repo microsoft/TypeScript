@@ -9,7 +9,7 @@
 //// [|export|] const foo: Foo = {}
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "files": ["a.ts", "b.ts"] }
+////{ "compilerOptions": { "lib": ["es5"] }, "files": ["a.ts", "b.ts"] }
 
 const ranges = test.ranges();
 verify.pasteEdits({

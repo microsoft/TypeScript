@@ -49,6 +49,7 @@ class C {
 });
 
 //// [esDecorators-emitDecoratorMetadata.js]
+"use strict";
 let C = (() => {
     let _classDecorators = [dec];
     let _classDescriptor;

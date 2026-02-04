@@ -1,3 +1,4 @@
+// @target: es2015
 function extend<T, U>(obj1: T, obj2: U): T & U {
     var result!: T & U;
     obj1 = result;

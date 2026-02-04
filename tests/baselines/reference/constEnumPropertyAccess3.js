@@ -22,6 +22,7 @@ E["E"].toString();
 
 
 //// [constEnumPropertyAccess3.js]
+"use strict";
 (-2 /* E.A */).toString();
 (-1 /* E.B */).toString();
 (-3 /* E.C */).toString();

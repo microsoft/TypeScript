@@ -6,4 +6,5 @@ var [...x = a] = a;  // Error, rest element cannot have initializer
 
 
 //// [restElementWithInitializer1.js]
-var _a = a.slice(0), x = _a === void 0 ? a : _a; // Error, rest element cannot have initializer
+"use strict";
+var [...x = a] = a; // Error, rest element cannot have initializer

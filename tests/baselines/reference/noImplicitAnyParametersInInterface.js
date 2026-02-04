@@ -53,3 +53,4 @@ interface I {
 }
 
 //// [noImplicitAnyParametersInInterface.js]
+"use strict";

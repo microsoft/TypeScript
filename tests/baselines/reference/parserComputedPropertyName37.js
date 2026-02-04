@@ -6,6 +6,7 @@ var v = {
 };
 
 //// [parserComputedPropertyName37.js]
+"use strict";
 var v = {
     [public]: 0
 };

@@ -22,6 +22,7 @@ class C {
 
 
 //// [classStaticBlock2.js]
+"use strict";
 var a = 1;
 var b = 2;
 var C = /** @class */ (function () {

@@ -1,0 +1,8 @@
+tsxNoJsx.tsx(1,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== tsxNoJsx.tsx (1 errors) ====
+    <nope />;
+    ~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    

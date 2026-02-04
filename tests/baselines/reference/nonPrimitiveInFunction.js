@@ -22,6 +22,7 @@ function returnError(): object {
 
 
 //// [nonPrimitiveInFunction.js]
+"use strict";
 function takeObject(o) { }
 function returnObject() {
     return {};

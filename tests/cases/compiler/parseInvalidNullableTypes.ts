@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 function f1(a: string): a is ?string {

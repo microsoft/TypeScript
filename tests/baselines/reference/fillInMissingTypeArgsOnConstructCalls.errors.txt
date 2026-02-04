@@ -1,0 +1,11 @@
+fillInMissingTypeArgsOnConstructCalls.ts(2,7): error TS2564: Property 'list' has no initializer and is not definitely assigned in the constructor.
+
+
+==== fillInMissingTypeArgsOnConstructCalls.ts (1 errors) ====
+    class A<T extends Object>{
+          list: T ;
+          ~~~~
+!!! error TS2564: Property 'list' has no initializer and is not definitely assigned in the constructor.
+    }
+    var a = new A();
+    

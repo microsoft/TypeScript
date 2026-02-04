@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 ////var x = a/*var1*/
 
 ////var x = (b/*var2*/

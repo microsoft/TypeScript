@@ -1,3 +1,4 @@
+// @target: es2015
 // @jsx: react
 // @esModuleInterop: true
 // @strictNullChecks: true

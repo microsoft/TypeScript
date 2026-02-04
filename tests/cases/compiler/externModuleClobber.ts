@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace EM {
 	export class Position { }
 

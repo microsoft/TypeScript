@@ -1,3 +1,4 @@
+// @target: es2015
 namespace CallSignature {
     interface Base { // T
         // M's

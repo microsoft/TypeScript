@@ -1,0 +1,16 @@
+index.tsx(9,16): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== index.tsx (1 errors) ====
+    declare namespace JSX {
+        interface Element { }
+        interface IntrinsicElements {
+            div: {
+                static?: boolean;
+            };
+        }
+    }
+    export default <div static={true} />;
+                   ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    

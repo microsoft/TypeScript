@@ -25,16 +25,14 @@ function f<T>(a: T) {
 x = f;
 
 //// [invalidAssignmentsToVoid.js]
+"use strict";
 var x;
 x = 1;
 x = true;
 x = '';
 x = {};
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 x = C;
 x = c;
 x = i;

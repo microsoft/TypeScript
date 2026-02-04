@@ -37,5 +37,5 @@ function eachPerson(callback) {
 declare function eachPerson(callback: WorksWithPeopleCallback): void;
 type WorksWithPeopleCallback = (person: {
     name: string;
-    age?: number;
+    age?: number | undefined;
 }) => void;

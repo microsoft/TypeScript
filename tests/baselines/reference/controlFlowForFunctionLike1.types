@@ -1,0 +1,251 @@
+//// [tests/cases/compiler/controlFlowForFunctionLike1.ts] ////
+
+=== controlFlowForFunctionLike1.ts ===
+function test1(a: number | string) {
+>test1 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
+>      : ^ ^^               ^^^^^^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  if (typeof a === "number") {
+>typeof a === "number" : boolean
+>                      : ^^^^^^^
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+>"number" : "number"
+>         : ^^^^^^^^
+
+    const fn = (arg: typeof a) => true;
+>fn : (arg: typeof a) => boolean
+>   : ^   ^^        ^^^^^^^^^^^^
+>(arg: typeof a) => true : (arg: typeof a) => boolean
+>                        : ^   ^^        ^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+>a : number
+>  : ^^^^^^
+>true : true
+>     : ^^^^
+
+    return fn;
+>fn : (arg: typeof a) => boolean
+>   : ^   ^^        ^^^^^^^^^^^^
+  }
+  return;
+}
+
+test1(0)?.(100);
+>test1(0)?.(100) : boolean | undefined
+>                : ^^^^^^^^^^^^^^^^^^^
+>test1(0) : ((arg: number) => boolean) | undefined
+>         : ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test1 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
+>      : ^ ^^               ^^^^^^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>100 : 100
+>    : ^^^
+
+test1(0)?.("");
+>test1(0)?.("") : boolean | undefined
+>               : ^^^^^^^^^^^^^^^^^^^
+>test1(0) : ((arg: number) => boolean) | undefined
+>         : ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test1 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
+>      : ^ ^^               ^^^^^^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>"" : ""
+>   : ^^
+
+function test2(a: number | string) {
+>test2 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
+>      : ^ ^^               ^^^^^^^   ^^        ^^^^^       ^^^^^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  if (typeof a === "number") {
+>typeof a === "number" : boolean
+>                      : ^^^^^^^
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+>"number" : "number"
+>         : ^^^^^^^^
+
+    const fn: { (arg: typeof a): boolean; } = () => true;
+>fn : (arg: typeof a) => boolean
+>   : ^   ^^        ^^^^^       
+>arg : string | number
+>    : ^^^^^^^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+>() => true : () => true
+>           : ^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+    return fn;
+>fn : (arg: typeof a) => boolean
+>   : ^   ^^        ^^^^^       
+  }
+  return;
+}
+
+test2(0)?.(100);
+>test2(0)?.(100) : boolean | undefined
+>                : ^^^^^^^^^^^^^^^^^^^
+>test2(0) : ((arg: string | number) => boolean) | undefined
+>         : ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^
+>test2 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
+>      : ^ ^^               ^^^^^^^   ^^        ^^^^^       ^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>100 : 100
+>    : ^^^
+
+test2(0)?.("");
+>test2(0)?.("") : boolean | undefined
+>               : ^^^^^^^^^^^^^^^^^^^
+>test2(0) : ((arg: string | number) => boolean) | undefined
+>         : ^^   ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^
+>test2 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
+>      : ^ ^^               ^^^^^^^   ^^        ^^^^^       ^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>"" : ""
+>   : ^^
+
+function test3(a: number | string) {
+>test3 : (a: number | string) => (arg: typeof a) => void
+>      : ^ ^^               ^^^^^^   ^^        ^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  if (typeof a === "number") {
+>typeof a === "number" : boolean
+>                      : ^^^^^^^
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+>"number" : "number"
+>         : ^^^^^^^^
+
+    return (arg: typeof a) => {};
+>(arg: typeof a) => {} : (arg: typeof a) => void
+>                      : ^   ^^        ^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+>a : number
+>  : ^^^^^^
+  }
+  throw new Error("");
+>new Error("") : Error
+>              : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+}
+
+test3(1)(100);
+>test3(1)(100) : void
+>              : ^^^^
+>test3(1) : (arg: number) => void
+>         : ^   ^^^^^^^^^^^^^^^^^
+>test3 : (a: number | string) => (arg: typeof a) => void
+>      : ^ ^^               ^^^^^^   ^^        ^^^^^^^^^
+>1 : 1
+>  : ^
+>100 : 100
+>    : ^^^
+
+test3(1)("");
+>test3(1)("") : void
+>             : ^^^^
+>test3(1) : (arg: number) => void
+>         : ^   ^^^^^^^^^^^^^^^^^
+>test3 : (a: number | string) => (arg: typeof a) => void
+>      : ^ ^^               ^^^^^^   ^^        ^^^^^^^^^
+>1 : 1
+>  : ^
+>"" : ""
+>   : ^^
+
+function test4(a: number | string) {
+>test4 : (a: number | string) => (arg: typeof a) => void
+>      : ^ ^^               ^^^^^^   ^^        ^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  let fn = (arg: typeof a) => {};
+>fn : (arg: typeof a) => void
+>   : ^   ^^        ^^^^^^^^^
+>(arg: typeof a) => {} : (arg: typeof a) => void
+>                      : ^   ^^        ^^^^^^^^^
+>arg : string | number
+>    : ^^^^^^^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  if (Math.random() && typeof a === "number") {
+>Math.random() && typeof a === "number" : boolean | 0
+>                                       : ^^^^^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>typeof a === "number" : boolean
+>                      : ^^^^^^^
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+>"number" : "number"
+>         : ^^^^^^^^
+
+    return fn;
+>fn : (arg: typeof a) => void
+>   : ^   ^^        ^^^^^^^^^
+  }
+  throw new Error("");
+>new Error("") : Error
+>              : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+}
+
+test4(1)?.(100);
+>test4(1)?.(100) : void
+>                : ^^^^
+>test4(1) : (arg: string | number) => void
+>         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test4 : (a: number | string) => (arg: typeof a) => void
+>      : ^ ^^               ^^^^^^   ^^        ^^^^^^^^^
+>1 : 1
+>  : ^
+>100 : 100
+>    : ^^^
+
+test4(1)?.("");
+>test4(1)?.("") : void
+>               : ^^^^
+>test4(1) : (arg: string | number) => void
+>         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test4 : (a: number | string) => (arg: typeof a) => void
+>      : ^ ^^               ^^^^^^   ^^        ^^^^^^^^^
+>1 : 1
+>  : ^
+>"" : ""
+>   : ^^
+

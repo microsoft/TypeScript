@@ -1,3 +1,4 @@
+// @target: es2015
 enum E { v1, v2 };
 
 function f<T extends { b: string }>(p1: T, p2: T[]) {

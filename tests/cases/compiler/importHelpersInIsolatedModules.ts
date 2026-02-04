@@ -1,6 +1,6 @@
 // @importHelpers: true
 // @isolatedModules: true
-// @target: es5
+// @target: es5, es2015
 // @module: commonjs
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true

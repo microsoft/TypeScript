@@ -30,6 +30,7 @@ differentName.value = 12; // error, property 'value' doesn't exist
 
 
 //// [unionTypeReadonly.js]
+"use strict";
 base.value = 12; // error, lhs can't be a readonly property
 identical.value = 12; // error, lhs can't be a readonly property
 mutable.value = 12; // error, lhs can't be a readonly property

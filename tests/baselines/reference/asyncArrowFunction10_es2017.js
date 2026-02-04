@@ -8,6 +8,7 @@ var foo = async (): Promise<void> => {
 
 
 //// [asyncArrowFunction10_es2017.js]
+"use strict";
 var foo = async () => {
     // Legal to use 'await' in a type context.
     var v;

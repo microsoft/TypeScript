@@ -1,0 +1,11 @@
+genericParameterAssignability1.ts(1,26): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+
+
+==== genericParameterAssignability1.ts (1 errors) ====
+    function f<T>(x: T): T { return null; }
+                             ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+    var r = <T>(x: T) => x;
+    r = f; // should be allowed

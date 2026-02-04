@@ -25,6 +25,7 @@ t1 = t2;
 
 
 //// [multiLineErrors.js]
+"use strict";
 var t = 32;
 function noReturn() {
     var x = 4;

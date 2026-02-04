@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
 // @module: commonjs
 
 // @Filename: /node_modules/antd/index.d.ts

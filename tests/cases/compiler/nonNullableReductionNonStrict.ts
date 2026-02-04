@@ -1,3 +1,4 @@
+// @target: es2015
 // Repros from #43425
 
 type Transform1<T> = ((value: string) => T) | (string extends T ? undefined : never);

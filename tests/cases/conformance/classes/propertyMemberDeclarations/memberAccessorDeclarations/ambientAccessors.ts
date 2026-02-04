@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @declaration: true
 // ok to use accessors in ambient class in ES3
 declare class C {

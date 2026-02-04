@@ -1,5 +1,5 @@
 // @strict: false
-// @target: es5
+// @target: es5, es2015
 //super.publicInstanceMemberFunction in constructor of derived class
 //super.publicInstanceMemberFunction in instance member function of derived class
 //super.publicInstanceMemberFunction in instance member accessor(get and set) of derived class

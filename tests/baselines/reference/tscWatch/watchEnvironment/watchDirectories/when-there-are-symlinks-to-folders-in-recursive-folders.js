@@ -53,7 +53,7 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src/file.ts 250 undefined Source file
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 File '/home/user/projects/myproject/src/package.json' does not exist.
 File '/home/user/projects/myproject/package.json' does not exist.
 File '/home/user/projects/package.json' does not exist.
@@ -80,7 +80,7 @@ File '/home/user/package.json' does not exist according to earlier cached lookup
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects 0 undefined Failed Lookup Locations
@@ -105,9 +105,10 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined 
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 25
+
 //// [/home/user/projects/myproject/src/file.js] Inode:: 124
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 
@@ -126,8 +127,8 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"inode":23}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+  {"inode":25}
 /home/user/projects: *new*
   {"inode":3}
 /home/user/projects/myproject: *new*
@@ -167,17 +168,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/user/projects/myproject/node_modules/reala/index.d.ts
 /home/user/projects/myproject/src/file.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/user/projects/myproject/node_modules/reala/index.d.ts
 /home/user/projects/myproject/src/file.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/user/projects/myproject/node_modules/reala/index.d.ts (used version)
 /home/user/projects/myproject/src/file.ts (used version)
 
@@ -212,8 +213,8 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":23}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":25}
 /home/user/projects:
   {"inode":3}
 /home/user/projects/myproject:
@@ -269,7 +270,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 undefined Source file
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 File '/home/user/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/home/user/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/home/user/projects/package.json' does not exist according to earlier cached lookups.
@@ -364,8 +365,8 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":23}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":25}
 /home/user/projects:
   {"inode":3}
 /home/user/projects/myproject:
@@ -405,7 +406,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/user/projects/myproject/src/file.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -457,7 +458,7 @@ CreatingProgramWith::
   options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 File '/home/user/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/home/user/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/home/user/projects/package.json' does not exist according to earlier cached lookups.
@@ -513,7 +514,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/user/projects/myproject/src/file.ts
 
 Semantic diagnostics in builder refreshed for::

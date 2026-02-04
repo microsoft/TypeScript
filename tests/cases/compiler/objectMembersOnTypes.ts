@@ -1,3 +1,4 @@
+// @target: es2015
 interface I {}
 class AAA implements I { }
 var x: number;

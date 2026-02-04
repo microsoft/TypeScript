@@ -22,20 +22,18 @@ class C<T> {
 }
 
 //// [typeParameterAssignmentCompat1.js]
+"use strict";
 function f() {
     var x;
     var y;
     x = y; // should be an error
     return x;
 }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.f = function () {
+class C {
+    f() {
         var x;
         var y;
         x = y; // should be an error
         return x;
-    };
-    return C;
-}());
+    }
+}

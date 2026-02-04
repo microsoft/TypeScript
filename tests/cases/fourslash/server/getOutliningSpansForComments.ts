@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
+
 ////[|/*
 ////    Block comment at the beginning of the file before module:
 ////        line one of the comment

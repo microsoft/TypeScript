@@ -9,6 +9,7 @@ I           // This should be the identifier 'I'
 {}          // This should be a block body
 
 //// [asiPreventsParsingAsInterface04.js]
+"use strict";
 var declare, interface, I;
 declare; // This should be the identifier 'declare'
 interface; // This should be the identifier 'interface'

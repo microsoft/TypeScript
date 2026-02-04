@@ -10,6 +10,7 @@ class Foo {
 
 
 //// [classIndexer5.js]
+"use strict";
 class Foo {
     #a;
     #b = false;

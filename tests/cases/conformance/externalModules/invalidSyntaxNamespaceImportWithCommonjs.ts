@@ -1,4 +1,5 @@
-﻿// @module: commonjs
+﻿// @target: es2015
+// @module: commonjs
 // @filename: 0.ts
 export class C { }
 

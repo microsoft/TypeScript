@@ -1,0 +1,97 @@
+moduleWithStatementsOfEveryKind.ts(2,15): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+moduleWithStatementsOfEveryKind.ts(3,19): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+moduleWithStatementsOfEveryKind.ts(6,47): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+moduleWithStatementsOfEveryKind.ts(8,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+moduleWithStatementsOfEveryKind.ts(12,19): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+moduleWithStatementsOfEveryKind.ts(19,9): error TS2322: Type 'null' is not assignable to type 'I[]'.
+moduleWithStatementsOfEveryKind.ts(31,22): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+moduleWithStatementsOfEveryKind.ts(32,26): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+moduleWithStatementsOfEveryKind.ts(35,54): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+moduleWithStatementsOfEveryKind.ts(37,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+moduleWithStatementsOfEveryKind.ts(41,19): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+moduleWithStatementsOfEveryKind.ts(48,16): error TS2322: Type 'null' is not assignable to type 'I[]'.
+
+
+==== moduleWithStatementsOfEveryKind.ts (12 errors) ====
+    namespace A {
+        class A { s: string }
+                  ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+        class AA<T> { s: T }
+                      ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+        interface I { id: number }
+    
+        class B extends AA<string> implements I { id: number }
+                                                  ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+        class BB<T> extends A {
+            id: number;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        namespace Module {
+            class A { s: string }
+                      ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+        }
+        enum Color { Blue, Red }
+        var x = 12;
+        function F(s: string): number {
+            return 2;
+        }
+        var array: I[] = null;
+            ~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'I[]'.
+        var fn = (s: string) => {
+            return 'hello ' + s;
+        }
+        var ol = { s: 'hello', id: 2, isvalid: true };
+    
+        declare class DC {
+            static x: number;
+        }
+    }
+    
+    namespace Y {
+        export class A { s: string }
+                         ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+        export class AA<T> { s: T }
+                             ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+        export interface I { id: number }
+    
+        export class B extends AA<string> implements I { id: number }
+                                                         ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+        export class BB<T> extends A {
+            id: number;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        export namespace Module {
+            class A { s: string }
+                      ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+        }
+        export enum Color { Blue, Red }
+        export var x = 12;
+        export function F(s: string): number {
+            return 2;
+        }
+        export var array: I[] = null;
+                   ~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'I[]'.
+        export var fn = (s: string) => {
+            return 'hello ' + s;
+        }
+        export var ol = { s: 'hello', id: 2, isvalid: true };
+    
+        export declare class DC {
+            static x: number;
+        }
+    }
+    

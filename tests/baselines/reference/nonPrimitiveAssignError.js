@@ -31,6 +31,7 @@ a = strObj; // ok
 
 
 //// [nonPrimitiveAssignError.js]
+"use strict";
 var x = {};
 var y = { foo: "bar" };
 var a = {};

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // (arg: { x: any, y: any }) => void
 function f1({ x, y }) { }

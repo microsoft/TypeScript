@@ -22,8 +22,8 @@ namespace test {
         var ys: U[] = [];
 >ys : U[]
 >   : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
     }
 }
 

@@ -19,8 +19,8 @@
 // | ----------------------------------------------------------------------
 // | const n: {
 // |     value: number;
-// |     left: Node<number>;
-// |     right: Node<number>;
+// |     left: Node<number> | undefined;
+// |     right: Node<number> | undefined;
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
@@ -45,7 +45,7 @@
 // |     right: TreeNode<T> | undefined;
 // |     orange?: {
 // |         name: string;
-// |     };
+// |     } | undefined;
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
@@ -55,7 +55,7 @@
 // |     value: T;
 // |     left: TreeNode<T> | undefined;
 // |     right: TreeNode<T> | undefined;
-// |     orange?: Orange;
+// |     orange?: Orange | undefined;
 // | }
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
@@ -69,11 +69,11 @@
 // | ----------------------------------------------------------------------
 // | const m: {
 // |     value: number;
-// |     left: TreeNode<number>;
-// |     right: TreeNode<number>;
+// |     left: TreeNode<number> | undefined;
+// |     right: TreeNode<number> | undefined;
 // |     orange?: {
 // |         name: string;
-// |     };
+// |     } | undefined;
 // | }
 // | (verbosity level: 2)
 // | ----------------------------------------------------------------------
@@ -81,9 +81,9 @@
 // | ----------------------------------------------------------------------
 // | const m: {
 // |     value: number;
-// |     left: TreeNode<number>;
-// |     right: TreeNode<number>;
-// |     orange?: Orange;
+// |     left: TreeNode<number> | undefined;
+// |     right: TreeNode<number> | undefined;
+// |     orange?: Orange | undefined;
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
@@ -466,6 +466,22 @@
           "kind": "punctuation"
         },
         {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "keyword"
+        },
+        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -506,6 +522,22 @@
           "kind": "punctuation"
         },
         {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "keyword"
+        },
+        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -744,6 +776,22 @@
         {
           "text": "Orange",
           "kind": "interfaceName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "keyword"
         },
         {
           "text": ";",
@@ -1026,6 +1074,22 @@
           "kind": "punctuation"
         },
         {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "keyword"
+        },
+        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -1202,6 +1266,22 @@
           "kind": "punctuation"
         },
         {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "keyword"
+        },
+        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -1242,6 +1322,22 @@
           "kind": "punctuation"
         },
         {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "keyword"
+        },
+        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -1272,6 +1368,22 @@
         {
           "text": "Orange",
           "kind": "interfaceName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "keyword"
         },
         {
           "text": ";",
@@ -1394,6 +1506,22 @@
           "kind": "punctuation"
         },
         {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "keyword"
+        },
+        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -1432,6 +1560,22 @@
         {
           "text": ">",
           "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "keyword"
         },
         {
           "text": ";",
@@ -1504,6 +1648,22 @@
         {
           "text": "}",
           "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "keyword"
         },
         {
           "text": ";",

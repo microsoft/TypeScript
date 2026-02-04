@@ -12,7 +12,7 @@
 //// export interface Test4 {}
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "files": ["file1.ts", "file2.ts"] }
+////{ "compilerOptions": { "lib": ["es5"] }, "files": ["file1.ts", "file2.ts"] }
 
 verify.pasteEdits({
     args: {

@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: false
 
 // these are widened to any at the point of assignment

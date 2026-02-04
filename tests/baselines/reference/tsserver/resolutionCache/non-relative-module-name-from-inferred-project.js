@@ -76,25 +76,25 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] ======== Resolving module './feature/file2' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
-Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/src/feature/file2', target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/src/feature/file2.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name './feature/file2' was successfully resolved to '/user/username/projects/myproject/product/src/feature/file2.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module '../test/file4' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
-Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/test/file4', target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/file4.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name '../test/file4' was successfully resolved to '/user/username/projects/myproject/product/test/file4.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module '../test/src/file3' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
-Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/test/src/file3', target file types: TypeScript, JavaScript, Declaration, JSON.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/src/file3.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name '../test/src/file3' was successfully resolved to '/user/username/projects/myproject/product/test/src/file3.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module1' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
-Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/src/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist.
@@ -114,7 +114,7 @@ Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproj
 Info seq  [hh:mm:ss:mss] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
-Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
@@ -139,7 +139,7 @@ Info seq  [hh:mm:ss:mss] ======== Module name 'module2' was successfully resolve
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/src/feature/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module1' from '/user/username/projects/myproject/product/src/feature/file2.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
-Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/src/feature/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
@@ -155,7 +155,7 @@ Info seq  [hh:mm:ss:mss] Resolution for module 'module1' was found in cache from
 Info seq  [hh:mm:ss:mss] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/src/feature/file2.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
-Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/src/feature/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
@@ -191,7 +191,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module1' from '/user/username/projects/myproject/product/test/file4.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
-Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
@@ -206,7 +206,7 @@ Info seq  [hh:mm:ss:mss] Resolution for module 'module1' was found in cache from
 Info seq  [hh:mm:ss:mss] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/test/file4.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
-Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
@@ -222,7 +222,7 @@ Info seq  [hh:mm:ss:mss] ======== Module name 'module2' was successfully resolve
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/test/src/file3.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module1' from '/user/username/projects/myproject/product/test/src/file3.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
-Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/src/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
@@ -238,7 +238,7 @@ Info seq  [hh:mm:ss:mss] Resolution for module 'module1' was found in cache from
 Info seq  [hh:mm:ss:mss] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/test/src/file3.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Bundler'.
-Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'import', 'types'.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/test/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
@@ -252,7 +252,7 @@ Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for pre
 Info seq  [hh:mm:ss:mss] Directory '/user/username/projects/myproject/product/test/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Resolution for module 'module2' was found in cache from location '/user/username/projects/myproject/product/test'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'module2' was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'. ========
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
@@ -293,7 +293,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (7)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/product/node_modules/module1/index.ts Text-1 "export function module1() {}"
 	/user/username/projects/myproject/node_modules/module2/index.ts Text-1 "export function module2() {}"
 	/user/username/projects/myproject/product/src/feature/file2.ts Text-1 "import { module1 } from \"module1\";import { module2 } from \"module2\";"
@@ -302,8 +302,8 @@ Info seq  [hh:mm:ss:mss] 	Files (7)
 	/user/username/projects/myproject/product/src/file1.ts SVC-1-0 "import \"./feature/file2\"; import \"../test/file4\"; import \"../test/src/file3\"; import { module1 } from \"module1\";import { module2 } from \"module2\";"
 
 
-	../../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../node_modules/module1/index.ts
 	  Imported via "module1" from file 'feature/file2.ts'
 	  Imported via "module1" from file '../test/file4.ts'
@@ -343,6 +343,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
 /user/username/projects/myproject/jsconfig.json: *new*
@@ -387,7 +389,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects: *new*
   {}
@@ -421,7 +423,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -487,7 +489,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -565,7 +567,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module2' from '/user/user
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (7)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/product/node_modules/module1/index.ts Text-1 "export function module1() {}"
 	/user/username/projects/myproject/node_modules/module2/index.ts Text-1 "export function module2() {}"
 	/user/username/projects/myproject/product/src/feature/file2.ts Text-2 "import { module1 } from \"module1\";import { module2 } from \"module2\";import { module1 } from \"module1\";import { module2 } from \"module2\";"
@@ -613,7 +615,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*

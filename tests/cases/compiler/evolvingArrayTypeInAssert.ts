@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 export function unsafeCast<T>(_value: unknown): asserts _value is T { }

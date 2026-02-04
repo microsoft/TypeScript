@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: jsdocInvalidTokens.js
 // @strict: true
 // @allowJs: true

@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: tsconfig.json
-//// { "compilerOptions": { "module": "commonjs" } }
+//// { "compilerOptions": { "module": "commonjs", "lib": ["es5"] } }
 
 // @Filename: path.d.ts
 //// declare module "path/posix" {

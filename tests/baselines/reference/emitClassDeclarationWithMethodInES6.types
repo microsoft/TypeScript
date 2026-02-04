@@ -53,6 +53,7 @@ class D {
 >baz : (a: any, x: string) => string
 >    : ^ ^^   ^^ ^^      ^^^^^      
 >a : any
+>  : ^^^
 >x : string
 >  : ^^^^^^
 

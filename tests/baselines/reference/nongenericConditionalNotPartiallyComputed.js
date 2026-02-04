@@ -6,3 +6,4 @@
 type A = Array<number> extends Array<any> ? Array<number> extends Array<infer T> ? T : never : never
 
 //// [nongenericConditionalNotPartiallyComputed.js]
+"use strict";

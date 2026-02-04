@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 /////** This is class c2 without constructor*/
 ////class c2 {
 ////}

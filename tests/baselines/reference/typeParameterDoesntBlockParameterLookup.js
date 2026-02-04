@@ -4,3 +4,4 @@
 declare function f<Foo extends Bar, Bar>(Bar: any): void
 
 //// [typeParameterDoesntBlockParameterLookup.js]
+"use strict";

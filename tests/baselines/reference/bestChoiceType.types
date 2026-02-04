@@ -4,8 +4,8 @@
 // Repro from #10041
 
 (''.match(/ /) || []).map(s => s.toLowerCase());
->(''.match(/ /) || []).map(s => s.toLowerCase()) : any[]
->                                                : ^^^^^
+>(''.match(/ /) || []).map(s => s.toLowerCase()) : string[]
+>                                                : ^^^^^^^^
 >(''.match(/ /) || []).map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
 >                          : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >(''.match(/ /) || []) : RegExpMatchArray | []
@@ -26,15 +26,18 @@
 >   : ^^
 >map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
 >    : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
->s => s.toLowerCase() : (s: any) => any
->                     : ^ ^^^^^^^^^^^^^
->s : any
->s.toLowerCase() : any
->s.toLowerCase : any
->s : any
->  : ^^^
->toLowerCase : any
->            : ^^^
+>s => s.toLowerCase() : (s: string) => string
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+>s.toLowerCase() : string
+>                : ^^^^^^
+>s.toLowerCase : () => string
+>              : ^^^^^^      
+>s : string
+>  : ^^^^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
 
 // Similar cases
 
@@ -67,25 +70,28 @@ function f1() {
 >   : ^^
 
     let z = y.map(s => s.toLowerCase());
->z : any[]
->  : ^^^^^
->y.map(s => s.toLowerCase()) : any[]
->                            : ^^^^^
+>z : string[]
+>  : ^^^^^^^^
+>y.map(s => s.toLowerCase()) : string[]
+>                            : ^^^^^^^^
 >y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
 >      : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >y : RegExpMatchArray | []
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
 >    : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
->s => s.toLowerCase() : (s: any) => any
->                     : ^ ^^^^^^^^^^^^^
->s : any
->s.toLowerCase() : any
->s.toLowerCase : any
->s : any
->  : ^^^
->toLowerCase : any
->            : ^^^
+>s => s.toLowerCase() : (s: string) => string
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+>s.toLowerCase() : string
+>                : ^^^^^^
+>s.toLowerCase : () => string
+>              : ^^^^^^      
+>s : string
+>  : ^^^^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
 }
 
 function f2() {
@@ -119,24 +125,27 @@ function f2() {
 >   : ^^^^^^^
 
     let z = y.map(s => s.toLowerCase());
->z : any[]
->  : ^^^^^
->y.map(s => s.toLowerCase()) : any[]
->                            : ^^^^^
+>z : string[]
+>  : ^^^^^^^^
+>y.map(s => s.toLowerCase()) : string[]
+>                            : ^^^^^^^^
 >y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
 >      : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >y : RegExpMatchArray | never[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
 >    : ^^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
->s => s.toLowerCase() : (s: any) => any
->                     : ^ ^^^^^^^^^^^^^
->s : any
->s.toLowerCase() : any
->s.toLowerCase : any
->s : any
->  : ^^^
->toLowerCase : any
->            : ^^^
+>s => s.toLowerCase() : (s: string) => string
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+>s.toLowerCase() : string
+>                : ^^^^^^
+>s.toLowerCase : () => string
+>              : ^^^^^^      
+>s : string
+>  : ^^^^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
 }
 

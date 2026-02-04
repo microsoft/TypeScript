@@ -66,6 +66,7 @@ var resultIsObject3 = x.doSomeThing() ? exprIsObject1 : exprIsObject2;
 var resultIsStringOrBoolean5 = x.doSomeThing() ? exprString1 : exprBoolean1; // union
 
 //// [conditionalOperatorConditoinIsAnyType.js]
+"use strict";
 //Cond is an any type variable
 condAny ? exprAny1 : exprAny2;
 condAny ? exprBoolean1 : exprBoolean2;

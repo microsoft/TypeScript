@@ -32,6 +32,7 @@ class B {
 
 
 //// [constructorWithParameterPropertiesAndPrivateFields.es2015.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/48771
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");

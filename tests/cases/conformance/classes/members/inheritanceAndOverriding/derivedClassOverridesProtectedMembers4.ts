@@ -1,3 +1,4 @@
+// @target: es2015
 var x: { foo: string; }
 var y: { foo: string; bar: string; }
 

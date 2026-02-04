@@ -1,3 +1,4 @@
+// @target: es2015
 // valid uses of arrays of function types
 
 var x = [() => 1, () => { }];

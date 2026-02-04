@@ -19,6 +19,7 @@ function foo() {
     console.log("foo from a");
 }
 //// [b.js]
+"use strict";
 import.defer("./a.js").then(ns => {
     ns.foo();
 });

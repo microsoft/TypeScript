@@ -9,10 +9,13 @@ function fn() {
 
     var p = this;
 >p : any
+>  : ^^^
 >this : any
+>     : ^^^
 
     var p: any;
 >p : any
+>  : ^^^
 }
 
 var t = function () {
@@ -23,10 +26,13 @@ var t = function () {
 
     var p = this;
 >p : any
+>  : ^^^
 >this : any
+>     : ^^^
 
     var p: any;
 >p : any
+>  : ^^^
 }
 
 var t2 = function f() {
@@ -39,10 +45,13 @@ var t2 = function f() {
 
     var x = this;
 >x : any
+>  : ^^^
 >this : any
+>     : ^^^
 
     var x: any;
 >x : any
+>  : ^^^
 }
 
 class C {
@@ -57,10 +66,13 @@ class C {
 
         var q: any;
 >q : any
+>  : ^^^
 
         var q = this;
 >q : any
+>  : ^^^
 >this : any
+>     : ^^^
     }
     y = function ff() {
 >y : () => void
@@ -72,10 +84,13 @@ class C {
 
         var q: any;
 >q : any
+>  : ^^^
 
         var q = this;
 >q : any
+>  : ^^^
 >this : any
+>     : ^^^
     }
 }
 
@@ -89,10 +104,13 @@ namespace M {
 
         var p = this;
 >p : any
+>  : ^^^
 >this : any
+>     : ^^^
 
         var p: any;
 >p : any
+>  : ^^^
     }
 
     var t = function () {
@@ -103,10 +121,13 @@ namespace M {
 
         var p = this;
 >p : any
+>  : ^^^
 >this : any
+>     : ^^^
 
         var p: any;
 >p : any
+>  : ^^^
     }
 
     var t2 = function f() {
@@ -119,10 +140,13 @@ namespace M {
 
         var x = this;
 >x : any
+>  : ^^^
 >this : any
+>     : ^^^
 
         var x: any;
 >x : any
+>  : ^^^
     }
 
 }

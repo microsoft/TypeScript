@@ -1,4 +1,5 @@
-﻿declare let x: "foo";
+﻿// @target: es2015
+declare let x: "foo";
 declare let y: "foo" | "bar";
 declare let z: "bar";
 

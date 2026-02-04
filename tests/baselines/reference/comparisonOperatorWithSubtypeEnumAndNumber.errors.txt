@@ -1,0 +1,215 @@
+comparisonOperatorWithSubtypeEnumAndNumber.ts(7,11): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(7,15): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(8,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(8,15): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(9,17): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(10,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(15,11): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(15,15): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(16,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(16,15): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(17,17): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(18,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(23,11): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(23,16): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(24,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(24,16): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(25,18): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(26,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(31,11): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(31,16): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(32,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(32,16): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(33,18): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(34,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(39,11): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(39,16): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(40,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(40,16): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(41,18): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(42,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(47,11): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(47,16): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(48,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(48,16): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(49,18): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(50,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(55,11): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(55,17): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(56,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(56,17): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(57,19): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(58,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(63,11): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(63,17): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(64,11): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(64,17): error TS2454: Variable 'a' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(65,19): error TS2454: Variable 'b' is used before being assigned.
+comparisonOperatorWithSubtypeEnumAndNumber.ts(66,11): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== comparisonOperatorWithSubtypeEnumAndNumber.ts (48 errors) ====
+    enum E { a, b, c }
+    
+    var a: E;
+    var b: number;
+    
+    // operator <
+    var ra1 = a < b;
+              ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var ra2 = b < a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var ra3 = E.a < b;
+                    ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var ra4 = b < E.a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var ra5 = E.a < 0;
+    var ra6 = 0 < E.a;
+    
+    // operator >
+    var rb1 = a > b;
+              ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rb2 = b > a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var rb3 = E.a > b;
+                    ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rb4 = b > E.a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rb5 = E.a > 0;
+    var rb6 = 0 > E.a;
+    
+    // operator <=
+    var rc1 = a <= b;
+              ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                   ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rc2 = b <= a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                   ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var rc3 = E.a <= b;
+                     ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rc4 = b <= E.a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rc5 = E.a <= 0;
+    var rc6 = 0 <= E.a;
+    
+    // operator >=
+    var rd1 = a >= b;
+              ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                   ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rd2 = b >= a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                   ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var rd3 = E.a >= b;
+                     ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rd4 = b >= E.a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rd5 = E.a >= 0;
+    var rd6 = 0 >= E.a;
+    
+    // operator ==
+    var re1 = a == b;
+              ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                   ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var re2 = b == a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                   ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var re3 = E.a == b;
+                     ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var re4 = b == E.a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var re5 = E.a == 0;
+    var re6 = 0 == E.a;
+    
+    // operator !=
+    var rf1 = a != b;
+              ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                   ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rf2 = b != a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                   ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var rf3 = E.a != b;
+                     ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rf4 = b != E.a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rf5 = E.a != 0;
+    var rf6 = 0 != E.a;
+    
+    // operator ===
+    var rg1 = a === b;
+              ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                    ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rg2 = b === a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                    ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var rg3 = E.a === b;
+                      ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rg4 = b === E.a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rg5 = E.a === 0;
+    var rg6 = 0 === E.a;
+    
+    // operator !==
+    var rh1 = a !== b;
+              ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                    ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rh2 = b !== a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                    ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var rh3 = E.a !== b;
+                      ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rh4 = b !== E.a;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rh5 = E.a !== 0;
+    var rh6 = 0 !== E.a;

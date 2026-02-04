@@ -19,6 +19,7 @@ declare var React: any;
 
 
 //// [file.js]
+"use strict";
 // Emit ' word' in the last string
 React.createElement("div", null,
     "word ",

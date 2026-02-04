@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // satisfaction of a constraint to Function, no errors expected
 

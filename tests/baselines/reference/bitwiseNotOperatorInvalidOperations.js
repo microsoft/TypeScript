@@ -14,6 +14,7 @@ var mul = ~[1, 2, "abc"], "";  //expect error
 var b =~;
 
 //// [bitwiseNotOperatorInvalidOperations.js]
+"use strict";
 // Unary operator ~
 var q;
 // operand before ~

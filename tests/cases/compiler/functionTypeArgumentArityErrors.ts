@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Overloaded functions with default type arguments
 declare function f1<A = any>(): void;

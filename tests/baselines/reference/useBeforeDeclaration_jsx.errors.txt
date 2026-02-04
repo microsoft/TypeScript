@@ -1,11 +1,19 @@
 useBeforeDeclaration_jsx.tsx(6,19): error TS2729: Property 'z' is used before its initialization.
 useBeforeDeclaration_jsx.tsx(7,19): error TS2729: Property 'z' is used before its initialization.
+useBeforeDeclaration_jsx.tsx(8,16): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 useBeforeDeclaration_jsx.tsx(8,28): error TS2729: Property 'x' is used before its initialization.
+useBeforeDeclaration_jsx.tsx(8,31): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+useBeforeDeclaration_jsx.tsx(9,16): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 useBeforeDeclaration_jsx.tsx(9,28): error TS2729: Property 'y' is used before its initialization.
+useBeforeDeclaration_jsx.tsx(9,31): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+useBeforeDeclaration_jsx.tsx(10,16): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 useBeforeDeclaration_jsx.tsx(10,25): error TS2729: Property 'y' is used before its initialization.
+useBeforeDeclaration_jsx.tsx(10,27): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+useBeforeDeclaration_jsx.tsx(13,22): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+useBeforeDeclaration_jsx.tsx(13,25): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
-==== useBeforeDeclaration_jsx.tsx (5 errors) ====
+==== useBeforeDeclaration_jsx.tsx (13 errors) ====
     namespace JSX {
         export interface Element {}
     }
@@ -20,19 +28,35 @@ useBeforeDeclaration_jsx.tsx(10,25): error TS2729: Property 'y' is used before i
 !!! error TS2729: Property 'z' is used before its initialization.
 !!! related TS2728 useBeforeDeclaration_jsx.tsx:13:12: 'z' is declared here.
         static c = <span {...C.x}></span>;
+                   ~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                ~
 !!! error TS2729: Property 'x' is used before its initialization.
 !!! related TS2728 useBeforeDeclaration_jsx.tsx:11:12: 'x' is declared here.
+                                  ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
         static d = <span id={C.y}></span>;
+                   ~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                ~
 !!! error TS2729: Property 'y' is used before its initialization.
 !!! related TS2728 useBeforeDeclaration_jsx.tsx:12:12: 'y' is declared here.
+                                  ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
         static e = <span>{C.y}</span>;
+                   ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                             ~
 !!! error TS2729: Property 'y' is used before its initialization.
 !!! related TS2728 useBeforeDeclaration_jsx.tsx:12:12: 'y' is declared here.
+                              ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
         static x = {};
         static y = '';
         static z = () => <b></b>;
+                         ~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                            ~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     }
     

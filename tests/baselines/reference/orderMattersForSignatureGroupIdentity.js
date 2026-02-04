@@ -27,5 +27,6 @@ declare var w: C;
 w({ s: "", n: 0 }).toLowerCase();
 
 //// [orderMattersForSignatureGroupIdentity.js]
+"use strict";
 v({ s: "", n: 0 }).toLowerCase();
 w({ s: "", n: 0 }).toLowerCase();

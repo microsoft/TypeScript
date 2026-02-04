@@ -71,17 +71,17 @@ var p: { x: number; y: number; }
 var p: M.D.Point;
 
 //// [exportImportAlias.js]
+"use strict";
 // expect no errors here
 var A;
 (function (A) {
     A.x = 'hello world';
-    var Point = /** @class */ (function () {
-        function Point(x, y) {
+    class Point {
+        constructor(x, y) {
             this.x = x;
             this.y = y;
         }
-        return Point;
-    }());
+    }
     A.Point = Point;
 })(A || (A = {}));
 var C;
@@ -99,13 +99,12 @@ var X;
     }
     X.Y = Y;
     (function (Y) {
-        var Point = /** @class */ (function () {
-            function Point(x, y) {
+        class Point {
+            constructor(x, y) {
                 this.x = x;
                 this.y = y;
             }
-            return Point;
-        }());
+        }
         Y.Point = Point;
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
@@ -118,12 +117,11 @@ var m = Z.y();
 var n = new Z.y.Point(0, 0);
 var K;
 (function (K) {
-    var L = /** @class */ (function () {
-        function L(name) {
+    class L {
+        constructor(name) {
             this.name = name;
         }
-        return L;
-    }());
+    }
     K.L = L;
     (function (L) {
         L.y = 12;

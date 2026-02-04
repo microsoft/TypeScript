@@ -1,3 +1,4 @@
+// @target: es2015
 function f1<T>(args: T) {
     var v1!: { [index: string]: new (arg: T) => Date };
     var v2 = v1['test'];

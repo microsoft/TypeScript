@@ -1,3 +1,4 @@
+// @target: es2015
 // These are mostly permitted with the current loose rules. All ok unless otherwise noted.
 
 namespace Errors {

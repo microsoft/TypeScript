@@ -43,5 +43,6 @@ console.log(_C__1)
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->_C__1 : any
+>_C__1 : undefined
+>      : ^^^^^^^^^
 

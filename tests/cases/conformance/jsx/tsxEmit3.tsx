@@ -1,3 +1,4 @@
+// @target: es2015
 //@filename: file.tsx
 //@jsx: preserve
 //@sourceMap: true

@@ -1,15 +1,25 @@
+override4.ts(4,5): error TS2564: Property 'p3' has no initializer and is not definitely assigned in the constructor.
+override4.ts(5,5): error TS2564: Property 'p4' has no initializer and is not definitely assigned in the constructor.
 override4.ts(11,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+override4.ts(13,5): error TS2564: Property 'p3' has no initializer and is not definitely assigned in the constructor.
 override4.ts(13,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+override4.ts(14,14): error TS2564: Property 'p4' has no initializer and is not definitely assigned in the constructor.
 override4.ts(17,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+override4.ts(22,14): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+override4.ts(23,5): error TS2564: Property 'fooo' has no initializer and is not definitely assigned in the constructor.
 override4.ts(23,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
 
 
-==== override4.ts (4 errors) ====
+==== override4.ts (10 errors) ====
     class B {
         p1: number = 1;
         p2: number = 1;
         p3: () => void;
+        ~~
+!!! error TS2564: Property 'p3' has no initializer and is not definitely assigned in the constructor.
         p4: () => void;
+        ~~
+!!! error TS2564: Property 'p4' has no initializer and is not definitely assigned in the constructor.
         foo (v: string) {}
         fooo (v: string) {}
     }
@@ -21,8 +31,12 @@ override4.ts(23,5): error TS4114: This member must have an 'override' modifier b
         override p2: number = 3;
         p3: () => void;
         ~~
+!!! error TS2564: Property 'p3' has no initializer and is not definitely assigned in the constructor.
+        ~~
 !!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
         override p4: () => void;
+                 ~~
+!!! error TS2564: Property 'p4' has no initializer and is not definitely assigned in the constructor.
         override foo (v: string) {}
     
         fooo (v: string) {}
@@ -33,7 +47,11 @@ override4.ts(23,5): error TS4114: This member must have an 'override' modifier b
     
     class DD extends B {
         override foo: () => void
+                 ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         fooo: () => void;
+        ~~~~
+!!! error TS2564: Property 'fooo' has no initializer and is not definitely assigned in the constructor.
         ~~~~
 !!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
     }

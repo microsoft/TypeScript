@@ -11,6 +11,7 @@ class C {
 
 
 //// [typeOfThisInStaticMembers5.js]
+"use strict";
 class C {
     foo;
     static create = () => new this("yep");

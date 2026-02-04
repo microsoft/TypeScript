@@ -1,0 +1,33 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== /index.ts (0 errors) ====
+    import minimist = require('minimist');
+    import process = require('process');
+    
+    export default function parseArgs(): minimist.ParsedArgs {
+      return minimist(process.argv.slice(2));
+    }
+    
+==== /node_modules/@types/minimist/minimist.d.ts (0 errors) ====
+    declare namespace thing {
+        interface ParsedArgs {}
+    }
+    declare function thing(x: any): thing.ParsedArgs;
+    export = thing;
+==== /node_modules/@types/minimist/package.json (0 errors) ====
+    {
+        "name": "minimist",
+        "version": "0.0.1",
+        "types": "./minimist.d.ts"
+    }
+==== /node_modules/@types/process/process.d.ts (0 errors) ====
+    declare const thing: any;
+    export = thing;
+==== /node_modules/@types/process/package.json (0 errors) ====
+    {
+        "name": "process",
+        "version": "0.0.1",
+        "types": "./process.d.ts"
+    }

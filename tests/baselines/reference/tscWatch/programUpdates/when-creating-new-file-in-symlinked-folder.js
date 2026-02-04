@@ -51,7 +51,7 @@ CreatingProgramWith::
   options: {"baseUrl":"/user/username/projects/myproject/client","paths":{"*":["*"]},"pathsBasePath":"/user/username/projects/myproject","watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/client/folder1/module1.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/client/linktofolder2/module2.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
@@ -70,21 +70,15 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder2 
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/folder2 1 undefined Wild card directory
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/client/folder1/module1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Module1Class = void 0;
-var Module1Class = /** @class */ (function () {
-    function Module1Class() {
-    }
-    return Module1Class;
-}());
-exports.Module1Class = Module1Class;
+export class Module1Class {
+}
 
 
 //// [/user/username/projects/myproject/folder2/module2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 
@@ -95,7 +89,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/client/folder1/module1.ts: *new*
   {}
@@ -129,14 +123,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/client/folder1/module1.ts
 /user/username/projects/myproject/client/linktofolder2/module2.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/client/folder1/module1.ts (used version)
 /user/username/projects/myproject/client/linktofolder2/module2.ts (used version)
 
@@ -186,8 +180,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 //// [/user/username/projects/myproject/folder2/module3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 
@@ -198,7 +191,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/myproject/client/folder1/module1.ts:
   {}
@@ -236,7 +229,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/client/folder1/module1.ts
 /user/username/projects/myproject/client/linktofolder2/module2.ts
 /user/username/projects/myproject/client/linktofolder2/module3.ts

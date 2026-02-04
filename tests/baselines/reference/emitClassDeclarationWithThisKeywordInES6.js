@@ -21,6 +21,7 @@ class B {
 }
 
 //// [emitClassDeclarationWithThisKeywordInES6.js]
+"use strict";
 class B {
     constructor() {
         this.x = 10;

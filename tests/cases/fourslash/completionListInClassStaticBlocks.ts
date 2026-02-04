@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
 // @target: esnext
 ////class Foo {
 ////    static #a = 1;

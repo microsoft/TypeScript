@@ -28,11 +28,8 @@ function g(x) {
 //// [assignmentToReferenceTypes.js]
 // Should all be allowed
 M = null;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 C = null;
 var E;
 (function (E) {

@@ -1,3 +1,4 @@
+// @target: es2015
 //// module then class
 namespace m3 { }
 class m3 { } // ok since the module is not instantiated

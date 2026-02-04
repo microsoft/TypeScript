@@ -1,6 +1,8 @@
+// @module: commonjs
+// @target: es2015
 // @filename: /foo/tsconfig.json
 {
-    "compilerOptions": { "declarationDir": "out" }
+    "compilerOptions": { "declarationDir": "out", "module": "commonjs", "target": "es2015" }
 }
 
 // @filename: /foo/test.ts

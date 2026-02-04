@@ -12,36 +12,18 @@ export function ignoreExtraVariables<CtorT extends {new(...args:any[]):{}}> (cto
 
 //// [file.js]
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ignoreExtraVariables = ignoreExtraVariables;
-var IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
+const IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
 //This is exported
 function ignoreExtraVariables(ctor) {
     var _a, _b;
-    return _b = /** @class */ (function (_super) {
-            __extends(class_1, _super);
-            function class_1() {
-                var _this = _super !== null && _super.apply(this, arguments) || this;
-                _this[_a] = true; //An unexported constant is used
-                return _this;
+    return _b = class extends ctor {
+            constructor() {
+                super(...arguments);
+                this[_a] = true; //An unexported constant is used
             }
-            return class_1;
-        }(ctor)),
+        },
         _a = IGNORE_EXTRA_VARIABLES,
         _b;
 }

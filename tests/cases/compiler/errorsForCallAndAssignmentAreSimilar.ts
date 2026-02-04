@@ -1,3 +1,4 @@
+// @target: es2015
 function minimalExample1() {
     type Disc =
         | { kind: "hddvd" }

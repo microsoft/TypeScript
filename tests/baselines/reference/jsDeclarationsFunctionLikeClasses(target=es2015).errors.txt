@@ -1,0 +1,31 @@
+referencer.js(7,22): error TS18048: 'p.x' is possibly 'undefined'.
+referencer.js(7,33): error TS18048: 'p.y' is possibly 'undefined'.
+
+
+==== source.js (0 errors) ====
+    /**
+     * @param {number} x
+     * @param {number} y
+     */
+    export function Point(x, y) {
+        if (!(this instanceof Point)) {
+            return new Point(x, y);
+        }
+        this.x = x;
+        this.y = y;
+    }
+    
+==== referencer.js (2 errors) ====
+    import {Point} from "./source";
+    
+    /**
+     * @param {Point} p
+     */
+    export function magnitude(p) {
+        return Math.sqrt(p.x ** 2 + p.y ** 2);
+                         ~~~
+!!! error TS18048: 'p.x' is possibly 'undefined'.
+                                    ~~~
+!!! error TS18048: 'p.y' is possibly 'undefined'.
+    }
+    

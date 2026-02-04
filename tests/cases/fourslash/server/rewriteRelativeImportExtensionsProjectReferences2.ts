@@ -3,6 +3,7 @@
 // @Filename: src/tsconfig-base.json
 //// {
 ////     "compilerOptions": {
+////         "lib": ["es5"],
 ////         "module": "nodenext",
 ////         "composite": true,
 ////         "rootDir": ".",
@@ -14,7 +15,7 @@
 // @Filename: src/compiler/tsconfig.json
 //// {
 ////     "extends": "../tsconfig-base.json",
-////     "compilerOptions": {}
+////     "compilerOptions": { "lib": ["es5"] }
 //// }
 
 // @Filename: src/compiler/parser.ts
@@ -23,7 +24,7 @@
 // @Filename: src/services/tsconfig.json
 //// {
 ////     "extends": "../tsconfig-base.json",
-////     "compilerOptions": {},
+////     "compilerOptions": { "lib": ["es5"] },
 ////     "references": [
 ////         { "path": "../compiler" }
 ////     ]

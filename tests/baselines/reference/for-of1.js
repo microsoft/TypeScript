@@ -5,5 +5,6 @@ var v;
 for (v of []) { }
 
 //// [for-of1.js]
+"use strict";
 var v;
 for (v of []) { }

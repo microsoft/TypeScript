@@ -20,23 +20,23 @@ class Vec2_T<A>
 }
 
 //// [genericClasses4.js]
+"use strict";
 // once caused stack overflow
-var Vec2_T = /** @class */ (function () {
-    function Vec2_T(x, y) {
+class Vec2_T {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
     }
-    Vec2_T.prototype.fmap = function (f) {
+    fmap(f) {
         var x = f(this.x);
         var y = f(this.y);
         var retval = new Vec2_T(x, y);
         return retval;
-    };
-    Vec2_T.prototype.apply = function (f) {
+    }
+    apply(f) {
         var x = f.x(this.x);
         var y = f.y(this.y);
         var retval = new Vec2_T(x, y);
         return retval;
-    };
-    return Vec2_T;
-}());
+    }
+}

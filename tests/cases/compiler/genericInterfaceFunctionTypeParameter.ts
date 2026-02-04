@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 export interface IFoo<A> { }
 export function foo<A>(fn: (ifoo: IFoo<A>) => void) {

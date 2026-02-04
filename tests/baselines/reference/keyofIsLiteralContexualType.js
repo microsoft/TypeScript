@@ -16,10 +16,11 @@ let x = pick({ a: 10, b: 20, c: 30 }, ["a", "c"]);
 let b = x.b;  // Error
 
 //// [keyofIsLiteralContexualType.js]
+"use strict";
 // keyof T is a literal contextual type
 function foo() {
-    var a = ["a", "b"];
-    var b = ["a", "b", "c"];
+    let a = ["a", "b"];
+    let b = ["a", "b", "c"];
 }
-var x = pick({ a: 10, b: 20, c: 30 }, ["a", "c"]);
-var b = x.b; // Error
+let x = pick({ a: 10, b: 20, c: 30 }, ["a", "c"]);
+let b = x.b; // Error

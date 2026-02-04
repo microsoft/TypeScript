@@ -1,0 +1,13 @@
+inferentialTypingWithFunctionTypeZip.ts(3,14): error TS2454: Variable 'zipWith' is used before being assigned.
+inferentialTypingWithFunctionTypeZip.ts(3,42): error TS2454: Variable 'pair' is used before being assigned.
+
+
+==== inferentialTypingWithFunctionTypeZip.ts (2 errors) ====
+    var pair: <T, S>(x: T) => (y: S) => { x: T; y: S; }
+    var zipWith: <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[];
+    var result = zipWith([1, 2], ['a', 'b'], pair);
+                 ~~~~~~~
+!!! error TS2454: Variable 'zipWith' is used before being assigned.
+                                             ~~~~
+!!! error TS2454: Variable 'pair' is used before being assigned.
+    var i = result[0].x; // number

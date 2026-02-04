@@ -1,11 +1,14 @@
-file.tsx(19,16): error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
-  Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
-file.tsx(25,42): error TS2551: Property 'subtr' does not exist on type 'string'. Did you mean 'substr'?
-file.tsx(27,33): error TS2339: Property 'notARealProperty' does not exist on type 'BigGreeter'.
-file.tsx(35,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not exist on type 'HTMLDivElement'.
+file.tsx(13,2): error TS2564: Property 'greeting' has no initializer and is not definitely assigned in the constructor.
+file.tsx(21,16): error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string | undefined; }'.
+  Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string | undefined; }'.
+file.tsx(27,42): error TS2551: Property 'subtr' does not exist on type 'string'. Did you mean 'substr'?
+file.tsx(29,33): error TS2339: Property 'notARealProperty' does not exist on type 'BigGreeter'.
+file.tsx(37,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not exist on type 'HTMLDivElement'.
 
 
-==== file.tsx (4 errors) ====
+==== file.tsx (5 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react');
     
     function Greet(x: {name?: string}) {
@@ -17,6 +20,8 @@ file.tsx(35,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not e
     		return <div></div>;
     	}
     	greeting: string;
+    	~~~~~~~~
+!!! error TS2564: Property 'greeting' has no initializer and is not definitely assigned in the constructor.
     }
     
     // OK
@@ -26,8 +31,8 @@ file.tsx(35,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not e
     // Error - not allowed to specify 'ref' on SFCs
     let c = <Greet ref="myRef" />;
                    ~~~
-!!! error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
-!!! error TS2322:   Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+!!! error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string | undefined; }'.
+!!! error TS2322:   Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string | undefined; }'.
     
     
     // OK - ref is valid for classes
@@ -36,7 +41,7 @@ file.tsx(35,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not e
     let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
                                              ~~~~~
 !!! error TS2551: Property 'subtr' does not exist on type 'string'. Did you mean 'substr'?
-!!! related TS2728 lib.d.ts:--:--: 'substr' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'substr' is declared here.
     // Error (ref callback is contextually typed)
     let f = <BigGreeter ref={x => x.notARealProperty} />;
                                     ~~~~~~~~~~~~~~~~

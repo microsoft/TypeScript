@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnreachableCode: false
 declare var ANY: any;
 declare var BOOLEAN: boolean;

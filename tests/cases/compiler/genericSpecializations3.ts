@@ -1,3 +1,4 @@
+// @target: es2015
 interface IFoo<T> {
     foo(x: T): T;
 }

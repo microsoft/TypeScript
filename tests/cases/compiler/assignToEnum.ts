@@ -1,3 +1,4 @@
+// @target: es2015
 enum A { foo, bar }
 A = undefined;  // invalid LHS
 A = A.bar;      // invalid LHS

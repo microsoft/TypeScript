@@ -30,11 +30,8 @@ var x15:number=C;
 
 
 //// [typeName1.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var x1 = 3;
 var x2 = 3;
 var x3 = 3;

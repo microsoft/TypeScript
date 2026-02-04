@@ -9,10 +9,8 @@ function bar(a = (v)) {
 }
 
 //// [functionWithDefaultParameterWithNoStatements12.js]
+"use strict";
 var v;
-function foo(a) {
-    if (a === void 0) { a = (v); }
-}
-function bar(a) {
-    if (a === void 0) { a = (v); }
+function foo(a = (v)) { }
+function bar(a = (v)) {
 }

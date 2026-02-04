@@ -1,8 +1,11 @@
 /// <reference path="../fourslash.ts" />
 
+// @lib: es5
+
 // @Filename: /home/src/workspaces/project/jsconfig.json
 ////{
 ////  "compilerOptions": {
+////    "lib": ["es5"],
 ////    "module": "commonjs",
 ////  },
 ////}

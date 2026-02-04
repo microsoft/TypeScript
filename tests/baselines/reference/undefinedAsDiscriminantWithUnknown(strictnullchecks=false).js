@@ -17,6 +17,7 @@ else {
 }
 
 //// [undefinedAsDiscriminantWithUnknown.js]
+"use strict";
 if (s.value !== undefined) {
     s;
 }

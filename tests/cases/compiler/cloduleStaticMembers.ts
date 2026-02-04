@@ -1,3 +1,4 @@
+// @target: es2015
 class Clod {
     private static x = 10;
     public static y = 10;

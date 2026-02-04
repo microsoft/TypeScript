@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 interface Options {
     m(x: number): void;

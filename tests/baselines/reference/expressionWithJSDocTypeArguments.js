@@ -34,18 +34,17 @@ type TComeOnBar = typeof Bar<?string?>;
 "use strict";
 // Repro from #51802
 function foo(x) { return x; }
-var Bar = /** @class */ (function () {
-    function Bar(x) {
+class Bar {
+    constructor(x) {
         this.x = x;
     }
-    return Bar;
-}());
+}
 // Errors expected on all of the following
-var WhatFoo = foo<?>;
-var HuhFoo = foo<?string>;
-var NopeFoo = foo<?string>;
-var ComeOnFoo = foo<??string>;
-var WhatBar = Bar<?>;
-var HuhBar = Bar<?string>;
-var NopeBar = Bar<?string>;
-var ComeOnBar = Bar<??string>;
+const WhatFoo = foo<?>;
+const HuhFoo = foo<?string>;
+const NopeFoo = foo<?string>;
+const ComeOnFoo = foo<??string>;
+const WhatBar = Bar<?>;
+const HuhBar = Bar<?string>;
+const NopeBar = Bar<?string>;
+const ComeOnBar = Bar<??string>;

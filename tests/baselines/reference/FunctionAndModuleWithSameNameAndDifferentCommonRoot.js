@@ -23,6 +23,7 @@ var cl = B.Point.Origin;
 
 
 //// [function.js]
+"use strict";
 var A;
 (function (A) {
     function Point() {
@@ -31,14 +32,16 @@ var A;
     A.Point = Point;
 })(A || (A = {}));
 //// [module.js]
+"use strict";
 var B;
 (function (B) {
-    var Point;
+    let Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
     })(Point = B.Point || (B.Point = {}));
 })(B || (B = {}));
 //// [test.js]
+"use strict";
 var fn;
 var fn = A.Point;
 var cl;

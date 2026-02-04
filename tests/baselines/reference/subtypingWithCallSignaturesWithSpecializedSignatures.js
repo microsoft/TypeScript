@@ -83,4 +83,5 @@ namespace MemberWithCallSignature {
 }
 
 //// [subtypingWithCallSignaturesWithSpecializedSignatures.js]
+"use strict";
 // same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results

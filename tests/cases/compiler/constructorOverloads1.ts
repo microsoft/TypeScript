@@ -1,3 +1,4 @@
+// @target: es2015
 class Foo {
     constructor(s: string);
     constructor(n: number);

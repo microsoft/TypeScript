@@ -41,6 +41,7 @@ do {
 }while (true)
 
 //// [invalidDoWhileContinueStatements.js]
+"use strict";
 // All errors
 // naked continue not allowed
 continue;
@@ -50,7 +51,7 @@ ONE: do
 while (true);
 // continue from inside function
 TWO: do {
-    var x = function () {
+    var x = () => {
         continue TWO;
     };
 } while (true);

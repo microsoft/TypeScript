@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 foo((...Far:any[])=>{return 0;})
 foo((1)=>{return 0;}); 

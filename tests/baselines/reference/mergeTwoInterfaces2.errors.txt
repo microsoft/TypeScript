@@ -1,0 +1,74 @@
+mergeTwoInterfaces2.ts(10,14): error TS2454: Variable 'a' is used before being assigned.
+mergeTwoInterfaces2.ts(11,14): error TS2454: Variable 'a' is used before being assigned.
+mergeTwoInterfaces2.ts(20,14): error TS2454: Variable 'a' is used before being assigned.
+mergeTwoInterfaces2.ts(21,14): error TS2454: Variable 'a' is used before being assigned.
+mergeTwoInterfaces2.ts(32,18): error TS2454: Variable 'a' is used before being assigned.
+mergeTwoInterfaces2.ts(33,18): error TS2454: Variable 'a' is used before being assigned.
+mergeTwoInterfaces2.ts(44,18): error TS2454: Variable 'a' is used before being assigned.
+mergeTwoInterfaces2.ts(45,18): error TS2454: Variable 'a' is used before being assigned.
+
+
+==== mergeTwoInterfaces2.ts (8 errors) ====
+    // two interfaces with the same root module should merge
+    
+    // root module now multiple module declarations
+    namespace M2 {
+        export interface A {
+            foo: string;
+        }
+    
+        var a: A;
+        var r1 = a.foo
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+        var r2 = a.bar;
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    }
+    
+    namespace M2 {
+        export interface A {
+            bar: number;
+        }
+    
+        var a: A;
+        var r1 = a.foo
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+        var r2 = a.bar;
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    }
+    
+    // same as above but with an additional level of nesting
+    namespace M2 {
+        export namespace M3 {
+            export interface A {
+                foo: string;
+            }
+    
+            var a: A;
+            var r1 = a.foo
+                     ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+            var r2 = a.bar;
+                     ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+        }
+    }
+    
+    namespace M2 {
+        export namespace M3 {
+            export interface A {
+                bar: number;
+            }
+    
+            var a: A;
+            var r1 = a.foo
+                     ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+            var r2 = a.bar;
+                     ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+        }
+    }

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Duplicate parameter names are always an error
 

@@ -1,5 +1,5 @@
 // @strict: false
-// @target: es5
+// @target: es5, es2015
 // @module: es2015
 
 export function f1(d = 0) {

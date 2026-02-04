@@ -1,0 +1,25 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== objectLiteralShorthandProperties.ts (0 errors) ====
+    var a, b, c;
+    
+    var x1 = {
+        a
+    };
+    
+    var x2 = {
+        a,
+    }
+    
+    var x3 = {
+        a: 0,
+        b,
+        c,
+        d() { },
+        x3,
+        parent: x3
+    };
+    
+    

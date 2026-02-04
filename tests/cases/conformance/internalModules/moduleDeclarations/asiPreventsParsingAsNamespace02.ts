@@ -1,3 +1,4 @@
+// @target: es2015
 
 var module: number;
 var m: string;

@@ -1,10 +1,13 @@
 error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+b.ts(1,17): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+main.ts(8,9): error TS2454: Variable 'a' is used before being assigned.
+main.ts(9,9): error TS2454: Variable 'a' is used before being assigned.
 
 
 !!! error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== main.ts (0 errors) ====
+==== main.ts (2 errors) ====
     /// <reference path="d.d.ts"/>
     /// <reference path="e.d.ts"/>
     import {A} from "./a";
@@ -13,13 +16,19 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     
     let a: A;
     let b = a.getB().x.toFixed();
+            ~
+!!! error TS2454: Variable 'a' is used before being assigned.
     let c = a.getCls().y.toLowerCase();
+            ~
+!!! error TS2454: Variable 'a' is used before being assigned.
     
 ==== a.ts (0 errors) ====
     export class A {}
     
-==== b.ts (0 errors) ====
+==== b.ts (1 errors) ====
     export class B {x: number;}
+                    ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     
 ==== c.d.ts (0 errors) ====
     declare module "C" {

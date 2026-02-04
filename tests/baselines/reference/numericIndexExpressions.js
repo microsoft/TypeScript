@@ -18,6 +18,7 @@ y['1'] = 4; // should be error
 y[1] = 4; // should be error
 
 //// [numericIndexExpressions.js]
+"use strict";
 x[1] = 4; // error
 x['1'] = 4; // error
 y['1'] = 4; // should be error

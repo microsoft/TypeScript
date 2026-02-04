@@ -75,7 +75,6 @@ const b5 = { value: su?.["length"] };
 >b5 : Symbol(b5, Decl(optionalChainingInference.ts, 19, 5))
 >value : Symbol(value, Decl(optionalChainingInference.ts, 19, 12))
 >su : Symbol(su, Decl(optionalChainingInference.ts, 2, 13))
->"length" : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 const v5: number = unbox(b5);
 >v5 : Symbol(v5, Decl(optionalChainingInference.ts, 20, 5))
@@ -102,7 +101,6 @@ const b7 = { value: osu?.prop["length"] };
 >osu?.prop : Symbol(prop, Decl(optionalChainingInference.ts, 4, 20))
 >osu : Symbol(osu, Decl(optionalChainingInference.ts, 4, 13))
 >prop : Symbol(prop, Decl(optionalChainingInference.ts, 4, 20))
->"length" : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 const v7: number = unbox(b7);
 >v7 : Symbol(v7, Decl(optionalChainingInference.ts, 26, 5))

@@ -17,6 +17,7 @@ class Derived extends Base {
 
 
 //// [redeclaredProperty.js]
+"use strict";
 class Base {
     b = 1;
 }

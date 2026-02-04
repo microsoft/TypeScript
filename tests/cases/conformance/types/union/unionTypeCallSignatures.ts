@@ -1,4 +1,5 @@
-﻿declare var numOrDate: number | Date;
+﻿// @target: es2015
+declare var numOrDate: number | Date;
 declare var strOrBoolean: string | boolean;
 declare var strOrNum: string | number;
 

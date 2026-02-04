@@ -1,3 +1,4 @@
+// @target: es2015
 if (true) {
     let x;
     if (true) {

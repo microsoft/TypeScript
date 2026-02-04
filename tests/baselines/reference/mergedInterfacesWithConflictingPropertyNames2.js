@@ -44,3 +44,4 @@ namespace M3 {
 }
 
 //// [mergedInterfacesWithConflictingPropertyNames2.js]
+"use strict";

@@ -1,3 +1,4 @@
+// @target: es2015
 declare var document: Document;
 interface Document {
     getElementById(elementId: string): HTMLElement;

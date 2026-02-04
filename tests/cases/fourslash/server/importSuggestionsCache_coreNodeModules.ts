@@ -4,6 +4,7 @@
 ////{
 ////  "compilerOptions": {
 ////    "module": "esnext",
+////    "lib": ["es5"],
 ////    "allowJs": true,
 ////    "checkJs": true,
 ////    "typeRoots": [

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 // https://github.com/Microsoft/TypeScript/issues/20994
 interface Options {

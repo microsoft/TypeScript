@@ -13,13 +13,11 @@ new myA;
 
 
 //// [classAbstractImportInstantiation.js]
+"use strict";
 var M;
 (function (M) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     M.A = A;
     new A;
 })(M || (M = {}));

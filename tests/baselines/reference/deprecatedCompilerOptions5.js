@@ -5,4 +5,5 @@ const a = 1;
 
 
 //// [a.js]
-var a = 1;
+"use strict";
+const a = 1;

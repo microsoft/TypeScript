@@ -1,3 +1,4 @@
+// @target: es2015
 // @moduleResolution: node
 // @module: commonjs
 // @noEmit: true

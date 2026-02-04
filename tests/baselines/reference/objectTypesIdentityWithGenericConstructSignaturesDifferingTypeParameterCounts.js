@@ -76,20 +76,14 @@ function foo14(x: any) { }
 
 //// [objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.js]
 // object types are identical structurally
-var B = /** @class */ (function () {
-    function B(x) {
-        return null;
-    }
-    return B;
-}());
-var C = /** @class */ (function () {
-    function C(x) {
-        return null;
-    }
-    return C;
-}());
+class B {
+    constructor(x) { return null; }
+}
+class C {
+    constructor(x) { return null; }
+}
 var a;
-var b = { new: function (x) { return x; } };
+var b = { new(x) { return x; } };
 function foo1b(x) { }
 function foo1c(x) { }
 function foo2(x) { }

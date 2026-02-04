@@ -35,6 +35,7 @@ class E {
 
 
 //// [constructorParameterShadowsOuterScopes2.js]
+"use strict";
 // With useDefineForClassFields: true and ESNext target, initializer
 // expressions for property declarations are evaluated in the scope of
 // the class body and are permitted to reference parameters or local

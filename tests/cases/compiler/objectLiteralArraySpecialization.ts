@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
 interface MyArrayWrapper<T> {

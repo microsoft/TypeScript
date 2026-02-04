@@ -1,3 +1,4 @@
+// @target: es2015
 // @noErrorTruncation: true
 // @noImplicitAny: true
 // @allowJs: true

@@ -1,4 +1,5 @@
-﻿// @experimentalDecorators: true
+﻿// @target: es2015
+// @experimentalDecorators: true
 @lambda(Enum.No)
 @deco(Enum.No)
 class Greeter {

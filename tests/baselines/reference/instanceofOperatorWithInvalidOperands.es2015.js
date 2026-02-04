@@ -58,6 +58,7 @@ declare var o6: {[Symbol.hasInstance](value: unknown): number;};
 var rb11 = x instanceof o6;
 
 //// [instanceofOperatorWithInvalidOperands.es2015.js]
+"use strict";
 class C {
     foo() { }
 }

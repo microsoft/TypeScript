@@ -7,10 +7,10 @@ var arg0 = null;  // error at "arg0"
 >     : ^^^
 
 var anyArray = [null, undefined];  // error at array literal
->anyArray : any[]
->         : ^^^^^
->[null, undefined] : null[]
->                  : ^^^^^^
+>anyArray : (null | undefined)[]
+>         : ^^^^^^^^^^^^^^^^^^^^
+>[null, undefined] : (null | undefined)[]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -128,8 +128,8 @@ var result1 = temp1(anyArray);
 >                : ^^^^
 >temp1 : (arg1: any) => void
 >      : ^    ^^^^^^^^^^^^^^
->anyArray : any[]
->         : ^^^^^
+>anyArray : (null | undefined)[]
+>         : ^^^^^^^^^^^^^^^^^^^^
 
 function noError(variable: any, array?: any) { }
 >noError : (variable: any, array?: any) => void
@@ -144,8 +144,8 @@ noError(null, []);
 >                  : ^^^^
 >noError : (variable: any, array?: any) => void
 >        : ^        ^^   ^^     ^^^   ^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 noError(undefined, <any>[]);
 >noError(undefined, <any>[]) : void
@@ -156,16 +156,16 @@ noError(undefined, <any>[]);
 >          : ^^^^^^^^^
 ><any>[] : any
 >        : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 noError(null, [null, undefined]);
 >noError(null, [null, undefined]) : void
 >                                 : ^^^^
 >noError : (variable: any, array?: any) => void
 >        : ^        ^^   ^^     ^^^   ^^^^^^^^^
->[null, undefined] : null[]
->                  : ^^^^^^
+>[null, undefined] : (null | undefined)[]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -176,8 +176,8 @@ noError(undefined, anyArray);
 >        : ^        ^^   ^^     ^^^   ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->anyArray : any[]
->         : ^^^^^
+>anyArray : (null | undefined)[]
+>         : ^^^^^^^^^^^^^^^^^^^^
 
 class C {
 >C : C
@@ -198,8 +198,8 @@ var newC = new C([], undefined);
 >                     : ^
 >C : typeof C
 >  : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -210,8 +210,8 @@ var newC1 = new C([], arg0);
 >                : ^
 >C : typeof C
 >  : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >arg0 : null
 >     : ^^^^
 
@@ -224,6 +224,6 @@ var newC2 = new C(<any>[], null)
 >  : ^^^^^^^^
 ><any>[] : any
 >        : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 

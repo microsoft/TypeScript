@@ -12,6 +12,7 @@ a = b = c = d = e = null;
 
 
 //// [chainedAssignment2.js]
+"use strict";
 var a;
 var b;
 var c;

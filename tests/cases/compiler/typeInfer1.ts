@@ -1,3 +1,4 @@
+// @target: es2015
 interface ITextWriter2 {
     Write(s:string):void;
     WriteLine(s:string):void;

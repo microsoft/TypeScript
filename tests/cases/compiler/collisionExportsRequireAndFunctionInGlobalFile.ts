@@ -1,3 +1,4 @@
+// @target: es2015
 function exports() {
     return 1;
 }

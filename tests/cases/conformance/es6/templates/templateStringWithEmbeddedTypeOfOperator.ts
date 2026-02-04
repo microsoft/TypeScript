@@ -1,1 +1,2 @@
-﻿var x = `abc${ typeof "hi" }def`;
+﻿// @target: es2015
+var x = `abc${ typeof "hi" }def`;

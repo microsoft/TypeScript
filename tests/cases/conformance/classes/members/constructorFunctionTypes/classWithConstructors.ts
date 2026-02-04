@@ -1,3 +1,4 @@
+// @target: es2015
 namespace NonGeneric {
     class C {
         constructor(x: string) { }

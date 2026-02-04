@@ -1,3 +1,4 @@
+// @target: es2015
 // scenario 1
 interface ISomething {
    something: number;

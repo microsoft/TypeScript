@@ -35,23 +35,20 @@ var b = {
 var r4 = b.foo(new Date());
 
 //// [propertyAccessOnTypeParameterWithConstraints4.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.f = function () {
+class C {
+    f() {
         var x = {};
         var a = x['notHere'](); // should be string
         return a + x.notHere();
-    };
-    return C;
-}());
+    }
+}
 var r = (new C()).f();
 var r2 = i.foo.notHere();
 var r2b = i.foo['notHere']();
 var r3 = a().notHere();
 var r3b = a()['notHere']();
 var b = {
-    foo: function (x) {
+    foo: (x) => {
         var a = x['notHere'](); // should be string
         return a + x.notHere();
     },

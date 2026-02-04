@@ -8,6 +8,7 @@ for (const [k, v] of map) {
 }
 
 //// [for-of50.js]
+"use strict";
 var map = new Map([["", true]]);
 for (const [k, v] of map) {
     k;

@@ -16,6 +16,7 @@ try {
 result // should not error here
 
 //// [flowAfterFinally1.js]
+"use strict";
 var result;
 openFile();
 try {

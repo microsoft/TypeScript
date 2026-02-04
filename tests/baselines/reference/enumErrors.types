@@ -1,5 +1,8 @@
 //// [tests/cases/conformance/enums/enumErrors.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === enumErrors.ts ===
 // Enum named with PredefinedTypes
 enum any { }

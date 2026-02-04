@@ -7659,6 +7659,7 @@ export const enum ScriptKind {
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
+    /** @deprecated */
     ES5 = 1,
     ES2015 = 2,
     ES2016 = 3,
@@ -7673,6 +7674,7 @@ export const enum ScriptTarget {
     ESNext = 99,
     JSON = 100,
     Latest = ESNext,
+    LatestStandard = ES2024,
 }
 
 export const enum LanguageVariant {

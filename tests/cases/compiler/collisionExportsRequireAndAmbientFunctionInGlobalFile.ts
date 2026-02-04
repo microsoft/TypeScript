@@ -1,3 +1,4 @@
+// @target: es2015
 declare function exports(): number;
 declare function require(): string;
 declare namespace m3 {

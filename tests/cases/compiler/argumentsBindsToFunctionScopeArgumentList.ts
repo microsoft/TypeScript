@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 var arguments = 10;
 function foo(a) {

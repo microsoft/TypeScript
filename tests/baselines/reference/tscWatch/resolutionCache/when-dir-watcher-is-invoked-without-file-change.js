@@ -39,7 +39,7 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/main.ts 250 undefined Source file
 ======== Resolving module './app/services/generated' from '/home/src/workspaces/project/src/main.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 Loading module as file / folder, candidate module location '/home/src/workspaces/project/src/app/services/generated', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/workspaces/project/src/app/services/generated.ts' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated.tsx' does not exist.
@@ -52,7 +52,7 @@ File '/home/src/workspaces/project/src/app/services/generated/index.ts' exists -
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/index.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Type roots
@@ -67,18 +67,15 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined W
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/project/src/app/services/generated/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
+export const y = 10;
 
 
 //// [/home/src/workspaces/project/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var generated_1 = require("./app/services/generated");
-var x = generated_1.y;
+import { y } from "./app/services/generated";
+const x = y;
 
 
 
@@ -89,7 +86,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /home/src/workspaces/project/src/app/services/generated/index.ts: *new*
   {}
@@ -116,17 +113,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/src/app/services/generated/index.ts
 /home/src/workspaces/project/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/src/app/services/generated/index.ts
 /home/src/workspaces/project/src/main.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/workspaces/project/src/app/services/generated/index.ts (used version)
 /home/src/workspaces/project/src/main.ts (used version)
 
@@ -181,7 +178,7 @@ CreatingProgramWith::
   options: {"watch":true,"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
 ======== Resolving module './app/services/generated' from '/home/src/workspaces/project/src/main.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 Loading module as file / folder, candidate module location '/home/src/workspaces/project/src/app/services/generated', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/workspaces/project/src/app/services/generated.ts' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated.tsx' does not exist.
@@ -209,7 +206,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /home/src/workspaces/project/src/main.ts:
   {}
@@ -242,7 +239,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -302,7 +299,7 @@ CreatingProgramWith::
   options: {"watch":true,"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
 ======== Resolving module './app/services/generated' from '/home/src/workspaces/project/src/main.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 Loading module as file / folder, candidate module location '/home/src/workspaces/project/src/app/services/generated', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/workspaces/project/src/app/services/generated.ts' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated.tsx' does not exist.
@@ -324,10 +321,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src
 
 //// [/home/src/workspaces/project/src/main.js] file written with same contents
 //// [/home/src/workspaces/project/src/app/services/generated/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
+export const y = 10;
 
 
 
@@ -338,7 +332,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /home/src/workspaces/project/src/app/services/generated/index.ts: *new*
   {}
@@ -366,7 +360,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/project/src/app/services/generated/index.ts
 /home/src/workspaces/project/src/main.ts
 

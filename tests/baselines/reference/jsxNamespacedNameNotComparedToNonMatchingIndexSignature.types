@@ -3,7 +3,7 @@
 === Performance Stats ===
 Assignability cache: 5,000
 Type Count: 10,000
-Instantiation count: 50,000
+Instantiation count: 100,000
 Symbol count: 100,000
 
 === jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx ===
@@ -19,8 +19,8 @@ declare module "react" {
 >    : ^^^^^^^^^^^^^^
 
         "ns:thing"?: string;
->"ns:thing" : string
->           : ^^^^^^
+>"ns:thing" : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
     }
 }
 

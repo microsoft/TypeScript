@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 // @Filename: aliasOnMergedModuleInterface_0.ts
 declare module "foo"

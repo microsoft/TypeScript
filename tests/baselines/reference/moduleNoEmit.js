@@ -6,6 +6,7 @@ namespace Foo {
 }
 
 //// [moduleNoEmit.js]
+"use strict";
 var Foo;
 (function (Foo) {
     1 + 1;

@@ -1,9 +1,11 @@
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-file.tsx(13,24): error TS2322: Type 'number' is not assignable to type 'string'.
+file.tsx(15,24): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== file.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react')
     
     interface MyComponentProp {
@@ -19,4 +21,4 @@ file.tsx(13,24): error TS2322: Type 'number' is not assignable to type 'string'.
     let i1 = <MyComponent1 values={5}/>;
                            ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6500 file.tsx:4:5: The expected type comes from property 'values' which is declared here on type 'IntrinsicAttributes & MyComponentProp'
+!!! related TS6500 file.tsx:6:5: The expected type comes from property 'values' which is declared here on type 'IntrinsicAttributes & MyComponentProp'

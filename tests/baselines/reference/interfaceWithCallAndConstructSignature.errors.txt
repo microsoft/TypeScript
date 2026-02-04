@@ -1,0 +1,17 @@
+interfaceWithCallAndConstructSignature.ts(7,9): error TS2454: Variable 'f' is used before being assigned.
+interfaceWithCallAndConstructSignature.ts(8,14): error TS2454: Variable 'f' is used before being assigned.
+
+
+==== interfaceWithCallAndConstructSignature.ts (2 errors) ====
+    interface Foo {
+        (): number;
+        new (): any;
+    }
+    
+    var f: Foo;
+    var r = f();
+            ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    var r2 = new f();
+                 ~
+!!! error TS2454: Variable 'f' is used before being assigned.

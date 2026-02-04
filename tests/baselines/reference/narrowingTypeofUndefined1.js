@@ -19,6 +19,7 @@ else {
 
 
 //// [narrowingTypeofUndefined1.js]
+"use strict";
 if (typeof a.error === 'undefined') {
     a.result.prop; // number
 }

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 // @useUnknownInCatchVariables: false
 // Regression test for #8295

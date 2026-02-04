@@ -1,3 +1,4 @@
+// @target: es2015
 switch (e) {
     case 1:
        1 + 

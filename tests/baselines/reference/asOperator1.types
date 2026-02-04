@@ -33,6 +33,7 @@ var z = Date as any as string;
 >Date as any as string : string
 >                      : ^^^^^^
 >Date as any : any
+>            : ^^^
 >Date : DateConstructor
 >     : ^^^^^^^^^^^^^^^
 

@@ -1,3 +1,4 @@
+// @target: es2015
 class C1 {
     x: this;
     f(x: this): this { return undefined; }

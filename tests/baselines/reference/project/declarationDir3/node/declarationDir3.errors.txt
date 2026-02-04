@@ -2,6 +2,8 @@ error TS5053: Option 'declarationDir' cannot be specified with option 'outFile'.
 error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
+a.ts(3,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+subfolder/c.ts(4,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 
 
 !!! error TS5053: Option 'declarationDir' cannot be specified with option 'outFile'.
@@ -12,14 +14,18 @@ error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
     export class B {
         
     }
-==== a.ts (0 errors) ====
+==== a.ts (1 errors) ====
     import {B} from './subfolder/b';
     export class A {
         b: B;
+        ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
     }
-==== subfolder/c.ts (0 errors) ====
+==== subfolder/c.ts (1 errors) ====
     import {A} from '../a';
     
     export class C {
         a: A;
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     }

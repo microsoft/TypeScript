@@ -1,6 +1,6 @@
 // @strict: false
 // @lib: es5,es2015.promise
-// @target: ES5
+// @target: ES5, ES2015
 
 // the generated code from both should be similar
 

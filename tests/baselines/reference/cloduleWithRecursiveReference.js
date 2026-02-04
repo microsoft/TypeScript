@@ -10,13 +10,11 @@ namespace M
 }
 
 //// [cloduleWithRecursiveReference.js]
+"use strict";
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     M.C = C;
     (function (C_1) {
         C_1.C = M.C;

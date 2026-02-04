@@ -1,3 +1,4 @@
+// @target: es2015
 // Test that importing a file from `node_modules` does not affect calculation of the common source directory.
 // @noImplicitReferences: true
 // @moduleResolution: bundler

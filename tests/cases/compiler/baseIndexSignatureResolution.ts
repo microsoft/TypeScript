@@ -1,3 +1,4 @@
+// @target: es2015
 class Base { private a: string; }
 class Derived extends Base { private b: string; }
 

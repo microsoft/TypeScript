@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 var v: { a: (_: string) => number } = { a: s => s.length } || { a: s => 1 };
 

@@ -1,3 +1,4 @@
+// @target: es5, es2015
 //@sourcemap: true
 //@downlevelIteration: true
 function foo() {

@@ -12,15 +12,13 @@ namespace M {
 }
 
 //// [aliasInaccessibleModule2.js]
+"use strict";
 var M;
 (function (M) {
-    var N;
+    let N;
     (function (N) {
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
     })(N || (N = {}));
     var R = N;
     M.X = R;

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // M is optional and S contains no property with the same name as M
 // N is optional and T contains no property with the same name as N

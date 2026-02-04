@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 type A<T> = { x: T } extends { x: 0 } ? 1 : 0;

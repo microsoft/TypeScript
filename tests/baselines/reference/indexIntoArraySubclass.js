@@ -7,5 +7,6 @@ var r = x2[0]; // string
 r = 0; //error
 
 //// [indexIntoArraySubclass.js]
+"use strict";
 var r = x2[0]; // string
 r = 0; //error

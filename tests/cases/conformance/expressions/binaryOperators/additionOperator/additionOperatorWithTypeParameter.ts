@@ -1,3 +1,4 @@
+// @target: es2015
 // type parameter type is not a valid operand of addition operator
 enum E { a, b }
 

@@ -1,5 +1,12 @@
 error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+b.ts(1,17): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+d.ts(7,1): error TS2322: Type '() => undefined' is not assignable to type '() => B'.
+  Type 'undefined' is not assignable to type 'B'.
+d.ts(8,1): error TS2322: Type '() => undefined' is not assignable to type '() => Cls'.
+  Type 'undefined' is not assignable to type 'Cls'.
+main.ts(5,9): error TS2454: Variable 'a' is used before being assigned.
+main.ts(6,9): error TS2454: Variable 'a' is used before being assigned.
 
 
 !!! error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
@@ -7,15 +14,17 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
 ==== a.ts (0 errors) ====
     export class A {}
     
-==== b.ts (0 errors) ====
+==== b.ts (1 errors) ====
     export class B {x: number;}
+                    ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     
 ==== c.d.ts (0 errors) ====
     declare module "C" {
         class Cls {y: string; }
     }
     
-==== d.ts (0 errors) ====
+==== d.ts (2 errors) ====
     /// <reference path="c.d.ts"/>
     
     import {A} from "./a";
@@ -23,7 +32,13 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     import {Cls} from "C";
     
     A.prototype.getB = function () { return undefined; }
+    ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '() => undefined' is not assignable to type '() => B'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'B'.
     A.prototype.getCls = function () { return undefined; }
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '() => undefined' is not assignable to type '() => Cls'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'Cls'.
     
     declare module "./a" {
         interface A {
@@ -37,11 +52,15 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
         }
     }
     
-==== main.ts (0 errors) ====
+==== main.ts (2 errors) ====
     import {A} from "./a";
     import "d";
     
     let a: A;
     let b = a.getB().x.toFixed();
+            ~
+!!! error TS2454: Variable 'a' is used before being assigned.
     let c = a.getCls().y.toLowerCase();
+            ~
+!!! error TS2454: Variable 'a' is used before being assigned.
     

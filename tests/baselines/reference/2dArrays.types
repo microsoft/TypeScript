@@ -24,14 +24,14 @@ class Board {
     ships: Ship[] = [];
 >ships : Ship[]
 >      : ^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     cells: Cell[] = [];
 >cells : Cell[]
 >      : ^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     private allShipsSunk() {
 >allShipsSunk : () => boolean

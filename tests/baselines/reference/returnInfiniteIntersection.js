@@ -11,7 +11,7 @@ let result = recursive()(1)
 
 //// [returnInfiniteIntersection.js]
 function recursive() {
-    var x = function (subkey) { return recursive(); };
+    let x = (subkey) => recursive();
     return x;
 }
-var result = recursive()(1);
+let result = recursive()(1);

@@ -1,3 +1,4 @@
+// @target: es2015
 // Check that we only cache results of type comparisons that are free of assumptions
 
 interface A {

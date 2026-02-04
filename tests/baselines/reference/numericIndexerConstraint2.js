@@ -7,11 +7,9 @@ var a: { one: number; } = { one: 1 };
 x = a;
 
 //// [numericIndexerConstraint2.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.foo = function () { };
-    return Foo;
-}());
+"use strict";
+class Foo {
+    foo() { }
+}
 var a = { one: 1 };
 x = a;

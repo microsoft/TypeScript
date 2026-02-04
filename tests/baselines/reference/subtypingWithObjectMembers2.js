@@ -77,3 +77,4 @@ namespace Optional {
 }
 
 //// [subtypingWithObjectMembers2.js]
+"use strict";

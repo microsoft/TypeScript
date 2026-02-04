@@ -8,4 +8,4 @@ f(() => n => n);
 
 
 //// [contextualTypingFunctionReturningFunction2.js]
-f(function () { return function (n) { return n; }; });
+f(() => n => n);

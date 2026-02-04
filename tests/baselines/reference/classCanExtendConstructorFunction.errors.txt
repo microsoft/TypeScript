@@ -5,13 +5,14 @@ first.js(31,5): error TS2416: Property 'load' in type 'Sql' is not assignable to
 first.js(47,24): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
 generic.js(19,19): error TS2554: Expected 1 arguments, but got 0.
 generic.js(20,32): error TS2345: Argument of type 'number' is not assignable to parameter of type '{ claim: "ignorant" | "malicious"; }'.
+second.ts(5,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 second.ts(8,25): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
 second.ts(14,7): error TS2417: Class static side 'typeof Conestoga' incorrectly extends base class static side 'typeof Wagon'.
   Types of property 'circle' are incompatible.
     Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(wagons?: Wagon[] | undefined) => number'.
       Types of parameters 'others' and 'wagons' are incompatible.
-        Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
-          Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
+        Type 'Wagon[] | undefined' is not assignable to type '(typeof Wagon)[]'.
+          Type 'undefined' is not assignable to type '(typeof Wagon)[]'.
 second.ts(17,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 
@@ -75,12 +76,14 @@ second.ts(17,15): error TS2345: Argument of type 'string' is not assignable to p
     
     }
     
-==== second.ts (3 errors) ====
+==== second.ts (4 errors) ====
     /**
      * @constructor
      */
     function Dragon(numberEaten: number) {
         this.numberEaten = numberEaten
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     // error!
     class Firedrake extends Dragon {
@@ -97,9 +100,8 @@ second.ts(17,15): error TS2345: Argument of type 'string' is not assignable to p
 !!! error TS2417:   Types of property 'circle' are incompatible.
 !!! error TS2417:     Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(wagons?: Wagon[] | undefined) => number'.
 !!! error TS2417:       Types of parameters 'others' and 'wagons' are incompatible.
-!!! error TS2417:         Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
-!!! error TS2417:           Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
-!!! related TS2728 first.js:9:1: 'circle' is declared here.
+!!! error TS2417:         Type 'Wagon[] | undefined' is not assignable to type '(typeof Wagon)[]'.
+!!! error TS2417:           Type 'undefined' is not assignable to type '(typeof Wagon)[]'.
         constructor(public drunkOO: true) {
             // error: wrong type
             super('nope');

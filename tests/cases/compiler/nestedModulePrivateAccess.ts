@@ -1,3 +1,4 @@
+// @target: es2015
 namespace a{
        var x:number;
        namespace b{

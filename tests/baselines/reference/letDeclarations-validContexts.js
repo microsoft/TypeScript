@@ -144,6 +144,7 @@ namespace m3 {
 }
 
 //// [letDeclarations-validContexts.js]
+"use strict";
 // Control flow statements with blocks
 if (true) {
     let l1 = 0;

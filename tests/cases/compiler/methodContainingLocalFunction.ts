@@ -1,5 +1,5 @@
 // @strict: false
-// @target: ES5
+// @target: ES5, ES2015
 // The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
 class BugExhibition<T> {
     public exhibitBug() {

@@ -1,4 +1,5 @@
-﻿// @removeComments: false
+﻿// @target: es2015
+// @removeComments: false
 
 // @Filename: file0.ts
 var x = 10

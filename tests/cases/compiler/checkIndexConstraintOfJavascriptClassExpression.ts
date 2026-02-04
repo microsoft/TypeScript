@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: weird.js
 // @allowJs: true
 // @checkJs: true

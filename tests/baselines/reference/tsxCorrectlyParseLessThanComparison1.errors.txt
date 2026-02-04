@@ -1,0 +1,31 @@
+tsxCorrectlyParseLessThanComparison1.tsx(14,22): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+tsxCorrectlyParseLessThanComparison1.tsx(16,21): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+tsxCorrectlyParseLessThanComparison1.tsx(16,26): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== tsxCorrectlyParseLessThanComparison1.tsx (3 errors) ====
+    declare namespace JSX {
+        interface Element {
+            div: string;
+        }
+    }
+    declare namespace React {
+        class Component<P, S> {
+            constructor(props?: P, context?: any);
+            props: P;
+        }
+    }
+    
+    export class ShortDetails extends React.Component<{ id: number }, {}> {
+        public render(): JSX.Element {
+                         ~~~~~~~~~~~
+!!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+            if (this.props.id < 1) {
+                return (<div></div>);
+                        ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                             ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+            }
+        }
+    }

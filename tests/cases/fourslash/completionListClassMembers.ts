@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
 
 ////class Class {
 ////    private privateInstanceMethod() { }

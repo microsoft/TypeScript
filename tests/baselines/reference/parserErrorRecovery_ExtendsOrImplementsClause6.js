@@ -4,3 +4,4 @@
 interface I extends { }
 
 //// [parserErrorRecovery_ExtendsOrImplementsClause6.js]
+"use strict";

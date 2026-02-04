@@ -1,4 +1,6 @@
-﻿declare var str: string;
+﻿// @target: es2015
+// @strict: true
+declare var str: string;
 declare var num: number;
 var strOrNumber: string | number = str || num;
 declare var objStr: { prop: string };

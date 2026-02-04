@@ -11,6 +11,7 @@ declare namespace mAmbient {
 
 
 //// [enumDecl1.js]
+"use strict";
 
 
 //// [enumDecl1.d.ts]

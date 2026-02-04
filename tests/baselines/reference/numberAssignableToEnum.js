@@ -8,6 +8,7 @@ e = n;
 n = e;
 
 //// [numberAssignableToEnum.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";

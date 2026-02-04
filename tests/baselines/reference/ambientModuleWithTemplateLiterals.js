@@ -23,6 +23,7 @@ Foo.d;
 Foo.e;
 
 //// [ambientModuleWithTemplateLiterals.js]
+"use strict";
 Foo.a;
 Foo.b;
 Foo.c;

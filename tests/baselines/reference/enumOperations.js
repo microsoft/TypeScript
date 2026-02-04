@@ -19,6 +19,7 @@ enumType >>>anyType;
 
 
 //// [enumOperations.js]
+"use strict";
 var Enum;
 (function (Enum) {
     Enum[Enum["None"] = 0] = "None";

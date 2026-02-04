@@ -5,6 +5,7 @@ type Tag = {__tag: any};
 >Tag : Tag
 >    : ^^^
 >__tag : any
+>      : ^^^
 
 declare function isNonBlank(value: string) : value is (string & Tag);
 >isNonBlank : (value: string) => value is (string & Tag)

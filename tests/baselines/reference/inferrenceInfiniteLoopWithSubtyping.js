@@ -38,11 +38,10 @@ User.addResolver({
 
 
 //// [app.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 User.addResolver({
     type: User, // `User as any` fix the problem
 });
+export {};
 
 
 //// [app.d.ts]

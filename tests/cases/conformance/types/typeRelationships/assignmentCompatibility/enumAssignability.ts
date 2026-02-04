@@ -1,3 +1,4 @@
+// @target: es2015
 // enums assignable to number, any, Object, errors unless otherwise noted
 
 enum E { A }

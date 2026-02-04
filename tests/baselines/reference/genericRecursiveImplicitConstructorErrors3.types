@@ -49,8 +49,8 @@ namespace TypeScript {
 >         : ^ ^^ ^^ ^^           ^^^          ^^                   ^^^       ^^^^^^^^
 >scopeSymbol : any
 >            : ^^^
->useConstraintInName : boolean
->                    : ^^^^^^^
+>useConstraintInName : boolean | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^
 
             var s = this.getScopedNameEx(scopeSymbol, useConstraintInName).toString();
 >s : any
@@ -69,8 +69,8 @@ namespace TypeScript {
 >                : ^^^^^^^^^^^^^^^^           ^^^          ^^                   ^^^       ^^                 ^^^       ^^                      ^^^       ^^^^^^^^
 >scopeSymbol : any
 >            : ^^^
->useConstraintInName : boolean
->                    : ^^^^^^^
+>useConstraintInName : boolean | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^
 >toString : any
 >         : ^^^
 
@@ -83,12 +83,12 @@ namespace TypeScript {
 >                : ^ ^^ ^^ ^^           ^^^          ^^                   ^^^       ^^                 ^^^       ^^                      ^^^       ^^^^^^^^
 >scopeSymbol : any
 >            : ^^^
->useConstraintInName : boolean
->                    : ^^^^^^^
->getPrettyTypeName : boolean
->                  : ^^^^^^^
->getTypeParamMarkerInfo : boolean
->                       : ^^^^^^^
+>useConstraintInName : boolean | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^
+>getPrettyTypeName : boolean | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^
+>getTypeParamMarkerInfo : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
 
             if (this.isArray()) {
 >this.isArray() : any
@@ -161,10 +161,10 @@ namespace TypeScript {
 >            : ^^^
 >false : false
 >      : ^^^^^
->getPrettyTypeName : boolean
->                  : ^^^^^^^
->getTypeParamMarkerInfo : boolean
->                       : ^^^^^^^
+>getPrettyTypeName : boolean | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^
+>getTypeParamMarkerInfo : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
 
                 this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName)) : 1
 >this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName) : any
@@ -183,8 +183,8 @@ namespace TypeScript {
 >      : ^^^^^
 >scopeSymbol : any
 >            : ^^^
->getPrettyTypeName : boolean
->                  : ^^^^^^^
+>getPrettyTypeName : boolean | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 

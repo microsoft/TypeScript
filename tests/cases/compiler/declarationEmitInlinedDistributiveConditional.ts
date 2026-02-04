@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 // @filename: test.ts
 import {dropPrivateProps1, dropPrivateProps2} from './api';

@@ -6,5 +6,6 @@ Atomics.pause(1);
 
 
 //// [esnextSharedMemory.js]
+"use strict";
 Atomics.pause();
 Atomics.pause(1);

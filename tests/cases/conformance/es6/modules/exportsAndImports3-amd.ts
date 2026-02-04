@@ -1,6 +1,6 @@
 // @strict: false
 // @module: amd
-// @target: ES5
+// @target: ES5, ES2015
 
 // @filename: t1.ts
 export var v = 1;

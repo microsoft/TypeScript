@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: file.ts
 export namespace Root {
     export interface Foo {

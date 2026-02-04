@@ -10,7 +10,6 @@ y = x;
 
 
 //// [elaboratedErrorsOnNullableTargets01.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = exports.y;
-exports.y = exports.x;
+x = y;
+y = x;
+export {};

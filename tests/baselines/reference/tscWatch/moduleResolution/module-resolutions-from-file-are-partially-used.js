@@ -143,10 +143,10 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module './a' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
-Resolving in CJS mode with conditions 'require', 'types', 'node'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/a', target file types: TypeScript, JavaScript, Declaration.
-File '/user/username/projects/myproject/a.ts' exists - use it as a name resolution result.
-======== Module name './a' was successfully resolved to '/user/username/projects/myproject/a.ts'. ========
+Directory '/user/username/projects/myproject/a' does not exist, skipping all lookups in it.
+======== Module name './a' was not resolved. ========
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
 File '/home/src/tslibs/TS/Lib/package.json' does not exist.
 File '/home/src/tslibs/TS/package.json' does not exist.
@@ -163,16 +163,14 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+export const x = 10;
 
 
 //// [/user/username/projects/myproject/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 
@@ -195,7 +193,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects: *new*
   {}
@@ -232,7 +230,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/node_modules/pkg/import.d.ts
 /user/username/projects/myproject/index.ts
@@ -240,7 +238,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 /user/username/projects/myproject/node_modules/pkg/import.d.ts (used version)
 /user/username/projects/myproject/index.ts (used version)
@@ -318,8 +316,8 @@ File '/user/username/package.json' does not exist according to earlier cached lo
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module 'pkg' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'.
-Reusing resolution of module './a' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/a.ts'.
 Reusing resolution of module 'pkg1' from '/user/username/projects/myproject/index.ts' of old program, it was not resolved.
+Reusing resolution of module './a' from '/user/username/projects/myproject/index.ts' of old program, it was not resolved.
 File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
@@ -336,7 +334,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 //// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/index.js] file written with same contents
 
 
 Program root files: [
@@ -351,7 +348,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/node_modules/pkg/import.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/index.ts
@@ -360,6 +357,5 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
-/user/username/projects/myproject/index.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

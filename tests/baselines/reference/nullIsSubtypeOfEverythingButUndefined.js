@@ -112,26 +112,20 @@ var r5 = true ? /1/ : null;
 var r5 = true ? null : /1/;
 var r6 = true ? { foo: 1 } : null;
 var r6 = true ? null : { foo: 1 };
-var r7 = true ? function () { } : null;
-var r7 = true ? null : function () { };
-var r8 = true ? function (x) { return x; } : null;
-var r8b = true ? null : function (x) { return x; }; // type parameters not identical across declarations
+var r7 = true ? () => { } : null;
+var r7 = true ? null : () => { };
+var r8 = true ? (x) => { return x; } : null;
+var r8b = true ? null : (x) => { return x; }; // type parameters not identical across declarations
 var i1;
 var r9 = true ? i1 : null;
 var r9 = true ? null : i1;
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    return C1;
-}());
+class C1 {
+}
 var c1;
 var r10 = true ? c1 : null;
 var r10 = true ? null : c1;
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
+class C2 {
+}
 var c2;
 var r12 = true ? c2 : null;
 var r12 = true ? null : c2;
@@ -150,11 +144,8 @@ function f() { }
 var af;
 var r15 = true ? af : null;
 var r15 = true ? null : af;
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));

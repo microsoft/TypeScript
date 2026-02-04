@@ -59,19 +59,16 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Something = void 0;
 exports.make = make;
-var me = __importStar(require("./this"));
+const me = __importStar(require("./this"));
 function make(x) {
     return null;
 }
-var MyComponent = /** @class */ (function () {
-    function MyComponent() {
-    }
-    return MyComponent;
-}());
+class MyComponent {
+}
 exports.default = MyComponent;
 var Something;
 (function (Something) {
-    var MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
+    let MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
     Something.create = make(me.default);
 })(Something || (exports.Something = Something = {}));
 

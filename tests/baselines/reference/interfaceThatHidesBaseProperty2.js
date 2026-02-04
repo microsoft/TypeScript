@@ -12,3 +12,4 @@ interface Derived extends Base { // error
 }
 
 //// [interfaceThatHidesBaseProperty2.js]
+"use strict";

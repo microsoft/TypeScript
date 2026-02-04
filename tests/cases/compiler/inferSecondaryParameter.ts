@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // type inference on 'bug' should give 'any'
 

@@ -1,3 +1,4 @@
+// @target: es2015
 function makePoint(x: number, y: number) {
     return {
         get x() { return x;}, // shouldn't be "void"

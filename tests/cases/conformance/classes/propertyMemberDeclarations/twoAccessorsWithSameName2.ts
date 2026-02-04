@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 class C {
     static get x() { return 1; }

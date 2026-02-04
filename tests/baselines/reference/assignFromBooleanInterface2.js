@@ -25,6 +25,7 @@ x = b; // expected error
 
 
 //// [assignFromBooleanInterface2.js]
+"use strict";
 var x = true;
 a = x;
 a = b;

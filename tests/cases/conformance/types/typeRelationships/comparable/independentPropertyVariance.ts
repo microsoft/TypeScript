@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 // Verify that properties can vary independently in comparable relationship

@@ -1,5 +1,3 @@
-var test = /** @class */ (function () {
-    function test() {
-    }
-    return test;
-}());
+"use strict";
+class test {
+}

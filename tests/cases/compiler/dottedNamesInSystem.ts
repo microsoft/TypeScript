@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: system
 export namespace A.B.C {
     export function foo() {}

@@ -1,3 +1,4 @@
+// @target: es2015
 namespace TypeScript2 {
   export interface DeclKind { };
   export interface PullTypesymbol { };

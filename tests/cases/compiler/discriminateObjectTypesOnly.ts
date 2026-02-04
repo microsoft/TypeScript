@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 type Thing = number | object;
 const k: Thing = { toFixed: null }; // OK, satisfies object

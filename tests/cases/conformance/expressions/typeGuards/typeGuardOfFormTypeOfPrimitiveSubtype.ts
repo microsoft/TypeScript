@@ -1,3 +1,4 @@
+// @target: es2015
 let a: {};
 let b: {toString(): string};
 if (typeof a === "number") {

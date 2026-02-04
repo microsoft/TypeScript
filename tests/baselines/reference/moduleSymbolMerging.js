@@ -13,7 +13,9 @@ namespace B {
 
 
 //// [A.js]
+"use strict";
 //// [B.js]
+"use strict";
 ///<reference path="A.ts" preserve="true" />
 var A;
 (function (A) {

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true, false
 
 // These should all resolve to never

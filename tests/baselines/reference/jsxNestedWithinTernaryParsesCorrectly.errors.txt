@@ -1,0 +1,28 @@
+jsxNestedWithinTernaryParsesCorrectly.tsx(3,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNestedWithinTernaryParsesCorrectly.tsx(8,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNestedWithinTernaryParsesCorrectly.tsx(10,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNestedWithinTernaryParsesCorrectly.tsx(12,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== jsxNestedWithinTernaryParsesCorrectly.tsx (4 errors) ====
+    const emptyMessage = null as any;
+    const a = (
+        <div>
+        ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+          {0 ? (
+            emptyMessage // must be identifier?
+          ) : (
+              // must be exactly two expression holes
+            <span>
+            ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+              {0}{0}
+            </span>
+            ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+          )}
+        </div>
+        ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    );

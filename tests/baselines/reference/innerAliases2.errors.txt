@@ -1,0 +1,25 @@
+innerAliases2.ts(11,21): error TS2322: Type 'null' is not assignable to type 'UsefulClass'.
+
+
+==== innerAliases2.ts (1 errors) ====
+    namespace _provider {
+                    export class UsefulClass {
+                                    public foo() {
+                                    }
+                    }
+    }
+    
+    namespace consumer {
+                    import provider = _provider;
+                    
+                    var g:provider.UsefulClass= null;
+                        ~
+!!! error TS2322: Type 'null' is not assignable to type 'UsefulClass'.
+                    
+                    function use():provider.UsefulClass { 
+                                    var p2:provider.UsefulClass= new provider.UsefulClass();
+                                    return p2; 
+                    }
+    }
+    
+    

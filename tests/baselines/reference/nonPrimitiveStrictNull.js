@@ -63,6 +63,7 @@ var u: Proxy<Blah>; // ok
 
 
 //// [nonPrimitiveStrictNull.js]
+"use strict";
 var a;
 var e;
 a.toString; // error

@@ -1,4 +1,5 @@
-﻿namespace Z {
+﻿// @target: es2015
+namespace Z {
     export namespace M {
         export function bar() {
             return "";

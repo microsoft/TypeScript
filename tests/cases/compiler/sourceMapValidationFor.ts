@@ -1,3 +1,4 @@
+// @target: es2015
 // @sourcemap: true
 for (var i = 0; i < 10; i++) {
     WScript.Echo("i: " + i);

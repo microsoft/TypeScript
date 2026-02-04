@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: items.ts
 export default {
     foob: "a"

@@ -7,6 +7,7 @@ var a = 1;
 
 
 //// [randomSemicolons1.js]
+"use strict";
 ;
 ;
 var a = 1;

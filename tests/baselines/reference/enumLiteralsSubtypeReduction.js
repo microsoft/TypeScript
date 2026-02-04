@@ -2058,6 +2058,7 @@ function run(a: number) {
 
 
 //// [enumLiteralsSubtypeReduction.js]
+"use strict";
 var E;
 (function (E) {
     E[E["E0"] = 0] = "E0";

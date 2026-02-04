@@ -225,9 +225,10 @@ class A {
         never
     ) {
         return Function.prototype[Symbol.hasInstance].call(this, value);
->Function.prototype[Symbol.hasInstance].call(this, value) : any
->Function.prototype[Symbol.hasInstance].call : (this: Function, thisArg: any, ...argArray: any[]) => any
->                                            : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
+>Function.prototype[Symbol.hasInstance].call(this, value) : boolean
+>                                                         : ^^^^^^^
+>Function.prototype[Symbol.hasInstance].call : <T_1, A extends any[], R>(this: (this: T_1, ...args: A) => R, thisArg: T_1, ...args: A) => R
+>                                            : ^^^^^^ ^^^^^^^^^     ^^ ^^    ^^                            ^^       ^^   ^^^^^    ^^ ^^^^^ 
 >Function.prototype[Symbol.hasInstance] : (value: any) => boolean
 >                                       : ^     ^^   ^^^^^       
 >Function.prototype : Function
@@ -242,8 +243,8 @@ class A {
 >       : ^^^^^^^^^^^^^^^^^
 >hasInstance : unique symbol
 >            : ^^^^^^^^^^^^^
->call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
+>call : <T_1, A extends any[], R>(this: (this: T_1, ...args: A) => R, thisArg: T_1, ...args: A) => R
+>     : ^^^^^^ ^^^^^^^^^     ^^ ^^    ^^                            ^^       ^^   ^^^^^    ^^ ^^^^^ 
 >this : T
 >     : ^
 >value : unknown

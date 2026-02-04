@@ -19,8 +19,9 @@ function f() {
 }
 
 //// [controlFlowDeleteOperator.js]
+"use strict";
 function f() {
-    var x = { b: 1 };
+    let x = { b: 1 };
     x.a;
     x.b;
     x.a = 1;

@@ -1,3 +1,4 @@
+// @target: es2015
 class C<T extends number> {
     x: T;
     get X(): T { return null; }

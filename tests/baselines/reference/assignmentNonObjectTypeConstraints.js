@@ -27,16 +27,10 @@ function foo(x) {
 }
 foo(5);
 foo(0 /* E.A */);
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class A {
+}
+class B {
+}
 function bar(x) {
     var y = x; // Ok
 }

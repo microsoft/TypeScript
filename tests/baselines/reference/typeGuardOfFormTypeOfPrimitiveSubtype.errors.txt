@@ -1,0 +1,43 @@
+typeGuardOfFormTypeOfPrimitiveSubtype.ts(3,12): error TS2454: Variable 'a' is used before being assigned.
+typeGuardOfFormTypeOfPrimitiveSubtype.ts(6,12): error TS2454: Variable 'a' is used before being assigned.
+typeGuardOfFormTypeOfPrimitiveSubtype.ts(9,12): error TS2454: Variable 'a' is used before being assigned.
+typeGuardOfFormTypeOfPrimitiveSubtype.ts(13,12): error TS2454: Variable 'b' is used before being assigned.
+typeGuardOfFormTypeOfPrimitiveSubtype.ts(16,12): error TS2454: Variable 'b' is used before being assigned.
+typeGuardOfFormTypeOfPrimitiveSubtype.ts(19,12): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== typeGuardOfFormTypeOfPrimitiveSubtype.ts (6 errors) ====
+    let a: {};
+    let b: {toString(): string};
+    if (typeof a === "number") {
+               ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+        let c: number = a;
+    }
+    if (typeof a === "string") {
+               ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+        let c: string = a;
+    }
+    if (typeof a === "boolean") {
+               ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+        let c: boolean = a;
+    }
+    
+    if (typeof b === "number") {
+               ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+        let c: number = b;
+    }
+    if (typeof b === "string") {
+               ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+        let c: string = b;
+    }
+    if (typeof b === "boolean") {
+               ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+        let c: boolean = b;
+    }
+    

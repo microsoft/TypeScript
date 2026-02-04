@@ -18,12 +18,10 @@ namespace clodule {
 
 
 //// [ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.js]
-var clodule = /** @class */ (function () {
-    function clodule() {
-    }
-    clodule.fn = function (id) { };
-    return clodule;
-}());
+"use strict";
+class clodule {
+    static fn(id) { }
+}
 (function (clodule) {
     // error: duplicate identifier expected
     function fn(x, y) {

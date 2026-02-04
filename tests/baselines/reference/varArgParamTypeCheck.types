@@ -44,7 +44,9 @@ sequence(
 
             this();
 >this() : any
+>       : ^^^
 >this : any
+>     : ^^^
 
         });
     },
@@ -64,7 +66,9 @@ sequence(
 
             this();
 >this() : any
+>       : ^^^
 >this : any
+>     : ^^^
 
         });
     }

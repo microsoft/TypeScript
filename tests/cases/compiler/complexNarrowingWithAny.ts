@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Repro from #10869
 

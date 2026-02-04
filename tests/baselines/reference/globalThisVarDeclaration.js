@@ -33,6 +33,7 @@ top.b;
 
 
 //// [output.js]
+"use strict";
 var a = 10;
 this.a;
 this.b;

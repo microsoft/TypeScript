@@ -1,0 +1,14 @@
+compositeGenericFunction.ts(3,44): error TS2322: Type 'null' is not assignable to type 'R'.
+  'R' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+
+
+==== compositeGenericFunction.ts (1 errors) ====
+    function f<T>(value: T) { return value; };
+    
+    function h<R>(func: (x: number) => R): R { return null; }
+                                               ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'R'.
+!!! error TS2322:   'R' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+    
+    var z: number = h<number>(f);
+    var z: number = h(f);

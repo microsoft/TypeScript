@@ -13,7 +13,6 @@ m! && m[0];
 
 m?.[0]! && m[0];
 >m : Symbol(m, Decl(narrowingWithNonNullExpression.ts, 0, 5))
->0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
 >m : Symbol(m, Decl(narrowingWithNonNullExpression.ts, 0, 5))
 >0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
 

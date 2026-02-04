@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 export type FilterPropsByType<T, TT> = {
   [K in keyof T]: T[K] extends TT ? K : never

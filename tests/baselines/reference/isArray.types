@@ -28,12 +28,12 @@ if (Array.isArray(maybeArray)) {
 }
 else {
     maybeArray.toFixed(); // OK
->maybeArray.toFixed() : string
->                     : ^^^^^^
->maybeArray.toFixed : (fractionDigits?: number) => string
->                   : ^              ^^^      ^^^^^      
->maybeArray : number
->           : ^^^^^^
->toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^      
+>maybeArray.toFixed() : any
+>                     : ^^^
+>maybeArray.toFixed : any
+>                   : ^^^
+>maybeArray : number | number[]
+>           : ^^^^^^^^^^^^^^^^^
+>toFixed : any
+>        : ^^^
 }

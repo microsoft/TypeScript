@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // @lib: es5,es2015.core,es2015.symbol.wellknown
 

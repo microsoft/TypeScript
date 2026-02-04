@@ -1,3 +1,4 @@
+// @target: es2015
 type AnyFunction = (...args: any[]) => any;
 type Params<T> = Parameters<Extract<T, AnyFunction>>;
 

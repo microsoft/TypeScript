@@ -1,56 +1,57 @@
 //// [tests/cases/compiler/jsxSpreadFirstUnionNoErrors.tsx] ////
 
 === jsxSpreadFirstUnionNoErrors.tsx ===
+/// <reference path="react.d.ts" />
 import React from "react";
->React : Symbol(React, Decl(jsxSpreadFirstUnionNoErrors.tsx, 0, 6))
+>React : Symbol(React, Decl(jsxSpreadFirstUnionNoErrors.tsx, 1, 6))
 
 type InfoProps =
->InfoProps : Symbol(InfoProps, Decl(jsxSpreadFirstUnionNoErrors.tsx, 0, 26))
+>InfoProps : Symbol(InfoProps, Decl(jsxSpreadFirstUnionNoErrors.tsx, 1, 26))
 
 | { status: "hidden" }
->status : Symbol(status, Decl(jsxSpreadFirstUnionNoErrors.tsx, 3, 3))
+>status : Symbol(status, Decl(jsxSpreadFirstUnionNoErrors.tsx, 4, 3))
 
 | { status: "visible"; content: string };
->status : Symbol(status, Decl(jsxSpreadFirstUnionNoErrors.tsx, 4, 3))
->content : Symbol(content, Decl(jsxSpreadFirstUnionNoErrors.tsx, 4, 22))
+>status : Symbol(status, Decl(jsxSpreadFirstUnionNoErrors.tsx, 5, 3))
+>content : Symbol(content, Decl(jsxSpreadFirstUnionNoErrors.tsx, 5, 22))
 
 const Info = (props: InfoProps) =>
->Info : Symbol(Info, Decl(jsxSpreadFirstUnionNoErrors.tsx, 6, 5))
->props : Symbol(props, Decl(jsxSpreadFirstUnionNoErrors.tsx, 6, 14))
->InfoProps : Symbol(InfoProps, Decl(jsxSpreadFirstUnionNoErrors.tsx, 0, 26))
+>Info : Symbol(Info, Decl(jsxSpreadFirstUnionNoErrors.tsx, 7, 5))
+>props : Symbol(props, Decl(jsxSpreadFirstUnionNoErrors.tsx, 7, 14))
+>InfoProps : Symbol(InfoProps, Decl(jsxSpreadFirstUnionNoErrors.tsx, 1, 26))
 
 props.status === "hidden"
->props.status : Symbol(status, Decl(jsxSpreadFirstUnionNoErrors.tsx, 3, 3), Decl(jsxSpreadFirstUnionNoErrors.tsx, 4, 3))
->props : Symbol(props, Decl(jsxSpreadFirstUnionNoErrors.tsx, 6, 14))
->status : Symbol(status, Decl(jsxSpreadFirstUnionNoErrors.tsx, 3, 3), Decl(jsxSpreadFirstUnionNoErrors.tsx, 4, 3))
+>props.status : Symbol(status, Decl(jsxSpreadFirstUnionNoErrors.tsx, 4, 3), Decl(jsxSpreadFirstUnionNoErrors.tsx, 5, 3))
+>props : Symbol(props, Decl(jsxSpreadFirstUnionNoErrors.tsx, 7, 14))
+>status : Symbol(status, Decl(jsxSpreadFirstUnionNoErrors.tsx, 4, 3), Decl(jsxSpreadFirstUnionNoErrors.tsx, 5, 3))
 
   ? <noscript />
 >noscript : Symbol(JSX.IntrinsicElements.noscript, Decl(react.d.ts, 2439, 42))
 
   : <div>{props.content}</div>;
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->props.content : Symbol(content, Decl(jsxSpreadFirstUnionNoErrors.tsx, 4, 22))
->props : Symbol(props, Decl(jsxSpreadFirstUnionNoErrors.tsx, 6, 14))
->content : Symbol(content, Decl(jsxSpreadFirstUnionNoErrors.tsx, 4, 22))
+>props.content : Symbol(content, Decl(jsxSpreadFirstUnionNoErrors.tsx, 5, 22))
+>props : Symbol(props, Decl(jsxSpreadFirstUnionNoErrors.tsx, 7, 14))
+>content : Symbol(content, Decl(jsxSpreadFirstUnionNoErrors.tsx, 5, 22))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
 const a = <Info status="hidden" />;
->a : Symbol(a, Decl(jsxSpreadFirstUnionNoErrors.tsx, 11, 5))
->Info : Symbol(Info, Decl(jsxSpreadFirstUnionNoErrors.tsx, 6, 5))
->status : Symbol(status, Decl(jsxSpreadFirstUnionNoErrors.tsx, 11, 15))
+>a : Symbol(a, Decl(jsxSpreadFirstUnionNoErrors.tsx, 12, 5))
+>Info : Symbol(Info, Decl(jsxSpreadFirstUnionNoErrors.tsx, 7, 5))
+>status : Symbol(status, Decl(jsxSpreadFirstUnionNoErrors.tsx, 12, 15))
 
 const b = <Info status="visible" content="hello world" />;
->b : Symbol(b, Decl(jsxSpreadFirstUnionNoErrors.tsx, 12, 5))
->Info : Symbol(Info, Decl(jsxSpreadFirstUnionNoErrors.tsx, 6, 5))
->status : Symbol(status, Decl(jsxSpreadFirstUnionNoErrors.tsx, 12, 15))
->content : Symbol(content, Decl(jsxSpreadFirstUnionNoErrors.tsx, 12, 32))
+>b : Symbol(b, Decl(jsxSpreadFirstUnionNoErrors.tsx, 13, 5))
+>Info : Symbol(Info, Decl(jsxSpreadFirstUnionNoErrors.tsx, 7, 5))
+>status : Symbol(status, Decl(jsxSpreadFirstUnionNoErrors.tsx, 13, 15))
+>content : Symbol(content, Decl(jsxSpreadFirstUnionNoErrors.tsx, 13, 32))
 
 declare const infoProps: InfoProps;
->infoProps : Symbol(infoProps, Decl(jsxSpreadFirstUnionNoErrors.tsx, 13, 13))
->InfoProps : Symbol(InfoProps, Decl(jsxSpreadFirstUnionNoErrors.tsx, 0, 26))
+>infoProps : Symbol(infoProps, Decl(jsxSpreadFirstUnionNoErrors.tsx, 14, 13))
+>InfoProps : Symbol(InfoProps, Decl(jsxSpreadFirstUnionNoErrors.tsx, 1, 26))
 
 const c = <Info {...infoProps} />;
->c : Symbol(c, Decl(jsxSpreadFirstUnionNoErrors.tsx, 15, 5))
->Info : Symbol(Info, Decl(jsxSpreadFirstUnionNoErrors.tsx, 6, 5))
->infoProps : Symbol(infoProps, Decl(jsxSpreadFirstUnionNoErrors.tsx, 13, 13))
+>c : Symbol(c, Decl(jsxSpreadFirstUnionNoErrors.tsx, 16, 5))
+>Info : Symbol(Info, Decl(jsxSpreadFirstUnionNoErrors.tsx, 7, 5))
+>infoProps : Symbol(infoProps, Decl(jsxSpreadFirstUnionNoErrors.tsx, 14, 13))
 

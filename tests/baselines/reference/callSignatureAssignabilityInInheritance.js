@@ -70,3 +70,4 @@ namespace MemberWithCallSignature {
 }
 
 //// [callSignatureAssignabilityInInheritance.js]
+"use strict";

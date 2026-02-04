@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @module: esnext, commonjs, system
 

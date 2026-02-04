@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // type parameters from the same declaration are identical to themself
 

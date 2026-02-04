@@ -6,6 +6,7 @@
 }
 
 //// [parserReturnStatement2.js]
+"use strict";
 {
     return;
 }

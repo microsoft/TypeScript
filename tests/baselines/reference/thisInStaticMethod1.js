@@ -10,13 +10,11 @@ class foo {
 var x = foo.bar();
 
 //// [thisInStaticMethod1.js]
-var foo = /** @class */ (function () {
-    function foo() {
-    }
-    foo.bar = function () {
+"use strict";
+class foo {
+    static bar() {
         return this.x;
-    };
-    foo.x = 3;
-    return foo;
-}());
+    }
+}
+foo.x = 3;
 var x = foo.bar();

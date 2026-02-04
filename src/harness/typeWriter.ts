@@ -245,6 +245,10 @@ export class TypeWriterWalker {
                 return undefined;
             }
 
+            if (ts.isOmittedExpression(node)) {
+                return undefined;
+            }
+
             // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
             // let type = this.checker.getTypeAtLocation(node);
             let type = ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) ? this.checker.getTypeAtLocation(node.parent) : undefined;

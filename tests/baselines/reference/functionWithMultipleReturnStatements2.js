@@ -94,6 +94,7 @@ function f12() {
 }
 
 //// [functionWithMultipleReturnStatements2.js]
+"use strict";
 // return type of a function with multiple returns is the BCT of each return statement
 // no errors expected here
 function f1() {
@@ -168,18 +169,18 @@ function f10() {
 // returns number => void
 function f11() {
     if (true) {
-        return function (x) { };
+        return (x) => { };
     }
     else {
-        return function (x) { };
+        return (x) => { };
     }
 }
 // returns Object => void
 function f12() {
     if (true) {
-        return function (x) { };
+        return (x) => { };
     }
     else {
-        return function (x) { };
+        return (x) => { };
     }
 }

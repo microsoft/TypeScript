@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: false
 // typeof  operator on any type
 

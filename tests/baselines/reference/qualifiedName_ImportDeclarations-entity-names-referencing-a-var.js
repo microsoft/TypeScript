@@ -13,6 +13,7 @@ namespace Beta {
 var x = Alpha.x
 
 //// [qualifiedName_ImportDeclarations-entity-names-referencing-a-var.js]
+"use strict";
 var Alpha;
 (function (Alpha) {
     Alpha.x = 100;

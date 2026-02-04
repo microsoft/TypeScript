@@ -37,9 +37,9 @@ declare class A {
     /**
      * @type object
      */
-    foo: object;
+    foo: object | undefined;
     /**
      * @type object
      */
-    bar: object;
+    bar: object | undefined;
 }

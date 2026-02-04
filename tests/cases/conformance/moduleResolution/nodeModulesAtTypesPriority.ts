@@ -1,3 +1,4 @@
+// @target: es2022
 // @module: node16
 // @strict: true
 // @noEmit: true

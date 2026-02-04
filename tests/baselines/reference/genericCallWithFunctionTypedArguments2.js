@@ -44,6 +44,7 @@ var r8 = foo3(1, i2, 1); // error
 var r9 = foo3<string, string>('', i2, ''); // string
 
 //// [genericCallWithFunctionTypedArguments2.js]
+"use strict";
 // Generic functions used as arguments for function typed parameters are not used to make inferences from
 // Using construct signature arguments, no errors expected
 function foo(x) {

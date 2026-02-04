@@ -1,5 +1,7 @@
 ///<reference path="fourslash.ts" />
 
+// @lib: es5
+
 ////var y: Array<string>|Array<number>;
 ////y.map/**/(
 

@@ -1,3 +1,4 @@
+// @target: es2015
 namespace Alpha {
     export var x = 100;
 }

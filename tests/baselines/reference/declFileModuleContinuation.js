@@ -12,17 +12,15 @@ namespace A.B.C {
 }
 
 //// [declFileModuleContinuation.js]
+"use strict";
 var A;
 (function (A) {
     var B;
     (function (B) {
         var C;
         (function (C) {
-            var W = /** @class */ (function () {
-                function W() {
-                }
-                return W;
-            }());
+            class W {
+            }
             C.W = W;
         })(C = B.C || (B.C = {}));
     })(B = A.B || (A.B = {}));
