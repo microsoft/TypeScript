@@ -1,3 +1,4 @@
+// @target: es2015
 // type parameter names are relevant when choosing whether to merge interface declarations
 
 interface B<T, U> {

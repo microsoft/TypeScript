@@ -5,4 +5,5 @@ var x = `\u{DDDDD}`;
 
 
 //// [unicodeExtendedEscapesInTemplates13.js]
+"use strict";
 var x = `\u{DDDDD}`;

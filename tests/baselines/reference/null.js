@@ -24,14 +24,12 @@ var w:I={x:null,y:3};
 
 
 //// [null.js]
+"use strict";
 var x = null;
 var y = 3 + x;
 var z = 3 + null;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 function f() {
     return null;
     return new C();

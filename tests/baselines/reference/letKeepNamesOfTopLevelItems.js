@@ -11,11 +11,12 @@ namespace A {
 }
 
 //// [letKeepNamesOfTopLevelItems.js]
-var x;
+"use strict";
+let x;
 function foo() {
-    var x;
+    let x;
 }
 var A;
 (function (A) {
-    var x;
+    let x;
 })(A || (A = {}));

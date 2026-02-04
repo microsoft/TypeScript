@@ -3,6 +3,7 @@
 === letIdentifierInElementAccess01.ts ===
 var let: any = {};
 >let : any
+>    : ^^^
 >{} : {}
 >   : ^^
 
@@ -12,7 +13,9 @@ var let: any = {};
 >let[0] = 100 : 100
 >             : ^^^
 >let[0] : any
+>       : ^^^
 >let : any
+>    : ^^^
 >0 : 0
 >  : ^
 >100 : 100

@@ -87,7 +87,7 @@ Info seq  [hh:mm:ss:mss] Excluded '/user/username/projects/project/commander.js'
 Info seq  [hh:mm:ss:mss] Creating ExternalProject: /user/username/projects/app/test1.csproj, currentDirectory: /user/username/projects/app
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/file3.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/test1.csproj
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
@@ -95,17 +95,19 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/test1.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test1.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/file3.d.ts Text-1 ""
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../project/file3.d.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
 /user/username/projects/app/node_modules/@types: *new*
@@ -114,7 +116,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/project/file3.d.ts: *new*
   {}
@@ -125,7 +127,7 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/app/test1.csproj
@@ -224,7 +226,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/app/test1.csproj",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/user/username/projects/project/lodash.js",
         "/user/username/projects/project/commander.js"
@@ -382,7 +384,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/project/file3.d.ts:
   {}
@@ -435,12 +437,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/test2.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test2.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/file3.d.ts Text-1 ""
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../project/file3.d.ts
 	  Root file specified for compilation
 
@@ -449,7 +451,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/app/test2.csproj",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "/user/username/projects/project/file3.d.ts"
       ],
       "compilerOptions": {
@@ -583,7 +585,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/app/test1.csproj
@@ -870,7 +872,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Cach
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/test1.csproj projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test1.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/file3.d.ts Text-1 ""
 	/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts Text-1 "declare const commander: { x: number }"
 	/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts Text-1 "declare const cordova: { x: number }"
@@ -878,8 +880,8 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts Text-1 "declare const lodash: { x: number }"
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../project/file3.d.ts
 	  Root file specified for compilation
 	../../../../home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts
@@ -896,7 +898,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/app/test1.csproj",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts",
@@ -1021,14 +1023,14 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Cach
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/test2.csproj projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test2.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/file3.d.ts Text-1 ""
 	/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts Text-1 "declare const grunt: { x: number }"
 	/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts Text-1 "declare const gulp: { x: number }"
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../project/file3.d.ts
 	  Root file specified for compilation
 	../../../../home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts
@@ -1041,7 +1043,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/app/test2.csproj",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/grunt/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts"
@@ -1172,7 +1174,7 @@ PolledWatches::
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/project/file3.d.ts:
   {}
@@ -1212,7 +1214,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/app/test1.csproj
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/app/test1.csproj

@@ -1,7 +1,8 @@
 unusedClassesinNamespace5.ts(10,11): error TS6196: 'c3' is declared but never used.
+unusedClassesinNamespace5.ts(11,16): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 
 
-==== unusedClassesinNamespace5.ts (1 errors) ====
+==== unusedClassesinNamespace5.ts (2 errors) ====
     namespace Validation {
         class c1 {
     
@@ -15,5 +16,7 @@ unusedClassesinNamespace5.ts(10,11): error TS6196: 'c3' is declared but never us
               ~~
 !!! error TS6196: 'c3' is declared but never used.
             public x: c1;
+                   ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         }
     }

@@ -12,6 +12,7 @@ namespace B {
 
 
 //// [internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.js]
+"use strict";
 var B;
 (function (B) {
     var A = 1;

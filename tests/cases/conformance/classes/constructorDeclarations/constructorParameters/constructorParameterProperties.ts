@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     y: string;
     constructor(private x: string, protected z: string) { }

@@ -90,6 +90,7 @@ declare const invalidIntersection: unique symbol | unique symbol;
 const shouldNotBeAssignable: string = Symbol();
 
 //// [uniqueSymbolsErrors.js]
+"use strict";
 // classes
 class InvalidClass {
     constructor(invalidConstructorArgType) { }

@@ -38,6 +38,7 @@ func<any>();
 
 
 //// [functionCalls.js]
+"use strict";
 anyVar(0);
 anyVar('');
 // Invoke function call on value of type 'any' with type arguments

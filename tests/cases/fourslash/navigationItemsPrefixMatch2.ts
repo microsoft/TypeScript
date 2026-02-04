@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
+// @lib: es5
+
 ////namespace Shapes {
 ////    export class Point {
 ////        [|private originality = 0.0;|]

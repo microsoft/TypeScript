@@ -1,14 +1,20 @@
 error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+bar.ts(3,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+foo.ts(2,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 
 
 !!! error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== foo.ts (0 errors) ====
+==== foo.ts (1 errors) ====
     export class Foo {
         a: string;
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     }
     
-==== bar.ts (0 errors) ====
+==== bar.ts (1 errors) ====
     import {Foo} from './foo';
     export class Bar extends Foo {
         b: string;
+        ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
     }

@@ -77,8 +77,8 @@ declare function setTimeout(expression: any, msec?: number, language?: any): num
 >           : ^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^      ^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^      ^^^
 >expression : any
 >           : ^^^
->msec : number
->     : ^^^^^^
+>msec : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >language : any
 >         : ^^^
 

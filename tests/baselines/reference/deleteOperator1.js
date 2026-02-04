@@ -7,6 +7,7 @@ var y: any = delete a;
 var z: number = delete a;
 
 //// [deleteOperator1.js]
+"use strict";
 var a;
 var x = delete a;
 var y = delete a;

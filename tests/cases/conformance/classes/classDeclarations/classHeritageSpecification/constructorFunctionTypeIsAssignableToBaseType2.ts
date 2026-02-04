@@ -1,3 +1,4 @@
+// @target: es2015
 // the constructor function itself does not need to be a subtype of the base type constructor function
 
 class Base {

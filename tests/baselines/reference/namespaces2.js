@@ -10,15 +10,13 @@ namespace A {
 var c: A.B.C = new A.B.C();
 
 //// [namespaces2.js]
+"use strict";
 var A;
 (function (A) {
-    var B;
+    let B;
     (function (B) {
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
         B.C = C;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));

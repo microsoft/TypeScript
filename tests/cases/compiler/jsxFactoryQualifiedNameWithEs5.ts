@@ -1,6 +1,6 @@
 // @strict: false
 //@module: commonjs
-//@target: es5
+//@target: es5, es2015
 //@jsx: react
 //@jsxFactory: skate.h
 //@noEmit: false

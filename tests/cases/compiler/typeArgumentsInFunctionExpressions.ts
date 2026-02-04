@@ -1,3 +1,4 @@
+// @target: es2015
 var obj = function f<T>(a: T) { // should not error
     var x: T;
     return a;

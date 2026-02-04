@@ -6,7 +6,7 @@ export const x = 10;
 //// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "module": "commonjs"
   },
   "include": [
@@ -31,11 +31,13 @@ declare const console: { log(msg: any): void; };
 
 /home/src/tslibs/TS/Lib/tsc.js --incremental --tsBuildInfoFile .tsbuildinfo --explainFiles
 Output::
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 src/main.ts
   Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es6.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/src/main.js]
 "use strict";
@@ -45,16 +47,16 @@ exports.x = 10;
 
 
 //// [/home/src/workspaces/project/.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"options":{"module":1,"target":1,"tsBuildInfoFile":"./.tsbuildinfo"},"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es6.d.ts","./src/main.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"options":{"module":1,"target":2,"tsBuildInfoFile":"./.tsbuildinfo"},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.es6.d.ts",
     "./src/main.ts"
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.es6.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -76,11 +78,11 @@ exports.x = 10;
   ],
   "options": {
     "module": 1,
-    "target": 1,
+    "target": 2,
     "tsBuildInfoFile": "./.tsbuildinfo"
   },
   "version": "FakeTSVersion",
-  "size": 657
+  "size": 661
 }
 
 
@@ -92,8 +94,8 @@ Input::
 
 /home/src/tslibs/TS/Lib/tsc.js --incremental --tsBuildInfoFile .tsbuildinfo --explainFiles
 Output::
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 src/main.ts
   Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 

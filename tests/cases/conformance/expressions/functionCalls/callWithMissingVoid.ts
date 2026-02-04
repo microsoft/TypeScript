@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 // From #4260

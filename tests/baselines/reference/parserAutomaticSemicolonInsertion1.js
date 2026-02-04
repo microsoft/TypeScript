@@ -18,6 +18,7 @@ a = o;
 
 
 //// [parserAutomaticSemicolonInsertion1.js]
+"use strict";
 var o;
 o = i;
 i = o;

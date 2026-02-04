@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     y: number;
     constructor(y: number) { } // ok

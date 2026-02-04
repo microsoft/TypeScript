@@ -206,12 +206,12 @@ declare var unionWithOptionalParameter1: { new (a: string, b?: number): string; 
 >                            : ^^^^^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^      ^
 >a : string
 >  : ^^^^^^
->b : number
->  : ^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->b : number
->  : ^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 strOrNum = new unionWithOptionalParameter1('hello');
 >strOrNum = new unionWithOptionalParameter1('hello') : string | number
@@ -268,8 +268,8 @@ declare var unionWithOptionalParameter2: { new (a: string, b?: number): string; 
 >                            : ^^^^^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >a : string
 >  : ^^^^^^
->b : number
->  : ^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number
@@ -330,8 +330,8 @@ declare var unionWithOptionalParameter3: { new (a: string, b?: number): string; 
 >                            : ^^^^^^ ^^      ^^ ^^^      ^^^^^      ^^^^^^^^^^ ^^      ^^^^^      ^
 >a : string
 >  : ^^^^^^
->b : number
->  : ^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 

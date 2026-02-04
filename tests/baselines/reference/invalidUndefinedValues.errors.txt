@@ -1,0 +1,86 @@
+invalidUndefinedValues.ts(3,1): error TS2322: Type '1' is not assignable to type 'undefined'.
+invalidUndefinedValues.ts(4,1): error TS2322: Type '""' is not assignable to type 'undefined'.
+invalidUndefinedValues.ts(5,1): error TS2322: Type 'true' is not assignable to type 'undefined'.
+invalidUndefinedValues.ts(7,1): error TS2322: Type 'void' is not assignable to type 'undefined'.
+invalidUndefinedValues.ts(8,1): error TS2322: Type 'null' is not assignable to type 'undefined'.
+invalidUndefinedValues.ts(10,11): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+invalidUndefinedValues.ts(12,1): error TS2322: Type 'typeof C' is not assignable to type 'undefined'.
+invalidUndefinedValues.ts(13,1): error TS2322: Type 'C' is not assignable to type 'undefined'.
+invalidUndefinedValues.ts(13,5): error TS2454: Variable 'b' is used before being assigned.
+invalidUndefinedValues.ts(17,1): error TS2322: Type 'I' is not assignable to type 'undefined'.
+invalidUndefinedValues.ts(17,5): error TS2454: Variable 'c' is used before being assigned.
+invalidUndefinedValues.ts(20,1): error TS2322: Type 'typeof M' is not assignable to type 'undefined'.
+invalidUndefinedValues.ts(22,1): error TS2322: Type '{ f(): void; }' is not assignable to type 'undefined'.
+invalidUndefinedValues.ts(25,5): error TS2322: Type 'T' is not assignable to type 'undefined'.
+invalidUndefinedValues.ts(27,1): error TS2322: Type '<T>(a: T) => void' is not assignable to type 'undefined'.
+invalidUndefinedValues.ts(30,1): error TS2322: Type 'typeof E' is not assignable to type 'undefined'.
+invalidUndefinedValues.ts(31,1): error TS2322: Type 'E' is not assignable to type 'undefined'.
+
+
+==== invalidUndefinedValues.ts (17 errors) ====
+    var x: typeof undefined;
+    
+    x = 1;
+    ~
+!!! error TS2322: Type '1' is not assignable to type 'undefined'.
+    x = '';
+    ~
+!!! error TS2322: Type '""' is not assignable to type 'undefined'.
+    x = true;
+    ~
+!!! error TS2322: Type 'true' is not assignable to type 'undefined'.
+    var a: void;
+    x = a;
+    ~
+!!! error TS2322: Type 'void' is not assignable to type 'undefined'.
+    x = null;
+    ~
+!!! error TS2322: Type 'null' is not assignable to type 'undefined'.
+    
+    class C { foo: string }
+              ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    var b: C;
+    x = C;
+    ~
+!!! error TS2322: Type 'typeof C' is not assignable to type 'undefined'.
+    x = b;
+    ~
+!!! error TS2322: Type 'C' is not assignable to type 'undefined'.
+        ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    interface I { foo: string }
+    var c: I;
+    x = c;
+    ~
+!!! error TS2322: Type 'I' is not assignable to type 'undefined'.
+        ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    
+    namespace M { export var x = 1; }
+    x = M;
+    ~
+!!! error TS2322: Type 'typeof M' is not assignable to type 'undefined'.
+    
+    x = { f() { } }
+    ~
+!!! error TS2322: Type '{ f(): void; }' is not assignable to type 'undefined'.
+    
+    function f<T>(a: T) {
+        x = a;
+        ~
+!!! error TS2322: Type 'T' is not assignable to type 'undefined'.
+!!! related TS2208 invalidUndefinedValues.ts:24:12: This type parameter might need an `extends undefined` constraint.
+    }
+    x = f;
+    ~
+!!! error TS2322: Type '<T>(a: T) => void' is not assignable to type 'undefined'.
+    
+    enum E { A }
+    x = E;
+    ~
+!!! error TS2322: Type 'typeof E' is not assignable to type 'undefined'.
+    x = E.A;
+    ~
+!!! error TS2322: Type 'E' is not assignable to type 'undefined'.

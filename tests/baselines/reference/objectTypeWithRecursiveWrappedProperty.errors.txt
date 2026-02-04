@@ -1,13 +1,19 @@
+objectTypeWithRecursiveWrappedProperty.ts(4,5): error TS2564: Property 'data' has no initializer and is not definitely assigned in the constructor.
+objectTypeWithRecursiveWrappedProperty.ts(5,5): error TS2564: Property 'next' has no initializer and is not definitely assigned in the constructor.
 objectTypeWithRecursiveWrappedProperty.ts(13,1): error TS2322: Type 'List<string>' is not assignable to type 'List<number>'.
   Type 'string' is not assignable to type 'number'.
 
 
-==== objectTypeWithRecursiveWrappedProperty.ts (1 errors) ====
+==== objectTypeWithRecursiveWrappedProperty.ts (3 errors) ====
     // Basic recursive type
     
     class List<T> {
         data: T;
+        ~~~~
+!!! error TS2564: Property 'data' has no initializer and is not definitely assigned in the constructor.
         next: List<List<T>>;
+        ~~~~
+!!! error TS2564: Property 'next' has no initializer and is not definitely assigned in the constructor.
     }
     
     var list1 = new List<number>();

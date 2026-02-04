@@ -51,7 +51,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.processedInternally2 = exports.processedInternally1 = void 0;
 exports.wrappedTest1 = wrappedTest1;
 exports.wrappedTest2 = wrappedTest2;
-var other_1 = require("./other");
+const other_1 = require("./other");
 function wrappedTest1(obj, k) {
     return (0, other_1.test1)(obj, k);
 }

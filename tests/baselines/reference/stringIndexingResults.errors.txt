@@ -1,0 +1,65 @@
+stringIndexingResults.ts(7,10): error TS2454: Variable 'c' is used before being assigned.
+stringIndexingResults.ts(8,10): error TS2454: Variable 'c' is used before being assigned.
+stringIndexingResults.ts(9,10): error TS2454: Variable 'c' is used before being assigned.
+stringIndexingResults.ts(17,10): error TS2454: Variable 'i' is used before being assigned.
+stringIndexingResults.ts(18,10): error TS2454: Variable 'i' is used before being assigned.
+stringIndexingResults.ts(19,10): error TS2454: Variable 'i' is used before being assigned.
+stringIndexingResults.ts(26,10): error TS2454: Variable 'a' is used before being assigned.
+stringIndexingResults.ts(27,10): error TS2454: Variable 'a' is used before being assigned.
+stringIndexingResults.ts(28,10): error TS2454: Variable 'a' is used before being assigned.
+
+
+==== stringIndexingResults.ts (9 errors) ====
+    class C {
+        [x: string]: string;
+        y = '';
+    }
+    
+    var c: C;
+    var r1 = c['y']; 
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r2 = c['a'];
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r3 = c[1]; 
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    
+    interface I {
+        [x: string]: string;
+        y: string;
+    }
+    
+    var i: I
+    var r4 = i['y'];
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    var r5 = i['a'];
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    var r6 = i[1]; 
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    
+    var a: {
+        [x: string]: string;
+        y: string;
+    }
+    
+    var r7 = a['y'];
+             ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var r8 = a['a'];
+             ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var r9 = a[1];
+             ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    var b: { [x: string]: string } = { y: '' }
+    
+    var r10 = b['y'];
+    var r11 = b['a'];
+    var r12 = b[1];
+    

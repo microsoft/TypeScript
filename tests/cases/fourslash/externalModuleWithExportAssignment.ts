@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 // @Filename: externalModuleWithExportAssignment_file0.ts
 ////namespace m2 {
 ////    export interface connectModule {

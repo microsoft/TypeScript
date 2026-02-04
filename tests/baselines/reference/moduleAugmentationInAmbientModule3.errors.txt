@@ -1,0 +1,44 @@
+main.ts(6,1): error TS2454: Variable 'x' is used before being assigned.
+main.ts(7,1): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== main.ts (2 errors) ====
+    /// <reference path="O.d.ts" />
+    
+    import {Observable} from "Observable";
+    import "Map";
+    let x: Observable;
+    x.foo().x;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x.foo2().x2;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
+==== O.d.ts (0 errors) ====
+    declare module "Observable" {
+        class Observable {}
+    }
+    
+    declare module "M" {
+        class Cls { x: number }
+    }
+    
+    declare module "Map" {
+        import { Cls } from "M";
+        module "Observable" {
+            interface Observable {
+                foo(): Cls;
+            }
+        }
+    }
+    
+    declare module "Map" {
+        class Cls2 { x2: number }
+        module "Observable" {
+            interface Observable {
+                foo2(): Cls2;
+            }
+        }
+    }
+    

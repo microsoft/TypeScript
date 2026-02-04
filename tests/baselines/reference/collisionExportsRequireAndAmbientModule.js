@@ -110,6 +110,7 @@ var m2;
     var a = 10;
 })(m2 || (m2 = {}));
 //// [collisionExportsRequireAndAmbientModule_globalFile.js]
+"use strict";
 var m4;
 (function (m4) {
     var a = 10;

@@ -1,3 +1,4 @@
+// @target: es2015
 declare var x: string | number;
 
 if (typeof x === "string") {

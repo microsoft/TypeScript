@@ -5,4 +5,5 @@ var v = undefined satisfies 1;
 
 
 //// [a.js]
+"use strict";
 var v = undefined;

@@ -1,3 +1,4 @@
+// @target: es2015
 
 // ok - overload signatures are assignment compatible with their implementation
 class Accessor {}

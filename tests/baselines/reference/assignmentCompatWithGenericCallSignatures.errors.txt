@@ -1,0 +1,13 @@
+assignmentCompatWithGenericCallSignatures.ts(6,5): error TS2454: Variable 'g' is used before being assigned.
+
+
+==== assignmentCompatWithGenericCallSignatures.ts (1 errors) ====
+    // some complex cases of assignment compat of generic signatures that stress contextual signature instantiation
+    
+    var f: <S extends { p: string }[]>(x: S) => void
+    var g: <T extends { p: string }>(x: T[]) => void
+    
+    f = g; // ok
+        ~
+!!! error TS2454: Variable 'g' is used before being assigned.
+    g = f; // ok

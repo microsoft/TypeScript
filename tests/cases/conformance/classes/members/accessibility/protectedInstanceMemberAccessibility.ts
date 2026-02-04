@@ -1,3 +1,4 @@
+// @target: es5, es2015
 class A {
     protected x!: string;
     protected f(): string {

@@ -1,0 +1,21 @@
+instantiateContextuallyTypedGenericThis.ts(9,1): error TS2454: Variable '$' is used before being assigned.
+instantiateContextuallyTypedGenericThis.ts(9,8): error TS2454: Variable 'lines' is used before being assigned.
+
+
+==== instantiateContextuallyTypedGenericThis.ts (2 errors) ====
+    interface JQuery {
+        each<T>(
+            collection: T[], callback: (this: T, dit: T) => T
+        ): T[];
+    }
+    
+    let $: JQuery;
+    let lines: string[];
+    $.each(lines, function(dit) {
+    ~
+!!! error TS2454: Variable '$' is used before being assigned.
+           ~~~~~
+!!! error TS2454: Variable 'lines' is used before being assigned.
+        return dit.charAt(0) + this.charAt(1);
+    });
+    

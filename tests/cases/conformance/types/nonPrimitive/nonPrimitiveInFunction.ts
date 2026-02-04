@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 function takeObject(o: object) {}
 function returnObject(): object {

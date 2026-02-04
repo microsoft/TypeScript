@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 
 // Not really different from divergentAccessorsTypes4.ts,
 // but goes through the deferred type code

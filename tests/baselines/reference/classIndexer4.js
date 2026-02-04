@@ -13,8 +13,8 @@ interface D123 extends C123 {
 }
 
 //// [classIndexer4.js]
-var C123 = /** @class */ (function () {
-    function C123() {
+"use strict";
+class C123 {
+    constructor() {
     }
-    return C123;
-}());
+}

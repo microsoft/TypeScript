@@ -17,10 +17,8 @@ c = i; // error
 i = c; // error
 
 //// [assignmentCompatWithObjectMembers5.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 c = i; // error
 i = c; // error

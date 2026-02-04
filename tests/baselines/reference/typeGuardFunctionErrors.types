@@ -46,8 +46,8 @@ function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
 >                                    : ^ ^^^^^^^^^^      
 >x : any
 >  : ^^^
->is : any
->   : ^^^
+>is : undefined
+>   : ^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 

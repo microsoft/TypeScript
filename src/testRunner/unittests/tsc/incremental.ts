@@ -23,7 +23,7 @@ describe("unittests:: tsc:: incremental::", () => {
                 "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
                 "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
-                        target: "es5",
+                        target: "es2015",
                         module: "commonjs",
                     },
                     include: [

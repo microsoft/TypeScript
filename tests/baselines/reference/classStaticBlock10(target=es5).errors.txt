@@ -1,0 +1,33 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== classStaticBlock10.ts (0 errors) ====
+    var a1 = 1;
+    var a2 = 1;
+    const b1 = 2;
+    const b2 = 2;
+    
+    function f () {
+        var a1 = 11;
+        const b1 = 22;
+    
+        class C1 {
+            static {
+                var a1 = 111;
+                var a2 = 111;
+                const b1 = 222;
+                const b2 = 222;
+            }
+        }
+    }
+    
+    class C2 {
+        static {
+            var a1 = 111;
+            var a2 = 111;
+            const b1 = 222;
+            const b2 = 222;
+        }
+    }
+    

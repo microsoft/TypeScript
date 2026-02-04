@@ -1,3 +1,4 @@
+// @target: es2015
 
 var x = <() => number>null;
 var y = <{(): number; }>null;

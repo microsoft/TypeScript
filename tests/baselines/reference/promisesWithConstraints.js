@@ -24,6 +24,7 @@ b2 = a2; // was error
 
 
 //// [promisesWithConstraints.js]
+"use strict";
 var a;
 a = b; // ok
 b = a; // ok

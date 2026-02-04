@@ -9,15 +9,10 @@ class D {
 }
 
 //// [parserErrorRecovery_ClassElement1.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 // Classes can't be nested.  So we should bail out of parsing here and recover
 // this as a source unit element.
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class D {
+}

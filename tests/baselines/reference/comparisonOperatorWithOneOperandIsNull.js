@@ -168,6 +168,7 @@ var r8b6 = f !== null;
 var r8b7 = g !== null;
 
 //// [comparisonOperatorWithOneOperandIsNull.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

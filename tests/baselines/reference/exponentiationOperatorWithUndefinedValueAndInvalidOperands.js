@@ -26,6 +26,7 @@ var r1d2 = '' ** undefined;
 var r1d3 = {} ** undefined;
 
 //// [exponentiationOperatorWithUndefinedValueAndInvalidOperands.js]
+"use strict";
 // If one operand is the undefined or undefined value, it is treated as having the type of the
 // other operand.
 // operator **

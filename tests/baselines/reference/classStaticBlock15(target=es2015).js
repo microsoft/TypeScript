@@ -20,6 +20,7 @@ console.log(_C__1)
 
 
 //// [classStaticBlock15.js]
+"use strict";
 var _a, _C__1_1, _C__3, _C__5;
 var _C__1;
 class C {

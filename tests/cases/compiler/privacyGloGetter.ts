@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 namespace m1 {
     export class C1_public {
         private f1() {

@@ -136,8 +136,8 @@ namespace Errors {
 >  : ^^^^^^
 
                     new (a?: number): number;
->a : number
->  : ^^^^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
                 }): number[];
                 new (x: {
@@ -149,8 +149,8 @@ namespace Errors {
 >  : ^^^^^^^
 
                     new (a?: boolean): boolean;
->a : boolean
->  : ^^^^^^^
+>a : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 
                 }): boolean[];
             };

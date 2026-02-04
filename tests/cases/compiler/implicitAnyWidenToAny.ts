@@ -1,3 +1,4 @@
+// @target: es2015
 //@noimplicitany: true
 // these should be errors
 var x = null;                        // error at "x"

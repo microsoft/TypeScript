@@ -1,3 +1,4 @@
+// @target: es2015
 interface A {
     f(p: string): { [p: string]: string; };
     f(p: "spec"): { [p: string]: any; } // Should be ok

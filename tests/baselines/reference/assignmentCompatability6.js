@@ -12,6 +12,7 @@ namespace __test2__ {
 __test2__.__val__obj3 = __test1__.__val__obj4
 
 //// [assignmentCompatability6.js]
+"use strict";
 var __test1__;
 (function (__test1__) {
     ;

@@ -11,6 +11,7 @@ function a(
 var x       =
 
 //// [parserSkippedTokens16.js]
+"use strict";
 foo();
 Bar;
 { }

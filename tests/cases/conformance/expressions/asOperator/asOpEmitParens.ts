@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 declare var x;
 // Must emit as (x + 1) * 3

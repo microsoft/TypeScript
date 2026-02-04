@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @declaration: true
 
 // Should allow accessor in ambient contexts even when targeting ES5

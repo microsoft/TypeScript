@@ -71,12 +71,12 @@ Cp.prototype = {
         this.z = this.y; return this
 >this.z = this.y : T
 >                : ^
->this.z : T
->       : ^
+>this.z : T | undefined
+>       : ^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->z : T
->  : ^
+>z : T | undefined
+>  : ^^^^^^^^^^^^^
 >this.y : T
 >       : ^
 >this : this
@@ -129,12 +129,12 @@ Cpp.prototype.m2 = function () {
     this.z = this.y; return this
 >this.z = this.y : T
 >                : ^
->this.z : T
->       : ^
+>this.z : T | undefined
+>       : ^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->z : T
->  : ^
+>z : T | undefined
+>  : ^^^^^^^^^^^^^
 >this.y : T
 >       : ^
 >this : this

@@ -1,4 +1,5 @@
-﻿interface A {
+﻿// @target: es2015
+interface A {
     (x: number): number;
     (x: string, y?: string): boolean;
     (x: Date): void;

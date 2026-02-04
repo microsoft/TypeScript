@@ -1,0 +1,19 @@
+recursiveTupleTypes2.ts(11,9): error TS2454: Variable 'tree2' is used before being assigned.
+
+
+==== recursiveTupleTypes2.ts (1 errors) ====
+    interface Tree1 {
+        children: [Tree1, Tree2];
+    }
+    
+    interface Tree2 {
+        children: [Tree2, Tree2];
+    }
+    
+    let tree1: Tree1;
+    let tree2: Tree2;
+    tree1 = tree2;
+            ~~~~~
+!!! error TS2454: Variable 'tree2' is used before being assigned.
+    tree2 = tree1;
+    

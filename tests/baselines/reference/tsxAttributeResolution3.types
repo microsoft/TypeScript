@@ -15,12 +15,12 @@ interface Attribs1 {
 >  : ^^^^^^
 
 	y?: number;
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 	z?: string;
->z : string
->  : ^^^^^^
+>z : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 // OK

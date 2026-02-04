@@ -19,6 +19,7 @@ function from<T>(arg: any): Query<T> {
 >from : <T_1>(arg: boolean) => Query<T_1>
 >     : ^^^^^^   ^^       ^^^^^          
 >arg : any
+>    : ^^^
 
     return undefined;
 >undefined : undefined

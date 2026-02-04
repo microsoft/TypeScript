@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es2015
+
 //// async function foo(x: Promise<string>) {
 ////    [|x./**/|]
 //// }

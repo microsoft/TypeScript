@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: es2015
 // @moduleResolution: bundler
 // @Filename: /project/node_modules/cjs-dep/index.d.ts

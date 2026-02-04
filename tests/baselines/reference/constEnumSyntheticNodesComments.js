@@ -21,6 +21,7 @@ function verify(a: En) {
 }
 
 //// [constEnumSyntheticNodesComments.js]
+"use strict";
 function assert(x) {
     return x;
 }

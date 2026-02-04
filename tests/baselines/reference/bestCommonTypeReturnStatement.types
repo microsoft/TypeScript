@@ -9,9 +9,10 @@ interface IPromise<T> {
 >                : ^            ^^ ^^^^^   
 >promiseValue : T
 >             : ^
->errorCallback : (reason: any) => any
->              : ^      ^^   ^^^^^   
+>errorCallback : ((reason: any) => any) | undefined
+>              : ^^      ^^   ^^^^^   ^^^^^^^^^^^^^
 >reason : any
+>       : ^^^
 }
 
 function f() {

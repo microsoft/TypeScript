@@ -1,5 +1,5 @@
 // @strict: false
-// @target: es5
+// @target: es5, es2015
 
 var o1 = { a: 1, b: 2 };
 var o2 = { a: 1, b: 2, };

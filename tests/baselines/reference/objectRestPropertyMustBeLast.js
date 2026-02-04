@@ -9,6 +9,7 @@ var {...a, x, ...b } = { x: 1 };    // Error, rest must be last property
 
 
 //// [objectRestPropertyMustBeLast.js]
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -21,7 +22,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 var _a, _b;
-var _c = { x: 1 }, x = _c.x; // Error, rest must be last property
-(_a = { x: 1 }, x = _a.x); // Error, rest must be last property
-var _d = { x: 1 }, x = _d.x, b = __rest(_d, ["a", "x"]); // Error, rest must be last property
-(_b = { x: 1 }, x = _b.x, b = __rest(_b, ["x"])); // Error, rest must be last property
+var _c = { x: 1 }, { x } = _c; // Error, rest must be last property
+(_a = { x: 1 }, { x } = _a); // Error, rest must be last property
+var _d = { x: 1 }, { x } = _d, b = __rest(_d, ["a", "x"]); // Error, rest must be last property
+(_b = { x: 1 }, { x } = _b, b = __rest(_b, ["x"])); // Error, rest must be last property

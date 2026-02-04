@@ -1,3 +1,4 @@
+// @target: es2015
 // @noimplicitany: true
 interface A {
     foo;

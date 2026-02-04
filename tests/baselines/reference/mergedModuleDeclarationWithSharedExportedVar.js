@@ -10,6 +10,7 @@ namespace M {
 }
 
 //// [mergedModuleDeclarationWithSharedExportedVar.js]
+"use strict";
 var M;
 (function (M) {
     M.v = 10;

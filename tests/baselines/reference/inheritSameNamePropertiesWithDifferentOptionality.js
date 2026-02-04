@@ -14,3 +14,4 @@ interface A extends C, C2 { // error
 }
 
 //// [inheritSameNamePropertiesWithDifferentOptionality.js]
+"use strict";

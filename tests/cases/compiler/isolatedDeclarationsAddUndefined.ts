@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @isolatedDeclarations: true
 // @declaration: true
 // @strict: true

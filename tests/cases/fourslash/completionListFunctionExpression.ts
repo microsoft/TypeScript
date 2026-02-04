@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
+// @lib: es5
+
 ////class DataHandler {
 ////    dataArray: Uint8Array;
 ////    loadData(filename) {

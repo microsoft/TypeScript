@@ -10,10 +10,7 @@ export function Foo() {
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = Foo;
-function Foo() {
+export function Foo() {
     // Error: T is not declared.
     return React.createElement(T, { extends: true });
 }

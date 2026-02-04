@@ -32,29 +32,24 @@ namespace M2 {
 
 
 //// [invalidNestedModules.js]
+"use strict";
 var A;
 (function (A) {
     var B;
     (function (B) {
         var C;
         (function (C) {
-            var Point = /** @class */ (function () {
-                function Point() {
-                }
-                return Point;
-            }());
+            class Point {
+            }
             C.Point = Point;
         })(C = B.C || (B.C = {}));
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 (function (A) {
-    var B;
+    let B;
     (function (B) {
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
         B.C = C;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
@@ -62,16 +57,13 @@ var M2;
 (function (M2) {
     var X;
     (function (X) {
-        var Point = /** @class */ (function () {
-            function Point() {
-            }
-            return Point;
-        }());
+        class Point {
+        }
         X.Point = Point;
     })(X = M2.X || (M2.X = {}));
 })(M2 || (M2 = {}));
 (function (M2) {
-    var X;
+    let X;
     (function (X) {
     })(X = M2.X || (M2.X = {}));
 })(M2 || (M2 = {}));

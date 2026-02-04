@@ -1,3 +1,4 @@
+// @target: es2015
 // Union of primitives, number, arrays, and C1
 let var1: number | "hello" | "world" | true | false | number[] | string[];
 

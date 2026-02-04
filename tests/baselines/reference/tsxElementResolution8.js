@@ -38,6 +38,7 @@ declare var Obj3: Obj3;
 
 
 //// [file.jsx]
+"use strict";
 // Error
 var Div = 3;
 <Div />;

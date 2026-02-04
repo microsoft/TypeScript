@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 class Base { foo() { } }
 class Derived1 extends Base { bar() { } }

@@ -11,8 +11,7 @@ interface B {
 export {A, B}
 
 //// [mutuallyRecursiveInterfaceDeclaration.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [mutuallyRecursiveInterfaceDeclaration.d.ts]

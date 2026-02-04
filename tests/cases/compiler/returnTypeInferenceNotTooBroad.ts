@@ -1,3 +1,4 @@
+// @target: es2015
 type Signs = { kind: 'a'; a: 3; } | { kind: 'b'; b: 2; } | { kind: 'c'; c: 1; };
 interface Opts<T> {
     low?: number;

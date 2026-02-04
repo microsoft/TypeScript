@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // don't use the parent type if it's a function declaration (#33741)
 

@@ -12,6 +12,7 @@ namespace __test2__ {
 __test2__.__val__x3 = __test1__.__val__obj4
 
 //// [assignmentCompatability9.js]
+"use strict";
 var __test1__;
 (function (__test1__) {
     ;
@@ -21,12 +22,11 @@ var __test1__;
 })(__test1__ || (__test1__ = {}));
 var __test2__;
 (function (__test2__) {
-    var classWithOptional = /** @class */ (function () {
-        function classWithOptional(one) {
+    class classWithOptional {
+        constructor(one) {
             this.one = one;
         }
-        return classWithOptional;
-    }());
+    }
     __test2__.classWithOptional = classWithOptional;
     var x3 = new classWithOptional();
     ;

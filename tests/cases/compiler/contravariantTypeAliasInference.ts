@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 type Func1<T> = (x: T) => void;

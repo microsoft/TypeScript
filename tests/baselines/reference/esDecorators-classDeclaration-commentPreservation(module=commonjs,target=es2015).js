@@ -120,6 +120,7 @@ class G {
 
 
 //// [file1.js]
+"use strict";
 /*1*/
 let C = (() => {
     var _C_method_get, _C_x_get, _C_x_set, _C_y, _C_z_accessor_storage, _C_z_get, _C_z_set, _C_z_1_accessor_storage;

@@ -15,11 +15,12 @@ class A {
 		this.foo = arguments;
 >this.foo = arguments : IArguments
 >                     : ^^^^^^^^^^
->this.foo : any
+>this.foo : object | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->foo : any
->    : ^^^
+>foo : object | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >arguments : IArguments
 >          : ^^^^^^^^^^
 	}

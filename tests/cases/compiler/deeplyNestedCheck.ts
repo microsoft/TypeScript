@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #14794
 
 interface DataSnapshot<X = {}> {

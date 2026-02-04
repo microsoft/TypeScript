@@ -85,6 +85,7 @@ class C3 {
 >j : (x: any) => x is this
 >  : ^ ^^   ^^^^^         
 >x : any
+>  : ^^^
 }
 
 declare class C4 {

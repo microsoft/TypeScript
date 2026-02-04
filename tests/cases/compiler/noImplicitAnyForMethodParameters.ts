@@ -1,3 +1,4 @@
+// @target: es2015
 //@noimplicitany: true
 declare class A {
     private foo(a); // OK - ambient class and private method - no error

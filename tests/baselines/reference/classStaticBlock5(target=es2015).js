@@ -19,6 +19,7 @@ class C extends B {
 
 
 //// [classStaticBlock5.js]
+"use strict";
 var _a, _b;
 class B {
 }

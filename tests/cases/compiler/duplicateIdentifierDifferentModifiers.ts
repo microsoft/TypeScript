@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Not OK
 interface B { x; }

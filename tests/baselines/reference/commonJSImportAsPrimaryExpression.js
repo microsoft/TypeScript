@@ -17,18 +17,17 @@ if(foo.C1.s1){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C1 = void 0;
-var C1 = /** @class */ (function () {
-    function C1() {
+class C1 {
+    constructor() {
         this.m1 = 42;
     }
-    C1.s1 = true;
-    return C1;
-}());
+}
 exports.C1 = C1;
+C1.s1 = true;
 //// [foo_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo = require("./foo_0");
+const foo = require("./foo_0");
 if (foo.C1.s1) {
     // Should cause runtime import
 }

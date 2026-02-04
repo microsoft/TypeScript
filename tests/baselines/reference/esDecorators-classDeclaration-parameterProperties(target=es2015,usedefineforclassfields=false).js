@@ -12,6 +12,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-parameterProperties.js]
+"use strict";
 let C = (() => {
     var _a;
     let _instanceExtraInitializers = [];

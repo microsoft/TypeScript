@@ -4,4 +4,5 @@
 var v = [,1];
 
 //// [parserArrayLiteralExpression6.js]
+"use strict";
 var v = [, 1];

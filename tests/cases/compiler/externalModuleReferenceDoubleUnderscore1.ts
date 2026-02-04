@@ -1,3 +1,4 @@
+// @target: es2015
 declare module 'timezonecomplete' {
     import basics = require("__timezonecomplete/basics");
     export import TimeUnit = basics.TimeUnit;

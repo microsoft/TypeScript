@@ -1,3 +1,4 @@
+// @target: es2015
 class C { private p: string };
 
 declare var strOrNum: string | number;

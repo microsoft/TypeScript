@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // satisfaction of a constraint to Function, all of these invocations are errors unless otherwise noted
 

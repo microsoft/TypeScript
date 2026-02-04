@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: mergedInterfaceFromMultipleFiles1_0.ts
 
 interface I { foo(): string; }

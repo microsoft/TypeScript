@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 declare var ab: { a: number, b: number };
 declare var abq: { a: number, b?: number };

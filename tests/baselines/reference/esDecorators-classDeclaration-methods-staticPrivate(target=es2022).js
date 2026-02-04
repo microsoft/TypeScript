@@ -14,6 +14,7 @@ class D {
 
 
 //// [esDecorators-classDeclaration-methods-staticPrivate.js]
+"use strict";
 let C = (() => {
     let _staticExtraInitializers = [];
     let _static_private_method1_decorators;

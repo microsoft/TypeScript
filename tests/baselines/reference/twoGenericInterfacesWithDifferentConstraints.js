@@ -65,3 +65,4 @@ interface Constraint<T extends number> {}
 
 
 //// [twoGenericInterfacesWithDifferentConstraints.js]
+"use strict";

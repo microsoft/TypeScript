@@ -16,7 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /*****************************
 * (c) Copyright - Important
 ****************************/
-var model = require("./greeter");
+const model = require("./greeter");
 var el = document.getElementById('content');
 var greeter = new model.Greeter(el);
 /** things */

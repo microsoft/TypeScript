@@ -43,16 +43,14 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 16
+
 //// [/user/username/projects/myproject/dist/src/file2.js] Inode:: 117
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+export const x = 10;
 
 
 //// [/user/username/projects/myproject/dist/src/file1.js] Inode:: 118
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 
@@ -63,8 +61,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"inode":14}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+  {"inode":16}
 /user/username/projects/myproject: *new*
   {"inode":4}
 /user/username/projects/myproject/dist: *new*
@@ -91,14 +89,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/src/file2.ts
 /user/username/projects/myproject/src/file1.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/src/file2.ts (used version)
 /user/username/projects/myproject/src/file1.ts (used version)
 
@@ -132,8 +130,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":14}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":16}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
@@ -194,8 +192,8 @@ PolledWatches *deleted*::
   {"pollingInterval":250}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":14}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":16}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
@@ -221,7 +219,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 No cached semantic diagnostics in the builder::
@@ -265,10 +263,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/dist/src/renamed.js] Inode:: 120
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+export const x = 10;
 
 
 
@@ -283,8 +278,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":14}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":16}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
@@ -321,7 +316,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/src/file1.ts
 /user/username/projects/myproject/src/renamed.ts
 

@@ -1,5 +1,5 @@
 // @strict: false
-// @target: ES5
+// @target: ES5, ES2015
 
 const float32Array = new Float32Array(1);
 [...float32Array];

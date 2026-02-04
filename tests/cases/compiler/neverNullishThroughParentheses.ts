@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 // Repro for issue where "never nullish" checks miss "never nullish" through parentheses

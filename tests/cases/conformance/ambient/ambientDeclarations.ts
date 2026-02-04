@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Ambient variable without type annotation
 declare var n;

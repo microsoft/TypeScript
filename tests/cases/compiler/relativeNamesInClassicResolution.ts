@@ -1,3 +1,4 @@
+// @target: es2015
 // @module:amd
 
 // @filename: somefolder/a.ts

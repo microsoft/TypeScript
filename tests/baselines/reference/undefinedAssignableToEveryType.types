@@ -58,6 +58,7 @@ var e: Date = undefined;
 
 var f: any = undefined;
 >f : any
+>  : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

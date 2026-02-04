@@ -91,6 +91,7 @@ enum Three {
 
 
 //// [overshifts.js]
+"use strict";
 1 << 1; // ok
 1 << 32; // overshift
 1 << 123;
@@ -115,7 +116,7 @@ enum Three {
 4294967295 >>> -32; // backwards overshift
 4294967295 >>> -123;
 4294967295 >>> -1024;
-var x = 1;
+let x = 1;
 x <<= 1; // ok
 x <<= 32; // overshift
 x <<= 123;

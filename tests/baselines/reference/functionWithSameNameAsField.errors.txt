@@ -1,12 +1,15 @@
 functionWithSameNameAsField.ts(2,12): error TS2300: Duplicate identifier 'total'.
+functionWithSameNameAsField.ts(2,12): error TS2564: Property 'total' has no initializer and is not definitely assigned in the constructor.
 functionWithSameNameAsField.ts(3,12): error TS2300: Duplicate identifier 'total'.
 
 
-==== functionWithSameNameAsField.ts (2 errors) ====
+==== functionWithSameNameAsField.ts (3 errors) ====
     class TestProgressBar {
         public total: number;
                ~~~~~
 !!! error TS2300: Duplicate identifier 'total'.
+               ~~~~~
+!!! error TS2564: Property 'total' has no initializer and is not definitely assigned in the constructor.
         public total(total: number) {
                ~~~~~
 !!! error TS2300: Duplicate identifier 'total'.

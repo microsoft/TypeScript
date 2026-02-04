@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 function baz(x: any) {
   return [[x, x]];
 }

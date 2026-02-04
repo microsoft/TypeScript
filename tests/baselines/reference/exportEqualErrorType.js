@@ -28,5 +28,5 @@ module.exports = server;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path='exportEqualErrorType_0.ts'/>
-var connect = require("./exportEqualErrorType_0");
+const connect = require("./exportEqualErrorType_0");
 connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.

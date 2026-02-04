@@ -19,6 +19,7 @@ class C3 {
 }
 
 //// [declarationEmitDestructuringParameterProperties2.js]
+"use strict";
 class C1 {
     constructor([x, y, z]) {
     }

@@ -1,0 +1,34 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== decoratorOnClassAccessor8.ts (0 errors) ====
+    declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+    
+    class A {
+        @dec get x() { return 0; }
+        set x(value: number) { }
+    }
+    
+    class B {
+        get x() { return 0; }
+        @dec set x(value: number) { }
+    }
+    
+    class C {
+        @dec set x(value: number) { }
+        get x() { return 0; }
+    }
+    
+    class D {
+        set x(value: number) { }
+        @dec get x() { return 0; }
+    }
+    
+    class E {
+        @dec get x() { return 0; }
+    }
+    
+    class F {
+        @dec set x(value: number) { }
+    }

@@ -7,6 +7,7 @@ function f1<X, Y>() {
 }
 
 //// [unusedTypeParameterInFunction2.js]
+"use strict";
 function f1() {
     var a;
     a;

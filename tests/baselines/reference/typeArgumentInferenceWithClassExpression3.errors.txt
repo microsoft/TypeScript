@@ -1,0 +1,16 @@
+typeArgumentInferenceWithClassExpression3.ts(1,29): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+typeArgumentInferenceWithClassExpression3.ts(2,5): error TS2322: Type 'undefined' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+
+
+==== typeArgumentInferenceWithClassExpression3.ts (2 errors) ====
+    function foo<T>(x = class { prop: T }): T {
+                                ~~~~
+!!! error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+        return undefined;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+    }
+    
+    foo(class { prop = "hello" }).length;

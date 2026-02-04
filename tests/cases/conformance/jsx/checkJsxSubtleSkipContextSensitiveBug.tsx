@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @jsx: react
 // @lib: es6

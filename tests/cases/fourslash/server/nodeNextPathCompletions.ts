@@ -31,7 +31,7 @@
 //// }
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "compilerOptions": { "module": "nodenext" }, "files": ["./src/foo.ts"] }
+//// { "compilerOptions": { "lib": ["es5"], "module": "nodenext" }, "files": ["./src/foo.ts"] }
 
 // @Filename: /home/src/workspaces/project/src/foo.ts
 //// import { fooFromIndex } from "/**/";

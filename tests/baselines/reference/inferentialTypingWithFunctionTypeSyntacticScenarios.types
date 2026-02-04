@@ -119,6 +119,7 @@ s = map("", new ic());
 // assignment
 var t;
 >t : any
+>  : ^^^
 
 s = map("", t = identity);
 >s = map("", t = identity) : string
@@ -134,6 +135,7 @@ s = map("", t = identity);
 >t = identity : <V>(y: V) => V
 >             : ^ ^^ ^^ ^^^^^ 
 >t : any
+>  : ^^^
 >identity : <V>(y: V) => V
 >         : ^ ^^ ^^ ^^^^^ 
 

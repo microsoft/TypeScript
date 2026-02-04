@@ -1,3 +1,4 @@
+// @target: es2015
 class NumClass<T extends number> {
     private value!: T;
     public get(): T {

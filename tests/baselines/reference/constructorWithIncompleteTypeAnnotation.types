@@ -193,8 +193,8 @@ namespace TypeScriptAllInOne {
                 }
             }
             catch (e) {
->e : any
->  : ^^^
+>e : unknown
+>  : ^^^^^^^
 
                 console.log(e);
 >console.log(e) : any
@@ -205,8 +205,8 @@ namespace TypeScriptAllInOne {
 >        : ^^^
 >log : any
 >    : ^^^
->e : any
->  : ^^^
+>e : unknown
+>  : ^^^^^^^
             }
             finally {
 
@@ -782,14 +782,14 @@ namespace TypeScriptAllInOne {
                 throw null;
             }
             catch (Exception)  ? 
->Exception : any
->          : ^^^
+>Exception : unknown
+>          : ^^^^^^^
             }
             finally {
                 try { }
                 catch (Exception) { }
->Exception : any
->          : ^^^
+>Exception : unknown
+>          : ^^^^^^^
             }
 
             return retVal;

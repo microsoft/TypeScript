@@ -1,10 +1,10 @@
+// @target: es2015
 // @jsx: react
 // @noUnusedLocals: true
-// @noLib: true
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
 
 // @Filename: my-component.tsx
+/// <reference path="/.lib/react.d.ts" />
 declare var React: any;
 
 export function MyComponent(props: any) {

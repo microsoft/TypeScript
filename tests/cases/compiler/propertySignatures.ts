@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Should be error - duplicate identifiers
 declare var foo1: { a:string; a: string; };

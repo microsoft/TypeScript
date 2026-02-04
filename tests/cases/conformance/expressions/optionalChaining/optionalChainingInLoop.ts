@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @lib: es2015
 // @noTypesAndSymbols: true
 // https://github.com/microsoft/TypeScript/issues/40643

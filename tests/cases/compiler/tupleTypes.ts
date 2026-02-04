@@ -1,3 +1,4 @@
+// @target: es2015
 var v1: [];  // Error
 var v2: [number];
 var v3: [number, string];

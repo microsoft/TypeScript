@@ -1,12 +1,15 @@
 strictModeReservedWord2.ts(2,11): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
 strictModeReservedWord2.ts(3,11): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
+strictModeReservedWord2.ts(4,5): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
 strictModeReservedWord2.ts(4,9): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+strictModeReservedWord2.ts(4,9): error TS7051: Parameter has a name but no type. Did you mean 'arg0: package'?
 strictModeReservedWord2.ts(4,18): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
+strictModeReservedWord2.ts(4,18): error TS7006: Parameter 'protected' implicitly has an 'any' type.
 strictModeReservedWord2.ts(6,6): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
 strictModeReservedWord2.ts(13,12): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
 
 
-==== strictModeReservedWord2.ts (6 errors) ====
+==== strictModeReservedWord2.ts (9 errors) ====
     "use strict"
     interface public { }
               ~~~~~~
@@ -15,10 +18,16 @@ strictModeReservedWord2.ts(13,12): error TS1212: Identifier expected. 'private' 
               ~~~~~~~~~~
 !!! error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
         foo(package, protected);
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
             ~~~~~~~
 !!! error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+            ~~~~~~~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'arg0: package'?
                      ~~~~~~~~~
 !!! error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
+                     ~~~~~~~~~
+!!! error TS7006: Parameter 'protected' implicitly has an 'any' type.
     }
     enum package { }
          ~~~~~~~

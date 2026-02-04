@@ -11,4 +11,6 @@ interface F { }
 
 
 //// [file0.js]
+"use strict";
 //// [file1.js]
+"use strict";

@@ -25,7 +25,7 @@ var x: Promise<string>;
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2015",
     "noImplicitAny": true,
     "sourceMap": false,
     "lib": [
@@ -64,6 +64,7 @@ Output::
 
 
 //// [/home/src/projects/project/app.js]
+"use strict";
 var x;
 
 
@@ -91,7 +92,7 @@ Program root files: [
 ]
 Program options: {
   "module": 1,
-  "target": 1,
+  "target": 2,
   "noImplicitAny": true,
   "sourceMap": false,
   "lib": [
@@ -122,7 +123,7 @@ Input::
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2015",
     "noImplicitAny": true,
     "sourceMap": false,
     "lib": [
@@ -177,7 +178,7 @@ Program root files: [
 ]
 Program options: {
   "module": 1,
-  "target": 1,
+  "target": 2,
   "noImplicitAny": true,
   "sourceMap": false,
   "lib": [

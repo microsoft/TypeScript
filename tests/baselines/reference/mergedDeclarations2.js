@@ -13,6 +13,7 @@ namespace Foo {
 }
 
 //// [mergedDeclarations2.js]
+"use strict";
 var Foo;
 (function (Foo) {
     Foo[Foo["b"] = 0] = "b";

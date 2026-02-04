@@ -37,19 +37,17 @@ if (a.stringOrUndefined) {
 //// [narrowingOrderIndependent.js]
 "use strict";
 // Repro from #36709
-var A = /** @class */ (function () {
-    function A(stringOrUndefined) {
+class A {
+    constructor(stringOrUndefined) {
         this.stringOrUndefined = stringOrUndefined;
     }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B(str) {
+}
+class B {
+    constructor(str) {
         this.str = str;
     }
-    return B;
-}());
-var a = new A("123");
+}
+const a = new A("123");
 if (a instanceof A && a.stringOrUndefined) {
     new B(a.stringOrUndefined);
 }

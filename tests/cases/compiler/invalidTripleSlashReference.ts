@@ -1,3 +1,4 @@
+// @target: es2015
 /// <reference path='filedoesnotexist.ts'/>
 /// <reference path='otherdoesnotexist.d.ts'/>
 

@@ -1,0 +1,18 @@
+typeArgumentInferenceApparentType2.ts(4,29): error TS2454: Variable 'u' is used before being assigned.
+typeArgumentInferenceApparentType2.ts(6,5): error TS2322: Type 'undefined' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+
+
+==== typeArgumentInferenceApparentType2.ts (2 errors) ====
+    function method<T>(iterable: Iterable<T>): T {
+        function inner<U extends Iterable<T>>() {
+            var u: U;
+            var res: T = method(u);
+                                ~
+!!! error TS2454: Variable 'u' is used before being assigned.
+        }
+        return;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+    }

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // @module: ES2015
 // @filename: b.ts

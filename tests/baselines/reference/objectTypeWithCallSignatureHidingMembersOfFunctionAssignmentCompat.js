@@ -17,6 +17,7 @@ f = a;
 a = f;
 
 //// [objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.js]
+"use strict";
 f = i;
 i = f;
 f = a;

@@ -1,3 +1,4 @@
+// @target: es2015
 // #23025
 // @noEmit: true
 // @allowJs: true

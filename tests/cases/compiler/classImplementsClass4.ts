@@ -1,3 +1,4 @@
+// @target: es2015
 class A {
     private x = 1;
     foo(): number { return 1; }

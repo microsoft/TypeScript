@@ -12,3 +12,4 @@ declare module "m" {
 
 
 //// [importDeclWithExportModifierInAmbientContext.js]
+"use strict";

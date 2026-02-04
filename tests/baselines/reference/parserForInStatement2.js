@@ -5,5 +5,6 @@ for (var in X) {
 }
 
 //// [parserForInStatement2.js]
+"use strict";
 for (var  in X) {
 }

@@ -20,4 +20,5 @@ declare function foo<T>(arr: T[]): T;
 foo([]).bar;
 
 //// [inferentiallyTypingAnEmptyArray.js]
+"use strict";
 foo([]).bar;

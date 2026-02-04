@@ -8,9 +8,7 @@ var a = new A();
 
 
 //// [fillInMissingTypeArgsOnConstructCalls.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+"use strict";
+class A {
+}
 var a = new A();

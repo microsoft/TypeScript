@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict
 
 const enum E { A, B, C, D, E, F }

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 // @declaration: true
 function f(addUndefined1 = "J", addUndefined2?: number) {

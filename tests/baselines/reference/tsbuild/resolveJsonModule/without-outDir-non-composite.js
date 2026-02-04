@@ -58,8 +58,8 @@ Output::
 
 TSFILE: /home/src/workspaces/solution/project/src/index.js
 TSFILE: /home/src/workspaces/solution/project/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 project/src/hello.json
   Imported via "./hello.json" from file 'project/src/index.ts'
   Part of 'files' list in tsconfig.json
@@ -70,13 +70,15 @@ Found 1 error.
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/solution/project/src/index.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var hello_json_1 = __importDefault(require("./hello.json"));
+const hello_json_1 = __importDefault(require("./hello.json"));
 exports.default = hello_json_1.default.hello;
 
 
@@ -118,8 +120,8 @@ Output::
 
 TSFILE: /home/src/workspaces/solution/project/src/index.js
 TSFILE: /home/src/workspaces/solution/project/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 project/src/hello.json
   Imported via "./hello.json" from file 'project/src/index.ts'
   Part of 'files' list in tsconfig.json

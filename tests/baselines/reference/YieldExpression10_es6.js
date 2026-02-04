@@ -8,6 +8,7 @@ var v = { * foo() {
 
 
 //// [YieldExpression10_es6.js]
+"use strict";
 var v = { *foo() {
         yield (foo);
     }

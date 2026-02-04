@@ -1,3 +1,4 @@
+// @target: es2015
 // Import this module when test harness supports external modules. Also remove the internal module below.
 // import Foo = require("interfaceDeclaration5")
 namespace Foo {

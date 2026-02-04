@@ -1,3 +1,4 @@
+// @target: es2015
 interface X<T> { e: T; }
 interface A<T> {
     a: B<T>;

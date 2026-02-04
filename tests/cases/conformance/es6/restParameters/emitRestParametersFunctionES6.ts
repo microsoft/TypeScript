@@ -1,3 +1,4 @@
-﻿// @target: es6
+﻿// @strict: false
+// @target: es6
 function bar(...rest) { }
 function foo(x: number, y: string, ...rest) { }

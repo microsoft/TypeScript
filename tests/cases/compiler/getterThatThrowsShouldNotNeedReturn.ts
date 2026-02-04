@@ -1,3 +1,4 @@
+// @target: es2015
 class Greeter {
  public get greet(): string {
   throw ''; // should not raise an error

@@ -3794,6 +3794,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // are ESM, there cannot be a synthetic default.
                 return false;
             }
+            // For other files (not node16/nodenext with impliedNodeFormat), check if we can determine
+            // the module format from project references
+            if (!targetMode && file.isDeclarationFile) {
+                // Try to get the project reference - try both source file mapping and output file mapping
+                // since declaration files can be mapped either way depending on how they're resolved
+                const redirect = host.getRedirectFromSourceFile(file.path) || host.getRedirectFromOutput(file.path);
+                if (redirect) {
+                    // This is a declaration file from a project reference, so we can determine
+                    // its module format from the referenced project's options
+                    const targetModuleKind = host.getEmitModuleFormatOfFile(file);
+                    if (usageMode === ModuleKind.ESNext && ModuleKind.ES2015 <= targetModuleKind && targetModuleKind <= ModuleKind.ESNext) {
+                        return false;
+                    }
+                }
+            }
         }
         if (!allowSyntheticDefaultImports) {
             return false;
@@ -6759,7 +6774,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return parentName;
                     }
                     const memberName = symbolName(type.symbol);
-                    if (isIdentifierText(memberName, ScriptTarget.ES5)) {
+                    if (isIdentifierText(memberName, ScriptTarget.ESNext)) {
                         return appendReferenceToType(
                             parentName as TypeReferenceNode | ImportTypeNode,
                             factory.createTypeReferenceNode(memberName, /*typeArguments*/ undefined),
@@ -45599,7 +45614,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return undefined;
         }
 
-        const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
+        const iterableExists = getGlobalIterableType(/*reportErrors*/ false) !== emptyGenericType;
+        const uplevelIteration = languageVersion >= ScriptTarget.ES2015 && iterableExists;
         const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
         const possibleOutOfBounds = compilerOptions.noUncheckedIndexedAccess && !!(use & IterationUse.PossiblyOutOfBounds);
 
@@ -46751,7 +46767,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function checkClassNameCollisionWithObject(name: Identifier): void {
         if (
-            languageVersion >= ScriptTarget.ES5 && name.escapedText === "Object"
+            name.escapedText === "Object"
             && host.getEmitModuleFormatOfFile(getSourceFileOfNode(name)) < ModuleKind.ES2015
         ) {
             error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_and_above_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
@@ -48529,6 +48545,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (ModuleKind.Node20 <= moduleKind && moduleKind <= ModuleKind.NodeNext && !isImportAttributes) {
                 return grammarErrorOnFirstToken(node, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert);
+            }
+
+            if (!isImportAttributes && compilerOptions.ignoreDeprecations !== "6.0") {
+                grammarErrorOnFirstToken(node, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert);
             }
 
             if (declaration.moduleSpecifier && getEmitSyntaxForModuleSpecifierExpression(declaration.moduleSpecifier) === ModuleKind.CommonJS) {

@@ -16,19 +16,11 @@ class D<T> {
 var c1 = new Foo<D<string>>(); // ok, circularity in assignment compat check causes success
 
 //// [recursiveTypeInGenericConstraint.js]
-var G = /** @class */ (function () {
-    function G() {
-    }
-    return G;
-}());
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+"use strict";
+class G {
+}
+class Foo {
+}
+class D {
+}
 var c1 = new Foo(); // ok, circularity in assignment compat check causes success

@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
+
 //// function f1<T>(x: T) {}
 //// f1({ abc/*1*/ });
 

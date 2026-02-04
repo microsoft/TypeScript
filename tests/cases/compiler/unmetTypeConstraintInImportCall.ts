@@ -1,3 +1,4 @@
+// @target: es2015
 // @noEmit: true
 // @filename: file1.ts
 export type Foo<T extends string> = { foo: T }

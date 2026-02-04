@@ -102,7 +102,7 @@ export function createZoo(): Array<Dog> {
 {
   "compilerOptions": {
     "declaration": true,
-    "target": "es5",
+    "target": "es2015",
     "module": "commonjs",
     "strict": true,
     "noUnusedLocals": true,

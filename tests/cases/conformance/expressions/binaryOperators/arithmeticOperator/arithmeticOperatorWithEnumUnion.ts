@@ -1,3 +1,4 @@
+// @target: es2015
 // operands of an enum type are treated as having the primitive type Number.
 
 enum E {

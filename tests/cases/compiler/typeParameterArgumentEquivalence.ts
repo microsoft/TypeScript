@@ -1,3 +1,4 @@
+// @target: es2015
 function foo<T>() {
     var x!: (item: number) => boolean;
     var y!: (item: T) => boolean;

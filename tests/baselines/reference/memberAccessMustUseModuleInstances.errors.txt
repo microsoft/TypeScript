@@ -1,4 +1,5 @@
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+memberAccessMustUseModuleInstances_0.ts(3,9): error TS2322: Type 'null' is not assignable to type 'Promise'.
 
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
@@ -8,10 +9,12 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     
     WinJS.Promise.timeout(10);
     
-==== memberAccessMustUseModuleInstances_0.ts (0 errors) ====
+==== memberAccessMustUseModuleInstances_0.ts (1 errors) ====
     export class Promise {
         static timeout(delay: number): Promise {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Promise'.
         }
     }
     

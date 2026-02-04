@@ -1,3 +1,4 @@
+// @target: es2015
 // @noResolve: true
 // @declaration: true
 // @module: amd

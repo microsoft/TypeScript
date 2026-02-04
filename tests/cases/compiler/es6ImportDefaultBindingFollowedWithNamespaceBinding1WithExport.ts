@@ -1,6 +1,6 @@
 // @module: amd
 // @declaration: true
-// @target: ES5
+// @target: ES5, ES2015
 
 // @filename: server.ts
 var a = 10;

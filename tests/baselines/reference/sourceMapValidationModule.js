@@ -16,6 +16,7 @@ namespace m3 {
 }
 
 //// [sourceMapValidationModule.js]
+"use strict";
 var m2;
 (function (m2) {
     var a = 10;
@@ -23,7 +24,7 @@ var m2;
 })(m2 || (m2 = {}));
 var m3;
 (function (m3) {
-    var m4;
+    let m4;
     (function (m4) {
         m4.x = 30;
     })(m4 || (m4 = {}));

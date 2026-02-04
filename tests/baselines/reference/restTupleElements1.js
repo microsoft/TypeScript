@@ -87,17 +87,17 @@ assign(); // Error
 assign(); // Error
 assign(); // Error
 assign(); // Error
-var e0 = t[0]; // number
-var e1 = t[1]; // string
-var e2 = t[2]; // boolean
-var e3 = t[3]; // boolean
-var ex = t[x]; // number | string | boolean
+let e0 = t[0]; // number
+let e1 = t[1]; // string
+let e2 = t[2]; // boolean
+let e3 = t[3]; // boolean
+let ex = t[x]; // number | string | boolean
 f0([]); // Error
 f0([1]);
 f0([1, 2, 3]);
 f0([1, "hello", true]);
-f1([function (x) { return x * 2; }, function (x) { return x.length; }, function (x) { return x.charCodeAt(0); }]);
-f2(function (x) { return x * 2; }, function (x) { return x.length; }, function (x) { return x.charCodeAt(0); });
+f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
+f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 
 
 //// [restTupleElements1.d.ts]

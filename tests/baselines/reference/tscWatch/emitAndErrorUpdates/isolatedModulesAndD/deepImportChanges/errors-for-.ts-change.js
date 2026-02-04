@@ -46,17 +46,12 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-        this.d = 1;
-    }
-    return C;
-}());
-exports.C = C;
+export class C {
+    d = 1;
+}
 
 
 //// [/user/username/projects/myproject/c.d.ts]
@@ -66,17 +61,10 @@ export declare class C {
 
 
 //// [/user/username/projects/myproject/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.B = void 0;
-var c_1 = require("./c");
-var B = /** @class */ (function () {
-    function B() {
-        this.c = new c_1.C();
-    }
-    return B;
-}());
-exports.B = B;
+import { C } from './c';
+export class B {
+    c = new C();
+}
 
 
 //// [/user/username/projects/myproject/b.d.ts]
@@ -87,10 +75,8 @@ export declare class B {
 
 
 //// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
-var b = new b_1.B();
+import { B } from './b';
+let b = new B();
 console.log(b.c.d);
 
 
@@ -106,7 +92,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/a.ts: *new*
   {}
@@ -134,19 +120,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/c.ts (computed .d.ts during emit)
 /user/username/projects/myproject/b.ts (computed .d.ts during emit)
 /user/username/projects/myproject/a.ts (computed .d.ts during emit)
@@ -185,16 +171,9 @@ Output::
 
 
 //// [/user/username/projects/myproject/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-        this.d2 = 1;
-    }
-    return C;
-}());
-exports.C = C;
+export class C {
+    d2 = 1;
+}
 
 
 //// [/user/username/projects/myproject/c.d.ts]
@@ -220,7 +199,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
@@ -264,16 +243,9 @@ Output::
 
 
 //// [/user/username/projects/myproject/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-        this.d = 1;
-    }
-    return C;
-}());
-exports.C = C;
+export class C {
+    d = 1;
+}
 
 
 //// [/user/username/projects/myproject/c.d.ts]
@@ -299,7 +271,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
@@ -348,16 +320,9 @@ Output::
 
 
 //// [/user/username/projects/myproject/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-        this.d2 = 1;
-    }
-    return C;
-}());
-exports.C = C;
+export class C {
+    d2 = 1;
+}
 
 
 //// [/user/username/projects/myproject/c.d.ts]
@@ -383,7 +348,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts

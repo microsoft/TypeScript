@@ -1,3 +1,4 @@
+// @target: es2015
 // @checkJs: true
 // @declaration: true
 // @outDir: out/

@@ -17,16 +17,14 @@ c.m(function(n) { return "hello: "+n; },18);
 
 
 //// [anonterface.js]
+"use strict";
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        C.prototype.m = function (fn, n2) {
+    class C {
+        m(fn, n2) {
             return fn(n2);
-        };
-        return C;
-    }());
+        }
+    }
     M.C = C;
 })(M || (M = {}));
 var c = new M.C();

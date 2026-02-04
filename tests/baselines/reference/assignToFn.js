@@ -13,6 +13,7 @@ namespace M {
 
 
 //// [assignToFn.js]
+"use strict";
 var M;
 (function (M) {
     var x = { f: function (n) { return true; } };

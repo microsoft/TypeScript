@@ -46,3 +46,4 @@ interface K extends J {
 }
 
 //// [indexerConstraints.js]
+"use strict";

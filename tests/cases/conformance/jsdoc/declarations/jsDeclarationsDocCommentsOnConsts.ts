@@ -1,7 +1,7 @@
 // @strict: false
 // @allowJs: true
 // @checkJs: true
-// @target: es5
+// @target: es5, es2015
 // @outDir: ./out
 // @declaration: true
 // @filename: index1.js

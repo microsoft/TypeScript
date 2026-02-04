@@ -34,6 +34,7 @@ parrot({
 
 
 //// [typeInferenceWithExcessProperties.js]
+"use strict";
 // Repro from #17041
 function parrot(obj) {
     return obj;
@@ -51,6 +52,6 @@ parrot({
 });
 parrot({
     name: "TypeScript",
-    sayHello: function () {
+    sayHello() {
     },
 });

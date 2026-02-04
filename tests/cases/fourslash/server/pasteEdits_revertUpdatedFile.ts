@@ -15,7 +15,7 @@
 //// export const t2 = 1;
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "files": ["target.ts", "other.ts", "other2.ts"] }
+////{ "compilerOptions": { "lib": ["es5"] }, "files": ["target.ts", "other.ts", "other2.ts"] }
 
 verify.pasteEdits({
     args: {

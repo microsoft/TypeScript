@@ -1,3 +1,4 @@
+// @target: es2015
 // module then enum
 // should be errors
 namespace m4 { }

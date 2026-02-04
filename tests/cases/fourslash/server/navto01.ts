@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
+
 /////// Module
 ////[|{| "name": "MyShapes", "kind": "module" |}namespace MyShapes {
 ////

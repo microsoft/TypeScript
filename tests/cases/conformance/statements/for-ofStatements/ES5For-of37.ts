@@ -1,3 +1,4 @@
+// @target: es5, es2015
 // @downlevelIteration: true
 // https://github.com/microsoft/TypeScript/issues/30083
 

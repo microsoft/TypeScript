@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitThis: true
 interface Foo { bar: boolean; }
 

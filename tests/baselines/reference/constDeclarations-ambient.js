@@ -12,3 +12,4 @@ declare namespace M {
 }
 
 //// [constDeclarations-ambient.js]
+"use strict";

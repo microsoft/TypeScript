@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 declare class CPromise<T> {
     then<U>(success?: (value: T) => CPromise<U>): CPromise<U>;

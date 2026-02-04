@@ -9,6 +9,7 @@ class A {
 
 
 //// [privateNameStaticAndStaticInitializer.js]
+"use strict";
 var _a, _A_foo, _A_prop;
 class A {
 }

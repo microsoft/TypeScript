@@ -1,6 +1,6 @@
 // @strict: false
 // @declaration: true
-// @target: es5
+// @target: es5, es2015
 
 namespace a {
 }

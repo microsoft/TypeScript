@@ -1,3 +1,4 @@
+// @target: es2015
 enum TopLevelEnum {
     ThisWasAllowedButShouldNotBe = this // Should not be allowed
 }

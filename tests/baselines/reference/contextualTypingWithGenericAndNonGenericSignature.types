@@ -29,8 +29,11 @@ f2 = (x, y) => { return x }
 >(x, y) => { return x } : (x: any, y: any) => any
 >                       : ^ ^^^^^^^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >x : any
+>  : ^^^
 
 var f3: {
 >f3 : { <T, U>(x: T, y: U): T; (x: string, y: number): string; }
@@ -58,6 +61,9 @@ f3 = (x, y) => { return x }
 >(x, y) => { return x } : (x: any, y: any) => any
 >                       : ^ ^^^^^^^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >x : any
+>  : ^^^
 

@@ -6,13 +6,9 @@ class C {
 }
 
 //// [restParamModifier2.js]
-var C = /** @class */ (function () {
-    function C() {
-        var rest = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            rest[_i] = arguments[_i];
-        }
+"use strict";
+class C {
+    constructor(...rest) {
         this.rest = rest;
     }
-    return C;
-}());
+}

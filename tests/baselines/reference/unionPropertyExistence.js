@@ -44,6 +44,7 @@ abc.inNone;
 
 
 //// [unionPropertyExistence.js]
+"use strict";
 x.nope();
 bFoo.onlyInB;
 x.length; // Ok

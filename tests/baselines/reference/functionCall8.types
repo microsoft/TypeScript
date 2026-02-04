@@ -4,8 +4,8 @@
 function foo(a?:string){}
 >foo : (a?: string) => void
 >    : ^ ^^^      ^^^^^^^^^
->a : string
->  : ^^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 foo('foo'); 
 >foo('foo') : void

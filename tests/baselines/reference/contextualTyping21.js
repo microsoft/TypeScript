@@ -4,5 +4,6 @@
 var foo:{id:number;}[] = [{id:1}]; foo = [{id:1}, 1];
 
 //// [contextualTyping21.js]
+"use strict";
 var foo = [{ id: 1 }];
 foo = [{ id: 1 }, 1];

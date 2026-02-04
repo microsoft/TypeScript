@@ -141,6 +141,7 @@ function noSelfcloseTypeArgAttrsTrailingText() { }
 
 
 //// [jsxParserRecovery.jsx]
+"use strict";
 // should have no errors here; all these functions should parse and resolve
 noName();
 noClose();

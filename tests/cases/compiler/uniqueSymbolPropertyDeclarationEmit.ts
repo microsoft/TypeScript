@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @strict: false
 // @noTypesAndSymbols: true
 // @esModuleInterop: true

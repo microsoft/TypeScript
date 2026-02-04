@@ -25,6 +25,7 @@ switch (y) {
 
 
 //// [stringLiteralsWithSwitchStatements04.js]
+"use strict";
 switch (y) {
     case "foo", x:
         break;

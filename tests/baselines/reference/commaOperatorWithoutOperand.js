@@ -26,6 +26,7 @@ declare var OBJECT: Object;
 ( , );
 
 //// [commaOperatorWithoutOperand.js]
+"use strict";
 // Expect to have compiler errors
 // Missing the second operand
 (ANY, );

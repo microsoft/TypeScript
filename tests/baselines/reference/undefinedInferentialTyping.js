@@ -8,6 +8,7 @@ function f<T>(arr: T[], elemnt: T): T {
 var a = f([], 3); // should be number
 
 //// [undefinedInferentialTyping.js]
+"use strict";
 function f(arr, elemnt) {
     return null;
 }

@@ -29,6 +29,7 @@ class C2 extends C1<number, string, boolean> {
 
 
 //// [destructuringParameterProperties4.js]
+"use strict";
 class C1 {
     constructor(k, [a, b, c]) {
         this.k = k;

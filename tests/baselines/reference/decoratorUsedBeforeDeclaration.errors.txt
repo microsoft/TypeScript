@@ -1,4 +1,5 @@
 decoratorUsedBeforeDeclaration.ts(1,2): error TS2448: Block-scoped variable 'lambda' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(1,2): error TS2454: Variable 'lambda' is used before being assigned.
 decoratorUsedBeforeDeclaration.ts(1,9): error TS2450: Enum 'Enum' used before its declaration.
 decoratorUsedBeforeDeclaration.ts(2,7): error TS2450: Enum 'Enum' used before its declaration.
 decoratorUsedBeforeDeclaration.ts(4,4): error TS2448: Block-scoped variable 'lambda' used before its declaration.
@@ -10,17 +11,23 @@ decoratorUsedBeforeDeclaration.ts(12,4): error TS2448: Block-scoped variable 'la
 decoratorUsedBeforeDeclaration.ts(12,11): error TS2450: Enum 'Enum' used before its declaration.
 decoratorUsedBeforeDeclaration.ts(13,9): error TS2450: Enum 'Enum' used before its declaration.
 decoratorUsedBeforeDeclaration.ts(18,4): error TS2448: Block-scoped variable 'lambda' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(24,10): error TS7006: Parameter 'param' implicitly has an 'any' type.
 decoratorUsedBeforeDeclaration.ts(24,11): error TS2448: Block-scoped variable 'lambda' used before its declaration.
 decoratorUsedBeforeDeclaration.ts(24,18): error TS2450: Enum 'Enum' used before its declaration.
 decoratorUsedBeforeDeclaration.ts(24,33): error TS2450: Enum 'Enum' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(28,10): error TS7006: Parameter 'param' implicitly has an 'any' type.
 decoratorUsedBeforeDeclaration.ts(28,11): error TS2448: Block-scoped variable 'lambda' used before its declaration.
+decoratorUsedBeforeDeclaration.ts(65,10): error TS7006: Parameter 'param' implicitly has an 'any' type.
+decoratorUsedBeforeDeclaration.ts(69,10): error TS7006: Parameter 'param' implicitly has an 'any' type.
 
 
-==== decoratorUsedBeforeDeclaration.ts (16 errors) ====
+==== decoratorUsedBeforeDeclaration.ts (21 errors) ====
     @lambda(Enum.No)
      ~~~~~~
 !!! error TS2448: Block-scoped variable 'lambda' used before its declaration.
 !!! related TS2728 decoratorUsedBeforeDeclaration.ts:40:7: 'lambda' is declared here.
+     ~~~~~~
+!!! error TS2454: Variable 'lambda' is used before being assigned.
             ~~~~
 !!! error TS2450: Enum 'Enum' used before its declaration.
 !!! related TS2728 decoratorUsedBeforeDeclaration.ts:35:6: 'Enum' is declared here.
@@ -77,6 +84,8 @@ decoratorUsedBeforeDeclaration.ts(28,11): error TS2448: Block-scoped variable 'l
       }
     
       greet2(@lambda(Enum.No) @deco(Enum.No) param) {
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7006: Parameter 'param' implicitly has an 'any' type.
               ~~~~~~
 !!! error TS2448: Block-scoped variable 'lambda' used before its declaration.
 !!! related TS2728 decoratorUsedBeforeDeclaration.ts:40:7: 'lambda' is declared here.
@@ -90,6 +99,8 @@ decoratorUsedBeforeDeclaration.ts(28,11): error TS2448: Block-scoped variable 'l
       }
     
       greet3(@lambda @deco param) {
+             ~~~~~~~~~~~~~~~~~~~
+!!! error TS7006: Parameter 'param' implicitly has an 'any' type.
               ~~~~~~
 !!! error TS2448: Block-scoped variable 'lambda' used before its declaration.
 !!! related TS2728 decoratorUsedBeforeDeclaration.ts:40:7: 'lambda' is declared here.
@@ -130,10 +141,14 @@ decoratorUsedBeforeDeclaration.ts(28,11): error TS2448: Block-scoped variable 'l
       }
     
       greet2(@lambda(Enum.No) @deco(Enum.No) param) {
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7006: Parameter 'param' implicitly has an 'any' type.
         return "Hello, " + this.greeting;
       }
     
       greet3(@lambda @deco param) {
+             ~~~~~~~~~~~~~~~~~~~
+!!! error TS7006: Parameter 'param' implicitly has an 'any' type.
         return "Hello, " + this.greeting;
       }
     }

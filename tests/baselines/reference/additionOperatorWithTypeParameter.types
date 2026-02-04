@@ -246,6 +246,6 @@ function foo<T, U>(t: T, u: U) {
 >       : ^^^
 >t : T
 >  : ^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 }

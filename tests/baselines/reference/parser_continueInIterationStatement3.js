@@ -6,6 +6,7 @@ for (;;) {
 }
 
 //// [parser_continueInIterationStatement3.js]
+"use strict";
 for (;;) {
     continue;
 }

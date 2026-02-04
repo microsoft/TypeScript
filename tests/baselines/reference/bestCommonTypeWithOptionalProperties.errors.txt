@@ -1,0 +1,72 @@
+bestCommonTypeWithOptionalProperties.ts(10,11): error TS2454: Variable 'x' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(10,14): error TS2454: Variable 'y' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(10,17): error TS2454: Variable 'z' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(11,11): error TS2454: Variable 'x' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(11,14): error TS2454: Variable 'z' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(11,17): error TS2454: Variable 'y' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(12,11): error TS2454: Variable 'y' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(12,14): error TS2454: Variable 'x' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(12,17): error TS2454: Variable 'z' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(13,11): error TS2454: Variable 'y' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(13,14): error TS2454: Variable 'z' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(13,17): error TS2454: Variable 'x' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(14,11): error TS2454: Variable 'z' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(14,14): error TS2454: Variable 'x' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(14,17): error TS2454: Variable 'y' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(15,11): error TS2454: Variable 'z' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(15,14): error TS2454: Variable 'y' is used before being assigned.
+bestCommonTypeWithOptionalProperties.ts(15,17): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== bestCommonTypeWithOptionalProperties.ts (18 errors) ====
+    interface X { foo: string }
+    interface Y extends X { bar?: number }
+    interface Z extends X { bar: string }
+    
+    var x: X;
+    var y: Y;
+    var z: Z;
+    
+    // All these arrays should be X[]
+    var b1 = [x, y, z];
+              ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+                    ~
+!!! error TS2454: Variable 'z' is used before being assigned.
+    var b2 = [x, z, y];
+              ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'z' is used before being assigned.
+                    ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+    var b3 = [y, x, z];
+              ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                    ~
+!!! error TS2454: Variable 'z' is used before being assigned.
+    var b4 = [y, z, x];
+              ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'z' is used before being assigned.
+                    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var b5 = [z, x, y];
+              ~
+!!! error TS2454: Variable 'z' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                    ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+    var b6 = [z, y, x];
+              ~
+!!! error TS2454: Variable 'z' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+                    ~
+!!! error TS2454: Variable 'x' is used before being assigned.

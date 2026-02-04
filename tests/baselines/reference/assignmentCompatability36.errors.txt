@@ -1,0 +1,15 @@
+assignmentCompatability36.ts(7,28): error TS2454: Variable 'aa' is used before being assigned.
+
+
+==== assignmentCompatability36.ts (1 errors) ====
+    namespace __test1__ {
+        export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
+        export var __val__obj4 = obj4;
+    }
+    namespace __test2__ {
+        export var aa:{[index:string]:any;};;
+        export var __val__aa = aa;
+                               ~~
+!!! error TS2454: Variable 'aa' is used before being assigned.
+    }
+    __test2__.__val__aa = __test1__.__val__obj4

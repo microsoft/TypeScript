@@ -1,3 +1,4 @@
+// @lib: es5
 // @allowNonTsExtensions: true
 // @Filename: test123.js
 

@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es5,dom
 // In Node, ErrorConstructor is augmented with extra properties. Excerpted below.
 interface ErrorConstructor {

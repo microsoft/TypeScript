@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     public get Foo() { return "foo";} // ok
     public set Foo(foo) {} // ok - type inferred from getter return statement

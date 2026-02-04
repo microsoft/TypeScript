@@ -27,6 +27,7 @@ const test = (base) => {
 
 
 //// [base.js]
+"use strict";
 class Base {
     constructor() { }
 }
@@ -36,6 +37,7 @@ const BaseFactory = () => {
 BaseFactory.Base = Base;
 module.exports = BaseFactory;
 //// [file.js]
+"use strict";
 /** @typedef {typeof import('./base')} BaseFactory */
 /**
  *

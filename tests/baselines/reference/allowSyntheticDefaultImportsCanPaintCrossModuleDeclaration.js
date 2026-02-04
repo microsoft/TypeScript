@@ -22,7 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var file1_1 = require("./file1");
+const file1_1 = require("./file1");
 exports.A = (0, file1_1.styled)();
 
 

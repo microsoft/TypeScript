@@ -8,6 +8,7 @@ import connect = require('./localAliasExportAssignment_0');
 
 connect();
 >connect() : any
+>          : ^^^
 >connect : () => any
 >        : ^^^^^^   
 

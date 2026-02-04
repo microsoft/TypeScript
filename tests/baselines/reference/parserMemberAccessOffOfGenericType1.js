@@ -4,4 +4,5 @@
 var v = List<number>.makeChild();
 
 //// [parserMemberAccessOffOfGenericType1.js]
+"use strict";
 var v = List.makeChild();

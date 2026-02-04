@@ -6,6 +6,7 @@ function foo<T, U extends T>(u: U) {
 }
 
 //// [contextuallyTypingOrOperator3.js]
+"use strict";
 function foo(u) {
     var x3 = u || u;
 }

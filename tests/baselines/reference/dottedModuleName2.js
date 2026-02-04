@@ -46,6 +46,7 @@ namespace M
 
 
 //// [dottedModuleName2.js]
+"use strict";
 var A;
 (function (A) {
     var B;
@@ -55,7 +56,7 @@ var A;
 })(A || (A = {}));
 var AA;
 (function (AA) {
-    var B;
+    let B;
     (function (B) {
         B.x = 1;
     })(B = AA.B || (AA.B = {}));

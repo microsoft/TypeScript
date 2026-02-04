@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 //@module: commonjs
 // @Filename: exportEqualErrorType_0.ts

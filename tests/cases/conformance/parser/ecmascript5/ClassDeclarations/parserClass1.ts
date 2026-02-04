@@ -1,3 +1,4 @@
+// @target: es2015
     export class NullLogger implements ILogger {
         public information(): boolean { return false; }
         public debug(): boolean { return false; }

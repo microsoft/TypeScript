@@ -7,3 +7,4 @@ declare namespace M {
 }
 
 //// [parserEnumDeclaration2.js]
+"use strict";

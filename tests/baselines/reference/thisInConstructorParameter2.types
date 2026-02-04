@@ -38,14 +38,14 @@ class P {
 >     : ^^^^
 
         zzz = (p = this) => this;
->zzz = (p = this) => this : (p?: this) => this
->                         : ^ ^^^^^^^^^^^^^^^^
+>zzz = (p = this) => this : (p?: this | undefined) => this
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >zzz : (p?: this) => this
 >    : ^ ^^^^^^^^^^^^^^^^
->(p = this) => this : (p?: this) => this
->                   : ^ ^^^^^^^^^^^^^^^^
->p : this
->  : ^^^^
+>(p = this) => this : (p?: this | undefined) => this
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : this | undefined
+>  : ^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >this : this

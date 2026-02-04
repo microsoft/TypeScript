@@ -58,11 +58,10 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/workspace/project/src/a/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = 10;
+export const a = 10;
 
 
 //// [/user/username/workspace/project/src/a/a.d.ts]
@@ -70,16 +69,16 @@ export declare const a = 10;
 
 
 //// [/user/username/workspace/project/tsconfig.A.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./src/a/a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14660415448-export const a = 10;","signature":"-3497920574-export declare const a = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/a/a.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./src/a/a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14660415448-export const a = 10;","signature":"-3497920574-export declare const a = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/a/a.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/workspace/project/tsconfig.A.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./src/a/a.ts"
   ],
   "fileInfos": {
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -108,7 +107,7 @@ export declare const a = 10;
   },
   "latestChangedDtsFile": "./src/a/a.d.ts",
   "version": "FakeTSVersion",
-  "size": 740
+  "size": 752
 }
 
 
@@ -125,7 +124,7 @@ CreatingProgramWith::
   projectReferences: [{"path":"/user/username/workspace/project/tsconfig.A.json","originalPath":"./tsconfig.A.json"}]
 Loading config file: /user/username/workspace/project/tsconfig.A.json
 FileWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/b/b.ts 250 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Source file
 ExcludeWatcher:: Added:: WatchInfo: /user/username/workspace/project/node_modules/@types 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Type roots
@@ -140,10 +139,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/pro
 
 
 //// [/user/username/workspace/project/src/b/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-exports.b = 10;
+export const b = 10;
 
 
 
@@ -152,7 +148,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/workspace/project/src/b/b.ts: *new*
   {}
@@ -181,15 +177,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/project/src/b/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/project/src/b/b.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/workspace/project/src/b/b.ts (used version)
 
 exitCode:: ExitStatus.undefined

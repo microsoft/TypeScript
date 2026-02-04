@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 function f<TType>(
     a: { weak?: string } & Readonly<TType> & { name: "ok" },

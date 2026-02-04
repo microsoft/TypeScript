@@ -1,3 +1,4 @@
+// @target: es5, es2015
 class MyBase {
     static S1: number = 5;
     private S2: string = "test";

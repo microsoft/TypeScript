@@ -30,8 +30,8 @@ interface Obj2type {
 	new(n: string): { q?: number };
 >n : string
 >  : ^^^^^^
->q : number
->  : ^^^^^^
+>q : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 declare var Obj2: Obj2type;
 >Obj2 : Obj2type

@@ -41,12 +41,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.h1 = exports.g1 = exports.f1 = exports.e1 = exports.d1 = exports.c1 = exports.b1 = exports.a1 = exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
 var ;
 let;
-var ;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+const ;
+class A {
+}
 var B;
 (function (B) {
     B.a = 1, B.c = 2;
@@ -60,11 +57,8 @@ exports.a1 = 1;
 exports.b1 = 1;
 exports.c1 = 'a';
 exports.d1 = 1;
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class D {
+}
 exports.e1 = new D;
 exports.f1 = new D;
 exports.g1 = new D;

@@ -22,8 +22,8 @@ export default async function f() {
 	const types = [];
 >types : T[]
 >      : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 	return types;
 >types : T[]

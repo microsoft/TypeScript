@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 type UnionKeys<T> = T extends any ? keyof T : never;
 type BugHelper<T, TAll> = T extends any ? Exclude<UnionKeys<TAll>, keyof T> : never

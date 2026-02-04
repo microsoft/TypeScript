@@ -37,6 +37,7 @@ var l: X.Y.Z.Line;
 
 
 //// [TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.js]
+"use strict";
 var A;
 (function (A) {
     var B;
@@ -44,7 +45,7 @@ var A;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 (function (A) {
-    var B;
+    let B;
     (function (B) {
     })(B || (B = {}));
 })(A || (A = {}));
@@ -57,25 +58,19 @@ var X;
     (function (Y) {
         var Z;
         (function (Z) {
-            var Line = /** @class */ (function () {
-                function Line() {
-                }
-                return Line;
-            }());
+            class Line {
+            }
             Z.Line = Line;
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 (function (X) {
-    var Y;
+    let Y;
     (function (Y) {
-        var Z;
+        let Z;
         (function (Z) {
-            var Line = /** @class */ (function () {
-                function Line() {
-                }
-                return Line;
-            }());
+            class Line {
+            }
             Z.Line = Line;
         })(Z || (Z = {}));
     })(Y = X.Y || (X.Y = {}));

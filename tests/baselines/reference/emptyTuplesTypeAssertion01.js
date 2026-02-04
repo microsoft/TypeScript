@@ -5,8 +5,9 @@ let x = <[]>[];
 let y = x[0];
 
 //// [emptyTuplesTypeAssertion01.js]
-var x = [];
-var y = x[0];
+"use strict";
+let x = [];
+let y = x[0];
 
 
 //// [emptyTuplesTypeAssertion01.d.ts]

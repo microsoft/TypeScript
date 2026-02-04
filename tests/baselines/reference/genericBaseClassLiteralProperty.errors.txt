@@ -1,0 +1,21 @@
+genericBaseClassLiteralProperty.ts(2,12): error TS2564: Property '_getValue1' has no initializer and is not definitely assigned in the constructor.
+genericBaseClassLiteralProperty.ts(3,12): error TS2564: Property '_getValue2' has no initializer and is not definitely assigned in the constructor.
+
+
+==== genericBaseClassLiteralProperty.ts (2 errors) ====
+    class BaseClass<T> {
+        public _getValue1: { (): T; };
+               ~~~~~~~~~~
+!!! error TS2564: Property '_getValue1' has no initializer and is not definitely assigned in the constructor.
+        public _getValue2: () => T;
+               ~~~~~~~~~~
+!!! error TS2564: Property '_getValue2' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class SubClass extends BaseClass<number> {
+        public Error(): void {
+    
+            var x : number = this._getValue1();
+            var y : number = this._getValue2();
+        }
+    }

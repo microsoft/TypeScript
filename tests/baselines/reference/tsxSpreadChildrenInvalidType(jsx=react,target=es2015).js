@@ -35,6 +35,7 @@ declare let x: TodoListProps;
 
 
 //// [tsxSpreadChildrenInvalidType.js]
+"use strict";
 function Todo(prop) {
     return React.createElement("div", null, prop.key.toString() + prop.todo);
 }

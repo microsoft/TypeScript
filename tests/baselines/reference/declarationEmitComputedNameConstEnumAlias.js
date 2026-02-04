@@ -27,12 +27,11 @@ exports.default = EnumExample;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-var EnumExample_1 = __importDefault(require("./EnumExample"));
-exports.default = (_a = {},
-    _a[EnumExample_1.default.TEST] = {},
-    _a);
+const EnumExample_1 = __importDefault(require("./EnumExample"));
+exports.default = {
+    [EnumExample_1.default.TEST]: {},
+};
 
 
 //// [EnumExample.d.ts]

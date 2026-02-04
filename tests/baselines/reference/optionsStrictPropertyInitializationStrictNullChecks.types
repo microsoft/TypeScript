@@ -3,5 +3,4 @@
 === optionsStrictPropertyInitializationStrictNullChecks.ts ===
 var x;
 >x : any
->  : ^^^
 

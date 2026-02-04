@@ -6,8 +6,8 @@ function foo(obj: { name?: string; id: number }) { }
 >    : ^   ^^                              ^^^^^^^^^
 >obj : { name?: string; id: number; }
 >    : ^^^^^^^^^      ^^^^^^      ^^^
->name : string
->     : ^^^^^^
+>name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
 

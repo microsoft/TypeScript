@@ -1,3 +1,4 @@
+// @target: es2015
 // delete  operator on boolean type
 declare var BOOLEAN: boolean;
 

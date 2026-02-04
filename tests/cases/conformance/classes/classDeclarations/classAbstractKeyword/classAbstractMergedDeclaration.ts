@@ -1,3 +1,4 @@
+// @target: es2015
 abstract class CM {}
 namespace CM {}
 

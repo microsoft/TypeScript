@@ -30,6 +30,7 @@ function VerticalNav() {
 } 
 
 //// [file.jsx]
+"use strict";
 function VerticalNavMenuItem(prop) {
     return <div>props.primaryText</div>;
 }

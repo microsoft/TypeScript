@@ -4,6 +4,7 @@
 //// {
 ////   "compilerOptions": {
 ////     "module": "commonjs",
+////     "lib": ["es5"],
 ////     "paths": {
 ////       "shared/*": ["../../shared/*"]
 ////     }

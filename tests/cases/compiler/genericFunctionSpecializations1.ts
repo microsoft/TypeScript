@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 function foo3<T>(test: string); // error
 function foo3<T>(test: T) { }

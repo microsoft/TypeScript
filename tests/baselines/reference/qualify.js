@@ -63,16 +63,17 @@ var x:T.I=y;
 
 
 //// [qualify.js]
+"use strict";
 var M;
 (function (M) {
     M.m = 0;
-    var N;
+    let N;
     (function (N) {
         N.n = 1;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));
 (function (M) {
-    var N;
+    let N;
     (function (N) {
         var y = M.m;
         var x = N.n + y;
@@ -80,21 +81,21 @@ var M;
 })(M || (M = {}));
 var T;
 (function (T) {
-    var U;
+    let U;
     (function (U) {
         var z = 3;
     })(U = T.U || (T.U = {}));
 })(T || (T = {}));
 var Peer;
 (function (Peer) {
-    var U2;
+    let U2;
     (function (U2) {
         var z = 3;
     })(U2 = Peer.U2 || (Peer.U2 = {}));
 })(Peer || (Peer = {}));
 var Everest;
 (function (Everest) {
-    var K2;
+    let K2;
     (function (K2) {
         var v1 = undefined;
         var v2 = v1;

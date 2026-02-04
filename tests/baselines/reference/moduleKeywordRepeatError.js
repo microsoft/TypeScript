@@ -6,6 +6,7 @@
 module.module { }
 
 //// [moduleKeywordRepeatError.js]
+"use strict";
 // "module.module { }" should raise a syntax error
 module.module;
 { }

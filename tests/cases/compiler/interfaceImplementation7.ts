@@ -1,4 +1,5 @@
-﻿interface i1{ name(): { s: string; }; }
+﻿// @target: es2015
+interface i1{ name(): { s: string; }; }
 interface i2{ name(): { n: number; }; }
 
 interface i3 extends i1, i2 { }

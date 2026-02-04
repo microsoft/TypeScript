@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // @Filename: expando.ts
 function ExpandoMerge(n: number) {

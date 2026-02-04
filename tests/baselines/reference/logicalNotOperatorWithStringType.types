@@ -65,8 +65,8 @@ var ResultIsBoolean1 = !STRING;
 var ResultIsBoolean2 = !STRING1;
 >ResultIsBoolean2 : boolean
 >                 : ^^^^^^^
->!STRING1 : boolean
->         : ^^^^^^^
+>!STRING1 : false
+>         : ^^^^^
 >STRING1 : string[]
 >        : ^^^^^^^^
 
@@ -82,8 +82,8 @@ var ResultIsBoolean3 = !"";
 var ResultIsBoolean4 = !{ x: "", y: "" };
 >ResultIsBoolean4 : boolean
 >                 : ^^^^^^^
->!{ x: "", y: "" } : boolean
->                  : ^^^^^^^
+>!{ x: "", y: "" } : false
+>                  : ^^^^^
 >{ x: "", y: "" } : { x: string; y: string; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -98,8 +98,8 @@ var ResultIsBoolean4 = !{ x: "", y: "" };
 var ResultIsBoolean5 = !{ x: "", y: (s: string) => { return s; } };
 >ResultIsBoolean5 : boolean
 >                 : ^^^^^^^
->!{ x: "", y: (s: string) => { return s; } } : boolean
->                                            : ^^^^^^^
+>!{ x: "", y: (s: string) => { return s; } } : false
+>                                            : ^^^^^
 >{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
 >                                           : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : string
@@ -249,8 +249,8 @@ var ResultIsBoolean14 = !!!(STRING + STRING);
 >       : ^^^^^^
 
 !STRING1;
->!STRING1 : boolean
->         : ^^^^^^^
+>!STRING1 : false
+>         : ^^^^^
 >STRING1 : string[]
 >        : ^^^^^^^^
 

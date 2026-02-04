@@ -41,15 +41,13 @@ var ResultIsNumber8 = ~~BOOLEAN;
 ~M.n;
 
 //// [bitwiseNotOperatorWithBooleanType.js]
+"use strict";
 // ~ operator on boolean type
 var BOOLEAN;
 function foo() { return true; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return false; };
-    return A;
-}());
+class A {
+    static foo() { return false; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));

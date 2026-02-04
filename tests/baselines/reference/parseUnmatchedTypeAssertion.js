@@ -5,4 +5,5 @@
 
 
 //// [parseUnmatchedTypeAssertion.js]
+"use strict";
 ;

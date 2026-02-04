@@ -8,8 +8,8 @@ function foo(x: { id: number; name?: string; }): void;
 >  : ^^^^^^      ^^^^^^^^^      ^^^
 >id : number
 >   : ^^^^^^
->name : string
->     : ^^^^^^
+>name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 
 foo({ id: 1234 });                 // Ok
 >foo({ id: 1234 }) : void

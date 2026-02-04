@@ -105,8 +105,8 @@ function test3(a: any) {
 >          : ^^^^^^^^^
 
 		a;
->a : boolean
->  : ^^^^^^^
+>a : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
     }
     else {
         a;
@@ -260,8 +260,8 @@ function test7(a: boolean | void) {
 >          : ^^^^^^^^^
 
 		a;
->a : boolean
->  : ^^^^^^^
+>a : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
     }
     else {
         a;
@@ -345,8 +345,8 @@ function test9(a: boolean | number) {
     }
     else {
         a;
->a : undefined
->  : ^^^^^^^^^
+>a : never
+>  : ^^^^^
     }
 }
 
@@ -371,8 +371,8 @@ function test10(a: boolean | number) {
 >                       : ^^^^^^^
 >typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a : undefined
->  : ^^^^^^^^^
+>a : never
+>  : ^^^^^
 >"boolean" : "boolean"
 >          : ^^^^^^^^^
 
@@ -382,8 +382,8 @@ function test10(a: boolean | number) {
         }
         else {
             a;
->a : undefined
->  : ^^^^^^^^^
+>a : never
+>  : ^^^^^
         }
     }
     else {
@@ -580,8 +580,8 @@ function test15(a: boolean | number | void) {
 >          : ^^^^^^^^^
 
 		a;
->a : boolean
->  : ^^^^^^^
+>a : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
     }
     else {
         a;
@@ -622,8 +622,8 @@ function test16(a: boolean | number | void) {
     }
     else {
         a;
->a : number
->  : ^^^^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 

@@ -13,6 +13,7 @@ abstract class C {
 
 
 //// [esDecorators-classDeclaration-fields-nonStaticAbstractAccessor.js]
+"use strict";
 const field3 = "field3";
 class C {
 }

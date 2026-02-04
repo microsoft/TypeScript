@@ -1,3 +1,4 @@
+// @target: es2015
 // accessors are not contextually typed
 
 class C {

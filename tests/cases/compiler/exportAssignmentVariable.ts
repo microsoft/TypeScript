@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: exportAssignmentVariable_A.ts
 var x = 0;

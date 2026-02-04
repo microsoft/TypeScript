@@ -18,6 +18,7 @@ function f(foo: T) {
 }
 
 //// [stringLiteralCheckedInIf02.js]
+"use strict";
 function isS(t) {
     return t === "a" || t === "b";
 }

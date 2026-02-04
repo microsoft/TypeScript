@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsRestArgsWithThisTypeInJSDocFunction.ts] ////
+
+=== bug38550.js ===
+export class Clazz {
+>Clazz : Clazz
+>      : ^^^^^
+
+  /**
+   * @param {function(this:Object, ...*):*} functionDeclaration
+   */
+  method(functionDeclaration) {}
+>method : (functionDeclaration: (this: Object, ...args: any[]) => any) => void
+>       : ^                   ^^     ^^        ^^^    ^^             ^^^^^^^^^
+>functionDeclaration : (this: Object, ...arg1: any[]) => any
+>                    : ^    ^^      ^^^^^^^^^^^     ^^^^^   
+}
+

@@ -49,6 +49,7 @@ namespace D {
 }
 
 //// [nameCollision.js]
+"use strict";
 var A;
 (function (A_1) {
     // these 2 statements force an underscore before the 'A' 
@@ -63,19 +64,16 @@ var B;
 (function (B_1) {
     // re-opened module with colliding name
     // this should add an underscore.
-    var B = /** @class */ (function () {
-        function B() {
-        }
-        return B;
-    }());
+    class B {
+    }
 })(B || (B = {}));
 var X;
 (function (X_1) {
     var X = 13;
-    var Y;
+    let Y;
     (function (Y_1) {
         var Y = 13;
-        var Z;
+        let Z;
         (function (Z_1) {
             var X = 12;
             var Y = 12;
@@ -87,7 +85,7 @@ var Y;
 (function (Y_2) {
     var Y;
     (function (Y_3) {
-        var Y;
+        let Y;
         (function (Y) {
             Y[Y["Red"] = 0] = "Red";
             Y[Y["Blue"] = 1] = "Blue";
