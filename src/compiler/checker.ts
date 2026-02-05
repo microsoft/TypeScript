@@ -13752,7 +13752,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return isLateBindableExpression(node.expression);
         }
         else if (isElementAccessExpression(node)) {
-            return isLateBindableExpression(node.argumentExpression);
+            return isLateBindableExpression(node);
         }
         return false;
     }

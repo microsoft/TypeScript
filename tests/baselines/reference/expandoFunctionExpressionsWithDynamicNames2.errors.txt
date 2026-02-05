@@ -1,0 +1,26 @@
+expandoFunctionExpressionsWithDynamicNames2.ts(6,7): error TS2741: Property '[mySymbol]' is missing in type '() => void' but required in type 'Foo'.
+expandoFunctionExpressionsWithDynamicNames2.ts(14,7): error TS2741: Property 'test' is missing in type '() => void' but required in type 'Bar'.
+
+
+==== expandoFunctionExpressionsWithDynamicNames2.ts (2 errors) ====
+    const mySymbol = Symbol();
+    interface Foo {
+      (): void;
+      [mySymbol]: true;
+    }
+    const foo: Foo = () => {};
+          ~~~
+!!! error TS2741: Property '[mySymbol]' is missing in type '() => void' but required in type 'Foo'.
+!!! related TS2728 expandoFunctionExpressionsWithDynamicNames2.ts:4:3: '[mySymbol]' is declared here.
+    foo[mySymbol] = true;
+    
+    interface Bar {
+      (): void;
+      test: true;
+    }
+    const t = "test" as const;
+    const bar: Bar = () => {};
+          ~~~
+!!! error TS2741: Property 'test' is missing in type '() => void' but required in type 'Bar'.
+!!! related TS2728 expandoFunctionExpressionsWithDynamicNames2.ts:11:3: 'test' is declared here.
+    bar[t] = true;

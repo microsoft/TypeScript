@@ -31,22 +31,22 @@ export function test() {
 >     : ^^^^^^                          
 
   function inner() {}
->inner : { (): void; [symb]: boolean; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : () => void
+>      : ^^^^^^^^^^
 
   inner[symb] = true;
 >inner[symb] = true : true
 >                   : ^^^^
->inner[symb] : boolean
->            : ^^^^^^^
->inner : { (): void; [symb]: boolean; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner[symb] : any
+>            : ^^^
+>inner : () => void
+>      : ^^^^^^^^^^
 >symb : unique symbol
 >     : ^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
   return inner;
->inner : { (): void; [symb]: boolean; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : () => void
+>      : ^^^^^^^^^^
 }

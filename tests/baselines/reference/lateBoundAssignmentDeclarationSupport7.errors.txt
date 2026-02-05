@@ -1,0 +1,37 @@
+lateBoundAssignmentDeclarationSupport7.js(6,1): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof F'.
+  Property '[_sym]' does not exist on type 'typeof F'.
+lateBoundAssignmentDeclarationSupport7.js(7,1): error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'typeof F'.
+  Property 'my-fake-sym' does not exist on type 'typeof F'.
+usage.js(2,11): error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'typeof F'.
+  Property 'my-fake-sym' does not exist on type 'typeof F'.
+usage.js(3,11): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof F'.
+  Property '[_sym]' does not exist on type 'typeof F'.
+
+
+==== usage.js (2 errors) ====
+    const x = require("./lateBoundAssignmentDeclarationSupport7.js");
+    const y = x.F["my-fake-sym"];
+              ~~~~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'typeof F'.
+!!! error TS7053:   Property 'my-fake-sym' does not exist on type 'typeof F'.
+    const z = x.F[x.S];
+              ~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof F'.
+!!! error TS7053:   Property '[_sym]' does not exist on type 'typeof F'.
+    
+==== lateBoundAssignmentDeclarationSupport7.js (2 errors) ====
+    const _sym = Symbol();
+    const _str = "my-fake-sym";
+    
+    function F() {
+    }
+    F[_sym] = "ok";
+    ~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof F'.
+!!! error TS7053:   Property '[_sym]' does not exist on type 'typeof F'.
+    F[_str] = "ok";
+    ~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'typeof F'.
+!!! error TS7053:   Property 'my-fake-sym' does not exist on type 'typeof F'.
+    module.exports.F = F;
+    module.exports.S = _sym;

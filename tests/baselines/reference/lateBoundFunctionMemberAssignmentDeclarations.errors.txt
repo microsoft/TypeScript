@@ -1,0 +1,20 @@
+index.ts(4,1): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof foo'.
+  Property '[_private]' does not exist on type 'typeof foo'.
+index.ts(6,19): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof foo'.
+  Property '[_private]' does not exist on type 'typeof foo'.
+
+
+==== index.ts (2 errors) ====
+    export function foo() {}
+    foo.bar = 12;
+    const _private = Symbol();
+    foo[_private] = "ok";
+    ~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof foo'.
+!!! error TS7053:   Property '[_private]' does not exist on type 'typeof foo'.
+    
+    const x: string = foo[_private];
+                      ~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof foo'.
+!!! error TS7053:   Property '[_private]' does not exist on type 'typeof foo'.
+    

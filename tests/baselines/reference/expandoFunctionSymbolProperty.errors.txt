@@ -1,0 +1,27 @@
+expandoFunctionSymbolProperty.ts(12,3): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type '() => void'.
+  Property '[symb]' does not exist on type '() => void'.
+expandoFunctionSymbolProperty.ts(13,3): error TS2741: Property '[symb]' is missing in type '() => void' but required in type 'TestSymb'.
+
+
+==== expandoFunctionSymbolProperty.ts (2 errors) ====
+    // repro from https://github.com/microsoft/TypeScript/issues/54220
+    
+    const symb = Symbol();
+    
+    interface TestSymb {
+      (): void;
+      readonly [symb]: boolean;
+    }
+    
+    export function test(): TestSymb {
+      function inner() {}
+      inner[symb] = true;
+      ~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type '() => void'.
+!!! error TS7053:   Property '[symb]' does not exist on type '() => void'.
+      return inner;
+      ~~~~~~
+!!! error TS2741: Property '[symb]' is missing in type '() => void' but required in type 'TestSymb'.
+!!! related TS2728 expandoFunctionSymbolProperty.ts:7:12: '[symb]' is declared here.
+    }
+    

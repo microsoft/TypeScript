@@ -28,8 +28,8 @@ const _private = Symbol();
 foo[_private] = "ok";
 >foo[_private] = "ok" : "ok"
 >                     : ^^^^
->foo[_private] : string
->              : ^^^^^^
+>foo[_private] : any
+>              : ^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >_private : unique symbol
@@ -46,8 +46,8 @@ const strMem = "strMemName";
 foo[strMem] = "ok";
 >foo[strMem] = "ok" : "ok"
 >                   : ^^^^
->foo[strMem] : string
->            : ^^^^^^
+>foo[strMem] : any
+>            : ^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >strMem : "strMemName"
@@ -64,8 +64,8 @@ const dashStrMem = "dashed-str-mem";
 foo[dashStrMem] = "ok";
 >foo[dashStrMem] = "ok" : "ok"
 >                       : ^^^^
->foo[dashStrMem] : string
->                : ^^^^^^
+>foo[dashStrMem] : any
+>                : ^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >dashStrMem : "dashed-str-mem"
@@ -82,8 +82,8 @@ const numMem = 42;
 foo[numMem] = "ok";
 >foo[numMem] = "ok" : "ok"
 >                   : ^^^^
->foo[numMem] : string
->            : ^^^^^^
+>foo[numMem] : any
+>            : ^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >numMem : 42
@@ -94,8 +94,8 @@ foo[numMem] = "ok";
 const x: string = foo[_private];
 >x : string
 >  : ^^^^^^
->foo[_private] : string
->              : ^^^^^^
+>foo[_private] : any
+>              : ^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >_private : unique symbol
@@ -104,8 +104,8 @@ const x: string = foo[_private];
 const y: string = foo[strMem];
 >y : string
 >  : ^^^^^^
->foo[strMem] : string
->            : ^^^^^^
+>foo[strMem] : any
+>            : ^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >strMem : "strMemName"
@@ -114,8 +114,8 @@ const y: string = foo[strMem];
 const z: string = foo[numMem];
 >z : string
 >  : ^^^^^^
->foo[numMem] : string
->            : ^^^^^^
+>foo[numMem] : any
+>            : ^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >numMem : 42
@@ -124,8 +124,8 @@ const z: string = foo[numMem];
 const a: string = foo[dashStrMem];
 >a : string
 >  : ^^^^^^
->foo[dashStrMem] : string
->                : ^^^^^^
+>foo[dashStrMem] : any
+>                : ^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >dashStrMem : "dashed-str-mem"

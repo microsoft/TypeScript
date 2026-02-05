@@ -1,0 +1,63 @@
+file.js(4,1): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof foo'.
+  Property '[_private]' does not exist on type 'typeof foo'.
+file.js(6,1): error TS7053: Element implicitly has an 'any' type because expression of type '"strMemName"' can't be used to index type 'typeof foo'.
+  Property 'strMemName' does not exist on type 'typeof foo'.
+file.js(8,1): error TS7053: Element implicitly has an 'any' type because expression of type '"dashed-str-mem"' can't be used to index type 'typeof foo'.
+  Property 'dashed-str-mem' does not exist on type 'typeof foo'.
+file.js(10,1): error TS7053: Element implicitly has an 'any' type because expression of type '42' can't be used to index type 'typeof foo'.
+  Property '42' does not exist on type 'typeof foo'.
+file.js(13,11): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof foo'.
+  Property '[_private]' does not exist on type 'typeof foo'.
+file.js(15,11): error TS7053: Element implicitly has an 'any' type because expression of type '"strMemName"' can't be used to index type 'typeof foo'.
+  Property 'strMemName' does not exist on type 'typeof foo'.
+file.js(17,11): error TS7053: Element implicitly has an 'any' type because expression of type '42' can't be used to index type 'typeof foo'.
+  Property '42' does not exist on type 'typeof foo'.
+file.js(19,11): error TS7053: Element implicitly has an 'any' type because expression of type '"dashed-str-mem"' can't be used to index type 'typeof foo'.
+  Property 'dashed-str-mem' does not exist on type 'typeof foo'.
+
+
+==== file.js (8 errors) ====
+    export function foo() {}
+    foo.bar = 12;
+    const _private = Symbol();
+    foo[_private] = "ok";
+    ~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof foo'.
+!!! error TS7053:   Property '[_private]' does not exist on type 'typeof foo'.
+    const strMem = "strMemName";
+    foo[strMem] = "ok";
+    ~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"strMemName"' can't be used to index type 'typeof foo'.
+!!! error TS7053:   Property 'strMemName' does not exist on type 'typeof foo'.
+    const dashStrMem = "dashed-str-mem";
+    foo[dashStrMem] = "ok";
+    ~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"dashed-str-mem"' can't be used to index type 'typeof foo'.
+!!! error TS7053:   Property 'dashed-str-mem' does not exist on type 'typeof foo'.
+    const numMem = 42;
+    foo[numMem] = "ok";
+    ~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '42' can't be used to index type 'typeof foo'.
+!!! error TS7053:   Property '42' does not exist on type 'typeof foo'.
+    
+    /** @type {string} */
+    const x = foo[_private];
+              ~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'typeof foo'.
+!!! error TS7053:   Property '[_private]' does not exist on type 'typeof foo'.
+    /** @type {string} */
+    const y = foo[strMem];
+              ~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"strMemName"' can't be used to index type 'typeof foo'.
+!!! error TS7053:   Property 'strMemName' does not exist on type 'typeof foo'.
+    /** @type {string} */
+    const z = foo[numMem];
+              ~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '42' can't be used to index type 'typeof foo'.
+!!! error TS7053:   Property '42' does not exist on type 'typeof foo'.
+    /** @type {string} */
+    const a = foo[dashStrMem];
+              ~~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"dashed-str-mem"' can't be used to index type 'typeof foo'.
+!!! error TS7053:   Property 'dashed-str-mem' does not exist on type 'typeof foo'.
+    

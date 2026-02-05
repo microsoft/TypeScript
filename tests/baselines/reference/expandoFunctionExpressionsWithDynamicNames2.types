@@ -22,8 +22,8 @@ interface Foo {
 const foo: Foo = () => {};
 >foo : Foo
 >    : ^^^
->() => {} : { (): void; [mySymbol]: true; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
 
 foo[mySymbol] = true;
 >foo[mySymbol] = true : true
@@ -56,8 +56,8 @@ const t = "test" as const;
 const bar: Bar = () => {};
 >bar : Bar
 >    : ^^^
->() => {} : { (): void; test: true; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
 
 bar[t] = true;
 >bar[t] = true : true
