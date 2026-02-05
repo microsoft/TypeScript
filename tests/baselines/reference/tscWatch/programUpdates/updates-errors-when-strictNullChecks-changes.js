@@ -46,12 +46,6 @@ foo().hello;
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
@@ -146,7 +140,8 @@ Input::
 {
   "compilerOptions": {
     "strict": true,
-    "alwaysStrict": false
+    "alwaysStrict": false,
+    "ignoreDeprecations": "6.0"
   }
 }
 
@@ -184,6 +179,7 @@ Program root files: [
 Program options: {
   "strict": true,
   "alwaysStrict": false,
+  "ignoreDeprecations": "6.0",
   "watch": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }

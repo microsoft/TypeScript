@@ -63,14 +63,6 @@ Loading config file: /user/username/projects/myproject/projects/project1/tsconfi
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class1.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2/class2.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 [96mproject2/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m3[0m     "module": "none",
@@ -167,16 +159,6 @@ declare class class2 {
   "size": 921
 }
 
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
@@ -275,15 +257,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/projects/project1/class3.d.ts: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -342,16 +316,6 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/pro
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/projects/project1/class3.d.ts:
@@ -485,16 +449,6 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
   "size": 1025
 }
 
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
@@ -687,15 +641,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/projects/project1/class3.d.ts: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -760,16 +706,6 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/pro
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/projects/project1/class3.d.ts:
@@ -903,16 +839,6 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
   "size": 1025
 }
 
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:

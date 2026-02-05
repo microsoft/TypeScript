@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserParameterList9.js]
+"use strict";
 class C {
     foo(...bar) { }
 }

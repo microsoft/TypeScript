@@ -13,6 +13,7 @@ callb2((a) => { a.length; } ); // ok, chose first overload
 
 
 //// [functionOverloadAmbiguity1.js]
+"use strict";
 function callb(a) { }
 callb((a) => { a.length; }); // error, chose first overload
 function callb2(a) { }

@@ -5,6 +5,7 @@ async function foo(a = await => await): Promise<void> {
 }
 
 //// [asyncFunctionDeclaration10_es5.js]
+"use strict";
 function foo() {
     return __awaiter(this, arguments, void 0, function (a, await) {
         if (a === void 0) { a = _a.sent(); }

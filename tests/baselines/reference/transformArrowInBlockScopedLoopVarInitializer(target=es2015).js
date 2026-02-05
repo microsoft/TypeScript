@@ -9,6 +9,7 @@ while (true)
 }
 
 //// [transformArrowInBlockScopedLoopVarInitializer.js]
+"use strict";
 // https://github.com/Microsoft/TypeScript/issues/11236
 while (true) {
     let local = null;

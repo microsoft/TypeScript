@@ -16,6 +16,9 @@ Info seq  [hh:mm:ss:mss] request:
           "typeRoots": [
             "/home/src/workspaces/project/node_modules/@types"
           ],
+          "types": [
+            "*"
+          ],
           "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
@@ -56,7 +59,8 @@ declare module 'util' {
     "checkJs": true,
     "typeRoots": [
       "node_modules/@types"
-    ]
+    ],
+    "types": ["*"]
   },
   "include": ["**/*"],
   "typeAcquisition": {
@@ -90,6 +94,9 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
   "checkJs": true,
   "typeRoots": [
    "/home/src/workspaces/project/node_modules/@types"
+  ],
+  "types": [
+   "*"
   ],
   "configFilePath": "/home/src/workspaces/project/tsconfig.json"
  }
@@ -186,7 +193,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"esnext\",\n    \"lib\": [\"es5\"],\n    \"allowJs\": true,\n    \"checkJs\": true,\n    \"typeRoots\": [\n      \"node_modules/@types\"\n    ]\n  },\n  \"include\": [\"**/*\"],\n  \"typeAcquisition\": {\n    \"enable\": true\n  }\n}"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"esnext\",\n    \"lib\": [\"es5\"],\n    \"allowJs\": true,\n    \"checkJs\": true,\n    \"typeRoots\": [\n      \"node_modules/@types\"\n    ],\n    \"types\": [\"*\"]\n  },\n  \"include\": [\"**/*\"],\n  \"typeAcquisition\": {\n    \"enable\": true\n  }\n}"
 	/home/src/workspaces/project/node_modules/@types/node/index.d.ts Text-1 "declare module 'fs' {\n  export function readFile(): void;\n}\ndeclare module 'util' {\n  export function promisify(): void;\n}"
 
 

@@ -8,6 +8,7 @@ namespace _this { //Error
 var f = () => this;
 
 //// [collisionThisExpressionAndModuleInGlobal.js]
+"use strict";
 var _this;
 (function (_this) {
     class c {

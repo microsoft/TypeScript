@@ -9,6 +9,7 @@ class C {
 }
 
 //// [scopeCheckInsidePublicMethod1.js]
+"use strict";
 class C {
     a() {
         s = 1; // ERR

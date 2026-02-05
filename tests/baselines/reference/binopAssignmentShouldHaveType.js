@@ -23,6 +23,7 @@ namespace Test {
 
 //// [binopAssignmentShouldHaveType.js]
 "use strict";
+"use strict";
 var Test;
 (function (Test) {
     class Bug {

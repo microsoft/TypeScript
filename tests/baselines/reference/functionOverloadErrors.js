@@ -121,6 +121,7 @@ function initExpr() { }
 
 
 //// [functionOverloadErrors.js]
+"use strict";
 function fn1() { }
 function fn2a() {
 }

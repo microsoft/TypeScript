@@ -7431,6 +7431,7 @@ export interface CompilerOptions {
     disableSourceOfProjectReferenceRedirect?: boolean;
     disableSolutionSearching?: boolean;
     disableReferencedProjectLoad?: boolean;
+    /** @deprecated */
     downlevelIteration?: boolean;
     emitBOM?: boolean;
     emitDecoratorMetadata?: boolean;

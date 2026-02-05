@@ -26,6 +26,7 @@ C.b = 1;
 C.foo();
 
 //// [classPropertyAsProtected.js]
+"use strict";
 class C {
     get y() { return null; }
     set y(x) { }

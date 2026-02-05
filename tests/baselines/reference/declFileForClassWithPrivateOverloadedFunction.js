@@ -8,6 +8,7 @@ class C {
 }
 
 //// [declFileForClassWithPrivateOverloadedFunction.js]
+"use strict";
 class C {
     foo(x) { }
 }

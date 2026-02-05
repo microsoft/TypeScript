@@ -35,12 +35,6 @@ var z = 10;
 
 
 
-PolledWatches::
-/a/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/a/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 Timeout callback:: count: 1
 1: pollLowPollingIntervalQueue *new*
 

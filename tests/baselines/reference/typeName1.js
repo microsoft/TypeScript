@@ -30,6 +30,7 @@ var x15:number=C;
 
 
 //// [typeName1.js]
+"use strict";
 class C {
 }
 var x1 = 3;

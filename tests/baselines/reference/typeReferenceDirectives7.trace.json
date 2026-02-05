@@ -5,8 +5,5 @@
     "File '/types/lib/package.json' does not exist.",
     "File '/types/lib/index.d.ts' exists - use it as a name resolution result.",
     "Resolving real path for '/types/lib/index.d.ts', result '/types/lib/index.d.ts'.",
-    "======== Type reference directive 'lib' was successfully resolved to '/types/lib/index.d.ts', primary: true. ========",
-    "======== Resolving type reference directive 'lib', containing file '/__inferred type names__.ts'. ========",
-    "Resolution for type reference directive 'lib' was found in cache from location '/'.",
     "======== Type reference directive 'lib' was successfully resolved to '/types/lib/index.d.ts', primary: true. ========"
 ]

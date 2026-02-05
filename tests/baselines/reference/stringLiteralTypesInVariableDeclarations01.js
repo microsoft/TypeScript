@@ -20,6 +20,7 @@ f = "foo";
 g = "bar";
 
 //// [stringLiteralTypesInVariableDeclarations01.js]
+"use strict";
 let a;
 var b;
 let c;

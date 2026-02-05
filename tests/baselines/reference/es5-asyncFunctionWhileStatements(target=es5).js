@@ -80,6 +80,7 @@ async function whileStatement18() {
 }
 
 //// [es5-asyncFunctionWhileStatements.js]
+"use strict";
 function whileStatement0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

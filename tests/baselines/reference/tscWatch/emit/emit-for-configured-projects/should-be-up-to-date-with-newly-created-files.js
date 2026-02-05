@@ -67,14 +67,6 @@ export var Foo4 = 10;
 
 
 
-PolledWatches::
-/home/src/projects/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/a/b/file1Consumer1.ts: *new*
   {}
@@ -172,14 +164,6 @@ import { Foo } from "./moduleFile1";
 let y = Foo();
 
 
-
-PolledWatches::
-/home/src/projects/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/a/b/file1Consumer1.ts:

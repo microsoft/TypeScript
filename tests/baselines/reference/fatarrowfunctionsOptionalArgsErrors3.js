@@ -5,4 +5,5 @@
 
 
 //// [fatarrowfunctionsOptionalArgsErrors3.js]
+"use strict";
 (...) => 105;

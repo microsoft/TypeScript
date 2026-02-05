@@ -26,6 +26,7 @@ C==C;
 
 
 //// [typeMatch1.js]
+"use strict";
 var x2 = x1;
 var x3 = i;
 var x4 = i2;

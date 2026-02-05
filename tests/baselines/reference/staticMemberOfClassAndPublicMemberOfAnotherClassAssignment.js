@@ -28,6 +28,7 @@ c = a;
 
 
 //// [staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.js]
+"use strict";
 class B {
     prop() { }
 }

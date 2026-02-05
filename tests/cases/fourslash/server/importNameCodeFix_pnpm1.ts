@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "compilerOptions": { "module": "commonjs", "lib": ["es5"] } }
+//// { "compilerOptions": { "module": "commonjs", "types": ["*"], "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts
 //// export declare function Component(): void;

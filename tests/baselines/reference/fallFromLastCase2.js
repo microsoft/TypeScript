@@ -29,6 +29,7 @@ function foo2(a: number) {
 }
 
 //// [fallFromLastCase2.js]
+"use strict";
 function foo1(a) {
     switch (a) {
         case 1:

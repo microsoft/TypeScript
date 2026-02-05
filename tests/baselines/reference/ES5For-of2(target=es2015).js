@@ -6,6 +6,7 @@ for (var v of []) {
 }
 
 //// [ES5For-of2.js]
+"use strict";
 for (var v of []) {
     var x = v;
 }

@@ -9,6 +9,7 @@ f<string, { a: number }>(); // should error
 
 
 //// [invalidConstraint1.js]
+"use strict";
 function f() {
     return undefined;
 }

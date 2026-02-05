@@ -506,10 +506,6 @@ Output::
 
 
 
-//// [/user/username/projects/project/other.js]
-let z = 0;
-
-
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo]
 {"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./other.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"strict":false},"latestChangedDtsFile":"./other.d.ts","version":"FakeTSVersion"}
 
@@ -611,11 +607,7 @@ Output::
 
 //// [/user/username/projects/project/commonFile1.js] file written with same contents
 //// [/user/username/projects/project/commonFile2.js] file written with same contents
-//// [/user/username/projects/project/other.js]
-"use strict";
-let z = 0;
-
-
+//// [/user/username/projects/project/other.js] file written with same contents
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo]
 {"root":["./commonfile1.ts","./commonfile2.ts","./other.ts","./other2.ts"],"version":"FakeTSVersion"}
 

@@ -60,6 +60,7 @@ b.b(1);
 
 
 //// [callSignaturesWithParameterInitializers.js]
+"use strict";
 // Optional parameters allow initializers only in implementation signatures
 function foo(x = 1) { }
 var f = function foo(x = 1) { };

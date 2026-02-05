@@ -56,12 +56,6 @@ class D extends C {
 
 
 
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es6.d.ts: *new*
   {}

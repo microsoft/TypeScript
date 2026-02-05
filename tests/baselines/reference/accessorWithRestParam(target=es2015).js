@@ -7,6 +7,7 @@ class C {
 }
 
 //// [accessorWithRestParam.js]
+"use strict";
 class C {
     set X(...v) { }
     static set X(...v2) { }

@@ -48,6 +48,7 @@ type ItemType3 = true.typeof(nodes.item(0));
 
 
 //// [string.js]
+"use strict";
 class C {
     foo() {
         const x;
@@ -57,6 +58,7 @@ class C {
 const nodes = document.getElementsByTagName("li");
 typeof (nodes.item(0));
 //// [number.js]
+"use strict";
 class C2 {
     foo() {
         const x;
@@ -66,6 +68,7 @@ class C2 {
 const nodes2 = document.getElementsByTagName("li");
 typeof (nodes.item(0));
 //// [boolean.js]
+"use strict";
 class C3 {
     foo() {
         const x;

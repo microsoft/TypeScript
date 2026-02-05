@@ -16,6 +16,9 @@ Info seq  [hh:mm:ss:mss] request:
             "es5"
           ],
           "module": "commonjs",
+          "types": [
+            "*"
+          ],
           "target": "es2024",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
@@ -41,6 +44,7 @@ readF
   "compilerOptions": {
     "lib": ["es5"],
     "module": "commonjs",
+    "types": ["*"]
   },
 }
 
@@ -82,6 +86,9 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/jsconfig.json : {
    "lib.es5.d.ts"
   ],
   "module": 1,
+  "types": [
+   "*"
+  ],
   "configFilePath": "/home/src/workspaces/project/jsconfig.json"
  }
 }
@@ -175,7 +182,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/jsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"lib\": [\"es5\"],\n    \"module\": \"commonjs\",\n  },\n}"
+	/home/src/workspaces/project/jsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"lib\": [\"es5\"],\n    \"module\": \"commonjs\",\n    \"types\": [\"*\"]\n  },\n}"
 	/home/src/workspaces/project/node_modules/@types/node/index.d.ts Text-1 "declare module 'fs' {\n  export function readFile(): void;\n}\ndeclare module 'util' {\n  export function promisify(): void;\n}"
 
 

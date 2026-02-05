@@ -68,6 +68,7 @@ interface IGlobalConstructSignatureWithOwnTypeParametes {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [declFileConstructSignatures_1.js]
+"use strict";
 
 
 //// [declFileConstructSignatures_0.d.ts]

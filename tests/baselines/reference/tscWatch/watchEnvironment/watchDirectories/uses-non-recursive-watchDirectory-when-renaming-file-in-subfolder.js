@@ -41,12 +41,6 @@ Output::
 
 
 
-PolledWatches::
-/a/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/a/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /a/username/projects/project: *new*
   {"inode":4}
@@ -94,10 +88,6 @@ sysLog:: /a/username/projects/project/src/file1.ts:: Changing watcher to Missing
 
 
 PolledWatches::
-/a/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/a/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /a/username/projects/project/src/file1.ts: *new*
   {"pollingInterval":250}
 
@@ -135,12 +125,6 @@ Output::
 "use strict";
 
 
-
-PolledWatches::
-/a/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/a/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /a/username/projects/project/src/file1.ts:

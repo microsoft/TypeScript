@@ -8,6 +8,7 @@ class C {
 }
 
 //// [incorrectClassOverloadChain.js]
+"use strict";
 class C {
     constructor() {
         this.x = 1;

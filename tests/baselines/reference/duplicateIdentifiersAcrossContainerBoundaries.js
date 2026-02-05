@@ -55,6 +55,7 @@ declare namespace N {
 
 
 //// [duplicateIdentifiersAcrossContainerBoundaries.js]
+"use strict";
 var M;
 (function (M) {
     class I {

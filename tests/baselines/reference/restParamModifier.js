@@ -6,6 +6,7 @@ class C {
 }
 
 //// [restParamModifier.js]
+"use strict";
 class C {
     constructor(...public, rest) { }
 }

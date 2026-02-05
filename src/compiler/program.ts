@@ -4526,6 +4526,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         });
 
         checkDeprecations("6.0", "7.0", createDiagnostic, createDeprecatedDiagnostic => {
+            if (options.alwaysStrict === false) {
+                createDeprecatedDiagnostic("alwaysStrict", "false", /*useInstead*/ undefined, /*related*/ undefined);
+            }
             if (options.target === ScriptTarget.ES5) {
                 createDeprecatedDiagnostic("target", "ES5");
             }
@@ -4549,6 +4552,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             }
             if (options.module === ModuleKind.None || options.module === ModuleKind.AMD || options.module === ModuleKind.UMD || options.module === ModuleKind.System) {
                 createDeprecatedDiagnostic("module", ModuleKind[options.module], /*useInstead*/ undefined, /*related*/ undefined);
+            }
+            if (options.downlevelIteration !== undefined) {
+                createDeprecatedDiagnostic("downlevelIteration");
             }
         });
     }

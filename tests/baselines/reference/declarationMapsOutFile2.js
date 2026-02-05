@@ -17,6 +17,7 @@ let x = c.doThing({a: 12});
 
 
 //// [bundle.js]
+"use strict";
 class Foo {
     doThing(x) {
         return { b: x.a };

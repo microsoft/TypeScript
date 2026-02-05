@@ -6,3 +6,4 @@ declare var {c, d};  // Error, destructuring declaration not allowed in ambient 
 
 
 //// [declarationInAmbientContext.js]
+"use strict";

@@ -10,7 +10,7 @@ export declare class PatternValidator {}
 { "name": "@angular/forms", "typings": "./forms.d.ts" }
 
 //// [/user/username/projects/project/tsconfig.json]
-{ "compilerOptions": { "module": "commonjs" } }
+{ "compilerOptions": { "module": "commonjs", "types": ["*"] } }
 
 //// [/user/username/projects/project/package.json]
 { "dependencies": {} }
@@ -75,6 +75,9 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/tsconfig.json :
  ],
  "options": {
   "module": 1,
+  "types": [
+   "*"
+  ],
   "configFilePath": "/user/username/projects/project/tsconfig.json"
  }
 }
@@ -143,7 +146,10 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "module": "commonjs"
+            "module": "commonjs",
+            "types": [
+              ""
+            ]
           },
           "typeAcquisition": {
             "enable": false,

@@ -24,6 +24,7 @@ class C {
 }
 
 //// [thisBinding.js]
+"use strict";
 var M;
 (function (M) {
     class C {

@@ -11,6 +11,7 @@ foo();
 
 
 //// [functionCall7.js]
+"use strict";
 var m1;
 (function (m1) {
     class c1 {

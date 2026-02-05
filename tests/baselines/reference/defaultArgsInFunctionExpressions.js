@@ -34,6 +34,7 @@ var f7 = (t = U) => { return t; };
 f7().x;
 
 //// [defaultArgsInFunctionExpressions.js]
+"use strict";
 var f = function (a = 3) { return a; }; // Type should be (a?: number) => number
 var n = f(4);
 n = f();

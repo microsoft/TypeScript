@@ -76,10 +76,6 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 und
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/lib/app.js :: WatchInfo: /user/username/projects/myproject/lib 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/lib/app.js :: WatchInfo: /user/username/projects/myproject/lib 1 undefined Failed Lookup Locations
 [96mlib/app.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2307: [0mCannot find module '@myapp/ts-types' or its corresponding type declarations.
@@ -104,11 +100,7 @@ const x = myapp;
 PolledWatches::
 /user/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -190,11 +182,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -590,14 +578,10 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@myapp/ts-types/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 

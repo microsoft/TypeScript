@@ -120,36 +120,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Custom watchFile:: Added:: {"id":3,"path":"/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts"}
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createDirectoryWatcher",
-      "body": {
-        "id": 4,
-        "path": "/home/src/projects/myproject/node_modules/@types",
-        "recursive": true,
-        "ignoreUpdate": true
-      }
-    }
-Custom watchDirectory:: Added:: {"id":4,"path":"/home/src/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createDirectoryWatcher",
-      "body": {
-        "id": 5,
-        "path": "/home/src/projects/node_modules/@types",
-        "recursive": true,
-        "ignoreUpdate": true
-      }
-    }
-Custom watchDirectory:: Added:: {"id":5,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -261,10 +231,6 @@ PolledWatches::
 FsWatchesRecursive::
 /home/src/projects/myproject: *new*
   {"event":{"id":2,"path":"/home/src/projects/myproject","recursive":true,"ignoreUpdate":true}}
-/home/src/projects/myproject/node_modules/@types: *new*
-  {"event":{"id":4,"path":"/home/src/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
-/home/src/projects/node_modules/@types: *new*
-  {"event":{"id":5,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 Projects::
 /home/src/projects/myproject/tsconfig.json (Configured) *new*
@@ -328,13 +294,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 6,
+        "id": 4,
         "path": "/home/src/projects/myproject/src",
         "recursive": true,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":6,"path":"/home/src/projects/myproject/src","recursive":true,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":4,"path":"/home/src/projects/myproject/src","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
@@ -343,13 +309,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 7,
+        "id": 5,
         "path": "/home/src/projects",
         "recursive": false,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":7,"path":"/home/src/projects","recursive":false,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":5,"path":"/home/src/projects","recursive":false,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
@@ -358,12 +324,12 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 8,
+        "id": 6,
         "path": "/home/src/projects/myproject/node_modules",
         "recursive": true
       }
     }
-Custom watchDirectory:: Added:: {"id":8,"path":"/home/src/projects/myproject/node_modules","recursive":true}
+Custom watchDirectory:: Added:: {"id":6,"path":"/home/src/projects/myproject/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
@@ -372,12 +338,12 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 9,
+        "id": 7,
         "path": "/home/src/projects/node_modules",
         "recursive": true
       }
     }
-Custom watchDirectory:: Added:: {"id":9,"path":"/home/src/projects/node_modules","recursive":true}
+Custom watchDirectory:: Added:: {"id":7,"path":"/home/src/projects/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 0 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
@@ -386,13 +352,13 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 10,
+        "id": 8,
         "path": "/home/src/projects/myproject",
         "recursive": false,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":10,"path":"/home/src/projects/myproject","recursive":false,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":8,"path":"/home/src/projects/myproject","recursive":false,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 0 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
@@ -437,23 +403,19 @@ PolledWatches::
 
 FsWatches::
 /home/src/projects: *new*
-  {"event":{"id":7,"path":"/home/src/projects","recursive":false,"ignoreUpdate":true}}
+  {"event":{"id":5,"path":"/home/src/projects","recursive":false,"ignoreUpdate":true}}
 /home/src/projects/myproject: *new*
-  {"event":{"id":10,"path":"/home/src/projects/myproject","recursive":false,"ignoreUpdate":true}}
+  {"event":{"id":8,"path":"/home/src/projects/myproject","recursive":false,"ignoreUpdate":true}}
 
 FsWatchesRecursive::
 /home/src/projects/myproject:
   {"event":{"id":2,"path":"/home/src/projects/myproject","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/myproject/node_modules: *new*
-  {"event":{"id":8,"path":"/home/src/projects/myproject/node_modules","recursive":true}}
-/home/src/projects/myproject/node_modules/@types:
-  {"event":{"id":4,"path":"/home/src/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":6,"path":"/home/src/projects/myproject/node_modules","recursive":true}}
 /home/src/projects/myproject/src: *new*
-  {"event":{"id":6,"path":"/home/src/projects/myproject/src","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":4,"path":"/home/src/projects/myproject/src","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/node_modules: *new*
-  {"event":{"id":9,"path":"/home/src/projects/node_modules","recursive":true}}
-/home/src/projects/node_modules/@types:
-  {"event":{"id":5,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":7,"path":"/home/src/projects/node_modules","recursive":true}}
 
 Timeout callback:: count: 2
 3: /home/src/projects/myproject/tsconfig.json *new*
@@ -599,11 +561,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createFileWatcher",
       "body": {
-        "id": 11,
+        "id": 9,
         "path": "/home/src/projects/myproject/src/new.ts"
       }
     }
-Custom watchFile:: Added:: {"id":11,"path":"/home/src/projects/myproject/src/new.ts"}
+Custom watchFile:: Added:: {"id":9,"path":"/home/src/projects/myproject/src/new.ts"}
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -620,7 +582,7 @@ After request
 
 PolledWatches::
 /home/src/projects/myproject/src/new.ts: *new*
-  {"event":{"id":11,"path":"/home/src/projects/myproject/src/new.ts"}}
+  {"event":{"id":9,"path":"/home/src/projects/myproject/src/new.ts"}}
 /home/src/projects/myproject/tsconfig.json:
   {"event":{"id":1,"path":"/home/src/projects/myproject/tsconfig.json"}}
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
@@ -628,23 +590,19 @@ PolledWatches::
 
 FsWatches::
 /home/src/projects:
-  {"event":{"id":7,"path":"/home/src/projects","recursive":false,"ignoreUpdate":true}}
+  {"event":{"id":5,"path":"/home/src/projects","recursive":false,"ignoreUpdate":true}}
 /home/src/projects/myproject:
-  {"event":{"id":10,"path":"/home/src/projects/myproject","recursive":false,"ignoreUpdate":true}}
+  {"event":{"id":8,"path":"/home/src/projects/myproject","recursive":false,"ignoreUpdate":true}}
 
 FsWatchesRecursive::
 /home/src/projects/myproject:
   {"event":{"id":2,"path":"/home/src/projects/myproject","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/myproject/node_modules:
-  {"event":{"id":8,"path":"/home/src/projects/myproject/node_modules","recursive":true}}
-/home/src/projects/myproject/node_modules/@types:
-  {"event":{"id":4,"path":"/home/src/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":6,"path":"/home/src/projects/myproject/node_modules","recursive":true}}
 /home/src/projects/myproject/src:
-  {"event":{"id":6,"path":"/home/src/projects/myproject/src","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":4,"path":"/home/src/projects/myproject/src","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/node_modules:
-  {"event":{"id":9,"path":"/home/src/projects/node_modules","recursive":true}}
-/home/src/projects/node_modules/@types:
-  {"event":{"id":5,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":7,"path":"/home/src/projects/node_modules","recursive":true}}
 
 ScriptInfos::
 /home/src/projects/myproject/src/index.ts (Open)

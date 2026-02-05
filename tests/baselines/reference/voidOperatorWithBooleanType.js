@@ -41,6 +41,7 @@ void objA.a;
 void M.n;
 
 //// [voidOperatorWithBooleanType.js]
+"use strict";
 // void  operator on boolean type
 var BOOLEAN;
 function foo() { return true; }

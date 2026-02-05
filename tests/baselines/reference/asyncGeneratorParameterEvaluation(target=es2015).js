@@ -12,6 +12,7 @@ class Sub extends Super {
 
 
 //// [asyncGeneratorParameterEvaluation.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/40410
 function f1(x_1) { return __asyncGenerator(this, arguments, function* f1_1(x, y = z) { }); }
 function f2(_a) { return __asyncGenerator(this, arguments, function* f2_1({ [z]: x }) { }); }

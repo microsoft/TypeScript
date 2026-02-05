@@ -78,6 +78,7 @@ var fp1: () =>any = a => 0;
 
 
 //// [incompatibleTypes.js]
+"use strict";
 class C1 {
     p1() {
         return "s";

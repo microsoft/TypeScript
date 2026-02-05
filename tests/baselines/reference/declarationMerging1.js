@@ -12,7 +12,9 @@ interface A {
 }
 
 //// [file1.js]
+"use strict";
 class A {
     getF() { return this._f; }
 }
 //// [file2.js]
+"use strict";

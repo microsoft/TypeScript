@@ -66,6 +66,7 @@ class Benchmark {
 }
 
 //// [indexTypeCheck.js]
+"use strict";
 var s = "some string";
 yellow[5]; // ok
 yellow["hue"]; // ok

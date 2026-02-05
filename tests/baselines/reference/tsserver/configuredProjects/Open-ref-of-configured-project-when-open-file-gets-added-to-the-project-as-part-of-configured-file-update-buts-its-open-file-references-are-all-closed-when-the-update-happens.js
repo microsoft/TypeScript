@@ -72,14 +72,6 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/file3.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/a/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -179,16 +171,6 @@ After request
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
@@ -250,16 +232,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -300,28 +272,18 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/b/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/project/a/b/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/b/src/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/project/a/b/src/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project/a/b/src/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/project/a/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/project/a/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
@@ -401,28 +363,18 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/b/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/a/b/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/b/src/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/a/b/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/b/src/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/a/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/a/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/tsconfig.json:
   {"pollingInterval":2000}
 
@@ -492,28 +444,18 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/b/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/a/b/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/b/src/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/a/b/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/b/src/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/a/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/a/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/tsconfig.json:
   {"pollingInterval":2000}
 
@@ -579,28 +521,18 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/b/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/a/b/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/b/src/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/a/b/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/b/src/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/a/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/a/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/tsconfig.json:
   {"pollingInterval":2000}
 
@@ -685,12 +617,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/a/file4.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject2*, currentDirectory: /user/username/projects/project/a
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -903,22 +829,12 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/a/b/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/a/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/a/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/tsconfig.json:
   {"pollingInterval":2000}
 

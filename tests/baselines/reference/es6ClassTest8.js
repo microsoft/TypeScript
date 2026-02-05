@@ -43,6 +43,7 @@ class Camera {
 
 
 //// [es6ClassTest8.js]
+"use strict";
 function f1(x) { return x; }
 class C {
     constructor() {

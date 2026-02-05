@@ -69,11 +69,7 @@ Thing.fn();
 PolledWatches::
 /home/src/projects/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/projects/project/src/package.json: *new*
   {"pollingInterval":2000}

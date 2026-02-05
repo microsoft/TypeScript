@@ -43,6 +43,7 @@ else {
 }
 
 //// [stringLiteralTypesAsTags02.js]
+"use strict";
 function hasKind(entity, kind) {
     return entity.kind === kind;
 }

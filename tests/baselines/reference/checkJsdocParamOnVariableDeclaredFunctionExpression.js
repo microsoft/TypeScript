@@ -20,6 +20,7 @@ var one = function (s) { }, two = function (untyped) { };
 
 
 //// [0.js]
+"use strict";
 // @ts-check
 /**
  * @param {number=} n

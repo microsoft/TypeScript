@@ -89,6 +89,7 @@ declare class c6NoError {
 }
 
 //// [collisionArgumentsClassConstructor.js]
+"use strict";
 // Constructors
 var c1 = /** @class */ (function () {
     function c1(i) {

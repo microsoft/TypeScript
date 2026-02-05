@@ -69,12 +69,6 @@ var x;
 
 
 
-PolledWatches::
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/project/app.ts: *new*
   {}
@@ -151,12 +145,6 @@ Output::
 
 
 //// [/home/src/projects/project/app.js] file written with same contents
-
-PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/project/app.ts:

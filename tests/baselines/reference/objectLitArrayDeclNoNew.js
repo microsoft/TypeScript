@@ -31,6 +31,7 @@ namespace Test {
 
 //// [objectLitArrayDeclNoNew.js]
 "use strict";
+"use strict";
 var Test;
 (function (Test) {
     class Gar {

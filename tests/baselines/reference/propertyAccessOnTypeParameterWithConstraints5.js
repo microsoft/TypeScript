@@ -47,6 +47,7 @@ var b = {
 var r4 = b.foo(new B()); // error after constraints above made illegal, doesn't matter
 
 //// [propertyAccessOnTypeParameterWithConstraints5.js]
+"use strict";
 class A {
     foo() { return ''; }
 }

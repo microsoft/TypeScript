@@ -12,6 +12,7 @@ var z = (function (num: number, boo = false, ...rest) { })(10)
 
 
 //// [emitDefaultParametersFunctionExpression.js]
+"use strict";
 var lambda1 = function (y) {
     if (y === void 0) { y = "hello"; }
 };

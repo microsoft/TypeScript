@@ -125,9 +125,6 @@ CreatingProgramWith::
 Loading config file: /user/username/workspace/project/tsconfig.A.json
 FileWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/b/b.ts 250 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Source file
-ExcludeWatcher:: Added:: WatchInfo: /user/username/workspace/project/node_modules/@types 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/node_modules/@types 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Type roots
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/project/src/b 1 {"excludeDirectories":["/user/username/workspace/project/**/node_modules"]} Wild card directory
@@ -142,10 +139,6 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/workspace/pro
 export const b = 10;
 
 
-
-PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*

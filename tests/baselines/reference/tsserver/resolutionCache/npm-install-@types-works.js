@@ -47,10 +47,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/nod
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -89,13 +85,9 @@ After request
 PolledWatches::
 /a/b/projects/node_modules: *new*
   {"pollingInterval":500}
-/a/b/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /a/b/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
 /a/b/projects/temp/node_modules: *new*
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types: *new*
   {"pollingInterval":500}
 /a/b/projects/temp/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -249,39 +241,20 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/pr
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types :: WatchInfo: /a/b/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types :: WatchInfo: /a/b/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types :: WatchInfo: /a/b/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types :: WatchInfo: /a/b/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types/pad :: WatchInfo: /a/b/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types/pad :: WatchInfo: /a/b/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types/pad :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/temp/node_modules/@types/pad :: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 3
-12: /dev/null/inferredProject1*
-13: *ensureProjectForOpenFiles*
-15: /dev/null/inferredProject1*FailedLookupInvalidation
+Before running Timeout callback:: count: 1
+6: /dev/null/inferredProject1*FailedLookupInvalidation
 //// [/a/b/projects/temp/node_modules/@types/pad/index.d.ts]
 export = pad;declare function pad(length: number, text: string, char ?: string): string;
 
 
 PolledWatches::
 /a/b/projects/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/node_modules/@types:
   {"pollingInterval":500}
 /a/b/projects/temp/jsconfig.json:
   {"pollingInterval":2000}
@@ -290,8 +263,6 @@ PolledWatches::
 
 PolledWatches *deleted*::
 /a/b/projects/temp/node_modules:
-  {"pollingInterval":500}
-/a/b/projects/temp/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -305,13 +276,18 @@ FsWatches::
 FsWatchesRecursive::
 /a/b/projects/temp/node_modules: *new*
   {}
-/a/b/projects/temp/node_modules/@types: *new*
-  {}
 
-Timeout callback:: count: 3
-12: /dev/null/inferredProject1* *new*
-13: *ensureProjectForOpenFiles* *new*
-15: /dev/null/inferredProject1*FailedLookupInvalidation *new*
+Timeout callback:: count: 1
+6: /dev/null/inferredProject1*FailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*FailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+7: /dev/null/inferredProject1* *new*
+8: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
@@ -320,8 +296,11 @@ Projects::
     dirty: true *changed*
     autoImportProviderHost: false
 
+Before running Timeout callback:: count: 2
+7: /dev/null/inferredProject1*
+8: *ensureProjectForOpenFiles*
+
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -344,78 +323,10 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Default library for target 'es2024'
 	node_modules/@types/pad/index.d.ts
 	  Imported via "pad" from file 'a.ts'
-	  Entry point for implicit type library 'pad'
 	a.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-After running Timeout callback:: count: 1
-
-PolledWatches::
-/a/b/projects/node_modules/@types:
-  {"pollingInterval":500}
-/a/b/projects/package.json: *new*
-  {"pollingInterval":2000}
-/a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules/@types/package.json: *new*
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules/@types/pad/package.json: *new*
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules/package.json: *new*
-  {"pollingInterval":2000}
-/a/b/projects/temp/package.json: *new*
-  {"pollingInterval":2000}
-/a/b/projects/temp/tsconfig.json:
-  {"pollingInterval":2000}
-
-PolledWatches *deleted*::
-/a/b/projects/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/projects:
-  {}
-/a/b/projects/temp:
-  {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b/projects/temp/node_modules:
-  {}
-/a/b/projects/temp/node_modules/@types:
-  {}
-
-Timeout callback:: count: 1
-13: *ensureProjectForOpenFiles* *deleted*
-15: /dev/null/inferredProject1*FailedLookupInvalidation *deleted*
-16: *ensureProjectForOpenFiles* *new*
-
-Projects::
-/dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 2
-    projectProgramVersion: 2 *changed*
-    dirty: false *changed*
-    autoImportProviderHost: undefined *changed*
-
-ScriptInfos::
-/a/b/projects/temp/a.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1* *default*
-/a/b/projects/temp/node_modules/@types/pad/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-
-Before running Timeout callback:: count: 1
-16: *ensureProjectForOpenFiles*
-
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -446,6 +357,59 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+PolledWatches::
+/a/b/projects/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/temp/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/temp/node_modules/@types/pad/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/temp/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/temp/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
+
+PolledWatches *deleted*::
+/a/b/projects/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects:
+  {}
+/a/b/projects/temp:
+  {}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/temp/node_modules:
+  {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
+
+ScriptInfos::
+/a/b/projects/temp/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/b/projects/temp/node_modules/@types/pad/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Before running Timeout callback:: count: 0
 

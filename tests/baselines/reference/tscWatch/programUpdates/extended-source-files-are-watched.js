@@ -64,16 +64,6 @@ let y = 1;
 
 
 
-PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
@@ -142,16 +132,6 @@ Output::
 
 
 
-PolledWatches::
-/user/username/workspace/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
@@ -214,14 +194,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-
-
-//// [/user/username/workspace/solution/projects/project/commonFile1.js]
-let x = 1;
-
-
-//// [/user/username/workspace/solution/projects/project/commonFile2.js]
-let y = 1;
 
 
 
@@ -336,26 +308,6 @@ Output::
 
 
 
-//// [/user/username/workspace/solution/projects/project/commonFile1.js]
-"use strict";
-let x = 1;
-
-
-//// [/user/username/workspace/solution/projects/project/commonFile2.js]
-"use strict";
-let y = 1;
-
-
-
-PolledWatches::
-/user/username/workspace/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:

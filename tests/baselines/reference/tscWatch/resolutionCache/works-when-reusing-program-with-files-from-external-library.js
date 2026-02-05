@@ -66,8 +66,6 @@ export {};
 
 
 PolledWatches::
-/a/b/projects/myProject/node_modules/@types: *new*
-  {"pollingInterval":500}
 /a/b/projects/myProject/node_modules/module1/package.json: *new*
   {"pollingInterval":2000}
 /a/b/projects/myProject/node_modules/package.json: *new*
@@ -76,11 +74,7 @@ PolledWatches::
   {"pollingInterval":2000}
 /a/b/projects/myProject/src/node_modules: *new*
   {"pollingInterval":500}
-/a/b/projects/myProject/src/node_modules/@types: *new*
-  {"pollingInterval":500}
 /a/b/projects/node_modules: *new*
-  {"pollingInterval":500}
-/a/b/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 /a/b/projects/package.json: *new*
   {"pollingInterval":2000}

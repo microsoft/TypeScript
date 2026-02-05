@@ -48,12 +48,6 @@ let y = 1;
 
 
 
-PolledWatches::
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/a/a.ts: *new*
   {}

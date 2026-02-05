@@ -8,6 +8,7 @@ function foo(...rest) {
 
 
 //// [restParameterNoTypeAnnotation.js]
+"use strict";
 function foo(...rest) {
     var x = rest[0];
     return x;

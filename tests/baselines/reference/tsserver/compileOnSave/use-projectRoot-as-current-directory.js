@@ -44,12 +44,6 @@ Info seq  [hh:mm:ss:mss] Creating ExternalProject: /home/src/root/TypeScriptProj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/root/TypeScriptProject3/TypeScriptProject3/Foo.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/root/TypeScriptProject3/TypeScriptProject3/node_modules/@types 1 undefined Project: /home/src/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/root/TypeScriptProject3/TypeScriptProject3/node_modules/@types 1 undefined Project: /home/src/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/root/TypeScriptProject3/node_modules/@types 1 undefined Project: /home/src/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/root/TypeScriptProject3/node_modules/@types 1 undefined Project: /home/src/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/root/node_modules/@types 1 undefined Project: /home/src/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/root/node_modules/@types 1 undefined Project: /home/src/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -119,14 +113,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
-
-PolledWatches::
-/home/src/root/TypeScriptProject3/TypeScriptProject3/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/root/TypeScriptProject3/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/root/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/root/TypeScriptProject3/TypeScriptProject3/Foo.ts: *new*

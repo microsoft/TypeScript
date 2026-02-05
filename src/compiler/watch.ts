@@ -97,6 +97,7 @@ import {
     sourceMapCommentRegExpDontCareLineStart,
     sys,
     System,
+    usesWildcardTypes,
     WatchCompilerHost,
     WatchCompilerHostOfConfigFile,
     WatchCompilerHostOfFilesAndCompilerOptions,
@@ -529,7 +530,7 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
                 options.outFile ? "--outFile" : "--out",
             );
         case FileIncludeKind.AutomaticTypeDirectiveFile: {
-            const messageAndArgs: DiagnosticAndArguments = options.types ?
+            const messageAndArgs: DiagnosticAndArguments = !usesWildcardTypes(options) ?
                 reason.packageId ?
                     [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
                     [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions, reason.typeReference] :

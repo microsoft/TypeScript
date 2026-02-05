@@ -8,6 +8,7 @@ var c = C.x;
 
 
 //// [propertyAccessibility2.js]
+"use strict";
 class C {
 }
 C.x = 1;

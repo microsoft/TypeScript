@@ -7,6 +7,7 @@ for (a in expr) {
 }
 
 //// [forInStatement5.js]
+"use strict";
 var a;
 var expr;
 for (a in expr) {

@@ -7,6 +7,8 @@ const x = 0
 x++;
 
 //// [file1.js]
+"use strict";
 const x = 0;
 //// [file2.js]
+"use strict";
 x++;

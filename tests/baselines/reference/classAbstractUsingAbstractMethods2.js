@@ -30,6 +30,7 @@ class DD extends AA {
 }
 
 //// [classAbstractUsingAbstractMethods2.js]
+"use strict";
 class A {
 }
 class B extends A {

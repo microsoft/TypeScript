@@ -82,6 +82,7 @@ import {
     FunctionExpression,
     FunctionLikeDeclaration,
     GetAccessorDeclaration,
+    getAlwaysStrict,
     getAssignedExpandoInitializer,
     getAssignmentDeclarationKind,
     getAssignmentDeclarationPropertyAccessKind,
@@ -108,7 +109,6 @@ import {
     getSourceFileOfNode,
     getSourceTextOfNodeFromSourceFile,
     getSpanOfTokenAtPosition,
-    getStrictOptionValue,
     getSymbolNameForPrivateIdentifier,
     getTextOfIdentifierOrLiteral,
     getThisContainer,
@@ -618,7 +618,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
-        if (getStrictOptionValue(opts, "alwaysStrict") && !file.isDeclarationFile) {
+        if (getAlwaysStrict(opts) && !file.isDeclarationFile) {
             // bind in strict mode source files with alwaysStrict option
             return true;
         }

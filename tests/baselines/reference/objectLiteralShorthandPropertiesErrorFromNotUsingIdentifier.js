@@ -23,6 +23,7 @@ var x = {
 var v = { class };  // error
 
 //// [objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.js]
+"use strict";
 // errors
 var y = {
     "stringLiteral": ,

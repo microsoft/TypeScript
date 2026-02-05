@@ -11,6 +11,7 @@ var v = class C {
  };
 
 //// [classExpressionWithStaticPropertiesES62.js]
+"use strict";
 var _a;
 var v = (_a = class C {
     },

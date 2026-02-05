@@ -35,6 +35,7 @@ class C5 {
 }
 
 //// [unknownSymbols1.js]
+"use strict";
 var x = asdf;
 var y;
 function foo(x, y) { }

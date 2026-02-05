@@ -12,5 +12,6 @@ class C {
 }
 
 //// [multipleClassPropertyModifiersErrors.js]
+"use strict";
 class C {
 }

@@ -17,6 +17,7 @@ namespace M {
 }
 
 //// [es6ClassTest3.js]
+"use strict";
 var M;
 (function (M) {
     class Visibility {

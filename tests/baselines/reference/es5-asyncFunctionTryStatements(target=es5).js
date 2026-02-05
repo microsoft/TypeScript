@@ -125,6 +125,7 @@ async function tryCatchFinally3() {
 }
 
 //// [es5-asyncFunctionTryStatements.js]
+"use strict";
 function tryCatch0() {
     return __awaiter(this, void 0, void 0, function () {
         var x, y;

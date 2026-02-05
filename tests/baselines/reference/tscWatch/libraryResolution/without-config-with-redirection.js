@@ -177,10 +177,6 @@ FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.scripthost.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es5.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules/@types 1 undefined Type roots
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
@@ -221,12 +217,6 @@ export const x = "type1";
 /// <reference lib="es5"/>
 
 
-
-PolledWatches::
-/home/src/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/workspace/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.dom.d.ts: *new*
@@ -463,10 +453,6 @@ project1/file2.ts
 
 
 PolledWatches::
-/home/src/workspace/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/workspace/projects/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/workspace/projects/project1/core.d.ts: *new*
   {"pollingInterval":500}
 

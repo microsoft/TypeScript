@@ -70,11 +70,34 @@ declare const console: { log(msg: any): void; };
 
 Info seq  [hh:mm:ss:mss] request:
     {
+      "command": "compilerOptionsForInferredProjects",
+      "arguments": {
+        "options": {
+          "allowJs": true,
+          "types": [
+            "*"
+          ]
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
       "command": "open",
       "arguments": {
         "file": "/home/src/projects/project/app.js"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/app.js ProjectRootPath: undefined:: Result: undefined
@@ -161,10 +184,11 @@ TI:: [hh:mm:ss:mss] Got install request
         "/home/src/projects/project/app.js"
       ],
       "compilerOptions": {
-        "target": 11,
-        "jsx": 1,
-        "allowNonTsExtensions": true,
         "allowJs": true,
+        "types": [
+          "*"
+        ],
+        "allowNonTsExtensions": true,
         "noEmitForJsFiles": true,
         "maxNodeModuleJsDepth": 2
       },
@@ -216,10 +240,11 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 11,
-        "jsx": 1,
-        "allowNonTsExtensions": true,
         "allowJs": true,
+        "types": [
+          "*"
+        ],
+        "allowNonTsExtensions": true,
         "noEmitForJsFiles": true,
         "maxNodeModuleJsDepth": 2
       },
@@ -244,10 +269,11 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 11,
-          "jsx": 1,
-          "allowNonTsExtensions": true,
           "allowJs": true,
+          "types": [
+            "*"
+          ],
+          "allowNonTsExtensions": true,
           "noEmitForJsFiles": true,
           "maxNodeModuleJsDepth": 2
         },
@@ -271,7 +297,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 1,
+      "request_seq": 2,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *

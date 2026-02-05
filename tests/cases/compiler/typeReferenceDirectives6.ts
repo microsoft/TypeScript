@@ -4,6 +4,7 @@
 // @traceResolution: true
 // @declaration: true
 // @typeRoots: /types
+// @types: *
 // @currentDirectory: /
 
 // $ comes from type declaration file - type reference directive should be added

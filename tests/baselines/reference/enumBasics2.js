@@ -18,6 +18,7 @@ enum Bar {
 
 
 //// [enumBasics2.js]
+"use strict";
 var Foo;
 (function (Foo) {
     Foo[Foo["a"] = 2] = "a";

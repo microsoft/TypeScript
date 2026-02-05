@@ -53,14 +53,6 @@ let x = y;
 
 
 
-PolledWatches::
-/home/src/projects/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/a/b/f1.ts: *new*
   {}

@@ -177,6 +177,7 @@ function foo8_c(x) {
 }
 
 //// [capturedLetConstInLoop2.js]
+"use strict";
 // ========let
 function foo0(x) {
     for (let x of []) {

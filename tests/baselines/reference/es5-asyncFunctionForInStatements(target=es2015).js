@@ -40,6 +40,7 @@ async function forInStatement8() {
 }
 
 //// [es5-asyncFunctionForInStatements.js]
+"use strict";
 function forInStatement0() {
     return __awaiter(this, void 0, void 0, function* () {
         for (x in y) {

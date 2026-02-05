@@ -19,6 +19,7 @@ namespace superContain {
 }
 
 //// [mergedModuleDeclarationCodeGen4.js]
+"use strict";
 var superContain;
 (function (superContain) {
     let contain;

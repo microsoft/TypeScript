@@ -46,6 +46,7 @@ enum SomeEnum {
 
 
 //// [thisInInvalidContexts.js]
+"use strict";
 class BaseErrClass {
     constructor(t) { }
 }
