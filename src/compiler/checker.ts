@@ -28800,7 +28800,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!noCacheCheck) {
                     const id = getFlowNodeId(flow);
                     const reachable = flowNodeReachable[id];
-                    return reachable !== undefined ? reachable : (flowNodeReachable[id] = isReachableFlowNodeWorker(flow, /*noCacheCheck*/ true));
+                    if (reachable !== undefined) {
+                        return reachable;
+                    }
+                    flowNodeReachable[id] = false;
+                    return flowNodeReachable[id] = isReachableFlowNodeWorker(flow, /*noCacheCheck*/ true);
                 }
                 noCacheCheck = false;
             }
