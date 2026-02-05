@@ -108,6 +108,7 @@ var LibMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, an
 	{Key: "esnext.iterator", Value: "lib.esnext.iterator.d.ts"},
 	{Key: "esnext.promise", Value: "lib.esnext.promise.d.ts"},
 	{Key: "esnext.float16", Value: "lib.esnext.float16.d.ts"},
+	{Key: "esnext.typedarrays", Value: "lib.esnext.typedarrays.d.ts"},
 	{Key: "esnext.error", Value: "lib.esnext.error.d.ts"},
 	{Key: "esnext.sharedmemory", Value: "lib.esnext.sharedmemory.d.ts"},
 	{Key: "decorators", Value: "lib.decorators.d.ts"},
