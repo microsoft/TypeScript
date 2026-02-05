@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @stableTypeOrdering: true
 // @strict: false
 ////// Referenced throughout the inheritance chain.
 ////interface I0 { a: number }
@@ -76,11 +77,11 @@ class C4 extends C3 implements I0, I4, I5 {
 
 interface I6 extends C4 {}
 class C5 implements I6 {
-    e: number;
-    f: number;
+    c: number;
     a: number;
     b: number;
     d: number;
-    c: number;
+    e: number;
+    f: number;
 }`,
 });

@@ -9,6 +9,7 @@ Info seq  [hh:mm:ss:mss] request:
         "options": {
           "target": "es2024",
           "newLine": "crlf",
+          "stableTypeOrdering": true,
           "lib": [
             "es5"
           ],
@@ -172,7 +173,7 @@ Info seq  [hh:mm:ss:mss] response:
           "line": 13,
           "offset": 9
         },
-        "displayString": "(property) colour: \"red\" | \"green\" | \"yellow\"",
+        "displayString": "(property) colour: \"green\" | \"red\" | \"yellow\"",
         "documentation": "The colour",
         "tags": []
       }
