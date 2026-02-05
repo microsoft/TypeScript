@@ -22,7 +22,7 @@ function foo(x: X): 1 {
   const { kind, a } = x;
 >kind : "a" | "b"
 >     : ^^^^^^^^^
->a : [1] | []
+>a : [] | [1]
 >  : ^^^^^^^^
 >x : X
 >  : ^

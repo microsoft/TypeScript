@@ -930,7 +930,7 @@ const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) =>
 const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
 >f52 : (...args: ["A", number] | ["B"]) => void
 >    : ^^^^    ^^                     ^^^^^    
->args : ["A", number] | ["B"]
+>args : ["B"] | ["A", number]
 >     : ^^^^^^^^^^^^^^^^^^^^^
 >(kind, payload?) => {    if (kind === 'A') {        payload.toFixed();    }    else {        payload;  // undefined    }} : (kind: "A" | "B", payload?: number | undefined) => void
 >                                                                                                                          : ^    ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1159,7 +1159,7 @@ type FooMethod = {
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => void
 >       : ^^^^    ^^                                                                               ^^^^^    
->args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
+>args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
 >     : ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^
 
     [type: "str", cb: (e: string) => void] |
@@ -1222,7 +1222,7 @@ type FooAsyncMethod = {
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Promise<any>
 >       : ^^^^    ^^                                                                               ^^^^^            
->args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
+>args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
 >     : ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^
 
     [type: "str", cb: (e: string) => void] |
@@ -1285,7 +1285,7 @@ type FooGenMethod = {
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Generator<any, any, any>
 >       : ^^^^    ^^                                                                               ^^^^^                        
->args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
+>args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
 >     : ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^
 
     [type: "str", cb: (e: string) => void] |
@@ -1348,7 +1348,7 @@ type FooAsyncGenMethod = {
   method(...args:
 >method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => AsyncGenerator<any, any, any>
 >       : ^^^^    ^^                                                                               ^^^^^                             
->args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
+>args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
 >     : ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^
 
     [type: "str", cb: (e: string) => void] |
