@@ -42,8 +42,6 @@ someUnion = o;
 
 
 //// [typeVariableConstraintedToAliasNotAssignableToUnion.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function fn(o) {
     aBoolean = o;
     aStringOrNumber = o;
@@ -60,3 +58,4 @@ aBoolean = o;
 aStringOrNumber = o;
 aStringOrSomething = o;
 someUnion = o;
+export {};

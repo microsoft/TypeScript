@@ -4,4 +4,5 @@
 const
 
 //// [downlevelLetConst1.js]
+"use strict";
 const ;

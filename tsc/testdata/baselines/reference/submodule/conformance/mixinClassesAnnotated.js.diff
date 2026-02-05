@@ -1,8 +1,8 @@
 --- old.mixinClassesAnnotated.js
 +++ new.mixinClassesAnnotated.js
-@@= skipped -69, +69 lines =@@
-
+@@= skipped -70, +70 lines =@@
  //// [mixinClassesAnnotated.js]
+ "use strict";
  class Base {
 +    x;
 +    y;

@@ -37,7 +37,7 @@ var i: I = x;
 var j: { (): string } = x;
 var j2: { <T>(x: T): string } = x;
 
-module M {
+namespace M {
     export var foo = 1;
 }
 
@@ -48,6 +48,7 @@ function k<T>(a: T) {
 }
 
 //// [assignAnyToEveryType.js]
+"use strict";
 // all of these are valid
 var x;
 var a = x;

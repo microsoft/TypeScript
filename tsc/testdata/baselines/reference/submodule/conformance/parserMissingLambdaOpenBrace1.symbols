@@ -7,7 +7,7 @@ class C {
     where(filter: Iterator<T, boolean>): Query<T> {
 >where : Symbol(C.where, Decl(parserMissingLambdaOpenBrace1.ts, 0, 9))
 >filter : Symbol(filter, Decl(parserMissingLambdaOpenBrace1.ts, 1, 10))
->Iterator : Symbol(Iterator)
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T)
 >Query : Symbol(Query)
 >T : Symbol(T)

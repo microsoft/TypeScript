@@ -18,5 +18,6 @@ var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
 
 
 //// [taggedTemplateStringsWithManyCallAndMemberExpressionsES6.js]
+"use strict";
 var f;
 var x = new new new f `abc${0}def`.member("hello")(42) === true;

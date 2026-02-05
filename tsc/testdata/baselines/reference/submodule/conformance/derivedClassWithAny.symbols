@@ -96,29 +96,29 @@ class E extends D {
     }
 }
 
-var c: C;
->c : Symbol(c, Decl(derivedClassWithAny.ts, 51, 3))
+declare var c: C;
+>c : Symbol(c, Decl(derivedClassWithAny.ts, 51, 11))
 >C : Symbol(C, Decl(derivedClassWithAny.ts, 0, 0))
 
-var d: D;
->d : Symbol(d, Decl(derivedClassWithAny.ts, 52, 3))
+declare var d: D;
+>d : Symbol(d, Decl(derivedClassWithAny.ts, 52, 11))
 >D : Symbol(D, Decl(derivedClassWithAny.ts, 14, 1))
 
-var e: E;
->e : Symbol(e, Decl(derivedClassWithAny.ts, 53, 3))
+declare var e: E;
+>e : Symbol(e, Decl(derivedClassWithAny.ts, 53, 11))
 >E : Symbol(E, Decl(derivedClassWithAny.ts, 32, 1))
 
 c = d;
->c : Symbol(c, Decl(derivedClassWithAny.ts, 51, 3))
->d : Symbol(d, Decl(derivedClassWithAny.ts, 52, 3))
+>c : Symbol(c, Decl(derivedClassWithAny.ts, 51, 11))
+>d : Symbol(d, Decl(derivedClassWithAny.ts, 52, 11))
 
 c = e;
->c : Symbol(c, Decl(derivedClassWithAny.ts, 51, 3))
->e : Symbol(e, Decl(derivedClassWithAny.ts, 53, 3))
+>c : Symbol(c, Decl(derivedClassWithAny.ts, 51, 11))
+>e : Symbol(e, Decl(derivedClassWithAny.ts, 53, 11))
 
 var r = c.foo(); // e.foo would return string
 >r : Symbol(r, Decl(derivedClassWithAny.ts, 57, 3))
 >c.foo : Symbol(C.foo, Decl(derivedClassWithAny.ts, 2, 33))
->c : Symbol(c, Decl(derivedClassWithAny.ts, 51, 3))
+>c : Symbol(c, Decl(derivedClassWithAny.ts, 51, 11))
 >foo : Symbol(C.foo, Decl(derivedClassWithAny.ts, 2, 33))
 

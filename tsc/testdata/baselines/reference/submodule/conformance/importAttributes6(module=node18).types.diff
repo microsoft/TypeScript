@@ -1,0 +1,11 @@
+--- old.importAttributes6(module=node18).types
++++ new.importAttributes6(module=node18).types
+@@= skipped -31, +31 lines =@@
+ >type : any
+ >field : any
+ >0..toString() : string
+->0..toString : (radix?: number) => string
++>0..toString : (radix?: number | undefined) => string
+ >0. : 0
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string

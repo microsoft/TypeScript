@@ -1,6 +1,6 @@
 --- old.sourceMap-FileWithComments.js
 +++ new.sourceMap-FileWithComments.js
-@@= skipped -42, +42 lines =@@
+@@= skipped -43, +43 lines =@@
  (function (Shapes) {
      // Class
      class Point {

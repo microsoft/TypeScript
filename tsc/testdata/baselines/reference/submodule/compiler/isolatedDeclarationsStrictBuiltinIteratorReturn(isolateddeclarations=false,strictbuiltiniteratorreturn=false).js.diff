@@ -1,6 +1,6 @@
 --- old.isolatedDeclarationsStrictBuiltinIteratorReturn(isolateddeclarations=false,strictbuiltiniteratorreturn=false).js
 +++ new.isolatedDeclarationsStrictBuiltinIteratorReturn(isolateddeclarations=false,strictbuiltiniteratorreturn=false).js
-@@= skipped -95, +95 lines =@@
+@@= skipped -96, +96 lines =@@
  declare function f13(): IterableIterator<number, BuiltinIteratorReturn>;
  declare function f14(): IterableIterator<number, BuiltinIteratorReturn, any>;
  declare const a1: () => Iterable<number>;

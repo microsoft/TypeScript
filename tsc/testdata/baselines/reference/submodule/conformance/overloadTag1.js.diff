@@ -1,6 +1,6 @@
 --- old.overloadTag1.js
 +++ new.overloadTag1.js
-@@= skipped -96, +96 lines =@@
+@@= skipped -92, +92 lines =@@
 
 
  //// [overloadTag1.d.ts]

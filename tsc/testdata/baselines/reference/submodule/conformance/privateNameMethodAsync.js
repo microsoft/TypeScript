@@ -17,6 +17,7 @@ new C().foo().then(console.log);
 
 
 //// [privateNameMethodAsync.js]
+"use strict";
 const C = class {
     async #bar() { return await Promise.resolve(42); }
     async foo() {

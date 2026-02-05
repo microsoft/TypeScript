@@ -1,0 +1,45 @@
+switchCaseWithIntersectionTypes01.ts(7,9): error TS2454: Variable 'strAndNum' is used before being assigned.
+switchCaseWithIntersectionTypes01.ts(9,10): error TS2454: Variable 'strAndNum' is used before being assigned.
+switchCaseWithIntersectionTypes01.ts(13,10): error TS2454: Variable 'str' is used before being assigned.
+switchCaseWithIntersectionTypes01.ts(14,10): error TS2454: Variable 'num' is used before being assigned.
+switchCaseWithIntersectionTypes01.ts(18,10): error TS2454: Variable 'numAndBool' is used before being assigned.
+switchCaseWithIntersectionTypes01.ts(22,10): error TS2454: Variable 'bool' is used before being assigned.
+
+
+==== switchCaseWithIntersectionTypes01.ts (6 errors) ====
+    var strAndNum: string & number;
+    var numAndBool: number & boolean;
+    var str: string;
+    var num: number;
+    var bool: boolean;
+    
+    switch (strAndNum) {
+            ~~~~~~~~~
+!!! error TS2454: Variable 'strAndNum' is used before being assigned.
+        // Identical
+        case strAndNum:
+             ~~~~~~~~~
+!!! error TS2454: Variable 'strAndNum' is used before being assigned.
+            break;
+    
+        // Constituents
+        case str:
+             ~~~
+!!! error TS2454: Variable 'str' is used before being assigned.
+        case num:
+             ~~~
+!!! error TS2454: Variable 'num' is used before being assigned.
+            break;
+    
+        // Overlap in constituents
+        case numAndBool:
+             ~~~~~~~~~~
+!!! error TS2454: Variable 'numAndBool' is used before being assigned.
+            break;
+    
+        // No relation
+        case bool:
+             ~~~~
+!!! error TS2454: Variable 'bool' is used before being assigned.
+            break;
+    }

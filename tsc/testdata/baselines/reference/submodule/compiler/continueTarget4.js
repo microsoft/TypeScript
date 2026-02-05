@@ -8,6 +8,7 @@ while (true) {
 }
 
 //// [continueTarget4.js]
+"use strict";
 target1: target2: while (true) {
     continue target2;
 }

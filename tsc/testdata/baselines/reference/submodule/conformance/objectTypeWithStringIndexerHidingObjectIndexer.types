@@ -21,13 +21,13 @@ var r = o['']; // should be Object
 class C {
 >C : C
 
-    foo: string;
+    foo!: string;
 >foo : string
 
     [x: string]: string;
 >x : string
 }
-var c: C;
+declare var c: C;
 >c : C
 
 var r2: string = c[''];
@@ -43,7 +43,7 @@ interface I {
     [x: string]: string;
 >x : string
 }
-var i: I;
+declare var i: I;
 >i : I
 
 var r3: string = i[''];
@@ -52,7 +52,7 @@ var r3: string = i[''];
 >i : I
 >'' : ""
 
-var o2: {
+declare var o2: {
 >o2 : { [x: string]: string; baz: string; }
 
     baz: string;

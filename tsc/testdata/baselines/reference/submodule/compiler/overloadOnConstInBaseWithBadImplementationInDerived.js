@@ -11,6 +11,7 @@ class C implements I {
 }
 
 //// [overloadOnConstInBaseWithBadImplementationInDerived.js]
+"use strict";
 class C {
     x1(a, callback) {
     }

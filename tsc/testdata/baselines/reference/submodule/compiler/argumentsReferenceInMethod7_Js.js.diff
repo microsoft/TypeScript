@@ -8,6 +8,6 @@
 -    /**
 -     * @type Function
 -     */
--    callee: Function;
+-    callee: Function | undefined;
 +    m(): void;
  }

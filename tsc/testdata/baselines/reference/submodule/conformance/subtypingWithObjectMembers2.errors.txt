@@ -9,13 +9,16 @@ subtypingWithObjectMembers2.ts(37,15): error TS2430: Interface 'B3' incorrectly 
     Type 'string' is not assignable to type 'Base'.
 subtypingWithObjectMembers2.ts(50,15): error TS2430: Interface 'B' incorrectly extends interface 'A'.
   Types of property 'bar' are incompatible.
-    Type 'string' is not assignable to type 'Base'.
+    Type 'string | undefined' is not assignable to type 'Base | undefined'.
+      Type 'string' is not assignable to type 'Base'.
 subtypingWithObjectMembers2.ts(60,15): error TS2430: Interface 'B2' incorrectly extends interface 'A2'.
   Types of property '2.0' are incompatible.
-    Type 'string' is not assignable to type 'Base'.
+    Type 'string | undefined' is not assignable to type 'Base | undefined'.
+      Type 'string' is not assignable to type 'Base'.
 subtypingWithObjectMembers2.ts(70,15): error TS2430: Interface 'B3' incorrectly extends interface 'A3'.
   Types of property ''2.0'' are incompatible.
-    Type 'string' is not assignable to type 'Base'.
+    Type 'string | undefined' is not assignable to type 'Base | undefined'.
+      Type 'string' is not assignable to type 'Base'.
 
 
 ==== subtypingWithObjectMembers2.ts (6 errors) ====
@@ -29,7 +32,7 @@ subtypingWithObjectMembers2.ts(70,15): error TS2430: Interface 'B3' incorrectly 
     
     // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
     // foo properties are valid, bar properties cause errors in the derived class declarations
-    module NotOptional {
+    namespace NotOptional {
         interface A {
             foo: Base;
             bar: Base;
@@ -74,7 +77,7 @@ subtypingWithObjectMembers2.ts(70,15): error TS2430: Interface 'B3' incorrectly 
     }
     
     // same cases as above but with optional
-    module Optional {
+    namespace Optional {
         interface A {
             foo?: Base;
             bar?: Base;
@@ -84,7 +87,8 @@ subtypingWithObjectMembers2.ts(70,15): error TS2430: Interface 'B3' incorrectly 
                   ~
 !!! error TS2430: Interface 'B' incorrectly extends interface 'A'.
 !!! error TS2430:   Types of property 'bar' are incompatible.
-!!! error TS2430:     Type 'string' is not assignable to type 'Base'.
+!!! error TS2430:     Type 'string | undefined' is not assignable to type 'Base | undefined'.
+!!! error TS2430:       Type 'string' is not assignable to type 'Base'.
             foo?: Derived; // ok
             bar?: string; // error
         }
@@ -98,7 +102,8 @@ subtypingWithObjectMembers2.ts(70,15): error TS2430: Interface 'B3' incorrectly 
                   ~~
 !!! error TS2430: Interface 'B2' incorrectly extends interface 'A2'.
 !!! error TS2430:   Types of property '2.0' are incompatible.
-!!! error TS2430:     Type 'string' is not assignable to type 'Base'.
+!!! error TS2430:     Type 'string | undefined' is not assignable to type 'Base | undefined'.
+!!! error TS2430:       Type 'string' is not assignable to type 'Base'.
             1?: Derived; // ok
             2?: string; // error
         }
@@ -112,7 +117,8 @@ subtypingWithObjectMembers2.ts(70,15): error TS2430: Interface 'B3' incorrectly 
                   ~~
 !!! error TS2430: Interface 'B3' incorrectly extends interface 'A3'.
 !!! error TS2430:   Types of property ''2.0'' are incompatible.
-!!! error TS2430:     Type 'string' is not assignable to type 'Base'.
+!!! error TS2430:     Type 'string | undefined' is not assignable to type 'Base | undefined'.
+!!! error TS2430:       Type 'string' is not assignable to type 'Base'.
             '1'?: Derived; // ok
             '2.0'?: string; // error
         }

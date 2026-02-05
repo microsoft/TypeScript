@@ -16,7 +16,7 @@ class Sammy {
 >1 : 1
    }
 }
-module Sammy {
+namespace Sammy {
 >Sammy : typeof Sammy
 
     export var x = 1;
@@ -27,7 +27,7 @@ interface JQueryStatic {
     sammy: Sammy; // class instance
 >sammy : Sammy
 }
-var $: JQueryStatic;
+declare var $: JQueryStatic;
 >$ : JQueryStatic
 
 var instanceOfClassSammy: Sammy = new $.sammy(); // should be error

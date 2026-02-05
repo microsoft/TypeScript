@@ -7,7 +7,7 @@ interface IFoo<T> {
 >x : T
 }
 
-var iFoo: IFoo<number>;
+declare var iFoo: IFoo<number>;
 >iFoo : IFoo<number>
 
 iFoo.foo(1);
@@ -25,7 +25,7 @@ class IntFooBad implements IFoo<number> { // error
 >x : string
 }
 
-var intFooBad: IntFooBad;
+declare var intFooBad: IntFooBad;
 >intFooBad : IntFooBad
 
 class IntFoo implements IFoo<number> {
@@ -36,7 +36,7 @@ class IntFoo implements IFoo<number> {
 >x : number
 }
 
-var intFoo: IntFoo;
+declare var intFoo: IntFoo;
 >intFoo : IntFoo
 
 class StringFoo2 implements IFoo<string> {
@@ -47,7 +47,7 @@ class StringFoo2 implements IFoo<string> {
 >x : string
 }
 
-var stringFoo2: StringFoo2;
+declare var stringFoo2: StringFoo2;
 >stringFoo2 : StringFoo2
 
 stringFoo2.foo("hm");

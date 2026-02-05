@@ -1,0 +1,11 @@
+--- old.jsxPropsAsIdentifierNames.types
++++ new.jsxPropsAsIdentifierNames.types
+@@= skipped -4, +4 lines =@@
+     interface Element { }
+     interface IntrinsicElements {
+         div: {
+->div : { static?: boolean; }
++>div : { static?: boolean | undefined; }
+
+             static?: boolean;
+ >static : boolean | undefined

@@ -41,6 +41,7 @@ x[x++]++;
 
 
 //// [decrementAndIncrementOperators.js]
+"use strict";
 var x = 0;
 // errors
 1++;

@@ -1,6 +1,6 @@
 --- old.ExportClassWithInaccessibleTypeInTypeParameterConstraint.js
 +++ new.ExportClassWithInaccessibleTypeInTypeParameterConstraint.js
-@@= skipped -29, +29 lines =@@
+@@= skipped -30, +30 lines =@@
  var A;
  (function (A) {
      class Point {

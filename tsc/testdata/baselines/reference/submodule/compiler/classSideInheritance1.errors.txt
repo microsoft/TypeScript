@@ -12,8 +12,8 @@ classSideInheritance1.ts(13,3): error TS2576: Property 'bar' does not exist on t
      
     class C2 extends A {}
     
-    var a: A;
-    var c: C2;
+    declare var a: A;
+    declare var c: C2;
     a.bar(); // static off an instance - should be an error
       ~~~
 !!! error TS2576: Property 'bar' does not exist on type 'A'. Did you mean to access the static member 'A.bar' instead?

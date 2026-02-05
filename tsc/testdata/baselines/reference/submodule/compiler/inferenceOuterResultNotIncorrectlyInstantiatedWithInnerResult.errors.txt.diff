@@ -1,0 +1,28 @@
+--- old.inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.errors.txt
++++ new.inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.errors.txt
+@@= skipped -0, +0 lines =@@
+ inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts(35,15): error TS2322: Type '{ x: number; }' is not assignable to type 'Assign<T, { x: number; }>'.
+   Type '{ x: number; }' is not assignable to type 'Omit<T, "x">'.
+ inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts(35,59): error TS2769: No overload matches this call.
+-  Overload 1 of 4, '(target: {}, source: { x: number; }): { x: number; }', gave the following error.
+-    Argument of type 'T' is not assignable to parameter of type '{}'.
+-  Overload 2 of 4, '(target: object, ...sources: any[]): any', gave the following error.
++  The last overload gave the following error.
+     Argument of type 'T' is not assignable to parameter of type 'object'.
+
+
+@@= skipped -47, +45 lines =@@
+ !!! error TS2322:   Type '{ x: number; }' is not assignable to type 'Omit<T, "x">'.
+                                                               ~~~~~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 4, '(target: {}, source: { x: number; }): { x: number; }', gave the following error.
+-!!! error TS2769:     Argument of type 'T' is not assignable to parameter of type '{}'.
+-!!! error TS2769:   Overload 2 of 4, '(target: object, ...sources: any[]): any', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'T' is not assignable to parameter of type 'object'.
+-!!! related TS2208 inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts:33:18: This type parameter might need an `extends {}` constraint.
+ !!! related TS2208 inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts:33:18: This type parameter might need an `extends object` constraint.
++!!! related TS2771 lib.es2015.core.d.ts:--:--: The last overload is declared here.
+             return new Foo(v);
+         }
+     }

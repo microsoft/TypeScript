@@ -1,0 +1,196 @@
+typeGuardOfFormInstanceOf.ts(8,5): error TS2564: Property 'p1' has no initializer and is not definitely assigned in the constructor.
+typeGuardOfFormInstanceOf.ts(11,5): error TS2564: Property 'p2' has no initializer and is not definitely assigned in the constructor.
+typeGuardOfFormInstanceOf.ts(14,5): error TS2564: Property 'p3' has no initializer and is not definitely assigned in the constructor.
+typeGuardOfFormInstanceOf.ts(17,5): error TS2564: Property 'p4' has no initializer and is not definitely assigned in the constructor.
+typeGuardOfFormInstanceOf.ts(24,1): error TS2322: Type 'string | false' is not assignable to type 'string'.
+  Type 'boolean' is not assignable to type 'string'.
+typeGuardOfFormInstanceOf.ts(24,7): error TS2454: Variable 'ctor1' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(25,1): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardOfFormInstanceOf.ts(25,7): error TS2454: Variable 'ctor1' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(26,1): error TS2322: Type 'string | false' is not assignable to type 'string'.
+  Type 'boolean' is not assignable to type 'string'.
+typeGuardOfFormInstanceOf.ts(26,7): error TS2454: Variable 'ctor1' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(27,1): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardOfFormInstanceOf.ts(27,7): error TS2454: Variable 'ctor1' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(30,1): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardOfFormInstanceOf.ts(30,7): error TS2454: Variable 'ctor2' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(31,1): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardOfFormInstanceOf.ts(31,7): error TS2454: Variable 'ctor2' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(32,1): error TS2322: Type 'string | false' is not assignable to type 'string'.
+  Type 'boolean' is not assignable to type 'string'.
+typeGuardOfFormInstanceOf.ts(32,7): error TS2454: Variable 'ctor2' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(33,5): error TS2322: Type 'false | D1' is not assignable to type 'C2 | D1'.
+  Type 'boolean' is not assignable to type 'C2 | D1'.
+typeGuardOfFormInstanceOf.ts(33,19): error TS2454: Variable 'ctor2' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(36,5): error TS2454: Variable 'ctor3' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(40,5): error TS2454: Variable 'ctor3' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(40,11): error TS2339: Property 'p2' does not exist on type 'C1 | C2'.
+  Property 'p2' does not exist on type 'C1'.
+typeGuardOfFormInstanceOf.ts(44,5): error TS2454: Variable 'ctor4' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(47,10): error TS2454: Variable 'ctor4' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(51,5): error TS2454: Variable 'ctor4' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(51,11): error TS2339: Property 'p4' does not exist on type 'C1 | C2 | C3'.
+  Property 'p4' does not exist on type 'C1'.
+typeGuardOfFormInstanceOf.ts(55,5): error TS2454: Variable 'ctor5' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(59,5): error TS2454: Variable 'ctor5' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(59,11): error TS2339: Property 'p2' does not exist on type 'C1 | C2 | D1'.
+  Property 'p2' does not exist on type 'C1'.
+typeGuardOfFormInstanceOf.ts(63,5): error TS2454: Variable 'ctor6' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(63,28): error TS2454: Variable 'ctor6' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(66,5): error TS2454: Variable 'ctor6' is used before being assigned.
+typeGuardOfFormInstanceOf.ts(66,11): error TS2339: Property 'p4' does not exist on type 'C1 | C2 | C3'.
+  Property 'p4' does not exist on type 'C1'.
+
+
+==== typeGuardOfFormInstanceOf.ts (34 errors) ====
+    // A type guard of the form x instanceof C, where C is of a subtype of the global type 'Function' 
+    // and C has a property named 'prototype'
+    //  - when true, narrows the type of x to the type of the 'prototype' property in C provided 
+    //    it is a subtype of the type of x, or
+    //  - when false, has no effect on the type of x.
+    
+    class C1 {
+        p1: string;
+        ~~
+!!! error TS2564: Property 'p1' has no initializer and is not definitely assigned in the constructor.
+    }
+    class C2 {
+        p2: number;
+        ~~
+!!! error TS2564: Property 'p2' has no initializer and is not definitely assigned in the constructor.
+    }
+    class D1 extends C1 {
+        p3: number;
+        ~~
+!!! error TS2564: Property 'p3' has no initializer and is not definitely assigned in the constructor.
+    }
+    class C3 {
+        p4: number;
+        ~~
+!!! error TS2564: Property 'p4' has no initializer and is not definitely assigned in the constructor.
+    }
+    var str: string;
+    var num: number;
+    var strOrNum: string | number;
+    
+    var ctor1: C1 | C2;
+    str = ctor1 instanceof C1 && ctor1.p1; // C1
+    ~~~
+!!! error TS2322: Type 'string | false' is not assignable to type 'string'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string'.
+          ~~~~~
+!!! error TS2454: Variable 'ctor1' is used before being assigned.
+    num = ctor1 instanceof C2 && ctor1.p2; // C2
+    ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+          ~~~~~
+!!! error TS2454: Variable 'ctor1' is used before being assigned.
+    str = ctor1 instanceof D1 && ctor1.p1; // D1
+    ~~~
+!!! error TS2322: Type 'string | false' is not assignable to type 'string'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string'.
+          ~~~~~
+!!! error TS2454: Variable 'ctor1' is used before being assigned.
+    num = ctor1 instanceof D1 && ctor1.p3; // D1
+    ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+          ~~~~~
+!!! error TS2454: Variable 'ctor1' is used before being assigned.
+    
+    var ctor2: C2 | D1;
+    num = ctor2 instanceof C2 && ctor2.p2; // C2
+    ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+          ~~~~~
+!!! error TS2454: Variable 'ctor2' is used before being assigned.
+    num = ctor2 instanceof D1 && ctor2.p3; // D1
+    ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+          ~~~~~
+!!! error TS2454: Variable 'ctor2' is used before being assigned.
+    str = ctor2 instanceof D1 && ctor2.p1; // D1
+    ~~~
+!!! error TS2322: Type 'string | false' is not assignable to type 'string'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string'.
+          ~~~~~
+!!! error TS2454: Variable 'ctor2' is used before being assigned.
+    var r2: D1 | C2 = ctor2 instanceof C1 && ctor2; // C2 | D1
+        ~~
+!!! error TS2322: Type 'false | D1' is not assignable to type 'C2 | D1'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'C2 | D1'.
+                      ~~~~~
+!!! error TS2454: Variable 'ctor2' is used before being assigned.
+    
+    var ctor3: C1 | C2;
+    if (ctor3 instanceof C1) {
+        ~~~~~
+!!! error TS2454: Variable 'ctor3' is used before being assigned.
+        ctor3.p1; // C1
+    }
+    else {
+        ctor3.p2; // C2
+        ~~~~~
+!!! error TS2454: Variable 'ctor3' is used before being assigned.
+              ~~
+!!! error TS2339: Property 'p2' does not exist on type 'C1 | C2'.
+!!! error TS2339:   Property 'p2' does not exist on type 'C1'.
+    }
+    
+    var ctor4: C1 | C2 | C3;
+    if (ctor4 instanceof C1) {
+        ~~~~~
+!!! error TS2454: Variable 'ctor4' is used before being assigned.
+        ctor4.p1; // C1
+    }
+    else if (ctor4 instanceof C2) {
+             ~~~~~
+!!! error TS2454: Variable 'ctor4' is used before being assigned.
+        ctor4.p2; // C2
+    }
+    else {
+        ctor4.p4; // C3
+        ~~~~~
+!!! error TS2454: Variable 'ctor4' is used before being assigned.
+              ~~
+!!! error TS2339: Property 'p4' does not exist on type 'C1 | C2 | C3'.
+!!! error TS2339:   Property 'p4' does not exist on type 'C1'.
+    }
+    
+    var ctor5: C1 | D1 | C2;
+    if (ctor5 instanceof C1) {
+        ~~~~~
+!!! error TS2454: Variable 'ctor5' is used before being assigned.
+        ctor5.p1; // C1
+    }
+    else {
+        ctor5.p2; // C2
+        ~~~~~
+!!! error TS2454: Variable 'ctor5' is used before being assigned.
+              ~~
+!!! error TS2339: Property 'p2' does not exist on type 'C1 | C2 | D1'.
+!!! error TS2339:   Property 'p2' does not exist on type 'C1'.
+    }
+    
+    var ctor6: C1 | C2 | C3;
+    if (ctor6 instanceof C1 || ctor6 instanceof C2) {
+        ~~~~~
+!!! error TS2454: Variable 'ctor6' is used before being assigned.
+                               ~~~~~
+!!! error TS2454: Variable 'ctor6' is used before being assigned.
+    }
+    else {
+        ctor6.p4; // C3
+        ~~~~~
+!!! error TS2454: Variable 'ctor6' is used before being assigned.
+              ~~
+!!! error TS2339: Property 'p4' does not exist on type 'C1 | C2 | C3'.
+!!! error TS2339:   Property 'p4' does not exist on type 'C1'.
+    }

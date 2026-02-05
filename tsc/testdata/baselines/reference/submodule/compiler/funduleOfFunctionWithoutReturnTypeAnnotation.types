@@ -9,7 +9,7 @@ function fn() {
 >fn : typeof fn
 >n : number
 }
-module fn {
+namespace fn {
 >fn : typeof fn
 
     export var n = 1;

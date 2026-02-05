@@ -8,6 +8,7 @@ class Bar {
 }
 
 //// [overloadResolutionOnDefaultConstructor1.js]
+"use strict";
 class Bar {
     clone() {
         return new Bar(0);

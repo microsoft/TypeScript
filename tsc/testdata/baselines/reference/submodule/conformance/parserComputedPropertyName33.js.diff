@@ -1,9 +1,9 @@
 --- old.parserComputedPropertyName33.js
 +++ new.parserComputedPropertyName33.js
-@@= skipped -7, +7 lines =@@
- }
+@@= skipped -8, +8 lines =@@
 
  //// [parserComputedPropertyName33.js]
+ "use strict";
 -var _a;
  class C {
 -    constructor() {

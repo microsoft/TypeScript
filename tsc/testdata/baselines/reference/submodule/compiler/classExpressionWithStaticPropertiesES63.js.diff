@@ -1,9 +1,9 @@
 --- old.classExpressionWithStaticPropertiesES63.js
 +++ new.classExpressionWithStaticPropertiesES63.js
-@@= skipped -11, +11 lines =@@
- arr.forEach(C => console.log(C.y()));
+@@= skipped -12, +12 lines =@@
 
  //// [classExpressionWithStaticPropertiesES63.js]
+ "use strict";
 -var _a;
  const arr = [];
  for (let i = 0; i < 3; i++) {

@@ -16,6 +16,7 @@ const a = (
 );
 
 //// [jsxNestedWithinTernaryParsesCorrectly.jsx]
+"use strict";
 const emptyMessage = null;
 const a = (<div>
       {0 ? (emptyMessage // must be identifier?

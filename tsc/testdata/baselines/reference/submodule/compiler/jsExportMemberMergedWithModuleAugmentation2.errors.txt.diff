@@ -2,28 +2,30 @@
 +++ new.jsExportMemberMergedWithModuleAugmentation2.errors.txt
 @@= skipped -0, +0 lines =@@
 -/index.ts(4,16): error TS2300: Duplicate identifier 'a'.
-+/index.ts(1,19): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
++/index.ts(1,19): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
 +/index.ts(3,16): error TS2671: Cannot augment module './test' because it resolves to a non-module entity.
- /index.ts(7,3): error TS2339: Property 'toFixed' does not exist on type 'string'.
+ /index.ts(7,3): error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
 -/test.js(2,3): error TS2300: Duplicate identifier 'a'.
--
--
--==== /test.js (1 errors) ====
-+
-+
-+==== /test.js (0 errors) ====
++/test.js(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+
+ ==== /test.js (1 errors) ====
      module.exports = {
++    ~~~~~~~~~~~~~~~~~~
        a: "ok"
 -      ~
 -!!! error TS2300: Duplicate identifier 'a'.
 -!!! related TS6203 /index.ts:4:16: 'a' was also declared here.
++    ~~~~~~~~~
      };
++    ~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
      
 -==== /index.ts (2 errors) ====
 +==== /index.ts (3 errors) ====
      import { a } from "./test";
 +                      ~~~~~~~~
-+!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
++!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
      
      declare module "./test" {
 +                   ~~~~~~~~

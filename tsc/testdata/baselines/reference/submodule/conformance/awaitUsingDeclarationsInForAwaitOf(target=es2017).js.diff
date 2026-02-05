@@ -1,6 +1,6 @@
 --- old.awaitUsingDeclarationsInForAwaitOf(target=es2017).js
 +++ new.awaitUsingDeclarationsInForAwaitOf(target=es2017).js
-@@= skipped -58, +58 lines =@@
+@@= skipped -59, +59 lines =@@
      var e = new Error(message);
      return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
  });

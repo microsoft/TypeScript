@@ -27,6 +27,7 @@ type Dcps = ConstructorParameters<typeof D>; // should be [number, ...string[]]
 
 
 //// [parameterListAsTupleType.js]
+"use strict";
 function foo(a, b) {
     return true;
 }

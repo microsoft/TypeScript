@@ -13,11 +13,11 @@ import type { x as Default } from "foo";
 >x : "module"
 >Default : any
 
-import type { x as Import } from "foo" assert { "resolution-mode": "import" };
+import type { x as Import } from "foo" with { "resolution-mode": "import" };
 >x : "module"
 >Import : any
 
-import type { x as Require } from "foo" assert { "resolution-mode": "require" };
+import type { x as Require } from "foo" with { "resolution-mode": "require" };
 >x : "script"
 >Require : any
 
@@ -34,11 +34,11 @@ type _Require = typeof Require;
 >Require : "script"
 
 // resolution-mode does not enforce file extension in `bundler`, just sets conditions
-import type { x as ImportRelative } from "./other" assert { "resolution-mode": "import" };
+import type { x as ImportRelative } from "./other" with { "resolution-mode": "import" };
 >x : "other"
 >ImportRelative : any
 
-import type { x as RequireRelative } from "./other" assert { "resolution-mode": "require" };
+import type { x as RequireRelative } from "./other" with { "resolution-mode": "require" };
 >x : "other"
 >RequireRelative : any
 

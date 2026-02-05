@@ -12,7 +12,8 @@ func TestCompletionsTypeAssertionKeywords(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `const a = {
+	const content = `// @lib: es5
+const a = {
   b: 42 as /*0*/
 };
 

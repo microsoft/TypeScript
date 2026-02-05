@@ -18,8 +18,8 @@ assignmentCompatWithGenericCallSignatures2.ts(16,1): error TS2322: Type 'A' is n
         <S>(x: S, ...y: S[]): void
     }
     
-    var a: A;
-    var b: B;
+    declare var a: A;
+    declare var b: B;
     
     // Both errors
     a = b;

@@ -1,8 +1,8 @@
 --- old.fatarrowfunctionsErrors.js
 +++ new.fatarrowfunctionsErrors.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [fatarrowfunctionsErrors.js]
+ "use strict";
  foo((...Far) => { return 0; });
 -foo((1), { return: 0 });
 +foo((1), { return: 0, });

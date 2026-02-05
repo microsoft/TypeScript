@@ -17,3 +17,62 @@
 +>foo4 : (cb: { new (x: boolean): boolean; new (x: string): string; }) => { new (x: boolean): boolean; new (x: string): string; }
  >b : new <T, U>(x: T) => U
  }
+
+@@= skipped -28, +28 lines =@@
+ >a : new <T>(x: T) => T
+
+     function foo6<T>(cb: { new(x: T): string; new(x: T, y?: T): string }) {
+->foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
+->cb : { new (x: T): string; new (x: T, y?: T): string; }
++>foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => { new (x: T): string; new (x: T, y?: T | undefined): string; }
++>cb : { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >x : T
+ >x : T
+ >y : T | undefined
+
+         return cb;
+->cb : { new (x: T): string; new (x: T, y?: T): string; }
++>cb : { new (x: T): string; new (x: T, y?: T | undefined): string; }
+     }
+
+     declare var b: { new <T>(x: T, y: T): string };
+@@= skipped -18, +18 lines =@@
+     var r10 = foo6(b); // error
+ >r10 : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
+ >foo6(b) : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
+->foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
++>foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >b : new <T>(x: T, y: T) => string
+
+     function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {
+->foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
++>foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >x : T
+->cb : { new (x: T): string; new (x: T, y?: T): string; }
++>cb : { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >x : T
+ >x : T
+ >y : T | undefined
+
+         return cb;
+->cb : { new (x: T): string; new (x: T, y?: T): string; }
++>cb : { new (x: T): string; new (x: T, y?: T | undefined): string; }
+     }
+
+     var r13 = foo7(1, a); // ok
+ >r13 : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+ >foo7(1, a) : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+->foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
++>foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >1 : 1
+ >a : new <T>(x: T) => T
+
+@@= skipped -30, +30 lines =@@
+     var r14 = foo7(1, c); // ok
+ >r14 : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+ >foo7(1, c) : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+->foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
++>foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >1 : 1
+ >c : { new <T>(x: T): number; new <T>(x: number): T; }
+ }

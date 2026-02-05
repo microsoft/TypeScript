@@ -8,52 +8,86 @@ sources: index.ts
 emittedFile:/app/bin/index.js
 sourceFile:index.ts
 -------------------------------------------------------------------
->>>"use strict";
->>>Object.defineProperty(exports, "__esModule", { value: true });
 >>>/// <reference path="../types/bar.d.ts" preserve="true" />
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >/// <reference path="../types/bar.d.ts" preserve="true" />
-1 >Emitted(3, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(3, 59) Source(1, 59) + SourceIndex(0)
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 59) Source(1, 59) + SourceIndex(0)
 ---
->>>const foo_1 = require("foo");
-1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                             ^->
-1 >
-  >
-2 >import { x } from "foo";
-1 >Emitted(4, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(4, 30) Source(2, 25) + SourceIndex(0)
----
->>>const bar_1 = require("bar");
-1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1->
-  >
-2 >import { y } from "bar";
-1->Emitted(5, 1) Source(3, 1) + SourceIndex(0)
-2 >Emitted(5, 30) Source(3, 25) + SourceIndex(0)
----
->>>foo_1.x + bar_1.y;
+>>>import { x } from "foo";
 1 >
 2 >^^^^^^^
-3 >       ^^^
-4 >          ^^^^^^^
-5 >                 ^
-6 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >       ^^
+4 >         ^
+5 >          ^^
+6 >            ^^^^^^
+7 >                  ^^^^^
+8 >                       ^
+9 >                        ^->
+1 >
+  >
+2 >import 
+3 >       { 
+4 >         x
+5 >           }
+6 >             from 
+7 >                  "foo"
+8 >                       ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+3 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+4 >Emitted(2, 11) Source(2, 11) + SourceIndex(0)
+5 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+6 >Emitted(2, 19) Source(2, 19) + SourceIndex(0)
+7 >Emitted(2, 24) Source(2, 24) + SourceIndex(0)
+8 >Emitted(2, 25) Source(2, 25) + SourceIndex(0)
+---
+>>>import { y } from "bar";
+1->
+2 >^^^^^^^
+3 >       ^^
+4 >         ^
+5 >          ^^
+6 >            ^^^^^^
+7 >                  ^^^^^
+8 >                       ^
+1->
+  >
+2 >import 
+3 >       { 
+4 >         y
+5 >           }
+6 >             from 
+7 >                  "bar"
+8 >                       ;
+1->Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 8) Source(3, 8) + SourceIndex(0)
+3 >Emitted(3, 10) Source(3, 10) + SourceIndex(0)
+4 >Emitted(3, 11) Source(3, 11) + SourceIndex(0)
+5 >Emitted(3, 13) Source(3, 13) + SourceIndex(0)
+6 >Emitted(3, 19) Source(3, 19) + SourceIndex(0)
+7 >Emitted(3, 24) Source(3, 24) + SourceIndex(0)
+8 >Emitted(3, 25) Source(3, 25) + SourceIndex(0)
+---
+>>>x + y;
+1 >
+2 >^
+3 > ^^^
+4 >    ^
+5 >     ^
+6 >      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >x
-3 >        + 
-4 >          y
-5 >                 ;
-1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0)
-2 >Emitted(6, 8) Source(4, 2) + SourceIndex(0)
-3 >Emitted(6, 11) Source(4, 5) + SourceIndex(0)
-4 >Emitted(6, 18) Source(4, 6) + SourceIndex(0)
-5 >Emitted(6, 19) Source(4, 7) + SourceIndex(0)
+3 >  + 
+4 >    y
+5 >     ;
+1 >Emitted(4, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 2) Source(4, 2) + SourceIndex(0)
+3 >Emitted(4, 5) Source(4, 5) + SourceIndex(0)
+4 >Emitted(4, 6) Source(4, 6) + SourceIndex(0)
+5 >Emitted(4, 7) Source(4, 7) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=../myMapRoot/index.js.map

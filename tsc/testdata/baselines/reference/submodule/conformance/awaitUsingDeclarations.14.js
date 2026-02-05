@@ -12,6 +12,7 @@ class C {
 
 
 //// [awaitUsingDeclarations.14.js]
+"use strict";
 class C {
     static {
         await using x = null;

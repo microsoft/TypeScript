@@ -5,14 +5,14 @@ declare function dec<T>(target: T): T;
 >dec : <T>(target: T) => T
 >target : T
 
-module M1 {
+namespace M1 {
 >M1 : typeof M1
 
     export var X: number;
 >X : number
 }
 
-module M2 {
+namespace M2 {
     @dec
 >dec : <T>(target: T) => T
 

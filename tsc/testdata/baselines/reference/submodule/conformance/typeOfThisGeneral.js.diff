@@ -1,8 +1,8 @@
 --- old.typeOfThisGeneral.js
 +++ new.typeOfThisGeneral.js
-@@= skipped -180, +180 lines =@@
-
+@@= skipped -181, +181 lines =@@
  //// [typeOfThisGeneral.js]
+ "use strict";
  class MyTestClass {
 +    canary;
 +    static staticCanary;

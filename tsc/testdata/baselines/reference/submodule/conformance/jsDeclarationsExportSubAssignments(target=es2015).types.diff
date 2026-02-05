@@ -1,0 +1,22 @@
+--- old.jsDeclarationsExportSubAssignments(target=es2015).types
++++ new.jsDeclarationsExportSubAssignments(target=es2015).types
+@@= skipped -19, +19 lines =@@
+ module.exports = Foo;
+ >module.exports = Foo : typeof Foo
+ >module.exports : typeof Foo
+->module : { exports: typeof Foo; }
++>module : { Foo: typeof Foo; }
+ >exports : typeof Foo
+ >Foo : typeof Foo
+
+ module.exports.Strings = Strings;
+ >module.exports.Strings = Strings : { a: string; b: string; }
+->module.exports.Strings : { a: string; b: string; }
++>module.exports.Strings : any
+ >module.exports : typeof Foo
+->module : { exports: typeof Foo; }
++>module : { Foo: typeof Foo; }
+ >exports : typeof Foo
+->Strings : { a: string; b: string; }
++>Strings : any
+ >Strings : { a: string; b: string; }

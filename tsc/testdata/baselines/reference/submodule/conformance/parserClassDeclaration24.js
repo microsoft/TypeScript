@@ -5,5 +5,6 @@ class any {
 }
 
 //// [parserClassDeclaration24.js]
+"use strict";
 class any {
 }

@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution12.tsx] ////
 
 === react.d.ts ===
-declare module JSX {
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(react.d.ts, 0, 0))
 
 	interface Element { }
->Element : Symbol(Element, Decl(react.d.ts, 0, 20))
+>Element : Symbol(Element, Decl(react.d.ts, 0, 23))
 
 	interface IntrinsicElements {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(react.d.ts, 1, 22))
@@ -58,7 +58,7 @@ declare class Component<P, S>  {
 	render(): JSX.Element;
 >render : Symbol(Component.render, Decl(file.tsx, 4, 41))
 >JSX : Symbol(JSX, Decl(react.d.ts, 0, 0))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 0, 20))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 0, 23))
 
 	props: P;
 >props : Symbol(Component.props, Decl(file.tsx, 5, 23))
@@ -85,17 +85,17 @@ interface ComponentClass<P> {
 >P : Symbol(P, Decl(file.tsx, 12, 25))
 }
 
-declare module TestMod {
+declare namespace TestMod {
 >TestMod : Symbol(TestMod, Decl(file.tsx, 14, 1))
 
 	interface TestClass extends ComponentClass<{reqd: any}> {
->TestClass : Symbol(TestClass, Decl(file.tsx, 16, 24))
+>TestClass : Symbol(TestClass, Decl(file.tsx, 16, 27))
 >ComponentClass : Symbol(ComponentClass, Decl(file.tsx, 9, 1))
 >reqd : Symbol(reqd, Decl(file.tsx, 17, 45))
 	}
 	var Test: TestClass;
 >Test : Symbol(Test, Decl(file.tsx, 19, 4))
->TestClass : Symbol(TestClass, Decl(file.tsx, 16, 24))
+>TestClass : Symbol(TestClass, Decl(file.tsx, 16, 27))
 }
 
 // Errors correctly

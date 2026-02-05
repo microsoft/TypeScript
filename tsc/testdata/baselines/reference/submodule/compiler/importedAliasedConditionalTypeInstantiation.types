@@ -17,8 +17,8 @@ export type Handler<TEvent = any, TResult = any> = (
 
 export type Callback<TResult = any> = (error?: Error | string | null, result?: TResult) => void;
 >Callback : Callback<TResult>
->error : string | Error
->result : TResult
+>error : string | Error | null | undefined
+>result : TResult | undefined
 
 === node_modules/lambda-tester/index.d.ts ===
 import { Handler, Callback } from 'aws-lambda';
@@ -48,7 +48,7 @@ declare namespace lambdaTester {
         (result: S, additional?: any, done?: () => {}): void;
 >result : S
 >additional : any
->done : () => {}
+>done : (() => {}) | undefined
     }
     type Verifier<S> = S extends HandlerError<Handler>
 >Verifier : Verifier<S>

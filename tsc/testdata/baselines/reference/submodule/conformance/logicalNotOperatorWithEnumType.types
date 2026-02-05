@@ -15,13 +15,13 @@ enum ENUM1 { };
 // enum type var
 var ResultIsBoolean1 = !ENUM;
 >ResultIsBoolean1 : boolean
->!ENUM : boolean
+>!ENUM : false
 >ENUM : typeof ENUM
 
 // enum type expressions
 var ResultIsBoolean2 = !ENUM["B"];
 >ResultIsBoolean2 : boolean
->!ENUM["B"] : boolean
+>!ENUM["B"] : false
 >ENUM["B"] : ENUM.B
 >ENUM : typeof ENUM
 >"B" : "B"
@@ -41,8 +41,8 @@ var ResultIsBoolean3 = !(ENUM.B + ENUM["C"]);
 // multiple ! operators
 var ResultIsBoolean4 = !!ENUM;
 >ResultIsBoolean4 : boolean
->!!ENUM : boolean
->!ENUM : boolean
+>!!ENUM : true
+>!ENUM : false
 >ENUM : typeof ENUM
 
 var ResultIsBoolean5 = !!!(ENUM["B"] + ENUM.C);
@@ -61,22 +61,22 @@ var ResultIsBoolean5 = !!!(ENUM["B"] + ENUM.C);
 
 // miss assignment operators
 !ENUM;
->!ENUM : boolean
+>!ENUM : false
 >ENUM : typeof ENUM
 
 !ENUM1;
->!ENUM1 : boolean
+>!ENUM1 : false
 >ENUM1 : typeof ENUM1
 
 !ENUM.B;
->!ENUM.B : boolean
+>!ENUM.B : false
 >ENUM.B : ENUM.B
 >ENUM : typeof ENUM
 >B : ENUM.B
 
 !ENUM, ENUM1;
 >!ENUM, ENUM1 : typeof ENUM1
->!ENUM : boolean
+>!ENUM : false
 >ENUM : typeof ENUM
 >ENUM1 : typeof ENUM1
 

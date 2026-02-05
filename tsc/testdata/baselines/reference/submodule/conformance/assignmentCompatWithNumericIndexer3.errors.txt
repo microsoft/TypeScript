@@ -21,8 +21,8 @@ assignmentCompatWithNumericIndexer3.ts(33,9): error TS2322: Type '{ [x: number]:
         [x: number]: Derived;
     }
     
-    var a: A;
-    var b: { [x: number]: Base; };
+    declare var a: A;
+    declare var b: { [x: number]: Base; };
     
     a = b; // error
     ~
@@ -36,7 +36,7 @@ assignmentCompatWithNumericIndexer3.ts(33,9): error TS2322: Type '{ [x: number]:
         [x: number]: Derived2; // ok
     }
     
-    var b2: { [x: number]: Derived2; };
+    declare var b2: { [x: number]: Derived2; };
     a = b2; // ok
     b2 = a; // error
     ~~
@@ -45,14 +45,14 @@ assignmentCompatWithNumericIndexer3.ts(33,9): error TS2322: Type '{ [x: number]:
 !!! error TS2322:     Property 'baz' is missing in type 'Derived' but required in type 'Derived2'.
 !!! related TS2728 assignmentCompatWithNumericIndexer3.ts:5:38: 'baz' is declared here.
     
-    module Generics {
+    namespace Generics {
         class A<T extends Derived> {
             [x: number]: T;
         }
     
         function foo<T extends Derived>() {
-            var a: A<T>;
-            var b: { [x: number]: Derived; };
+            var a!: A<T>;
+            var b!: { [x: number]: Derived; };
             a = b; // error
             ~
 !!! error TS2322: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>'.
@@ -61,7 +61,7 @@ assignmentCompatWithNumericIndexer3.ts(33,9): error TS2322: Type '{ [x: number]:
 !!! error TS2322:       'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
             b = a; // ok
     
-            var b2: { [x: number]: T; };
+            var b2!: { [x: number]: T; };
             a = b2; // ok
             b2 = a; // ok
         }

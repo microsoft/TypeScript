@@ -3,14 +3,22 @@
 // const /*RENAME*/[|externalRENAME|] = true;
 // 
 // function f({
-//     lvl1 = external,
-// --- (line: 5) skipped ---
+//     lvl1 = [|externalRENAME|],
+//     nested: { lvl2 = [|externalRENAME|]},
+//     oldName: newName = [|externalRENAME|]
+// }) {}
+// 
+// const {
+//     lvl1 = [|externalRENAME|],
+//     nested: { lvl2 = [|externalRENAME|]},
+//     oldName: newName = [|externalRENAME|]
+// } = obj;
 
 
 
 // === findRenameLocations ===
 // === /renameBindingElementInitializerExternal.ts ===
-// const external = true;
+// const [|externalRENAME|] = true;
 // 
 // function f({
 //     lvl1 = /*RENAME*/[|externalRENAME|],
@@ -24,23 +32,11 @@
 //     oldName: newName = [|externalRENAME|]
 // } = obj;
 
-// === bundled:///libs/lib.dom.d.ts ===
-// --- (line: --) skipped ---
-//  *
-//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
-//  */
-// declare var [|externalRENAME|]: External;
-// /**
-//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
-//  *
-// --- (line: --) skipped ---
-// 
-
 
 
 // === findRenameLocations ===
 // === /renameBindingElementInitializerExternal.ts ===
-// const external = true;
+// const [|externalRENAME|] = true;
 // 
 // function f({
 //     lvl1 = [|externalRENAME|],
@@ -54,23 +50,11 @@
 //     oldName: newName = [|externalRENAME|]
 // } = obj;
 
-// === bundled:///libs/lib.dom.d.ts ===
-// --- (line: --) skipped ---
-//  *
-//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
-//  */
-// declare var [|externalRENAME|]: External;
-// /**
-//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
-//  *
-// --- (line: --) skipped ---
-// 
-
 
 
 // === findRenameLocations ===
 // === /renameBindingElementInitializerExternal.ts ===
-// const external = true;
+// const [|externalRENAME|] = true;
 // 
 // function f({
 //     lvl1 = [|externalRENAME|],
@@ -84,23 +68,11 @@
 //     oldName: newName = [|externalRENAME|]
 // } = obj;
 
-// === bundled:///libs/lib.dom.d.ts ===
-// --- (line: --) skipped ---
-//  *
-//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
-//  */
-// declare var [|externalRENAME|]: External;
-// /**
-//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
-//  *
-// --- (line: --) skipped ---
-// 
-
 
 
 // === findRenameLocations ===
 // === /renameBindingElementInitializerExternal.ts ===
-// const external = true;
+// const [|externalRENAME|] = true;
 // 
 // function f({
 //     lvl1 = [|externalRENAME|],
@@ -114,23 +86,11 @@
 //     oldName: newName = [|externalRENAME|]
 // } = obj;
 
-// === bundled:///libs/lib.dom.d.ts ===
-// --- (line: --) skipped ---
-//  *
-//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
-//  */
-// declare var [|externalRENAME|]: External;
-// /**
-//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
-//  *
-// --- (line: --) skipped ---
-// 
-
 
 
 // === findRenameLocations ===
 // === /renameBindingElementInitializerExternal.ts ===
-// const external = true;
+// const [|externalRENAME|] = true;
 // 
 // function f({
 //     lvl1 = [|externalRENAME|],
@@ -144,23 +104,11 @@
 //     oldName: newName = [|externalRENAME|]
 // } = obj;
 
-// === bundled:///libs/lib.dom.d.ts ===
-// --- (line: --) skipped ---
-//  *
-//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
-//  */
-// declare var [|externalRENAME|]: External;
-// /**
-//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
-//  *
-// --- (line: --) skipped ---
-// 
-
 
 
 // === findRenameLocations ===
 // === /renameBindingElementInitializerExternal.ts ===
-// const external = true;
+// const [|externalRENAME|] = true;
 // 
 // function f({
 //     lvl1 = [|externalRENAME|],
@@ -173,15 +121,3 @@
 //     nested: { lvl2 = [|externalRENAME|]},
 //     oldName: newName = /*RENAME*/[|externalRENAME|]
 // } = obj;
-
-// === bundled:///libs/lib.dom.d.ts ===
-// --- (line: --) skipped ---
-//  *
-//  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/external)
-//  */
-// declare var [|externalRENAME|]: External;
-// /**
-//  * The **`Window.frameElement`** property returns the element (such as iframe or object) in which the window is embedded.
-//  *
-// --- (line: --) skipped ---
-// 

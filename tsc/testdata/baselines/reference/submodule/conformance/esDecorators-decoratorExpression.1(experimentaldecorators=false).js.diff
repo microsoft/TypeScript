@@ -1,6 +1,6 @@
 --- old.esDecorators-decoratorExpression.1(experimentaldecorators=false).js
 +++ new.esDecorators-decoratorExpression.1(experimentaldecorators=false).js
-@@= skipped -54, +54 lines =@@
+@@= skipped -55, +55 lines =@@
      }
  }
  {

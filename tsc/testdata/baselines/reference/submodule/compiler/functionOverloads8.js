@@ -7,4 +7,5 @@ function foo(foo?:any){ return '' }
 
 
 //// [functionOverloads8.js]
+"use strict";
 function foo(foo) { return ''; }

@@ -1,0 +1,21 @@
+--- old.defaultPropertyAssignedClassWithPrototype.errors.txt
++++ new.defaultPropertyAssignedClassWithPrototype.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++bug39167.js(2,1): error TS7022: 'K' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
++
++
++==== bug39167.js (1 errors) ====
++    var test = {};
++    test.K = test.K ||
++    ~~~~~~~~~~~~~~~~~~
++        function () {}
++    ~~~~~~~~~~~~~~~~~~
++!!! error TS7022: 'K' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
++    
++    test.K.prototype = {
++        add() {}
++    };
++    
++    new test.K().add;
++    

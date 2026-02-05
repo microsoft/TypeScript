@@ -1,6 +1,6 @@
 --- old.TwoInternalModulesThatMergeEachWithExportedAndNonExportedLocalVarsOfTheSameName.js
 +++ new.TwoInternalModulesThatMergeEachWithExportedAndNonExportedLocalVarsOfTheSameName.js
-@@= skipped -60, +60 lines =@@
+@@= skipped -62, +62 lines =@@
      let Utils;
      (function (Utils) {
          class Plane {

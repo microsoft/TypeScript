@@ -1,8 +1,8 @@
 --- old.indexersInClassType.js
 +++ new.indexersInClassType.js
-@@= skipped -20, +20 lines =@@
-
+@@= skipped -21, +21 lines =@@
  //// [indexersInClassType.js]
+ "use strict";
  class C {
 +    1;
 +    'a';

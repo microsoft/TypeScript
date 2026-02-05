@@ -31,6 +31,7 @@ class C extends A {
 }
 
 //// [mixingApparentTypeOverrides.js]
+"use strict";
 function Tagged(Base) {
     return class extends Base {
         _tag;

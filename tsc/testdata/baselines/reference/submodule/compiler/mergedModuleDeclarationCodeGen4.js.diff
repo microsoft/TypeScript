@@ -1,6 +1,6 @@
 --- old.mergedModuleDeclarationCodeGen4.js
 +++ new.mergedModuleDeclarationCodeGen4.js
-@@= skipped -39, +39 lines =@@
+@@= skipped -40, +40 lines =@@
                  let data;
                  (function (data_1) {
                      function bar(contain, my, buz, data) {

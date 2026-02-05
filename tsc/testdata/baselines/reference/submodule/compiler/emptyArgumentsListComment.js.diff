@@ -1,9 +1,9 @@
 --- old.emptyArgumentsListComment.js
 +++ new.emptyArgumentsListComment.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
 
  //// [emptyArgumentsListComment.js]
+ "use strict";
 -a( /*1*/);
 -a(
 -/*first*/

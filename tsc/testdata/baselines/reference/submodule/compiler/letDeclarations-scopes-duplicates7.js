@@ -7,6 +7,8 @@ let var1 = 0;
 var var1 = 0;
 
 //// [file1.js]
+"use strict";
 let var1 = 0;
 //// [file2.js]
+"use strict";
 var var1 = 0;

@@ -10,7 +10,7 @@ fn = () => 3;
 >() => 3 : () => number
 >3 : 3
 
-module foo {
+namespace foo {
 >foo : typeof foo
 
     function xyz() {

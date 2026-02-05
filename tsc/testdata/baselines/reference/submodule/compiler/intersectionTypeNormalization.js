@@ -108,6 +108,7 @@ function foo(so: any) {
 }
 
 //// [intersectionTypeNormalization.js]
+"use strict";
 var x;
 var x;
 var x;

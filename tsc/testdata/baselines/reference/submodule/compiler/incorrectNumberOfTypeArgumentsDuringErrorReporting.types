@@ -3,7 +3,7 @@
 === incorrectNumberOfTypeArgumentsDuringErrorReporting.ts ===
 interface ObjA {
   y?:string,
->y : string
+>y : string | undefined
 }
 
 interface ObjB {[key:string]:any}

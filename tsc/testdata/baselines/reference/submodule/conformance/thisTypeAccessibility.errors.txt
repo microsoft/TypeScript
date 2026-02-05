@@ -1,3 +1,6 @@
+thisTypeAccessibility.ts(17,13): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+thisTypeAccessibility.ts(18,15): error TS2564: Property 'pp' has no initializer and is not definitely assigned in the constructor.
+thisTypeAccessibility.ts(19,12): error TS2564: Property 'ppp' has no initializer and is not definitely assigned in the constructor.
 thisTypeAccessibility.ts(26,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
 thisTypeAccessibility.ts(29,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
 thisTypeAccessibility.ts(30,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
@@ -12,7 +15,7 @@ thisTypeAccessibility.ts(58,20): error TS2341: Property 'sp' is private and only
 thisTypeAccessibility.ts(59,20): error TS2445: Property 'spp' is protected and only accessible within class 'MyGenericClass<T>' and its subclasses.
 
 
-==== thisTypeAccessibility.ts (12 errors) ====
+==== thisTypeAccessibility.ts (15 errors) ====
     class MyClass {
         private p: number = 123;
         protected pp: number = 123;
@@ -30,8 +33,14 @@ thisTypeAccessibility.ts(59,20): error TS2445: Property 'spp' is protected and o
     
     class MyGenericClass<T> {
         private p: T;
+                ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
         protected pp: T;
+                  ~~
+!!! error TS2564: Property 'pp' has no initializer and is not definitely assigned in the constructor.
         public ppp: T;
+               ~~~
+!!! error TS2564: Property 'ppp' has no initializer and is not definitely assigned in the constructor.
         private static sp: number;
         protected static spp: number;
         public static sppp: number;

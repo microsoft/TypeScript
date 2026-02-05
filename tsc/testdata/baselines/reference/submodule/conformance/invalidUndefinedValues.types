@@ -2,22 +2,22 @@
 
 === invalidUndefinedValues.ts ===
 var x: typeof undefined;
->x : any
+>x : undefined
 >undefined : undefined
 
 x = 1;
 >x = 1 : 1
->x : any
+>x : undefined
 >1 : 1
 
 x = '';
 >x = '' : ""
->x : any
+>x : undefined
 >'' : ""
 
 x = true;
 >x = true : true
->x : any
+>x : undefined
 >true : true
 
 var a: void;
@@ -25,12 +25,12 @@ var a: void;
 
 x = a;
 >x = a : void
->x : any
+>x : undefined
 >a : void
 
 x = null;
 >x = null : null
->x : any
+>x : undefined
 
 class C { foo: string }
 >C : C
@@ -41,12 +41,12 @@ var b: C;
 
 x = C;
 >x = C : typeof C
->x : any
+>x : undefined
 >C : typeof C
 
 x = b;
 >x = b : C
->x : any
+>x : undefined
 >b : C
 
 interface I { foo: string }
@@ -57,22 +57,22 @@ var c: I;
 
 x = c;
 >x = c : I
->x : any
+>x : undefined
 >c : I
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : typeof M
 >x : number
 >1 : 1
 
 x = M;
 >x = M : typeof M
->x : any
+>x : undefined
 >M : typeof M
 
 x = { f() { } }
 >x = { f() { } } : { f(): void; }
->x : any
+>x : undefined
 >{ f() { } } : { f(): void; }
 >f : () => void
 
@@ -82,12 +82,12 @@ function f<T>(a: T) {
 
     x = a;
 >x = a : T
->x : any
+>x : undefined
 >a : T
 }
 x = f;
 >x = f : <T>(a: T) => void
->x : any
+>x : undefined
 >f : <T>(a: T) => void
 
 enum E { A }
@@ -96,12 +96,12 @@ enum E { A }
 
 x = E;
 >x = E : typeof E
->x : any
+>x : undefined
 >E : typeof E
 
 x = E.A;
 >x = E.A : E
->x : any
+>x : undefined
 >E.A : E
 >E : typeof E
 >A : E

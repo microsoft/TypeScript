@@ -1,8 +1,8 @@
 --- old.generatedContextualTyping.js
 +++ new.generatedContextualTyping.js
-@@= skipped -357, +357 lines =@@
-
+@@= skipped -358, +358 lines =@@
  //// [generatedContextualTyping.js]
+ "use strict";
  class Base {
 +    p;
  }

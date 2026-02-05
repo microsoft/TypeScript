@@ -1,6 +1,6 @@
 --- old.functionMergedWithModule.js
 +++ new.functionMergedWithModule.js
-@@= skipped -20, +20 lines =@@
+@@= skipped -21, +21 lines =@@
      var x = 10;
  }
  (function (foo) {

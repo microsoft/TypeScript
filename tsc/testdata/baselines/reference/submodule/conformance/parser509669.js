@@ -6,6 +6,7 @@ function foo():any {
 }
 
 //// [parser509669.js]
+"use strict";
 function foo() {
     return () => { };
 }

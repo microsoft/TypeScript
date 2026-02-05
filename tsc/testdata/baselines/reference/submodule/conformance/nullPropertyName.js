@@ -86,6 +86,7 @@ foo.of = 1;
 
 
 //// [nullPropertyName.js]
+"use strict";
 function foo() { }
 // properties
 foo.x = 1;

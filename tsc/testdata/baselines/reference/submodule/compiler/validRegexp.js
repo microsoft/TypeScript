@@ -6,6 +6,7 @@ var x1 = /[a-z/]$/i;
 var x2 = /[a-z/]$ /i;
 
 //// [validRegexp.js]
+"use strict";
 var x = / [a - z /]$ /, i;
 var x1 = /[a-z/]$/i;
 var x2 = /[a-z/]$ /i;

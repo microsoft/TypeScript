@@ -1,6 +1,6 @@
 --- old.bestCommonTypeOfConditionalExpressions.js
 +++ new.bestCommonTypeOfConditionalExpressions.js
-@@= skipped -33, +33 lines =@@
+@@= skipped -34, +34 lines =@@
  var a;
  var b;
  class Base {

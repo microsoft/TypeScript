@@ -1,0 +1,10 @@
+noConstraintInReturnType1.ts(2,45): error TS2322: Type 'null' is not assignable to type 'List<T>'.
+
+
+==== noConstraintInReturnType1.ts (1 errors) ====
+    class List<T extends {}> {
+        static empty<T extends {}>(): List<T> { return null; }
+                                                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'List<T>'.
+    }
+    

@@ -7,5 +7,6 @@ class C {
 }
 
 //// [symbolProperty43.js]
+"use strict";
 class C {
 }

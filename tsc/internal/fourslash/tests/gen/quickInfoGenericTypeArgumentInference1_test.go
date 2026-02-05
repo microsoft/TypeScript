@@ -11,7 +11,8 @@ func TestQuickInfoGenericTypeArgumentInference1(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module Underscore {
+	const content = `// @strict: false
+namespace Underscore {
     export interface Iterator<T, U> {
         (value: T, index: any, list: any): U;
     }

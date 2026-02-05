@@ -33,6 +33,7 @@ const expected: Promise<["a", "b", "c"]> = Promise.all(undefined as readonly ["a
 
 
 //// [correctOrderOfPromiseMethod.js]
+"use strict";
 async function countEverything() {
     const providerA = async () => { return []; };
     const providerB = async () => { return []; };

@@ -45,6 +45,7 @@ d?.["bar"];
 
 
 //// [noPropertyAccessFromIndexSignature1.js]
+"use strict";
 // access property
 a.foo;
 a["foo"];

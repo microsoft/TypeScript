@@ -9,5 +9,6 @@ Point.prototype.add = function(dx, dy) {
 };
 
 //// [assignToPrototype1.js]
+"use strict";
 Point.prototype.add = function (dx, dy) {
 };

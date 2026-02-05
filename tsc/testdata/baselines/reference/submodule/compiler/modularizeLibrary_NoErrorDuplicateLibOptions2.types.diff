@@ -11,3 +11,15 @@
 +>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
  >arguments : IArguments
  }
+
+@@= skipped -194, +194 lines =@@
+
+ str.includes("hello", 0);
+ >str.includes("hello", 0) : boolean
+->str.includes : (searchString: string, position?: number) => boolean
++>str.includes : (searchString: string, position?: number | undefined) => boolean
+ >str : string
+->includes : (searchString: string, position?: number) => boolean
++>includes : (searchString: string, position?: number | undefined) => boolean
+ >"hello" : "hello"
+ >0 : 0

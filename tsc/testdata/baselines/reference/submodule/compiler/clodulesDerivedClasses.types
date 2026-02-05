@@ -8,7 +8,7 @@ class Shape {
 >id : number
 }
 
-module Shape.Utils {
+namespace Shape.Utils {
 >Shape : typeof Shape
 >Utils : typeof Utils
 
@@ -25,7 +25,7 @@ class Path extends Shape {
 
 }
 
-module Path.Utils {
+namespace Path.Utils {
 >Path : typeof Path
 >Utils : typeof Utils
 

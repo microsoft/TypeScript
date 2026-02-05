@@ -1,6 +1,6 @@
 genericArrayAssignmentCompatErrors.ts(2,19): error TS2351: This expression is not constructable.
-  Type 'undefined[]' has no construct signatures.
-genericArrayAssignmentCompatErrors.ts(4,14): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
+  Type 'never[]' has no construct signatures.
+genericArrayAssignmentCompatErrors.ts(4,22): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
 
 
 ==== genericArrayAssignmentCompatErrors.ts (2 errors) ====
@@ -8,12 +8,12 @@ genericArrayAssignmentCompatErrors.ts(4,14): error TS2314: Generic type 'Array<T
     var myCars2 = new [];
                       ~~
 !!! error TS2351: This expression is not constructable.
-!!! error TS2351:   Type 'undefined[]' has no construct signatures.
+!!! error TS2351:   Type 'never[]' has no construct signatures.
     var myCars3 = new Array({});
-    var myCars4: Array; // error
-                 ~~~~~
+    declare var myCars4: Array; // error
+                         ~~~~~
 !!! error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
-    var myCars5: Array<any>[];
+    declare var myCars5: Array<any>[];
      
     myCars = myCars2;
     myCars = myCars3;

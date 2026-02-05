@@ -7,13 +7,13 @@ var f = ''
 >'' : ""
 
 // test #2
-module foo {
+namespace foo {
 >foo : typeof foo
 
         function bar() { }
 >bar : () => void
 }
 // test #3
-module empty {
+namespace empty {
 }
 // test #4

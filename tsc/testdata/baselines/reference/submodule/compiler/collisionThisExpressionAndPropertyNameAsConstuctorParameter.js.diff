@@ -1,6 +1,6 @@
 --- old.collisionThisExpressionAndPropertyNameAsConstuctorParameter.js
 +++ new.collisionThisExpressionAndPropertyNameAsConstuctorParameter.js
-@@= skipped -45, +45 lines =@@
+@@= skipped -46, +46 lines =@@
      }
  }
  class Foo3 {

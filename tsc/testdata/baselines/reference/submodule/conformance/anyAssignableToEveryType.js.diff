@@ -1,7 +1,7 @@
 --- old.anyAssignableToEveryType.js
 +++ new.anyAssignableToEveryType.js
-@@= skipped -49, +49 lines =@@
- //// [anyAssignableToEveryType.js]
+@@= skipped -50, +50 lines =@@
+ "use strict";
  var a;
  class C {
 +    foo;

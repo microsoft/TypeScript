@@ -1,0 +1,9 @@
+--- old.parserES5SymbolProperty5(target=es2015).js
++++ new.parserES5SymbolProperty5(target=es2015).js
+@@= skipped -7, +7 lines =@@
+ //// [parserES5SymbolProperty5.js]
+ "use strict";
+ class C {
++    [Symbol.isRegExp];
+ }
+-Symbol.isRegExp;

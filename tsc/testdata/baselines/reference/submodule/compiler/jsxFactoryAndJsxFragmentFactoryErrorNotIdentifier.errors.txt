@@ -1,9 +1,27 @@
 error TS18035: Invalid value for 'jsxFragmentFactory'. '234' is not a valid identifier or qualified-name.
+jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx(4,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx(4,10): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx(4,19): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx(4,28): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx(4,35): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx(4,44): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
 !!! error TS18035: Invalid value for 'jsxFragmentFactory'. '234' is not a valid identifier or qualified-name.
-==== jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx (0 errors) ====
+==== jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx (6 errors) ====
     declare var h: any;
     
     <></>;
     <><span>1</span><><span>2.1</span><span>2.2</span></></>;
+      ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+             ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                      ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                               ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                      ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                               ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.

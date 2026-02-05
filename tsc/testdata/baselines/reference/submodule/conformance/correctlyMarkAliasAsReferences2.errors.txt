@@ -1,0 +1,19 @@
+0.tsx(7,21): error TS2454: Variable 'buttonProps' is used before being assigned.
+
+
+==== 0.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    ///<reference path="declaration.d.ts" />
+    import * as cx from 'classnames';
+    import * as React from "react";
+    
+    let buttonProps : {[attributeName: string]: ''}
+    let k = <button {...buttonProps}>
+                        ~~~~~~~~~~~
+!!! error TS2454: Variable 'buttonProps' is used before being assigned.
+                <span className={cx('class1', { class2: true })} />
+            </button>;
+    
+==== declaration.d.ts (0 errors) ====
+    declare module "classnames";
+    

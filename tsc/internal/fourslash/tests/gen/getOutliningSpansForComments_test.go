@@ -12,7 +12,8 @@ func TestGetOutliningSpansForComments(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `[|/*
+	const content = `// @lib: es5
+[|/*
     Block comment at the beginning of the file before module:
         line one of the comment
         line two of the comment

@@ -36,6 +36,7 @@ class Test2<T extends A> {
 }
 
 //// [strictNullNotNullIndexTypeNoLib.js]
+"use strict";
 class Test {
     attrs;
     m() {

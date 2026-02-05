@@ -9,5 +9,5 @@ var a;
 
 delete a;
 >delete a : boolean
->a : any
+>a : undefined
 

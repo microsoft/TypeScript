@@ -1,10 +1,10 @@
 --- old.decoratorMetadataNoLibIsolatedModulesTypes.js
 +++ new.decoratorMetadataNoLibIsolatedModulesTypes.js
-@@= skipped -21, +21 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.B = void 0;
- class B {
+@@= skipped -18, +18 lines =@@
+ };
+ var _a;
+ export class B {
 +    member;
  }
- exports.B = B;
  __decorate([
+     Decorate,

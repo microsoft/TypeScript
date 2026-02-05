@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/decorators/invalid/decoratorOnUsing.ts] ////
+
+=== decoratorOnUsing.ts ===
+declare function dec<T>(target: T): T;
+>dec : Symbol(dec, Decl(decoratorOnUsing.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorOnUsing.ts, 0, 21))
+>target : Symbol(target, Decl(decoratorOnUsing.ts, 0, 24))
+>T : Symbol(T, Decl(decoratorOnUsing.ts, 0, 21))
+>T : Symbol(T, Decl(decoratorOnUsing.ts, 0, 21))
+
+@dec
+>dec : Symbol(dec, Decl(decoratorOnUsing.ts, 0, 0))
+
+using 1
+
+@dec
+>dec : Symbol(dec, Decl(decoratorOnUsing.ts, 0, 0))
+
+using x
+>x : Symbol(x, Decl(decoratorOnUsing.ts, 6, 5))
+

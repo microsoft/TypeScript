@@ -1,9 +1,0 @@
---- old.destructuringArrayBindingPatternAndAssignment4.types
-+++ new.destructuringArrayBindingPatternAndAssignment4.types
-@@= skipped -7, +7 lines =@@
- >data : number[] | null
-
- const [value] = data; // Error
-->value : any
-+>value : number
- >data : number[] | null

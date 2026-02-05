@@ -1,0 +1,40 @@
+genericCallWithFunctionTypedArguments4.ts(3,11): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+genericCallWithFunctionTypedArguments4.ts(4,11): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+genericCallWithFunctionTypedArguments4.ts(12,12): error TS2454: Variable 'u' is used before being assigned.
+genericCallWithFunctionTypedArguments4.ts(15,14): error TS2454: Variable 'a' is used before being assigned.
+genericCallWithFunctionTypedArguments4.ts(22,15): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== genericCallWithFunctionTypedArguments4.ts (5 errors) ====
+    // No inference is made from function typed arguments which have multiple call signatures
+    
+    class C { foo: string }
+              ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    class D { bar: string }
+              ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+    var a: {
+        new(x: boolean): C;
+        new(x: string): D;
+    }
+    
+    function foo4<T, U>(cb: new(x: T) => U) {
+        var u: U;
+        return u;
+               ~
+!!! error TS2454: Variable 'u' is used before being assigned.
+    }
+    
+    var r = foo4(a); // T is {} (candidates boolean and string), U is {} (candidates C and D)
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    var b: {
+        new<T>(x: boolean): T;
+        new<T>(x: T): any;
+    }
+    
+    var r2 = foo4(b); // T is {} (candidates boolean and {}), U is any (candidates any and {})
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.

@@ -1,0 +1,26 @@
+missingImportAfterModuleImport_1.ts(5,12): error TS2564: Property 'SubModule' has no initializer and is not definitely assigned in the constructor.
+
+
+==== missingImportAfterModuleImport_1.ts (1 errors) ====
+    ///<reference path='missingImportAfterModuleImport_0.ts' preserve="true" />
+    import SubModule = require('SubModule');
+    class MainModule {
+        // public static SubModule: SubModule;
+        public SubModule: SubModule;
+               ~~~~~~~~~
+!!! error TS2564: Property 'SubModule' has no initializer and is not definitely assigned in the constructor.
+        constructor() { }
+    }
+    export = MainModule;
+    
+    
+==== missingImportAfterModuleImport_0.ts (0 errors) ====
+    declare module "SubModule" {
+        class SubModule {
+            public static StaticVar: number;
+            public InstanceVar: number;
+            constructor();
+        }
+        export = SubModule;
+    }
+    

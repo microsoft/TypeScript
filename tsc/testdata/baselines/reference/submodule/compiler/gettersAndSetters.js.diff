@@ -1,7 +1,7 @@
 --- old.gettersAndSetters.js
 +++ new.gettersAndSetters.js
-@@= skipped -54, +54 lines =@@
- //// [gettersAndSetters.js]
+@@= skipped -55, +55 lines =@@
+ "use strict";
  // classes
  class C {
 -    constructor() {

@@ -12,7 +12,8 @@ func TestCompletionForStringLiteral13(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface SymbolConstructor {
+	const content = `// @lib: es5
+interface SymbolConstructor {
     readonly species: symbol;
 }
 var Symbol: SymbolConstructor;

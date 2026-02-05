@@ -1,18 +1,19 @@
 //// [tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt6.ts] ////
 
 //// [moduleSharesNameWithImportDeclarationInsideIt6.ts]
-module Z.M {
+namespace Z.M {
     export function bar() {
         return "";
     }
 }
-module A.M {
+namespace A.M {
     import M = Z.M;
     export function bar() {
     }
 }
 
 //// [moduleSharesNameWithImportDeclarationInsideIt6.js]
+"use strict";
 var Z;
 (function (Z) {
     let M;

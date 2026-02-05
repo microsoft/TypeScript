@@ -1,8 +1,8 @@
 --- old.emitClassDeclarationWithMethodInES6.js
 +++ new.emitClassDeclarationWithMethodInES6.js
-@@= skipped -25, +25 lines =@@
-
+@@= skipped -26, +26 lines =@@
  //// [emitClassDeclarationWithMethodInES6.js]
+ "use strict";
  class D {
 +    _bar;
      foo() { }

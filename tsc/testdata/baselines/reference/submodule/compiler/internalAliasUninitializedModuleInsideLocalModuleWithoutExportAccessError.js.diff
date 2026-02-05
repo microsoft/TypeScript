@@ -1,6 +1,6 @@
 --- old.internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.js
 +++ new.internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.js
-@@= skipped -31, +31 lines =@@
+@@= skipped -23, +23 lines =@@
  exports.z = exports.c = void 0;
  var c;
  (function (c) {

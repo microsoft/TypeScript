@@ -9,6 +9,7 @@ class Foo {
 
 
 //// [missingReturnStatement1.js]
+"use strict";
 class Foo {
     foo() {
         //return 4;

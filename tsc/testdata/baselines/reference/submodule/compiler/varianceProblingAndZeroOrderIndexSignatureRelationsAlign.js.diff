@@ -1,8 +1,8 @@
 --- old.varianceProblingAndZeroOrderIndexSignatureRelationsAlign.js
 +++ new.varianceProblingAndZeroOrderIndexSignatureRelationsAlign.js
-@@= skipped -72, +72 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.MyServer = void 0;
+@@= skipped -69, +69 lines =@@
+
+ //// [varianceProblingAndZeroOrderIndexSignatureRelationsAlign.js]
  class Left {
 +    value;
 +    _tag = 'Left';

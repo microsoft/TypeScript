@@ -14,4 +14,5 @@ var test: IIntervalTreeNode[] = [{ interval: { begin: 0 }, children: null }]; //
 
 
 //// [doNotWidenAtObjectLiteralPropertyAssignment.js]
+"use strict";
 var test = [{ interval: { begin: 0 }, children: null }]; // was error here because best common type is {}

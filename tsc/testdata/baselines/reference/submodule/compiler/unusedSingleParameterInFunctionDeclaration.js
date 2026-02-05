@@ -6,6 +6,7 @@ function greeter(person: string) {
 }
 
 //// [unusedSingleParameterInFunctionDeclaration.js]
+"use strict";
 function greeter(person) {
     var unused = 20;
 }

@@ -6,6 +6,8 @@ async function f() {}
 function g() { }
 
 //// [a.js]
+"use strict";
 async function f() { }
 //// [b.js]
+"use strict";
 function g() { }

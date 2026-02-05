@@ -9,7 +9,7 @@ export interface Option<T> {
 	zip1<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray1<O>]>;
 >zip1 : Symbol(Option.zip1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 28))
 >O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 6))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
 >others : Symbol(others, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 36))
 >O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 6))
@@ -21,7 +21,7 @@ export interface Option<T> {
 	zip2<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray2<O>]>;
 >zip2 : Symbol(Option.zip2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 88))
 >O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 6))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
 >others : Symbol(others, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 36))
 >O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 6))
@@ -33,7 +33,7 @@ export interface Option<T> {
 	zip3<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray3<O>]>;
 >zip3 : Symbol(Option.zip3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 88))
 >O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 6, 6))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
 >others : Symbol(others, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 6, 36))
 >O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 6, 6))

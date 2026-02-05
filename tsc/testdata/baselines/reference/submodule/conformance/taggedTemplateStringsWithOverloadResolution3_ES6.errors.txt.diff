@@ -1,29 +1,71 @@
 --- old.taggedTemplateStringsWithOverloadResolution3_ES6.errors.txt
 +++ new.taggedTemplateStringsWithOverloadResolution3_ES6.errors.txt
 @@= skipped -0, +0 lines =@@
+ taggedTemplateStringsWithOverloadResolution3_ES6.ts(2,10): error TS2394: This overload signature is not compatible with its implementation signature.
+ taggedTemplateStringsWithOverloadResolution3_ES6.ts(6,25): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(strs: TemplateStringsArray, s: string): string', gave the following error.
+-    Argument of type 'undefined' is not assignable to parameter of type 'string'.
+-  Overload 2 of 2, '(strs: TemplateStringsArray, n: number): number', gave the following error.
++  The last overload gave the following error.
+     Argument of type 'undefined' is not assignable to parameter of type 'number'.
  taggedTemplateStringsWithOverloadResolution3_ES6.ts(9,9): error TS2769: No overload matches this call.
 -  Overload 1 of 2, '(strs: TemplateStringsArray, s: string): string', gave the following error.
 -    Argument of type '{}' is not assignable to parameter of type 'string'.
 -  Overload 2 of 2, '(strs: TemplateStringsArray, n: number): number', gave the following error.
 +  The last overload gave the following error.
      Argument of type '{}' is not assignable to parameter of type 'number'.
- taggedTemplateStringsWithOverloadResolution3_ES6.ts(18,4): error TS2339: Property 'foo' does not exist on type 'Date'.
- taggedTemplateStringsWithOverloadResolution3_ES6.ts(44,1): error TS2554: Expected 2-4 arguments, but got 1.
+ taggedTemplateStringsWithOverloadResolution3_ES6.ts(11,10): error TS2394: This overload signature is not compatible with its implementation signature.
+ taggedTemplateStringsWithOverloadResolution3_ES6.ts(15,5): error TS2322: Type 'undefined' is not assignable to type 'Date'.
+@@= skipped -17, +13 lines =@@
+ taggedTemplateStringsWithOverloadResolution3_ES6.ts(47,10): error TS7010: 'fn4', which lacks return-type annotation, implicitly has an 'any' return type.
+ taggedTemplateStringsWithOverloadResolution3_ES6.ts(48,10): error TS7010: 'fn4', which lacks return-type annotation, implicitly has an 'any' return type.
+ taggedTemplateStringsWithOverloadResolution3_ES6.ts(49,10): error TS7010: 'fn4', which lacks return-type annotation, implicitly has an 'any' return type.
+-taggedTemplateStringsWithOverloadResolution3_ES6.ts(55,1): error TS2769: No overload matches this call.
+-  Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: number): any', gave the following error.
+-    Argument of type 'number' is not assignable to parameter of type 'string'.
+-  Overload 2 of 3, '(strs: TemplateStringsArray, n: 3, m: string): any', gave the following error.
++taggedTemplateStringsWithOverloadResolution3_ES6.ts(55,16): error TS2769: No overload matches this call.
++  The last overload gave the following error.
+     Argument of type 'undefined' is not assignable to parameter of type 'string'.
+-taggedTemplateStringsWithOverloadResolution3_ES6.ts(56,1): error TS2769: No overload matches this call.
+-  Overload 1 of 3, '(strs: TemplateStringsArray, n: "", m: number): any', gave the following error.
+-    Argument of type 'null' is not assignable to parameter of type 'number'.
+-  Overload 2 of 3, '(strs: TemplateStringsArray, n: number, m: string): any', gave the following error.
++taggedTemplateStringsWithOverloadResolution3_ES6.ts(56,9): error TS2769: No overload matches this call.
++  The last overload gave the following error.
+     Argument of type 'string' is not assignable to parameter of type 'number'.
+ taggedTemplateStringsWithOverloadResolution3_ES6.ts(59,9): error TS2769: No overload matches this call.
+-  Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: number): any', gave the following error.
+-    Argument of type 'null' is not assignable to parameter of type 'string'.
+-  Overload 2 of 3, '(strs: TemplateStringsArray, n: number, m: string): any', gave the following error.
++  The last overload gave the following error.
+     Argument of type 'null' is not assignable to parameter of type 'number'.
  taggedTemplateStringsWithOverloadResolution3_ES6.ts(62,9): error TS2769: No overload matches this call.
--  Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: any): any', gave the following error.
+-  Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: number): any', gave the following error.
 -    Argument of type 'boolean' is not assignable to parameter of type 'string'.
--  Overload 2 of 3, '(strs: TemplateStringsArray, n: number, m: any): any', gave the following error.
+-  Overload 2 of 3, '(strs: TemplateStringsArray, n: number, m: string): any', gave the following error.
 +  The last overload gave the following error.
      Argument of type 'boolean' is not assignable to parameter of type 'number'.
- taggedTemplateStringsWithOverloadResolution3_ES6.ts(63,18): error TS2769: No overload matches this call.
--  Overload 1 of 3, '(strs: TemplateStringsArray, n: any, m: number): any', gave the following error.
--    Argument of type 'boolean' is not assignable to parameter of type 'number'.
--  Overload 2 of 3, '(strs: TemplateStringsArray, n: any, m: string): any', gave the following error.
+ taggedTemplateStringsWithOverloadResolution3_ES6.ts(63,9): error TS2769: No overload matches this call.
+-  Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: number): any', gave the following error.
+-    Argument of type 'null' is not assignable to parameter of type 'string'.
+-  Overload 2 of 3, '(strs: TemplateStringsArray, n: number, m: string): any', gave the following error.
 +  The last overload gave the following error.
-     Argument of type 'boolean' is not assignable to parameter of type 'string'.
+     Argument of type 'null' is not assignable to parameter of type 'number'.
+ taggedTemplateStringsWithOverloadResolution3_ES6.ts(66,10): error TS2394: This overload signature is not compatible with its implementation signature.
  taggedTemplateStringsWithOverloadResolution3_ES6.ts(69,18): error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
-
-@@= skipped -29, +23 lines =@@
+@@= skipped -41, +31 lines =@@
+     var s: string = fn1 `${ undefined }`;
+                             ~~~~~~~~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(strs: TemplateStringsArray, s: string): string', gave the following error.
+-!!! error TS2769:     Argument of type 'undefined' is not assignable to parameter of type 'string'.
+-!!! error TS2769:   Overload 2 of 2, '(strs: TemplateStringsArray, n: number): number', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'undefined' is not assignable to parameter of type 'number'.
++!!! related TS2771 taggedTemplateStringsWithOverloadResolution3_ES6.ts:3:10: The last overload is declared here.
+     
+     // No candidate overloads found
      fn1 `${ {} }`; // Error
              ~~
  !!! error TS2769: No overload matches this call.
@@ -35,25 +77,60 @@
 +!!! related TS2771 taggedTemplateStringsWithOverloadResolution3_ES6.ts:3:10: The last overload is declared here.
      
      function fn2(strs: TemplateStringsArray, s: string, n: number): number;
-     function fn2<T>(strs: TemplateStringsArray, n: number, t: T): T;
-@@= skipped -64, +63 lines =@@
+              ~~~
+@@= skipped -80, +78 lines =@@
+     fn4 `${ '' }${ 3  }`;
+     fn4 `${ 3  }${ '' }`;
+     fn4 `${ 3  }${ undefined }`;
+-    ~~~
++                   ~~~~~~~~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: number): any', gave the following error.
+-!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.
+-!!! error TS2769:   Overload 2 of 3, '(strs: TemplateStringsArray, n: 3, m: string): any', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'undefined' is not assignable to parameter of type 'string'.
++!!! related TS2771 taggedTemplateStringsWithOverloadResolution3_ES6.ts:48:10: The last overload is declared here.
+     fn4 `${ '' }${ null }`;
+-    ~~~
++            ~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 3, '(strs: TemplateStringsArray, n: "", m: number): any', gave the following error.
+-!!! error TS2769:     Argument of type 'null' is not assignable to parameter of type 'number'.
+-!!! error TS2769:   Overload 2 of 3, '(strs: TemplateStringsArray, n: number, m: string): any', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.
++!!! related TS2771 taggedTemplateStringsWithOverloadResolution3_ES6.ts:48:10: The last overload is declared here.
+     
+     // Generic overloads with constraints called with type arguments that do not satisfy the constraints
+     fn4 `${ null }${ null }`; // Error
+             ~~~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: number): any', gave the following error.
+-!!! error TS2769:     Argument of type 'null' is not assignable to parameter of type 'string'.
+-!!! error TS2769:   Overload 2 of 3, '(strs: TemplateStringsArray, n: number, m: string): any', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'null' is not assignable to parameter of type 'number'.
++!!! related TS2771 taggedTemplateStringsWithOverloadResolution3_ES6.ts:48:10: The last overload is declared here.
+     
+     // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
      fn4 `${ true }${ null }`;
              ~~~~
  !!! error TS2769: No overload matches this call.
--!!! error TS2769:   Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: any): any', gave the following error.
+-!!! error TS2769:   Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: number): any', gave the following error.
 -!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
--!!! error TS2769:   Overload 2 of 3, '(strs: TemplateStringsArray, n: number, m: any): any', gave the following error.
+-!!! error TS2769:   Overload 2 of 3, '(strs: TemplateStringsArray, n: number, m: string): any', gave the following error.
 +!!! error TS2769:   The last overload gave the following error.
  !!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'number'.
 +!!! related TS2771 taggedTemplateStringsWithOverloadResolution3_ES6.ts:48:10: The last overload is declared here.
      fn4 `${ null }${ true }`;
-                      ~~~~
+             ~~~~
  !!! error TS2769: No overload matches this call.
--!!! error TS2769:   Overload 1 of 3, '(strs: TemplateStringsArray, n: any, m: number): any', gave the following error.
--!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'number'.
--!!! error TS2769:   Overload 2 of 3, '(strs: TemplateStringsArray, n: any, m: string): any', gave the following error.
+-!!! error TS2769:   Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: number): any', gave the following error.
+-!!! error TS2769:     Argument of type 'null' is not assignable to parameter of type 'string'.
+-!!! error TS2769:   Overload 2 of 3, '(strs: TemplateStringsArray, n: number, m: string): any', gave the following error.
 +!!! error TS2769:   The last overload gave the following error.
- !!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
+ !!! error TS2769:     Argument of type 'null' is not assignable to parameter of type 'number'.
 +!!! related TS2771 taggedTemplateStringsWithOverloadResolution3_ES6.ts:48:10: The last overload is declared here.
      
      // Non - generic overloads where contextual typing of function arguments has errors

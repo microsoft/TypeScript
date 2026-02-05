@@ -1,6 +1,6 @@
 --- old.internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.js
 +++ new.internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.js
-@@= skipped -24, +24 lines =@@
+@@= skipped -18, +18 lines =@@
  exports.c = void 0;
  var c;
  (function (c) {

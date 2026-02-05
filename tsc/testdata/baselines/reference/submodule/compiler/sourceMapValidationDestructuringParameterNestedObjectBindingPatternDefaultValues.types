@@ -13,13 +13,13 @@ interface Robot {
 >name : string
 
     skills: {
->skills : { primary?: string; secondary?: string; }
+>skills : { primary?: string | undefined; secondary?: string | undefined; }
 
         primary?: string;
->primary : string
+>primary : string | undefined
 
         secondary?: string;
->secondary : string
+>secondary : string | undefined
 
     };
 }
@@ -108,7 +108,7 @@ function foo2(
 }
 function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = robotA) {
 >foo3 : ({ skills }?: Robot) => void
->skills : { primary?: string; secondary?: string; }
+>skills : { primary?: string | undefined; secondary?: string | undefined; }
 >{ primary: "SomeSkill", secondary: "someSkill" } : { primary: string; secondary: string; }
 >primary : string
 >"SomeSkill" : "SomeSkill"
@@ -121,9 +121,9 @@ function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Ro
 >console.log : (msg: string) => void
 >console : { log(msg: string): void; }
 >log : (msg: string) => void
->skills.primary : string
->skills : { primary?: string; secondary?: string; }
->primary : string
+>skills.primary : string | undefined
+>skills : { primary?: string | undefined; secondary?: string | undefined; }
+>primary : string | undefined
 }
 
 foo1(robotA);

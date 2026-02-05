@@ -1,8 +1,8 @@
 --- old.mergedInterfacesWithInheritedPrivates3.js
 +++ new.mergedInterfacesWithInheritedPrivates3.js
-@@= skipped -41, +41 lines =@@
-
+@@= skipped -42, +42 lines =@@
  //// [mergedInterfacesWithInheritedPrivates3.js]
+ "use strict";
  class C {
 +    x;
  }

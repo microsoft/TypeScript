@@ -4,4 +4,5 @@
 var v = /[\]/]/
 
 //// [parser645086_3.js]
+"use strict";
 var v = /[\]/]/;

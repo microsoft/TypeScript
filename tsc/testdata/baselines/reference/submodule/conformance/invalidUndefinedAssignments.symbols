@@ -46,9 +46,9 @@ g = x;
 I = x;
 >x : Symbol(x, Decl(invalidUndefinedAssignments.ts, 0, 3))
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : Symbol(M, Decl(invalidUndefinedAssignments.ts, 13, 6))
->x : Symbol(x, Decl(invalidUndefinedAssignments.ts, 15, 21))
+>x : Symbol(x, Decl(invalidUndefinedAssignments.ts, 15, 24))
 
 M = x;
 >M : Symbol(M, Decl(invalidUndefinedAssignments.ts, 13, 6))

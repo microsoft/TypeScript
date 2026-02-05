@@ -44,7 +44,7 @@ class T {
     }
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(lambdaPropSelf.ts, 17, 1))
 
     var x = this;

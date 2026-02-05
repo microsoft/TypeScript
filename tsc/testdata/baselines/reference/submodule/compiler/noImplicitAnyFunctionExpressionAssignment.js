@@ -10,6 +10,7 @@ var x2: (a: any) => void = function f<T>(x: T) {
 };
 
 //// [noImplicitAnyFunctionExpressionAssignment.js]
+"use strict";
 var x = function (x) {
     return null;
 };

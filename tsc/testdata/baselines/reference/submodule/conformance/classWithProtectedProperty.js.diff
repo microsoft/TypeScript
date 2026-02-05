@@ -1,7 +1,7 @@
 --- old.classWithProtectedProperty.js
 +++ new.classWithProtectedProperty.js
-@@= skipped -31, +31 lines =@@
- //// [classWithProtectedProperty.js]
+@@= skipped -32, +32 lines =@@
+ "use strict";
  // accessing any protected outside the class is an error
  class C {
 -    constructor() {

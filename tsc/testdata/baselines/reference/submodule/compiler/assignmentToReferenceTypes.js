@@ -3,7 +3,7 @@
 //// [assignmentToReferenceTypes.ts]
 // Should all be allowed
 
-module M {
+namespace M {
 }
 M = null;
 
@@ -26,6 +26,7 @@ function g(x) {
 }
 
 //// [assignmentToReferenceTypes.js]
+"use strict";
 // Should all be allowed
 M = null;
 class C {

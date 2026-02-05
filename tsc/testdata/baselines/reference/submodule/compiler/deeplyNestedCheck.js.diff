@@ -1,6 +1,6 @@
 --- old.deeplyNestedCheck.js
 +++ new.deeplyNestedCheck.js
-@@= skipped -69, +69 lines =@@
+@@= skipped -70, +70 lines =@@
                                      {
                                          g: {
                                              h: [

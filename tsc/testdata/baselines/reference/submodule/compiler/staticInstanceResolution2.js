@@ -14,6 +14,7 @@ B.hasOwnProperty('foo');
 
 
 //// [staticInstanceResolution2.js]
+"use strict";
 class A {
 }
 A.hasOwnProperty('foo');

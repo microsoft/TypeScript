@@ -1,6 +1,6 @@
 --- old.numericIndexerConstrainsPropertyDeclarations2.js
 +++ new.numericIndexerConstrainsPropertyDeclarations2.js
-@@= skipped -55, +55 lines =@@
+@@= skipped -56, +56 lines =@@
      bar() { return ''; }
  }
  class Foo {

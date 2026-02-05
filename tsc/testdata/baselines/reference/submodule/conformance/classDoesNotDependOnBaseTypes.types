@@ -27,14 +27,14 @@ if (typeof x !== "string") {
     x[0] = "";
 >x[0] = "" : ""
 >x[0] : StringTree
->x : StringTreeCollection
+>x : StringTree
 >0 : 0
 >"" : ""
 
     x[0] = new StringTreeCollection;
 >x[0] = new StringTreeCollection : StringTreeCollection
 >x[0] : StringTree
->x : StringTreeCollection
+>x : StringTree
 >0 : 0
 >new StringTreeCollection : StringTreeCollection
 >StringTreeCollection : typeof StringTreeCollection

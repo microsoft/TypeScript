@@ -1,8 +1,8 @@
 --- old.badArraySyntax.js
 +++ new.badArraySyntax.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
  //// [badArraySyntax.js]
+ "use strict";
  class Z {
 -    constructor() {
 -        this.x = "";

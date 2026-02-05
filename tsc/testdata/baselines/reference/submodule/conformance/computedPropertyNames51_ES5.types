@@ -4,10 +4,10 @@
 function f<T, K extends keyof T>() {
 >f : <T, K extends keyof T>() => void
 
-    var t: T;
+    var t!: T;
 >t : T
 
-    var k: K;
+    var k!: K;
 >k : K
 
     var v = {

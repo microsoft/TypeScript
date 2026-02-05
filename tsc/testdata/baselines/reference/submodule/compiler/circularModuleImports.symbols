@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/circularModuleImports.ts] ////
 
 === circularModuleImports.ts ===
-module M
+namespace M
 >M : Symbol(M, Decl(circularModuleImports.ts, 0, 0))
  
 {

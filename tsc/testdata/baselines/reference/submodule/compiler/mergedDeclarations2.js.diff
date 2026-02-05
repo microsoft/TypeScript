@@ -1,6 +1,6 @@
 --- old.mergedDeclarations2.js
 +++ new.mergedDeclarations2.js
-@@= skipped -17, +17 lines =@@
+@@= skipped -18, +18 lines =@@
      Foo[Foo["b"] = 0] = "b";
  })(Foo || (Foo = {}));
  (function (Foo) {

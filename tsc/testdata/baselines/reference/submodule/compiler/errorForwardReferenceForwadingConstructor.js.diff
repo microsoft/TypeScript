@@ -1,6 +1,6 @@
 --- old.errorForwardReferenceForwadingConstructor.js
 +++ new.errorForwardReferenceForwadingConstructor.js
-@@= skipped -18, +18 lines =@@
+@@= skipped -19, +19 lines =@@
      var d2 = new derived(4);
  }
  class base {

@@ -1,8 +1,8 @@
 --- old.accessStaticMemberFromInstanceMethod01.js
 +++ new.accessStaticMemberFromInstanceMethod01.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [accessStaticMemberFromInstanceMethod01.js]
+ "use strict";
  class C {
 +    foo;
      static bar() {

@@ -1,13 +1,13 @@
 // === goToDefinition ===
 // === /goToDefinitionPartialImplementation_1.ts ===
-// module A {
+// namespace A {
 //     <|export interface [|IA|] {
 //         y: string;
 //     }|>
 // }
 
 // === /goToDefinitionPartialImplementation_2.ts ===
-// module A {
+// namespace A {
 //     <|export interface [|IA|] {
 //         x: number;
 //     }|>

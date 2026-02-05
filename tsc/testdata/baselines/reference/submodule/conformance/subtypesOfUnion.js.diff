@@ -1,6 +1,6 @@
 --- old.subtypesOfUnion.js
 +++ new.subtypesOfUnion.js
-@@= skipped -60, +60 lines =@@
+@@= skipped -61, +61 lines =@@
      E[E["e2"] = 1] = "e2";
  })(E || (E = {}));
  class A {

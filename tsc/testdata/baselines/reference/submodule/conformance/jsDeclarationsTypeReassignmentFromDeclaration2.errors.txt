@@ -1,0 +1,14 @@
+index.js(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+
+==== index.js (1 errors) ====
+    const items = require("./some-mod")();
+    module.exports = items;
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+==== some-mod.d.ts (0 errors) ====
+    interface Item {
+        x: string;
+    }
+    declare function getItems(): Item[];
+    export = getItems;

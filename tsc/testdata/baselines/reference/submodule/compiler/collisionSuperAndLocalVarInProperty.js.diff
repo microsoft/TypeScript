@@ -1,7 +1,7 @@
 --- old.collisionSuperAndLocalVarInProperty.js
 +++ new.collisionSuperAndLocalVarInProperty.js
-@@= skipped -21, +21 lines =@@
- //// [collisionSuperAndLocalVarInProperty.js]
+@@= skipped -22, +22 lines =@@
+ "use strict";
  var _super = 10; // No Error
  class Foo {
 -    constructor() {

@@ -1,8 +1,8 @@
 --- old.typeGuardOfFormTypeOfOther.js
 +++ new.typeGuardOfFormTypeOfOther.js
-@@= skipped -84, +84 lines =@@
-
+@@= skipped -85, +85 lines =@@
  //// [typeGuardOfFormTypeOfOther.js]
+ "use strict";
  class C {
 +    p;
  }

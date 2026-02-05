@@ -49,12 +49,12 @@ Cp.prototype = {
         this.z = this.y; return this
 >this.z = this.y : any
 >this.z : any
->this : any
+>this : { m4(): any; }
 >z : any
 >this.y : any
->this : any
+>this : { m4(): any; }
 >y : any
->this : any
+>this : { m4(): any; }
     }
 }
 

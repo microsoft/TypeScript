@@ -2,7 +2,7 @@
 
 === deleteOperatorWithStringType.ts ===
 // delete  operator on string type
-var STRING: string;
+declare var STRING: string;
 >STRING : string
 
 var STRING1: string[] = ["", "abc"];
@@ -25,7 +25,7 @@ class A {
 >foo : () => string
 >"" : ""
 }
-module M {
+namespace M {
 >M : typeof M
 
     export var n: string;

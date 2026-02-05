@@ -20,6 +20,7 @@ function fun([a, b]) { }
 fun(new FooIterator);
 
 //// [iterableArrayPattern10.js]
+"use strict";
 class Bar {
     x;
 }

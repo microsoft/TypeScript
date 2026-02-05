@@ -1,6 +1,6 @@
 --- old.functionArgShadowing.js
 +++ new.functionArgShadowing.js
-@@= skipped -27, +27 lines =@@
+@@= skipped -28, +28 lines =@@
      x.bar(); // the property bar does not exist on a value of type A
  }
  class C {

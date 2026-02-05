@@ -8,20 +8,20 @@ interface Number {
 
 interface NotNumber {
     toString(radix?: number): string;
->toString : (radix?: number) => string
->radix : number
+>toString : (radix?: number | undefined) => string
+>radix : number | undefined
 
     toFixed(fractionDigits?: number): string;
->toFixed : (fractionDigits?: number) => string
->fractionDigits : number
+>toFixed : (fractionDigits?: number | undefined) => string
+>fractionDigits : number | undefined
 
     toExponential(fractionDigits?: number): string;
->toExponential : (fractionDigits?: number) => string
->fractionDigits : number
+>toExponential : (fractionDigits?: number | undefined) => string
+>fractionDigits : number | undefined
 
     toPrecision(precision?: number): string;
->toPrecision : (precision?: number) => string
->precision : number
+>toPrecision : (precision?: number | undefined) => string
+>precision : number | undefined
 
     valueOf(): number;
 >valueOf : () => number
@@ -34,10 +34,10 @@ var x = 1;
 >x : number
 >1 : 1
 
-var a: Number;
+declare var a: Number;
 >a : Number
 
-var b: NotNumber;
+declare var b: NotNumber;
 >b : NotNumber
 
 a = x; 

@@ -16,6 +16,7 @@ list1 = list2; // ok
 list1 = list3; // error
 
 //// [objectTypeWithRecursiveWrappedProperty.js]
+"use strict";
 // Basic recursive type
 class List {
     data;

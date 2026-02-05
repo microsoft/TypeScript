@@ -134,6 +134,7 @@ foo(
 );
 
 //// [fatarrowfunctionsOptionalArgs.js]
+"use strict";
 // valid
 // no params
 () => 1;

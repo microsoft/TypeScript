@@ -5,4 +5,5 @@ var s = $.extend< { workItem: any }, { workItem: any, width: string }>({ workIte
 
 
 //// [parserCommaInTypeMemberList2.js]
+"use strict";
 var s = $.extend({ workItem: this._workItem }, {});

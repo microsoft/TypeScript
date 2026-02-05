@@ -16,6 +16,7 @@ declare var x: any;
 
 
 //// [reactNamespaceJSXEmit.js]
+"use strict";
 myReactLib.createElement("foo", { data: true });
 myReactLib.createElement(Bar, { x: x });
 myReactLib.createElement("x-component", null);

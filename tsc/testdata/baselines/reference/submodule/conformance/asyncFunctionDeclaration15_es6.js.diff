@@ -1,9 +1,9 @@
 --- old.asyncFunctionDeclaration15_es6.js
 +++ new.asyncFunctionDeclaration15_es6.js
-@@= skipped -26, +26 lines =@@
-
+@@= skipped -27, +27 lines =@@
 
  //// [asyncFunctionDeclaration15_es6.js]
+ "use strict";
 -function fn1() {
 -    return __awaiter(this, void 0, void 0, function* () { });
 -} // valid: Promise<void>

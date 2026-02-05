@@ -1,0 +1,22 @@
+--- old.protectedInstanceMemberAccessibility(target=es2015).js
++++ new.protectedInstanceMemberAccessibility(target=es2015).js
+@@= skipped -48, +48 lines =@@
+ //// [protectedInstanceMemberAccessibility.js]
+ "use strict";
+ class A {
++    x;
+     f() {
+         return "hello";
+     }
+ }
+ class B extends A {
++    y;
+     g() {
+         var t1 = this.x;
+         var t2 = this.f();
+@@= skipped -32, +34 lines =@@
+     }
+ }
+ class C extends A {
++    z;
+ }

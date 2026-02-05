@@ -1,0 +1,33 @@
+--- old.inferenceContextualReturnTypeUnion1.types
++++ new.inferenceContextualReturnTypeUnion1.types
+@@= skipped -7, +7 lines =@@
+ >fn : T
+
+ declare function ex2(callback?: (x: number) => void): void;
+->ex2 : (callback?: (x: number) => void) => void
++>ex2 : (callback?: ((x: number) => void) | undefined) => void
+ >callback : ((x: number) => void) | undefined
+ >x : number
+
+ ex2(useCallback1((x) => {}));
+ >ex2(useCallback1((x) => {})) : void
+->ex2 : (callback?: (x: number) => void) => void
++>ex2 : (callback?: ((x: number) => void) | undefined) => void
+ >useCallback1((x) => {}) : (x: number) => void
+ >useCallback1 : <T extends Function>(fn: T) => T
+ >(x) => {} : (x: number) => void
+ >x : number
+
+ declare function ex3(callback: ((x: number) => void) | 5): void;
+->ex3 : (callback: ((x: number) => void) | 5) => void
++>ex3 : (callback: 5 | ((x: number) => void)) => void
+ >callback : 5 | ((x: number) => void)
+ >x : number
+
+ ex3(useCallback1((x) => {}));
+ >ex3(useCallback1((x) => {})) : void
+->ex3 : (callback: ((x: number) => void) | 5) => void
++>ex3 : (callback: 5 | ((x: number) => void)) => void
+ >useCallback1((x) => {}) : (x: number) => void
+ >useCallback1 : <T extends Function>(fn: T) => T
+ >(x) => {} : (x: number) => void

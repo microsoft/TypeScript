@@ -1,8 +1,8 @@
 --- old.inKeywordTypeguard(strict=false).js
 +++ new.inKeywordTypeguard(strict=false).js
-@@= skipped -387, +387 lines =@@
-
+@@= skipped -388, +388 lines =@@
  //// [inKeywordTypeguard.js]
+ "use strict";
  class A {
 +    a;
  }

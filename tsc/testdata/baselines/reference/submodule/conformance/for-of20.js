@@ -19,6 +19,7 @@ for (let v of new FooIterator) {
 }
 
 //// [for-of20.js]
+"use strict";
 class Foo {
 }
 class FooIterator {

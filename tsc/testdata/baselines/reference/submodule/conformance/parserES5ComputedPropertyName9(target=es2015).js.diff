@@ -1,0 +1,8 @@
+--- old.parserES5ComputedPropertyName9(target=es2015).js
++++ new.parserES5ComputedPropertyName9(target=es2015).js
+@@= skipped -7, +7 lines =@@
+ //// [parserES5ComputedPropertyName9.js]
+ "use strict";
+ class C {
++    [e];
+ }

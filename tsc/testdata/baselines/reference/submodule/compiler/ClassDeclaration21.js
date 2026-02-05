@@ -7,6 +7,7 @@ class C {
 }
 
 //// [ClassDeclaration21.js]
+"use strict";
 class C {
     1() { }
 }

@@ -1,8 +1,8 @@
 --- old.typeIdentityConsidersBrands.js
 +++ new.typeIdentityConsidersBrands.js
-@@= skipped -35, +35 lines =@@
-
+@@= skipped -36, +36 lines =@@
  //// [typeIdentityConsidersBrands.js]
+ "use strict";
  class X {
 +    name;
  }

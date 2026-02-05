@@ -15,7 +15,7 @@ func TestAutoImportProvider6(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
-{ "compilerOptions": { "module": "commonjs", "lib": ["es2019"] } }
+{ "compilerOptions": { "module": "commonjs", "lib": ["es2019"], "types": ["*"] } }
 // @Filename: /home/src/workspaces/project/package.json
 { "dependencies": { "antd": "*", "react": "*" } }
 // @Filename: /home/src/workspaces/project/node_modules/@types/react/index.d.ts

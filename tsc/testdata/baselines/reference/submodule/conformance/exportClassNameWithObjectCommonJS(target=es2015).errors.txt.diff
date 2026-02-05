@@ -1,0 +1,12 @@
+--- old.exportClassNameWithObjectCommonJS(target=es2015).errors.txt
++++ new.exportClassNameWithObjectCommonJS(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-exportClassNameWithObjectCommonJS.ts(1,14): error TS2725: Class name cannot be 'Object' when targeting ES5 and above with module CommonJS.
+-
+-
+-==== exportClassNameWithObjectCommonJS.ts (1 errors) ====
+-    export class Object {}
+-                 ~~~~~~
+-!!! error TS2725: Class name cannot be 'Object' when targeting ES5 and above with module CommonJS.
+-    
++<no content>

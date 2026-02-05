@@ -6,7 +6,7 @@ declare class X { }
 //// [b.ts]
 export {X};
 export function f() {
-    var x: X;
+    var x!: X;
     return x;
 } 
 

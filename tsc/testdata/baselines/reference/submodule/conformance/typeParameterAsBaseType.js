@@ -13,6 +13,7 @@ interface I2<T, U> extends U { }
 
 
 //// [typeParameterAsBaseType.js]
+"use strict";
 // type parameters cannot be used as base types
 // these are all errors
 class C extends T {

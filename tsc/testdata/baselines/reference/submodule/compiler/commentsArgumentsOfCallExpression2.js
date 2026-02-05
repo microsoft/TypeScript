@@ -13,6 +13,7 @@ foo(
     /*e5*/ "hello");
 
 //// [commentsArgumentsOfCallExpression2.js]
+"use strict";
 function foo(/*c1*/ x, /*d1*/ y, /*e1*/ w) { }
 var a, b;
 foo(/*c2*/ 1, /*d2*/ 1 + 2, /*e1*/ a + b);

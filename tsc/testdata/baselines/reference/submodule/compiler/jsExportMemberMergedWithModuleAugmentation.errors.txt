@@ -1,22 +1,30 @@
-/index.ts(1,23): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
+/index.ts(1,23): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
 /index.ts(3,16): error TS2671: Cannot augment module './test' because it resolves to a non-module entity.
 /index.ts(11,10): error TS2749: 'Abcde' refers to a value, but is being used as a type here. Did you mean 'typeof Abcde'?
+/test.js(3,3): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+/test.js(6,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
-==== /test.js (0 errors) ====
+==== /test.js (2 errors) ====
     class Abcde {
       /** @type {string} */
       x;
+      ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     module.exports = {
+    ~~~~~~~~~~~~~~~~~~
       Abcde
+    ~~~~~~~
     };
+    ~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
 ==== /index.ts (3 errors) ====
     import { Abcde } from "./test";
                           ~~~~~~~~
-!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
+!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
     
     declare module "./test" {
                    ~~~~~~~~

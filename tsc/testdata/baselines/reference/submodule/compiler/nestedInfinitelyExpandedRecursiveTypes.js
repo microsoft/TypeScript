@@ -14,6 +14,7 @@ f = g;
 g = f;
 
 //// [nestedInfinitelyExpandedRecursiveTypes.js]
+"use strict";
 var f;
 var g;
 f = g;

@@ -2,7 +2,7 @@
 
 === typeofOperatorWithNumberType.ts ===
 // typeof  operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 >NUMBER : number
 
 var NUMBER1: number[] = [1, 2];
@@ -25,10 +25,10 @@ class A {
 >foo : () => number
 >1 : 1
 }
-module M {
+namespace M {
 >M : typeof M
 
-    export var n: number;
+    export var n!: number;
 >n : number
 }
 
@@ -176,11 +176,14 @@ typeof objA.a, M.n;
 >n : number
 
 // use typeof in type query
-var z: number;
+declare var z: number;
 >z : number
 
-var x: number[];
+declare var x: number[];
 >x : number[]
+
+declare var r: () => number;
+>r : () => number
 
 z: typeof NUMBER;
 >z : any

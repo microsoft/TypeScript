@@ -8,6 +8,8 @@ a ? () => a() : (): any => null;
 
 
 //// [fileJs.js]
+"use strict";
 a ? () => a() : () => null; // Not legal JS; "Unexpected token ')'" at last paren
 //// [fileTs.js]
+"use strict";
 a ? () => a() : () => null;

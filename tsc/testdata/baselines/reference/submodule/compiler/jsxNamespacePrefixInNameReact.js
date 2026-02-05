@@ -34,6 +34,7 @@ var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
 
 
 //// [jsxNamespacePrefixInNameReact.js]
+"use strict";
 var justElement1 = React.createElement("a:element", null);
 var justElement2 = React.createElement("a:element", null);
 var justElement3 = React.createElement("a:element", { attr: "value" });

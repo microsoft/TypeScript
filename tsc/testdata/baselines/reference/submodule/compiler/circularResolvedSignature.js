@@ -19,10 +19,7 @@ export function Component() {
 
 
 //// [circularResolvedSignature.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Component = Component;
-function Component() {
+export function Component() {
     const [state, setState] = useState(() => ({
         value: "string", // this should be a number
         foo: (arg) => setState(arg),

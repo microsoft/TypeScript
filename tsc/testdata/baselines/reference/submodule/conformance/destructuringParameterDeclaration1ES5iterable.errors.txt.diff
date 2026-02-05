@@ -1,0 +1,15 @@
+--- old.destructuringParameterDeclaration1ES5iterable.errors.txt
++++ new.destructuringParameterDeclaration1ES5iterable.errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+ destructuringParameterDeclaration1ES5iterable.ts(12,4): error TS2345: Argument of type '[number, number, string[][], number]' is not assignable to parameter of type '[number, number, string[][]]'.
+   Source has 4 element(s) but target allows only 3.
+ destructuringParameterDeclaration1ES5iterable.ts(23,5): error TS7010: 'b5', which lacks return-type annotation, implicitly has an 'any' return type.
+@@= skipped -62, +61 lines =@@
+ destructuringParameterDeclaration1ES5iterable.ts(95,32): error TS7031: Binding element 'any' implicitly has an 'any' type.
+
+
+-!!! error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+ ==== destructuringParameterDeclaration1ES5iterable.ts (60 errors) ====
+     // A parameter declaration may specify either an identifier or a binding pattern.
+     // The identifiers specified in parameter declarations and binding patterns

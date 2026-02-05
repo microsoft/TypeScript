@@ -11,6 +11,7 @@ class B extends A {
 }
 
 //// [captureThisInSuperCall.js]
+"use strict";
 class A {
     constructor(p) { }
 }

@@ -58,6 +58,7 @@ var foods2: MonsterFood[] = new PetFood[new IceCream('Mint chocolate chip') , Co
 
 
 //// [objectCreationOfElementAccessExpression.js]
+"use strict";
 class Food {
     name;
     amount;

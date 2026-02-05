@@ -27,6 +27,7 @@ class Foo {
 
 
 //// [privateNameFieldParenthesisLeftAssignment.js]
+"use strict";
 class Foo {
     #p;
     constructor(value) {

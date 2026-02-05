@@ -1,16 +1,17 @@
 //// [tests/cases/compiler/mergedModuleDeclarationCodeGen2.ts] ////
 
 //// [mergedModuleDeclarationCodeGen2.ts]
-module my.data.foo {
+namespace my.data.foo {
     export function buz() { }
 }
-module my.data {
+namespace my.data {
     function data(my) {
         foo.buz();
     }
 }
 
 //// [mergedModuleDeclarationCodeGen2.js]
+"use strict";
 var my;
 (function (my) {
     let data;

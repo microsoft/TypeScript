@@ -1,8 +1,8 @@
 --- old.gettersAndSettersErrors.js
 +++ new.gettersAndSettersErrors.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [gettersAndSettersErrors.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.Foo = 0; // error - duplicate identifier Foo - confirmed

@@ -24,13 +24,10 @@ export function y(arg: Type): void {
 }
 
 //// [typePredicateInLoop.js]
-"use strict";
 // Repro from #12101
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = y;
 const guard = (arg) => arg.type === 1;
 const otherFunc = (arg1, arg2) => { };
-function y(arg) {
+export function y(arg) {
     if (guard(arg)) {
         for (const ITEM of arg.arr) {
             if (otherFunc(ITEM, arg)) {

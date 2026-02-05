@@ -1,6 +1,6 @@
 --- old.enumIsNotASubtypeOfAnythingButNumber.js
 +++ new.enumIsNotASubtypeOfAnythingButNumber.js
-@@= skipped -138, +138 lines =@@
+@@= skipped -139, +139 lines =@@
      E[E["A"] = 0] = "A";
  })(E || (E = {}));
  class A {

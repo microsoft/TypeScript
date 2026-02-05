@@ -1,6 +1,6 @@
 --- old.privacyCannotNameVarTypeDeclFile.js
 +++ new.privacyCannotNameVarTypeDeclFile.js
-@@= skipped -104, +104 lines =@@
+@@= skipped -105, +105 lines =@@
  exports.SpecializedWidget = exports.Widget1 = void 0;
  exports.createWidget1 = createWidget1;
  class Widget1 {

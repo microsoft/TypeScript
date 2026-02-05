@@ -75,85 +75,116 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 <a .../*hai*/asdf/>;
 
 //// [1.jsx]
+"use strict";
  > ;
 //// [2.jsx]
+"use strict";
 <a: />;
 //// [3.jsx]
+"use strict";
  < ;
 a /  > ;
 //// [4.jsx]
+"use strict";
 <a b d/>;
 //// [5.jsx]
+"use strict";
 <a>;</>;
 //// [6.jsx]
+"use strict";
 <a></b>;
 //// [7.jsx]
+"use strict";
 <a foo="bar;/>;
 //// [8.jsx]
+"use strict";
 <a:b></b>;
 //// [9.jsx]
+"use strict";
 <a:b c></a:b>;
 c > ;
 //// [10.jsx]
+"use strict";
 <a.b c></a.b>;
 c > ;
 //// [11.jsx]
+"use strict";
 <a.b.c></a>;
 //// [12.jsx]
+"use strict";
  < .a > ;
 a > ;
 //// [13.jsx]
+"use strict";
 <a.></a.>;
 //// [14.jsx]
+"use strict";
 <a />;
 [foo] > ;
 a[foo] > ;
 //// [15.jsx]
+"use strict";
 <a />;
 ['foo'] > ;
 a['foo'] > ;
 //// [16.jsx]
+"use strict";
 <a><a />;</>;
 //// [17.jsx]
+"use strict";
 <a b=>;</>;
 //// [18.jsx]
+"use strict";
 var x = /* Leading trivia */ (<div>one</div>, <div>two</div>);
 ;
 //// [19.jsx]
+"use strict";
 var x = (<div>one</div> /* intervening comment */, <div>two</div>);
 ;
 //// [20.jsx]
+"use strict";
 <a>{"str"};}</a>;
 //// [21.jsx]
+"use strict";
 <span className="a" id="b"/>;
 //// [22.jsx]
+"use strict";
 <div className/>;
 "app" > ;
 //// [23.jsx]
+"use strict";
 <div {...props}/>;
 //// [24.jsx]
+"use strict";
 <div>stuff</div>;
 {
     props;
 }
  > ;
 //// [25.jsx]
+"use strict";
 <div {...props}>stuff</div>;
 {
     props;
 }
  > ;
 //// [26.jsx]
+"use strict";
 <a>></a>;
 //// [27.jsx]
+"use strict";
 <a> ></a>;
 //// [28.jsx]
+"use strict";
 <a b>;
 </>;
 //// [29.jsx]
+"use strict";
 <a b=<>;
 </>/>;
 //// [30.jsx]
+"use strict";
 <a>}</a>;
 //// [31.jsx]
+"use strict";
 <a asdf/>;

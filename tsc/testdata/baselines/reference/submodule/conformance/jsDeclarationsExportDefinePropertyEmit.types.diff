@@ -143,8 +143,8 @@
 +>module : { "\"index\"": typeof import("index"); }
 +>exports : typeof import("index")
  >"g" : "g"
- >{ value: g } : { value: (a: { x: string; }, b: { y: () => void; }) => void; }
- >value : (a: { x: string; }, b: { y: () => void; }) => void
+ >{ value: g } : { value: (a: { x: string; }, b: { y: () => void; }) => void | ""; }
+ >value : (a: { x: string; }, b: { y: () => void; }) => void | ""
 @@= skipped -33, +33 lines =@@
  >y : () => void
  }
@@ -161,9 +161,9 @@
 +>module : { "\"index\"": typeof import("index"); }
 +>exports : typeof import("index")
  >"h" : "h"
- >{ value: hh } : { value: (a: { x: string; }, b: { y: () => void; }) => void; }
- >value : (a: { x: string; }, b: { y: () => void; }) => void
- >hh : (a: { x: string; }, b: { y: () => void; }) => void
+ >{ value: hh } : { value: (a: { x: string; }, b: { y: () => void; }) => void | ""; }
+ >value : (a: { x: string; }, b: { y: () => void; }) => void | ""
+ >hh : (a: { x: string; }, b: { y: () => void; }) => void | ""
 
  Object.defineProperty(module.exports, "i", { value: function i(){} });
 ->Object.defineProperty(module.exports, "i", { value: function i(){} }) : typeof module.exports

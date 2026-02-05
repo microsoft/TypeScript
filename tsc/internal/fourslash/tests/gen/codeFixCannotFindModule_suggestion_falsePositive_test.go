@@ -12,6 +12,7 @@ func TestCodeFixCannotFindModule_suggestion_falsePositive(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @moduleResolution: bundler
+// @module: commonjs
 // @resolveJsonModule: true
 // @strict: true
 // @Filename: /node_modules/foo/bar.json

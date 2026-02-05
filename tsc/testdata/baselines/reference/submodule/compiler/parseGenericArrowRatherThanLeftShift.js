@@ -9,5 +9,6 @@ const b = foo<<T>(x: T) => number>(() => 1);
 
 
 //// [parseGenericArrowRatherThanLeftShift.js]
+"use strict";
 function foo(_x) { }
 const b = foo(() => 1);

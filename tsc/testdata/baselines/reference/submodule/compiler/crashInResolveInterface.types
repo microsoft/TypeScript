@@ -7,8 +7,8 @@ declare var c: C;
 
 interface C {
     count(countTitle?: string): void;
->count : (countTitle?: string) => void
->countTitle : string
+>count : (countTitle?: string | undefined) => void
+>countTitle : string | undefined
 }
 interface C {
     log(message?: any, ...optionalParams: any[]): void;

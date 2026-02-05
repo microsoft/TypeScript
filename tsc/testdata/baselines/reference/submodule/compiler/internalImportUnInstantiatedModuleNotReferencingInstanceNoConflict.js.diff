@@ -1,6 +1,6 @@
 --- old.internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.js
 +++ new.internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.js
-@@= skipped -14, +14 lines =@@
+@@= skipped -15, +15 lines =@@
  var B;
  (function (B) {
      var A = 1;

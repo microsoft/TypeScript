@@ -1,3 +1,7 @@
+assignmentCompatWithConstructSignatures5.ts(3,14): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+assignmentCompatWithConstructSignatures5.ts(4,30): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+assignmentCompatWithConstructSignatures5.ts(5,34): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+assignmentCompatWithConstructSignatures5.ts(6,35): error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
 assignmentCompatWithConstructSignatures5.ts(40,1): error TS2322: Type 'new <T>(x: T) => void' is not assignable to type 'new <T>(x: T) => T'.
   Type 'void' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
@@ -20,28 +24,36 @@ assignmentCompatWithConstructSignatures5.ts(58,1): error TS2322: Type 'new <T ex
         Type 'U' is not assignable to type 'Base'.
 
 
-==== assignmentCompatWithConstructSignatures5.ts (4 errors) ====
+==== assignmentCompatWithConstructSignatures5.ts (8 errors) ====
     // checking assignment compat for function types. All valid
     
     class Base { foo: string; }
+                 ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     class Derived extends Base { bar: string; }
+                                 ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
     class Derived2 extends Derived { baz: string; }
+                                     ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
     class OtherDerived extends Base { bing: string; }
+                                      ~~~~
+!!! error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
     
-    var a: new <T>(x: T) => T[];
-    var a2: new <T>(x: T) => string[];
-    var a3: new <T>(x: T) => void;
-    var a4: new <T, U>(x: T, y: U) => string;
-    var a5: new <T, U>(x: new (arg: T) => U) => T;
-    var a6: new <T extends Base>(x: new (arg: T) => Derived) => T;
-    var a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
-    var a15: new <T>(x: { a: T; b: T }) => T[];
-    var a16: new <T extends Base>(x: { a: T; b: T }) => T[];
-    var a17: {
+    declare var a: new <T>(x: T) => T[];
+    declare var a2: new <T>(x: T) => string[];
+    declare var a3: new <T>(x: T) => void;
+    declare var a4: new <T, U>(x: T, y: U) => string;
+    declare var a5: new <T, U>(x: new (arg: T) => U) => T;
+    declare var a6: new <T extends Base>(x: new (arg: T) => Derived) => T;
+    declare var a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
+    declare var a15: new <T>(x: { a: T; b: T }) => T[];
+    declare var a16: new <T extends Base>(x: { a: T; b: T }) => T[];
+    declare var a17: {
         new <T extends Derived>(x: new (a: T) => T): T[];
         new <T extends Base>(x: new (a: T) => T): T[];        
     };
-    var a18: {
+    declare var a18: {
         new (x: {
             new <T extends Derived>(a: T): T;
             new <T extends Base>(a: T): T;
@@ -52,29 +64,29 @@ assignmentCompatWithConstructSignatures5.ts(58,1): error TS2322: Type 'new <T ex
         }): any[];
     };
     
-    var b: new <T>(x: T) => T[]; 
+    declare var b: new <T>(x: T) => T[]; 
     a = b; // ok
     b = a; // ok
-    var b2: new <T>(x: T) => string[]; 
+    declare var b2: new <T>(x: T) => string[]; 
     a2 = b2; // ok
     b2 = a2; // ok
-    var b3: new <T>(x: T) => T; 
+    declare var b3: new <T>(x: T) => T; 
     a3 = b3; // ok
     b3 = a3; // ok
     ~~
 !!! error TS2322: Type 'new <T>(x: T) => void' is not assignable to type 'new <T>(x: T) => T'.
 !!! error TS2322:   Type 'void' is not assignable to type 'T'.
 !!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
-    var b4: new <T, U>(x: T, y: U) => string; 
+    declare var b4: new <T, U>(x: T, y: U) => string; 
     a4 = b4; // ok
     b4 = a4; // ok
-    var b5: new <T, U>(x: new (arg: T) => U) => T; 
+    declare var b5: new <T, U>(x: new (arg: T) => U) => T; 
     a5 = b5; // ok
     b5 = a5; // ok
-    var b6: new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T; 
+    declare var b6: new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T; 
     a6 = b6; // ok
     b6 = a6; // ok
-    var b11: new <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
+    declare var b11: new <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
     a11 = b11; // ok
     b11 = a11; // ok
     ~~~
@@ -84,8 +96,8 @@ assignmentCompatWithConstructSignatures5.ts(58,1): error TS2322: Type 'new <T ex
 !!! error TS2322:       Types of property 'foo' are incompatible.
 !!! error TS2322:         Type 'U' is not assignable to type 'T'.
 !!! error TS2322:           'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 assignmentCompatWithConstructSignatures5.ts:50:18: This type parameter might need an `extends T` constraint.
-    var b15: new <U, V>(x: { a: U; b: V; }) => U[]; 
+!!! related TS2208 assignmentCompatWithConstructSignatures5.ts:50:26: This type parameter might need an `extends T` constraint.
+    declare var b15: new <U, V>(x: { a: U; b: V; }) => U[]; 
     a15 = b15; // ok
     b15 = a15; // ok
     ~~~
@@ -95,8 +107,8 @@ assignmentCompatWithConstructSignatures5.ts(58,1): error TS2322: Type 'new <T ex
 !!! error TS2322:       Types of property 'b' are incompatible.
 !!! error TS2322:         Type 'V' is not assignable to type 'U'.
 !!! error TS2322:           'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
-!!! related TS2208 assignmentCompatWithConstructSignatures5.ts:53:18: This type parameter might need an `extends U` constraint.
-    var b16: new <T>(x: { a: T; b: T }) => T[]; 
+!!! related TS2208 assignmentCompatWithConstructSignatures5.ts:53:26: This type parameter might need an `extends U` constraint.
+    declare var b16: new <T>(x: { a: T; b: T }) => T[]; 
     a15 = b16; // ok
     b15 = a16; // ok
     ~~~
@@ -105,11 +117,11 @@ assignmentCompatWithConstructSignatures5.ts(58,1): error TS2322: Type 'new <T ex
 !!! error TS2322:     Type '{ a: U; b: V; }' is not assignable to type '{ a: Base; b: Base; }'.
 !!! error TS2322:       Types of property 'a' are incompatible.
 !!! error TS2322:         Type 'U' is not assignable to type 'Base'.
-!!! related TS2208 assignmentCompatWithConstructSignatures5.ts:53:15: This type parameter might need an `extends Base` constraint.
-    var b17: new <T>(x: new (a: T) => T) => T[]; 
+!!! related TS2208 assignmentCompatWithConstructSignatures5.ts:53:23: This type parameter might need an `extends Base` constraint.
+    declare var b17: new <T>(x: new (a: T) => T) => T[]; 
     a17 = b17; // ok
     b17 = a17; // ok
-    var b18: new (x: new <T>(a: T) => T) => any[]; 
+    declare var b18: new (x: new <T>(a: T) => T) => any[]; 
     a18 = b18; // ok
     b18 = a18; // ok
     

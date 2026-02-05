@@ -18,6 +18,7 @@ interface Foo2<T> extends Base2<T> { // error
 }
 
 //// [interfaceWithPropertyThatIsPrivateInBaseType2.js]
+"use strict";
 class Base {
     x() { }
 }

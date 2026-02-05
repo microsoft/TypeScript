@@ -12,6 +12,7 @@ class A extends B {
 
 
 //// [privateNameLateSuperUseDefineForClassFields.js]
+"use strict";
 class B {
 }
 class A extends B {

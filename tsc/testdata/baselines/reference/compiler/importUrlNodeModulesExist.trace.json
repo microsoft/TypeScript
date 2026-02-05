@@ -1,7 +1,0 @@
-======== Resolving module 'https://deno.land/std@0.208.0/path/mod.ts' from '/src/index.ts'. ========
-Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
-File '/src/package.json' does not exist.
-File '/package.json' does not exist.
-Skipping module 'https://deno.land/std@0.208.0/path/mod.ts' that looks like an absolute URI, target file types: TypeScript, JavaScript, Declaration, JSON.
-======== Module name 'https://deno.land/std@0.208.0/path/mod.ts' was not resolved. ========

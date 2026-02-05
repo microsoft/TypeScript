@@ -11,6 +11,7 @@ class TestFile {
 }
 
 //// [detachedCommentAtStartOfFunctionBody1.js]
+"use strict";
 class TestFile {
     foo(message) {
         /// <summary>Test summary</summary>

@@ -80,8 +80,10 @@ var asConst2 = /** @type {const} */({
 });
 
 //// [a.js]
+"use strict";
 var W;
 //// [b.js]
+"use strict";
 // @ts-check
 var W = /** @type {string} */ 4;
 var W = /** @type {string} */ 4; // Error

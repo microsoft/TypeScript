@@ -16,6 +16,7 @@ class C5 implements I1 {
 
 
 //// [interfaceImplementation4.js]
+"use strict";
 class C5 {
     iNum;
     iAny;

@@ -11,7 +11,7 @@ func TestEnumUpdate1(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
+	const content = `namespace M {
 	export enum E {
 		A = 1,
 		B = 2,
@@ -19,7 +19,7 @@ func TestEnumUpdate1(t *testing.T) {
 		/*1*/
 	}
 }
-module M {
+namespace M {
 	function foo(): M.E {
 		return M.E.A;
 	}

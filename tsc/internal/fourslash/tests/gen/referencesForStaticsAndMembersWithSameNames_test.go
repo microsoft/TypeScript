@@ -11,8 +11,8 @@ func TestReferencesForStaticsAndMembersWithSameNames(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module FindRef4 {
-	module MixedStaticsClassTest {
+	const content = `namespace FindRef4 {
+	namespace MixedStaticsClassTest {
 		export class Foo {
 			/*1*/bar: Foo;
 			/*2*/static /*3*/bar: Foo;

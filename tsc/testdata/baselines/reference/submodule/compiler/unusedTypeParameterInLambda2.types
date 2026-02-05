@@ -8,9 +8,9 @@ class A {
 >f1 : () => <T, X>() => void
 
         return <T, X>() => {
-><T, X>() => {            var a: X;            a;        } : <T, X>() => void
+><T, X>() => {            var a!: X;            a;        } : <T, X>() => void
 
-            var a: X;
+            var a!: X;
 >a : X
 
             a;

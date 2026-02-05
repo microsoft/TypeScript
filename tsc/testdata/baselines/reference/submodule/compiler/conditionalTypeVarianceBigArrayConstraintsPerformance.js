@@ -13,7 +13,8 @@ function F<T, U>(p1: Stuff<T>, p2: Stuff<U>) {
 }
 
 //// [conditionalTypeVarianceBigArrayConstraintsPerformance.js]
-/// <reference path="react16.d.ts" />
+"use strict";
+/// <reference path="/.lib/react16.d.ts" />
 function F(p1, p2) {
     p1 = p2; // Error
 }

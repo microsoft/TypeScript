@@ -1,15 +1,16 @@
 //// [tests/cases/compiler/varNameConflictsWithImportInDifferentPartOfModule.ts] ////
 
 //// [varNameConflictsWithImportInDifferentPartOfModule.ts]
-module M1 {
+namespace M1 {
     export var q = 5;
     export var s = '';
 }
-module M1 {
+namespace M1 {
     export import q = M1.s; // Should be an error but isn't
 }
 
 //// [varNameConflictsWithImportInDifferentPartOfModule.js]
+"use strict";
 var M1;
 (function (M1) {
     M1.q = 5;

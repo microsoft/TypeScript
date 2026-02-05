@@ -1,7 +1,7 @@
 --- old.mixinAccessModifiers.js
 +++ new.mixinAccessModifiers.js
-@@= skipped -136, +136 lines =@@
- //// [mixinAccessModifiers.js]
+@@= skipped -137, +137 lines =@@
+ "use strict";
  class Private {
      constructor(...args) { }
 +    p;

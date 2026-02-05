@@ -1,6 +1,6 @@
 --- old.baseExpressionTypeParameters.js
 +++ new.baseExpressionTypeParameters.js
-@@= skipped -18, +18 lines =@@
+@@= skipped -19, +19 lines =@@
  // Repro from #17829
  function base() {
      class Base {

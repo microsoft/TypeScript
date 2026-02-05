@@ -7,7 +7,7 @@ class Base {
 >Base : Base
 
     foo: typeof undefined;
->foo : any
+>foo : undefined
 >undefined : undefined
 } 
 
@@ -24,7 +24,7 @@ class DA extends Base {
 >Base : Base
 
     foo: typeof undefined; 
->foo : any
+>foo : undefined
 >undefined : undefined
 }
 
@@ -158,7 +158,7 @@ class D11 extends Base {
 function f() { }
 >f : typeof f
 
-module f {
+namespace f {
 >f : typeof f
 
     export var bar = 1;
@@ -179,7 +179,7 @@ class c { baz: string }
 >c : c
 >baz : string
 
-module c {
+namespace c {
 >c : typeof c
 
     export var bar = 1;

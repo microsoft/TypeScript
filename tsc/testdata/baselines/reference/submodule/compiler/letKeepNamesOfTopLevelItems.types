@@ -11,7 +11,7 @@ function foo() {
 >x : any
 }
 
-module A {
+namespace A {
 >A : typeof A
 
     let x;

@@ -36,6 +36,7 @@ function f(b: boolean) {
 }
 
 //// [classBlockScoping.js]
+"use strict";
 function f(b) {
     let Foo;
     if (b) {

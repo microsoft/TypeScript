@@ -17,7 +17,7 @@ class D extends C {
 >C : C
 }
 
-module D {
+namespace D {
 >D : typeof D
 
     export function foo(): number {

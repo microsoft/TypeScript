@@ -4,4 +4,5 @@
 var x: Worker;
 
 //// [verifyDefaultLib_webworker.js]
+"use strict";
 var x;

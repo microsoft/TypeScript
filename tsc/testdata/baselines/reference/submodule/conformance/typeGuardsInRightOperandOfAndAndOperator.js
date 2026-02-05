@@ -48,6 +48,7 @@ function foo7(x: number | string | boolean) {
 
 
 //// [typeGuardsInRightOperandOfAndAndOperator.js]
+"use strict";
 // In the right operand of a && operation, 
 // the type of a variable or parameter is narrowed by any type guard in the left operand when true.
 function foo(x) {

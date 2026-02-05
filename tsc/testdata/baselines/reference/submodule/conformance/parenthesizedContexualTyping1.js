@@ -31,6 +31,7 @@ var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
 var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
 
 //// [parenthesizedContexualTyping1.js]
+"use strict";
 function fun(g, x) {
     return g(x);
 }

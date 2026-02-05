@@ -25,6 +25,7 @@ function c(x: string | number) {
 
 
 //// [typeGuardsInForStatement.js]
+"use strict";
 let cond;
 function a(x) {
     for (x = undefined; typeof x !== "number"; x = undefined) {

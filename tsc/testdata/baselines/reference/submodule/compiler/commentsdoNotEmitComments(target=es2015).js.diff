@@ -1,0 +1,37 @@
+--- old.commentsdoNotEmitComments(target=es2015).js
++++ new.commentsdoNotEmitComments(target=es2015).js
+@@= skipped -96, +96 lines =@@
+ //// [commentsdoNotEmitComments.js]
+ "use strict";
+ var myVariable = 10;
+-function foo(p) {
++function foo(/** parameter comment*/ p) {
+ }
+ var fooVar;
+ foo(50);
+ fooVar();
+ class c {
+     constructor() {
+-        this.b = 10;
+     }
++    b = 10;
+     myFoo() {
+         return this.b;
+     }
+@@= skipped -27, +27 lines =@@
+ var m1;
+ (function (m1) {
+     class b {
++        x;
+         constructor(x) {
+             this.x = x;
+         }
+@@= skipped -11, +12 lines =@@
+
+ //// [commentsdoNotEmitComments.d.ts]
+ declare var myVariable: number;
+-declare function foo(p: number): void;
++declare function foo(/** parameter comment*/ p: number): void;
+ declare var fooVar: () => void;
+ declare class c {
+     constructor();

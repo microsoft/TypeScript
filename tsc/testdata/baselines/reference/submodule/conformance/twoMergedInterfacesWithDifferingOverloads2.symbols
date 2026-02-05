@@ -33,11 +33,11 @@ var r3 = a(1, 2);
 >r3 : Symbol(r3, Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 12, 3))
 >a : Symbol(a, Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 9, 3))
 
-module G {
+namespace G {
 >G : Symbol(G, Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 12, 17))
 
     interface A<T> {
->A : Symbol(A, Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 14, 10), Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 18, 5))
+>A : Symbol(A, Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 14, 13), Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 18, 5))
 >T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 15, 16), Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 20, 16))
 
         (): string;
@@ -48,7 +48,7 @@ module G {
     }
 
     interface A<T> {
->A : Symbol(A, Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 14, 10), Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 18, 5))
+>A : Symbol(A, Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 14, 13), Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 18, 5))
 >T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 15, 16), Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 20, 16))
 
         (x: T, y: number): T;
@@ -68,7 +68,7 @@ module G {
 
     var a: A<boolean>;
 >a : Symbol(a, Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 25, 7))
->A : Symbol(A, Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 14, 10), Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 18, 5))
+>A : Symbol(A, Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 14, 13), Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 18, 5))
 
     var r = a();
 >r : Symbol(r, Decl(twoMergedInterfacesWithDifferingOverloads2.ts, 26, 7))

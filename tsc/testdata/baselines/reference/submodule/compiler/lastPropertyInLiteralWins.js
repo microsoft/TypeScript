@@ -19,6 +19,7 @@ test({ // Should be OK.  Last 'thunk' is of correct type
 
 
 //// [lastPropertyInLiteralWins.js]
+"use strict";
 function test(thing) {
     thing.thunk("str");
 }

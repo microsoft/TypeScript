@@ -7,6 +7,7 @@ Symbol instanceof Symbol();
 Symbol instanceof (Symbol() || {});
 
 //// [symbolType1.js]
+"use strict";
 Symbol() instanceof Symbol;
 Symbol instanceof Symbol();
 (Symbol() || {}) instanceof Object; // This one should be okay, it's a valid way of distinguishing types

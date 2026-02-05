@@ -36,8 +36,6 @@ var thisIsOk = new ClassA<ConcreteClass>(new ConcreteClass(), {
 });
 
 //// [inferenceDoesntCompareAgainstUninstantiatedTypeParameter.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 class ClassA {
     entity;
     settings;
@@ -65,3 +63,4 @@ var thisIsOk = new ClassA(new ConcreteClass(), {
         }
     ]
 });
+export {};

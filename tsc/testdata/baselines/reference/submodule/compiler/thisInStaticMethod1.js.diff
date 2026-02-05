@@ -1,8 +1,8 @@
 --- old.thisInStaticMethod1.js
 +++ new.thisInStaticMethod1.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [thisInStaticMethod1.js]
+ "use strict";
  class foo {
 +    static x = 3;
      static bar() {

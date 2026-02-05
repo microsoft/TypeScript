@@ -1,6 +1,6 @@
 // === goToDefinition ===
 // === /file.tsx ===
-// declare module JSX {
+// declare namespace JSX {
 //     interface Element { }
 //     interface IntrinsicElements { }
 //     interface ElementAttributesProperty { props; }
@@ -33,7 +33,7 @@
 
 // === goToDefinition ===
 // === /file.tsx ===
-// declare module JSX {
+// declare namespace JSX {
 //     interface Element { }
 //     interface IntrinsicElements { }
 //     interface ElementAttributesProperty { props; }

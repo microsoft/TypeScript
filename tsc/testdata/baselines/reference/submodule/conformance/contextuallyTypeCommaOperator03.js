@@ -6,5 +6,6 @@ let x: (a: string) => string;
 x = (a => a, b => b);
 
 //// [contextuallyTypeCommaOperator03.js]
+"use strict";
 let x;
 x = (a => a, b => b);

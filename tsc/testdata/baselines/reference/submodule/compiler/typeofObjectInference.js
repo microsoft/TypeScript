@@ -25,6 +25,7 @@ function decorateD<O extends any>(fn: (first: First) => O) {
 let d = decorateD(({value}) => 5)
 
 //// [typeofObjectInference.js]
+"use strict";
 let val = 1;
 function decorateA(fn) {
     return () => fn({ value: val });

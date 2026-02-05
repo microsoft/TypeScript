@@ -11,7 +11,7 @@ export {X};
 export function f() {
 >f : () => X
 
-    var x: X;
+    var x!: X;
 >x : X
 
     return x;

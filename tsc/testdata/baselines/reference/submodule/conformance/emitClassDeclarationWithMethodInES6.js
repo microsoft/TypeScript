@@ -25,6 +25,7 @@ class D {
 }
 
 //// [emitClassDeclarationWithMethodInES6.js]
+"use strict";
 class D {
     _bar;
     foo() { }

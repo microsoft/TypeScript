@@ -12,7 +12,7 @@ class C {
 >z : string
 }
 
-var c: C;
+declare var c: C;
 >c : C
 
 var r = c.y;
@@ -45,7 +45,7 @@ class D<T> {
 >z : T
 }
 
-var d: D<string>;
+declare var d: D<string>;
 >d : D<string>
 
 var r = d.y;

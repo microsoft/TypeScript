@@ -1,0 +1,61 @@
+--- old.jsDeclarationsTypeReferences3(target=es2015).types
++++ new.jsDeclarationsTypeReferences3(target=es2015).types
+@@= skipped -3, +3 lines =@@
+ /// <reference types="node" />
+
+ const Something = require("fs").Something;
+->Something : typeof Something
+->require("fs").Something : typeof Something
++>Something : typeof import("fs").Something
++>require("fs").Something : typeof import("fs").Something
+ >require("fs") : typeof import("fs")
+ >require : any
+ >"fs" : "fs"
+->Something : typeof Something
++>Something : typeof import("fs").Something
+
+ module.exports.A = {}
+->module.exports.A = {} : typeof A
+->module.exports.A : typeof A
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->A : typeof A
++>module.exports.A = {} : {}
++>module.exports.A : {}
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
++>A : {}
+ >{} : {}
+
+ module.exports.A.B = {
+->module.exports.A.B = {    thing: new Something()} : { thing: Something; }
+->module.exports.A.B : { thing: Something; }
+->module.exports.A : typeof A
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->A : typeof A
+->B : { thing: Something; }
+->{    thing: new Something()} : { thing: Something; }
++>module.exports.A.B = {    thing: new Something()} : { thing: import("fs").Something; }
++>module.exports.A.B : any
++>module.exports.A : {}
++>module.exports : typeof import("index")
++>module : { "\"index\"": typeof import("index"); }
++>exports : typeof import("index")
++>A : {}
++>B : any
++>{    thing: new Something()} : { thing: import("fs").Something; }
+
+     thing: new Something()
+->thing : Something
+->new Something() : Something
+->Something : typeof Something
++>thing : import("fs").Something
++>new Something() : import("fs").Something
++>Something : typeof import("fs").Something
+ }
+
+ === node_modules/@types/node/index.d.ts ===

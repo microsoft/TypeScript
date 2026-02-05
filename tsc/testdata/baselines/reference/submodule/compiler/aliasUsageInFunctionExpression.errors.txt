@@ -1,0 +1,24 @@
+aliasUsageInFunctionExpression_backbone.ts(2,12): error TS2564: Property 'someData' has no initializer and is not definitely assigned in the constructor.
+
+
+==== aliasUsageInFunctionExpression_main.ts (0 errors) ====
+    import Backbone = require("./aliasUsageInFunctionExpression_backbone");
+    import moduleA = require("./aliasUsageInFunctionExpression_moduleA");
+    interface IHasVisualizationModel {
+        VisualizationModel: typeof Backbone.Model;
+    }
+    var f = (x: IHasVisualizationModel) => x;
+    f = (x) => moduleA;
+==== aliasUsageInFunctionExpression_backbone.ts (1 errors) ====
+    export class Model {
+        public someData: string;
+               ~~~~~~~~
+!!! error TS2564: Property 'someData' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+==== aliasUsageInFunctionExpression_moduleA.ts (0 errors) ====
+    import Backbone = require("./aliasUsageInFunctionExpression_backbone");
+    export class VisualizationModel extends Backbone.Model {
+        // interesting stuff here
+    }
+    

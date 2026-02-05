@@ -16,6 +16,7 @@ module {
 }
 
 //// [anonymousModules.js]
+"use strict";
 module;
 {
     export var foo = 1;

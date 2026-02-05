@@ -3,7 +3,7 @@
 === exportCodeGen.ts ===
 // should replace all refs to 'x' in the body,
 // with fully qualified
-module A {
+namespace A {
 >A : typeof A
 
     export var x = 12;
@@ -21,7 +21,7 @@ module A {
 } 
 
 // should not fully qualify 'x'
-module B {
+namespace B {
 >B : typeof B
 
     var x = 12;
@@ -39,7 +39,7 @@ module B {
 }
 
 // not copied, since not exported
-module C {
+namespace C {
 >C : typeof C
 
     function no() {
@@ -51,7 +51,7 @@ module C {
 }
 
 // copies, since exported
-module D {
+namespace D {
 >D : typeof D
 
     export function yes() {
@@ -63,7 +63,7 @@ module D {
 }
 
 // validate all exportable statements
-module E {
+namespace E {
 >E : typeof E
 
     export enum Color { Red }
@@ -80,7 +80,7 @@ module E {
 >C : C
 >name : string
 
-    export module M {
+    export namespace M {
 >M : typeof M
 
         export var x = 42;
@@ -91,7 +91,7 @@ module E {
 
 // validate all exportable statements,
 // which are not exported
-module F {
+namespace F {
 >F : typeof F
 
     enum Color { Red }
@@ -108,7 +108,7 @@ module F {
 >C : C
 >name : string
 
-    module M {
+    namespace M {
 >M : typeof M
 
         var x = 42;

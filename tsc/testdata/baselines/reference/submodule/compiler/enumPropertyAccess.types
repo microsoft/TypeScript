@@ -25,9 +25,9 @@ var p = x.Green; // error
 
 x.toFixed(); // ok
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number) => string
+>x.toFixed : (fractionDigits?: number | undefined) => string
 >x : Colors.Red
->toFixed : (fractionDigits?: number) => string
+>toFixed : (fractionDigits?: number | undefined) => string
 
 // Now with generics
 function fill<B extends Colors>(f: B) {
@@ -41,7 +41,7 @@ function fill<B extends Colors>(f: B) {
 
     f.toFixed(); // ok
 >f.toFixed() : string
->f.toFixed : (fractionDigits?: number) => string
+>f.toFixed : (fractionDigits?: number | undefined) => string
 >f : Colors
->toFixed : (fractionDigits?: number) => string
+>toFixed : (fractionDigits?: number | undefined) => string
 }

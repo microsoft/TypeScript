@@ -10,6 +10,7 @@ function f() {
 }
 
 //// [modifierOnClassDeclarationMemberInFunction.js]
+"use strict";
 function f() {
     class C {
         baz = 1;

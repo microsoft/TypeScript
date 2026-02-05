@@ -1,0 +1,33 @@
+--- old.forAwaitPerIterationBindingDownlevel(target=es2015).errors.txt
++++ new.forAwaitPerIterationBindingDownlevel(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-
+-
+-!!! error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-==== forAwaitPerIterationBindingDownlevel.ts (0 errors) ====
+-    const sleep = (tm: number) => new Promise(resolve => setTimeout(resolve, tm));
+-    
+-    async function* gen() {
+-        yield 1;
+-        await sleep(1000);
+-        yield 2;
+-    }
+-    
+-    const log = console.log;
+-    
+-    (async () => {
+-        for await (const outer of gen()) {
+-            log(`I'm loop ${outer}`);
+-            (async () => {
+-                const inner = outer;
+-                await sleep(2000);
+-                if (inner === outer) {
+-                    log(`I'm loop ${inner} and I know I'm loop ${outer}`);
+-                } else {
+-                    log(`I'm loop ${inner}, but I think I'm loop ${outer}`);
+-                }
+-            })();
+-        }
+-    })();
++<no content>

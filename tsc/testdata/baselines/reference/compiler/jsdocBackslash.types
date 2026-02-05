@@ -1,9 +1,0 @@
-//// [tests/cases/compiler/jsdocBackslash.ts] ////
-
-=== test.js ===
-/**
- * \
- */
-function foo() {}
->foo : () => void
-

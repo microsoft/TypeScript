@@ -29,6 +29,7 @@ namespace Test1 {
 }
 
 //// [errorForUsingPropertyOfTypeAsType03.js]
+"use strict";
 var Test1;
 (function (Test1) {
     let Color;

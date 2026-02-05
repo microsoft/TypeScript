@@ -1,7 +1,7 @@
 --- old.ClassAndModuleWithSameNameAndCommonRootES6.js
 +++ new.ClassAndModuleWithSameNameAndCommonRootES6.js
-@@= skipped -42, +42 lines =@@
- //// [class.js]
+@@= skipped -43, +43 lines =@@
+ "use strict";
  var X;
  (function (X) {
 -    var Y;
@@ -17,8 +17,8 @@
          }
          Y.Point = Point;
      })(Y = X.Y || (X.Y = {}));
-@@= skipped -14, +16 lines =@@
- //// [module.js]
+@@= skipped -15, +17 lines =@@
+ "use strict";
  var X;
  (function (X) {
 -    var Y;
@@ -26,9 +26,9 @@
      (function (Y) {
          let Point;
          (function (Point) {
-@@= skipped -14, +14 lines =@@
- var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
+@@= skipped -16, +16 lines =@@
  //// [simple.js]
+ "use strict";
  class A {
 +    id;
  }

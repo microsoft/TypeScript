@@ -13,7 +13,7 @@ import type { onInit } from "./framework-hooks";
 
 interface Component {
   [onInit]?(): void;
->[onInit] : () => void
+>[onInit] : (() => void) | undefined
 >onInit : unique symbol
 }
 

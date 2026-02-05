@@ -1,22 +1,22 @@
 //// [tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts] ////
 
 === commaOperatorInvalidAssignmentType.ts ===
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 >BOOLEAN : boolean
 
-var NUMBER: number;
+declare var NUMBER: number;
 >NUMBER : number
 
-var STRING: string;
+declare var STRING: string;
 >STRING : string
 
-var resultIsBoolean: boolean
+declare var resultIsBoolean: boolean
 >resultIsBoolean : boolean
 
-var resultIsNumber: number
+declare var resultIsNumber: number
 >resultIsNumber : number
 
-var resultIsString: string
+declare var resultIsString: string
 >resultIsString : string
 
 //Expect errors when the results type is different form the second operand

@@ -17,8 +17,9 @@ func TestAutoImportProvider_exportMap2(t *testing.T) {
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
 {
   "compilerOptions": {
-    "module": "commonjs"
-    "moduleResolution": "node10",
+    "lib": ["es5"],
+    "module": "commonjs",
+    "moduleResolution": "node10"
   }
 }
 // @Filename: /home/src/workspaces/project/package.json

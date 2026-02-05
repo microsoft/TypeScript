@@ -10,6 +10,7 @@ var x: {
 }
 
 //// [unusedTypeParameters5.js]
+"use strict";
 class A {
     x;
 }

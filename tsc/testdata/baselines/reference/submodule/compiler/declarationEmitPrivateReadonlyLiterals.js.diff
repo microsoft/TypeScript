@@ -1,8 +1,8 @@
 --- old.declarationEmitPrivateReadonlyLiterals.js
 +++ new.declarationEmitPrivateReadonlyLiterals.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [declarationEmitPrivateReadonlyLiterals.js]
+ "use strict";
  class Foo {
 -    constructor() {
 -        this.B = "b";

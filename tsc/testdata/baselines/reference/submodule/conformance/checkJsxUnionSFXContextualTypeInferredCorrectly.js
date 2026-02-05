@@ -41,21 +41,14 @@ ComponentWithUnion({
 
 
 //// [checkJsxUnionSFXContextualTypeInferredCorrectly.js]
-"use strict";
-/// <reference path="react16.d.ts" />
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ComponentWithUnion = ComponentWithUnion;
-exports.HereIsTheError = HereIsTheError;
-const react_1 = __importDefault(require("react"));
-function ComponentWithUnion(props) {
-    return react_1.default.createElement("h1", null);
+/// <reference path="/.lib/react16.d.ts" />
+import React from 'react';
+export function ComponentWithUnion(props) {
+    return React.createElement("h1", null);
 }
 // Usage with React tsx
-function HereIsTheError() {
-    return (react_1.default.createElement(ComponentWithUnion, { multi: false, value: 's', onChange: val => console.log(val) }));
+export function HereIsTheError() {
+    return (React.createElement(ComponentWithUnion, { multi: false, value: 's', onChange: val => console.log(val) }));
 }
 // Usage with pure TypeScript
 ComponentWithUnion({

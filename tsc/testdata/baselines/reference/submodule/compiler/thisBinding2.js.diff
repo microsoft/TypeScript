@@ -1,8 +1,8 @@
 --- old.thisBinding2.js
 +++ new.thisBinding2.js
-@@= skipped -24, +24 lines =@@
-
+@@= skipped -25, +25 lines =@@
  //// [thisBinding2.js]
+ "use strict";
  class C {
 +    x;
      constructor() {

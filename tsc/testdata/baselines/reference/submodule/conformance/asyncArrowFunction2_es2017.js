@@ -5,5 +5,6 @@ var f = (await) => {
 }
 
 //// [asyncArrowFunction2_es2017.js]
+"use strict";
 var f = (await) => {
 };

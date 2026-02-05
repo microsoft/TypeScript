@@ -74,22 +74,20 @@ test = { foo: true, bar: { foo: true, bar: true, boo: true } }
 
 
 //// [excessPropertyChecksWithNestedIntersections.js]
-"use strict";
 // https://github.com/Microsoft/TypeScript/issues/13813
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.myInstance = exports.photo = exports.obj = void 0;
 let a = { a: { x: 'hello' } }; // ok
 let b = { a: { x: 2 } }; // error - types of property x are incompatible
 let c = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
 let d = { a: { x: 'hello' }, c: 5 }; // ok
 let e = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatible
 let f = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in type A
-exports.photo = {
+export let obj;
+export const photo = {
     id: 1,
     url: '',
     xyz: 1 // Great! This causes an error!
 };
-exports.myInstance = {
+export const myInstance = {
     id: 1,
     name: '',
     photo: {

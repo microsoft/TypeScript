@@ -19,7 +19,7 @@ function test1(x: Foo) {
 }
 
 class Bar {
-    a: number;
+    a: number = 0;
     b?: number;
     c? = 2;
     constructor(public d?: number, public e = 10) {}
@@ -59,6 +59,7 @@ class Derived extends Base {
 
 
 //// [optionalMethods.js]
+"use strict";
 function test1(x) {
     x.a;
     x.b;
@@ -71,7 +72,7 @@ function test1(x) {
 class Bar {
     d;
     e;
-    a;
+    a = 0;
     b;
     c = 2;
     constructor(d, e = 10) {

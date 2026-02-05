@@ -1,6 +1,6 @@
 --- old.invalidStaticField.js
 +++ new.invalidStaticField.js
-@@= skipped -8, +8 lines =@@
+@@= skipped -9, +9 lines =@@
      foo() { return B.NULL; }
  }
  class B {

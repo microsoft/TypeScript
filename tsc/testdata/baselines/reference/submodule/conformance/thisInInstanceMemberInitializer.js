@@ -11,6 +11,7 @@ class D<T> {
 }
 
 //// [thisInInstanceMemberInitializer.js]
+"use strict";
 class C {
     x = this;
 }

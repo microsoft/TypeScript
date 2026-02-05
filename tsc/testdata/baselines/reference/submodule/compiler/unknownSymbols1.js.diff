@@ -1,6 +1,6 @@
 --- old.unknownSymbols1.js
 +++ new.unknownSymbols1.js
-@@= skipped -42, +42 lines =@@
+@@= skipped -43, +43 lines =@@
  }
  var z = x; // should be an error
  class C {

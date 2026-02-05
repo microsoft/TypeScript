@@ -9,6 +9,7 @@ var match: { [index: number]: string; }
 
 
 //// [nestedIndexer.js]
+"use strict";
 function then(x) {
     var match;
 }

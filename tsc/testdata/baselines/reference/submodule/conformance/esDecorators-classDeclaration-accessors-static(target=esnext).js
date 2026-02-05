@@ -16,6 +16,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-accessors-static.js]
+"use strict";
 const method3 = "method3";
 class C {
     @dec(11)

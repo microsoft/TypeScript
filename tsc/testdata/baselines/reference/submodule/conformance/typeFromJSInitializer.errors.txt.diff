@@ -4,27 +4,36 @@
 -a.js(3,5): error TS7008: Member 'unknown' implicitly has an 'any' type.
 -a.js(4,5): error TS7008: Member 'unknowable' implicitly has an 'any' type.
 -a.js(5,5): error TS7008: Member 'empty' implicitly has an 'any[]' type.
++a.js(3,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(4,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(5,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +a.js(7,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
  a.js(25,29): error TS7006: Parameter 'l' implicitly has an 'any[]' type.
  a.js(27,5): error TS2322: Type 'undefined' is not assignable to type 'null'.
  a.js(29,5): error TS2322: Type '1' is not assignable to type 'null'.
-@@= skipped -9, +7 lines =@@
+@@= skipped -9, +10 lines =@@
  a.js(37,5): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 -==== a.js (10 errors) ====
-+==== a.js (8 errors) ====
++==== a.js (11 errors) ====
      function A () {
          // should get any on this-assignments in constructor
          this.unknown = null
 -        ~~~~~~~~~~~~~~~~~~~
 -!!! error TS7008: Member 'unknown' implicitly has an 'any' type.
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
          this.unknowable = undefined
 -        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -!!! error TS7008: Member 'unknowable' implicitly has an 'any' type.
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
          this.empty = []
 -        ~~~~~~~~~~~~~~~
 -!!! error TS7008: Member 'empty' implicitly has an 'any[]' type.
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
      }
      var a = new A()
 +            ~~~~~~~

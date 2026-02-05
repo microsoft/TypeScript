@@ -1,7 +1,7 @@
 --- old.objectTypesIdentityWithNumericIndexers2.js
 +++ new.objectTypesIdentityWithNumericIndexers2.js
-@@= skipped -129, +129 lines =@@
- //// [objectTypesIdentityWithNumericIndexers2.js]
+@@= skipped -130, +130 lines =@@
+ "use strict";
  // object types are identical structurally
  class Base {
 +    foo;

@@ -1,6 +1,12 @@
 --- old.jsFunctionWithPrototypeNoErrorTruncationNoCrash.errors.txt
 +++ new.jsFunctionWithPrototypeNoErrorTruncationNoCrash.errors.txt
-@@= skipped -5, +5 lines =@@
+@@= skipped -0, +0 lines =@@
+ index.js(1,16): error TS7006: Parameter 'obj' implicitly has an 'any' type.
++index.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+ index.js(6,21): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+ index.js(7,20): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+ index.js(8,22): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
+@@= skipped -5, +6 lines =@@
  index.js(10,20): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
  index.js(11,21): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
  index.js(13,21): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
@@ -8,16 +14,23 @@
 -
 -
 -==== index.js (9 errors) ====
++index.js(14,35): error TS2339: Property 'rgb' does not exist on type '{ negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }'.
 +
 +
-+==== index.js (8 errors) ====
++==== index.js (10 errors) ====
      function Color(obj) {
                     ~~~
  !!! error TS7006: Parameter 'obj' implicitly has an 'any' type.
-@@= skipped -34, +33 lines =@@
-     	                   ~~~~~
+         this.example = true
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+     };
+     Color.prototype = {
+     	negate: function () {return this;},
+@@= skipped -35, +37 lines =@@
  !!! error TS7006: Parameter 'ratio' implicitly has an 'any' type.
      	toJSON: function () {return this.rgb();},
--    	                                 ~~~
+     	                                 ~~~
 -!!! error TS2339: Property 'rgb' does not exist on type 'Color'.
++!!! error TS2339: Property 'rgb' does not exist on type '{ negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }'.
      };

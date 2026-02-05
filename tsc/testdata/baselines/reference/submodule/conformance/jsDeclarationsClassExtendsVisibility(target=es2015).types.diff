@@ -1,0 +1,32 @@
+--- old.jsDeclarationsClassExtendsVisibility(target=es2015).types
++++ new.jsDeclarationsClassExtendsVisibility(target=es2015).types
+@@= skipped -26, +26 lines =@@
+ module.exports = Foo;
+ >module.exports = Foo : typeof Foo
+ >module.exports : typeof Foo
+->module : { exports: typeof Foo; }
++>module : { Foo: typeof Foo; }
+ >exports : typeof Foo
+ >Foo : typeof Foo
+
+ module.exports.Strings = Strings;
+ >module.exports.Strings = Strings : { a: string; b: string; }
+->module.exports.Strings : { a: string; b: string; }
++>module.exports.Strings : any
+ >module.exports : typeof Foo
+->module : { exports: typeof Foo; }
++>module : { Foo: typeof Foo; }
+ >exports : typeof Foo
+->Strings : { a: string; b: string; }
++>Strings : any
+ >Strings : { a: string; b: string; }
+
+ === bar.js ===
+@@= skipped -20, +20 lines =@@
+ module.exports = Bar;
+ >module.exports = Bar : typeof Bar
+ >module.exports : typeof Bar
+->module : { exports: typeof Bar; }
++>module : { Bar: typeof Bar; }
+ >exports : typeof Bar
+ >Bar : typeof Bar

@@ -4,7 +4,7 @@
 // https://github.com/microsoft/TypeScript/issues/19577
 
 function testNonNullInference(numbers: number[]) {
->testNonNullInference : (numbers: number[]) => number
+>testNonNullInference : (numbers: number[]) => number | undefined
 >numbers : number[]
 
     let last;
@@ -30,7 +30,7 @@ function testNonNullInference(numbers: number[]) {
     }
 
     last;
->last : number
+>last : number | undefined
 
     last!;
 >last! : number
@@ -38,7 +38,7 @@ function testNonNullInference(numbers: number[]) {
 }
 
 function testNonNullInferenceWithArrays(numbers: number[]) {
->testNonNullInferenceWithArrays : (numbers: number[]) => number[]
+>testNonNullInferenceWithArrays : (numbers: number[]) => number[] | undefined
 >numbers : number[]
 
     let result;
@@ -46,7 +46,7 @@ function testNonNullInferenceWithArrays(numbers: number[]) {
 
     const arr = [];
 >arr : any[]
->[] : undefined[]
+>[] : never[]
 
     for (const n of numbers) {
 >n : number
@@ -76,7 +76,7 @@ function testNonNullInferenceWithArrays(numbers: number[]) {
     }
 
     result;
->result : number[]
+>result : number[] | undefined
 
     result!;
 >result! : number[]

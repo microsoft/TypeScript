@@ -11,6 +11,7 @@ preferredRevision = PUPPETEER_REVISIONS.firefox;
 
 
 //// [objectFreezeLiteralsDontWiden.js]
+"use strict";
 const PUPPETEER_REVISIONS = Object.freeze({
     chromium: '1011831',
     firefox: 'latest',

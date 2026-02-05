@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution16.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : typeof React
 
@@ -32,7 +34,7 @@ export class AddressComp extends React.Component<Properties, void> {
 >Component : typeof React.Component
 
   public render() {
->render : () => any
+>render : () => null
 
     return null;
   }

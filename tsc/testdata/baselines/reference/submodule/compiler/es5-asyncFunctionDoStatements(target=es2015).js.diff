@@ -1,0 +1,257 @@
+--- old.es5-asyncFunctionDoStatements(target=es2015).js
++++ new.es5-asyncFunctionDoStatements(target=es2015).js
+@@= skipped -80, +80 lines =@@
+
+ //// [es5-asyncFunctionDoStatements.js]
+ "use strict";
+-function doStatement0() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        do {
+-            x;
+-        } while (y);
+-    });
+-}
+-function doStatement1() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        do {
+-            yield x;
+-        } while (y);
+-    });
+-}
+-function doStatement2() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        do {
+-            x;
+-        } while (yield y);
+-    });
+-}
+-function doStatement3() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        do {
+-            continue;
+-        } while (y);
+-    });
+-}
+-function doStatement4() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        do {
+-            yield x;
+-            continue;
+-        } while (y);
+-    });
+-}
+-function doStatement5() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        do {
+-            if (1)
+-                continue;
+-            yield x;
+-        } while (y);
+-    });
+-}
+-function doStatement6() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        do {
+-            continue;
+-        } while (yield y);
+-    });
+-}
+-function doStatement7() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        A: do {
+-            continue A;
+-        } while (y);
+-    });
+-}
+-function doStatement8() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        B: do {
+-            yield x;
+-            continue B;
+-        } while (y);
+-    });
+-}
+-function doStatement9() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        C: do {
+-            if (1)
+-                continue C;
+-            yield x;
+-        } while (y);
+-    });
+-}
+-function doStatement10() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        D: do {
+-            continue D;
+-        } while (yield y);
+-    });
+-}
+-function doStatement11() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        do {
+-            break;
+-        } while (y);
+-    });
+-}
+-function doStatement12() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        do {
+-            yield x;
+-            break;
+-        } while (y);
+-    });
+-}
+-function doStatement13() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        do {
+-            if (1)
+-                break;
+-            yield x;
+-        } while (y);
+-    });
+-}
+-function doStatement14() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        do {
+-            break;
+-        } while (yield y);
+-    });
+-}
+-function doStatement15() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        E: do {
+-            break E;
+-        } while (y);
+-    });
+-}
+-function doStatement16() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        F: do {
+-            yield x;
+-            break F;
+-        } while (y);
+-    });
+-}
+-function doStatement17() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        G: do {
+-            if (1)
+-                break G;
+-            yield x;
+-        } while (y);
+-    });
+-}
+-function doStatement18() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        H: do {
+-            break H;
+-        } while (yield y);
+-    });
++async function doStatement0() {
++    do {
++        x;
++    } while (y);
++}
++async function doStatement1() {
++    do {
++        await x;
++    } while (y);
++}
++async function doStatement2() {
++    do {
++        x;
++    } while (await y);
++}
++async function doStatement3() {
++    do {
++        continue;
++    } while (y);
++}
++async function doStatement4() {
++    do {
++        await x;
++        continue;
++    } while (y);
++}
++async function doStatement5() {
++    do {
++        if (1)
++            continue;
++        await x;
++    } while (y);
++}
++async function doStatement6() {
++    do {
++        continue;
++    } while (await y);
++}
++async function doStatement7() {
++    A: do {
++        continue A;
++    } while (y);
++}
++async function doStatement8() {
++    B: do {
++        await x;
++        continue B;
++    } while (y);
++}
++async function doStatement9() {
++    C: do {
++        if (1)
++            continue C;
++        await x;
++    } while (y);
++}
++async function doStatement10() {
++    D: do {
++        continue D;
++    } while (await y);
++}
++async function doStatement11() {
++    do {
++        break;
++    } while (y);
++}
++async function doStatement12() {
++    do {
++        await x;
++        break;
++    } while (y);
++}
++async function doStatement13() {
++    do {
++        if (1)
++            break;
++        await x;
++    } while (y);
++}
++async function doStatement14() {
++    do {
++        break;
++    } while (await y);
++}
++async function doStatement15() {
++    E: do {
++        break E;
++    } while (y);
++}
++async function doStatement16() {
++    F: do {
++        await x;
++        break F;
++    } while (y);
++}
++async function doStatement17() {
++    G: do {
++        if (1)
++            break G;
++        await x;
++    } while (y);
++}
++async function doStatement18() {
++    H: do {
++        break H;
++    } while (await y);
+ }

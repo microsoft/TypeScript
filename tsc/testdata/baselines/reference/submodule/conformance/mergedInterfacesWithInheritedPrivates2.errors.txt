@@ -10,11 +10,11 @@ mergedInterfacesWithInheritedPrivates2.ts(31,12): error TS2341: Property 'w' is 
 
 ==== mergedInterfacesWithInheritedPrivates2.ts (5 errors) ====
     class C {
-        private x: number;
+        private x!: number;
     }
     
     class C2 {
-        private w: number;
+        private w!: number;
     }
     
     interface A extends C {
@@ -29,9 +29,9 @@ mergedInterfacesWithInheritedPrivates2.ts(31,12): error TS2341: Property 'w' is 
           ~
 !!! error TS2420: Class 'D' incorrectly implements interface 'A'.
 !!! error TS2420:   Types have separate declarations of a private property 'w'.
-        private w: number;
-        y: string;
-        z: string;
+        private w!: number;
+        y!: string;
+        z!: string;
     }
     
     class E extends C2 implements A { // error
@@ -42,12 +42,12 @@ mergedInterfacesWithInheritedPrivates2.ts(31,12): error TS2341: Property 'w' is 
 !!! error TS2420: Class 'E' incorrectly implements interface 'A'.
 !!! error TS2420:   Property 'x' is missing in type 'E' but required in type 'A'.
 !!! related TS2728 mergedInterfacesWithInheritedPrivates2.ts:2:13: 'x' is declared here.
-        w: number;
-        y: string;
-        z: string;
+        w!: number;
+        y!: string;
+        z!: string;
     }
     
-    var a: A;
+    declare var a: A;
     var r = a.x; // error
               ~
 !!! error TS2341: Property 'x' is private and only accessible within class 'C'.

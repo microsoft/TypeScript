@@ -30,11 +30,11 @@ interface MoverShaker extends Mover, Shaker {
 }
 
 // Inside a module
-declare module MoversAndShakers {
+declare namespace MoversAndShakers {
 >MoversAndShakers : Symbol(MoversAndShakers, Decl(interfacePropertiesWithSameName2.ts, 11, 1))
 
     export class Mover {
->Mover : Symbol(Mover, Decl(interfacePropertiesWithSameName2.ts, 14, 33))
+>Mover : Symbol(Mover, Decl(interfacePropertiesWithSameName2.ts, 14, 36))
 
         move(): void;
 >move : Symbol(Mover.move, Decl(interfacePropertiesWithSameName2.ts, 15, 24))
@@ -57,18 +57,18 @@ declare module MoversAndShakers {
 
 interface MoverShaker2 extends MoversAndShakers.Mover, MoversAndShakers.Shaker { } // error
 >MoverShaker2 : Symbol(MoverShaker2, Decl(interfacePropertiesWithSameName2.ts, 23, 1))
->MoversAndShakers.Mover : Symbol(MoversAndShakers.Mover, Decl(interfacePropertiesWithSameName2.ts, 14, 33))
+>MoversAndShakers.Mover : Symbol(MoversAndShakers.Mover, Decl(interfacePropertiesWithSameName2.ts, 14, 36))
 >MoversAndShakers : Symbol(MoversAndShakers, Decl(interfacePropertiesWithSameName2.ts, 11, 1))
->Mover : Symbol(MoversAndShakers.Mover, Decl(interfacePropertiesWithSameName2.ts, 14, 33))
+>Mover : Symbol(MoversAndShakers.Mover, Decl(interfacePropertiesWithSameName2.ts, 14, 36))
 >MoversAndShakers.Shaker : Symbol(MoversAndShakers.Shaker, Decl(interfacePropertiesWithSameName2.ts, 18, 5))
 >MoversAndShakers : Symbol(MoversAndShakers, Decl(interfacePropertiesWithSameName2.ts, 11, 1))
 >Shaker : Symbol(MoversAndShakers.Shaker, Decl(interfacePropertiesWithSameName2.ts, 18, 5))
 
 interface MoverShaker3 extends MoversAndShakers.Mover, MoversAndShakers.Shaker {
 >MoverShaker3 : Symbol(MoverShaker3, Decl(interfacePropertiesWithSameName2.ts, 25, 82))
->MoversAndShakers.Mover : Symbol(MoversAndShakers.Mover, Decl(interfacePropertiesWithSameName2.ts, 14, 33))
+>MoversAndShakers.Mover : Symbol(MoversAndShakers.Mover, Decl(interfacePropertiesWithSameName2.ts, 14, 36))
 >MoversAndShakers : Symbol(MoversAndShakers, Decl(interfacePropertiesWithSameName2.ts, 11, 1))
->Mover : Symbol(MoversAndShakers.Mover, Decl(interfacePropertiesWithSameName2.ts, 14, 33))
+>Mover : Symbol(MoversAndShakers.Mover, Decl(interfacePropertiesWithSameName2.ts, 14, 36))
 >MoversAndShakers.Shaker : Symbol(MoversAndShakers.Shaker, Decl(interfacePropertiesWithSameName2.ts, 18, 5))
 >MoversAndShakers : Symbol(MoversAndShakers, Decl(interfacePropertiesWithSameName2.ts, 11, 1))
 >Shaker : Symbol(MoversAndShakers.Shaker, Decl(interfacePropertiesWithSameName2.ts, 18, 5))

@@ -1,12 +1,16 @@
+commentsOnJSXExpressionsArePreserved.tsx(5,16): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 commentsOnJSXExpressionsArePreserved.tsx(5,17): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+commentsOnJSXExpressionsArePreserved.tsx(18,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
-==== commentsOnJSXExpressionsArePreserved.tsx (1 errors) ====
+==== commentsOnJSXExpressionsArePreserved.tsx (3 errors) ====
     // file is intentionally not a module - this tests for a crash in the module/system transforms alongside the `react-jsx` and `react-jsxdev` outputs
     namespace JSX {}
     class Component {
         render() {
             return <div>
+                   ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                     ~~~
 !!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
                 {/* missing */}
@@ -22,5 +26,7 @@ commentsOnJSXExpressionsArePreserved.tsx(5,17): error TS2874: This JSX tag requi
                     // ??? 4
                 /* ??? 5 */}
             </div>;
+            ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
         }
     }

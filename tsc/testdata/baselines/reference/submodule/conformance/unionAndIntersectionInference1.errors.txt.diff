@@ -1,0 +1,28 @@
+--- old.unionAndIntersectionInference1.errors.txt
++++ new.unionAndIntersectionInference1.errors.txt
+@@= skipped -5, +5 lines =@@
+   'U' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+ unionAndIntersectionInference1.ts(52,5): error TS2454: Variable 'foo' is used before being assigned.
+ unionAndIntersectionInference1.ts(95,52): error TS2769: No overload matches this call.
+-  Overload 1 of 4, '(target: {}, source: U): {} & U', gave the following error.
+-    Argument of type 'T' is not assignable to parameter of type '{}'.
+-  Overload 2 of 4, '(target: object, ...sources: any[]): any', gave the following error.
++  The last overload gave the following error.
+     Argument of type 'T' is not assignable to parameter of type 'object'.
+ unionAndIntersectionInference1.ts(96,7): error TS2322: Type '{ func: <T>() => void; }' is not assignable to type '(() => void) & { func: any; }'.
+   Type '{ func: <T>() => void; }' is not assignable to type '() => void'.
+@@= skipped -120, +118 lines =@@
+     const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
+                                                        ~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 4, '(target: {}, source: U): {} & U', gave the following error.
+-!!! error TS2769:     Argument of type 'T' is not assignable to parameter of type '{}'.
+-!!! error TS2769:   Overload 2 of 4, '(target: object, ...sources: any[]): any', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'T' is not assignable to parameter of type 'object'.
+-!!! related TS2208 unionAndIntersectionInference1.ts:95:17: This type parameter might need an `extends {}` constraint.
+ !!! related TS2208 unionAndIntersectionInference1.ts:95:17: This type parameter might need an `extends object` constraint.
++!!! related TS2771 lib.es2015.core.d.ts:--:--: The last overload is declared here.
+     const res: (() => void) & { func: any } = assign(() => {}, { func });
+           ~~~
+ !!! error TS2322: Type '{ func: <T>() => void; }' is not assignable to type '(() => void) & { func: any; }'.

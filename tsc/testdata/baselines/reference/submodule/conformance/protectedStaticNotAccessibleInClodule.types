@@ -13,7 +13,7 @@ class C {
 >bar : string
 }
 
-module C {
+namespace C {
 >C : typeof C
 
     export var f = C.foo; // OK

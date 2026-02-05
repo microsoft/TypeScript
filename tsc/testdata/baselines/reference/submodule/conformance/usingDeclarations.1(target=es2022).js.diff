@@ -1,18 +1,18 @@
 --- old.usingDeclarations.1(target=es2022).js
 +++ new.usingDeclarations.1(target=es2022).js
-@@= skipped -205, +205 lines =@@
+@@= skipped -216, +216 lines =@@
      var e = new Error(message);
      return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
  });
-+var d1, a, C1, C2, C3, N, env_1;
++var d1, a, C1, C2, C3, N;
  function f() {
-     const env_15 = { stack: [], error: void 0, hasError: false };
+     const env_18 = { stack: [], error: void 0, hasError: false };
      try {
 @@= skipped -56, +57 lines =@@
-         __disposeResources(env_18);
+         __disposeResources(env_21);
      }
  }
--var d1, a, C1, C2, C3, N, env_1;
- const env_2 = { stack: [], error: void 0, hasError: false };
+-var d1, a, C1, C2, C3, N;
+ const env_1 = { stack: [], error: void 0, hasError: false };
  try {
-     d1 = __addDisposableResource(env_2, { [Symbol.dispose]() { } }, false);
+     d1 = __addDisposableResource(env_1, { [Symbol.dispose]() { } }, false);

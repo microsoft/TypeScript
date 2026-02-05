@@ -11,7 +11,7 @@ nonPrimitiveAssignError.ts(19,1): error TS2322: Type 'object' is not assignable 
 ==== nonPrimitiveAssignError.ts (7 errors) ====
     var x = {};
     var y = {foo: "bar"};
-    var a: object;
+    var a: object = {};
     x = a;
     y = a; // expect error
     ~

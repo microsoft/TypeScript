@@ -9,6 +9,7 @@ switch (0) {
 
 
 //// [switchAssignmentCompat.js]
+"use strict";
 class Foo {
 }
 switch (0) {

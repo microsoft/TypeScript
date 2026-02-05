@@ -1,8 +1,8 @@
 --- old.parser509668.js
 +++ new.parser509668.js
-@@= skipped -7, +7 lines =@@
-
+@@= skipped -8, +8 lines =@@
  //// [parser509668.js]
+ "use strict";
  class Foo3 {
 +    args;
      // Doesn't work, but should

@@ -1,8 +1,8 @@
 --- old.autoAccessor4(target=es2022).js
 +++ new.autoAccessor4(target=es2022).js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [autoAccessor4.js]
+ "use strict";
  class C1 {
 -    #_a_accessor_storage;
 -    get 0() { return this.#_a_accessor_storage; }

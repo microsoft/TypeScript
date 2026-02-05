@@ -1,0 +1,26 @@
+--- old.commaOperatorWithSecondOperandStringType.types
++++ new.commaOperatorWithSecondOperandStringType.types
+@@= skipped -111, +111 lines =@@
+ >"a" : "a"
+ >"b" : "b"
+ >NUMBER.toString() : string
+->NUMBER.toString : (radix?: number) => string
++>NUMBER.toString : (radix?: number | undefined) => string
+ >NUMBER : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+ OBJECT = new Object, STRING + "string";
+ >OBJECT = new Object, STRING + "string" : string
+@@= skipped -54, +54 lines =@@
+ >"a" : "a"
+ >"b" : "b"
+ >NUMBER.toString() : string
+->NUMBER.toString : (radix?: number) => string
++>NUMBER.toString : (radix?: number | undefined) => string
+ >NUMBER : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+ var resultIsString11 = (new Object, STRING + "string");
+ >resultIsString11 : string

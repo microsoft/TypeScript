@@ -1,0 +1,57 @@
+mutrec.ts(11,3): error TS2454: Variable 'b' is used before being assigned.
+mutrec.ts(27,3): error TS2454: Variable 'i2' is used before being assigned.
+mutrec.ts(29,3): error TS2454: Variable 'i3' is used before being assigned.
+mutrec.ts(40,3): error TS2454: Variable 'i4' is used before being assigned.
+
+
+==== mutrec.ts (4 errors) ====
+    interface A {
+        x:B[];
+    }
+    
+    interface B {
+        x:A[];
+    }
+    
+    function f(p: A) { return p };
+    var b:B;
+    f(b);
+      ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    interface I1 {
+        y:I2;
+    }
+    
+    interface I2 {
+        y:I3;
+    }
+    
+    interface I3 {
+        y:I1;
+    }
+    
+    function g(p: I1) { return p };
+    var i2:I2;
+    g(i2);
+      ~~
+!!! error TS2454: Variable 'i2' is used before being assigned.
+    var i3:I3;
+    g(i3);
+      ~~
+!!! error TS2454: Variable 'i3' is used before being assigned.
+    
+    interface I4 {
+        y:I5;
+    }
+    
+    interface I5 {
+        y:I4;
+    }
+    
+    var i4:I4;
+    g(i4);
+      ~~
+!!! error TS2454: Variable 'i4' is used before being assigned.
+    
+    

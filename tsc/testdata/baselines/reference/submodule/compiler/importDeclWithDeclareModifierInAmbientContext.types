@@ -4,7 +4,7 @@
 declare module "m" {
 >"m" : typeof import("m")
 
-    module x {
+    namespace x {
         interface c {
         }
     }

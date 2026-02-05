@@ -1,0 +1,17 @@
+interfaceInReopenedModule.ts(8,17): error TS2564: Property 'n' has no initializer and is not definitely assigned in the constructor.
+
+
+==== interfaceInReopenedModule.ts (1 errors) ====
+    namespace m {
+    }
+    
+    // In second instance of same module, exported interface is not visible
+    namespace m {
+        interface f {}
+        export class n { 
+            private n: f;
+                    ~
+!!! error TS2564: Property 'n' has no initializer and is not definitely assigned in the constructor.
+        }
+    }
+    

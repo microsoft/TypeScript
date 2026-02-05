@@ -1,8 +1,8 @@
 --- old.superCallWithCommentEmit01.js
 +++ new.superCallWithCommentEmit01.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [superCallWithCommentEmit01.js]
+ "use strict";
  class A {
 +    text;
      constructor(text) {

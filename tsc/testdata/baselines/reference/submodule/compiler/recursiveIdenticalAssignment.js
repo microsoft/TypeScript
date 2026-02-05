@@ -14,5 +14,6 @@ var b: B<B<any>> = a // Error, any does not satisfy constraint B<B<T>>
 
 
 //// [recursiveIdenticalAssignment.js]
+"use strict";
 var a;
 var b = a; // Error, any does not satisfy constraint B<B<T>>

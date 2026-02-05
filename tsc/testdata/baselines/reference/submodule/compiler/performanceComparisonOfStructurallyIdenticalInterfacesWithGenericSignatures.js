@@ -91,10 +91,7 @@ export class A<T> implements InterfaceB<T> {
 export class B<T> extends A<T> { }
 
 //// [performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.B = exports.A = void 0;
-class A {
+export class A {
     filter(callback) {
         return undefined;
     }
@@ -135,7 +132,5 @@ class A {
         return undefined;
     }
 }
-exports.A = A;
-class B extends A {
+export class B extends A {
 }
-exports.B = B;

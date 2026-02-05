@@ -286,7 +286,7 @@ declare function privateAmbientFunctionWithPrivateModuleParameterTypes(param: pr
 >param : privateModule.publicClass
 >privateModule : any
 
-export module publicModule {
+export namespace publicModule {
 >publicModule : typeof publicModule
 
     class privateClass {
@@ -577,7 +577,7 @@ export module publicModule {
 
 }
 
-module privateModule {
+namespace privateModule {
 >privateModule : typeof privateModule
 
     class privateClass {
@@ -914,7 +914,7 @@ declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(param: pub
 >publicAmbientFunctionWithPublicParmeterTypesInGlobal : (param: publicClassInGlobal) => void
 >param : publicClassInGlobal
 
-module publicModuleInGlobal {
+namespace publicModuleInGlobal {
 >publicModuleInGlobal : typeof publicModuleInGlobal
 
     class privateClass {
@@ -925,7 +925,7 @@ module publicModuleInGlobal {
 >publicClass : publicClass
     }
 
-    module privateModule {
+    namespace privateModule {
 >privateModule : typeof privateModule
 
         class privateClass {

@@ -1,6 +1,6 @@
 --- old.multivar.js
 +++ new.multivar.js
-@@= skipped -57, +57 lines =@@
+@@= skipped -58, +58 lines =@@
      var a2, b22 = 10, b222;
      var m3;
      class C {

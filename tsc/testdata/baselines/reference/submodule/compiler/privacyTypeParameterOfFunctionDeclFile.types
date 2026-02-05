@@ -240,7 +240,7 @@ function privateFunctionWithPrivateMopduleTypeParameters<T extends privateModule
 }
 
 
-export module publicModule {
+export namespace publicModule {
 >publicModule : typeof publicModule
 
     class privateClass {
@@ -483,7 +483,7 @@ export module publicModule {
 
 }
 
-module privateModule {
+namespace privateModule {
 >privateModule : typeof privateModule
 
     class privateClass {

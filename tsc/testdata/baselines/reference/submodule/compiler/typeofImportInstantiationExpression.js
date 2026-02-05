@@ -20,3 +20,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.myFunction = myFunction;
 function myFunction(arg) { return (arg.params || {}); }
 //// [main.js]
+"use strict";

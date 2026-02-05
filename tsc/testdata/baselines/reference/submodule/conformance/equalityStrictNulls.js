@@ -81,6 +81,7 @@ function f5(x: string) {
 
 
 //// [equalityStrictNulls.js]
+"use strict";
 function f1(x) {
     if (x == undefined) {
     }

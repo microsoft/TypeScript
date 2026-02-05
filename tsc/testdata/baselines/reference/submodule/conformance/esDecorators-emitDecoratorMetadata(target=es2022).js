@@ -49,6 +49,7 @@ class C {
 });
 
 //// [esDecorators-emitDecoratorMetadata.js]
+"use strict";
 @dec
 class C {
     constructor(x) { }

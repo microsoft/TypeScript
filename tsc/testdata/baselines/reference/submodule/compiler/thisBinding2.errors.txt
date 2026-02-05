@@ -3,7 +3,7 @@ thisBinding2.ts(10,11): error TS2683: 'this' implicitly has type 'any' because i
 
 ==== thisBinding2.ts (1 errors) ====
     class C {
-     x: number;
+     x!: number;
         constructor() {
             this.x = (() => {
        var x = 1;

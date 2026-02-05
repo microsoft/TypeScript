@@ -11,6 +11,7 @@ async function func() {
 }
 
 //// [invalidContinueInDownlevelAsync.js]
+"use strict";
 async function func() {
     if (true) {
         continue;

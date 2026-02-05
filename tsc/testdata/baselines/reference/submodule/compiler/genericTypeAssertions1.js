@@ -7,6 +7,7 @@ var r: A<string> = <A<number>>new A(); // error
 var r2: A<number> = <A<A<number>>>foo; // error
 
 //// [genericTypeAssertions1.js]
+"use strict";
 class A {
     foo(x) { }
 }

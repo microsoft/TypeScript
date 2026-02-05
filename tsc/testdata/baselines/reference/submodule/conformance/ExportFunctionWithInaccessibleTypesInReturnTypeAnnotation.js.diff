@@ -1,6 +1,6 @@
 --- old.ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.js
 +++ new.ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.js
-@@= skipped -20, +20 lines =@@
+@@= skipped -21, +21 lines =@@
  var A;
  (function (A) {
      class Point {

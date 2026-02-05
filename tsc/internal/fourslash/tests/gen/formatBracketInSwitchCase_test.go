@@ -11,7 +11,8 @@ func TestFormatBracketInSwitchCase(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `switch (x) {
+	const content = `// @lib: es5
+switch (x) {
     case[]:
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

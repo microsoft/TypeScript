@@ -21,5 +21,6 @@ abstract class A {
 
 
 //// [classAbstractMixedWithModifiers.js]
+"use strict";
 class A {
 }

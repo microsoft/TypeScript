@@ -25,8 +25,7 @@ export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as 
 
 
 //// [namedTupleMembersErrors.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [namedTupleMembersErrors.d.ts]

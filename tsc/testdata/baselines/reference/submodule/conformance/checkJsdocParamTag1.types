@@ -7,22 +7,22 @@
  * @param {string} [s]
  */
 function foo(n, s) {}
->foo : (n?: number, s?: string) => void
->n : number
->s : string
+>foo : (n?: number | undefined, s?: string | undefined) => void
+>n : number | undefined
+>s : string | undefined
 
 foo();
 >foo() : void
->foo : (n?: number, s?: string) => void
+>foo : (n?: number | undefined, s?: string | undefined) => void
 
 foo(1);
 >foo(1) : void
->foo : (n?: number, s?: string) => void
+>foo : (n?: number | undefined, s?: string | undefined) => void
 >1 : 1
 
 foo(1, "hi");
 >foo(1, "hi") : void
->foo : (n?: number, s?: string) => void
+>foo : (n?: number | undefined, s?: string | undefined) => void
 >1 : 1
 >"hi" : "hi"
 

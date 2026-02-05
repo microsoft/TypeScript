@@ -1,8 +1,8 @@
 --- old.superCalls.js
 +++ new.superCalls.js
-@@= skipped -33, +33 lines =@@
-
+@@= skipped -34, +34 lines =@@
  //// [superCalls.js]
+ "use strict";
  class Base {
 +    x = 43;
      constructor(n) {

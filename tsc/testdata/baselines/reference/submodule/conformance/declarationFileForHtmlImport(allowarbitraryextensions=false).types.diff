@@ -1,0 +1,16 @@
+--- old.declarationFileForHtmlImport(allowarbitraryextensions=false).types
++++ new.declarationFileForHtmlImport(allowarbitraryextensions=false).types
+@@= skipped -27, +27 lines =@@
+
+ window.customElements.define("my-html5-element", mod.HTML5Element);
+ >window.customElements.define("my-html5-element", mod.HTML5Element) : void
+->window.customElements.define : (name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions) => void
++>window.customElements.define : (name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions | undefined) => void
+ >window.customElements : CustomElementRegistry
+ >window : Window & typeof globalThis
+ >customElements : CustomElementRegistry
+->define : (name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions) => void
++>define : (name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions | undefined) => void
+ >"my-html5-element" : "my-html5-element"
+ >mod.HTML5Element : any
+ >mod : any

@@ -6,6 +6,7 @@ var bar = foge.slice(1, 10);
 var len = foge.byteLength;
 
 //// [useSharedArrayBuffer3.js]
+"use strict";
 var foge = new SharedArrayBuffer(1024);
 var bar = foge.slice(1, 10);
 var len = foge.byteLength;

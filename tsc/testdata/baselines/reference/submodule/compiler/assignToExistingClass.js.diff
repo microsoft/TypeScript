@@ -1,6 +1,6 @@
 --- old.assignToExistingClass.js
 +++ new.assignToExistingClass.js
-@@= skipped -20, +20 lines =@@
+@@= skipped -21, +21 lines =@@
  var Test;
  (function (Test) {
      class Mocked {

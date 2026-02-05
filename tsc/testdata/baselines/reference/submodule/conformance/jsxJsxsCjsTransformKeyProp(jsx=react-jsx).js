@@ -14,7 +14,7 @@ export {};
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 const props = { answer: 42 };
 const a = jsx_runtime_1.jsx("div", Object.assign({}, props, { children: "text" }), "foo");
 const b = react_1.createElement("div", Object.assign({}, props, { key: "bar" }), "text");

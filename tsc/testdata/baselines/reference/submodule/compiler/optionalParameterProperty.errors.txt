@@ -6,7 +6,7 @@ optionalParameterProperty.ts(5,7): error TS2415: Class 'D' incorrectly extends b
 
 ==== optionalParameterProperty.ts (1 errors) ====
     class C {
-        p: number;
+        p: number = 0;
     }
     
     class D extends C { 

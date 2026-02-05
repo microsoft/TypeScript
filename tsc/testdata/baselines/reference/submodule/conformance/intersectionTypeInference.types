@@ -6,7 +6,7 @@ function extend<T, U>(obj1: T, obj2: U): T & U {
 >obj1 : T
 >obj2 : U
 
-    var result: T & U;
+    var result!: T & U;
 >result : T & U
 
     obj1 = result;

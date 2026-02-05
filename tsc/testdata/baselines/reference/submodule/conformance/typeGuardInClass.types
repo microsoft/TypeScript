@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/expressions/typeGuards/typeGuardInClass.ts] ////
 
 === typeGuardInClass.ts ===
-let x: string | number;
+declare var x: string | number;
 >x : string | number
 
 if (typeof x === "string") {

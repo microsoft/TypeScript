@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/parameterPropertyInConstructor1.ts] ////
 
 === parameterPropertyInConstructor1.ts ===
-declare module mod {
+declare namespace mod {
 >mod : Symbol(mod, Decl(parameterPropertyInConstructor1.ts, 0, 0))
 
   class Customers {
->Customers : Symbol(Customers, Decl(parameterPropertyInConstructor1.ts, 0, 20))
+>Customers : Symbol(Customers, Decl(parameterPropertyInConstructor1.ts, 0, 23))
 
     constructor(public names: string);
 >names : Symbol(Customers.names, Decl(parameterPropertyInConstructor1.ts, 2, 16))

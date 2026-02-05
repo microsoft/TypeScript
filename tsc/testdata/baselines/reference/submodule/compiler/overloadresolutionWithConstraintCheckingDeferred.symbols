@@ -66,8 +66,10 @@ var result3: string = foo(x => { // x has type D
 >foo : Symbol(foo, Decl(overloadresolutionWithConstraintCheckingDeferred.ts, 7, 1), Decl(overloadresolutionWithConstraintCheckingDeferred.ts, 9, 52), Decl(overloadresolutionWithConstraintCheckingDeferred.ts, 10, 49))
 >x : Symbol(x, Decl(overloadresolutionWithConstraintCheckingDeferred.ts, 17, 26))
 
-    var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
+    var y: G<typeof x> = new G(x); // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
 >y : Symbol(y, Decl(overloadresolutionWithConstraintCheckingDeferred.ts, 18, 7))
+>G : Symbol(G, Decl(overloadresolutionWithConstraintCheckingDeferred.ts, 3, 17))
+>x : Symbol(x, Decl(overloadresolutionWithConstraintCheckingDeferred.ts, 17, 26))
 >G : Symbol(G, Decl(overloadresolutionWithConstraintCheckingDeferred.ts, 3, 17))
 >x : Symbol(x, Decl(overloadresolutionWithConstraintCheckingDeferred.ts, 17, 26))
 

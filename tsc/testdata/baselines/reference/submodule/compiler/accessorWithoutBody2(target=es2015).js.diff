@@ -1,0 +1,8 @@
+--- old.accessorWithoutBody2(target=es2015).js
++++ new.accessorWithoutBody2(target=es2015).js
+@@= skipped -4, +4 lines =@@
+
+ //// [accessorWithoutBody2.js]
+ "use strict";
+-var v = { set foo(a) { } };
++var v = {};

@@ -49,12 +49,12 @@ catch (e) {
 >Error : ErrorConstructor
 
         e.stack?.toUpperCase();
->e.stack?.toUpperCase() : string
->e.stack?.toUpperCase : () => string
->e.stack : string
+>e.stack?.toUpperCase() : string | undefined
+>e.stack?.toUpperCase : (() => string) | undefined
+>e.stack : string | undefined
 >e : Error
->stack : string
->toUpperCase : () => string
+>stack : string | undefined
+>toUpperCase : (() => string) | undefined
     }
     if (typeof e === "number") {
 >typeof e === "number" : boolean
@@ -64,9 +64,9 @@ catch (e) {
 
         e.toExponential();
 >e.toExponential() : string
->e.toExponential : (fractionDigits?: number) => string
+>e.toExponential : (fractionDigits?: number | undefined) => string
 >e : number
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
         e++;
 >e++ : number

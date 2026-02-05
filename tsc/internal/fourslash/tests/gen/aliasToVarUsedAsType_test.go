@@ -12,7 +12,7 @@ func TestAliasToVarUsedAsType(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `/**/
-module A {
+namespace A {
 export var X;
 import Z = A.X;
 var v: Z;

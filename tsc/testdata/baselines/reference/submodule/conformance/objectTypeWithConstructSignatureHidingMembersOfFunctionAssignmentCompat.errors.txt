@@ -11,8 +11,8 @@ objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts(14,1)
         new(): any;
     }
     
-    var i: I;
-    var f: Object;
+    declare var i: I;
+    declare var f: Object;
     f = i;
     i = f;
     ~
@@ -20,7 +20,7 @@ objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts(14,1)
 !!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 !!! error TS2322:     Type 'Object' provides no match for the signature 'new (): any'.
     
-    var a: {
+    declare var a: {
         new(): any
     }
     f = a;

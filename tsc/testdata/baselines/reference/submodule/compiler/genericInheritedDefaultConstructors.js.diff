@@ -1,8 +1,8 @@
 --- old.genericInheritedDefaultConstructors.js
 +++ new.genericInheritedDefaultConstructors.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [genericInheritedDefaultConstructors.js]
+ "use strict";
  class A {
 +    a;
  }

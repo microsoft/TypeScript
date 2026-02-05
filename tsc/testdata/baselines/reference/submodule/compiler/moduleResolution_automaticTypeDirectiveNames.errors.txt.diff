@@ -1,0 +1,18 @@
+--- old.moduleResolution_automaticTypeDirectiveNames.errors.txt
++++ new.moduleResolution_automaticTypeDirectiveNames.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++/a.ts(1,1): error TS2304: Cannot find name 'a'.
++
++
++==== /a.ts (1 errors) ====
++    a;
++    ~
++!!! error TS2304: Cannot find name 'a'.
++    
++==== /node_modules/@types/.a/index.d.ts (0 errors) ====
++    declare const a: number;
++    
++==== /node_modules/@types/a/index.d.ts (0 errors) ====
++    declare const a: string;
++    

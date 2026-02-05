@@ -1,8 +1,8 @@
 --- old.classExtendsItselfIndirectly2.js
 +++ new.classExtendsItselfIndirectly2.js
-@@= skipped -25, +25 lines =@@
-
+@@= skipped -26, +26 lines =@@
  //// [classExtendsItselfIndirectly2.js]
+ "use strict";
  class C extends N.E {
 +    foo;
  } // error

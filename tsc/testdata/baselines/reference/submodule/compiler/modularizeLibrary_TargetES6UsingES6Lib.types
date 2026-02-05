@@ -127,9 +127,9 @@ var str = "Hello world";
 
 str.includes("hello", 0);
 >str.includes("hello", 0) : boolean
->str.includes : (searchString: string, position?: number) => boolean
+>str.includes : (searchString: string, position?: number | undefined) => boolean
 >str : string
->includes : (searchString: string, position?: number) => boolean
+>includes : (searchString: string, position?: number | undefined) => boolean
 >"hello" : "hello"
 >0 : 0
 

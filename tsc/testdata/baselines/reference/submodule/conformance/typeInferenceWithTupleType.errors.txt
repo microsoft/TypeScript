@@ -1,0 +1,58 @@
+typeInferenceWithTupleType.ts(11,18): error TS2322: Type 'undefined' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+typeInferenceWithTupleType.ts(11,29): error TS2322: Type 'undefined' is not assignable to type 'U'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+typeInferenceWithTupleType.ts(16,9): error TS2454: Variable 'zipResult' is used before being assigned.
+typeInferenceWithTupleType.ts(18,12): error TS2454: Variable 'zipResult' is used before being assigned.
+typeInferenceWithTupleType.ts(31,15): error TS2352: Conversion of type 'undefined' to type '["a"[], "b"[]]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+typeInferenceWithTupleType.ts(32,15): error TS2352: Conversion of type 'undefined' to type '["a"[], "b"[]]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== typeInferenceWithTupleType.ts (6 errors) ====
+    function combine<T, U>(x: T, y: U): [T, U] {
+        return [x, y];
+    }
+    
+    var combineResult = combine("string", 10);
+    var combineEle1 = combineResult[0]; // string
+    var combineEle2 = combineResult[1]; // number
+    
+    function zip<T, U>(array1: T[], array2: U[]): [[T, U]] {
+        if (array1.length != array2.length) {
+            return [[undefined, undefined]];
+                     ~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+                                ~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'U'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+        }
+        var length = array1.length;
+        var zipResult: [[T, U]];
+        for (var i = 0; i < length; ++i) {
+            zipResult.push([array1[i], array2[i]]);
+            ~~~~~~~~~
+!!! error TS2454: Variable 'zipResult' is used before being assigned.
+        }
+        return zipResult;
+               ~~~~~~~~~
+!!! error TS2454: Variable 'zipResult' is used before being assigned.
+    }
+    
+    var zipResult = zip(["foo", "bar"], [5, 6]);
+    var zipResultEle = zipResult[0]; // [string, number]
+    var zipResultEleEle = zipResult[0][0]; // string
+    
+    // #33559 and #33752
+    
+    declare function f1<T1, T2>(values: [T1[], T2[]]): T1;
+    declare function f2<T1, T2>(values: readonly [T1[], T2[]]): T1;
+    
+    let expected: "a";
+    expected = f1(undefined as ["a"[], "b"[]]);
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'undefined' to type '["a"[], "b"[]]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    expected = f2(undefined as ["a"[], "b"[]]);
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'undefined' to type '["a"[], "b"[]]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    

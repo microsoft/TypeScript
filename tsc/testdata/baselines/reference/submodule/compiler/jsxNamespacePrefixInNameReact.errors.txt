@@ -1,23 +1,53 @@
+jsxNamespacePrefixInNameReact.tsx(3,20): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(4,20): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(4,31): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(5,20): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(5,46): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(6,20): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(6,39): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(7,20): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(7,54): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(9,26): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxNamespacePrefixInNameReact.tsx(9,32): error TS1003: Identifier expected.
+jsxNamespacePrefixInNameReact.tsx(10,26): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxNamespacePrefixInNameReact.tsx(10,32): error TS1003: Identifier expected.
+jsxNamespacePrefixInNameReact.tsx(10,38): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxNamespacePrefixInNameReact.tsx(10,45): error TS1005: '>' expected.
 jsxNamespacePrefixInNameReact.tsx(10,50): error TS1005: ',' expected.
 jsxNamespacePrefixInNameReact.tsx(10,51): error TS1109: Expression expected.
+jsxNamespacePrefixInNameReact.tsx(11,26): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxNamespacePrefixInNameReact.tsx(11,32): error TS1003: Identifier expected.
+jsxNamespacePrefixInNameReact.tsx(11,53): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxNamespacePrefixInNameReact.tsx(11,60): error TS1005: '>' expected.
 jsxNamespacePrefixInNameReact.tsx(11,65): error TS1005: ',' expected.
 jsxNamespacePrefixInNameReact.tsx(11,66): error TS1109: Expression expected.
+jsxNamespacePrefixInNameReact.tsx(12,26): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxNamespacePrefixInNameReact.tsx(12,32): error TS1003: Identifier expected.
+jsxNamespacePrefixInNameReact.tsx(12,46): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxNamespacePrefixInNameReact.tsx(12,53): error TS1005: '>' expected.
 jsxNamespacePrefixInNameReact.tsx(12,58): error TS1005: ',' expected.
 jsxNamespacePrefixInNameReact.tsx(12,59): error TS1109: Expression expected.
+jsxNamespacePrefixInNameReact.tsx(13,26): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxNamespacePrefixInNameReact.tsx(13,32): error TS1003: Identifier expected.
+jsxNamespacePrefixInNameReact.tsx(13,61): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxNamespacePrefixInNameReact.tsx(13,68): error TS1005: '>' expected.
 jsxNamespacePrefixInNameReact.tsx(13,73): error TS1005: ',' expected.
 jsxNamespacePrefixInNameReact.tsx(13,74): error TS1109: Expression expected.
+jsxNamespacePrefixInNameReact.tsx(15,22): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(16,22): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(16,48): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(17,22): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(17,56): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(19,13): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(20,13): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(20,41): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(21,13): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(21,49): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(23,19): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxNamespacePrefixInNameReact.tsx(23,27): error TS1003: Identifier expected.
 jsxNamespacePrefixInNameReact.tsx(23,29): error TS1005: '...' expected.
 jsxNamespacePrefixInNameReact.tsx(23,29): error TS2698: Spread types may only be created from object types.
+jsxNamespacePrefixInNameReact.tsx(24,19): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxNamespacePrefixInNameReact.tsx(24,27): error TS1003: Identifier expected.
 jsxNamespacePrefixInNameReact.tsx(26,21): error TS1109: Expression expected.
 jsxNamespacePrefixInNameReact.tsx(26,22): error TS1109: Expression expected.
@@ -26,26 +56,53 @@ jsxNamespacePrefixInNameReact.tsx(26,30): error TS2362: The left-hand side of an
 jsxNamespacePrefixInNameReact.tsx(26,38): error TS1005: ':' expected.
 jsxNamespacePrefixInNameReact.tsx(26,41): error TS1109: Expression expected.
 jsxNamespacePrefixInNameReact.tsx(26,42): error TS1109: Expression expected.
+jsxNamespacePrefixInNameReact.tsx(27,21): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxNamespacePrefixInNameReact.tsx(27,29): error TS1003: Identifier expected.
 jsxNamespacePrefixInNameReact.tsx(27,31): error TS1005: '...' expected.
 jsxNamespacePrefixInNameReact.tsx(27,31): error TS2698: Spread types may only be created from object types.
+jsxNamespacePrefixInNameReact.tsx(29,24): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxNamespacePrefixInNameReact.tsx(30,24): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
-==== jsxNamespacePrefixInNameReact.tsx (31 errors) ====
+==== jsxNamespacePrefixInNameReact.tsx (64 errors) ====
     declare var React: any;
     
     var justElement1 = <a:element />;
+                       ~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     var justElement2 = <a:element></a:element>;
+                       ~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                  ~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     var justElement3 = <a:element attr={"value"}></a:element>;
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                                 ~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     var justElement4 = <a:element>{"text"}</a:element>;
+                       ~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                          ~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     var justElement5 = <a:element attr={"value"}>{"text"}</a:element>;
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                                         ~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     var tooManySeparators1 = <a:ele:ment />;
+                             ~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                    ~
 !!! error TS1003: Identifier expected.
     var tooManySeparators2 = <a:ele:ment></a:ele:ment>;
+                             ~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                    ~
 !!! error TS1003: Identifier expected.
+                                         ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                                 ~
 !!! error TS1005: '>' expected.
                                                      ~
@@ -53,8 +110,12 @@ jsxNamespacePrefixInNameReact.tsx(27,31): error TS2698: Spread types may only be
                                                       ~
 !!! error TS1109: Expression expected.
     var tooManySeparators3 = <a:ele:ment attr={"value"}></a:ele:ment>;
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                    ~
 !!! error TS1003: Identifier expected.
+                                                        ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                                                ~
 !!! error TS1005: '>' expected.
                                                                     ~
@@ -62,8 +123,12 @@ jsxNamespacePrefixInNameReact.tsx(27,31): error TS2698: Spread types may only be
                                                                      ~
 !!! error TS1109: Expression expected.
     var tooManySeparators4 = <a:ele:ment>{"text"}</a:ele:ment>;
+                             ~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                    ~
 !!! error TS1003: Identifier expected.
+                                                 ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                                         ~
 !!! error TS1005: '>' expected.
                                                              ~
@@ -71,8 +136,12 @@ jsxNamespacePrefixInNameReact.tsx(27,31): error TS2698: Spread types may only be
                                                               ~
 !!! error TS1109: Expression expected.
     var tooManySeparators5 = <a:ele:ment attr={"value"}>{"text"}</a:ele:ment>;
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                    ~
 !!! error TS1003: Identifier expected.
+                                                                ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                                                        ~
 !!! error TS1005: '>' expected.
                                                                             ~
@@ -81,14 +150,36 @@ jsxNamespacePrefixInNameReact.tsx(27,31): error TS2698: Spread types may only be
 !!! error TS1109: Expression expected.
     
     var justAttribute1 = <element a:attr={"value"} />;
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     var justAttribute2 = <element a:attr={"value"}></element>;
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                                   ~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     var justAttribute3 = <element a:attr={"value"}>{"text"}</element>;
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                                           ~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     var both1 = <a:element a:attr={"value"} />;
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     var both2 = <a:element k:attr={"value"}></a:element>;
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                            ~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     var both3 = <a:element a:attr={"value"}>{"text"}</a:element>;
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                                    ~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     var endOfIdent1 = <a: attr={"value"} />;
+                      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                               ~
 !!! error TS1003: Identifier expected.
                                 ~~~~~~~
@@ -96,6 +187,8 @@ jsxNamespacePrefixInNameReact.tsx(27,31): error TS2698: Spread types may only be
                                 ~~~~~~~
 !!! error TS2698: Spread types may only be created from object types.
     var endOfIdent2 = <a attr:={"value"} />;
+                      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                               ~
 !!! error TS1003: Identifier expected.
     
@@ -115,6 +208,8 @@ jsxNamespacePrefixInNameReact.tsx(27,31): error TS2698: Spread types may only be
                                              ~
 !!! error TS1109: Expression expected.
     var beginOfIdent2 = <a :attr={"value"} />;
+                        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                 ~
 !!! error TS1003: Identifier expected.
                                   ~~~~~~~
@@ -123,5 +218,9 @@ jsxNamespacePrefixInNameReact.tsx(27,31): error TS2698: Spread types may only be
 !!! error TS2698: Spread types may only be created from object types.
     
     var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
+                           ~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
+                           ~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     

@@ -1,7 +1,7 @@
 --- old.initializerReferencingConstructorLocals.js
 +++ new.initializerReferencingConstructorLocals.js
-@@= skipped -25, +25 lines =@@
- //// [initializerReferencingConstructorLocals.js]
+@@= skipped -26, +26 lines =@@
+ "use strict";
  // Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
  class C {
 +    a = z; // error

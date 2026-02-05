@@ -1,0 +1,35 @@
+stringNamedPropertyAccess.ts(6,10): error TS2454: Variable 'c' is used before being assigned.
+stringNamedPropertyAccess.ts(13,10): error TS2454: Variable 'i' is used before being assigned.
+stringNamedPropertyAccess.ts(18,10): error TS2454: Variable 'a' is used before being assigned.
+
+
+==== stringNamedPropertyAccess.ts (3 errors) ====
+    class C {
+        "a b": number;
+        static "c d": number;
+    }
+    var c: C;
+    var r1 = c["a b"];
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r1b = C['c d'];
+    
+    interface I {
+        "a b": number;
+    }
+    var i: I;
+    var r2 = i["a b"];
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    
+    var a: {
+        "a b": number;
+    }
+    var r3 = a["a b"];
+             ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    var b = {
+        "a b": 1
+    }
+    var r4 = b["a b"];

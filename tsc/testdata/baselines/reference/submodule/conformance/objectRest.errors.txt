@@ -18,24 +18,24 @@ objectRest.ts(44,53): error TS2739: Type '{}' is missing the following propertie
     let o2 = { c: 'terrible idea?', d: 'yes' };
     var { d: renamed, ...d } = o2;
     
-    let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
+    declare let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
     var { x, n1: { y, n2: { z, n3: { ...nr } } }, ...restrest } = nestedrest;
     
-    let complex: { x: { ka, ki }, y: number };
+    declare let complex: { x: { ka, ki }, y: number };
     var { x: { ka, ...nested }, y: other, ...rest } = complex;
     ({x: { ka, ...nested }, y: other, ...rest} = complex);
     var { x, ...fresh } = { x: 1, y: 2 };
     ({ x, ...fresh } = { x: 1, y: 2 });
     
     class Removable {
-        private x: number;
-        protected y: number;
+        private x!: number;
+        protected y!: number;
         set z(value: number) { }
         get both(): number { return 12 }
         set both(value: number) { }
         m() { }
-        removed: string;
-        remainder: string;
+        removed!: string;
+        remainder!: string;
     }
     interface I {
         m(): void;

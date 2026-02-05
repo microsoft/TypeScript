@@ -58,13 +58,14 @@ class D<T> {
     protected static baz(x: any, y?: any) { }
 }
 
-var c: C;
+declare var c: C;
 var r = c.foo(1); // error
 
-var d: D<number>;
+declare var d: D<number>;
 var r2 = d.foo(2); // error
 
 //// [memberFunctionsWithPublicPrivateOverloads.js]
+"use strict";
 class C {
     foo(x, y) { }
     bar(x, y) { }
@@ -81,7 +82,5 @@ class D {
     static bar(x, y) { }
     static baz(x, y) { }
 }
-var c;
 var r = c.foo(1); // error
-var d;
 var r2 = d.foo(2); // error

@@ -6,16 +6,16 @@ var arg0 = null;  // error at "arg0"
 >arg0 : any
 
 var anyArray = [null, undefined];  // error at array literal
->anyArray : any[]
->[null, undefined] : null[]
+>anyArray : (null | undefined)[]
+>[null, undefined] : (null | undefined)[]
 >undefined : undefined
 
-var objL: { v; w; }             // error at "y,z"
+declare var objL: { v; w; }             // error at "y,z"
 >objL : { v: any; w: any; }
 >v : any
 >w : any
 
-var funcL: (y2) => number;
+declare var funcL: (y2) => number;
 >funcL : (y2: any) => number
 >y2 : any
 
@@ -80,7 +80,7 @@ var result1 = temp1(anyArray);
 >result1 : void
 >temp1(anyArray) : void
 >temp1 : (arg1: any) => void
->anyArray : any[]
+>anyArray : (null | undefined)[]
 
 function noError(variable: any, array?: any) { }
 >noError : (variable: any, array?: any) => void
@@ -90,26 +90,26 @@ function noError(variable: any, array?: any) { }
 noError(null, []);
 >noError(null, []) : void
 >noError : (variable: any, array?: any) => void
->[] : undefined[]
+>[] : never[]
 
 noError(undefined, <any>[]);
 >noError(undefined, <any>[]) : void
 >noError : (variable: any, array?: any) => void
 >undefined : undefined
 ><any>[] : any
->[] : undefined[]
+>[] : never[]
 
 noError(null, [null, undefined]);
 >noError(null, [null, undefined]) : void
 >noError : (variable: any, array?: any) => void
->[null, undefined] : null[]
+>[null, undefined] : (null | undefined)[]
 >undefined : undefined
 
 noError(undefined, anyArray);
 >noError(undefined, anyArray) : void
 >noError : (variable: any, array?: any) => void
 >undefined : undefined
->anyArray : any[]
+>anyArray : (null | undefined)[]
 
 class C {
 >C : C
@@ -124,14 +124,14 @@ var newC = new C([], undefined);
 >newC : C
 >new C([], undefined) : C
 >C : typeof C
->[] : undefined[]
+>[] : never[]
 >undefined : undefined
 
 var newC1 = new C([], arg0);
 >newC1 : C
 >new C([], arg0) : C
 >C : typeof C
->[] : undefined[]
+>[] : never[]
 >arg0 : null
 
 var newC2 = new C(<any>[], null) 
@@ -139,5 +139,5 @@ var newC2 = new C(<any>[], null)
 >new C(<any>[], null) : C
 >C : typeof C
 ><any>[] : any
->[] : undefined[]
+>[] : never[]
 

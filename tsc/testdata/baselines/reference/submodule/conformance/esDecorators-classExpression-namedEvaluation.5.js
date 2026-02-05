@@ -11,6 +11,7 @@ declare let dec: any, obj: any, x: any;
 
 
 //// [esDecorators-classExpression-namedEvaluation.5.js]
+"use strict";
 // 13.15.5.3 RS: PropertyDestructuringAssignmentEvaluation
 //   AssignmentProperty : IdentifierReference Initializer?
 ({ x = 

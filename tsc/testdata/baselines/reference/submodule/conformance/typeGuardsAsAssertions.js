@@ -129,22 +129,17 @@ function f7() {
 
 
 //// [typeGuardsAsAssertions.js]
-"use strict";
 // Repro from #8513
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.none = void 0;
-exports.isSome = isSome;
-exports.fn = fn;
 let cond;
-exports.none = { none: '' };
-function isSome(value) {
+export const none = { none: '' };
+export function isSome(value) {
     return 'some' in value;
 }
 function someFrom(some) {
     return { some };
 }
-function fn(makeSome) {
-    let result = exports.none;
+export function fn(makeSome) {
+    let result = none;
     result; // None
     while (cond) {
         result; // Some<r> | None

@@ -11,6 +11,7 @@ var result1 = b+;   //expect error
 var result2 =+;
 
 //// [plusOperatorInvalidOperations.js]
+"use strict";
 // Unary operator +
 var b;
 // operand before +

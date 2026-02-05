@@ -1,15 +1,18 @@
+privateStaticNotAccessibleInClodule.ts(4,13): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 privateStaticNotAccessibleInClodule.ts(9,22): error TS2341: Property 'bar' is private and only accessible within class 'C'.
 
 
-==== privateStaticNotAccessibleInClodule.ts (1 errors) ====
+==== privateStaticNotAccessibleInClodule.ts (2 errors) ====
     // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
     
     class C {
         private foo: string;
+                ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         private static bar: string;
     }
     
-    module C {
+    namespace C {
         export var y = C.bar; // error
                          ~~~
 !!! error TS2341: Property 'bar' is private and only accessible within class 'C'.

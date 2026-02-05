@@ -37,14 +37,11 @@ class Item<data> extends BaseClass {
 }
 
 //// [conflictingTypeParameterSymbolTransfer.js]
-"use strict";
 // @strict
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C2 = void 0;
 // Via #56620
 class Base {
 }
-class C2 extends Base {
+export class C2 extends Base {
     T;
     constructor(T) {
         super();
@@ -54,7 +51,6 @@ class C2 extends Base {
         let a = null;
     }
 }
-exports.C2 = C2;
 // via #56689
 class Leg {
 }

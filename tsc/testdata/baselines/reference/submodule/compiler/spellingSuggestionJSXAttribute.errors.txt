@@ -8,16 +8,16 @@ spellingSuggestionJSXAttribute.tsx(11,8): error TS2322: Type '{ for: string; cla
   Property 'for' does not exist on type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'. Did you mean 'htmlFor'?
 spellingSuggestionJSXAttribute.tsx(12,9): error TS2769: No overload matches this call.
   The last overload gave the following error.
-    Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
-      Property 'class' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'className'?
-spellingSuggestionJSXAttribute.tsx(13,10): error TS2322: Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'.
-  Property 'class' does not exist on type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'. Did you mean 'className'?
+    Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string | undefined; htmlFor?: string | undefined; }>'.
+      Property 'class' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string | undefined; htmlFor?: string | undefined; }>'. Did you mean 'className'?
+spellingSuggestionJSXAttribute.tsx(13,10): error TS2322: Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string | undefined; htmlFor?: string | undefined; }'.
+  Property 'class' does not exist on type 'IntrinsicAttributes & { className?: string | undefined; htmlFor?: string | undefined; }'. Did you mean 'className'?
 spellingSuggestionJSXAttribute.tsx(14,9): error TS2769: No overload matches this call.
   The last overload gave the following error.
-    Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
-      Property 'for' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'htmlFor'?
-spellingSuggestionJSXAttribute.tsx(15,10): error TS2322: Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'.
-  Property 'for' does not exist on type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'. Did you mean 'htmlFor'?
+    Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string | undefined; htmlFor?: string | undefined; }>'.
+      Property 'for' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string | undefined; htmlFor?: string | undefined; }>'. Did you mean 'htmlFor'?
+spellingSuggestionJSXAttribute.tsx(15,10): error TS2322: Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string | undefined; htmlFor?: string | undefined; }'.
+  Property 'for' does not exist on type 'IntrinsicAttributes & { className?: string | undefined; htmlFor?: string | undefined; }'. Did you mean 'htmlFor'?
 
 
 ==== spellingSuggestionJSXAttribute.tsx (8 errors) ====
@@ -48,22 +48,22 @@ spellingSuggestionJSXAttribute.tsx(15,10): error TS2322: Type '{ for: string; }'
             ~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
-!!! error TS2769:     Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
-!!! error TS2769:       Property 'class' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'className'?
+!!! error TS2769:     Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string | undefined; htmlFor?: string | undefined; }>'.
+!!! error TS2769:       Property 'class' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string | undefined; htmlFor?: string | undefined; }>'. Did you mean 'className'?
 !!! related TS2771 react16.d.ts:357:13: The last overload is declared here.
     <MyComp2 class="" />;
              ~~~~~
-!!! error TS2322: Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'.
-!!! error TS2322:   Property 'class' does not exist on type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'. Did you mean 'className'?
+!!! error TS2322: Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string | undefined; htmlFor?: string | undefined; }'.
+!!! error TS2322:   Property 'class' does not exist on type 'IntrinsicAttributes & { className?: string | undefined; htmlFor?: string | undefined; }'. Did you mean 'className'?
     <MyComp for="" />;
             ~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
-!!! error TS2769:     Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
-!!! error TS2769:       Property 'for' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'htmlFor'?
+!!! error TS2769:     Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string | undefined; htmlFor?: string | undefined; }>'.
+!!! error TS2769:       Property 'for' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string | undefined; htmlFor?: string | undefined; }>'. Did you mean 'htmlFor'?
 !!! related TS2771 react16.d.ts:357:13: The last overload is declared here.
     <MyComp2 for="" />;
              ~~~
-!!! error TS2322: Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'.
-!!! error TS2322:   Property 'for' does not exist on type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'. Did you mean 'htmlFor'?
+!!! error TS2322: Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string | undefined; htmlFor?: string | undefined; }'.
+!!! error TS2322:   Property 'for' does not exist on type 'IntrinsicAttributes & { className?: string | undefined; htmlFor?: string | undefined; }'. Did you mean 'htmlFor'?
     

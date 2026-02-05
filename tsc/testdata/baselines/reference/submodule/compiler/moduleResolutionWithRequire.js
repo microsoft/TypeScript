@@ -12,6 +12,7 @@ function foo() {
 
 
 //// [index.js]
+"use strict";
 function foo() {
     const a = require('../outside-of-rootdir/foo');
     const { other } = require('./other');

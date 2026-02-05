@@ -1,6 +1,6 @@
 --- old.underscoreTest1.types
 +++ new.underscoreTest1.types
-@@= skipped -3224, +3224 lines =@@
+@@= skipped -3225, +3225 lines =@@
  >obj : T
 
          chain<T>(list: T[]): ChainedArray<T>;

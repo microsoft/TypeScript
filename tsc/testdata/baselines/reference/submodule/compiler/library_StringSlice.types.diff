@@ -1,0 +1,36 @@
+--- old.library_StringSlice.types
++++ new.library_StringSlice.types
+@@= skipped -3, +3 lines =@@
+ // String.prototype.slice can have zero, one, or two arguments
+ String.prototype.slice();
+ >String.prototype.slice() : string
+->String.prototype.slice : (start?: number, end?: number) => string
++>String.prototype.slice : (start?: number | undefined, end?: number | undefined) => string
+ >String.prototype : String
+ >String : StringConstructor
+ >prototype : String
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+
+ String.prototype.slice(0);
+ >String.prototype.slice(0) : string
+->String.prototype.slice : (start?: number, end?: number) => string
++>String.prototype.slice : (start?: number | undefined, end?: number | undefined) => string
+ >String.prototype : String
+ >String : StringConstructor
+ >prototype : String
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+ >0 : 0
+
+ String.prototype.slice(0,1);
+ >String.prototype.slice(0,1) : string
+->String.prototype.slice : (start?: number, end?: number) => string
++>String.prototype.slice : (start?: number | undefined, end?: number | undefined) => string
+ >String.prototype : String
+ >String : StringConstructor
+ >prototype : String
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+ >0 : 0
+ >1 : 1

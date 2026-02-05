@@ -1,6 +1,6 @@
 --- old.assignmentCompatWithConstructSignatures3.errors.txt
 +++ new.assignmentCompatWithConstructSignatures3.errors.txt
-@@= skipped -41, +41 lines =@@
+@@= skipped -45, +45 lines =@@
    Types of parameters 'y' and 'y' are incompatible.
      Type 'T' is not assignable to type '{ foo: string; bar: string; }'.
        Property 'bar' is missing in type 'Base' but required in type '{ foo: string; bar: string; }'.
@@ -15,7 +15,7 @@
    Type 'Derived[]' is not assignable to type 'T'.
      'Derived[]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived[]'.
  assignmentCompatWithConstructSignatures3.ts(85,1): error TS2322: Type 'new <T>(x: { a: T; b: T; }) => T' is not assignable to type 'new (x: { a: string; b: number; }) => Object'.
-@@= skipped -162, +162 lines =@@
+@@= skipped -170, +170 lines =@@
      a12 = b12; // ok
      b12 = a12; // ok
      ~~~
@@ -32,4 +32,4 @@
 +!!! error TS2322: Type 'new (x: Base[], y: Derived[]) => Derived[]' is not assignable to type 'new <T extends Derived[]>(x: Base[], y: T) => T'.
  !!! error TS2322:   Type 'Derived[]' is not assignable to type 'T'.
  !!! error TS2322:     'Derived[]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived[]'.
-     var b14: new <T>(x: { a: T; b: T }) => T; 
+     declare var b14: new <T>(x: { a: T; b: T }) => T; 

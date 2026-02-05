@@ -19,6 +19,7 @@ class E {
 
 
 //// [gettersAndSettersErrors.js]
+"use strict";
 class C {
     get Foo() { return "foo"; } // ok
     set Foo(foo) { } // ok

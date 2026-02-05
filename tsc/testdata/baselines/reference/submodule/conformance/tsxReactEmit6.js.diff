@@ -1,6 +1,6 @@
 --- old.tsxReactEmit6.js
 +++ new.tsxReactEmit6.js
-@@= skipped -33, +33 lines =@@
+@@= skipped -35, +35 lines =@@
      // Should emit M.React.createElement
      //  and M.React.__spread
      var foo;

@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/arrayIterationLibES5TargetDifferent.ts] ////
+
+=== arrayIterationLibES5TargetDifferent.ts ===
+declare function log(message?: any): void;
+>log : (message?: any) => void
+>message : any
+
+for (const x of [1, 2, 3]) {
+>x : any
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+    log(x);
+>log(x) : void
+>log : (message?: any) => void
+>x : any
+}
+
+declare const aString: string;
+>aString : string
+
+for (const x of aString) {
+>x : any
+>aString : string
+
+    log(x);
+>log(x) : void
+>log : (message?: any) => void
+>x : any
+}
+
+declare const aNumber: number;
+>aNumber : number
+
+for (const x of aNumber) {
+>x : any
+>aNumber : number
+
+    log(x);
+>log(x) : void
+>log : (message?: any) => void
+>x : any
+}
+
+declare const anObject: { foo: string };
+>anObject : { foo: string; }
+>foo : string
+
+for (const x of anObject) {
+>x : any
+>anObject : { foo: string; }
+
+    log(x);
+>log(x) : void
+>log : (message?: any) => void
+>x : any
+}

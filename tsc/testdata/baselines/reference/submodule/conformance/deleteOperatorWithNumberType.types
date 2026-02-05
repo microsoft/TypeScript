@@ -2,7 +2,7 @@
 
 === deleteOperatorWithNumberType.ts ===
 // delete  operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 >NUMBER : number
 
 var NUMBER1: number[] = [1, 2];
@@ -25,7 +25,7 @@ class A {
 >foo : () => number
 >1 : 1
 }
-module M {
+namespace M {
 >M : typeof M
 
     export var n: number;

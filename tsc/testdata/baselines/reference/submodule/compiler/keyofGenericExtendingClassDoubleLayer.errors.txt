@@ -1,0 +1,25 @@
+keyofGenericExtendingClassDoubleLayer.ts(2,12): error TS2564: Property 'createdAt' has no initializer and is not definitely assigned in the constructor.
+keyofGenericExtendingClassDoubleLayer.ts(10,12): error TS2564: Property 'age' has no initializer and is not definitely assigned in the constructor.
+
+
+==== keyofGenericExtendingClassDoubleLayer.ts (2 errors) ====
+    class Model<Attributes = any> {
+        public createdAt: Date;
+               ~~~~~~~~~
+!!! error TS2564: Property 'createdAt' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    type ModelAttributes<T> = Omit<T, keyof Model>;
+    
+    class AutoModel<T> extends Model<ModelAttributes<T>> {}
+    
+    class PersonModel extends AutoModel<PersonModel> {
+        public age: number;
+               ~~~
+!!! error TS2564: Property 'age' has no initializer and is not definitely assigned in the constructor.
+    
+        toJson() {
+            let x: keyof this = 'createdAt';
+        }
+    }
+    

@@ -51,6 +51,7 @@ interface I extends B {
 }
 
 //// [constructSignatureAssignabilityInInheritance5.js]
+"use strict";
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // same as subtypingWithConstructSignatures2 just with an extra level of indirection in the inheritance chain
 class Base {

@@ -152,7 +152,7 @@ func fileOutput(file *harnessutil.TestFile, settings *harnessutil.HarnessOptions
 	} else {
 		fileName = tspath.GetBaseFileName(file.UnitName)
 	}
-	return "//// [" + fileName + "]\r\n" + removeTestPathPrefixes(file.Content, false /*retainTrailingDirectorySeparator*/)
+	return "//// [" + fileName + "]\r\n" + file.Content
 }
 
 type declarationCompilationContext struct {

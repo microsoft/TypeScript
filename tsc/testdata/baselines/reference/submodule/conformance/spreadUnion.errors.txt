@@ -1,0 +1,25 @@
+spreadUnion.ts(4,16): error TS2454: Variable 'union' is used before being assigned.
+spreadUnion.ts(7,16): error TS2454: Variable 'union' is used before being assigned.
+spreadUnion.ts(10,16): error TS2454: Variable 'union' is used before being assigned.
+spreadUnion.ts(10,26): error TS2454: Variable 'union' is used before being assigned.
+
+
+==== spreadUnion.ts (4 errors) ====
+    var union: { a: number } | { b: string };
+    
+    var o3: { a: number } | { b: string };
+    var o3 =  { ...union };
+                   ~~~~~
+!!! error TS2454: Variable 'union' is used before being assigned.
+    
+    var o4: { a: boolean } | { b: string , a: boolean};
+    var o4 =  { ...union, a: false };
+                   ~~~~~
+!!! error TS2454: Variable 'union' is used before being assigned.
+    
+    var o5: { a: number } | { b: string } | { a: number, b: string };
+    var o5 =  { ...union, ...union };
+                   ~~~~~
+!!! error TS2454: Variable 'union' is used before being assigned.
+                             ~~~~~
+!!! error TS2454: Variable 'union' is used before being assigned.

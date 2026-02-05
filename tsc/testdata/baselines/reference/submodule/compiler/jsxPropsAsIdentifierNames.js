@@ -13,6 +13,4 @@ export default <div static={true} />;
 
 
 //// [index.jsx]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = <div static={true}/>;
+export default <div static={true}/>;

@@ -1,0 +1,18 @@
+--- old.esnextmodulekindWithES5Target11(target=es2015).js
++++ new.esnextmodulekindWithES5Target11(target=es2015).js
+@@= skipped -18, +18 lines =@@
+ };
+ var C_1;
+ let C = C_1 = class C {
+-    constructor() {
+-        this.p = 1;
+-    }
+     static x() { return C_1.y; }
++    static y = 1;
++    p = 1;
+     method() { }
+ };
+-C.y = 1;
+ C = C_1 = __decorate([
+     foo
+ ], C);

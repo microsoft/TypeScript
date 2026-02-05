@@ -9,6 +9,7 @@ enum A {
 
 
 //// [enumWithComputedMember.js]
+"use strict";
 var A;
 (function (A) {
     var auto;

@@ -1,12 +1,15 @@
+inferFromGenericFunctionReturnTypes1.ts(5,3): error TS2564: Property '_store' has no initializer and is not definitely assigned in the constructor.
 inferFromGenericFunctionReturnTypes1.ts(68,16): error TS2339: Property 'toUpperCase' does not exist on type 'number'.
 
 
-==== inferFromGenericFunctionReturnTypes1.ts (1 errors) ====
+==== inferFromGenericFunctionReturnTypes1.ts (2 errors) ====
     // Repro from #15680
     
     // This is a contrived class. We could do the same thing with Observables, etc.
     class SetOf<A> {
       _store: A[];
+      ~~~~~~
+!!! error TS2564: Property '_store' has no initializer and is not definitely assigned in the constructor.
     
       add(a: A) {
         this._store.push(a);

@@ -1,18 +1,24 @@
 this_inside-enum-should-not-be-allowed.ts(2,36): error TS2332: 'this' cannot be referenced in current location.
+this_inside-enum-should-not-be-allowed.ts(2,36): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 this_inside-enum-should-not-be-allowed.ts(7,30): error TS2332: 'this' cannot be referenced in current location.
+this_inside-enum-should-not-be-allowed.ts(7,30): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
-==== this_inside-enum-should-not-be-allowed.ts (2 errors) ====
+==== this_inside-enum-should-not-be-allowed.ts (4 errors) ====
     enum TopLevelEnum {
         ThisWasAllowedButShouldNotBe = this // Should not be allowed
                                        ~~~~
 !!! error TS2332: 'this' cannot be referenced in current location.
+                                       ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     
-    module ModuleEnum {
+    namespace ModuleEnum {
         enum EnumInModule {
             WasADifferentError = this // this was handled as if this was in a module
                                  ~~~~
 !!! error TS2332: 'this' cannot be referenced in current location.
+                                 ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
         }
     }

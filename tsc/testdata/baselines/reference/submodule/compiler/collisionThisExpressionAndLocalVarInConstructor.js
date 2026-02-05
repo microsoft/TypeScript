@@ -24,6 +24,7 @@ class class2 {
 }
 
 //// [collisionThisExpressionAndLocalVarInConstructor.js]
+"use strict";
 class class1 {
     constructor() {
         var x2 = {

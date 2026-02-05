@@ -1,8 +1,8 @@
 --- old.thisTypeAccessibility.js
 +++ new.thisTypeAccessibility.js
-@@= skipped -65, +65 lines =@@
-
+@@= skipped -66, +66 lines =@@
  //// [thisTypeAccessibility.js]
+ "use strict";
  class MyClass {
 -    constructor() {
 -        this.p = 123;

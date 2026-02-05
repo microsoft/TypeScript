@@ -27,6 +27,7 @@ class LanguageSpec_section_4_5_inference {
 }
 
 //// [accessors_spec_section-4.5_inference.js]
+"use strict";
 class A {
 }
 class B extends A {

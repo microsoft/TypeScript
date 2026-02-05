@@ -7,6 +7,7 @@ for (using of;;) break;
 
 
 //// [usingDeclarationsInForOf.4.js]
+"use strict";
 for (using of = null;;)
     break;
 for (using of = null;;)

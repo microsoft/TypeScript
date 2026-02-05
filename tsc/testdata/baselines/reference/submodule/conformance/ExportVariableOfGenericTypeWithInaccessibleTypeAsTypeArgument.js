@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts] ////
 
 //// [ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts]
-module A {
+namespace A {
     class B {
         id: number;
     }
@@ -11,6 +11,7 @@ module A {
 }
 
 //// [ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.js]
+"use strict";
 var A;
 (function (A) {
     class B {

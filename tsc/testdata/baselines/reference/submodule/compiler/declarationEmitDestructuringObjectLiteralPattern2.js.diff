@@ -1,6 +1,6 @@
 --- old.declarationEmitDestructuringObjectLiteralPattern2.js
 +++ new.declarationEmitDestructuringObjectLiteralPattern2.js
-@@= skipped -25, +25 lines =@@
+@@= skipped -26, +26 lines =@@
  var { a4, b4, c4 } = f15();
  var m;
  (function (m) {

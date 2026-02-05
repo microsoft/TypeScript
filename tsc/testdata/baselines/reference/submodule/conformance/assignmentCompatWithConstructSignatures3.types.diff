@@ -3,13 +3,13 @@
 @@= skipped -83, +83 lines =@@
  >bar : string
 
- var a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
+ declare var a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 ->a12 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 +>a12 : new (x: Base[], y: Derived2[]) => Derived[]
  >x : Base[]
  >y : Derived2[]
 
- var a13: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
+ declare var a13: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
 ->a13 : new (x: Array<Base>, y: Array<Derived>) => Array<Derived>
 +>a13 : new (x: Base[], y: Derived[]) => Derived[]
  >x : Base[]
@@ -18,7 +18,7 @@
 @@= skipped -241, +241 lines =@@
  >a11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 
- var b12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; 
+ declare var b12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; 
 ->b12 : new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>
 +>b12 : new <T extends Base[]>(x: Base[], y: T) => Derived[]
  >x : Base[]
@@ -40,7 +40,7 @@
 +>b12 : new <T extends Base[]>(x: Base[], y: T) => Derived[]
 +>a12 : new (x: Base[], y: Derived2[]) => Derived[]
 
- var b13: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T; 
+ declare var b13: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T; 
 ->b13 : new <T extends Array<Derived>>(x: Array<Base>, y: T) => T
 +>b13 : new <T extends Derived[]>(x: Base[], y: T) => T
  >x : Base[]
@@ -62,5 +62,5 @@
 +>b13 : new <T extends Derived[]>(x: Base[], y: T) => T
 +>a13 : new (x: Base[], y: Derived[]) => Derived[]
 
- var b14: new <T>(x: { a: T; b: T }) => T; 
+ declare var b14: new <T>(x: { a: T; b: T }) => T; 
  >b14 : new <T>(x: { a: T; b: T; }) => T

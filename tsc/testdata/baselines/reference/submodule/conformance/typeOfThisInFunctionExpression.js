@@ -29,7 +29,7 @@ class C {
     }
 }
 
-module M {
+namespace M {
     function fn() {
         var p = this;
         var p: any;
@@ -48,6 +48,7 @@ module M {
 }
 
 //// [typeOfThisInFunctionExpression.js]
+"use strict";
 // type of 'this' in FunctionExpression is Any
 function fn() {
     var p = this;

@@ -1,0 +1,59 @@
+--- old.genericTypeArgumentInference1.types
++++ new.genericTypeArgumentInference1.types
+@@= skipped -9, +9 lines =@@
+     }
+     export interface Static {
+         all<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): T;
+->all : <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any) => T
++>all : <T>(list: T[], iterator?: Iterator<T, boolean> | undefined, context?: any) => T
+ >list : T[]
+ >iterator : Iterator<T, boolean> | undefined
+ >context : any
+@@= skipped -17, +17 lines =@@
+ var r = _.all([true, 1, null, 'yes'], _.identity);
+ >r : string | number | boolean | null
+ >_.all([true, 1, null, 'yes'], _.identity) : string | number | boolean | null
+->_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
++>_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
+ >_ : Underscore.Static
+->all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
++>all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
+ >[true, 1, null, 'yes'] : (string | number | true | null)[]
+ >true : true
+ >1 : 1
+@@= skipped -14, +14 lines =@@
+ var r2 = _.all([true], _.identity);
+ >r2 : boolean
+ >_.all([true], _.identity) : boolean
+->_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
++>_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
+ >_ : Underscore.Static
+->all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
++>all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
+ >[true] : true[]
+ >true : true
+ >_.identity : <T>(value: T) => T
+@@= skipped -12, +12 lines =@@
+ var r3 = _.all([], _.identity);
+ >r3 : never
+ >_.all([], _.identity) : never
+->_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
++>_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
+ >_ : Underscore.Static
+->all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
++>all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
+ >[] : never[]
+ >_.identity : <T>(value: T) => T
+ >_ : Underscore.Static
+@@= skipped -11, +11 lines =@@
+ var r4 = _.all([<any>true], _.identity);
+ >r4 : any
+ >_.all([<any>true], _.identity) : any
+->_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
++>_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
+ >_ : Underscore.Static
+->all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
++>all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
+ >[<any>true] : any[]
+ ><any>true : any
+ >true : true

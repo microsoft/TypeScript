@@ -1,8 +1,8 @@
 --- old.classIsSubtypeOfBaseType.js
 +++ new.classIsSubtypeOfBaseType.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [classIsSubtypeOfBaseType.js]
+ "use strict";
  class Base {
 +    foo;
  }

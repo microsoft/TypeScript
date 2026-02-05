@@ -6,6 +6,7 @@ async function f() {
 }
 
 //// [awaitUsingDeclarations.12.js]
+"use strict";
 async function f() {
     await using x = {};
 }

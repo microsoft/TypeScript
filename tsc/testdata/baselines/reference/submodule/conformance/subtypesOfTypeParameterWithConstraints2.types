@@ -149,7 +149,7 @@ enum E { A }
 function f() { }
 >f : typeof f
 
-module f {
+namespace f {
 >f : typeof f
 
     export var bar = 1;
@@ -160,7 +160,7 @@ class c { baz: string }
 >c : c
 >baz : string
 
-module c {
+namespace c {
 >c : typeof c
 
     export var bar = 1;
@@ -173,34 +173,34 @@ function f4<T extends Number>(x: T) {
 >x : T
 
     var r0 = true ? x : null; // ok
->r0 : T
->true ? x : null : T
+>r0 : T | null
+>true ? x : null : T | null
 >true : true
 >x : T
 
     var r0 = true ? null : x; // ok
->r0 : T
->true ? null : x : T
+>r0 : T | null
+>true ? null : x : T | null
 >true : true
 >x : T
 
     var u: typeof undefined;
->u : any
+>u : undefined
 >undefined : undefined
 
     var r0b = true ? u : x; // ok
->r0b : any
->true ? u : x : any
+>r0b : T | undefined
+>true ? u : x : T | undefined
 >true : true
->u : any
+>u : undefined
 >x : T
 
     var r0b = true ? x : u; // ok
->r0b : any
->true ? x : u : any
+>r0b : T | undefined
+>true ? x : u : T | undefined
 >true : true
 >x : T
->u : any
+>u : undefined
 }
 
 function f5<T extends Number>(x: T) {

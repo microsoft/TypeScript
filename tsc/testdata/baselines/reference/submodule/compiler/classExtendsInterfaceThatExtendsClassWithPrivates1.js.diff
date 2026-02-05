@@ -1,8 +1,8 @@
 --- old.classExtendsInterfaceThatExtendsClassWithPrivates1.js
 +++ new.classExtendsInterfaceThatExtendsClassWithPrivates1.js
-@@= skipped -17, +17 lines =@@
-
+@@= skipped -18, +18 lines =@@
  //// [classExtendsInterfaceThatExtendsClassWithPrivates1.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.x = 1;

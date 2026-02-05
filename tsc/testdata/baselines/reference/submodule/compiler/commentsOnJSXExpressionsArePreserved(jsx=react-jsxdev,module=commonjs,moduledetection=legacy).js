@@ -23,7 +23,8 @@ class Component {
 }
 
 //// [commentsOnJSXExpressionsArePreserved.js]
-const _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
+"use strict";
+const _jsxFileName = "/.src/commentsOnJSXExpressionsArePreserved.tsx";
 class Component {
     render() {
         return _jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);

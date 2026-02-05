@@ -1,9 +1,9 @@
 --- old.privateNamesUnique-4.js
 +++ new.privateNamesUnique-4.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
 
  //// [privateNamesUnique-4.js]
+ "use strict";
 -var _C_something;
  class A1 {
  }

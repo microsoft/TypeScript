@@ -1,6 +1,6 @@
 error TS5056: Cannot write file 'out/b.js' because it would be overwritten by multiple input files.
 error TS5056: Cannot write file 'out/c.js' because it would be overwritten by multiple input files.
-error TS5096: Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.
+error TS5096: Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.
 /project/main.ts(8,16): error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './b.ts' instead?
 /project/main.ts(12,16): error TS6142: Module './c.tsx' was resolved to '/project/c.tsx', but '--jsx' is not set.
 /project/types.d.ts(2,16): error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './a.ts' instead?
@@ -8,7 +8,7 @@ error TS5096: Option 'allowImportingTsExtensions' can only be used when either '
 
 !!! error TS5056: Cannot write file 'out/b.js' because it would be overwritten by multiple input files.
 !!! error TS5056: Cannot write file 'out/c.js' because it would be overwritten by multiple input files.
-!!! error TS5096: Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.
+!!! error TS5096: Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.
 ==== /project/a.ts (0 errors) ====
     export {};
     

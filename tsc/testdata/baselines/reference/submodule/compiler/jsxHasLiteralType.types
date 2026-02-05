@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/jsxHasLiteralType.tsx] ////
 
 === jsxHasLiteralType.tsx ===
+/// <reference path="react.d.ts" />
 import * as React from "react";
 >React : typeof React
 

@@ -26,7 +26,7 @@ x = ''; // Error
 >x : number
 >'' : ""
 
-module M {
+namespace M {
 >M : typeof M
 
     export var y: number;
@@ -93,10 +93,10 @@ M = { y: 3 }; // Error
 >y : number
 >3 : 3
 
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 
-    export module M3 {
+    export namespace M3 {
 >M3 : typeof M3
 
         export var x: number;

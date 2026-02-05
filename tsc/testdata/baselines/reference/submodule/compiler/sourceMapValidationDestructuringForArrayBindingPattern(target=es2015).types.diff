@@ -1,0 +1,18 @@
+--- old.sourceMapValidationDestructuringForArrayBindingPattern(target=es2015).types
++++ new.sourceMapValidationDestructuringForArrayBindingPattern(target=es2015).types
+@@= skipped -518, +518 lines =@@
+ >multiRobotAInfo : [string, [string, string]]
+ }
+ for (let [...multiRobotAInfo] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
+->multiRobotAInfo : (string | string[])[]
++>multiRobotAInfo : any[]
+ >["trimmer", ["trimming", "edging"]] : (string | string[])[]
+ >"trimmer" : "trimmer"
+ >["trimming", "edging"] : string[]
+@@= skipped -19, +19 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->multiRobotAInfo : (string | string[])[]
++>multiRobotAInfo : any[]
+ }

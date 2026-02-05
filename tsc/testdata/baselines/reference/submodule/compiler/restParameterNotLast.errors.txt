@@ -1,7 +1,13 @@
 restParameterNotLast.ts(1,12): error TS1014: A rest parameter must be last in a parameter list.
+restParameterNotLast.ts(1,12): error TS7019: Rest parameter 'x' implicitly has an 'any[]' type.
+restParameterNotLast.ts(1,18): error TS7006: Parameter 'y' implicitly has an 'any' type.
 
 
-==== restParameterNotLast.ts (1 errors) ====
+==== restParameterNotLast.ts (3 errors) ====
     function f(...x, y) { }
                ~~~
 !!! error TS1014: A rest parameter must be last in a parameter list.
+               ~~~~
+!!! error TS7019: Rest parameter 'x' implicitly has an 'any[]' type.
+                     ~
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.

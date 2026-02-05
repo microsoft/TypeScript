@@ -15,7 +15,7 @@ func TestTsxCompletionInFunctionExpressionOfChildrenCallback1(t *testing.T) {
 	const content = `//@module: commonjs
 //@jsx: preserve
 // @Filename: 1.tsx
-declare module JSX {
+declare namespace JSX {
     interface Element { }
     interface IntrinsicElements {
     }

@@ -1,8 +1,8 @@
 --- old.scopeCheckInsideStaticMethod1.js
 +++ new.scopeCheckInsideStaticMethod1.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [scopeCheckInsideStaticMethod1.js]
+ "use strict";
  class C {
 +    v;
 +    p;

@@ -12,7 +12,8 @@ func TestCompletionsSelfDeclaring2(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `function f1<T>(x: T) {}
+	const content = `// @lib: es5
+function f1<T>(x: T) {}
 f1({ abc/*1*/ });
 function f2<T extends { xyz: number }>(x: T) {}
 f2({ x/*2*/ });`

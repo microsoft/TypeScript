@@ -1,0 +1,11 @@
+--- old.importHelpers(target=es2015).types
++++ new.importHelpers(target=es2015).types
+@@= skipped -87, +87 lines =@@
+ >sources : any[]
+
+ export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
+->__decorate : (decorators: Function[], target: any, key?: string | symbol, desc?: any) => any
++>__decorate : (decorators: Function[], target: any, key?: string | symbol | undefined, desc?: any) => any
+ >decorators : Function[]
+ >target : any
+ >key : string | symbol | undefined

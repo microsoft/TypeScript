@@ -14,18 +14,19 @@ func TestMultiModuleClodule(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `class C {
+	const content = `// @lib: es5
+class C {
     constructor(x: number) { }
     foo() { }
     bar() { }
     static boo() { }
 }
 
-module C {
+namespace C {
     export var x = 1;
     var y = 2;
 }
-module C {
+namespace C {
     export function foo() { }
     function baz() { return ''; }
 }

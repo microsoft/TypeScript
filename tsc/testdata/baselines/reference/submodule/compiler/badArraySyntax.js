@@ -14,6 +14,7 @@ var a6: Z[][] = new   Z     [      ]   [  ];
 
 
 //// [badArraySyntax.js]
+"use strict";
 class Z {
     x = "";
 }

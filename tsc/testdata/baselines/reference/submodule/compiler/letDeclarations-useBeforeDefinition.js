@@ -14,6 +14,7 @@ var v1;
 
 
 //// [letDeclarations-useBeforeDefinition.js]
+"use strict";
 {
     l1;
     let l1;

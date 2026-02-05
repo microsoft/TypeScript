@@ -8,6 +8,7 @@ static public = 1;
 
 
 //// [parserAccessibilityAfterStatic3.js]
+"use strict";
 class Outer {
     static public = 1;
 }

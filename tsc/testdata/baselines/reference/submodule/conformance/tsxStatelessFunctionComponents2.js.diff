@@ -1,6 +1,6 @@
 --- old.tsxStatelessFunctionComponents2.js
 +++ new.tsxStatelessFunctionComponents2.js
-@@= skipped -49, +49 lines =@@
+@@= skipped -52, +52 lines =@@
      render() {
          return <div></div>;
      }

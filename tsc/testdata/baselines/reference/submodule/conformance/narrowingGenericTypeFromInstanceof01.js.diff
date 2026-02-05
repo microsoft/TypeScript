@@ -1,8 +1,8 @@
 --- old.narrowingGenericTypeFromInstanceof01.js
 +++ new.narrowingGenericTypeFromInstanceof01.js
-@@= skipped -30, +30 lines =@@
-
+@@= skipped -31, +31 lines =@@
  //// [narrowingGenericTypeFromInstanceof01.js]
+ "use strict";
  class A {
 +    a;
      constructor(a) {

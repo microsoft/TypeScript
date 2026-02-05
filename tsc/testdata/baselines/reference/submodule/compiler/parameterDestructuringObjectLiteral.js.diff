@@ -1,0 +1,11 @@
+--- old.parameterDestructuringObjectLiteral.js
++++ new.parameterDestructuringObjectLiteral.js
+@@= skipped -20, +20 lines =@@
+
+ //// [parameterDestructuringObjectLiteral.d.ts]
+ declare const fn1: (options: {
+-    headers?: {};
++    headers?: {} | undefined;
+ }) => void;
+ declare const fn2: ({ headers }: {
+     headers?: {} | undefined;

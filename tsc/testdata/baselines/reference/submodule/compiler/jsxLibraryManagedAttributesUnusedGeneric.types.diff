@@ -10,3 +10,19 @@
 +>React.createElement : any
  >React : any
  >createElement : any
+
+@@= skipped -35, +35 lines =@@
+ }
+
+ declare const Comp: (p: { className?: string }) => null
+->Comp : (p: { className?: string; }) => null
+->p : { className?: string; }
++>Comp : (p: { className?: string | undefined; }) => null
++>p : { className?: string | undefined; }
+ >className : string | undefined
+
+ ;<Comp css="color:hotpink;" />
+ ><Comp css="color:hotpink;" /> : jsx.JSX.Element
+->Comp : (p: { className?: string; }) => null
++>Comp : (p: { className?: string | undefined; }) => null
+ >css : string

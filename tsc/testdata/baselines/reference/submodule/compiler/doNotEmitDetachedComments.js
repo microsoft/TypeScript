@@ -30,6 +30,7 @@ function bar() { }
 
 
 //// [doNotEmitDetachedComments.js]
+"use strict";
 var x = 10;
 function foo() { }
 function bar() { }

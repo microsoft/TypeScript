@@ -1,6 +1,6 @@
 --- old.typeMatch2.js
 +++ new.typeMatch2.js
-@@= skipped -54, +54 lines =@@
+@@= skipped -55, +55 lines =@@
      a = { x: 1, z: 3 }; // error
  }
  class Animal {

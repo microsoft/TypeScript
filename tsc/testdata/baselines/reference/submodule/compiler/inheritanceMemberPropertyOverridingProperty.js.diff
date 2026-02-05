@@ -1,8 +1,8 @@
 --- old.inheritanceMemberPropertyOverridingProperty.js
 +++ new.inheritanceMemberPropertyOverridingProperty.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [inheritanceMemberPropertyOverridingProperty.js]
+ "use strict";
  class a {
 +    x;
  }

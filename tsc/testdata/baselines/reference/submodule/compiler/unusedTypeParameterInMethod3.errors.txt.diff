@@ -11,6 +11,6 @@
                          ~
 -!!! error TS6133: 'Z' is declared but its value is never read.
 +!!! error TS6196: 'Z' is declared but never used.
-             var a: X;
-             var b: Y;
+             var a!: X;
+             var b!: Y;
              a;

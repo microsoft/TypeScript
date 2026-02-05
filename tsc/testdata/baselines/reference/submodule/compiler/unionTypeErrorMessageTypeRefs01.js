@@ -53,6 +53,7 @@ thingOfTypeAliases = y;
 thingOfTypeAliases = z;
 
 //// [unionTypeErrorMessageTypeRefs01.js]
+"use strict";
 thingOfInterfaces = a;
 thingOfInterfaces = b;
 thingOfInterfaces = c;

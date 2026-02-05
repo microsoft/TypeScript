@@ -14,6 +14,7 @@ class D<T> {
 }
 
 //// [superCallInConstructorWithNoBaseType.js]
+"use strict";
 class C {
     constructor() {
         super(); // error

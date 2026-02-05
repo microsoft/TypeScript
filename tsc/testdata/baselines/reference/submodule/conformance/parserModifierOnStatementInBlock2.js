@@ -7,5 +7,6 @@
 
 
 //// [parserModifierOnStatementInBlock2.js]
+"use strict";
 {
 }

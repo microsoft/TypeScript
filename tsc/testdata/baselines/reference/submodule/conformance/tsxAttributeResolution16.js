@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution16.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 interface Address {
@@ -28,6 +30,7 @@ let a = <AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" />
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AddressComp = void 0;
 const React = require("react");

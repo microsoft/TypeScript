@@ -1,7 +1,7 @@
 --- old.declarationEmitDestructuringArrayPattern3.js
 +++ new.declarationEmitDestructuringArrayPattern3.js
-@@= skipped -7, +7 lines =@@
- //// [declarationEmitDestructuringArrayPattern3.js]
+@@= skipped -8, +8 lines =@@
+ "use strict";
  var M;
  (function (M) {
 -    var _a;

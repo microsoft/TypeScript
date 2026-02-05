@@ -8,6 +8,7 @@ for (var [num, strBoolSym] of array) {
 }
 
 //// [for-of44.js]
+"use strict";
 var array = [[0, ""], [0, true], [1, Symbol()]];
 for (var [num, strBoolSym] of array) {
     num;

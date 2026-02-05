@@ -1,6 +1,6 @@
 --- old.commentsOnJSXExpressionsArePreserved(jsx=preserve,module=commonjs,moduledetection=auto).js
 +++ new.commentsOnJSXExpressionsArePreserved(jsx=preserve,module=commonjs,moduledetection=auto).js
-@@= skipped -25, +25 lines =@@
+@@= skipped -26, +26 lines =@@
  class Component {
      render() {
          return <div>

@@ -5,7 +5,7 @@ file.tsx(33,7): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== file.tsx (4 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface ElementAttributesProperty { pr: any; }
     	interface IntrinsicElements { }
@@ -14,19 +14,19 @@ file.tsx(33,7): error TS2322: Type 'string' is not assignable to type 'number'.
     interface Obj1type {
     	new(n: string): any;
     }
-    var Obj1: Obj1type;
+    declare var Obj1: Obj1type;
     <Obj1 x={10} />; // OK
     
     interface Obj2type {
     	new(n: string): { q?: number; pr: any };
     }
-    var Obj2: Obj2type;
+    declare var Obj2: Obj2type;
     <Obj2 x={10} />; // OK
     
     interface Obj3type {
     	new(n: string): { x: number; };
     }
-    var Obj3: Obj3type;
+    declare var Obj3: Obj3type;
     <Obj3 x={10} />; // Error
     ~~~~~~~~~~~~~~~
 !!! error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
@@ -41,7 +41,7 @@ file.tsx(33,7): error TS2322: Type 'string' is not assignable to type 'number'.
     interface Obj4type {
     	new(n: string): { x: number; pr: { x: number; } };
     }
-    var Obj4: Obj4type;
+    declare var Obj4: Obj4type;
     <Obj4 x={10} />; // OK
     <Obj4 x={'10'} />; // Error
           ~

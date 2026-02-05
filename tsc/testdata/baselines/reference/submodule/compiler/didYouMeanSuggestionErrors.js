@@ -31,6 +31,7 @@ suite("another suite", () => {
 });
 
 //// [didYouMeanSuggestionErrors.js]
+"use strict";
 describe("my test suite", () => {
     it("should run", () => {
         const a = $(".thing");

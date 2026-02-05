@@ -2,7 +2,7 @@
 
 === decrementOperatorWithUnsupportedBooleanType.ts ===
 // -- operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 >BOOLEAN : boolean
 
 function foo(): boolean { return true; }
@@ -19,7 +19,7 @@ class A {
 >foo : () => boolean
 >true : true
 }
-module M {
+namespace M {
 >M : typeof M
 
     export var n: boolean;

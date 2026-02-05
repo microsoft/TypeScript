@@ -1,0 +1,192 @@
+--- old.comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.types
++++ new.comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.types
+@@= skipped -43, +43 lines =@@
+ >y : number
+
+ var a4: { new <T>(x?: T): T };
+->a4 : new <T>(x?: T) => T
++>a4 : new <T>(x?: T | undefined) => T
+ >x : T | undefined
+
+ var b4: { new (x?: string): string };
+->b4 : new (x?: string) => string
++>b4 : new (x?: string | undefined) => string
+ >x : string | undefined
+
+ var a5: { new <T>(...x: T[]): T };
+@@= skipped -53, +53 lines =@@
+ var r1a4 = a4 < b4;
+ >r1a4 : boolean
+ >a4 < b4 : boolean
+->a4 : new <T>(x?: T) => T
+->b4 : new (x?: string) => string
++>a4 : new <T>(x?: T | undefined) => T
++>b4 : new (x?: string | undefined) => string
+
+ var r1a5 = a5 < b5;
+ >r1a5 : boolean
+@@= skipped -38, +38 lines =@@
+ var r1b4 = b4 < a4;
+ >r1b4 : boolean
+ >b4 < a4 : boolean
+->b4 : new (x?: string) => string
+->a4 : new <T>(x?: T) => T
++>b4 : new (x?: string | undefined) => string
++>a4 : new <T>(x?: T | undefined) => T
+
+ var r1b5 = b5 < a5;
+ >r1b5 : boolean
+@@= skipped -39, +39 lines =@@
+ var r2a4 = a4 > b4;
+ >r2a4 : boolean
+ >a4 > b4 : boolean
+->a4 : new <T>(x?: T) => T
+->b4 : new (x?: string) => string
++>a4 : new <T>(x?: T | undefined) => T
++>b4 : new (x?: string | undefined) => string
+
+ var r2a5 = a5 > b5;
+ >r2a5 : boolean
+@@= skipped -38, +38 lines =@@
+ var r2b4 = b4 > a4;
+ >r2b4 : boolean
+ >b4 > a4 : boolean
+->b4 : new (x?: string) => string
+->a4 : new <T>(x?: T) => T
++>b4 : new (x?: string | undefined) => string
++>a4 : new <T>(x?: T | undefined) => T
+
+ var r2b5 = b5 > a5;
+ >r2b5 : boolean
+@@= skipped -39, +39 lines =@@
+ var r3a4 = a4 <= b4;
+ >r3a4 : boolean
+ >a4 <= b4 : boolean
+->a4 : new <T>(x?: T) => T
+->b4 : new (x?: string) => string
++>a4 : new <T>(x?: T | undefined) => T
++>b4 : new (x?: string | undefined) => string
+
+ var r3a5 = a5 <= b5;
+ >r3a5 : boolean
+@@= skipped -38, +38 lines =@@
+ var r3b4 = b4 <= a4;
+ >r3b4 : boolean
+ >b4 <= a4 : boolean
+->b4 : new (x?: string) => string
+->a4 : new <T>(x?: T) => T
++>b4 : new (x?: string | undefined) => string
++>a4 : new <T>(x?: T | undefined) => T
+
+ var r3b5 = b5 <= a5;
+ >r3b5 : boolean
+@@= skipped -39, +39 lines =@@
+ var r4a4 = a4 >= b4;
+ >r4a4 : boolean
+ >a4 >= b4 : boolean
+->a4 : new <T>(x?: T) => T
+->b4 : new (x?: string) => string
++>a4 : new <T>(x?: T | undefined) => T
++>b4 : new (x?: string | undefined) => string
+
+ var r4a5 = a5 >= b5;
+ >r4a5 : boolean
+@@= skipped -38, +38 lines =@@
+ var r4b4 = b4 >= a4;
+ >r4b4 : boolean
+ >b4 >= a4 : boolean
+->b4 : new (x?: string) => string
+->a4 : new <T>(x?: T) => T
++>b4 : new (x?: string | undefined) => string
++>a4 : new <T>(x?: T | undefined) => T
+
+ var r4b5 = b5 >= a5;
+ >r4b5 : boolean
+@@= skipped -39, +39 lines =@@
+ var r5a4 = a4 == b4;
+ >r5a4 : boolean
+ >a4 == b4 : boolean
+->a4 : new <T>(x?: T) => T
+->b4 : new (x?: string) => string
++>a4 : new <T>(x?: T | undefined) => T
++>b4 : new (x?: string | undefined) => string
+
+ var r5a5 = a5 == b5;
+ >r5a5 : boolean
+@@= skipped -38, +38 lines =@@
+ var r5b4 = b4 == a4;
+ >r5b4 : boolean
+ >b4 == a4 : boolean
+->b4 : new (x?: string) => string
+->a4 : new <T>(x?: T) => T
++>b4 : new (x?: string | undefined) => string
++>a4 : new <T>(x?: T | undefined) => T
+
+ var r5b5 = b5 == a5;
+ >r5b5 : boolean
+@@= skipped -39, +39 lines =@@
+ var r6a4 = a4 != b4;
+ >r6a4 : boolean
+ >a4 != b4 : boolean
+->a4 : new <T>(x?: T) => T
+->b4 : new (x?: string) => string
++>a4 : new <T>(x?: T | undefined) => T
++>b4 : new (x?: string | undefined) => string
+
+ var r6a5 = a5 != b5;
+ >r6a5 : boolean
+@@= skipped -38, +38 lines =@@
+ var r6b4 = b4 != a4;
+ >r6b4 : boolean
+ >b4 != a4 : boolean
+->b4 : new (x?: string) => string
+->a4 : new <T>(x?: T) => T
++>b4 : new (x?: string | undefined) => string
++>a4 : new <T>(x?: T | undefined) => T
+
+ var r6b5 = b5 != a5;
+ >r6b5 : boolean
+@@= skipped -39, +39 lines =@@
+ var r7a4 = a4 === b4;
+ >r7a4 : boolean
+ >a4 === b4 : boolean
+->a4 : new <T>(x?: T) => T
+->b4 : new (x?: string) => string
++>a4 : new <T>(x?: T | undefined) => T
++>b4 : new (x?: string | undefined) => string
+
+ var r7a5 = a5 === b5;
+ >r7a5 : boolean
+@@= skipped -38, +38 lines =@@
+ var r7b4 = b4 === a4;
+ >r7b4 : boolean
+ >b4 === a4 : boolean
+->b4 : new (x?: string) => string
+->a4 : new <T>(x?: T) => T
++>b4 : new (x?: string | undefined) => string
++>a4 : new <T>(x?: T | undefined) => T
+
+ var r7b5 = b5 === a5;
+ >r7b5 : boolean
+@@= skipped -39, +39 lines =@@
+ var r8a4 = a4 !== b4;
+ >r8a4 : boolean
+ >a4 !== b4 : boolean
+->a4 : new <T>(x?: T) => T
+->b4 : new (x?: string) => string
++>a4 : new <T>(x?: T | undefined) => T
++>b4 : new (x?: string | undefined) => string
+
+ var r8a5 = a5 !== b5;
+ >r8a5 : boolean
+@@= skipped -38, +38 lines =@@
+ var r8b4 = b4 !== a4;
+ >r8b4 : boolean
+ >b4 !== a4 : boolean
+->b4 : new (x?: string) => string
+->a4 : new <T>(x?: T) => T
++>b4 : new (x?: string | undefined) => string
++>a4 : new <T>(x?: T | undefined) => T
+
+ var r8b5 = b5 !== a5;
+ >r8b5 : boolean

@@ -26,14 +26,14 @@ ps[index] = 12;
 
 interface indexErrors {
     [p2?: string];
->p2 : string
+>p2 : string | undefined
 
     [...p3: any[]];
 >p3 : any[]
 
     [p4: string, p5?: string];
 >p4 : string
->p5 : string
+>p5 : string | undefined
 
     [p6: string, ...p7: any[]];
 >p6 : string

@@ -14,6 +14,7 @@ let x = <    Foo.Bar >Hello
 let y = <   Baz >Hello
 
 //// [errorSpanForUnclosedJsxTag.js]
+"use strict";
 let Foo = {
     Bar() { }
 };

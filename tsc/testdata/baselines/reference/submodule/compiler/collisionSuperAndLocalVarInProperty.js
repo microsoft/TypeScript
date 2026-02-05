@@ -20,6 +20,7 @@ class b extends Foo {
 }
 
 //// [collisionSuperAndLocalVarInProperty.js]
+"use strict";
 var _super = 10; // No Error
 class Foo {
     prop1 = {

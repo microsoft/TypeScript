@@ -19,12 +19,12 @@ function f<T, U>(): Foo<U> {
 >Foo : Symbol(Foo, Decl(typeParameterAssignmentCompat1.ts, 0, 0))
 >U : Symbol(U, Decl(typeParameterAssignmentCompat1.ts, 4, 13))
 
-    var x: Foo<T>;
+    var x!: Foo<T>;
 >x : Symbol(x, Decl(typeParameterAssignmentCompat1.ts, 5, 7))
 >Foo : Symbol(Foo, Decl(typeParameterAssignmentCompat1.ts, 0, 0))
 >T : Symbol(T, Decl(typeParameterAssignmentCompat1.ts, 4, 11))
 
-    var y: Foo<U>;
+    var y!: Foo<U>;
 >y : Symbol(y, Decl(typeParameterAssignmentCompat1.ts, 6, 7))
 >Foo : Symbol(Foo, Decl(typeParameterAssignmentCompat1.ts, 0, 0))
 >U : Symbol(U, Decl(typeParameterAssignmentCompat1.ts, 4, 13))
@@ -47,12 +47,12 @@ class C<T> {
 >Foo : Symbol(Foo, Decl(typeParameterAssignmentCompat1.ts, 0, 0))
 >U : Symbol(U, Decl(typeParameterAssignmentCompat1.ts, 12, 6))
 
-        var x: Foo<T>;
+        var x!: Foo<T>;
 >x : Symbol(x, Decl(typeParameterAssignmentCompat1.ts, 13, 11))
 >Foo : Symbol(Foo, Decl(typeParameterAssignmentCompat1.ts, 0, 0))
 >T : Symbol(T, Decl(typeParameterAssignmentCompat1.ts, 11, 8))
 
-        var y: Foo<U>;
+        var y!: Foo<U>;
 >y : Symbol(y, Decl(typeParameterAssignmentCompat1.ts, 14, 11))
 >Foo : Symbol(Foo, Decl(typeParameterAssignmentCompat1.ts, 0, 0))
 >U : Symbol(U, Decl(typeParameterAssignmentCompat1.ts, 12, 6))

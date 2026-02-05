@@ -20,27 +20,27 @@ var {a, ...rest1 } = union;
 
 
 var undefinedUnion: { n: number } | undefined;
->undefinedUnion : { n: number; }
+>undefinedUnion : { n: number; } | undefined
 >n : number
 
 var rest2: {};
 >rest2 : {}
 
 var {n, ...rest2 } = undefinedUnion;
->n : number
+>n : any
 >rest2 : {}
->undefinedUnion : { n: number; }
+>undefinedUnion : { n: number; } | undefined
 
 
 var nullUnion: { n: number } | null;
->nullUnion : { n: number; }
+>nullUnion : { n: number; } | null
 >n : number
 
 var rest3: {};
 >rest3 : {}
 
 var {n, ...rest3 } = nullUnion;
->n : number
+>n : any
 >rest3 : {}
->nullUnion : { n: number; }
+>nullUnion : { n: number; } | null
 

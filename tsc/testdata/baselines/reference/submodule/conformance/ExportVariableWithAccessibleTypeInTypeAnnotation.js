@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ExportVariableWithAccessibleTypeInTypeAnnotation.ts] ////
 
 //// [ExportVariableWithAccessibleTypeInTypeAnnotation.ts]
-module A {
+namespace A {
 
     export interface Point {
         x: number;
@@ -14,6 +14,7 @@ module A {
 
 
 //// [ExportVariableWithAccessibleTypeInTypeAnnotation.js]
+"use strict";
 var A;
 (function (A) {
     // valid since Point is exported

@@ -60,6 +60,7 @@ function f() {
 
 
 //// [cf.js]
+"use strict";
 function f() {
     var z;
     var x = 10;

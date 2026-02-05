@@ -22,7 +22,7 @@ class D<T>{
 
 function F(x: string): number { return 42; }
 
-module M {
+namespace M {
     export class A {
         name: string;
     }
@@ -56,6 +56,7 @@ for(var m: typeof M;;){}
 for( var m = M.A;;){}
 
 //// [forStatementsMultipleInvalidDecl.js]
+"use strict";
 class C {
     id;
     valid;

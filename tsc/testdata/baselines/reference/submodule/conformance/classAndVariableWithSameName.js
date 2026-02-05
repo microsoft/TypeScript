@@ -4,7 +4,7 @@
 class C { foo: string; } // error
 var C = ''; // error
 
-module M {
+namespace M {
     class D { // error
         bar: string;
     }
@@ -13,6 +13,7 @@ module M {
 }
 
 //// [classAndVariableWithSameName.js]
+"use strict";
 class C {
     foo;
 } // error

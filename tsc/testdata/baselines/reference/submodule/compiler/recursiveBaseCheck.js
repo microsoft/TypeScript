@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/recursiveBaseCheck.ts] ////
 
 //// [recursiveBaseCheck.ts]
-declare module Module {
+declare namespace Module {
     class C extends D {
     }
     export class B extends Module.C {
@@ -20,3 +20,4 @@ declare module Module {
 
 
 //// [recursiveBaseCheck.js]
+"use strict";

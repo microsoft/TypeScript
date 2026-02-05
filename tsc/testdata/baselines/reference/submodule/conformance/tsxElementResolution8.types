@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution8.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements { }
 }
@@ -36,7 +36,7 @@ interface Obj1 {
 	new(): {};
 	(): number;
 }
-var Obj1: Obj1;
+declare var Obj1: Obj1;
 >Obj1 : Obj1
 
 <Obj1 />; // OK, prefer construct signatures
@@ -46,7 +46,7 @@ var Obj1: Obj1;
 interface Obj2 {
 	(): number;
 }
-var Obj2: Obj2;
+declare var Obj2: Obj2;
 >Obj2 : Obj2
 
 <Obj2 />; // Error
@@ -55,7 +55,7 @@ var Obj2: Obj2;
 
 interface Obj3 {
 }
-var Obj3: Obj3;
+declare var Obj3: Obj3;
 >Obj3 : Obj3
 
 <Obj3 />; // Error

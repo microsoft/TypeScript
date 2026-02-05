@@ -8,6 +8,7 @@ var as1 = as as string;
 
 
 //// [asOperatorNames.js]
+"use strict";
 var a = 20;
 var b = a;
 var as = "hello";

@@ -40,6 +40,7 @@ const catMap: CatMap = {
 
 
 //// [mappedTypeOverlappingStringEnumKeys.js]
+"use strict";
 // #37859
 var TerrestrialAnimalTypes;
 (function (TerrestrialAnimalTypes) {

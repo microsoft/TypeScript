@@ -34,8 +34,8 @@ assignmentCompatWithCallSignatures2.ts(49,1): error TS2322: Type '(x: string) =>
     interface T {
         f(x: number): void;
     }
-    var t: T;
-    var a: { f(x: number): void };
+    declare var t: T;
+    declare var a: { f(x: number): void };
     
     t = a;
     a = t;
@@ -43,8 +43,8 @@ assignmentCompatWithCallSignatures2.ts(49,1): error TS2322: Type '(x: string) =>
     interface S {
         f(x: number): string;
     }
-    var s: S;
-    var a2: { f(x: number): string };
+    declare var s: S;
+    declare var a2: { f(x: number): string };
     t = s;
     t = a2;
     a = s;
@@ -75,8 +75,8 @@ assignmentCompatWithCallSignatures2.ts(49,1): error TS2322: Type '(x: string) =>
     interface S2 {
         f(x: string): void;
     }
-    var s2: S2;
-    var a3: { f(x: string): void };
+    declare var s2: S2;
+    declare var a3: { f(x: string): void };
     // these are errors
     t = s2;
     ~

@@ -9,6 +9,7 @@ const regexes: RegExp[] = [
 
 
 //// [regularExpressionExtendedUnicodeEscapes.js]
+"use strict";
 const regexes = [
     /\u{10000}[\u{10000}]/,
     /\u{10000}[\u{10000}]/u,

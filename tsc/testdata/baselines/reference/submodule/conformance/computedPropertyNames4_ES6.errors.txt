@@ -1,0 +1,46 @@
+computedPropertyNames4_ES6.ts(5,6): error TS2454: Variable 's' is used before being assigned.
+computedPropertyNames4_ES6.ts(6,6): error TS2454: Variable 'n' is used before being assigned.
+computedPropertyNames4_ES6.ts(6,10): error TS2454: Variable 'n' is used before being assigned.
+computedPropertyNames4_ES6.ts(7,6): error TS2454: Variable 's' is used before being assigned.
+computedPropertyNames4_ES6.ts(7,10): error TS2454: Variable 's' is used before being assigned.
+computedPropertyNames4_ES6.ts(8,6): error TS2454: Variable 's' is used before being assigned.
+computedPropertyNames4_ES6.ts(8,10): error TS2454: Variable 'n' is used before being assigned.
+computedPropertyNames4_ES6.ts(9,7): error TS2454: Variable 's' is used before being assigned.
+computedPropertyNames4_ES6.ts(9,11): error TS2454: Variable 's' is used before being assigned.
+
+
+==== computedPropertyNames4_ES6.ts (9 errors) ====
+    var s: string;
+    var n: number;
+    var a: any;
+    var v = {
+        [s]: 0,
+         ~
+!!! error TS2454: Variable 's' is used before being assigned.
+        [n]: n,
+         ~
+!!! error TS2454: Variable 'n' is used before being assigned.
+             ~
+!!! error TS2454: Variable 'n' is used before being assigned.
+        [s + s]: 1,
+         ~
+!!! error TS2454: Variable 's' is used before being assigned.
+             ~
+!!! error TS2454: Variable 's' is used before being assigned.
+        [s + n]: 2,
+         ~
+!!! error TS2454: Variable 's' is used before being assigned.
+             ~
+!!! error TS2454: Variable 'n' is used before being assigned.
+        [+s]: s,
+          ~
+!!! error TS2454: Variable 's' is used before being assigned.
+              ~
+!!! error TS2454: Variable 's' is used before being assigned.
+        [""]: 0,
+        [0]: 0,
+        [a]: 1,
+        [<any>true]: 0,
+        [`hello bye`]: 0,
+        [`hello ${a} bye`]: 0
+    }

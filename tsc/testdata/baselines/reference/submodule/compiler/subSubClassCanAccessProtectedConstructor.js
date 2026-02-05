@@ -19,6 +19,7 @@ class SubclassOfSubclass extends Subclass {
 
 
 //// [subSubClassCanAccessProtectedConstructor.js]
+"use strict";
 class Base {
     constructor() { }
     instance1 = new Base(); // allowed

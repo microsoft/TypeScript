@@ -36,6 +36,7 @@ class B3 extends A3 {
 }
 
 //// [subtypingWithObjectMembers4.js]
+"use strict";
 // subtyping when property names do not match
 class Base {
     foo;

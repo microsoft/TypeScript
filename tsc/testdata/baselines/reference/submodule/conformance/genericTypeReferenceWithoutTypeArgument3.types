@@ -34,7 +34,7 @@ declare class D extends C {}
 >D : D
 >C : typeof C
 
-declare module M {
+declare namespace M {
 >M : typeof M
 
     export class E<T> { foo: T }

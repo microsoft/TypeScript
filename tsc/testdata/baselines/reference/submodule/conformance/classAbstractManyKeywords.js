@@ -7,15 +7,10 @@ default abstract class C {}
 import abstract class D {}
 
 //// [classAbstractManyKeywords.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.B = void 0;
-class A {
+export default class A {
 }
-exports.default = A;
-class B {
+export class B {
 }
-exports.B = B;
 class C {
 }
 class D {

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/dottedModuleName2.ts] ////
 
 === dottedModuleName2.ts ===
-module A.B {
+namespace A.B {
 >A : typeof A
 >B : typeof B
  
@@ -13,7 +13,7 @@ module A.B {
  
  
  
-module AA { export module B {
+namespace AA { export namespace B {
 >AA : typeof AA
 >B : typeof B
  
@@ -42,7 +42,7 @@ var tmpError = A.B.x;
 >x : number
 
 
-module A.B.C
+namespace A.B.C
 >A : typeof A
 >B : typeof B
 >C : typeof C
@@ -57,7 +57,7 @@ module A.B.C
  
  
  
-module M
+namespace M
  
 {
  

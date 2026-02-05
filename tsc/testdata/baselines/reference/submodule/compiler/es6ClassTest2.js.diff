@@ -1,8 +1,8 @@
 --- old.es6ClassTest2.js
 +++ new.es6ClassTest2.js
-@@= skipped -161, +161 lines =@@
-
+@@= skipped -162, +162 lines =@@
  //// [es6ClassTest2.js]
+ "use strict";
  class BasicMonster {
 +    name;
 +    health;

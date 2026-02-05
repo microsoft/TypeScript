@@ -1,6 +1,6 @@
 --- old.covariance1.js
 +++ new.covariance1.js
-@@= skipped -22, +22 lines =@@
+@@= skipped -23, +23 lines =@@
  var M;
  (function (M) {
      class XX {

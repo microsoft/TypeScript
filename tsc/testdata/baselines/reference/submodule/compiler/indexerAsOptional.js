@@ -12,5 +12,6 @@ class indexSig2 {
 }
 
 //// [indexerAsOptional.js]
+"use strict";
 class indexSig2 {
 }

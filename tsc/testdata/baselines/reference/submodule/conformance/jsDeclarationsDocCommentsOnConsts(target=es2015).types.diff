@@ -1,0 +1,17 @@
+--- old.jsDeclarationsDocCommentsOnConsts(target=es2015).types
++++ new.jsDeclarationsDocCommentsOnConsts(target=es2015).types
+@@= skipped -24, +24 lines =@@
+ }
+
+ module.exports = {x, b}
+->module.exports = {x, b} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports = {x, b} : { x: (a: any) => string; b: () => number; }
++>module.exports : { x: (a: any) => string; b: () => number; }
++>module : { "export=": { x: (a: any) => string; b: () => number; }; }
++>exports : { x: (a: any) => string; b: () => number; }
+ >{x, b} : { x: (a: any) => string; b: () => number; }
+ >x : (a: any) => string
+ >b : () => number

@@ -1,10 +1,14 @@
 --- old.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=legacy).js
 +++ new.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=legacy).js
-@@= skipped -25, +25 lines =@@
- const _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
+@@= skipped -23, +23 lines =@@
+
+ //// [commentsOnJSXExpressionsArePreserved.js]
+ "use strict";
+-const _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
++const _jsxFileName = "/.src/commentsOnJSXExpressionsArePreserved.tsx";
  class Component {
      render() {
--        return (0, _a.jsxDEV)("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
+-        return (0, _a.jsxDEV)("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 16 }, this);
 +        return _jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
      }
  }

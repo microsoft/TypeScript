@@ -8,4 +8,5 @@ interface Foo<T> {
 var f: Foo<Foo<number>>;
 
 //// [nestedGenerics.js]
+"use strict";
 var f;

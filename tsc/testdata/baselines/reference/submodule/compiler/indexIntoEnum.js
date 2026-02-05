@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/indexIntoEnum.ts] ////
 
 //// [indexIntoEnum.ts]
-module M {
+namespace M {
 
     enum E { }
 
@@ -9,6 +9,7 @@ module M {
 }
 
 //// [indexIntoEnum.js]
+"use strict";
 var M;
 (function (M) {
     let E;

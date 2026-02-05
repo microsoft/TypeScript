@@ -13,6 +13,7 @@ class bar extends foo {
 var x = new bar();
 
 //// [classAbstractCrashedOnce.js]
+"use strict";
 class foo {
 }
 class bar extends foo {

@@ -74,6 +74,7 @@ class C {
 
 
 //// [classStaticBlock22.js]
+"use strict";
 let await;
 class C {
     static {

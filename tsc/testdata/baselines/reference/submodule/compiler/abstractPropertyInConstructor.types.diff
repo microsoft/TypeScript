@@ -1,0 +1,11 @@
+--- old.abstractPropertyInConstructor.types
++++ new.abstractPropertyInConstructor.types
+@@= skipped -13, +13 lines =@@
+ >this : this
+ >method : (num: number) => void
+ >parseInt(str) : number
+->parseInt : (string: string, radix?: number) => number
++>parseInt : (string: string, radix?: number | undefined) => number
+ >str : string
+
+         let val = this.prop.toLowerCase();

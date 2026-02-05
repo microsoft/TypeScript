@@ -1,0 +1,11 @@
+--- old.tsxAttributeResolution11.types
++++ new.tsxAttributeResolution11.types
+@@= skipped -23, +23 lines =@@
+   }
+
+   props: {
+->props : { ref?: string; }
++>props : { ref?: string | undefined; }
+
+ 	  ref?: string;
+ >ref : string | undefined

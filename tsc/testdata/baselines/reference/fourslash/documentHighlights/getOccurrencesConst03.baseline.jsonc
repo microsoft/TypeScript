@@ -1,6 +1,6 @@
 // === documentHighlights ===
 // === /getOccurrencesConst03.ts ===
-// module m {
+// namespace m {
 //     export const x;
 //     export /*HIGHLIGHTS*/[|const|] enum E {
 //     }
@@ -23,7 +23,7 @@
 
 // === documentHighlights ===
 // === /getOccurrencesConst03.ts ===
-// module m {
+// namespace m {
 //     export /*HIGHLIGHTS*/const x;
 //     export const enum E {
 //     }

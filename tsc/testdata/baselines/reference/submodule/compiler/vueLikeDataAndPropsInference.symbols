@@ -127,6 +127,8 @@ test({
 >oldVal : Symbol(oldVal, Decl(vueLikeDataAndPropsInference.ts, 40, 27))
 
             this.bar = false
+>this.bar : Symbol(bar, Decl(vueLikeDataAndPropsInference.ts, 33, 13))
+>bar : Symbol(bar, Decl(vueLikeDataAndPropsInference.ts, 33, 13))
         }
     }
 })

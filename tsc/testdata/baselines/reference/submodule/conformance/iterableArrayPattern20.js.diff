@@ -1,8 +1,8 @@
 --- old.iterableArrayPattern20.js
 +++ new.iterableArrayPattern20.js
-@@= skipped -20, +20 lines =@@
-
+@@= skipped -21, +21 lines =@@
  //// [iterableArrayPattern20.js]
+ "use strict";
  class Bar {
 +    x;
  }

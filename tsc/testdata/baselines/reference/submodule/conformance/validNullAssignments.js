@@ -22,7 +22,7 @@ var g: I;
 g = null; // ok
 I = null; // error
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 M = null; // error
 
 var h: { f(): void } = null;
@@ -33,6 +33,7 @@ function i<T>(a: T) {
 i = null; // error
 
 //// [validNullAssignments.js]
+"use strict";
 var a = null;
 var b = null;
 var c = null;

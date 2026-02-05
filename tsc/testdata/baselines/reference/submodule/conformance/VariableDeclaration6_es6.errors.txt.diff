@@ -1,0 +1,14 @@
+--- old.VariableDeclaration6_es6.errors.txt
++++ new.VariableDeclaration6_es6.errors.txt
+@@= skipped -0, +0 lines =@@
+-VariableDeclaration6_es6.ts(1,1): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+ VariableDeclaration6_es6.ts(1,1): error TS2304: Cannot find name 'let'.
+
+
+-==== VariableDeclaration6_es6.ts (2 errors) ====
++==== VariableDeclaration6_es6.ts (1 errors) ====
+     let
+-    ~~~
+-!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+     ~~~
+ !!! error TS2304: Cannot find name 'let'.

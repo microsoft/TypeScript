@@ -14,8 +14,8 @@ export {};
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 const react_1 = require("react");
-const _jsxFileName = "jsxJsxsCjsTransformKeyProp.tsx";
-/// <reference path="react16.d.ts" />
+const _jsxFileName = "/.src/jsxJsxsCjsTransformKeyProp.tsx";
+/// <reference path="/.lib/react16.d.ts" />
 const props = { answer: 42 };
 const a = jsx_dev_runtime_1.jsxDEV("div", Object.assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 10 }, this);
 const b = react_1.createElement("div", Object.assign({}, props, { key: "bar" }), "text");

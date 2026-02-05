@@ -31,6 +31,7 @@ class c extends Foo {
 }
 
 //// [collisionSuperAndLocalFunctionInMethod.js]
+"use strict";
 function _super() {
 }
 class Foo {

@@ -1,0 +1,29 @@
+--- old.commonSourceDirectory_dts.errors.txt
++++ new.commonSourceDirectory_dts.errors.txt
+@@= skipped -0, +0 lines =@@
+-/app/tsconfig.json(3,9): error TS5011: The common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+-  Visit https://aka.ms/ts6 for migration information.
+-
+-
+-==== /app/tsconfig.json (1 errors) ====
+-    {
+-        "compilerOptions": {
+-            "outDir": "bin",
+-            ~~~~~~~~
+-!!! error TS5011: The common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+-!!! error TS5011:   Visit https://aka.ms/ts6 for migration information.
+-            "sourceMap": true,
+-            "mapRoot": "myMapRoot",
+-            "sourceRoot": "mySourceRoot",
+-            "declaration": true
+-        }
+-    }
+-    
+-==== /app/lib/bar.d.ts (0 errors) ====
+-    declare const y: number;
+-    
+-==== /app/src/index.ts (0 errors) ====
+-    /// <reference path="../lib/bar.d.ts" preserve="true" />
+-    export const x = y;
+-    
++<no content>

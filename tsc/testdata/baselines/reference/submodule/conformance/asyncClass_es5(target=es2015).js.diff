@@ -1,0 +1,9 @@
+--- old.asyncClass_es5(target=es2015).js
++++ new.asyncClass_es5(target=es2015).js
+@@= skipped -5, +5 lines =@@
+
+ //// [asyncClass_es5.js]
+ "use strict";
+-class C {
++async class C {
+ }

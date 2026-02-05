@@ -7,4 +7,5 @@ interface HTMLMissingElement {}
 
 
 //// [missingDomElement_UsingDomLib.js]
+"use strict";
 ({}).textContent;

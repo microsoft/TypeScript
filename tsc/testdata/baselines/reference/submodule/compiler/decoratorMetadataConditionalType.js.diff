@@ -1,6 +1,6 @@
 --- old.decoratorMetadataConditionalType.js
 +++ new.decoratorMetadataConditionalType.js
-@@= skipped -21, +21 lines =@@
+@@= skipped -22, +22 lines =@@
      if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
  };
  class BaseEntity {

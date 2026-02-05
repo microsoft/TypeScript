@@ -22,6 +22,7 @@ x = y;
 y = x;
 
 //// [stringLiteralTypesInUnionTypes02.js]
+"use strict";
 var x = undefined;
 var y = undefined;
 if (x === "foo") {

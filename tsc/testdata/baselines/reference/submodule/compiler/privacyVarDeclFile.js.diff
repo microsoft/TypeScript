@@ -126,7 +126,7 @@
      }
      var privateVarWithPrivateModulePropertyTypes;
  })(privateModule || (privateModule = {}));
-@@= skipped -22, +42 lines =@@
+@@= skipped -23, +43 lines =@@
  class publicClassInGlobal {
  }
  class publicClassWithWithPublicPropertyTypesInGlobal {

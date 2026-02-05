@@ -45,6 +45,7 @@ g(i4);
 
 
 //// [mutrec.js]
+"use strict";
 function f(p) { return p; }
 ;
 var b;

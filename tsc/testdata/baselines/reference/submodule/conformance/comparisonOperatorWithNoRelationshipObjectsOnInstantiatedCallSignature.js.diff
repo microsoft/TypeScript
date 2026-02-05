@@ -1,8 +1,8 @@
 --- old.comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.js
 +++ new.comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.js
-@@= skipped -152, +152 lines =@@
-
+@@= skipped -153, +153 lines =@@
  //// [comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.js]
+ "use strict";
  class Base {
 +    a;
  }

@@ -1,6 +1,6 @@
 --- old.superAccessCastedCall.js
 +++ new.superAccessCastedCall.js
-@@= skipped -26, +26 lines =@@
+@@= skipped -27, +27 lines =@@
      bar() { }
  }
  class Bar extends Foo {

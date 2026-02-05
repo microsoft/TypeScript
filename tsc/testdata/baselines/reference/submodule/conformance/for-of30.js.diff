@@ -1,8 +1,8 @@
 --- old.for-of30.js
 +++ new.for-of30.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [for-of30.js]
+ "use strict";
  class MyStringIterator {
 -    constructor() {
 -        this.return = 0;

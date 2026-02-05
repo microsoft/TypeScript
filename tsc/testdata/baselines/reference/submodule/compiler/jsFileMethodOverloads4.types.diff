@@ -14,7 +14,7 @@
   */
  Foo.prototype.bar = function (a, b) { }
 ->Foo.prototype.bar = function (a, b) { } : { (a: string): void; (a: number, b: string): void; }
-+>Foo.prototype.bar = function (a, b) { } : (a: string | number, b?: string) => void
++>Foo.prototype.bar = function (a, b) { } : (a: string | number, b?: string | undefined) => void
  >Foo.prototype.bar : any
  >Foo.prototype : any
 ->Foo : typeof Foo
@@ -22,6 +22,6 @@
  >prototype : any
  >bar : any
 ->function (a, b) { } : { (a: string): void; (a: number, b: string): void; }
-+>function (a, b) { } : (a: string | number, b?: string) => void
++>function (a, b) { } : (a: string | number, b?: string | undefined) => void
  >a : string | number
- >b : string
+ >b : string | undefined

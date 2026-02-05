@@ -1,6 +1,6 @@
 --- old.assignmentCompatWithObjectMembers2.js
 +++ new.assignmentCompatWithObjectMembers2.js
-@@= skipped -47, +47 lines =@@
+@@= skipped -48, +48 lines =@@
  // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
  // additional optional properties do not cause errors
  class S {

@@ -16,6 +16,7 @@ func TestImportNameCodeFix_externalNonRelateive2(t *testing.T) {
 {
   "compilerOptions": {
     "module": "commonjs",
+    "lib": ["es5"],
     "paths": {
       "shared/*": ["../../shared/*"]
     }
@@ -35,9 +36,9 @@ shared/*external2external*/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.MarkTestAsStradaServer()
-	opts814 := f.GetOptions()
-	opts814.FormatCodeSettings.NewLineCharacter = "\n"
-	f.Configure(t, opts814)
+	opts839 := f.GetOptions()
+	opts839.FormatCodeSettings.NewLineCharacter = "\n"
+	f.Configure(t, opts839)
 	f.GoToMarker(t, "internal2external")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { shared } from "shared/constants";

@@ -1,6 +1,6 @@
 --- old.staticsInConstructorBodies.js
 +++ new.staticsInConstructorBodies.js
-@@= skipped -11, +11 lines =@@
+@@= skipped -12, +12 lines =@@
  class C {
      constructor() {
      }

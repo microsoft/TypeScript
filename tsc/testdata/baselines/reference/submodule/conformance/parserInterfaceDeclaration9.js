@@ -18,3 +18,4 @@ interface I3 {
 
 
 //// [parserInterfaceDeclaration9.js]
+"use strict";

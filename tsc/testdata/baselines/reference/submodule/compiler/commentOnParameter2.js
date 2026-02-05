@@ -11,6 +11,7 @@ b
 ){}
 
 //// [commentOnParameter2.js]
+"use strict";
 function commentedParameters(
 /* Parameter a */
 a /* End of parameter a */

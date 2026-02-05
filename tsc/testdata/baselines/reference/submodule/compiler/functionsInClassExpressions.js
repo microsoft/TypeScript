@@ -13,6 +13,7 @@ let Foo = class {
 }
 
 //// [functionsInClassExpressions.js]
+"use strict";
 let Foo = class {
     constructor() {
         this.bar++;

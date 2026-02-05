@@ -7,7 +7,7 @@ declare var console: any;
 const arr: {y(): number}[] = [];
 >arr : { y(): number; }[]
 >y : () => number
->[] : undefined[]
+>[] : never[]
 
 for (let i = 0; i < 3; i++) {
 >i : number

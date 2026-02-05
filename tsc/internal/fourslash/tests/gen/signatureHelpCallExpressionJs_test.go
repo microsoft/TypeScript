@@ -11,7 +11,8 @@ func TestSignatureHelpCallExpressionJs(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @checkJs: true
+	const content = `// @strict: false
+// @checkJs: true
 // @allowJs: true
 // @Filename: main.js
 function allOptional() { arguments; }

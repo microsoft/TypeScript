@@ -47,6 +47,7 @@ function g(fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: 
 
 
 //// [objectSpreadStrictNull.js]
+"use strict";
 function f(definiteBoolean, definiteString, optionalString, optionalNumber, undefinedString, undefinedNumber) {
     // optional
     let optionalUnionStops = Object.assign(Object.assign(Object.assign({}, definiteBoolean), definiteString), optionalNumber);

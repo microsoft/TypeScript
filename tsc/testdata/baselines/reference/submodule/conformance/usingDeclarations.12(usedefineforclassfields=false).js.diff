@@ -1,6 +1,6 @@
 --- old.usingDeclarations.12(usedefineforclassfields=false).js
 +++ new.usingDeclarations.12(usedefineforclassfields=false).js
-@@= skipped -69, +69 lines =@@
+@@= skipped -70, +70 lines =@@
      constructor() { }
  }
  class C2 extends C1 {

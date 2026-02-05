@@ -1,6 +1,6 @@
 --- old.callbackTagVariadicType.js
 +++ new.callbackTagVariadicType.js
-@@= skipped -32, +32 lines =@@
+@@= skipped -28, +28 lines =@@
   * @param {...string} args
   * @returns {number}
   */

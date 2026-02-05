@@ -1,0 +1,24 @@
+--- old.derivedClassConstructorWithExplicitReturns01(target=es2015).js
++++ new.derivedClassConstructorWithExplicitReturns01(target=es2015).js
+@@= skipped -37, +37 lines =@@
+ //// [derivedClassConstructorWithExplicitReturns01.js]
+ "use strict";
+ class C {
++    cProp = 10;
+     foo() { return "this never gets used."; }
+     constructor(value) {
+-        this.cProp = 10;
+         return {
+             cProp: value,
+             foo() {
+@@= skipped -12, +12 lines =@@
+     }
+ }
+ class D extends C {
++    dProp = () => this;
+     constructor(a = 100) {
+         super(a);
+-        this.dProp = () => this;
+         if (Math.random() < 0.5) {
+             "You win!";
+             return {

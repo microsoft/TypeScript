@@ -13,18 +13,18 @@ export { }
 
 === 1.ts ===
 let v = "str" || true;
->v : string | boolean
->"str" || true : "str" | true
+>v : string
+>"str" || true : "str"
 >"str" : "str"
 >true : true
 
 function bar () {
->bar : () => string | boolean
+>bar : () => string
 
     return v;
->v : string | boolean
+>v : string
 }
 export { v, bar }
->v : string | boolean
->bar : () => string | boolean
+>v : string
+>bar : () => string
 

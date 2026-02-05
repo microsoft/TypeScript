@@ -37,6 +37,7 @@ new Derived("", 3, "", 3);
 new Derived("", 3, "", "");
 
 //// [inheritedConstructorWithRestParams2.js]
+"use strict";
 class IBaseBase {
     constructor(x) { }
 }

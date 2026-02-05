@@ -25,7 +25,7 @@
 +  The last overload gave the following error.
      Argument of type 'boolean' is not assignable to parameter of type 'string'.
  overloadResolutionConstructors.ts(100,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type 'string'.
- overloadResolutionConstructors.ts(100,26): error TS2339: Property 'toFixed' does not exist on type 'string'.
+ overloadResolutionConstructors.ts(100,26): error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
 @@= skipped -43, +39 lines =@@
      new fn1({}); // Error
              ~~

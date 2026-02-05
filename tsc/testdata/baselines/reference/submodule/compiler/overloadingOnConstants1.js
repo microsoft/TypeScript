@@ -13,7 +13,7 @@ interface Document2 {
     createElement(tagName: string): Base;
 }
 
-var d2: Document2;
+declare var d2: Document2;
 
 // these are ok
 var htmlElement: Base = d2.createElement("yo")
@@ -28,6 +28,7 @@ var htmlDivElement2: Derived1 = d2.createElement("div");
 var htmlSpanElement2: Derived1 = d2.createElement("span");
 
 //// [overloadingOnConstants1.js]
+"use strict";
 class Base {
     foo() { }
 }
@@ -40,7 +41,6 @@ class Derived2 extends Base {
 class Derived3 extends Base {
     biz() { }
 }
-var d2;
 // these are ok
 var htmlElement = d2.createElement("yo");
 var htmlCanvasElement = d2.createElement("canvas");

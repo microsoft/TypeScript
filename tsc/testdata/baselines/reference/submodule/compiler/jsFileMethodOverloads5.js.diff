@@ -11,9 +11,9 @@
   * @param {number} [b]
   * @return {void}
   */
--export function foo(a: number, b?: number): void;
+-export function foo(a: number, b?: number | undefined): void;
 +/**
 + * @param {string | number} a
 + * @param {number} [b]
 + */
-+export declare const foo: (a: string | number, b?: number) => void;
++export declare const foo: (a: string | number, b?: number | undefined) => void;

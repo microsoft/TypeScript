@@ -1,0 +1,11 @@
+--- old.importHelpersInAmbientContext(target=es2015).types
++++ new.importHelpersInAmbientContext(target=es2015).types
+@@= skipped -93, +93 lines =@@
+ >propertyNames : string[]
+
+ export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
+->__decorate : (decorators: Function[], target: any, key?: string | symbol, desc?: any) => any
++>__decorate : (decorators: Function[], target: any, key?: string | symbol | undefined, desc?: any) => any
+ >decorators : Function[]
+ >target : any
+ >key : string | symbol | undefined

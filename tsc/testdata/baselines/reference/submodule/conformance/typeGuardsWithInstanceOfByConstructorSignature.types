@@ -11,7 +11,7 @@ interface A {
 declare var A: AConstructor;
 >A : AConstructor
 
-var obj1: A | string;
+declare var obj1: A | string;
 >obj1 : string | A
 
 if (obj1 instanceof A) { // narrowed to A.
@@ -30,7 +30,7 @@ if (obj1 instanceof A) { // narrowed to A.
 >bar : any
 }
 
-var obj2: any;
+declare var obj2: any;
 >obj2 : any
 
 if (obj2 instanceof A) {
@@ -60,7 +60,7 @@ interface B<T> {
 declare var B: BConstructor;
 >B : BConstructor
 
-var obj3: B<number> | string;
+declare var obj3: B<number> | string;
 >obj3 : string | B<number>
 
 if (obj3 instanceof B) { // narrowed to B<number>.
@@ -90,7 +90,7 @@ if (obj3 instanceof B) { // narrowed to B<number>.
 >"str" : "str"
 }
 
-var obj4: any;
+declare var obj4: any;
 >obj4 : any
 
 if (obj4 instanceof B) {
@@ -151,7 +151,7 @@ interface C2 {
 declare var C: CConstructor;
 >C : CConstructor
 
-var obj5: C1 | A;
+declare var obj5: C1 | A;
 >obj5 : A | C1
 
 if (obj5 instanceof C) { // narrowed to C1.
@@ -180,7 +180,7 @@ if (obj5 instanceof C) { // narrowed to C1.
 >bar2 : any
 }
 
-var obj6: any;
+declare var obj6: any;
 >obj6 : any
 
 if (obj6 instanceof C) {
@@ -212,7 +212,7 @@ interface D {
 declare var D: { new (): D; };
 >D : new () => D
 
-var obj7: D | string;
+declare var obj7: D | string;
 >obj7 : string | D
 
 if (obj7 instanceof D) { // narrowed to D.
@@ -231,7 +231,7 @@ if (obj7 instanceof D) { // narrowed to D.
 >bar : any
 }
 
-var obj8: any;
+declare var obj8: any;
 >obj8 : any
 
 if (obj8 instanceof D) {
@@ -271,7 +271,7 @@ interface E2 {
 declare var E: EConstructor;
 >E : EConstructor
 
-var obj9: E1 | A;
+declare var obj9: E1 | A;
 >obj9 : A | E1
 
 if (obj9 instanceof E) { // narrowed to E1
@@ -295,7 +295,7 @@ if (obj9 instanceof E) { // narrowed to E1
 >bar2 : any
 }
 
-var obj10: any;
+declare var obj10: any;
 >obj10 : any
 
 if (obj10 instanceof E) {
@@ -333,7 +333,7 @@ interface F {
 declare var F: FConstructor;
 >F : FConstructor
 
-var obj11: F | string;
+declare var obj11: F | string;
 >obj11 : string | F
 
 if (obj11 instanceof F) { // can't type narrowing, construct signature returns any.
@@ -352,7 +352,7 @@ if (obj11 instanceof F) { // can't type narrowing, construct signature returns a
 >bar : any
 }
 
-var obj12: any;
+declare var obj12: any;
 >obj12 : any
 
 if (obj12 instanceof F) {
@@ -389,7 +389,7 @@ interface G2 {
 declare var G: GConstructor;
 >G : GConstructor
 
-var obj13: G1 | G2;
+declare var obj13: G1 | G2;
 >obj13 : G1 | G2
 
 if (obj13 instanceof G) { // narrowed to G1. G1 is return type of prototype property.
@@ -408,7 +408,7 @@ if (obj13 instanceof G) { // narrowed to G1. G1 is return type of prototype prop
 >foo2 : any
 }
 
-var obj14: any;
+declare var obj14: any;
 >obj14 : any
 
 if (obj14 instanceof G) {
@@ -441,7 +441,7 @@ interface H {
 declare var H: HConstructor;
 >H : HConstructor
 
-var obj15: H | string;
+declare var obj15: H | string;
 >obj15 : string | H
 
 if (obj15 instanceof H) { // narrowed to H.
@@ -460,7 +460,7 @@ if (obj15 instanceof H) { // narrowed to H.
 >bar : any
 }
 
-var obj16: any;
+declare var obj16: any;
 >obj16 : any
 
 if (obj16 instanceof H) {
@@ -479,7 +479,7 @@ if (obj16 instanceof H) {
 >foo2 : any
 }
 
-var obj17: any;
+declare var obj17: any;
 >obj17 : any
 
 if (obj17 instanceof Object) { // can't narrow type from 'any' to 'Object'
@@ -498,7 +498,7 @@ if (obj17 instanceof Object) { // can't narrow type from 'any' to 'Object'
 >foo2 : any
 }
 
-var obj18: any;
+declare var obj18: any;
 >obj18 : any
 
 if (obj18 instanceof Function) { // can't narrow type from 'any' to 'Function'

@@ -1,6 +1,6 @@
 --- old.subtypingWithObjectMembers5.js
 +++ new.subtypingWithObjectMembers5.js
-@@= skipped -70, +70 lines =@@
+@@= skipped -71, +71 lines =@@
  var NotOptional;
  (function (NotOptional) {
      class B {

@@ -6,5 +6,6 @@ import.foo;
 
 
 //// [b.js]
+"use strict";
 import.foo();
 import.foo;

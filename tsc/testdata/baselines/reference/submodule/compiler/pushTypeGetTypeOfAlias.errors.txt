@@ -1,10 +1,13 @@
+bar.js(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 bar.js(1,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 bar.js(2,9): error TS2339: Property 'blah' does not exist on type 'typeof import("bar")'.
 bar.js(2,24): error TS2339: Property 'someProp' does not exist on type 'typeof import("bar")'.
 
 
-==== bar.js (3 errors) ====
+==== bar.js (4 errors) ====
     module.exports = function () {};
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2309: An export assignment cannot be used in a module with other exported elements.
     exports.blah = exports.someProp;

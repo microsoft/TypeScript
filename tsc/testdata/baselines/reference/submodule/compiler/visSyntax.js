@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/visSyntax.ts] ////
 
 //// [visSyntax.ts]
-module M {
+namespace M {
     export class C {
     }
 
@@ -14,6 +14,7 @@ module M {
 
 
 //// [visSyntax.js]
+"use strict";
 var M;
 (function (M) {
     class C {

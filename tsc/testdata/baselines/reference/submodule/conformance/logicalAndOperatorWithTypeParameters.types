@@ -11,10 +11,10 @@ function foo<T, U, V/* extends T*/>(t: T, u: U, v: V) {
 >v : V
 
     var r1 = t && t;
->r1 : T
->t && t : T
+>r1 : NonNullable<T>
+>t && t : NonNullable<T>
 >t : T
->t : T
+>t : NonNullable<T>
 
     var r2 = u && t;
 >r2 : T
@@ -35,10 +35,10 @@ function foo<T, U, V/* extends T*/>(t: T, u: U, v: V) {
 >u : U
 
     var r5 = u && u;
->r5 : U
->u && u : U
+>r5 : NonNullable<U>
+>u && u : NonNullable<U>
 >u : U
->u : U
+>u : NonNullable<U>
 
     var r6 = v && u;
 >r6 : U
@@ -59,10 +59,10 @@ function foo<T, U, V/* extends T*/>(t: T, u: U, v: V) {
 >v : V
 
     var r9 = v && v;
->r9 : V
->v && v : V
+>r9 : NonNullable<V>
+>v && v : NonNullable<V>
 >v : V
->v : V
+>v : NonNullable<V>
 
     var a: number;
 >a : number

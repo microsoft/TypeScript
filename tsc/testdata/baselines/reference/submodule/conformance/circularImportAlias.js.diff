@@ -1,6 +1,6 @@
 --- old.circularImportAlias.js
 +++ new.circularImportAlias.js
-@@= skipped -26, +26 lines =@@
+@@= skipped -27, +27 lines =@@
  (function (B) {
      B.a = A;
      class D extends B.a.C {

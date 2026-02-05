@@ -25,6 +25,7 @@ a = b = new A();
 
 
 //// [chainedAssignment3.js]
+"use strict";
 class A {
     id;
 }

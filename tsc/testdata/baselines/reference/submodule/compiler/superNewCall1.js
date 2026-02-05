@@ -14,6 +14,7 @@ class B extends A<number, string> {
 }
 
 //// [superNewCall1.js]
+"use strict";
 class A {
     map;
     constructor(map) {

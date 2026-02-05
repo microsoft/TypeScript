@@ -7,6 +7,14 @@
 // 
 // export {}
 
+// === bundled:///libs/lib.es2015.promise.d.ts ===
+// --- (line: --) skipped ---
+//     resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>;
+// }
+// 
+// <|declare var [|Promise|]: PromiseConstructor;|>
+// 
+
 // === bundled:///libs/lib.es5.d.ts ===
 // --- (line: --) skipped ---
 // /**
@@ -44,6 +52,14 @@
 // const /*GOTO TYPE*/promisedBob = getUser() 
 // 
 // export {}
+
+// === bundled:///libs/lib.es2015.promise.d.ts ===
+// --- (line: --) skipped ---
+//     resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>;
+// }
+// 
+// <|declare var [|Promise|]: PromiseConstructor;|>
+// 
 
 // === bundled:///libs/lib.es5.d.ts ===
 // --- (line: --) skipped ---

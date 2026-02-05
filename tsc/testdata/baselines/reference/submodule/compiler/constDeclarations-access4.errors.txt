@@ -19,7 +19,7 @@ constDeclarations-access4.ts(26,3): error TS2540: Cannot assign to 'x' because i
 
 
 ==== constDeclarations-access4.ts (18 errors) ====
-    declare module M {
+    declare namespace M {
         const x: number;
     }
     

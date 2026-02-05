@@ -29,6 +29,7 @@ abstract class BB extends AA {
 
 
 //// [classAbstractSuperCalls.js]
+"use strict";
 class A {
     foo() { return 1; }
 }

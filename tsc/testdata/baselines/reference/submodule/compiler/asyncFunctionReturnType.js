@@ -78,6 +78,7 @@ async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K 
 }
 
 //// [asyncFunctionReturnType.js]
+"use strict";
 async function fAsync() {
     // Without explicit type annotation, this is just an array.
     return [1, true];

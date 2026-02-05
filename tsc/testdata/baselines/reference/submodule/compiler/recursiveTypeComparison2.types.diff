@@ -1,0 +1,19 @@
+--- old.recursiveTypeComparison2.types
++++ new.recursiveTypeComparison2.types
+@@= skipped -18, +18 lines =@@
+ >b : U
+
+         slidingWindow(max: number, min?: number): Property<T[]>;
+->slidingWindow : (max: number, min?: number) => Property<T[]>
++>slidingWindow : (max: number, min?: number | undefined) => Property<T[]>
+ >max : number
+ >min : number | undefined
+
+@@= skipped -30, +30 lines =@@
+ >other : Observable<U>
+
+         endOnError(f?: (value: T) => boolean): Observable<T>;
+->endOnError : (f?: (value: T) => boolean) => Observable<T>
++>endOnError : (f?: ((value: T) => boolean) | undefined) => Observable<T>
+ >f : ((value: T) => boolean) | undefined
+ >value : T

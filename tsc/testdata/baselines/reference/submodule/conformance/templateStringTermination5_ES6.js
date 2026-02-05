@@ -4,4 +4,5 @@
 `\\\\\\`
 
 //// [templateStringTermination5_ES6.js]
+"use strict";
 `\\\\\\`;

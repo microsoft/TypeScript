@@ -1,7 +1,7 @@
 --- old.jsdocTemplateTag.errors.txt
 +++ new.jsdocTemplateTag.errors.txt
 @@= skipped -0, +0 lines =@@
--forgot.js(23,1): error TS2322: Type '(keyframes: any[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
+-forgot.js(23,1): error TS2322: Type '(keyframes: Array<any>) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
 -  Type 'void' is not assignable to type 'Animation'.
 -
 -
@@ -34,7 +34,7 @@
       */
      Element.prototype.animate = function(keyframes) {};
      ~~~~~~~~~~~~~~~~~~~~~~~~~
--!!! error TS2322: Type '(keyframes: any[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
+-!!! error TS2322: Type '(keyframes: Array<any>) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
 -!!! error TS2322:   Type 'void' is not assignable to type 'Animation'.
 +!!! error TS2322: Type '(keyframes: Object[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
 +!!! error TS2322:   Types of parameters 'keyframes' and 'keyframes' are incompatible.

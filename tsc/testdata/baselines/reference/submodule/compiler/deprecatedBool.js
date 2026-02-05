@@ -6,5 +6,6 @@ var bool: boolean;
 
 
 //// [deprecatedBool.js]
+"use strict";
 var b4;
 var bool;

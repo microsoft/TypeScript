@@ -10,6 +10,7 @@ class C2<T> extends C1<T> {
 }
 
 //// [instanceSubtypeCheck2.js]
+"use strict";
 class C1 {
     x;
 }

@@ -111,7 +111,7 @@ func NewInferredProject(
 			AllowJs:                    core.TSTrue,
 			Module:                     core.ModuleKindESNext,
 			ModuleResolution:           core.ModuleResolutionKindBundler,
-			Target:                     core.ScriptTargetES2022,
+			Target:                     core.ScriptTargetLatestStandard,
 			Jsx:                        core.JsxEmitReactJSX,
 			AllowImportingTsExtensions: core.TSTrue,
 			StrictNullChecks:           core.TSTrue,

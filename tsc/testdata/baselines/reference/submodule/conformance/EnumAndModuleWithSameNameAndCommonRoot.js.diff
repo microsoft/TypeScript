@@ -1,6 +1,6 @@
 --- old.EnumAndModuleWithSameNameAndCommonRoot.js
 +++ new.EnumAndModuleWithSameNameAndCommonRoot.js
-@@= skipped -25, +25 lines =@@
+@@= skipped -26, +26 lines =@@
  })(enumdule || (enumdule = {}));
  (function (enumdule) {
      class Point {

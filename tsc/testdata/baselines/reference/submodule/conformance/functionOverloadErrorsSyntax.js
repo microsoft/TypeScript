@@ -14,6 +14,7 @@ function fn5() { }
 
 
 //// [functionOverloadErrorsSyntax.js]
+"use strict";
 function fn4a() { }
 function fn4b() { }
 function fn5() { }

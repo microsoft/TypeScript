@@ -17,7 +17,7 @@ func TestCompletionsImport_umdModules3_script(t *testing.T) {
 	const content = `// @filename: /package.json
 { "dependencies": { "@types/classnames": "*" } }
 // @filename: /tsconfig.json
-{ "compilerOptions": { "module": "es2015" }}
+{ "compilerOptions": { "module": "es2015", "types": ["*"] }}
 // @filename: /node_modules/@types/classnames/package.json
 { "name": "@types/classnames", "types": "index.d.ts" }
 // @filename: /node_modules/@types/classnames/index.d.ts

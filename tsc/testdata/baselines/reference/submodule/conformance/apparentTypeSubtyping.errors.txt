@@ -1,14 +1,20 @@
+apparentTypeSubtyping.ts(5,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 apparentTypeSubtyping.ts(10,5): error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'Base<string>'.
   Type 'String' is not assignable to type 'string'.
     'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
+apparentTypeSubtyping.ts(10,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+apparentTypeSubtyping.ts(14,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+apparentTypeSubtyping.ts(20,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 
 
-==== apparentTypeSubtyping.ts (1 errors) ====
+==== apparentTypeSubtyping.ts (5 errors) ====
     // subtype checks use the apparent type of the target type
     // S is a subtype of a type T, and T is a supertype of S, if one of the following is true, where S' denotes the apparent type (section 3.8.1) of S:
     
     class Base<U extends String> {
         x: U;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     // is String (S) a subtype of U extends String (T)? Would only be true if we used the apparent type of U (T)
@@ -18,14 +24,20 @@ apparentTypeSubtyping.ts(10,5): error TS2416: Property 'x' in type 'Derived<U>' 
 !!! error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'Base<string>'.
 !!! error TS2416:   Type 'String' is not assignable to type 'string'.
 !!! error TS2416:     'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Base2 {
         x: String;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         static s: String;
     }
     
     // is U extends String (S) a subtype of String (T)? Apparent type of U is String so it succeeds
     class Derived2<U extends String> extends Base2 { // error because of the prototype's not matching, not because of the instance side
         x: U;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }

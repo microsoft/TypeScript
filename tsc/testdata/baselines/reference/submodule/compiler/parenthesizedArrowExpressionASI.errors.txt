@@ -1,0 +1,11 @@
+parenthesizedArrowExpressionASI.ts(3,5): error TS2352: Conversion of type 'undefined' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== parenthesizedArrowExpressionASI.ts (1 errors) ====
+    const x = (a: any[]) => (
+        // comment
+        undefined as number
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'undefined' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    );
+    

@@ -5,5 +5,6 @@ for (foo() in b) {
 }
 
 //// [parserForStatement6.js]
+"use strict";
 for (foo() in b) {
 }

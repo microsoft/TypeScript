@@ -7,11 +7,12 @@ foobar;
 declare module 'barfoo' { export const x: number; }
 barfoo;
 
-declare module farboo { export const x: number; }
+declare namespace farboo { export const x: number; }
 faroo;
 
 
 //// [spellingSuggestionModule.js]
+"use strict";
 foobar;
 barfoo;
 faroo;

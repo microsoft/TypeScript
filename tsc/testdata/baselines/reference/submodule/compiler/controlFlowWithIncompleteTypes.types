@@ -26,9 +26,9 @@ function foo1() {
 >x = x.slice() : string
 >x : string | number | boolean
 >x.slice() : string
->x.slice : (start?: number, end?: number) => string
+>x.slice : (start?: number | undefined, end?: number | undefined) => string
 >x : string
->slice : (start?: number, end?: number) => string
+>slice : (start?: number | undefined, end?: number | undefined) => string
         }
         else {
             x = "abc";
@@ -65,9 +65,9 @@ function foo2() {
 >x = x.slice() : string
 >x : string | number | boolean
 >x.slice() : string
->x.slice : (start?: number, end?: number) => string
+>x.slice : (start?: number | undefined, end?: number | undefined) => string
 >x : string
->slice : (start?: number, end?: number) => string
+>slice : (start?: number | undefined, end?: number | undefined) => string
         }
     }
 }

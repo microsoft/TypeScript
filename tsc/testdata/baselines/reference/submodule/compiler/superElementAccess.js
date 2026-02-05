@@ -38,6 +38,7 @@ class MyDerived extends MyBase {
 }
 
 //// [superElementAccess.js]
+"use strict";
 class MyBase {
     m1(a) { return a; }
     p1() { }

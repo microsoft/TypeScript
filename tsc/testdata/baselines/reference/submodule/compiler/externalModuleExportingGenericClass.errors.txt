@@ -1,3 +1,4 @@
+externalModuleExportingGenericClass_file0.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 externalModuleExportingGenericClass_file1.ts(2,8): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 
 
@@ -9,9 +10,11 @@ externalModuleExportingGenericClass_file1.ts(2,8): error TS2314: Generic type 'C
     var v2: any = (new a()).foo;
     var v3: number = (new a<number>()).foo;
     
-==== externalModuleExportingGenericClass_file0.ts (0 errors) ====
+==== externalModuleExportingGenericClass_file0.ts (1 errors) ====
     class C<T> {
         foo: T;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     export = C;
     

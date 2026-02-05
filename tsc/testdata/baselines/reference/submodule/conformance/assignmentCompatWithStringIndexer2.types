@@ -17,10 +17,10 @@ interface A {
 >x : string
 }
 
-var a: A;
+declare var a: A;
 >a : A
 
-var b: { [x: string]: Derived; }
+declare var b: { [x: string]: Derived; };
 >b : { [x: string]: Derived; }
 >x : string
 
@@ -34,7 +34,7 @@ b = a; // error
 >b : { [x: string]: Derived; }
 >a : A
 
-var b2: { [x: string]: Derived2; }
+declare var b2: { [x: string]: Derived2; };
 >b2 : { [x: string]: Derived2; }
 >x : string
 
@@ -48,7 +48,7 @@ b2 = a; // error
 >b2 : { [x: string]: Derived2; }
 >a : A
 
-module Generics {
+namespace Generics {
 >Generics : typeof Generics
 
     interface A<T extends Base> {
@@ -61,11 +61,11 @@ module Generics {
 >x : string
     }
 
-    var b1: { [x: string]: Derived; };
+    declare var b1: { [x: string]: Derived; };
 >b1 : { [x: string]: Derived; }
 >x : string
 
-    var a1: A<Base>;
+    declare var a1: A<Base>;
 >a1 : A<Base>
 
     a1 = b1; // ok
@@ -83,7 +83,7 @@ module Generics {
 >x : string
     }
 
-    var b2: { [x: string]: Derived2; };
+    declare var b2: { [x: string]: Derived2; };
 >b2 : { [x: string]: Derived2; }
 >x : string
 
@@ -100,11 +100,11 @@ module Generics {
     function foo<T extends Base>() {
 >foo : <T extends Base>() => void
 
-        var b3: { [x: string]: Derived; };
+        var b3!: { [x: string]: Derived; };
 >b3 : { [x: string]: Derived; }
 >x : string
 
-        var a3: A<T>;
+        var a3!: A<T>;
 >a3 : A<T>
 
         a3 = b3; // error
@@ -117,7 +117,7 @@ module Generics {
 >b3 : { [x: string]: Derived; }
 >a3 : A<T>
 
-        var b4: { [x: string]: Derived2; };
+        var b4!: { [x: string]: Derived2; };
 >b4 : { [x: string]: Derived2; }
 >x : string
 

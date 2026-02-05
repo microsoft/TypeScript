@@ -4,7 +4,7 @@
 function f1<X, Y>() {
 >f1 : <X, Y>() => void
 
-    var a: X;
+    var a!: X;
 >a : X
 
     a;

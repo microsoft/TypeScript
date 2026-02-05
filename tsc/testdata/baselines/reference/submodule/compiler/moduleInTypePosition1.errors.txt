@@ -1,3 +1,4 @@
+moduleInTypePosition1_0.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 moduleInTypePosition1_1.ts(3,14): error TS2709: Cannot use namespace 'WinJS' as a type.
 
 
@@ -8,8 +9,10 @@ moduleInTypePosition1_1.ts(3,14): error TS2709: Cannot use namespace 'WinJS' as 
                  ~~~~~
 !!! error TS2709: Cannot use namespace 'WinJS' as a type.
     
-==== moduleInTypePosition1_0.ts (0 errors) ====
+==== moduleInTypePosition1_0.ts (1 errors) ====
     export class Promise {
         foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     

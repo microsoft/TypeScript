@@ -1,8 +1,8 @@
 --- old.comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.js
 +++ new.comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.js
-@@= skipped -167, +167 lines =@@
-
+@@= skipped -168, +168 lines =@@
  //// [comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.js]
+ "use strict";
  class Base {
 +    a;
  }

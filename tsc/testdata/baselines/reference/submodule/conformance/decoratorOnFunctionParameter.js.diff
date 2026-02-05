@@ -1,8 +1,8 @@
 --- old.decoratorOnFunctionParameter.js
 +++ new.decoratorOnFunctionParameter.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [decoratorOnFunctionParameter.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.n = true;

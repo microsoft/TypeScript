@@ -6,11 +6,11 @@ typeofInternalModules.ts(23,1): error TS2741: Property 'instantiated' is missing
 
 
 ==== typeofInternalModules.ts (5 errors) ====
-    module Outer {
-        export module instantiated {
+    namespace Outer {
+        export namespace instantiated {
             export class C { }
         }
-        export module uninstantiated {
+        export namespace uninstantiated {
             export interface P { }
         }
     }
@@ -40,5 +40,5 @@ typeofInternalModules.ts(23,1): error TS2741: Property 'instantiated' is missing
     x7 = importInst;
     ~~
 !!! error TS2741: Property 'instantiated' is missing in type 'typeof instantiated' but required in type 'typeof Outer'.
-!!! related TS2728 typeofInternalModules.ts:2:19: 'instantiated' is declared here.
+!!! related TS2728 typeofInternalModules.ts:2:22: 'instantiated' is declared here.
     

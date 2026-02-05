@@ -4,10 +4,10 @@
  === globalThisPropertyAssignment.js ===
  this.x = 1
  >this.x = 1 : 1
-->this.x : number
+->this.x : number | undefined
 +>this.x : any
  >this : typeof globalThis
-->x : number
+->x : number | undefined
 +>x : any
  >1 : 1
 

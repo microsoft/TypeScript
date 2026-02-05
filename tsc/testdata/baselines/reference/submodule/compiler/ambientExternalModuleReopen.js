@@ -9,3 +9,4 @@ declare module 'fs' {
 }
 
 //// [ambientExternalModuleReopen.js]
+"use strict";

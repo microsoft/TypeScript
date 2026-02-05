@@ -123,16 +123,16 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >[].forEach : (callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any) => void
 >[] : never[]
 >forEach : (callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any) => void
->(f: () => void) => f && f.apply(parent, []) : (f: () => void) => any
+>(f: () => void) => f && f.apply(parent, []) : (f: () => void) => void
 >f : () => void
->f && f.apply(parent, []) : any
+>f && f.apply(parent, []) : void
 >f : () => void
->f.apply(parent, []) : any
->f.apply : (this: Function, thisArg: any, argArray?: any) => any
+>f.apply(parent, []) : void
+>f.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >f : () => void
->apply : (this: Function, thisArg: any, argArray?: any) => any
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >parent : Window
->[] : never[]
+>[] : []
 
     // error
     required1 && required2 && required1() && console.log('foo');

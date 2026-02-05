@@ -9,4 +9,5 @@ $.foo();
 
 
 //// [consumer.js]
+"use strict";
 $.foo();

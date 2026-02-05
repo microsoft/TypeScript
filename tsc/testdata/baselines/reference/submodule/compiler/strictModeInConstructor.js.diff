@@ -1,6 +1,6 @@
 --- old.strictModeInConstructor.js
 +++ new.strictModeInConstructor.js
-@@= skipped -66, +66 lines =@@
+@@= skipped -67, +67 lines =@@
  class A {
  }
  class B extends A {

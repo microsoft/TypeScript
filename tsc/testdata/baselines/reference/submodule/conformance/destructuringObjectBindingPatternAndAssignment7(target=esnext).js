@@ -12,6 +12,7 @@ console.log(aVal, bVal);
 
 
 //// [destructuringObjectBindingPatternAndAssignment7.js]
+"use strict";
 var K;
 (function (K) {
     K["a"] = "a";

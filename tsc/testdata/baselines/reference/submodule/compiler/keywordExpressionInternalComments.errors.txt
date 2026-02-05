@@ -1,0 +1,11 @@
+keywordExpressionInternalComments.ts(4,20): error TS2790: The operand of a 'delete' operator must be optional.
+
+
+==== keywordExpressionInternalComments.ts (1 errors) ====
+    /*1*/ new /*2*/ Array /*3*/;
+    /*1*/ typeof /*2*/ Array /*3*/;
+    /*1*/ void /*2*/ Array /*3*/;
+    /*1*/ delete /*2*/ Array.toString /*3*/;
+                       ~~~~~~~~~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    

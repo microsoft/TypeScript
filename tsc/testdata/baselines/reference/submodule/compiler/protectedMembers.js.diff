@@ -1,7 +1,7 @@
 --- old.protectedMembers.js
 +++ new.protectedMembers.js
-@@= skipped -119, +119 lines =@@
- //// [protectedMembers.js]
+@@= skipped -120, +120 lines =@@
+ "use strict";
  // Class with protected members
  class C1 {
 +    x;
@@ -18,7 +18,7 @@
      f() {
          return super.f();
      }
-@@= skipped -26, +28 lines =@@
+@@= skipped -23, +25 lines =@@
  C3.sx;
  C3.sf();
  class A {
@@ -48,8 +48,6 @@
  class B1 {
 +    x;
  }
- var a1;
- var b1;
  a1 = b1; // Error, B1 doesn't derive from A1
  b1 = a1; // Error, x is protected in A1 but public in B1
  class A2 {

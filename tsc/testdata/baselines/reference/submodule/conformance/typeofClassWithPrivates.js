@@ -13,6 +13,7 @@ var r: typeof C;
 var r2: typeof c;
 
 //// [typeofClassWithPrivates.js]
+"use strict";
 class C {
     a;
     static b;

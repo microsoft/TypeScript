@@ -1,7 +1,7 @@
 --- old.instantiateGenericClassWithZeroTypeArguments.js
 +++ new.instantiateGenericClassWithZeroTypeArguments.js
-@@= skipped -19, +19 lines =@@
- //// [instantiateGenericClassWithZeroTypeArguments.js]
+@@= skipped -20, +20 lines =@@
+ "use strict";
  // no errors expected when instantiating a generic type with no type arguments provided
  class C {
 +    x;

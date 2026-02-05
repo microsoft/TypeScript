@@ -1,8 +1,8 @@
 --- old.duplicateClassElements.js
 +++ new.duplicateClassElements.js
-@@= skipped -47, +47 lines =@@
-
+@@= skipped -48, +48 lines =@@
  //// [duplicateClassElements.js]
+ "use strict";
  class a {
 -    b() {
 -    }

@@ -1,0 +1,41 @@
+--- old.newWithSpreadES5(target=es2015).types
++++ new.newWithSpreadES5(target=es2015).types
+@@= skipped -446, +446 lines =@@
+
+ // Element access expression with a number
+ new i["a-b"][1](1, 2, "string");
+->new i["a-b"][1](1, 2, "string") : error
+->i["a-b"][1] : error
+->i["a-b"] : error
++>new i["a-b"][1](1, 2, "string") : any
++>i["a-b"][1] : any
++>i["a-b"] : any
+ >i : C[][]
+ >"a-b" : "a-b"
+ >1 : 1
+@@= skipped -11, +11 lines =@@
+ >"string" : "string"
+
+ new i["a-b"][1](1, 2, ...a);
+->new i["a-b"][1](1, 2, ...a) : error
+->i["a-b"][1] : error
+->i["a-b"] : error
++>new i["a-b"][1](1, 2, ...a) : any
++>i["a-b"][1] : any
++>i["a-b"] : any
+ >i : C[][]
+ >"a-b" : "a-b"
+ >1 : 1
+@@= skipped -12, +12 lines =@@
+ >a : string[]
+
+ new i["a-b"][1](1, 2, ...a, "string");
+->new i["a-b"][1](1, 2, ...a, "string") : error
+->i["a-b"][1] : error
+->i["a-b"] : error
++>new i["a-b"][1](1, 2, ...a, "string") : any
++>i["a-b"][1] : any
++>i["a-b"] : any
+ >i : C[][]
+ >"a-b" : "a-b"
+ >1 : 1

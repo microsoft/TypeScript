@@ -6,6 +6,7 @@ function f() {
 }
 
 //// [anonymousClassExpression1.js]
+"use strict";
 function f() {
     return typeof class {
     } === "function";

@@ -19,3 +19,4 @@ type AliasedRest = AliasRest extends [unknown] ? true : false; // Expect `Aliase
 type NormalRest = [...number[]] extends [unknown] ? true : false; // Expect `NormalRest` to be `false`
 
 //// [singletonLabeledTuple.js]
+"use strict";

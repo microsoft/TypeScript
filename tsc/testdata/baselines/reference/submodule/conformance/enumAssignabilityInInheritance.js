@@ -84,7 +84,7 @@ declare function foo13(x: E): E;
 var r4 = foo13(E.A);
 
 function f() { }
-module f {
+namespace f {
     export var bar = 1;
 }
 declare function foo14(x: typeof f): typeof f;
@@ -93,7 +93,7 @@ declare function foo14(x: E): E;
 var r4 = foo14(E.A);
 
 class CC { baz: string }
-module CC {
+namespace CC {
     export var bar = 1;
 }
 declare function foo15(x: CC): CC;
@@ -112,6 +112,7 @@ declare function foo17(x: E): E;
 var r4 = foo16(E.A);
 
 //// [enumAssignabilityInInheritance.js]
+"use strict";
 // enum is only a subtype of number, no types are subtypes of enum, all of these except the first are errors
 var E;
 (function (E) {

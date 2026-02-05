@@ -74,6 +74,7 @@ for(let f in (Foo.forIn = []) ){
 }
 
 //// [expandoFunctionNestedAssigmentsDeclared.js]
+"use strict";
 function Foo() {
 }
 (Foo.bla = { foo: 1 }).foo = (Foo.baz = 1) + (Foo.bar = 0);

@@ -29,10 +29,10 @@ class Property {
 >parent : Class | Module
 }
 
-var c: Class;
+declare var c: Class;
 >c : Class
 
-var p: Property;
+declare var p: Property;
 >p : Property
 
 c = p;

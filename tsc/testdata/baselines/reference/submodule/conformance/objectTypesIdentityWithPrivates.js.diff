@@ -1,7 +1,7 @@
 --- old.objectTypesIdentityWithPrivates.js
 +++ new.objectTypesIdentityWithPrivates.js
-@@= skipped -124, +124 lines =@@
- //// [objectTypesIdentityWithPrivates.js]
+@@= skipped -125, +125 lines =@@
+ "use strict";
  // object types are identical structurally
  class A {
 +    foo;

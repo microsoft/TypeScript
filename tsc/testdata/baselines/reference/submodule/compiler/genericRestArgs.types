@@ -35,21 +35,21 @@ var a1Gd = makeArrayG<number>(1, ""); // error
 >"" : ""
 
 function makeArrayGOpt<T>(item1?: T, item2?: T, item3?: T) {
->makeArrayGOpt : <T>(item1?: T, item2?: T, item3?: T) => T[]
->item1 : T
->item2 : T
->item3 : T
+>makeArrayGOpt : <T>(item1?: T | undefined, item2?: T | undefined, item3?: T | undefined) => (T | undefined)[]
+>item1 : T | undefined
+>item2 : T | undefined
+>item3 : T | undefined
 
     return [item1, item2, item3];
->[item1, item2, item3] : T[]
->item1 : T
->item2 : T
->item3 : T
+>[item1, item2, item3] : (T | undefined)[]
+>item1 : T | undefined
+>item2 : T | undefined
+>item3 : T | undefined
 }
 var a2Ga = makeArrayGOpt(1, ""); 
->a2Ga : number[]
->makeArrayGOpt(1, "") : number[]
->makeArrayGOpt : <T>(item1?: T, item2?: T, item3?: T) => T[]
+>a2Ga : (number | undefined)[]
+>makeArrayGOpt(1, "") : (number | undefined)[]
+>makeArrayGOpt : <T>(item1?: T | undefined, item2?: T | undefined, item3?: T | undefined) => (T | undefined)[]
 >1 : 1
 >"" : ""
 

@@ -1,0 +1,10 @@
+numberAssignableToEnumInsideUnion.ts(3,22): error TS2454: Variable 'n' is used before being assigned.
+
+
+==== numberAssignableToEnumInsideUnion.ts (1 errors) ====
+    enum E { A, B }
+    let n: number;
+    let z: E | boolean = n;
+                         ~
+!!! error TS2454: Variable 'n' is used before being assigned.
+    

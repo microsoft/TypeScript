@@ -1,8 +1,8 @@
 --- old.illegalSuperCallsInConstructor.js
 +++ new.illegalSuperCallsInConstructor.js
-@@= skipped -23, +23 lines =@@
-
+@@= skipped -24, +24 lines =@@
  //// [illegalSuperCallsInConstructor.js]
+ "use strict";
  class Base {
 +    x;
  }

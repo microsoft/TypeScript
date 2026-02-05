@@ -1,0 +1,12 @@
+--- old.sourceMapValidationLabeled.errors.txt
++++ new.sourceMapValidationLabeled.errors.txt
+@@= skipped -0, +0 lines =@@
+-sourceMapValidationLabeled.ts(1,1): error TS1344: 'A label is not allowed here.
+-
+-
+-==== sourceMapValidationLabeled.ts (1 errors) ====
+-    x:
+-    ~
+-!!! error TS1344: 'A label is not allowed here.
+-    var b = 10;
++<no content>

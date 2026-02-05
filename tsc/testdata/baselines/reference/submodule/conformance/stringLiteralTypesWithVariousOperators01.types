@@ -1,25 +1,17 @@
 //// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators01.ts] ////
 
 === stringLiteralTypesWithVariousOperators01.ts ===
-let abc: "ABC" = "ABC";
+declare let abc: "ABC";
 >abc : "ABC"
->"ABC" : "ABC"
 
-let xyz: "XYZ" = "XYZ";
+declare let xyz: "XYZ";
 >xyz : "XYZ"
->"XYZ" : "XYZ"
 
-let abcOrXyz: "ABC" | "XYZ" = abc || xyz;
+declare let abcOrXyz: "ABC" | "XYZ";
 >abcOrXyz : "ABC" | "XYZ"
->abc || xyz : "ABC" | "XYZ"
->abc : "ABC"
->xyz : "XYZ"
 
-let abcOrXyzOrNumber: "ABC" | "XYZ" | number = abcOrXyz || 100;
+declare let abcOrXyzOrNumber: "ABC" | "XYZ" | number;
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
->abcOrXyz || 100 : "ABC" | "XYZ" | 100
->abcOrXyz : "ABC" | "XYZ"
->100 : 100
 
 let a = "" + abc;
 >a : string

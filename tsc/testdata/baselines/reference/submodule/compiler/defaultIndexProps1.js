@@ -15,6 +15,7 @@ var q2 = o["v"];
 
 
 //// [defaultIndexProps1.js]
+"use strict";
 class Foo {
     v = "Yo";
 }

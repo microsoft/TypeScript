@@ -1,0 +1,21 @@
+interMixingModulesInterfaces5.ts(10,13): error TS2322: Type 'null' is not assignable to type 'number'.
+
+
+==== interMixingModulesInterfaces5.ts (1 errors) ====
+    namespace A {
+    
+        interface B {
+            name: string;
+            value: number;
+        }
+    
+        export namespace B {
+            export function createB(): number {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'number'.
+            }
+        }
+    }
+    
+    var x: number = A.B.createB();

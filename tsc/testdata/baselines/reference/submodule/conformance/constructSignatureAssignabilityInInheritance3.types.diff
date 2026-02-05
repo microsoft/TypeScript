@@ -9,7 +9,30 @@
  >x : Base[]
  >y : Derived2[]
 
-@@= skipped -94, +94 lines =@@
+@@= skipped -21, +21 lines =@@
+ >b : number
+
+             a16: {
+->a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
++>a16 : { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }
+
+                 // type of parameter is overload set which means we can't do inference based on this type
+                 new (x: {
+->x : { new (a: number): number; new (a?: number): number; }
++>x : { new (a: number): number; new (a?: number | undefined): number; }
+
+                     new (a: number): number;
+ >a : number
+@@= skipped -14, +14 lines =@@
+
+                 }): number[];
+                 new (x: {
+->x : { new (a: boolean): boolean; new (a?: boolean): boolean; }
++>x : { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }
+
+                     new (a: boolean): boolean;
+ >a : boolean
+@@= skipped -59, +59 lines =@@
 
          interface I4E extends A {
              a12: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; // valid, no inferences for T, defaults to Array<Derived2>

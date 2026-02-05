@@ -11,6 +11,7 @@ var x: any;
 for (var v of new MyStringIterator) { }
 
 //// [for-of25.js]
+"use strict";
 class MyStringIterator {
     [Symbol.iterator]() {
         return x;

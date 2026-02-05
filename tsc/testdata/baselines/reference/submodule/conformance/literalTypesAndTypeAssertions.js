@@ -17,6 +17,7 @@ let { d = "foo" as "foo" } = { d: "bar" as "bar" };
 
 
 //// [literalTypesAndTypeAssertions.js]
+"use strict";
 const obj = {
     a: "foo",
     b: "foo",

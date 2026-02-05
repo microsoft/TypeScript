@@ -6,5 +6,6 @@ var a: [any];
 var b = a = [undefined, null];
 
 //// [wideningTuples3.js]
+"use strict";
 var a;
 var b = a = [undefined, null];

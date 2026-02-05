@@ -18,6 +18,7 @@ class Derived2 extends Base<{ bar: string; }> {
 }
 
 //// [classIsSubtypeOfBaseType.js]
+"use strict";
 class Base {
     foo;
 }

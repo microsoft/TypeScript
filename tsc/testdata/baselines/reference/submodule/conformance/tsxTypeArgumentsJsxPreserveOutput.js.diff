@@ -1,6 +1,6 @@
 --- old.tsxTypeArgumentsJsxPreserveOutput.js
 +++ new.tsxTypeArgumentsJsxPreserveOutput.js
-@@= skipped -44, +44 lines =@@
+@@= skipped -47, +47 lines =@@
      return null;
  }
  <>

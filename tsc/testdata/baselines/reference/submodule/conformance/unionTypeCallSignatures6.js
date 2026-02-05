@@ -59,6 +59,7 @@ f4(); // error
 
 
 //// [unionTypeCallSignatures6.js]
+"use strict";
 f1(); // error
 f2(); // error
 x1.f0();

@@ -35,7 +35,7 @@ duplicateLocalVariable1.ts(184,37): error TS2356: An arithmetic operand must be 
                 try {
                     testResult = testcase.test();
                 }
-                catch (e) {
+                catch (e: any) {
                     exception = true;
                     testResult = false;
                     if (typeof testcase.errorMessageRegEx === "string") {

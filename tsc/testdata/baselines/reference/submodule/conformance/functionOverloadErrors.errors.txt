@@ -91,7 +91,7 @@ functionOverloadErrors.ts(116,19): error TS2371: A parameter initializer is only
     }
     
     //Function overloads with differing export
-    module M {
+    namespace M {
         export function fn1();
                         ~~~
 !!! error TS2383: Overload signatures must all be exported or non-exported.

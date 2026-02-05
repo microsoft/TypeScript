@@ -1,0 +1,35 @@
+/foo/bar/a.ts(1,19): error TS2307: Cannot find module 'xyz' or its corresponding type declarations.
+/foo/bar/a.ts(2,19): error TS2307: Cannot find module 'pdq' or its corresponding type declarations.
+/foo/bar/a.ts(3,19): error TS2307: Cannot find module 'abc' or its corresponding type declarations.
+
+
+==== /foo/bar/tsconfig.json (0 errors) ====
+    {}
+    
+==== /foo/bar/a.ts (3 errors) ====
+    import { x } from "xyz";
+                      ~~~~~
+!!! error TS2307: Cannot find module 'xyz' or its corresponding type declarations.
+    import { y } from "pdq";
+                      ~~~~~
+!!! error TS2307: Cannot find module 'pdq' or its corresponding type declarations.
+    import { z } from "abc";
+                      ~~~~~
+!!! error TS2307: Cannot find module 'abc' or its corresponding type declarations.
+    x + y + z;
+    
+==== /node_modules/@types/dopey/index.d.ts (0 errors) ====
+    declare module "xyz" {
+        export const x: number;
+    }
+    
+==== /foo/node_modules/@types/grumpy/index.d.ts (0 errors) ====
+    declare module "pdq" {
+        export const y: number; 
+    }
+    
+==== /foo/node_modules/@types/sneezy/index.d.ts (0 errors) ====
+    declare module "abc" {
+        export const z: number;
+    }
+    

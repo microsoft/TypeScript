@@ -10,6 +10,7 @@ console.log(C.s);
 
 
 //// [privateNameMethodInStaticFieldInit.js]
+"use strict";
 class C {
     static s = new C().#method();
     #method() { return 42; }

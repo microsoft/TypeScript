@@ -5,11 +5,8 @@ export declare function evaluateKeyboardEvent(): void;
 //// [/out/input/keyboard.d.ts.map] *new* 
 {"version":3,"file":"keyboard.d.ts","sourceRoot":"","sources":["../../src/common/input/keyboard.ts"],"names":[],"mappings":"AACA,wBAAgB,qBAAqB,SAAM"}
 //// [/out/input/keyboard.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.evaluateKeyboardEvent = evaluateKeyboardEvent;
 function bar() { return "just a random function so .d.ts location doesnt match"; }
-function evaluateKeyboardEvent() { }
+export function evaluateKeyboardEvent() { }
 
 //// [/out/input/keyboard.test.d.ts] *new* 
 export {};
@@ -17,15 +14,13 @@ export {};
 //// [/out/input/keyboard.test.d.ts.map] *new* 
 {"version":3,"file":"keyboard.test.d.ts","sourceRoot":"","sources":["../../src/common/input/keyboard.test.ts"],"names":[],"mappings":""}
 //// [/out/input/keyboard.test.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const keyboard_1 = require("common/input/keyboard");
+import { evaluateKeyboardEvent } from 'common/input/keyboard';
 function testEvaluateKeyboardEvent() {
-    return (0, keyboard_1.evaluateKeyboardEvent)();
+    return evaluateKeyboardEvent();
 }
 
 //// [/out/src.tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.d.ts","./input/keyboard.d.ts","../src/terminal.ts","./input/keyboard.test.d.ts","../src/common/input/keyboard.ts","../src/common/input/keyboard.test.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"362bf1943c7d2a927f25978d1f24d61f-export declare function evaluateKeyboardEvent(): void;\n//# sourceMappingURL=keyboard.d.ts.map",{"version":"ff8262b3768be0c0049523b4b8a7b4f7-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n\treturn evaluateKeyboardEvent();\n}","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},"aaff3960e003a07ef50db935cb91a696-export {};\n//# sourceMappingURL=keyboard.test.d.ts.map"],"fileIdsList":[[2]],"options":{"composite":true,"declarationMap":true,"outDir":"./","tsBuildInfoFile":"./src.tsconfig.tsbuildinfo"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./terminal.d.ts","resolvedRoot":[[2,5],[4,6]]}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2024.full.d.ts","./input/keyboard.d.ts","../src/terminal.ts","./input/keyboard.test.d.ts","../src/common/input/keyboard.ts","../src/common/input/keyboard.test.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"362bf1943c7d2a927f25978d1f24d61f-export declare function evaluateKeyboardEvent(): void;\n//# sourceMappingURL=keyboard.d.ts.map",{"version":"ff8262b3768be0c0049523b4b8a7b4f7-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n\treturn evaluateKeyboardEvent();\n}","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},"aaff3960e003a07ef50db935cb91a696-export {};\n//# sourceMappingURL=keyboard.test.d.ts.map"],"fileIdsList":[[2]],"options":{"composite":true,"declarationMap":true,"outDir":"./","tsBuildInfoFile":"./src.tsconfig.tsbuildinfo"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./terminal.d.ts","resolvedRoot":[[2,5],[4,6]]}
 //// [/out/src.tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -43,7 +38,7 @@ function testEvaluateKeyboardEvent() {
     }
   ],
   "fileNames": [
-    "lib.d.ts",
+    "lib.es2024.full.d.ts",
     "./input/keyboard.d.ts",
     "../src/terminal.ts",
     "./input/keyboard.test.d.ts",
@@ -52,7 +47,7 @@ function testEvaluateKeyboardEvent() {
   ],
   "fileInfos": [
     {
-      "fileName": "lib.d.ts",
+      "fileName": "lib.es2024.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -114,7 +109,7 @@ function testEvaluateKeyboardEvent() {
       "../src/common/input/keyboard.test.ts"
     ]
   ],
-  "size": 1693
+  "size": 1705
 }
 //// [/out/terminal.d.ts] *new* 
 export {};
@@ -122,15 +117,13 @@ export {};
 //// [/out/terminal.d.ts.map] *new* 
 {"version":3,"file":"terminal.d.ts","sourceRoot":"","sources":["../src/terminal.ts"],"names":[],"mappings":""}
 //// [/out/terminal.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const keyboard_1 = require("common/input/keyboard");
+import { evaluateKeyboardEvent } from 'common/input/keyboard';
 function foo() {
-    return (0, keyboard_1.evaluateKeyboardEvent)();
+    return evaluateKeyboardEvent();
 }
 
 //// [/out/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.d.ts","../src/common/input/keyboard.ts","../src/common/input/keyboard.test.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"6e37abb18685aa8e2642ab0218eef699-function bar() { return \"just a random function so .d.ts location doesnt match\"; }\nexport function evaluateKeyboardEvent() { }","signature":"569df1f274cf52f322c6e7a2f4e891fe-export declare function evaluateKeyboardEvent(): void;\n","impliedNodeFormat":1},{"version":"e844013c2f8764710bfebda24351c0d3-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n\treturn evaluateKeyboardEvent();\n}","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"declarationMap":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./input/keyboard.test.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2024.full.d.ts","../src/common/input/keyboard.ts","../src/common/input/keyboard.test.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"6e37abb18685aa8e2642ab0218eef699-function bar() { return \"just a random function so .d.ts location doesnt match\"; }\nexport function evaluateKeyboardEvent() { }","signature":"569df1f274cf52f322c6e7a2f4e891fe-export declare function evaluateKeyboardEvent(): void;\n","impliedNodeFormat":1},{"version":"e844013c2f8764710bfebda24351c0d3-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n\treturn evaluateKeyboardEvent();\n}","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"declarationMap":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./input/keyboard.test.d.ts"}
 //// [/out/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -147,13 +140,13 @@ function foo() {
     }
   ],
   "fileNames": [
-    "lib.d.ts",
+    "lib.es2024.full.d.ts",
     "../src/common/input/keyboard.ts",
     "../src/common/input/keyboard.test.ts"
   ],
   "fileInfos": [
     {
-      "fileName": "lib.d.ts",
+      "fileName": "lib.es2024.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -203,7 +196,7 @@ function foo() {
     ]
   },
   "latestChangedDtsFile": "./input/keyboard.test.d.ts",
-  "size": 1658
+  "size": 1670
 }
 //// [/src/common/input/keyboard.test.ts] *new* 
 import { evaluateKeyboardEvent } from 'common/input/keyboard';

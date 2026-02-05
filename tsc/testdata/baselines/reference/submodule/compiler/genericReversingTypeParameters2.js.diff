@@ -1,8 +1,8 @@
 --- old.genericReversingTypeParameters2.js
 +++ new.genericReversingTypeParameters2.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [genericReversingTypeParameters2.js]
+ "use strict";
  class BiMap {
 +    inverseBiMap;
      get(key) { return null; }

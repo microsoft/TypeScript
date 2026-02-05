@@ -4,4 +4,5 @@
 var x = x => `abc${ x }def`;
 
 //// [templateStringInArrowFunction.js]
+"use strict";
 var x = x => `abc${x}def`;

@@ -5,10 +5,10 @@ declare namespace JSX {
     interface Element { }
     interface IntrinsicElements {
         div: {
->div : { static?: boolean; }
+>div : { static?: boolean | undefined; }
 
             static?: boolean;
->static : boolean
+>static : boolean | undefined
 
         };
     }

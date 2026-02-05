@@ -1,7 +1,7 @@
 --- old.asyncArrowFunctionCapturesThis_es6.js
 +++ new.asyncArrowFunctionCapturesThis_es6.js
-@@= skipped -10, +10 lines =@@
- //// [asyncArrowFunctionCapturesThis_es6.js]
+@@= skipped -11, +11 lines =@@
+ "use strict";
  class C {
      method() {
 -        var fn = () => __awaiter(this, void 0, void 0, function* () { return yield this; });

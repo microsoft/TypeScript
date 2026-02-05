@@ -1,0 +1,18 @@
+--- old.arrayIterationLibES5TargetDifferent(nolib=true,target=es2015).types
++++ new.arrayIterationLibES5TargetDifferent(nolib=true,target=es2015).types
+@@= skipped -21, +21 lines =@@
+ >aString : string
+
+ for (const x of aString) {
+->x : string
++>x : any
+ >aString : string
+
+     log(x);
+ >log(x) : void
+ >log : (message?: any) => void
+->x : string
++>x : any
+ }
+
+ declare const aNumber: number;

@@ -47,6 +47,7 @@ var messenger = {
 
 
 //// [fatarrowfunctions.js]
+"use strict";
 function foo(x) {
     return x();
 }

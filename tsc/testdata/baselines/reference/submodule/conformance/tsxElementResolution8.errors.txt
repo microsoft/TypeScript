@@ -3,7 +3,7 @@ file.tsx(34,2): error TS2604: JSX element type 'Obj3' does not have any construc
 
 
 ==== file.tsx (2 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements { }
     }
@@ -26,18 +26,18 @@ file.tsx(34,2): error TS2604: JSX element type 'Obj3' does not have any construc
     	new(): {};
     	(): number;
     }
-    var Obj1: Obj1;
+    declare var Obj1: Obj1;
     <Obj1 />; // OK, prefer construct signatures
     
     interface Obj2 {
     	(): number;
     }
-    var Obj2: Obj2;
+    declare var Obj2: Obj2;
     <Obj2 />; // Error
     
     interface Obj3 {
     }
-    var Obj3: Obj3;
+    declare var Obj3: Obj3;
     <Obj3 />; // Error
      ~~~~
 !!! error TS2604: JSX element type 'Obj3' does not have any construct or call signatures.

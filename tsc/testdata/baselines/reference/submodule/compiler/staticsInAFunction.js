@@ -9,6 +9,7 @@ function boo{
 
 
 //// [staticsInAFunction.js]
+"use strict";
 function boo() {
     test();
     test(name, string);

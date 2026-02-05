@@ -1,8 +1,8 @@
 --- old.returnTypeTypeArguments.js
 +++ new.returnTypeTypeArguments.js
-@@= skipped -79, +79 lines =@@
-
+@@= skipped -80, +80 lines =@@
  //// [returnTypeTypeArguments.js]
+ "use strict";
  class One {
 +    value;
  }

@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/checkJsxChildrenProperty9.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 // OK
@@ -10,6 +12,7 @@ let k3 = <div> {1} {"That is a number"} </div>;
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 // OK

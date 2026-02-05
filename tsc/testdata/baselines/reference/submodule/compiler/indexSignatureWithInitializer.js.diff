@@ -1,8 +1,8 @@
 --- old.indexSignatureWithInitializer.js
 +++ new.indexSignatureWithInitializer.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [indexSignatureWithInitializer.js]
+ "use strict";
  class C {
 +    [x = 0];
  }

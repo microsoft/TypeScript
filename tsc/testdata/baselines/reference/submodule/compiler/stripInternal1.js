@@ -8,6 +8,7 @@ class C {
 }
 
 //// [stripInternal1.js]
+"use strict";
 class C {
     foo() { }
     // @internal

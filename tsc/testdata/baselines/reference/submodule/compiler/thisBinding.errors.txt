@@ -2,7 +2,7 @@ thisBinding.ts(9,8): error TS2339: Property 'e' does not exist on type 'I'.
 
 
 ==== thisBinding.ts (1 errors) ====
-    module M {
+    namespace M {
         export interface I {
     	z;
         }

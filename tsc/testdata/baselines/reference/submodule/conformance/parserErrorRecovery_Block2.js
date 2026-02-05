@@ -7,6 +7,7 @@ function f() {
 }
 
 //// [parserErrorRecovery_Block2.js]
+"use strict";
 function f() {
     return;
 }

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/externalModules/importNonExternalModule.ts] ////
 
 //// [foo_0.ts]
-module foo {
+namespace foo {
 	export var answer = 42;
 }
 
@@ -14,6 +14,7 @@ if(foo.answer === 42){
 
 
 //// [foo_0.js]
+"use strict";
 var foo;
 (function (foo) {
     foo.answer = 42;

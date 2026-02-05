@@ -5,7 +5,7 @@
  /** @type {ValueGetter_2} */
  var ooscope2 = s => s.length > 0
 ->ooscope2 : (name: string) => boolean | number | string | undefined
-->s => s.length > 0 : (s: string) => string | number | boolean
+->s => s.length > 0 : (s: string) => string | number | boolean | undefined
 +>ooscope2 : ValueGetter_2
 +>s => s.length > 0 : (s: string) => boolean
  >s : string

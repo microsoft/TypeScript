@@ -121,7 +121,7 @@ function f(n: () => void) { }
 >f : (n: () => void) => void
 >n : () => void
 
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 
     export function foo(n: () => void ) {

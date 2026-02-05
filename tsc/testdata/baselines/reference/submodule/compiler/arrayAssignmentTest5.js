@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/arrayAssignmentTest5.ts] ////
 
 //// [arrayAssignmentTest5.ts]
-module Test {
+namespace Test {
     interface IState {
     }
     interface IToken {
@@ -36,6 +36,7 @@ module Test {
 
 
 //// [arrayAssignmentTest5.js]
+"use strict";
 var Test;
 (function (Test) {
     class Bug {

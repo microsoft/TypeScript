@@ -1,8 +1,8 @@
 --- old.implicitAnyGenerics.js
 +++ new.implicitAnyGenerics.js
-@@= skipped -28, +28 lines =@@
-
+@@= skipped -29, +29 lines =@@
  //// [implicitAnyGenerics.js]
+ "use strict";
  class C {
 +    x;
  }

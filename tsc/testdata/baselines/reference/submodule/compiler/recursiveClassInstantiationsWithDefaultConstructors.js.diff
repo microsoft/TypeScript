@@ -1,6 +1,6 @@
 --- old.recursiveClassInstantiationsWithDefaultConstructors.js
 +++ new.recursiveClassInstantiationsWithDefaultConstructors.js
-@@= skipped -14, +14 lines =@@
+@@= skipped -15, +15 lines =@@
  var TypeScript2;
  (function (TypeScript2) {
      class MemberName {

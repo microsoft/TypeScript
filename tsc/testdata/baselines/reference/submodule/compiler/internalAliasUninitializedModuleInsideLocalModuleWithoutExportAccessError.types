@@ -1,16 +1,8 @@
 //// [tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts] ////
 
 === internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts ===
-<<<<<<< HEAD
-export module a {
-    export module b {
-||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
 export namespace a {
     export namespace b {
-=======
-export namespace a {
-    export namespace b {
->>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
         export interface I {
             foo();
 >foo : () => any
@@ -18,7 +10,7 @@ export namespace a {
     }
 }
 
-export module c {
+export namespace c {
 >c : typeof c
 
     import b = a.b;
@@ -26,7 +18,7 @@ export module c {
 >a : any
 >b : any
 
-    export var x: b.I;
+    export declare var x: b.I;
 >x : b.I
 >b : any
 

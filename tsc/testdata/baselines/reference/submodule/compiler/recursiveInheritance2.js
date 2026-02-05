@@ -17,6 +17,7 @@ x = y;
 
 
 //// [recursiveInheritance2.js]
+"use strict";
 ;
 var x = a();
 ;

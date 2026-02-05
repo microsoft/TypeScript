@@ -16,5 +16,6 @@ cafoo = cfoo;
 
 
 //// [nongenericPartialInstantiationsRelatedInBothDirections.js]
+"use strict";
 cfoo = cafoo;
 cafoo = cfoo;

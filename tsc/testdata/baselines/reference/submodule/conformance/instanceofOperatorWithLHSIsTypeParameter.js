@@ -7,6 +7,7 @@ function foo<T>(t: T) {
 }
 
 //// [instanceofOperatorWithLHSIsTypeParameter.js]
+"use strict";
 function foo(t) {
     var x;
     var r = t instanceof x;

@@ -1,6 +1,6 @@
 --- old.parserErrorRecovery_IncompleteMemberVariable1.js
 +++ new.parserErrorRecovery_IncompleteMemberVariable1.js
-@@= skipped -35, +35 lines =@@
+@@= skipped -36, +36 lines =@@
  (function (Shapes) {
      // Class
      class Point {

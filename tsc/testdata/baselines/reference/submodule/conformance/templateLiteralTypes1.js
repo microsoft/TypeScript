@@ -258,9 +258,7 @@ const test1: SpacingShorthand = "0 0 0";
 
 
 //// [templateLiteralTypes1.js]
-"use strict";
 // Template types example from #12754
-Object.defineProperty(exports, "__esModule", { value: true });
 const createScopedActionType = (scope) => (type) => `${scope}/${type}`;
 const createActionInMyScope = createScopedActionType("MyScope"); // <T extends string>(type: T) => `MyScope/${T}`
 const MY_ACTION = createActionInMyScope("MY_ACTION"); // 'MyScope/MY_ACTION'
@@ -297,6 +295,7 @@ const obj2 = {
 let make = getProp2(obj2, 'cars.1.make'); // 'Trabant'
 const spacing = "s12";
 const test1 = "0 0 0";
+export {};
 
 
 //// [templateLiteralTypes1.d.ts]

@@ -1,7 +1,7 @@
 --- old.classWithDuplicateIdentifier.js
 +++ new.classWithDuplicateIdentifier.js
-@@= skipped -17, +17 lines =@@
- //// [classWithDuplicateIdentifier.js]
+@@= skipped -18, +18 lines =@@
+ "use strict";
  class C {
      a() { return 0; } // error: duplicate identifier
 +    a;

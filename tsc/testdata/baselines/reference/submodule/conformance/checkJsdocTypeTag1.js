@@ -44,6 +44,7 @@ var props = {};
 
 
 //// [0.js]
+"use strict";
 // @ts-check
 /** @type {String} */
 var S = "hello world";

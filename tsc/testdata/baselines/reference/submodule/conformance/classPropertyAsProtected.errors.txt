@@ -21,7 +21,7 @@ classPropertyAsProtected.ts(23,3): error TS2445: Property 'foo' is protected and
         protected static foo() { }
     }
     
-    var c: C;
+    declare var c: C;
     // all errors
     c.x;
       ~

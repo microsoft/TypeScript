@@ -1,6 +1,6 @@
 --- old.functionCall7.js
 +++ new.functionCall7.js
-@@= skipped -13, +13 lines =@@
+@@= skipped -14, +14 lines =@@
  var m1;
  (function (m1) {
      class c1 {

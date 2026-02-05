@@ -7,6 +7,7 @@ class foo<T> {
 } 
 
 //// [typeParametersInStaticMethods.js]
+"use strict";
 class foo {
     static M(x) {
     }

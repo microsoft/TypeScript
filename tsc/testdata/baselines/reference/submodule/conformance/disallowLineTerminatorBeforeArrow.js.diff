@@ -1,6 +1,6 @@
 --- old.disallowLineTerminatorBeforeArrow.js
 +++ new.disallowLineTerminatorBeforeArrow.js
-@@= skipped -107, +107 lines =@@
+@@= skipped -108, +108 lines =@@
  (function (m) {
      class City {
          constructor(x, thing = () => 100) {

@@ -6,6 +6,7 @@ for (;;) {
 }
 
 //// [continueInIterationStatement3.js]
+"use strict";
 for (;;) {
     continue;
 }

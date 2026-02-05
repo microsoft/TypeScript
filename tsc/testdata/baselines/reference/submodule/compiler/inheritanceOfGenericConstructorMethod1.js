@@ -10,6 +10,7 @@ var b3 = new B<Date>(); // error, could not select overload for 'new' expression
 
 
 //// [inheritanceOfGenericConstructorMethod1.js]
+"use strict";
 class A {
 }
 class B extends A {

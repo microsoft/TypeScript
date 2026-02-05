@@ -1,6 +1,6 @@
 --- old.typeAliases.js
 +++ new.typeAliases.js
-@@= skipped -96, +96 lines =@@
+@@= skipped -97, +97 lines =@@
  var x6;
  var x6;
  class C7 {

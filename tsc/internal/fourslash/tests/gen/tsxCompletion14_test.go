@@ -14,7 +14,7 @@ func TestTsxCompletion14(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `//@module: commonjs
 //@jsx: preserve
-declare module JSX {
+declare namespace JSX {
     interface Element { }
     interface IntrinsicElements {
     }
@@ -22,7 +22,7 @@ declare module JSX {
 }
 //@Filename: exporter.tsx
 export class Thing { props: { ONE: string; TWO: number } }
-export module M {
+export namespace M {
    export declare function SFCComp(props: { Three: number; Four: string }): JSX.Element;
 }
 //@Filename: file.tsx

@@ -1,6 +1,6 @@
 --- old.superCallsInConstructor.js
 +++ new.superCallsInConstructor.js
-@@= skipped -27, +27 lines =@@
+@@= skipped -28, +28 lines =@@
      bar() { }
  }
  class Base {

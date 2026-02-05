@@ -7,20 +7,20 @@ declare function exports(): number;
 declare function require(): string;
 >require : Symbol(require, Decl(collisionExportsRequireAndAmbientFunctionInGlobalFile.ts, 0, 35))
 
-declare module m3 {
+declare namespace m3 {
 >m3 : Symbol(m3, Decl(collisionExportsRequireAndAmbientFunctionInGlobalFile.ts, 1, 35))
 
     function exports(): string[];
->exports : Symbol(exports, Decl(collisionExportsRequireAndAmbientFunctionInGlobalFile.ts, 2, 19))
+>exports : Symbol(exports, Decl(collisionExportsRequireAndAmbientFunctionInGlobalFile.ts, 2, 22))
 
     function require(): number[];
 >require : Symbol(require, Decl(collisionExportsRequireAndAmbientFunctionInGlobalFile.ts, 3, 33))
 }
-module m4 {
+namespace m4 {
 >m4 : Symbol(m4, Decl(collisionExportsRequireAndAmbientFunctionInGlobalFile.ts, 5, 1))
 
     export declare function exports(): string;
->exports : Symbol(exports, Decl(collisionExportsRequireAndAmbientFunctionInGlobalFile.ts, 6, 11))
+>exports : Symbol(exports, Decl(collisionExportsRequireAndAmbientFunctionInGlobalFile.ts, 6, 14))
 
     export declare function require(): string;
 >require : Symbol(require, Decl(collisionExportsRequireAndAmbientFunctionInGlobalFile.ts, 7, 46))

@@ -1,0 +1,46 @@
+genericClassExpressionInFunction.ts(2,5): error TS2564: Property 'genericVar' has no initializer and is not definitely assigned in the constructor.
+genericClassExpressionInFunction.ts(16,5): error TS2564: Property 'namae' has no initializer and is not definitely assigned in the constructor.
+genericClassExpressionInFunction.ts(19,5): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+genericClassExpressionInFunction.ts(23,5): error TS2564: Property 'nom' has no initializer and is not definitely assigned in the constructor.
+
+
+==== genericClassExpressionInFunction.ts (4 errors) ====
+    class A<T> {
+        genericVar: T
+        ~~~~~~~~~~
+!!! error TS2564: Property 'genericVar' has no initializer and is not definitely assigned in the constructor.
+    }
+    function B1<U>() {
+        // class expression can use T
+        return class extends A<U> { }
+    }
+    class B2<V> {
+        anon = class extends A<V> { }
+    }
+    function B3<W>() {
+        return class Inner<TInner> extends A<W> { }
+    }
+    // extends can call B
+    class K extends B1<number>() {
+        namae: string;
+        ~~~~~
+!!! error TS2564: Property 'namae' has no initializer and is not definitely assigned in the constructor.
+    }
+    class C extends (new B2<number>().anon) {
+        name: string;
+        ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+    }
+    let b3Number = B3<number>();
+    class S extends b3Number<string> {
+        nom: string;
+        ~~~
+!!! error TS2564: Property 'nom' has no initializer and is not definitely assigned in the constructor.
+    }
+    var c = new C();
+    var k = new K();
+    var s = new S();
+    c.genericVar = 12;
+    k.genericVar = 12;
+    s.genericVar = 12;
+    

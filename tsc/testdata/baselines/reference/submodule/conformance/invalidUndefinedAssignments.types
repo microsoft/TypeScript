@@ -2,7 +2,7 @@
 
 === invalidUndefinedAssignments.ts ===
 var x: typeof undefined;
->x : any
+>x : undefined
 >undefined : undefined
 
 enum E { A }
@@ -10,16 +10,16 @@ enum E { A }
 >A : E.A
 
 E = x;
->E = x : any
+>E = x : undefined
 >E : any
->x : any
+>x : undefined
 
 E.A = x;
->E.A = x : any
+>E.A = x : undefined
 >E.A : any
 >E : typeof E
 >A : any
->x : any
+>x : undefined
 
 class C { foo: string }
 >C : C
@@ -29,9 +29,9 @@ var f: C;
 >f : C
 
 C = x;
->C = x : any
+>C = x : undefined
 >C : any
->x : any
+>x : undefined
 
 interface I { foo: string }
 >foo : string
@@ -40,24 +40,24 @@ var g: I;
 >g : I
 
 g = x;
->g = x : any
+>g = x : undefined
 >g : I
->x : any
+>x : undefined
 
 I = x;
->I = x : any
+>I = x : undefined
 >I : any
->x : any
+>x : undefined
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : typeof M
 >x : number
 >1 : 1
 
 M = x;
->M = x : any
+>M = x : undefined
 >M : any
->x : any
+>x : undefined
 
 function i<T>(a: T) { }
 >i : <T>(a: T) => void
@@ -65,7 +65,7 @@ function i<T>(a: T) { }
 
 // BUG 767030
 i = x; 
->i = x : any
+>i = x : undefined
 >i : any
->x : any
+>x : undefined
 

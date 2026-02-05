@@ -32,6 +32,7 @@ var r2d = x.data;
 var r2e = x['hm']; // should be Object
 
 //// [objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.js]
+"use strict";
 var i;
 var r1 = i.apply;
 var r1b = i.call;

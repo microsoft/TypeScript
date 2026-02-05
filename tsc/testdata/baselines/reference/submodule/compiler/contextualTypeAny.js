@@ -8,6 +8,7 @@ var obj: { [s: string]: number } = { p: "", q: x };
 var arr: number[] = ["", x];
 
 //// [contextualTypeAny.js]
+"use strict";
 var x;
 var obj = { p: "", q: x };
 var arr = ["", x];

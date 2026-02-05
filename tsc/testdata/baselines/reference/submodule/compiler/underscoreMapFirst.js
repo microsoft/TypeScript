@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/underscoreMapFirst.ts] ////
 
 //// [underscoreMapFirst.ts]
-declare module _ {
+declare namespace _ {
     interface Collection<T> { }
     interface List<T> extends Collection<T> {
         [index: number]: T;
@@ -51,6 +51,7 @@ class MyView extends View {
 
 
 //// [underscoreMapFirst.js]
+"use strict";
 class MyView extends View {
     getDataSeries() {
         var data = this.model.get("data");

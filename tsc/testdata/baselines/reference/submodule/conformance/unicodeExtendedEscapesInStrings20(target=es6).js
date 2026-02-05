@@ -5,4 +5,5 @@ var x = "\u{";
 
 
 //// [unicodeExtendedEscapesInStrings20.js]
+"use strict";
 var x = "\u{";

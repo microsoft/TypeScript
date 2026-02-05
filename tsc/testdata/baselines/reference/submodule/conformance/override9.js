@@ -15,6 +15,7 @@ interface D extends B {
 
 
 //// [override9.js]
+"use strict";
 
 
 //// [override9.d.ts]

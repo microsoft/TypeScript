@@ -1,8 +1,8 @@
 --- old.genericPrototypeProperty2.js
 +++ new.genericPrototypeProperty2.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [genericPrototypeProperty2.js]
+ "use strict";
  class BaseEvent {
 +    target;
  }

@@ -1,0 +1,9 @@
+typeofUndefined.ts(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'undefined', but here has type 'any'.
+
+
+==== typeofUndefined.ts (1 errors) ====
+    var x: typeof undefined;
+    var x: any; // shouldn't be an error since type is the same as the first declaration
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'undefined', but here has type 'any'.
+!!! related TS6203 typeofUndefined.ts:1:5: 'x' was also declared here.

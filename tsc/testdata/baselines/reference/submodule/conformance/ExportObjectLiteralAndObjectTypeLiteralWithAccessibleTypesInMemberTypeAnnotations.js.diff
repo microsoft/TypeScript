@@ -1,6 +1,6 @@
 --- old.ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.js
 +++ new.ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.js
-@@= skipped -16, +16 lines =@@
+@@= skipped -17, +17 lines =@@
  var A;
  (function (A) {
      class Point {

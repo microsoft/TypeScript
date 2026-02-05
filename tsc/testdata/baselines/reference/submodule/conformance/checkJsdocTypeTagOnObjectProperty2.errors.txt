@@ -2,13 +2,16 @@
 0.js(6,14): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 0.js(6,14): error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
 0.js(6,22): error TS1005: '}' expected.
+0.js(7,11): error TS7006: Parameter 'n1' implicitly has an 'any' type.
 0.js(10,14): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 0.js(10,22): error TS1005: '}' expected.
+0.js(11,13): error TS7006: Parameter 'n1' implicitly has an 'any' type.
 0.js(12,14): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 0.js(12,22): error TS1005: '}' expected.
+0.js(15,3): error TS2322: Type 'undefined' is not assignable to type 'string'.
 
 
-==== 0.js (8 errors) ====
+==== 0.js (11 errors) ====
     // @ts-check
     var lol;
     const obj = {
@@ -25,6 +28,8 @@
                          ~
 !!! error TS1005: '}' expected.
       method1(n1) {
+              ~~
+!!! error TS7006: Parameter 'n1' implicitly has an 'any' type.
           return "42";
       },
       /** @type {function(number): number} */
@@ -34,6 +39,8 @@
                          ~
 !!! error TS1005: '}' expected.
       method2: (n1) => "lol",
+                ~~
+!!! error TS7006: Parameter 'n1' implicitly has an 'any' type.
       /** @type {function(number): number} */
                  ~~~~~~~~
 !!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
@@ -43,6 +50,8 @@
       arrowFunc: (num="0") => num + 42,
       /** @type {string} */
       lol
+      ~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
     }
     lol = "string"
     /** @type {string} */

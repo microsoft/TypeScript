@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxCorrectlyParseLessThanComparison1.tsx] ////
 
 //// [tsxCorrectlyParseLessThanComparison1.tsx]
-declare module JSX {
+declare namespace JSX {
     interface Element {
         div: string;
     }
@@ -22,14 +22,10 @@ export class ShortDetails extends React.Component<{ id: number }, {}> {
 }
 
 //// [tsxCorrectlyParseLessThanComparison1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ShortDetails = void 0;
-class ShortDetails extends React.Component {
+export class ShortDetails extends React.Component {
     render() {
         if (this.props.id < 1) {
             return (React.createElement("div", null));
         }
     }
 }
-exports.ShortDetails = ShortDetails;

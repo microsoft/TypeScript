@@ -39,6 +39,7 @@ const withExtra: MyEmptyTuple = []
 
 
 //// [contextualTypeWithTuple.js]
+"use strict";
 // no error
 var numStrTuple = [5, "hello"];
 var numStrTuple2 = [5, "foo", true];

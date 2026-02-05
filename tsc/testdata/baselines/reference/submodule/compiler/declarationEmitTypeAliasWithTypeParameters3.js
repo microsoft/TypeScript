@@ -10,6 +10,7 @@ function bar() {
 
 
 //// [declarationEmitTypeAliasWithTypeParameters3.js]
+"use strict";
 function bar() {
     return {};
 }

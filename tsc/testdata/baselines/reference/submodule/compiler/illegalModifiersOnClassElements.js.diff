@@ -1,8 +1,8 @@
 --- old.illegalModifiersOnClassElements.js
 +++ new.illegalModifiersOnClassElements.js
-@@= skipped -7, +7 lines =@@
-
+@@= skipped -8, +8 lines =@@
  //// [illegalModifiersOnClassElements.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.bar = 1;

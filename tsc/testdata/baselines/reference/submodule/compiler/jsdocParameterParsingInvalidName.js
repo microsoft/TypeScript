@@ -10,6 +10,7 @@ class c {
 }
 
 //// [jsdocParameterParsingInvalidName.js]
+"use strict";
 class c {
     /**
      * @param {string} [`foo]

@@ -1,8 +1,8 @@
 --- old.asyncGeneratorParameterEvaluation(target=es2015).js
 +++ new.asyncGeneratorParameterEvaluation(target=es2015).js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [asyncGeneratorParameterEvaluation.js]
+ "use strict";
  // https://github.com/microsoft/TypeScript/issues/40410
 -function f1(x_1) { return __asyncGenerator(this, arguments, function* f1_1(x, y = z) { }); }
 -function f2(_a) { return __asyncGenerator(this, arguments, function* f2_1({ [z]: x }) { }); }

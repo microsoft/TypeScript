@@ -1,8 +1,8 @@
 --- old.superElementAccess.js
 +++ new.superElementAccess.js
-@@= skipped -38, +38 lines =@@
-
+@@= skipped -39, +39 lines =@@
  //// [superElementAccess.js]
+ "use strict";
  class MyBase {
 -    constructor() {
 -        this.m2 = function () { };

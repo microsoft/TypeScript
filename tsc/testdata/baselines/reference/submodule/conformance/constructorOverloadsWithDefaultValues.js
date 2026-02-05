@@ -16,6 +16,7 @@ class D<T> {
 }
 
 //// [constructorOverloadsWithDefaultValues.js]
+"use strict";
 class C {
     foo;
     constructor() {

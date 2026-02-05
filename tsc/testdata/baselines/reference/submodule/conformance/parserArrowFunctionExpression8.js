@@ -8,6 +8,8 @@ x ? y => ({ y }) : z => ({ z })
 
 
 //// [fileJs.js]
+"use strict";
 x ? y => ({ y }) : z => ({ z }); // Legal JS
 //// [fileTs.js]
+"use strict";
 x ? y => ({ y }) : z => ({ z });

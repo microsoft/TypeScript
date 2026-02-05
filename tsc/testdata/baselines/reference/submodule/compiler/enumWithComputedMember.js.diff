@@ -1,7 +1,7 @@
 --- old.enumWithComputedMember.js
 +++ new.enumWithComputedMember.js
-@@= skipped -10, +10 lines =@@
- //// [enumWithComputedMember.js]
+@@= skipped -11, +11 lines =@@
+ "use strict";
  var A;
  (function (A) {
 -    A[A["X"] = "".length] = "X";

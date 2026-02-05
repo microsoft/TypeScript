@@ -9,6 +9,7 @@ class foo {
 
 
 //// [functionOverloads6.js]
+"use strict";
 class foo {
     static fnOverload(foo) { }
 }

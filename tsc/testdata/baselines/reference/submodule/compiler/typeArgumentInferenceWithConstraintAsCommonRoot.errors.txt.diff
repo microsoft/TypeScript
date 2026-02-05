@@ -8,7 +8,7 @@
 
  ==== typeArgumentInferenceWithConstraintAsCommonRoot.ts (1 errors) ====
 @@= skipped -10, +9 lines =@@
-     var e: Elephant;
+     declare var e: Elephant;
      f(g, e); // valid because both Giraffe and Elephant satisfy the constraint. T is Animal
           ~
 -!!! error TS2345: Argument of type 'Elephant' is not assignable to parameter of type 'Giraffe'.

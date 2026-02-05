@@ -1,0 +1,16 @@
+extendConstructSignatureInInterface.ts(6,17): error TS2454: Variable 'CStatic' is used before being assigned.
+
+
+==== extendConstructSignatureInInterface.ts (1 errors) ====
+    interface C {
+        new(x: number): C;
+    }
+    
+    var CStatic: C;
+    class E extends CStatic {
+                    ~~~~~~~
+!!! error TS2454: Variable 'CStatic' is used before being assigned.
+    }
+    
+    var e: E = new E(1);
+    

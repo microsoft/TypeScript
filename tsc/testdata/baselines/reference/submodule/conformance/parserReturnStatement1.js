@@ -4,4 +4,5 @@
 return;
 
 //// [parserReturnStatement1.js]
+"use strict";
 return;

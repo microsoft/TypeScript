@@ -1,6 +1,6 @@
 --- old.asyncImportNestedYield.js
 +++ new.asyncImportNestedYield.js
-@@= skipped -38, +38 lines =@@
+@@= skipped -39, +39 lines =@@
          return result;
      };
  })();

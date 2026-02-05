@@ -6,6 +6,7 @@ while (true) {
 }
 
 //// [parser_breakTarget6.js]
+"use strict";
 while (true) {
     break target;
 }

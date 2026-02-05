@@ -8,11 +8,11 @@ function f<T>(x: T): T {
 >T : Symbol(T, Decl(typeofTypeParameter.ts, 0, 11))
 >T : Symbol(T, Decl(typeofTypeParameter.ts, 0, 11))
 
-    var a: typeof x;
+    var a!: typeof x;
 >a : Symbol(a, Decl(typeofTypeParameter.ts, 1, 7))
 >x : Symbol(x, Decl(typeofTypeParameter.ts, 0, 14))
 
-    var y: typeof T;
+    var y!: typeof T;
 >y : Symbol(y, Decl(typeofTypeParameter.ts, 2, 7))
 
     return a;

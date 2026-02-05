@@ -16,3 +16,4 @@ type SerializablePartial<T> = {
 
 
 //// [mappedTypeCircularReferenceInAccessor.js]
+"use strict";

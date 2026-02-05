@@ -3,15 +3,21 @@
 @@= skipped -0, +0 lines =@@
 -<no content>
 +/a.js(1,15): error TS2315: Type 'Object' is not generic.
++/a.js(4,13): error TS7006: Parameter 'n' implicitly has an 'any' type.
++/a.js(5,12): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +
 +
-+==== /a.js (1 errors) ====
++==== /a.js (3 errors) ====
 +    /** @typedef {Object.<string, (n: number) => boolean>} Predicates */
 +                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS2315: Type 'Object' is not generic.
 +    
 +    const p = /** @satisfies {Predicates} */ ({
 +        isEven: n => n % 2 === 0,
++                ~
++!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
 +        isOdd: n => n % 2 === 1
++               ~
++!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
 +    });
 +    

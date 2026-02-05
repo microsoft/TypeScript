@@ -12,6 +12,7 @@ class Super extends Base {
 }
 
 //// [validUseOfThisInSuper.js]
+"use strict";
 class Base {
     b;
     constructor(b) {

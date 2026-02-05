@@ -23,19 +23,19 @@ interface I5 {
 }
 
 class C1 implements I2 { // should be an error - it doesn't implement the members of I1
-    public i2P1: string;
+    public i2P1!: string;
 }
 
-var i2: I2;
+declare var i2: I2;
 var i1: I1;
-var i3: I3;
+declare var i3: I3;
 i1 = i2;
 i2 = i3; // should be an error - i3 does not implement the members of i1
 
 var c1: C1;
 
-var i4: I4;
-var i5: I5;
+declare var i4: I4;
+declare var i5: I5;
 
 i4 = i5; // should be an error
 i5 = i4; // should be an error
@@ -43,16 +43,13 @@ i5 = i4; // should be an error
 
 
 //// [interfaceInheritance.js]
+"use strict";
 class C1 {
     i2P1;
 }
-var i2;
 var i1;
-var i3;
 i1 = i2;
 i2 = i3; // should be an error - i3 does not implement the members of i1
 var c1;
-var i4;
-var i5;
 i4 = i5; // should be an error
 i5 = i4; // should be an error

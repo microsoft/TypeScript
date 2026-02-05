@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/importAndVariableDeclarationConflict3.ts] ////
 
 //// [importAndVariableDeclarationConflict3.ts]
-module m {
+namespace m {
   export var m = '';
 }
 
@@ -10,6 +10,7 @@ import x = m.m;
 
 
 //// [importAndVariableDeclarationConflict3.js]
+"use strict";
 var m;
 (function (m_1) {
     m_1.m = '';

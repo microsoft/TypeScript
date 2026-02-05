@@ -66,7 +66,7 @@ A.s = A.t = function g(m) {
 >m + this.x : any
 >m : number
 >this.x : any
->this : any
+>this : { (): void; s: (m: number) => any; t: (m: number) => any; }
 >x : any
 }
 var a = new A()

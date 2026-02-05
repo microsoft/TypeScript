@@ -15,6 +15,7 @@ C.getInstance().#field; // Error
 
 
 //// [privateNameMethodClassExpression.js]
+"use strict";
 const C = class {
     #field = this.#method();
     #method() { return 42; }

@@ -1,7 +1,7 @@
 --- old.importAliasFromNamespace.js
 +++ new.importAliasFromNamespace.js
-@@= skipped -23, +23 lines =@@
- //// [internal.js]
+@@= skipped -24, +24 lines =@@
+ "use strict";
  var My;
  (function (My) {
 -    var Internal;
@@ -9,7 +9,7 @@
      (function (Internal) {
          function getThing() { }
          Internal.getThing = getThing;
-@@= skipped -10, +10 lines =@@
+@@= skipped -11, +11 lines =@@
  /// <reference path="./internal.ts" preserve="true" />
  var SomeOther;
  (function (SomeOther) {

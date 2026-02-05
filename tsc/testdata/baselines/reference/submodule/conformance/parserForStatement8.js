@@ -5,5 +5,6 @@ for (this in b) {
 }
 
 //// [parserForStatement8.js]
+"use strict";
 for (this in b) {
 }

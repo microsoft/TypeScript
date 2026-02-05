@@ -1,0 +1,10 @@
+--- old.ambientRequireFunction(module=preserve).js
++++ new.ambientRequireFunction(module=preserve).js
+@@= skipped -13, +13 lines =@@
+ const text = fs.readFileSync("/a/b/c");
+
+ //// [app.js]
+-"use strict";
+ /// <reference path="node.d.ts"/>
+ const fs = require("fs");
+ const text = fs.readFileSync("/a/b/c");

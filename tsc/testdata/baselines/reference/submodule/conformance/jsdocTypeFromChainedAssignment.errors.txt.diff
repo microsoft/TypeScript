@@ -4,6 +4,11 @@
 -a.js(12,21): error TS2339: Property 'x' does not exist on type 'typeof A'.
 -a.js(15,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 -a.js(16,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
++a.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(4,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(4,18): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(11,22): error TS7023: 'g' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
++a.js(12,21): error TS2339: Property 'x' does not exist on type '{ (): void; s: (m: number) => any; t: (m: number) => any; }'.
 +a.js(14,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
  a.js(17,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
  a.js(18,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -13,16 +18,30 @@
 -==== a.js (6 errors) ====
 +
 +
-+==== a.js (3 errors) ====
++==== a.js (8 errors) ====
      function A () {
          this.x = 1
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
          /** @type {1} */
-@@= skipped -18, +15 lines =@@
+         this.first = this.second = 1
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++                     ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+     }
+     /** @param {number} n */
+     A.prototype.y = A.prototype.z = function f(n) {
+@@= skipped -17, +25 lines =@@
+     }
      /** @param {number} m */
      A.s = A.t = function g(m) {
++                         ~
++!!! error TS7023: 'g' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
          return m + this.x
--                        ~
+                         ~
 -!!! error TS2339: Property 'x' does not exist on type 'typeof A'.
++!!! error TS2339: Property 'x' does not exist on type '{ (): void; s: (m: number) => any; t: (m: number) => any; }'.
      }
      var a = new A()
 +            ~~~~~~~
@@ -36,7 +55,7 @@
      A.s('still no') // error
          ~~~~~~~~~~
  !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-@@= skipped -17, +13 lines =@@
+@@= skipped -18, +18 lines =@@
          ~~~~~~~~~~~~~~~~~
  !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
      a.first = 10 // error: '10' isn't assignable to '1'

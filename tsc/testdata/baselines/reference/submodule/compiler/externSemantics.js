@@ -7,3 +7,4 @@ declare var y:number=3;
 
 
 //// [externSemantics.js]
+"use strict";

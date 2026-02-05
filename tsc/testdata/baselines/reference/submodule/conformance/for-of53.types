@@ -2,8 +2,8 @@
 
 === for-of53.ts ===
 for (let v of []) {
->v : any
->[] : undefined[]
+>v : never
+>[] : never[]
 
     var v;
 >v : any

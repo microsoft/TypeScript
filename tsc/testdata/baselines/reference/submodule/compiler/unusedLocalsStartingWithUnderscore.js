@@ -16,8 +16,6 @@ namespace _ns {
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 for (const _ of []) { }
 for (const _ in []) { }
 var _ns;
@@ -26,3 +24,4 @@ var _ns;
     for (const _ of []) { }
     for (const _ in []) { }
 })(_ns || (_ns = {}));
+export {};

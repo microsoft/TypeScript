@@ -14,7 +14,8 @@ func TestJsdocTypedefTagTypeExpressionCompletion(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface I {
+	const content = `// @lib: es5
+interface I {
     age: number;
 }
  class Foo {

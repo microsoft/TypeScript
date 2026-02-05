@@ -10,6 +10,7 @@ class C {
 }
 
 //// [conflictMarkerTrivia1.js]
+"use strict";
 class C {
     v = 1;
 }

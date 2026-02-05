@@ -44,6 +44,7 @@ class Bar8 extends Foo implements I {
 
 
 //// [implementingAnInterfaceExtendingClassWithProtecteds.js]
+"use strict";
 class Foo {
     x;
 }

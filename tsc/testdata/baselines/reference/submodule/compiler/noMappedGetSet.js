@@ -7,3 +7,4 @@ type OH_NO = {
 
 
 //// [noMappedGetSet.js]
+"use strict";

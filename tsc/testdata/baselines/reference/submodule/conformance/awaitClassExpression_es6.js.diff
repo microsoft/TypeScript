@@ -1,9 +1,9 @@
 --- old.awaitClassExpression_es6.js
 +++ new.awaitClassExpression_es6.js
-@@= skipped -9, +9 lines =@@
- }
+@@= skipped -10, +10 lines =@@
 
  //// [awaitClassExpression_es6.js]
+ "use strict";
 -function func() {
 -    return __awaiter(this, void 0, void 0, function* () {
 -        class D extends (yield p) {

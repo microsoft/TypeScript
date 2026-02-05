@@ -1,24 +1,30 @@
+first.js(6,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 first.js(8,13): error TS2749: 'Wagon' refers to a value, but is being used as a type here. Did you mean 'typeof Wagon'?
-first.js(21,19): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons?: Wagon[]) => number; }' is not a constructor function type.
+first.js(21,19): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons?: Wagon[] | undefined) => number; }' is not a constructor function type.
 first.js(44,4): error TS2339: Property 'numberOxen' does not exist on type 'Sql'.
 first.js(47,24): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
+generic.js(6,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 generic.js(9,23): error TS2507: Type '<T>(flavour: T) => void' is not a constructor function type.
 generic.js(11,21): error TS2339: Property 'flavour' does not exist on type 'Chowder'.
+generic.js(15,12): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 generic.js(17,27): error TS2554: Expected 0 arguments, but got 1.
 generic.js(18,9): error TS2339: Property 'flavour' does not exist on type 'Chowder'.
 generic.js(20,32): error TS2554: Expected 0 arguments, but got 1.
+second.ts(5,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 second.ts(8,25): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
-second.ts(14,25): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons?: Wagon[]) => number; }' is not a constructor function type.
+second.ts(14,25): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons?: Wagon[] | undefined) => number; }' is not a constructor function type.
 second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Conestoga'.
 
 
-==== first.js (4 errors) ====
+==== first.js (5 errors) ====
     /**
      * @constructor
      * @param {number} numberOxen
      */
     function Wagon(numberOxen) {
         this.numberOxen = numberOxen
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     /** @param {Wagon[]=} wagons */
                 ~~~~~
@@ -37,7 +43,7 @@ second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Con
     // ok
     class Sql extends Wagon {
                       ~~~~~
-!!! error TS2507: Type '{ (numberOxen: number): void; circle: (wagons?: Wagon[]) => number; }' is not a constructor function type.
+!!! error TS2507: Type '{ (numberOxen: number): void; circle: (wagons?: Wagon[] | undefined) => number; }' is not a constructor function type.
         constructor() {
             super(); // error: not enough arguments
             this.foonly = 12
@@ -71,12 +77,14 @@ second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Con
     
     }
     
-==== second.ts (3 errors) ====
+==== second.ts (4 errors) ====
     /**
      * @constructor
      */
     function Dragon(numberEaten: number) {
         this.numberEaten = numberEaten
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     // error!
     class Firedrake extends Dragon {
@@ -89,7 +97,7 @@ second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Con
     // ok
     class Conestoga extends Wagon {
                             ~~~~~
-!!! error TS2507: Type '{ (numberOxen: number): void; circle: (wagons?: Wagon[]) => number; }' is not a constructor function type.
+!!! error TS2507: Type '{ (numberOxen: number): void; circle: (wagons?: Wagon[] | undefined) => number; }' is not a constructor function type.
         constructor(public drunkOO: true) {
             // error: wrong type
             super('nope');
@@ -105,13 +113,15 @@ second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Con
       ~~~~~~~~~~
 !!! error TS2339: Property 'numberOxen' does not exist on type 'Conestoga'.
     
-==== generic.js (5 errors) ====
+==== generic.js (7 errors) ====
     /**
      * @template T
      * @param {T} flavour
      */
     function Soup(flavour) {
         this.flavour = flavour
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     /** @extends {Soup<{ claim: "ignorant" | "malicious" }>} */
     class Chowder extends Soup {
@@ -125,6 +135,8 @@ second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Con
     }
     
     var soup = new Soup(1);
+               ~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
     soup.flavour
     var chowder = new Chowder({ claim: "ignorant" });
                               ~~~~~~~~~~~~~~~~~~~~~

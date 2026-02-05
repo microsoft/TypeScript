@@ -11,6 +11,7 @@ const b: typeof A = B;
 
 
 //// [assignmentCompatability45.js]
+"use strict";
 class A {
 }
 class B extends A {

@@ -7,4 +7,5 @@ function foo(bar:{a:any; b?:string;}[]) { return 0 }
 
 
 //// [functionOverloads21.js]
+"use strict";
 function foo(bar) { return 0; }

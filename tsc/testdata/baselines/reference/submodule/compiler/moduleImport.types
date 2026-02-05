@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleImport.ts] ////
 
 === moduleImport.ts ===
-module A.B.C {
+namespace A.B.C {
 >A : typeof A
 >B : typeof B
 >C : typeof C
@@ -30,7 +30,7 @@ module A.B.C {
 	}
 }
 
-module X {
+namespace X {
 >X : typeof X
 
 	import ABC = A.B.C;

@@ -92,6 +92,7 @@ function fn8(x: Alpha|Beta|Gamma) {
 
 
 //// [instanceOfAssignability.js]
+"use strict";
 // Derived1 is assignable to, but not a subtype of, Base
 class Derived1 {
     foo;

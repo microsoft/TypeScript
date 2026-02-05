@@ -1,0 +1,19 @@
+--- old.moduleExportAlias3.errors.txt
++++ new.moduleExportAlias3.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++bug24062.js(4,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++
++
++==== bug24062.js (1 errors) ====
++    // #24062
++    class C {
++    }
++    module.exports = {
++    ~~~~~~~~~~~~~~~~~~
++        C
++    ~~~~~
++    };
++    ~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++    

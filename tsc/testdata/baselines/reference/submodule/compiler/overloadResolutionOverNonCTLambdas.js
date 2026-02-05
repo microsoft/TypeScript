@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/overloadResolutionOverNonCTLambdas.ts] ////
 
 //// [overloadResolutionOverNonCTLambdas.ts]
-module Bugs {
+namespace Bugs {
   class A {
   }
   
@@ -26,6 +26,7 @@ bug3(fprime);
 bug3(function(x:string):string { return x; });
 
 //// [overloadResolutionOverNonCTLambdas.js]
+"use strict";
 var Bugs;
 (function (Bugs) {
     class A {

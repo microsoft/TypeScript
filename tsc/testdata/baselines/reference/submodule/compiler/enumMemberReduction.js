@@ -45,14 +45,6 @@ export function fn6(optionalEnum?: MyStringEnumWithEmpty) {
 
 
 //// [enumMemberReduction.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fn = fn;
-exports.fn2 = fn2;
-exports.fn3 = fn3;
-exports.fn4 = fn4;
-exports.fn5 = fn5;
-exports.fn6 = fn6;
 var MyEnum;
 (function (MyEnum) {
     MyEnum[MyEnum["A"] = 0] = "A";
@@ -71,21 +63,21 @@ var MyStringEnumWithEmpty;
     MyStringEnumWithEmpty["B"] = "b";
     MyStringEnumWithEmpty["C"] = "c";
 })(MyStringEnumWithEmpty || (MyStringEnumWithEmpty = {}));
-function fn(optionalEnum) {
+export function fn(optionalEnum) {
     return optionalEnum !== null && optionalEnum !== void 0 ? optionalEnum : MyEnum.A;
 }
-function fn2(optionalEnum) {
+export function fn2(optionalEnum) {
     return optionalEnum || MyEnum.B;
 }
-function fn3(optionalEnum) {
+export function fn3(optionalEnum) {
     return optionalEnum !== null && optionalEnum !== void 0 ? optionalEnum : MyEnum.A;
 }
-function fn4(optionalEnum) {
+export function fn4(optionalEnum) {
     return optionalEnum || MyEnum.B;
 }
-function fn5(optionalEnum) {
+export function fn5(optionalEnum) {
     return optionalEnum || MyStringEnum.B;
 }
-function fn6(optionalEnum) {
+export function fn6(optionalEnum) {
     return optionalEnum || MyStringEnumWithEmpty.B;
 }

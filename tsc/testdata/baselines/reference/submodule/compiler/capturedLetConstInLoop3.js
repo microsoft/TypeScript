@@ -220,6 +220,7 @@ function foo8_c(x) {
 }
 
 //// [capturedLetConstInLoop3.js]
+"use strict";
 function foo0(x) {
     for (let x of []) {
         var v = x;

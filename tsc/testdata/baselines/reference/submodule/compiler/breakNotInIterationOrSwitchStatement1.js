@@ -4,4 +4,5 @@
 break;
 
 //// [breakNotInIterationOrSwitchStatement1.js]
+"use strict";
 break;

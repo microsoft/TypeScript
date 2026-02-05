@@ -7,6 +7,7 @@ class foo {
 }
 
 //// [constructorArgsErrors1.js]
+"use strict";
 class foo {
     constructor(a) {
     }

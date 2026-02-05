@@ -15,6 +15,7 @@ class Point {
 }
 
 //// [instanceAndStaticDeclarations1.js]
+"use strict";
 // from spec
 class Point {
     x;

@@ -54,7 +54,7 @@
 -                        ~~~~~~~~~~~~~
 -!!! error TS6053: File 'typescript.ts' not found.
      
-     module TypeScript {
+     namespace TypeScript {
          export interface IAstWalker {
 @@= skipped -701, +699 lines =@@
      

@@ -1,0 +1,414 @@
+--- old.sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues(target=es2015).sourcemap.txt
++++ new.sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues(target=es2015).sourcemap.txt
+@@= skipped -61, +61 lines =@@
+ 7 >                 ^^^^^
+ 8 >                      ^^^
+ 9 >                         ^^^^^^^^
+-10>                                 ^^^^
+-11>                                     ^
+-12>                                      ^
+-13>                                       ^
+-14>                                        ^^
+-15>                                          ^^^^^^
+-16>                                                ^^
+-17>                                                  ^^^^^^^
+-18>                                                         ^
++10>                                 ^
++11>                                  ^^^
++12>                                     ^
++13>                                      ^
++14>                                       ^
++15>                                        ^^
++16>                                          ^^^^^^
++17>                                                ^^
++18>                                                  ^^^^^^^
++19>                                                         ^
++20>                                                          ^^
+ 1->
+   >
+   >
+@@= skipped -20, +22 lines =@@
+ 7 >                 nameA
+ 8 >                       = 
+ 9 >                         "noName"
+-10>                                 ]: Robot = 
+-11>                                     [
+-12>                                      -
+-13>                                       1
+-14>                                        , 
+-15>                                          "name"
+-16>                                                , 
+-17>                                                  "skill"
+-18>                                                         ]
++10>                                 ]
++11>                                  : Robot = 
++12>                                     [
++13>                                      -
++14>                                       1
++15>                                        , 
++16>                                          "name"
++17>                                                , 
++18>                                                  "skill"
++19>                                                         ]
++20>                                                          ) 
+ 1->Emitted(3, 1) Source(7, 1) + SourceIndex(0)
+ 2 >Emitted(3, 10) Source(7, 10) + SourceIndex(0)
+ 3 >Emitted(3, 14) Source(7, 14) + SourceIndex(0)
+@@= skipped -18, +20 lines =@@
+ 7 >Emitted(3, 23) Source(7, 23) + SourceIndex(0)
+ 8 >Emitted(3, 26) Source(7, 26) + SourceIndex(0)
+ 9 >Emitted(3, 34) Source(7, 34) + SourceIndex(0)
+-10>Emitted(3, 38) Source(7, 45) + SourceIndex(0)
+-11>Emitted(3, 39) Source(7, 46) + SourceIndex(0)
+-12>Emitted(3, 40) Source(7, 47) + SourceIndex(0)
+-13>Emitted(3, 41) Source(7, 48) + SourceIndex(0)
+-14>Emitted(3, 43) Source(7, 50) + SourceIndex(0)
+-15>Emitted(3, 49) Source(7, 56) + SourceIndex(0)
+-16>Emitted(3, 51) Source(7, 58) + SourceIndex(0)
+-17>Emitted(3, 58) Source(7, 65) + SourceIndex(0)
+-18>Emitted(3, 59) Source(7, 66) + SourceIndex(0)
++10>Emitted(3, 35) Source(7, 35) + SourceIndex(0)
++11>Emitted(3, 38) Source(7, 45) + SourceIndex(0)
++12>Emitted(3, 39) Source(7, 46) + SourceIndex(0)
++13>Emitted(3, 40) Source(7, 47) + SourceIndex(0)
++14>Emitted(3, 41) Source(7, 48) + SourceIndex(0)
++15>Emitted(3, 43) Source(7, 50) + SourceIndex(0)
++16>Emitted(3, 49) Source(7, 56) + SourceIndex(0)
++17>Emitted(3, 51) Source(7, 58) + SourceIndex(0)
++18>Emitted(3, 58) Source(7, 65) + SourceIndex(0)
++19>Emitted(3, 59) Source(7, 66) + SourceIndex(0)
++20>Emitted(3, 61) Source(7, 68) + SourceIndex(0)
+ ---
+ >>>    console.log(nameA);
+ 1 >^^^^
+@@= skipped -19, +21 lines =@@
+ 6 >                ^^^^^
+ 7 >                     ^
+ 8 >                      ^
+-1 >) {
++1 >{
+   >    
+ 2 >    console
+ 3 >           .
+@@= skipped -23, +23 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(5, 1) Source(9, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(5, 1) Source(8, 24) + SourceIndex(0)
+ 2 >Emitted(5, 2) Source(9, 2) + SourceIndex(0)
+ ---
+ >>>function foo2([numberB = -1] = [-1, "name", "skill"]) {
+@@= skipped -15, +15 lines =@@
+ 7 >                      ^^^
+ 8 >                         ^
+ 9 >                          ^
+-10>                           ^^^^
+-11>                               ^
+-12>                                ^
+-13>                                 ^
+-14>                                  ^^
+-15>                                    ^^^^^^
+-16>                                          ^^
+-17>                                            ^^^^^^^
+-18>                                                   ^
++10>                           ^
++11>                            ^^^
++12>                               ^
++13>                                ^
++14>                                 ^
++15>                                  ^^
++16>                                    ^^^^^^
++17>                                          ^^
++18>                                            ^^^^^^^
++19>                                                   ^
++20>                                                    ^^
+ 1->
+   >
+   >
+@@= skipped -20, +22 lines =@@
+ 7 >                       = 
+ 8 >                         -
+ 9 >                          1
+-10>                           ]: Robot = 
+-11>                               [
+-12>                                -
+-13>                                 1
+-14>                                  , 
+-15>                                    "name"
+-16>                                          , 
+-17>                                            "skill"
+-18>                                                   ]
++10>                           ]
++11>                            : Robot = 
++12>                               [
++13>                                -
++14>                                 1
++15>                                  , 
++16>                                    "name"
++17>                                          , 
++18>                                            "skill"
++19>                                                   ]
++20>                                                    ) 
+ 1->Emitted(6, 1) Source(11, 1) + SourceIndex(0)
+ 2 >Emitted(6, 10) Source(11, 10) + SourceIndex(0)
+ 3 >Emitted(6, 14) Source(11, 14) + SourceIndex(0)
+@@= skipped -18, +20 lines =@@
+ 7 >Emitted(6, 26) Source(11, 26) + SourceIndex(0)
+ 8 >Emitted(6, 27) Source(11, 27) + SourceIndex(0)
+ 9 >Emitted(6, 28) Source(11, 28) + SourceIndex(0)
+-10>Emitted(6, 32) Source(11, 39) + SourceIndex(0)
+-11>Emitted(6, 33) Source(11, 40) + SourceIndex(0)
+-12>Emitted(6, 34) Source(11, 41) + SourceIndex(0)
+-13>Emitted(6, 35) Source(11, 42) + SourceIndex(0)
+-14>Emitted(6, 37) Source(11, 44) + SourceIndex(0)
+-15>Emitted(6, 43) Source(11, 50) + SourceIndex(0)
+-16>Emitted(6, 45) Source(11, 52) + SourceIndex(0)
+-17>Emitted(6, 52) Source(11, 59) + SourceIndex(0)
+-18>Emitted(6, 53) Source(11, 60) + SourceIndex(0)
++10>Emitted(6, 29) Source(11, 29) + SourceIndex(0)
++11>Emitted(6, 32) Source(11, 39) + SourceIndex(0)
++12>Emitted(6, 33) Source(11, 40) + SourceIndex(0)
++13>Emitted(6, 34) Source(11, 41) + SourceIndex(0)
++14>Emitted(6, 35) Source(11, 42) + SourceIndex(0)
++15>Emitted(6, 37) Source(11, 44) + SourceIndex(0)
++16>Emitted(6, 43) Source(11, 50) + SourceIndex(0)
++17>Emitted(6, 45) Source(11, 52) + SourceIndex(0)
++18>Emitted(6, 52) Source(11, 59) + SourceIndex(0)
++19>Emitted(6, 53) Source(11, 60) + SourceIndex(0)
++20>Emitted(6, 55) Source(11, 62) + SourceIndex(0)
+ ---
+ >>>    console.log(numberB);
+ 1 >^^^^
+@@= skipped -19, +21 lines =@@
+ 6 >                ^^^^^^^
+ 7 >                       ^
+ 8 >                        ^
+-1 >) {
++1 >{
+   >    
+ 2 >    console
+ 3 >           .
+@@= skipped -23, +23 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(8, 1) Source(13, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(8, 1) Source(12, 26) + SourceIndex(0)
+ 2 >Emitted(8, 2) Source(13, 2) + SourceIndex(0)
+ ---
+ >>>function foo3([numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [-1, "name", "skill"]) {
+@@= skipped -23, +23 lines =@@
+ 15>                                               ^^^^^^^
+ 16>                                                      ^^^
+ 17>                                                         ^^^^^^^
+-18>                                                                ^^^^
+-19>                                                                    ^
+-20>                                                                     ^
+-21>                                                                      ^
+-22>                                                                       ^^
+-23>                                                                         ^^^^^^
+-24>                                                                               ^^
+-25>                                                                                 ^^^^^^^
+-26>                                                                                        ^
++18>                                                                ^
++19>                                                                 ^^^
++20>                                                                    ^
++21>                                                                     ^
++22>                                                                      ^
++23>                                                                       ^^
++24>                                                                         ^^^^^^
++25>                                                                               ^^
++26>                                                                                 ^^^^^^^
++27>                                                                                        ^
++28>                                                                                         ^^
+ 1->
+   >
+   >
+@@= skipped -28, +30 lines =@@
+ 15>                                               skillA2
+ 16>                                                       = 
+ 17>                                                         "skill"
+-18>                                                                ]: Robot = 
+-19>                                                                    [
+-20>                                                                     -
+-21>                                                                      1
+-22>                                                                       , 
+-23>                                                                         "name"
+-24>                                                                               , 
+-25>                                                                                 "skill"
+-26>                                                                                        ]
++18>                                                                ]
++19>                                                                 : Robot = 
++20>                                                                    [
++21>                                                                     -
++22>                                                                      1
++23>                                                                       , 
++24>                                                                         "name"
++25>                                                                               , 
++26>                                                                                 "skill"
++27>                                                                                        ]
++28>                                                                                         ) 
+ 1->Emitted(9, 1) Source(15, 1) + SourceIndex(0)
+ 2 >Emitted(9, 10) Source(15, 10) + SourceIndex(0)
+ 3 >Emitted(9, 14) Source(15, 14) + SourceIndex(0)
+@@= skipped -26, +28 lines =@@
+ 15>Emitted(9, 55) Source(15, 55) + SourceIndex(0)
+ 16>Emitted(9, 58) Source(15, 58) + SourceIndex(0)
+ 17>Emitted(9, 65) Source(15, 65) + SourceIndex(0)
+-18>Emitted(9, 69) Source(15, 76) + SourceIndex(0)
+-19>Emitted(9, 70) Source(15, 77) + SourceIndex(0)
+-20>Emitted(9, 71) Source(15, 78) + SourceIndex(0)
+-21>Emitted(9, 72) Source(15, 79) + SourceIndex(0)
+-22>Emitted(9, 74) Source(15, 81) + SourceIndex(0)
+-23>Emitted(9, 80) Source(15, 87) + SourceIndex(0)
+-24>Emitted(9, 82) Source(15, 89) + SourceIndex(0)
+-25>Emitted(9, 89) Source(15, 96) + SourceIndex(0)
+-26>Emitted(9, 90) Source(15, 97) + SourceIndex(0)
++18>Emitted(9, 66) Source(15, 66) + SourceIndex(0)
++19>Emitted(9, 69) Source(15, 76) + SourceIndex(0)
++20>Emitted(9, 70) Source(15, 77) + SourceIndex(0)
++21>Emitted(9, 71) Source(15, 78) + SourceIndex(0)
++22>Emitted(9, 72) Source(15, 79) + SourceIndex(0)
++23>Emitted(9, 74) Source(15, 81) + SourceIndex(0)
++24>Emitted(9, 80) Source(15, 87) + SourceIndex(0)
++25>Emitted(9, 82) Source(15, 89) + SourceIndex(0)
++26>Emitted(9, 89) Source(15, 96) + SourceIndex(0)
++27>Emitted(9, 90) Source(15, 97) + SourceIndex(0)
++28>Emitted(9, 92) Source(15, 99) + SourceIndex(0)
+ ---
+ >>>    console.log(nameA2);
+ 1 >^^^^
+@@= skipped -19, +21 lines =@@
+ 6 >                ^^^^^^
+ 7 >                      ^
+ 8 >                       ^
+-1 >) {
++1 >{
+   >    
+ 2 >    console
+ 3 >           .
+@@= skipped -23, +23 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(11, 1) Source(17, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(11, 1) Source(16, 25) + SourceIndex(0)
+ 2 >Emitted(11, 2) Source(17, 2) + SourceIndex(0)
+ ---
+ >>>function foo4([numberA3 = -1, ...robotAInfo] = [-1, "name", "skill"]) {
+@@= skipped -18, +18 lines =@@
+ 10>                            ^^
+ 11>                              ^^^
+ 12>                                 ^^^^^^^^^^
+-13>                                           ^^^^
+-14>                                               ^
+-15>                                                ^
+-16>                                                 ^
+-17>                                                  ^^
+-18>                                                    ^^^^^^
+-19>                                                          ^^
+-20>                                                            ^^^^^^^
+-21>                                                                   ^
++13>                                           ^
++14>                                            ^^^
++15>                                               ^
++16>                                                ^
++17>                                                 ^
++18>                                                  ^^
++19>                                                    ^^^^^^
++20>                                                          ^^
++21>                                                            ^^^^^^^
++22>                                                                   ^
++23>                                                                    ^^
+ 1->
+   >
+   >
+@@= skipped -23, +25 lines =@@
+ 10>                            , 
+ 11>                              ...
+ 12>                                 robotAInfo
+-13>                                           ]: Robot = 
+-14>                                               [
+-15>                                                -
+-16>                                                 1
+-17>                                                  , 
+-18>                                                    "name"
+-19>                                                          , 
+-20>                                                            "skill"
+-21>                                                                   ]
++13>                                           ]
++14>                                            : Robot = 
++15>                                               [
++16>                                                -
++17>                                                 1
++18>                                                  , 
++19>                                                    "name"
++20>                                                          , 
++21>                                                            "skill"
++22>                                                                   ]
++23>                                                                    ) 
+ 1->Emitted(12, 1) Source(19, 1) + SourceIndex(0)
+ 2 >Emitted(12, 10) Source(19, 10) + SourceIndex(0)
+ 3 >Emitted(12, 14) Source(19, 14) + SourceIndex(0)
+@@= skipped -21, +23 lines =@@
+ 10>Emitted(12, 31) Source(19, 31) + SourceIndex(0)
+ 11>Emitted(12, 34) Source(19, 34) + SourceIndex(0)
+ 12>Emitted(12, 44) Source(19, 44) + SourceIndex(0)
+-13>Emitted(12, 48) Source(19, 55) + SourceIndex(0)
+-14>Emitted(12, 49) Source(19, 56) + SourceIndex(0)
+-15>Emitted(12, 50) Source(19, 57) + SourceIndex(0)
+-16>Emitted(12, 51) Source(19, 58) + SourceIndex(0)
+-17>Emitted(12, 53) Source(19, 60) + SourceIndex(0)
+-18>Emitted(12, 59) Source(19, 66) + SourceIndex(0)
+-19>Emitted(12, 61) Source(19, 68) + SourceIndex(0)
+-20>Emitted(12, 68) Source(19, 75) + SourceIndex(0)
+-21>Emitted(12, 69) Source(19, 76) + SourceIndex(0)
++13>Emitted(12, 45) Source(19, 45) + SourceIndex(0)
++14>Emitted(12, 48) Source(19, 55) + SourceIndex(0)
++15>Emitted(12, 49) Source(19, 56) + SourceIndex(0)
++16>Emitted(12, 50) Source(19, 57) + SourceIndex(0)
++17>Emitted(12, 51) Source(19, 58) + SourceIndex(0)
++18>Emitted(12, 53) Source(19, 60) + SourceIndex(0)
++19>Emitted(12, 59) Source(19, 66) + SourceIndex(0)
++20>Emitted(12, 61) Source(19, 68) + SourceIndex(0)
++21>Emitted(12, 68) Source(19, 75) + SourceIndex(0)
++22>Emitted(12, 69) Source(19, 76) + SourceIndex(0)
++23>Emitted(12, 71) Source(19, 78) + SourceIndex(0)
+ ---
+ >>>    console.log(robotAInfo);
+ 1 >^^^^
+@@= skipped -19, +21 lines =@@
+ 6 >                ^^^^^^^^^^
+ 7 >                          ^
+ 8 >                           ^
+-1 >) {
++1 >{
+   >    
+ 2 >    console
+ 3 >           .
+@@= skipped -23, +23 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(14, 1) Source(21, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(14, 1) Source(20, 29) + SourceIndex(0)
+ 2 >Emitted(14, 2) Source(21, 2) + SourceIndex(0)
+ ---
+ >>>foo1(robotA);

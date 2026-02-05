@@ -24,10 +24,10 @@ o = b; // OK
 b = true; // OK
 >b : Symbol(b, Decl(booleanAssignment.ts, 0, 3))
 
-var b2:boolean;
->b2 : Symbol(b2, Decl(booleanAssignment.ts, 10, 3))
+declare var b2:boolean;
+>b2 : Symbol(b2, Decl(booleanAssignment.ts, 10, 11))
 
 b = b2; // OK
 >b : Symbol(b, Decl(booleanAssignment.ts, 0, 3))
->b2 : Symbol(b2, Decl(booleanAssignment.ts, 10, 3))
+>b2 : Symbol(b2, Decl(booleanAssignment.ts, 10, 11))
 

@@ -6,3 +6,4 @@ declare enum E {
 }
 
 //// [ambientEnumElementInitializer5.js]
+"use strict";

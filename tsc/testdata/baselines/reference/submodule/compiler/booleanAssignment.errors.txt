@@ -24,5 +24,5 @@ booleanAssignment.ts(4,1): error TS2322: Type '{}' is not assignable to type 'Bo
     
     b = true; // OK
     
-    var b2:boolean;
+    declare var b2:boolean;
     b = b2; // OK

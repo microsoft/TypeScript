@@ -1,8 +1,8 @@
 --- old.objectCreationExpressionInFunctionParameter.js
 +++ new.objectCreationExpressionInFunctionParameter.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [objectCreationExpressionInFunctionParameter.js]
+ "use strict";
  class A {
 +    a1;
      constructor(a1) {

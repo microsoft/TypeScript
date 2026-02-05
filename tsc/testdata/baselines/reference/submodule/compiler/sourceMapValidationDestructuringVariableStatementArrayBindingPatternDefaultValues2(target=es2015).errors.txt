@@ -1,0 +1,41 @@
+sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts(8,5): error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts(9,5): error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts(10,5): error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts(10,25): error TS2488: Type 'string[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts(12,5): error TS2488: Type '[string, string[]]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts(13,5): error TS2488: Type '[string, [string, string]]' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts(13,26): error TS2488: Type '[string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts (7 errors) ====
+    declare var console: {
+        log(msg: string): void;
+    }
+    type MultiSkilledRobot = [string, string[]];
+    var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
+    var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
+    
+    let [, skillA = ["noSkill", "noSkill"]] = multiRobotA;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
+    let [nameMB = "noName" ] = multiRobotB;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
+    let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'string[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+    
+    let [nameMC = "noName" ] = ["roomba", ["vacuum", "mopping"]];
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type '[string, string[]]' must have a '[Symbol.iterator]()' method that returns an iterator.
+    let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type '[string, [string, string]]' must have a '[Symbol.iterator]()' method that returns an iterator.
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type '[string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
+    
+    if (nameMB == nameMA) {
+        console.log(skillA[0] + skillA[1]);
+    }

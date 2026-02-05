@@ -4,4 +4,5 @@
 var x = `abc${ { x: 10, y: 20 } }def`;
 
 //// [templateStringWithEmbeddedObjectLiteralES6.js]
+"use strict";
 var x = `abc${{ x: 10, y: 20 }}def`;

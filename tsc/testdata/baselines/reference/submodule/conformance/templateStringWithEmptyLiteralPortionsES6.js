@@ -29,6 +29,7 @@ var m = `1${ 0 }2${ 0 }3`;
 
 
 //// [templateStringWithEmptyLiteralPortionsES6.js]
+"use strict";
 var a = ``;
 var b = `${0}`;
 var c = `1${0}`;

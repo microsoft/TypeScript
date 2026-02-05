@@ -65,6 +65,7 @@ function e(x: I<"A" | "B">) {
 
 
 //// [controlFlowIfStatement.js]
+"use strict";
 let x;
 let cond;
 x = /a/;

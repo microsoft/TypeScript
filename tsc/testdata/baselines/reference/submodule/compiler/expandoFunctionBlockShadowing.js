@@ -21,17 +21,13 @@ if (Math.random()) {
 }
 
 //// [expandoFunctionBlockShadowing.js]
-"use strict";
 // https://github.com/microsoft/TypeScript/issues/56538
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.X = X;
-exports.Y = Y;
-function X() { }
+export function X() { }
 if (Math.random()) {
     const X = {};
     X.test = 1;
 }
-function Y() { }
+export function Y() { }
 Y.test = "foo";
 const aliasTopY = Y;
 if (Math.random()) {

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/errorMessageOnObjectLiteralType.ts] ////
 
 //// [errorMessageOnObjectLiteralType.ts]
-var x: {
+declare var x: {
     a: string;
     b: number;
 };
@@ -9,6 +9,6 @@ x.getOwnPropertyNamess();
 Object.getOwnPropertyNamess(null);
 
 //// [errorMessageOnObjectLiteralType.js]
-var x;
+"use strict";
 x.getOwnPropertyNamess();
 Object.getOwnPropertyNamess(null);

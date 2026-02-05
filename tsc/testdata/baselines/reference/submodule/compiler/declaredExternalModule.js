@@ -30,3 +30,4 @@ declare module 'connect' {
 
 
 //// [declaredExternalModule.js]
+"use strict";

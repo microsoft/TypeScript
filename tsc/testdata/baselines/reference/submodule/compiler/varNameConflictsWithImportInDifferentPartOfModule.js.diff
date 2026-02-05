@@ -1,6 +1,6 @@
 --- old.varNameConflictsWithImportInDifferentPartOfModule.js
 +++ new.varNameConflictsWithImportInDifferentPartOfModule.js
-@@= skipped -15, +15 lines =@@
+@@= skipped -16, +16 lines =@@
      M1.s = '';
  })(M1 || (M1 = {}));
  (function (M1) {

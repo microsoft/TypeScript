@@ -11,13 +11,13 @@ func TestRecursiveClassReference(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `declare module Thing { }
+	const content = `declare namespace Thing { }
 
-module Thing {
+namespace Thing {
    var /**/x: Mode;
 }
 
-module Thing {
+namespace Thing {
   export class Mode { }
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

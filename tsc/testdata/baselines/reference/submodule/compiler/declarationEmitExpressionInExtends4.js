@@ -19,6 +19,7 @@ class C3 extends SomeUndefinedFunction {
 }
 
 //// [declarationEmitExpressionInExtends4.js]
+"use strict";
 function getSomething() {
     return class D {
     };

@@ -49,20 +49,14 @@ export class NonAmbientDerived extends NonAmbientBase {
 
 
 //// [overrideWithoutNoImplicitOverride1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.NonAmbientDerived = exports.NonAmbientBase = exports.NonAmbientClass = void 0;
-class NonAmbientClass {
+export class NonAmbientClass {
     yadda() { }
 }
-exports.NonAmbientClass = NonAmbientClass;
 /////
-class NonAmbientBase {
+export class NonAmbientBase {
     foo() { }
 }
-exports.NonAmbientBase = NonAmbientBase;
-class NonAmbientDerived extends NonAmbientBase {
+export class NonAmbientDerived extends NonAmbientBase {
     foo() { }
     bar() { }
 }
-exports.NonAmbientDerived = NonAmbientDerived;

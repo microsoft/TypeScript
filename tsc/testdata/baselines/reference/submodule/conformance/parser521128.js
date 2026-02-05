@@ -4,5 +4,6 @@
 module.module { }
 
 //// [parser521128.js]
+"use strict";
 module.module;
 { }

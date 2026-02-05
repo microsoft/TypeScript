@@ -1,17 +1,17 @@
 //// [tests/cases/compiler/exportImportAndClodule.ts] ////
 
 === exportImportAndClodule.ts ===
-module K {
+namespace K {
 >K : Symbol(K, Decl(exportImportAndClodule.ts, 0, 0))
 
     export class L {
->L : Symbol(L, Decl(exportImportAndClodule.ts, 0, 10), Decl(exportImportAndClodule.ts, 3, 5))
+>L : Symbol(L, Decl(exportImportAndClodule.ts, 0, 13), Decl(exportImportAndClodule.ts, 3, 5))
 
         constructor(public name: string) { }
 >name : Symbol(L.name, Decl(exportImportAndClodule.ts, 2, 20))
     }
-    export module L {
->L : Symbol(L, Decl(exportImportAndClodule.ts, 0, 10), Decl(exportImportAndClodule.ts, 3, 5))
+    export namespace L {
+>L : Symbol(L, Decl(exportImportAndClodule.ts, 0, 13), Decl(exportImportAndClodule.ts, 3, 5))
 
         export var y = 12;
 >y : Symbol(y, Decl(exportImportAndClodule.ts, 5, 18))
@@ -27,13 +27,13 @@ module K {
         }
     }
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(exportImportAndClodule.ts, 11, 1))
 
     export import D = K.L;
->D : Symbol(D, Decl(exportImportAndClodule.ts, 12, 10))
+>D : Symbol(D, Decl(exportImportAndClodule.ts, 12, 13))
 >K : Symbol(K, Decl(exportImportAndClodule.ts, 0, 0))
->L : Symbol(D, Decl(exportImportAndClodule.ts, 0, 10), Decl(exportImportAndClodule.ts, 3, 5))
+>L : Symbol(D, Decl(exportImportAndClodule.ts, 0, 13), Decl(exportImportAndClodule.ts, 3, 5))
 }
 var o: { name: string };
 >o : Symbol(o, Decl(exportImportAndClodule.ts, 15, 3), Decl(exportImportAndClodule.ts, 16, 3))
@@ -41,9 +41,9 @@ var o: { name: string };
 
 var o = new M.D('Hello');
 >o : Symbol(o, Decl(exportImportAndClodule.ts, 15, 3), Decl(exportImportAndClodule.ts, 16, 3))
->M.D : Symbol(M.D, Decl(exportImportAndClodule.ts, 12, 10))
+>M.D : Symbol(M.D, Decl(exportImportAndClodule.ts, 12, 13))
 >M : Symbol(M, Decl(exportImportAndClodule.ts, 11, 1))
->D : Symbol(M.D, Decl(exportImportAndClodule.ts, 12, 10))
+>D : Symbol(M.D, Decl(exportImportAndClodule.ts, 12, 13))
 
 var p: { x: number; y: number; }
 >p : Symbol(p, Decl(exportImportAndClodule.ts, 17, 3), Decl(exportImportAndClodule.ts, 18, 3))
@@ -53,6 +53,6 @@ var p: { x: number; y: number; }
 var p: M.D.Point;
 >p : Symbol(p, Decl(exportImportAndClodule.ts, 17, 3), Decl(exportImportAndClodule.ts, 18, 3))
 >M : Symbol(M, Decl(exportImportAndClodule.ts, 11, 1))
->D : Symbol(M.D, Decl(exportImportAndClodule.ts, 12, 10))
+>D : Symbol(M.D, Decl(exportImportAndClodule.ts, 12, 13))
 >Point : Symbol(K.L.Point, Decl(exportImportAndClodule.ts, 5, 26))
 

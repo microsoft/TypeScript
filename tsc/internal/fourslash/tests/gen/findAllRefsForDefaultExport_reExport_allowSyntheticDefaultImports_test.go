@@ -12,6 +12,7 @@ func TestFindAllRefsForDefaultExport_reExport_allowSyntheticDefaultImports(t *te
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowSyntheticDefaultImports: true
+// @module: commonjs
 // @Filename: /export.ts
 const /*0*/foo = 1;
 export = /*1*/foo;

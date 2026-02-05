@@ -1,0 +1,38 @@
+--- old.spellingSuggestionJSXAttribute.types
++++ new.spellingSuggestionJSXAttribute.types
+@@= skipped -5, +5 lines =@@
+ >React : typeof React
+
+ function MyComp2(props: { className?: string, htmlFor?: string }) {
+->MyComp2 : (props: { className?: string; htmlFor?: string; }) => never
+->props : { className?: string; htmlFor?: string; }
++>MyComp2 : (props: { className?: string | undefined; htmlFor?: string | undefined; }) => never
++>props : { className?: string | undefined; htmlFor?: string | undefined; }
+ >className : string | undefined
+ >htmlFor : string | undefined
+
+@@= skipped -10, +10 lines =@@
+ }
+ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
+ >MyComp : MyComp
+->React.Component : React.Component<{ className?: string; htmlFor?: string; }, {}, any>
++>React.Component : React.Component<{ className?: string | undefined; htmlFor?: string | undefined; }, {}, any>
+ >React : typeof React
+ >Component : typeof React.Component
+ >className : string | undefined
+@@= skipped -34, +34 lines =@@
+
+ <MyComp2 class="" />;
+ ><MyComp2 class="" /> : JSX.Element
+->MyComp2 : (props: { className?: string; htmlFor?: string; }) => never
++>MyComp2 : (props: { className?: string | undefined; htmlFor?: string | undefined; }) => never
+ >class : string
+
+ <MyComp for="" />;
+@@= skipped -10, +10 lines =@@
+
+ <MyComp2 for="" />;
+ ><MyComp2 for="" /> : JSX.Element
+->MyComp2 : (props: { className?: string; htmlFor?: string; }) => never
++>MyComp2 : (props: { className?: string | undefined; htmlFor?: string | undefined; }) => never
+ >for : string

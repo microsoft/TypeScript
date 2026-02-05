@@ -1,0 +1,34 @@
+minimatch.js(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+
+==== use.js (0 errors) ====
+    /// <reference path='./types.d.ts'/>
+    var mini = require('./minimatch')
+    mini.M.defaults()
+    var m = new mini.M()
+    m.m()
+    mini.filter()
+    
+==== types.d.ts (0 errors) ====
+    declare var require: any;
+    declare var module: any;
+==== minimatch.js (1 errors) ====
+    /// <reference path='./types.d.ts'/>
+    module.exports = minimatch
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    minimatch.M = M
+    minimatch.filter = filter
+    function filter() {
+        return minimatch()
+    }
+    function minimatch() {
+    }
+    M.defaults = function (def) {
+        return def
+    }
+    M.prototype.m = function () {
+    }
+    function M() {
+    }
+    

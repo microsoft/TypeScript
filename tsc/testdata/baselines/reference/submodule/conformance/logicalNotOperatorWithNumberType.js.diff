@@ -1,6 +1,6 @@
 --- old.logicalNotOperatorWithNumberType.js
 +++ new.logicalNotOperatorWithNumberType.js
-@@= skipped -52, +52 lines =@@
+@@= skipped -51, +51 lines =@@
  var NUMBER1 = [1, 2];
  function foo() { return 1; }
  class A {

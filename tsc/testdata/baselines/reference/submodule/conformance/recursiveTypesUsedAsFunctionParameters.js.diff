@@ -1,8 +1,8 @@
 --- old.recursiveTypesUsedAsFunctionParameters.js
 +++ new.recursiveTypesUsedAsFunctionParameters.js
-@@= skipped -46, +46 lines =@@
-
+@@= skipped -47, +47 lines =@@
  //// [recursiveTypesUsedAsFunctionParameters.js]
+ "use strict";
  class List {
 +    data;
 +    next;

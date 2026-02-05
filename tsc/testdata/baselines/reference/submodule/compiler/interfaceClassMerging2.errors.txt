@@ -1,0 +1,45 @@
+interfaceClassMerging2.ts(7,5): error TS2564: Property 'classFooProperty' has no initializer and is not definitely assigned in the constructor.
+interfaceClassMerging2.ts(21,5): error TS2564: Property 'classBarProperty' has no initializer and is not definitely assigned in the constructor.
+
+
+==== interfaceClassMerging2.ts (2 errors) ====
+    interface Foo {
+        interfaceFooMethod(): this;
+        interfaceFooProperty: this;
+    }
+    
+    class Foo {
+        classFooProperty: this;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'classFooProperty' has no initializer and is not definitely assigned in the constructor.
+    
+        classFooMethod(): this {
+            return this;
+        }
+    }
+    
+    
+    interface Bar {
+        interfaceBarMethod(): this;
+        interfaceBarProperty: this;
+    }
+    
+    class Bar extends Foo {
+        classBarProperty: this;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'classBarProperty' has no initializer and is not definitely assigned in the constructor.
+    
+        classBarMethod(): this {
+            return this;
+        }
+    }
+    
+    
+    var bar = new Bar();
+    bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod();
+    
+    
+    var foo = new Foo();
+    
+    foo = bar;
+    

@@ -1,8 +1,8 @@
 --- old.comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.js
 +++ new.comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.js
-@@= skipped -114, +114 lines =@@
-
+@@= skipped -115, +115 lines =@@
  //// [comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.js]
+ "use strict";
  class Base {
 +    a;
  }
@@ -12,5 +12,5 @@
  class C {
 +    c;
  }
- var a1;
- var b1;
+ // operator <
+ var r1a1 = a1 < b1;

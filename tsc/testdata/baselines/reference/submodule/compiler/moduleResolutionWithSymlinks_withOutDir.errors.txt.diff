@@ -1,25 +1,34 @@
 --- old.moduleResolutionWithSymlinks_withOutDir.errors.txt
 +++ new.moduleResolutionWithSymlinks_withOutDir.errors.txt
 @@= skipped -0, +0 lines =@@
--<no content>
+-/src/app.ts(6,5): error TS2454: Variable 'y' is used before being assigned.
+ /src/library-a/index.ts(1,32): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+-
+-
+-==== /src/app.ts (1 errors) ====
 +/src/library-b/index.ts(1,23): error TS2307: Cannot find module 'library-a' or its corresponding type declarations.
 +
 +
 +==== /src/app.ts (0 errors) ====
-+    import { MyClass } from "./library-a";
-+    import { MyClass2 } from "./library-b";
-+    
-+    let x: MyClass;
-+    let y: MyClass2;
-+    x = y;
-+    y = x;
-+    
-+==== /src/library-a/index.ts (0 errors) ====
-+    export class MyClass { private x: number; }
-+    
+     import { MyClass } from "./library-a";
+     import { MyClass2 } from "./library-b";
+     
+     let x: MyClass;
+     let y: MyClass2;
+     x = y;
+-        ~
+-!!! error TS2454: Variable 'y' is used before being assigned.
+     y = x;
+     
+ ==== /src/library-a/index.ts (1 errors) ====
+@@= skipped -17, +15 lines =@@
+                                    ~
+ !!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+     
+-==== /src/library-b/index.ts (0 errors) ====
 +==== /src/library-b/index.ts (1 errors) ====
-+    import {MyClass} from "library-a";
+     import {MyClass} from "library-a";
 +                          ~~~~~~~~~~~
 +!!! error TS2307: Cannot find module 'library-a' or its corresponding type declarations.
-+    export { MyClass as MyClass2 }
-+    
+     export { MyClass as MyClass2 }
+     

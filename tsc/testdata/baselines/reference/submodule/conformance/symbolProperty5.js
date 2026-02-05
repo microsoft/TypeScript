@@ -10,6 +10,7 @@ var x = {
 }
 
 //// [symbolProperty5.js]
+"use strict";
 var x = {
     [Symbol.iterator]: 0,
     [Symbol.toPrimitive]() { },

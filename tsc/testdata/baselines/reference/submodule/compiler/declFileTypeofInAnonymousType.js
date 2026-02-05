@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileTypeofInAnonymousType.ts] ////
 
 //// [declFileTypeofInAnonymousType.ts]
-module m1 {
+namespace m1 {
     export class c {
     }
     export enum e {
@@ -24,6 +24,7 @@ var d = {
 };
 
 //// [declFileTypeofInAnonymousType.js]
+"use strict";
 var m1;
 (function (m1) {
     class c {

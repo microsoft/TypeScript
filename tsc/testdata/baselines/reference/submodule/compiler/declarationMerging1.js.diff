@@ -1,8 +1,8 @@
 --- old.declarationMerging1.js
 +++ new.declarationMerging1.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [file1.js]
+ "use strict";
  class A {
 +    _f;
      getF() { return this._f; }

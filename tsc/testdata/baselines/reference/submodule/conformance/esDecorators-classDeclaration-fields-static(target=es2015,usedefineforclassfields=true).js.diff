@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-fields-static(target=es2015,usedefineforclassfields=true).js
 +++ new.esDecorators-classDeclaration-fields-static(target=es2015,usedefineforclassfields=true).js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [esDecorators-classDeclaration-fields-static.js]
+ "use strict";
  const field3 = "field3";
 -let C = (() => {
 -    var _a;

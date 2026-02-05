@@ -15,6 +15,7 @@ var x2: (a: A) => void = true ? (a: C) => a.foo : (b: number) => { };
 
 
 //// [contextualTypingOfConditionalExpression2.js]
+"use strict";
 class A {
     foo;
 }

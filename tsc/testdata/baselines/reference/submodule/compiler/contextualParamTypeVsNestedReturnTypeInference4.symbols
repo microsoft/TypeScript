@@ -1,0 +1,207 @@
+//// [tests/cases/compiler/contextualParamTypeVsNestedReturnTypeInference4.ts] ////
+
+=== contextualParamTypeVsNestedReturnTypeInference4.ts ===
+type Covariant<A> = (_: never) => A;
+>Covariant : Symbol(Covariant, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 0))
+>A : Symbol(A, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 15))
+>_ : Symbol(_, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 21))
+>A : Symbol(A, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 15))
+
+interface Effect<out A, out E = never, out R = never> {
+>Effect : Symbol(Effect, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 36))
+>A : Symbol(A, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 2, 17))
+>E : Symbol(E, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 2, 23))
+>R : Symbol(R, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 2, 38))
+
+  readonly _A: Covariant<A>;
+>_A : Symbol(Effect._A, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 2, 55))
+>Covariant : Symbol(Covariant, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 0))
+>A : Symbol(A, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 2, 17))
+
+  readonly _E: Covariant<E>;
+>_E : Symbol(Effect._E, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 3, 28))
+>Covariant : Symbol(Covariant, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 0))
+>E : Symbol(E, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 2, 23))
+
+  readonly _R: Covariant<R>;
+>_R : Symbol(Effect._R, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 4, 28))
+>Covariant : Symbol(Covariant, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 0))
+>R : Symbol(R, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 2, 38))
+}
+
+declare function effectGen<A, E, R, AEff>(
+>effectGen : Symbol(effectGen, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 6, 1))
+>A : Symbol(A, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 8, 27))
+>E : Symbol(E, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 8, 29))
+>R : Symbol(R, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 8, 32))
+>AEff : Symbol(AEff, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 8, 35))
+
+  f: () => Generator<Effect<A, E, R>, AEff, never>,
+>f : Symbol(f, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 8, 42))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Effect : Symbol(Effect, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 36))
+>A : Symbol(A, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 8, 27))
+>E : Symbol(E, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 8, 29))
+>R : Symbol(R, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 8, 32))
+>AEff : Symbol(AEff, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 8, 35))
+
+): Effect<AEff, E, R>;
+>Effect : Symbol(Effect, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 36))
+>AEff : Symbol(AEff, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 8, 35))
+>E : Symbol(E, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 8, 29))
+>R : Symbol(R, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 8, 32))
+
+declare function effectFn<A, E, R, AEff, Args extends Array<any>>(
+>effectFn : Symbol(effectFn, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 10, 22))
+>A : Symbol(A, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 26))
+>E : Symbol(E, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 28))
+>R : Symbol(R, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 31))
+>AEff : Symbol(AEff, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 34))
+>Args : Symbol(Args, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 40))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+
+  body: (...args: Args) => Generator<Effect<A, E, R>, AEff, never>,
+>body : Symbol(body, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 66))
+>args : Symbol(args, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 13, 9))
+>Args : Symbol(Args, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 40))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Effect : Symbol(Effect, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 36))
+>A : Symbol(A, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 26))
+>E : Symbol(E, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 28))
+>R : Symbol(R, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 31))
+>AEff : Symbol(AEff, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 34))
+
+): (...args: Args) => Effect<AEff, E, R>;
+>args : Symbol(args, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 14, 4))
+>Args : Symbol(Args, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 40))
+>Effect : Symbol(Effect, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 36))
+>AEff : Symbol(AEff, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 34))
+>E : Symbol(E, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 28))
+>R : Symbol(R, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 12, 31))
+
+interface Tag<in out Id, in out Value> {
+>Tag : Symbol(Tag, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 35, 11), Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 14, 41))
+>Id : Symbol(Id, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 16, 14))
+>Value : Symbol(Value, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 16, 24))
+
+  readonly _op: "Tag";
+>_op : Symbol(Tag._op, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 16, 40))
+
+  readonly Service: Value;
+>Service : Symbol(Tag.Service, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 17, 22))
+>Value : Symbol(Value, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 16, 24))
+
+  readonly Identifier: Id;
+>Identifier : Symbol(Tag.Identifier, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 18, 26))
+>Id : Symbol(Id, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 16, 14))
+}
+
+interface TagClassShape<Id, Shape> {
+>TagClassShape : Symbol(TagClassShape, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 20, 1))
+>Id : Symbol(Id, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 22, 24), Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 23, 23))
+>Shape : Symbol(Shape, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 22, 27))
+
+  readonly Type: Shape;
+>Type : Symbol(TagClassShape.Type, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 22, 36))
+>Shape : Symbol(Shape, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 22, 27))
+
+  readonly Id: Id;
+>Id : Symbol(Id, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 22, 24), Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 23, 23))
+>Id : Symbol(Id, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 22, 24), Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 23, 23))
+}
+
+interface TagClass<Self, Id extends string, Type> extends Tag<Self, Type> {
+>TagClass : Symbol(TagClass, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 25, 1))
+>Self : Symbol(Self, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 27, 19))
+>Id : Symbol(Id, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 27, 24))
+>Type : Symbol(Type, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 27, 43))
+>Tag : Symbol(Tag, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 35, 11), Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 14, 41))
+>Self : Symbol(Self, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 27, 19))
+>Type : Symbol(Type, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 27, 43))
+
+  new (_: never): TagClassShape<Id, Type>;
+>_ : Symbol(_, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 28, 7))
+>TagClassShape : Symbol(TagClassShape, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 20, 1))
+>Id : Symbol(Id, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 27, 24))
+>Type : Symbol(Type, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 27, 43))
+
+  readonly key: Id;
+>key : Symbol(TagClass.key, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 28, 42))
+>Id : Symbol(Id, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 27, 24))
+}
+
+declare function layerEffect<I, S, E, R>(
+>layerEffect : Symbol(layerEffect, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 30, 1))
+>I : Symbol(I, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 32, 29))
+>S : Symbol(S, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 32, 31))
+>E : Symbol(E, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 32, 34))
+>R : Symbol(R, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 32, 37))
+
+  tag: Tag<I, S>,
+>tag : Symbol(tag, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 32, 41))
+>Tag : Symbol(Tag, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 35, 11), Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 14, 41))
+>I : Symbol(I, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 32, 29))
+>S : Symbol(S, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 32, 31))
+
+  effect: Effect<S, E, R>,
+>effect : Symbol(effect, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 33, 17))
+>Effect : Symbol(Effect, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 36))
+>S : Symbol(S, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 32, 31))
+>E : Symbol(E, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 32, 34))
+>R : Symbol(R, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 32, 37))
+
+): unknown;
+
+declare function Tag<const Id extends string>(
+>Tag : Symbol(Tag, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 35, 11), Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 14, 41))
+>Id : Symbol(Id, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 37, 21))
+
+  id: Id,
+>id : Symbol(id, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 37, 46))
+>Id : Symbol(Id, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 37, 21))
+
+): <Self, Shape>() => TagClass<Self, Id, Shape>;
+>Self : Symbol(Self, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 39, 4))
+>Shape : Symbol(Shape, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 39, 9))
+>TagClass : Symbol(TagClass, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 25, 1))
+>Self : Symbol(Self, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 39, 4))
+>Id : Symbol(Id, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 37, 21))
+>Shape : Symbol(Shape, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 39, 9))
+
+class Foo extends Tag("Foo")<
+>Foo : Symbol(Foo, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 39, 48))
+>Tag : Symbol(Tag, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 35, 11), Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 14, 41))
+
+  Foo,
+>Foo : Symbol(Foo, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 39, 48))
+  {
+    fn: (a: string) => Effect<void>;
+>fn : Symbol(fn, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 43, 3))
+>a : Symbol(a, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 44, 9))
+>Effect : Symbol(Effect, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 0, 36))
+  }
+>() {}
+
+layerEffect(
+>layerEffect : Symbol(layerEffect, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 30, 1))
+
+  Foo,
+>Foo : Symbol(Foo, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 39, 48))
+
+  effectGen(function* () {
+>effectGen : Symbol(effectGen, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 6, 1))
+
+    return {
+      fn: effectFn(function* (a) {
+>fn : Symbol(fn, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 51, 12))
+>effectFn : Symbol(effectFn, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 10, 22))
+>a : Symbol(a, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 52, 30))
+
+        a; // string
+>a : Symbol(a, Decl(contextualParamTypeVsNestedReturnTypeInference4.ts, 52, 30))
+
+      }),
+    };
+  }),
+);
+

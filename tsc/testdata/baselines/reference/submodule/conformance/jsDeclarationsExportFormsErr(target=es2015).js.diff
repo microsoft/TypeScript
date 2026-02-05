@@ -1,0 +1,24 @@
+--- old.jsDeclarationsExportFormsErr(target=es2015).js
++++ new.jsDeclarationsExportFormsErr(target=es2015).js
+@@= skipped -96, +96 lines =@@
+
+
+ //// [cls.d.ts]
+-export class Foo {
++export declare class Foo {
+ }
+ //// [bar.d.ts]
+-export = ns;
+ import ns = require("./cls");
++export = ns;
+ //// [bin.d.ts]
+-export {};
++export = ns;
+ //// [globalNs.d.ts]
+ export * from "./cls";
++export as namespace GLO;
+ //// [includeAll.d.ts]
+-export {};
++import "./bar";
++import "./bin";
++import "./globalNs";

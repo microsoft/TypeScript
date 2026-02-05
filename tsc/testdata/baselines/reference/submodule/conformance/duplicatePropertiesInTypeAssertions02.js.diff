@@ -1,6 +1,6 @@
 --- old.duplicatePropertiesInTypeAssertions02.js
 +++ new.duplicatePropertiesInTypeAssertions02.js
-@@= skipped -9, +9 lines =@@
+@@= skipped -10, +10 lines =@@
  //// [duplicatePropertiesInTypeAssertions02.d.ts]
  declare let x: {
      a: number;

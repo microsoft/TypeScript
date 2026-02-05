@@ -11,7 +11,7 @@ func TestNoCompletionListOnCommentsInsideObjectLiterals(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module ObjectLiterals {
+	const content = `namespace ObjectLiterals {
 	interface MyPoint {
 		x1: number;
 		y1: number;

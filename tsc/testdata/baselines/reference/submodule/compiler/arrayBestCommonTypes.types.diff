@@ -1,0 +1,368 @@
+--- old.arrayBestCommonTypes.types
++++ new.arrayBestCommonTypes.types
+@@= skipped -19, +19 lines =@@
+ >f : f
+
+         public voidIfAny(x: boolean, y?: boolean): number;
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >x : boolean
+ >y : boolean | undefined
+
+         public voidIfAny(x: string, y?: boolean): number;
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >x : string
+ >y : boolean | undefined
+
+         public voidIfAny(x: number, y?: boolean): number;
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >x : number
+ >y : boolean | undefined
+
+         public voidIfAny(x: any, y = false): any { return null; }
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >x : any
+ >y : boolean
+ >false : false
+@@= skipped -27, +27 lines =@@
+ ><number>(this.voidIfAny([4, 2][0])) : number
+ >(this.voidIfAny([4, 2][0])) : number
+ >this.voidIfAny([4, 2][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[4, 2][0] : number
+ >[4, 2] : number[]
+ >4 : 4
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny([4, 2, undefined][0])) : number
+ >(this.voidIfAny([4, 2, undefined][0])) : number
+ >this.voidIfAny([4, 2, undefined][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[4, 2, undefined][0] : number | undefined
+ >[4, 2, undefined] : (number | undefined)[]
+ >4 : 4
+@@= skipped -14, +14 lines =@@
+ ><number>(this.voidIfAny([undefined, 2, 4][0])) : number
+ >(this.voidIfAny([undefined, 2, 4][0])) : number
+ >this.voidIfAny([undefined, 2, 4][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[undefined, 2, 4][0] : number | undefined
+ >[undefined, 2, 4] : (number | undefined)[]
+ >undefined : undefined
+@@= skipped -14, +14 lines =@@
+ ><number>(this.voidIfAny([null, 2, 4][0])) : number
+ >(this.voidIfAny([null, 2, 4][0])) : number
+ >this.voidIfAny([null, 2, 4][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[null, 2, 4][0] : number | null
+ >[null, 2, 4] : (number | null)[]
+ >2 : 2
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny([2, 4, null][0])) : number
+ >(this.voidIfAny([2, 4, null][0])) : number
+ >this.voidIfAny([2, 4, null][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[2, 4, null][0] : number | null
+ >[2, 4, null] : (number | null)[]
+ >2 : 2
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny([undefined, 4, null][0])) : number
+ >(this.voidIfAny([undefined, 4, null][0])) : number
+ >this.voidIfAny([undefined, 4, null][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[undefined, 4, null][0] : number | null | undefined
+ >[undefined, 4, null] : (number | null | undefined)[]
+ >undefined : undefined
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny(['', "q"][0])) : number
+ >(this.voidIfAny(['', "q"][0])) : number
+ >this.voidIfAny(['', "q"][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >['', "q"][0] : string
+ >['', "q"] : string[]
+ >'' : ""
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny(['', "q", undefined][0])) : number
+ >(this.voidIfAny(['', "q", undefined][0])) : number
+ >this.voidIfAny(['', "q", undefined][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >['', "q", undefined][0] : string | undefined
+ >['', "q", undefined] : (string | undefined)[]
+ >'' : ""
+@@= skipped -14, +14 lines =@@
+ ><number>(this.voidIfAny([undefined, "q", ''][0])) : number
+ >(this.voidIfAny([undefined, "q", ''][0])) : number
+ >this.voidIfAny([undefined, "q", ''][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[undefined, "q", ''][0] : string | undefined
+ >[undefined, "q", ''] : (string | undefined)[]
+ >undefined : undefined
+@@= skipped -14, +14 lines =@@
+ ><number>(this.voidIfAny([null, "q", ''][0])) : number
+ >(this.voidIfAny([null, "q", ''][0])) : number
+ >this.voidIfAny([null, "q", ''][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[null, "q", ''][0] : string | null
+ >[null, "q", ''] : (string | null)[]
+ >"q" : "q"
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny(["q", '', null][0])) : number
+ >(this.voidIfAny(["q", '', null][0])) : number
+ >this.voidIfAny(["q", '', null][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >["q", '', null][0] : string | null
+ >["q", '', null] : (string | null)[]
+ >"q" : "q"
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny([undefined, '', null][0])) : number
+ >(this.voidIfAny([undefined, '', null][0])) : number
+ >this.voidIfAny([undefined, '', null][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[undefined, '', null][0] : string | null | undefined
+ >[undefined, '', null] : (string | null | undefined)[]
+ >undefined : undefined
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny([[3, 4], [null]][0][0])) : number
+ >(this.voidIfAny([[3, 4], [null]][0][0])) : number
+ >this.voidIfAny([[3, 4], [null]][0][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[[3, 4], [null]][0][0] : number | null
+ >[[3, 4], [null]][0] : null[] | number[]
+ >[[3, 4], [null]] : (null[] | number[])[]
+@@= skipped -199, +199 lines =@@
+ >f : f
+
+         public voidIfAny(x: boolean, y?: boolean): number;
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >x : boolean
+ >y : boolean | undefined
+
+         public voidIfAny(x: string, y?: boolean): number;
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >x : string
+ >y : boolean | undefined
+
+         public voidIfAny(x: number, y?: boolean): number;
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >x : number
+ >y : boolean | undefined
+
+         public voidIfAny(x: any, y = false): any { return null; }
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >x : any
+ >y : boolean
+ >false : false
+@@= skipped -27, +27 lines =@@
+ ><number>(this.voidIfAny([4, 2][0])) : number
+ >(this.voidIfAny([4, 2][0])) : number
+ >this.voidIfAny([4, 2][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[4, 2][0] : number
+ >[4, 2] : number[]
+ >4 : 4
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny([4, 2, undefined][0])) : number
+ >(this.voidIfAny([4, 2, undefined][0])) : number
+ >this.voidIfAny([4, 2, undefined][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[4, 2, undefined][0] : number | undefined
+ >[4, 2, undefined] : (number | undefined)[]
+ >4 : 4
+@@= skipped -14, +14 lines =@@
+ ><number>(this.voidIfAny([undefined, 2, 4][0])) : number
+ >(this.voidIfAny([undefined, 2, 4][0])) : number
+ >this.voidIfAny([undefined, 2, 4][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[undefined, 2, 4][0] : number | undefined
+ >[undefined, 2, 4] : (number | undefined)[]
+ >undefined : undefined
+@@= skipped -14, +14 lines =@@
+ ><number>(this.voidIfAny([null, 2, 4][0])) : number
+ >(this.voidIfAny([null, 2, 4][0])) : number
+ >this.voidIfAny([null, 2, 4][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[null, 2, 4][0] : number | null
+ >[null, 2, 4] : (number | null)[]
+ >2 : 2
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny([2, 4, null][0])) : number
+ >(this.voidIfAny([2, 4, null][0])) : number
+ >this.voidIfAny([2, 4, null][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[2, 4, null][0] : number | null
+ >[2, 4, null] : (number | null)[]
+ >2 : 2
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny([undefined, 4, null][0])) : number
+ >(this.voidIfAny([undefined, 4, null][0])) : number
+ >this.voidIfAny([undefined, 4, null][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[undefined, 4, null][0] : number | null | undefined
+ >[undefined, 4, null] : (number | null | undefined)[]
+ >undefined : undefined
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny(['', "q"][0])) : number
+ >(this.voidIfAny(['', "q"][0])) : number
+ >this.voidIfAny(['', "q"][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >['', "q"][0] : string
+ >['', "q"] : string[]
+ >'' : ""
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny(['', "q", undefined][0])) : number
+ >(this.voidIfAny(['', "q", undefined][0])) : number
+ >this.voidIfAny(['', "q", undefined][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >['', "q", undefined][0] : string | undefined
+ >['', "q", undefined] : (string | undefined)[]
+ >'' : ""
+@@= skipped -14, +14 lines =@@
+ ><number>(this.voidIfAny([undefined, "q", ''][0])) : number
+ >(this.voidIfAny([undefined, "q", ''][0])) : number
+ >this.voidIfAny([undefined, "q", ''][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[undefined, "q", ''][0] : string | undefined
+ >[undefined, "q", ''] : (string | undefined)[]
+ >undefined : undefined
+@@= skipped -14, +14 lines =@@
+ ><number>(this.voidIfAny([null, "q", ''][0])) : number
+ >(this.voidIfAny([null, "q", ''][0])) : number
+ >this.voidIfAny([null, "q", ''][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[null, "q", ''][0] : string | null
+ >[null, "q", ''] : (string | null)[]
+ >"q" : "q"
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny(["q", '', null][0])) : number
+ >(this.voidIfAny(["q", '', null][0])) : number
+ >this.voidIfAny(["q", '', null][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >["q", '', null][0] : string | null
+ >["q", '', null] : (string | null)[]
+ >"q" : "q"
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny([undefined, '', null][0])) : number
+ >(this.voidIfAny([undefined, '', null][0])) : number
+ >this.voidIfAny([undefined, '', null][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[undefined, '', null][0] : string | null | undefined
+ >[undefined, '', null] : (string | null | undefined)[]
+ >undefined : undefined
+@@= skipped -13, +13 lines =@@
+ ><number>(this.voidIfAny([[3, 4], [null]][0][0])) : number
+ >(this.voidIfAny([[3, 4], [null]][0][0])) : number
+ >this.voidIfAny([[3, 4], [null]][0][0]) : number
+->this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >this : this
+->voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
++>voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+ >[[3, 4], [null]][0][0] : number | null
+ >[[3, 4], [null]][0] : null[] | number[]
+ >[[3, 4], [null]] : (null[] | number[])[]

@@ -1,7 +1,7 @@
 --- old.constructorParametersThatShadowExternalNamesInVariableDeclarations.js
 +++ new.constructorParametersThatShadowExternalNamesInVariableDeclarations.js
-@@= skipped -17, +17 lines =@@
- //// [constructorParametersThatShadowExternalNamesInVariableDeclarations.js]
+@@= skipped -18, +18 lines =@@
+ "use strict";
  var x = 1;
  class A {
 +    a = x;

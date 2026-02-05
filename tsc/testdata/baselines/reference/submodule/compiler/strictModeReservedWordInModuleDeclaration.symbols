@@ -2,18 +2,18 @@
 
 === strictModeReservedWordInModuleDeclaration.ts ===
 "use strict"
-module public { }
->public : Symbol(public, Decl(strictModeReservedWordInModuleDeclaration.ts, 0, 12), Decl(strictModeReservedWordInModuleDeclaration.ts, 2, 18))
+namespace public { }
+>public : Symbol(public, Decl(strictModeReservedWordInModuleDeclaration.ts, 0, 12), Decl(strictModeReservedWordInModuleDeclaration.ts, 2, 21))
 
-module private { }
->private : Symbol(private, Decl(strictModeReservedWordInModuleDeclaration.ts, 1, 17), Decl(strictModeReservedWordInModuleDeclaration.ts, 4, 1))
+namespace private { }
+>private : Symbol(private, Decl(strictModeReservedWordInModuleDeclaration.ts, 1, 20), Decl(strictModeReservedWordInModuleDeclaration.ts, 4, 1))
 
-module public.whatever {
->public : Symbol(public, Decl(strictModeReservedWordInModuleDeclaration.ts, 0, 12), Decl(strictModeReservedWordInModuleDeclaration.ts, 2, 18))
->whatever : Symbol(whatever, Decl(strictModeReservedWordInModuleDeclaration.ts, 3, 14))
+namespace public.whatever {
+>public : Symbol(public, Decl(strictModeReservedWordInModuleDeclaration.ts, 0, 12), Decl(strictModeReservedWordInModuleDeclaration.ts, 2, 21))
+>whatever : Symbol(whatever, Decl(strictModeReservedWordInModuleDeclaration.ts, 3, 17))
 }
-module private.public.foo { }
->private : Symbol(private, Decl(strictModeReservedWordInModuleDeclaration.ts, 1, 17), Decl(strictModeReservedWordInModuleDeclaration.ts, 4, 1))
->public : Symbol(public, Decl(strictModeReservedWordInModuleDeclaration.ts, 5, 15))
->foo : Symbol(foo, Decl(strictModeReservedWordInModuleDeclaration.ts, 5, 22))
+namespace private.public.foo { }
+>private : Symbol(private, Decl(strictModeReservedWordInModuleDeclaration.ts, 1, 20), Decl(strictModeReservedWordInModuleDeclaration.ts, 4, 1))
+>public : Symbol(public, Decl(strictModeReservedWordInModuleDeclaration.ts, 5, 18))
+>foo : Symbol(foo, Decl(strictModeReservedWordInModuleDeclaration.ts, 5, 25))
 

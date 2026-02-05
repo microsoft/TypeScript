@@ -11,10 +11,11 @@ func TestGetDeclarationDiagnostics(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @declaration: true
+	const content = `// @strict: false
+// @declaration: true
 // @outFile: true
 // @Filename: inputFile1.ts
-module m {
+namespace m {
    export function foo() {
        class C implements I { private a; }
        interface I { }

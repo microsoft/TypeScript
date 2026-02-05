@@ -1,6 +1,6 @@
 --- old.typeGuardsInModule.js
 +++ new.typeGuardsInModule.js
-@@= skipped -146, +146 lines =@@
+@@= skipped -147, +147 lines =@@
  // Dotted module
  var m3;
  (function (m3) {

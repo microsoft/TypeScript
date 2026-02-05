@@ -7,4 +7,5 @@ declare function identity<V>(y: V): V;
 var s = map("", identity);
 
 //// [inferentialTypingWithFunctionType.js]
+"use strict";
 var s = map("", identity);

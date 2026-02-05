@@ -1,6 +1,6 @@
 --- old.classStaticBlock8.js
 +++ new.classStaticBlock8.js
-@@= skipped -54, +54 lines =@@
+@@= skipped -55, +55 lines =@@
  function foo(v) {
      label: while (v) {
          class C {

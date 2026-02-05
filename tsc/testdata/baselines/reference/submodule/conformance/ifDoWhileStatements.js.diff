@@ -1,8 +1,8 @@
 --- old.ifDoWhileStatements.js
 +++ new.ifDoWhileStatements.js
-@@= skipped -165, +165 lines =@@
-
+@@= skipped -166, +166 lines =@@
  //// [ifDoWhileStatements.js]
+ "use strict";
  class C {
 +    id;
 +    name;

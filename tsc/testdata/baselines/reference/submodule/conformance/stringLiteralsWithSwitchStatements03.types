@@ -1,13 +1,13 @@
 //// [tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts] ////
 
 === stringLiteralsWithSwitchStatements03.ts ===
-let x: "foo";
+declare let x: "foo";
 >x : "foo"
 
-let y: "foo" | "bar"; 
+declare let y: "foo" | "bar";
 >y : "bar" | "foo"
 
-let z: "bar";
+declare let z: "bar";
 >z : "bar"
 
 declare function randBool(): boolean;
@@ -60,30 +60,30 @@ switch (x) {
 
         break;
     case (("foo" || ("bar"))):
->(("foo" || ("bar"))) : "bar" | "foo"
->("foo" || ("bar")) : "bar" | "foo"
->"foo" || ("bar") : "bar" | "foo"
+>(("foo" || ("bar"))) : "foo"
+>("foo" || ("bar")) : "foo"
+>"foo" || ("bar") : "foo"
 >"foo" : "foo"
 >("bar") : "bar"
 >"bar" : "bar"
 
         break;
     case (("bar" || ("baz"))):
->(("bar" || ("baz"))) : "bar" | "baz"
->("bar" || ("baz")) : "bar" | "baz"
->"bar" || ("baz") : "bar" | "baz"
+>(("bar" || ("baz"))) : "bar"
+>("bar" || ("baz")) : "bar"
+>"bar" || ("baz") : "bar"
 >"bar" : "bar"
 >("baz") : "baz"
 >"baz" : "baz"
 
         break;
     case z || "baz":
->z || "baz" : "bar" | "baz"
+>z || "baz" : "bar"
 >z : "bar"
 >"baz" : "baz"
 
     case "baz" || z:
->"baz" || z : "bar" | "baz"
+>"baz" || z : "baz"
 >"baz" : "baz"
 >z : "bar"
 

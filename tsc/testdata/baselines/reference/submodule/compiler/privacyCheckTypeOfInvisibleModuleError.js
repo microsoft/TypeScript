@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/privacyCheckTypeOfInvisibleModuleError.ts] ////
 
 //// [privacyCheckTypeOfInvisibleModuleError.ts]
-module Outer {
-    module Inner {
+namespace Outer {
+    namespace Inner {
         export var m: typeof Inner;
     }
 
@@ -11,6 +11,7 @@ module Outer {
 
 
 //// [privacyCheckTypeOfInvisibleModuleError.js]
+"use strict";
 var Outer;
 (function (Outer) {
     let Inner;

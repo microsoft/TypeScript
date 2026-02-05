@@ -9,5 +9,6 @@ function f(args: ["a"] | I) { }
 f(["a"]);
 
 //// [unionTypeWithIndexAndTuple.js]
+"use strict";
 function f(args) { }
 f(["a"]);

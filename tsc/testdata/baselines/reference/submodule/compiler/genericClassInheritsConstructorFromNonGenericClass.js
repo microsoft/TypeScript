@@ -8,6 +8,7 @@ class C {
 }
 
 //// [genericClassInheritsConstructorFromNonGenericClass.js]
+"use strict";
 class A extends B {
 }
 class B extends C {

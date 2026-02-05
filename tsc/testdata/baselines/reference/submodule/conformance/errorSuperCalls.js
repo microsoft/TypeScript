@@ -77,6 +77,7 @@ class OtherDerived extends OtherBase {
 
 
 //// [errorSuperCalls.js]
+"use strict";
 //super call in class constructor with no base type
 class NoBase {
     constructor() {

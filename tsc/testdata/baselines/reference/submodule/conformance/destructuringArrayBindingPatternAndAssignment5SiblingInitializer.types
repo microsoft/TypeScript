@@ -69,17 +69,17 @@ function f3() {
 // Based on comment:
 //   - https://github.com/microsoft/TypeScript/issues/49989#issuecomment-1852694486
 declare const yadda: [number, number] | undefined
->yadda : [number, number]
+>yadda : [number, number] | undefined
 
 function f4() {
 >f4 : () => void
 
     const [ a, b = a ] = yadda ?? [];
->a : number
->b : number
->a : number
+>a : number | undefined
+>b : number | undefined
+>a : number | undefined
 >yadda ?? [] : [] | [number, number]
->yadda : [number, number]
+>yadda : [number, number] | undefined
 >[] : []
 }
 

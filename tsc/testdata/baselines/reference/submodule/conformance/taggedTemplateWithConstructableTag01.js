@@ -6,6 +6,7 @@ class CtorTag { }
 CtorTag `Hello world!`;
 
 //// [taggedTemplateWithConstructableTag01.js]
+"use strict";
 class CtorTag {
 }
 CtorTag `Hello world!`;

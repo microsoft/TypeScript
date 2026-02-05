@@ -2,13 +2,13 @@
 
 //// [typeParameterExplicitlyExtendsAny.ts]
 function fee<T>() {
-    var t: T;
+    var t!: T;
     t.blah; // Error
     t.toString; // ok
 }
 
 function fee2<T extends any>() {
-    var t: T;
+    var t!: T;
     t.blah; // ok
     t.toString; // ok
 }
@@ -36,6 +36,7 @@ class MyClass {
 
 
 //// [typeParameterExplicitlyExtendsAny.js]
+"use strict";
 function fee() {
     var t;
     t.blah; // Error

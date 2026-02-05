@@ -32,6 +32,7 @@ var b = {
 }
 
 //// [parametersWithNoAnnotationAreAny.js]
+"use strict";
 function foo(x) { return x; }
 var f = function foo(x) { return x; };
 var f2 = (x) => x;

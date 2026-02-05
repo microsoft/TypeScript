@@ -17,5 +17,4 @@ declare const b: Foo<Date | null>;
 type ShouldBe0 = Equals<typeof a, typeof b>;
 
 //// [conditionalEqualityTestingNullability.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

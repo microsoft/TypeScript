@@ -1,0 +1,82 @@
+typeGuardsInProperties.ts(7,13): error TS2564: Property 'pp1' has no initializer and is not definitely assigned in the constructor.
+typeGuardsInProperties.ts(8,5): error TS2564: Property 'pp2' has no initializer and is not definitely assigned in the constructor.
+typeGuardsInProperties.ts(14,9): error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+  Type 'boolean' is not assignable to type 'string | number'.
+typeGuardsInProperties.ts(15,9): error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+  Type 'boolean' is not assignable to type 'string | number'.
+typeGuardsInProperties.ts(16,9): error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+  Type 'boolean' is not assignable to type 'string | number'.
+typeGuardsInProperties.ts(20,1): error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+  Type 'boolean' is not assignable to type 'string | number'.
+typeGuardsInProperties.ts(20,19): error TS2454: Variable 'c1' is used before being assigned.
+typeGuardsInProperties.ts(20,42): error TS2454: Variable 'c1' is used before being assigned.
+typeGuardsInProperties.ts(21,1): error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+  Type 'boolean' is not assignable to type 'string | number'.
+typeGuardsInProperties.ts(21,19): error TS2454: Variable 'c1' is used before being assigned.
+typeGuardsInProperties.ts(21,42): error TS2454: Variable 'c1' is used before being assigned.
+typeGuardsInProperties.ts(25,1): error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+  Type 'boolean' is not assignable to type 'string | number'.
+typeGuardsInProperties.ts(25,19): error TS2454: Variable 'obj1' is used before being assigned.
+typeGuardsInProperties.ts(25,42): error TS2454: Variable 'obj1' is used before being assigned.
+
+
+==== typeGuardsInProperties.ts (14 errors) ====
+    // Note that type guards affect types of variables and parameters only and 
+    // have no effect on members of objects such as properties. 
+    
+    var num: number;
+    var strOrNum: string | number;
+    class C1 {
+        private pp1: string | number;
+                ~~~
+!!! error TS2564: Property 'pp1' has no initializer and is not definitely assigned in the constructor.
+        pp2: string | number;
+        ~~~
+!!! error TS2564: Property 'pp2' has no initializer and is not definitely assigned in the constructor.
+        // Inside public accessor getter
+        get pp3() {
+            return strOrNum;
+        }
+        method() {
+            strOrNum = typeof this.pp1 === "string" && this.pp1; // string | number
+            ~~~~~~~~
+!!! error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string | number'.
+            strOrNum = typeof this.pp2 === "string" && this.pp2; // string | number
+            ~~~~~~~~
+!!! error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string | number'.
+            strOrNum = typeof this.pp3 === "string" && this.pp3; // string | number
+            ~~~~~~~~
+!!! error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string | number'.
+        }
+    }
+    var c1: C1;
+    strOrNum = typeof c1.pp2 === "string" && c1.pp2; // string | number
+    ~~~~~~~~
+!!! error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string | number'.
+                      ~~
+!!! error TS2454: Variable 'c1' is used before being assigned.
+                                             ~~
+!!! error TS2454: Variable 'c1' is used before being assigned.
+    strOrNum = typeof c1.pp3 === "string" && c1.pp3; // string | number
+    ~~~~~~~~
+!!! error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string | number'.
+                      ~~
+!!! error TS2454: Variable 'c1' is used before being assigned.
+                                             ~~
+!!! error TS2454: Variable 'c1' is used before being assigned.
+    var obj1: {
+        x: string | number;
+    };
+    strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
+    ~~~~~~~~
+!!! error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string | number'.
+                      ~~~~
+!!! error TS2454: Variable 'obj1' is used before being assigned.
+                                             ~~~~
+!!! error TS2454: Variable 'obj1' is used before being assigned.

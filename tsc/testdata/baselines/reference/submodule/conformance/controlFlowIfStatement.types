@@ -30,7 +30,7 @@ if (x /* RegExp */, (x = true)) {
 }
 else {
     x; // boolean
->x : true
+>x : never
 
     x = 42;
 >x = 42 : 42
@@ -103,9 +103,9 @@ function c<T>(data: string | T): T {
 
         return JSON.parse(data);
 >JSON.parse(data) : any
->JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
+>JSON.parse : (text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined) => any
 >JSON : JSON
->parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
+>parse : (text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined) => any
 >data : string | (T & string)
     }
     else {

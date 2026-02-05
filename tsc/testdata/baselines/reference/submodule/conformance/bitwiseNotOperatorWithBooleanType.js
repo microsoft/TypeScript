@@ -10,7 +10,7 @@ class A {
     public a: boolean;
     static foo() { return false; }
 }
-module M {
+namespace M {
     export var n: boolean;
 }
 
@@ -41,6 +41,7 @@ var ResultIsNumber8 = ~~BOOLEAN;
 ~M.n;
 
 //// [bitwiseNotOperatorWithBooleanType.js]
+"use strict";
 // ~ operator on boolean type
 var BOOLEAN;
 function foo() { return true; }

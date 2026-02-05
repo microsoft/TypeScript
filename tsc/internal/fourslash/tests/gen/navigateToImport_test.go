@@ -13,7 +13,8 @@ func TestNavigateToImport(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @Filename: library.ts
+	const content = `// @lib: es5
+// @Filename: library.ts
 [|export function foo() {}|]
 [|export function bar() {}|]
 // @Filename: user.ts

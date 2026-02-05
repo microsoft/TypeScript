@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts] ////
 
 //// [ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts]
-module A {
+namespace A {
 
     export class Point {
         x: number;
@@ -18,6 +18,7 @@ module A {
 }
 
 //// [ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.js]
+"use strict";
 var A;
 (function (A) {
     class Point {

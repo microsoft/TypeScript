@@ -4,6 +4,7 @@
 class foo { public bar: { (): number; (i: number): number; } = function() { return 1 }; }
 
 //// [contextualTyping15.js]
+"use strict";
 class foo {
     bar = function () { return 1; };
 }

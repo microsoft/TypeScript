@@ -4,4 +4,5 @@
 const
 
 //// [VariableDeclaration1_es6.js]
+"use strict";
 const ;

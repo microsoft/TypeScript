@@ -1,8 +1,8 @@
 --- old.privateAccessInSubclass1.js
 +++ new.privateAccessInSubclass1.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [privateAccessInSubclass1.js]
+ "use strict";
  class Base {
 +    options;
  }

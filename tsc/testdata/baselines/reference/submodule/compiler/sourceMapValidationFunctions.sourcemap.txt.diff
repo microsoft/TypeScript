@@ -1,6 +1,6 @@
 --- old.sourceMapValidationFunctions.sourcemap.txt
 +++ new.sourceMapValidationFunctions.sourcemap.txt
-@@= skipped -34, +34 lines =@@
+@@= skipped -35, +35 lines =@@
  3 >         ^^^^^
  4 >              ^
  5 >               ^^^^^^^^
@@ -12,12 +12,12 @@
  4 >              (
  5 >               greeting: string
 +6 >                       ): number 
- 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
- 2 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
- 3 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
- 4 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
- 5 >Emitted(2, 24) Source(2, 32) + SourceIndex(0)
-+6 >Emitted(2, 26) Source(2, 42) + SourceIndex(0)
+ 1->Emitted(3, 1) Source(2, 1) + SourceIndex(0)
+ 2 >Emitted(3, 10) Source(2, 10) + SourceIndex(0)
+ 3 >Emitted(3, 15) Source(2, 15) + SourceIndex(0)
+ 4 >Emitted(3, 16) Source(2, 16) + SourceIndex(0)
+ 5 >Emitted(3, 24) Source(2, 32) + SourceIndex(0)
++6 >Emitted(3, 26) Source(2, 42) + SourceIndex(0)
  ---
  >>>    greetings++;
  1 >^^^^
@@ -36,11 +36,11 @@
  1 >
 -  >
 -2 >}
--1 >Emitted(5, 1) Source(5, 1) + SourceIndex(0)
+-1 >Emitted(6, 1) Source(5, 1) + SourceIndex(0)
 +2 >
 +  >}
-+1 >Emitted(5, 1) Source(4, 22) + SourceIndex(0)
- 2 >Emitted(5, 2) Source(5, 2) + SourceIndex(0)
++1 >Emitted(6, 1) Source(4, 22) + SourceIndex(0)
+ 2 >Emitted(6, 2) Source(5, 2) + SourceIndex(0)
  ---
  >>>function greet2(greeting, n = 10, x, ...restParams) {
 @@= skipped -20, +20 lines =@@
@@ -56,14 +56,14 @@
  13>                                     ...
  14>                                        restParams: string[]
 +15>                                                  ): number 
- 1->Emitted(6, 1) Source(6, 1) + SourceIndex(0)
- 2 >Emitted(6, 10) Source(6, 10) + SourceIndex(0)
- 3 >Emitted(6, 16) Source(6, 16) + SourceIndex(0)
+ 1->Emitted(7, 1) Source(6, 1) + SourceIndex(0)
+ 2 >Emitted(7, 10) Source(6, 10) + SourceIndex(0)
+ 3 >Emitted(7, 16) Source(6, 16) + SourceIndex(0)
 @@= skipped -14, +15 lines =@@
- 12>Emitted(6, 38) Source(6, 55) + SourceIndex(0)
- 13>Emitted(6, 41) Source(6, 58) + SourceIndex(0)
- 14>Emitted(6, 51) Source(6, 78) + SourceIndex(0)
-+15>Emitted(6, 53) Source(6, 88) + SourceIndex(0)
+ 12>Emitted(7, 38) Source(6, 55) + SourceIndex(0)
+ 13>Emitted(7, 41) Source(6, 58) + SourceIndex(0)
+ 14>Emitted(7, 51) Source(6, 78) + SourceIndex(0)
++15>Emitted(7, 53) Source(6, 88) + SourceIndex(0)
  ---
  >>>    greetings++;
  1 >^^^^
@@ -82,11 +82,11 @@
  1 >
 -  >
 -2 >}
--1 >Emitted(9, 1) Source(9, 1) + SourceIndex(0)
+-1 >Emitted(10, 1) Source(9, 1) + SourceIndex(0)
 +2 >
 +  >}
-+1 >Emitted(9, 1) Source(8, 22) + SourceIndex(0)
- 2 >Emitted(9, 2) Source(9, 2) + SourceIndex(0)
++1 >Emitted(10, 1) Source(8, 22) + SourceIndex(0)
+ 2 >Emitted(10, 2) Source(9, 2) + SourceIndex(0)
  ---
  >>>function foo(greeting, n = 10, x, ...restParams) {
 @@= skipped -20, +20 lines =@@
@@ -103,14 +103,14 @@
  14>                                     restParams: string[]
 +15>                                               )
 +  >                                               
- 1->Emitted(10, 1) Source(10, 1) + SourceIndex(0)
- 2 >Emitted(10, 10) Source(10, 10) + SourceIndex(0)
- 3 >Emitted(10, 13) Source(10, 13) + SourceIndex(0)
+ 1->Emitted(11, 1) Source(10, 1) + SourceIndex(0)
+ 2 >Emitted(11, 10) Source(10, 10) + SourceIndex(0)
+ 3 >Emitted(11, 13) Source(10, 13) + SourceIndex(0)
 @@= skipped -14, +16 lines =@@
- 12>Emitted(10, 35) Source(10, 52) + SourceIndex(0)
- 13>Emitted(10, 38) Source(10, 55) + SourceIndex(0)
- 14>Emitted(10, 48) Source(10, 75) + SourceIndex(0)
-+15>Emitted(10, 50) Source(11, 1) + SourceIndex(0)
+ 12>Emitted(11, 35) Source(10, 52) + SourceIndex(0)
+ 13>Emitted(11, 38) Source(10, 55) + SourceIndex(0)
+ 14>Emitted(11, 48) Source(10, 75) + SourceIndex(0)
++15>Emitted(11, 50) Source(11, 1) + SourceIndex(0)
  ---
  >>>    return;
  1 >^^^^
@@ -120,17 +120,17 @@
 +1 >{
    >    
  2 >    return;
- 1 >Emitted(11, 5) Source(12, 5) + SourceIndex(0)
+ 1 >Emitted(12, 5) Source(12, 5) + SourceIndex(0)
 @@= skipped -16, +16 lines =@@
  2 >^
  3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
  1 >
 -  >
 -2 >}
--1 >Emitted(12, 1) Source(13, 1) + SourceIndex(0)
+-1 >Emitted(13, 1) Source(13, 1) + SourceIndex(0)
 +2 >
 +  >}
-+1 >Emitted(12, 1) Source(12, 12) + SourceIndex(0)
- 2 >Emitted(12, 2) Source(13, 2) + SourceIndex(0)
++1 >Emitted(13, 1) Source(12, 12) + SourceIndex(0)
+ 2 >Emitted(13, 2) Source(13, 2) + SourceIndex(0)
  ---
  >>>//# sourceMappingURL=sourceMapValidationFunctions.js.map

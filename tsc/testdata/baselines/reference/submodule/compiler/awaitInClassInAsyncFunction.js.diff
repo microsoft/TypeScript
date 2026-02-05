@@ -1,6 +1,6 @@
 --- old.awaitInClassInAsyncFunction.js
 +++ new.awaitInClassInAsyncFunction.js
-@@= skipped -20, +20 lines =@@
+@@= skipped -21, +21 lines =@@
  }
  async function foo() {
      return new class {

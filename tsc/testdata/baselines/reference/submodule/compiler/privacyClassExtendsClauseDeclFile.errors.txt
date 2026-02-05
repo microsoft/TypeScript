@@ -3,7 +3,7 @@ privacyClassExtendsClauseDeclFile_externalModule.ts(21,83): error TS2449: Class 
 
 
 ==== privacyClassExtendsClauseDeclFile_externalModule.ts (2 errors) ====
-    export module publicModule {
+    export namespace publicModule {
         export class publicClassInPublicModule {
             private f1() {
             }
@@ -33,7 +33,7 @@ privacyClassExtendsClauseDeclFile_externalModule.ts(21,83): error TS2449: Class 
         }
     }
     
-    module privateModule {
+    namespace privateModule {
         export class publicClassInPrivateModule {
             private f1() {
             }
@@ -80,7 +80,7 @@ privacyClassExtendsClauseDeclFile_externalModule.ts(21,83): error TS2449: Class 
     }
     
 ==== privacyClassExtendsClauseDeclFile_GlobalFile.ts (0 errors) ====
-    module publicModuleInGlobal {
+    namespace publicModuleInGlobal {
         export class publicClassInPublicModule {
             private f1() {
             }

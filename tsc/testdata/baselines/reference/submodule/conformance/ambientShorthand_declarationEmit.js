@@ -5,6 +5,7 @@ declare module "foo";
 
 
 //// [ambientShorthand_declarationEmit.js]
+"use strict";
 
 
 //// [ambientShorthand_declarationEmit.d.ts]

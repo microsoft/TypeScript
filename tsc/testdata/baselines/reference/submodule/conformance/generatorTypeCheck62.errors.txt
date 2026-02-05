@@ -1,21 +1,20 @@
-generatorTypeCheck62.ts(24,62): error TS2345: Argument of type '(state: State) => Generator<never, State, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void>'.
-  Type 'Generator<never, State, any>' is not assignable to type 'IterableIterator<State, void>'.
+generatorTypeCheck62.ts(24,62): error TS2345: Argument of type '(state: State) => Generator<never, State, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State | undefined, void>'.
+  Type 'Generator<never, State, any>' is not assignable to type 'IterableIterator<State | undefined, void>'.
     The types returned by 'next(...)' are incompatible between these types.
-      Type 'IteratorResult<never, State>' is not assignable to type 'IteratorResult<State, void>'.
-        Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorResult<State, void>'.
+      Type 'IteratorResult<never, State>' is not assignable to type 'IteratorResult<State | undefined, void>'.
+        Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorResult<State | undefined, void>'.
           Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorReturnResult<void>'.
             Type 'State' is not assignable to type 'void'.
-generatorTypeCheck62.ts(32,62): error TS2345: Argument of type '(state: State) => Generator<any, State, any>' is not assignable to parameter of type '(a: any) => IterableIterator<any, void>'.
-  Type 'Generator<any, State, any>' is not assignable to type 'IterableIterator<any, void>'.
+generatorTypeCheck62.ts(32,62): error TS2345: Argument of type '(state: State) => Generator<undefined, State, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State | undefined, void>'.
+  Type 'Generator<undefined, State, any>' is not assignable to type 'IterableIterator<State | undefined, void>'.
     The types returned by 'next(...)' are incompatible between these types.
-      Type 'IteratorResult<any, State>' is not assignable to type 'IteratorResult<any, void>'.
-        Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorResult<any, void>'.
+      Type 'IteratorResult<undefined, State>' is not assignable to type 'IteratorResult<State | undefined, void>'.
+        Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorResult<State | undefined, void>'.
           Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorReturnResult<void>'.
             Type 'State' is not assignable to type 'void'.
-generatorTypeCheck62.ts(32,62): error TS7025: Generator implicitly has yield type 'any'. Consider supplying a return type annotation.
 
 
-==== generatorTypeCheck62.ts (3 errors) ====
+==== generatorTypeCheck62.ts (2 errors) ====
     export interface StrategicState {
         lastStrategyApplied?: string;
     }
@@ -41,11 +40,11 @@ generatorTypeCheck62.ts(32,62): error TS7025: Generator implicitly has yield typ
     
     export const Nothing1: Strategy<State> = strategy("Nothing", function*(state: State) {
                                                                  ~~~~~~~~
-!!! error TS2345: Argument of type '(state: State) => Generator<never, State, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void>'.
-!!! error TS2345:   Type 'Generator<never, State, any>' is not assignable to type 'IterableIterator<State, void>'.
+!!! error TS2345: Argument of type '(state: State) => Generator<never, State, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State | undefined, void>'.
+!!! error TS2345:   Type 'Generator<never, State, any>' is not assignable to type 'IterableIterator<State | undefined, void>'.
 !!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
-!!! error TS2345:       Type 'IteratorResult<never, State>' is not assignable to type 'IteratorResult<State, void>'.
-!!! error TS2345:         Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorResult<State, void>'.
+!!! error TS2345:       Type 'IteratorResult<never, State>' is not assignable to type 'IteratorResult<State | undefined, void>'.
+!!! error TS2345:         Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorResult<State | undefined, void>'.
 !!! error TS2345:           Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorReturnResult<void>'.
 !!! error TS2345:             Type 'State' is not assignable to type 'void'.
         return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
@@ -57,15 +56,13 @@ generatorTypeCheck62.ts(32,62): error TS7025: Generator implicitly has yield typ
     
     export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
                                                                  ~~~~~~~~
-!!! error TS2345: Argument of type '(state: State) => Generator<any, State, any>' is not assignable to parameter of type '(a: any) => IterableIterator<any, void>'.
-!!! error TS2345:   Type 'Generator<any, State, any>' is not assignable to type 'IterableIterator<any, void>'.
+!!! error TS2345: Argument of type '(state: State) => Generator<undefined, State, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State | undefined, void>'.
+!!! error TS2345:   Type 'Generator<undefined, State, any>' is not assignable to type 'IterableIterator<State | undefined, void>'.
 !!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
-!!! error TS2345:       Type 'IteratorResult<any, State>' is not assignable to type 'IteratorResult<any, void>'.
-!!! error TS2345:         Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorResult<any, void>'.
+!!! error TS2345:       Type 'IteratorResult<undefined, State>' is not assignable to type 'IteratorResult<State | undefined, void>'.
+!!! error TS2345:         Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorResult<State | undefined, void>'.
 !!! error TS2345:           Type 'IteratorReturnResult<State>' is not assignable to type 'IteratorReturnResult<void>'.
 !!! error TS2345:             Type 'State' is not assignable to type 'void'.
-                                                                 ~~~~~~~~
-!!! error TS7025: Generator implicitly has yield type 'any'. Consider supplying a return type annotation.
         yield ;
         return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
     });

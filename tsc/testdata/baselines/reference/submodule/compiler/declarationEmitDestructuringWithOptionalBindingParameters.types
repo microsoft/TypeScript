@@ -2,13 +2,13 @@
 
 === declarationEmitDestructuringWithOptionalBindingParameters.ts ===
 function foo([x,y,z]?: [string, number, boolean]) {
->foo : ([x, y, z]?: [string, number, boolean]) => void
+>foo : ([x, y, z]?: [string, number, boolean] | undefined) => void
 >x : string
 >y : number
 >z : boolean
 }
 function foo1( { x, y, z }?: { x: string; y: number; z: boolean }) {
->foo1 : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => void
+>foo1 : ({ x, y, z }?: { x: string; y: number; z: boolean; } | undefined) => void
 >x : string
 >y : number
 >z : boolean

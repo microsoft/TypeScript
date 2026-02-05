@@ -2,11 +2,11 @@
 
 === destructuringInVariableDeclarations2.ts ===
 let { toString } = 1;
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 >1 : 1
 {
     let { toFixed } = 1;
->toFixed : (fractionDigits?: number) => string
+>toFixed : (fractionDigits?: number | undefined) => string
 >1 : 1
 }
 export {};

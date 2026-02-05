@@ -54,7 +54,7 @@ class TestClass<T> {
 class TestClass2<T extends Date> {
 >TestClass2 : Symbol(TestClass2, Decl(controlFlowUnionContainingTypeParameter1.ts, 15, 1))
 >T : Symbol(T, Decl(controlFlowUnionContainingTypeParameter1.ts, 17, 17))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
   typeguard(val: unknown): val is T {
 >typeguard : Symbol(TestClass2.typeguard, Decl(controlFlowUnionContainingTypeParameter1.ts, 17, 34))

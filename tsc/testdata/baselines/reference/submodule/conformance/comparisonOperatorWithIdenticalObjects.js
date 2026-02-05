@@ -197,6 +197,7 @@ var r8b6 = b5 !== a5;
 var r8b7 = b6 !== a6;
 
 //// [comparisonOperatorWithIdenticalObjects.js]
+"use strict";
 class A1 {
     a;
     b;

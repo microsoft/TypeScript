@@ -1,0 +1,38 @@
+--- old.es2016IntlAPIs.types
++++ new.es2016IntlAPIs.types
+@@= skipped -8, +8 lines =@@
+ >console : Console
+ >log : (...data: any[]) => void
+ >Intl.getCanonicalLocales('EN-US') : string[]
+->Intl.getCanonicalLocales : (locale?: string | readonly string[]) => string[]
++>Intl.getCanonicalLocales : (locale?: string | readonly string[] | undefined) => string[]
+ >Intl : typeof Intl
+->getCanonicalLocales : (locale?: string | readonly string[]) => string[]
++>getCanonicalLocales : (locale?: string | readonly string[] | undefined) => string[]
+ >'EN-US' : "EN-US"
+
+ // Expected output: Array ["en-US"]
+@@= skipped -13, +13 lines =@@
+ >console : Console
+ >log : (...data: any[]) => void
+ >Intl.getCanonicalLocales(['EN-US', 'Fr']) : string[]
+->Intl.getCanonicalLocales : (locale?: string | readonly string[]) => string[]
++>Intl.getCanonicalLocales : (locale?: string | readonly string[] | undefined) => string[]
+ >Intl : typeof Intl
+->getCanonicalLocales : (locale?: string | readonly string[]) => string[]
++>getCanonicalLocales : (locale?: string | readonly string[] | undefined) => string[]
+ >['EN-US', 'Fr'] : string[]
+ >'EN-US' : "EN-US"
+ >'Fr' : "Fr"
+@@= skipped -12, +12 lines =@@
+ try {
+   Intl.getCanonicalLocales('EN_US');
+ >Intl.getCanonicalLocales('EN_US') : string[]
+->Intl.getCanonicalLocales : (locale?: string | readonly string[]) => string[]
++>Intl.getCanonicalLocales : (locale?: string | readonly string[] | undefined) => string[]
+ >Intl : typeof Intl
+->getCanonicalLocales : (locale?: string | readonly string[]) => string[]
++>getCanonicalLocales : (locale?: string | readonly string[] | undefined) => string[]
+ >'EN_US' : "EN_US"
+
+ } catch (err) {

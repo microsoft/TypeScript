@@ -17,7 +17,7 @@ class C1T5 {
 >i : number
 	    }
 }
-module C2T5 {}
+namespace C2T5 {}
 
 class  bigClass {
 >bigClass : bigClass

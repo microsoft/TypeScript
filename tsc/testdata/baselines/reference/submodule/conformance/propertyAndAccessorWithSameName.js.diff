@@ -1,8 +1,8 @@
 --- old.propertyAndAccessorWithSameName.js
 +++ new.propertyAndAccessorWithSameName.js
-@@= skipped -22, +22 lines =@@
-
+@@= skipped -23, +23 lines =@@
  //// [propertyAndAccessorWithSameName.js]
+ "use strict";
  class C {
 +    x;
      get x() {

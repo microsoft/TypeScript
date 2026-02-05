@@ -1,8 +1,8 @@
 --- old.arrayLiteralsWithRecursiveGenerics.js
 +++ new.arrayLiteralsWithRecursiveGenerics.js
-@@= skipped -28, +28 lines =@@
-
+@@= skipped -29, +29 lines =@@
  //// [arrayLiteralsWithRecursiveGenerics.js]
+ "use strict";
  class List {
 +    data;
 +    next;

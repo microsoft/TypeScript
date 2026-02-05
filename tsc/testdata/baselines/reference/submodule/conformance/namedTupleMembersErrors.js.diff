@@ -1,6 +1,6 @@
 --- old.namedTupleMembersErrors.js
 +++ new.namedTupleMembersErrors.js
-@@= skipped -37, +37 lines =@@
+@@= skipped -36, +36 lines =@@
  export type Pair2 = [any, last?: any];
  export type Opt = [element: string?];
  export type Trailing = [first: string, rest: ...string[]];

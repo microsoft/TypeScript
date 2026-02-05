@@ -5,5 +5,6 @@ if (a) {
 }
 
 //// [parserIfStatement2.js]
+"use strict";
 if (a) {
 }

@@ -1,0 +1,43 @@
+typeGuardsInExternalModule.ts(7,12): error TS2454: Variable 'var1' is used before being assigned.
+typeGuardsInExternalModule.ts(11,5): error TS2322: Type 'string | number' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+typeGuardsInExternalModule.ts(11,11): error TS2454: Variable 'var1' is used before being assigned.
+typeGuardsInExternalModule.ts(17,12): error TS2454: Variable 'var2' is used before being assigned.
+typeGuardsInExternalModule.ts(22,16): error TS2454: Variable 'var2' is used before being assigned.
+
+
+==== typeGuardsInExternalModule.ts (5 errors) ====
+    // Note that type guards affect types of variables and parameters only and 
+    // have no effect on members of objects such as properties. 
+    
+    // local variable in external module
+    var num: number;
+    var var1: string | number;
+    if (typeof var1 === "string") {
+               ~~~~
+!!! error TS2454: Variable 'var1' is used before being assigned.
+        num = var1.length; // string
+    }
+    else {
+        num = var1; // number
+        ~~~
+!!! error TS2322: Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+              ~~~~
+!!! error TS2454: Variable 'var1' is used before being assigned.
+    }
+    
+    // exported variable in external module
+    var strOrNum: string | number;
+    export var var2: string | number;
+    if (typeof var2 === "string") {
+               ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
+        // export makes the var property and not variable
+        strOrNum = var2; // string | number
+    }
+    else {
+        strOrNum = var2; // number | string
+                   ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
+    }

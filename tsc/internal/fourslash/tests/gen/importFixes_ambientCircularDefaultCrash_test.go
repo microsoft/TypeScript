@@ -14,7 +14,8 @@ func TestImportFixes_ambientCircularDefaultCrash(t *testing.T) {
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
 {
   "compilerOptions": {
-    "module": "preserve"
+    "module": "preserve",
+    "lib": ["es5"]
   }
 }
 // @Filename: /home/src/workspaces/project/types.d.ts

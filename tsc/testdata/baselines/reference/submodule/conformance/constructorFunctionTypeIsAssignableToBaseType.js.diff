@@ -1,8 +1,8 @@
 --- old.constructorFunctionTypeIsAssignableToBaseType.js
 +++ new.constructorFunctionTypeIsAssignableToBaseType.js
-@@= skipped -22, +22 lines =@@
-
+@@= skipped -23, +23 lines =@@
  //// [constructorFunctionTypeIsAssignableToBaseType.js]
+ "use strict";
  class Base {
 +    static foo;
  }

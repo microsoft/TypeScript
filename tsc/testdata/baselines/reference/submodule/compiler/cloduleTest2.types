@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/cloduleTest2.ts] ////
 
 === cloduleTest2.ts ===
-module T1 {
+namespace T1 {
 >T1 : typeof T1
 
-    module m3d { export var y = 2; }
+    namespace m3d { export var y = 2; }
 >m3d : typeof m3d
 >y : number
 >2 : 2
@@ -21,7 +21,7 @@ module T1 {
 >m3d : typeof m3d
 }
 
-module T2 {
+namespace T2 {
 >T2 : typeof T2
 
     declare class m3d { constructor(foo); foo(): void; static bar(); }
@@ -30,7 +30,7 @@ module T2 {
 >foo : () => void
 >bar : () => any
 
-    module m3d { export var y = 2; }
+    namespace m3d { export var y = 2; }
 >m3d : typeof m3d
 >y : number
 >2 : 2
@@ -41,10 +41,10 @@ module T2 {
 >m3d : typeof m3d
 }
 
-module T3 {
+namespace T3 {
 >T3 : typeof T3
 
-    module m3d { export var y = 2; }
+    namespace m3d { export var y = 2; }
 >m3d : typeof m3d
 >y : number
 >2 : 2
@@ -77,7 +77,7 @@ module T3 {
 >y : any
 }
 
-module T4 {
+namespace T4 {
 >T4 : typeof T4
 
     declare class m3d { foo(): void; static bar(); }
@@ -85,7 +85,7 @@ module T4 {
 >foo : () => void
 >bar : () => any
 
-    module m3d { export var y = 2; }
+    namespace m3d { export var y = 2; }
 >m3d : typeof m3d
 >y : number
 >2 : 2
@@ -113,7 +113,7 @@ module T4 {
 >y : any
 }
 
-module m3d { export var y = 2; }
+namespace m3d { export var y = 2; }
 >m3d : typeof m3d
 >y : number
 >2 : 2

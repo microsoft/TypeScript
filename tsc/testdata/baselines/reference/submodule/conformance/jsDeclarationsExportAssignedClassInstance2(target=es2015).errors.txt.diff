@@ -1,0 +1,16 @@
+--- old.jsDeclarationsExportAssignedClassInstance2(target=es2015).errors.txt
++++ new.jsDeclarationsExportAssignedClassInstance2(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++index.js(6,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++
++
++==== index.js (1 errors) ====
++    class Foo {
++        static stat = 10;
++        member = 10;
++    }
++    
++    module.exports = new Foo();
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.

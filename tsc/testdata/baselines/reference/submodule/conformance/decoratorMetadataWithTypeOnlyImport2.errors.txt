@@ -1,0 +1,19 @@
+index.ts(6,3): error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
+
+
+==== services.ts (0 errors) ====
+    export namespace Services {
+      export class Service {}
+    }
+    
+==== index.ts (1 errors) ====
+    import type { Services } from './services';
+    
+    declare const decorator: any;
+    export class Main {
+      @decorator()
+      field: Services.Service;
+      ~~~~~
+!!! error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
+    }
+    

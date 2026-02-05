@@ -1,8 +1,8 @@
 --- old.functionSubtypingOfVarArgs.js
 +++ new.functionSubtypingOfVarArgs.js
-@@= skipped -17, +17 lines =@@
-
+@@= skipped -18, +18 lines =@@
  //// [functionSubtypingOfVarArgs.js]
+ "use strict";
  class EventBase {
 -    constructor() {
 -        this._listeners = [];

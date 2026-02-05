@@ -21,6 +21,7 @@ class b extends Foo {
 }
 
 //// [collisionSuperAndLocalFunctionInProperty.js]
+"use strict";
 function _super() {
 }
 class Foo {

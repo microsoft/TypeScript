@@ -22,6 +22,7 @@ b.x = 1; // assigned number to string
 
 
 //// [subtypingTransitivity.js]
+"use strict";
 class B {
     x;
 }

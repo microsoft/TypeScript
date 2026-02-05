@@ -1,0 +1,12 @@
+--- old.constraintSatisfactionWithAny.types
++++ new.constraintSatisfactionWithAny.types
+@@= skipped -114, +114 lines =@@
+ }
+
+ var c7 = new C4(a);
+->c7 : C4<(<T>(x: T) => T)>
+->new C4(a) : C4<(<T>(x: T) => T)>
++>c7 : C4<<T>(x: T) => T>
++>new C4(a) : C4<<T>(x: T) => T>
+ >C4 : typeof C4
+ >a : undefined

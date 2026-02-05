@@ -10,3 +10,4 @@ declare class FooBase {
 }
 
 //// [parserClassDeclaration18.js]
+"use strict";

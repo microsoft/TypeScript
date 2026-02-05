@@ -1,9 +1,9 @@
 --- old.commentInEmptyParameterList1.js
 +++ new.commentInEmptyParameterList1.js
-@@= skipped -4, +4 lines =@@
- }
+@@= skipped -5, +5 lines =@@
 
  //// [commentInEmptyParameterList1.js]
+ "use strict";
 -function foo( /** nothing */) {
 +function foo( /** nothing */ /** nothing */) {
  }

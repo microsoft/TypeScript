@@ -1,6 +1,6 @@
 --- old.invalidNewTarget.es6.js
 +++ new.invalidNewTarget.es6.js
-@@= skipped -29, +29 lines =@@
+@@= skipped -30, +30 lines =@@
  const a = new.target;
  const b = () => new.target;
  class C {

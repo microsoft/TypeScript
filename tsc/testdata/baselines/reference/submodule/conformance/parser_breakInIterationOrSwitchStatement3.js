@@ -6,6 +6,7 @@ for (;;) {
 }
 
 //// [parser_breakInIterationOrSwitchStatement3.js]
+"use strict";
 for (;;) {
     break;
 }

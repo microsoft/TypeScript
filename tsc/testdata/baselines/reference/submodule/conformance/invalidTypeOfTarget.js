@@ -11,6 +11,7 @@ var x7: typeof function f() { };
 var x8: typeof /123/;
 
 //// [invalidTypeOfTarget.js]
+"use strict";
 var x1, {};
 var x2;
 () => ;

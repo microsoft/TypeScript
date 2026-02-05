@@ -1,8 +1,8 @@
 --- old.esDecorators-preservesThis.js
 +++ new.esDecorators-preservesThis.js
-@@= skipped -40, +40 lines =@@
-
+@@= skipped -41, +41 lines =@@
  //// [esDecorators-preservesThis.js]
+ "use strict";
  // https://github.com/microsoft/TypeScript/issues/53752
 -var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
 -    var useValue = arguments.length > 2;

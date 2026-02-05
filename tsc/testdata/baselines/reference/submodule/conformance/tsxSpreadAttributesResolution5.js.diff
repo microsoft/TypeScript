@@ -1,6 +1,6 @@
 --- old.tsxSpreadAttributesResolution5.js
 +++ new.tsxSpreadAttributesResolution5.js
-@@= skipped -53, +53 lines =@@
+@@= skipped -56, +56 lines =@@
      render() {
          return <div>Default hi</div>;
      }

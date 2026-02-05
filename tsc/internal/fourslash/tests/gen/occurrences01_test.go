@@ -12,7 +12,8 @@ func TestOccurrences01(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `foo: [|switch|] (10) {
+	const content = `// @lib: es5
+foo: [|switch|] (10) {
     [|case|] 1:
     [|case|] 2:
     [|case|] 3:

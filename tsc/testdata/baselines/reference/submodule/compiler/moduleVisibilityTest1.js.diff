@@ -1,6 +1,6 @@
 --- old.moduleVisibilityTest1.js
 +++ new.moduleVisibilityTest1.js
-@@= skipped -94, +94 lines =@@
+@@= skipped -95, +95 lines =@@
      M.x = 5;
      var y = M.x + M.x;
      class B {

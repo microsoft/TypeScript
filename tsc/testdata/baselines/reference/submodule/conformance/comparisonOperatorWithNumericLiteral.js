@@ -46,6 +46,7 @@ x !== <BrandedNum>0;
 
 
 //// [comparisonOperatorWithNumericLiteral.js]
+"use strict";
 var x;
 // operator >
 x > 0;

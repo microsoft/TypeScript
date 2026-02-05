@@ -81,6 +81,7 @@ var rh3 = b1 !== a1;
 var rh4 = b2 !== a2;
 
 //// [comparisonOperatorWithSubtypeObjectOnProperty.js]
+"use strict";
 class Base {
     a;
 }

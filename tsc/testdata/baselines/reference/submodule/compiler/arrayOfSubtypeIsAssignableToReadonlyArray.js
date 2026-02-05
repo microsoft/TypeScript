@@ -22,6 +22,7 @@ rrb = cra; // error: 'A' is not assignable to 'B'
 
 
 //// [arrayOfSubtypeIsAssignableToReadonlyArray.js]
+"use strict";
 class A {
     a;
 }

@@ -1,6 +1,6 @@
 --- old.plusOperatorWithNumberType.js
 +++ new.plusOperatorWithNumberType.js
-@@= skipped -48, +48 lines =@@
+@@= skipped -47, +47 lines =@@
  var NUMBER1 = [1, 2];
  function foo() { return 1; }
  class A {

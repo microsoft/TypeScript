@@ -22,6 +22,7 @@ class class2 {
 }
 
 //// [noCollisionThisExpressionAndLocalVarInProperty.js]
+"use strict";
 class class1 {
     prop1 = {
         doStuff: (callback) => () => {

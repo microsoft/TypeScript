@@ -2,9 +2,9 @@ memberScope.ts(4,11): error TS2708: Cannot use namespace 'Basil' as a value.
 
 
 ==== memberScope.ts (1 errors) ====
-    module Salt {
+    namespace Salt {
       export class Pepper {}
-      export module Basil { }
+      export namespace Basil { }
       var z = Basil.Pepper;
               ~~~~~
 !!! error TS2708: Cannot use namespace 'Basil' as a value.

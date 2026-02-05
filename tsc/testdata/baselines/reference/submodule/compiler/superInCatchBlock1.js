@@ -16,6 +16,7 @@ class B extends A {
 
 
 //// [superInCatchBlock1.js]
+"use strict";
 class A {
     m() { }
 }

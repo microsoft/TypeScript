@@ -12,7 +12,7 @@ func TestSyntaxErrorAfterImport1(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare module "extmod" {
-  module IntMod {
+  namespace IntMod {
     class Customer {
       constructor(name: string);
     }

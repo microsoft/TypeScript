@@ -1,7 +1,7 @@
 --- old.privateNameStaticFieldDestructuredBinding(target=esnext).js
 +++ new.privateNameStaticFieldDestructuredBinding(target=esnext).js
-@@= skipped -28, +28 lines =@@
- //// [privateNameStaticFieldDestructuredBinding.js]
+@@= skipped -29, +29 lines =@@
+ "use strict";
  class A {
      static #field = 1;
 +    otherClass = A;

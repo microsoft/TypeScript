@@ -6,5 +6,6 @@ class C {
 }
 
 //// [parserSymbolIndexer3.js]
+"use strict";
 class C {
 }

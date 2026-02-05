@@ -6,5 +6,6 @@ class C {
 }
 
 //// [MemberFunctionDeclaration5_es6.js]
+"use strict";
 class C {
 }

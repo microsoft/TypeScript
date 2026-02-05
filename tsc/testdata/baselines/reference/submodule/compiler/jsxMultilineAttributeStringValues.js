@@ -10,6 +10,7 @@ foo: 23
 
 
 //// [jsxMultilineAttributeStringValues.jsx]
+"use strict";
 const a = <input value="
   foo: 23
 "></input>;

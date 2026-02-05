@@ -22,6 +22,7 @@ class Container {
 }
 
 //// [constraintCheckInGenericBaseTypeReference.js]
+"use strict";
 // No errors
 class Constraint {
     method() { }

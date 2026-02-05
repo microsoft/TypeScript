@@ -11,7 +11,8 @@ func TestQuickInfoSignatureRestParameterFromUnion2(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `declare const rest:
+	const content = `// @strict: false
+declare const rest:
   | ((a?: { a: true }, ...rest: string[]) => unknown)
   | ((b?: { b: true }) => unknown);
 

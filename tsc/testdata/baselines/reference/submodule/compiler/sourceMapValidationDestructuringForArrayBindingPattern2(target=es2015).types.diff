@@ -1,0 +1,56 @@
+--- old.sourceMapValidationDestructuringForArrayBindingPattern2(target=es2015).types
++++ new.sourceMapValidationDestructuringForArrayBindingPattern2(target=es2015).types
+@@= skipped -525, +525 lines =@@
+ >[numberA3, ...robotAInfo] = robotA : Robot
+ >[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
+ >numberA3 : number
+->...robotAInfo : string | number
++>...robotAInfo : any
+ >robotAInfo : (string | number)[]
+ >robotA : Robot
+ >i = 0 : 0
+@@= skipped -24, +24 lines =@@
+ >[numberA3, ...robotAInfo] = getRobot() : Robot
+ >[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
+ >numberA3 : number
+->...robotAInfo : string | number
++>...robotAInfo : any
+ >robotAInfo : (string | number)[]
+ >getRobot() : Robot
+ >getRobot : () => Robot
+@@= skipped -25, +25 lines =@@
+ >[numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"] : Robot
+ >[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
+ >numberA3 : number
+->...robotAInfo : string | number
++>...robotAInfo : any
+ >robotAInfo : (string | number)[]
+ ><Robot>[2, "trimmer", "trimming"] : Robot
+ >[2, "trimmer", "trimming"] : [number, string, string]
+@@= skipped -27, +27 lines =@@
+ >[...multiRobotAInfo] = multiRobotA, i = 0 : 0
+ >[...multiRobotAInfo] = multiRobotA : MultiSkilledRobot
+ >[...multiRobotAInfo] : (string | [string, string])[]
+->...multiRobotAInfo : string | [string, string]
++>...multiRobotAInfo : any
+ >multiRobotAInfo : (string | [string, string])[]
+ >multiRobotA : MultiSkilledRobot
+ >i = 0 : 0
+@@= skipped -23, +23 lines =@@
+ >[...multiRobotAInfo] = getMultiRobot(), i = 0 : 0
+ >[...multiRobotAInfo] = getMultiRobot() : MultiSkilledRobot
+ >[...multiRobotAInfo] : (string | [string, string])[]
+->...multiRobotAInfo : string | [string, string]
++>...multiRobotAInfo : any
+ >multiRobotAInfo : (string | [string, string])[]
+ >getMultiRobot() : MultiSkilledRobot
+ >getMultiRobot : () => MultiSkilledRobot
+@@= skipped -24, +24 lines =@@
+ >[...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]], i = 0 : 0
+ >[...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]] : MultiSkilledRobot
+ >[...multiRobotAInfo] : (string | [string, string])[]
+->...multiRobotAInfo : string | [string, string]
++>...multiRobotAInfo : any
+ >multiRobotAInfo : (string | [string, string])[]
+ ><MultiSkilledRobot>["trimmer", ["trimming", "edging"]] : MultiSkilledRobot
+ >["trimmer", ["trimming", "edging"]] : [string, [string, string]]

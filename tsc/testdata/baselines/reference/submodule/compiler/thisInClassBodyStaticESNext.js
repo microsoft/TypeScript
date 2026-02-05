@@ -12,6 +12,7 @@ class Foo {
 
 
 //// [thisInClassBodyStaticESNext.js]
+"use strict";
 // all are allowed with es-compliant class field emit
 class Foo {
     x = this;

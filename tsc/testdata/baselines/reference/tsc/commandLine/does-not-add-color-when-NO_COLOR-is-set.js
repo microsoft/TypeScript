@@ -96,7 +96,7 @@ default: false
 --target, -t
 Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
 one of: es5, es6/es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, esnext
-default: es5
+default: es2024
 
 --module, -m
 Specify what module code is generated.
@@ -137,7 +137,7 @@ default: false
 --strict
 Enable all strict type-checking options.
 type: boolean
-default: false
+default: true
 
 --types
 Specify type package names to be included without being referenced in a source file.

@@ -15,6 +15,7 @@ function test(r: Real | Fake) {
 
 
 //// [unionThisTypeInFunctions.js]
+"use strict";
 function test(r) {
     r.method(12); // error
 }

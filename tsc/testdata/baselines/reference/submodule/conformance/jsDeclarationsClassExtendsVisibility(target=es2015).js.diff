@@ -1,0 +1,24 @@
+--- old.jsDeclarationsClassExtendsVisibility(target=es2015).js
++++ new.jsDeclarationsClassExtendsVisibility(target=es2015).js
+@@= skipped -32, +32 lines =@@
+
+ //// [bar.d.ts]
+ export = Bar;
+-declare class Bar {
+-}
+ //// [cls.d.ts]
+ export = Foo;
+-declare class Foo extends Bar {
+-}
+-declare namespace Foo {
+-    export { Strings };
+-}
+-import Bar = require("./bar");
+-declare namespace Strings {
+-    let a: string;
+-    let b: string;
+-}
++export declare var Strings: {
++    a: string;
++    b: string;
++};

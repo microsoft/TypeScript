@@ -1,6 +1,6 @@
 --- old.asyncArrowFunctionCapturesArguments_es6.js
 +++ new.asyncArrowFunctionCapturesArguments_es6.js
-@@= skipped -15, +15 lines =@@
+@@= skipped -16, +16 lines =@@
  class C {
      method() {
          function other() { }

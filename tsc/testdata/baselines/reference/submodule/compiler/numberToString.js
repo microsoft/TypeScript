@@ -14,6 +14,7 @@ f2(3+""); // ok + operator promotes
 
 
 //// [numberToString.js]
+"use strict";
 function f1(n) {
     return n; // error return type mismatch
 }

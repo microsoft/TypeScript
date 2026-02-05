@@ -14,7 +14,7 @@ class EventAggregator
 >event : T
 }
 
-var ea: EventAggregator;
+declare var ea: EventAggregator;
 >ea : EventAggregator
 
 ea.publish([1,2,3]);

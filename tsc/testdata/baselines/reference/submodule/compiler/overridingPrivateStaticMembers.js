@@ -10,6 +10,7 @@ class Derived2 extends Base2 {
 }
 
 //// [overridingPrivateStaticMembers.js]
+"use strict";
 class Base2 {
     static y;
 }

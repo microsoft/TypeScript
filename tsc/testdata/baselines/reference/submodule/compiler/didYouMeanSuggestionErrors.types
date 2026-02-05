@@ -62,7 +62,7 @@ suite("another suite", () => {
 >Buffer.from : any
 >Buffer : any
 >from : any
->[] : undefined[]
+>[] : never[]
 
         const z = module.exports;
 >z : any

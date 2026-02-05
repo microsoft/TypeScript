@@ -9,6 +9,7 @@ const enum ConstColor { Red, Green, Blue }
 
 
 //// [enumUsedBeforeDeclaration.js]
+"use strict";
 const v = Color.Green;
 const v2 = 1 /* ConstColor.Green */;
 var Color;

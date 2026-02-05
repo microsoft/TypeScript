@@ -1,0 +1,21 @@
+--- old.destructuringObjectBindingPatternAndAssignment9SiblingInitializer.types
++++ new.destructuringObjectBindingPatternAndAssignment9SiblingInitializer.types
+@@= skipped -76, +76 lines =@@
+ // Based on comment:
+ //   - https://github.com/microsoft/TypeScript/issues/49989#issuecomment-1852694486
+ declare const yadda: { a?: number, b?: number } | undefined
+->yadda : { a?: number; b?: number; } | undefined
++>yadda : { a?: number | undefined; b?: number | undefined; } | undefined
+ >a : number | undefined
+ >b : number | undefined
+
+@@= skipped -11, +11 lines =@@
+ >a : number | undefined
+ >b : number | undefined
+ >a : number | undefined
+->yadda ?? {} : { a?: number; b?: number; }
+->yadda : { a?: number; b?: number; } | undefined
++>yadda ?? {} : { a?: number | undefined; b?: number | undefined; }
++>yadda : { a?: number | undefined; b?: number | undefined; } | undefined
+ >{} : {}
+ }

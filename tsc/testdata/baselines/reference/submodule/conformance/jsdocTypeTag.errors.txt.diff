@@ -1,129 +1,38 @@
 --- old.jsdocTypeTag.errors.txt
 +++ new.jsdocTypeTag.errors.txt
 @@= skipped -0, +0 lines =@@
--<no content>
 +b.ts(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'S' must be of type 'String', but here has type 'string'.
 +b.ts(3,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'N' must be of type 'Number', but here has type 'number'.
 +b.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'B' must be of type 'Boolean', but here has type 'boolean'.
 +b.ts(7,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'BI' must be of type 'BigInt', but here has type 'bigint'.
-+b.ts(20,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Obj' must be of type 'Object', but here has type 'any'.
-+b.ts(21,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'obj' must be of type 'object', but here has type 'any'.
-+
-+
-+==== a.js (0 errors) ====
-+    /** @type {String} */
-+    var S;
-+    
-+    /** @type {string} */
-+    var s;
-+    
-+    /** @type {Number} */
-+    var N;
-+    
-+    /** @type {number} */
-+    var n;
-+    
-+    /** @type {BigInt} */
-+    var BI;
-+    
-+    /** @type {bigint} */
-+    var bi;
-+    
-+    /** @type {Boolean} */
-+    var B;
-+    
-+    /** @type {boolean} */
-+    var b;
-+    
-+    /** @type {Void} */
-+    var V;
-+    
-+    /** @type {void} */
-+    var v;
-+    
-+    /** @type {Undefined} */
-+    var U;
-+    
-+    /** @type {undefined} */
-+    var u;
-+    
-+    /** @type {Null} */
-+    var Nl;
-+    
-+    /** @type {null} */
-+    var nl;
-+    
-+    /** @type {Array} */
-+    var A;
-+    
-+    /** @type {array} */
-+    var a;
-+    
-+    /** @type {Promise} */
-+    var P;
-+    
-+    /** @type {promise} */
-+    var p;
-+    
-+    /** @type {?number} */
-+    var nullable;
-+    
-+    /** @type {Object} */
-+    var Obj;
-+    
-+    /** @type {object} */
-+    var obj;
-+    
-+    /** @type {Function} */
-+    var Func;
-+    
-+    /** @type {(s: string) => number} */
-+    var f;
-+    
-+    /** @type {new (s: string) => { s: string }} */
-+    var ctor;
-+    
+ b.ts(20,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Obj' must be of type 'Object', but here has type 'any'.
+ b.ts(21,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'obj' must be of type 'object', but here has type 'any'.
+
+@@= skipped -74, +78 lines =@@
+     /** @type {new (s: string) => { s: string }} */
+     var ctor;
+     
+-==== b.ts (2 errors) ====
 +==== b.ts (6 errors) ====
-+    var S: string;
+     var S: string;
 +        ~
 +!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'S' must be of type 'String', but here has type 'string'.
 +!!! related TS6203 a.js:2:5: 'S' was also declared here.
-+    var s: string;
-+    var N: number;
+     var s: string;
+     var N: number;
 +        ~
 +!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'N' must be of type 'Number', but here has type 'number'.
 +!!! related TS6203 a.js:8:5: 'N' was also declared here.
-+    var n: number
-+    var B: boolean;
+     var n: number
+     var B: boolean;
 +        ~
 +!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'B' must be of type 'Boolean', but here has type 'boolean'.
 +!!! related TS6203 a.js:20:5: 'B' was also declared here.
-+    var b: boolean;
-+    var BI: bigint;
+     var b: boolean;
+     var BI: bigint;
 +        ~~
 +!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'BI' must be of type 'BigInt', but here has type 'bigint'.
 +!!! related TS6203 a.js:14:5: 'BI' was also declared here.
-+    var bi: bigint;
-+    var V :void;
-+    var v: void;
-+    var U: undefined;
-+    var u: undefined;
-+    var Nl: null;
-+    var nl: null;
-+    var A: any[];
-+    var a: any[];
-+    var P: Promise<any>;
-+    var p: Promise<any>;
-+    var nullable: number | null;
-+    var Obj: any;
-+        ~~~
-+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'Obj' must be of type 'Object', but here has type 'any'.
-+!!! related TS6203 a.js:59:5: 'Obj' was also declared here.
-+    var obj: any;
-+        ~~~
-+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'obj' must be of type 'object', but here has type 'any'.
-+!!! related TS6203 a.js:62:5: 'obj' was also declared here.
-+    var Func: Function;
-+    var f: (s: string) => number;
-+    var ctor: new (s: string) => { s: string };
-+    
+     var bi: bigint;
+     var V :void;
+     var v: void;

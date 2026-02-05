@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/specializationOfExportedClass.ts] ////
 
 //// [specializationOfExportedClass.ts]
-module M {
+namespace M {
 
 export class C<T> { }
 
@@ -11,6 +11,7 @@ var x = new M.C<string>();
 
 
 //// [specializationOfExportedClass.js]
+"use strict";
 var M;
 (function (M) {
     class C {

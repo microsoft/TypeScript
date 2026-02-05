@@ -6,6 +6,7 @@ enum E3 { a: 1, }
 enum E1 { a, b: 1, c, d: 2 = 3 }
 
 //// [parserEnum5.js]
+"use strict";
 var E2;
 (function (E2) {
     E2[E2["a"] = 0] = "a";

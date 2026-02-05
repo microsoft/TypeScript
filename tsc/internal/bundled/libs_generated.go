@@ -100,6 +100,7 @@ var LibNames = []string{
 	"lib.esnext.iterator.d.ts",
 	"lib.esnext.promise.d.ts",
 	"lib.esnext.sharedmemory.d.ts",
+	"lib.esnext.typedarrays.d.ts",
 	"lib.scripthost.d.ts",
 	"lib.webworker.asynciterable.d.ts",
 	"lib.webworker.d.ts",

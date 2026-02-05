@@ -8,6 +8,7 @@
 
 
 //// [parser.numericSeparators.binary.js]
+"use strict";
 3;
 1;
 195;

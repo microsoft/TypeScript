@@ -7,6 +7,7 @@ var a = function () {
     };
 
 //// [variableDeclarator1.js]
+"use strict";
 var a = function () {
     var c = 1;
     return c;

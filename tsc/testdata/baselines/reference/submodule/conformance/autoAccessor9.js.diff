@@ -1,6 +1,6 @@
 --- old.autoAccessor9.js
 +++ new.autoAccessor9.js
-@@= skipped -56, +56 lines =@@
+@@= skipped -57, +57 lines =@@
  // If there are other field initializers to transform, we must transform auto-accessors so that we can preserve
  // initialization order:
  class C2 {

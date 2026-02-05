@@ -1,8 +1,12 @@
+optionalPropertiesInClasses.ts(7,9): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 optionalPropertiesInClasses.ts(10,7): error TS2420: Class 'C2' incorrectly implements interface 'ifoo'.
   Property 'y' is missing in type 'C2' but required in type 'ifoo'.
+optionalPropertiesInClasses.ts(11,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+optionalPropertiesInClasses.ts(15,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+optionalPropertiesInClasses.ts(16,9): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 
 
-==== optionalPropertiesInClasses.ts (1 errors) ====
+==== optionalPropertiesInClasses.ts (5 errors) ====
     interface ifoo {
     	x?:number;
     	y:number;
@@ -10,6 +14,8 @@ optionalPropertiesInClasses.ts(10,7): error TS2420: Class 'C2' incorrectly imple
     
     class C1 implements ifoo {
     	public y:number;
+    	       ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C2 implements ifoo { // ERROR - still need 'y'
@@ -18,9 +24,15 @@ optionalPropertiesInClasses.ts(10,7): error TS2420: Class 'C2' incorrectly imple
 !!! error TS2420:   Property 'y' is missing in type 'C2' but required in type 'ifoo'.
 !!! related TS2728 optionalPropertiesInClasses.ts:3:2: 'y' is declared here.
     	public x:number;
+    	       ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C3 implements ifoo {
     	public x:number;
+    	       ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     	public y:number;
+    	       ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }

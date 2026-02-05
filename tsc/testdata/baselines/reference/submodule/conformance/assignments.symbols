@@ -10,7 +10,7 @@
 //  Assign to a parameter
 //  Assign to an interface
 
-module M { }
+namespace M { }
 >M : Symbol(M, Decl(assignments.ts, 0, 0))
 
 M = null; // Error

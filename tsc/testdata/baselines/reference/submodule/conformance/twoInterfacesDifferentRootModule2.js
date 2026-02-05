@@ -3,7 +3,7 @@
 //// [twoInterfacesDifferentRootModule2.ts]
 // two interfaces with different root modules should not merge
 
-module M {
+namespace M {
     export interface A {
         foo: string;
     }
@@ -12,12 +12,12 @@ module M {
         foo: T;
     }
 
-    module M2 {
+    namespace M2 {
         export interface A {
             bar: number;
         }
 
-        var a: A;
+        declare var a: A;
         var r1 = a.foo; // error
         var r2 = a.bar;
 
@@ -25,37 +25,34 @@ module M {
             bar: T;
         }
 
-        var b: B<string>;
+        declare var b: B<string>;
         var r3 = b.foo; // error
         var r4 = b.bar;
     }
 
-    var a: A;
+    declare var a: A;
     var r1 = a.foo; 
     var r2 = a.bar; // error
 
-    var b: B<string>;
+    declare var b: B<string>;
     var r3 = b.foo; 
     var r4 = b.bar; // error
 }
 
 //// [twoInterfacesDifferentRootModule2.js]
+"use strict";
 // two interfaces with different root modules should not merge
 var M;
 (function (M) {
     let M2;
     (function (M2) {
-        var a;
         var r1 = a.foo; // error
         var r2 = a.bar;
-        var b;
         var r3 = b.foo; // error
         var r4 = b.bar;
     })(M2 || (M2 = {}));
-    var a;
     var r1 = a.foo;
     var r2 = a.bar; // error
-    var b;
     var r3 = b.foo;
     var r4 = b.bar; // error
 })(M || (M = {}));

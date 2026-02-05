@@ -52,15 +52,15 @@ s >= 0;
 0 >= (s || 0);
 >0 >= (s || 0) : boolean
 >0 : 0
->(s || 0) : symbol | 0
->s || 0 : symbol | 0
+>(s || 0) : symbol
+>s || 0 : symbol
 >s : symbol
 >0 : 0
 
 (s || 0) >= s;
 >(s || 0) >= s : boolean
->(s || 0) : symbol | 0
->s || 0 : symbol | 0
+>(s || 0) : symbol
+>s || 0 : symbol
 >s : symbol
 >0 : 0
 >s : symbol

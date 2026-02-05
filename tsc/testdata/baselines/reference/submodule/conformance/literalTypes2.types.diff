@@ -26,3 +26,16 @@
 +>f6 : () => "bar" | "foo"
  >() => "bar" : () => "bar"
  >"bar" : "bar"
+
+@@= skipped -150, +150 lines =@@
+     let result = a.slice();
+ >result : T[]
+ >a.slice() : T[]
+->a.slice : (start?: number, end?: number) => T[]
++>a.slice : (start?: number | undefined, end?: number | undefined) => T[]
+ >a : T[]
+->slice : (start?: number, end?: number) => T[]
++>slice : (start?: number | undefined, end?: number | undefined) => T[]
+
+     result.push(x);
+ >result.push(x) : number

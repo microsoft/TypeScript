@@ -1,6 +1,6 @@
 --- old.decoratorOnClass5.es6.js
 +++ new.decoratorOnClass5.es6.js
-@@= skipped -20, +20 lines =@@
+@@= skipped -21, +21 lines =@@
  var C_1;
  let C = C_1 = class C {
      static x() { return C_1.y; }

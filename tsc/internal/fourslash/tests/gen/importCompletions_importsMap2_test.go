@@ -16,6 +16,7 @@ func TestImportCompletions_importsMap2(t *testing.T) {
 {
   "compilerOptions": {
     "module": "nodenext",
+    "lib": ["es5"],
     "rootDir": "src",
     "outDir": "dist"
   }

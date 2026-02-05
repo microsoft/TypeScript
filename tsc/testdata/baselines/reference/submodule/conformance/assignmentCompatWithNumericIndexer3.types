@@ -19,10 +19,10 @@ class A {
 >x : number
 }
 
-var a: A;
+declare var a: A;
 >a : A
 
-var b: { [x: number]: Base; };
+declare var b: { [x: number]: Base; };
 >b : { [x: number]: Base; }
 >x : number
 
@@ -44,7 +44,7 @@ class B2 extends A {
 >x : number
 }
 
-var b2: { [x: number]: Derived2; };
+declare var b2: { [x: number]: Derived2; };
 >b2 : { [x: number]: Derived2; }
 >x : number
 
@@ -58,7 +58,7 @@ b2 = a; // error
 >b2 : { [x: number]: Derived2; }
 >a : A
 
-module Generics {
+namespace Generics {
 >Generics : typeof Generics
 
     class A<T extends Derived> {
@@ -71,10 +71,10 @@ module Generics {
     function foo<T extends Derived>() {
 >foo : <T extends Derived>() => void
 
-        var a: A<T>;
+        var a!: A<T>;
 >a : A<T>
 
-        var b: { [x: number]: Derived; };
+        var b!: { [x: number]: Derived; };
 >b : { [x: number]: Derived; }
 >x : number
 
@@ -88,7 +88,7 @@ module Generics {
 >b : { [x: number]: Derived; }
 >a : A<T>
 
-        var b2: { [x: number]: T; };
+        var b2!: { [x: number]: T; };
 >b2 : { [x: number]: T; }
 >x : number
 

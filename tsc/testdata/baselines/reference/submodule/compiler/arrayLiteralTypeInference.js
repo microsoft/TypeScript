@@ -54,6 +54,7 @@ var z3: { id: number }[] =
 
 
 //// [arrayLiteralTypeInference.js]
+"use strict";
 class Action {
     id;
 }

@@ -17,6 +17,7 @@ class D {
 }
 
 //// [noImplicitAnyForMethodParameters.js]
+"use strict";
 class C {
     foo(a) { } // OK - non-ambient class and private method - error
 }

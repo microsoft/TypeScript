@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/assignToFn.ts] ////
 
 //// [assignToFn.ts]
-module M {
+namespace M {
     interface I {
 	f(n:number):boolean;
     }
@@ -13,6 +13,7 @@ module M {
 
 
 //// [assignToFn.js]
+"use strict";
 var M;
 (function (M) {
     var x = { f: function (n) { return true; } };

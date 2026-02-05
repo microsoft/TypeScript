@@ -7,7 +7,7 @@ var obj: Object;
 
 if (ArrayBuffer.isView(obj)) {
 >ArrayBuffer.isView : Symbol(ArrayBufferConstructor.isView, Decl(lib.es5.d.ts, --, --))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isView : Symbol(ArrayBufferConstructor.isView, Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(arrayBufferIsViewNarrowsType.ts, 0, 3))
 

@@ -1,6 +1,6 @@
 --- old.enumErrors.js
 +++ new.enumErrors.js
-@@= skipped -72, +72 lines =@@
+@@= skipped -73, +73 lines =@@
  // Enum with computed member initializer of type Number
  var E5;
  (function (E5) {

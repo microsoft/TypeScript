@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/vararg.ts] ////
 
 //// [vararg.ts]
-module M {
+namespace M {
     export class C {
         public f(x:string,...rest:number[]) {
             var sum=0;
@@ -41,6 +41,7 @@ result+=x.fonly("a","b","c","d"); //ok
 
 
 //// [vararg.js]
+"use strict";
 var M;
 (function (M) {
     class C {

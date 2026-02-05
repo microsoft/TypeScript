@@ -1,8 +1,9 @@
+axios.js(9,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 axios.js(9,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 axios.js(10,16): error TS2339: Property 'default' does not exist on type 'Axios'.
 
 
-==== axios.js (2 errors) ====
+==== axios.js (3 errors) ====
     class Axios {
         constructor() {
         }
@@ -12,6 +13,8 @@ axios.js(10,16): error TS2339: Property 'default' does not exist on type 'Axios'
     // none of the 3 references should have a use-before-def error
     axios.m()
     module.exports = axios;
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2309: An export assignment cannot be used in a module with other exported elements.
     module.exports.default = axios;

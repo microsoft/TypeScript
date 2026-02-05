@@ -4,4 +4,5 @@
 var x = typeof `abc${ 123 }def`;
 
 //// [templateStringInTypeOfES6.js]
+"use strict";
 var x = typeof `abc${123}def`;

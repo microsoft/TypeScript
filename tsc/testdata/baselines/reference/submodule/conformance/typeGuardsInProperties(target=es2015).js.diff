@@ -1,0 +1,11 @@
+--- old.typeGuardsInProperties(target=es2015).js
++++ new.typeGuardsInProperties(target=es2015).js
+@@= skipped -33, +33 lines =@@
+ var num;
+ var strOrNum;
+ class C1 {
++    pp1;
++    pp2;
+     // Inside public accessor getter
+     get pp3() {
+         return strOrNum;

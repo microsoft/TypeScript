@@ -1,8 +1,8 @@
 --- old.overloadingOnConstants2.js
 +++ new.overloadingOnConstants2.js
-@@= skipped -30, +30 lines =@@
-
+@@= skipped -31, +31 lines =@@
  //// [overloadingOnConstants2.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.x = 1;

@@ -19,6 +19,7 @@ function f(value: A | B): number {
 }
 
 //// [exhaustiveSwitchWithWideningLiteralTypes.js]
+"use strict";
 // Repro from #12529
 class A {
     kind = "A"; // (property) A.kind: "A"

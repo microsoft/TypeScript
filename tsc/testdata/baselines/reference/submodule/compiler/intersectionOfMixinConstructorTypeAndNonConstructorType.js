@@ -8,5 +8,6 @@ new x();
 
 
 //// [intersectionOfMixinConstructorTypeAndNonConstructorType.js]
+"use strict";
 // Repro for #17388
 new x();

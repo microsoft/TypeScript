@@ -8,6 +8,7 @@ class C {
 }
 
 //// [parserComputedPropertyName27.js]
+"use strict";
 class C {
     // No ASI
     [e] = 0[e2];

@@ -8,7 +8,7 @@ class clodule<T> {
     static fn(id: string) { }
 }
 
-module clodule {
+namespace clodule {
     // error: duplicate identifier expected
     export function fn<T>(x: T, y: T): T {
         return x;
@@ -18,6 +18,7 @@ module clodule {
 
 
 //// [ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.js]
+"use strict";
 class clodule {
     id;
     value;

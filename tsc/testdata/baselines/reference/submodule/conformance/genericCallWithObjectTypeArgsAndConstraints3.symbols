@@ -34,7 +34,7 @@ function f<T extends Base>(a: { x: T; y: T }) {
 >y : Symbol(y, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 12, 37))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 12, 11))
 
-    var r: T;
+    var r!: T;
 >r : Symbol(r, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 13, 7))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 12, 11))
 
@@ -62,7 +62,7 @@ function f2<T extends Base, U extends { x: T; y: T }>(a: U) {
 >a : Symbol(a, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 19, 54))
 >U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 19, 27))
 
-    var r: T;
+    var r!: T;
 >r : Symbol(r, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 20, 7))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints3.ts, 19, 12))
 

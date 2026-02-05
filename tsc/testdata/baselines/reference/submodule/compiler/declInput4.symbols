@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/declInput4.ts] ////
 
 === declInput4.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(declInput4.ts, 0, 0))
 
     class C { }
->C : Symbol(C, Decl(declInput4.ts, 0, 10))
+>C : Symbol(C, Decl(declInput4.ts, 0, 13))
 
     export class E {}
 >E : Symbol(E, Decl(declInput4.ts, 1, 15))

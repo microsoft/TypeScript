@@ -59,6 +59,7 @@ var r5 = b2[2];
 var r6 = b2[3];
 
 //// [numericIndexingResults.js]
+"use strict";
 class C {
     1 = '';
     "2" = '';

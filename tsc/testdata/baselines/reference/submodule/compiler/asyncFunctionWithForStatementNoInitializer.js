@@ -27,6 +27,7 @@ async function test4() {
 }
 
 //// [asyncFunctionWithForStatementNoInitializer.js]
+"use strict";
 async function test1() {
     let i = 0;
     let limit = 10;

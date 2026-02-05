@@ -6,3 +6,4 @@ interface Array<T> {
 }
 
 //// [augmentArray.js]
+"use strict";

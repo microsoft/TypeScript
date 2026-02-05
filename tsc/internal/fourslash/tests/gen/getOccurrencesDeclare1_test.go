@@ -12,7 +12,7 @@ func TestGetOccurrencesDeclare1(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module m {
+	const content = `namespace m {
     export class C1 {
         public pub1;
         public pub2;
@@ -42,12 +42,12 @@ func TestGetOccurrencesDeclare1(t *testing.T) {
     export interface I1 {
     }
 
-    export [|declare|] module ma.m1.m2.m3 {
+    export [|declare|] namespace ma.m1.m2.m3 {
         interface I2 {
         }
     }
 
-    export module mb.m1.m2.m3 {
+    export namespace mb.m1.m2.m3 {
         declare var foo;
 
         export class C2 {

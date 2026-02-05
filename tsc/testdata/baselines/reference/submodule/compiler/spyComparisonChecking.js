@@ -26,6 +26,7 @@ function mock<T>(spyName: string, methodNames: Array<keyof T>): SpyObj<T> {
 }
 
 //// [spyComparisonChecking.js]
+"use strict";
 function mock(spyName, methodNames) {
     const spyObj = createSpyObj(spyName, methodNames);
     for (const methodName of methodNames) {

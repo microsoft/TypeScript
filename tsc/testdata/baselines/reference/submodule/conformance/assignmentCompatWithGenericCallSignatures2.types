@@ -15,10 +15,10 @@ interface B {
 >y : S[]
 }
 
-var a: A;
+declare var a: A;
 >a : A
 
-var b: B;
+declare var b: B;
 >b : B
 
 // Both errors

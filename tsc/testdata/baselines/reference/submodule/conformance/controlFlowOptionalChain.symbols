@@ -1680,7 +1680,7 @@ function getArea(shape?: Shape) {
         case 'circle':
             return Math.PI * shape.radius ** 2
 >Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >shape.radius : Symbol(radius, Decl(controlFlowOptionalChain.ts, 526, 23))
 >shape : Symbol(shape, Decl(controlFlowOptionalChain.ts, 528, 17))

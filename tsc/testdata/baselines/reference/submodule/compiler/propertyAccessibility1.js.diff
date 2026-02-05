@@ -1,8 +1,8 @@
 --- old.propertyAccessibility1.js
 +++ new.propertyAccessibility1.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [propertyAccessibility1.js]
+ "use strict";
  class Foo {
 -    constructor() {
 -        this.privProp = 0;

@@ -44,7 +44,7 @@
  >this.x = 10 : 10
  >this.x : any
 ->this : this
-+>this : any
++>this : {}
  >x : any
  >10 : 10
  }

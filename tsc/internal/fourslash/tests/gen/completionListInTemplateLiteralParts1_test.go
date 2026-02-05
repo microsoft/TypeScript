@@ -12,7 +12,8 @@ func TestCompletionListInTemplateLiteralParts1(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `/*0*/` + "`" + `  $ { ${/*1*/ 10/*2*/ + 1.1/*3*/ /*4*/} 12312` + "`" + `/*5*/
+	const content = `// @lib: es5
+/*0*/` + "`" + `  $ { ${/*1*/ 10/*2*/ + 1.1/*3*/ /*4*/} 12312` + "`" + `/*5*/
 
 /*6*/` + "`" + `asdasd${/*7*/ 2 + 1.1 /*8*/} 12312 {`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

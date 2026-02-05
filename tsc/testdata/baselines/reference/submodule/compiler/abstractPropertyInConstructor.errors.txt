@@ -9,9 +9,11 @@ abstractPropertyInConstructor.ts(78,18): error TS2715: Abstract property 'y' in 
 abstractPropertyInConstructor.ts(79,12): error TS2715: Abstract property 'x' in class 'C1' cannot be accessed in the constructor.
 abstractPropertyInConstructor.ts(79,15): error TS2715: Abstract property 'y' in class 'C1' cannot be accessed in the constructor.
 abstractPropertyInConstructor.ts(79,22): error TS2715: Abstract property 'y' in class 'C1' cannot be accessed in the constructor.
+abstractPropertyInConstructor.ts(84,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+abstractPropertyInConstructor.ts(85,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 
 
-==== abstractPropertyInConstructor.ts (11 errors) ====
+==== abstractPropertyInConstructor.ts (13 errors) ====
     abstract class AbstractClass {
         constructor(str: string, other: AbstractClass) {
             this.method(parseInt(str));
@@ -119,7 +121,11 @@ abstractPropertyInConstructor.ts(79,22): error TS2715: Abstract property 'y' in 
     
     class C2 {
         x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         y: string;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     
         constructor() {
             let self = this;                // ok

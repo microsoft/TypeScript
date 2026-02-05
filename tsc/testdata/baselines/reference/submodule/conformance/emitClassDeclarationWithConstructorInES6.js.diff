@@ -1,8 +1,8 @@
 --- old.emitClassDeclarationWithConstructorInES6.js
 +++ new.emitClassDeclarationWithConstructorInES6.js
-@@= skipped -27, +27 lines =@@
-
+@@= skipped -28, +28 lines =@@
  //// [emitClassDeclarationWithConstructorInES6.js]
+ "use strict";
  class A {
 +    y;
      constructor(x) {

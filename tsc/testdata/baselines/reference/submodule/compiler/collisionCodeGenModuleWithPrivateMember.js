@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/collisionCodeGenModuleWithPrivateMember.ts] ////
 
 //// [collisionCodeGenModuleWithPrivateMember.ts]
-module m1 {
+namespace m1 {
     class m1 {
     }
     var x = new m1();
@@ -11,6 +11,7 @@ module m1 {
 var foo = new m1.c1();
 
 //// [collisionCodeGenModuleWithPrivateMember.js]
+"use strict";
 var m1;
 (function (m1_1) {
     class m1 {

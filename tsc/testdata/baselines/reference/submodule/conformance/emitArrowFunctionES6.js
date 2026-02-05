@@ -23,6 +23,7 @@ var p10 = ([{ value, done }]) => { };
 
 
 //// [emitArrowFunctionES6.js]
+"use strict";
 var f1 = () => { };
 var f2 = (x, y) => { };
 var f3 = (x, y, ...rest) => { };

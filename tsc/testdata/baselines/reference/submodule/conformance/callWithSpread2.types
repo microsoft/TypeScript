@@ -2,26 +2,26 @@
 
 === callWithSpread2.ts ===
 declare function all(a?: number, b?: number): void;
->all : (a?: number, b?: number) => void
->a : number
->b : number
+>all : (a?: number | undefined, b?: number | undefined) => void
+>a : number | undefined
+>b : number | undefined
 
 declare function weird(a?: number | string, b?: number | string): void;
->weird : (a?: string | number, b?: string | number) => void
->a : string | number
->b : string | number
+>weird : (a?: string | number | undefined, b?: string | number | undefined) => void
+>a : string | number | undefined
+>b : string | number | undefined
 
 declare function prefix(s: string, a?: number, b?: number): void;
->prefix : (s: string, a?: number, b?: number) => void
+>prefix : (s: string, a?: number | undefined, b?: number | undefined) => void
 >s : string
->a : number
->b : number
+>a : number | undefined
+>b : number | undefined
 
 declare function rest(s: string, a?: number, b?: number,  ...rest: number[]): void;
->rest : (s: string, a?: number, b?: number, ...rest: number[]) => void
+>rest : (s: string, a?: number | undefined, b?: number | undefined, ...rest: number[]) => void
 >s : string
->a : number
->b : number
+>a : number | undefined
+>b : number | undefined
 >rest : number[]
 
 declare function normal(s: string): void;
@@ -32,11 +32,11 @@ declare function thunk(): string;
 >thunk : () => string
 
 declare function prefix2(s: string, n: number, a?: number, b?: number): void;
->prefix2 : (s: string, n: number, a?: number, b?: number) => void
+>prefix2 : (s: string, n: number, a?: number | undefined, b?: number | undefined) => void
 >s : string
 >n : number
->a : number
->b : number
+>a : number | undefined
+>b : number | undefined
 
 declare var ns: number[];
 >ns : number[]
@@ -50,38 +50,38 @@ declare var tuple: [number, string];
 // good
 all(...ns)
 >all(...ns) : void
->all : (a?: number, b?: number) => void
+>all : (a?: number | undefined, b?: number | undefined) => void
 >...ns : number
 >ns : number[]
 
 weird(...ns)
 >weird(...ns) : void
->weird : (a?: string | number, b?: string | number) => void
+>weird : (a?: string | number | undefined, b?: string | number | undefined) => void
 >...ns : number
 >ns : number[]
 
 weird(...mixed)
 >weird(...mixed) : void
->weird : (a?: string | number, b?: string | number) => void
+>weird : (a?: string | number | undefined, b?: string | number | undefined) => void
 >...mixed : string | number
 >mixed : (string | number)[]
 
 weird(...tuple)
 >weird(...tuple) : void
->weird : (a?: string | number, b?: string | number) => void
+>weird : (a?: string | number | undefined, b?: string | number | undefined) => void
 >...tuple : string | number
 >tuple : [number, string]
 
 prefix("a", ...ns)
 >prefix("a", ...ns) : void
->prefix : (s: string, a?: number, b?: number) => void
+>prefix : (s: string, a?: number | undefined, b?: number | undefined) => void
 >"a" : "a"
 >...ns : number
 >ns : number[]
 
 rest("d", ...ns)
 >rest("d", ...ns) : void
->rest : (s: string, a?: number, b?: number, ...rest: number[]) => void
+>rest : (s: string, a?: number | undefined, b?: number | undefined, ...rest: number[]) => void
 >"d" : "d"
 >...ns : number
 >ns : number[]
@@ -104,65 +104,65 @@ thunk(...ns)
 // bad
 all(...mixed)
 >all(...mixed) : void
->all : (a?: number, b?: number) => void
+>all : (a?: number | undefined, b?: number | undefined) => void
 >...mixed : string | number
 >mixed : (string | number)[]
 
 all(...tuple)
 >all(...tuple) : void
->all : (a?: number, b?: number) => void
+>all : (a?: number | undefined, b?: number | undefined) => void
 >...tuple : string | number
 >tuple : [number, string]
 
 prefix("b", ...mixed)
 >prefix("b", ...mixed) : void
->prefix : (s: string, a?: number, b?: number) => void
+>prefix : (s: string, a?: number | undefined, b?: number | undefined) => void
 >"b" : "b"
 >...mixed : string | number
 >mixed : (string | number)[]
 
 prefix("c", ...tuple)
 >prefix("c", ...tuple) : void
->prefix : (s: string, a?: number, b?: number) => void
+>prefix : (s: string, a?: number | undefined, b?: number | undefined) => void
 >"c" : "c"
 >...tuple : string | number
 >tuple : [number, string]
 
 rest("e", ...mixed)
 >rest("e", ...mixed) : void
->rest : (s: string, a?: number, b?: number, ...rest: number[]) => void
+>rest : (s: string, a?: number | undefined, b?: number | undefined, ...rest: number[]) => void
 >"e" : "e"
 >...mixed : string | number
 >mixed : (string | number)[]
 
 rest("f", ...tuple)
 >rest("f", ...tuple) : void
->rest : (s: string, a?: number, b?: number, ...rest: number[]) => void
+>rest : (s: string, a?: number | undefined, b?: number | undefined, ...rest: number[]) => void
 >"f" : "f"
 >...tuple : string | number
 >tuple : [number, string]
 
 prefix(...ns) // required parameters are required
 >prefix(...ns) : void
->prefix : (s: string, a?: number, b?: number) => void
+>prefix : (s: string, a?: number | undefined, b?: number | undefined) => void
 >...ns : number
 >ns : number[]
 
 prefix(...mixed)
 >prefix(...mixed) : void
->prefix : (s: string, a?: number, b?: number) => void
+>prefix : (s: string, a?: number | undefined, b?: number | undefined) => void
 >...mixed : string | number
 >mixed : (string | number)[]
 
 prefix(...tuple)
 >prefix(...tuple) : void
->prefix : (s: string, a?: number, b?: number) => void
+>prefix : (s: string, a?: number | undefined, b?: number | undefined) => void
 >...tuple : string | number
 >tuple : [number, string]
 
 prefix2("g", ...ns);
 >prefix2("g", ...ns) : void
->prefix2 : (s: string, n: number, a?: number, b?: number) => void
+>prefix2 : (s: string, n: number, a?: number | undefined, b?: number | undefined) => void
 >"g" : "g"
 >...ns : number
 >ns : number[]

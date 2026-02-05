@@ -79,6 +79,7 @@ export let x: DiagnosticCategory;
 })()
 
 //// [a.js]
+"use strict";
 var numerics;
 (function (numerics) {
     let DiagnosticCategory;

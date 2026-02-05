@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/unspecializedConstraints.ts] ////
 
 //// [unspecializedConstraints.ts]
-module ts {
+namespace ts {
     interface Map<T> {
         [index: string]: T;
     }
@@ -156,6 +156,7 @@ module ts {
 
 
 //// [unspecializedConstraints.js]
+"use strict";
 var ts;
 (function (ts) {
     class Symbol {

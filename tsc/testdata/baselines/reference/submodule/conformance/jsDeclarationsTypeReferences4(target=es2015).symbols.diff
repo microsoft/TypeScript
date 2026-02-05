@@ -1,0 +1,10 @@
+--- old.jsDeclarationsTypeReferences4(target=es2015).symbols
++++ new.jsDeclarationsTypeReferences4(target=es2015).symbols
+@@= skipped -16, +16 lines =@@
+ >Something : Symbol(Something, Decl(index.js, 6, 13))
+ >require("fs").Something : Symbol(Something, Decl(index.d.ts, 0, 21))
+ >require : Symbol(require)
+->"fs" : Symbol("fs", Decl(index.d.ts, 0, 0))
+ >Something : Symbol(Something, Decl(index.d.ts, 0, 21))
+
+         const thing = new Something();

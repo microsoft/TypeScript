@@ -7,15 +7,15 @@ var a;
 var x: boolean = delete a;
 >x : boolean
 >delete a : boolean
->a : any
+>a : undefined
 
 var y: any = delete a;
 >y : any
 >delete a : boolean
->a : any
+>a : undefined
 
 var z: number = delete a;
 >z : number
 >delete a : boolean
->a : any
+>a : undefined
 

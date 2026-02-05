@@ -5,5 +5,6 @@ var iter: Iterable<number>;
 for (let num of iter) { }
 
 //// [for-of57.js]
+"use strict";
 var iter;
 for (let num of iter) { }

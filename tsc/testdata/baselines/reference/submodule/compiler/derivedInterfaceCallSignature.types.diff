@@ -1,0 +1,93 @@
+--- old.derivedInterfaceCallSignature.types
++++ new.derivedInterfaceCallSignature.types
+@@= skipped -6, +6 lines =@@
+ >index : number | undefined
+
+     x(): (data: any, index?: number) => number;
+->x : () => (data: any, index?: number) => number
++>x : () => (data: any, index?: number | undefined) => number
+ >data : any
+ >index : number | undefined
+
+     y(): (data: any, index?: number) => number;
+->y : () => (data: any, index?: number) => number
++>y : () => (data: any, index?: number | undefined) => number
+ >data : any
+ >index : number | undefined
+
+@@= skipped -16, +16 lines =@@
+ >tension : () => number
+
+     defined(): (data: any, index?: number) => boolean;
+->defined : () => (data: any, index?: number) => boolean
++>defined : () => (data: any, index?: number | undefined) => boolean
+ >data : any
+ >index : number | undefined
+ }
+
+ interface D3SvgArea extends D3SvgPath {
+     x(x: (data: any, index?: number) => number): D3SvgArea;
+->x : (x: (data: any, index?: number) => number) => D3SvgArea
+->x : (data: any, index?: number) => number
++>x : (x: (data: any, index?: number | undefined) => number) => D3SvgArea
++>x : (data: any, index?: number | undefined) => number
+ >data : any
+ >index : number | undefined
+
+     y(y: (data: any, index?: number) => number): D3SvgArea;
+->y : (y: (data: any, index?: number) => number) => D3SvgArea
+->y : (data: any, index?: number) => number
++>y : (y: (data: any, index?: number | undefined) => number) => D3SvgArea
++>y : (data: any, index?: number | undefined) => number
+ >data : any
+ >index : number | undefined
+
+     y0(): (data: any, index?: number) => number;
+->y0 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
++>y0 : { (): (data: any, index?: number | undefined) => number; (y: number): D3SvgArea; (y: (data: any, index?: number | undefined) => number): D3SvgArea; }
+ >data : any
+ >index : number | undefined
+
+     y0(y: number): D3SvgArea;
+->y0 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
++>y0 : { (): (data: any, index?: number | undefined) => number; (y: number): D3SvgArea; (y: (data: any, index?: number | undefined) => number): D3SvgArea; }
+ >y : number
+
+     y0(y: (data: any, index?: number) => number): D3SvgArea;
+->y0 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
+->y : (data: any, index?: number) => number
++>y0 : { (): (data: any, index?: number | undefined) => number; (y: number): D3SvgArea; (y: (data: any, index?: number | undefined) => number): D3SvgArea; }
++>y : (data: any, index?: number | undefined) => number
+ >data : any
+ >index : number | undefined
+
+     y1(): (data: any, index?: number) => number;
+->y1 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
++>y1 : { (): (data: any, index?: number | undefined) => number; (y: number): D3SvgArea; (y: (data: any, index?: number | undefined) => number): D3SvgArea; }
+ >data : any
+ >index : number | undefined
+
+     y1(y: number): D3SvgArea;
+->y1 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
++>y1 : { (): (data: any, index?: number | undefined) => number; (y: number): D3SvgArea; (y: (data: any, index?: number | undefined) => number): D3SvgArea; }
+ >y : number
+
+     y1(y: (data: any, index?: number) => number): D3SvgArea;
+->y1 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
+->y : (data: any, index?: number) => number
++>y1 : { (): (data: any, index?: number | undefined) => number; (y: number): D3SvgArea; (y: (data: any, index?: number | undefined) => number): D3SvgArea; }
++>y : (data: any, index?: number | undefined) => number
+ >data : any
+ >index : number | undefined
+
+@@= skipped -57, +57 lines =@@
+ >tension : number
+
+     defined(defined: (data: any, index?: number) => boolean): D3SvgArea;
+->defined : (defined: (data: any, index?: number) => boolean) => D3SvgArea
+->defined : (data: any, index?: number) => boolean
++>defined : (defined: (data: any, index?: number | undefined) => boolean) => D3SvgArea
++>defined : (data: any, index?: number | undefined) => boolean
+ >data : any
+ >index : number | undefined
+ }

@@ -4,4 +4,5 @@
 new A().b()
 
 //// [parserInvocationOfMemberAccessOffOfObjectCreationExpression1.js]
+"use strict";
 new A().b();

@@ -55,6 +55,7 @@ var c8 = new C4<any>(b);
 
 
 //// [constraintSatisfactionWithAny.js]
+"use strict";
 // any is not a valid type argument unless there is no constraint, or the constraint is any
 function foo(x) { return null; }
 function foo2(x) { return null; }

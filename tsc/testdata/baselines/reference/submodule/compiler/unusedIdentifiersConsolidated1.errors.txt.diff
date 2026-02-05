@@ -5,10 +5,10 @@
  unusedIdentifiersConsolidated1.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
 -unusedIdentifiersConsolidated1.ts(5,32): error TS6133: 'unusedtypeparameter' is declared but its value is never read.
 +unusedIdentifiersConsolidated1.ts(5,32): error TS6196: 'unusedtypeparameter' is declared but never used.
+ unusedIdentifiersConsolidated1.ts(6,13): error TS2564: Property 'unusedprivatevariable' has no initializer and is not definitely assigned in the constructor.
  unusedIdentifiersConsolidated1.ts(6,13): error TS6133: 'unusedprivatevariable' is declared but its value is never read.
  unusedIdentifiersConsolidated1.ts(7,13): error TS6133: 'greeting' is declared but its value is never read.
- unusedIdentifiersConsolidated1.ts(11,17): error TS6133: 'message' is declared but its value is never read.
-@@= skipped -27, +27 lines =@@
+@@= skipped -30, +30 lines =@@
      
      class Dummy<usedtypeparameter, unusedtypeparameter> {
                                     ~~~~~~~~~~~~~~~~~~~
@@ -16,4 +16,4 @@
 +!!! error TS6196: 'unusedtypeparameter' is declared but never used.
          private unusedprivatevariable: string;
                  ~~~~~~~~~~~~~~~~~~~~~
- !!! error TS6133: 'unusedprivatevariable' is declared but its value is never read.
+ !!! error TS2564: Property 'unusedprivatevariable' has no initializer and is not definitely assigned in the constructor.

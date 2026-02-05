@@ -1,0 +1,88 @@
+thisInPropertyBoundDeclarations.ts(2,13): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+thisInPropertyBoundDeclarations.ts(18,9): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+thisInPropertyBoundDeclarations.ts(23,13): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+thisInPropertyBoundDeclarations.ts(25,15): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+thisInPropertyBoundDeclarations.ts(30,13): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+==== thisInPropertyBoundDeclarations.ts (5 errors) ====
+    class Bug {
+        private name: string;
+                ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+    
+        private static func: Function[] = [
+         (that: Bug, name: string) => {
+             that.foo(name);
+         }
+        ];
+    
+        private foo(name: string) {
+            this.name = name;
+        }
+    }
+    
+    // Valid use of this in a property bound decl
+    class A {
+        prop1 = function() {
+            this;
+            ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 thisInPropertyBoundDeclarations.ts:17:13: An outer value of 'this' is shadowed by this container.
+        };
+    
+        prop2 = function() {
+            function inner() {
+                this;
+                ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+            }
+            () => this;
+                  ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 thisInPropertyBoundDeclarations.ts:21:13: An outer value of 'this' is shadowed by this container.
+        };
+    
+        prop3 = () => {
+            function inner() {
+                this;
+                ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 thisInPropertyBoundDeclarations.ts:29:18: An outer value of 'this' is shadowed by this container.
+            }
+        };
+    
+        prop4 = {
+            a: function() { return this; },
+        };
+    
+        prop5 = () => {
+            return {
+                a: function() { return this; },
+            };
+        };
+    }
+    
+    class B {
+        prop1 = this;
+    
+        prop2 = () => this;
+    
+        prop3 = () => () => () => () => this;
+    
+        prop4 = '  ' +
+        function() {
+        } +
+        ' ' +
+        (() => () => () => this);
+    
+        prop5 = {
+            a: () => { return this; }
+        };
+    
+        prop6 = () => {
+            return {
+                a: () => { return this; }
+            };
+        };
+    }

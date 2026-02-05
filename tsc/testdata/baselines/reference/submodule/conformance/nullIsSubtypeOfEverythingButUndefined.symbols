@@ -41,11 +41,11 @@ var r3 = true ? null : true;
 
 var r4 = true ? new Date() : null;
 >r4 : Symbol(r4, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 18, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 19, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var r4 = true ? null : new Date();
 >r4 : Symbol(r4, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 18, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 19, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var r5 = true ? /1/ : null;
 >r5 : Symbol(r5, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 21, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 22, 3))
@@ -158,7 +158,7 @@ var r14 = true ? null : E.A;
 function f() { }
 >f : Symbol(f, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 53, 28), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 55, 16))
 
-module f {
+namespace f {
 >f : Symbol(f, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 53, 28), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 55, 16))
 
     export var bar = 1;
@@ -180,7 +180,7 @@ class c { baz: string }
 >c : Symbol(c, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 61, 27), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 63, 23))
 >baz : Symbol(c.baz, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 63, 9))
 
-module c {
+namespace c {
 >c : Symbol(c, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 61, 27), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 63, 23))
 
     export var bar = 1;

@@ -1,0 +1,19 @@
+mod.js(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+
+==== requireTwoPropertyAccesses.js (0 errors) ====
+    const value = require("./mod").x.y
+    console.log(value)
+    
+==== mod.js (1 errors) ====
+    module.exports = {
+    ~~~~~~~~~~~~~~~~~~
+        x: {
+    ~~~~~~~~
+            y: "value"
+    ~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+    }
+    ~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.

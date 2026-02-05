@@ -10,5 +10,6 @@ Callbacks<number, string, boolean>('s'); // no error
 new Callbacks<number, string, boolean>('s'); // no error
 
 //// [overloadsAndTypeArgumentArity.js]
+"use strict";
 Callbacks('s'); // no error
 new Callbacks('s'); // no error

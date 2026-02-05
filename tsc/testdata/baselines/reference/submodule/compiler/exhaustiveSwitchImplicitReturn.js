@@ -58,6 +58,7 @@ function foo6(bar: "a", a: boolean, b: boolean): number {
 
 
 //// [exhaustiveSwitchImplicitReturn.js]
+"use strict";
 function foo1(bar) {
     switch (bar) {
         case "a":

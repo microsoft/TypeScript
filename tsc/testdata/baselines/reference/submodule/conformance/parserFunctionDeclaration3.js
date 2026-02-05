@@ -4,3 +4,4 @@
 function foo();
 
 //// [parserFunctionDeclaration3.js]
+"use strict";

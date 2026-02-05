@@ -1,20 +1,32 @@
+implementingAnInterfaceExtendingClassWithProtecteds.ts(2,15): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 implementingAnInterfaceExtendingClassWithProtecteds.ts(9,7): error TS2420: Class 'Bar' incorrectly implements interface 'I'.
   Type 'Bar' is missing the following properties from type 'I': y, x
 implementingAnInterfaceExtendingClassWithProtecteds.ts(12,7): error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
   Property 'x' is missing in type 'Bar2' but required in type 'I'.
+implementingAnInterfaceExtendingClassWithProtecteds.ts(13,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 implementingAnInterfaceExtendingClassWithProtecteds.ts(16,7): error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
   Property 'x' is protected but type 'Bar3' is not a class derived from 'Foo'.
+implementingAnInterfaceExtendingClassWithProtecteds.ts(17,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+implementingAnInterfaceExtendingClassWithProtecteds.ts(18,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 implementingAnInterfaceExtendingClassWithProtecteds.ts(21,7): error TS2420: Class 'Bar4' incorrectly implements interface 'I'.
   Property 'x' is protected but type 'Bar4' is not a class derived from 'Foo'.
+implementingAnInterfaceExtendingClassWithProtecteds.ts(22,15): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+implementingAnInterfaceExtendingClassWithProtecteds.ts(23,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 implementingAnInterfaceExtendingClassWithProtecteds.ts(26,7): error TS2420: Class 'Bar5' incorrectly implements interface 'I'.
   Property 'y' is missing in type 'Foo' but required in type 'I'.
 implementingAnInterfaceExtendingClassWithProtecteds.ts(29,7): error TS2420: Class 'Bar6' incorrectly implements interface 'I'.
   Property 'y' is protected in type 'Bar6' but public in type 'I'.
+implementingAnInterfaceExtendingClassWithProtecteds.ts(30,15): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+implementingAnInterfaceExtendingClassWithProtecteds.ts(34,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+implementingAnInterfaceExtendingClassWithProtecteds.ts(38,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+implementingAnInterfaceExtendingClassWithProtecteds.ts(39,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 
 
-==== implementingAnInterfaceExtendingClassWithProtecteds.ts (6 errors) ====
+==== implementingAnInterfaceExtendingClassWithProtecteds.ts (16 errors) ====
     class Foo {
         protected x: string;
+                  ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     interface I extends Foo {
@@ -33,6 +45,8 @@ implementingAnInterfaceExtendingClassWithProtecteds.ts(29,7): error TS2420: Clas
 !!! error TS2420:   Property 'x' is missing in type 'Bar2' but required in type 'I'.
 !!! related TS2728 implementingAnInterfaceExtendingClassWithProtecteds.ts:2:15: 'x' is declared here.
         y: number;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Bar3 implements I { // error
@@ -40,7 +54,11 @@ implementingAnInterfaceExtendingClassWithProtecteds.ts(29,7): error TS2420: Clas
 !!! error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'x' is protected but type 'Bar3' is not a class derived from 'Foo'.
         x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         y: number;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Bar4 implements I { // error
@@ -48,7 +66,11 @@ implementingAnInterfaceExtendingClassWithProtecteds.ts(29,7): error TS2420: Clas
 !!! error TS2420: Class 'Bar4' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'x' is protected but type 'Bar4' is not a class derived from 'Foo'.
         protected x: string;
+                  ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         y: number;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Bar5 extends Foo implements I { // error
@@ -63,14 +85,22 @@ implementingAnInterfaceExtendingClassWithProtecteds.ts(29,7): error TS2420: Clas
 !!! error TS2420: Class 'Bar6' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'y' is protected in type 'Bar6' but public in type 'I'.
         protected y: number;
+                  ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Bar7 extends Foo implements I {
         y: number;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Bar8 extends Foo implements I {
         x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         y: number;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }
     

@@ -10,7 +10,7 @@ subtypingWithConstructSignaturesWithSpecializedSignatures.ts(76,15): error TS243
 ==== subtypingWithConstructSignaturesWithSpecializedSignatures.ts (2 errors) ====
     // same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results
     
-    module CallSignature {
+    namespace CallSignature {
         interface Base { // T
             // M's
             new (x: 'a'): void;
@@ -45,7 +45,7 @@ subtypingWithConstructSignaturesWithSpecializedSignatures.ts(76,15): error TS243
         }
     }
     
-    module MemberWithCallSignature {
+    namespace MemberWithCallSignature {
         interface Base { // T
             // M's
             a: {

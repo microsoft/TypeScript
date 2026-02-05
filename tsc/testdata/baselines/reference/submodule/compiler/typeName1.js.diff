@@ -1,8 +1,8 @@
 --- old.typeName1.js
 +++ new.typeName1.js
-@@= skipped -30, +30 lines =@@
-
+@@= skipped -31, +31 lines =@@
  //// [typeName1.js]
+ "use strict";
  class C {
 +    eek;
 +    static zeek;

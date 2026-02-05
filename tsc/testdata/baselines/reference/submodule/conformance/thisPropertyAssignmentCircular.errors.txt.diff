@@ -1,0 +1,33 @@
+--- old.thisPropertyAssignmentCircular.errors.txt
++++ new.thisPropertyAssignmentCircular.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++thisPropertyAssignmentCircular.js(15,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++thisPropertyAssignmentCircular.js(16,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++
++
++==== thisPropertyAssignmentCircular.js (2 errors) ====
++    export class Foo {
++        constructor() {
++            this.foo = "Hello";
++        }
++        slicey() {
++            this.foo = this.foo.slice();
++        }
++        m() {
++            this.foo
++        }
++    }
++    
++    /** @class */
++    function C() {
++        this.x = 0;
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++!!! related TS2738 thisPropertyAssignmentCircular.js:14:10: An outer value of 'this' is shadowed by this container.
++        this.x = function() { this.x.toString(); }
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++!!! related TS2738 thisPropertyAssignmentCircular.js:14:10: An outer value of 'this' is shadowed by this container.
++    }
++    

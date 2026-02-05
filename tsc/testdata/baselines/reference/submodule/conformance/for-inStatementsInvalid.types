@@ -34,7 +34,7 @@ for (var x in fn()) { }
 >fn() : void
 >fn : () => void
 
-var c : string, d:string, e;
+declare var c : string, d:string, e: any;
 >c : string
 >d : string
 >e : any
@@ -197,7 +197,7 @@ interface I {
     [idx: number]: number;
 >idx : number
 }
-var i: I;
+declare var i: I;
 >i : I
 
 for (var x in i[42]) { } 

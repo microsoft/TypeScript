@@ -6,3 +6,4 @@ declare global {
 }
 
 //// [moduleAugmentationGlobal6.js]
+"use strict";

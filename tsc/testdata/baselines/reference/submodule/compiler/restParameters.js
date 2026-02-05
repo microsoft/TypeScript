@@ -10,6 +10,7 @@ function f20(a:string, b?:string, ...c:number[]){}
 function f21(a:string, b?:string, c?:number, ...d:number[]){}
 
 //// [restParameters.js]
+"use strict";
 function f18(a, ...b) { }
 function f19(a, b, ...c) { }
 function f20(a, b, ...c) { }

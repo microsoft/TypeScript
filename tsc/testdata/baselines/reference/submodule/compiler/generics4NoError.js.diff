@@ -1,8 +1,8 @@
 --- old.generics4NoError.js
 +++ new.generics4NoError.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [generics4NoError.js]
+ "use strict";
  class C {
 +    x;
  }

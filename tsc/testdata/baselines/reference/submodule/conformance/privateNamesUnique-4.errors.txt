@@ -1,13 +1,16 @@
+privateNamesUnique-4.ts(5,11): error TS2564: Property '#something' has no initializer and is not definitely assigned in the constructor.
 privateNamesUnique-4.ts(6,7): error TS2322: Type 'A2' is not assignable to type 'C'.
   Property '#something' is missing in type 'A1' but required in type 'C'.
 
 
-==== privateNamesUnique-4.ts (1 errors) ====
+==== privateNamesUnique-4.ts (2 errors) ====
     class A1 { }
     interface A2 extends A1 { }
     declare const a: A2;
     
     class C { #something: number }
+              ~~~~~~~~~~
+!!! error TS2564: Property '#something' has no initializer and is not definitely assigned in the constructor.
     const c: C = a;
           ~
 !!! error TS2322: Type 'A2' is not assignable to type 'C'.

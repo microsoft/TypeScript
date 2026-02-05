@@ -1,6 +1,6 @@
 --- old.dynamicNamesErrors.js
 +++ new.dynamicNamesErrors.js
-@@= skipped -75, +75 lines =@@
+@@= skipped -73, +73 lines =@@
  const z = Symbol();
  const w = Symbol();
  class ClassMemberVisibility {

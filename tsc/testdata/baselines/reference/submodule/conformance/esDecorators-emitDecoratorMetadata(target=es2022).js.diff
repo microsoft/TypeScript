@@ -1,9 +1,9 @@
 --- old.esDecorators-emitDecoratorMetadata(target=es2022).js
 +++ new.esDecorators-emitDecoratorMetadata(target=es2022).js
-@@= skipped -48, +48 lines =@@
- });
+@@= skipped -49, +49 lines =@@
 
  //// [esDecorators-emitDecoratorMetadata.js]
+ "use strict";
 -let C = (() => {
 -    let _classDecorators = [dec];
 -    let _classDescriptor;

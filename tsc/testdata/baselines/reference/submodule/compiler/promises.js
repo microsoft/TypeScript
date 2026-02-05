@@ -9,3 +9,4 @@ interface Promise<T> {
 
 
 //// [promises.js]
+"use strict";

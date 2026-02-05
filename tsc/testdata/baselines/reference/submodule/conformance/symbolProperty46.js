@@ -14,6 +14,7 @@ class C {
 (new C)[Symbol.hasInstance] = "";
 
 //// [symbolProperty46.js]
+"use strict";
 class C {
     get [Symbol.hasInstance]() {
         return "";

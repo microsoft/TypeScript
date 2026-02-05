@@ -13,6 +13,7 @@ class A {
 
 
 //// [privateNameDeclaration.js]
+"use strict";
 class A {
     #foo;
     #bar = 6;

@@ -35,6 +35,7 @@ class C4 extends Base {
 }
 
 //// [overrideParameterProperty.js]
+"use strict";
 class Base {
     p1;
 }

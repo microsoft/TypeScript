@@ -1,6 +1,6 @@
 --- old.decoratorMetadataPromise.js
 +++ new.decoratorMetadataPromise.js
-@@= skipped -22, +22 lines =@@
+@@= skipped -23, +23 lines =@@
  var __metadata = (this && this.__metadata) || function (k, v) {
      if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
  };

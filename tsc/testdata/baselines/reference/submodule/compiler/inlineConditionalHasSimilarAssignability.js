@@ -19,6 +19,7 @@ function foo<T>(a: T) {
 }
 
 //// [inlineConditionalHasSimilarAssignability.js]
+"use strict";
 function foo(a) {
     const b = 0;
     a = b; // ok

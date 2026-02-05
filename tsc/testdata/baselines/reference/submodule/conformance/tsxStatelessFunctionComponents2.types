@@ -1,27 +1,29 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : typeof React
 
 function Greet(x: {name?: string}) {
->Greet : (x: { name?: string; }) => JSX.Element
->x : { name?: string; }
->name : string
+>Greet : (x: { name?: string | undefined; }) => JSX.Element
+>x : { name?: string | undefined; }
+>name : string | undefined
 
 	return <div>Hello, {x}</div>;
 ><div>Hello, {x}</div> : JSX.Element
 >div : any
->x : { name?: string; }
+>x : { name?: string | undefined; }
 >div : any
 }
 
 class BigGreeter extends React.Component<{ name?: string }, {}> {
 >BigGreeter : BigGreeter
->React.Component : React.Component<{ name?: string; }, {}>
+>React.Component : React.Component<{ name?: string | undefined; }, {}>
 >React : typeof React
 >Component : typeof React.Component
->name : string
+>name : string | undefined
 
 	render() {
 >render : () => JSX.Element
@@ -39,20 +41,20 @@ class BigGreeter extends React.Component<{ name?: string }, {}> {
 let a = <Greet />;
 >a : JSX.Element
 ><Greet /> : JSX.Element
->Greet : (x: { name?: string; }) => JSX.Element
+>Greet : (x: { name?: string | undefined; }) => JSX.Element
 
 // OK - always valid to specify 'key'
 let b = <Greet key="k" />;
 >b : JSX.Element
 ><Greet key="k" /> : JSX.Element
->Greet : (x: { name?: string; }) => JSX.Element
+>Greet : (x: { name?: string | undefined; }) => JSX.Element
 >key : string
 
 // Error - not allowed to specify 'ref' on SFCs
 let c = <Greet ref="myRef" />;
 >c : JSX.Element
 ><Greet ref="myRef" /> : JSX.Element
->Greet : (x: { name?: string; }) => JSX.Element
+>Greet : (x: { name?: string | undefined; }) => JSX.Element
 >ref : string
 
 
@@ -65,11 +67,11 @@ let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
 >x => x.greeting.substr(10) : (x: BigGreeter) => string
 >x : BigGreeter
 >x.greeting.substr(10) : string
->x.greeting.substr : (from: number, length?: number) => string
+>x.greeting.substr : (from: number, length?: number | undefined) => string
 >x.greeting : string
 >x : BigGreeter
 >greeting : string
->substr : (from: number, length?: number) => string
+>substr : (from: number, length?: number | undefined) => string
 >10 : 10
 
 // Error ('subtr' not on string)

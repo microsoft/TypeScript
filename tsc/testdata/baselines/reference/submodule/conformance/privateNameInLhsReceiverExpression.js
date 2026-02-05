@@ -12,6 +12,7 @@ class Test {
 
 
 //// [privateNameInLhsReceiverExpression.js]
+"use strict";
 class Test {
     #y = 123;
     static something(obj) {

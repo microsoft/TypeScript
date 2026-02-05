@@ -21,13 +21,13 @@ let obj = {
 
     this.x = 1
 >this.x = 1 : 1
->this.x : any
->this : any
->x : any
+>this.x : number
+>this : { x: number; y: number[]; fun: () => void; f2: () => void; f3: () => void; }
+>x : number
 >1 : 1
 
     this/*1*/
->this : any
+>this : { x: number; y: number[]; fun: () => void; f2: () => void; f3: () => void; }
 
   },
   f2: function() {
@@ -35,12 +35,12 @@ let obj = {
 >function() {    this.x    this/*2*/  } : () => void
 
     this.x
->this.x : any
->this : any
->x : any
+>this.x : number
+>this : { x: number; y: number[]; fun: () => void; f2: () => void; f3: () => void; }
+>x : number
 
     this/*2*/
->this : any
+>this : { x: number; y: number[]; fun: () => void; f2: () => void; f3: () => void; }
 
   },
   f3: (function() {

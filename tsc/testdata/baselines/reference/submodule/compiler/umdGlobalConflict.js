@@ -20,5 +20,6 @@ const p: string = Alpha.x;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [global.js]
+"use strict";
 // Should be OK, first in wins
 const p = Alpha.x;

@@ -38,6 +38,7 @@ for (; false;) {
 }
 
 //// [nestedBlockScopedBindings16.js]
+"use strict";
 var x;
 for (; false;) {
     {

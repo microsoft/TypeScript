@@ -1,6 +1,6 @@
 --- old.parserRealSource11.js
 +++ new.parserRealSource11.js
-@@= skipped -2372, +2372 lines =@@
+@@= skipped -2373, +2373 lines =@@
  var TypeScript;
  (function (TypeScript) {
      class ASTSpan {

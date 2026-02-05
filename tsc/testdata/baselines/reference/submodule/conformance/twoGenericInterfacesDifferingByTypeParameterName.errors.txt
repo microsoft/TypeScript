@@ -37,7 +37,7 @@ twoGenericInterfacesDifferingByTypeParameterName.ts(56,22): error TS2428: All de
         y: V;
     }
     
-    module M {
+    namespace M {
         interface A<T> {
                   ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.
@@ -63,19 +63,19 @@ twoGenericInterfacesDifferingByTypeParameterName.ts(56,22): error TS2428: All de
         }
     }
     
-    module M2 {
+    namespace M2 {
         interface B<T, U> {
             x: U;
         }
     }
     
-    module M2 {
+    namespace M2 {
         interface B<T, V> { // ok, different declaration space than other M2
             y: V;
         }
     }
     
-    module M3 {
+    namespace M3 {
         export interface B<T, U> {
                          ~
 !!! error TS2428: All declarations of 'B' must have identical type parameters.
@@ -83,7 +83,7 @@ twoGenericInterfacesDifferingByTypeParameterName.ts(56,22): error TS2428: All de
         }
     }
     
-    module M3 {
+    namespace M3 {
         export interface B<T, V> { // error
                          ~
 !!! error TS2428: All declarations of 'B' must have identical type parameters.

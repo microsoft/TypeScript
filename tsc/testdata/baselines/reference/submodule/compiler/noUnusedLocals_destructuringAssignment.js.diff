@@ -1,8 +1,8 @@
 --- old.noUnusedLocals_destructuringAssignment.js
 +++ new.noUnusedLocals_destructuringAssignment.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [noUnusedLocals_destructuringAssignment.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.x = 0;

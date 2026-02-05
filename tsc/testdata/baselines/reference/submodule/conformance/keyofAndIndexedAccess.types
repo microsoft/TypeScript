@@ -60,7 +60,7 @@ type K00 = keyof any;  // string
 >K00 : string | number | symbol
 
 type K01 = keyof string;  // "toString" | "charAt" | ...
->K01 : number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"
+>K01 : number | "anchor" | "big" | "blink" | "bold" | "charAt" | "charCodeAt" | "codePointAt" | "concat" | "endsWith" | "fixed" | "fontcolor" | "fontsize" | "includes" | "indexOf" | "italics" | "lastIndexOf" | "length" | "link" | "localeCompare" | "match" | "normalize" | "repeat" | "replace" | "search" | "slice" | "small" | "split" | "startsWith" | "strike" | "sub" | "substr" | "substring" | "sup" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf" | unique symbol
 
 type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
 >K02 : "toExponential" | "toFixed" | "toLocaleString" | "toPrecision" | "toString" | "valueOf"

@@ -1,8 +1,8 @@
 --- old.classAndVariableWithSameName.js
 +++ new.classAndVariableWithSameName.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [classAndVariableWithSameName.js]
+ "use strict";
  class C {
 +    foo;
  } // error

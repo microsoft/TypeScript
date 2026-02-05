@@ -11,6 +11,7 @@ var [x2] = a;          // emit x2: number | string
 var [x3, y3, z3] = a;  // emit x3, y3, z3 
 
 //// [declarationEmitDestructuringArrayPattern1.js]
+"use strict";
 var [] = [1, "hello"]; // Dont emit anything
 var [x] = [1, "hello"]; // emit x: number
 var [x1, y1] = [1, "hello"]; // emit x1: number, y1: string

@@ -8,6 +8,7 @@ function method<T>(iterable: Iterable<T>): T {
 var res: string = method("test");
 
 //// [typeArgumentInferenceApparentType1.js]
+"use strict";
 function method(iterable) {
     return;
 }

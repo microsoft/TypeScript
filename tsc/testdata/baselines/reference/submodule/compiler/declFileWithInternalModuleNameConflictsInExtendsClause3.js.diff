@@ -1,7 +1,7 @@
 --- old.declFileWithInternalModuleNameConflictsInExtendsClause3.js
 +++ new.declFileWithInternalModuleNameConflictsInExtendsClause3.js
-@@= skipped -17, +17 lines =@@
- //// [declFileWithInternalModuleNameConflictsInExtendsClause3.js]
+@@= skipped -18, +18 lines =@@
+ "use strict";
  var X;
  (function (X) {
 -    var A;

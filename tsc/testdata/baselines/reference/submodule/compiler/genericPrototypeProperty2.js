@@ -18,6 +18,7 @@ class MyEventWrapper extends BaseEventWrapper {
 }
 
 //// [genericPrototypeProperty2.js]
+"use strict";
 class BaseEvent {
     target;
 }

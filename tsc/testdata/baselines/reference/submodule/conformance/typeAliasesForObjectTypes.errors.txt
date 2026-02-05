@@ -1,14 +1,17 @@
+typeAliasesForObjectTypes.ts(6,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 typeAliasesForObjectTypes.ts(10,6): error TS2300: Duplicate identifier 'T2'.
 typeAliasesForObjectTypes.ts(11,6): error TS2300: Duplicate identifier 'T2'.
 
 
-==== typeAliasesForObjectTypes.ts (2 errors) ====
+==== typeAliasesForObjectTypes.ts (3 errors) ====
     type T1 = { x: string }
     
     // An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.
     interface I1 extends T1 { y: string }
     class C1 implements T1 {
         x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     // An interface can have multiple merged declarations, but a type alias for an object type literal cannot.

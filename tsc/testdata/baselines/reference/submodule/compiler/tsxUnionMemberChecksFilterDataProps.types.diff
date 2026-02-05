@@ -5,16 +5,33 @@
 
  declare function NotHappy(props: ({ fixed?: boolean } | { value?: number })): ReactElement<any>;
 ->NotHappy : (props: ({ fixed?: boolean; } | { value?: number; })) => ReactElement<any>
-+>NotHappy : (props: { fixed?: boolean; } | { value?: number; }) => ReactElement<any>
- >props : { fixed?: boolean; } | { value?: number; }
- >fixed : boolean
- >value : number
+->props : { fixed?: boolean; } | { value?: number; }
++>NotHappy : (props: { fixed?: boolean | undefined; } | { value?: number | undefined; }) => ReactElement<any>
++>props : { fixed?: boolean | undefined; } | { value?: number | undefined; }
+ >fixed : boolean | undefined
+ >value : number | undefined
+
+ declare function Happy(props: { fixed?: boolean, value?: number }): ReactElement<any>;
+->Happy : (props: { fixed?: boolean; value?: number; }) => ReactElement<any>
+->props : { fixed?: boolean; value?: number; }
++>Happy : (props: { fixed?: boolean | undefined; value?: number | undefined; }) => ReactElement<any>
++>props : { fixed?: boolean | undefined; value?: number | undefined; }
+ >fixed : boolean | undefined
+ >value : number | undefined
+
 @@= skipped -16, +16 lines =@@
  >() => (<NotHappy data-testid="my-test-id" />) : () => JSX.Element
  >(<NotHappy data-testid="my-test-id" />) : JSX.Element
  ><NotHappy data-testid="my-test-id" /> : JSX.Element
 ->NotHappy : (props: ({ fixed?: boolean; } | { value?: number; })) => ReactElement<any>
-+>NotHappy : (props: { fixed?: boolean; } | { value?: number; }) => ReactElement<any>
++>NotHappy : (props: { fixed?: boolean | undefined; } | { value?: number | undefined; }) => ReactElement<any>
  >data-testid : string
 
  const RootHappy = () => (<Happy data-testid="my-test-id" />);
+@@= skipped -8, +8 lines =@@
+ >() => (<Happy data-testid="my-test-id" />) : () => JSX.Element
+ >(<Happy data-testid="my-test-id" />) : JSX.Element
+ ><Happy data-testid="my-test-id" /> : JSX.Element
+->Happy : (props: { fixed?: boolean; value?: number; }) => ReactElement<any>
++>Happy : (props: { fixed?: boolean | undefined; value?: number | undefined; }) => ReactElement<any>
+ >data-testid : string

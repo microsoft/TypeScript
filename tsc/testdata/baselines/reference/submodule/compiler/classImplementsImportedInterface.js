@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/classImplementsImportedInterface.ts] ////
 
 //// [classImplementsImportedInterface.ts]
-module M1 {
+namespace M1 {
     export interface I {
         foo();
     }
 }
 
-module M2 {
+namespace M2 {
     import T = M1.I;
     class C implements T {
         foo() {}
@@ -15,6 +15,7 @@ module M2 {
 }
 
 //// [classImplementsImportedInterface.js]
+"use strict";
 var M2;
 (function (M2) {
     var T = M1.I;

@@ -1,17 +1,17 @@
 //// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures.ts] ////
 
 === subtypingWithConstructSignatures.ts ===
-module ConstructSignature {
+namespace ConstructSignature {
 >ConstructSignature : Symbol(ConstructSignature, Decl(subtypingWithConstructSignatures.ts, 0, 0))
 
     declare function foo1(cb: new (x: number) => void): typeof cb;
->foo1 : Symbol(foo1, Decl(subtypingWithConstructSignatures.ts, 0, 27), Decl(subtypingWithConstructSignatures.ts, 1, 66))
+>foo1 : Symbol(foo1, Decl(subtypingWithConstructSignatures.ts, 0, 30), Decl(subtypingWithConstructSignatures.ts, 1, 66))
 >cb : Symbol(cb, Decl(subtypingWithConstructSignatures.ts, 1, 26))
 >x : Symbol(x, Decl(subtypingWithConstructSignatures.ts, 1, 35))
 >cb : Symbol(cb, Decl(subtypingWithConstructSignatures.ts, 1, 26))
 
     declare function foo1(cb: any): any;
->foo1 : Symbol(foo1, Decl(subtypingWithConstructSignatures.ts, 0, 27), Decl(subtypingWithConstructSignatures.ts, 1, 66))
+>foo1 : Symbol(foo1, Decl(subtypingWithConstructSignatures.ts, 0, 30), Decl(subtypingWithConstructSignatures.ts, 1, 66))
 >cb : Symbol(cb, Decl(subtypingWithConstructSignatures.ts, 2, 26))
 
     var rarg1: new (x: number) => number;
@@ -20,7 +20,7 @@ module ConstructSignature {
 
     var r = foo1(rarg1); // ok because base returns void
 >r : Symbol(r, Decl(subtypingWithConstructSignatures.ts, 4, 7))
->foo1 : Symbol(foo1, Decl(subtypingWithConstructSignatures.ts, 0, 27), Decl(subtypingWithConstructSignatures.ts, 1, 66))
+>foo1 : Symbol(foo1, Decl(subtypingWithConstructSignatures.ts, 0, 30), Decl(subtypingWithConstructSignatures.ts, 1, 66))
 >rarg1 : Symbol(rarg1, Decl(subtypingWithConstructSignatures.ts, 3, 7))
 
     var rarg2: new <T>(x: T) => string;
@@ -31,7 +31,7 @@ module ConstructSignature {
 
     var r2 = foo1(rarg2); // ok because base returns void
 >r2 : Symbol(r2, Decl(subtypingWithConstructSignatures.ts, 6, 7))
->foo1 : Symbol(foo1, Decl(subtypingWithConstructSignatures.ts, 0, 27), Decl(subtypingWithConstructSignatures.ts, 1, 66))
+>foo1 : Symbol(foo1, Decl(subtypingWithConstructSignatures.ts, 0, 30), Decl(subtypingWithConstructSignatures.ts, 1, 66))
 >rarg2 : Symbol(rarg2, Decl(subtypingWithConstructSignatures.ts, 5, 7))
 
     declare function foo2(cb: new (x: number, y: number) => void): typeof cb;

@@ -2,7 +2,7 @@ knockout.ts(21,20): error TS2339: Property 'd' does not exist on type 'Observabl
 
 
 ==== knockout.ts (1 errors) ====
-      declare module ko {
+      declare namespace ko {
        export interface Observable<T> {
          (): T;
          (value: T): any;

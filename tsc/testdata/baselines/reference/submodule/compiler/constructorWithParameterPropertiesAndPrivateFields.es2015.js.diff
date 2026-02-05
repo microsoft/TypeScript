@@ -1,8 +1,8 @@
 --- old.constructorWithParameterPropertiesAndPrivateFields.es2015.js
 +++ new.constructorWithParameterPropertiesAndPrivateFields.es2015.js
-@@= skipped -32, +32 lines =@@
-
+@@= skipped -33, +33 lines =@@
  //// [constructorWithParameterPropertiesAndPrivateFields.es2015.js]
+ "use strict";
  // https://github.com/microsoft/TypeScript/issues/48771
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
 -    if (kind === "m") throw new TypeError("Private method is not writable");

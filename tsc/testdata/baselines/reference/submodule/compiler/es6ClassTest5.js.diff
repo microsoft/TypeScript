@@ -1,8 +1,8 @@
 --- old.es6ClassTest5.js
 +++ new.es6ClassTest5.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [es6ClassTest5.js]
+ "use strict";
  class C1T5 {
 -    constructor() {
 -        this.foo = (i) => {

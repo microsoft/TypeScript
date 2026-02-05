@@ -4,4 +4,5 @@
 href.match(/:\/\/(.[^/]+)/)[1];
 
 //// [parserRegularExpression2.js]
+"use strict";
 href.match(/:\/\/(.[^/]+)/)[1];

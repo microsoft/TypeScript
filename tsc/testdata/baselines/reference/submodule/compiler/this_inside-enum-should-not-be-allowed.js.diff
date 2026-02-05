@@ -1,7 +1,7 @@
 --- old.this_inside-enum-should-not-be-allowed.js
 +++ new.this_inside-enum-should-not-be-allowed.js
-@@= skipped -13, +13 lines =@@
- //// [this_inside-enum-should-not-be-allowed.js]
+@@= skipped -14, +14 lines =@@
+ "use strict";
  var TopLevelEnum;
  (function (TopLevelEnum) {
 -    TopLevelEnum[TopLevelEnum["ThisWasAllowedButShouldNotBe"] = this] = "ThisWasAllowedButShouldNotBe"; // Should not be allowed

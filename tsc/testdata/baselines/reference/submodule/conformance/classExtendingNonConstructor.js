@@ -17,6 +17,7 @@ class C7 extends foo { }
 
 
 //// [classExtendingNonConstructor.js]
+"use strict";
 var x;
 function foo() {
     this.x = 1;

@@ -7,7 +7,7 @@ namespace Foo {
   export default foo;
 }
 
-module Bar {
+namespace Bar {
 >Bar : Symbol(Bar, Decl(parserExportAssignment9.ts, 2, 1))
 
   export default bar;

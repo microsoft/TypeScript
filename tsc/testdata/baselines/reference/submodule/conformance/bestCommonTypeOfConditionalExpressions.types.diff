@@ -1,0 +1,44 @@
+--- old.bestCommonTypeOfConditionalExpressions.types
++++ new.bestCommonTypeOfConditionalExpressions.types
+@@= skipped -4, +4 lines =@@
+ // no errors expected here
+
+ var a: { x: number; y?: number };
+->a : { x: number; y?: number; }
++>a : { x: number; y?: number | undefined; }
+ >x : number
+ >y : number | undefined
+
+ var b: { x: number; z?: number };
+->b : { x: number; z?: number; }
++>b : { x: number; z?: number | undefined; }
+ >x : number
+ >z : number | undefined
+
+@@= skipped -47, +47 lines =@@
+ >{} : {}
+
+ var r4 = true ? a : b; // typeof a
+->r4 : { x: number; y?: number; } | { x: number; z?: number; }
+->true ? a : b : { x: number; y?: number; } | { x: number; z?: number; }
++>r4 : { x: number; y?: number | undefined; } | { x: number; z?: number | undefined; }
++>true ? a : b : { x: number; y?: number | undefined; } | { x: number; z?: number | undefined; }
+ >true : true
+->a : { x: number; y?: number; }
+->b : { x: number; z?: number; }
++>a : { x: number; y?: number | undefined; }
++>b : { x: number; z?: number | undefined; }
+
+ var r5 = true ? b : a; // typeof b
+->r5 : { x: number; y?: number; } | { x: number; z?: number; }
+->true ? b : a : { x: number; y?: number; } | { x: number; z?: number; }
++>r5 : { x: number; y?: number | undefined; } | { x: number; z?: number | undefined; }
++>true ? b : a : { x: number; y?: number | undefined; } | { x: number; z?: number | undefined; }
+ >true : true
+->b : { x: number; z?: number; }
+->a : { x: number; y?: number; }
++>b : { x: number; z?: number | undefined; }
++>a : { x: number; y?: number | undefined; }
+
+ var r6 = true ? (x: number) => { } : (x: Object) => { }; // returns number => void
+ >r6 : ((x: number) => void) | ((x: Object) => void)

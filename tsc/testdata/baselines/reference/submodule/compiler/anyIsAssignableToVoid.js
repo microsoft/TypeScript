@@ -10,3 +10,4 @@ interface Q extends P { // check assignability here. any is assignable to void.
 }
 
 //// [anyIsAssignableToVoid.js]
+"use strict";

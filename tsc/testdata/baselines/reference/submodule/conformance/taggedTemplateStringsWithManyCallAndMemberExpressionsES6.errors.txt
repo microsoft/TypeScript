@@ -1,0 +1,21 @@
+taggedTemplateStringsWithManyCallAndMemberExpressionsES6.ts(13,21): error TS2454: Variable 'f' is used before being assigned.
+
+
+==== taggedTemplateStringsWithManyCallAndMemberExpressionsES6.ts (1 errors) ====
+    interface I {
+        (strs: TemplateStringsArray, ...subs: number[]): I;
+        member: {
+            new (s: string): {
+                new (n: number): {
+                    new (): boolean;
+                }
+            }
+        };
+    }
+    var f: I;
+    
+    var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
+                        ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    
+    

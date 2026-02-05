@@ -21,6 +21,7 @@ fun(new FooIterator);
 
 
 //// [iterableArrayPattern11.js]
+"use strict";
 class Bar {
     x;
 }

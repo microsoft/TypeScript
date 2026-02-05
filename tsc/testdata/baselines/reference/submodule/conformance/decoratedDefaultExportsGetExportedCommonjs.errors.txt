@@ -1,0 +1,20 @@
+a.ts(3,2): error TS2454: Variable 'decorator' is used before being assigned.
+b.ts(3,2): error TS2454: Variable 'decorator' is used before being assigned.
+
+
+==== a.ts (1 errors) ====
+    var decorator: ClassDecorator;
+    
+    @decorator
+     ~~~~~~~~~
+!!! error TS2454: Variable 'decorator' is used before being assigned.
+    export default class Foo {}
+    
+==== b.ts (1 errors) ====
+    var decorator: ClassDecorator;
+    
+    @decorator
+     ~~~~~~~~~
+!!! error TS2454: Variable 'decorator' is used before being assigned.
+    export default class {}
+    

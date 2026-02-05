@@ -28,6 +28,7 @@ class B2 {
 
 
 //// [privateNameAccessorsAccess.js]
+"use strict";
 class A2 {
     get #prop() { return ""; }
     set #prop(param) { }

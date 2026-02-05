@@ -3,7 +3,7 @@ cannotInvokeNewOnErrorExpression.ts(5,22): error TS1011: An element access expre
 
 
 ==== cannotInvokeNewOnErrorExpression.ts (2 errors) ====
-    module M
+    namespace M
     {
         class ClassA {}
     }

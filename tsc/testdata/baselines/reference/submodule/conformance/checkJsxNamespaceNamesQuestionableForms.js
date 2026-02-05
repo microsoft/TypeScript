@@ -16,6 +16,7 @@ declare namespace JSX {
 <this:b></this:b>;
 
 //// [checkJsxNamespaceNamesQuestionableForms.jsx]
+"use strict";
 <a:b></a:b>;
 <b:c x></b:c>;
 x > ;

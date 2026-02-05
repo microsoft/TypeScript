@@ -10,6 +10,7 @@ class b extends a {
 }
 
 //// [inheritanceMemberPropertyOverridingProperty.js]
+"use strict";
 class a {
     x;
 }

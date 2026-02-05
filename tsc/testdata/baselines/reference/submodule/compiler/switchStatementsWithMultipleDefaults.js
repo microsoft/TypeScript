@@ -33,6 +33,7 @@ switch (x) {
 }
 
 //// [switchStatementsWithMultipleDefaults.js]
+"use strict";
 var x = 10;
 switch (x) {
     case 1:

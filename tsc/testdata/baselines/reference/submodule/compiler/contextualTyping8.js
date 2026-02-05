@@ -4,4 +4,5 @@
 var foo:{id:number;}[] = [<{id:number;}>({})];
 
 //// [contextualTyping8.js]
+"use strict";
 var foo = [({})];

@@ -1,9 +1,9 @@
 --- old.modularizeLibrary_Dom.asynciterable.js
 +++ new.modularizeLibrary_Dom.asynciterable.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
 
  //// [modularizeLibrary_Dom.asynciterable.js]
+ "use strict";
 -navigator.storage.getDirectory().then(async (directory) => {
 +navigator.storage.getDirectory().then(async directory => {
      for await (const [key, handle] of directory) {

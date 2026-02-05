@@ -10,6 +10,7 @@ class C {
 
 
 //// [staticGetter1.js]
+"use strict";
 // once caused stack overflow
 class C {
     static get x() {

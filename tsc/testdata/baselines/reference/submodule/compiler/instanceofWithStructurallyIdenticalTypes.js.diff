@@ -1,7 +1,7 @@
 --- old.instanceofWithStructurallyIdenticalTypes.js
 +++ new.instanceofWithStructurallyIdenticalTypes.js
-@@= skipped -74, +74 lines =@@
- //// [instanceofWithStructurallyIdenticalTypes.js]
+@@= skipped -75, +75 lines =@@
+ "use strict";
  // Repro from #7271
  class C1 {
 +    item;

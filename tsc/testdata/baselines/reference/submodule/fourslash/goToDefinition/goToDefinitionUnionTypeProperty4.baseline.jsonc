@@ -5,14 +5,9 @@
 // }
 // 
 // interface Magnitude {
-//     <|[|pop|](): number;|>
-// }
-// 
-// interface Art {
-//     <|[|pop|](): boolean;|>
-// }
-// 
-// var art: Art;
+// --- (line: 6) skipped ---
+
+// --- (line: 13) skipped ---
 // var magnitude: Magnitude;
 // var snapcrackle: SnapCrackle;
 // 

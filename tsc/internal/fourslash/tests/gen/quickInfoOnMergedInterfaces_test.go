@@ -11,7 +11,7 @@ func TestQuickInfoOnMergedInterfaces(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
+	const content = `namespace M {
     interface A<T> {
         (): string;
         (x: T): T;

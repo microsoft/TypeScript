@@ -1,0 +1,18 @@
+--- old.abstractPropertyBasics(target=es2015).js
++++ new.abstractPropertyBasics(target=es2015).js
+@@= skipped -27, +27 lines =@@
+ class B {
+ }
+ class C extends B {
+-    constructor() {
+-        super(...arguments);
+-        this.raw = "edge";
+-        this.ro = "readonly please";
+-    }
+     get prop() { return "foo"; }
+     set prop(v) { }
++    raw = "edge";
++    ro = "readonly please";
++    readonlyProp;
+     m() { }
+ }

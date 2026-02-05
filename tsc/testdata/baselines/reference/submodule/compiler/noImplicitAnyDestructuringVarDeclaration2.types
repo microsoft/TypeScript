@@ -23,11 +23,11 @@ let [a1 = 10, b1 = 10, c1 = 10] = [1, 2, 3]; // no error
 >3 : 3
 
 let [a2 = undefined, b2 = undefined, c2 = undefined] = [1, 2, 3]; // no error
->a2 : number
+>a2 : number | undefined
 >undefined : undefined
->b2 : number
+>b2 : number | undefined
 >undefined : undefined
->c2 : number
+>c2 : number | undefined
 >undefined : undefined
 >[1, 2, 3] : [number, number, number]
 >1 : 1
@@ -90,11 +90,11 @@ let {x1 = 10, y1 = 10, z1 = 10} = { x1: 1, y1: 2, z1: 3 }; // no error
 >3 : 3
 
 let {x2 = undefined, y2 = undefined, z2 = undefined} = { x2: 1, y2: 2, z2: 3 }; // no error
->x2 : number
+>x2 : number | undefined
 >undefined : undefined
->y2 : number
+>y2 : number | undefined
 >undefined : undefined
->z2 : number
+>z2 : number | undefined
 >undefined : undefined
 >{ x2: 1, y2: 2, z2: 3 } : { x2?: number; y2?: number; z2?: number; }
 >x2 : number

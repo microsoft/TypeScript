@@ -1,0 +1,15 @@
+--- old.jsDeclarationsFunctionWithDefaultAssignedMember.errors.txt
++++ new.jsDeclarationsFunctionWithDefaultAssignedMember.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++index.js(5,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++
++
++==== index.js (1 errors) ====
++    function foo() {}
++    
++    foo.foo = foo;
++    foo.default = foo;
++    module.exports = foo;
++    ~~~~~~~~~~~~~~~~~~~~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.

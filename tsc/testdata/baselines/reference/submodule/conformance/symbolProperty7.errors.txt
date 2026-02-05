@@ -1,8 +1,9 @@
 symbolProperty7.ts(2,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 symbolProperty7.ts(3,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+symbolProperty7.ts(3,5): error TS2564: Property '[Symbol()]' has no initializer and is not definitely assigned in the constructor.
 
 
-==== symbolProperty7.ts (2 errors) ====
+==== symbolProperty7.ts (3 errors) ====
     class C {
         [Symbol()] = 0;
         ~~~~~~~~~~
@@ -10,6 +11,8 @@ symbolProperty7.ts(3,5): error TS1166: A computed property name in a class prope
         [Symbol()]: number;
         ~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+        ~~~~~~~~~~
+!!! error TS2564: Property '[Symbol()]' has no initializer and is not definitely assigned in the constructor.
         [Symbol()]() { }
         get [Symbol()]() {
             return 0;

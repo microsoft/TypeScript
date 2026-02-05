@@ -1,14 +1,20 @@
 tsxNoTypeAnnotatedSFC.tsx(2,24): error TS2307: Cannot find module 'react' or its corresponding type declarations.
+tsxNoTypeAnnotatedSFC.tsx(4,23): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+tsxNoTypeAnnotatedSFC.tsx(6,24): error TS7006: Parameter 'props' implicitly has an 'any' type.
 
 
-==== tsxNoTypeAnnotatedSFC.tsx (1 errors) ====
+==== tsxNoTypeAnnotatedSFC.tsx (3 errors) ====
     // not _actually_ making react available in this test to regression test #22948
     import * as React from 'react';
                            ~~~~~~~
 !!! error TS2307: Cannot find module 'react' or its corresponding type declarations.
     
     const Test123 = () => <div/>;
+                          ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     function testComponent(props) {
+                           ~~~~~
+!!! error TS7006: Parameter 'props' implicitly has an 'any' type.
         return <Test123 {...props}/>;
     }

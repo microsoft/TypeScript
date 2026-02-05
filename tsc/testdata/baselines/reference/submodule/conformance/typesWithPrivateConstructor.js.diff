@@ -1,6 +1,6 @@
 --- old.typesWithPrivateConstructor.js
 +++ new.typesWithPrivateConstructor.js
-@@= skipped -32, +32 lines =@@
+@@= skipped -33, +33 lines =@@
  declare class C {
      private constructor();
  }

@@ -1,9 +1,9 @@
 --- old.noCrashOnThisTypeUsage.js
 +++ new.noCrashOnThisTypeUsage.js
-@@= skipped -32, +32 lines =@@
+@@= skipped -29, +29 lines =@@
  function notifyListeners(listenable, change) {
  }
- class ObservableValue {
+ export class ObservableValue {
 +    value;
      constructor(value) {
          this.value = value;
@@ -18,4 +18,3 @@
 +    changeListeners = [];
      observe(handler, fireImmediately) { }
  }
- exports.ObservableValue = ObservableValue;

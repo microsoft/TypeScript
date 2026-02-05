@@ -17,6 +17,7 @@ interface I {
 }
 
 //// [arguments.js]
+"use strict";
 function f() {
     var x = arguments[12];
     (() => arguments)();

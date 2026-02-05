@@ -1,0 +1,16 @@
+symbolProperty28.ts(10,11): error TS2454: Variable 'c' is used before being assigned.
+
+
+==== symbolProperty28.ts (1 errors) ====
+    class C1 {
+        [Symbol.toStringTag]() {
+            return { x: "" };
+        }
+    }
+    
+    class C2 extends C1 { }
+    
+    var c: C2;
+    var obj = c[Symbol.toStringTag]().x;
+              ~
+!!! error TS2454: Variable 'c' is used before being assigned.

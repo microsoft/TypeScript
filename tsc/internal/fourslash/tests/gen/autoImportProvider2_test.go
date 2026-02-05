@@ -21,7 +21,7 @@ export declare class DirectDependency {}
 // @Filename: /home/src/workspaces/project/node_modules/indirect-dependency/index.d.ts
 export declare class IndirectDependency
 // @Filename: /home/src/workspaces/project/tsconfig.json
-{}
+{ "compilerOptions": { "lib": ["es5"] } }
 // @Filename: /home/src/workspaces/project/package.json
 { "dependencies": { "direct-dependency": "*" } }
 // @Filename: /home/src/workspaces/project/index.ts
@@ -30,8 +30,8 @@ IndirectDependency/**/`
 	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
-	opts1116 := f.GetOptions()
-	opts1116.FormatCodeSettings.NewLineCharacter = "\n"
-	f.Configure(t, opts1116)
+	opts1155 := f.GetOptions()
+	opts1155.FormatCodeSettings.NewLineCharacter = "\n"
+	f.Configure(t, opts1155)
 	f.VerifyImportFixAtPosition(t, []string{}, nil /*preferences*/)
 }

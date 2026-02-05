@@ -15,6 +15,7 @@ function test2(x: (number | string) | number) {
 
 
 //// [instanceofWithPrimitiveUnion.js]
+"use strict";
 function test1(x) {
     if (x instanceof Object) {
         x;

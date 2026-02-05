@@ -30,6 +30,7 @@ y.length;  // should not error
 
 
 //// [inheritedGenericCallSignature.js]
+"use strict";
 var x;
 var y = x(undefined);
 y.length; // should not error

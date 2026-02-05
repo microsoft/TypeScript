@@ -8,5 +8,6 @@ f({ data: 0 }, { data(value, key) {} });
 
 
 //// [contextualPropertyOfGenericMappedType.js]
+"use strict";
 // Repro for #24694
 f({ data: 0 }, { data(value, key) { } });

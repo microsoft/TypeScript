@@ -7,4 +7,5 @@ function foo(foo:any){ }
 
 
 //// [functionOverloads10.js]
+"use strict";
 function foo(foo) { }

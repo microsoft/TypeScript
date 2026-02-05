@@ -1,0 +1,11 @@
+--- old.metadataReferencedWithinFilteredUnion(strictnullchecks=true,target=es2015).js
++++ new.metadataReferencedWithinFilteredUnion(strictnullchecks=true,target=es2015).js
+@@= skipped -53, +53 lines =@@
+ exports.Class2 = Class2;
+ __decorate([
+     decorate,
+-    __metadata("design:type", Object),
++    __metadata("design:type", Class1_1.Class1),
+     __metadata("design:paramtypes", [])
+ ], Class2.prototype, "maybeProp", null);
+ __decorate([

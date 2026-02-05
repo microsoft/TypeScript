@@ -25,6 +25,7 @@ class Foo {
 
 
 //// [asiInES6Classes.js]
+"use strict";
 class Foo {
     defaults = {
         done: false

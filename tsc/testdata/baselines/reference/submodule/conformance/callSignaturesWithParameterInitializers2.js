@@ -15,7 +15,7 @@ class C {
     foo(x = 1) { }
 }
 
-var c: C;
+declare var c: C;
 c.foo();
 c.foo(1);
 
@@ -28,6 +28,7 @@ b.foo();
 b.foo(1);
 
 //// [callSignaturesWithParameterInitializers2.js]
+"use strict";
 // Optional parameters allow initializers only in implementation signatures
 // All the below declarations are errors
 function foo(x = 1) { }
@@ -36,7 +37,6 @@ foo();
 class C {
     foo(x = 1) { }
 }
-var c;
 c.foo();
 c.foo(1);
 var b = {

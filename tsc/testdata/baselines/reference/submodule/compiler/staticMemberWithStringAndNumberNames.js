@@ -15,6 +15,7 @@ class C {
 }
 
 //// [staticMemberWithStringAndNumberNames.js]
+"use strict";
 class C {
     static "foo" = 0;
     static 0 = 1;

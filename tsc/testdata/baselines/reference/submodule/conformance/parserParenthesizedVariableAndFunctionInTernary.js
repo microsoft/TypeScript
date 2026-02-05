@@ -6,5 +6,6 @@ const c = true ? (a) : function() {};
 
 
 //// [parserParenthesizedVariableAndFunctionInTernary.js]
+"use strict";
 let a;
 const c = true ? (a) : function () { };

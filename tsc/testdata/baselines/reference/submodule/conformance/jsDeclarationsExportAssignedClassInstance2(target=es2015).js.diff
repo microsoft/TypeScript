@@ -1,0 +1,25 @@
+--- old.jsDeclarationsExportAssignedClassInstance2(target=es2015).js
++++ new.jsDeclarationsExportAssignedClassInstance2(target=es2015).js
+@@= skipped -10, +10 lines =@@
+ //// [index.js]
+ "use strict";
+ class Foo {
+-    constructor() {
+-        this.member = 10;
+-    }
++    static stat = 10;
++    member = 10;
+ }
+-Foo.stat = 10;
+ module.exports = new Foo();
+
+
+ //// [index.d.ts]
+-declare const _exports: Foo;
+-export = _exports;
+ declare class Foo {
+     static stat: number;
+     member: number;
+ }
++declare const _default: Foo;
++export = _default;

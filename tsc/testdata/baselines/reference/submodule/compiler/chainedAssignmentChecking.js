@@ -25,6 +25,7 @@ c1 = c2 = c3; // Should be error
 
 
 //// [chainedAssignmentChecking.js]
+"use strict";
 class X {
     z;
     constructor(z) {

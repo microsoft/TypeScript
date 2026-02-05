@@ -1,0 +1,17 @@
+cloduleGenericOnSelfMember.ts(2,5): error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
+
+
+==== cloduleGenericOnSelfMember.ts (1 errors) ====
+    class ServiceBase<T> {
+        field: T;
+        ~~~~~
+!!! error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
+    }
+    class Service extends ServiceBase<typeof Service.Base> {
+    }
+    namespace Service {
+        export const Base = {
+            name: "1",
+            value: 5
+        };
+    }

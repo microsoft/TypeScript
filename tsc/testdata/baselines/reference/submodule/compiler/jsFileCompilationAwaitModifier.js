@@ -13,6 +13,7 @@ class Foo {
 
 
 //// [a.js]
+"use strict";
 class Foo {
     async a() {
         await Promise.resolve(1);

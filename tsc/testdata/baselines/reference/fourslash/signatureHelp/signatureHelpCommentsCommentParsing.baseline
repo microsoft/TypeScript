@@ -192,29 +192,29 @@
 // multiply(10, 20, 30, 40, 50);
 //          ^
 // | ----------------------------------------------------------------------
-// | multiply(**a: number**, b: number, c?: number, d?: any, e?: any): void
+// | multiply(**a: number**, b: number, c?: number | undefined, d?: any, e?: any): void
 // | - `a: number`: first number
 
 // | This is multiplication function
 // | ----------------------------------------------------------------------
 //             ^
 // | ----------------------------------------------------------------------
-// | multiply(a: number, **b: number**, c?: number, d?: any, e?: any): void
+// | multiply(a: number, **b: number**, c?: number | undefined, d?: any, e?: any): void
 // | This is multiplication function
 // | ----------------------------------------------------------------------
 //                 ^
 // | ----------------------------------------------------------------------
-// | multiply(a: number, b: number, **c?: number**, d?: any, e?: any): void
+// | multiply(a: number, b: number, **c?: number | undefined**, d?: any, e?: any): void
 // | This is multiplication function
 // | ----------------------------------------------------------------------
 //                      ^
 // | ----------------------------------------------------------------------
-// | multiply(a: number, b: number, c?: number, **d?: any**, e?: any): void
+// | multiply(a: number, b: number, c?: number | undefined, **d?: any**, e?: any): void
 // | This is multiplication function
 // | ----------------------------------------------------------------------
 //                          ^
 // | ----------------------------------------------------------------------
-// | multiply(a: number, b: number, c?: number, d?: any, **e?: any**): void
+// | multiply(a: number, b: number, c?: number | undefined, d?: any, **e?: any**): void
 // | - `e?: any`: LastParam 
 // | This is multiplication function
 // | ----------------------------------------------------------------------
@@ -255,40 +255,40 @@
 // subtract(10,  20,  null,  null,  null, null);
 //          ^
 // | ----------------------------------------------------------------------
-// | subtract(**a: number**, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void
+// | subtract(**a: number**, b: number, c?: (() => string) | undefined, d?: (() => string) | undefined, e?: (() => string) | undefined, f?: (() => string) | undefined): void
 // | This is subtract function
 // | ----------------------------------------------------------------------
 //              ^
 // | ----------------------------------------------------------------------
-// | subtract(a: number, **b: number**, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void
+// | subtract(a: number, **b: number**, c?: (() => string) | undefined, d?: (() => string) | undefined, e?: (() => string) | undefined, f?: (() => string) | undefined): void
 // | - `b: number`: this is about b
 
 // | This is subtract function
 // | ----------------------------------------------------------------------
 //                   ^
 // | ----------------------------------------------------------------------
-// | subtract(a: number, b: number, **c?: () => string**, d?: () => string, e?: () => string, f?: () => string): void
-// | - `c?: () => string`: this is optional param c
+// | subtract(a: number, b: number, **c?: (() => string) | undefined**, d?: (() => string) | undefined, e?: (() => string) | undefined, f?: (() => string) | undefined): void
+// | - `c?: (() => string) | undefined`: this is optional param c
 
 // | This is subtract function
 // | ----------------------------------------------------------------------
 //                          ^
 // | ----------------------------------------------------------------------
-// | subtract(a: number, b: number, c?: () => string, **d?: () => string**, e?: () => string, f?: () => string): void
-// | - `d?: () => string`: this is optional param d
+// | subtract(a: number, b: number, c?: (() => string) | undefined, **d?: (() => string) | undefined**, e?: (() => string) | undefined, f?: (() => string) | undefined): void
+// | - `d?: (() => string) | undefined`: this is optional param d
 
 // | This is subtract function
 // | ----------------------------------------------------------------------
 //                                 ^
 // | ----------------------------------------------------------------------
-// | subtract(a: number, b: number, c?: () => string, d?: () => string, **e?: () => string**, f?: () => string): void
-// | - `e?: () => string`: this is optional param e
+// | subtract(a: number, b: number, c?: (() => string) | undefined, d?: (() => string) | undefined, **e?: (() => string) | undefined**, f?: (() => string) | undefined): void
+// | - `e?: (() => string) | undefined`: this is optional param e
 
 // | This is subtract function
 // | ----------------------------------------------------------------------
 //                                        ^
 // | ----------------------------------------------------------------------
-// | subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, **f?: () => string**): void
+// | subtract(a: number, b: number, c?: (() => string) | undefined, d?: (() => string) | undefined, e?: (() => string) | undefined, **f?: (() => string) | undefined**): void
 // | This is subtract function
 // | ----------------------------------------------------------------------
 // /** this is square function
@@ -878,7 +878,7 @@ not aligned text about parameter will eat only one space
     "item": {
       "signatures": [
         {
-          "label": "multiply(a: number, b: number, c?: number, d?: any, e?: any): void",
+          "label": "multiply(a: number, b: number, c?: number | undefined, d?: any, e?: any): void",
           "documentation": {
             "kind": "markdown",
             "value": "This is multiplication function"
@@ -895,7 +895,7 @@ not aligned text about parameter will eat only one space
               "label": "b: number"
             },
             {
-              "label": "c?: number"
+              "label": "c?: number | undefined"
             },
             {
               "label": "d?: any"
@@ -927,7 +927,7 @@ not aligned text about parameter will eat only one space
     "item": {
       "signatures": [
         {
-          "label": "multiply(a: number, b: number, c?: number, d?: any, e?: any): void",
+          "label": "multiply(a: number, b: number, c?: number | undefined, d?: any, e?: any): void",
           "documentation": {
             "kind": "markdown",
             "value": "This is multiplication function"
@@ -944,7 +944,7 @@ not aligned text about parameter will eat only one space
               "label": "b: number"
             },
             {
-              "label": "c?: number"
+              "label": "c?: number | undefined"
             },
             {
               "label": "d?: any"
@@ -976,7 +976,7 @@ not aligned text about parameter will eat only one space
     "item": {
       "signatures": [
         {
-          "label": "multiply(a: number, b: number, c?: number, d?: any, e?: any): void",
+          "label": "multiply(a: number, b: number, c?: number | undefined, d?: any, e?: any): void",
           "documentation": {
             "kind": "markdown",
             "value": "This is multiplication function"
@@ -993,7 +993,7 @@ not aligned text about parameter will eat only one space
               "label": "b: number"
             },
             {
-              "label": "c?: number"
+              "label": "c?: number | undefined"
             },
             {
               "label": "d?: any"
@@ -1025,7 +1025,7 @@ not aligned text about parameter will eat only one space
     "item": {
       "signatures": [
         {
-          "label": "multiply(a: number, b: number, c?: number, d?: any, e?: any): void",
+          "label": "multiply(a: number, b: number, c?: number | undefined, d?: any, e?: any): void",
           "documentation": {
             "kind": "markdown",
             "value": "This is multiplication function"
@@ -1042,7 +1042,7 @@ not aligned text about parameter will eat only one space
               "label": "b: number"
             },
             {
-              "label": "c?: number"
+              "label": "c?: number | undefined"
             },
             {
               "label": "d?: any"
@@ -1074,7 +1074,7 @@ not aligned text about parameter will eat only one space
     "item": {
       "signatures": [
         {
-          "label": "multiply(a: number, b: number, c?: number, d?: any, e?: any): void",
+          "label": "multiply(a: number, b: number, c?: number | undefined, d?: any, e?: any): void",
           "documentation": {
             "kind": "markdown",
             "value": "This is multiplication function"
@@ -1091,7 +1091,7 @@ not aligned text about parameter will eat only one space
               "label": "b: number"
             },
             {
-              "label": "c?: number"
+              "label": "c?: number | undefined"
             },
             {
               "label": "d?: any"
@@ -1215,7 +1215,7 @@ not aligned text about parameter will eat only one space
     "item": {
       "signatures": [
         {
-          "label": "subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
+          "label": "subtract(a: number, b: number, c?: (() => string) | undefined, d?: (() => string) | undefined, e?: (() => string) | undefined, f?: (() => string) | undefined): void",
           "documentation": {
             "kind": "markdown",
             "value": "This is subtract function"
@@ -1232,28 +1232,28 @@ not aligned text about parameter will eat only one space
               }
             },
             {
-              "label": "c?: () => string",
+              "label": "c?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param c\n"
               }
             },
             {
-              "label": "d?: () => string",
+              "label": "d?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param d\n"
               }
             },
             {
-              "label": "e?: () => string",
+              "label": "e?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param e\n"
               }
             },
             {
-              "label": "f?: () => string"
+              "label": "f?: (() => string) | undefined"
             }
           ],
           "activeParameter": 0
@@ -1275,7 +1275,7 @@ not aligned text about parameter will eat only one space
     "item": {
       "signatures": [
         {
-          "label": "subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
+          "label": "subtract(a: number, b: number, c?: (() => string) | undefined, d?: (() => string) | undefined, e?: (() => string) | undefined, f?: (() => string) | undefined): void",
           "documentation": {
             "kind": "markdown",
             "value": "This is subtract function"
@@ -1292,28 +1292,28 @@ not aligned text about parameter will eat only one space
               }
             },
             {
-              "label": "c?: () => string",
+              "label": "c?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param c\n"
               }
             },
             {
-              "label": "d?: () => string",
+              "label": "d?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param d\n"
               }
             },
             {
-              "label": "e?: () => string",
+              "label": "e?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param e\n"
               }
             },
             {
-              "label": "f?: () => string"
+              "label": "f?: (() => string) | undefined"
             }
           ],
           "activeParameter": 1
@@ -1335,7 +1335,7 @@ not aligned text about parameter will eat only one space
     "item": {
       "signatures": [
         {
-          "label": "subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
+          "label": "subtract(a: number, b: number, c?: (() => string) | undefined, d?: (() => string) | undefined, e?: (() => string) | undefined, f?: (() => string) | undefined): void",
           "documentation": {
             "kind": "markdown",
             "value": "This is subtract function"
@@ -1352,28 +1352,28 @@ not aligned text about parameter will eat only one space
               }
             },
             {
-              "label": "c?: () => string",
+              "label": "c?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param c\n"
               }
             },
             {
-              "label": "d?: () => string",
+              "label": "d?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param d\n"
               }
             },
             {
-              "label": "e?: () => string",
+              "label": "e?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param e\n"
               }
             },
             {
-              "label": "f?: () => string"
+              "label": "f?: (() => string) | undefined"
             }
           ],
           "activeParameter": 2
@@ -1395,7 +1395,7 @@ not aligned text about parameter will eat only one space
     "item": {
       "signatures": [
         {
-          "label": "subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
+          "label": "subtract(a: number, b: number, c?: (() => string) | undefined, d?: (() => string) | undefined, e?: (() => string) | undefined, f?: (() => string) | undefined): void",
           "documentation": {
             "kind": "markdown",
             "value": "This is subtract function"
@@ -1412,28 +1412,28 @@ not aligned text about parameter will eat only one space
               }
             },
             {
-              "label": "c?: () => string",
+              "label": "c?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param c\n"
               }
             },
             {
-              "label": "d?: () => string",
+              "label": "d?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param d\n"
               }
             },
             {
-              "label": "e?: () => string",
+              "label": "e?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param e\n"
               }
             },
             {
-              "label": "f?: () => string"
+              "label": "f?: (() => string) | undefined"
             }
           ],
           "activeParameter": 3
@@ -1455,7 +1455,7 @@ not aligned text about parameter will eat only one space
     "item": {
       "signatures": [
         {
-          "label": "subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
+          "label": "subtract(a: number, b: number, c?: (() => string) | undefined, d?: (() => string) | undefined, e?: (() => string) | undefined, f?: (() => string) | undefined): void",
           "documentation": {
             "kind": "markdown",
             "value": "This is subtract function"
@@ -1472,28 +1472,28 @@ not aligned text about parameter will eat only one space
               }
             },
             {
-              "label": "c?: () => string",
+              "label": "c?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param c\n"
               }
             },
             {
-              "label": "d?: () => string",
+              "label": "d?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param d\n"
               }
             },
             {
-              "label": "e?: () => string",
+              "label": "e?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param e\n"
               }
             },
             {
-              "label": "f?: () => string"
+              "label": "f?: (() => string) | undefined"
             }
           ],
           "activeParameter": 4
@@ -1515,7 +1515,7 @@ not aligned text about parameter will eat only one space
     "item": {
       "signatures": [
         {
-          "label": "subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
+          "label": "subtract(a: number, b: number, c?: (() => string) | undefined, d?: (() => string) | undefined, e?: (() => string) | undefined, f?: (() => string) | undefined): void",
           "documentation": {
             "kind": "markdown",
             "value": "This is subtract function"
@@ -1532,28 +1532,28 @@ not aligned text about parameter will eat only one space
               }
             },
             {
-              "label": "c?: () => string",
+              "label": "c?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param c\n"
               }
             },
             {
-              "label": "d?: () => string",
+              "label": "d?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param d\n"
               }
             },
             {
-              "label": "e?: () => string",
+              "label": "e?: (() => string) | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "this is optional param e\n"
               }
             },
             {
-              "label": "f?: () => string"
+              "label": "f?: (() => string) | undefined"
             }
           ],
           "activeParameter": 5

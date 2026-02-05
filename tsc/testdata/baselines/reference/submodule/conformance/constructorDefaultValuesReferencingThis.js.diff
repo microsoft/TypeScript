@@ -1,8 +1,8 @@
 --- old.constructorDefaultValuesReferencingThis.js
 +++ new.constructorDefaultValuesReferencingThis.js
-@@= skipped -22, +22 lines =@@
-
+@@= skipped -23, +23 lines =@@
  //// [constructorDefaultValuesReferencingThis.js]
+ "use strict";
  class C {
 -    constructor(x = this) {
 -        this.baseProp = 1;

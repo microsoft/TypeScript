@@ -18,6 +18,7 @@ class C extends A {
 
 
 //// [abstractProperty.js]
+"use strict";
 class A {
     foo() {
         console.log(this.x);

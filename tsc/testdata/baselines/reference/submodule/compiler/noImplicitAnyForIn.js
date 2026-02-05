@@ -33,6 +33,7 @@ var n = [[]] || [];
 for (n[idx++] in m);
 
 //// [noImplicitAnyForIn.js]
+"use strict";
 var x = [[1, 2, 3], ["hello"]];
 for (var i in x) {
     for (var j in x[i]) {

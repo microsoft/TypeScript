@@ -1,0 +1,8 @@
+ES5For-ofTypeCheck7.ts(2,15): error TS2488: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== ES5For-ofTypeCheck7.ts (1 errors) ====
+    declare var union: string | number;
+    for (var v of union) { }
+                  ~~~~~
+!!! error TS2488: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.

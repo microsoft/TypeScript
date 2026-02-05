@@ -18,5 +18,8 @@ declare class C3 { }
 declare class C3 { }
 
 //// [file1.js]
+"use strict";
 //// [file2.js]
+"use strict";
 //// [file3.js]
+"use strict";

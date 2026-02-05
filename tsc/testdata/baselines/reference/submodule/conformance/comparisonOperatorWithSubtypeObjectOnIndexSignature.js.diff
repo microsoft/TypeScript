@@ -1,8 +1,8 @@
 --- old.comparisonOperatorWithSubtypeObjectOnIndexSignature.js
 +++ new.comparisonOperatorWithSubtypeObjectOnIndexSignature.js
-@@= skipped -110, +110 lines =@@
-
+@@= skipped -111, +111 lines =@@
  //// [comparisonOperatorWithSubtypeObjectOnIndexSignature.js]
+ "use strict";
  class Base {
 +    a;
  }

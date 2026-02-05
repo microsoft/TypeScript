@@ -21,6 +21,7 @@
 });
 
 //// [circularInferredTypeOfVariable.js]
+"use strict";
 // Repro from #14428
 (async () => {
     function foo(p) {

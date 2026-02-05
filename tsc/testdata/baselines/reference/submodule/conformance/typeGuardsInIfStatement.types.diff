@@ -94,12 +94,24 @@
      }
  }
  function foo11(x: number | string | boolean) {
-->foo11 : (x: number | string | boolean) => string
-+>foo11 : (x: string | number | boolean) => string
+->foo11 : (x: number | string | boolean) => string | false
++>foo11 : (x: string | number | boolean) => string | false
  >x : string | number | boolean
 
      // Mixing typeguard narrowing in if statement with conditional expression typeguard
-@@= skipped -62, +62 lines =@@
+@@= skipped -39, +39 lines =@@
+ >10 && x.toString() : string
+ >10 : 10
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+             )
+             : (
+@@= skipped -23, +23 lines =@@
      }
  }
  function foo12(x: number | string | boolean) {
@@ -108,3 +120,15 @@
  >x : string | number | boolean
 
      // Mixing typeguard narrowing in if statement with conditional expression typeguard
+@@= skipped -36, +36 lines =@@
+
+             ? x.toString() // number
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+             : x.toString(); // boolean | string
+ >x.toString() : any

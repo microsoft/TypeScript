@@ -5,4 +5,5 @@
 
 
 //// [simpleArrowFunctionParameterReferencedInObjectLiteral1.js]
+"use strict";
 [].map(() => [].map(p => ({ X: p })));

@@ -1,7 +1,7 @@
 --- old.genericClassWithStaticsUsingTypeArguments.js
 +++ new.genericClassWithStaticsUsingTypeArguments.js
-@@= skipped -21, +21 lines =@@
- //// [genericClassWithStaticsUsingTypeArguments.js]
+@@= skipped -22, +22 lines =@@
+ "use strict";
  // Should be error to use 'T' in all declarations within Foo.
  class Foo {
 +    static a = (n) => { };

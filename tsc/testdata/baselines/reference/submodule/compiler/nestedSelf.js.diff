@@ -1,6 +1,6 @@
 --- old.nestedSelf.js
 +++ new.nestedSelf.js
-@@= skipped -13, +13 lines =@@
+@@= skipped -14, +14 lines =@@
  var M;
  (function (M) {
      class C {

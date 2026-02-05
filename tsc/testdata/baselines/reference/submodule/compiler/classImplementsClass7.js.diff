@@ -1,8 +1,8 @@
 --- old.classImplementsClass7.js
 +++ new.classImplementsClass7.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [classImplementsClass7.js]
+ "use strict";
  class A {
 +    x;
  }

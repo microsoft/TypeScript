@@ -2,13 +2,14 @@
 
 //// [anyDeclare.ts]
 declare var x: any;
-module myMod {
+namespace myMod {
     var myFn;
     function myFn() {  }
 }
 
 
 //// [anyDeclare.js]
+"use strict";
 var myMod;
 (function (myMod) {
     var myFn;

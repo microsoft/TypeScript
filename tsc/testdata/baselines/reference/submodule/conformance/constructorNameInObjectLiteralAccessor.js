@@ -8,6 +8,7 @@ const c1 = {
 
 
 //// [constructorNameInObjectLiteralAccessor.js]
+"use strict";
 const c1 = {
     get constructor() { return; },
     set constructor(value) { }

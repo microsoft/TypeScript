@@ -1,0 +1,28 @@
+--- old.propertyAccessStringIndexSignature(noimplicitany=false).symbols
++++ new.propertyAccessStringIndexSignature(noimplicitany=false).symbols
+@@= skipped -9, +9 lines =@@
+ >Flags : Symbol(Flags, Decl(propertyAccessStringIndexSignature.ts, 0, 0))
+
+ flags.b;
+->flags.b : Symbol(Flags.__index, Decl(propertyAccessStringIndexSignature.ts, 0, 17))
++>flags.b : Symbol(Flags[__index], Decl(propertyAccessStringIndexSignature.ts, 0, 17))
+ >flags : Symbol(flags, Decl(propertyAccessStringIndexSignature.ts, 1, 11))
+->b : Symbol(Flags.__index, Decl(propertyAccessStringIndexSignature.ts, 0, 17))
++>b : Symbol(Flags[__index], Decl(propertyAccessStringIndexSignature.ts, 0, 17))
+
+ flags.f;
+->flags.f : Symbol(Flags.__index, Decl(propertyAccessStringIndexSignature.ts, 0, 17))
++>flags.f : Symbol(Flags[__index], Decl(propertyAccessStringIndexSignature.ts, 0, 17))
+ >flags : Symbol(flags, Decl(propertyAccessStringIndexSignature.ts, 1, 11))
+->f : Symbol(Flags.__index, Decl(propertyAccessStringIndexSignature.ts, 0, 17))
++>f : Symbol(Flags[__index], Decl(propertyAccessStringIndexSignature.ts, 0, 17))
+
+ flags.isNotNecessarilyNeverFalse;
+->flags.isNotNecessarilyNeverFalse : Symbol(Flags.__index, Decl(propertyAccessStringIndexSignature.ts, 0, 17))
++>flags.isNotNecessarilyNeverFalse : Symbol(Flags[__index], Decl(propertyAccessStringIndexSignature.ts, 0, 17))
+ >flags : Symbol(flags, Decl(propertyAccessStringIndexSignature.ts, 1, 11))
+->isNotNecessarilyNeverFalse : Symbol(Flags.__index, Decl(propertyAccessStringIndexSignature.ts, 0, 17))
++>isNotNecessarilyNeverFalse : Symbol(Flags[__index], Decl(propertyAccessStringIndexSignature.ts, 0, 17))
+
+ flags['this is fine'];
+ >flags : Symbol(flags, Decl(propertyAccessStringIndexSignature.ts, 1, 11))

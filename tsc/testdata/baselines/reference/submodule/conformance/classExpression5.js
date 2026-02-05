@@ -8,6 +8,7 @@ new class {
 }().hi();
 
 //// [classExpression5.js]
+"use strict";
 new class {
     hi() {
         return "Hi!";

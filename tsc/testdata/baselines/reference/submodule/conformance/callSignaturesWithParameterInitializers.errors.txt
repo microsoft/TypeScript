@@ -22,7 +22,7 @@ callSignaturesWithParameterInitializers.ts(37,9): error TS2371: A parameter init
         foo(x = 1) { }
     }
     
-    var c: C;
+    declare var c: C;
     c.foo();
     c.foo(1);
     
@@ -36,14 +36,14 @@ callSignaturesWithParameterInitializers.ts(37,9): error TS2371: A parameter init
 !!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     }
     
-    var i: I;
+    declare var i: I;
     i();
     i(1);
     i.foo(1);
     i.foo(1, 2);
     
     // these are errors
-    var a: {
+    declare var a: {
         (x = 1);
          ~~~~~
 !!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.

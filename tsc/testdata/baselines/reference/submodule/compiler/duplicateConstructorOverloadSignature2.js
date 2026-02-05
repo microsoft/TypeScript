@@ -8,6 +8,7 @@ class C<T> {
 }
 
 //// [duplicateConstructorOverloadSignature2.js]
+"use strict";
 class C {
     constructor(x) { }
 }

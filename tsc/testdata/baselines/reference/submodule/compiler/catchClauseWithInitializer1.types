@@ -4,6 +4,6 @@
 try {
 }
 catch (e = 1) {
->e : any
+>e : unknown
 >1 : 1
 }

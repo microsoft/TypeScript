@@ -20,6 +20,7 @@ let hResult = h("foo");
 hResult = h("bar");
 
 //// [stringLiteralTypesAsTypeParameterConstraint01.js]
+"use strict";
 function foo(f) {
     return f;
 }

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution14.tsx] ////
 
 //// [react.d.ts]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
         div: any;
@@ -30,6 +30,7 @@ function VerticalNav() {
 } 
 
 //// [file.jsx]
+"use strict";
 function VerticalNavMenuItem(prop) {
     return <div>props.primaryText</div>;
 }

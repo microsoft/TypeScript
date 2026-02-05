@@ -22,7 +22,7 @@ class D extends C implements A { // error
     z: string;
 }
 
-module M {
+namespace M {
     class C {
         private x: string;
     }
@@ -41,6 +41,7 @@ module M {
 }
 
 //// [mergedInterfacesWithInheritedPrivates3.js]
+"use strict";
 class C {
     x;
 }

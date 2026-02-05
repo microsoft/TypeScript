@@ -2,7 +2,7 @@
 
 === optionalBindingParametersInOverloads2.ts ===
 function foo({ x, y, z }?: { x: string; y: number; z: boolean });
->foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
+>foo : ({ x, y, z }?: { x: string; y: number; z: boolean; } | undefined) => any
 >x : string
 >y : number
 >z : boolean
@@ -11,14 +11,14 @@ function foo({ x, y, z }?: { x: string; y: number; z: boolean });
 >z : boolean
 
 function foo(...rest: any[]) {
->foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
+>foo : ({ x, y, z }?: { x: string; y: number; z: boolean; } | undefined) => any
 >rest : any[]
 
 }
 
 foo({ x: "", y: 0, z: false });
 >foo({ x: "", y: 0, z: false }) : any
->foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
+>foo : ({ x, y, z }?: { x: string; y: number; z: boolean; } | undefined) => any
 >{ x: "", y: 0, z: false } : { x: string; y: number; z: false; }
 >x : string
 >"" : ""
@@ -29,7 +29,7 @@ foo({ x: "", y: 0, z: false });
 
 foo({ x: false, y: 0, z: "" });
 >foo({ x: false, y: 0, z: "" }) : any
->foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
+>foo : ({ x, y, z }?: { x: string; y: number; z: boolean; } | undefined) => any
 >{ x: false, y: 0, z: "" } : { x: boolean; y: number; z: string; }
 >x : boolean
 >false : false

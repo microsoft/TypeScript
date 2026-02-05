@@ -10,6 +10,7 @@ let cls = class implements Foo {
 }
 
 //// [implementsInClassExpression.js]
+"use strict";
 let cls = class {
     doThing() { }
 };

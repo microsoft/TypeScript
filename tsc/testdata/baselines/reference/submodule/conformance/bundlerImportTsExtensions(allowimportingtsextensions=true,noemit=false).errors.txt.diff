@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
  error TS5056: Cannot write file 'out/b.js' because it would be overwritten by multiple input files.
  error TS5056: Cannot write file 'out/c.js' because it would be overwritten by multiple input files.
- error TS5096: Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.
+ error TS5096: Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.
 -error TS6054: File '/project/e.txt' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
 -  The file is in the program because:
 -    Root file specified for compilation
@@ -13,7 +13,7 @@
 @@= skipped -11, +8 lines =@@
  !!! error TS5056: Cannot write file 'out/b.js' because it would be overwritten by multiple input files.
  !!! error TS5056: Cannot write file 'out/c.js' because it would be overwritten by multiple input files.
- !!! error TS5096: Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.
+ !!! error TS5096: Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.
 -!!! error TS6054: File '/project/e.txt' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
 -!!! error TS6054:   The file is in the program because:
 -!!! error TS6054:     Root file specified for compilation

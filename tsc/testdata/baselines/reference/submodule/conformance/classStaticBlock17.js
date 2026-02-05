@@ -34,6 +34,7 @@ const b = new B(a);
 a.getX();
 
 //// [classStaticBlock17.js]
+"use strict";
 let friendA;
 class A {
     #x;

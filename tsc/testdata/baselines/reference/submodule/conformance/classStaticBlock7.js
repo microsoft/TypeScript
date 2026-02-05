@@ -47,6 +47,7 @@ function f3 () {
 
 
 //// [classStaticBlock7.js]
+"use strict";
 class C {
     static {
         await 1;

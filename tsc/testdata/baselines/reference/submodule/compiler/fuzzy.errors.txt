@@ -7,7 +7,7 @@ fuzzy.ts(25,20): error TS2352: Conversion of type '{ oneI: this; }' to type 'R' 
 
 
 ==== fuzzy.ts (3 errors) ====
-    module M {
+    namespace M {
         export interface I {
             works:()=>R;
             alsoWorks:()=>R;

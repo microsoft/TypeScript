@@ -22,7 +22,7 @@ interface Derived2 extends Derived { baz: string; }
 //      - M is an optional property and S' contains no property of the same name as M.
 interface T {
     Foo?: Base;
->Foo : Base
+>Foo : Base | undefined
 }
 
 interface S extends T {
@@ -32,7 +32,7 @@ interface S extends T {
 
 interface T2 {
     1?: Base; 
->1 : Base
+>1 : Base | undefined
 }
 
 interface S2 extends T2 {
@@ -42,7 +42,7 @@ interface S2 extends T2 {
 
 interface T3 {
     '1'?: Base;
->'1' : Base
+>'1' : Base | undefined
 }
 
 interface S3 extends T3 {
@@ -52,8 +52,8 @@ interface S3 extends T3 {
 
 // object literal case
 var a: { Foo?: Base; };
->a : { Foo?: Base; }
->Foo : Base
+>a : { Foo?: Base | undefined; }
+>Foo : Base | undefined
 
 var b = { Foo: <Derived>null };
 >b : { Foo: Derived; }
@@ -62,18 +62,18 @@ var b = { Foo: <Derived>null };
 ><Derived>null : Derived
 
 var r = true ? a : b;
->r : { Foo?: Base; }
->true ? a : b : { Foo?: Base; }
+>r : { Foo?: Base | undefined; }
+>true ? a : b : { Foo?: Base | undefined; }
 >true : true
->a : { Foo?: Base; }
+>a : { Foo?: Base | undefined; }
 >b : { Foo: Derived; }
 
-module TwoLevels {
+namespace TwoLevels {
 >TwoLevels : typeof TwoLevels
 
     interface T {
         Foo?: Base;
->Foo : Base
+>Foo : Base | undefined
     }
 
     interface S extends T {
@@ -83,7 +83,7 @@ module TwoLevels {
 
     interface T2 {
         1?: Base;
->1 : Base
+>1 : Base | undefined
     }
 
     interface S2 extends T2 {
@@ -93,7 +93,7 @@ module TwoLevels {
 
     interface T3 {
         '1'?: Base;
->'1' : Base
+>'1' : Base | undefined
     }
 
     interface S3 extends T3 {
@@ -103,8 +103,8 @@ module TwoLevels {
 
     // object literal case
     var a: { Foo?: Base; };
->a : { Foo?: Base; }
->Foo : Base
+>a : { Foo?: Base | undefined; }
+>Foo : Base | undefined
 
     var b = { Foo: <Derived2>null };
 >b : { Foo: Derived2; }
@@ -113,9 +113,9 @@ module TwoLevels {
 ><Derived2>null : Derived2
 
     var r = true ? a : b;
->r : { Foo?: Base; }
->true ? a : b : { Foo?: Base; }
+>r : { Foo?: Base | undefined; }
+>true ? a : b : { Foo?: Base | undefined; }
 >true : true
->a : { Foo?: Base; }
+>a : { Foo?: Base | undefined; }
 >b : { Foo: Derived2; }
 }

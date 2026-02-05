@@ -1,6 +1,6 @@
 --- old.typeGuardOfFormExpr1AndExpr2.js
 +++ new.typeGuardOfFormExpr1AndExpr2.js
-@@= skipped -55, +55 lines =@@
+@@= skipped -56, +56 lines =@@
  var strOrNumOrBool;
  var numOrBool;
  class C {

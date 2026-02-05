@@ -1,0 +1,18 @@
+--- old.derivedClassWithPrivateInstanceShadowingProtectedInstance(target=es2015).js
++++ new.derivedClassWithPrivateInstanceShadowingProtectedInstance(target=es2015).js
+@@= skipped -25, +25 lines =@@
+ //// [derivedClassWithPrivateInstanceShadowingProtectedInstance.js]
+ "use strict";
+ class Base {
++    x;
+     fn() {
+         return '';
+     }
+@@= skipped -8, +9 lines =@@
+ }
+ // error, not a subtype
+ class Derived extends Base {
++    x;
+     fn() {
+         return '';
+     }

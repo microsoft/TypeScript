@@ -1,3 +1,5 @@
+mod.js(3,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+mod.js(6,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 use.js(3,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 use.js(4,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
@@ -17,13 +19,17 @@ use.js(4,9): error TS7009: 'new' expression, whose target lacks a construct sign
 ==== types.d.ts (0 errors) ====
     declare function require(name: string): any;
     declare var exports: any;
-==== mod.js (0 errors) ====
+==== mod.js (2 errors) ====
     /// <reference path='./types.d.ts'/>
     var A = function A() {
         this.a = 1
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     var B = function B() {
         this.b = 2
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     exports.A = A
     exports.B = B

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/overloadsWithProvisionalErrors.ts] ////
 
 === overloadsWithProvisionalErrors.ts ===
-var func: {
+declare var func: {
 >func : { (s: string): number; (lambda: (s: string) => { a: number; b: number; }): string; }
 
     (s: string): number;

@@ -7,5 +7,6 @@ function foo(a: 'hi', x: any) {
 }
 
 //// [overloadingOnConstantsInImplementation.js]
+"use strict";
 function foo(a, x) {
 }

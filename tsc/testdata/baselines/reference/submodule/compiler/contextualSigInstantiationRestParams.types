@@ -2,9 +2,9 @@
 
 === contextualSigInstantiationRestParams.ts ===
 declare function toInstantiate<A, B>(a?: A, b?: B): B;
->toInstantiate : <A, B>(a?: A, b?: B) => B
->a : A
->b : B
+>toInstantiate : <A, B>(a?: A | undefined, b?: B | undefined) => B
+>a : A | undefined
+>b : B | undefined
 
 declare function contextual(...s: string[]): string
 >contextual : (...s: string[]) => string
@@ -13,5 +13,5 @@ declare function contextual(...s: string[]): string
 var sig: typeof contextual = toInstantiate;
 >sig : (...s: string[]) => string
 >contextual : (...s: string[]) => string
->toInstantiate : <A, B>(a?: A, b?: B) => B
+>toInstantiate : <A, B>(a?: A | undefined, b?: B | undefined) => B
 

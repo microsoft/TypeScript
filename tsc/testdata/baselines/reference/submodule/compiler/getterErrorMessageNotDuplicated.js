@@ -16,3 +16,4 @@ interface Bar extends Foo {
 }
 
 //// [getterErrorMessageNotDuplicated.js]
+"use strict";

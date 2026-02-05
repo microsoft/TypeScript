@@ -12,7 +12,11 @@
 +        };
 +    };
 +    /** @implements {A} */
-+    C5: any;
++    C5: {
++        new (): {
++            method(): number;
++        };
++    };
 +};
  declare namespace Ns {
 -    export { C1 };
@@ -21,7 +25,7 @@
          new (): {
              method(): number;
          };
-@@= skipped -14, +23 lines =@@
+@@= skipped -14, +27 lines =@@
          method(): number;
      };
  };
@@ -49,5 +53,9 @@
 -declare class C3 implements A {
 -    method(): number;
 +declare namespace Ns {
-+    var C5: any;
++    var C5: {
++        new (): {
++            method(): number;
++        };
++    };
  }

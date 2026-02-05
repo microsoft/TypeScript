@@ -14,6 +14,7 @@ function baz4({} = { x: 10 }) { }
 
 
 //// [declarationEmitDestructuring4.js]
+"use strict";
 // For an array binding pattern with empty elements,
 // we will not make any modification and will emit
 // the similar binding pattern users' have written
@@ -25,7 +26,7 @@ function baz4({} = { x: 10 }) { }
 
 
 //// [declarationEmitDestructuring4.d.ts]
-declare function baz([]: any[]): void;
+declare function baz([]: Iterable<any, void, undefined>): void;
 declare function baz1([]?: number[]): void;
 declare function baz2([[]]?: [number[]]): void;
 declare function baz3({}: {}): void;

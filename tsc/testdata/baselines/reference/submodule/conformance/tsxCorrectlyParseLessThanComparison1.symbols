@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/jsx/tsxCorrectlyParseLessThanComparison1.tsx] ////
 
 === tsxCorrectlyParseLessThanComparison1.tsx ===
-declare module JSX {
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 0, 0))
 
     interface Element {
->Element : Symbol(Element, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 0, 20))
+>Element : Symbol(Element, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 0, 23))
 
         div: string;
 >div : Symbol(Element.div, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 1, 23))
@@ -40,7 +40,7 @@ export class ShortDetails extends React.Component<{ id: number }, {}> {
     public render(): JSX.Element {
 >render : Symbol(ShortDetails.render, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 12, 71))
 >JSX : Symbol(JSX, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 0, 0))
->Element : Symbol(JSX.Element, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 0, 20))
+>Element : Symbol(JSX.Element, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 0, 23))
 
         if (this.props.id < 1) {
 >this.props.id : Symbol(id, Decl(tsxCorrectlyParseLessThanComparison1.tsx, 12, 51))

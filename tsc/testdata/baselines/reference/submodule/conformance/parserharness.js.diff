@@ -1,6 +1,6 @@
 --- old.parserharness.js
 +++ new.parserharness.js
-@@= skipped -2292, +2292 lines =@@
+@@= skipped -2293, +2293 lines =@@
      }
      Harness.emitLog = emitLog;
      class Runnable {

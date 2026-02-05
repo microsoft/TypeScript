@@ -6,3 +6,4 @@ interface I {
 }
 
 //// [parserSymbolProperty1.js]
+"use strict";

@@ -4,4 +4,5 @@
 (a, b)
 
 //// [typecheckCommaExpression.js]
+"use strict";
 (a, b);

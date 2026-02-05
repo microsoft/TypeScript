@@ -9,7 +9,7 @@
 +
 +
 +==== circularModuleImports.ts (2 errors) ====
-     module M
+     namespace M
       
      {
 @@= skipped -10, +11 lines =@@

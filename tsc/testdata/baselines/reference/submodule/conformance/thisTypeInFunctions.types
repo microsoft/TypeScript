@@ -488,12 +488,12 @@ let specifiedLambdaToSpecified: (this: {y: number}, x: number) => number = speci
 >specifiedLambda : (this: void, x: number) => number
 
 
-let explicitCFunction: (this: C, m: number) => number;
+declare let explicitCFunction: (this: C, m: number) => number;
 >explicitCFunction : (this: C, m: number) => number
 >this : C
 >m : number
 
-let explicitPropertyFunction: (this: {n: number}, m: number) => number;
+declare let explicitPropertyFunction: (this: {n: number}, m: number) => number;
 >explicitPropertyFunction : (this: { n: number; }, m: number) => number
 >this : { n: number; }
 >n : number

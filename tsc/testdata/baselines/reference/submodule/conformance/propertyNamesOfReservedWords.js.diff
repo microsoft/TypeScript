@@ -1,8 +1,8 @@
 --- old.propertyNamesOfReservedWords.js
 +++ new.propertyNamesOfReservedWords.js
-@@= skipped -279, +279 lines =@@
-
+@@= skipped -280, +280 lines =@@
  //// [propertyNamesOfReservedWords.js]
+ "use strict";
  class C {
 +    abstract;
 +    as;

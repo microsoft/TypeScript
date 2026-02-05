@@ -1,0 +1,8 @@
+memberAccessOnConstructorType.ts(2,1): error TS2454: Variable 'f' is used before being assigned.
+
+
+==== memberAccessOnConstructorType.ts (1 errors) ====
+    var f: new () => void;
+    f.arguments == 0;
+    ~
+!!! error TS2454: Variable 'f' is used before being assigned.

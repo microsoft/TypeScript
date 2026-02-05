@@ -4,7 +4,7 @@
 class Foo {
 >Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 0, 0))
 
-    private x: string;
+    private x!: string;
 >x : Symbol(Foo.x, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 0, 11))
 }
 
@@ -21,7 +21,7 @@ class Bar extends Foo implements I { // ok
 >Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 0, 0))
 >I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 2, 1))
 
-    y: number;
+    y!: number;
 >y : Symbol(Bar.y, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 8, 36))
 }
 
@@ -30,11 +30,11 @@ class Bar2 extends Foo implements I { // error
 >Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 0, 0))
 >I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 2, 1))
 
-    x: string;
+    x!: string;
 >x : Symbol(Bar2.x, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 12, 37))
 
-    y: number;
->y : Symbol(Bar2.y, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 13, 14))
+    y!: number;
+>y : Symbol(Bar2.y, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 13, 15))
 }
 
 class Bar3 extends Foo implements I { // error
@@ -42,29 +42,29 @@ class Bar3 extends Foo implements I { // error
 >Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 0, 0))
 >I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 2, 1))
 
-    private x: string;
+    private x!: string;
 >x : Symbol(Bar3.x, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 17, 37))
 
-    y: number;
->y : Symbol(Bar3.y, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 18, 22))
+    y!: number;
+>y : Symbol(Bar3.y, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 18, 23))
 }
 
 // another level of indirection
-module M {
+namespace M {
 >M : Symbol(M, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 20, 1))
 
     class Foo {
->Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 23, 10))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 23, 13))
 
-        private x: string;
+        private x!: string;
 >x : Symbol(Foo.x, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 24, 15))
     }
 
     class Baz extends Foo {
 >Baz : Symbol(Baz, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 26, 5))
->Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 23, 10))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 23, 13))
 
-        z: number;
+        z!: number;
 >z : Symbol(Baz.z, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 28, 27))
     }
 
@@ -78,57 +78,57 @@ module M {
 
     class Bar extends Foo implements I { // ok
 >Bar : Symbol(Bar, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 34, 5))
->Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 23, 10))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 23, 13))
 >I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 30, 5))
 
-        y: number;
+        y!: number;
 >y : Symbol(Bar.y, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 36, 40))
 
-        z: number;
->z : Symbol(Bar.z, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 37, 18))
+        z!: number;
+>z : Symbol(Bar.z, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 37, 19))
     }
 
     class Bar2 extends Foo implements I { // error
 >Bar2 : Symbol(Bar2, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 39, 5))
->Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 23, 10))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 23, 13))
 >I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 30, 5))
 
-        x: string;
+        x!: string;
 >x : Symbol(Bar2.x, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 41, 41))
 
-        y: number;
->y : Symbol(Bar2.y, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 42, 18))
+        y!: number;
+>y : Symbol(Bar2.y, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 42, 19))
     }
 
     class Bar3 extends Foo implements I { // error
 >Bar3 : Symbol(Bar3, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 44, 5))
->Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 23, 10))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 23, 13))
 >I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 30, 5))
 
-        private x: string;
+        private x!: string;
 >x : Symbol(Bar3.x, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 46, 41))
 
-        y: number;
->y : Symbol(Bar3.y, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 47, 26))
+        y!: number;
+>y : Symbol(Bar3.y, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 47, 27))
     }
 }
 
 // two levels of privates
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 50, 1))
 
     class Foo {
->Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 53, 11))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 53, 14))
 
-        private x: string;
+        private x!: string;
 >x : Symbol(Foo.x, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 54, 15))
     }
 
     class Baz extends Foo {
 >Baz : Symbol(Baz, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 56, 5))
->Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 53, 11))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 53, 14))
 
-        private y: number;
+        private y!: number;
 >y : Symbol(Baz.y, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 58, 27))
     }
 
@@ -142,54 +142,54 @@ module M2 {
 
     class Bar extends Foo implements I { // error
 >Bar : Symbol(Bar, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 64, 5))
->Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 53, 11))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 53, 14))
 >I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 60, 5))
 
-        z: number;
+        z!: number;
 >z : Symbol(Bar.z, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 66, 40))
     }
 
-    var b: Bar;
->b : Symbol(b, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 70, 7))
+    declare var b: Bar;
+>b : Symbol(b, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 70, 15))
 >Bar : Symbol(Bar, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 64, 5))
 
     var r1 = b.z;
 >r1 : Symbol(r1, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 71, 7))
 >b.z : Symbol(Bar.z, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 66, 40))
->b : Symbol(b, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 70, 7))
+>b : Symbol(b, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 70, 15))
 >z : Symbol(Bar.z, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 66, 40))
 
     var r2 = b.x; // error
 >r2 : Symbol(r2, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 72, 7))
 >b.x : Symbol(Foo.x, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 54, 15))
->b : Symbol(b, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 70, 7))
+>b : Symbol(b, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 70, 15))
 >x : Symbol(Foo.x, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 54, 15))
 
     var r3 = b.y; // error
 >r3 : Symbol(r3, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 73, 7))
->b : Symbol(b, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 70, 7))
+>b : Symbol(b, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 70, 15))
 
     class Bar2 extends Foo implements I { // error
 >Bar2 : Symbol(Bar2, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 73, 17))
->Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 53, 11))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 53, 14))
 >I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 60, 5))
 
-        x: string;
+        x!: string;
 >x : Symbol(Bar2.x, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 75, 41))
 
-        z: number;
->z : Symbol(Bar2.z, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 76, 18))
+        z!: number;
+>z : Symbol(Bar2.z, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 76, 19))
     }
 
     class Bar3 extends Foo implements I { // error
 >Bar3 : Symbol(Bar3, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 78, 5))
->Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 53, 11))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 53, 14))
 >I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 60, 5))
 
-        private x: string;
+        private x!: string;
 >x : Symbol(Bar3.x, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 80, 41))
 
-        z: number;
->z : Symbol(Bar3.z, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 81, 26))
+        z!: number;
+>z : Symbol(Bar3.z, Decl(implementingAnInterfaceExtendingClassWithPrivates2.ts, 81, 27))
     }
 }

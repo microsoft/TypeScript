@@ -266,8 +266,6 @@ function foo(services: Readonly<Services>, s: string | null): string {
 
 
 //// [neverReturningFunctions1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function fail(message) {
     throw new Error(message);
 }
@@ -467,6 +465,7 @@ function foo(services, s) {
         return s;
     }
 }
+export {};
 
 
 //// [neverReturningFunctions1.d.ts]

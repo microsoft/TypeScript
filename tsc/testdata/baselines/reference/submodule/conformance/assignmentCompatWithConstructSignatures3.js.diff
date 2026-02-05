@@ -1,7 +1,7 @@
 --- old.assignmentCompatWithConstructSignatures3.js
 +++ new.assignmentCompatWithConstructSignatures3.js
-@@= skipped -103, +103 lines =@@
- //// [assignmentCompatWithConstructSignatures3.js]
+@@= skipped -104, +104 lines =@@
+ "use strict";
  // checking assignment compatibility relations for function types. All of these are valid.
  class Base {
 +    foo;
@@ -15,5 +15,5 @@
  class OtherDerived extends Base {
 +    bing;
  }
- var a;
- var a2;
+ a = b; // ok
+ b = a; // ok

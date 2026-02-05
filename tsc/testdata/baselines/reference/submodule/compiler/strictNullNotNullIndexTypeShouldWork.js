@@ -35,6 +35,7 @@ class Test2<T extends A> {
 }
 
 //// [strictNullNotNullIndexTypeShouldWork.js]
+"use strict";
 class Test {
     attrs;
     m() {

@@ -143,9 +143,7 @@ const attributes2: Attribute2 = {
 
 
 //// [excessPropertyCheckWithMultipleDiscriminants.js]
-"use strict";
 // Repro from #32657
-Object.defineProperty(exports, "__esModule", { value: true });
 const foo = {
     type: "number",
     value: 10,
@@ -198,3 +196,4 @@ const attributes2 = {
     autoIncrement: true,
     required: true,
 };
+export {};

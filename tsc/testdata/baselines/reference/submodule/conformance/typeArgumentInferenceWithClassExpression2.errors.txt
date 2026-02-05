@@ -1,18 +1,26 @@
+typeArgumentInferenceWithClassExpression2.ts(1,29): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+typeArgumentInferenceWithClassExpression2.ts(2,5): error TS2322: Type 'undefined' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+typeArgumentInferenceWithClassExpression2.ts(6,1): error TS2571: Object is of type 'unknown'.
 typeArgumentInferenceWithClassExpression2.ts(6,5): error TS2345: Argument of type 'typeof (Anonymous class)' is not assignable to parameter of type 'typeof (Anonymous class)'.
   Property 'prop' is missing in type '(Anonymous class)' but required in type 'foo.(Anonymous class)'.
-typeArgumentInferenceWithClassExpression2.ts(6,38): error TS2339: Property 'length' does not exist on type 'unknown'.
 
 
-==== typeArgumentInferenceWithClassExpression2.ts (2 errors) ====
+==== typeArgumentInferenceWithClassExpression2.ts (4 errors) ====
     function foo<T>(x = class { prop: T }): T {
+                                ~~~~
+!!! error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
         return undefined;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
     }
     
     // Should not infer string because it is a static property
     foo(class { static prop = "hello" }).length;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2571: Object is of type 'unknown'.
         ~~~~~
 !!! error TS2345: Argument of type 'typeof (Anonymous class)' is not assignable to parameter of type 'typeof (Anonymous class)'.
 !!! error TS2345:   Property 'prop' is missing in type '(Anonymous class)' but required in type 'foo.(Anonymous class)'.
 !!! related TS2728 typeArgumentInferenceWithClassExpression2.ts:1:29: 'prop' is declared here.
-                                         ~~~~~~
-!!! error TS2339: Property 'length' does not exist on type 'unknown'.

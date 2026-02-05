@@ -6,6 +6,7 @@ for (let v of [0]) {
 }
 
 //// [for-of5.js]
+"use strict";
 for (let v of [0]) {
     v;
 }

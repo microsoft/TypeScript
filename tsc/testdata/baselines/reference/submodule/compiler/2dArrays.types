@@ -8,18 +8,21 @@ class Cell {
 class Ship {
 >Ship : Ship
 
-    isSunk: boolean;
+    isSunk: boolean = false;
 >isSunk : boolean
+>false : false
 }
 
 class Board {
 >Board : Board
 
-    ships: Ship[];
+    ships: Ship[] = [];
 >ships : Ship[]
+>[] : never[]
 
-    cells: Cell[];
+    cells: Cell[] = [];
 >cells : Cell[]
+>[] : never[]
 
     private allShipsSunk() {
 >allShipsSunk : () => boolean

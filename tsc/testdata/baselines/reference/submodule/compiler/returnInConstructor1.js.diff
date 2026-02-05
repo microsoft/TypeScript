@@ -1,6 +1,6 @@
 --- old.returnInConstructor1.js
 +++ new.returnInConstructor1.js
-@@= skipped -93, +93 lines =@@
+@@= skipped -94, +94 lines =@@
      }
  }
  class E {

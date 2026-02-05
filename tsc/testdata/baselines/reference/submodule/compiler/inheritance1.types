@@ -46,13 +46,13 @@ class Locations1 {
     select() { }
 >select : () => void
 }
-var sc: SelectableControl;
+declare var sc: SelectableControl;
 >sc : SelectableControl
 
-var c: Control;
+declare var c: Control;
 >c : Control
 
-var b: Button;
+declare var b: Button;
 >b : Button
 
 sc = b;
@@ -75,7 +75,7 @@ b = c;
 >b : Button
 >c : Control
 
-var t: TextBox;
+declare var t: TextBox;
 >t : TextBox
 
 sc = t;
@@ -98,7 +98,7 @@ t = c;
 >t : TextBox
 >c : Control
 
-var i: ImageBase;
+declare var i: ImageBase;
 >i : ImageBase
 
 sc = i;
@@ -121,7 +121,7 @@ i = c;
 >i : ImageBase
 >c : Control
 
-var i1: Image1;
+declare var i1: Image1;
 >i1 : Image1
 
 sc = i1;
@@ -144,7 +144,7 @@ i1 = c;
 >i1 : Image1
 >c : Control
 
-var l: Locations;
+declare var l: Locations;
 >l : Locations
 
 sc = l;
@@ -167,7 +167,7 @@ l = c;
 >l : Locations
 >c : Control
 
-var l1: Locations1;
+declare var l1: Locations1;
 >l1 : Locations1
 
 sc = l1;

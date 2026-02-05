@@ -8,6 +8,6 @@
 -    /**
 -     * @type object
 -     */
--    foo: object;
+-    foo: object | undefined;
 +    m(): void;
  }

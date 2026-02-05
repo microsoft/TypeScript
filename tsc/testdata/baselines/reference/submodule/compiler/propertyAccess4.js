@@ -4,4 +4,5 @@
 null.toBAZ();
 
 //// [propertyAccess4.js]
+"use strict";
 null.toBAZ();

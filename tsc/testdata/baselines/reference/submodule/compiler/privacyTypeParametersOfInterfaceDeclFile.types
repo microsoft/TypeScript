@@ -128,7 +128,7 @@ interface privateInterfaceWithPrivateModuleTypeParameterConstraints<T extends pr
 >privateModule : any
 }
 
-export module publicModule {
+export namespace publicModule {
 >publicModule : typeof publicModule
 
     class privateClassInPublicModule {
@@ -258,7 +258,7 @@ export module publicModule {
     }
 }
 
-module privateModule {
+namespace privateModule {
 >privateModule : typeof privateModule
 
     class privateClassInPrivateModule {

@@ -12,6 +12,7 @@ const bar: object & {err: string} = {bar: 'bar'}; // error
 
 
 //// [nonPrimitiveUnionIntersection.js]
+"use strict";
 var a = ""; // error
 var b = ""; // ok
 var c = 123; // error

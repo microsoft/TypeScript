@@ -1,0 +1,43 @@
+--- old.staticsInAFunction.errors.txt
++++ new.staticsInAFunction.errors.txt
+@@= skipped -0, +0 lines =@@
+ staticsInAFunction.ts(1,13): error TS1005: '(' expected.
+ staticsInAFunction.ts(2,4): error TS1128: Declaration or statement expected.
+-staticsInAFunction.ts(2,11): error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add 'jest' or 'mocha' to the types field in your tsconfig.
++staticsInAFunction.ts(2,11): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+ staticsInAFunction.ts(3,4): error TS1128: Declaration or statement expected.
+-staticsInAFunction.ts(3,11): error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add 'jest' or 'mocha' to the types field in your tsconfig.
++staticsInAFunction.ts(3,11): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+ staticsInAFunction.ts(3,16): error TS2304: Cannot find name 'name'.
+ staticsInAFunction.ts(3,20): error TS1005: ',' expected.
+ staticsInAFunction.ts(3,21): error TS2693: 'string' only refers to a type, but is being used as a value here.
+ staticsInAFunction.ts(4,4): error TS1128: Declaration or statement expected.
+-staticsInAFunction.ts(4,11): error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add 'jest' or 'mocha' to the types field in your tsconfig.
++staticsInAFunction.ts(4,11): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+ staticsInAFunction.ts(4,16): error TS2304: Cannot find name 'name'.
+ staticsInAFunction.ts(4,21): error TS1109: Expression expected.
+ staticsInAFunction.ts(4,22): error TS2693: 'any' only refers to a type, but is being used as a value here.
+@@= skipped -21, +21 lines =@@
+        ~~~~~~
+ !!! error TS1128: Declaration or statement expected.
+               ~~~~
+-!!! error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add 'jest' or 'mocha' to the types field in your tsconfig.
++!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+        static test(name:string)
+        ~~~~~~
+ !!! error TS1128: Declaration or statement expected.
+               ~~~~
+-!!! error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add 'jest' or 'mocha' to the types field in your tsconfig.
++!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+                    ~~~~
+ !!! error TS2304: Cannot find name 'name'.
+                        ~
+@@= skipped -16, +16 lines =@@
+        ~~~~~~
+ !!! error TS1128: Declaration or statement expected.
+               ~~~~
+-!!! error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add 'jest' or 'mocha' to the types field in your tsconfig.
++!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+                    ~~~~
+ !!! error TS2304: Cannot find name 'name'.
+                         ~

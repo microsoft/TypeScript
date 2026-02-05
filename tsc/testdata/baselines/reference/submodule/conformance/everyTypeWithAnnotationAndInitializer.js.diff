@@ -1,8 +1,8 @@
 --- old.everyTypeWithAnnotationAndInitializer.js
 +++ new.everyTypeWithAnnotationAndInitializer.js
-@@= skipped -51, +51 lines =@@
-
+@@= skipped -52, +52 lines =@@
  //// [everyTypeWithAnnotationAndInitializer.js]
+ "use strict";
  class C {
 +    id;
  }

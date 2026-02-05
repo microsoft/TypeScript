@@ -1,8 +1,8 @@
 --- old.unusedParameterProperty1.js
 +++ new.unusedParameterProperty1.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [unusedParameterProperty1.js]
+ "use strict";
  class A {
 +    used;
      constructor(used) {

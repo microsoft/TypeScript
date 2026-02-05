@@ -4,4 +4,5 @@
 continue;
 
 //// [parser_continueNotInIterationStatement1.js]
+"use strict";
 continue;

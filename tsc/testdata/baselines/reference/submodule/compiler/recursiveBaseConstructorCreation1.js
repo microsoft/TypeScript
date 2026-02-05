@@ -9,6 +9,7 @@ var x = new C2(); // Valid
 
 
 //// [recursiveBaseConstructorCreation1.js]
+"use strict";
 class C1 {
     func(param) { }
 }

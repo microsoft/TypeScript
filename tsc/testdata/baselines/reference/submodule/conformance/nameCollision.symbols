@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/codeGeneration/nameCollision.ts] ////
 
 === nameCollision.ts ===
-module A {
+namespace A {
 >A : Symbol(A, Decl(nameCollision.ts, 0, 0))
 
     // these 2 statements force an underscore before the 'A' 
@@ -13,39 +13,39 @@ module A {
 >_A : Symbol(_A, Decl(nameCollision.ts, 4, 7))
 }
 
-module B {
+namespace B {
 >B : Symbol(B, Decl(nameCollision.ts, 5, 1), Decl(nameCollision.ts, 9, 1))
 
     var A = 12;
 >A : Symbol(A, Decl(nameCollision.ts, 8, 7))
 }
 
-module B {
+namespace B {
 >B : Symbol(B, Decl(nameCollision.ts, 5, 1), Decl(nameCollision.ts, 9, 1))
 
     // re-opened module with colliding name
     // this should add an underscore.
     class B {
->B : Symbol(B, Decl(nameCollision.ts, 11, 10))
+>B : Symbol(B, Decl(nameCollision.ts, 11, 13))
 
         name: string;
 >name : Symbol(B.name, Decl(nameCollision.ts, 14, 13))
     }
 }
 
-module X {
+namespace X {
 >X : Symbol(X, Decl(nameCollision.ts, 17, 1))
 
     var X = 13;
 >X : Symbol(X, Decl(nameCollision.ts, 20, 7))
 
-    export module Y {
+    export namespace Y {
 >Y : Symbol(Y, Decl(nameCollision.ts, 20, 15))
 
         var Y = 13;
 >Y : Symbol(Y, Decl(nameCollision.ts, 22, 11))
 
-        export module Z {
+        export namespace Z {
 >Z : Symbol(Z, Decl(nameCollision.ts, 22, 19))
 
             var X = 12;
@@ -60,12 +60,12 @@ module X {
     }
 }
 
-module Y.Y {
+namespace Y.Y {
 >Y : Symbol(Y, Decl(nameCollision.ts, 29, 1))
->Y : Symbol(Y, Decl(nameCollision.ts, 31, 9))
+>Y : Symbol(Y, Decl(nameCollision.ts, 31, 12))
 
     export enum Y {
->Y : Symbol(Y, Decl(nameCollision.ts, 31, 12))
+>Y : Symbol(Y, Decl(nameCollision.ts, 31, 15))
 
         Red, Blue
 >Red : Symbol(Y.Red, Decl(nameCollision.ts, 32, 19))
@@ -75,11 +75,11 @@ module Y.Y {
 
 // no collision, since interface doesn't
 // generate code.
-module D {
+namespace D {
 >D : Symbol(D, Decl(nameCollision.ts, 35, 1))
 
     export interface D {
->D : Symbol(D, Decl(nameCollision.ts, 39, 10))
+>D : Symbol(D, Decl(nameCollision.ts, 39, 13))
 
         id: number;
 >id : Symbol(D.id, Decl(nameCollision.ts, 40, 24))

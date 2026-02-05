@@ -51,6 +51,7 @@ function createObjNoCrash() {
 
 
 //// [noImplicitThisBigThis.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/29902
 function createObj() {
     return {

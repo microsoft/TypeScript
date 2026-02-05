@@ -1,0 +1,19 @@
+--- old.strictModeReservedWordInClassDeclaration.errors.txt
++++ new.strictModeReservedWordInClassDeclaration.errors.txt
+@@= skipped -0, +0 lines =@@
+-strictModeReservedWordInClassDeclaration.ts(1,11): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+ strictModeReservedWordInClassDeclaration.ts(4,17): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+ strictModeReservedWordInClassDeclaration.ts(4,17): error TS7006: Parameter 'private' implicitly has an 'any' type.
+ strictModeReservedWordInClassDeclaration.ts(4,26): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+@@= skipped -33, +32 lines =@@
+ strictModeReservedWordInClassDeclaration.ts(28,17): error TS2304: Cannot find name 'package'.
+
+
+-==== strictModeReservedWordInClassDeclaration.ts (34 errors) ====
++==== strictModeReservedWordInClassDeclaration.ts (33 errors) ====
+     interface public { }
+-              ~~~~~~
+-!!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+     
+     class Foo {
+         constructor(private, public, static) {

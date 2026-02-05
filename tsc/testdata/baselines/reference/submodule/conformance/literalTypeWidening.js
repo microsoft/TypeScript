@@ -147,7 +147,6 @@ const b: E.A = a;
 
 
 //// [literalTypeWidening.js]
-"use strict";
 // Widening vs. non-widening literal types
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
@@ -160,10 +159,6 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.langCodes = void 0;
-exports.Set = Set;
-exports.keys = keys;
 function f1() {
     const c1 = "hello"; // Widening type "hello"
     let v1 = c1; // Type string
@@ -246,17 +241,17 @@ if (isSuccess(result)) {
 function onMouseOver() { return "onmouseover"; }
 let x = onMouseOver();
 // Repro from #23649
-function Set(...keys) {
+export function Set(...keys) {
     const result = {};
     keys.forEach(key => result[key] = true);
     return result;
 }
-function keys(obj) {
+export function keys(obj) {
     return Object.keys(obj);
 }
 const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl');
-exports.langCodes = keys(langCodeSet);
-const arr = exports.langCodes.map(code => ({ code }));
+export const langCodes = keys(langCodeSet);
+const arr = langCodes.map(code => ({ code }));
 // Repro from #29081
 function test(obj) {
     let { a } = obj, rest = __rest(obj, ["a"]);

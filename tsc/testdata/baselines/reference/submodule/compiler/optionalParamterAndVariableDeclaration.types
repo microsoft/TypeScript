@@ -5,13 +5,13 @@ class C {
 >C : C
 
     constructor(options?: number) {
->options : number
+>options : number | undefined
 
         var options = (options || 0);
->options : number
+>options : number | undefined
 >(options || 0) : number
 >options || 0 : number
->options : number
+>options : number | undefined
 >0 : 0
     }
 }

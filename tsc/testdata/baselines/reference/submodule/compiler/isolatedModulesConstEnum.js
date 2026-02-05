@@ -19,3 +19,4 @@ type E2 = {
 
 
 //// [bar.js]
+"use strict";

@@ -1,6 +1,6 @@
 --- old.duplicateIdentifiersAcrossFileBoundaries.js
 +++ new.duplicateIdentifiersAcrossFileBoundaries.js
-@@= skipped -40, +40 lines =@@
+@@= skipped -41, +41 lines =@@
  function f() { }
  var v = 3;
  class Foo {

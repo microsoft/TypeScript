@@ -6,6 +6,7 @@ function foo<T > (x: T) { return x; }
 var x = foo<number>(5); // 'x' should be number
 
 //// [genericFunctions0.js]
+"use strict";
 function foo(x) { return x; }
 var x = foo(5); // 'x' should be number
 

@@ -1,16 +1,20 @@
 parserConditionalExpression1.ts(1,2): error TS2304: Cannot find name 'a'.
+parserConditionalExpression1.ts(1,9): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
 parserConditionalExpression1.ts(1,11): error TS2304: Cannot find name 'c'.
 parserConditionalExpression1.ts(1,15): error TS2304: Cannot find name 'a'.
 parserConditionalExpression1.ts(1,22): error TS2304: Cannot find name 'a'.
 parserConditionalExpression1.ts(1,32): error TS2304: Cannot find name 'c'.
 parserConditionalExpression1.ts(1,35): error TS2304: Cannot find name 'a'.
 parserConditionalExpression1.ts(1,40): error TS2304: Cannot find name '_'.
+parserConditionalExpression1.ts(1,50): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
 
 
-==== parserConditionalExpression1.ts (7 errors) ====
+==== parserConditionalExpression1.ts (9 errors) ====
     (a=this.R[c])?a.JW||(a.e5(this,c),a.JW=_.l):this.A
      ~
 !!! error TS2304: Cannot find name 'a'.
+            ~
+!!! error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
               ~
 !!! error TS2304: Cannot find name 'c'.
                   ~
@@ -23,3 +27,5 @@ parserConditionalExpression1.ts(1,40): error TS2304: Cannot find name '_'.
 !!! error TS2304: Cannot find name 'a'.
                                            ~
 !!! error TS2304: Cannot find name '_'.
+                                                     ~
+!!! error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.

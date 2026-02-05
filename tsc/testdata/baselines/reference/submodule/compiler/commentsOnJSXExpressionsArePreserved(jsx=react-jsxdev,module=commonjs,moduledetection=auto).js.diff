@@ -1,10 +1,14 @@
 --- old.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=auto).js
 +++ new.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=auto).js
-@@= skipped -28, +28 lines =@@
- const _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
+@@= skipped -25, +25 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+-const _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
++const _jsxFileName = "/.src/commentsOnJSXExpressionsArePreserved.tsx";
  class Component {
      render() {
--        return (0, jsx_dev_runtime_1.jsxDEV)("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
+-        return (0, jsx_dev_runtime_1.jsxDEV)("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 16 }, this);
 +        return jsx_dev_runtime_1.jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
      }
  }

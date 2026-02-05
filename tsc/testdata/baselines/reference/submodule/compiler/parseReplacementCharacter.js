@@ -10,7 +10,11 @@
 /** oops �� oops */
 
 //// [parseReplacementCharacter.js]
+"use strict";
 "oops �� oops";
 'oops �� oops';
 `oops �� oops`;
 `${"oops �� oops"}`;
+// oops �� oops
+/* oops �� oops */
+/** oops �� oops */ 

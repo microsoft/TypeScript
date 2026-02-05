@@ -56,6 +56,7 @@ var [c14, c15, c16] = [1, 2, "string"];
 
 
 //// [destructuringArrayBindingPatternAndAssignment1ES5.js]
+"use strict";
 /* AssignmentPattern:
  *      ObjectAssignmentPattern
  *      ArrayAssignmentPattern

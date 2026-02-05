@@ -1,6 +1,6 @@
 --- old.variableDeclaratorResolvedDuringContextualTyping.js
 +++ new.variableDeclaratorResolvedDuringContextualTyping.js
-@@= skipped -139, +139 lines =@@
+@@= skipped -140, +140 lines =@@
      Errors.ConnectionError = ConnectionError;
  })(Errors || (Errors = {}));
  class FileService {

@@ -15,6 +15,7 @@ var x3 = (a:number) {};
 var x4= (...a: any[]) { };
 
 //// [fatarrowfunctionsErrors.js]
+"use strict";
 foo((...Far) => { return 0; });
 foo((1), { return: 0, });
 foo((x) => { return x; });

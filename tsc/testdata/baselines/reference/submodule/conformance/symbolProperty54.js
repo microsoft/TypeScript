@@ -6,6 +6,7 @@ var obj = {
 };
 
 //// [symbolProperty54.js]
+"use strict";
 var obj = {
     [Symbol.prototype]: 0
 };

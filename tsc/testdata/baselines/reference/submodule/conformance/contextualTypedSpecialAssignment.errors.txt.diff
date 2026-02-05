@@ -2,6 +2,7 @@
 +++ new.contextualTypedSpecialAssignment.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
++mod.js(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +test.js(15,5): error TS2322: Type 'string' is not assignable to type '"done"'.
 +test.js(16,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +test.js(57,17): error TS2339: Property 'x' does not exist on type 'Thing'.
@@ -89,11 +90,16 @@
 +        m(n) { }
 +    }
 +    
-+==== mod.js (0 errors) ====
++==== mod.js (1 errors) ====
 +    // module.exports assignment
 +    /** @type {{ status: 'done', m(n: number): void }} */
 +    module.exports = {
++    ~~~~~~~~~~~~~~~~~~
 +        status: "done",
++    ~~~~~~~~~~~~~~~~~~~
 +        m(n) { }
++    ~~~~~~~~~~~~
 +    }
++    ~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +    

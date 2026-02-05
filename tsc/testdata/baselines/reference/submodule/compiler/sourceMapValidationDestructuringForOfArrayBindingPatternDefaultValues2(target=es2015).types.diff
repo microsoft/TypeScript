@@ -1,0 +1,29 @@
+--- old.sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues2(target=es2015).types
++++ new.sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues2(target=es2015).types
+@@= skipped -485, +485 lines =@@
+ >numberA3 : number
+ >-1 : -1
+ >1 : 1
+->...robotAInfo : string | number
++>...robotAInfo : any
+ >robotAInfo : (string | number)[]
+ >robots : Robot[]
+
+@@= skipped -17, +17 lines =@@
+ >numberA3 : number
+ >-1 : -1
+ >1 : 1
+->...robotAInfo : string | number
++>...robotAInfo : any
+ >robotAInfo : (string | number)[]
+ >getRobots() : Robot[]
+ >getRobots : () => Robot[]
+@@= skipped -18, +18 lines =@@
+ >numberA3 : number
+ >-1 : -1
+ >1 : 1
+->...robotAInfo : string | number
++>...robotAInfo : any
+ >robotAInfo : (string | number)[]
+ >[robotA, robotB] : Robot[]
+ >robotA : Robot

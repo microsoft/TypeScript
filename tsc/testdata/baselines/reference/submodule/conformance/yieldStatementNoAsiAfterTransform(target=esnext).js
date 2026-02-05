@@ -66,6 +66,7 @@ function *t10() {
 
 
 //// [yieldStatementNoAsiAfterTransform.js]
+"use strict";
 function* t1() {
     yield 
     // comment

@@ -25,6 +25,7 @@ var d = new D();
 
 
 //// [superCallOutsideConstructor.js]
+"use strict";
 class C {
     foo() { }
 }

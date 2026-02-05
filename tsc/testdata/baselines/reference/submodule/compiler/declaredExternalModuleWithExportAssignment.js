@@ -21,3 +21,4 @@ declare module 'connect' {
 
 
 //// [declaredExternalModuleWithExportAssignment.js]
+"use strict";

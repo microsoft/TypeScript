@@ -1,0 +1,29 @@
+--- old.conditionalTypeDoesntSpinForever.types
++++ new.conditionalTypeDoesntSpinForever.types
+@@= skipped -39, +39 lines =@@
+ >name : any
+
+       name: <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {name: TYPE}>
+->name : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
++>name : <TYPE>(t?: TYPE | undefined) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
+ >t : TYPE | undefined
+ >name : TYPE
+     }
+@@= skipped -136, +136 lines =@@
+ >record : any
+
+       identifier: <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>
+->identifier : <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
++>identifier : <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE | undefined) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
+ >t : TYPE | undefined
+ >identifier : TYPE
+
+@@= skipped -60, +60 lines =@@
+ >record : any
+
+       record: <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {record: TYPE}>
+->record : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
++>record : <TYPE>(t?: TYPE | undefined) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
+ >t : TYPE | undefined
+ >record : TYPE
+     }

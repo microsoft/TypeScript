@@ -41,6 +41,7 @@ interface Quux<U> {
 }
 
 //// [nonIdenticalTypeConstraints.js]
+"use strict";
 class Different {
     a;
     b;

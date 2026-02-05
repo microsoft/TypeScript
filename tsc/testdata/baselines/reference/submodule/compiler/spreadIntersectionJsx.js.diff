@@ -1,7 +1,7 @@
 --- old.spreadIntersectionJsx.js
 +++ new.spreadIntersectionJsx.js
-@@= skipped -10, +10 lines =@@
- //// [spreadIntersectionJsx.js]
+@@= skipped -11, +11 lines =@@
+ "use strict";
  const React = null;
  class A {
 +    a;

@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/declFileImportChainInExportAssignment.ts] ////
 
 === declFileImportChainInExportAssignment.ts ===
-module m {
+namespace m {
 >m : typeof m
 
-    export module c {
+    export namespace c {
 >c : typeof import("declFileImportChainInExportAssignment")
 
         export class c {

@@ -10,6 +10,7 @@ var ANY = ANY typeof ;    //expect error
 var ANY1 = typeof ;
 
 //// [typeofOperatorInvalidOperations.js]
+"use strict";
 // Unary operator typeof
 // opreand before typeof
 var ANY = ANY;

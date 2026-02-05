@@ -21,6 +21,7 @@ a.foo();
 
 
 //// [classOrder2.js]
+"use strict";
 class A extends B {
     foo() { this.bar(); }
 }

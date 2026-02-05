@@ -1,3 +1,4 @@
+typeParamExtendsOtherTypeParam.ts(3,5): error TS2564: Property 'data' has no initializer and is not definitely assigned in the constructor.
 typeParamExtendsOtherTypeParam.ts(12,26): error TS2741: Property 'a' is missing in type '{ b: string; }' but required in type '{ a: string; }'.
 typeParamExtendsOtherTypeParam.ts(13,26): error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: string; }'.
   Types of property 'a' are incompatible.
@@ -12,10 +13,12 @@ typeParamExtendsOtherTypeParam.ts(28,15): error TS2741: Property 'b' is missing 
 typeParamExtendsOtherTypeParam.ts(29,15): error TS2741: Property 'b' is missing in type 'I1' but required in type 'I2'.
 
 
-==== typeParamExtendsOtherTypeParam.ts (8 errors) ====
+==== typeParamExtendsOtherTypeParam.ts (9 errors) ====
     class A<T, U extends T> { }
     class B<T extends Object, U extends T> {
         data: A<Object, Object>;
+        ~~~~
+!!! error TS2564: Property 'data' has no initializer and is not definitely assigned in the constructor.
     }
     
     // Below 2 should compile without error 

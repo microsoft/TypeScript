@@ -9,6 +9,7 @@ class C {
 }
 
 //// [computedPropertyNames21_ES6.js]
+"use strict";
 class C {
     bar() {
         return 0;

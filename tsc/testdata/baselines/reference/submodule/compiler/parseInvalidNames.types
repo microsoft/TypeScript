@@ -9,10 +9,6 @@ interface 100 {}
 >interface : any
 >100 : 100
 
-module 100 {}
->module : any
->100 : 100
-
 type 100 {}
 >type : any
 >100 : 100
@@ -23,10 +19,6 @@ export namespace 100 {}
 
 export interface 100 {}
 >interface : any
->100 : 100
-
-export module 100 {}
->module : any
 >100 : 100
 
 export type 100 {}

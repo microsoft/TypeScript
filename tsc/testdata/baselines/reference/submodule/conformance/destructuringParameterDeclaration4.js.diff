@@ -1,6 +1,6 @@
 --- old.destructuringParameterDeclaration4.js
 +++ new.destructuringParameterDeclaration4.js
-@@= skipped -55, +55 lines =@@
+@@= skipped -56, +56 lines =@@
  a6([1, 2, "string"]); // Error, parameter type is number[]
  var temp = [1, 2, 3];
  class C {

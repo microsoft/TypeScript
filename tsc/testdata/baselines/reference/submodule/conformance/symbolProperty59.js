@@ -6,3 +6,4 @@ interface I {
 }
 
 //// [symbolProperty59.js]
+"use strict";

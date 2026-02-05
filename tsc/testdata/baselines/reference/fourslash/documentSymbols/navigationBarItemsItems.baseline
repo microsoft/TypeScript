@@ -10,7 +10,7 @@
 // }|>
 // 
 // /// Module
-// <|module [|{| name: Shapes, kind: Namespace |}Shapes|] {
+// <|namespace [|{| name: Shapes, kind: Namespace |}Shapes|] {
 // 
 //     // Class
 //     <|export class [|{| name: Point, kind: Class |}Point|] implements IPoint {

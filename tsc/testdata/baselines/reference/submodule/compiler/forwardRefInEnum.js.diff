@@ -1,6 +1,6 @@
 --- old.forwardRefInEnum.js
 +++ new.forwardRefInEnum.js
-@@= skipped -20, +20 lines =@@
+@@= skipped -21, +21 lines =@@
  (function (E1) {
      // illegal case
      // forward reference to the element of the same enum

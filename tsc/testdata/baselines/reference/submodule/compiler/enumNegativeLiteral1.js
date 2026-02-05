@@ -7,6 +7,7 @@ enum E {
 
 
 //// [enumNegativeLiteral1.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = -5] = "a";

@@ -1,8 +1,8 @@
 --- old.lambdaPropSelf.js
 +++ new.lambdaPropSelf.js
-@@= skipped -26, +26 lines =@@
-
+@@= skipped -27, +27 lines =@@
  //// [lambdaPropSelf.js]
+ "use strict";
  class Person {
 +    name;
 +    children;

@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/unexportedInstanceClassVariables.ts] ////
 
 //// [unexportedInstanceClassVariables.ts]
-module M{
+namespace M{
 	class A{
 		constructor(val:string){}
 	}
 }
 
-module M{
+namespace M{
 	class A {}  
  
  	var a = new A();
@@ -15,6 +15,7 @@ module M{
 
 
 //// [unexportedInstanceClassVariables.js]
+"use strict";
 var M;
 (function (M) {
     class A {

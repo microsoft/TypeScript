@@ -1,6 +1,6 @@
 --- old.declInput4.js
 +++ new.declInput4.js
-@@= skipped -25, +25 lines =@@
+@@= skipped -26, +26 lines =@@
      }
      M.E = E;
      class D {

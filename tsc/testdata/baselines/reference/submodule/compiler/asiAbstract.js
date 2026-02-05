@@ -18,6 +18,7 @@ class C3 {
 
 
 //// [asiAbstract.js]
+"use strict";
 abstract;
 class NonAbstractClass {
 }

@@ -1,6 +1,7 @@
 //// [tests/cases/conformance/jsx/checkJsxGenericTagHasCorrectInferences.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
 import * as React from "react";
 >React : typeof React
 

@@ -4,4 +4,5 @@
 var x;
 
 //// [file1.js]
+"use strict";
 var x;

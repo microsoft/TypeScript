@@ -15,7 +15,8 @@ func TestAutoImportFileExcludePatterns2(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @Filename: /lib/components/button/Button.ts
+	const content = `// @lib: es5
+// @Filename: /lib/components/button/Button.ts
 export function Button() {}
 // @Filename: /lib/components/button/index.ts
 export * from "./Button";

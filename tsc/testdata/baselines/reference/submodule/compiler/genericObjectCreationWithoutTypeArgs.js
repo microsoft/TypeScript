@@ -12,6 +12,7 @@ var x4 = new SS;           // OK
 
 
 //// [genericObjectCreationWithoutTypeArgs.js]
+"use strict";
 class SS {
 }
 var x1 = new SS(); // OK

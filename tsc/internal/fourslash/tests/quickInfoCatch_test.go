@@ -15,5 +15,5 @@ func TestQuickCatchInfo(t *testing.T) {
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyQuickInfoAt(t, "1", "var error: any", "")
+	f.VerifyQuickInfoAt(t, "1", "var error: unknown", "")
 }

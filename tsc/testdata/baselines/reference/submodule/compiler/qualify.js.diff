@@ -1,6 +1,6 @@
 --- old.qualify.js
 +++ new.qualify.js
-@@= skipped -73, +73 lines =@@
+@@= skipped -74, +74 lines =@@
  (function (M) {
      let N;
      (function (N) {

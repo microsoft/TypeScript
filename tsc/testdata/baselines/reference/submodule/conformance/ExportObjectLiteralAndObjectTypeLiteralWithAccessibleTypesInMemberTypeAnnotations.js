@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts] ////
 
 //// [ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts]
-module A {
+namespace A {
 
     class Point {
         constructor(public x: number, public y: number) { }
@@ -14,6 +14,7 @@ module A {
 
 
 //// [ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.js]
+"use strict";
 var A;
 (function (A) {
     class Point {

@@ -8,7 +8,7 @@ overloadErrorMatchesImplementationElaboaration.ts(8,12): error TS2345: Argument 
         publish<T>(event: T): void {}
     }
     
-    var ea: EventAggregator;
+    declare var ea: EventAggregator;
     ea.publish([1,2,3]);
                ~~~~~~~
 !!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'string'.

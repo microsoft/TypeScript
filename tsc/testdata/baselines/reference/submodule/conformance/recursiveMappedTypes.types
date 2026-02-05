@@ -118,7 +118,7 @@ export interface ListWidget {
 >"maximum_count" : number
 
     "collapsable"?: boolean, //default to false, means all expanded
->"collapsable" : boolean
+>"collapsable" : boolean | undefined
 
     "each": Child<ListWidget>;
 >"each" : any

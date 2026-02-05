@@ -1,6 +1,6 @@
 --- old.thisTypeErrors2.js
 +++ new.thisTypeErrors2.js
-@@= skipped -23, +23 lines =@@
+@@= skipped -24, +24 lines =@@
  class Generic {
  }
  class Derived {

@@ -24,6 +24,7 @@ var n: number;
 
 
 //// [decls.js]
+"use strict";
 // Ambient external import declaration referencing ambient external module using top level module name
 //// [consumer.js]
 "use strict";

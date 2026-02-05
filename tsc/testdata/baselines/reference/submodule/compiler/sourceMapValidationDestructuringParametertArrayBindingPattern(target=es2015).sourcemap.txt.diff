@@ -1,0 +1,202 @@
+--- old.sourceMapValidationDestructuringParametertArrayBindingPattern(target=es2015).sourcemap.txt
++++ new.sourceMapValidationDestructuringParametertArrayBindingPattern(target=es2015).sourcemap.txt
+@@= skipped -59, +59 lines =@@
+ 6 >               ^^
+ 7 >                 ^^^^^
+ 8 >                      ^
+-9 >                       ^->
++9 >                       ^^
+ 1 >
+   >
+   >
+@@= skipped -11, +11 lines =@@
+ 6 >               , 
+ 7 >                 nameA
+ 8 >                      ]: Robot
++9 >                       ) 
+ 1 >Emitted(3, 1) Source(7, 1) + SourceIndex(0)
+ 2 >Emitted(3, 10) Source(7, 10) + SourceIndex(0)
+ 3 >Emitted(3, 14) Source(7, 14) + SourceIndex(0)
+@@= skipped -8, +9 lines =@@
+ 6 >Emitted(3, 18) Source(7, 18) + SourceIndex(0)
+ 7 >Emitted(3, 23) Source(7, 23) + SourceIndex(0)
+ 8 >Emitted(3, 24) Source(7, 31) + SourceIndex(0)
++9 >Emitted(3, 26) Source(7, 33) + SourceIndex(0)
+ ---
+ >>>    console.log(nameA);
+-1->^^^^
++1 >^^^^
+ 2 >    ^^^^^^^
+ 3 >           ^
+ 4 >            ^^^
+@@= skipped -10, +11 lines =@@
+ 6 >                ^^^^^
+ 7 >                     ^
+ 8 >                      ^
+-1->) {
++1 >{
+   >    
+ 2 >    console
+ 3 >           .
+@@= skipped -9, +9 lines =@@
+ 6 >                nameA
+ 7 >                     )
+ 8 >                      ;
+-1->Emitted(4, 5) Source(8, 5) + SourceIndex(0)
++1 >Emitted(4, 5) Source(8, 5) + SourceIndex(0)
+ 2 >Emitted(4, 12) Source(8, 12) + SourceIndex(0)
+ 3 >Emitted(4, 13) Source(8, 13) + SourceIndex(0)
+ 4 >Emitted(4, 16) Source(8, 16) + SourceIndex(0)
+@@= skipped -14, +14 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(5, 1) Source(9, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(5, 1) Source(8, 24) + SourceIndex(0)
+ 2 >Emitted(5, 2) Source(9, 2) + SourceIndex(0)
+ ---
+ >>>function foo2([numberB]) {
+@@= skipped -13, +13 lines =@@
+ 5 >              ^
+ 6 >               ^^^^^^^
+ 7 >                      ^
+-8 >                       ^^^->
++8 >                       ^^
++9 >                         ^->
+ 1->
+   >
+   >
+@@= skipped -10, +11 lines =@@
+ 5 >              [
+ 6 >               numberB
+ 7 >                      ]: Robot
++8 >                       ) 
+ 1->Emitted(6, 1) Source(11, 1) + SourceIndex(0)
+ 2 >Emitted(6, 10) Source(11, 10) + SourceIndex(0)
+ 3 >Emitted(6, 14) Source(11, 14) + SourceIndex(0)
+@@= skipped -7, +8 lines =@@
+ 5 >Emitted(6, 16) Source(11, 16) + SourceIndex(0)
+ 6 >Emitted(6, 23) Source(11, 23) + SourceIndex(0)
+ 7 >Emitted(6, 24) Source(11, 31) + SourceIndex(0)
++8 >Emitted(6, 26) Source(11, 33) + SourceIndex(0)
+ ---
+ >>>    console.log(numberB);
+ 1->^^^^
+@@= skipped -10, +11 lines =@@
+ 6 >                ^^^^^^^
+ 7 >                       ^
+ 8 >                        ^
+-1->) {
++1->{
+   >    
+ 2 >    console
+ 3 >           .
+@@= skipped -23, +23 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(8, 1) Source(13, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(8, 1) Source(12, 26) + SourceIndex(0)
+ 2 >Emitted(8, 2) Source(13, 2) + SourceIndex(0)
+ ---
+ >>>function foo3([numberA2, nameA2, skillA2]) {
+@@= skipped -17, +17 lines =@@
+ 9 >                               ^^
+ 10>                                 ^^^^^^^
+ 11>                                        ^
++12>                                         ^^
+ 1->
+   >
+   >
+@@= skipped -13, +14 lines =@@
+ 9 >                               , 
+ 10>                                 skillA2
+ 11>                                        ]: Robot
++12>                                         ) 
+ 1->Emitted(9, 1) Source(15, 1) + SourceIndex(0)
+ 2 >Emitted(9, 10) Source(15, 10) + SourceIndex(0)
+ 3 >Emitted(9, 14) Source(15, 14) + SourceIndex(0)
+@@= skipped -11, +12 lines =@@
+ 9 >Emitted(9, 34) Source(15, 34) + SourceIndex(0)
+ 10>Emitted(9, 41) Source(15, 41) + SourceIndex(0)
+ 11>Emitted(9, 42) Source(15, 49) + SourceIndex(0)
++12>Emitted(9, 44) Source(15, 51) + SourceIndex(0)
+ ---
+ >>>    console.log(nameA2);
+ 1 >^^^^
+@@= skipped -10, +11 lines =@@
+ 6 >                ^^^^^^
+ 7 >                      ^
+ 8 >                       ^
+-1 >) {
++1 >{
+   >    
+ 2 >    console
+ 3 >           .
+@@= skipped -23, +23 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(11, 1) Source(17, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(11, 1) Source(16, 25) + SourceIndex(0)
+ 2 >Emitted(11, 2) Source(17, 2) + SourceIndex(0)
+ ---
+ >>>function foo4([numberA3, ...robotAInfo]) {
+@@= skipped -16, +16 lines =@@
+ 8 >                         ^^^
+ 9 >                            ^^^^^^^^^^
+ 10>                                      ^
++11>                                       ^^
+ 1->
+   >
+   >
+@@= skipped -12, +13 lines =@@
+ 8 >                         ...
+ 9 >                            robotAInfo
+ 10>                                      ]: Robot
++11>                                       ) 
+ 1->Emitted(12, 1) Source(19, 1) + SourceIndex(0)
+ 2 >Emitted(12, 10) Source(19, 10) + SourceIndex(0)
+ 3 >Emitted(12, 14) Source(19, 14) + SourceIndex(0)
+@@= skipped -10, +11 lines =@@
+ 8 >Emitted(12, 29) Source(19, 29) + SourceIndex(0)
+ 9 >Emitted(12, 39) Source(19, 39) + SourceIndex(0)
+ 10>Emitted(12, 40) Source(19, 47) + SourceIndex(0)
++11>Emitted(12, 42) Source(19, 49) + SourceIndex(0)
+ ---
+ >>>    console.log(robotAInfo);
+ 1 >^^^^
+@@= skipped -10, +11 lines =@@
+ 6 >                ^^^^^^^^^^
+ 7 >                          ^
+ 8 >                           ^
+-1 >) {
++1 >{
+   >    
+ 2 >    console
+ 3 >           .
+@@= skipped -23, +23 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(14, 1) Source(21, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(14, 1) Source(20, 29) + SourceIndex(0)
+ 2 >Emitted(14, 2) Source(21, 2) + SourceIndex(0)
+ ---
+ >>>foo1(robotA);

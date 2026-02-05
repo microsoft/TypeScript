@@ -13,6 +13,7 @@ new C().bar();
 
 
 //// [privateNameSetterExprReturnValue.js]
+"use strict";
 class C {
     set #foo(a) { }
     bar() {

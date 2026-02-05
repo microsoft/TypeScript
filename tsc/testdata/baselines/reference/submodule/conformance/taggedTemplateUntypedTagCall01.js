@@ -5,5 +5,6 @@ var tag: Function;
 tag `Hello world!`;
 
 //// [taggedTemplateUntypedTagCall01.js]
+"use strict";
 var tag;
 tag `Hello world!`;

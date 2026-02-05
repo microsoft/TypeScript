@@ -82,16 +82,11 @@ namespace N12 {
 
 
 //// [missingFunctionImplementation.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C2 = exports.C1 = void 0;
-class C1 {
+export class C1 {
 }
-exports.C1 = C1;
 // merged with a namespace
-class C2 {
+export class C2 {
 }
-exports.C2 = C2;
 // merged with a namespace, multiple overloads
 class C3 {
 }

@@ -1,0 +1,40 @@
+arrayconcat.ts(12,9): error TS2564: Property 'options' has no initializer and is not definitely assigned in the constructor.
+arrayconcat.ts(16,25): error TS18048: 'a.name' is possibly 'undefined'.
+arrayconcat.ts(17,25): error TS18048: 'b.name' is possibly 'undefined'.
+
+
+==== arrayconcat.ts (3 errors) ====
+    interface IOptions {
+        name?: string;
+        flag?: boolean;
+        short?: string;
+        usage?: string;
+        set?: (s: string) => void;
+        type?: string;
+        experimental?: boolean;
+    }
+    
+    class parser {
+    	public options: IOptions[];
+    	       ~~~~~~~
+!!! error TS2564: Property 'options' has no initializer and is not definitely assigned in the constructor.
+    
+    	public m() {
+    		this.options = this.options.sort(function(a, b) {
+                var aName = a.name.toLowerCase();
+                            ~~~~~~
+!!! error TS18048: 'a.name' is possibly 'undefined'.
+                var bName = b.name.toLowerCase();
+                            ~~~~~~
+!!! error TS18048: 'b.name' is possibly 'undefined'.
+    
+                if (aName > bName) {
+                    return 1;
+                } else if (aName < bName) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+    	}
+    }

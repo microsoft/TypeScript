@@ -28,6 +28,7 @@ var b = {
 }
 
 //// [objectTypesWithOptionalProperties.js]
+"use strict";
 // Basic uses of optional properties
 var a;
 class C {

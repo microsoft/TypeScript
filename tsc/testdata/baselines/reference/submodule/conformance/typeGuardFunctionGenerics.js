@@ -35,6 +35,7 @@ if (funD(isC, a)) {
 let test3: B = funE(isB, 1);
 
 //// [typeGuardFunctionGenerics.js]
+"use strict";
 class A {
     propA;
 }

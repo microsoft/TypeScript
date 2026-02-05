@@ -1,8 +1,8 @@
 --- old.propertyNamesWithStringLiteral.js
 +++ new.propertyNamesWithStringLiteral.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [propertyNamesWithStringLiteral.js]
+ "use strict";
  class _Color {
 +    a;
 +    r;

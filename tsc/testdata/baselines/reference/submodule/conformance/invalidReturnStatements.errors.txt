@@ -2,11 +2,13 @@ invalidReturnStatements.ts(2,17): error TS2355: A function whose declared type i
 invalidReturnStatements.ts(3,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 invalidReturnStatements.ts(4,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 invalidReturnStatements.ts(5,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+invalidReturnStatements.ts(10,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+invalidReturnStatements.ts(14,5): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
 invalidReturnStatements.ts(16,22): error TS2739: Type '{ id: number; }' is missing the following properties from type 'D': name, dispose
 invalidReturnStatements.ts(18,22): error TS2741: Property 'name' is missing in type 'C' but required in type 'D'.
 
 
-==== invalidReturnStatements.ts (6 errors) ====
+==== invalidReturnStatements.ts (8 errors) ====
     // all the following should be error
     function fn1(): number {  }
                     ~~~~~~
@@ -25,10 +27,14 @@ invalidReturnStatements.ts(18,22): error TS2741: Property 'name' is missing in t
     interface I { id: number }
     class C implements I {
         id: number;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         dispose() {}
     }
     class D extends C {
         name: string;
+        ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
     }
     function fn10(): D { return { id: 12 }; } 
                          ~~~~~~

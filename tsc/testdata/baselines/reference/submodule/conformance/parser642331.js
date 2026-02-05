@@ -7,6 +7,7 @@ class test {
 
 
 //// [parser642331.js]
+"use strict";
 class test {
     constructor(static) { }
 }

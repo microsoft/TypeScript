@@ -10,6 +10,7 @@ function* g(): IterableIterator<(x: string) => number> {
 }
 
 //// [generatorTypeCheck28.js]
+"use strict";
 function* g() {
     yield* {
         *[Symbol.iterator]() {

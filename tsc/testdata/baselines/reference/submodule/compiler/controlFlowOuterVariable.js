@@ -15,6 +15,7 @@ const helper = function<T>(t: T[]) {
 }
 
 //// [controlFlowOuterVariable.js]
+"use strict";
 // Repros from #10641
 const CONFIG = {
     foo: '',

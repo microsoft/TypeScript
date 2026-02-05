@@ -1,7 +1,7 @@
 --- old.subtypingWithObjectMembersAccessibility.js
 +++ new.subtypingWithObjectMembersAccessibility.js
-@@= skipped -37, +37 lines =@@
- //// [subtypingWithObjectMembersAccessibility.js]
+@@= skipped -38, +38 lines =@@
+ "use strict";
  // Derived member is private, base member is not causes errors
  class Base {
 +    foo;

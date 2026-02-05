@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxReactEmit1.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -44,6 +44,7 @@ var whitespace3 = <div>
 
 
 //// [file.js]
+"use strict";
 var p;
 var selfClosed1 = React.createElement("div", null);
 var selfClosed2 = React.createElement("div", { x: "1" });

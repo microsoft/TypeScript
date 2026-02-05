@@ -8,6 +8,7 @@ let o10 = { ...get x() { return 12; }};
 
 
 //// [objectSpreadNegativeParse.js]
+"use strict";
 let o7 = Object.assign({}, o ?  : );
 let o8 = Object.assign({},  * o);
 let o9 = Object.assign({}, matchMedia()), {};

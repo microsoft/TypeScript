@@ -12,6 +12,7 @@ else {
 }
 
 //// [isArray.js]
+"use strict";
 var maybeArray;
 if (Array.isArray(maybeArray)) {
     maybeArray.length; // OK

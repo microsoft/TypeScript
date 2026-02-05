@@ -11,6 +11,7 @@ class A {
 
 
 //// [classStaticBlock9.js]
+"use strict";
 class A {
     static bar = A.foo + 1;
     static {

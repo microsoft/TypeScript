@@ -1847,7 +1847,7 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
 declare function head<T extends Array<any>>(list: T): T[0];
 >head : Symbol(head, Decl(keyofAndIndexedAccess.ts, 506, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 510, 22))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >list : Symbol(list, Decl(keyofAndIndexedAccess.ts, 510, 44))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 510, 22))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 510, 22))

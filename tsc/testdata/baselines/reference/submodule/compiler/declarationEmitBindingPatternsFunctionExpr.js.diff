@@ -1,6 +1,6 @@
 --- old.declarationEmitBindingPatternsFunctionExpr.js
 +++ new.declarationEmitBindingPatternsFunctionExpr.js
-@@= skipped -39, +39 lines =@@
+@@= skipped -40, +40 lines =@@
  declare let value: string;
  declare const shadowedVariable: ({ value: alias }: {
      value: string;

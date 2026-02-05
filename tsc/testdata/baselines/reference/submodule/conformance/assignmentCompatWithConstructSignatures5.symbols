@@ -22,90 +22,90 @@ class OtherDerived extends Base { bing: string; }
 >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures5.ts, 0, 0))
 >bing : Symbol(OtherDerived.bing, Decl(assignmentCompatWithConstructSignatures5.ts, 5, 33))
 
-var a: new <T>(x: T) => T[];
->a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 12))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 15))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 12))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 12))
+declare var a: new <T>(x: T) => T[];
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 20))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 23))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 20))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 20))
 
-var a2: new <T>(x: T) => string[];
->a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignatures5.ts, 8, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 8, 13))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 8, 16))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 8, 13))
+declare var a2: new <T>(x: T) => string[];
+>a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignatures5.ts, 8, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 8, 21))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 8, 24))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 8, 21))
 
-var a3: new <T>(x: T) => void;
->a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignatures5.ts, 9, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 9, 13))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 9, 16))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 9, 13))
+declare var a3: new <T>(x: T) => void;
+>a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignatures5.ts, 9, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 9, 21))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 9, 24))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 9, 21))
 
-var a4: new <T, U>(x: T, y: U) => string;
->a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 13))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 15))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 19))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 13))
->y : Symbol(y, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 24))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 15))
+declare var a4: new <T, U>(x: T, y: U) => string;
+>a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 21))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 23))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 27))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 21))
+>y : Symbol(y, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 32))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 23))
 
-var a5: new <T, U>(x: new (arg: T) => U) => T;
->a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 13))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 15))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 19))
->arg : Symbol(arg, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 27))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 13))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 15))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 13))
+declare var a5: new <T, U>(x: new (arg: T) => U) => T;
+>a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 21))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 23))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 27))
+>arg : Symbol(arg, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 35))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 21))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 23))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 21))
 
-var a6: new <T extends Base>(x: new (arg: T) => Derived) => T;
->a6 : Symbol(a6, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 13))
+declare var a6: new <T extends Base>(x: new (arg: T) => Derived) => T;
+>a6 : Symbol(a6, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 21))
 >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures5.ts, 0, 0))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 29))
->arg : Symbol(arg, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 37))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 13))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 37))
+>arg : Symbol(arg, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 45))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 21))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithConstructSignatures5.ts, 2, 27))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 13))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 21))
 
-var a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
->a11 : Symbol(a11, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 14))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 17))
->foo : Symbol(foo, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 21))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 14))
->y : Symbol(y, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 31))
->foo : Symbol(foo, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 36))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 14))
->bar : Symbol(bar, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 44))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 14))
+declare var a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
+>a11 : Symbol(a11, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 22))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 25))
+>foo : Symbol(foo, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 29))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 22))
+>y : Symbol(y, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 39))
+>foo : Symbol(foo, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 44))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 22))
+>bar : Symbol(bar, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 52))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 22))
 >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures5.ts, 0, 0))
 
-var a15: new <T>(x: { a: T; b: T }) => T[];
->a15 : Symbol(a15, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 14))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 17))
->a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 21))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 14))
->b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 27))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 14))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 14))
+declare var a15: new <T>(x: { a: T; b: T }) => T[];
+>a15 : Symbol(a15, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 22))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 25))
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 29))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 22))
+>b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 35))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 22))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 22))
 
-var a16: new <T extends Base>(x: { a: T; b: T }) => T[];
->a16 : Symbol(a16, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 14))
+declare var a16: new <T extends Base>(x: { a: T; b: T }) => T[];
+>a16 : Symbol(a16, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 22))
 >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures5.ts, 0, 0))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 30))
->a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 34))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 14))
->b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 40))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 14))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 14))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 38))
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 42))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 22))
+>b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 48))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 22))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 22))
 
-var a17: {
->a17 : Symbol(a17, Decl(assignmentCompatWithConstructSignatures5.ts, 16, 3))
+declare var a17: {
+>a17 : Symbol(a17, Decl(assignmentCompatWithConstructSignatures5.ts, 16, 11))
 
     new <T extends Derived>(x: new (a: T) => T): T[];
 >T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 17, 9))
@@ -126,8 +126,8 @@ var a17: {
 >T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 18, 9))
 
 };
-var a18: {
->a18 : Symbol(a18, Decl(assignmentCompatWithConstructSignatures5.ts, 20, 3))
+declare var a18: {
+>a18 : Symbol(a18, Decl(assignmentCompatWithConstructSignatures5.ts, 20, 11))
 
     new (x: {
 >x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 21, 9))
@@ -167,194 +167,194 @@ var a18: {
     }): any[];
 };
 
-var b: new <T>(x: T) => T[]; 
->b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 12))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 15))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 12))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 12))
+declare var b: new <T>(x: T) => T[]; 
+>b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 20))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 23))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 20))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 20))
 
 a = b; // ok
->a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 3))
->b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 3))
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 11))
+>b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 11))
 
 b = a; // ok
->b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 3))
->a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 3))
+>b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 31, 11))
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 7, 11))
 
-var b2: new <T>(x: T) => string[]; 
->b2 : Symbol(b2, Decl(assignmentCompatWithConstructSignatures5.ts, 34, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 34, 13))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 34, 16))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 34, 13))
+declare var b2: new <T>(x: T) => string[]; 
+>b2 : Symbol(b2, Decl(assignmentCompatWithConstructSignatures5.ts, 34, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 34, 21))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 34, 24))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 34, 21))
 
 a2 = b2; // ok
->a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignatures5.ts, 8, 3))
->b2 : Symbol(b2, Decl(assignmentCompatWithConstructSignatures5.ts, 34, 3))
+>a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignatures5.ts, 8, 11))
+>b2 : Symbol(b2, Decl(assignmentCompatWithConstructSignatures5.ts, 34, 11))
 
 b2 = a2; // ok
->b2 : Symbol(b2, Decl(assignmentCompatWithConstructSignatures5.ts, 34, 3))
->a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignatures5.ts, 8, 3))
+>b2 : Symbol(b2, Decl(assignmentCompatWithConstructSignatures5.ts, 34, 11))
+>a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignatures5.ts, 8, 11))
 
-var b3: new <T>(x: T) => T; 
->b3 : Symbol(b3, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 13))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 16))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 13))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 13))
+declare var b3: new <T>(x: T) => T; 
+>b3 : Symbol(b3, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 21))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 24))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 21))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 21))
 
 a3 = b3; // ok
->a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignatures5.ts, 9, 3))
->b3 : Symbol(b3, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 3))
+>a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignatures5.ts, 9, 11))
+>b3 : Symbol(b3, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 11))
 
 b3 = a3; // ok
->b3 : Symbol(b3, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 3))
->a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignatures5.ts, 9, 3))
+>b3 : Symbol(b3, Decl(assignmentCompatWithConstructSignatures5.ts, 37, 11))
+>a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignatures5.ts, 9, 11))
 
-var b4: new <T, U>(x: T, y: U) => string; 
->b4 : Symbol(b4, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 13))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 15))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 19))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 13))
->y : Symbol(y, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 24))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 15))
+declare var b4: new <T, U>(x: T, y: U) => string; 
+>b4 : Symbol(b4, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 21))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 23))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 27))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 21))
+>y : Symbol(y, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 32))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 23))
 
 a4 = b4; // ok
->a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 3))
->b4 : Symbol(b4, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 3))
+>a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 11))
+>b4 : Symbol(b4, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 11))
 
 b4 = a4; // ok
->b4 : Symbol(b4, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 3))
->a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 3))
+>b4 : Symbol(b4, Decl(assignmentCompatWithConstructSignatures5.ts, 40, 11))
+>a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignatures5.ts, 10, 11))
 
-var b5: new <T, U>(x: new (arg: T) => U) => T; 
->b5 : Symbol(b5, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 13))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 15))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 19))
->arg : Symbol(arg, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 27))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 13))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 15))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 13))
+declare var b5: new <T, U>(x: new (arg: T) => U) => T; 
+>b5 : Symbol(b5, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 21))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 23))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 27))
+>arg : Symbol(arg, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 35))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 21))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 23))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 21))
 
 a5 = b5; // ok
->a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 3))
->b5 : Symbol(b5, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 3))
+>a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 11))
+>b5 : Symbol(b5, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 11))
 
 b5 = a5; // ok
->b5 : Symbol(b5, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 3))
->a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 3))
+>b5 : Symbol(b5, Decl(assignmentCompatWithConstructSignatures5.ts, 43, 11))
+>a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignatures5.ts, 11, 11))
 
-var b6: new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T; 
->b6 : Symbol(b6, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 13))
+declare var b6: new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T; 
+>b6 : Symbol(b6, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 21))
 >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures5.ts, 0, 0))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 28))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 36))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithConstructSignatures5.ts, 2, 27))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 48))
->arg : Symbol(arg, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 56))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 13))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 28))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 13))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 56))
+>arg : Symbol(arg, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 64))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 21))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 36))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 21))
 
 a6 = b6; // ok
->a6 : Symbol(a6, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 3))
->b6 : Symbol(b6, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 3))
+>a6 : Symbol(a6, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 11))
+>b6 : Symbol(b6, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 11))
 
 b6 = a6; // ok
->b6 : Symbol(b6, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 3))
->a6 : Symbol(a6, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 3))
+>b6 : Symbol(b6, Decl(assignmentCompatWithConstructSignatures5.ts, 46, 11))
+>a6 : Symbol(a6, Decl(assignmentCompatWithConstructSignatures5.ts, 12, 11))
 
-var b11: new <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
->b11 : Symbol(b11, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 14))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 16))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 20))
->foo : Symbol(foo, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 24))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 14))
->y : Symbol(y, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 34))
->foo : Symbol(foo, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 39))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 16))
->bar : Symbol(bar, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 47))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 16))
+declare var b11: new <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
+>b11 : Symbol(b11, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 22))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 24))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 28))
+>foo : Symbol(foo, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 32))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 22))
+>y : Symbol(y, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 42))
+>foo : Symbol(foo, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 47))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 24))
+>bar : Symbol(bar, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 55))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 24))
 >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures5.ts, 0, 0))
 
 a11 = b11; // ok
->a11 : Symbol(a11, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 3))
->b11 : Symbol(b11, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 3))
+>a11 : Symbol(a11, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 11))
+>b11 : Symbol(b11, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 11))
 
 b11 = a11; // ok
->b11 : Symbol(b11, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 3))
->a11 : Symbol(a11, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 3))
+>b11 : Symbol(b11, Decl(assignmentCompatWithConstructSignatures5.ts, 49, 11))
+>a11 : Symbol(a11, Decl(assignmentCompatWithConstructSignatures5.ts, 13, 11))
 
-var b15: new <U, V>(x: { a: U; b: V; }) => U[]; 
->b15 : Symbol(b15, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 3))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 14))
->V : Symbol(V, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 16))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 20))
->a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 24))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 14))
->b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 30))
->V : Symbol(V, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 16))
->U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 14))
+declare var b15: new <U, V>(x: { a: U; b: V; }) => U[]; 
+>b15 : Symbol(b15, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 11))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 22))
+>V : Symbol(V, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 24))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 28))
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 32))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 22))
+>b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 38))
+>V : Symbol(V, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 24))
+>U : Symbol(U, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 22))
 
 a15 = b15; // ok
->a15 : Symbol(a15, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 3))
->b15 : Symbol(b15, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 3))
+>a15 : Symbol(a15, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 11))
+>b15 : Symbol(b15, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 11))
 
 b15 = a15; // ok
->b15 : Symbol(b15, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 3))
->a15 : Symbol(a15, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 3))
+>b15 : Symbol(b15, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 11))
+>a15 : Symbol(a15, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 11))
 
-var b16: new <T>(x: { a: T; b: T }) => T[]; 
->b16 : Symbol(b16, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 14))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 17))
->a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 21))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 14))
->b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 27))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 14))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 14))
+declare var b16: new <T>(x: { a: T; b: T }) => T[]; 
+>b16 : Symbol(b16, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 22))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 25))
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 29))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 22))
+>b : Symbol(b, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 35))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 22))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 22))
 
 a15 = b16; // ok
->a15 : Symbol(a15, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 3))
->b16 : Symbol(b16, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 3))
+>a15 : Symbol(a15, Decl(assignmentCompatWithConstructSignatures5.ts, 14, 11))
+>b16 : Symbol(b16, Decl(assignmentCompatWithConstructSignatures5.ts, 55, 11))
 
 b15 = a16; // ok
->b15 : Symbol(b15, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 3))
->a16 : Symbol(a16, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 3))
+>b15 : Symbol(b15, Decl(assignmentCompatWithConstructSignatures5.ts, 52, 11))
+>a16 : Symbol(a16, Decl(assignmentCompatWithConstructSignatures5.ts, 15, 11))
 
-var b17: new <T>(x: new (a: T) => T) => T[]; 
->b17 : Symbol(b17, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 3))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 14))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 17))
->a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 25))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 14))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 14))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 14))
+declare var b17: new <T>(x: new (a: T) => T) => T[]; 
+>b17 : Symbol(b17, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 11))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 22))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 25))
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 33))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 22))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 22))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 22))
 
 a17 = b17; // ok
->a17 : Symbol(a17, Decl(assignmentCompatWithConstructSignatures5.ts, 16, 3))
->b17 : Symbol(b17, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 3))
+>a17 : Symbol(a17, Decl(assignmentCompatWithConstructSignatures5.ts, 16, 11))
+>b17 : Symbol(b17, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 11))
 
 b17 = a17; // ok
->b17 : Symbol(b17, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 3))
->a17 : Symbol(a17, Decl(assignmentCompatWithConstructSignatures5.ts, 16, 3))
+>b17 : Symbol(b17, Decl(assignmentCompatWithConstructSignatures5.ts, 58, 11))
+>a17 : Symbol(a17, Decl(assignmentCompatWithConstructSignatures5.ts, 16, 11))
 
-var b18: new (x: new <T>(a: T) => T) => any[]; 
->b18 : Symbol(b18, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 3))
->x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 14))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 22))
->a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 25))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 22))
->T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 22))
+declare var b18: new (x: new <T>(a: T) => T) => any[]; 
+>b18 : Symbol(b18, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 11))
+>x : Symbol(x, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 22))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 30))
+>a : Symbol(a, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 33))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 30))
+>T : Symbol(T, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 30))
 
 a18 = b18; // ok
->a18 : Symbol(a18, Decl(assignmentCompatWithConstructSignatures5.ts, 20, 3))
->b18 : Symbol(b18, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 3))
+>a18 : Symbol(a18, Decl(assignmentCompatWithConstructSignatures5.ts, 20, 11))
+>b18 : Symbol(b18, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 11))
 
 b18 = a18; // ok
->b18 : Symbol(b18, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 3))
->a18 : Symbol(a18, Decl(assignmentCompatWithConstructSignatures5.ts, 20, 3))
+>b18 : Symbol(b18, Decl(assignmentCompatWithConstructSignatures5.ts, 61, 11))
+>a18 : Symbol(a18, Decl(assignmentCompatWithConstructSignatures5.ts, 20, 11))
 

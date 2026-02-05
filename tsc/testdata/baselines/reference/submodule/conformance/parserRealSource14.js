@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     export function lastOf(items: any[]): any {
         return (items === null || items.length === 0) ? null : items[items.length - 1];
     }
@@ -578,6 +578,7 @@ module TypeScript {
 
 
 //// [parserRealSource14.js]
+"use strict";
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />

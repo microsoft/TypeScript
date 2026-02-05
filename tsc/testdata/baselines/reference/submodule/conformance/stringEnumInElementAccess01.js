@@ -19,6 +19,7 @@ const snb: string | number | boolean = item[e];
 
 
 //// [stringEnumInElementAccess01.js]
+"use strict";
 var E;
 (function (E) {
     E["A"] = "a";

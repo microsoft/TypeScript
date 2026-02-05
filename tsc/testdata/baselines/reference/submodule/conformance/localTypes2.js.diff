@@ -1,6 +1,6 @@
 --- old.localTypes2.js
 +++ new.localTypes2.js
-@@= skipped -46, +46 lines =@@
+@@= skipped -47, +47 lines =@@
  function f1() {
      function f() {
          class C {

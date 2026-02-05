@@ -20,6 +20,7 @@ class C extends B {
 
 
 //// [lift.js]
+"use strict";
 class B {
     y;
     constructor(y) {

@@ -1,8 +1,8 @@
 --- old.undefinedTypeAssignment4.js
 +++ new.undefinedTypeAssignment4.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [undefinedTypeAssignment4.js]
+ "use strict";
  class undefined {
 +    foo;
  }

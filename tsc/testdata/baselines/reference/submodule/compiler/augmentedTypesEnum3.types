@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/augmentedTypesEnum3.ts] ////
 
 === augmentedTypesEnum3.ts ===
-module E {
+namespace E {
 >E : typeof E
 
     var t;
@@ -13,11 +13,11 @@ enum E { }
 enum F { }
 >F : F
 
-module F { var t; }
+namespace F { var t; }
 >F : typeof F
 >t : any
 
-module A {
+namespace A {
 >A : typeof A
 
     var o;
@@ -35,7 +35,7 @@ enum A {
     c
 >c : A.b
 }
-module A {
+namespace A {
 >A : typeof A
 
     var p;

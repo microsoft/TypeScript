@@ -1,6 +1,6 @@
 --- old.jsxReactTestSuite.js
 +++ new.jsxReactTestSuite.js
-@@= skipped -140, +140 lines =@@
+@@= skipped -141, +141 lines =@@
      } attr4="baz">
    </div>;
  (<div>

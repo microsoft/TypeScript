@@ -6,6 +6,7 @@ while (true) {
 }
 
 //// [continueInIterationStatement1.js]
+"use strict";
 while (true) {
     continue;
 }

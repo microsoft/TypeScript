@@ -1,9 +1,9 @@
 --- old.emitter.forAwait(target=es2015).js
 +++ new.emitter.forAwait(target=es2015).js
-@@= skipped -50, +50 lines =@@
- }
+@@= skipped -51, +51 lines =@@
 
  //// [file1.js]
+ "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
 -    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 -    return new (P || (P = Promise))(function (resolve, reject) {
@@ -45,6 +45,7 @@
 +    }
  }
  //// [file2.js]
+ "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
 -    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 -    return new (P || (P = Promise))(function (resolve, reject) {
@@ -86,6 +87,7 @@
 +    }
  }
  //// [file3.js]
+ "use strict";
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;
@@ -131,6 +133,7 @@
 +    }
  }
  //// [file4.js]
+ "use strict";
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;
@@ -176,6 +179,7 @@
 +    }
  }
  //// [file5.js]
+ "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
 -    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 -    return new (P || (P = Promise))(function (resolve, reject) {
@@ -220,6 +224,7 @@
 +    }
  }
  //// [file6.js]
+ "use strict";
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;
@@ -268,6 +273,7 @@
 +    }
  }
  //// [file7.js]
+ "use strict";
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;

@@ -4,4 +4,5 @@
 var x: Null;
 
 //// [directReferenceToNull.js]
+"use strict";
 var x;

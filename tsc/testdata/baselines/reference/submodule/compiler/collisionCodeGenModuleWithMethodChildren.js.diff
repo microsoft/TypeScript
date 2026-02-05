@@ -1,6 +1,6 @@
 --- old.collisionCodeGenModuleWithMethodChildren.js
 +++ new.collisionCodeGenModuleWithMethodChildren.js
-@@= skipped -45, +45 lines =@@
+@@= skipped -46, +46 lines =@@
      class d {
          fn2() {
              var M;

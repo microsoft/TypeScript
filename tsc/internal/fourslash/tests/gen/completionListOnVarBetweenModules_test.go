@@ -12,14 +12,14 @@ func TestCompletionListOnVarBetweenModules(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M1 {
+	const content = `namespace M1 {
     export class C1 {
     }
     export class C2 {
     }
 }
 var x: M1./**/
-module M2 {
+namespace M2 {
     export class Test3 {
     }
 }`

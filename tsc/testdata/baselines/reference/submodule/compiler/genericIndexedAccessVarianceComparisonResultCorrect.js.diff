@@ -1,8 +1,8 @@
 --- old.genericIndexedAccessVarianceComparisonResultCorrect.js
 +++ new.genericIndexedAccessVarianceComparisonResultCorrect.js
-@@= skipped -29, +29 lines =@@
-
+@@= skipped -30, +30 lines =@@
  //// [genericIndexedAccessVarianceComparisonResultCorrect.js]
+ "use strict";
  class A {
 -    constructor() {
 -        this.x = 'A';

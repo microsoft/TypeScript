@@ -96,6 +96,7 @@ class C2 {
 
 
 //// [abstractPropertyInConstructor.js]
+"use strict";
 class AbstractClass {
     constructor(str, other) {
         this.method(parseInt(str));

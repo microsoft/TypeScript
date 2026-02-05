@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/exportImportAndClodule.ts] ////
 
 === exportImportAndClodule.ts ===
-module K {
+namespace K {
 >K : typeof K
 
     export class L {
@@ -10,7 +10,7 @@ module K {
         constructor(public name: string) { }
 >name : string
     }
-    export module L {
+    export namespace L {
 >L : typeof L
 
         export var y = 12;
@@ -26,7 +26,7 @@ module K {
         }
     }
 }
-module M {
+namespace M {
 >M : typeof M
 
     export import D = K.L;

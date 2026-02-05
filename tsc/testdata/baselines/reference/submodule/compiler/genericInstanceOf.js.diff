@@ -1,8 +1,8 @@
 --- old.genericInstanceOf.js
 +++ new.genericInstanceOf.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
  //// [genericInstanceOf.js]
+ "use strict";
  class C {
 +    a;
 +    b;

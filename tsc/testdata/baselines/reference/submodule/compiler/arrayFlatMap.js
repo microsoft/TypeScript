@@ -8,6 +8,7 @@ readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
 
 
 //// [arrayFlatMap.js]
+"use strict";
 const array = [];
 const readonlyArray = [];
 array.flatMap(() => []); // ok

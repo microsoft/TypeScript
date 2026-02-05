@@ -1,18 +1,18 @@
 --- old.typeArgumentInferenceWithClassExpression2.errors.txt
 +++ new.typeArgumentInferenceWithClassExpression2.errors.txt
-@@= skipped -0, +0 lines =@@
+@@= skipped -2, +2 lines =@@
+   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+ typeArgumentInferenceWithClassExpression2.ts(6,1): error TS2571: Object is of type 'unknown'.
  typeArgumentInferenceWithClassExpression2.ts(6,5): error TS2345: Argument of type 'typeof (Anonymous class)' is not assignable to parameter of type 'typeof (Anonymous class)'.
 -  Property 'prop' is missing in type '(Anonymous class)' but required in type 'foo<unknown>.(Anonymous class)'.
 +  Property 'prop' is missing in type '(Anonymous class)' but required in type 'foo.(Anonymous class)'.
- typeArgumentInferenceWithClassExpression2.ts(6,38): error TS2339: Property 'length' does not exist on type 'unknown'.
 
 
-@@= skipped -11, +11 lines =@@
-     foo(class { static prop = "hello" }).length;
+ ==== typeArgumentInferenceWithClassExpression2.ts (4 errors) ====
+@@= skipped -19, +19 lines =@@
+ !!! error TS2571: Object is of type 'unknown'.
          ~~~~~
  !!! error TS2345: Argument of type 'typeof (Anonymous class)' is not assignable to parameter of type 'typeof (Anonymous class)'.
 -!!! error TS2345:   Property 'prop' is missing in type '(Anonymous class)' but required in type 'foo<unknown>.(Anonymous class)'.
 +!!! error TS2345:   Property 'prop' is missing in type '(Anonymous class)' but required in type 'foo.(Anonymous class)'.
  !!! related TS2728 typeArgumentInferenceWithClassExpression2.ts:1:29: 'prop' is declared here.
-                                          ~~~~~~
- !!! error TS2339: Property 'length' does not exist on type 'unknown'.

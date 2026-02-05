@@ -3,7 +3,7 @@
 === twoInterfacesDifferentRootModule2.ts ===
 // two interfaces with different root modules should not merge
 
-module M {
+namespace M {
 >M : typeof M
 
     export interface A {
@@ -16,7 +16,7 @@ module M {
 >foo : T
     }
 
-    module M2 {
+    namespace M2 {
 >M2 : typeof M2
 
         export interface A {
@@ -24,7 +24,7 @@ module M {
 >bar : number
         }
 
-        var a: A;
+        declare var a: A;
 >a : A
 
         var r1 = a.foo; // error
@@ -44,7 +44,7 @@ module M {
 >bar : T
         }
 
-        var b: B<string>;
+        declare var b: B<string>;
 >b : B<string>
 
         var r3 = b.foo; // error
@@ -60,7 +60,7 @@ module M {
 >bar : string
     }
 
-    var a: A;
+    declare var a: A;
 >a : A
 
     var r1 = a.foo; 
@@ -75,7 +75,7 @@ module M {
 >a : A
 >bar : any
 
-    var b: B<string>;
+    declare var b: B<string>;
 >b : B<string>
 
     var r3 = b.foo; 

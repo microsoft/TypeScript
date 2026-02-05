@@ -39,6 +39,7 @@ type _5 = (Foo | (Foo & Bar))['foo']; // Prev error, now ok
 
 
 //// [unionPropertyOfProtectedAndIntersectionProperty.js]
+"use strict";
 class Foo {
     foo = 0;
 }

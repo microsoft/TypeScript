@@ -27,6 +27,7 @@ function f<T, U extends A, V extends U>(): void {
 }
 
 //// [errorMessagesIntersectionTypes03.js]
+"use strict";
 function f() {
     let t;
     let u;

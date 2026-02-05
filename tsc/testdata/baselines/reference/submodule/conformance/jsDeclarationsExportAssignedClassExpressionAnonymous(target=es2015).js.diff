@@ -1,0 +1,20 @@
+--- old.jsDeclarationsExportAssignedClassExpressionAnonymous(target=es2015).js
++++ new.jsDeclarationsExportAssignedClassExpressionAnonymous(target=es2015).js
+@@= skipped -22, +22 lines =@@
+
+
+ //// [index.d.ts]
+-export = exports;
+-declare class exports {
+-    /**
+-     * @param {number} p
+-     */
+-    constructor(p: number);
+-    t: number;
+-}
++declare const _default: {
++    new (p: number): {
++        t: number;
++    };
++};
++export = _default;

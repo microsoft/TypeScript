@@ -16,6 +16,7 @@ var r4: A<number> = <A<number>>new A();
 var r5: A<number> = <A<number>>[]; // error
 
 //// [genericTypeAssertions2.js]
+"use strict";
 class A {
     foo(x) { }
 }

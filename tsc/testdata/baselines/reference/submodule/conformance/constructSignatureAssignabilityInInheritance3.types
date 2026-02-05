@@ -4,7 +4,7 @@
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // error cases
 
-module Errors {
+namespace Errors {
 >Errors : typeof Errors
 
     class Base { foo: string; }
@@ -26,7 +26,7 @@ module Errors {
 >Base : Base
 >bing : string
 
-    module WithNonGenericSignaturesInBaseType {
+    namespace WithNonGenericSignaturesInBaseType {
         // base type with non-generic call signatures
         interface A {
             a2: new (x: number) => string[];
@@ -81,27 +81,27 @@ module Errors {
 >b : number
 
             a16: {
->a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+>a16 : { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }
 
                 // type of parameter is overload set which means we can't do inference based on this type
                 new (x: {
->x : { new (a: number): number; new (a?: number): number; }
+>x : { new (a: number): number; new (a?: number | undefined): number; }
 
                     new (a: number): number;
 >a : number
 
                     new (a?: number): number;
->a : number
+>a : number | undefined
 
                 }): number[];
                 new (x: {
->x : { new (a: boolean): boolean; new (a?: boolean): boolean; }
+>x : { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }
 
                     new (a: boolean): boolean;
 >a : boolean
 
                     new (a?: boolean): boolean;
->a : boolean
+>a : boolean | undefined
 
                 }): boolean[];
             };
@@ -184,7 +184,7 @@ module Errors {
         }
     }
 
-    module WithGenericSignaturesInBaseType {
+    namespace WithGenericSignaturesInBaseType {
         // base type has generic call signature
         interface B {
             a2: new <T>(x: T) => T[];

@@ -16,7 +16,7 @@ class C {
     }
 }
 
-var c: C;
+declare var c: C;
 c.x1(1, (x: 'hi') => { return 1; } );
 c.x1(1, (x: 'bye') => { return 1; } );
 c.x1(1, (x) => { return 1; } );
@@ -24,6 +24,7 @@ c.x1(1, (x) => { return 1; } );
 c.x1(1, (x: number) => { return 1; } );
 
 //// [overloadOnConstNoAnyImplementation2.js]
+"use strict";
 class C {
     x1(a, callback) {
         callback('hi');
@@ -33,7 +34,6 @@ class C {
         callback(1); // error
     }
 }
-var c;
 c.x1(1, (x) => { return 1; });
 c.x1(1, (x) => { return 1; });
 c.x1(1, (x) => { return 1; });

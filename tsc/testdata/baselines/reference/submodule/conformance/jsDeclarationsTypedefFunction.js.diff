@@ -1,6 +1,6 @@
 --- old.jsDeclarationsTypedefFunction.js
 +++ new.jsDeclarationsTypedefFunction.js
-@@= skipped -38, +38 lines =@@
+@@= skipped -39, +39 lines =@@
   *   [id: string]: [Function, Function];
   * }} ResolveRejectMap
   */

@@ -1,6 +1,6 @@
 --- old.arrowFunctionExpressions.js
 +++ new.arrowFunctionExpressions.js
-@@= skipped -126, +126 lines =@@
+@@= skipped -127, +127 lines =@@
  // Arrow function used in class member initializer
  // Arrow function used in class member function
  class MyClass {

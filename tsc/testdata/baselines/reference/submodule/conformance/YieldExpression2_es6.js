@@ -4,4 +4,5 @@
 yield foo;
 
 //// [YieldExpression2_es6.js]
+"use strict";
 yield foo;

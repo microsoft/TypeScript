@@ -1,8 +1,8 @@
 --- old.genericPrototypeProperty.js
 +++ new.genericPrototypeProperty.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [genericPrototypeProperty.js]
+ "use strict";
  class C {
 +    x;
      foo(x) { return null; }

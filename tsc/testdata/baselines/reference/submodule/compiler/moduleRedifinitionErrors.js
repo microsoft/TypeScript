@@ -3,10 +3,11 @@
 //// [moduleRedifinitionErrors.ts]
 class A {
 }
-module A {
+namespace A {
 }
 
 
 //// [moduleRedifinitionErrors.js]
+"use strict";
 class A {
 }

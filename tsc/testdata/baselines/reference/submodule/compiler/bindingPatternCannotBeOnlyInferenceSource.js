@@ -29,6 +29,7 @@ const {} = useReduxDispatch1(
 
 
 //// [bindingPatternCannotBeOnlyInferenceSource.js]
+"use strict";
 const {} = f(); // error (only in strictNullChecks)
 const { p1 } = f(); // error
 const [] = f(); // error

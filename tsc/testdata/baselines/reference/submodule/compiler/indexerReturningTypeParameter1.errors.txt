@@ -1,0 +1,25 @@
+indexerReturningTypeParameter1.ts(5,9): error TS2454: Variable 'a' is used before being assigned.
+indexerReturningTypeParameter1.ts(9,9): error TS2322: Type 'null' is not assignable to type '{ [key: string]: T[]; }'.
+indexerReturningTypeParameter1.ts(13,10): error TS2454: Variable 'a2' is used before being assigned.
+
+
+==== indexerReturningTypeParameter1.ts (3 errors) ====
+    interface f {
+        groupBy<T>(): { [key: string]: T[]; };
+    }
+    var a: f;
+    var r = a.groupBy();
+            ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    class c {
+        groupBy<T>(): { [key: string]: T[]; } {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type '{ [key: string]: T[]; }'.
+        }
+    }
+    var a2: c;
+    var r2 = a2.groupBy();
+             ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.

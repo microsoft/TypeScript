@@ -6,18 +6,18 @@ class Event {
 
 	 private _listeners: any[] = [];
 >_listeners : any[]
->[] : undefined[]
+>[] : never[]
 
 	 constructor () {
 
 		 // TODO: remove
 
 		 this._listeners = [];
->this._listeners = [] : undefined[]
+>this._listeners = [] : never[]
 >this._listeners : any[]
 >this : this
 >_listeners : any[]
->[] : undefined[]
+>[] : never[]
 
 	}
 

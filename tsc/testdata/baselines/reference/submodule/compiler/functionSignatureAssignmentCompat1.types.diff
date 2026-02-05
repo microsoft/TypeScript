@@ -1,0 +1,29 @@
+--- old.functionSignatureAssignmentCompat1.types
++++ new.functionSignatureAssignmentCompat1.types
+@@= skipped -10, +10 lines =@@
+ >raw : ParserFunc
+
+     readline(delimiter?: string): ParserFunc;
+->readline : (delimiter?: string) => ParserFunc
++>readline : (delimiter?: string | undefined) => ParserFunc
+ >delimiter : string | undefined
+ }
+ declare var parsers: Parsers;
+@@= skipped -14, +14 lines =@@
+
+ var d: ParserFunc = parsers.readline; // not ok
+ >d : ParserFunc
+->parsers.readline : (delimiter?: string) => ParserFunc
++>parsers.readline : (delimiter?: string | undefined) => ParserFunc
+ >parsers : Parsers
+->readline : (delimiter?: string) => ParserFunc
++>readline : (delimiter?: string | undefined) => ParserFunc
+
+ var e: ParserFunc = parsers.readline(); // ok
+ >e : ParserFunc
+ >parsers.readline() : ParserFunc
+->parsers.readline : (delimiter?: string) => ParserFunc
++>parsers.readline : (delimiter?: string | undefined) => ParserFunc
+ >parsers : Parsers
+->readline : (delimiter?: string) => ParserFunc
++>readline : (delimiter?: string | undefined) => ParserFunc

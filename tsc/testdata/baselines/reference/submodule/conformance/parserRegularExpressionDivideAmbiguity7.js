@@ -6,5 +6,6 @@
 
 
 //// [parserRegularExpressionDivideAmbiguity7.js]
+"use strict";
 (a / 8);
 { }

@@ -14,14 +14,16 @@ func TestCloduleAsBaseClass2(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @Filename: cloduleAsBaseClass2_0.ts
+	const content = `// @module: commonjs
+// @strict: false
+// @Filename: cloduleAsBaseClass2_0.ts
 class A {
     constructor(x: number) { }
     foo() { }
     static bar() { }
 }
 
-module A {
+namespace A {
     export var x = 1;
     export function baz() { }
 }

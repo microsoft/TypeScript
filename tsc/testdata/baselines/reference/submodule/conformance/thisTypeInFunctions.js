@@ -103,8 +103,8 @@ let unspecifiedLambdaToSpecified: (this: {y: number}, x: number) => number = uns
 let specifiedLambdaToSpecified: (this: {y: number}, x: number) => number = specifiedLambda;
 
 
-let explicitCFunction: (this: C, m: number) => number;
-let explicitPropertyFunction: (this: {n: number}, m: number) => number;
+declare let explicitCFunction: (this: C, m: number) => number;
+declare let explicitPropertyFunction: (this: {n: number}, m: number) => number;
 c.explicitC = explicitCFunction;
 c.explicitC = function(this: C, m: number) { return this.n + m };
 c.explicitProperty = explicitPropertyFunction;
@@ -197,6 +197,7 @@ function missingTypeIsImplicitAny(this, a: number) { return this.anything + a; }
 
 
 //// [thisTypeInFunctions.js]
+"use strict";
 // body checking
 class B {
     n;
@@ -282,8 +283,6 @@ let unspecifiedLambda = x => x + 12;
 let specifiedLambda = x => x + 12;
 let unspecifiedLambdaToSpecified = unspecifiedLambda;
 let specifiedLambdaToSpecified = specifiedLambda;
-let explicitCFunction;
-let explicitPropertyFunction;
 c.explicitC = explicitCFunction;
 c.explicitC = function (m) { return this.n + m; };
 c.explicitProperty = explicitPropertyFunction;

@@ -1,3 +1,4 @@
+file.tsx(2,22): error TS7008: Member 'something' implicitly has an 'any' type.
 file.tsx(11,2): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Type '{}' is not assignable to type 'number'.
@@ -5,17 +6,19 @@ file.tsx(18,2): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Type '{}' is not assignable to type 'number'.
 file.tsx(18,2): error TS2786: 'Obj2' cannot be used as a JSX component.
-  Property 'something' is missing in type '{ x: number; } & { y: string; }' but required in type 'Element'.
+  Its return type '{ x: number; } & { y: string; }' is not a valid JSX element.
 file.tsx(25,2): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Type '{ x: number; }' is not assignable to type 'number'.
 file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
-  Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
+  Its return type '{ x: number; } & { x: number; y: string; }' is not a valid JSX element.
 
 
-==== file.tsx (5 errors) ====
-    declare module JSX {
+==== file.tsx (6 errors) ====
+    declare namespace JSX {
     	interface Element { something; }
+    	                    ~~~~~~~~~
+!!! error TS7008: Member 'something' implicitly has an 'any' type.
     	interface IntrinsicElements { }
     }
     
@@ -23,7 +26,7 @@ file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
     	new(n: string): { x: number };
     	new(n: number): { y: string };
     }
-    var Obj1: Obj1;
+    declare var Obj1: Obj1;
     <Obj1 />; // Error, return type is not an object type
      ~~~~
 !!! error TS2769: No overload matches this call.
@@ -35,7 +38,7 @@ file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
     	(n: string): { x: number };
     	(n: number): { y: string };
     }
-    var Obj2: Obj2;
+    declare var Obj2: Obj2;
     <Obj2 />; // Error, return type is not an object type
      ~~~~
 !!! error TS2769: No overload matches this call.
@@ -44,14 +47,13 @@ file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
 !!! related TS2771 file.tsx:15:2: The last overload is declared here.
      ~~~~
 !!! error TS2786: 'Obj2' cannot be used as a JSX component.
-!!! error TS2786:   Property 'something' is missing in type '{ x: number; } & { y: string; }' but required in type 'Element'.
-!!! related TS2728 file.tsx:2:22: 'something' is declared here.
+!!! error TS2786:   Its return type '{ x: number; } & { y: string; }' is not a valid JSX element.
     
     interface Obj3 {
     	(n: string): { x: number };
     	(n: number): { x: number; y: string };
     }
-    var Obj3: Obj3;
+    declare var Obj3: Obj3;
     <Obj3 x={42} />; // OK
      ~~~~
 !!! error TS2769: No overload matches this call.
@@ -60,6 +62,5 @@ file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
 !!! related TS2771 file.tsx:22:2: The last overload is declared here.
      ~~~~
 !!! error TS2786: 'Obj3' cannot be used as a JSX component.
-!!! error TS2786:   Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
-!!! related TS2728 file.tsx:2:22: 'something' is declared here.
+!!! error TS2786:   Its return type '{ x: number; } & { x: number; y: string; }' is not a valid JSX element.
     

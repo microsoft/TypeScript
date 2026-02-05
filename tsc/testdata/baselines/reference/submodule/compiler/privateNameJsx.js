@@ -11,6 +11,7 @@ class Test {
 
 
 //// [privateNameJsx.jsx]
+"use strict";
 class Test {
     #prop = () => <div />;
     render() {

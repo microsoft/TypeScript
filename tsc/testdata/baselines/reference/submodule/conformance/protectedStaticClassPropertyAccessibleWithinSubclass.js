@@ -46,6 +46,7 @@ Derived2.x;     // Error, neither within their declaring class nor classes deriv
 Derived3.x;     // Error, neither within their declaring class nor classes derived from their declaring class
 
 //// [protectedStaticClassPropertyAccessibleWithinSubclass.js]
+"use strict";
 class Base {
     static x;
     static staticMethod() {

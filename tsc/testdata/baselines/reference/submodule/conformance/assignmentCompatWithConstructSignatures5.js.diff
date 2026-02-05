@@ -1,7 +1,7 @@
 --- old.assignmentCompatWithConstructSignatures5.js
 +++ new.assignmentCompatWithConstructSignatures5.js
-@@= skipped -69, +69 lines =@@
- //// [assignmentCompatWithConstructSignatures5.js]
+@@= skipped -70, +70 lines =@@
+ "use strict";
  // checking assignment compat for function types. All valid
  class Base {
 +    foo;
@@ -15,5 +15,5 @@
  class OtherDerived extends Base {
 +    bing;
  }
- var a;
- var a2;
+ a = b; // ok
+ b = a; // ok

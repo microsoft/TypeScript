@@ -29,7 +29,7 @@ declare const c: C;
 >c : C
 
 declare const d: C | undefined;
->d : C
+>d : C | undefined
 
 // access property
 a.foo;
@@ -77,23 +77,23 @@ c["bar"];
 
 // optional access property
 d?.foo;
->d?.foo : string
->d : C
->foo : string
+>d?.foo : string | undefined
+>d : C | undefined
+>foo : string | undefined
 
 d?.["foo"]
->d?.["foo"] : string
->d : C
+>d?.["foo"] : string | undefined
+>d : C | undefined
 >"foo" : "foo"
 
 // optional access index signature
 d?.bar;
->d?.bar : string
->d : C
->bar : string
+>d?.bar : string | undefined
+>d : C | undefined
+>bar : string | undefined
 
 d?.["bar"];
->d?.["bar"] : string
->d : C
+>d?.["bar"] : string | undefined
+>d : C | undefined
 >"bar" : "bar"
 

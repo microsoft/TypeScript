@@ -1,8 +1,8 @@
 --- old.checkJsxChildrenProperty11.js
 +++ new.checkJsxChildrenProperty11.js
-@@= skipped -25, +25 lines =@@
-
+@@= skipped -26, +26 lines =@@
  //// [file.jsx]
+ "use strict";
  class Button {
 +    props;
      render() {

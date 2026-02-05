@@ -81,12 +81,12 @@ class A {
 
     prop4 = {
 >prop4 : { a: () => any; }
->{        a: function() { return this; },    } : { a: () => any; }
+>{        a: function() { return this; },    } : { a: () => { a: any; }; }
 
         a: function() { return this; },
->a : () => any
->function() { return this; } : () => any
->this : any
+>a : () => { a: any; }
+>function() { return this; } : () => { a: any; }
+>this : { a: () => any; }
 
     };
 
@@ -95,12 +95,12 @@ class A {
 >() => {        return {            a: function() { return this; },        };    } : () => { a: () => any; }
 
         return {
->{            a: function() { return this; },        } : { a: () => any; }
+>{            a: function() { return this; },        } : { a: () => { a: any; }; }
 
             a: function() { return this; },
->a : () => any
->function() { return this; } : () => any
->this : any
+>a : () => { a: any; }
+>function() { return this; } : () => { a: any; }
+>this : { a: () => any; }
 
         };
     };

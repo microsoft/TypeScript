@@ -8,6 +8,7 @@ if (true) {
 foo();
 
 //// [blockScopedFunctionDeclarationES6.js]
+"use strict";
 if (true) {
     function foo() { }
     foo();

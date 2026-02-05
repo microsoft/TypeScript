@@ -3,14 +3,14 @@ dottedModuleName.ts(3,33): error TS2552: Cannot find name 'x'. Did you mean 'X'?
 
 
 ==== dottedModuleName.ts (2 errors) ====
-    module M {
-        export module N {
+    namespace M {
+        export namespace N {
     	export function f(x:number)=>2*x;
     	                           ~~
 !!! error TS1144: '{' or ';' expected.
     	                               ~
 !!! error TS2552: Cannot find name 'x'. Did you mean 'X'?
-    	export module X.Y.Z {
+    	export namespace X.Y.Z {
     	    export var v2=f(v);
     	}
         }
@@ -18,9 +18,9 @@ dottedModuleName.ts(3,33): error TS2552: Cannot find name 'x'. Did you mean 'X'?
     
     
     
-    module M.N {
-        export module X {
-    	export module Y.Z {
+    namespace M.N {
+        export namespace X {
+    	export namespace Y.Z {
     	    export var v=f(10);
     	}
         }

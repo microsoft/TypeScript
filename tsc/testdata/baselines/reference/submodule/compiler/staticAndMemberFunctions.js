@@ -7,6 +7,7 @@ class T {
 }
 
 //// [staticAndMemberFunctions.js]
+"use strict";
 class T {
     static x() { }
     y() { }

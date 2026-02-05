@@ -1,6 +1,6 @@
 --- old.vardecl.js
 +++ new.vardecl.js
-@@= skipped -136, +136 lines =@@
+@@= skipped -137, +137 lines =@@
      var a2, b22 = 10, b222;
      var m3;
      class C {

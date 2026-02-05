@@ -1,6 +1,6 @@
 --- old.noUnusedLocals_writeOnlyProperty_dynamicNames.js
 +++ new.noUnusedLocals_writeOnlyProperty_dynamicNames.js
-@@= skipped -16, +16 lines =@@
+@@= skipped -17, +17 lines =@@
  const x = Symbol("x");
  const y = Symbol("y");
  class C {

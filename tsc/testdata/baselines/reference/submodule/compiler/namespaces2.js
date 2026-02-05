@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/namespaces2.ts] ////
 
 //// [namespaces2.ts]
-module A {
-    export module B {
+namespace A {
+    export namespace B {
         export class C { }
     }
 }
@@ -10,6 +10,7 @@ module A {
 var c: A.B.C = new A.B.C();
 
 //// [namespaces2.js]
+"use strict";
 var A;
 (function (A) {
     let B;

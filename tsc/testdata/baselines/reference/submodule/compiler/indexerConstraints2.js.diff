@@ -1,8 +1,8 @@
 --- old.indexerConstraints2.js
 +++ new.indexerConstraints2.js
-@@= skipped -84, +84 lines =@@
-
+@@= skipped -85, +85 lines =@@
  //// [indexerConstraints2.js]
+ "use strict";
  class A {
 +    a;
  }

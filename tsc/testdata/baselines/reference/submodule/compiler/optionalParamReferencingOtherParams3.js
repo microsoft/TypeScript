@@ -7,6 +7,7 @@ function right(a = b, b = a) {
 }
 
 //// [optionalParamReferencingOtherParams3.js]
+"use strict";
 function right(a = b, b = a) {
     a;
     b;

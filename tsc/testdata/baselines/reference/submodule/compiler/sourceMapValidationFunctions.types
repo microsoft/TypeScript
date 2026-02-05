@@ -17,11 +17,11 @@ function greet(greeting: string): number {
 >greetings : number
 }
 function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): number {
->greet2 : (greeting: string, n?: number, x?: string, ...restParams: string[]) => number
+>greet2 : (greeting: string, n?: number, x?: string | undefined, ...restParams: string[]) => number
 >greeting : string
 >n : number
 >10 : 10
->x : string
+>x : string | undefined
 >restParams : string[]
 
     greetings++;
@@ -32,11 +32,11 @@ function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): 
 >greetings : number
 }
 function foo(greeting: string, n = 10, x?: string, ...restParams: string[])
->foo : (greeting: string, n?: number, x?: string, ...restParams: string[]) => void
+>foo : (greeting: string, n?: number, x?: string | undefined, ...restParams: string[]) => void
 >greeting : string
 >n : number
 >10 : 10
->x : string
+>x : string | undefined
 >restParams : string[]
 {
     return;

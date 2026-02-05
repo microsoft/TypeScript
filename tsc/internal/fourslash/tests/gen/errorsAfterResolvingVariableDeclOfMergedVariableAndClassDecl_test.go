@@ -11,11 +11,11 @@ func TestErrorsAfterResolvingVariableDeclOfMergedVariableAndClassDecl(t *testing
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
+	const content = `namespace M {
     export class C {
         foo() { }
     }
-    export module C {
+    export namespace C {
         export var /*1*/C = M.C;
     }
 }`

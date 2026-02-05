@@ -16,7 +16,7 @@ func TestJsxAriaLikeCompletions(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `//@Filename: file.tsx
 declare var React: any;
-declare module JSX {
+declare namespace JSX {
     interface Element { }
     interface IntrinsicElements {
         div: { "aria-whatever"?: string  }

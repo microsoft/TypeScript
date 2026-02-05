@@ -18,6 +18,7 @@ testError((t1, t2, t3: D) => {})
 
 
 //// [partiallyAnnotatedFunctionInferenceError.js]
+"use strict";
 class C {
     test;
 }

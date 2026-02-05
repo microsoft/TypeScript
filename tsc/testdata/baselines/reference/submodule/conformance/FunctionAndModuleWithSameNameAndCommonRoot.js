@@ -1,15 +1,15 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/FunctionAndModuleWithSameNameAndCommonRoot.ts] ////
 
 //// [function.ts]
-module A {
+namespace A {
     export function Point() {
         return { x: 0, y: 0 };
     }
 }
 
 //// [module.ts]
-module A {
-    export module Point {
+namespace A {
+    export namespace Point {
         export var Origin = { x: 0, y: 0 };
     }
 }
@@ -24,13 +24,13 @@ var cl = A.Point.Origin; // not expected to be an error.
 
 
 //// [simple.ts]
-module B {
+namespace B {
 
     export function Point() {
         return { x: 0, y: 0 };
     }
 
-    export module Point {
+    export namespace Point {
         export var Origin = { x: 0, y: 0 };
     }
 }
@@ -44,6 +44,7 @@ var cl = B.Point.Origin;
 
 
 //// [function.js]
+"use strict";
 var A;
 (function (A) {
     function Point() {
@@ -52,6 +53,7 @@ var A;
     A.Point = Point;
 })(A || (A = {}));
 //// [module.js]
+"use strict";
 var A;
 (function (A) {
     let Point;
@@ -60,12 +62,14 @@ var A;
     })(Point = A.Point || (A.Point = {}));
 })(A || (A = {}));
 //// [test.js]
+"use strict";
 var fn;
 var fn = A.Point;
 var cl;
 var cl = A.Point();
 var cl = A.Point.Origin; // not expected to be an error.
 //// [simple.js]
+"use strict";
 var B;
 (function (B) {
     function Point() {

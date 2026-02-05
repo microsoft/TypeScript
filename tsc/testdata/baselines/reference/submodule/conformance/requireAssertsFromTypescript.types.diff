@@ -1,0 +1,55 @@
+--- old.requireAssertsFromTypescript.types
++++ new.requireAssertsFromTypescript.types
+@@= skipped -1, +1 lines =@@
+
+ === 38379.js ===
+ const { art } = require('./ex')
+->art : (value: any, message?: string | Error) => asserts value
++>art : (value: any, message?: string | Error | undefined) => asserts value
+ >require('./ex') : typeof import("ex")
+ >require : any
+ >'./ex' : "./ex"
+
+ const artoo = require('./ex2')
+->artoo : (value: any, message?: string | Error) => asserts value
+->require('./ex2') : (value: any, message?: string | Error) => asserts value
++>artoo : (value: any, message?: string | Error | undefined) => asserts value
++>require('./ex2') : (value: any, message?: string | Error | undefined) => asserts value
+ >require : any
+ >'./ex2' : "./ex2"
+
+@@= skipped -17, +17 lines =@@
+
+ art(x)
+ >art(x) : void
+->art : (value: any, message?: string | Error) => asserts value
++>art : (value: any, message?: string | Error | undefined) => asserts value
+ >x : number
+
+ let y = 1
+@@= skipped -9, +9 lines =@@
+
+ artoo(y)
+ >artoo(y) : void
+->artoo : (value: any, message?: string | Error) => asserts value
++>artoo : (value: any, message?: string | Error | undefined) => asserts value
+ >y : number
+
+ === ex.d.ts ===
+ // based on assert in @types/node
+ export function art(value: any, message?: string | Error): asserts value;
+->art : (value: any, message?: string | Error) => asserts value
++>art : (value: any, message?: string | Error | undefined) => asserts value
+ >value : any
+ >message : string | Error | undefined
+
+ === ex2.d.ts ===
+ declare function art(value: any, message?: string | Error): asserts value;
+->art : (value: any, message?: string | Error) => asserts value
++>art : (value: any, message?: string | Error | undefined) => asserts value
+ >value : any
+ >message : string | Error | undefined
+
+ export = art;
+->art : (value: any, message?: string | Error) => asserts value
++>art : (value: any, message?: string | Error | undefined) => asserts value

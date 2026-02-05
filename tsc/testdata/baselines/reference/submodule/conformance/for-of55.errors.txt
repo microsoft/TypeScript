@@ -1,9 +1,12 @@
+for-of55.ts(2,10): error TS7022: 'v' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 for-of55.ts(2,15): error TS2448: Block-scoped variable 'v' used before its declaration.
 
 
-==== for-of55.ts (1 errors) ====
+==== for-of55.ts (2 errors) ====
     let v = [1];
     for (let v of v) {
+             ~
+!!! error TS7022: 'v' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
                   ~
 !!! error TS2448: Block-scoped variable 'v' used before its declaration.
 !!! related TS2728 for-of55.ts:2:10: 'v' is declared here.

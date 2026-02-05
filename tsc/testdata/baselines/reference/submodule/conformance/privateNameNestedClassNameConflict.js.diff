@@ -1,9 +1,9 @@
 --- old.privateNameNestedClassNameConflict.js
 +++ new.privateNameNestedClassNameConflict.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
 
  //// [privateNameNestedClassNameConflict.js]
+ "use strict";
 -var _A_foo;
  class A {
 +    #foo;

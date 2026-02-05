@@ -16,6 +16,7 @@ class TestController {
 
 
 //// [invalidThisEmitInContextualObjectLiteral.js]
+"use strict";
 class TestController {
     m(def) { }
     p = this.m({

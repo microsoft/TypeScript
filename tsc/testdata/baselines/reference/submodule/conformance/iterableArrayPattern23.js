@@ -5,5 +5,6 @@ var a: string, b: boolean;
 [a, b] = { 0: "", 1: true };
 
 //// [iterableArrayPattern23.js]
+"use strict";
 var a, b;
 [a, b] = { 0: "", 1: true };

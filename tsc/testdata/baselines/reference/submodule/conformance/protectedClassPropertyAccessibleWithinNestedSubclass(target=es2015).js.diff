@@ -1,0 +1,17 @@
+--- old.protectedClassPropertyAccessibleWithinNestedSubclass(target=es2015).js
++++ new.protectedClassPropertyAccessibleWithinNestedSubclass(target=es2015).js
+@@= skipped -41, +41 lines =@@
+ //// [protectedClassPropertyAccessibleWithinNestedSubclass.js]
+ "use strict";
+ class B {
++    x;
++    static x;
+ }
+ class C extends B {
+     get y() { return this.x; }
+@@= skipped -27, +29 lines =@@
+     }
+ }
+ class E extends C {
++    z;
+ }

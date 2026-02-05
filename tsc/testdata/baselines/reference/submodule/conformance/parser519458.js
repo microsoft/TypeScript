@@ -5,6 +5,7 @@ import rect = module("rect"); var bar = new rect.Rect();
 
 
 //// [parser519458.js]
+"use strict";
 var rect = module;
 ("rect");
 var bar = new rect.Rect();

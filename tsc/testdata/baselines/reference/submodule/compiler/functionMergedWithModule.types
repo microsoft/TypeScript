@@ -10,7 +10,7 @@ function foo(title: string) {
 >10 : 10
 }
 
-module foo.Bar {
+namespace foo.Bar {
 >foo : typeof foo
 >Bar : typeof Bar
 
@@ -19,7 +19,7 @@ module foo.Bar {
     }
 }
 
-module foo.Baz {
+namespace foo.Baz {
 >foo : typeof foo
 >Baz : typeof Baz
 

@@ -1,0 +1,10 @@
+--- old.unusedGetterInClass(target=es2015).js
++++ new.unusedGetterInClass(target=es2015).js
+@@= skipped -13, +13 lines =@@
+ //// [unusedGetterInClass.js]
+ "use strict";
+ class Employee {
++    _fullName;
+     get fullName() {
+         return this._fullName;
+     }

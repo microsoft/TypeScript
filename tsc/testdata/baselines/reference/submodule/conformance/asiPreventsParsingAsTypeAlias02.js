@@ -11,6 +11,7 @@ namespace container {
 }
 
 //// [asiPreventsParsingAsTypeAlias02.js]
+"use strict";
 var type;
 var string;
 var Foo;

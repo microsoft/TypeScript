@@ -1,8 +1,8 @@
 --- old.classAndInterfaceWithSameName.js
 +++ new.classAndInterfaceWithSameName.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [classAndInterfaceWithSameName.js]
+ "use strict";
  class C {
 +    foo;
  }

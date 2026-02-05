@@ -227,6 +227,7 @@ Promise.resolve(undefined as Promise<string> | Promise<Promise<number>>);
 Promise.resolve(undefined as Promise<string | Promise<Promise<number>>>);
 
 //// [promiseType.js]
+"use strict";
 async function A() {
     const a = await p;
     return a;

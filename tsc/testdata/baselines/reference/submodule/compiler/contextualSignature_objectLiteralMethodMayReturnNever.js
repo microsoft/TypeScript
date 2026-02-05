@@ -6,4 +6,5 @@ const o: I = { m() { throw new Error("not implemented"); } };
 
 
 //// [contextualSignature_objectLiteralMethodMayReturnNever.js]
+"use strict";
 const o = { m() { throw new Error("not implemented"); } };

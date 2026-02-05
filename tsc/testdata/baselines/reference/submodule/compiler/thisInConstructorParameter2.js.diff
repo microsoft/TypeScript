@@ -1,9 +1,9 @@
 --- old.thisInConstructorParameter2.js
 +++ new.thisInConstructorParameter2.js
-@@= skipped -13, +13 lines =@@
- }
+@@= skipped -14, +14 lines =@@
 
  //// [thisInConstructorParameter2.js]
+ "use strict";
 -var _a;
  class P {
 +    z;

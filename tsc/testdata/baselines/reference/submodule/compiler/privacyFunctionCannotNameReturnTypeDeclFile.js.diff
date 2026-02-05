@@ -1,6 +1,6 @@
 --- old.privacyFunctionCannotNameReturnTypeDeclFile.js
 +++ new.privacyFunctionCannotNameReturnTypeDeclFile.js
-@@= skipped -167, +167 lines =@@
+@@= skipped -168, +168 lines =@@
  exports.SpecializedWidget = exports.Widget1 = void 0;
  exports.createWidget1 = createWidget1;
  class Widget1 {

@@ -1,9 +1,0 @@
---- old.parserMemberAccessorDeclaration8.js
-+++ new.parserMemberAccessorDeclaration8.js
-@@= skipped -6, +6 lines =@@
-
- //// [parserMemberAccessorDeclaration8.js]
- class C {
-+    static static;
-     get Foo() { }
- }

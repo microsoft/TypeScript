@@ -7,6 +7,7 @@ function addProp2(x: any): x is { a: string; a: string; } {
 
 
 //// [checkTypePredicateForRedundantProperties.js]
+"use strict";
 function addProp2(x) {
     return true;
 }

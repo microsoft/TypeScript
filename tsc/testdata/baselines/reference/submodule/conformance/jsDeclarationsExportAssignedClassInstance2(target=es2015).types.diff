@@ -1,0 +1,11 @@
+--- old.jsDeclarationsExportAssignedClassInstance2(target=es2015).types
++++ new.jsDeclarationsExportAssignedClassInstance2(target=es2015).types
+@@= skipped -15, +15 lines =@@
+ module.exports = new Foo();
+ >module.exports = new Foo() : Foo
+ >module.exports : Foo
+->module : { exports: Foo; }
++>module : { "export=": Foo; }
+ >exports : Foo
+ >new Foo() : Foo
+ >Foo : typeof Foo

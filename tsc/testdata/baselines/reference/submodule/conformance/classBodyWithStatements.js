@@ -16,6 +16,7 @@ class C3 {
 }
 
 //// [classBodyWithStatements.js]
+"use strict";
 class C {
 }
 var x = 1;

@@ -13,6 +13,6 @@ var a = f([], 3); // should be number
 >a : number
 >f([], 3) : 3
 >f : <T>(arr: T[], elemnt: T) => T
->[] : undefined[]
+>[] : never[]
 >3 : 3
 

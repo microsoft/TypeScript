@@ -1,7 +1,7 @@
 --- old.declarationEmitExpressionInExtends.js
 +++ new.declarationEmitExpressionInExtends.js
-@@= skipped -17, +17 lines =@@
- //// [declarationEmitExpressionInExtends.js]
+@@= skipped -18, +18 lines =@@
+ "use strict";
  var x;
  class Q {
 +    s;

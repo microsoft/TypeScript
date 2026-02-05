@@ -7,7 +7,7 @@ genericClassesRedeclaration.ts(68,11): error TS2300: Duplicate identifier 'Ident
 
 
 ==== genericClassesRedeclaration.ts (6 errors) ====
-    declare module TypeScript {
+    declare namespace TypeScript {
         interface IIndexable<T> {
             [s: string]: T;
             ~~~~~~~~~~~~~~~
@@ -52,7 +52,7 @@ genericClassesRedeclaration.ts(68,11): error TS2300: Duplicate identifier 'Ident
         }
     }
     
-    declare module TypeScript {
+    declare namespace TypeScript {
         interface IIndexable<T> {
             [s: string]: T;
             ~~~~~~~~~~~~~~~

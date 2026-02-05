@@ -1,0 +1,17 @@
+extendedInterfaceGenericType.ts(9,20): error TS2454: Variable 'alpha' is used before being assigned.
+
+
+==== extendedInterfaceGenericType.ts (1 errors) ====
+    interface Alpha<T> {
+        takesArgOfT(arg: T): Alpha<T>;
+        makeBetaOfNumber(): Beta<number>;
+    }
+    interface Beta<T> extends Alpha<T> {
+    }
+    
+    var alpha: Alpha<number>;
+    var betaOfNumber = alpha.makeBetaOfNumber();
+                       ~~~~~
+!!! error TS2454: Variable 'alpha' is used before being assigned.
+    betaOfNumber.takesArgOfT(5);
+    

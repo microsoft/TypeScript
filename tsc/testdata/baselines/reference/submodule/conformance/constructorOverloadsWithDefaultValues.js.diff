@@ -1,8 +1,8 @@
 --- old.constructorOverloadsWithDefaultValues.js
 +++ new.constructorOverloadsWithDefaultValues.js
-@@= skipped -16, +16 lines =@@
-
+@@= skipped -17, +17 lines =@@
  //// [constructorOverloadsWithDefaultValues.js]
+ "use strict";
  class C {
 +    foo;
      constructor() {

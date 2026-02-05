@@ -4,6 +4,7 @@
 do{;}while(false)false
 
 //// [parserDoStatement2.js]
+"use strict";
 do {
     ;
 } while (false);

@@ -24,6 +24,7 @@ var b = {
 }
 
 //// [stringNamedPropertyDuplicates.js]
+"use strict";
 class C {
     "a b";
     "a b";

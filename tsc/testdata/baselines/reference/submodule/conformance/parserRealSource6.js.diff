@@ -1,6 +1,6 @@
 --- old.parserRealSource6.js
 +++ new.parserRealSource6.js
-@@= skipped -229, +229 lines =@@
+@@= skipped -230, +230 lines =@@
  var TypeScript;
  (function (TypeScript) {
      class TypeCollectionContext {

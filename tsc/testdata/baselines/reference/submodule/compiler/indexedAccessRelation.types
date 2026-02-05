@@ -13,7 +13,7 @@ class Component<S> {
 
 export interface State<T> {
     a?: T;
->a : T
+>a : T | undefined
 }
 
 class Foo {}

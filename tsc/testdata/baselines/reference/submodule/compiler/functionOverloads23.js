@@ -7,4 +7,5 @@ function foo(bar:(a?)=>void) { return 0 }
 
 
 //// [functionOverloads23.js]
+"use strict";
 function foo(bar) { return 0; }

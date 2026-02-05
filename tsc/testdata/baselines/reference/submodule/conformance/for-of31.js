@@ -17,6 +17,7 @@ class MyStringIterator {
 for (var v of new MyStringIterator) { }
 
 //// [for-of31.js]
+"use strict";
 class MyStringIterator {
     next() {
         return {

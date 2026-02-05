@@ -1,0 +1,54 @@
+unionAndIntersectionInference2.ts(8,4): error TS2454: Variable 'a1' is used before being assigned.
+unionAndIntersectionInference2.ts(9,4): error TS2454: Variable 'b1' is used before being assigned.
+unionAndIntersectionInference2.ts(10,4): error TS2454: Variable 'c1' is used before being assigned.
+unionAndIntersectionInference2.ts(11,4): error TS2454: Variable 'd1' is used before being assigned.
+unionAndIntersectionInference2.ts(12,4): error TS2454: Variable 'e1' is used before being assigned.
+unionAndIntersectionInference2.ts(20,4): error TS2454: Variable 'a2' is used before being assigned.
+unionAndIntersectionInference2.ts(21,4): error TS2454: Variable 'b2' is used before being assigned.
+unionAndIntersectionInference2.ts(22,4): error TS2454: Variable 'c2' is used before being assigned.
+unionAndIntersectionInference2.ts(23,4): error TS2454: Variable 'd2' is used before being assigned.
+
+
+==== unionAndIntersectionInference2.ts (9 errors) ====
+    declare function f1<T>(x: T | string): T;
+    
+    var a1: string;
+    var b1: string | string[];
+    var c1: string[] | string;
+    var d1: string | { name: string };
+    var e1: number | string | boolean;
+    f1(a1); // string
+       ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    f1(b1); // string[]
+       ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    f1(c1); // string[]
+       ~~
+!!! error TS2454: Variable 'c1' is used before being assigned.
+    f1(d1); // { name: string }
+       ~~
+!!! error TS2454: Variable 'd1' is used before being assigned.
+    f1(e1); // number | boolean
+       ~~
+!!! error TS2454: Variable 'e1' is used before being assigned.
+    
+    declare function f2<T>(x: T & { name: string }): T;
+    
+    var a2: string & { name: string };
+    var b2: { name: string } & string[];
+    var c2: string & { name: string } & number;
+    var d2: string & { name: string } & number & { name: string };
+    f2(a2); // string
+       ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    f2(b2); // string[]
+       ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    f2(c2); // never
+       ~~
+!!! error TS2454: Variable 'c2' is used before being assigned.
+    f2(d2); // never
+       ~~
+!!! error TS2454: Variable 'd2' is used before being assigned.
+    

@@ -12,6 +12,7 @@ function foo(): Error {
 }
 
 //// [app.js]
+"use strict";
 /// <reference types="node"/>
 function foo() {
     return undefined;

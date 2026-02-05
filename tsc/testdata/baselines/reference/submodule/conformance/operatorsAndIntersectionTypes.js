@@ -34,6 +34,7 @@ const b4 = serialNo === serialNo;
 
 
 //// [operatorsAndIntersectionTypes.js]
+"use strict";
 function createGuid() {
     return "21EC2020-3AEA-4069-A2DD-08002B30309D";
 }

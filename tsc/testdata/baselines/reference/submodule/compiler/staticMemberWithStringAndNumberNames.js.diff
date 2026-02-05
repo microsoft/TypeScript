@@ -1,8 +1,8 @@
 --- old.staticMemberWithStringAndNumberNames.js
 +++ new.staticMemberWithStringAndNumberNames.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [staticMemberWithStringAndNumberNames.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.x = C['foo'];

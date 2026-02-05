@@ -5,5 +5,6 @@ var CustomTag = "h1";
 <CustomTag> Hello World </CustomTag>  // No error
 
 //// [tsxDynamicTagName1.jsx]
+"use strict";
 var CustomTag = "h1";
 <CustomTag> Hello World </CustomTag>; // No error

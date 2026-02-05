@@ -2,11 +2,11 @@
 
 === validUndefinedValues.ts ===
 var x: typeof undefined;
->x : any
+>x : undefined
 >undefined : undefined
 
 x = undefined;
 >x = undefined : undefined
->x : any
+>x : undefined
 >undefined : undefined
 

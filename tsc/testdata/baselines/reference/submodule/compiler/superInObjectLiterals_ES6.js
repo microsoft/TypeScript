@@ -62,6 +62,7 @@ class B extends A {
 }
 
 //// [superInObjectLiterals_ES6.js]
+"use strict";
 var obj = {
     __proto__: {
         method() {

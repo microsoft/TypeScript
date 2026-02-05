@@ -19,6 +19,7 @@ class B {
 }
 
 //// [constructorParametersInVariableDeclarations.js]
+"use strict";
 class A {
     a = x;
     b = { p: x };

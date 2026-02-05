@@ -28,6 +28,7 @@ b = b2;
 b = b3;
 
 //// [genericCloneReturnTypes.js]
+"use strict";
 class Bar {
     size;
     t;

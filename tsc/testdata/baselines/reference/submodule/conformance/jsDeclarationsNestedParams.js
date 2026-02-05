@@ -27,6 +27,7 @@ class Y {
 
 
 //// [file.js]
+"use strict";
 class X {
     /**
       * Cancels the request, sending a cancellation to the other party

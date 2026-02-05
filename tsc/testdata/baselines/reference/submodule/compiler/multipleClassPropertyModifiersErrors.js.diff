@@ -1,8 +1,8 @@
 --- old.multipleClassPropertyModifiersErrors.js
 +++ new.multipleClassPropertyModifiersErrors.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [multipleClassPropertyModifiersErrors.js]
+ "use strict";
  class C {
 +    p1;
 +    p2;

@@ -1,8 +1,8 @@
 --- old.propertyAccessibility2.js
 +++ new.propertyAccessibility2.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
  //// [propertyAccessibility2.js]
+ "use strict";
  class C {
 +    static x = 1;
  }

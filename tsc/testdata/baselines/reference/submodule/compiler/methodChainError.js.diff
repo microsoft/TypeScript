@@ -1,8 +1,8 @@
 --- old.methodChainError.js
 +++ new.methodChainError.js
-@@= skipped -20, +20 lines =@@
-
+@@= skipped -21, +21 lines =@@
  //// [methodChainError.js]
+ "use strict";
  class Builder {
 +    notMethod;
      method(param) {

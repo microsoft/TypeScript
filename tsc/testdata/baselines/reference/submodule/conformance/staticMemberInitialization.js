@@ -9,6 +9,7 @@ var c = new C();
 var r = C.x;
 
 //// [staticMemberInitialization.js]
+"use strict";
 class C {
     static x = 1;
 }

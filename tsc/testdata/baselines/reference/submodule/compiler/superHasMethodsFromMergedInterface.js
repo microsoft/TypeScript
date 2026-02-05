@@ -11,6 +11,7 @@ class Sub extends C {
 
 
 //// [superHasMethodsFromMergedInterface.js]
+"use strict";
 class C {
     m1() { }
 }

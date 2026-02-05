@@ -11,7 +11,7 @@ func TestFunctionIndentation(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
+	const content = `namespace M {
 export =
 C;
 class C {
@@ -52,7 +52,7 @@ v;
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.FormatDocument(t, "")
-	f.VerifyCurrentFileContent(t, `module M {
+	f.VerifyCurrentFileContent(t, `namespace M {
 `+`    export =
 `+`        C;
 `+`    class C {

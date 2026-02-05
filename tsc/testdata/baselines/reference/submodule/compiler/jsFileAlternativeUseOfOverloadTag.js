@@ -55,6 +55,7 @@ const example3 = {
 
 
 //// [jsFileAlternativeUseOfOverloadTag.js]
+"use strict";
 // These are a few examples of existing alternative uses of @overload tag.
 // They will not work as expected with our implementation, but we are
 // trying to make sure that our changes do not result in any crashes here.

@@ -1,9 +1,9 @@
 --- old.esDecorators-classDeclaration-simpleTransformation(target=es2015).js
 +++ new.esDecorators-classDeclaration-simpleTransformation(target=es2015).js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
 
  //// [esDecorators-classDeclaration-simpleTransformation.js]
+ "use strict";
 -let C = (() => {
 -    let _classDecorators = [dec];
 -    let _classDescriptor;

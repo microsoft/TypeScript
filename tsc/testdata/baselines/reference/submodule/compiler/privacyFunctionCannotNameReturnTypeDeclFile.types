@@ -326,7 +326,7 @@ declare module "GlobalWidgets" {
     export function createWidget3(): Widget3;
 >createWidget3 : () => Widget3
 
-    export module SpecializedGlobalWidget {
+    export namespace SpecializedGlobalWidget {
 >SpecializedGlobalWidget : typeof SpecializedGlobalWidget
 
         export class Widget4 {
@@ -356,7 +356,7 @@ export function createWidget1() {
 >Widget1 : typeof Widget1
 }
 
-export module SpecializedWidget {
+export namespace SpecializedWidget {
 >SpecializedWidget : typeof SpecializedWidget
 
     export class Widget2 {

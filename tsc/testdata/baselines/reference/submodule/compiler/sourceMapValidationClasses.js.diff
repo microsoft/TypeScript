@@ -1,7 +1,7 @@
 --- old.sourceMapValidationClasses.js
 +++ new.sourceMapValidationClasses.js
-@@= skipped -40, +40 lines =@@
- //// [sourceMapValidationClasses.js]
+@@= skipped -41, +41 lines =@@
+ "use strict";
  var Foo;
  (function (Foo) {
 -    var Bar;

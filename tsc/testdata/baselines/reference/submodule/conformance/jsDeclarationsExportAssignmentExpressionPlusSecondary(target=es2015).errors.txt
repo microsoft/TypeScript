@@ -1,0 +1,37 @@
+index.js(5,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+index.js(5,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+index.js(12,16): error TS2339: Property 'Strings' does not exist on type '{ thing: string; also: string; desc: { item: string; }; }'.
+
+
+==== index.js (3 errors) ====
+    const Strings = {
+        a: "A",
+        b: "B"
+    };
+    module.exports = {
+    ~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~
+        thing: "ok",
+    ~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~
+        also: "ok",
+    ~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~
+        desc: {
+    ~~~~~~~~~~~
+    ~~~~~~~~~~~
+            item: "ok"
+    ~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+    ~~~~~
+    };
+    ~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    ~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    module.exports.Strings = Strings;
+                   ~~~~~~~
+!!! error TS2339: Property 'Strings' does not exist on type '{ thing: string; also: string; desc: { item: string; }; }'.
+    

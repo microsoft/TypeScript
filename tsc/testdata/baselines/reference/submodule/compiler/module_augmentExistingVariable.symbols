@@ -4,7 +4,7 @@
 var console: any;
 >console : Symbol(console, Decl(module_augmentExistingVariable.ts, 0, 3))
 
-module console {
+namespace console {
 >console : Symbol(console, Decl(module_augmentExistingVariable.ts, 0, 17))
 
     export var x = 2;

@@ -1,6 +1,6 @@
 --- old.exportCodeGen.js
 +++ new.exportCodeGen.js
-@@= skipped -97, +97 lines =@@
+@@= skipped -98, +98 lines =@@
      function fn() { }
      E.fn = fn;
      class C {

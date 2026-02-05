@@ -8,7 +8,7 @@ class C {
 
     constructor(x: number, y?: string);
 >x : number
->y : string
+>y : string | undefined
 
     constructor(x: number, y: string);
 >x : number
@@ -30,7 +30,7 @@ class C2<T> {
 
     constructor(x: T, y?: string);
 >x : T
->y : string
+>y : string | undefined
 
     constructor(x: T, y: string);
 >x : T
@@ -50,7 +50,7 @@ var r2 = new C2(1, '');
 interface I {
     new(x: number, y?: string): C;
 >x : number
->y : string
+>y : string | undefined
 
     new(x: number, y: string): C;
 >x : number
@@ -70,7 +70,7 @@ var r3 = new i(1, '');
 interface I2<T> {
     new (x: T, y?: string): C2<T>;
 >x : T
->y : string
+>y : string | undefined
 
     new (x: T, y: string): C2<T>;
 >x : T
@@ -78,7 +78,7 @@ interface I2<T> {
 
     new <T>(x: T, y?: string): C2<T>;
 >x : T
->y : string
+>y : string | undefined
 
     new <T>(x: T, y: string): C2<T>;
 >x : T
@@ -97,11 +97,11 @@ var r4 = new i2(1, '');
 >'' : ""
 
 var a: {
->a : { new (x: number, y?: string): C; new (x: number, y: string): C; }
+>a : { new (x: number, y?: string | undefined): C; new (x: number, y: string): C; }
 
     new(x: number, y?: string): C;
 >x : number
->y : string
+>y : string | undefined
 
     new(x: number, y: string): C;
 >x : number
@@ -111,16 +111,16 @@ var a: {
 var r5 = new a(1, '');
 >r5 : C
 >new a(1, '') : C
->a : { new (x: number, y?: string): C; new (x: number, y: string): C; }
+>a : { new (x: number, y?: string | undefined): C; new (x: number, y: string): C; }
 >1 : 1
 >'' : ""
 
 var b: {
->b : { new <T>(x: T, y?: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
+>b : { new <T>(x: T, y?: string | undefined): C2<T>; new <T>(x: T, y: string): C2<T>; }
 
     new<T>(x: T, y?: string): C2<T>;
 >x : T
->y : string
+>y : string | undefined
 
     new<T>(x: T, y: string): C2<T>;
 >x : T
@@ -130,7 +130,7 @@ var b: {
 var r6 = new b(1, '');
 >r6 : C2<number>
 >new b(1, '') : C2<number>
->b : { new <T>(x: T, y?: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
+>b : { new <T>(x: T, y?: string | undefined): C2<T>; new <T>(x: T, y: string): C2<T>; }
 >1 : 1
 >'' : ""
 

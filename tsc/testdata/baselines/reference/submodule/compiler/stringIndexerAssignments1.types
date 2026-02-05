@@ -6,11 +6,11 @@ var x: { [index: string]: string; one: string; };
 >index : string
 >one : string
 
-var a: { one: string; };
+declare var a: { one: string; };
 >a : { one: string; }
 >one : string
 
-var b: { one: number; two: string; };
+declare var b: { one: number; two: string; };
 >b : { one: number; two: string; }
 >one : number
 >two : string

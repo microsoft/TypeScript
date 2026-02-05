@@ -4,3 +4,4 @@
 \\
 
 //// [parserSkippedTokens2.js]
+"use strict";

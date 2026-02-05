@@ -38,6 +38,7 @@ class A {
 
 
 //// [privateNameFieldAssignment.js]
+"use strict";
 class A {
     #field = 0;
     constructor() {

@@ -1,0 +1,10 @@
+--- old.protectedClassPropertyAccessibleWithinSubclass3(target=es2015).js
++++ new.protectedClassPropertyAccessibleWithinSubclass3(target=es2015).js
+@@= skipped -17, +17 lines =@@
+ //// [protectedClassPropertyAccessibleWithinSubclass3.js]
+ "use strict";
+ class Base {
++    x;
+     method() {
+         this.x; // OK, accessed within their declaring class
+     }

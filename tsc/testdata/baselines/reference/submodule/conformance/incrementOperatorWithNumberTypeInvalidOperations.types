@@ -2,7 +2,7 @@
 
 === incrementOperatorWithNumberTypeInvalidOperations.ts ===
 // ++ operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 >NUMBER : number
 
 var NUMBER1: number[] = [1, 2];
@@ -18,14 +18,14 @@ function foo(): number { return 1; }
 class A {
 >A : A
 
-    public a: number;
+    public a!: number;
 >a : number
 
     static foo() { return 1; }
 >foo : () => number
 >1 : 1
 }
-module M {
+namespace M {
 >M : typeof M
 
     export var n: number;

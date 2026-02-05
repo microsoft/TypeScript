@@ -1,8 +1,8 @@
 --- old.parserConstructorDeclaration10.js
 +++ new.parserConstructorDeclaration10.js
-@@= skipped -6, +6 lines =@@
-
+@@= skipped -7, +7 lines =@@
  //// [parserConstructorDeclaration10.js]
+ "use strict";
  class C {
 -    constructor(): number { }
 +    constructor() { }

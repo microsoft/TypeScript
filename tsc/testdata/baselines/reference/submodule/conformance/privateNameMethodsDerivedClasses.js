@@ -15,6 +15,7 @@ class Derived extends Base {
 
 
 //// [privateNameMethodsDerivedClasses.js]
+"use strict";
 class Base {
     #prop() { return 123; }
     static method(x) {

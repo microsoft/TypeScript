@@ -1,0 +1,31 @@
+genericTypeWithMultipleBases1.ts(15,1): error TS2454: Variable 'x' is used before being assigned.
+genericTypeWithMultipleBases1.ts(16,1): error TS2454: Variable 'x' is used before being assigned.
+genericTypeWithMultipleBases1.ts(17,1): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== genericTypeWithMultipleBases1.ts (3 errors) ====
+    export interface I1 {
+        m1: () => void;
+    }
+     
+    export interface I2 {
+        m2: () => void;
+    }
+     
+    export interface I3<T> extends I1, I2 {
+    //export interface I3<T> extends I2, I1 {
+        p1: T;
+    }
+     
+    var x: I3<number>;
+    x.p1;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x.m1();
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x.m2();
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
+    

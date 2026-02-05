@@ -7,5 +7,6 @@ const {  } = pick(['b'], { a: 'a', b: 'b' }); // T: "b" | "a" ??? (before fix)
 
 
 //// [bindingPatternContextualTypeDoesNotCauseWidening.js]
+"use strict";
 const _ = pick(['b'], { a: 'a', b: 'b' }); // T: "b"
 const {} = pick(['b'], { a: 'a', b: 'b' }); // T: "b" | "a" ??? (before fix)

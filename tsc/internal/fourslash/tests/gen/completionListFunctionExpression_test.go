@@ -12,7 +12,8 @@ func TestCompletionListFunctionExpression(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `class DataHandler {
+	const content = `// @lib: es5
+class DataHandler {
     dataArray: Uint8Array;
     loadData(filename) {
         var xmlReq = new XMLHttpRequest();

@@ -1,6 +1,6 @@
 --- old.jsdocTemplateTagDefault.js
 +++ new.jsdocTemplateTagDefault.js
-@@= skipped -128, +128 lines =@@
+@@= skipped -129, +129 lines =@@
 
  //// [file.d.ts]
  /**

@@ -1,7 +1,7 @@
 --- old.subtypingWithConstructSignatures2.js
 +++ new.subtypingWithConstructSignatures2.js
-@@= skipped -176, +176 lines =@@
- //// [subtypingWithConstructSignatures2.js]
+@@= skipped -177, +177 lines =@@
+ "use strict";
  // checking subtype relations for function types as it relates to contextual signature instantiation
  class Base {
 +    foo;

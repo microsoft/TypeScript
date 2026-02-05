@@ -1,0 +1,12 @@
+moduleReopenedTypeSameBlock.ts(4,32): error TS2322: Type 'null' is not assignable to type 'I'.
+
+
+==== moduleReopenedTypeSameBlock.ts (1 errors) ====
+    namespace M { export class C1 { } }
+    namespace M {
+        export interface I { n: number; }
+        export class C2 { f(): I { return null; } }
+                                   ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'I'.
+    }
+    

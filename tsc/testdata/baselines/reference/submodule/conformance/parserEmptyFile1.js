@@ -4,3 +4,4 @@
 
 
 //// [parserEmptyFile1.js]
+"use strict";

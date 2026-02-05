@@ -19,6 +19,7 @@ export class B {
     print() { return "I am B"; }
 }
 //// [2.js]
+"use strict";
 async function foo() {
     class C extends (await import("./0")).B {
     }

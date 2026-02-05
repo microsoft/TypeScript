@@ -1,9 +1,9 @@
 --- old.privateNameStaticFieldInitializer(target=es2015).js
 +++ new.privateNameStaticFieldInitializer(target=es2015).js
-@@= skipped -7, +7 lines =@@
-
+@@= skipped -8, +8 lines =@@
 
  //// [privateNameStaticFieldInitializer.js]
+ "use strict";
 -var _a, _A_field, _A_uninitialized;
  class A {
 +    static #field = 10;

@@ -1,0 +1,30 @@
+--- old.library_RegExpExecArraySlice.types
++++ new.library_RegExpExecArraySlice.types
+@@= skipped -6, +6 lines =@@
+
+ regExpExecArrayValue.slice();
+ >regExpExecArrayValue.slice() : string[]
+->regExpExecArrayValue.slice : (start?: number, end?: number) => string[]
++>regExpExecArrayValue.slice : (start?: number | undefined, end?: number | undefined) => string[]
+ >regExpExecArrayValue : RegExpExecArray
+->slice : (start?: number, end?: number) => string[]
++>slice : (start?: number | undefined, end?: number | undefined) => string[]
+
+ regExpExecArrayValue.slice(0);
+ >regExpExecArrayValue.slice(0) : string[]
+->regExpExecArrayValue.slice : (start?: number, end?: number) => string[]
++>regExpExecArrayValue.slice : (start?: number | undefined, end?: number | undefined) => string[]
+ >regExpExecArrayValue : RegExpExecArray
+->slice : (start?: number, end?: number) => string[]
++>slice : (start?: number | undefined, end?: number | undefined) => string[]
+ >0 : 0
+
+ regExpExecArrayValue.slice(0,1);
+ >regExpExecArrayValue.slice(0,1) : string[]
+->regExpExecArrayValue.slice : (start?: number, end?: number) => string[]
++>regExpExecArrayValue.slice : (start?: number | undefined, end?: number | undefined) => string[]
+ >regExpExecArrayValue : RegExpExecArray
+->slice : (start?: number, end?: number) => string[]
++>slice : (start?: number | undefined, end?: number | undefined) => string[]
+ >0 : 0
+ >1 : 1

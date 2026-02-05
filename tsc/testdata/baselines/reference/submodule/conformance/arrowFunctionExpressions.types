@@ -62,8 +62,8 @@ var p1 = ([a]) => { };
 >a : any
 
 var p2 = ([...a]) => { };
->p2 : ([...a]: any[]) => void
->([...a]) => { } : ([...a]: any[]) => void
+>p2 : ([...a]: Iterable<any, void, undefined>) => void
+>([...a]) => { } : ([...a]: Iterable<any, void, undefined>) => void
 >a : any[]
 
 var p3 = ([, a]) => { };

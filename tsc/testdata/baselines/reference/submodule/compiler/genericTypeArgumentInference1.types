@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericTypeArgumentInference1.ts] ////
 
 === genericTypeArgumentInference1.ts ===
-module Underscore {
+namespace Underscore {
     export interface Iterator<T, U> {
         (value: T, index: any, list: any): U;
 >value : T
@@ -10,9 +10,9 @@ module Underscore {
     }
     export interface Static {
         all<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): T;
->all : <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any) => T
+>all : <T>(list: T[], iterator?: Iterator<T, boolean> | undefined, context?: any) => T
 >list : T[]
->iterator : Iterator<T, boolean>
+>iterator : Iterator<T, boolean> | undefined
 >context : any
 
         identity<T>(value: T): T;
@@ -25,12 +25,12 @@ declare var _: Underscore.Static;
 >Underscore : any
 
 var r = _.all([true, 1, null, 'yes'], _.identity);
->r : string | number | boolean
->_.all([true, 1, null, 'yes'], _.identity) : string | number | boolean
->_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>r : string | number | boolean | null
+>_.all([true, 1, null, 'yes'], _.identity) : string | number | boolean | null
+>_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
 >_ : Underscore.Static
->all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->[true, 1, null, 'yes'] : (string | number | true)[]
+>all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
+>[true, 1, null, 'yes'] : (string | number | true | null)[]
 >true : true
 >1 : 1
 >'yes' : "yes"
@@ -41,9 +41,9 @@ var r = _.all([true, 1, null, 'yes'], _.identity);
 var r2 = _.all([true], _.identity);
 >r2 : boolean
 >_.all([true], _.identity) : boolean
->_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
 >_ : Underscore.Static
->all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
 >[true] : true[]
 >true : true
 >_.identity : <T>(value: T) => T
@@ -51,12 +51,12 @@ var r2 = _.all([true], _.identity);
 >identity : <T>(value: T) => T
 
 var r3 = _.all([], _.identity);
->r3 : any
->_.all([], _.identity) : any
->_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>r3 : never
+>_.all([], _.identity) : never
+>_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
 >_ : Underscore.Static
->all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->[] : undefined[]
+>all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
+>[] : never[]
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static
 >identity : <T>(value: T) => T
@@ -64,9 +64,9 @@ var r3 = _.all([], _.identity);
 var r4 = _.all([<any>true], _.identity);
 >r4 : any
 >_.all([<any>true], _.identity) : any
->_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
 >_ : Underscore.Static
->all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
+>all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean> | undefined, context?: any) => T
 >[<any>true] : any[]
 ><any>true : any
 >true : true

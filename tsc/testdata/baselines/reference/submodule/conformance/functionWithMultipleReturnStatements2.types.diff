@@ -1,0 +1,54 @@
+--- old.functionWithMultipleReturnStatements2.types
++++ new.functionWithMultipleReturnStatements2.types
+@@= skipped -90, +90 lines =@@
+ //}
+
+ var a: { x: number; y?: number };
+->a : { x: number; y?: number; }
++>a : { x: number; y?: number | undefined; }
+ >x : number
+ >y : number | undefined
+
+ var b: { x: number; z?: number };
+->b : { x: number; z?: number; }
++>b : { x: number; z?: number | undefined; }
+ >x : number
+ >z : number | undefined
+
+ // returns typeof a
+ function f9() {
+->f9 : () => { x: number; y?: number; } | { x: number; z?: number; }
++>f9 : () => { x: number; y?: number | undefined; } | { x: number; z?: number | undefined; }
+
+     if (true) {
+ >true : true
+
+         return a;
+->a : { x: number; y?: number; }
++>a : { x: number; y?: number | undefined; }
+
+     } else {
+         return b;
+->b : { x: number; z?: number; }
++>b : { x: number; z?: number | undefined; }
+     }
+ }
+
+ // returns typeof b
+ function f10() {
+->f10 : () => { x: number; y?: number; } | { x: number; z?: number; }
++>f10 : () => { x: number; y?: number | undefined; } | { x: number; z?: number | undefined; }
+
+     if (true) {
+ >true : true
+
+         return b;
+->b : { x: number; z?: number; }
++>b : { x: number; z?: number | undefined; }
+
+     } else {
+         return a;
+->a : { x: number; y?: number; }
++>a : { x: number; y?: number | undefined; }
+     }
+ }

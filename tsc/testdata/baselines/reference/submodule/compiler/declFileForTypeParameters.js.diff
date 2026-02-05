@@ -1,8 +1,8 @@
 --- old.declFileForTypeParameters.js
 +++ new.declFileForTypeParameters.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [declFileForTypeParameters.js]
+ "use strict";
  class C {
 +    x;
      foo(a) {

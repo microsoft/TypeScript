@@ -1,9 +1,9 @@
 --- old.tsxDynamicTagName5.js
 +++ new.tsxDynamicTagName5.js
-@@= skipped -56, +56 lines =@@
- exports.Text = void 0;
- const React = __importStar(require("react"));
- class Text extends React.Component {
+@@= skipped -20, +20 lines =@@
+ //// [app.jsx]
+ import * as React from 'react';
+ export class Text extends React.Component {
 -    constructor() {
 -        super(...arguments);
 -        this._tagName = 'div';

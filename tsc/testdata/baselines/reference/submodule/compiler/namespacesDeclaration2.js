@@ -4,7 +4,7 @@
 namespace N {
     function S() {}
 }
-module M {
+namespace M {
     function F() {}
 }
 
@@ -17,6 +17,7 @@ var foo: M.F;
 let x: ns.A;
 
 //// [namespacesDeclaration2.js]
+"use strict";
 var N;
 (function (N) {
     function S() { }

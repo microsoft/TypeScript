@@ -5,7 +5,7 @@
      }
      async next(value?: T): Promise<IteratorResult<T>> {
 ->next : (value?: T) => Promise<IteratorResult<T>>
-+>next : (value?: T) => Promise<IteratorResult<T, any>>
- >value : T
++>next : (value?: T | undefined) => Promise<IteratorResult<T, any>>
+ >value : T | undefined
 
          if (value != null) {

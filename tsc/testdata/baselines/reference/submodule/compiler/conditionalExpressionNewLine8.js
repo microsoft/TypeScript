@@ -6,6 +6,7 @@ var v = a
   : c ? f : g;
 
 //// [conditionalExpressionNewLine8.js]
+"use strict";
 var v = a
     ? b ? d : e
     : c ? f : g;

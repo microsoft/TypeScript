@@ -9,3 +9,4 @@ interface Example {
 
 
 //// [newLineInTypeofInstantiation.js]
+"use strict";

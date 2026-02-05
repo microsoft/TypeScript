@@ -18,6 +18,7 @@ function compare</**type*/T>(a: T, b: T) {
 }
 
 //// [commentsTypeParameters.js]
+"use strict";
 class C {
     method(a) {
     }

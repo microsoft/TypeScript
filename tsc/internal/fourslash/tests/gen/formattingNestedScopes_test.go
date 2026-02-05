@@ -11,7 +11,7 @@ func TestFormattingNestedScopes(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `/*1*/        module      My.App      {
+	const content = `/*1*/        namespace      My.App      {
 /*2*/export      var appModule =      angular.module("app", [
 /*3*/            ]).config([() =>            {
 /*4*/                        configureStates
@@ -22,7 +22,7 @@ func TestFormattingNestedScopes(t *testing.T) {
 	defer done()
 	f.FormatDocument(t, "")
 	f.GoToMarker(t, "1")
-	f.VerifyCurrentLineContent(t, `module My.App {`)
+	f.VerifyCurrentLineContent(t, `namespace My.App {`)
 	f.GoToMarker(t, "2")
 	f.VerifyCurrentLineContent(t, `    export var appModule = angular.module("app", [`)
 	f.GoToMarker(t, "3")

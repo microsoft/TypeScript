@@ -20,10 +20,10 @@ var b = '' in 0;
 >'' : ""
 >0 : 0
 
-var c: any;
+declare var c: any;
 >c : any
 
-var y: number;
+declare var y: number;
 >y : number
 
 if (y in c) { }

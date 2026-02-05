@@ -17,7 +17,7 @@ class Derived2 extends Derived { baz: string; }
 >Derived : Derived
 >baz : string
 
-module TargetHasOptional {
+namespace TargetHasOptional {
 >TargetHasOptional : typeof TargetHasOptional
 
     // targets
@@ -25,10 +25,10 @@ module TargetHasOptional {
         opt?: Base
 >opt : Base
     }
-    var c: C;
+    declare var c: C;
 >c : C
 
-    var a: { opt?: Base; }
+    declare var a: { opt?: Base; };
 >a : { opt?: Base; }
 >opt : Base
 
@@ -53,13 +53,13 @@ module TargetHasOptional {
         opt?: Derived;
 >opt : Derived
     }
-    var d: D;
+    declare var d: D;
 >d : D
 
-    var e: E;
+    declare var e: E;
 >e : E
 
-    var f: F;
+    declare var f: F;
 >f : F
 
     // all ok
@@ -129,7 +129,7 @@ module TargetHasOptional {
 >c : C
 }
 
-module SourceHasOptional {
+namespace SourceHasOptional {
 >SourceHasOptional : typeof SourceHasOptional
 
     // targets
@@ -137,10 +137,10 @@ module SourceHasOptional {
         opt: Base
 >opt : Base
     }
-    var c: C;
+    declare var c: C;
 >c : C
 
-    var a: { opt: Base; }
+    declare var a: { opt: Base; };
 >a : { opt: Base; }
 >opt : Base
 
@@ -164,13 +164,13 @@ module SourceHasOptional {
         opt: Derived;
 >opt : Derived
     }
-    var d: D;
+    declare var d: D;
 >d : D
 
-    var e: E;
+    declare var e: E;
 >e : E
 
-    var f: F;
+    declare var f: F;
 >f : F
 
     c = d; // error

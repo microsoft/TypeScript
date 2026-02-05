@@ -157,6 +157,7 @@ tag`\0088`;
 
 
 //// [templateLiteralEscapeSequence.js]
+"use strict";
 `\u`;
 `\u0`;
 `\u00`;

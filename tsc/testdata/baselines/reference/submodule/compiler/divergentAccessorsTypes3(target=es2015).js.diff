@@ -1,0 +1,10 @@
+--- old.divergentAccessorsTypes3(target=es2015).js
++++ new.divergentAccessorsTypes3(target=es2015).js
+@@= skipped -51, +51 lines =@@
+     set prop1(s) { }
+     get prop2() { return ""; }
+     set prop2(s) { }
++    prop3;
+     get prop4() { return ""; }
+     set prop4(s) { }
+ }

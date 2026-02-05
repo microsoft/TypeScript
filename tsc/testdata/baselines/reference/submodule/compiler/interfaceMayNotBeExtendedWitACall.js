@@ -9,3 +9,4 @@ interface blue extends color() { // error
 
 
 //// [interfaceMayNotBeExtendedWitACall.js]
+"use strict";

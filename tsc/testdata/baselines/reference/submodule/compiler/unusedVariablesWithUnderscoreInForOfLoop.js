@@ -32,6 +32,7 @@ function t3() {
 
 
 //// [unusedVariablesWithUnderscoreInForOfLoop.js]
+"use strict";
 function t1() {
     for (const [_a, b] of [['key', 1]]) {
         console.log(b);

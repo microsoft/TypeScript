@@ -39,8 +39,8 @@ interface Magenta {
 	[p:Purple]; // error
 }
 
-var yellow: Yellow;
-var blue: Blue;
+declare var yellow: Yellow;
+declare var blue: Blue;
 var s = "some string";
 
 yellow[5]; // ok
@@ -53,7 +53,7 @@ s[<any>{}]; // ok
 
 yellow[blue]; // error
 
-var x:number[];
+declare var x:number[];
 x[0];
 
 class Benchmark {
@@ -66,8 +66,7 @@ class Benchmark {
 }
 
 //// [indexTypeCheck.js]
-var yellow;
-var blue;
+"use strict";
 var s = "some string";
 yellow[5]; // ok
 yellow["hue"]; // ok
@@ -76,7 +75,6 @@ s[0]; // error
 s["s"]; // ok
 s[{}]; // ok
 yellow[blue]; // error
-var x;
 x[0];
 class Benchmark {
     results = {};

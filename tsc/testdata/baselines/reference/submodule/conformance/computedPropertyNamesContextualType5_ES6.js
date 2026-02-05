@@ -12,6 +12,7 @@ var o: I = {
 }
 
 //// [computedPropertyNamesContextualType5_ES6.js]
+"use strict";
 var o = {
     [+"foo"]: "",
     [+"bar"]: 0

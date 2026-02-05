@@ -11,6 +11,7 @@ class C {
 declare var OData: any;
 
 //// [doNotEmitPinnedCommentOnNotEmittedNodets.js]
+"use strict";
 class C {
     foo(x, y) { }
 }

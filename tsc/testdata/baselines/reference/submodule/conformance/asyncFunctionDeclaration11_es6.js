@@ -5,5 +5,6 @@ async function await(): Promise<void> {
 }
 
 //// [asyncFunctionDeclaration11_es6.js]
+"use strict";
 async function await() {
 }

@@ -10,6 +10,7 @@ var X = { 0b11: '', 3: '' };
 
 
 //// [duplicateIdentifierDifferentSpelling.js]
+"use strict";
 class A {
     0b11 = '';
     3 = '';

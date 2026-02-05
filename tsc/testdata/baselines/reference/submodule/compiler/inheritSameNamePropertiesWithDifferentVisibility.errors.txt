@@ -1,14 +1,20 @@
+inheritSameNamePropertiesWithDifferentVisibility.ts(2,12): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+inheritSameNamePropertiesWithDifferentVisibility.ts(6,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 inheritSameNamePropertiesWithDifferentVisibility.ts(9,11): error TS2320: Interface 'A' cannot simultaneously extend types 'C' and 'C2'.
   Named property 'x' of types 'C' and 'C2' are not identical.
 
 
-==== inheritSameNamePropertiesWithDifferentVisibility.ts (1 errors) ====
+==== inheritSameNamePropertiesWithDifferentVisibility.ts (3 errors) ====
     class C {
         public x: number;
+               ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C2 {
         private x: number;
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     interface A extends C, C2 { // error

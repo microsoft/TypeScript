@@ -10,10 +10,7 @@ export function test<N extends number>(singletons: ["a"][], i: N) {
 
 
 //// [spreadTupleAccessedByTypeParameter.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = test;
-function test(singletons, i) {
+export function test(singletons, i) {
     const singleton = singletons[i];
     const [, ...rest] = singleton;
     return rest;

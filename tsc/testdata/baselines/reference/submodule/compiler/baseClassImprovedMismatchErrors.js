@@ -21,6 +21,7 @@ class DerivedInterface implements Base {
 }
 
 //// [baseClassImprovedMismatchErrors.js]
+"use strict";
 class Base {
     n;
     fn() {

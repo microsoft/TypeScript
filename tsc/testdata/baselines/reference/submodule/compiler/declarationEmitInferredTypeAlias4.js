@@ -8,6 +8,7 @@ function f<A>() {
 }
 
 //// [declarationEmitInferredTypeAlias4.js]
+"use strict";
 function f() {
     var x;
     return x;

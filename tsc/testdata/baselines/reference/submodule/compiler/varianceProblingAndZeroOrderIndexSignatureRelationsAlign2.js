@@ -69,9 +69,6 @@ class Server<X extends NeededInfo> {}
 export class MyServer extends Server<MyInfo> {} // not assignable error at `MyInfo`
 
 //// [varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MyServer = void 0;
 class Left {
     value;
     _tag = 'Left';
@@ -133,6 +130,5 @@ function tmp2(n) { }
 // tmp2(tmp1); // uncommenting this line removes a type error from a completely unrelated line ?? (see test 1, needs to behave the same)
 class Server {
 }
-class MyServer extends Server {
+export class MyServer extends Server {
 } // not assignable error at `MyInfo`
-exports.MyServer = MyServer;

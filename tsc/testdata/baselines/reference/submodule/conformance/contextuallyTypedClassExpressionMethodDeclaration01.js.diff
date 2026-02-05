@@ -1,6 +1,6 @@
 --- old.contextuallyTypedClassExpressionMethodDeclaration01.js
 +++ new.contextuallyTypedClassExpressionMethodDeclaration01.js
-@@= skipped -58, +58 lines =@@
+@@= skipped -59, +59 lines =@@
      };
  }
  function getFoo2() {

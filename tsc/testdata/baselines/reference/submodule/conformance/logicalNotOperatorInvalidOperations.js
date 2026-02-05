@@ -2,7 +2,7 @@
 
 //// [logicalNotOperatorInvalidOperations.ts]
 // Unary operator !
-var b: number;
+declare var b: number;
 
 // operand before !
 var BOOLEAN1 = b!;  //expect error
@@ -14,8 +14,7 @@ var BOOLEAN2 = !b + b;
 var BOOLEAN3 =!;
 
 //// [logicalNotOperatorInvalidOperations.js]
-// Unary operator !
-var b;
+"use strict";
 // operand before !
 var BOOLEAN1 = b; //expect error
 // miss parentheses

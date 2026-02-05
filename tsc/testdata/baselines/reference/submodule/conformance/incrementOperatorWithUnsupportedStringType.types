@@ -2,7 +2,7 @@
 
 === incrementOperatorWithUnsupportedStringType.ts ===
 // ++ operator on string type
-var STRING: string;
+declare var STRING: string;
 >STRING : string
 
 var STRING1: string[] = ["", ""];
@@ -18,14 +18,14 @@ function foo(): string { return ""; }
 class A {
 >A : A
 
-    public a: string;
+    public a!: string;
 >a : string
 
     static foo() { return ""; }
 >foo : () => string
 >"" : ""
 }
-module M {
+namespace M {
 >M : typeof M
 
     export var n: string;

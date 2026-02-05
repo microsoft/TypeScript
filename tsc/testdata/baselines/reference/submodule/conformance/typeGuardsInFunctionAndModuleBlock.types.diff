@@ -9,7 +9,16 @@
  >x : string | number | boolean
 
      return typeof x === "string"
-@@= skipped -44, +44 lines =@@
+@@= skipped -37, +37 lines =@@
+
+                 : x.toString(); // number
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
          } ();
  }
  function foo2(x: number | string | boolean) {
@@ -18,7 +27,17 @@
  >x : string | number | boolean
 
      return typeof x === "string"
-@@= skipped -46, +46 lines =@@
+@@= skipped -45, +45 lines =@@
+
+                 : x.toString(); // number
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+         } (x); // x here is narrowed to number | boolean
  >x : number | boolean
  }
  function foo3(x: number | string | boolean) {
@@ -27,7 +46,16 @@
  >x : string | number | boolean
 
      return typeof x === "string"
-@@= skipped -44, +44 lines =@@
+@@= skipped -45, +45 lines =@@
+
+                 : x.toString(); // number
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
          })();
  }
  function foo4(x: number | string | boolean) {
@@ -36,7 +64,18 @@
  >x : string | number | boolean
 
      return typeof x === "string"
-@@= skipped -47, +47 lines =@@
+@@= skipped -45, +45 lines =@@
+
+                 : x.toString(); // number
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+         })(x); // x here is narrowed to number | boolean
+ >x : number | boolean
  }
  // Type guards do not affect nested function declarations
  function foo5(x: number | string | boolean) {
@@ -45,3 +84,27 @@
  >x : string | number | boolean
 
      if (typeof x === "string") {
+@@= skipped -76, +76 lines =@@
+
+             : x.toString(); // number
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+         }
+     }
+ }
+@@= skipped -52, +52 lines =@@
+
+             : x.toString(); // number
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+         }
+     }
+ }

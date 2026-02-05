@@ -1,0 +1,181 @@
+//// [tests/cases/compiler/reverseMappedTypeInferenceWidening1.ts] ////
+
+=== reverseMappedTypeInferenceWidening1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62720
+
+type TypeFunction<ReturnType = unknown> = (...args: any[]) => ReturnType;
+>TypeFunction : Symbol(TypeFunction, Decl(reverseMappedTypeInferenceWidening1.ts, 0, 0))
+>ReturnType : Symbol(ReturnType, Decl(reverseMappedTypeInferenceWidening1.ts, 2, 18))
+>args : Symbol(args, Decl(reverseMappedTypeInferenceWidening1.ts, 2, 43))
+>ReturnType : Symbol(ReturnType, Decl(reverseMappedTypeInferenceWidening1.ts, 2, 18))
+
+type Flags = {
+>Flags : Symbol(Flags, Decl(reverseMappedTypeInferenceWidening1.ts, 2, 73))
+
+  [flagName: string]: {
+>flagName : Symbol(flagName, Decl(reverseMappedTypeInferenceWidening1.ts, 4, 3))
+
+    type: TypeFunction;
+>type : Symbol(type, Decl(reverseMappedTypeInferenceWidening1.ts, 4, 23))
+>TypeFunction : Symbol(TypeFunction, Decl(reverseMappedTypeInferenceWidening1.ts, 0, 0))
+
+    default?: unknown;
+>default : Symbol(default, Decl(reverseMappedTypeInferenceWidening1.ts, 5, 23))
+
+  };
+};
+type TypeFlag<Schemas extends Flags> = {
+>TypeFlag : Symbol(TypeFlag, Decl(reverseMappedTypeInferenceWidening1.ts, 8, 2))
+>Schemas : Symbol(Schemas, Decl(reverseMappedTypeInferenceWidening1.ts, 9, 14))
+>Flags : Symbol(Flags, Decl(reverseMappedTypeInferenceWidening1.ts, 2, 73))
+
+  [flag in keyof Schemas]: Schemas[flag] extends { type: TypeFunction<infer T> }
+>flag : Symbol(flag, Decl(reverseMappedTypeInferenceWidening1.ts, 10, 3))
+>Schemas : Symbol(Schemas, Decl(reverseMappedTypeInferenceWidening1.ts, 9, 14))
+>Schemas : Symbol(Schemas, Decl(reverseMappedTypeInferenceWidening1.ts, 9, 14))
+>flag : Symbol(flag, Decl(reverseMappedTypeInferenceWidening1.ts, 10, 3))
+>type : Symbol(type, Decl(reverseMappedTypeInferenceWidening1.ts, 10, 50))
+>TypeFunction : Symbol(TypeFunction, Decl(reverseMappedTypeInferenceWidening1.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedTypeInferenceWidening1.ts, 10, 75))
+
+    ? T
+>T : Symbol(T, Decl(reverseMappedTypeInferenceWidening1.ts, 10, 75))
+
+    : never;
+};
+
+declare function fn1<Options extends Flags>(
+>fn1 : Symbol(fn1, Decl(reverseMappedTypeInferenceWidening1.ts, 13, 2))
+>Options : Symbol(Options, Decl(reverseMappedTypeInferenceWidening1.ts, 15, 21))
+>Flags : Symbol(Flags, Decl(reverseMappedTypeInferenceWidening1.ts, 2, 73))
+
+  options: Options,
+>options : Symbol(options, Decl(reverseMappedTypeInferenceWidening1.ts, 15, 44))
+>Options : Symbol(Options, Decl(reverseMappedTypeInferenceWidening1.ts, 15, 21))
+
+): TypeFlag<Options>;
+>TypeFlag : Symbol(TypeFlag, Decl(reverseMappedTypeInferenceWidening1.ts, 8, 2))
+>Options : Symbol(Options, Decl(reverseMappedTypeInferenceWidening1.ts, 15, 21))
+
+const result1 = fn1({
+>result1 : Symbol(result1, Decl(reverseMappedTypeInferenceWidening1.ts, 19, 5))
+>fn1 : Symbol(fn1, Decl(reverseMappedTypeInferenceWidening1.ts, 13, 2))
+
+  booleanFlag: { type: Boolean },
+>booleanFlag : Symbol(booleanFlag, Decl(reverseMappedTypeInferenceWidening1.ts, 19, 21))
+>type : Symbol(type, Decl(reverseMappedTypeInferenceWidening1.ts, 20, 16))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  booleanFlagDefault: {
+>booleanFlagDefault : Symbol(booleanFlagDefault, Decl(reverseMappedTypeInferenceWidening1.ts, 20, 33))
+
+    type: Boolean,
+>type : Symbol(type, Decl(reverseMappedTypeInferenceWidening1.ts, 21, 23))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    default: false,
+>default : Symbol(default, Decl(reverseMappedTypeInferenceWidening1.ts, 22, 18))
+
+  },
+});
+result1.booleanFlag; // boolean
+>result1.booleanFlag : Symbol(booleanFlag, Decl(reverseMappedTypeInferenceWidening1.ts, 19, 21))
+>result1 : Symbol(result1, Decl(reverseMappedTypeInferenceWidening1.ts, 19, 5))
+>booleanFlag : Symbol(booleanFlag, Decl(reverseMappedTypeInferenceWidening1.ts, 19, 21))
+
+result1.booleanFlagDefault; // boolean
+>result1.booleanFlagDefault : Symbol(booleanFlagDefault, Decl(reverseMappedTypeInferenceWidening1.ts, 20, 33))
+>result1 : Symbol(result1, Decl(reverseMappedTypeInferenceWidening1.ts, 19, 5))
+>booleanFlagDefault : Symbol(booleanFlagDefault, Decl(reverseMappedTypeInferenceWidening1.ts, 20, 33))
+
+declare function fn2<Options extends Flags>(
+>fn2 : Symbol(fn2, Decl(reverseMappedTypeInferenceWidening1.ts, 27, 27))
+>Options : Symbol(Options, Decl(reverseMappedTypeInferenceWidening1.ts, 29, 21))
+>Flags : Symbol(Flags, Decl(reverseMappedTypeInferenceWidening1.ts, 2, 73))
+
+  options: Readonly<Options>,
+>options : Symbol(options, Decl(reverseMappedTypeInferenceWidening1.ts, 29, 44))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Options : Symbol(Options, Decl(reverseMappedTypeInferenceWidening1.ts, 29, 21))
+
+): TypeFlag<Options>;
+>TypeFlag : Symbol(TypeFlag, Decl(reverseMappedTypeInferenceWidening1.ts, 8, 2))
+>Options : Symbol(Options, Decl(reverseMappedTypeInferenceWidening1.ts, 29, 21))
+
+const result2 = fn2({
+>result2 : Symbol(result2, Decl(reverseMappedTypeInferenceWidening1.ts, 33, 5))
+>fn2 : Symbol(fn2, Decl(reverseMappedTypeInferenceWidening1.ts, 27, 27))
+
+  booleanFlag: { type: Boolean },
+>booleanFlag : Symbol(booleanFlag, Decl(reverseMappedTypeInferenceWidening1.ts, 33, 21))
+>type : Symbol(type, Decl(reverseMappedTypeInferenceWidening1.ts, 34, 16))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  booleanFlagDefault: {
+>booleanFlagDefault : Symbol(booleanFlagDefault, Decl(reverseMappedTypeInferenceWidening1.ts, 34, 33))
+
+    type: Boolean,
+>type : Symbol(type, Decl(reverseMappedTypeInferenceWidening1.ts, 35, 23))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    default: false,
+>default : Symbol(default, Decl(reverseMappedTypeInferenceWidening1.ts, 36, 18))
+
+  },
+});
+result2.booleanFlag; // boolean
+>result2.booleanFlag : Symbol(booleanFlag, Decl(reverseMappedTypeInferenceWidening1.ts, 33, 21))
+>result2 : Symbol(result2, Decl(reverseMappedTypeInferenceWidening1.ts, 33, 5))
+>booleanFlag : Symbol(booleanFlag, Decl(reverseMappedTypeInferenceWidening1.ts, 33, 21))
+
+result2.booleanFlagDefault; // boolean
+>result2.booleanFlagDefault : Symbol(booleanFlagDefault, Decl(reverseMappedTypeInferenceWidening1.ts, 34, 33))
+>result2 : Symbol(result2, Decl(reverseMappedTypeInferenceWidening1.ts, 33, 5))
+>booleanFlagDefault : Symbol(booleanFlagDefault, Decl(reverseMappedTypeInferenceWidening1.ts, 34, 33))
+
+declare function fn3<Options extends Flags>(
+>fn3 : Symbol(fn3, Decl(reverseMappedTypeInferenceWidening1.ts, 41, 27))
+>Options : Symbol(Options, Decl(reverseMappedTypeInferenceWidening1.ts, 43, 21))
+>Flags : Symbol(Flags, Decl(reverseMappedTypeInferenceWidening1.ts, 2, 73))
+
+  options: Readonly<Options>,
+>options : Symbol(options, Decl(reverseMappedTypeInferenceWidening1.ts, 43, 44))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Options : Symbol(Options, Decl(reverseMappedTypeInferenceWidening1.ts, 43, 21))
+
+): Options;
+>Options : Symbol(Options, Decl(reverseMappedTypeInferenceWidening1.ts, 43, 21))
+
+const result3 = fn3({
+>result3 : Symbol(result3, Decl(reverseMappedTypeInferenceWidening1.ts, 47, 5))
+>fn3 : Symbol(fn3, Decl(reverseMappedTypeInferenceWidening1.ts, 41, 27))
+
+  booleanFlag: { type: Boolean },
+>booleanFlag : Symbol(booleanFlag, Decl(reverseMappedTypeInferenceWidening1.ts, 47, 21))
+>type : Symbol(type, Decl(reverseMappedTypeInferenceWidening1.ts, 48, 16))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  booleanFlagDefault: {
+>booleanFlagDefault : Symbol(booleanFlagDefault, Decl(reverseMappedTypeInferenceWidening1.ts, 48, 33))
+
+    type: Boolean,
+>type : Symbol(type, Decl(reverseMappedTypeInferenceWidening1.ts, 49, 23))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    default: false, // no cursed EPC failure here
+>default : Symbol(default, Decl(reverseMappedTypeInferenceWidening1.ts, 50, 18))
+
+  },
+});
+
+declare function takeType(arg: { type: unknown }): void;
+>takeType : Symbol(takeType, Decl(reverseMappedTypeInferenceWidening1.ts, 53, 3))
+>arg : Symbol(arg, Decl(reverseMappedTypeInferenceWidening1.ts, 55, 26))
+>type : Symbol(type, Decl(reverseMappedTypeInferenceWidening1.ts, 55, 32))
+
+takeType(result3.booleanFlagDefault);
+>takeType : Symbol(takeType, Decl(reverseMappedTypeInferenceWidening1.ts, 53, 3))
+>result3.booleanFlagDefault : Symbol(booleanFlagDefault, Decl(reverseMappedTypeInferenceWidening1.ts, 48, 33))
+>result3 : Symbol(result3, Decl(reverseMappedTypeInferenceWidening1.ts, 47, 5))
+>booleanFlagDefault : Symbol(booleanFlagDefault, Decl(reverseMappedTypeInferenceWidening1.ts, 48, 33))
+

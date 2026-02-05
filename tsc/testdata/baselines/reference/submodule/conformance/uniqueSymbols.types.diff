@@ -81,8 +81,8 @@
 
      method5(p?: typeof s): typeof s;
 ->method5 : (p?: typeof s) => typeof s
-+>method5 : (p?: unique symbol) => unique symbol
- >p : unique symbol
++>method5 : (p?: unique symbol | undefined) => unique symbol
+ >p : unique symbol | undefined
  >s : unique symbol
  >s : unique symbol
 @@= skipped -70, +70 lines =@@

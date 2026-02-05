@@ -7,8 +7,8 @@ var q;
 
 // operand before ~
 var a = q~;  //expect error
->a : any
->q : any
+>a : undefined
+>q : undefined
 >~ : number
 > : any
 

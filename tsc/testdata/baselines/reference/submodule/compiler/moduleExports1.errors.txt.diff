@@ -1,0 +1,20 @@
+--- old.moduleExports1.errors.txt
++++ new.moduleExports1.errors.txt
+@@= skipped -0, +0 lines =@@
+ moduleExports1.ts(3,10): error TS2564: Property 'address' has no initializer and is not definitely assigned in the constructor.
+-moduleExports1.ts(13,6): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+-moduleExports1.ts(13,22): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++moduleExports1.ts(13,6): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++moduleExports1.ts(13,22): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+ ==== moduleExports1.ts (3 errors) ====
+@@= skipped -19, +19 lines =@@
+     
+     if (!module.exports) module.exports = "";
+          ~~~~~~
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                          ~~~~~~
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.

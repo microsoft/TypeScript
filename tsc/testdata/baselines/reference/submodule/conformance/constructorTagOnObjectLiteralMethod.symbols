@@ -7,6 +7,7 @@ const obj = {
   /** @constructor */
   Foo() { this.bar = "bar" }
 >Foo : Symbol(Foo, Decl(example.js, 0, 13))
+>this : Symbol(obj, Decl(example.js, 0, 11))
 
 };
 (new obj.Foo()).bar

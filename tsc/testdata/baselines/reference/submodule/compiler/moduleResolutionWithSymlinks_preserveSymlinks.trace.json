@@ -11,7 +11,7 @@ Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 ======== Type reference directive 'linked' was not resolved. ========
 ======== Resolving module 'linked' from '/app/app.ts'. ========
 Explicitly specified module resolution kind: 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 File '/app/package.json' does not exist.
 File '/package.json' does not exist.
 Loading module 'linked' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
@@ -29,7 +29,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'linked' was not resolved. ========
 ======== Resolving module 'linked2' from '/app/app.ts'. ========
 Explicitly specified module resolution kind: 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 File '/app/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'linked2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.

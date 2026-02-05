@@ -25,11 +25,11 @@ import fs = module("fs");
 >fs : Symbol(fs, Decl(constructorWithIncompleteTypeAnnotation.ts, 8, 1))
 
 
-module TypeScriptAllInOne {
+namespace TypeScriptAllInOne {
 >TypeScriptAllInOne : Symbol(TypeScriptAllInOne, Decl(constructorWithIncompleteTypeAnnotation.ts, 10, 25))
 
     export class Program {
->Program : Symbol(Program, Decl(constructorWithIncompleteTypeAnnotation.ts, 13, 27))
+>Program : Symbol(Program, Decl(constructorWithIncompleteTypeAnnotation.ts, 13, 30))
 
         static Main(...args: string[]) {
 >Main : Symbol(Program.Main, Decl(constructorWithIncompleteTypeAnnotation.ts, 14, 26))
@@ -649,8 +649,8 @@ interface IDisposable {
 
 TypeScriptAllInOne.Program.Main();
 >TypeScriptAllInOne.Program.Main : Symbol(TypeScriptAllInOne.Program.Main, Decl(constructorWithIncompleteTypeAnnotation.ts, 14, 26))
->TypeScriptAllInOne.Program : Symbol(TypeScriptAllInOne.Program, Decl(constructorWithIncompleteTypeAnnotation.ts, 13, 27))
+>TypeScriptAllInOne.Program : Symbol(TypeScriptAllInOne.Program, Decl(constructorWithIncompleteTypeAnnotation.ts, 13, 30))
 >TypeScriptAllInOne : Symbol(TypeScriptAllInOne, Decl(constructorWithIncompleteTypeAnnotation.ts, 10, 25))
->Program : Symbol(TypeScriptAllInOne.Program, Decl(constructorWithIncompleteTypeAnnotation.ts, 13, 27))
+>Program : Symbol(TypeScriptAllInOne.Program, Decl(constructorWithIncompleteTypeAnnotation.ts, 13, 30))
 >Main : Symbol(TypeScriptAllInOne.Program.Main, Decl(constructorWithIncompleteTypeAnnotation.ts, 14, 26))
 

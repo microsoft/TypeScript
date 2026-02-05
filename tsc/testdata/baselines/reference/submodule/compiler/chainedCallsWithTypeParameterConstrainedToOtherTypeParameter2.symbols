@@ -20,11 +20,11 @@ class Chain<T> {
 >Chain : Symbol(Chain, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 0, 0))
 >S : Symbol(S, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 2, 9))
 
-        var t: T;
+        var t!: T;
 >t : Symbol(t, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 3, 11))
 >T : Symbol(T, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 0, 12))
 
-        var s: S;
+        var s!: S;
 >s : Symbol(s, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 4, 11))
 >S : Symbol(S, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 2, 9))
 
@@ -114,15 +114,15 @@ class Chain2<T extends I> {
 >Chain2 : Symbol(Chain2, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 22, 1))
 >S : Symbol(S, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 25, 9))
 
-        var i: I;
+        var i!: I;
 >i : Symbol(i, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 26, 11))
 >I : Symbol(I, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 17, 1))
 
-        var t: T;
+        var t!: T;
 >t : Symbol(t, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 27, 11))
 >T : Symbol(T, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 23, 13))
 
-        var s: S;
+        var s!: S;
 >s : Symbol(s, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 28, 11))
 >S : Symbol(S, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts, 25, 9))
 

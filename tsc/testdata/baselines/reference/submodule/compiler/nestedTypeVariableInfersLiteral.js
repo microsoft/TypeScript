@@ -22,6 +22,7 @@ hasZField(nestedUnionArray) // ok
 
 
 //// [nestedTypeVariableInfersLiteral.js]
+"use strict";
 const directUnionSingle = direct("z");
 const directUnionArray = direct(["z", "y"]);
 const nestedSingle = nested({ fields: "z" });

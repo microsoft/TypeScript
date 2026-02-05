@@ -103,7 +103,7 @@ type X<V> = V extends (...args: any[]) => any ? (...args: Parameters<V>) => void
 >args : Symbol(args, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 49))
 >Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
 >V : Symbol(V, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 7))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 // vscode - another `Parameters` example
 export type AddFirstParameterToFunctions<Target> = {

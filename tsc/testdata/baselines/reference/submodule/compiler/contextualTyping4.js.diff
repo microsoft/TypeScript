@@ -1,8 +1,8 @@
 --- old.contextualTyping4.js
 +++ new.contextualTyping4.js
-@@= skipped -4, +4 lines =@@
-
+@@= skipped -5, +5 lines =@@
  //// [contextualTyping4.js]
+ "use strict";
  class foo {
 -    constructor() {
 -        this.bar = { id: 5, name: "foo" };

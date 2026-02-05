@@ -12,6 +12,7 @@ class c2 implements i1 { public name:string; }
  
 
 //// [privateInterfaceProperties.js]
+"use strict";
 // should be an error 
 class c1 {
     name;

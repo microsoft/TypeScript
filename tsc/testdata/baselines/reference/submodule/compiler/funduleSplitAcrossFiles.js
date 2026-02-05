@@ -4,14 +4,16 @@
 function D() { }
 
 //// [funduleSplitAcrossFiles_module.ts]
-module D {
+namespace D {
     export var y = "hi";
 }
 D.y;
 
 //// [funduleSplitAcrossFiles_function.js]
+"use strict";
 function D() { }
 //// [funduleSplitAcrossFiles_module.js]
+"use strict";
 var D;
 (function (D) {
     D.y = "hi";

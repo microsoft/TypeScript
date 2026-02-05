@@ -12,7 +12,7 @@ class Clod {
 >y : number
 >10 : 10
 }
-module Clod {
+namespace Clod {
 >Clod : typeof Clod
 
     var p = Clod.x;

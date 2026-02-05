@@ -6,6 +6,6 @@
    transform(fn) {
 ->transform : { <U>(fn: (y: T) => U): U; <U>(): T; }
 +>transform : { <U>(fn: (y: T) => U): U; (): T; }
- >fn : (y: T) => unknown
+ >fn : ((y: T) => unknown) | undefined
 
      return fn ? fn(this.value) : this.value;

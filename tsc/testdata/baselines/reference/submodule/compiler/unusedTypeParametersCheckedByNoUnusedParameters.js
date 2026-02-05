@@ -15,6 +15,7 @@ let l = <T>() => { };
 
 
 //// [unusedTypeParametersCheckedByNoUnusedParameters.js]
+"use strict";
 function f() { }
 ;
 class C {

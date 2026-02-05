@@ -8,9 +8,9 @@ function f(this: { n: number }) {
 }
 
 const o: { n: number, test?: (this: { n: number }) => void } = { n: 1 }
->o : { n: number; test?: (this: { n: number; }) => void; }
+>o : { n: number; test?: ((this: { n: number; }) => void) | undefined; }
 >n : number
->test : (this: { n: number; }) => void
+>test : ((this: { n: number; }) => void) | undefined
 >this : { n: number; }
 >n : number
 >{ n: 1 } : { n: number; }
@@ -19,29 +19,29 @@ const o: { n: number, test?: (this: { n: number }) => void } = { n: 1 }
 
 o.test = f
 >o.test = f : (this: { n: number; }) => void
->o.test : (this: { n: number; }) => void
->o : { n: number; test?: (this: { n: number; }) => void; }
->test : (this: { n: number; }) => void
+>o.test : ((this: { n: number; }) => void) | undefined
+>o : { n: number; test?: ((this: { n: number; }) => void) | undefined; }
+>test : ((this: { n: number; }) => void) | undefined
 >f : (this: { n: number; }) => void
 
 o.test();
 >o.test() : void
 >o.test : (this: { n: number; }) => void
->o : { n: number; test?: (this: { n: number; }) => void; }
+>o : { n: number; test?: ((this: { n: number; }) => void) | undefined; }
 >test : (this: { n: number; }) => void
 
 o!.test();
 >o!.test() : void
 >o!.test : (this: { n: number; }) => void
->o! : { n: number; test?: (this: { n: number; }) => void; }
->o : { n: number; test?: (this: { n: number; }) => void; }
+>o! : { n: number; test?: ((this: { n: number; }) => void) | undefined; }
+>o : { n: number; test?: ((this: { n: number; }) => void) | undefined; }
 >test : (this: { n: number; }) => void
 
 o.test!();
 >o.test!() : void
 >o.test! : (this: { n: number; }) => void
 >o.test : (this: { n: number; }) => void
->o : { n: number; test?: (this: { n: number; }) => void; }
+>o : { n: number; test?: ((this: { n: number; }) => void) | undefined; }
 >test : (this: { n: number; }) => void
 
 o.test!!!();
@@ -50,7 +50,7 @@ o.test!!!();
 >o.test!! : (this: { n: number; }) => void
 >o.test! : (this: { n: number; }) => void
 >o.test : (this: { n: number; }) => void
->o : { n: number; test?: (this: { n: number; }) => void; }
+>o : { n: number; test?: ((this: { n: number; }) => void) | undefined; }
 >test : (this: { n: number; }) => void
 
 (o.test!)();
@@ -58,14 +58,14 @@ o.test!!!();
 >(o.test!) : (this: { n: number; }) => void
 >o.test! : (this: { n: number; }) => void
 >o.test : (this: { n: number; }) => void
->o : { n: number; test?: (this: { n: number; }) => void; }
+>o : { n: number; test?: ((this: { n: number; }) => void) | undefined; }
 >test : (this: { n: number; }) => void
 
 (o.test)();
 >(o.test)() : void
 >(o.test) : (this: { n: number; }) => void
 >o.test : (this: { n: number; }) => void
->o : { n: number; test?: (this: { n: number; }) => void; }
+>o : { n: number; test?: ((this: { n: number; }) => void) | undefined; }
 >test : (this: { n: number; }) => void
 
 

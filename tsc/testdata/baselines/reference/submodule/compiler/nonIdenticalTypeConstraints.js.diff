@@ -1,8 +1,8 @@
 --- old.nonIdenticalTypeConstraints.js
 +++ new.nonIdenticalTypeConstraints.js
-@@= skipped -41, +41 lines =@@
-
+@@= skipped -42, +42 lines =@@
  //// [nonIdenticalTypeConstraints.js]
+ "use strict";
  class Different {
 +    a;
 +    b;

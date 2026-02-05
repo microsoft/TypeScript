@@ -1,8 +1,8 @@
 --- old.autoAsiForStaticsInClassDeclaration.js
 +++ new.autoAsiForStaticsInClassDeclaration.js
-@@= skipped -7, +7 lines =@@
-
+@@= skipped -8, +8 lines =@@
  //// [autoAsiForStaticsInClassDeclaration.js]
+ "use strict";
  class C {
 +    static x;
 +    static y;

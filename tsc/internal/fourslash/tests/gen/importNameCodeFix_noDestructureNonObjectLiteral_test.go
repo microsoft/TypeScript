@@ -11,7 +11,8 @@ func TestImportNameCodeFix_noDestructureNonObjectLiteral(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @target: es2015
+	const content = `// @lib: es5
+// @target: es2015
 // @strict: true
 // @esModuleInterop: true
 // @Filename: /array.ts

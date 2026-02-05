@@ -1,0 +1,10 @@
+--- old.divergentAccessorsTypes5(target=es2015).js
++++ new.divergentAccessorsTypes5(target=es2015).js
+@@= skipped -45, +45 lines =@@
+ class One {
+     get prop1() { return ""; }
+     set prop1(s) { }
++    prop2;
+ }
+ class Two {
+     get prop1() { return "hello"; }

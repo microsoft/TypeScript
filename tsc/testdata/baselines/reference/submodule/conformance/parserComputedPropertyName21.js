@@ -6,3 +6,4 @@ interface I {
 }
 
 //// [parserComputedPropertyName21.js]
+"use strict";

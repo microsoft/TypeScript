@@ -1,6 +1,6 @@
 --- old.privacyTopLevelAmbientExternalModuleImportWithExport.js
 +++ new.privacyTopLevelAmbientExternalModuleImportWithExport.js
-@@= skipped -55, +55 lines =@@
+@@= skipped -57, +57 lines =@@
  exports.c_public = void 0;
  // Public elements
  class c_public {

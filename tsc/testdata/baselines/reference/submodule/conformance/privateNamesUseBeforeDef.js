@@ -23,6 +23,7 @@ class B {
 
 
 //// [privateNamesUseBeforeDef.js]
+"use strict";
 class A {
     #foo = this.#bar; // Error
     #bar = 3;

@@ -1,6 +1,6 @@
 --- old.thisInSuperCall1.js
 +++ new.thisInSuperCall1.js
-@@= skipped -16, +16 lines =@@
+@@= skipped -17, +17 lines =@@
      constructor(a) { }
  }
  class Foo extends Base {

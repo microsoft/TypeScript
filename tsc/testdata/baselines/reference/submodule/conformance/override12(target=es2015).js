@@ -27,6 +27,7 @@ class B extends A {
 
 
 //// [override12.js]
+"use strict";
 class A {
     m1() {
         return 0;

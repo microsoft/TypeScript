@@ -20,19 +20,19 @@ class C2 extends A {
     }
 }
 
-var c: C;
->c : Symbol(c, Decl(classImplementsClass2.ts, 9, 3))
+declare var c: C;
+>c : Symbol(c, Decl(classImplementsClass2.ts, 9, 11))
 >C : Symbol(C, Decl(classImplementsClass2.ts, 0, 39))
 
-var c2: C2;
->c2 : Symbol(c2, Decl(classImplementsClass2.ts, 10, 3))
+declare var c2: C2;
+>c2 : Symbol(c2, Decl(classImplementsClass2.ts, 10, 11))
 >C2 : Symbol(C2, Decl(classImplementsClass2.ts, 1, 23))
 
 c = c2;
->c : Symbol(c, Decl(classImplementsClass2.ts, 9, 3))
->c2 : Symbol(c2, Decl(classImplementsClass2.ts, 10, 3))
+>c : Symbol(c, Decl(classImplementsClass2.ts, 9, 11))
+>c2 : Symbol(c2, Decl(classImplementsClass2.ts, 10, 11))
 
 c2 = c;
->c2 : Symbol(c2, Decl(classImplementsClass2.ts, 10, 3))
->c : Symbol(c, Decl(classImplementsClass2.ts, 9, 3))
+>c2 : Symbol(c2, Decl(classImplementsClass2.ts, 10, 11))
+>c : Symbol(c, Decl(classImplementsClass2.ts, 9, 11))
 

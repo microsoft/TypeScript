@@ -12,6 +12,7 @@ window.localStorage
 
 
 //// [index.js]
+"use strict";
 /// <reference lib="dom" />
 const a = { abc: "Hello" };
 // This should fail because libdom has been replaced

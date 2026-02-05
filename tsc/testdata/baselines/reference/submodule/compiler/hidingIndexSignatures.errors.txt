@@ -1,0 +1,21 @@
+hidingIndexSignatures.ts(10,1): error TS2454: Variable 'b' is used before being assigned.
+hidingIndexSignatures.ts(12,1): error TS2454: Variable 'a' is used before being assigned.
+
+
+==== hidingIndexSignatures.ts (2 errors) ====
+    interface A {
+        [a: string]: {};
+    }
+    
+    interface B extends A {
+        [a: string]: number; // Number is not a subtype of string.  Should error.
+    }
+    
+    var b: B;
+    b[""]; // Should be number
+    ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var a: A;
+    a[""]; // Should be {}
+    ~
+!!! error TS2454: Variable 'a' is used before being assigned.

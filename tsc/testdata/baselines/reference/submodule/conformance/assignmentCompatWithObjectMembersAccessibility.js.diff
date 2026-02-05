@@ -1,14 +1,11 @@
 --- old.assignmentCompatWithObjectMembersAccessibility.js
 +++ new.assignmentCompatWithObjectMembersAccessibility.js
-@@= skipped -116, +116 lines =@@
+@@= skipped -117, +117 lines =@@
  (function (TargetIsPublic) {
      // targets
      class Base {
 +        foo;
      }
-     var a;
-     var b;
-     var i;
      // sources
      class D {
 +        foo;
@@ -16,17 +13,14 @@
      class E {
 +        foo;
      }
-     var d;
-     var e;
-@@= skipped -36, +39 lines =@@
+     a = b;
+     a = i;
+@@= skipped -31, +34 lines =@@
  (function (TargetIsPublic) {
      // targets
      class Base {
 +        foo;
      }
-     var a;
-     var b;
-     var i;
      // sources
      class D {
 +        foo;
@@ -34,5 +28,5 @@
      class E {
 +        foo;
      }
-     var d;
-     var e;
+     a = b; // error
+     a = i; // error

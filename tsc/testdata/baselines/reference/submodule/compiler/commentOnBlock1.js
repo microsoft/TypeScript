@@ -7,6 +7,7 @@ function f() {
 }
 
 //// [commentOnBlock1.js]
+"use strict";
 // asdf
 function f() {
     /*asdf*/ { }

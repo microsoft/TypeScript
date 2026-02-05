@@ -19,6 +19,7 @@ class PersonModel extends AutoModel<PersonModel> {
 
 
 //// [keyofGenericExtendingClassDoubleLayer.js]
+"use strict";
 class Model {
     createdAt;
 }

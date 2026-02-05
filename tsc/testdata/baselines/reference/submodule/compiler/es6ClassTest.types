@@ -87,7 +87,7 @@ var f = new Foo();
 >new Foo() : Foo
 >Foo : typeof Foo
 
-declare module AmbientMod {
+declare namespace AmbientMod {
 >AmbientMod : typeof AmbientMod
 
 	export class Provide {

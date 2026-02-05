@@ -31,10 +31,10 @@ interface C {
 >s : string
 }
 
-var v: A;
+declare var v: A;
 >v : A
 
-var v: B;
+declare var v: B;
 >v : A
 
 v({ s: "", n: 0 }).toLowerCase();
@@ -49,10 +49,10 @@ v({ s: "", n: 0 }).toLowerCase();
 >0 : 0
 >toLowerCase : any
 
-var w: A;
+declare var w: A;
 >w : A
 
-var w: C;
+declare var w: C;
 >w : A
 
 w({ s: "", n: 0 }).toLowerCase();

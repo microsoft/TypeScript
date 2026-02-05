@@ -11,3 +11,4 @@ interface B extends A {
 }
 
 //// [specializedSignatureInInterface.js]
+"use strict";

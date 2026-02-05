@@ -1,0 +1,33 @@
+--- old.derivedClassOverridesProtectedMembers2(target=es2015).js
++++ new.derivedClassOverridesProtectedMembers2(target=es2015).js
+@@= skipped -69, +69 lines =@@
+ var x;
+ var y;
+ class Base {
++    a;
+     b(a) { }
+     get c() { return x; }
+     set c(v) { }
++    d;
++    static r;
+     static s(a) { }
+     static get t() { return x; }
+     static set t(v) { }
++    static u;
+     constructor(a) { }
+ }
+ // Increase visibility of all protected members to public
+ class Derived extends Base {
++    a;
+     b(a) { }
+     get c() { return y; }
+     set c(v) { }
++    d;
++    static r;
+     static s(a) { }
+     static get t() { return y; }
+     static set t(a) { }
++    static u;
+     constructor(a) { super(a); }
+ }
+ var d = new Derived(y);

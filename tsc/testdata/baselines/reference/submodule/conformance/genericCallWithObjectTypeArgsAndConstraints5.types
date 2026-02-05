@@ -31,10 +31,10 @@ function foo<T, U extends T>(t: T, t2: U) {
 >t2 : U
 }
 
-var c: C;
+declare var c: C;
 >c : C
 
-var d: D;
+declare var d: D;
 >d : D
 
 var r2 = foo(d, c); // the constraints are self-referencing, no downstream error

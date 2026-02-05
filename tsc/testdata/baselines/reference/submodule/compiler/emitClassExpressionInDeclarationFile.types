@@ -35,7 +35,7 @@ export class FooItem {
 >foo : () => void
 
     name?: string;
->name : string
+>name : string | undefined
 }
 
 export type Constructor<T> = new(...args: any[]) => T;

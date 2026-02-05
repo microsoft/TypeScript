@@ -1,0 +1,19 @@
+--- old.jsxAndTypeAssertion.errors.txt
++++ new.jsxAndTypeAssertion.errors.txt
+@@= skipped -0, +0 lines =@@
+ jsxAndTypeAssertion.tsx(6,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+ jsxAndTypeAssertion.tsx(6,6): error TS17008: JSX element 'any' has no corresponding closing tag.
+-jsxAndTypeAssertion.tsx(6,13): error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add 'jest' or 'mocha' to the types field in your tsconfig.
++jsxAndTypeAssertion.tsx(6,13): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+ jsxAndTypeAssertion.tsx(6,17): error TS1005: '}' expected.
+ jsxAndTypeAssertion.tsx(6,19): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+ jsxAndTypeAssertion.tsx(6,24): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+@@= skipped -64, +64 lines =@@
+          ~~~
+ !!! error TS17008: JSX element 'any' has no corresponding closing tag.
+                 ~~~~
+-!!! error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add 'jest' or 'mocha' to the types field in your tsconfig.
++!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+                     ~
+ !!! error TS1005: '}' expected.
+                       ~~~~~

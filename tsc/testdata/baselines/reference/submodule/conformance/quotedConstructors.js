@@ -35,6 +35,7 @@ class F {
 
 
 //// [quotedConstructors.js]
+"use strict";
 class C {
     constructor() {
         console.log(this);

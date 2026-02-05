@@ -79,9 +79,22 @@ export const m = mod;
 }
 
 tsgo -b
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+[96mcommon/index.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1202: [0mImport assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+[7m1[0m import x = require("./obj.json");
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mcommon/index.ts[0m:[93m2[0m:[93m1[0m - [91merror[0m[90m TS1203: [0mExport assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+[7m2[0m export = x;
+[7m [0m [91m~~~~~~~~~~~[0m
+
+
+Found 2 errors in the same file, starting at: common/index.ts[90m:1[0m
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -112,19 +125,16 @@ export declare function getVar(): {
 };
 
 //// [/home/src/workspaces/out/sub-project-2/index.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getVar = getVar;
-const index_1 = require("../sub-project/index");
+import { m } from '../sub-project/index';
 const variable = {
-    key: index_1.m,
+    key: m,
 };
-function getVar() {
+export function getVar() {
     return variable;
 }
 
 //// [/home/src/workspaces/out/sub-project-2/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.d.ts","../sub-project/index.d.ts","../../solution/sub-project-2/index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"b13b16e08eb0717669fa55818828b2cb-export declare const m: {\n    val: number;\n};\n",{"version":"56ecb5738c72a131a1514873df723721-import { m } from '../sub-project/index';\n\nconst variable = {\n    key: m,\n};\n\nexport function getVar() {\n    return variable;\n}","signature":"f6a0b1edad82fddabb5c98ad5da1660d-export declare function getVar(): {\n    key: {\n        val: number;\n    };\n};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2024.full.d.ts","../sub-project/index.d.ts","../../solution/sub-project-2/index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"b13b16e08eb0717669fa55818828b2cb-export declare const m: {\n    val: number;\n};\n",{"version":"56ecb5738c72a131a1514873df723721-import { m } from '../sub-project/index';\n\nconst variable = {\n    key: m,\n};\n\nexport function getVar() {\n    return variable;\n}","signature":"f6a0b1edad82fddabb5c98ad5da1660d-export declare function getVar(): {\n    key: {\n        val: number;\n    };\n};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/out/sub-project-2/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -137,13 +147,13 @@ function getVar() {
     }
   ],
   "fileNames": [
-    "lib.d.ts",
+    "lib.es2024.full.d.ts",
     "../sub-project/index.d.ts",
     "../../solution/sub-project-2/index.js"
   ],
   "fileInfos": [
     {
-      "fileName": "lib.d.ts",
+      "fileName": "lib.es2024.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -193,7 +203,7 @@ function getVar() {
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1580
+  "size": 1592
 }
 //// [/home/src/workspaces/out/sub-project/index.d.ts] *new* 
 export declare const m: {
@@ -201,17 +211,11 @@ export declare const m: {
 };
 
 //// [/home/src/workspaces/out/sub-project/index.js] *new* 
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.m = void 0;
-const common_1 = __importDefault(require("../common"));
-exports.m = common_1.default;
+import mod from '../common';
+export const m = mod;
 
 //// [/home/src/workspaces/out/sub-project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[4],"fileNames":["lib.d.ts","../../solution/common/obj.json","../../solution/common/index.d.ts","../../solution/sub-project/index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d47747c9a3b20f363d6de91e2bd8ed62-{\n    \"val\": 42,\n}"},"641f5162aeaa035322008b19df89c663-import x = require(\"./obj.json\");\nexport = x;\n",{"version":"4c69d0c670e9dc788b5e107f277aa8ab-import mod from '../common';\n\nexport const m = mod;","signature":"b13b16e08eb0717669fa55818828b2cb-export declare const m: {\n    val: number;\n};\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[4],"fileNames":["lib.es2024.full.d.ts","../../solution/common/obj.json","../../solution/common/index.d.ts","../../solution/sub-project/index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d47747c9a3b20f363d6de91e2bd8ed62-{\n    \"val\": 42,\n}"},"641f5162aeaa035322008b19df89c663-import x = require(\"./obj.json\");\nexport = x;\n",{"version":"4c69d0c670e9dc788b5e107f277aa8ab-import mod from '../common';\n\nexport const m = mod;","signature":"b13b16e08eb0717669fa55818828b2cb-export declare const m: {\n    val: number;\n};\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/out/sub-project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -224,14 +228,14 @@ exports.m = common_1.default;
     }
   ],
   "fileNames": [
-    "lib.d.ts",
+    "lib.es2024.full.d.ts",
     "../../solution/common/obj.json",
     "../../solution/common/index.d.ts",
     "../../solution/sub-project/index.js"
   ],
   "fileInfos": [
     {
-      "fileName": "lib.d.ts",
+      "fileName": "lib.es2024.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -296,19 +300,17 @@ exports.m = common_1.default;
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1583
+  "size": 1595
 }
 //// [/home/src/workspaces/solution/common/index.d.ts] *new* 
 import x = require("./obj.json");
 export = x;
 
 //// [/home/src/workspaces/solution/common/index.js] *new* 
-"use strict";
-const x = require("./obj.json");
-module.exports = x;
+export {};
 
 //// [/home/src/workspaces/solution/common/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.d.ts","./obj.json","./index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d47747c9a3b20f363d6de91e2bd8ed62-{\n    \"val\": 42,\n}"},{"version":"6d5621da1dbc82712844ae5e706b9295-import x = require(\"./obj.json\");\nexport = x;","signature":"641f5162aeaa035322008b19df89c663-import x = require(\"./obj.json\");\nexport = x;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"rootDir":"..","skipLibCheck":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2024.full.d.ts","./obj.json","./index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d47747c9a3b20f363d6de91e2bd8ed62-{\n    \"val\": 42,\n}"},{"version":"6d5621da1dbc82712844ae5e706b9295-import x = require(\"./obj.json\");\nexport = x;","signature":"641f5162aeaa035322008b19df89c663-import x = require(\"./obj.json\");\nexport = x;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"rootDir":"..","skipLibCheck":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"end":33,"code":1202,"category":1,"messageKey":"Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_1202"},{"pos":34,"end":45,"code":1203,"category":1,"messageKey":"Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or__1203"}]]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/solution/common/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -325,13 +327,13 @@ module.exports = x;
     }
   ],
   "fileNames": [
-    "lib.d.ts",
+    "lib.es2024.full.d.ts",
     "./obj.json",
     "./index.ts"
   ],
   "fileInfos": [
     {
-      "fileName": "lib.d.ts",
+      "fileName": "lib.es2024.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -382,13 +384,33 @@ module.exports = x;
       "./obj.json"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./index.ts",
+      [
+        {
+          "end": 33,
+          "code": 1202,
+          "category": 1,
+          "messageKey": "Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_1202"
+        },
+        {
+          "pos": 34,
+          "end": 45,
+          "code": 1203,
+          "category": 1,
+          "messageKey": "Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or__1203"
+        }
+      ]
+    ]
+  ],
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1381
+  "size": 1753
 }
 
 common/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/solution/common/obj.json
 *refresh*    /home/src/workspaces/solution/common/index.ts
 Signatures::
@@ -396,7 +418,7 @@ Signatures::
 
 sub-project/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/solution/common/obj.json
 *refresh*    /home/src/workspaces/solution/common/index.d.ts
 *refresh*    /home/src/workspaces/solution/sub-project/index.js
@@ -405,7 +427,7 @@ Signatures::
 
 sub-project-2/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/out/sub-project/index.d.ts
 *refresh*    /home/src/workspaces/solution/sub-project-2/index.js
 Signatures::

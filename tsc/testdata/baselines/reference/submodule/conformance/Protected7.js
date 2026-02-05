@@ -6,6 +6,7 @@ class C {
 }
 
 //// [Protected7.js]
+"use strict";
 class C {
     m() { }
 }

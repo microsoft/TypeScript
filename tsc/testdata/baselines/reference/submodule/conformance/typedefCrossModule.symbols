@@ -46,6 +46,7 @@ exports.C = function() {
 >C : Symbol(C, Decl(mod3.js, 0, 0))
 
     this.p = 1
+>this : Symbol("mod3", Decl(mod3.js, 0, 0))
 }
 
 === use.js ===

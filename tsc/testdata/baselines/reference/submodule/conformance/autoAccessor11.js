@@ -18,6 +18,7 @@ class C {
 
 
 //// [autoAccessor11.js]
+"use strict";
 class C {
     accessor;
     a;

@@ -11,6 +11,7 @@ for await (const item of arr) {
 
 
 //// [topLevelAwaitNonModule.js]
+"use strict";
 await x;
 const arr = [Promise.resolve()];
 for await (const item of arr) {

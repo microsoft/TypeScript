@@ -1,8 +1,8 @@
 --- old.genericWithIndexerOfTypeParameterType1.js
 +++ new.genericWithIndexerOfTypeParameterType1.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [genericWithIndexerOfTypeParameterType1.js]
+ "use strict";
  class LazyArray {
 -    constructor() {
 -        this.objects = {};

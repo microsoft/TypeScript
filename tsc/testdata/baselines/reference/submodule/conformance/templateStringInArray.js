@@ -4,4 +4,5 @@
 var x = [1, 2, `abc${ 123 }def`];
 
 //// [templateStringInArray.js]
+"use strict";
 var x = [1, 2, `abc${123}def`];

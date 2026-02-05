@@ -5,7 +5,7 @@
 // all of these are errors
 
 class C {
-    x: string;
+    x!: string;
 }
 
 var c = new C<number>();
@@ -13,7 +13,7 @@ var c = new C<number>();
 function Foo(): void { }
 var r = new Foo<number>();
 
-var f: { (): void };
+declare var f: { (): void };
 var r2 = new f<number>();
 
 var a: any;
@@ -21,6 +21,7 @@ var a: any;
 var r2 = new a<number>();
 
 //// [instantiateNonGenericTypeWithTypeArguments.js]
+"use strict";
 // it is an error to provide type arguments to a non-generic call
 // all of these are errors
 class C {
@@ -29,7 +30,6 @@ class C {
 var c = new C();
 function Foo() { }
 var r = new Foo();
-var f;
 var r2 = new f();
 var a;
 // BUG 790977

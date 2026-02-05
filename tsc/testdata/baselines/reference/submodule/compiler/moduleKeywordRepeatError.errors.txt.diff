@@ -1,0 +1,16 @@
+--- old.moduleKeywordRepeatError.errors.txt
++++ new.moduleKeywordRepeatError.errors.txt
+@@= skipped -0, +0 lines =@@
+-moduleKeywordRepeatError.ts(3,1): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++moduleKeywordRepeatError.ts(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ moduleKeywordRepeatError.ts(3,15): error TS1005: ';' expected.
+
+
+@@= skipped -6, +6 lines =@@
+     
+     module.module { }
+     ~~~~~~
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                   ~
+ !!! error TS1005: ';' expected.

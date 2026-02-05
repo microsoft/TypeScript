@@ -13,6 +13,7 @@ class Test extends Base {
 
 
 //// [thisTypeInFunctions3.js]
+"use strict";
 class Test extends Base {
     m() {
         this.check(this);

@@ -9,6 +9,7 @@ for ([k = false, v = ""] of map) {
 }
 
 //// [for-of46.js]
+"use strict";
 var k, v;
 var map = new Map([["", true]]);
 for ([k = false, v = ""] of map) {

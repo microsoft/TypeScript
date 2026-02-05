@@ -135,6 +135,7 @@ function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>
 
 
 //// [mixinAccessModifiers.js]
+"use strict";
 class Private {
     constructor(...args) { }
     p;

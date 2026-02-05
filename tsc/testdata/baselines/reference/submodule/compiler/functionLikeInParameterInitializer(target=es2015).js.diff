@@ -1,0 +1,13 @@
+--- old.functionLikeInParameterInitializer(target=es2015).js
++++ new.functionLikeInParameterInitializer(target=es2015).js
+@@= skipped -35, +35 lines =@@
+ }
+ // error
+ export function baz3(func = class {
+-    constructor() {
+-        this.x = foo;
+-    }
++    x = foo;
+ }) {
+     let foo = "in";
+ }

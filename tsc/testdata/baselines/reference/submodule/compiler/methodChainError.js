@@ -20,6 +20,7 @@ new Builder()
     .method("a");
 
 //// [methodChainError.js]
+"use strict";
 class Builder {
     notMethod;
     method(param) {

@@ -1,7 +1,7 @@
 --- old.circularConstraintYieldsAppropriateError.js
 +++ new.circularConstraintYieldsAppropriateError.js
-@@= skipped -21, +21 lines =@@
- //// [circularConstraintYieldsAppropriateError.js]
+@@= skipped -22, +22 lines =@@
+ "use strict";
  // https://github.com/Microsoft/TypeScript/issues/16861
  class BaseType {
 +    bar;

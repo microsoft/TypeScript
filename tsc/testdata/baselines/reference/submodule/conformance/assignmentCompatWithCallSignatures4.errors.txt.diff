@@ -1,20 +1,20 @@
 --- old.assignmentCompatWithCallSignatures4.errors.txt
 +++ new.assignmentCompatWithCallSignatures4.errors.txt
-@@= skipped -22, +22 lines =@@
+@@= skipped -32, +32 lines =@@
  assignmentCompatWithCallSignatures4.ts(62,9): error TS2322: Type '(x: { foo: string; }, y: { foo: string; bar: string; }) => Base' is not assignable to type '<T extends Derived>(x: T, y: T) => T'.
    Type 'Base' is not assignable to type 'T'.
      'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
 -assignmentCompatWithCallSignatures4.ts(66,9): error TS2322: Type '(x: Base[], y: Derived2[]) => Derived[]' is not assignable to type '<T extends Array<Derived2>>(x: Base[], y: Base[]) => T'.
 +assignmentCompatWithCallSignatures4.ts(66,9): error TS2322: Type '(x: Base[], y: Derived2[]) => Derived[]' is not assignable to type '<T extends Derived2[]>(x: Base[], y: Base[]) => T'.
-   Type 'Derived[]' is not assignable to type 'T'.
-     'T' could be instantiated with an arbitrary type which could be unrelated to 'Derived[]'.
- assignmentCompatWithCallSignatures4.ts(69,9): error TS2322: Type '<T>(x: { a: T; b: T; }) => T' is not assignable to type '(x: { a: string; b: number; }) => number'.
-@@= skipped -140, +140 lines =@@
+   Types of parameters 'y' and 'y' are incompatible.
+     Type 'Base[]' is not assignable to type 'Derived2[]'.
+       Type 'Base' is missing the following properties from type 'Derived2': baz, bar
+@@= skipped -159, +159 lines =@@
              a12 = b12;
              b12 = a12;
              ~~~
 -!!! error TS2322: Type '(x: Base[], y: Derived2[]) => Derived[]' is not assignable to type '<T extends Array<Derived2>>(x: Base[], y: Base[]) => T'.
 +!!! error TS2322: Type '(x: Base[], y: Derived2[]) => Derived[]' is not assignable to type '<T extends Derived2[]>(x: Base[], y: Base[]) => T'.
- !!! error TS2322:   Type 'Derived[]' is not assignable to type 'T'.
- !!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'Derived[]'.
-     
+ !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
+ !!! error TS2322:     Type 'Base[]' is not assignable to type 'Derived2[]'.
+ !!! error TS2322:       Type 'Base' is missing the following properties from type 'Derived2': baz, bar

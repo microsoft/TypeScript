@@ -18,6 +18,7 @@ a = b;
 b = a;
 
 //// [stringLiteralTypesOverloadAssignability02.js]
+"use strict";
 function f(x) {
     return 0;
 }

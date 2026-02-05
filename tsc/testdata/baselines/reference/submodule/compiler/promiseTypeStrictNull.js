@@ -222,6 +222,7 @@ const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
 
 
 //// [promiseTypeStrictNull.js]
+"use strict";
 async function A() {
     const a = await p;
     return a;

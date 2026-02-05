@@ -11,7 +11,8 @@ func TestQuickInfoOnCatchVariable(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `function f() {
+	const content = `// @strict: false
+function f() {
    try { } catch (/**/e) { }
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

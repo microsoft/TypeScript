@@ -16,7 +16,7 @@ func TestAutoImportProvider1(t *testing.T) {
 // @Filename: /home/src/workspaces/project/node_modules/@angular/forms/forms.d.ts
 export class PatternValidator {}
 // @Filename: /home/src/workspaces/project/tsconfig.json
-{}
+{ "compilerOptions": { "lib": ["es5"] } }
 // @Filename: /home/src/workspaces/project/package.json
 { "dependencies": { "@angular/forms": "*" } }
 // @Filename: /home/src/workspaces/project/index.ts
@@ -25,9 +25,9 @@ PatternValidator/**/`
 	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "")
-	opts615 := f.GetOptions()
-	opts615.FormatCodeSettings.NewLineCharacter = "\n"
-	f.Configure(t, opts615)
+	opts654 := f.GetOptions()
+	opts654.FormatCodeSettings.NewLineCharacter = "\n"
+	f.Configure(t, opts654)
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { PatternValidator } from "@angular/forms";
 

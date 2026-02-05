@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks02.ts] ////
 
 //// [stringLiteralsWithEqualityChecks02.ts]
-let x: "foo";
-let y: "foo" | "bar";
+declare let x: "foo";
+declare let y: "foo" | "bar";
 
 let b: boolean;
 b = x == y;
@@ -26,8 +26,7 @@ b = "bar" != y;
 
 
 //// [stringLiteralsWithEqualityChecks02.js]
-let x;
-let y;
+"use strict";
 let b;
 b = x == y;
 b = "foo" == y;

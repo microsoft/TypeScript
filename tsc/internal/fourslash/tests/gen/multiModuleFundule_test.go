@@ -12,12 +12,13 @@ func TestMultiModuleFundule(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `function C(x: number) { }
+	const content = `// @strict: false
+function C(x: number) { }
 
-module C {
+namespace C {
     export var x = 1;
 }
-module C {
+namespace C {
     export function foo() { }
 }
 

@@ -8,6 +8,7 @@ var a = new A();
 
 
 //// [fillInMissingTypeArgsOnConstructCalls.js]
+"use strict";
 class A {
     list;
 }

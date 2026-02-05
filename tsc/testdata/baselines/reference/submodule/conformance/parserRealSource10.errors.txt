@@ -348,7 +348,7 @@ parserRealSource10.ts(449,41): error TS1011: An element access expression should
     
     ///<reference path='typescript.ts' />
     
-    module TypeScript {
+    namespace TypeScript {
         export enum TokenID {
             // Keywords
             Any,

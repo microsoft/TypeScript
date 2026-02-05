@@ -6,9 +6,9 @@ var x;
 
 (1, x)=0;
 >(1, x)=0 : 0
->(1, x) : any
->1, x : any
+>(1, x) : undefined
+>1, x : undefined
 >1 : 1
->x : any
+>x : undefined
 >0 : 0
 

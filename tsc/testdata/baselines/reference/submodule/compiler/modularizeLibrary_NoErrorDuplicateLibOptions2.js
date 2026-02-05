@@ -83,6 +83,7 @@ const o1 = {
 }
 
 //// [modularizeLibrary_NoErrorDuplicateLibOptions2.js]
+"use strict";
 // Using Es6 array
 function f(x, y, z) {
     return Array.from(arguments);

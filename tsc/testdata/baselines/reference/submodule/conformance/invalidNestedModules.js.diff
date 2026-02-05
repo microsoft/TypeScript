@@ -1,7 +1,7 @@
 --- old.invalidNestedModules.js
 +++ new.invalidNestedModules.js
-@@= skipped -33, +33 lines =@@
- //// [invalidNestedModules.js]
+@@= skipped -34, +34 lines =@@
+ "use strict";
  var A;
  (function (A) {
 -    var B;

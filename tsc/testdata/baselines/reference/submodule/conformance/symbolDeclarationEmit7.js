@@ -6,6 +6,7 @@ var obj: {
 }
 
 //// [symbolDeclarationEmit7.js]
+"use strict";
 var obj;
 
 

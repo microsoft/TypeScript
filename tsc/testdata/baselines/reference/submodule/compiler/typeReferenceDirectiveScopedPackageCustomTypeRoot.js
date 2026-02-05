@@ -27,6 +27,7 @@ atTypesCache;
 mangledAtTypesCache;
 
 //// [a.js]
+"use strict";
 typesCache;
 mangledAtTypesCache;
 nodeModulesCache;

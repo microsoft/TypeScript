@@ -14,7 +14,7 @@ sourceFile:test.tsx
 >>>class AppComponent {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >declare module JSX {
+1 >declare namespace JSX {
   >    interface IntrinsicElements {
   >        [s: string]: any;
   >    }

@@ -2,7 +2,7 @@
 
 //// [importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts]
 declare module "m" {
-    module x {
+    namespace x {
         interface c {
         }
     }
@@ -11,3 +11,4 @@ declare module "m" {
 }
 
 //// [importDeclWithExportModifierAndExportAssignmentInAmbientContext.js]
+"use strict";

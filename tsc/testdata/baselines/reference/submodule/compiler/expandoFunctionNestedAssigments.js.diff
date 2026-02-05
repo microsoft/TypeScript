@@ -1,6 +1,6 @@
 --- old.expandoFunctionNestedAssigments.js
 +++ new.expandoFunctionNestedAssigments.js
-@@= skipped -96, +96 lines =@@
+@@= skipped -97, +97 lines =@@
 
  //// [expandoFunctionNestedAssigments.d.ts]
  declare function Foo(): void;

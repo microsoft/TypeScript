@@ -14,6 +14,7 @@
 "Should error because of end of file.
 
 //// [scannerStringLiterals.js]
+"use strict";
 "";
 " ";
 "a";

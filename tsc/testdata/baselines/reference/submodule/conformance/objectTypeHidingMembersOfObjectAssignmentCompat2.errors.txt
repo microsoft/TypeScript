@@ -22,8 +22,8 @@ objectTypeHidingMembersOfObjectAssignmentCompat2.ts(20,1): error TS2322: Type '{
         toString(): number;
     }
     
-    var i: I;
-    var o: Object;
+    declare var i: I;
+    declare var o: Object;
     o = i; // error
     ~
 !!! error TS2322: Type 'I' is not assignable to type 'Object'.
@@ -39,7 +39,7 @@ objectTypeHidingMembersOfObjectAssignmentCompat2.ts(20,1): error TS2322: Type '{
     class C {
         toString(): number { return 1; }
     }
-    var c: C;
+    declare var c: C;
     o = c; // error
     ~
 !!! error TS2322: Type 'C' is not assignable to type 'Object'.

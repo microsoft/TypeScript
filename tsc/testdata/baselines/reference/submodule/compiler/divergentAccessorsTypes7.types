@@ -15,7 +15,7 @@ class Test<S> {
 >value : string
 
         return null!;
->null! : null
+>null! : never
     }
 
     // -- Replacing the getter such that the getter/setter types match, removes the error:

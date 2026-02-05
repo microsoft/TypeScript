@@ -1,14 +1,15 @@
 nonPrimitiveNarrow.ts(9,5): error TS2322: Type 'number' is not assignable to type 'object'.
 nonPrimitiveNarrow.ts(13,7): error TS2339: Property 'toFixed' does not exist on type 'never'.
+nonPrimitiveNarrow.ts(19,4): error TS18047: 'b' is possibly 'null'.
 nonPrimitiveNarrow.ts(21,6): error TS2339: Property 'toString' does not exist on type 'never'.
 
 
-==== nonPrimitiveNarrow.ts (3 errors) ====
+==== nonPrimitiveNarrow.ts (4 errors) ====
     class Narrow {
-        narrowed: boolean
+        narrowed!: boolean
     }
     
-    var a: object
+    declare var a: object;
     
     if (a instanceof Narrow) {
         a.narrowed; // ok
@@ -23,10 +24,12 @@ nonPrimitiveNarrow.ts(21,6): error TS2339: Property 'toString' does not exist on
 !!! error TS2339: Property 'toFixed' does not exist on type 'never'.
     }
     
-    var b: object | null
+    declare var b: object | null;
     
     if (typeof b === 'object') {
        b.toString(); // ok, object | null
+       ~
+!!! error TS18047: 'b' is possibly 'null'.
     } else {
        b.toString(); // error, never
          ~~~~~~~~

@@ -1,8 +1,8 @@
 --- old.superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.js
 +++ new.superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.js]
+ "use strict";
  class A {
 +    map;
      constructor(map) {

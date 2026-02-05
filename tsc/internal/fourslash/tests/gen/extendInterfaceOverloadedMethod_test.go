@@ -11,7 +11,8 @@ func TestExtendInterfaceOverloadedMethod(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface A<T> {
+	const content = `// @strict: false
+interface A<T> {
     foo(a: T): B<T>;
     foo(): void ;
     foo2(): B<number>;

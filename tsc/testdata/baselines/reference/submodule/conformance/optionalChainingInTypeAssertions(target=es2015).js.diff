@@ -1,6 +1,6 @@
 --- old.optionalChainingInTypeAssertions(target=es2015).js
 +++ new.optionalChainingInTypeAssertions(target=es2015).js
-@@= skipped -26, +26 lines =@@
+@@= skipped -27, +27 lines =@@
  const foo = new Foo();
  (_a = foo.m) === null || _a === void 0 ? void 0 : _a.call(foo);
  (_b = foo.m) === null || _b === void 0 ? void 0 : _b.call(foo);

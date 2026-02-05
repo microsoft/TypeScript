@@ -7,7 +7,7 @@ interface A {
 
     (x: string, y?: string): boolean;
 >x : string
->y : string
+>y : string | undefined
 
     (x: Date): void;
 >x : Date
@@ -37,7 +37,7 @@ interface C {
 
     (x: number, s?: string): number;
 >x : number
->s : string
+>s : string | undefined
 
     <T>(x: T[]): T[];
 >x : T[]

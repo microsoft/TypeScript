@@ -1,9 +1,9 @@
 --- old.esDecorators-classDeclaration-parameterProperties(target=es2015,usedefineforclassfields=true).js
 +++ new.esDecorators-classDeclaration-parameterProperties(target=es2015,usedefineforclassfields=true).js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
 
  //// [esDecorators-classDeclaration-parameterProperties.js]
+ "use strict";
 -let C = (() => {
 -    var _a;
 -    let _instanceExtraInitializers = [];

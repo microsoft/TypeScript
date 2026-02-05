@@ -1,0 +1,30 @@
+--- old.reverseMappedTypeInferenceWidening2.errors.txt
++++ new.reverseMappedTypeInferenceWidening2.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++reverseMappedTypeInferenceWidening2.ts(8,5): error TS2561: Object literal may only specify known properties, but 'prop2' does not exist in type '{ prop: unknown; }'. Did you mean to write 'prop'?
++reverseMappedTypeInferenceWidening2.ts(12,5): error TS2561: Object literal may only specify known properties, but 'prop2' does not exist in type '{ prop: unknown; }'. Did you mean to write 'prop'?
++
++
++==== reverseMappedTypeInferenceWidening2.ts (2 errors) ====
++    declare function test1<T extends Record<string, { prop: unknown }>>(arg: {
++      [K in keyof T]: T[K];
++    }): T;
++    
++    const res1 = test1({
++      foo: {
++        prop: 1,
++        prop2: "",
++        ~~~~~
++!!! error TS2561: Object literal may only specify known properties, but 'prop2' does not exist in type '{ prop: unknown; }'. Did you mean to write 'prop'?
++!!! related TS6500 reverseMappedTypeInferenceWidening2.ts:1:74: The expected type comes from property 'foo' which is declared here on type '{ [x: string]: { prop: unknown; }; }'
++      },
++      bar: {
++        prop: true,
++        prop2: null,
++        ~~~~~
++!!! error TS2561: Object literal may only specify known properties, but 'prop2' does not exist in type '{ prop: unknown; }'. Did you mean to write 'prop'?
++!!! related TS6500 reverseMappedTypeInferenceWidening2.ts:1:74: The expected type comes from property 'bar' which is declared here on type '{ [x: string]: { prop: unknown; }; }'
++      },
++    });
++    

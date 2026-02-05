@@ -1,0 +1,14 @@
+--- old.controlFlowForStatement.types
++++ new.controlFlowForStatement.types
+@@= skipped -61, +61 lines =@@
+ >x = x.toExponential() : string
+ >x : string | number | boolean
+ >x.toExponential() : string
+->x.toExponential : (fractionDigits?: number) => string
++>x.toExponential : (fractionDigits?: number | undefined) => string
+ >x : number
+->toExponential : (fractionDigits?: number) => string
++>toExponential : (fractionDigits?: number | undefined) => string
+ >x = 5 : 5
+ >x : string | number | boolean
+ >5 : 5

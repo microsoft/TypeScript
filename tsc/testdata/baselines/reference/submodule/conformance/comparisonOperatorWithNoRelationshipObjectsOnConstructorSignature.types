@@ -23,59 +23,59 @@ class C {
 >c : string
 }
 
-var a1: { fn(): Base };
+declare var a1: { fn(): Base };
 >a1 : { fn(): Base; }
 >fn : () => Base
 
-var b1: { new (): Base };
+declare var b1: { new (): Base };
 >b1 : new () => Base
 
-var a2: { new (a: number, b: string): Base };
+declare var a2: { new (a: number, b: string): Base };
 >a2 : new (a: number, b: string) => Base
 >a : number
 >b : string
 
-var b2: { new (a: string): Base };
+declare var b2: { new (a: string): Base };
 >b2 : new (a: string) => Base
 >a : string
 
-var a3: { new (a: Base, b: string): Base };
+declare var a3: { new (a: Base, b: string): Base };
 >a3 : new (a: Base, b: string) => Base
 >a : Base
 >b : string
 
-var b3: { new (a: Derived, b: Base): Base };
+declare var b3: { new (a: Derived, b: Base): Base };
 >b3 : new (a: Derived, b: Base) => Base
 >a : Derived
 >b : Base
 
-var a4: { new (): Base };
+declare var a4: { new (): Base };
 >a4 : new () => Base
 
-var b4: { new (): C };
+declare var b4: { new (): C };
 >b4 : new () => C
 
-var a5: { new (a?: Base): Base };
->a5 : new (a?: Base) => Base
->a : Base
+declare var a5: { new (a?: Base): Base };
+>a5 : new (a?: Base | undefined) => Base
+>a : Base | undefined
 
-var b5: { new (a?: C): Base };
->b5 : new (a?: C) => Base
->a : C
+declare var b5: { new (a?: C): Base };
+>b5 : new (a?: C | undefined) => Base
+>a : C | undefined
 
-var a6: { new (...a: Base[]): Base };
+declare var a6: { new (...a: Base[]): Base };
 >a6 : new (...a: Base[]) => Base
 >a : Base[]
 
-var b6: { new (...a: C[]): Base };
+declare var b6: { new (...a: C[]): Base };
 >b6 : new (...a: C[]) => Base
 >a : C[]
 
-var a7: { new <T>(t: T): T };
+declare var a7: { new <T>(t: T): T };
 >a7 : new <T>(t: T) => T
 >t : T
 
-var b7: { new <T>(t: T[]): T };
+declare var b7: { new <T>(t: T[]): T };
 >b7 : new <T>(t: T[]) => T
 >t : T[]
 
@@ -107,8 +107,8 @@ var r1a4 = a4 < b4;
 var r1a5 = a5 < b5;
 >r1a5 : boolean
 >a5 < b5 : boolean
->a5 : new (a?: Base) => Base
->b5 : new (a?: C) => Base
+>a5 : new (a?: Base | undefined) => Base
+>b5 : new (a?: C | undefined) => Base
 
 var r1a6 = a6 < b6;
 >r1a6 : boolean
@@ -149,8 +149,8 @@ var r1b4 = b4 < a4;
 var r1b5 = b5 < a5;
 >r1b5 : boolean
 >b5 < a5 : boolean
->b5 : new (a?: C) => Base
->a5 : new (a?: Base) => Base
+>b5 : new (a?: C | undefined) => Base
+>a5 : new (a?: Base | undefined) => Base
 
 var r1b6 = b6 < a6;
 >r1b6 : boolean
@@ -192,8 +192,8 @@ var r2a4 = a4 > b4;
 var r2a5 = a5 > b5;
 >r2a5 : boolean
 >a5 > b5 : boolean
->a5 : new (a?: Base) => Base
->b5 : new (a?: C) => Base
+>a5 : new (a?: Base | undefined) => Base
+>b5 : new (a?: C | undefined) => Base
 
 var r2a6 = a6 > b6;
 >r2a6 : boolean
@@ -234,8 +234,8 @@ var r2b4 = b4 > a4;
 var r2b5 = b5 > a5;
 >r2b5 : boolean
 >b5 > a5 : boolean
->b5 : new (a?: C) => Base
->a5 : new (a?: Base) => Base
+>b5 : new (a?: C | undefined) => Base
+>a5 : new (a?: Base | undefined) => Base
 
 var r2b6 = b6 > a6;
 >r2b6 : boolean
@@ -277,8 +277,8 @@ var r3a4 = a4 <= b4;
 var r3a5 = a5 <= b5;
 >r3a5 : boolean
 >a5 <= b5 : boolean
->a5 : new (a?: Base) => Base
->b5 : new (a?: C) => Base
+>a5 : new (a?: Base | undefined) => Base
+>b5 : new (a?: C | undefined) => Base
 
 var r3a6 = a6 <= b6;
 >r3a6 : boolean
@@ -319,8 +319,8 @@ var r3b4 = b4 <= a4;
 var r3b5 = b5 <= a5;
 >r3b5 : boolean
 >b5 <= a5 : boolean
->b5 : new (a?: C) => Base
->a5 : new (a?: Base) => Base
+>b5 : new (a?: C | undefined) => Base
+>a5 : new (a?: Base | undefined) => Base
 
 var r3b6 = b6 <= a6;
 >r3b6 : boolean
@@ -362,8 +362,8 @@ var r4a4 = a4 >= b4;
 var r4a5 = a5 >= b5;
 >r4a5 : boolean
 >a5 >= b5 : boolean
->a5 : new (a?: Base) => Base
->b5 : new (a?: C) => Base
+>a5 : new (a?: Base | undefined) => Base
+>b5 : new (a?: C | undefined) => Base
 
 var r4a6 = a6 >= b6;
 >r4a6 : boolean
@@ -404,8 +404,8 @@ var r4b4 = b4 >= a4;
 var r4b5 = b5 >= a5;
 >r4b5 : boolean
 >b5 >= a5 : boolean
->b5 : new (a?: C) => Base
->a5 : new (a?: Base) => Base
+>b5 : new (a?: C | undefined) => Base
+>a5 : new (a?: Base | undefined) => Base
 
 var r4b6 = b6 >= a6;
 >r4b6 : boolean
@@ -447,8 +447,8 @@ var r5a4 = a4 == b4;
 var r5a5 = a5 == b5;
 >r5a5 : boolean
 >a5 == b5 : boolean
->a5 : new (a?: Base) => Base
->b5 : new (a?: C) => Base
+>a5 : new (a?: Base | undefined) => Base
+>b5 : new (a?: C | undefined) => Base
 
 var r5a6 = a6 == b6;
 >r5a6 : boolean
@@ -489,8 +489,8 @@ var r5b4 = b4 == a4;
 var r5b5 = b5 == a5;
 >r5b5 : boolean
 >b5 == a5 : boolean
->b5 : new (a?: C) => Base
->a5 : new (a?: Base) => Base
+>b5 : new (a?: C | undefined) => Base
+>a5 : new (a?: Base | undefined) => Base
 
 var r5b6 = b6 == a6;
 >r5b6 : boolean
@@ -532,8 +532,8 @@ var r6a4 = a4 != b4;
 var r6a5 = a5 != b5;
 >r6a5 : boolean
 >a5 != b5 : boolean
->a5 : new (a?: Base) => Base
->b5 : new (a?: C) => Base
+>a5 : new (a?: Base | undefined) => Base
+>b5 : new (a?: C | undefined) => Base
 
 var r6a6 = a6 != b6;
 >r6a6 : boolean
@@ -574,8 +574,8 @@ var r6b4 = b4 != a4;
 var r6b5 = b5 != a5;
 >r6b5 : boolean
 >b5 != a5 : boolean
->b5 : new (a?: C) => Base
->a5 : new (a?: Base) => Base
+>b5 : new (a?: C | undefined) => Base
+>a5 : new (a?: Base | undefined) => Base
 
 var r6b6 = b6 != a6;
 >r6b6 : boolean
@@ -617,8 +617,8 @@ var r7a4 = a4 === b4;
 var r7a5 = a5 === b5;
 >r7a5 : boolean
 >a5 === b5 : boolean
->a5 : new (a?: Base) => Base
->b5 : new (a?: C) => Base
+>a5 : new (a?: Base | undefined) => Base
+>b5 : new (a?: C | undefined) => Base
 
 var r7a6 = a6 === b6;
 >r7a6 : boolean
@@ -659,8 +659,8 @@ var r7b4 = b4 === a4;
 var r7b5 = b5 === a5;
 >r7b5 : boolean
 >b5 === a5 : boolean
->b5 : new (a?: C) => Base
->a5 : new (a?: Base) => Base
+>b5 : new (a?: C | undefined) => Base
+>a5 : new (a?: Base | undefined) => Base
 
 var r7b6 = b6 === a6;
 >r7b6 : boolean
@@ -702,8 +702,8 @@ var r8a4 = a4 !== b4;
 var r8a5 = a5 !== b5;
 >r8a5 : boolean
 >a5 !== b5 : boolean
->a5 : new (a?: Base) => Base
->b5 : new (a?: C) => Base
+>a5 : new (a?: Base | undefined) => Base
+>b5 : new (a?: C | undefined) => Base
 
 var r8a6 = a6 !== b6;
 >r8a6 : boolean
@@ -744,8 +744,8 @@ var r8b4 = b4 !== a4;
 var r8b5 = b5 !== a5;
 >r8b5 : boolean
 >b5 !== a5 : boolean
->b5 : new (a?: C) => Base
->a5 : new (a?: Base) => Base
+>b5 : new (a?: C | undefined) => Base
+>a5 : new (a?: Base | undefined) => Base
 
 var r8b6 = b6 !== a6;
 >r8b6 : boolean

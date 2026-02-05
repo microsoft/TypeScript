@@ -1,0 +1,22 @@
+--- old.jsDeclarationsExportAssignedConstructorFunction(target=es2015).errors.txt
++++ new.jsDeclarationsExportAssignedConstructorFunction(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++jsDeclarationsExportAssignedConstructorFunction.js(3,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++jsDeclarationsExportAssignedConstructorFunction.js(3,10): error TS2339: Property 'x' does not exist on type 'typeof import("jsDeclarationsExportAssignedConstructorFunction")'.
++
++
++==== jsDeclarationsExportAssignedConstructorFunction.js (2 errors) ====
++    /** @constructor */
++    module.exports.MyClass = function() {
++        this.x = 1
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++             ~
++!!! error TS2339: Property 'x' does not exist on type 'typeof import("jsDeclarationsExportAssignedConstructorFunction")'.
++    }
++    module.exports.MyClass.prototype = {
++        a: function() {
++        }
++    }
++    

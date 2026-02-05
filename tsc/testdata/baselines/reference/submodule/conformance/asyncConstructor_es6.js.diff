@@ -1,8 +1,8 @@
 --- old.asyncConstructor_es6.js
 +++ new.asyncConstructor_es6.js
-@@= skipped -7, +7 lines =@@
-
+@@= skipped -8, +8 lines =@@
  //// [asyncConstructor_es6.js]
+ "use strict";
  class C {
 -    constructor() {
 +    async constructor() {

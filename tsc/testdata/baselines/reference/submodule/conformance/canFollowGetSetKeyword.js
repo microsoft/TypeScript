@@ -19,6 +19,7 @@ const d = {
 };
 
 //// [canFollowGetSetKeyword.js]
+"use strict";
 class A {
     get;
     *x() { }

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/functionTypeArgumentArrayAssignment.ts] ////
 
 //// [functionTypeArgumentArrayAssignment.ts]
-module test {
+namespace test {
     interface Array<T> {
         foo: T;
         length: number;
@@ -14,6 +14,7 @@ module test {
 
 
 //// [functionTypeArgumentArrayAssignment.js]
+"use strict";
 var test;
 (function (test) {
     function map() {

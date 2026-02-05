@@ -57,8 +57,8 @@ class a {
     }
 }
 new a(/*27*/"Hello");
-module m {
-    export module m2 {
+namespace m {
+    export namespace m2 {
         /** class comment */
         export class c1 {
             /** constructor comment*/

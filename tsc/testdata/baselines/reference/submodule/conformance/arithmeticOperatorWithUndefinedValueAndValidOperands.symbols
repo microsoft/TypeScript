@@ -14,22 +14,22 @@ enum E {
 >b : Symbol(E.b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 4, 6))
 }
 
-var a: any;
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+declare var a: any;
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 
-var b: number;
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+declare var b: number;
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 
 // operator *
 var ra1 = undefined * a;
 >ra1 : Symbol(ra1, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 12, 3))
 >undefined : Symbol(undefined)
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 
 var ra2 = undefined * b;
 >ra2 : Symbol(ra2, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 13, 3))
 >undefined : Symbol(undefined)
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 
 var ra3 = undefined * 1;
 >ra3 : Symbol(ra3, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 14, 3))
@@ -44,12 +44,12 @@ var ra4 = undefined * E.a;
 
 var ra5 = a * undefined;
 >ra5 : Symbol(ra5, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 16, 3))
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 >undefined : Symbol(undefined)
 
 var ra6 = b * undefined;
 >ra6 : Symbol(ra6, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 17, 3))
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 >undefined : Symbol(undefined)
 
 var ra7 = 0 * undefined;
@@ -67,12 +67,12 @@ var ra8 = E.b * undefined;
 var rb1 = undefined / a;
 >rb1 : Symbol(rb1, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 22, 3))
 >undefined : Symbol(undefined)
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 
 var rb2 = undefined / b;
 >rb2 : Symbol(rb2, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 23, 3))
 >undefined : Symbol(undefined)
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 
 var rb3 = undefined / 1;
 >rb3 : Symbol(rb3, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 24, 3))
@@ -87,12 +87,12 @@ var rb4 = undefined / E.a;
 
 var rb5 = a / undefined;
 >rb5 : Symbol(rb5, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 26, 3))
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 >undefined : Symbol(undefined)
 
 var rb6 = b / undefined;
 >rb6 : Symbol(rb6, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 27, 3))
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 >undefined : Symbol(undefined)
 
 var rb7 = 0 / undefined;
@@ -110,12 +110,12 @@ var rb8 = E.b / undefined;
 var rc1 = undefined % a;
 >rc1 : Symbol(rc1, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 32, 3))
 >undefined : Symbol(undefined)
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 
 var rc2 = undefined % b;
 >rc2 : Symbol(rc2, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 33, 3))
 >undefined : Symbol(undefined)
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 
 var rc3 = undefined % 1;
 >rc3 : Symbol(rc3, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 34, 3))
@@ -130,12 +130,12 @@ var rc4 = undefined % E.a;
 
 var rc5 = a % undefined;
 >rc5 : Symbol(rc5, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 36, 3))
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 >undefined : Symbol(undefined)
 
 var rc6 = b % undefined;
 >rc6 : Symbol(rc6, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 37, 3))
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 >undefined : Symbol(undefined)
 
 var rc7 = 0 % undefined;
@@ -153,12 +153,12 @@ var rc8 = E.b % undefined;
 var rd1 = undefined - a;
 >rd1 : Symbol(rd1, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 42, 3))
 >undefined : Symbol(undefined)
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 
 var rd2 = undefined - b;
 >rd2 : Symbol(rd2, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 43, 3))
 >undefined : Symbol(undefined)
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 
 var rd3 = undefined - 1;
 >rd3 : Symbol(rd3, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 44, 3))
@@ -173,12 +173,12 @@ var rd4 = undefined - E.a;
 
 var rd5 = a - undefined;
 >rd5 : Symbol(rd5, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 46, 3))
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 >undefined : Symbol(undefined)
 
 var rd6 = b - undefined;
 >rd6 : Symbol(rd6, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 47, 3))
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 >undefined : Symbol(undefined)
 
 var rd7 = 0 - undefined;
@@ -196,12 +196,12 @@ var rd8 = E.b - undefined;
 var re1 = undefined << a;
 >re1 : Symbol(re1, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 52, 3))
 >undefined : Symbol(undefined)
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 
 var re2 = undefined << b;
 >re2 : Symbol(re2, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 53, 3))
 >undefined : Symbol(undefined)
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 
 var re3 = undefined << 1;
 >re3 : Symbol(re3, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 54, 3))
@@ -216,12 +216,12 @@ var re4 = undefined << E.a;
 
 var re5 = a << undefined;
 >re5 : Symbol(re5, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 56, 3))
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 >undefined : Symbol(undefined)
 
 var re6 = b << undefined;
 >re6 : Symbol(re6, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 57, 3))
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 >undefined : Symbol(undefined)
 
 var re7 = 0 << undefined;
@@ -239,12 +239,12 @@ var re8 = E.b << undefined;
 var rf1 = undefined >> a;
 >rf1 : Symbol(rf1, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 62, 3))
 >undefined : Symbol(undefined)
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 
 var rf2 = undefined >> b;
 >rf2 : Symbol(rf2, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 63, 3))
 >undefined : Symbol(undefined)
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 
 var rf3 = undefined >> 1;
 >rf3 : Symbol(rf3, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 64, 3))
@@ -259,12 +259,12 @@ var rf4 = undefined >> E.a;
 
 var rf5 = a >> undefined;
 >rf5 : Symbol(rf5, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 66, 3))
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 >undefined : Symbol(undefined)
 
 var rf6 = b >> undefined;
 >rf6 : Symbol(rf6, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 67, 3))
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 >undefined : Symbol(undefined)
 
 var rf7 = 0 >> undefined;
@@ -282,12 +282,12 @@ var rf8 = E.b >> undefined;
 var rg1 = undefined >>> a;
 >rg1 : Symbol(rg1, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 72, 3))
 >undefined : Symbol(undefined)
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 
 var rg2 = undefined >>> b;
 >rg2 : Symbol(rg2, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 73, 3))
 >undefined : Symbol(undefined)
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 
 var rg3 = undefined >>> 1;
 >rg3 : Symbol(rg3, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 74, 3))
@@ -302,12 +302,12 @@ var rg4 = undefined >>> E.a;
 
 var rg5 = a >>> undefined;
 >rg5 : Symbol(rg5, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 76, 3))
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 >undefined : Symbol(undefined)
 
 var rg6 = b >>> undefined;
 >rg6 : Symbol(rg6, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 77, 3))
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 >undefined : Symbol(undefined)
 
 var rg7 = 0 >>> undefined;
@@ -325,12 +325,12 @@ var rg8 = E.b >>> undefined;
 var rh1 = undefined & a;
 >rh1 : Symbol(rh1, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 82, 3))
 >undefined : Symbol(undefined)
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 
 var rh2 = undefined & b;
 >rh2 : Symbol(rh2, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 83, 3))
 >undefined : Symbol(undefined)
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 
 var rh3 = undefined & 1;
 >rh3 : Symbol(rh3, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 84, 3))
@@ -345,12 +345,12 @@ var rh4 = undefined & E.a;
 
 var rh5 = a & undefined;
 >rh5 : Symbol(rh5, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 86, 3))
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 >undefined : Symbol(undefined)
 
 var rh6 = b & undefined;
 >rh6 : Symbol(rh6, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 87, 3))
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 >undefined : Symbol(undefined)
 
 var rh7 = 0 & undefined;
@@ -368,12 +368,12 @@ var rh8 = E.b & undefined;
 var ri1 = undefined ^ a;
 >ri1 : Symbol(ri1, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 92, 3))
 >undefined : Symbol(undefined)
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 
 var ri2 = undefined ^ b;
 >ri2 : Symbol(ri2, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 93, 3))
 >undefined : Symbol(undefined)
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 
 var ri3 = undefined ^ 1;
 >ri3 : Symbol(ri3, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 94, 3))
@@ -388,12 +388,12 @@ var ri4 = undefined ^ E.a;
 
 var ri5 = a ^ undefined;
 >ri5 : Symbol(ri5, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 96, 3))
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 >undefined : Symbol(undefined)
 
 var ri6 = b ^ undefined;
 >ri6 : Symbol(ri6, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 97, 3))
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 >undefined : Symbol(undefined)
 
 var ri7 = 0 ^ undefined;
@@ -411,12 +411,12 @@ var ri8 = E.b ^ undefined;
 var rj1 = undefined | a;
 >rj1 : Symbol(rj1, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 102, 3))
 >undefined : Symbol(undefined)
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 
 var rj2 = undefined | b;
 >rj2 : Symbol(rj2, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 103, 3))
 >undefined : Symbol(undefined)
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 
 var rj3 = undefined | 1;
 >rj3 : Symbol(rj3, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 104, 3))
@@ -431,12 +431,12 @@ var rj4 = undefined | E.a;
 
 var rj5 = a | undefined;
 >rj5 : Symbol(rj5, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 106, 3))
->a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 >undefined : Symbol(undefined)
 
 var rj6 = b | undefined;
 >rj6 : Symbol(rj6, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 107, 3))
->b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(arithmeticOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 >undefined : Symbol(undefined)
 
 var rj7 = 0 | undefined;

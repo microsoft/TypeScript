@@ -1,0 +1,14 @@
+--- old.jsDeclarationsTypeReferences3(target=es2015).js
++++ new.jsDeclarationsTypeReferences3(target=es2015).js
+@@= skipped -24, +24 lines =@@
+
+
+ //// [index.d.ts]
+-export namespace A {
+-    namespace B {
+-        let thing: Something;
+-    }
+-}
+-import Something_1 = require("fs");
+-import Something = Something_1.Something;
++export declare var A: {};

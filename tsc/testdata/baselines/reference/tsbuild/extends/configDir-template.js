@@ -51,15 +51,15 @@ Output::
 
 ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 'paths' option is specified, looking for a pattern to match module name '@myscope/sometype'.
 Module name '@myscope/sometype', matched pattern '@myscope/*'.
 Trying substitution '/home/src/projects/myproject/types/*', candidate module location: '/home/src/projects/myproject/types/sometype'.
 Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
-../../tslibs/TS/Lib/lib.d.ts
-   Default library for target 'ES5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+   Default library for target 'ES2024'
 types/sometype.ts
    Imported via "@myscope/sometype" from file 'main.ts'
 main.ts
@@ -71,11 +71,8 @@ export declare const y = 10;
 export declare const x = 10;
 
 //// [/home/src/projects/myproject/outDir/main.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
 // some comment
-exports.y = 10;
+export const y = 10;
 
 //// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo] *new* 
 {"version":"FakeTSVersion","root":["../main.ts"]}
@@ -93,12 +90,9 @@ exports.y = 10;
   "size": 49
 }
 //// [/home/src/projects/myproject/outDir/types/sometype.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+export const x = 10;
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -124,7 +118,7 @@ declare const console: { log(msg: any): void; };
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/projects/myproject/types/sometype.ts
 *refresh*    /home/src/projects/myproject/main.ts
 Signatures::

@@ -1,6 +1,6 @@
 --- old.commaOperatorWithSecondOperandObjectType.js
 +++ new.commaOperatorWithSecondOperandObjectType.js
-@@= skipped -47, +47 lines =@@
+@@= skipped -48, +48 lines =@@
  var STRING;
  var OBJECT;
  class CLASS {

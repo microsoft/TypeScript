@@ -6,11 +6,11 @@ var Common = {};
 >{} : { localize: (string: string) => string; }
 
 self['Common'] = self['Common'] || {};
->self['Common'] = self['Common'] || {} : { localize: (string: string) => string; } | {}
+>self['Common'] = self['Common'] || {} : { localize: (string: string) => string; }
 >self['Common'] : { localize: (string: string) => string; }
 >self : Window & typeof globalThis
 >'Common' : "Common"
->self['Common'] || {} : { localize: (string: string) => string; } | {}
+>self['Common'] || {} : { localize: (string: string) => string; }
 >self['Common'] : { localize: (string: string) => string; }
 >self : Window & typeof globalThis
 >'Common' : "Common"

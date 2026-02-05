@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-outerThisReference(target=es2022).js
 +++ new.esDecorators-classDeclaration-outerThisReference(target=es2022).js
-@@= skipped -38, +38 lines =@@
-
+@@= skipped -39, +39 lines =@@
  //// [esDecorators-classDeclaration-outerThisReference.js]
+ "use strict";
  // `this` should point to the outer `this` in both cases.
 -let A = (() => {
 -    let _outerThis = this;

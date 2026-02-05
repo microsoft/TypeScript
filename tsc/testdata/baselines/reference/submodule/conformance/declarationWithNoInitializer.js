@@ -6,5 +6,6 @@ var {c, d};          // Error, no initializer
 
 
 //// [declarationWithNoInitializer.js]
+"use strict";
 var [a, b]; // Error, no initializer
 var { c, d }; // Error, no initializer

@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/callConstructAssignment.ts] ////
 
 === callConstructAssignment.ts ===
-var foo:{ ( ):void; }
+declare var foo:{ ( ):void; }
 >foo : () => void
 
-var bar:{ new ( ):any; }
+declare var bar:{ new ( ):any; }
 >bar : new () => any
 
 foo = bar; // error

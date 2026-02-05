@@ -100,6 +100,7 @@ interface Nested {
 }
 
 //// [truthinessCallExpressionCoercion.js]
+"use strict";
 function onlyErrorsWhenTestingNonNullableFunctionType(required, optional) {
     if (required) { // error
     }

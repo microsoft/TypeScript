@@ -39,6 +39,7 @@ var temp: any;
 1 ** (delete temp++) ** 3;
 
 //// [exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.js]
+"use strict";
 var temp;
 // Error: incorrect type on left-hand side 
 Math.pow((!--temp), 3);

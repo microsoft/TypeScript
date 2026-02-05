@@ -19,14 +19,12 @@ export const m = X.f();
 
 
 //// [fakeInfinity2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.m = exports.Foo = void 0;
+export { Foo };
 var Foo;
 (function (Foo) {
     Foo[Foo["A"] = 1e999] = "A";
     Foo[Foo["B"] = -1e999] = "B";
-})(Foo || (exports.Foo = Foo = {}));
+})(Foo || (Foo = {}));
 var X;
 (function (X) {
     function f() {
@@ -34,7 +32,7 @@ var X;
     }
     X.f = f;
 })(X || (X = {}));
-exports.m = X.f();
+export const m = X.f();
 
 
 //// [fakeInfinity2.d.ts]

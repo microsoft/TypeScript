@@ -1,0 +1,13 @@
+--- old.decoratorMetadataOnInferredType(target=es2015).js
++++ new.decoratorMetadataOnInferredType(target=es2015).js
+@@= skipped -27, +27 lines =@@
+ function decorator(target, propertyKey) {
+ }
+ class B {
+-    constructor() {
+-        this.x = new A();
+-    }
++    x = new A();
+ }
+ exports.B = B;
+ __decorate([

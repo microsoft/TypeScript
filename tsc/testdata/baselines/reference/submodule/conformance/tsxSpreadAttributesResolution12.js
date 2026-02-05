@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution12.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 const obj = {};
@@ -36,6 +38,7 @@ let x3 = <OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} />
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const obj = {};

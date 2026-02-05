@@ -1,6 +1,6 @@
 --- old.esDecorators-classExpression-namedEvaluation.4.js
 +++ new.esDecorators-classExpression-namedEvaluation.4.js
-@@= skipped -23, +23 lines =@@
+@@= skipped -24, +24 lines =@@
  // 8.6.3 RS: IteratorBindingInitialization
  //  SingleNameBinding : BindingIdentifier Initializer?
  {

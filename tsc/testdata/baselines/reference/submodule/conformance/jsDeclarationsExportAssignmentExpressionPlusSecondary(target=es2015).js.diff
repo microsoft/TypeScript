@@ -1,0 +1,27 @@
+--- old.jsDeclarationsExportAssignmentExpressionPlusSecondary(target=es2015).js
++++ new.jsDeclarationsExportAssignmentExpressionPlusSecondary(target=es2015).js
+@@= skipped -31, +31 lines =@@
+
+
+ //// [index.d.ts]
+-export namespace Strings {
+-    let a: string;
+-    let b: string;
+-}
+-export declare let thing: string;
+-export declare let also: string;
+-export declare namespace desc {
+-    let item: string;
+-}
++declare const _default: {
++    thing: string;
++    also: string;
++    desc: {
++        item: string;
++    };
++};
++export = _default;
++export declare var Strings: {
++    a: string;
++    b: string;
++};

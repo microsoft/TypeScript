@@ -1,6 +1,6 @@
 --- old.thisInInvalidContexts.js
 +++ new.thisInInvalidContexts.js
-@@= skipped -49, +49 lines =@@
+@@= skipped -50, +50 lines =@@
      constructor(t) { }
  }
  class ClassWithNoInitializer extends BaseErrClass {

@@ -1,0 +1,68 @@
+readonlyInDeclarationFile.ts(8,22): error TS2564: Property 'a1' has no initializer and is not definitely assigned in the constructor.
+readonlyInDeclarationFile.ts(9,24): error TS2564: Property 'a2' has no initializer and is not definitely assigned in the constructor.
+readonlyInDeclarationFile.ts(10,21): error TS2564: Property 'a3' has no initializer and is not definitely assigned in the constructor.
+readonlyInDeclarationFile.ts(52,12): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== readonlyInDeclarationFile.ts (4 errors) ====
+    interface Foo {
+        readonly x: number;
+        readonly [x: string]: Object;
+    }
+    
+    class C {
+        readonly [x: string]: Object;
+        private readonly a1: number;
+                         ~~
+!!! error TS2564: Property 'a1' has no initializer and is not definitely assigned in the constructor.
+        protected readonly a2: number;
+                           ~~
+!!! error TS2564: Property 'a2' has no initializer and is not definitely assigned in the constructor.
+        public readonly a3: number;
+                        ~~
+!!! error TS2564: Property 'a3' has no initializer and is not definitely assigned in the constructor.
+        private get b1() { return 1 }
+        protected get b2() { return 1 }
+        public get b3() { return 1 }
+        private get c1() { return 1 }
+        private set c1(value) { }
+        protected get c2() { return 1 }
+        protected set c2(value) { }
+        public get c3() { return 1 }
+        public set c3(value) { }
+        private static readonly s1: number;
+        protected static readonly s2: number;
+        public static readonly s3: number;
+        private static get t1() { return 1 }
+        protected static get t2() { return 1 }
+        public static get t3() { return 1 }
+        private static get u1() { return 1 }
+        private static set u1(value) { }
+        protected static get u2() { return 1 }
+        protected static set u2(value) { }
+        public static get u3() { return 1 }
+        public static set u3(value) { }
+    }
+    
+    var z: {
+        readonly a: string;
+        readonly [x: string]: Object;
+    }
+    
+    function f() {
+        return {
+            get x() { return 1; },
+            get y() { return 1; },
+            set y(value) { }
+        }
+    }
+    
+    function g() {
+        var x: {
+            readonly a: string;
+            readonly [x: string]: Object;
+        }
+        return x;
+               ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    }

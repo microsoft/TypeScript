@@ -12,6 +12,7 @@ var z = foo.x + 10;
 
 
 //// [foo_0.js]
+"use strict";
 //// [foo_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

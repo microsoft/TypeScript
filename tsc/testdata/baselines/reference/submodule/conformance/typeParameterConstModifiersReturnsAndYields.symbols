@@ -1,0 +1,401 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiersReturnsAndYields.ts] ////
+
+=== typeParameterConstModifiersReturnsAndYields.ts ===
+enum E { Val, Val2 }
+>E : Symbol(E, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 0))
+>Val : Symbol(E.Val, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 8))
+>Val2 : Symbol(E.Val2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 13))
+
+declare function test1<const T>(create: () => T): T;
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 2, 23))
+>create : Symbol(create, Decl(typeParameterConstModifiersReturnsAndYields.ts, 2, 32))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 2, 23))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 2, 23))
+
+const result1 = test1(() => ['a']);
+>result1 : Symbol(result1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 4, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+const result2 = test1(() => `a${Math.random()}`);
+>result2 : Symbol(result2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 5, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+const result3 = test1(() => 'a');
+>result3 : Symbol(result3, Decl(typeParameterConstModifiersReturnsAndYields.ts, 6, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+const result4 = test1(() => true);
+>result4 : Symbol(result4, Decl(typeParameterConstModifiersReturnsAndYields.ts, 7, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+const result5 = test1(() => 101n);
+>result5 : Symbol(result5, Decl(typeParameterConstModifiersReturnsAndYields.ts, 8, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+const result6 = test1(() => false);
+>result6 : Symbol(result6, Decl(typeParameterConstModifiersReturnsAndYields.ts, 9, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+const result7 = test1(() => 11111);
+>result7 : Symbol(result7, Decl(typeParameterConstModifiersReturnsAndYields.ts, 10, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+const result8 = test1(() => E.Val);
+>result8 : Symbol(result8, Decl(typeParameterConstModifiersReturnsAndYields.ts, 11, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+>E.Val : Symbol(E.Val, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 8))
+>E : Symbol(E, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 0))
+>Val : Symbol(E.Val, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 8))
+
+const result9 = test1(() => { return ['a']; });
+>result9 : Symbol(result9, Decl(typeParameterConstModifiersReturnsAndYields.ts, 13, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+const result10 = test1(() => { return `a${Math.random()}`; });
+>result10 : Symbol(result10, Decl(typeParameterConstModifiersReturnsAndYields.ts, 14, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+const result11 = test1(() => { return 'a'; });
+>result11 : Symbol(result11, Decl(typeParameterConstModifiersReturnsAndYields.ts, 15, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+const result12 = test1(() => { return true; });
+>result12 : Symbol(result12, Decl(typeParameterConstModifiersReturnsAndYields.ts, 16, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+const result13 = test1(() => { return 101n; });
+>result13 : Symbol(result13, Decl(typeParameterConstModifiersReturnsAndYields.ts, 17, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+const result14 = test1(() => { return false; });
+>result14 : Symbol(result14, Decl(typeParameterConstModifiersReturnsAndYields.ts, 18, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+const result15 = test1(() => { return 11111; });
+>result15 : Symbol(result15, Decl(typeParameterConstModifiersReturnsAndYields.ts, 19, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+const result16 = test1(() => { return E.Val; });
+>result16 : Symbol(result16, Decl(typeParameterConstModifiersReturnsAndYields.ts, 20, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+>E.Val : Symbol(E.Val, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 8))
+>E : Symbol(E, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 0))
+>Val : Symbol(E.Val, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 8))
+
+const result17 = test1(async () => 'foo');
+>result17 : Symbol(result17, Decl(typeParameterConstModifiersReturnsAndYields.ts, 22, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+const result18 = test1(async () => { return 'foo'; });
+>result18 : Symbol(result18, Decl(typeParameterConstModifiersReturnsAndYields.ts, 23, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
+
+declare function test2<const T>(create: () => Promise<T>): T;
+>test2 : Symbol(test2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 23, 54))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 25, 23))
+>create : Symbol(create, Decl(typeParameterConstModifiersReturnsAndYields.ts, 25, 32))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 25, 23))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 25, 23))
+
+const result19 = test2(async () => 'foo');
+>result19 : Symbol(result19, Decl(typeParameterConstModifiersReturnsAndYields.ts, 27, 5))
+>test2 : Symbol(test2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 23, 54))
+
+const result20 = test2(async () => { return 'foo'; });
+>result20 : Symbol(result20, Decl(typeParameterConstModifiersReturnsAndYields.ts, 28, 5))
+>test2 : Symbol(test2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 23, 54))
+
+declare function test3<const T, const R>(arg: () => Generator<T, R>): [T, R]
+>test3 : Symbol(test3, Decl(typeParameterConstModifiersReturnsAndYields.ts, 28, 54))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 30, 23))
+>R : Symbol(R, Decl(typeParameterConstModifiersReturnsAndYields.ts, 30, 31))
+>arg : Symbol(arg, Decl(typeParameterConstModifiersReturnsAndYields.ts, 30, 41))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 30, 23))
+>R : Symbol(R, Decl(typeParameterConstModifiersReturnsAndYields.ts, 30, 31))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 30, 23))
+>R : Symbol(R, Decl(typeParameterConstModifiersReturnsAndYields.ts, 30, 31))
+
+const result21 = test3(function*() {
+>result21 : Symbol(result21, Decl(typeParameterConstModifiersReturnsAndYields.ts, 32, 5))
+>test3 : Symbol(test3, Decl(typeParameterConstModifiersReturnsAndYields.ts, 28, 54))
+
+    yield 10;
+    return '1';
+});
+
+declare function test4<const T, const R>(arg: () => AsyncGenerator<T, R>): [T, R]
+>test4 : Symbol(test4, Decl(typeParameterConstModifiersReturnsAndYields.ts, 35, 3))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 37, 23))
+>R : Symbol(R, Decl(typeParameterConstModifiersReturnsAndYields.ts, 37, 31))
+>arg : Symbol(arg, Decl(typeParameterConstModifiersReturnsAndYields.ts, 37, 41))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 37, 23))
+>R : Symbol(R, Decl(typeParameterConstModifiersReturnsAndYields.ts, 37, 31))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 37, 23))
+>R : Symbol(R, Decl(typeParameterConstModifiersReturnsAndYields.ts, 37, 31))
+
+const result22 = test4(async function*() {
+>result22 : Symbol(result22, Decl(typeParameterConstModifiersReturnsAndYields.ts, 39, 5))
+>test4 : Symbol(test4, Decl(typeParameterConstModifiersReturnsAndYields.ts, 35, 3))
+
+    yield 10;
+    return '1';
+});
+
+// https://github.com/microsoft/TypeScript/issues/53813
+const UploadThingServerHelper = <const ValidRoutes,>(route: {
+>UploadThingServerHelper : Symbol(UploadThingServerHelper, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 5))
+>ValidRoutes : Symbol(ValidRoutes, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 33))
+>route : Symbol(route, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 53))
+
+  readonly [Route in keyof ValidRoutes]: {
+>Route : Symbol(Route, Decl(typeParameterConstModifiersReturnsAndYields.ts, 46, 12))
+>ValidRoutes : Symbol(ValidRoutes, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 33))
+
+    middleware: () => ValidRoutes[Route];
+>middleware : Symbol(middleware, Decl(typeParameterConstModifiersReturnsAndYields.ts, 46, 42))
+>ValidRoutes : Symbol(ValidRoutes, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 33))
+>Route : Symbol(Route, Decl(typeParameterConstModifiersReturnsAndYields.ts, 46, 12))
+
+    onUpload: (response: { metadata: ValidRoutes[Route] }) => void;
+>onUpload : Symbol(onUpload, Decl(typeParameterConstModifiersReturnsAndYields.ts, 47, 41))
+>response : Symbol(response, Decl(typeParameterConstModifiersReturnsAndYields.ts, 48, 15))
+>metadata : Symbol(metadata, Decl(typeParameterConstModifiersReturnsAndYields.ts, 48, 26))
+>ValidRoutes : Symbol(ValidRoutes, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 33))
+>Route : Symbol(Route, Decl(typeParameterConstModifiersReturnsAndYields.ts, 46, 12))
+
+  };
+}) => {};
+
+const FileRouter = UploadThingServerHelper({
+>FileRouter : Symbol(FileRouter, Decl(typeParameterConstModifiersReturnsAndYields.ts, 52, 5))
+>UploadThingServerHelper : Symbol(UploadThingServerHelper, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 5))
+
+  example: {
+>example : Symbol(example, Decl(typeParameterConstModifiersReturnsAndYields.ts, 52, 44))
+
+    middleware: () => "someValue",
+>middleware : Symbol(middleware, Decl(typeParameterConstModifiersReturnsAndYields.ts, 53, 12))
+
+    onUpload: (response) => {
+>onUpload : Symbol(onUpload, Decl(typeParameterConstModifiersReturnsAndYields.ts, 54, 34))
+>response : Symbol(response, Decl(typeParameterConstModifiersReturnsAndYields.ts, 55, 15))
+
+      const v: "someValue" = response.metadata;
+>v : Symbol(v, Decl(typeParameterConstModifiersReturnsAndYields.ts, 56, 11))
+>response.metadata : Symbol(metadata, Decl(typeParameterConstModifiersReturnsAndYields.ts, 48, 26))
+>response : Symbol(response, Decl(typeParameterConstModifiersReturnsAndYields.ts, 55, 15))
+>metadata : Symbol(metadata, Decl(typeParameterConstModifiersReturnsAndYields.ts, 48, 26))
+
+    },
+  },
+});
+
+function outer1<const T>(cb: () => T) {
+>outer1 : Symbol(outer1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 59, 3))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 61, 16))
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 61, 25))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 61, 16))
+
+  function inner1<const U>(cb2: () => U) {
+>inner1 : Symbol(inner1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 61, 39))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 62, 18))
+>cb2 : Symbol(cb2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 62, 27))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 62, 18))
+
+    return [cb(), cb2()];
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 61, 25))
+>cb2 : Symbol(cb2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 62, 27))
+  }
+  return inner1;
+>inner1 : Symbol(inner1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 61, 39))
+}
+const nestedResult1 = outer1(() => 1)(() => "foo");
+>nestedResult1 : Symbol(nestedResult1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 67, 5))
+>outer1 : Symbol(outer1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 59, 3))
+
+function outer2<T>(cb: () => T) {
+>outer2 : Symbol(outer2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 67, 51))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 69, 16))
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 69, 19))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 69, 16))
+
+  function inner2<const U>(cb2: () => U) {
+>inner2 : Symbol(inner2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 69, 33))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 70, 18))
+>cb2 : Symbol(cb2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 70, 27))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 70, 18))
+
+    return [cb(), cb2()];
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 69, 19))
+>cb2 : Symbol(cb2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 70, 27))
+  }
+  return inner2;
+>inner2 : Symbol(inner2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 69, 33))
+}
+const nestedResult2 = outer2(() => 1)(() => "foo");
+>nestedResult2 : Symbol(nestedResult2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 75, 5))
+>outer2 : Symbol(outer2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 67, 51))
+
+function outer3<const T>(cb: () => T) {
+>outer3 : Symbol(outer3, Decl(typeParameterConstModifiersReturnsAndYields.ts, 75, 51))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 77, 16))
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 77, 25))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 77, 16))
+
+  function inner3<U>(cb2: () => U) {
+>inner3 : Symbol(inner3, Decl(typeParameterConstModifiersReturnsAndYields.ts, 77, 39))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 78, 18))
+>cb2 : Symbol(cb2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 78, 21))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 78, 18))
+
+    return [cb(), cb2()];
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 77, 25))
+>cb2 : Symbol(cb2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 78, 21))
+  }
+  return inner3;
+>inner3 : Symbol(inner3, Decl(typeParameterConstModifiersReturnsAndYields.ts, 77, 39))
+}
+const nestedResult3 = outer3(() => 1)(() => "foo");
+>nestedResult3 : Symbol(nestedResult3, Decl(typeParameterConstModifiersReturnsAndYields.ts, 83, 5))
+>outer3 : Symbol(outer3, Decl(typeParameterConstModifiersReturnsAndYields.ts, 75, 51))
+
+declare function overloaded1<const T>(cb: () => T): T;
+>overloaded1 : Symbol(overloaded1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 83, 51), Decl(typeParameterConstModifiersReturnsAndYields.ts, 85, 54))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 85, 29))
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 85, 38))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 85, 29))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 85, 29))
+
+declare function overloaded1<const T, const U>(cb: () => T, cb2: () => U): [T, U];
+>overloaded1 : Symbol(overloaded1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 83, 51), Decl(typeParameterConstModifiersReturnsAndYields.ts, 85, 54))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 86, 29))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 86, 37))
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 86, 47))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 86, 29))
+>cb2 : Symbol(cb2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 86, 59))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 86, 37))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 86, 29))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 86, 37))
+
+const overloadA = overloaded1(() => 42);
+>overloadA : Symbol(overloadA, Decl(typeParameterConstModifiersReturnsAndYields.ts, 87, 5))
+>overloaded1 : Symbol(overloaded1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 83, 51), Decl(typeParameterConstModifiersReturnsAndYields.ts, 85, 54))
+
+const overloadB = overloaded1(() => "hi", () => true);
+>overloadB : Symbol(overloadB, Decl(typeParameterConstModifiersReturnsAndYields.ts, 88, 5))
+>overloaded1 : Symbol(overloaded1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 83, 51), Decl(typeParameterConstModifiersReturnsAndYields.ts, 85, 54))
+
+declare function overloaded2<T>(cb: () => T): T;
+>overloaded2 : Symbol(overloaded2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 88, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 90, 48))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 90, 29))
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 90, 32))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 90, 29))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 90, 29))
+
+declare function overloaded2<T, const U>(cb: () => T, cb2: () => U): [T, U];
+>overloaded2 : Symbol(overloaded2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 88, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 90, 48))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 91, 29))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 91, 31))
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 91, 41))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 91, 29))
+>cb2 : Symbol(cb2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 91, 53))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 91, 31))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 91, 29))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 91, 31))
+
+const overloadC = overloaded2(() => 42);
+>overloadC : Symbol(overloadC, Decl(typeParameterConstModifiersReturnsAndYields.ts, 92, 5))
+>overloaded2 : Symbol(overloaded2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 88, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 90, 48))
+
+const overloadD = overloaded2(() => "hi", () => true);
+>overloadD : Symbol(overloadD, Decl(typeParameterConstModifiersReturnsAndYields.ts, 93, 5))
+>overloaded2 : Symbol(overloaded2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 88, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 90, 48))
+
+declare function overloaded3<const T>(cb: () => T): T;
+>overloaded3 : Symbol(overloaded3, Decl(typeParameterConstModifiersReturnsAndYields.ts, 93, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 95, 54))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 95, 29))
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 95, 38))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 95, 29))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 95, 29))
+
+declare function overloaded3<const T, U>(cb: () => T, cb2: () => U): [T, U];
+>overloaded3 : Symbol(overloaded3, Decl(typeParameterConstModifiersReturnsAndYields.ts, 93, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 95, 54))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 96, 29))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 96, 37))
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 96, 41))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 96, 29))
+>cb2 : Symbol(cb2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 96, 53))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 96, 37))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 96, 29))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 96, 37))
+
+const overloadE = overloaded3(() => 42);
+>overloadE : Symbol(overloadE, Decl(typeParameterConstModifiersReturnsAndYields.ts, 97, 5))
+>overloaded3 : Symbol(overloaded3, Decl(typeParameterConstModifiersReturnsAndYields.ts, 93, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 95, 54))
+
+const overloadF = overloaded3(() => "hi", () => true);
+>overloadF : Symbol(overloadF, Decl(typeParameterConstModifiersReturnsAndYields.ts, 98, 5))
+>overloaded3 : Symbol(overloaded3, Decl(typeParameterConstModifiersReturnsAndYields.ts, 93, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 95, 54))
+
+declare function overloaded4<const T>(cb: () => T): T;
+>overloaded4 : Symbol(overloaded4, Decl(typeParameterConstModifiersReturnsAndYields.ts, 98, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 100, 54))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 100, 29))
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 100, 38))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 100, 29))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 100, 29))
+
+declare function overloaded4<T, U>(cb: () => T, cb2: () => U): [T, U];
+>overloaded4 : Symbol(overloaded4, Decl(typeParameterConstModifiersReturnsAndYields.ts, 98, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 100, 54))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 101, 29))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 101, 31))
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 101, 35))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 101, 29))
+>cb2 : Symbol(cb2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 101, 47))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 101, 31))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 101, 29))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 101, 31))
+
+const overloadG = overloaded4(() => 42);
+>overloadG : Symbol(overloadG, Decl(typeParameterConstModifiersReturnsAndYields.ts, 102, 5))
+>overloaded4 : Symbol(overloaded4, Decl(typeParameterConstModifiersReturnsAndYields.ts, 98, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 100, 54))
+
+const overloadH = overloaded4(() => "hi", () => true);
+>overloadH : Symbol(overloadH, Decl(typeParameterConstModifiersReturnsAndYields.ts, 103, 5))
+>overloaded4 : Symbol(overloaded4, Decl(typeParameterConstModifiersReturnsAndYields.ts, 98, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 100, 54))
+
+declare function overloaded5<T>(cb: () => T): T;
+>overloaded5 : Symbol(overloaded5, Decl(typeParameterConstModifiersReturnsAndYields.ts, 103, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 105, 48))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 105, 29))
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 105, 32))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 105, 29))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 105, 29))
+
+declare function overloaded5<const T, U>(cb: () => T, cb2: () => U): [T, U];
+>overloaded5 : Symbol(overloaded5, Decl(typeParameterConstModifiersReturnsAndYields.ts, 103, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 105, 48))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 106, 29))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 106, 37))
+>cb : Symbol(cb, Decl(typeParameterConstModifiersReturnsAndYields.ts, 106, 41))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 106, 29))
+>cb2 : Symbol(cb2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 106, 53))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 106, 37))
+>T : Symbol(T, Decl(typeParameterConstModifiersReturnsAndYields.ts, 106, 29))
+>U : Symbol(U, Decl(typeParameterConstModifiersReturnsAndYields.ts, 106, 37))
+
+const overloadI = overloaded5(() => 42);
+>overloadI : Symbol(overloadI, Decl(typeParameterConstModifiersReturnsAndYields.ts, 107, 5))
+>overloaded5 : Symbol(overloaded5, Decl(typeParameterConstModifiersReturnsAndYields.ts, 103, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 105, 48))
+
+const overloadJ = overloaded5(() => "hi", () => true);
+>overloadJ : Symbol(overloadJ, Decl(typeParameterConstModifiersReturnsAndYields.ts, 108, 5))
+>overloaded5 : Symbol(overloaded5, Decl(typeParameterConstModifiersReturnsAndYields.ts, 103, 54), Decl(typeParameterConstModifiersReturnsAndYields.ts, 105, 48))
+

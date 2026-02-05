@@ -23,27 +23,27 @@ console.log(Intl.PluralRules.supportedLocalesOf(locales, options).join(', '));
 >console : Console
 >log : (...data: any[]) => void
 >Intl.PluralRules.supportedLocalesOf(locales, options).join(', ') : string
->Intl.PluralRules.supportedLocalesOf(locales, options).join : (separator?: string) => string
+>Intl.PluralRules.supportedLocalesOf(locales, options).join : (separator?: string | undefined) => string
 >Intl.PluralRules.supportedLocalesOf(locales, options) : string[]
->Intl.PluralRules.supportedLocalesOf : (locales: string | readonly string[], options?: { localeMatcher?: "best fit" | "lookup"; }) => string[]
+>Intl.PluralRules.supportedLocalesOf : (locales: string | readonly string[], options?: { localeMatcher?: "best fit" | "lookup" | undefined; } | undefined) => string[]
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >Intl : typeof Intl
 >PluralRules : Intl.PluralRulesConstructor
->supportedLocalesOf : (locales: string | readonly string[], options?: { localeMatcher?: "best fit" | "lookup"; }) => string[]
+>supportedLocalesOf : (locales: string | readonly string[], options?: { localeMatcher?: "best fit" | "lookup" | undefined; } | undefined) => string[]
 >locales : string[]
 >options : { readonly localeMatcher: "lookup"; }
->join : (separator?: string) => string
+>join : (separator?: string | undefined) => string
 >', ' : ", "
 
 const [ part ] = new Intl.NumberFormat().formatToParts();
 >part : Intl.NumberFormatPart
 >new Intl.NumberFormat().formatToParts() : Intl.NumberFormatPart[]
->new Intl.NumberFormat().formatToParts : (number?: number | bigint) => Intl.NumberFormatPart[]
+>new Intl.NumberFormat().formatToParts : (number?: number | bigint | undefined) => Intl.NumberFormatPart[]
 >new Intl.NumberFormat() : Intl.NumberFormat
 >Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
 >NumberFormat : Intl.NumberFormatConstructor
->formatToParts : (number?: number | bigint) => Intl.NumberFormatPart[]
+>formatToParts : (number?: number | bigint | undefined) => Intl.NumberFormatPart[]
 
 console.log(part.type, part.value);
 >console.log(part.type, part.value) : void

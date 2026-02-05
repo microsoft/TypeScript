@@ -1,0 +1,23 @@
+constructorArgWithGenericCallSignature.ts(12,8): error TS2454: Variable 'func' is used before being assigned.
+constructorArgWithGenericCallSignature.ts(13,29): error TS2454: Variable 'func' is used before being assigned.
+
+
+==== constructorArgWithGenericCallSignature.ts (2 errors) ====
+    namespace Test {
+        export interface MyFunc {
+            <T>(value1: T): T;
+        }
+        export class MyClass {
+            constructor(func: MyFunc) { }
+        }
+     
+     export function F(func: MyFunc) { }
+    }
+    var func: Test.MyFunc;
+    Test.F(func); // OK
+           ~~~~
+!!! error TS2454: Variable 'func' is used before being assigned.
+    var test = new Test.MyClass(func); // Should be OK
+                                ~~~~
+!!! error TS2454: Variable 'func' is used before being assigned.
+    

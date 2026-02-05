@@ -15,6 +15,7 @@ class C3 extends C1 {
 
 
 //// [autoAccessor6.js]
+"use strict";
 class C1 {
     accessor a;
 }

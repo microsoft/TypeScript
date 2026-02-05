@@ -1,0 +1,22 @@
+--- old.parserShorthandPropertyAssignment1.types
++++ new.parserShorthandPropertyAssignment1.types
+@@= skipped -1, +1 lines =@@
+
+ === parserShorthandPropertyAssignment1.ts ===
+ function foo(obj: { name?: string; id: number }) { }
+->foo : (obj: { name?: string; id: number; }) => void
+->obj : { name?: string; id: number; }
++>foo : (obj: { name?: string | undefined; id: number; }) => void
++>obj : { name?: string | undefined; id: number; }
+ >name : string | undefined
+ >id : number
+
+@@= skipped -11, +11 lines =@@
+
+ foo({ name?, id? });
+ >foo({ name?, id? }) : void
+->foo : (obj: { name?: string; id: number; }) => void
++>foo : (obj: { name?: string | undefined; id: number; }) => void
+ >{ name?, id? } : { name: any; id: any; }
+ >name : any
+ >id : any

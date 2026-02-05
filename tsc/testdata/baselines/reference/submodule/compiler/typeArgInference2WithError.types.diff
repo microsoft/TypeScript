@@ -1,0 +1,18 @@
+--- old.typeArgInference2WithError.types
++++ new.typeArgInference2WithError.types
+@@= skipped -6, +6 lines =@@
+ }
+
+ declare function foo<T extends Item>(x?: T, y?: T): T;
+->foo : <T extends Item>(x?: T, y?: T) => T
++>foo : <T extends Item>(x?: T | undefined, y?: T | undefined) => T
+ >x : T | undefined
+ >y : T | undefined
+
+ var z7 = foo("abc", 5); // Error
+ >z7 : Item
+ >foo("abc", 5) : Item
+->foo : <T extends Item>(x?: T, y?: T) => T
++>foo : <T extends Item>(x?: T | undefined, y?: T | undefined) => T
+ >"abc" : "abc"
+ >5 : 5

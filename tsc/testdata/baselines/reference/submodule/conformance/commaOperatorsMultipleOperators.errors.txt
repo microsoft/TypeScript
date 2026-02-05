@@ -1,0 +1,113 @@
+commaOperatorsMultipleOperators.ts(8,6): error TS2454: Variable 'BOOLEAN' is used before being assigned.
+commaOperatorsMultipleOperators.ts(8,15): error TS2454: Variable 'NUMBER' is used before being assigned.
+commaOperatorsMultipleOperators.ts(9,1): error TS2454: Variable 'BOOLEAN' is used before being assigned.
+commaOperatorsMultipleOperators.ts(9,10): error TS2454: Variable 'NUMBER' is used before being assigned.
+commaOperatorsMultipleOperators.ts(9,18): error TS2454: Variable 'STRING' is used before being assigned.
+commaOperatorsMultipleOperators.ts(10,1): error TS2454: Variable 'NUMBER' is used before being assigned.
+commaOperatorsMultipleOperators.ts(10,9): error TS2454: Variable 'STRING' is used before being assigned.
+commaOperatorsMultipleOperators.ts(10,17): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorsMultipleOperators.ts(11,1): error TS2454: Variable 'STRING' is used before being assigned.
+commaOperatorsMultipleOperators.ts(11,9): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorsMultipleOperators.ts(12,1): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorsMultipleOperators.ts(12,14): error TS2454: Variable 'BOOLEAN' is used before being assigned.
+commaOperatorsMultipleOperators.ts(15,21): error TS2454: Variable 'STRING' is used before being assigned.
+commaOperatorsMultipleOperators.ts(15,29): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorsMultipleOperators.ts(16,25): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorsMultipleOperators.ts(16,38): error TS2454: Variable 'BOOLEAN' is used before being assigned.
+commaOperatorsMultipleOperators.ts(17,29): error TS2454: Variable 'BOOLEAN' is used before being assigned.
+commaOperatorsMultipleOperators.ts(17,38): error TS2454: Variable 'NUMBER' is used before being assigned.
+commaOperatorsMultipleOperators.ts(18,24): error TS2454: Variable 'BOOLEAN' is used before being assigned.
+commaOperatorsMultipleOperators.ts(18,33): error TS2454: Variable 'NUMBER' is used before being assigned.
+commaOperatorsMultipleOperators.ts(18,41): error TS2454: Variable 'STRING' is used before being assigned.
+commaOperatorsMultipleOperators.ts(19,24): error TS2454: Variable 'NUMBER' is used before being assigned.
+commaOperatorsMultipleOperators.ts(19,32): error TS2454: Variable 'STRING' is used before being assigned.
+commaOperatorsMultipleOperators.ts(19,40): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorsMultipleOperators.ts(23,3): error TS2454: Variable 'NUMBER' is used before being assigned.
+commaOperatorsMultipleOperators.ts(23,11): error TS2454: Variable 'STRING' is used before being assigned.
+commaOperatorsMultipleOperators.ts(26,26): error TS2454: Variable 'NUMBER' is used before being assigned.
+commaOperatorsMultipleOperators.ts(26,34): error TS2454: Variable 'STRING' is used before being assigned.
+
+
+==== commaOperatorsMultipleOperators.ts (28 errors) ====
+    var ANY: any;
+    var BOOLEAN: boolean;
+    var NUMBER: number;
+    var STRING: string;
+    var OBJECT: Object;
+    
+    //Expected: work well
+    ANY, BOOLEAN, NUMBER;
+         ~~~~~~~
+!!! error TS2454: Variable 'BOOLEAN' is used before being assigned.
+                  ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+    BOOLEAN, NUMBER, STRING;
+    ~~~~~~~
+!!! error TS2454: Variable 'BOOLEAN' is used before being assigned.
+             ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+                     ~~~~~~
+!!! error TS2454: Variable 'STRING' is used before being assigned.
+    NUMBER, STRING, OBJECT;
+    ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+            ~~~~~~
+!!! error TS2454: Variable 'STRING' is used before being assigned.
+                    ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    STRING, OBJECT, ANY;
+    ~~~~~~
+!!! error TS2454: Variable 'STRING' is used before being assigned.
+            ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    OBJECT, ANY, BOOLEAN;
+    ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+                 ~~~~~~~
+!!! error TS2454: Variable 'BOOLEAN' is used before being assigned.
+    
+    //Results should have the same type as the third operand
+    var resultIsAny1 = (STRING, OBJECT, ANY);
+                        ~~~~~~
+!!! error TS2454: Variable 'STRING' is used before being assigned.
+                                ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    var resultIsBoolean1 = (OBJECT, ANY, BOOLEAN);
+                            ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+                                         ~~~~~~~
+!!! error TS2454: Variable 'BOOLEAN' is used before being assigned.
+    var resultIsNumber1 = (ANY, BOOLEAN, NUMBER);
+                                ~~~~~~~
+!!! error TS2454: Variable 'BOOLEAN' is used before being assigned.
+                                         ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+    var resultIsString1 = (BOOLEAN, NUMBER, STRING);
+                           ~~~~~~~
+!!! error TS2454: Variable 'BOOLEAN' is used before being assigned.
+                                    ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+                                            ~~~~~~
+!!! error TS2454: Variable 'STRING' is used before being assigned.
+    var resultIsObject1 = (NUMBER, STRING, OBJECT);
+                           ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+                                   ~~~~~~
+!!! error TS2454: Variable 'STRING' is used before being assigned.
+                                           ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    
+    //Literal and expression
+    null, true, 1;
+    ++NUMBER, STRING.charAt(0), new Object();
+      ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+              ~~~~~~
+!!! error TS2454: Variable 'STRING' is used before being assigned.
+    
+    var resultIsNumber2 = (null, true, 1);
+    var resultIsObject2 = (++NUMBER, STRING.charAt(0), new Object());
+                             ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+                                     ~~~~~~
+!!! error TS2454: Variable 'STRING' is used before being assigned.

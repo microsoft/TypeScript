@@ -1,9 +1,9 @@
 --- old.privateNamesAndDecorators.js
 +++ new.privateNamesAndDecorators.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
 
  //// [privateNamesAndDecorators.js]
+ "use strict";
 -var _A_instances, _A_foo, _A_bar;
  class A {
 -    constructor() {

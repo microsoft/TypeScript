@@ -6,6 +6,7 @@ for ((async) of [1, 2]);
 
 
 //// [parserForOfStatement24.js]
+"use strict";
 var async;
 for ((async) of [1, 2])
     ;

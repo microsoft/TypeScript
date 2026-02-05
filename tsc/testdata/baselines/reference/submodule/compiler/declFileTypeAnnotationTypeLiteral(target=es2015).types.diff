@@ -1,0 +1,20 @@
+--- old.declFileTypeAnnotationTypeLiteral(target=es2015).types
++++ new.declFileTypeAnnotationTypeLiteral(target=es2015).types
+@@= skipped -16, +16 lines =@@
+
+ // Object literal with everything
+ var x: {
+->x : { (a: number): c; (a: string): g<string>; new (a: number): c; new (a: string): m.c; [n: number]: c; [n: string]: c; a: c; b: g<string>; m1(): g<number>; m2(a: string, b?: number, ...c: c[]): string; }
++>x : { (a: number): c; (a: string): g<string>; new (a: number): c; new (a: string): m.c; [n: number]: c; [n: string]: c; a: c; b: g<string>; m1(): g<number>; m2(a: string, b?: number | undefined, ...c: c[]): string; }
+
+     // Call signatures
+     (a: number): c;
+@@= skipped -36, +36 lines =@@
+ >m1 : () => g<number>
+
+     m2(a: string, b?: number, ...c: c[]): string;
+->m2 : (a: string, b?: number, ...c: c[]) => string
++>m2 : (a: string, b?: number | undefined, ...c: c[]) => string
+ >a : string
+ >b : number | undefined
+ >c : c[]

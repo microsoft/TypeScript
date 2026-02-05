@@ -1,10 +1,10 @@
 --- old.plusOperatorWithAnyOtherType.js
 +++ new.plusOperatorWithAnyOtherType.js
-@@= skipped -69, +69 lines =@@
+@@= skipped -67, +67 lines =@@
      return a;
  }
  class A {
 +    a;
      static foo() {
-         var a;
+         var a = undefined;
          return a;

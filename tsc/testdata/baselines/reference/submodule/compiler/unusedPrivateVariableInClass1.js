@@ -6,6 +6,7 @@ class greeter {
 }
 
 //// [unusedPrivateVariableInClass1.js]
+"use strict";
 class greeter {
     x;
 }

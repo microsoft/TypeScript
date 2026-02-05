@@ -1,0 +1,85 @@
+--- old.jsDeclarationsEnums(target=es2015).js
++++ new.jsDeclarationsEnums(target=es2015).js
+@@= skipped -116, +116 lines =@@
+
+
+ //// [index.d.ts]
+-export enum A {
++export declare enum A {
+ }
+-export enum B {
++export declare enum B {
+     Member = 0
+ }
+-export enum E {
+-}
+-export enum F {
+-}
+-export enum G {
++declare enum C {
++}
++export { C };
++declare enum DD {
++}
++export { DD as D };
++export declare enum E {
++}
++export { E as EE };
++export { F as FF };
++export declare enum F {
++}
++export declare enum G {
+     A = 1,
+     B = 2,
+     C = 3
+ }
+-export enum H {
++export declare enum H {
+     A = "a",
+     B = "b"
+ }
+-export enum I {
++export declare enum I {
+     A = "a",
+     B = 0,
+     C = 1
+ }
+-export const enum J {
++export declare const enum J {
+     A = 1,
+     B = 2,
+     C = 3
+ }
+-export enum K {
+-    None = 0,
+-    A = 1,
+-    B = 2,
+-    C = 4,
+-    Mask = 7
+-}
+-export const enum L {
+-    None = 0,
+-    A = 1,
+-    B = 2,
+-    C = 4,
+-    Mask = 7
+-}
+-export enum C {
+-}
+-declare enum DD {
+-}
+-export { DD as D, E as EE, F as FF };
++export declare enum K {
++    None = 0,
++    A = 1,
++    B = 2,
++    C = 4,
++    Mask = 7
++}
++export declare const enum L {
++    None = 0,
++    A = 1,
++    B = 2,
++    C = 4,
++    Mask = 7
++}

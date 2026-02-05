@@ -1,0 +1,42 @@
+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(4,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(5,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(5,10): error TS2339: Property 't' does not exist on type '{ "export=": (p: number) => void; }'.
+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(7,16): error TS2339: Property 'Sub' does not exist on type '(p: number) => void'.
+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(8,10): error TS2339: Property 'instance' does not exist on type '(p: number) => void'.
+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(8,21): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+jsDeclarationsExportAssignedConstructorFunctionWithSub.js(10,16): error TS2339: Property 'Sub' does not exist on type '(p: number) => void'.
+
+
+==== jsDeclarationsExportAssignedConstructorFunctionWithSub.js (8 errors) ====
+    /**
+     * @param {number} p
+     */
+    module.exports = function (p) {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        this.t = 12 + p;
+    ~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+             ~
+!!! error TS2339: Property 't' does not exist on type '{ "export=": (p: number) => void; }'.
+    }
+    ~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    ~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    module.exports.Sub = function() {
+                   ~~~
+!!! error TS2339: Property 'Sub' does not exist on type '(p: number) => void'.
+        this.instance = new module.exports(10);
+             ~~~~~~~~
+!!! error TS2339: Property 'instance' does not exist on type '(p: number) => void'.
+                        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+    }
+    module.exports.Sub.prototype = { }
+                   ~~~
+!!! error TS2339: Property 'Sub' does not exist on type '(p: number) => void'.
+    

@@ -10,6 +10,7 @@ class C {
 
 
 //// [classStaticBlock19.js]
+"use strict";
 class C {
     static {
         // something

@@ -9,6 +9,7 @@ x2((x) => 1 );
 
 
 //// [overloadWithCallbacksWithDifferingOptionalityOnArgs.js]
+"use strict";
 function x2(callback) { }
 x2(() => 1);
 x2((x) => 1);

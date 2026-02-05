@@ -49,6 +49,7 @@ class AsyncClass {
 
 
 //// [es2017basicAsync.js]
+"use strict";
 async () => {
     await 0;
 };

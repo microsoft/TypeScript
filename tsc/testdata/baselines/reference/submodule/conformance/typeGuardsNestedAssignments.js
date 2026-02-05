@@ -2,7 +2,7 @@
 
 //// [typeGuardsNestedAssignments.ts]
 class Foo {
-    x: string;
+    x: string = "";
 }
 
 declare function getFooOrNull(): Foo | null;
@@ -48,8 +48,9 @@ while ((match = re.exec("xxx")) != null) {
 }
 
 //// [typeGuardsNestedAssignments.js]
+"use strict";
 class Foo {
-    x;
+    x = "";
 }
 function f1() {
     let foo;

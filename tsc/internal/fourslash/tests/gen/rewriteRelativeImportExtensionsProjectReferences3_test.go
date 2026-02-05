@@ -14,6 +14,7 @@ func TestRewriteRelativeImportExtensionsProjectReferences3(t *testing.T) {
 	const content = `// @Filename: src/tsconfig-base.json
 {
     "compilerOptions": {
+        "lib": ["es5"],
         "module": "nodenext",
         "composite": true,
         "rewriteRelativeImportExtensions": true,
@@ -23,6 +24,7 @@ func TestRewriteRelativeImportExtensionsProjectReferences3(t *testing.T) {
 {
     "extends": "../tsconfig-base.json",
     "compilerOptions": {
+        "lib": ["es5"],
         "rootDir": ".",
         "outDir": "../../dist/compiler",
 }
@@ -32,6 +34,7 @@ export {};
 {
     "extends": "../tsconfig-base.json",
     "compilerOptions": {
+        "lib": ["es5"],
         "rootDir": ".",
         "outDir": "../../dist/services",
     },

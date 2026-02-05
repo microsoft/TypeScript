@@ -1,8 +1,9 @@
+superCallsInConstructor.ts(7,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 superCallsInConstructor.ts(12,9): error TS1101: 'with' statements are not allowed in strict mode.
 superCallsInConstructor.ts(12,9): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== superCallsInConstructor.ts (2 errors) ====
+==== superCallsInConstructor.ts (3 errors) ====
     class C {
         foo() {}
         bar() {}
@@ -10,6 +11,8 @@ superCallsInConstructor.ts(12,9): error TS2410: The 'with' statement is not supp
     
     class Base {
         x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
      
     class Derived extends Base {

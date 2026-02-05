@@ -1,7 +1,7 @@
 --- old.privateInterfaceProperties.js
 +++ new.privateInterfaceProperties.js
-@@= skipped -13, +13 lines =@@
- //// [privateInterfaceProperties.js]
+@@= skipped -14, +14 lines =@@
+ "use strict";
  // should be an error 
  class c1 {
 +    name;

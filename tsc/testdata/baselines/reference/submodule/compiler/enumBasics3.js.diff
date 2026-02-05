@@ -1,6 +1,6 @@
 --- old.enumBasics3.js
 +++ new.enumBasics3.js
-@@= skipped -27, +27 lines =@@
+@@= skipped -28, +28 lines =@@
          let E1;
          (function (E1) {
              E1[E1["a"] = 1] = "a";

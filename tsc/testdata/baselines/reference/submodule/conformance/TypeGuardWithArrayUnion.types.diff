@@ -4,8 +4,8 @@
  }
 
  function saySize(message: Message | Message[]) {
-->saySize : (message: Message | Message[]) => number
-+>saySize : (message: Message[] | Message) => number
+->saySize : (message: Message | Message[]) => number | undefined
++>saySize : (message: Message[] | Message) => number | undefined
  >message : Message[] | Message
 
      if (message instanceof Array) {

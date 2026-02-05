@@ -1,9 +1,14 @@
+superWithTypeArgument3.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 superWithTypeArgument3.ts(8,14): error TS2754: 'super' may not use type arguments.
+superWithTypeArgument3.ts(11,22): error TS2345: Argument of type 'null' is not assignable to parameter of type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 
 
-==== superWithTypeArgument3.ts (1 errors) ====
+==== superWithTypeArgument3.ts (3 errors) ====
     class C<T> {
         foo: T;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         bar<U>(x: U) { }
     }
     
@@ -15,5 +20,8 @@ superWithTypeArgument3.ts(8,14): error TS2754: 'super' may not use type argument
         }
         bar() {
             super.bar<T>(null);
+                         ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'T'.
+!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
         }
     }

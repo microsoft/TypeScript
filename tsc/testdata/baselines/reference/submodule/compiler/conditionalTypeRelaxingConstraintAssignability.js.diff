@@ -1,9 +1,9 @@
 --- old.conditionalTypeRelaxingConstraintAssignability.js
 +++ new.conditionalTypeRelaxingConstraintAssignability.js
-@@= skipped -43, +43 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Elem = void 0;
- class Elem {
+@@= skipped -40, +40 lines =@@
+
+ //// [conditionalTypeRelaxingConstraintAssignability.js]
+ export class Elem {
 +    children_;
      constructor(children_) {
          this.children_ = children_;

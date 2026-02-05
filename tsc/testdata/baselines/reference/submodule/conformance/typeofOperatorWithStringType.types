@@ -2,7 +2,7 @@
 
 === typeofOperatorWithStringType.ts ===
 // typeof  operator on string type
-var STRING: string;
+declare var STRING: string;
 >STRING : string
 
 var STRING1: string[] = ["", "abc"];
@@ -25,10 +25,10 @@ class A {
 >foo : () => string
 >"" : ""
 }
-module M {
+namespace M {
 >M : typeof M
 
-    export var n: string;
+    export var n!: string;
 >n : string
 }
 
@@ -173,13 +173,13 @@ typeof objA.a, M.n;
 >n : string
 
 // use typeof in type query
-var z: string;
+declare var z: string;
 >z : string
 
-var x: string[];
+declare var x: string[];
 >x : string[]
 
-var r: () => string;
+declare var r: () => string;
 >r : () => string
 
 z: typeof STRING;

@@ -1,8 +1,8 @@
 --- old.varAsID.js
 +++ new.varAsID.js
-@@= skipped -21, +21 lines =@@
-
+@@= skipped -22, +22 lines =@@
  //// [varAsID.js]
+ "use strict";
  class Foo {
 -    constructor() {
 -        this.x = 1;

@@ -31,7 +31,7 @@ class C {
 >foo : () => void
 }
 
-var c: C;
+declare var c: C;
 >c : C
 
 // all errors

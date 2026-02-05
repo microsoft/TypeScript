@@ -1,6 +1,6 @@
 --- old.derivedClassOverridesPublicMembers.js
 +++ new.derivedClassOverridesPublicMembers.js
-@@= skipped -67, +67 lines =@@
+@@= skipped -68, +68 lines =@@
  var x;
  var y;
  class Base {

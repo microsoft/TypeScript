@@ -13,18 +13,14 @@ var res = x('a', 'b')
 
 
 //// [callbackTagVariadicType.js]
-"use strict";
 /**
  * @callback Foo
  * @param {...string} args
  * @returns {number}
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
 /** @type {Foo} */
-const x = () => 1;
-exports.x = x;
-var res = (0, exports.x)('a', 'b');
+export const x = () => 1;
+var res = x('a', 'b');
 
 
 //// [callbackTagVariadicType.d.ts]

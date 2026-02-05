@@ -48,7 +48,7 @@ function f3() {
 >1 : 1
     }
     catch (e) {
->e : any
+>e : unknown
 
         return '';
 >'' : ""
@@ -63,7 +63,7 @@ function f4() {
 >1 : 1
     }
     catch (e) {
->e : any
+>e : unknown
 
     }
     finally {

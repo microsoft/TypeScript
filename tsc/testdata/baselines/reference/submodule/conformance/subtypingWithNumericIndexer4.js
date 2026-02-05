@@ -15,7 +15,7 @@ class B extends A {
     [x: number]: string; // error
 }
 
-module Generics {
+namespace Generics {
     class A<T extends Derived> {
         [x: number]: T;
     }
@@ -30,6 +30,7 @@ module Generics {
 }
 
 //// [subtypingWithNumericIndexer4.js]
+"use strict";
 // Derived type indexer must be subtype of base type indexer
 class A {
 }

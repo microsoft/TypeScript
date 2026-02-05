@@ -1,0 +1,23 @@
+for-of22.ts(14,1): error TS2454: Variable 'v' is used before being assigned.
+
+
+==== for-of22.ts (1 errors) ====
+    class Foo { }
+    class FooIterator {
+        next() {
+            return {
+                value: new Foo,
+                done: false
+            };
+        }
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    v;
+    ~
+!!! error TS2454: Variable 'v' is used before being assigned.
+    for (var v of new FooIterator) {
+        
+    }

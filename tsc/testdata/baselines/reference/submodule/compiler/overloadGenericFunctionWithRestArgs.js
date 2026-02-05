@@ -13,6 +13,7 @@ function Choice<T>(...v_args: T[]): A<T> {
 }
 
 //// [overloadGenericFunctionWithRestArgs.js]
+"use strict";
 class B {
     id;
 }

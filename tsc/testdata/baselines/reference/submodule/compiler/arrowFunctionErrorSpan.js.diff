@@ -1,6 +1,6 @@
 --- old.arrowFunctionErrorSpan.js
 +++ new.arrowFunctionErrorSpan.js
-@@= skipped -82, +82 lines =@@
+@@= skipped -83, +83 lines =@@
  // multi line with a comment 3
  f(// comment 1
  // comment 2

@@ -1,0 +1,18 @@
+unusedGetterInClass.ts(2,13): error TS2564: Property '_fullName' has no initializer and is not definitely assigned in the constructor.
+unusedGetterInClass.ts(4,17): error TS6133: 'fullName' is declared but its value is never read.
+
+
+==== unusedGetterInClass.ts (2 errors) ====
+    class Employee {
+        private _fullName: string;
+                ~~~~~~~~~
+!!! error TS2564: Property '_fullName' has no initializer and is not definitely assigned in the constructor.
+    
+        private get fullName(): string {
+                    ~~~~~~~~
+!!! error TS6133: 'fullName' is declared but its value is never read.
+            return this._fullName;
+        }
+        // Will not also error on the setter
+        private set fullName(_: string) {}
+    }

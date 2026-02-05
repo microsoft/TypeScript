@@ -1,6 +1,6 @@
 --- old.decrementOperatorWithAnyOtherTypeInvalidOperations.js
 +++ new.decrementOperatorWithAnyOtherTypeInvalidOperations.js
-@@= skipped -84, +84 lines =@@
+@@= skipped -82, +82 lines =@@
      return a;
  }
  class A {

@@ -1,8 +1,8 @@
 --- old.declFileTypeofClass.js
 +++ new.declFileTypeofClass.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [declFileTypeofClass.js]
+ "use strict";
  class c {
 +    static x;
 +    static y;

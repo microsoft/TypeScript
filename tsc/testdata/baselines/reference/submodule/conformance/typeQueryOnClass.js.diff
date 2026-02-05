@@ -1,8 +1,8 @@
 --- old.typeQueryOnClass.js
 +++ new.typeQueryOnClass.js
-@@= skipped -59, +59 lines =@@
-
+@@= skipped -60, +60 lines =@@
  //// [typeQueryOnClass.js]
+ "use strict";
  class C {
 +    x;
      constructor(x) {

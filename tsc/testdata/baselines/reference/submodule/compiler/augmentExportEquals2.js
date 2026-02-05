@@ -20,3 +20,4 @@ import "./file2";
 let a: x.A; // should not work
 
 //// [file3.js]
+"use strict";

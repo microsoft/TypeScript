@@ -1,8 +1,8 @@
 --- old.autoAccessorNoUseDefineForClassFields.js
 +++ new.autoAccessorNoUseDefineForClassFields.js
-@@= skipped -58, +58 lines =@@
- }
+@@= skipped -63, +63 lines =@@
  //// [file5.js]
+ "use strict";
  class C5 {
 -    constructor() {
 -        this.x = 0;
@@ -15,6 +15,7 @@
 +    accessor #x = 1;
  }
  //// [file6.js]
+ "use strict";
  class C6 {
 -    constructor() {
 -        this.#x_accessor_storage = 0;

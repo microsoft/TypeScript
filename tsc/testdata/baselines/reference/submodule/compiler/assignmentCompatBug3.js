@@ -28,6 +28,7 @@ foo(x);
 foo(x + y);
 
 //// [assignmentCompatBug3.js]
+"use strict";
 function makePoint(x, y) {
     return {
         get x() { return x; }, // shouldn't be "void"

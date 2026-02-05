@@ -28,8 +28,8 @@ multiLineErrors.ts(21,1): error TS2322: Type 'A2' is not assignable to type 'A1'
         x: { y: string; };
     }
     
-    var t1: A1;
-    var t2: A2;
+    declare var t1: A1;
+    declare var t2: A2;
     t1 = t2;
     ~~
 !!! error TS2322: Type 'A2' is not assignable to type 'A1'.

@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript.AstWalkerWithDetailCallback {
+namespace TypeScript.AstWalkerWithDetailCallback {
     export interface AstWalkerDetailCallback {
         EmptyCallback? (pre, ast: AST): boolean;
         EmptyExprCallback? (pre, ast: AST): boolean;
@@ -149,6 +149,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 }
 
 //// [parserRealSource13.js]
+"use strict";
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />

@@ -1,7 +1,7 @@
 --- old.subtypesOfTypeParameter.js
 +++ new.subtypesOfTypeParameter.js
-@@= skipped -109, +109 lines =@@
- //// [subtypesOfTypeParameter.js]
+@@= skipped -110, +110 lines =@@
+ "use strict";
  // checking whether other types are subtypes of type parameters
  class C3 {
 +    foo;

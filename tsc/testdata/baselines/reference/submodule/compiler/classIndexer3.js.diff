@@ -1,6 +1,6 @@
 --- old.classIndexer3.js
 +++ new.classIndexer3.js
-@@= skipped -17, +17 lines =@@
+@@= skipped -18, +18 lines =@@
      }
  }
  class D123 extends C123 {

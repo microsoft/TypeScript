@@ -1,22 +1,30 @@
+typeParameterAssignability3.ts(3,13): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+typeParameterAssignability3.ts(8,9): error TS2454: Variable 'a' is used before being assigned.
 typeParameterAssignability3.ts(14,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
 typeParameterAssignability3.ts(15,5): error TS2322: Type 'T' is not assignable to type 'U'.
   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
+typeParameterAssignability3.ts(19,5): error TS2564: Property 't' has no initializer and is not definitely assigned in the constructor.
+typeParameterAssignability3.ts(20,5): error TS2564: Property 'u' has no initializer and is not definitely assigned in the constructor.
 typeParameterAssignability3.ts(22,9): error TS2322: Type 'U' is not assignable to type 'T'.
   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
 typeParameterAssignability3.ts(23,9): error TS2322: Type 'T' is not assignable to type 'U'.
   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
 
 
-==== typeParameterAssignability3.ts (4 errors) ====
+==== typeParameterAssignability3.ts (8 errors) ====
     // type parameters are not assignable to one another unless directly or indirectly constrained to one another
     
     class Foo { foo: string; }
+                ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     
     function foo<T extends Foo, U extends Foo>(t: T, u: U) {
         var a: T;
         var b: U;
         t = a; // ok
+            ~
+!!! error TS2454: Variable 'a' is used before being assigned.
         a = t; // ok
     
         b = u; // ok
@@ -34,7 +42,11 @@ typeParameterAssignability3.ts(23,9): error TS2322: Type 'T' is not assignable t
     
     class C<T extends Foo, U extends Foo> {
         t: T;
+        ~
+!!! error TS2564: Property 't' has no initializer and is not definitely assigned in the constructor.
         u: U;
+        ~
+!!! error TS2564: Property 'u' has no initializer and is not definitely assigned in the constructor.
         r = () => {
             this.t = this.u; // error
             ~~~~~~

@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/arrayIterationLibES5TargetDifferent.ts] ////
+
+=== arrayIterationLibES5TargetDifferent.ts ===
+declare function log(message?: any): void;
+>log : Symbol(log, Decl(arrayIterationLibES5TargetDifferent.ts, 0, 0))
+>message : Symbol(message, Decl(arrayIterationLibES5TargetDifferent.ts, 0, 21))
+
+for (const x of [1, 2, 3]) {
+>x : Symbol(x, Decl(arrayIterationLibES5TargetDifferent.ts, 2, 10))
+
+    log(x);
+>log : Symbol(log, Decl(arrayIterationLibES5TargetDifferent.ts, 0, 0))
+>x : Symbol(x, Decl(arrayIterationLibES5TargetDifferent.ts, 2, 10))
+}
+
+declare const aString: string;
+>aString : Symbol(aString, Decl(arrayIterationLibES5TargetDifferent.ts, 6, 13))
+
+for (const x of aString) {
+>x : Symbol(x, Decl(arrayIterationLibES5TargetDifferent.ts, 8, 10))
+>aString : Symbol(aString, Decl(arrayIterationLibES5TargetDifferent.ts, 6, 13))
+
+    log(x);
+>log : Symbol(log, Decl(arrayIterationLibES5TargetDifferent.ts, 0, 0))
+>x : Symbol(x, Decl(arrayIterationLibES5TargetDifferent.ts, 8, 10))
+}
+
+declare const aNumber: number;
+>aNumber : Symbol(aNumber, Decl(arrayIterationLibES5TargetDifferent.ts, 12, 13))
+
+for (const x of aNumber) {
+>x : Symbol(x, Decl(arrayIterationLibES5TargetDifferent.ts, 14, 10))
+>aNumber : Symbol(aNumber, Decl(arrayIterationLibES5TargetDifferent.ts, 12, 13))
+
+    log(x);
+>log : Symbol(log, Decl(arrayIterationLibES5TargetDifferent.ts, 0, 0))
+>x : Symbol(x, Decl(arrayIterationLibES5TargetDifferent.ts, 14, 10))
+}
+
+declare const anObject: { foo: string };
+>anObject : Symbol(anObject, Decl(arrayIterationLibES5TargetDifferent.ts, 18, 13))
+>foo : Symbol(foo, Decl(arrayIterationLibES5TargetDifferent.ts, 18, 25))
+
+for (const x of anObject) {
+>x : Symbol(x, Decl(arrayIterationLibES5TargetDifferent.ts, 20, 10))
+>anObject : Symbol(anObject, Decl(arrayIterationLibES5TargetDifferent.ts, 18, 13))
+
+    log(x);
+>log : Symbol(log, Decl(arrayIterationLibES5TargetDifferent.ts, 0, 0))
+>x : Symbol(x, Decl(arrayIterationLibES5TargetDifferent.ts, 20, 10))
+}

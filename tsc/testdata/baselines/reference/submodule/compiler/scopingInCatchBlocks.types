@@ -2,17 +2,17 @@
 
 === scopingInCatchBlocks.ts ===
 try { } catch(ex1) { 
->ex1 : any
+>ex1 : unknown
 
 	throw ex1;
->ex1 : any
+>ex1 : unknown
 }
 
 try { } catch(ex1) { } // should not error
->ex1 : any
+>ex1 : unknown
 
 try { } catch(ex1) { } // should not error
->ex1 : any
+>ex1 : unknown
 
 var x = ex1; // should error
 >x : any

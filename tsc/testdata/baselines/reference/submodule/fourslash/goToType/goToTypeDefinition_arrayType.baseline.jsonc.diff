@@ -4,7 +4,7 @@
  // declare const users2: UsersArr
  // --- (line: 7) skipped ---
 
--// === lib.d.ts ===
+-// === /home/src/tslibs/TS/Lib/lib.es5.d.ts ===
 +// === lib.es5.d.ts ===
  // --- (line: --) skipped ---
  //     slice(start?: number, end?: number): T[];
@@ -29,7 +29,7 @@
  // declare const users3: CustomArray<User>
  // users3
 
--// === lib.d.ts ===
+-// === /home/src/tslibs/TS/Lib/lib.es5.d.ts ===
 +// === lib.es5.d.ts ===
  // --- (line: --) skipped ---
  //     slice(start?: number, end?: number): T[];

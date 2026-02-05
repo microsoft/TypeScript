@@ -1,0 +1,144 @@
+--- old.sourceMapValidationDestructuringVariableStatementArrayBindingPattern3(target=es2015).errors.txt
++++ new.sourceMapValidationDestructuringVariableStatementArrayBindingPattern3(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(18,1): error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(19,1): error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(20,1): error TS2488: Type '[number, string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(21,1): error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(22,1): error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(23,1): error TS2488: Type '[string, [string, string]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(25,1): error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(26,1): error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(27,1): error TS2488: Type '[number, string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(28,1): error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(29,1): error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(30,1): error TS2488: Type '[string, string[]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(32,1): error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(33,1): error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(34,1): error TS2488: Type '[number, string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(35,1): error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(35,10): error TS2488: Type '[string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(36,1): error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(36,10): error TS2488: Type '[string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(37,1): error TS2488: Type '[string, [string, string]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(37,10): error TS2488: Type '[string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(39,1): error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(40,1): error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(41,1): error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(42,1): error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(43,1): error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts(44,1): error TS2488: Type '(string | [string, string])[]' must have a '[Symbol.iterator]()' method that returns an iterator.
++
++
++==== sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts (27 errors) ====
++    declare var console: {
++        log(msg: any): void;
++    }
++    type Robot = [number, string, string];
++    type MultiSkilledRobot = [string, [string, string]];
++    
++    var robotA: Robot = [1, "mower", "mowing"];
++    var robotB: Robot = [2, "trimmer", "trimming"];
++    var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
++    var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
++    
++    let nameA: string, numberB: number, nameB: string, skillB: string;
++    let robotAInfo: (number | string)[];
++    
++    let multiSkillB: [string, string], nameMB: string, primarySkillB: string, secondarySkillB: string;
++    let multiRobotAInfo: (string | [string, string])[];
++    
++    [, nameA] = robotA;
++    ~~~~~~~~~
++!!! error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [, nameB] = getRobotB();
++    ~~~~~~~~~
++!!! error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [, nameB] = [2, "trimmer", "trimming"];
++    ~~~~~~~~~
++!!! error TS2488: Type '[number, string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [, multiSkillB] = multiRobotB;
++    ~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [, multiSkillB] = getMultiRobotB();
++    ~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [, multiSkillB] = ["roomba", ["vacuum", "mopping"]];
++    ~~~~~~~~~~~~~~~
++!!! error TS2488: Type '[string, [string, string]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    
++    [numberB] = robotB;
++    ~~~~~~~~~
++!!! error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [numberB] = getRobotB();
++    ~~~~~~~~~
++!!! error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [numberB] = [2, "trimmer", "trimming"];
++    ~~~~~~~~~
++!!! error TS2488: Type '[number, string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [nameMB] = multiRobotB;
++    ~~~~~~~~
++!!! error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [nameMB] = getMultiRobotB();
++    ~~~~~~~~
++!!! error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [nameMB] = ["trimmer", ["trimming", "edging"]];
++    ~~~~~~~~
++!!! error TS2488: Type '[string, string[]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    
++    [numberB, nameB, skillB] = robotB;
++    ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [numberB, nameB, skillB] = getRobotB();
++    ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [numberB, nameB, skillB] = [2, "trimmer", "trimming"];
++    ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type '[number, string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [nameMB, [primarySkillB, secondarySkillB]] = multiRobotB;
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type '[string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [nameMB, [primarySkillB, secondarySkillB]] = getMultiRobotB();
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type '[string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [nameMB, [primarySkillB, secondarySkillB]] = ["trimmer", ["trimming", "edging"]];
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type '[string, [string, string]]' must have a '[Symbol.iterator]()' method that returns an iterator.
++             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type '[string, string]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    
++    [numberB, ...robotAInfo] = robotB;
++    ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [numberB, ...robotAInfo] = getRobotB();
++    ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [numberB, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"];
++    ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [...multiRobotAInfo] = multiRobotA;
++    ~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [...multiRobotAInfo] = getMultiRobotB();
++    ~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type 'MultiSkilledRobot' must have a '[Symbol.iterator]()' method that returns an iterator.
++    [...multiRobotAInfo] = ["trimmer", ["trimming", "edging"]];
++    ~~~~~~~~~~~~~~~~~~~~
++!!! error TS2488: Type '(string | [string, string])[]' must have a '[Symbol.iterator]()' method that returns an iterator.
++    
++    if (nameA == nameB) {
++        console.log(skillB);
++    }
++    
++    function getRobotB() {
++        return robotB;
++    }
++    
++    function getMultiRobotB() {
++        return multiRobotB;
++    }

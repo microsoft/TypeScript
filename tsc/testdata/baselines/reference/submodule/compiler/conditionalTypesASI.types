@@ -5,9 +5,9 @@
 
 interface JSONSchema4 {
   a?: number
->a : number
+>a : number | undefined
 
   extends?: string | string[]
->extends : string | string[]
+>extends : string | string[] | undefined
 }
 

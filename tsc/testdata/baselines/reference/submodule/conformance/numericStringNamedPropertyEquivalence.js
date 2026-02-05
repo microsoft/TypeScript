@@ -26,6 +26,7 @@ var b = {
 }
 
 //// [numericStringNamedPropertyEquivalence.js]
+"use strict";
 // Each of these types has an error in it. 
 // String named and numeric named properties conflict if they would be equivalent after ToNumber on the property name.
 class C {

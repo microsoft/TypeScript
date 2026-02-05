@@ -1,7 +1,7 @@
 --- old.duplicateIdentifierDifferentModifiers.js
 +++ new.duplicateIdentifierDifferentModifiers.js
-@@= skipped -26, +26 lines =@@
- //// [duplicateIdentifierDifferentModifiers.js]
+@@= skipped -27, +27 lines =@@
+ "use strict";
  // OK
  class A {
 +    y;

@@ -1,0 +1,35 @@
+--- old.commentsClass(target=es2015).js
++++ new.commentsClass(target=es2015).js
+@@= skipped -97, +97 lines =@@
+ var i4_c = c4;
+ /** Class with statics*/
+ class c5 {
++    static s1;
+ }
+ var i5 = new c5();
+ var i5_c = c5;
+ /// class with statics and constructor
+ class c6 {
++    /// s1 comment
++    static s1; /// s1 comment2
+     /// constructor comment
+     constructor() {
+     }
+@@= skipped -13, +16 lines =@@
+ var i6_c = c6;
+ // class with statics and constructor
+ class c7 {
++    // s1 comment
++    static s1;
+     // constructor comment
+     constructor() {
+     }
+@@= skipped -9, +11 lines =@@
+ /** class with statics and constructor
+  */
+ class c8 {
++    /** s1 comment */
++    static s1; /** s1 comment2 */
+     /** constructor comment
+     */
+     constructor() {

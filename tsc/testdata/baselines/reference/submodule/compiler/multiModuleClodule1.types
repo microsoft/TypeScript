@@ -17,7 +17,7 @@ class C {
 >boo : () => void
 }
 
-module C {
+namespace C {
 >C : typeof C
 
     export var x = 1;
@@ -28,7 +28,7 @@ module C {
 >y : number
 >2 : 2
 }
-module C {
+namespace C {
 >C : typeof C
 
     export function foo() { }

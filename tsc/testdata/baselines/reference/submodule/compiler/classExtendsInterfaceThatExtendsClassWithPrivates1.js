@@ -17,6 +17,7 @@ class D2 implements I {
 } 
 
 //// [classExtendsInterfaceThatExtendsClassWithPrivates1.js]
+"use strict";
 class C {
     foo(x) { return x; }
     x = 1;

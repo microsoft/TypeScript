@@ -34,6 +34,7 @@ let x: any, f: any;
 ({ ["__proto__"]: @dec class { } });
 
 //// [esDecorators-classExpression-namedEvaluation.2.js]
+"use strict";
 let x, f;
 // 13.2.5.5 RS: PropertyDefinitionEvaluation
 //  PropertyAssignment : PropertyName `:` AssignmentExpression

@@ -1,6 +1,6 @@
 --- old.TwoInternalModulesWithTheSameNameAndSameCommonRoot.js
 +++ new.TwoInternalModulesWithTheSameNameAndSameCommonRoot.js
-@@= skipped -56, +56 lines =@@
+@@= skipped -58, +58 lines =@@
      let Utils;
      (function (Utils) {
          class Plane {

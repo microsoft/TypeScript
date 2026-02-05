@@ -4,4 +4,5 @@
 function f(...x, y) { }
 
 //// [restParameterNotLast.js]
+"use strict";
 function f(...x, y) { }

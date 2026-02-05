@@ -1,0 +1,38 @@
+--- old.mismatchedExplicitTypeParameterAndArgumentType.types
++++ new.mismatchedExplicitTypeParameterAndArgumentType.types
+@@= skipped -39, +39 lines =@@
+ >(x) => x.toString() : (x: string | number) => string
+ >x : string | number
+ >x.toString() : string
+->x.toString : (() => string) | ((radix?: number) => string)
++>x.toString : (() => string) | ((radix?: number | undefined) => string)
+ >x : string | number
+->toString : (() => string) | ((radix?: number) => string)
++>toString : (() => string) | ((radix?: number | undefined) => string)
+
+ var r5 = map<any, any>([1, ""], (x) => x.toString());
+ >r5 : any[]
+@@= skipped -42, +42 lines =@@
+ >(x) => x.toString() : (x: number) => string
+ >x : number
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+ var r7b = map<number>([1, ""], (x) => x.toString()); // error
+ >r7b : unknown[]
+@@= skipped -14, +14 lines =@@
+ >(x) => x.toString() : (x: number) => string
+ >x : number
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+ var r8 = map<any, string>([1, ""], (x) => x.toString());
+ >r8 : string[]

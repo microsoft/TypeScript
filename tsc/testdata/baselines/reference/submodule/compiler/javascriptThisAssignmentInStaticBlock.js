@@ -21,6 +21,7 @@ class ElementsArray extends Array {
 ElementsArray.isArray(new ElementsArray());
 
 //// [a.js]
+"use strict";
 class Thing {
     static {
         this.doSomething = () => { };

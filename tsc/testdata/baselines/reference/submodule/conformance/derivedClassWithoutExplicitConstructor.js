@@ -28,6 +28,7 @@ var d = new D(); // error
 var d2 = new D(new Date()); // ok
 
 //// [derivedClassWithoutExplicitConstructor.js]
+"use strict";
 class Base {
     a = 1;
     constructor(x) { this.a = x; }

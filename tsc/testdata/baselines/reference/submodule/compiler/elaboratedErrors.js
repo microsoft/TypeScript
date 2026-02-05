@@ -16,8 +16,8 @@ class WorkerFS implements FileSystem {
 
 interface Alpha { x: string; }
 interface Beta { y: number; }
-var x: Alpha;
-var y: Beta;
+declare var x: Alpha;
+declare var y: Beta;
 
 // Only one of these errors should be large
 x = y;
@@ -29,13 +29,12 @@ y = x;
 
 
 //// [elaboratedErrors.js]
+"use strict";
 function fn(s) { }
 // This should issue a large error, not a small one
 class WorkerFS {
     read;
 }
-var x;
-var y;
 // Only one of these errors should be large
 x = y;
 x = y;

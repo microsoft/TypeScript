@@ -78,7 +78,7 @@ let { c: c4 = class { static x = { a: "a" } }}: { c?: I } = { };
 >{ a: "a" } : { a: "a"; }
 >a : "a"
 >"a" : "a"
->c : I
+>c : I | undefined
 >{ } : {}
 
 let { c: c5 = class { static x = { a: "a" } }}: { c?: I } = { c: class { static x = { a: "a" } } };
@@ -89,7 +89,7 @@ let { c: c5 = class { static x = { a: "a" } }}: { c?: I } = { c: class { static 
 >{ a: "a" } : { a: "a"; }
 >a : "a"
 >"a" : "a"
->c : I
+>c : I | undefined
 >{ c: class { static x = { a: "a" } } } : { c: typeof c; }
 >c : typeof c
 >class { static x = { a: "a" } } : typeof c
@@ -132,7 +132,7 @@ let [ c9 = class { static x = { a: "a" } } ]: I[] = [];
 >{ a: "a" } : { a: "a"; }
 >a : "a"
 >"a" : "a"
->[] : undefined[]
+>[] : never[]
 
 let [ c10 = class { static x = { a: "a" } } ]: [I?] = [class { static x = { a: "a" } }];
 >c10 : I

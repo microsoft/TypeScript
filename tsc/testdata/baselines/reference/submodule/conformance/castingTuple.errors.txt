@@ -1,3 +1,7 @@
+castingTuple.ts(3,24): error TS7008: Member 'c' implicitly has an 'any' type.
+castingTuple.ts(4,24): error TS7008: Member 'd' implicitly has an 'any' type.
+castingTuple.ts(5,21): error TS7008: Member 'e' implicitly has an 'any' type.
+castingTuple.ts(6,21): error TS7008: Member 'f' implicitly has an 'any' type.
 castingTuple.ts(13,23): error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Source has 2 element(s) but target requires 3.
 castingTuple.ts(14,15): error TS2352: Conversion of type '[number, string, boolean]' to type '[number, string]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
@@ -17,13 +21,21 @@ castingTuple.ts(32,5): error TS2403: Subsequent variable declarations must have 
 castingTuple.ts(33,1): error TS2304: Cannot find name 't4'.
 
 
-==== castingTuple.ts (9 errors) ====
+==== castingTuple.ts (13 errors) ====
     interface I { }
     class A { a = 10; }
     class C implements I { c };
+                           ~
+!!! error TS7008: Member 'c' implicitly has an 'any' type.
     class D implements I { d };
+                           ~
+!!! error TS7008: Member 'd' implicitly has an 'any' type.
     class E extends A { e };
+                        ~
+!!! error TS7008: Member 'e' implicitly has an 'any' type.
     class F extends A { f };
+                        ~
+!!! error TS7008: Member 'f' implicitly has an 'any' type.
     enum E1 { one }
     enum E2 { one }
     

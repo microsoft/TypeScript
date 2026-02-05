@@ -1,8 +1,8 @@
 --- old.privateStaticMemberAccessibility.js
 +++ new.privateStaticMemberAccessibility.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [privateStaticMemberAccessibility.js]
+ "use strict";
  class Base {
 +    static foo;
  }

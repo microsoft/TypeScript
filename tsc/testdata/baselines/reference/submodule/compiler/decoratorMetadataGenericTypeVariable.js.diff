@@ -1,10 +1,10 @@
 --- old.decoratorMetadataGenericTypeVariable.js
 +++ new.decoratorMetadataGenericTypeVariable.js
-@@= skipped -20, +20 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.C = void 0;
- class C {
+@@= skipped -17, +17 lines =@@
+     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+ };
+ export class C {
 +    member;
  }
- exports.C = C;
  __decorate([
+     Decorate,

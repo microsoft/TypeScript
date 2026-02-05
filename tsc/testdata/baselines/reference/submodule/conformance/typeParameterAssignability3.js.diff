@@ -1,7 +1,7 @@
 --- old.typeParameterAssignability3.js
 +++ new.typeParameterAssignability3.js
-@@= skipped -29, +29 lines =@@
- //// [typeParameterAssignability3.js]
+@@= skipped -30, +30 lines =@@
+ "use strict";
  // type parameters are not assignable to one another unless directly or indirectly constrained to one another
  class Foo {
 +    foo;

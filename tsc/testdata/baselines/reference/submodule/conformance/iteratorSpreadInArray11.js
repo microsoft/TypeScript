@@ -5,5 +5,6 @@ var iter: Iterable<number>;
 var array = [...iter];
 
 //// [iteratorSpreadInArray11.js]
+"use strict";
 var iter;
 var array = [...iter];

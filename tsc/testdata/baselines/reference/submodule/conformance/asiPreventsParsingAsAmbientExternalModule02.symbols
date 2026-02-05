@@ -7,7 +7,7 @@ var declare: number;
 var module: string;
 >module : Symbol(module, Decl(asiPreventsParsingAsAmbientExternalModule02.ts, 1, 3))
 
-module container {
+namespace container {
 >container : Symbol(container, Decl(asiPreventsParsingAsAmbientExternalModule02.ts, 1, 19))
 
     declare                // this is the identifier 'declare'

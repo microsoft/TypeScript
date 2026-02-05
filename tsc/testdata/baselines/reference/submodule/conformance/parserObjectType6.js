@@ -7,4 +7,5 @@ var v: {
 };
 
 //// [parserObjectType6.js]
+"use strict";
 var v;

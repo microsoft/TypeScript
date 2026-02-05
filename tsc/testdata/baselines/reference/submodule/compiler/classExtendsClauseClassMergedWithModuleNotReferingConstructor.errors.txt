@@ -1,19 +1,25 @@
+classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts(2,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts(10,21): error TS2507: Type 'number' is not a constructor function type.
+classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts(11,9): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
 
 
-==== classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts (1 errors) ====
+==== classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts (3 errors) ====
     class A {
         a: number;
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     }
-    module A {
+    namespace A {
         export var v: string;
     }
     
-    module Foo {
+    namespace Foo {
         var A = 1;
         class B extends A {
                         ~
 !!! error TS2507: Type 'number' is not a constructor function type.
             b: string;
+            ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
         }
     }

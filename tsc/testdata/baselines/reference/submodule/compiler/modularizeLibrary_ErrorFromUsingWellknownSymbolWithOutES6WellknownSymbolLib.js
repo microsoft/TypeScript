@@ -10,6 +10,7 @@ let a = ['c', 'd'];
 a[Symbol.isConcatSpreadable] = false;
 
 //// [modularizeLibrary_ErrorFromUsingWellknownSymbolWithOutES6WellknownSymbolLib.js]
+"use strict";
 function f(x, y, z) {
     return Array.from(arguments);
 }

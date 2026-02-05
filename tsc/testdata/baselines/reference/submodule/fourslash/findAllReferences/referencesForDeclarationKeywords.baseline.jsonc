@@ -126,7 +126,7 @@
 // /*FIND ALL REFS*/type [|T|] = { }
 // enum E { }
 // namespace N { }
-// module M { }
+// namespace M { }
 // --- (line: 12) skipped ---
 
 
@@ -139,7 +139,7 @@
 // type T = { }
 // /*FIND ALL REFS*/enum [|E|] { }
 // namespace N { }
-// module M { }
+// namespace M { }
 // function fn() {}
 // --- (line: 13) skipped ---
 
@@ -152,7 +152,7 @@
 // type T = { }
 // enum E { }
 // /*FIND ALL REFS*/namespace [|N|] { }
-// module M { }
+// namespace M { }
 // function fn() {}
 // var x;
 // --- (line: 14) skipped ---
@@ -165,7 +165,7 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// /*FIND ALL REFS*/module [|M|] { }
+// /*FIND ALL REFS*/namespace [|M|] { }
 // function fn() {}
 // var x;
 // let y;
@@ -178,7 +178,7 @@
 // --- (line: 8) skipped ---
 // enum E { }
 // namespace N { }
-// module M { }
+// namespace M { }
 // /*FIND ALL REFS*/function [|fn|]() {}
 // var x;
 // let y;
@@ -191,7 +191,7 @@
 // === /referencesForDeclarationKeywords.ts ===
 // --- (line: 9) skipped ---
 // namespace N { }
-// module M { }
+// namespace M { }
 // function fn() {}
 // /*FIND ALL REFS*/var [|x|];
 // let y;
@@ -204,7 +204,7 @@
 // === findAllReferences ===
 // === /referencesForDeclarationKeywords.ts ===
 // --- (line: 10) skipped ---
-// module M { }
+// namespace M { }
 // function fn() {}
 // var x;
 // /*FIND ALL REFS*/let [|y|];

@@ -119,9 +119,9 @@ import {h} from "./renderer";
 >h : () => void
 
 function Component() { return null; }
->Component : () => any
+>Component : () => null
 
 <Component />
 ><Component /> : any
->Component : () => any
+>Component : () => null
 

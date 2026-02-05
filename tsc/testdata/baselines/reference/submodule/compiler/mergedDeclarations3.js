@@ -1,37 +1,37 @@
 //// [tests/cases/compiler/mergedDeclarations3.ts] ////
 
 //// [mergedDeclarations3.ts]
-module M {
+namespace M {
  export enum Color {
    Red, Green
  }
 }
-module M {
- export module Color {
+namespace M {
+ export namespace Color {
    export var Blue = 4;
   }
 }
 var p = M.Color.Blue; // ok
 
-module M {
+namespace M {
     export function foo() {
     }
 }
 
-module M {
-    module foo {
+namespace M {
+    namespace foo {
         export var x = 1;
     }
 }
 
-module M {
-    export module foo {
+namespace M {
+    export namespace foo {
         export var y = 2
     }
 }
 
-module M {
-    module foo {
+namespace M {
+    namespace foo {
         export var z = 1;
     }
 }
@@ -42,6 +42,7 @@ M.foo.y // ok
 M.foo.z // error
 
 //// [mergedDeclarations3.js]
+"use strict";
 var M;
 (function (M) {
     let Color;

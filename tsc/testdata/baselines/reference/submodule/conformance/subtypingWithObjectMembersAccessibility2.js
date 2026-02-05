@@ -11,7 +11,7 @@ class Derived extends Base {
     bar: string;
 }
 
-module ExplicitPublic {
+namespace ExplicitPublic {
     class A {
         private foo: Base;
     }
@@ -37,7 +37,7 @@ module ExplicitPublic {
     }
 }
 
-module ImplicitPublic {
+namespace ImplicitPublic {
     class A {
         private foo: Base;
     }
@@ -64,6 +64,7 @@ module ImplicitPublic {
 }
 
 //// [subtypingWithObjectMembersAccessibility2.js]
+"use strict";
 // Derived member is private, base member is not causes errors
 class Base {
     foo;

@@ -459,7 +459,7 @@ let d = new D();
 >new D() : D
 >D : typeof D
 
-let explicitXProperty: (this: { x: number }, m: number) => number;
+declare let explicitXProperty: (this: { x: number }, m: number) => number;
 >explicitXProperty : (this: { x: number; }, m: number) => number
 >this : { x: number; }
 >x : number

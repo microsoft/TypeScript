@@ -2,7 +2,7 @@
 
 === unusedNamespaceInModule.ts ===
 
-module A {
+namespace A {
     namespace B { }
     export namespace C {}
 }

@@ -1,0 +1,17 @@
+--- old.FunctionDeclaration13_es6.errors.txt
++++ new.FunctionDeclaration13_es6.errors.txt
+@@= skipped -0, +0 lines =@@
+-FunctionDeclaration13_es6.ts(3,11): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+ FunctionDeclaration13_es6.ts(3,11): error TS2304: Cannot find name 'yield'.
+
+
+-==== FunctionDeclaration13_es6.ts (2 errors) ====
++==== FunctionDeclaration13_es6.ts (1 errors) ====
+     function * foo() {
+        // Legal to use 'yield' in a type context.
+        var v: yield;
+-              ~~~~~
+-!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+               ~~~~~
+ !!! error TS2304: Cannot find name 'yield'.
+     }

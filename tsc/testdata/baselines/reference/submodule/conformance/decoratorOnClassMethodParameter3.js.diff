@@ -1,6 +1,6 @@
 --- old.decoratorOnClassMethodParameter3.js
 +++ new.decoratorOnClassMethodParameter3.js
-@@= skipped -20, +20 lines =@@
+@@= skipped -21, +21 lines =@@
  var __param = (this && this.__param) || function (paramIndex, decorator) {
      return function (target, key) { decorator(target, key, paramIndex); }
  };

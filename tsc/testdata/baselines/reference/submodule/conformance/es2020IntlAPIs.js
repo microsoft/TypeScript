@@ -61,6 +61,7 @@ console.log(Intl.DisplayNames.supportedLocalesOf(localesArg, {})); // ["es-ES", 
 
 
 //// [es2020IntlAPIs.js]
+"use strict";
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
 const count = 26254.39;
 const date = new Date("2012-05-24");

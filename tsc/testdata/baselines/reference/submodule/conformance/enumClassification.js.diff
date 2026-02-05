@@ -1,6 +1,6 @@
 --- old.enumClassification.js
 +++ new.enumClassification.js
-@@= skipped -152, +152 lines =@@
+@@= skipped -153, +153 lines =@@
  // Examples of numeric enum types with constant and computed members
  var E20;
  (function (E20) {

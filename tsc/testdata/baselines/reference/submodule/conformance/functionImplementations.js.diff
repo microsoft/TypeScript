@@ -1,6 +1,6 @@
 --- old.functionImplementations.js
 +++ new.functionImplementations.js
-@@= skipped -224, +224 lines =@@
+@@= skipped -225, +225 lines =@@
  // A compile - time error occurs if no return statement expression has a type that is a supertype of each of the others.
  // FunctionExpression with no return type annotation with multiple return statements with subtype relation between returns
  class Base {

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ExportModuleWithAccessibleTypesOnItsExportedMembers.ts] ////
 
 === ExportModuleWithAccessibleTypesOnItsExportedMembers.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     export class Point {
@@ -12,7 +12,7 @@ module A {
 >y : number
     }
 
-    export module B {
+    export namespace B {
 >B : typeof B
 
         export var Origin: Point = new Point(0, 0);

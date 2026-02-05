@@ -24,6 +24,7 @@ var r1: typeof D;
 var r2: typeof d;
 
 //// [typeofClass2.js]
+"use strict";
 class C {
     constructor(x) { }
     static foo(x) { }

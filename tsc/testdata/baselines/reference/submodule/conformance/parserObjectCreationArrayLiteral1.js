@@ -4,4 +4,5 @@
 new Foo[];
 
 //// [parserObjectCreationArrayLiteral1.js]
+"use strict";
 new Foo[];

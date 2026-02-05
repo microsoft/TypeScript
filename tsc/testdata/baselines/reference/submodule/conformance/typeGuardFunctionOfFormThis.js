@@ -144,6 +144,7 @@ interface MimicGuardInterface {
 
 
 //// [typeGuardFunctionOfFormThis.js]
+"use strict";
 class RoyalGuard {
     isLeader() {
         return this instanceof LeadGuard;

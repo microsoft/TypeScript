@@ -1,8 +1,8 @@
 --- old.overloadGenericFunctionWithRestArgs.js
 +++ new.overloadGenericFunctionWithRestArgs.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [overloadGenericFunctionWithRestArgs.js]
+ "use strict";
  class B {
 +    id;
  }

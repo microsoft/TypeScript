@@ -1,0 +1,99 @@
+--- old.arrayLiteralWithMultipleBestCommonTypes.types
++++ new.arrayLiteralWithMultipleBestCommonTypes.types
+@@= skipped -3, +3 lines =@@
+ // when multiple best common types exist we will choose the first candidate
+
+ var a: { x: number; y?: number };
+->a : { x: number; y?: number; }
++>a : { x: number; y?: number | undefined; }
+ >x : number
+ >y : number | undefined
+
+ var b: { x: number; z?: number };
+->b : { x: number; z?: number; }
++>b : { x: number; z?: number | undefined; }
+ >x : number
+ >z : number | undefined
+
+ var c: { x: number; a?: number };
+->c : { x: number; a?: number; }
++>c : { x: number; a?: number | undefined; }
+ >x : number
+ >a : number | undefined
+
+ var as = [a, b]; // { x: number; y?: number };[]
+->as : ({ x: number; y?: number; } | { x: number; z?: number; })[]
+->[a, b] : ({ x: number; y?: number; } | { x: number; z?: number; })[]
+->a : { x: number; y?: number; }
+->b : { x: number; z?: number; }
++>as : ({ x: number; y?: number | undefined; } | { x: number; z?: number | undefined; })[]
++>[a, b] : ({ x: number; y?: number | undefined; } | { x: number; z?: number | undefined; })[]
++>a : { x: number; y?: number | undefined; }
++>b : { x: number; z?: number | undefined; }
+
+ var bs = [b, a]; // { x: number; z?: number };[]
+->bs : ({ x: number; y?: number; } | { x: number; z?: number; })[]
+->[b, a] : ({ x: number; y?: number; } | { x: number; z?: number; })[]
+->b : { x: number; z?: number; }
+->a : { x: number; y?: number; }
++>bs : ({ x: number; y?: number | undefined; } | { x: number; z?: number | undefined; })[]
++>[b, a] : ({ x: number; y?: number | undefined; } | { x: number; z?: number | undefined; })[]
++>b : { x: number; z?: number | undefined; }
++>a : { x: number; y?: number | undefined; }
+
+ var cs = [a, b, c]; // { x: number; y?: number };[]
+->cs : ({ x: number; y?: number; } | { x: number; z?: number; } | { x: number; a?: number; })[]
+->[a, b, c] : ({ x: number; y?: number; } | { x: number; z?: number; } | { x: number; a?: number; })[]
+->a : { x: number; y?: number; }
+->b : { x: number; z?: number; }
+->c : { x: number; a?: number; }
++>cs : ({ x: number; y?: number | undefined; } | { x: number; z?: number | undefined; } | { x: number; a?: number | undefined; })[]
++>[a, b, c] : ({ x: number; y?: number | undefined; } | { x: number; z?: number | undefined; } | { x: number; a?: number | undefined; })[]
++>a : { x: number; y?: number | undefined; }
++>b : { x: number; z?: number | undefined; }
++>c : { x: number; a?: number | undefined; }
+
+ var ds = [(x: Object) => 1, (x: string) => 2]; // { (x:Object) => number }[]
+ >ds : ((x: string) => number)[]
+@@= skipped -54, +54 lines =@@
+ >1 : 1
+
+ var fs = [(a: { x: number; y?: number }) => 1, (b: { x: number; z?: number }) => 2]; // (a: { x: number; y?: number }) => number[]
+->fs : (((a: { x: number; y?: number; }) => number) | ((b: { x: number; z?: number; }) => number))[]
+->[(a: { x: number; y?: number }) => 1, (b: { x: number; z?: number }) => 2] : (((a: { x: number; y?: number; }) => number) | ((b: { x: number; z?: number; }) => number))[]
+->(a: { x: number; y?: number }) => 1 : (a: { x: number; y?: number; }) => number
+->a : { x: number; y?: number; }
++>fs : (((a: { x: number; y?: number | undefined; }) => number) | ((b: { x: number; z?: number | undefined; }) => number))[]
++>[(a: { x: number; y?: number }) => 1, (b: { x: number; z?: number }) => 2] : (((a: { x: number; y?: number | undefined; }) => number) | ((b: { x: number; z?: number | undefined; }) => number))[]
++>(a: { x: number; y?: number }) => 1 : (a: { x: number; y?: number | undefined; }) => number
++>a : { x: number; y?: number | undefined; }
+ >x : number
+ >y : number | undefined
+ >1 : 1
+->(b: { x: number; z?: number }) => 2 : (b: { x: number; z?: number; }) => number
+->b : { x: number; z?: number; }
++>(b: { x: number; z?: number }) => 2 : (b: { x: number; z?: number | undefined; }) => number
++>b : { x: number; z?: number | undefined; }
+ >x : number
+ >z : number | undefined
+ >2 : 2
+
+ var gs = [(b: { x: number; z?: number }) => 2, (a: { x: number; y?: number }) => 1]; // (b: { x: number; z?: number }) => number[]
+->gs : (((b: { x: number; z?: number; }) => number) | ((a: { x: number; y?: number; }) => number))[]
+->[(b: { x: number; z?: number }) => 2, (a: { x: number; y?: number }) => 1] : (((b: { x: number; z?: number; }) => number) | ((a: { x: number; y?: number; }) => number))[]
+->(b: { x: number; z?: number }) => 2 : (b: { x: number; z?: number; }) => number
+->b : { x: number; z?: number; }
++>gs : (((b: { x: number; z?: number | undefined; }) => number) | ((a: { x: number; y?: number | undefined; }) => number))[]
++>[(b: { x: number; z?: number }) => 2, (a: { x: number; y?: number }) => 1] : (((b: { x: number; z?: number | undefined; }) => number) | ((a: { x: number; y?: number | undefined; }) => number))[]
++>(b: { x: number; z?: number }) => 2 : (b: { x: number; z?: number | undefined; }) => number
++>b : { x: number; z?: number | undefined; }
+ >x : number
+ >z : number | undefined
+ >2 : 2
+->(a: { x: number; y?: number }) => 1 : (a: { x: number; y?: number; }) => number
+->a : { x: number; y?: number; }
++>(a: { x: number; y?: number }) => 1 : (a: { x: number; y?: number | undefined; }) => number
++>a : { x: number; y?: number | undefined; }
+ >x : number
+ >y : number | undefined
+ >1 : 1

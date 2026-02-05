@@ -1,17 +1,18 @@
 //// [tests/cases/compiler/declFileModuleContinuation.ts] ////
 
 //// [declFileModuleContinuation.ts]
-module A.C {
+namespace A.C {
     export interface Z {
     }
 }
 
-module A.B.C {
+namespace A.B.C {
     export class W implements A.C.Z {
     }
 }
 
 //// [declFileModuleContinuation.js]
+"use strict";
 var A;
 (function (A) {
     let B;

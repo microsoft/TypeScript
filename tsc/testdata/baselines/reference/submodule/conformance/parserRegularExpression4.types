@@ -10,8 +10,8 @@ if (Ca.test(c.href) || Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?
 >c.href : any
 >c : any
 >href : any
->Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?|&)q=/.test(c.href) : boolean
->Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) : boolean
+>Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) && !/(\\?|&)q=/.test(c.href) : any
+>Ba.test(c.href) && /(\\?|&)adurl=/.test(c.href) : any
 >Ba.test(c.href) : any
 >Ba.test : any
 >Ba : any

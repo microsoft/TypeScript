@@ -21,6 +21,7 @@ class Location {
 
 
 //// [interfaceExtendsClass1.js]
+"use strict";
 class Control {
     state;
 }

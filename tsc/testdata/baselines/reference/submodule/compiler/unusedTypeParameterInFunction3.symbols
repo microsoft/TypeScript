@@ -7,11 +7,11 @@ function f1<X, Y, Z>() {
 >Y : Symbol(Y, Decl(unusedTypeParameterInFunction3.ts, 0, 14))
 >Z : Symbol(Z, Decl(unusedTypeParameterInFunction3.ts, 0, 17))
 
-    var a: X;
+    var a!: X;
 >a : Symbol(a, Decl(unusedTypeParameterInFunction3.ts, 1, 7))
 >X : Symbol(X, Decl(unusedTypeParameterInFunction3.ts, 0, 12))
 
-    var b: Z;
+    var b!: Z;
 >b : Symbol(b, Decl(unusedTypeParameterInFunction3.ts, 2, 7))
 >Z : Symbol(Z, Decl(unusedTypeParameterInFunction3.ts, 0, 17))
 

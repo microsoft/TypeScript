@@ -10,6 +10,7 @@ cobalt.pitch = function() {}
 
 
 //// [recur1.js]
+"use strict";
 var salt = new salt.pepper();
 salt.pepper = function () { };
 var cobalt = new cobalt.pitch();

@@ -1,6 +1,6 @@
 --- old.sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js
 +++ new.sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js
-@@= skipped -12, +12 lines =@@
+@@= skipped -13, +13 lines =@@
  class AbstractGreeter {
  }
  class Greeter extends AbstractGreeter {

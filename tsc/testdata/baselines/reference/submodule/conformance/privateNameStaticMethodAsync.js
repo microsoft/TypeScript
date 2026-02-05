@@ -18,6 +18,7 @@ const C = class {
 
 
 //// [privateNameStaticMethodAsync.js]
+"use strict";
 const C = class {
     static async #bar() { return await Promise.resolve(42); }
     static async foo() {

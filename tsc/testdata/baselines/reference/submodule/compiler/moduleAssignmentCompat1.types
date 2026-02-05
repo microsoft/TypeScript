@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/moduleAssignmentCompat1.ts] ////
 
 === moduleAssignmentCompat1.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     export class C { }
 >C : C
 }
-module B {
+namespace B {
 >B : typeof B
 
     export class C { }

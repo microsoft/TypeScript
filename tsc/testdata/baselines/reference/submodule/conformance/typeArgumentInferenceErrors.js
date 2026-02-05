@@ -19,6 +19,7 @@ someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // 
 
 
 //// [typeArgumentInferenceErrors.js]
+"use strict";
 // Generic call with multiple type parameters and only one used in parameter type annotation
 function someGenerics1(n, m) { }
 someGenerics1(3, 4); // Error

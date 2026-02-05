@@ -3,39 +3,39 @@
 === generatorTypeCheck62.ts ===
 export interface StrategicState {
     lastStrategyApplied?: string;
->lastStrategyApplied : string
+>lastStrategyApplied : string | undefined
 }
 
 export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>): (a: T) => IterableIterator<T | undefined, void> {
->strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T, void>) => (a: T) => IterableIterator<T, void>
+>strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>) => (a: T) => IterableIterator<T | undefined, void>
 >stratName : string
->gen : (a: T) => IterableIterator<T, void>
+>gen : (a: T) => IterableIterator<T | undefined, void>
 >a : T
 >a : T
 
     return function*(state) {
->function*(state) {        for (const next of gen(state)) {            if (next) {                next.lastStrategyApplied = stratName;            }            yield next;        }    } : (state: T) => Generator<T, void, any>
+>function*(state) {        for (const next of gen(state)) {            if (next) {                next.lastStrategyApplied = stratName;            }            yield next;        }    } : (state: T) => Generator<T | undefined, void, any>
 >state : T
 
         for (const next of gen(state)) {
->next : T
->gen(state) : IterableIterator<T, void>
->gen : (a: T) => IterableIterator<T, void>
+>next : T | undefined
+>gen(state) : IterableIterator<T | undefined, void>
+>gen : (a: T) => IterableIterator<T | undefined, void>
 >state : T
 
             if (next) {
->next : T
+>next : T | undefined
 
                 next.lastStrategyApplied = stratName;
 >next.lastStrategyApplied = stratName : string
->next.lastStrategyApplied : string
+>next.lastStrategyApplied : string | undefined
 >next : T
->lastStrategyApplied : string
+>lastStrategyApplied : string | undefined
 >stratName : string
             }
             yield next;
 >yield next : any
->next : T
+>next : T | undefined
         }
     }
 }
@@ -52,8 +52,8 @@ export interface State extends StrategicState {
 
 export const Nothing1: Strategy<State> = strategy("Nothing", function*(state: State) {
 >Nothing1 : Strategy<State>
->strategy("Nothing", function*(state: State) {    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.}) : (a: State) => IterableIterator<State, void>
->strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T, void>) => (a: T) => IterableIterator<T, void>
+>strategy("Nothing", function*(state: State) {    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.}) : (a: State) => IterableIterator<State | undefined, void>
+>strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>) => (a: T) => IterableIterator<T | undefined, void>
 >"Nothing" : "Nothing"
 >function*(state: State) {    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.} : (state: State) => Generator<never, State, any>
 >state : State
@@ -65,8 +65,8 @@ export const Nothing1: Strategy<State> = strategy("Nothing", function*(state: St
 
 export const Nothing2: Strategy<State> = strategy("Nothing", function*(state: State) {
 >Nothing2 : Strategy<State>
->strategy("Nothing", function*(state: State) {    yield state;}) : (a: State) => IterableIterator<State, void>
->strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T, void>) => (a: T) => IterableIterator<T, void>
+>strategy("Nothing", function*(state: State) {    yield state;}) : (a: State) => IterableIterator<State | undefined, void>
+>strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>) => (a: T) => IterableIterator<T | undefined, void>
 >"Nothing" : "Nothing"
 >function*(state: State) {    yield state;} : (state: State) => Generator<State, void, any>
 >state : State
@@ -79,10 +79,10 @@ export const Nothing2: Strategy<State> = strategy("Nothing", function*(state: St
 
 export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
 >Nothing3 : Strategy<State>
->strategy("Nothing", function* (state: State) {    yield ;    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.}) : (a: State) => IterableIterator<State, void>
->strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T, void>) => (a: T) => IterableIterator<T, void>
+>strategy("Nothing", function* (state: State) {    yield ;    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.}) : (a: State) => IterableIterator<State | undefined, void>
+>strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>) => (a: T) => IterableIterator<T | undefined, void>
 >"Nothing" : "Nothing"
->function* (state: State) {    yield ;    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.} : (state: State) => Generator<any, State, any>
+>function* (state: State) {    yield ;    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.} : (state: State) => Generator<undefined, State, any>
 >state : State
 
     yield ;

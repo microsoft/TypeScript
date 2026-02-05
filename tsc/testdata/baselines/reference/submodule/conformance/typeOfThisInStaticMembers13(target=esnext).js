@@ -11,6 +11,7 @@ class C {
 
 
 //// [typeOfThisInStaticMembers13.js]
+"use strict";
 class C {
     static c = "foo";
     static bar = class Inner {

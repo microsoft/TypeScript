@@ -9,6 +9,7 @@ var declare: any;
 declare instanceof C;
 
 //// [declareIdentifierAsBeginningOfStatementExpression01.js]
+"use strict";
 class C {
 }
 var declare;

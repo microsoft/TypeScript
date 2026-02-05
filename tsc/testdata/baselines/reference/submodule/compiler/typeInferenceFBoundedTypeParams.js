@@ -26,6 +26,7 @@ fold(
 
 
 //// [typeInferenceFBoundedTypeParams.js]
+"use strict";
 // Example from #6037
 function fold(values, result, fold) {
     for (let value of values) {

@@ -104,7 +104,7 @@ class C {
 >m6 : () => MyPromise<void>
 }
 
-module M {
+namespace M {
 >M : typeof M
 
 	export async function f1() { }

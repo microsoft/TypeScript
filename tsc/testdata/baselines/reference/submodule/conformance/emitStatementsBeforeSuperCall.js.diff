@@ -1,6 +1,6 @@
 --- old.emitStatementsBeforeSuperCall.js
 +++ new.emitStatementsBeforeSuperCall.js
-@@= skipped -26, +26 lines =@@
+@@= skipped -27, +27 lines =@@
  class Base {
  }
  class Sub extends Base {

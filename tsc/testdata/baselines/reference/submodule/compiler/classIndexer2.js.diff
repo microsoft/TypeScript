@@ -1,8 +1,8 @@
 --- old.classIndexer2.js
 +++ new.classIndexer2.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [classIndexer2.js]
+ "use strict";
  class C123 {
 +    x;
 +    y;

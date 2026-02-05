@@ -1,0 +1,9 @@
+--- old.subclassUint8Array.symbols
++++ new.subclassUint8Array.symbols
+@@= skipped -2, +2 lines =@@
+ === subclassUint8Array.ts ===
+ class CustomBuffer extends Uint8Array {
+ >CustomBuffer : Symbol(CustomBuffer, Decl(subclassUint8Array.ts, 0, 0))
+->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
++>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+ }

@@ -3,11 +3,11 @@
 //// [comparisonOperatorWithIdenticalPrimitiveType.ts]
 enum E { a, b, c }
 
-var a: number;
-var b: boolean;
-var c: string;
-var d: void;
-var e: E;
+declare var a: number;
+declare var b: boolean;
+declare var c: string;
+declare var d: void;
+declare var e: E;
 
 // operator <
 var ra1 = a < a;
@@ -82,17 +82,13 @@ var rh6 = null !== null;
 var rh7 = undefined !== undefined;
 
 //// [comparisonOperatorWithIdenticalPrimitiveType.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
     E[E["c"] = 2] = "c";
 })(E || (E = {}));
-var a;
-var b;
-var c;
-var d;
-var e;
 // operator <
 var ra1 = a < a;
 var ra2 = b < b;

@@ -7,3 +7,4 @@ interface int<T, U, V> {
 }
 
 //// [unusedTypeParameterInInterface2.js]
+"use strict";

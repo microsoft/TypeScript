@@ -1,0 +1,29 @@
+--- old.es5-asyncFunctionPropertyAccess(target=es2015).js
++++ new.es5-asyncFunctionPropertyAccess(target=es2015).js
+@@= skipped -16, +16 lines =@@
+
+ //// [es5-asyncFunctionPropertyAccess.js]
+ "use strict";
+-function propertyAccess0() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        y = yield x.a;
+-    });
+-}
+-function propertyAccess1() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        y = (yield x).a;
+-    });
+-}
+-function callExpression0() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        yield x(y, z);
+-    });
++async function propertyAccess0() {
++    y = await x.a;
++}
++async function propertyAccess1() {
++    y = (await x).a;
++}
++async function callExpression0() {
++    await x(y, z);
+ }

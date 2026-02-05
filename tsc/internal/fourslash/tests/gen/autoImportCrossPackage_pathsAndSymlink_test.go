@@ -31,6 +31,7 @@ export function Tooltip {};
 {
   "compilerOptions": {
     "composite": true,
+    "lib": ["es5"],
     "module": "esnext",
     "moduleResolution": "bundler",
     "paths": {

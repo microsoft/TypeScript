@@ -80,7 +80,7 @@ class B3 extends A3 {
 >'2.0' : string
 }
 
-module TwoLevels {
+namespace TwoLevels {
 >TwoLevels : typeof TwoLevels
 
     class A {

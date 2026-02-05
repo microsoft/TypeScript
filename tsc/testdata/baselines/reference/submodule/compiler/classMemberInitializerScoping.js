@@ -23,6 +23,7 @@ class CCCC {
 
 
 //// [classMemberInitializerScoping.js]
+"use strict";
 var aaa = 1;
 class CCC {
     y = aaa;

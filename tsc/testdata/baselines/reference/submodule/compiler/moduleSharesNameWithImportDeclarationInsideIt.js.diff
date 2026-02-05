@@ -1,7 +1,7 @@
 --- old.moduleSharesNameWithImportDeclarationInsideIt.js
 +++ new.moduleSharesNameWithImportDeclarationInsideIt.js
-@@= skipped -15, +15 lines =@@
- //// [moduleSharesNameWithImportDeclarationInsideIt.js]
+@@= skipped -16, +16 lines =@@
+ "use strict";
  var Z;
  (function (Z) {
 -    var M;

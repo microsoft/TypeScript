@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/interMixingModulesInterfaces5.ts] ////
 
 === interMixingModulesInterfaces5.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     interface B {
@@ -12,7 +12,7 @@ module A {
 >value : number
     }
 
-    export module B {
+    export namespace B {
 >B : typeof B
 
         export function createB(): number {

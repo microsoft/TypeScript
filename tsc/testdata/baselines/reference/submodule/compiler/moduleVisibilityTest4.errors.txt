@@ -5,7 +5,7 @@ moduleVisibilityTest4.ts(15,11): error TS2694: Namespace 'N' has no exported mem
 
 
 ==== moduleVisibilityTest4.ts (4 errors) ====
-    module M {
+    namespace M {
         export type nums = number;
     }
     

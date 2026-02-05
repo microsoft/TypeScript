@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/recursivelySpecializedConstructorDeclaration.ts] ////
 
 //// [recursivelySpecializedConstructorDeclaration.ts]
-module MsPortal.Controls.Base.ItemList {
+namespace MsPortal.Controls.Base.ItemList {
 
     export interface Interface<TValue> {
         // Removing this line fixes the constructor of ItemValue
@@ -19,7 +19,7 @@ module MsPortal.Controls.Base.ItemList {
 
 // Generates:
 /*
-declare module MsPortal.Controls.Base.ItemList {
+declare namespace MsPortal.Controls.Base.ItemList {
     interface Interface<TValue> {
         options: ViewModel<TValue>;
     }
@@ -32,6 +32,7 @@ declare module MsPortal.Controls.Base.ItemList {
 */
 
 //// [recursivelySpecializedConstructorDeclaration.js]
+"use strict";
 var MsPortal;
 (function (MsPortal) {
     let Controls;
@@ -54,7 +55,7 @@ var MsPortal;
 })(MsPortal || (MsPortal = {}));
 // Generates:
 /*
-declare module MsPortal.Controls.Base.ItemList {
+declare namespace MsPortal.Controls.Base.ItemList {
     interface Interface<TValue> {
         options: ViewModel<TValue>;
     }

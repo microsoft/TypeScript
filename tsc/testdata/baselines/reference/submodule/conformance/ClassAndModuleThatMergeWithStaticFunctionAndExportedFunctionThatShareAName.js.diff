@@ -1,8 +1,8 @@
 --- old.ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.js
 +++ new.ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.js
-@@= skipped -25, +25 lines =@@
-
+@@= skipped -26, +26 lines =@@
  //// [ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.js]
+ "use strict";
  class Point {
 +    x;
 +    y;

@@ -18,7 +18,7 @@ class MyTestClass {
 >this : this
 >canary : number
 
-        var p: number;
+        var p!: number;
 >p : number
 
         this.canary = 3;
@@ -35,7 +35,7 @@ class MyTestClass {
 >t : this
 >this : this
 
-        var t: MyTestClass;
+        var t!: MyTestClass;
 >t : this
 
         //type of 'this' in member function body is the class instance type
@@ -43,7 +43,7 @@ class MyTestClass {
 >p : this
 >this : this
 
-        var p: MyTestClass;
+        var p!: MyTestClass;
 >p : this
     }
 
@@ -55,7 +55,7 @@ class MyTestClass {
 >p : this
 >this : this
 
-        var p: MyTestClass;
+        var p!: MyTestClass;
 >p : this
 
         return this;
@@ -69,7 +69,7 @@ class MyTestClass {
 >p : this
 >this : this
 
-        var p: MyTestClass;
+        var p!: MyTestClass;
 >p : this
 
         p = v;
@@ -85,14 +85,14 @@ class MyTestClass {
 
     someFunc = () => {
 >someFunc : () => void
->() => {        //type of 'this' in member variable initializer is the class instance type        var t = this;        var t: MyTestClass;    } : () => void
+>() => {        //type of 'this' in member variable initializer is the class instance type        var t = this;        var t!: MyTestClass;    } : () => void
 
         //type of 'this' in member variable initializer is the class instance type
         var t = this;
 >t : this
 >this : this
 
-        var t: MyTestClass;
+        var t!: MyTestClass;
 >t : this
 
     };
@@ -103,7 +103,7 @@ class MyTestClass {
 >t : typeof MyTestClass
 >this : typeof MyTestClass
 
-        var t: typeof MyTestClass;
+        var t!: typeof MyTestClass;
 >t : typeof MyTestClass
 >MyTestClass : typeof MyTestClass
 
@@ -121,7 +121,7 @@ class MyTestClass {
 >p : typeof MyTestClass
 >this : typeof MyTestClass
 
-        var p: typeof MyTestClass;
+        var p!: typeof MyTestClass;
 >p : typeof MyTestClass
 >MyTestClass : typeof MyTestClass
 
@@ -143,7 +143,7 @@ class MyTestClass {
 >p : typeof MyTestClass
 >this : typeof MyTestClass
 
-        var p: typeof MyTestClass;
+        var p!: typeof MyTestClass;
 >p : typeof MyTestClass
 >MyTestClass : typeof MyTestClass
 
@@ -169,7 +169,7 @@ class MyTestClass {
 >p : typeof MyTestClass
 >this : typeof MyTestClass
 
-        var p: typeof MyTestClass;
+        var p!: typeof MyTestClass;
 >p : typeof MyTestClass
 >MyTestClass : typeof MyTestClass
 
@@ -201,7 +201,7 @@ class MyGenericTestClass<T, U> {
 >this : this
 >canary : number
 
-        var p: number;
+        var p!: number;
 >p : number
 
         this.canary = 3;
@@ -218,7 +218,7 @@ class MyGenericTestClass<T, U> {
 >t : this
 >this : this
 
-        var t: MyGenericTestClass<T, U>;
+        var t!: MyGenericTestClass<T, U>;
 >t : this
 
         //type of 'this' in member function body is the class instance type
@@ -226,7 +226,7 @@ class MyGenericTestClass<T, U> {
 >p : this
 >this : this
 
-        var p: MyGenericTestClass<T, U>;
+        var p!: MyGenericTestClass<T, U>;
 >p : this
     }
 
@@ -238,7 +238,7 @@ class MyGenericTestClass<T, U> {
 >p : this
 >this : this
 
-        var p: MyGenericTestClass<T, U>;
+        var p!: MyGenericTestClass<T, U>;
 >p : this
 
         return this;
@@ -252,7 +252,7 @@ class MyGenericTestClass<T, U> {
 >p : this
 >this : this
 
-        var p: MyGenericTestClass<T, U>;
+        var p!: MyGenericTestClass<T, U>;
 >p : this
 
         p = v;
@@ -268,14 +268,14 @@ class MyGenericTestClass<T, U> {
 
     someFunc = () => {
 >someFunc : () => void
->() => {        //type of 'this' in member variable initializer is the class instance type        var t = this;        var t: MyGenericTestClass<T, U>;    } : () => void
+>() => {        //type of 'this' in member variable initializer is the class instance type        var t = this;        var t!: MyGenericTestClass<T, U>;    } : () => void
 
         //type of 'this' in member variable initializer is the class instance type
         var t = this;
 >t : this
 >this : this
 
-        var t: MyGenericTestClass<T, U>;
+        var t!: MyGenericTestClass<T, U>;
 >t : this
 
     };
@@ -286,7 +286,7 @@ class MyGenericTestClass<T, U> {
 >t : typeof MyGenericTestClass
 >this : typeof MyGenericTestClass
 
-        var t: typeof MyGenericTestClass;
+        var t!: typeof MyGenericTestClass;
 >t : typeof MyGenericTestClass
 >MyGenericTestClass : typeof MyGenericTestClass
 
@@ -304,7 +304,7 @@ class MyGenericTestClass<T, U> {
 >p : typeof MyGenericTestClass
 >this : typeof MyGenericTestClass
 
-        var p: typeof MyGenericTestClass;
+        var p!: typeof MyGenericTestClass;
 >p : typeof MyGenericTestClass
 >MyGenericTestClass : typeof MyGenericTestClass
 
@@ -326,7 +326,7 @@ class MyGenericTestClass<T, U> {
 >p : typeof MyGenericTestClass
 >this : typeof MyGenericTestClass
 
-        var p: typeof MyGenericTestClass;
+        var p!: typeof MyGenericTestClass;
 >p : typeof MyGenericTestClass
 >MyGenericTestClass : typeof MyGenericTestClass
 
@@ -352,7 +352,7 @@ class MyGenericTestClass<T, U> {
 >p : typeof MyGenericTestClass
 >this : typeof MyGenericTestClass
 
-        var p: typeof MyGenericTestClass;
+        var p!: typeof MyGenericTestClass;
 >p : typeof MyGenericTestClass
 >MyGenericTestClass : typeof MyGenericTestClass
 
@@ -373,7 +373,7 @@ function fn(s = this) {
 >s : any
 >this : any
 
-    var s: any;
+    var s!: any;
 >s : any
 
     s.spaaaaaaace = 4;
@@ -384,7 +384,7 @@ function fn(s = this) {
 >4 : 4
 
     //type of 'this' in a function declaration body is Any
-    var t: any;
+    var t!: any;
 >t : any
 
     var t = this;
@@ -402,11 +402,11 @@ function fn(s = this) {
 //type of 'this' in a function expression param list list is Any
 var q1 = function (s = this) {
 >q1 : (s?: any) => void
->function (s = this) {    var s: any;    s.spaaaaaaace = 4;    //type of 'this' in a function expression body is Any    var t: any;    var t = this;    this.spaaaaace = 4;} : (s?: any) => void
+>function (s = this) {    var s!: any;    s.spaaaaaaace = 4;    //type of 'this' in a function expression body is Any    var t!: any;    var t = this;    this.spaaaaace = 4;} : (s?: any) => void
 >s : any
 >this : any
 
-    var s: any;
+    var s!: any;
 >s : any
 
     s.spaaaaaaace = 4;
@@ -417,7 +417,7 @@ var q1 = function (s = this) {
 >4 : 4
 
     //type of 'this' in a function expression body is Any
-    var t: any;
+    var t!: any;
 >t : any
 
     var t = this;
@@ -435,11 +435,11 @@ var q1 = function (s = this) {
 //type of 'this' in a fat arrow expression param list is typeof globalThis
 var q2 = (s = this) => {
 >q2 : (s?: typeof globalThis) => void
->(s = this) => {    var s: typeof globalThis;    s.spaaaaaaace = 4;    //type of 'this' in a fat arrow expression body is typeof globalThis    var t: typeof globalThis;    var t = this;    this.spaaaaace = 4;} : (s?: typeof globalThis) => void
+>(s = this) => {    var s!: typeof globalThis;    s.spaaaaaaace = 4;    //type of 'this' in a fat arrow expression body is typeof globalThis    var t!: typeof globalThis;    var t = this;    this.spaaaaace = 4;} : (s?: typeof globalThis) => void
 >s : typeof globalThis
 >this : typeof globalThis
 
-    var s: typeof globalThis;
+    var s!: typeof globalThis;
 >s : typeof globalThis
 >globalThis : typeof globalThis
 
@@ -451,7 +451,7 @@ var q2 = (s = this) => {
 >4 : 4
 
     //type of 'this' in a fat arrow expression body is typeof globalThis
-    var t: typeof globalThis;
+    var t!: typeof globalThis;
 >t : typeof globalThis
 >globalThis : typeof globalThis
 
@@ -467,8 +467,8 @@ var q2 = (s = this) => {
 >4 : 4
 }
 
-//type of 'this' in global module is GlobalThis
-var t: typeof globalThis;
+//type of 'this' in global namespace is GlobalThis
+var t!: typeof globalThis;
 >t : typeof globalThis
 >globalThis : typeof globalThis
 

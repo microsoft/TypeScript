@@ -20,9 +20,11 @@ declare class E extends C {
 }
 
 //// [a.js]
+"use strict";
 /*!=========
     Keep this pinned comment
    =========
 */
 //// [b.js]
+"use strict";
 ///<reference path="a.ts"/>

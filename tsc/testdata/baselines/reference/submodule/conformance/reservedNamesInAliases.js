@@ -11,6 +11,7 @@ type object = I;
 
 
 //// [reservedNamesInAliases.js]
+"use strict";
 type;
 void ;
 I;

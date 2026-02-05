@@ -1,6 +1,6 @@
 --- old.jsFileFunctionOverloads.js
 +++ new.jsFileFunctionOverloads.js
-@@= skipped -111, +111 lines =@@
+@@= skipped -112, +112 lines =@@
      /** @type {unknown[]} */
      const result = [];
      for (let i = 0; i < array.length; i += 1) {

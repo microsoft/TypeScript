@@ -10,6 +10,7 @@ class C {
 }
 
 //// [classDeclarationBlockScoping1.js]
+"use strict";
 class C {
 }
 {

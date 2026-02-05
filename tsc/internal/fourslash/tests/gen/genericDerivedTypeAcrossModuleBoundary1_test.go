@@ -11,12 +11,12 @@ func TestGenericDerivedTypeAcrossModuleBoundary1(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
+	const content = `namespace M {
    export class C1 { }
    export class C2<T> { }
 }
 var c = new M.C2<number>();
-module N {
+namespace N {
    export class D1 extends M.C1 { }
    export class D2<T> extends M.C2<T> { }
 }

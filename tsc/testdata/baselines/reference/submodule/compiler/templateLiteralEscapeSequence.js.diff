@@ -1,9 +1,9 @@
 --- old.templateLiteralEscapeSequence.js
 +++ new.templateLiteralEscapeSequence.js
-@@= skipped -156, +156 lines =@@
-
+@@= skipped -157, +157 lines =@@
 
  //// [templateLiteralEscapeSequence.js]
+ "use strict";
 -var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
 -    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
 -    return cooked;

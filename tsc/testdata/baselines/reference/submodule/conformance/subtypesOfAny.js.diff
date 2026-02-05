@@ -1,7 +1,7 @@
 --- old.subtypesOfAny.js
 +++ new.subtypesOfAny.js
-@@= skipped -137, +137 lines =@@
- //// [subtypesOfAny.js]
+@@= skipped -138, +138 lines =@@
+ "use strict";
  // every type is a subtype of any, no errors expected
  class A {
 +    foo;

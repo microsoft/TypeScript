@@ -13,6 +13,7 @@ const obj = {
 };
 
 //// [symbolObserverMismatchingPolyfillsWorkTogether.js]
+"use strict";
 const obj = {
     [Symbol.observer]: 0
 };

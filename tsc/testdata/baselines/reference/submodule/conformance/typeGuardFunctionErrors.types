@@ -34,7 +34,7 @@ function hasANonBooleanReturnStatement(x): x is A {
 function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
 >hasTypeGuardTypeInsideTypeGuardType : (x: any) => x is x
 >x : any
->is : any
+>is : undefined
 >A : typeof A
 
     return true;

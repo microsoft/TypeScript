@@ -24,6 +24,7 @@ var w:I={x:null,y:3};
 
 
 //// [null.js]
+"use strict";
 var x = null;
 var y = 3 + x;
 var z = 3 + null;

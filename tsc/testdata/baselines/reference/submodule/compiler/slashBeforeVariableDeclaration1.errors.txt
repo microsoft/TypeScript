@@ -1,7 +1,10 @@
 slashBeforeVariableDeclaration1.ts(1,1): error TS1127: Invalid character.
+slashBeforeVariableDeclaration1.ts(1,15): error TS7005: Variable 'v' implicitly has an 'any' type.
 
 
-==== slashBeforeVariableDeclaration1.ts (1 errors) ====
+==== slashBeforeVariableDeclaration1.ts (2 errors) ====
     \ declare var v;
     ~
 !!! error TS1127: Invalid character.
+                  ~
+!!! error TS7005: Variable 'v' implicitly has an 'any' type.

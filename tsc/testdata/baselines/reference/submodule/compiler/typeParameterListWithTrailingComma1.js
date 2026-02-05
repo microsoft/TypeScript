@@ -5,5 +5,6 @@ class C<T,> {
 }
 
 //// [typeParameterListWithTrailingComma1.js]
+"use strict";
 class C {
 }

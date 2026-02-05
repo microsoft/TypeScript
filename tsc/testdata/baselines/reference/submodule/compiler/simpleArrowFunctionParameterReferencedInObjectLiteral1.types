@@ -2,19 +2,19 @@
 
 === simpleArrowFunctionParameterReferencedInObjectLiteral1.ts ===
 [].map(() => [].map(p => ({ X: p })));
->[].map(() => [].map(p => ({ X: p }))) : { X: any; }[][]
->[].map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->[] : undefined[]
->map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->() => [].map(p => ({ X: p })) : () => { X: any; }[]
->[].map(p => ({ X: p })) : { X: any; }[]
->[].map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->[] : undefined[]
->map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->p => ({ X: p }) : (p: any) => { X: any; }
->p : any
->({ X: p }) : { X: any; }
->{ X: p } : { X: any; }
->X : any
->p : any
+>[].map(() => [].map(p => ({ X: p }))) : { X: never; }[][]
+>[].map : <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
+>[] : never[]
+>map : <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
+>() => [].map(p => ({ X: p })) : () => { X: never; }[]
+>[].map(p => ({ X: p })) : { X: never; }[]
+>[].map : <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
+>[] : never[]
+>map : <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
+>p => ({ X: p }) : (p: never) => { X: never; }
+>p : never
+>({ X: p }) : { X: never; }
+>{ X: p } : { X: never; }
+>X : never
+>p : never
 

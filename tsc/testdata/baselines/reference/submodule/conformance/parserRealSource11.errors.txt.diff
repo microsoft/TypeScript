@@ -291,7 +291,7 @@
 -                        ~~~~~~~~~~~~~
 -!!! error TS6053: File 'typescript.ts' not found.
      
-     module TypeScript {
+     namespace TypeScript {
          export class ASTSpan {
 @@= skipped -329, +327 lines =@@
                  emitter.recordSourceMappingStart(this);

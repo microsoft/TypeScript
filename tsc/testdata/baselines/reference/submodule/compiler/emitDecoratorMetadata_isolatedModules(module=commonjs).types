@@ -83,7 +83,7 @@ class HelloWorld {
   handleEvent3(event: C3): T1 { return undefined! } // Ok, Error
 >handleEvent3 : (event: C3) => T1
 >event : C3
->undefined! : undefined
+>undefined! : never
 >undefined : undefined
 }
 

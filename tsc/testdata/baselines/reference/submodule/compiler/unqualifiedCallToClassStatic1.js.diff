@@ -1,8 +1,8 @@
 --- old.unqualifiedCallToClassStatic1.js
 +++ new.unqualifiedCallToClassStatic1.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [unqualifiedCallToClassStatic1.js]
+ "use strict";
  class Vector {
 +    static foo = () => {
 +        // 'foo' cannot be called in an unqualified manner.

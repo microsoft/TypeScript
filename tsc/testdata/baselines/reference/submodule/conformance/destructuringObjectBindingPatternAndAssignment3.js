@@ -11,6 +11,7 @@ var {"prop"} = { "prop": 1 };
 
 
 //// [destructuringObjectBindingPatternAndAssignment3.js]
+"use strict";
 // Error
 var { h, } = { h: 1 };
 var { i } = { i: 2 };

@@ -9,6 +9,7 @@ trimmed = "abcde".trimRight();
 
 
 //// [stringTrim.js]
+"use strict";
 var trimmed;
 trimmed = "abcde".trimEnd();
 trimmed = "abcde".trimStart();

@@ -31,7 +31,7 @@ class B2 implements A {
 >x : string
 }
 
-module Generics {
+namespace Generics {
 >Generics : typeof Generics
 
     interface A<T extends Base> {

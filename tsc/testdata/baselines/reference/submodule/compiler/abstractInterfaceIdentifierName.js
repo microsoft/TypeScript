@@ -7,3 +7,4 @@ interface abstract {
 
 
 //// [abstractInterfaceIdentifierName.js]
+"use strict";

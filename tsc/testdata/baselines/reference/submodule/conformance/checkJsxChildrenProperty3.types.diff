@@ -1,0 +1,14 @@
+--- old.checkJsxChildrenProperty3.types
++++ new.checkJsxChildrenProperty3.types
+@@= skipped -35, +35 lines =@@
+             ? this.props.children(this.state.result)
+ >this.props.children(this.state.result) : JSX.Element
+ >this.props.children : ((user: IUser) => JSX.Element) & (React.ReactNode | undefined)
+->this.props : IFetchUserProps & { children?: React.ReactNode; }
++>this.props : IFetchUserProps & { children?: React.ReactNode | undefined; }
+ >this : this
+->props : IFetchUserProps & { children?: React.ReactNode; }
++>props : IFetchUserProps & { children?: React.ReactNode | undefined; }
+ >children : ((user: IUser) => JSX.Element) & (React.ReactNode | undefined)
+ >this.state.result : any
+ >this.state : any

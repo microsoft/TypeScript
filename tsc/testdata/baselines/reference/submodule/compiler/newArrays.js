@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/newArrays.ts] ////
 
 //// [newArrays.ts]
-module M {
+namespace M {
 	class Foo {}
 	class Gar {
 		public fa: Foo[];
@@ -15,6 +15,7 @@ module M {
 }
 
 //// [newArrays.js]
+"use strict";
 var M;
 (function (M) {
     class Foo {

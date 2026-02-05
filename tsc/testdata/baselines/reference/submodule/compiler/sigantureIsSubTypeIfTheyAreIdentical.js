@@ -11,6 +11,7 @@ class CacheService implements ICache { // Should not error that property type of
 }
 
 //// [sigantureIsSubTypeIfTheyAreIdentical.js]
+"use strict";
 class CacheService {
     get(key) {
         return undefined;

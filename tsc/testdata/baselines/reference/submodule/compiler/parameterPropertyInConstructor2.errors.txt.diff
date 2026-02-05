@@ -9,7 +9,7 @@
 
 -==== parameterPropertyInConstructor2.ts (3 errors) ====
 +==== parameterPropertyInConstructor2.ts (4 errors) ====
-     module mod {
+     namespace mod {
        class Customers {
          constructor(public names: string);
 @@= skipped -11, +12 lines =@@

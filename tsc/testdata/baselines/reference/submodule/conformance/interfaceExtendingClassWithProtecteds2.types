@@ -4,14 +4,14 @@
 class Foo {
 >Foo : Foo
 
-    protected x: string;
+    protected x!: string;
 >x : string
 }
 
 class Bar {
 >Bar : Bar
 
-    protected x: string;
+    protected x!: string;
 >x : string
 }
 
@@ -26,7 +26,7 @@ interface I4 extends Foo, Bar { // error
 class Baz {
 >Baz : Baz
 
-    protected y: string;
+    protected y!: string;
 >y : string
 }
 
@@ -35,7 +35,7 @@ interface I5 extends Foo, Baz {
 >z : string
 }
 
-var i: I5;
+declare var i: I5;
 >i : I5
 
 var r: string = i.z;

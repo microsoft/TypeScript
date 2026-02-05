@@ -10,6 +10,7 @@
 
 
 //// [abstractClassInLocalScope.js]
+"use strict";
 (() => {
     class A {
     }

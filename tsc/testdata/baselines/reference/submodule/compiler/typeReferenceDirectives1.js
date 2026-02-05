@@ -10,6 +10,7 @@ interface A {
 }
 
 //// [app.js]
+"use strict";
 /// <reference types="lib" preserve="true" />
 
 

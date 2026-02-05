@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/moduleAssignmentCompat2.ts] ////
 
 //// [moduleAssignmentCompat2.ts]
-module A {
+namespace A {
     export class C { }
 }
-module B {
+namespace B {
     export class C { }
     export class D { }
 }
@@ -16,6 +16,7 @@ a = b;
 b = a; // error
 
 //// [moduleAssignmentCompat2.js]
+"use strict";
 var A;
 (function (A) {
     class C {

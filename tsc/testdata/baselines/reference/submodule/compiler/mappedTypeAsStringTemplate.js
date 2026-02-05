@@ -11,6 +11,7 @@ foo(c);
 
 
 //// [mappedTypeAsStringTemplate.js]
+"use strict";
 // Repro from #44220
 function foo(foox) { }
 const c = { x: 1 };

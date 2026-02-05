@@ -22,9 +22,7 @@ class Comp<T extends Foo, S> extends Component<S & State<T>>
 
 
 //// [indexedAccessRelation.js]
-"use strict";
 // Repro from #14723
-Object.defineProperty(exports, "__esModule", { value: true });
 class Component {
     setState(state) { }
 }
@@ -35,3 +33,4 @@ class Comp extends Component {
         this.setState({ a: a });
     }
 }
+export {};

@@ -76,6 +76,7 @@ function foo<T, U>(t: T, u: U) {
 
 
 //// [unionTypesAssignability.js]
+"use strict";
 var unionNumberString;
 class C {
 }

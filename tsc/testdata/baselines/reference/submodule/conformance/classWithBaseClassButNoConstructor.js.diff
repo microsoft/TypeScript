@@ -1,6 +1,6 @@
 --- old.classWithBaseClassButNoConstructor.js
 +++ new.classWithBaseClassButNoConstructor.js
-@@= skipped -46, +46 lines =@@
+@@= skipped -47, +47 lines =@@
      constructor(x) { }
  }
  class C extends Base {

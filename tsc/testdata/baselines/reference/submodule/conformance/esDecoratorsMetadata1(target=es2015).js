@@ -18,6 +18,7 @@ C[Symbol.metadata].b; // 'y'
 
 
 //// [foo.js]
+"use strict";
 function meta(key, value) {
     return (_, context) => {
         context.metadata[key] = value;

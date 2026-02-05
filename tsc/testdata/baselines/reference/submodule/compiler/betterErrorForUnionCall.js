@@ -12,6 +12,7 @@ fnUnion2("");
 
 
 //// [betterErrorForUnionCall.js]
+"use strict";
 union("");
 fnUnion("");
 fnUnion2("");

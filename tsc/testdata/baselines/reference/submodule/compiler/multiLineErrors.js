@@ -19,17 +19,16 @@ interface A2 {
     x: { y: string; };
 }
 
-var t1: A1;
-var t2: A2;
+declare var t1: A1;
+declare var t2: A2;
 t1 = t2;
 
 
 //// [multiLineErrors.js]
+"use strict";
 var t = 32;
 function noReturn() {
     var x = 4;
     var y = 10;
 }
-var t1;
-var t2;
 t1 = t2;

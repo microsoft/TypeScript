@@ -387,6 +387,7 @@ function test3<T extends any[] | Record<string, any>>(obj: T) {
 
 
 //// [inKeywordTypeguard.js]
+"use strict";
 class A {
     a;
 }

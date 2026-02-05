@@ -5,4 +5,5 @@ interface BadGenerator extends Iterator<number>, Iterable<string> { }
 function* g3(): BadGenerator { }
 
 //// [generatorTypeCheck8.js]
+"use strict";
 function* g3() { }

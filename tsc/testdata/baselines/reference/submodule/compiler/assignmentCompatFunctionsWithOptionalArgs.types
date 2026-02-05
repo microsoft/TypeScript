@@ -2,21 +2,21 @@
 
 === assignmentCompatFunctionsWithOptionalArgs.ts ===
 function foo(x: { id: number; name?: string; }): void;
->foo : (x: { id: number; name?: string; }) => void
->x : { id: number; name?: string; }
+>foo : (x: { id: number; name?: string | undefined; }) => void
+>x : { id: number; name?: string | undefined; }
 >id : number
->name : string
+>name : string | undefined
 
 foo({ id: 1234 });                 // Ok
 >foo({ id: 1234 }) : void
->foo : (x: { id: number; name?: string; }) => void
+>foo : (x: { id: number; name?: string | undefined; }) => void
 >{ id: 1234 } : { id: number; }
 >id : number
 >1234 : 1234
 
 foo({ id: 1234, name: "hello" });  // Ok
 >foo({ id: 1234, name: "hello" }) : void
->foo : (x: { id: number; name?: string; }) => void
+>foo : (x: { id: number; name?: string | undefined; }) => void
 >{ id: 1234, name: "hello" } : { id: number; name: string; }
 >id : number
 >1234 : 1234
@@ -25,7 +25,7 @@ foo({ id: 1234, name: "hello" });  // Ok
 
 foo({ id: 1234, name: false });    // Error, name of wrong type
 >foo({ id: 1234, name: false }) : void
->foo : (x: { id: number; name?: string; }) => void
+>foo : (x: { id: number; name?: string | undefined; }) => void
 >{ id: 1234, name: false } : { id: number; name: boolean; }
 >id : number
 >1234 : 1234
@@ -34,7 +34,7 @@ foo({ id: 1234, name: false });    // Error, name of wrong type
 
 foo({ name: "hello" });            // Error, id required but missing
 >foo({ name: "hello" }) : void
->foo : (x: { id: number; name?: string; }) => void
+>foo : (x: { id: number; name?: string | undefined; }) => void
 >{ name: "hello" } : { name: string; }
 >name : string
 >"hello" : "hello"

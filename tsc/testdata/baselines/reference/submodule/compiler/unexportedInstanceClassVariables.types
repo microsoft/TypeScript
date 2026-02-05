@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/unexportedInstanceClassVariables.ts] ////
 
 === unexportedInstanceClassVariables.ts ===
-module M{
+namespace M{
 >M : typeof M
 
 	class A{
@@ -12,7 +12,7 @@ module M{
 	}
 }
 
-module M{
+namespace M{
 >M : typeof M
 
 	class A {}  

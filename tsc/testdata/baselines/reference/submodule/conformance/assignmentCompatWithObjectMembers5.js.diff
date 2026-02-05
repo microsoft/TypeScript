@@ -1,10 +1,10 @@
 --- old.assignmentCompatWithObjectMembers5.js
 +++ new.assignmentCompatWithObjectMembers5.js
-@@= skipped -17, +17 lines =@@
-
+@@= skipped -18, +18 lines =@@
  //// [assignmentCompatWithObjectMembers5.js]
+ "use strict";
  class C {
 +    foo;
  }
- var c;
- var i;
+ c = i; // error
+ i = c; // error

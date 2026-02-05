@@ -25,10 +25,10 @@
 
    export function fromJS(jsValue: any, reviver?: (key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any): any;
 ->fromJS : (jsValue: any, reviver?: (key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any) => any
-+>fromJS : (jsValue: any, reviver?: (key: string | number, sequence: Collection.Indexed<any> | Collection.Keyed<string, any>, path?: (string | number)[]) => any) => any
++>fromJS : (jsValue: any, reviver?: ((key: string | number, sequence: Collection.Indexed<any> | Collection.Keyed<string, any>, path?: (string | number)[] | undefined) => any) | undefined) => any
  >jsValue : any
-->reviver : (key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any
-+>reviver : (key: string | number, sequence: Collection.Indexed<any> | Collection.Keyed<string, any>, path?: (string | number)[]) => any
+->reviver : ((key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any) | undefined
++>reviver : ((key: string | number, sequence: Collection.Indexed<any> | Collection.Keyed<string, any>, path?: (string | number)[] | undefined) => any) | undefined
  >key : string | number
  >sequence : Collection.Indexed<any> | Collection.Keyed<string, any>
  >Collection : any
@@ -305,15 +305,7 @@
  >values : T[]
    }
    export function Stack(): Stack<any>;
-@@= skipped -18, +18 lines =@@
-
-     // Reading values
-     peek(): T | undefined;
-->peek : () => T | undefined
-+>peek : () => T
-
-     // Persistent changes
-     clear(): Stack<T>;
+@@= skipped -25, +25 lines =@@
  >clear : () => Stack<T>
 
      unshift(...values: Array<T>): Stack<T>;
@@ -322,7 +314,7 @@
  >values : T[]
 
      unshiftAll(iter: Iterable<T>): Stack<T>;
-@@= skipped -18, +18 lines =@@
+@@= skipped -11, +11 lines =@@
  >shift : () => Stack<T>
 
      push(...values: Array<T>): Stack<T>;
@@ -340,7 +332,24 @@
  >valuesOrCollections : (C | Iterable<C>)[]
 
      map<M>(mapper: (value: T, key: number, iter: this) => M, context?: any): Stack<M>;
-@@= skipped -52, +52 lines =@@
+@@= skipped -36, +36 lines =@@
+ >context : any
+   }
+   export function Range(start?: number, end?: number, step?: number): Seq.Indexed<number>;
+->Range : (start?: number, end?: number, step?: number) => Seq.Indexed<number>
++>Range : (start?: number | undefined, end?: number | undefined, step?: number | undefined) => Seq.Indexed<number>
+ >start : number | undefined
+ >end : number | undefined
+ >step : number | undefined
+ >Seq : any
+
+   export function Repeat<T>(value: T, times?: number): Seq.Indexed<T>;
+->Repeat : <T>(value: T, times?: number) => Seq.Indexed<T>
++>Repeat : <T>(value: T, times?: number | undefined) => Seq.Indexed<T>
+ >value : T
+ >times : number | undefined
+ >Seq : any
+@@= skipped -16, +16 lines =@@
  >Record : typeof Record
 
      export function isRecord(maybeRecord: any): maybeRecord is Record.Instance<any>;
@@ -408,7 +417,7 @@
  >values : T[]
  >Seq : any
 
-     export module Keyed {}
+     export namespace Keyed {}
      export function Keyed<K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>;
 ->Keyed : { <K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>; <V_1>(obj: { [key: string]: V_1; }): Seq.Keyed<string, V_1>; <K_1, V_1>(): Seq.Keyed<K_1, V_1>; (): Seq.Keyed<any, any>; }
 +>Keyed : { <K, V>(collection: Iterable<[K, V]>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; <K_1, V_1>(): Keyed<K_1, V_1>; (): Keyed<any, any>; }
@@ -647,7 +656,7 @@
  >Collection : any
 @@= skipped -21, +21 lines =@@
 
-     export module Keyed {}
+     export namespace Keyed {}
      export function Keyed<K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>;
 ->Keyed : { <K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>; <V_1>(obj: { [key: string]: V_1; }): Collection.Keyed<string, V_1>; }
 +>Keyed : { <K, V>(collection: Iterable<[K, V]>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; }
@@ -729,7 +738,7 @@
  >key : K
 @@= skipped -15, +15 lines =@@
      }
-     export module Indexed {}
+     export namespace Indexed {}
      export function Indexed<T>(collection: Iterable<T>): Collection.Indexed<T>;
 ->Indexed : <T>(collection: Iterable<T>) => Collection.Indexed<T>
 +>Indexed : <T>(collection: Iterable<T>) => Indexed<T>
@@ -748,13 +757,13 @@
        // Reading values
        get<NSV>(index: number, notSetValue: NSV): T | NSV;
 ->get : { <NSV>(index: number, notSetValue: NSV): T | NSV; (index: number): T | undefined; }
-+>get : { <NSV>(index: number, notSetValue: NSV): NSV | T; (index: number): T; }
++>get : { <NSV>(index: number, notSetValue: NSV): NSV | T; (index: number): T | undefined; }
  >index : number
  >notSetValue : NSV
 
        get(index: number): T | undefined;
 ->get : { <NSV>(index: number, notSetValue: NSV): T | NSV; (index: number): T | undefined; }
-+>get : { <NSV>(index: number, notSetValue: NSV): NSV | T; (index: number): T; }
++>get : { <NSV>(index: number, notSetValue: NSV): NSV | T; (index: number): T | undefined; }
  >index : number
 
        // Conversion to Seq
@@ -849,7 +858,7 @@
  >index : number
 @@= skipped -15, +15 lines =@@
      }
-     export module Set {}
+     export namespace Set {}
      export function Set<T>(collection: Iterable<T>): Collection.Set<T>;
 ->Set : <T>(collection: Iterable<T>) => Collection.Set<T>
 +>Set : <T>(collection: Iterable<T>) => Set<T>
@@ -914,30 +923,17 @@
      // Reading values
      get<NSV>(key: K, notSetValue: NSV): V | NSV;
 ->get : { <NSV>(key: K, notSetValue: NSV): V | NSV; (key: K): V | undefined; }
-+>get : { <NSV>(key: K, notSetValue: NSV): NSV | V; (key: K): V; }
++>get : { <NSV>(key: K, notSetValue: NSV): NSV | V; (key: K): V | undefined; }
  >key : K
  >notSetValue : NSV
 
      get(key: K): V | undefined;
 ->get : { <NSV>(key: K, notSetValue: NSV): V | NSV; (key: K): V | undefined; }
-+>get : { <NSV>(key: K, notSetValue: NSV): NSV | V; (key: K): V; }
++>get : { <NSV>(key: K, notSetValue: NSV): NSV | V; (key: K): V | undefined; }
  >key : K
 
      has(key: K): boolean;
-@@= skipped -21, +21 lines =@@
- >value : V
-
-     first(): V | undefined;
-->first : () => V | undefined
-+>first : () => V
-
-     last(): V | undefined;
-->last : () => V | undefined
-+>last : () => V
-
-     // Reading deep values
-     getIn(searchKeyPath: Iterable<any>, notSetValue?: any): any;
-@@= skipped -23, +23 lines =@@
+@@= skipped -44, +44 lines =@@
 
      // Conversion to JavaScript types
      toJS(): Array<any> | { [key: string]: any };
@@ -956,7 +952,32 @@
 
      toObject(): { [key: string]: V };
  >toObject : () => { [key: string]: V; }
-@@= skipped -204, +204 lines =@@
+@@= skipped -109, +109 lines =@@
+ >reverse : () => this
+
+     sort(comparator?: (valueA: V, valueB: V) => number): this;
+->sort : (comparator?: (valueA: V, valueB: V) => number) => this
++>sort : (comparator?: ((valueA: V, valueB: V) => number) | undefined) => this
+ >comparator : ((valueA: V, valueB: V) => number) | undefined
+ >valueA : V
+ >valueB : V
+
+     sortBy<C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number): this;
+->sortBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number) => this
++>sortBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: ((valueA: C, valueB: C) => number) | undefined) => this
+ >comparatorValueMapper : (value: V, key: K, iter: this) => C
+ >value : V
+ >key : K
+@@= skipped -35, +35 lines =@@
+
+     // Creating subsets
+     slice(begin?: number, end?: number): this;
+->slice : (begin?: number, end?: number) => this
++>slice : (begin?: number | undefined, end?: number | undefined) => this
+ >begin : number | undefined
+ >end : number | undefined
+
+@@= skipped -60, +60 lines =@@
 
      // Combination
      concat(...valuesOrCollections: Array<any>): Collection<any, any>;
@@ -965,6 +986,16 @@
  >valuesOrCollections : any[]
 
      flatten(depth?: number): Collection<any, any>;
+->flatten : { (depth?: number): Collection<any, any>; (shallow?: boolean): Collection<any, any>; }
++>flatten : { (depth?: number | undefined): Collection<any, any>; (shallow?: boolean | undefined): Collection<any, any>; }
+ >depth : number | undefined
+
+     flatten(shallow?: boolean): Collection<any, any>;
+->flatten : { (depth?: number): Collection<any, any>; (shallow?: boolean): Collection<any, any>; }
++>flatten : { (depth?: number | undefined): Collection<any, any>; (shallow?: boolean | undefined): Collection<any, any>; }
+ >shallow : boolean | undefined
+
+     flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Collection<K, M>;
 @@= skipped -21, +21 lines =@@
 
      // Reducing a value
@@ -1004,99 +1035,80 @@
  >reduction : R | V
  >value : V
  >key : K
-@@= skipped -51, +51 lines =@@
+@@= skipped -24, +24 lines =@@
+ >context : any
+
+     join(separator?: string): string;
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >separator : string | undefined
+
+     isEmpty(): boolean;
+@@= skipped -27, +27 lines =@@
 
      // Search for value
      find(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): V | undefined;
 ->find : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => V | undefined
-+>find : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => V
++>find : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V | undefined) => V | undefined
  >predicate : (value: V, key: K, iter: this) => boolean
  >value : V
  >key : K
 @@= skipped -9, +9 lines =@@
- >notSetValue : V
+ >notSetValue : V | undefined
 
      findLast(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): V | undefined;
 ->findLast : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => V | undefined
-+>findLast : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => V
++>findLast : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V | undefined) => V | undefined
  >predicate : (value: V, key: K, iter: this) => boolean
  >value : V
  >key : K
 @@= skipped -9, +9 lines =@@
- >notSetValue : V
+ >notSetValue : V | undefined
 
      findEntry(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): [K, V] | undefined;
 ->findEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => [K, V] | undefined
-+>findEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => [K, V]
++>findEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V | undefined) => [K, V] | undefined
  >predicate : (value: V, key: K, iter: this) => boolean
  >value : V
  >key : K
 @@= skipped -9, +9 lines =@@
- >notSetValue : V
+ >notSetValue : V | undefined
 
      findLastEntry(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): [K, V] | undefined;
 ->findLastEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => [K, V] | undefined
-+>findLastEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => [K, V]
++>findLastEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V | undefined) => [K, V] | undefined
  >predicate : (value: V, key: K, iter: this) => boolean
  >value : V
  >key : K
-@@= skipped -9, +9 lines =@@
- >notSetValue : V
-
-     findKey(predicate: (value: V, key: K, iter: this) => boolean, context?: any): K | undefined;
-->findKey : (predicate: (value: V, key: K, iter: this) => boolean, context?: any) => K | undefined
-+>findKey : (predicate: (value: V, key: K, iter: this) => boolean, context?: any) => K
- >predicate : (value: V, key: K, iter: this) => boolean
- >value : V
- >key : K
-@@= skipped -8, +8 lines =@@
- >context : any
-
-     findLastKey(predicate: (value: V, key: K, iter: this) => boolean, context?: any): K | undefined;
-->findLastKey : (predicate: (value: V, key: K, iter: this) => boolean, context?: any) => K | undefined
-+>findLastKey : (predicate: (value: V, key: K, iter: this) => boolean, context?: any) => K
- >predicate : (value: V, key: K, iter: this) => boolean
- >value : V
- >key : K
-@@= skipped -8, +8 lines =@@
- >context : any
-
-     keyOf(searchValue: V): K | undefined;
-->keyOf : (searchValue: V) => K | undefined
-+>keyOf : (searchValue: V) => K
- >searchValue : V
-
-     lastKeyOf(searchValue: V): K | undefined;
-->lastKeyOf : (searchValue: V) => K | undefined
-+>lastKeyOf : (searchValue: V) => K
+@@= skipped -33, +33 lines =@@
  >searchValue : V
 
      max(comparator?: (valueA: V, valueB: V) => number): V | undefined;
 ->max : (comparator?: (valueA: V, valueB: V) => number) => V | undefined
-+>max : (comparator?: (valueA: V, valueB: V) => number) => V
- >comparator : (valueA: V, valueB: V) => number
++>max : (comparator?: ((valueA: V, valueB: V) => number) | undefined) => V | undefined
+ >comparator : ((valueA: V, valueB: V) => number) | undefined
  >valueA : V
  >valueB : V
 
      maxBy<C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number): V | undefined;
 ->maxBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number) => V | undefined
-+>maxBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number) => V
++>maxBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: ((valueA: C, valueB: C) => number) | undefined) => V | undefined
  >comparatorValueMapper : (value: V, key: K, iter: this) => C
  >value : V
  >key : K
-@@= skipped -24, +24 lines =@@
+@@= skipped -16, +16 lines =@@
  >valueB : C
 
      min(comparator?: (valueA: V, valueB: V) => number): V | undefined;
 ->min : (comparator?: (valueA: V, valueB: V) => number) => V | undefined
-+>min : (comparator?: (valueA: V, valueB: V) => number) => V
- >comparator : (valueA: V, valueB: V) => number
++>min : (comparator?: ((valueA: V, valueB: V) => number) | undefined) => V | undefined
+ >comparator : ((valueA: V, valueB: V) => number) | undefined
  >valueA : V
  >valueB : V
 
      minBy<C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number): V | undefined;
 ->minBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number) => V | undefined
-+>minBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number) => V
++>minBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: ((valueA: C, valueB: C) => number) | undefined) => V | undefined
  >comparatorValueMapper : (value: V, key: K, iter: this) => C
  >value : V
  >key : K

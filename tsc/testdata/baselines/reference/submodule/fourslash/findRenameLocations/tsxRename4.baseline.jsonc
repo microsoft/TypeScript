@@ -60,7 +60,7 @@
 
 // === findRenameLocations ===
 // === /file.tsx ===
-// declare module JSX {
+// declare namespace JSX {
 //     interface Element {}
 //     interface IntrinsicElements {
 //         [|divRENAME|]: {};
@@ -77,7 +77,7 @@
 
 // === findRenameLocations ===
 // === /file.tsx ===
-// declare module JSX {
+// declare namespace JSX {
 //     interface Element {}
 //     interface IntrinsicElements {
 //         [|divRENAME|]: {};

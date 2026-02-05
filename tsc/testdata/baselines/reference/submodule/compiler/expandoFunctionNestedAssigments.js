@@ -54,6 +54,7 @@ for(let f in (Foo.forIn = []) ){
 }
 
 //// [expandoFunctionNestedAssigments.js]
+"use strict";
 function Foo() {
 }
 let d = (Foo.inVariableInit = 1);

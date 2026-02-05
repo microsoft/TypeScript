@@ -10,4 +10,5 @@ a.foo = 'baz';
 
 
 //// [propertyAccessOfReadonlyIndexSignature.js]
+"use strict";
 a.foo = 'baz';

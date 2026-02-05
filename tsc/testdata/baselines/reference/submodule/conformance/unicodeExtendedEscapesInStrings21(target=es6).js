@@ -5,4 +5,5 @@ var x = "\u{67";
 
 
 //// [unicodeExtendedEscapesInStrings21.js]
+"use strict";
 var x = "\u{67";

@@ -10,11 +10,11 @@ class A {
 >Y : Symbol(Y, Decl(unusedTypeParameterInMethod2.ts, 1, 16))
 >Z : Symbol(Z, Decl(unusedTypeParameterInMethod2.ts, 1, 19))
 
-        var a: X;
+        var a!: X;
 >a : Symbol(a, Decl(unusedTypeParameterInMethod2.ts, 2, 11))
 >X : Symbol(X, Decl(unusedTypeParameterInMethod2.ts, 1, 14))
 
-        var b: Z;
+        var b!: Z;
 >b : Symbol(b, Decl(unusedTypeParameterInMethod2.ts, 3, 11))
 >Z : Symbol(Z, Decl(unusedTypeParameterInMethod2.ts, 1, 19))
 

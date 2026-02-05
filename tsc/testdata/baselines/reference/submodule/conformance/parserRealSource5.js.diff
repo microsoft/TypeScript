@@ -1,6 +1,6 @@
 --- old.parserRealSource5.js
 +++ new.parserRealSource5.js
-@@= skipped -75, +75 lines =@@
+@@= skipped -76, +76 lines =@@
  (function (TypeScript) {
      // TODO: refactor indent logic for use in emit
      class PrintContext {

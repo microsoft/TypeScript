@@ -17,6 +17,7 @@ function foo () {
 
 
 //// [classStaticBlock18.js]
+"use strict";
 function foo() {
     return class {
         static foo = 1;

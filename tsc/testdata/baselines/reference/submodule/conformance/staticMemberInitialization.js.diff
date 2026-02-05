@@ -1,8 +1,8 @@
 --- old.staticMemberInitialization.js
 +++ new.staticMemberInitialization.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [staticMemberInitialization.js]
+ "use strict";
  class C {
 +    static x = 1;
  }

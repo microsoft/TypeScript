@@ -11,15 +11,16 @@ func TestInheritedModuleMembersForClodule2(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
-    export module A {
+	const content = `// @strict: false
+namespace M {
+    export namespace A {
         var o;
     }
 }
-module M {
+namespace M {
     export class A { a = 1;}
 }
-module M {
+namespace M {
     export class A { /**/b }
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

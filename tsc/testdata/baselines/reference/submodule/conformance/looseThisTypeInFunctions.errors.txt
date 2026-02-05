@@ -16,7 +16,7 @@ looseThisTypeInFunctions.ts(46,20): error TS2339: Property 'length' does not exi
         implicitNoThis(m: number): number;
     }
     class C implements I {
-        n: number;
+        n!: number;
         explicitThis(this: this, m: number): number {
             return this.n + m;
         }
@@ -55,7 +55,7 @@ looseThisTypeInFunctions.ts(46,20): error TS2339: Property 'length' does not exi
     let n = x(12); // callee:void doesn't match this:I
             ~~~~~
 !!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'I'.
-    let u: Unused;
+    declare let u: Unused;
     let y = u.implicitNoThis;
     n = y(12); // ok, callee:void matches this:any
     c.explicitVoid = c.implicitThis // ok, implicitThis(this:any)

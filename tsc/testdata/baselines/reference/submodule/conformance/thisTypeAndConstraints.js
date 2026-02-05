@@ -25,6 +25,7 @@ class B<T extends A> {
 
 
 //// [thisTypeAndConstraints.js]
+"use strict";
 class A {
     self() {
         return this;

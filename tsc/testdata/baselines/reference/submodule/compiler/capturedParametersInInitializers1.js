@@ -43,6 +43,7 @@ function foo9(y = {[z]() { return z; }}, z = 1) {
 
 
 //// [capturedParametersInInitializers1.js]
+"use strict";
 // ok - usage is deferred
 function foo1(y = class {
     c = x;

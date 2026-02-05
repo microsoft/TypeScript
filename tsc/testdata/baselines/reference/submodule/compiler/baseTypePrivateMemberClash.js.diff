@@ -1,8 +1,8 @@
 --- old.baseTypePrivateMemberClash.js
 +++ new.baseTypePrivateMemberClash.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [baseTypePrivateMemberClash.js]
+ "use strict";
  class X {
 +    m;
  }

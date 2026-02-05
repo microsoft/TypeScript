@@ -4,5 +4,6 @@
 while (true) continue
 
 //// [asiContinue.js]
+"use strict";
 while (true)
     continue;

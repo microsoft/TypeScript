@@ -1,7 +1,7 @@
 --- old.readonlyConstructorAssignment.js
 +++ new.readonlyConstructorAssignment.js
-@@= skipped -43, +43 lines =@@
- //// [readonlyConstructorAssignment.js]
+@@= skipped -44, +44 lines =@@
+ "use strict";
  // Tests that readonly parameter properties behave like regular readonly properties
  class A {
 +    x;

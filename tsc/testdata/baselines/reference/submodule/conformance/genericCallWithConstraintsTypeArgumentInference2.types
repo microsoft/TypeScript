@@ -7,7 +7,7 @@ function foo<T, U extends T>(t: T) {
 >foo : <T, U extends T>(t: T) => U
 >t : T
 
-    var u: U;
+    var u!: U;
 >u : U
 
     return u;

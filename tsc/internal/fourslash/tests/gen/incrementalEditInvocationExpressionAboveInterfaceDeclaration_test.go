@@ -11,7 +11,8 @@ func TestIncrementalEditInvocationExpressionAboveInterfaceDeclaration(t *testing
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `declare function alert(message?: any): void;
+	const content = `// @lib: es5
+declare function alert(message?: any): void;
 /*1*/
 interface Foo {
     setISO8601(dString): Date;

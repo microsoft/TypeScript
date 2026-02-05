@@ -10,6 +10,7 @@ var v1 : C<string>;
 var y = v1.x; // should be 'string'
 
 //// [genericClasses0.js]
+"use strict";
 class C {
     x;
 }

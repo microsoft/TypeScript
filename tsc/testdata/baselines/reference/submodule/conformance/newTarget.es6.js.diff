@@ -1,7 +1,7 @@
 --- old.newTarget.es6.js
 +++ new.newTarget.es6.js
-@@= skipped -36, +36 lines =@@
- //// [newTarget.es6.js]
+@@= skipped -37, +37 lines =@@
+ "use strict";
  class A {
      constructor() {
 -        this.d = function () { return new.target; };

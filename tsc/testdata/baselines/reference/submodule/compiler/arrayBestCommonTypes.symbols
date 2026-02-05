@@ -1,19 +1,19 @@
 //// [tests/cases/compiler/arrayBestCommonTypes.ts] ////
 
 === arrayBestCommonTypes.ts ===
-module EmptyTypes {
+namespace EmptyTypes {
 >EmptyTypes : Symbol(EmptyTypes, Decl(arrayBestCommonTypes.ts, 0, 0))
 
     interface iface { }
->iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 0, 19))
+>iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 0, 22))
 
     class base implements iface { }
 >base : Symbol(base, Decl(arrayBestCommonTypes.ts, 1, 23))
->iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 0, 19))
+>iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 0, 22))
 
     class base2 implements iface { }
 >base2 : Symbol(base2, Decl(arrayBestCommonTypes.ts, 2, 35))
->iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 0, 19))
+>iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 0, 22))
 
     class derived extends base { }
 >derived : Symbol(derived, Decl(arrayBestCommonTypes.ts, 3, 36))
@@ -191,7 +191,7 @@ module EmptyTypes {
 
             var ifaceObj: iface = null;
 >ifaceObj : Symbol(ifaceObj, Decl(arrayBestCommonTypes.ts, 41, 15))
->iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 0, 19))
+>iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 0, 22))
 
             var baseObj = new base();
 >baseObj : Symbol(baseObj, Decl(arrayBestCommonTypes.ts, 42, 15))
@@ -228,22 +228,22 @@ module EmptyTypes {
     }
 }
 
-module NonEmptyTypes {
+namespace NonEmptyTypes {
 >NonEmptyTypes : Symbol(NonEmptyTypes, Decl(arrayBestCommonTypes.ts, 51, 1))
 
     interface iface { x: string; }
->iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 53, 22))
+>iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 53, 25))
 >x : Symbol(iface.x, Decl(arrayBestCommonTypes.ts, 54, 21))
 
     class base implements iface { x: string; y: string; }
 >base : Symbol(base, Decl(arrayBestCommonTypes.ts, 54, 34))
->iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 53, 22))
+>iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 53, 25))
 >x : Symbol(base.x, Decl(arrayBestCommonTypes.ts, 55, 33))
 >y : Symbol(base.y, Decl(arrayBestCommonTypes.ts, 55, 44))
 
     class base2 implements iface { x: string; z: string; }
 >base2 : Symbol(base2, Decl(arrayBestCommonTypes.ts, 55, 57))
->iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 53, 22))
+>iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 53, 25))
 >x : Symbol(base2.x, Decl(arrayBestCommonTypes.ts, 56, 34))
 >z : Symbol(base2.z, Decl(arrayBestCommonTypes.ts, 56, 45))
 
@@ -424,7 +424,7 @@ module NonEmptyTypes {
 
             var ifaceObj: iface = null;
 >ifaceObj : Symbol(ifaceObj, Decl(arrayBestCommonTypes.ts, 94, 15))
->iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 53, 22))
+>iface : Symbol(iface, Decl(arrayBestCommonTypes.ts, 53, 25))
 
             var baseObj = new base();
 >baseObj : Symbol(baseObj, Decl(arrayBestCommonTypes.ts, 95, 15))

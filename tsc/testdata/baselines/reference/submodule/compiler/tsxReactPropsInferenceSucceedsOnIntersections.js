@@ -19,11 +19,6 @@ const CustomButton: React.SFC<CustomButtonProps> = props => <Button {...props} /
 
 
 //// [tsxReactPropsInferenceSucceedsOnIntersections.js]
-"use strict";
-/// <reference path="react16.d.ts" />
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = __importDefault(require("react"));
-const CustomButton = props => react_1.default.createElement(Button, Object.assign({}, props));
+/// <reference path="/.lib/react16.d.ts" />
+import React from "react";
+const CustomButton = props => React.createElement(Button, Object.assign({}, props));

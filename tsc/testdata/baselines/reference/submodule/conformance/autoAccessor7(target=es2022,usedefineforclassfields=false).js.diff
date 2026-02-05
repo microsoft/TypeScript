@@ -1,6 +1,6 @@
 --- old.autoAccessor7(target=es2022,usedefineforclassfields=false).js
 +++ new.autoAccessor7(target=es2022,usedefineforclassfields=false).js
-@@= skipped -17, +17 lines =@@
+@@= skipped -18, +18 lines =@@
  class C1 {
  }
  class C2 extends C1 {

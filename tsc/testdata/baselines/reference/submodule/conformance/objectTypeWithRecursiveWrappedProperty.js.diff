@@ -1,7 +1,7 @@
 --- old.objectTypeWithRecursiveWrappedProperty.js
 +++ new.objectTypeWithRecursiveWrappedProperty.js
-@@= skipped -17, +17 lines =@@
- //// [objectTypeWithRecursiveWrappedProperty.js]
+@@= skipped -18, +18 lines =@@
+ "use strict";
  // Basic recursive type
  class List {
 +    data;

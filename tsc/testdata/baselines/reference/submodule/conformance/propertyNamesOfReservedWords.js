@@ -279,6 +279,7 @@ var r7 = E.abstract;
 var r8 = E.as;
 
 //// [propertyNamesOfReservedWords.js]
+"use strict";
 class C {
     abstract;
     as;

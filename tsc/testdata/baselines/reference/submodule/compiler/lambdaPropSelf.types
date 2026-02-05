@@ -51,7 +51,7 @@ class T {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
     var x = this;

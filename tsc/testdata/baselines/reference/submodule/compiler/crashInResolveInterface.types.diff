@@ -1,0 +1,11 @@
+--- old.crashInResolveInterface.types
++++ new.crashInResolveInterface.types
+@@= skipped -6, +6 lines =@@
+
+ interface C {
+     count(countTitle?: string): void;
+->count : (countTitle?: string) => void
++>count : (countTitle?: string | undefined) => void
+ >countTitle : string | undefined
+ }
+ interface C {

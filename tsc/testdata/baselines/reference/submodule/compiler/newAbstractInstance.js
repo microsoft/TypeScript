@@ -7,6 +7,7 @@ new b();
 
 
 //// [newAbstractInstance.js]
+"use strict";
 class B {
 }
 new b();

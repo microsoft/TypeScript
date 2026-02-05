@@ -18,6 +18,7 @@ class foo extends baz {}
 
 
 //// [classOrderBug.js]
+"use strict";
 class bar {
     baz;
     constructor() {

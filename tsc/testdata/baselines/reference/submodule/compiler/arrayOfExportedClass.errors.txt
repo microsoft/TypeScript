@@ -1,0 +1,31 @@
+arrayOfExportedClass_0.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+arrayOfExportedClass_1.ts(6,12): error TS2564: Property 'cars' has no initializer and is not definitely assigned in the constructor.
+
+
+==== arrayOfExportedClass_1.ts (1 errors) ====
+    ///<reference path='arrayOfExportedClass_0.ts'/>
+    import Car = require('./arrayOfExportedClass_0');
+    
+    class Road {
+    
+        public cars: Car[];
+               ~~~~
+!!! error TS2564: Property 'cars' has no initializer and is not definitely assigned in the constructor.
+    
+        public AddCars(cars: Car[]) {
+    
+            this.cars = cars;
+        }
+    }
+    
+    export = Road;
+    
+==== arrayOfExportedClass_0.ts (1 errors) ====
+    class Car {
+        foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    export = Car;
+    

@@ -20,12 +20,13 @@ class T {
     }
 }
 
-module M {
+namespace M {
     var x = this;
 }
 
 
 //// [lambdaPropSelf.js]
+"use strict";
 class Person {
     name;
     children;

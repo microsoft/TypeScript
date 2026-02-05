@@ -13,6 +13,7 @@ class C {
 }
 
 //// [computedPropertyNames38_ES6.js]
+"use strict";
 class Foo {
     x;
 }

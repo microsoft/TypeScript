@@ -12,5 +12,6 @@ class List<U> implements IList<U> {
 
 
 //// [ClassDeclaration25.js]
+"use strict";
 class List {
 }

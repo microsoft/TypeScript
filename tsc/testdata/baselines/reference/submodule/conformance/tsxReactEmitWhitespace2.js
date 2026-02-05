@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxReactEmitWhitespace2.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -19,6 +19,7 @@ declare var React: any;
 
 
 //// [file.js]
+"use strict";
 // Emit ' word' in the last string
 React.createElement("div", null,
     "word ",

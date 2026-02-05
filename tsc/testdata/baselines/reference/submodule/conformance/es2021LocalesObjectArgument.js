@@ -12,6 +12,7 @@ Intl.ListFormat.supportedLocalesOf([deDE, jaJP]);
 
 
 //// [es2021LocalesObjectArgument.js]
+"use strict";
 const enUS = new Intl.Locale("en-US");
 const deDE = new Intl.Locale("de-DE");
 const jaJP = new Intl.Locale("ja-JP");

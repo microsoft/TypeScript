@@ -1,20 +1,29 @@
+index.js(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 index.js(3,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+namespacer.js(4,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+namespacey.js(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
-==== index.js (1 errors) ====
+==== index.js (2 errors) ====
     const _item = require("./namespacer");
     module.exports = 12;
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     Object.defineProperty(module, "exports", { value: "oh no" });
                           ~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     
-==== namespacey.js (0 errors) ====
+==== namespacey.js (1 errors) ====
     const A = {}
     A.bar = class Q {}
     module.exports = A;
-==== namespacer.js (0 errors) ====
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+==== namespacer.js (1 errors) ====
     const B = {}
     B.NS = require("./namespacey");
     Object.defineProperty(B, "NS", { value: "why though", writable: true });
     module.exports = B;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     

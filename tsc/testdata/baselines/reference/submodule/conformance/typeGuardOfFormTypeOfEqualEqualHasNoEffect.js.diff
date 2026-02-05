@@ -1,10 +1,10 @@
 --- old.typeGuardOfFormTypeOfEqualEqualHasNoEffect.js
 +++ new.typeGuardOfFormTypeOfEqualEqualHasNoEffect.js
-@@= skipped -38, +38 lines =@@
-
+@@= skipped -39, +39 lines =@@
  //// [typeGuardOfFormTypeOfEqualEqualHasNoEffect.js]
+ "use strict";
  class C {
 +    p;
  }
  ;
- var strOrNum;
+ // typeof x == s has not effect on typeguard

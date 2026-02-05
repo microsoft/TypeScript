@@ -51,6 +51,7 @@ var invalidCommentedFancyMulti: number = 'nope';
 
 
 //// [ts-expect-error.js]
+"use strict";
 // @ts-expect-error additional commenting
 var invalidCommentedFancySingle = 'nope';
 /*

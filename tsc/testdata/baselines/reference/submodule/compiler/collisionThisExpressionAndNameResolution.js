@@ -15,6 +15,7 @@ class Foo {
 }
 
 //// [collisionThisExpressionAndNameResolution.js]
+"use strict";
 var console;
 class Foo {
     x() {

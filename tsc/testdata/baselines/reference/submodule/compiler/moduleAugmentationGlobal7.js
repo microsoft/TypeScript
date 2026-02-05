@@ -8,3 +8,4 @@ namespace A {
 }
 
 //// [moduleAugmentationGlobal7.js]
+"use strict";

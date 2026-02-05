@@ -192,28 +192,28 @@ func (options *CompilerOptions) GetEmitScriptTarget() ScriptTarget {
 	if options.Target != ScriptTargetNone {
 		return options.Target
 	}
-	switch options.GetEmitModuleKind() {
-	case ModuleKindNode16, ModuleKindNode18:
-		return ScriptTargetES2022
-	case ModuleKindNode20:
-		return ScriptTargetES2023
-	case ModuleKindNodeNext:
-		return ScriptTargetESNext
-	default:
-		return ScriptTargetES5
-	}
+	return ScriptTargetLatestStandard
 }
 
 func (options *CompilerOptions) GetEmitModuleKind() ModuleKind {
-	switch options.Module {
-	case ModuleKindNone, ModuleKindAMD, ModuleKindUMD, ModuleKindSystem:
-		if options.Target >= ScriptTargetES2015 {
-			return ModuleKindES2015
-		}
-		return ModuleKindCommonJS
-	default:
+	if options.Module != ModuleKindNone {
 		return options.Module
 	}
+
+	target := options.GetEmitScriptTarget()
+	if target == ScriptTargetESNext {
+		return ModuleKindESNext
+	}
+	if target >= ScriptTargetES2022 {
+		return ModuleKindES2022
+	}
+	if target >= ScriptTargetES2020 {
+		return ModuleKindES2020
+	}
+	if target >= ScriptTargetES2015 {
+		return ModuleKindES2015
+	}
+	return ModuleKindCommonJS
 }
 
 func (options *CompilerOptions) GetModuleResolutionKind() ModuleResolutionKind {
@@ -301,7 +301,7 @@ func (options *CompilerOptions) GetStrictOptionValue(value Tristate) bool {
 	if value != TSUnknown {
 		return value == TSTrue
 	}
-	return options.Strict == TSTrue
+	return options.Strict != TSFalse
 }
 
 func (options *CompilerOptions) GetEffectiveTypeRoots(currentDirectory string) (result []string, fromConfig bool) {
@@ -512,22 +512,23 @@ func (newLine NewLineKind) GetNewLineCharacter() string {
 type ScriptTarget int32
 
 const (
-	ScriptTargetNone   ScriptTarget = 0
-	ScriptTargetES3    ScriptTarget = 0 // Deprecated
-	ScriptTargetES5    ScriptTarget = 1
-	ScriptTargetES2015 ScriptTarget = 2
-	ScriptTargetES2016 ScriptTarget = 3
-	ScriptTargetES2017 ScriptTarget = 4
-	ScriptTargetES2018 ScriptTarget = 5
-	ScriptTargetES2019 ScriptTarget = 6
-	ScriptTargetES2020 ScriptTarget = 7
-	ScriptTargetES2021 ScriptTarget = 8
-	ScriptTargetES2022 ScriptTarget = 9
-	ScriptTargetES2023 ScriptTarget = 10
-	ScriptTargetES2024 ScriptTarget = 11
-	ScriptTargetESNext ScriptTarget = 99
-	ScriptTargetJSON   ScriptTarget = 100
-	ScriptTargetLatest ScriptTarget = ScriptTargetESNext
+	ScriptTargetNone           ScriptTarget = 0
+	ScriptTargetES3            ScriptTarget = 0 // Deprecated
+	ScriptTargetES5            ScriptTarget = 1 // Deprecated
+	ScriptTargetES2015         ScriptTarget = 2
+	ScriptTargetES2016         ScriptTarget = 3
+	ScriptTargetES2017         ScriptTarget = 4
+	ScriptTargetES2018         ScriptTarget = 5
+	ScriptTargetES2019         ScriptTarget = 6
+	ScriptTargetES2020         ScriptTarget = 7
+	ScriptTargetES2021         ScriptTarget = 8
+	ScriptTargetES2022         ScriptTarget = 9
+	ScriptTargetES2023         ScriptTarget = 10
+	ScriptTargetES2024         ScriptTarget = 11
+	ScriptTargetESNext         ScriptTarget = 99
+	ScriptTargetJSON           ScriptTarget = 100
+	ScriptTargetLatest         ScriptTarget = ScriptTargetESNext
+	ScriptTargetLatestStandard ScriptTarget = ScriptTargetES2024
 )
 
 type JsxEmit int32

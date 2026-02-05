@@ -9,6 +9,7 @@ function foo() {
 }
 
 //// [debugger.js]
+"use strict";
 debugger;
 function foo() {
     debugger;

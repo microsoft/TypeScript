@@ -11,6 +11,7 @@ class Foo {
 
 
 //// [invokingNonGenericMethodWithTypeArguments2.js]
+"use strict";
 class Foo {
     foo;
     constructor() {

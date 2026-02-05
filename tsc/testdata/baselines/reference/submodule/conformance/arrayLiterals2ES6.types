@@ -11,8 +11,8 @@
 //      ...   AssignmentExpression
 
 var a0 = [, , 2, 3, 4]
->a0 : number[]
->[, , 2, 3, 4] : number[]
+>a0 : (number | undefined)[]
+>[, , 2, 3, 4] : (number | undefined)[]
 >2 : 2
 >3 : 3
 >4 : 4
@@ -24,17 +24,17 @@ var a1 = ["hello", "world"]
 >"world" : "world"
 
 var a2 = [, , , ...a0, "hello"];
->a2 : (string | number)[]
->[, , , ...a0, "hello"] : (string | number)[]
->...a0 : number
->a0 : number[]
+>a2 : (string | number | undefined)[]
+>[, , , ...a0, "hello"] : (string | number | undefined)[]
+>...a0 : number | undefined
+>a0 : (number | undefined)[]
 >"hello" : "hello"
 
 var a3 = [, , ...a0]
->a3 : number[]
->[, , ...a0] : number[]
->...a0 : number
->a0 : number[]
+>a3 : (number | undefined)[]
+>[, , ...a0] : (number | undefined)[]
+>...a0 : number | undefined
+>a0 : (number | undefined)[]
 
 var a4 = [() => 1, ];
 >a4 : (() => number)[]
@@ -43,10 +43,10 @@ var a4 = [() => 1, ];
 >1 : 1
 
 var a5 = [...a0, , ]
->a5 : number[]
->[...a0, , ] : number[]
->...a0 : number
->a0 : number[]
+>a5 : (number | undefined)[]
+>[...a0, , ] : (number | undefined)[]
+>...a0 : number | undefined
+>a0 : (number | undefined)[]
 
 // Each element expression in a non-empty array literal is processed as follows:
 //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
@@ -158,16 +158,16 @@ var d4: myArray2 = [...temp, ...temp1];
 >temp1 : number[]
 
 var d5 = [...a2];
->d5 : (string | number)[]
->[...a2] : (string | number)[]
->...a2 : string | number
->a2 : (string | number)[]
+>d5 : (string | number | undefined)[]
+>[...a2] : (string | number | undefined)[]
+>...a2 : string | number | undefined
+>a2 : (string | number | undefined)[]
 
 var d6 = [...a3];
->d6 : number[]
->[...a3] : number[]
->...a3 : number
->a3 : number[]
+>d6 : (number | undefined)[]
+>[...a3] : (number | undefined)[]
+>...a3 : number | undefined
+>a3 : (number | undefined)[]
 
 var d7 = [...a4];
 >d7 : (() => number)[]

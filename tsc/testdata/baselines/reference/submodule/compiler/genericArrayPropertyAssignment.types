@@ -17,6 +17,6 @@ return list.length ===0;
 isEmpty([]); // error
 >isEmpty([]) : boolean
 >isEmpty : (list: { length: number; }) => boolean
->[] : undefined[]
+>[] : never[]
  
 

@@ -16,6 +16,7 @@ switch (1) {
 }
 
 //// [nestedBlockScopedBindings12.js]
+"use strict";
 var x;
 {
     let x;

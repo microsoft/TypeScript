@@ -1,7 +1,7 @@
 --- old.genericClasses4.js
 +++ new.genericClasses4.js
-@@= skipped -21, +21 lines =@@
- //// [genericClasses4.js]
+@@= skipped -22, +22 lines =@@
+ "use strict";
  // once caused stack overflow
  class Vec2_T {
 +    x;

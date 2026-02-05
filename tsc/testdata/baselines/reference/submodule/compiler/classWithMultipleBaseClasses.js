@@ -27,6 +27,7 @@ interface I extends A, B {
 }
 
 //// [classWithMultipleBaseClasses.js]
+"use strict";
 class A {
     foo() { }
 }

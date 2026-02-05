@@ -53,6 +53,7 @@ class Other extends Doing {
 
 
 //// [superCallInNonStaticMethod.js]
+"use strict";
 class Doing {
     instanceMethod() {
     }

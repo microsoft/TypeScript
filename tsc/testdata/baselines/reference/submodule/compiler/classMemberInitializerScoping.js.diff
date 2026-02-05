@@ -1,7 +1,7 @@
 --- old.classMemberInitializerScoping.js
 +++ new.classMemberInitializerScoping.js
-@@= skipped -24, +24 lines =@@
- //// [classMemberInitializerScoping.js]
+@@= skipped -25, +25 lines =@@
+ "use strict";
  var aaa = 1;
  class CCC {
 +    y = aaa;

@@ -1,13 +1,17 @@
 --- old.fakeInfinity2.js
 +++ new.fakeInfinity2.js
-@@= skipped -23, +23 lines =@@
- exports.m = exports.Foo = void 0;
- var Foo;
+@@= skipped -18, +18 lines =@@
+
+
+ //// [fakeInfinity2.js]
+-export var Foo;
++export { Foo };
++var Foo;
  (function (Foo) {
 -    Foo[Foo["A"] = Infinity] = "A";
 -    Foo[Foo["B"] = -Infinity] = "B";
 +    Foo[Foo["A"] = 1e999] = "A";
 +    Foo[Foo["B"] = -1e999] = "B";
- })(Foo || (exports.Foo = Foo = {}));
+ })(Foo || (Foo = {}));
  var X;
  (function (X) {

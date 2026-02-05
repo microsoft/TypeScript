@@ -1,9 +1,9 @@
 --- old.computedPropertyNamesWithStaticProperty.js
 +++ new.computedPropertyNamesWithStaticProperty.js
-@@= skipped -24, +24 lines =@@
-
+@@= skipped -25, +25 lines =@@
 
  //// [computedPropertyNamesWithStaticProperty.js]
+ "use strict";
 -var _a;
  class C1 {
 +    static staticProp = 10;

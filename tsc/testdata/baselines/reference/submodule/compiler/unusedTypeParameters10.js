@@ -6,3 +6,4 @@ type Alias2<T> = { x: T };
 
 
 //// [unusedTypeParameters10.js]
+"use strict";

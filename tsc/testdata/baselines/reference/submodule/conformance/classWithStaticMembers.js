@@ -22,6 +22,7 @@ var r2 = r.x;
 var r3 = r.foo;
 
 //// [classWithStaticMembers.js]
+"use strict";
 class C {
     a;
     b;

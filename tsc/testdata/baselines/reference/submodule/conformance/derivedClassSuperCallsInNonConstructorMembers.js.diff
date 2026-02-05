@@ -1,7 +1,7 @@
 --- old.derivedClassSuperCallsInNonConstructorMembers.js
 +++ new.derivedClassSuperCallsInNonConstructorMembers.js
-@@= skipped -35, +35 lines =@@
- //// [derivedClassSuperCallsInNonConstructorMembers.js]
+@@= skipped -36, +36 lines =@@
+ "use strict";
  // error to use super calls outside a constructor
  class Base {
 +    x;

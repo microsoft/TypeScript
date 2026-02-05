@@ -1,6 +1,21 @@
 --- old.contextuallyTypedJsxAttribute.types
 +++ new.contextuallyTypedJsxAttribute.types
-@@= skipped -21, +21 lines =@@
+@@= skipped -2, +2 lines =@@
+ === index.tsx ===
+ interface Elements {
+   foo: { callback?: (value: number) => void };
+->foo : { callback?: (value: number) => void; }
++>foo : { callback?: ((value: number) => void) | undefined; }
+ >callback : ((value: number) => void) | undefined
+ >value : number
+
+   bar: { callback?: (value: string) => void };
+->bar : { callback?: (value: string) => void; }
++>bar : { callback?: ((value: string) => void) | undefined; }
+ >callback : ((value: string) => void) | undefined
+ >value : string
+ }
+@@= skipped -19, +19 lines =@@
  >props : Props<C>
 
  <Test

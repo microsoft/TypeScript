@@ -1,6 +1,6 @@
 --- old.instantiateNonGenericTypeWithTypeArguments.js
 +++ new.instantiateNonGenericTypeWithTypeArguments.js
-@@= skipped -23, +23 lines =@@
+@@= skipped -24, +24 lines =@@
  // it is an error to provide type arguments to a non-generic call
  // all of these are errors
  class C {

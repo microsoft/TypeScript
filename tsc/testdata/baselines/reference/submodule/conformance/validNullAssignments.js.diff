@@ -1,6 +1,6 @@
 --- old.validNullAssignments.js
 +++ new.validNullAssignments.js
-@@= skipped -44, +44 lines =@@
+@@= skipped -45, +45 lines =@@
  })(E || (E = {}));
  E.A = null; // error
  class C {

@@ -1,0 +1,196 @@
+--- old.comparisonOperatorWithNoRelationshipObjectsOnCallSignature.types
++++ new.comparisonOperatorWithNoRelationshipObjectsOnCallSignature.types
+@@= skipped -61, +61 lines =@@
+ >fn : () => C
+
+ declare var a5: { fn(a?: Base): void };
+->a5 : { fn(a?: Base): void; }
+->fn : (a?: Base) => void
++>a5 : { fn(a?: Base | undefined): void; }
++>fn : (a?: Base | undefined) => void
+ >a : Base | undefined
+
+ declare var b5: { fn(a?: C): void };
+->b5 : { fn(a?: C): void; }
+->fn : (a?: C) => void
++>b5 : { fn(a?: C | undefined): void; }
++>fn : (a?: C | undefined) => void
+ >a : C | undefined
+
+ declare var a6: { fn(...a: Base[]): void };
+@@= skipped -57, +57 lines =@@
+ var r1a5 = a5 < b5;
+ >r1a5 : boolean
+ >a5 < b5 : boolean
+->a5 : { fn(a?: Base): void; }
+->b5 : { fn(a?: C): void; }
++>a5 : { fn(a?: Base | undefined): void; }
++>b5 : { fn(a?: C | undefined): void; }
+
+ var r1a6 = a6 < b6;
+ >r1a6 : boolean
+@@= skipped -42, +42 lines =@@
+ var r1b5 = b5 < a5;
+ >r1b5 : boolean
+ >b5 < a5 : boolean
+->b5 : { fn(a?: C): void; }
+->a5 : { fn(a?: Base): void; }
++>b5 : { fn(a?: C | undefined): void; }
++>a5 : { fn(a?: Base | undefined): void; }
+
+ var r1b6 = b6 < a6;
+ >r1b6 : boolean
+@@= skipped -43, +43 lines =@@
+ var r2a5 = a5 > b5;
+ >r2a5 : boolean
+ >a5 > b5 : boolean
+->a5 : { fn(a?: Base): void; }
+->b5 : { fn(a?: C): void; }
++>a5 : { fn(a?: Base | undefined): void; }
++>b5 : { fn(a?: C | undefined): void; }
+
+ var r2a6 = a6 > b6;
+ >r2a6 : boolean
+@@= skipped -42, +42 lines =@@
+ var r2b5 = b5 > a5;
+ >r2b5 : boolean
+ >b5 > a5 : boolean
+->b5 : { fn(a?: C): void; }
+->a5 : { fn(a?: Base): void; }
++>b5 : { fn(a?: C | undefined): void; }
++>a5 : { fn(a?: Base | undefined): void; }
+
+ var r2b6 = b6 > a6;
+ >r2b6 : boolean
+@@= skipped -43, +43 lines =@@
+ var r3a5 = a5 <= b5;
+ >r3a5 : boolean
+ >a5 <= b5 : boolean
+->a5 : { fn(a?: Base): void; }
+->b5 : { fn(a?: C): void; }
++>a5 : { fn(a?: Base | undefined): void; }
++>b5 : { fn(a?: C | undefined): void; }
+
+ var r3a6 = a6 <= b6;
+ >r3a6 : boolean
+@@= skipped -42, +42 lines =@@
+ var r3b5 = b5 <= a5;
+ >r3b5 : boolean
+ >b5 <= a5 : boolean
+->b5 : { fn(a?: C): void; }
+->a5 : { fn(a?: Base): void; }
++>b5 : { fn(a?: C | undefined): void; }
++>a5 : { fn(a?: Base | undefined): void; }
+
+ var r3b6 = b6 <= a6;
+ >r3b6 : boolean
+@@= skipped -43, +43 lines =@@
+ var r4a5 = a5 >= b5;
+ >r4a5 : boolean
+ >a5 >= b5 : boolean
+->a5 : { fn(a?: Base): void; }
+->b5 : { fn(a?: C): void; }
++>a5 : { fn(a?: Base | undefined): void; }
++>b5 : { fn(a?: C | undefined): void; }
+
+ var r4a6 = a6 >= b6;
+ >r4a6 : boolean
+@@= skipped -42, +42 lines =@@
+ var r4b5 = b5 >= a5;
+ >r4b5 : boolean
+ >b5 >= a5 : boolean
+->b5 : { fn(a?: C): void; }
+->a5 : { fn(a?: Base): void; }
++>b5 : { fn(a?: C | undefined): void; }
++>a5 : { fn(a?: Base | undefined): void; }
+
+ var r4b6 = b6 >= a6;
+ >r4b6 : boolean
+@@= skipped -43, +43 lines =@@
+ var r5a5 = a5 == b5;
+ >r5a5 : boolean
+ >a5 == b5 : boolean
+->a5 : { fn(a?: Base): void; }
+->b5 : { fn(a?: C): void; }
++>a5 : { fn(a?: Base | undefined): void; }
++>b5 : { fn(a?: C | undefined): void; }
+
+ var r5a6 = a6 == b6;
+ >r5a6 : boolean
+@@= skipped -42, +42 lines =@@
+ var r5b5 = b5 == a5;
+ >r5b5 : boolean
+ >b5 == a5 : boolean
+->b5 : { fn(a?: C): void; }
+->a5 : { fn(a?: Base): void; }
++>b5 : { fn(a?: C | undefined): void; }
++>a5 : { fn(a?: Base | undefined): void; }
+
+ var r5b6 = b6 == a6;
+ >r5b6 : boolean
+@@= skipped -43, +43 lines =@@
+ var r6a5 = a5 != b5;
+ >r6a5 : boolean
+ >a5 != b5 : boolean
+->a5 : { fn(a?: Base): void; }
+->b5 : { fn(a?: C): void; }
++>a5 : { fn(a?: Base | undefined): void; }
++>b5 : { fn(a?: C | undefined): void; }
+
+ var r6a6 = a6 != b6;
+ >r6a6 : boolean
+@@= skipped -42, +42 lines =@@
+ var r6b5 = b5 != a5;
+ >r6b5 : boolean
+ >b5 != a5 : boolean
+->b5 : { fn(a?: C): void; }
+->a5 : { fn(a?: Base): void; }
++>b5 : { fn(a?: C | undefined): void; }
++>a5 : { fn(a?: Base | undefined): void; }
+
+ var r6b6 = b6 != a6;
+ >r6b6 : boolean
+@@= skipped -43, +43 lines =@@
+ var r7a5 = a5 === b5;
+ >r7a5 : boolean
+ >a5 === b5 : boolean
+->a5 : { fn(a?: Base): void; }
+->b5 : { fn(a?: C): void; }
++>a5 : { fn(a?: Base | undefined): void; }
++>b5 : { fn(a?: C | undefined): void; }
+
+ var r7a6 = a6 === b6;
+ >r7a6 : boolean
+@@= skipped -42, +42 lines =@@
+ var r7b5 = b5 === a5;
+ >r7b5 : boolean
+ >b5 === a5 : boolean
+->b5 : { fn(a?: C): void; }
+->a5 : { fn(a?: Base): void; }
++>b5 : { fn(a?: C | undefined): void; }
++>a5 : { fn(a?: Base | undefined): void; }
+
+ var r7b6 = b6 === a6;
+ >r7b6 : boolean
+@@= skipped -43, +43 lines =@@
+ var r8a5 = a5 !== b5;
+ >r8a5 : boolean
+ >a5 !== b5 : boolean
+->a5 : { fn(a?: Base): void; }
+->b5 : { fn(a?: C): void; }
++>a5 : { fn(a?: Base | undefined): void; }
++>b5 : { fn(a?: C | undefined): void; }
+
+ var r8a6 = a6 !== b6;
+ >r8a6 : boolean
+@@= skipped -42, +42 lines =@@
+ var r8b5 = b5 !== a5;
+ >r8b5 : boolean
+ >b5 !== a5 : boolean
+->b5 : { fn(a?: C): void; }
+->a5 : { fn(a?: Base): void; }
++>b5 : { fn(a?: C | undefined): void; }
++>a5 : { fn(a?: Base | undefined): void; }
+
+ var r8b6 = b6 !== a6;
+ >r8b6 : boolean

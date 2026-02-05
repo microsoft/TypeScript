@@ -1,6 +1,6 @@
 --- old.declarationEmitExpandoPropertyPrivateName.errors.txt
 +++ new.declarationEmitExpandoPropertyPrivateName.errors.txt
-@@= skipped -8, +8 lines =@@
+@@= skipped -11, +11 lines =@@
      
      export function q() {}
      q.val = f();

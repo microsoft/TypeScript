@@ -1,0 +1,29 @@
+superWithGenericSpecialization.ts(2,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+superWithGenericSpecialization.ts(6,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+superWithGenericSpecialization.ts(13,17): error TS2454: Variable 'd' is used before being assigned.
+superWithGenericSpecialization.ts(14,18): error TS2454: Variable 'd' is used before being assigned.
+
+
+==== superWithGenericSpecialization.ts (4 errors) ====
+    class C<T> {
+        x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class D<T> extends C<string> {
+        y: T;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+        constructor() {
+            super(); // uses the type parameter type of the base class, ie string
+        }
+    }
+    
+    var d: D<number>;
+    var r: string = d.x;
+                    ~
+!!! error TS2454: Variable 'd' is used before being assigned.
+    var r2: number = d.y;
+                     ~
+!!! error TS2454: Variable 'd' is used before being assigned.

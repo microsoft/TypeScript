@@ -1,8 +1,9 @@
 overloadOnConstantsInvalidOverload1.ts(6,10): error TS2394: This overload signature is not compatible with its implementation signature.
+overloadOnConstantsInvalidOverload1.ts(8,5): error TS2322: Type 'null' is not assignable to type 'Derived2'.
 overloadOnConstantsInvalidOverload1.ts(11,5): error TS2345: Argument of type '"HI"' is not assignable to parameter of type '"SPAN"'.
 
 
-==== overloadOnConstantsInvalidOverload1.ts (2 errors) ====
+==== overloadOnConstantsInvalidOverload1.ts (3 errors) ====
     class Base { foo() { } }
     class Derived1 extends Base { bar() { } }
     class Derived2 extends Base { baz() { } }
@@ -14,6 +15,8 @@ overloadOnConstantsInvalidOverload1.ts(11,5): error TS2345: Argument of type '"H
 !!! related TS2750 overloadOnConstantsInvalidOverload1.ts:7:10: The implementation signature is declared here.
     function foo(name: "DIV"): Derived2 {
         return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Derived2'.
     }
     
     foo("HI");

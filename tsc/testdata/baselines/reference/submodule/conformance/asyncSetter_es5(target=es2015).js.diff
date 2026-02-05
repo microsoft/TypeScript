@@ -1,0 +1,10 @@
+--- old.asyncSetter_es5(target=es2015).js
++++ new.asyncSetter_es5(target=es2015).js
+@@= skipped -8, +8 lines =@@
+ //// [asyncSetter_es5.js]
+ "use strict";
+ class C {
+-    set foo(value) {
++    async set foo(value) {
+     }
+ }

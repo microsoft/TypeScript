@@ -1,13 +1,7 @@
 //// [tests/cases/compiler/moduleExports1.ts] ////
 
 //// [moduleExports1.ts]
-<<<<<<< HEAD
-export module TypeScript.Strasse.Street {
-||||||| parent of 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
 export namespace TypeScript.Strasse.Street {
-=======
-export namespace TypeScript.Strasse.Street {
->>>>>>> 42f6576e83 (Deprecate `--module amd`, `umd`, `system`, `none`; `--moduleResolution classic`; change defaults (#62669))
 	export class Rue {
 		public address:string;
 	}	

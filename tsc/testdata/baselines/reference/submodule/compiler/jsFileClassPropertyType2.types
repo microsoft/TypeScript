@@ -7,11 +7,11 @@ class C {
     constructor() {
       /** @type {number[]}*/
       this.p = [];
->this.p = [] : undefined[]
+>this.p = [] : never[]
 >this.p : number[]
 >this : this
 >p : number[]
->[] : undefined[]
+>[] : never[]
   }
 }
 

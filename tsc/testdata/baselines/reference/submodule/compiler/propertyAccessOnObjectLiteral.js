@@ -11,6 +11,7 @@ class A { }
 
 
 //// [propertyAccessOnObjectLiteral.js]
+"use strict";
 class A {
 }
 ({}.toString());

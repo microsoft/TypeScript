@@ -11,7 +11,7 @@ func TestReferencesForExportedValues(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
+	const content = `namespace M {
     /*1*/export var /*2*/variable = 0;
 
     // local use

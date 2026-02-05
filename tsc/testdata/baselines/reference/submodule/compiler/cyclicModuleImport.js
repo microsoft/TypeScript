@@ -22,6 +22,7 @@ declare module "MainModule" {
 
 
 //// [cyclicModuleImport.js]
+"use strict";
 
 
 //// [cyclicModuleImport.d.ts]

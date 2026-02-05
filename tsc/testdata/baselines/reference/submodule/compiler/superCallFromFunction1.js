@@ -6,6 +6,7 @@ function foo() {
 }
 
 //// [superCallFromFunction1.js]
+"use strict";
 function foo() {
     super(value => String(value));
 }

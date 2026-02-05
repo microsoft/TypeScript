@@ -23,7 +23,7 @@ interface I {
 >x : number
 }
 
-var f: I;
+declare var f: I;
 >f : I
 
 f `abc`

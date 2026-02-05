@@ -53,6 +53,7 @@ interface NextFunction {
 
 
 //// [contextualTypingOfTooShortOverloads.js]
+"use strict";
 // small repro from #11875
 var use;
 use((req, res) => { });

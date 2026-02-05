@@ -1,15 +1,24 @@
+classIsSubtypeOfBaseType.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+classIsSubtypeOfBaseType.ts(6,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 classIsSubtypeOfBaseType.ts(12,5): error TS2416: Property 'foo' in type 'Derived2' is not assignable to the same property in base type 'Base<{ bar: string; }>'.
-  Type '{ bar?: string; }' is not assignable to type '{ bar: string; }'.
-    Property 'bar' is optional in type '{ bar?: string; }' but required in type '{ bar: string; }'.
+  Type '{ bar?: string | undefined; }' is not assignable to type '{ bar: string; }'.
+    Types of property 'bar' are incompatible.
+      Type 'string | undefined' is not assignable to type 'string'.
+        Type 'undefined' is not assignable to type 'string'.
+classIsSubtypeOfBaseType.ts(12,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 
 
-==== classIsSubtypeOfBaseType.ts (1 errors) ====
+==== classIsSubtypeOfBaseType.ts (4 errors) ====
     class Base<T> {
         foo: T;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Derived extends Base<{ bar: string; }> {
         foo: {
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
             bar: string; baz: number; // ok
         }
     }
@@ -18,8 +27,12 @@ classIsSubtypeOfBaseType.ts(12,5): error TS2416: Property 'foo' in type 'Derived
         foo: {
         ~~~
 !!! error TS2416: Property 'foo' in type 'Derived2' is not assignable to the same property in base type 'Base<{ bar: string; }>'.
-!!! error TS2416:   Type '{ bar?: string; }' is not assignable to type '{ bar: string; }'.
-!!! error TS2416:     Property 'bar' is optional in type '{ bar?: string; }' but required in type '{ bar: string; }'.
+!!! error TS2416:   Type '{ bar?: string | undefined; }' is not assignable to type '{ bar: string; }'.
+!!! error TS2416:     Types of property 'bar' are incompatible.
+!!! error TS2416:       Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2416:         Type 'undefined' is not assignable to type 'string'.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
             bar?: string; // error
         }
     }

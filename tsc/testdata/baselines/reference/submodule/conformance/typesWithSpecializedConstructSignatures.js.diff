@@ -1,7 +1,7 @@
 --- old.typesWithSpecializedConstructSignatures.js
 +++ new.typesWithSpecializedConstructSignatures.js
-@@= skipped -43, +43 lines =@@
- //// [typesWithSpecializedConstructSignatures.js]
+@@= skipped -44, +44 lines =@@
+ "use strict";
  // basic uses of specialized signatures without errors
  class Base {
 +    foo;

@@ -14,7 +14,7 @@ declare module "server" {
     import events = require("other"); // Ambient declaration, no error expected.
 >events : Symbol(events, Decl(server.d.ts, 4, 25))
 
-    module S {
+    namespace S {
 >S : Symbol(S, Decl(server.d.ts, 5, 37))
 
         export var a: number;

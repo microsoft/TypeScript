@@ -483,6 +483,12 @@
       "value": "number"
     },
     {
+      "value": " | "
+    },
+    {
+      "value": "undefined"
+    },
+    {
       "value": "; "
     },
     {

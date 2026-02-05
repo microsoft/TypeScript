@@ -2,7 +2,7 @@
 
 === capturedLetConstInLoop8_ES6.ts ===
 function foo() {
->foo : () => "123" | "456"
+>foo : () => "123" | "456" | undefined
 
     l0:
 >l0 : any
@@ -183,7 +183,7 @@ function foo() {
 }
 
 function foo_c() {
->foo_c : () => "123" | "456"
+>foo_c : () => "123" | "456" | undefined
 
     l0:
 >l0 : any

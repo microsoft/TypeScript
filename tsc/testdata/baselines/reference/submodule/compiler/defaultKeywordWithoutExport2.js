@@ -6,5 +6,6 @@ default function () {
 }
 
 //// [defaultKeywordWithoutExport2.js]
+"use strict";
 function () {
 }

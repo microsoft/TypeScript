@@ -1,8 +1,10 @@
 namespaced.js(8,12): error TS2702: 'NS' only refers to a type, but is being used as a namespace here.
 namespaced.js(8,12): error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
+namespaced.js(9,12): error TS7006: Parameter 'space' implicitly has an 'any' type.
+namespaced.js(9,19): error TS7006: Parameter 'peace' implicitly has an 'any' type.
 
 
-==== namespaced.js (2 errors) ====
+==== namespaced.js (4 errors) ====
     /**
      * @callback NS.Nested.Inner
      * @param {Object} space - spaaaaaaaaace
@@ -16,6 +18,10 @@ namespaced.js(8,12): error TS8030: A JSDoc '@type' tag on a function must have a
                ~~~~~~~~~~~~~~~
 !!! error TS8030: A JSDoc '@type' tag on a function must have a signature with the correct number of arguments.
     function f(space, peace) {
+               ~~~~~
+!!! error TS7006: Parameter 'space' implicitly has an 'any' type.
+                      ~~~~~
+!!! error TS7006: Parameter 'peace' implicitly has an 'any' type.
         return '1'
     }
     

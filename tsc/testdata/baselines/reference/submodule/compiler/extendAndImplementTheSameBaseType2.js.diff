@@ -1,8 +1,8 @@
 --- old.extendAndImplementTheSameBaseType2.js
 +++ new.extendAndImplementTheSameBaseType2.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [extendAndImplementTheSameBaseType2.js]
+ "use strict";
  class C {
 +    foo;
      bar() {

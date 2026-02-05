@@ -1,12 +1,13 @@
 //// [tests/cases/compiler/thisInModule.ts] ////
 
 //// [thisInModule.ts]
-module myMod {
+namespace myMod {
     var x;
     this.x = 5;
 }
 
 //// [thisInModule.js]
+"use strict";
 var myMod;
 (function (myMod) {
     var x;

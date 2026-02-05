@@ -2,6 +2,6 @@
 
 === parserArrayLiteralExpression2.ts ===
 var v = [,];
->v : any[]
+>v : undefined[]
 >[,] : undefined[]
 

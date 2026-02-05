@@ -25,7 +25,7 @@ arrowFunctionsMissingTokens.ts(52,41): error TS1005: '=>' expected.
 
 
 ==== arrowFunctionsMissingTokens.ts (24 errors) ====
-    module missingArrowsWithCurly {
+    namespace missingArrowsWithCurly {
         var a = () { };
                    ~
 !!! error TS1005: '=>' expected.
@@ -47,8 +47,8 @@ arrowFunctionsMissingTokens.ts(52,41): error TS1005: '=>' expected.
 !!! error TS1005: '=>' expected.
     }
     
-    module missingCurliesWithArrow {
-        module withStatement {
+    namespace missingCurliesWithArrow {
+        namespace withStatement {
             var a = () => var k = 10;};
                           ~~~
 !!! error TS1005: '{' expected.
@@ -74,7 +74,7 @@ arrowFunctionsMissingTokens.ts(52,41): error TS1005: '=>' expected.
 !!! error TS1005: '{' expected.
         }
     
-        module withoutStatement {
+        namespace withoutStatement {
             var a = () => };
                           ~
 !!! error TS1109: Expression expected.
@@ -105,7 +105,7 @@ arrowFunctionsMissingTokens.ts(52,41): error TS1005: '=>' expected.
     ~
 !!! error TS1128: Declaration or statement expected.
     
-    module ce_nEst_pas_une_arrow_function {
+    namespace ce_nEst_pas_une_arrow_function {
         var a = ();
                  ~
 !!! error TS1109: Expression expected.
@@ -127,7 +127,7 @@ arrowFunctionsMissingTokens.ts(52,41): error TS1005: '=>' expected.
 !!! error TS1005: '=>' expected.
     }
     
-    module okay {
+    namespace okay {
         var a = () => { };
     
         var b = (): void => { }

@@ -11,5 +11,6 @@ var arr: string[] = [];
 var y: number = arr.x;
 
 //// [extendGenericArray2.js]
+"use strict";
 var arr = [];
 var y = arr.x;

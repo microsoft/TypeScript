@@ -2,6 +2,7 @@
 +++ new.overloadingOnConstants2.errors.txt
 @@= skipped -0, +0 lines =@@
  overloadingOnConstants2.ts(9,10): error TS2394: This overload signature is not compatible with its implementation signature.
+ overloadingOnConstants2.ts(11,4): error TS2322: Type 'null' is not assignable to type 'C'.
  overloadingOnConstants2.ts(15,13): error TS2769: No overload matches this call.
 -  Overload 1 of 2, '(x: "hi", items: string[]): D', gave the following error.
 -    Argument of type '"um"' is not assignable to parameter of type '"hi"'.
@@ -9,8 +10,8 @@
 +  The last overload gave the following error.
      Argument of type '"um"' is not assignable to parameter of type '"bye"'.
  overloadingOnConstants2.ts(19,10): error TS2394: This overload signature is not compatible with its implementation signature.
-
-@@= skipped -27, +25 lines =@@
+ overloadingOnConstants2.ts(22,4): error TS2322: Type 'null' is not assignable to type 'C'.
+@@= skipped -31, +29 lines =@@
      var c = foo("um", []); // error
                  ~~~~
  !!! error TS2769: No overload matches this call.

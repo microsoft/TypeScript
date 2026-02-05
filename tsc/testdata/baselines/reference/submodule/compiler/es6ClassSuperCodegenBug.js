@@ -16,6 +16,7 @@ class B extends A {
 
 
 //// [es6ClassSuperCodegenBug.js]
+"use strict";
 class A {
     constructor(str1, str2) { }
 }

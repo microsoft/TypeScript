@@ -1,7 +1,7 @@
 --- old.moduleMemberWithoutTypeAnnotation1.js
 +++ new.moduleMemberWithoutTypeAnnotation1.js
-@@= skipped -50, +50 lines =@@
- //// [moduleMemberWithoutTypeAnnotation1.js]
+@@= skipped -51, +51 lines =@@
+ "use strict";
  var TypeScript;
  (function (TypeScript) {
 -    var Parser;

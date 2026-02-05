@@ -10,7 +10,7 @@ class C {
 class D extends C {
 }
 
-module D {
+namespace D {
     export function foo(): number {
         return 0;
     };
@@ -24,6 +24,7 @@ class E extends D {
 
 
 //// [inheritedModuleMembersForClodule.js]
+"use strict";
 class C {
     static foo() {
         return "123";

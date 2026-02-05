@@ -1,6 +1,6 @@
 --- old.constructorParameterShadowsOuterScopes.js
 +++ new.constructorParameterShadowsOuterScopes.js
-@@= skipped -28, +28 lines =@@
+@@= skipped -29, +29 lines =@@
  // local variable are inaccessible in initializer expressions for instance member variables
  var x = 1;
  class C {

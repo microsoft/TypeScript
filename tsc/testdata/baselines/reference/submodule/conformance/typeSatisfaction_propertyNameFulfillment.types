@@ -27,20 +27,20 @@ const p = {
 let a = p.a.toFixed();
 >a : string
 >p.a.toFixed() : string
->p.a.toFixed : (fractionDigits?: number) => string
+>p.a.toFixed : (fractionDigits?: number | undefined) => string
 >p.a : number
 >p : { a: number; b: string; x: number; }
 >a : number
->toFixed : (fractionDigits?: number) => string
+>toFixed : (fractionDigits?: number | undefined) => string
 
 let b = p.b.substring(1);
 >b : string
 >p.b.substring(1) : string
->p.b.substring : (start: number, end?: number) => string
+>p.b.substring : (start: number, end?: number | undefined) => string
 >p.b : string
 >p : { a: number; b: string; x: number; }
 >b : string
->substring : (start: number, end?: number) => string
+>substring : (start: number, end?: number | undefined) => string
 >1 : 1
 
 // Should error even though 'd' is in 'Keys'

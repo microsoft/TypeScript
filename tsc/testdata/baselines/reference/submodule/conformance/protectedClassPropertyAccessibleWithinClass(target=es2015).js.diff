@@ -1,0 +1,26 @@
+--- old.protectedClassPropertyAccessibleWithinClass(target=es2015).js
++++ new.protectedClassPropertyAccessibleWithinClass(target=es2015).js
+@@= skipped -36, +36 lines =@@
+ "use strict";
+ // no errors
+ class C {
++    x;
+     get y() { return this.x; }
+     set y(x) { this.y = this.x; }
+     foo() { return this.foo; }
++    static x;
+     static get y() { return this.x; }
+     static set y(x) { this.y = this.x; }
+     static foo() { return this.foo; }
+@@= skipped -10, +12 lines =@@
+ }
+ // added level of function nesting
+ class C2 {
++    x;
+     get y() { () => this.x; return null; }
+     set y(x) { () => { this.y = this.x; }; }
+     foo() { () => this.foo; }
++    static x;
+     static get y() { () => this.x; return null; }
+     static set y(x) {
+         () => { this.y = this.x; };

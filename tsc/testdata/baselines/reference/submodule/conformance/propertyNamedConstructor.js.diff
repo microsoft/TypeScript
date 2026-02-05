@@ -1,8 +1,8 @@
 --- old.propertyNamedConstructor.js
 +++ new.propertyNamedConstructor.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [propertyNamedConstructor.js]
+ "use strict";
  class X1 {
 -    constructor() {
 -        this["constructor"] = 3; // Error

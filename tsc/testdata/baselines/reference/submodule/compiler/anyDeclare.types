@@ -4,7 +4,7 @@
 declare var x: any;
 >x : any
 
-module myMod {
+namespace myMod {
 >myMod : typeof myMod
 
     var myFn;

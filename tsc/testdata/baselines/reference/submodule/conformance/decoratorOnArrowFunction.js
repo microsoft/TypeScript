@@ -7,6 +7,7 @@ var F = @dec () => {
 }
 
 //// [decoratorOnArrowFunction.js]
+"use strict";
 var F = ();
 {
 }

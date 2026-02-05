@@ -13,6 +13,7 @@ var g3: () => Iterable<Foo> = function* () {
 }
 
 //// [generatorTypeCheck25.js]
+"use strict";
 class Foo {
     x;
 }

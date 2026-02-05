@@ -27,7 +27,7 @@ class B extends A {
 >x : string
 }
 
-module Generics {
+namespace Generics {
 >Generics : typeof Generics
 
     class A<T extends Derived> {

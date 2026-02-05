@@ -12,11 +12,14 @@ let Bar = 42
 
 
 //// [file1.js]
+"use strict";
 class Foo {
 }
 const Bar = 3;
 //// [file2.js]
+"use strict";
 class Bar {
 }
 //// [file3.js]
+"use strict";
 let Bar = 42;

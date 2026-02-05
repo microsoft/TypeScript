@@ -1,6 +1,6 @@
 --- old.protoAsIndexInIndexExpression.js
 +++ new.protoAsIndexInIndexExpression.js
-@@= skipped -34, +34 lines =@@
+@@= skipped -35, +35 lines =@@
      "__proto__": 0
  };
  class C {

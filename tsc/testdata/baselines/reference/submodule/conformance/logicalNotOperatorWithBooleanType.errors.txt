@@ -4,16 +4,16 @@ logicalNotOperatorWithBooleanType.ts(36,1): error TS2695: Left side of comma ope
 
 ==== logicalNotOperatorWithBooleanType.ts (2 errors) ====
     // ! operator on boolean type
-    var BOOLEAN: boolean;
+    declare var BOOLEAN: boolean;
     
     function foo(): boolean { return true; }
     
     class A {
-        public a: boolean;
+        public a!: boolean;
         static foo() { return false; }
     }
-    module M {
-        export var n: boolean;
+    namespace M {
+        export declare var n: boolean;
     }
     
     var objA = new A();

@@ -1,0 +1,10 @@
+--- old.asyncGetter_es5(target=es2015).js
++++ new.asyncGetter_es5(target=es2015).js
+@@= skipped -8, +8 lines =@@
+ //// [asyncGetter_es5.js]
+ "use strict";
+ class C {
+-    get foo() {
++    async get foo() {
+     }
+ }

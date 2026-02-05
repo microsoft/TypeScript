@@ -7,13 +7,13 @@
 ->c : <T>() => T extends Uppercase<"a" & { a: 1; }> ? 1 : 2
 +>c : <T>() => T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2
  >a : 1
- >null! : null
+ >null! : never
 
  let d: (<T>() => T extends Uppercase<'a' & { a: 1 }> ? 1 : 2) = null!;
 ->d : <T>() => T extends Uppercase<"a" & { a: 1; }> ? 1 : 2
 +>d : <T>() => T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2
  >a : 1
- >null! : null
+ >null! : never
 
  c = d;
 ->c = d : <T>() => T extends Uppercase<"a" & { a: 1; }> ? 1 : 2

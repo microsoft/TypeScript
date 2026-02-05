@@ -3,7 +3,7 @@
 === tsxAttributesHasInferrableIndex.tsx ===
 type AttributeValue = number | string | Date | boolean;
 >AttributeValue : Symbol(AttributeValue, Decl(tsxAttributesHasInferrableIndex.tsx, 0, 0))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 interface Attributes {
 >Attributes : Symbol(Attributes, Decl(tsxAttributesHasInferrableIndex.tsx, 0, 55))

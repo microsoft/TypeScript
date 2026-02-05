@@ -7,19 +7,19 @@ moduleVisibilityTest2.ts(63,15): error TS2339: Property 'E' does not exist on ty
 
 
 ==== moduleVisibilityTest2.ts (6 errors) ====
-    module OuterMod {
+    namespace OuterMod {
     	export function someExportedOuterFunc() { return -1; }
     
-    	export module OuterInnerMod {
+    	export namespace OuterInnerMod {
     		export function someExportedOuterInnerFunc() { return "foo"; }
     	}
     }
     
     import OuterInnerAlias = OuterMod.OuterInnerMod;
     
-    module M {
+    namespace M {
     
-    	module InnerMod {
+    	namespace InnerMod {
     		export function someExportedInnerFunc() { return -2; }
     	}
     
@@ -60,7 +60,7 @@ moduleVisibilityTest2.ts(63,15): error TS2339: Property 'E' does not exist on ty
     	function someModuleFunction() { return 5;}
     }
     
-    module M {
+    namespace M {
     	export var c = x;
     	               ~
 !!! error TS2304: Cannot find name 'x'.

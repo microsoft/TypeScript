@@ -694,19 +694,19 @@ g(N["s"]);
 
 // falsy expressions
 s || "";
->s || "" : "" | unique symbol
+>s || "" : unique symbol
 >s : unique symbol
 >"" : ""
 
 N.s || "";
->N.s || "" : "" | unique symbol
+>N.s || "" : unique symbol
 >N.s : unique symbol
 >N : typeof N
 >s : unique symbol
 >"" : ""
 
 N["s"] || "";
->N["s"] || "" : "" | unique symbol
+>N["s"] || "" : unique symbol
 >N["s"] : unique symbol
 >N : typeof N
 >"s" : "s"
@@ -813,15 +813,15 @@ interface Context {
 >s : unique symbol
 
     method5(p?: typeof s): typeof s;
->method5 : (p?: unique symbol) => unique symbol
->p : unique symbol
+>method5 : (p?: unique symbol | undefined) => unique symbol
+>p : unique symbol | undefined
 >s : unique symbol
 >s : unique symbol
 }
 
 const o3: Context = {
 >o3 : Context
->{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncGenerator<unique symbol, void, any>; method4(): Generator<unique symbol, void, any>; method5(p?: unique symbol): unique symbol; }
+>{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncGenerator<unique symbol, void, any>; method4(): Generator<unique symbol, void, any>; method5(p?: unique symbol | undefined): unique symbol; }
 
     method1() {
 >method1 : () => unique symbol
@@ -854,8 +854,8 @@ const o3: Context = {
 
     },
     method5(p = s) { // parameter should not widen due to contextual type
->method5 : (p?: unique symbol) => unique symbol
->p : unique symbol
+>method5 : (p?: unique symbol | undefined) => unique symbol
+>p : unique symbol | undefined
 >s : unique symbol
 
         return p;

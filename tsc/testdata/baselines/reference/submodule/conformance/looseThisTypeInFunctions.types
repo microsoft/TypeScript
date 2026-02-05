@@ -18,7 +18,7 @@ interface Unused {
 class C implements I {
 >C : C
 
-    n: number;
+    n!: number;
 >n : number
 
     explicitThis(this: this, m: number): number {
@@ -138,7 +138,7 @@ let n = x(12); // callee:void doesn't match this:I
 >x : (this: I, m: number) => number
 >12 : 12
 
-let u: Unused;
+declare let u: Unused;
 >u : Unused
 
 let y = u.implicitNoThis;

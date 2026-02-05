@@ -1,5 +1,5 @@
 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(17,5): error TS2322: Type '() => number[]' is not assignable to type '() => Promise<number[]>'.
-  Type 'number[]' is missing the following properties from type 'Promise<number[]>': then, catch
+  Type 'number[]' is missing the following properties from type 'Promise<number[]>': then, catch, [Symbol.toStringTag]
 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(18,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(19,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(20,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
@@ -32,7 +32,7 @@ errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(27,14): error TS2322: Type 'num
         a() { return [123] },
         ~
 !!! error TS2322: Type '() => number[]' is not assignable to type '() => Promise<number[]>'.
-!!! error TS2322:   Type 'number[]' is missing the following properties from type 'Promise<number[]>': then, catch
+!!! error TS2322:   Type 'number[]' is missing the following properties from type 'Promise<number[]>': then, catch, [Symbol.toStringTag]
         b: () => "hello",
                  ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'Promise<string>'.

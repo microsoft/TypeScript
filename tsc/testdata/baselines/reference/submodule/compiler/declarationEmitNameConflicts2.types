@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declarationEmitNameConflicts2.ts] ////
 
 === declarationEmitNameConflicts2.ts ===
-module X.Y.base {
+namespace X.Y.base {
 >X : typeof X
 >Y : typeof Y
 >base : typeof base
@@ -12,7 +12,7 @@ module X.Y.base {
     export class C { }
 >C : C
 
-    export module M {
+    export namespace M {
 >M : typeof M
 
         export var v;
@@ -22,7 +22,7 @@ module X.Y.base {
 >E : E
 }
 
-module X.Y.base.Z {
+namespace X.Y.base.Z {
 >X : typeof X
 >Y : typeof Y
 >base : typeof base

@@ -30,7 +30,7 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2420: Clas
 
 ==== implementingAnInterfaceExtendingClassWithPrivates2.ts (15 errors) ====
     class Foo {
-        private x: string;
+        private x!: string;
     }
     
     interface I extends Foo {
@@ -38,7 +38,7 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2420: Clas
     }
     
     class Bar extends Foo implements I { // ok
-        y: number;
+        y!: number;
     }
     
     class Bar2 extends Foo implements I { // error
@@ -48,8 +48,8 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2420: Clas
           ~~~~
 !!! error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'x' is private in type 'I' but not in type 'Bar2'.
-        x: string;
-        y: number;
+        x!: string;
+        y!: number;
     }
     
     class Bar3 extends Foo implements I { // error
@@ -59,18 +59,18 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2420: Clas
           ~~~~
 !!! error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
 !!! error TS2420:   Types have separate declarations of a private property 'x'.
-        private x: string;
-        y: number;
+        private x!: string;
+        y!: number;
     }
     
     // another level of indirection
-    module M {
+    namespace M {
         class Foo {
-            private x: string;
+            private x!: string;
         }
     
         class Baz extends Foo {
-            z: number;
+            z!: number;
         }
     
         interface I extends Baz {
@@ -78,8 +78,8 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2420: Clas
         }
     
         class Bar extends Foo implements I { // ok
-            y: number;
-            z: number;
+            y!: number;
+            z!: number;
         }
     
         class Bar2 extends Foo implements I { // error
@@ -90,8 +90,8 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2420: Clas
 !!! error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'z' is missing in type 'Bar2' but required in type 'I'.
 !!! related TS2728 implementingAnInterfaceExtendingClassWithPrivates2.ts:30:9: 'z' is declared here.
-            x: string;
-            y: number;
+            x!: string;
+            y!: number;
         }
     
         class Bar3 extends Foo implements I { // error
@@ -102,19 +102,19 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2420: Clas
 !!! error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'z' is missing in type 'Bar3' but required in type 'I'.
 !!! related TS2728 implementingAnInterfaceExtendingClassWithPrivates2.ts:30:9: 'z' is declared here.
-            private x: string;
-            y: number;
+            private x!: string;
+            y!: number;
         }
     }
     
     // two levels of privates
-    module M2 {
+    namespace M2 {
         class Foo {
-            private x: string;
+            private x!: string;
         }
     
         class Baz extends Foo {
-            private y: number;
+            private y!: number;
         }
     
         interface I extends Baz {
@@ -126,10 +126,10 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2420: Clas
 !!! error TS2420: Class 'Bar' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'y' is missing in type 'Bar' but required in type 'I'.
 !!! related TS2728 implementingAnInterfaceExtendingClassWithPrivates2.ts:60:17: 'y' is declared here.
-            z: number;
+            z!: number;
         }
     
-        var b: Bar;
+        declare var b: Bar;
         var r1 = b.z;
         var r2 = b.x; // error
                    ~
@@ -146,8 +146,8 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2420: Clas
 !!! error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'y' is missing in type 'Bar2' but required in type 'I'.
 !!! related TS2728 implementingAnInterfaceExtendingClassWithPrivates2.ts:60:17: 'y' is declared here.
-            x: string;
-            z: number;
+            x!: string;
+            z!: number;
         }
     
         class Bar3 extends Foo implements I { // error
@@ -158,7 +158,7 @@ implementingAnInterfaceExtendingClassWithPrivates2.ts(81,11): error TS2420: Clas
 !!! error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'y' is missing in type 'Bar3' but required in type 'I'.
 !!! related TS2728 implementingAnInterfaceExtendingClassWithPrivates2.ts:60:17: 'y' is declared here.
-            private x: string;
-            z: number;
+            private x!: string;
+            z!: number;
         }
     }

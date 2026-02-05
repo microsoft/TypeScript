@@ -1,8 +1,8 @@
 --- old.forStatementsMultipleInvalidDecl.js
 +++ new.forStatementsMultipleInvalidDecl.js
-@@= skipped -56, +56 lines =@@
-
+@@= skipped -57, +57 lines =@@
  //// [forStatementsMultipleInvalidDecl.js]
+ "use strict";
  class C {
 +    id;
 +    valid;

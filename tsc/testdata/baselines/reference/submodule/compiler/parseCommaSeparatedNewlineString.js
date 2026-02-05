@@ -5,5 +5,6 @@
 '')
 
 //// [parseCommaSeparatedNewlineString.js]
+"use strict";
 (a,
     '');

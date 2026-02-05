@@ -62,6 +62,7 @@ class B extends A {
 
 
 //// [asyncMethodWithSuperConflict_es6.js]
+"use strict";
 class A {
     x() {
     }

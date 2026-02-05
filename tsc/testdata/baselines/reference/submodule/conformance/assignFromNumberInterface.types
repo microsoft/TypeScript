@@ -5,7 +5,7 @@ var x = 1;
 >x : number
 >1 : 1
 
-var a: Number;
+declare var a: Number;
 >a : Number
 
 x = a;

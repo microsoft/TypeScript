@@ -12,3 +12,4 @@ interface B<T> extends A<T>
 }
 
 //// [instanceSubtypeCheck1.js]
+"use strict";

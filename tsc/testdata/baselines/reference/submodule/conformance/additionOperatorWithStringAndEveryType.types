@@ -157,5 +157,5 @@ var r20 = x + [];
 >r20 : string
 >x + [] : string
 >x : string
->[] : undefined[]
+>[] : never[]
 

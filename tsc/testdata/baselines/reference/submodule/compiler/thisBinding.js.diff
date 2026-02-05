@@ -1,6 +1,6 @@
 --- old.thisBinding.js
 +++ new.thisBinding.js
-@@= skipped -26, +26 lines =@@
+@@= skipped -27, +27 lines =@@
  var M;
  (function (M) {
      class C {

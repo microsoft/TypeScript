@@ -7,12 +7,12 @@ class C {
     static foo() { }
 }
 enum E { a, b, c }
-module M { export var a }
+namespace M { export var a }
 
-var a: boolean;
-var b: number;
-var c: Object;
-var d: Number;
+declare var a: boolean;
+declare var b: number;
+declare var c: Object;
+declare var d: Number;
 
 // boolean + every type except any and string
 var r1 = a + a;
@@ -43,6 +43,7 @@ var r19 = E.a + C.foo();
 var r20 = E.a + M;
 
 //// [additionOperatorWithInvalidOperands.js]
+"use strict";
 function foo() { }
 class C {
     a;
@@ -57,10 +58,6 @@ var E;
 var M;
 (function (M) {
 })(M || (M = {}));
-var a;
-var b;
-var c;
-var d;
 // boolean + every type except any and string
 var r1 = a + a;
 var r2 = a + b;

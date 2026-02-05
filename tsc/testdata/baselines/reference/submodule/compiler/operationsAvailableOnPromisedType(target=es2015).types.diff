@@ -1,0 +1,20 @@
+--- old.operationsAvailableOnPromisedType(target=es2015).types
++++ new.operationsAvailableOnPromisedType(target=es2015).types
+@@= skipped -1, +1 lines =@@
+
+ === operationsAvailableOnPromisedType.ts ===
+ async function fn(
+->fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<{ new (): any; }>) => Promise<void>
++>fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<new () => any>) => Promise<void>
+
+     a: number,
+ >a : number
+@@= skipped -70, +70 lines =@@
+
+         fn(b, b, c, d, e, f, g);
+ >fn(b, b, c, d, e, f, g) : Promise<void>
+->fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<{ new (): any; }>) => Promise<void>
++>fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<new () => any>) => Promise<void>
+ >b : Promise<number>
+ >b : Promise<number>
+ >c : Promise<string[]>

@@ -1,0 +1,11 @@
+--- old.crashRegressionTest.types
++++ new.crashRegressionTest.types
+@@= skipped -31, +31 lines =@@
+         }
+  
+         public text(value?: string): any {
+->text : (value?: string) => any
++>text : (value?: string | undefined) => any
+ >value : string | undefined
+
+             this._templateStorage.templateSources[this._name] = value;

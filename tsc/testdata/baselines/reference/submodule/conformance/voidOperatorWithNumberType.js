@@ -11,7 +11,7 @@ class A {
     public a: number;
     static foo() { return 1; }
 }
-module M {
+namespace M {
     export var n: number;
 }
 
@@ -48,6 +48,7 @@ void M.n;
 void objA.a, M.n;
 
 //// [voidOperatorWithNumberType.js]
+"use strict";
 // void  operator on number type
 var NUMBER;
 var NUMBER1 = [1, 2];

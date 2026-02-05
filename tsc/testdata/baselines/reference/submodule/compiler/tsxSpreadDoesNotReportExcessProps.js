@@ -13,15 +13,10 @@ class MyComponent extends React.Component<{dataSource: number[], onClick?: any},
 
 
 //// [tsxSpreadDoesNotReportExcessProps.js]
-"use strict";
-/// <reference path="react16.d.ts" />
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = __importDefault(require("react"));
-class MyComponent extends react_1.default.Component {
+/// <reference path="/.lib/react16.d.ts" />
+import React from "react";
+class MyComponent extends React.Component {
     render() {
-        return (react_1.default.createElement("div", Object.assign({}, this.props, { className: "ok" })));
+        return (React.createElement("div", Object.assign({}, this.props, { className: "ok" })));
     }
 }

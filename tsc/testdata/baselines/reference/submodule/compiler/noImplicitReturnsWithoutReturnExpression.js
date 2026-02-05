@@ -28,6 +28,7 @@ function isMissingReturnExpression5(x) {
 
 
 //// [noImplicitReturnsWithoutReturnExpression.js]
+"use strict";
 function isMissingReturnExpression() {
     return;
 }

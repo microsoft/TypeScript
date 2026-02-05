@@ -1,6 +1,6 @@
 --- old.assignmentCompatWithObjectMembersOptionality2.js
 +++ new.assignmentCompatWithObjectMembersOptionality2.js
-@@= skipped -95, +95 lines =@@
+@@= skipped -96, +96 lines =@@
  // M is optional and S contains no property with the same name as M
  // N is optional and T contains no property with the same name as N
  class Base {

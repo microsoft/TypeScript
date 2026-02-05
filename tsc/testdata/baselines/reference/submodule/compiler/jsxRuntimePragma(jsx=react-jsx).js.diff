@@ -2,7 +2,7 @@
 +++ new.jsxRuntimePragma(jsx=react-jsx).js
 @@= skipped -85, +85 lines =@@
  const jsx_runtime_1 = require("react/jsx-runtime");
- /// <reference path="react16.d.ts" />
+ /// <reference path="/.lib/react16.d.ts" />
  /* @jsxRuntime automatic */
 -const HelloWorld = () => (0, jsx_runtime_1.jsx)("h1", { children: "Hello world" });
 +const HelloWorld = () => jsx_runtime_1.jsx("h1", { children: "Hello world" });
@@ -15,7 +15,7 @@
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 @@= skipped -12, +12 lines =@@
- /// <reference path="react16.d.ts" />
+ /// <reference path="/.lib/react16.d.ts" />
  /* @jsxRuntime classic */
  /* @jsxRuntime automatic */
 -const HelloWorld = () => (0, jsx_runtime_1.jsx)("h1", { children: "Hello world" });

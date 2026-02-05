@@ -5,7 +5,7 @@
  export type X = string;
  export declare const fn: {
 -    o: (a?: (X | undefined)[]) => void;
-+    o: (a?: string[]) => void;
++    o: (a?: (string | undefined)[] | undefined) => void;
  };
  //// [b.d.ts]
  export declare const m: {
@@ -14,6 +14,6 @@
  export declare const x: {
      p: {
 -        o: (a?: (import("./a").X | undefined)[]) => void;
-+        o: (a?: string[]) => void;
++        o: (a?: (string | undefined)[] | undefined) => void;
      };
  };

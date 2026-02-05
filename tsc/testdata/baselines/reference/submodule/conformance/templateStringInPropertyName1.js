@@ -6,5 +6,6 @@ var x = {
 }
 
 //// [templateStringInPropertyName1.js]
+"use strict";
 var x = {} `a`;
 321;

@@ -1,6 +1,6 @@
 --- old.genericCallbacksAndClassHierarchy.js
 +++ new.genericCallbacksAndClassHierarchy.js
-@@= skipped -28, +28 lines =@@
+@@= skipped -29, +29 lines =@@
  var M;
  (function (M) {
      class C1 {

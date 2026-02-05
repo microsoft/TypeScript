@@ -1,38 +1,7 @@
 //// [tests/cases/conformance/directives/multiline.tsx] ////
 
-=== a.ts ===
-export const texts: string[] = [];
->texts : string[]
->[] : undefined[]
-
-/**
- @ts-ignore */
-texts.push(100);
->texts.push(100) : number
->texts.push : (...items: string[]) => number
->texts : string[]
->push : (...items: string[]) => number
->100 : 100
-
-/**
- @ts-expect-error */
-texts.push(100);
->texts.push(100) : number
->texts.push : (...items: string[]) => number
->texts : string[]
->push : (...items: string[]) => number
->100 : 100
-
-/**
- @ts-expect-error */
-texts.push("100");
->texts.push("100") : number
->texts.push : (...items: string[]) => number
->texts : string[]
->push : (...items: string[]) => number
->"100" : "100"
-
 === b.tsx ===
+/// <reference path="react.d.ts" />
 import * as React from "react";
 >React : typeof React
 

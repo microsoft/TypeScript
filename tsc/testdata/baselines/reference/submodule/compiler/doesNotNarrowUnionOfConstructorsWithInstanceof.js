@@ -30,6 +30,7 @@ if (!(a instanceof b)) {
 
 
 //// [doesNotNarrowUnionOfConstructorsWithInstanceof.js]
+"use strict";
 class A {
     length;
     constructor() {

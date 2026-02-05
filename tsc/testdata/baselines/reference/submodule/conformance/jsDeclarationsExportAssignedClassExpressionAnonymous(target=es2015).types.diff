@@ -1,0 +1,19 @@
+--- old.jsDeclarationsExportAssignedClassExpressionAnonymous(target=es2015).types
++++ new.jsDeclarationsExportAssignedClassExpressionAnonymous(target=es2015).types
+@@= skipped -1, +1 lines =@@
+
+ === index.js ===
+ module.exports = class {
+->module.exports = class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import("index")
+->module.exports : typeof import("index")
+->module : { exports: typeof import("index"); }
+->exports : typeof import("index")
+->class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import("index")
++>module.exports = class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof exports
++>module.exports : typeof (Anonymous class)
++>module : { "\uFFFDclass": typeof (Anonymous class); }
++>exports : typeof (Anonymous class)
++>class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof exports
+
+     /**
+      * @param {number} p

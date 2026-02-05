@@ -6,3 +6,4 @@ declare class C {
 }
 
 //// [parserParameterList14.js]
+"use strict";

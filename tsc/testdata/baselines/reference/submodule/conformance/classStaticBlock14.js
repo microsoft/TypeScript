@@ -16,6 +16,7 @@ class C {
 
 
 //// [classStaticBlock14.js]
+"use strict";
 class C {
     static #_1 = 1;
     static #_3 = 1;

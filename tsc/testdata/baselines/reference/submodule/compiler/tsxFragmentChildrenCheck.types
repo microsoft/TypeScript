@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/tsxFragmentChildrenCheck.ts] ////
 
 === my-component.tsx ===
+/// <reference path="react.d.ts" />
 declare var React: any;
 >React : any
 

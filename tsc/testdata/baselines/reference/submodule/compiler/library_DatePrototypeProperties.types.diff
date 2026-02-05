@@ -1,0 +1,152 @@
+--- old.library_DatePrototypeProperties.types
++++ new.library_DatePrototypeProperties.types
+@@= skipped -35, +35 lines =@@
+
+ Date.prototype.toLocaleString();
+ >Date.prototype.toLocaleString() : string
+->Date.prototype.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
++>Date.prototype.toLocaleString : { (): string; (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string; }
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->toLocaleString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
++>toLocaleString : { (): string; (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string; }
+
+ Date.prototype.toLocaleDateString();
+ >Date.prototype.toLocaleDateString() : string
+->Date.prototype.toLocaleDateString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
++>Date.prototype.toLocaleDateString : { (): string; (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string; }
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->toLocaleDateString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
++>toLocaleDateString : { (): string; (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string; }
+
+ Date.prototype.toLocaleTimeString();
+ >Date.prototype.toLocaleTimeString() : string
+->Date.prototype.toLocaleTimeString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
++>Date.prototype.toLocaleTimeString : { (): string; (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string; }
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->toLocaleTimeString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
++>toLocaleTimeString : { (): string; (locales?: string | string[] | undefined, options?: Intl.DateTimeFormatOptions | undefined): string; }
+
+ Date.prototype.valueOf();
+ >Date.prototype.valueOf() : number
+@@= skipped -203, +203 lines =@@
+
+ Date.prototype.setSeconds(0);
+ >Date.prototype.setSeconds(0) : number
+->Date.prototype.setSeconds : (sec: number, ms?: number) => number
++>Date.prototype.setSeconds : (sec: number, ms?: number | undefined) => number
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->setSeconds : (sec: number, ms?: number) => number
++>setSeconds : (sec: number, ms?: number | undefined) => number
+ >0 : 0
+
+ Date.prototype.setUTCSeconds(0);
+ >Date.prototype.setUTCSeconds(0) : number
+->Date.prototype.setUTCSeconds : (sec: number, ms?: number) => number
++>Date.prototype.setUTCSeconds : (sec: number, ms?: number | undefined) => number
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->setUTCSeconds : (sec: number, ms?: number) => number
++>setUTCSeconds : (sec: number, ms?: number | undefined) => number
+ >0 : 0
+
+ Date.prototype.setMinutes(0);
+ >Date.prototype.setMinutes(0) : number
+->Date.prototype.setMinutes : (min: number, sec?: number, ms?: number) => number
++>Date.prototype.setMinutes : (min: number, sec?: number | undefined, ms?: number | undefined) => number
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->setMinutes : (min: number, sec?: number, ms?: number) => number
++>setMinutes : (min: number, sec?: number | undefined, ms?: number | undefined) => number
+ >0 : 0
+
+ Date.prototype.setUTCMinutes(0);
+ >Date.prototype.setUTCMinutes(0) : number
+->Date.prototype.setUTCMinutes : (min: number, sec?: number, ms?: number) => number
++>Date.prototype.setUTCMinutes : (min: number, sec?: number | undefined, ms?: number | undefined) => number
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->setUTCMinutes : (min: number, sec?: number, ms?: number) => number
++>setUTCMinutes : (min: number, sec?: number | undefined, ms?: number | undefined) => number
+ >0 : 0
+
+ Date.prototype.setHours(0);
+ >Date.prototype.setHours(0) : number
+->Date.prototype.setHours : (hours: number, min?: number, sec?: number, ms?: number) => number
++>Date.prototype.setHours : (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->setHours : (hours: number, min?: number, sec?: number, ms?: number) => number
++>setHours : (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number
+ >0 : 0
+
+ Date.prototype.setUTCHours(0);
+ >Date.prototype.setUTCHours(0) : number
+->Date.prototype.setUTCHours : (hours: number, min?: number, sec?: number, ms?: number) => number
++>Date.prototype.setUTCHours : (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->setUTCHours : (hours: number, min?: number, sec?: number, ms?: number) => number
++>setUTCHours : (hours: number, min?: number | undefined, sec?: number | undefined, ms?: number | undefined) => number
+ >0 : 0
+
+ Date.prototype.setDate(0);
+@@= skipped -72, +72 lines =@@
+
+ Date.prototype.setMonth(0);
+ >Date.prototype.setMonth(0) : number
+->Date.prototype.setMonth : (month: number, date?: number) => number
++>Date.prototype.setMonth : (month: number, date?: number | undefined) => number
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->setMonth : (month: number, date?: number) => number
++>setMonth : (month: number, date?: number | undefined) => number
+ >0 : 0
+
+ Date.prototype.setUTCMonth(0);
+ >Date.prototype.setUTCMonth(0) : number
+->Date.prototype.setUTCMonth : (month: number, date?: number) => number
++>Date.prototype.setUTCMonth : (month: number, date?: number | undefined) => number
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->setUTCMonth : (month: number, date?: number) => number
++>setUTCMonth : (month: number, date?: number | undefined) => number
+ >0 : 0
+
+ Date.prototype.setFullYear(0);
+ >Date.prototype.setFullYear(0) : number
+->Date.prototype.setFullYear : (year: number, month?: number, date?: number) => number
++>Date.prototype.setFullYear : (year: number, month?: number | undefined, date?: number | undefined) => number
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->setFullYear : (year: number, month?: number, date?: number) => number
++>setFullYear : (year: number, month?: number | undefined, date?: number | undefined) => number
+ >0 : 0
+
+ Date.prototype.setUTCFullYear(0);
+ >Date.prototype.setUTCFullYear(0) : number
+->Date.prototype.setUTCFullYear : (year: number, month?: number, date?: number) => number
++>Date.prototype.setUTCFullYear : (year: number, month?: number | undefined, date?: number | undefined) => number
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->setUTCFullYear : (year: number, month?: number, date?: number) => number
++>setUTCFullYear : (year: number, month?: number | undefined, date?: number | undefined) => number
+ >0 : 0
+
+ Date.prototype.toUTCString();

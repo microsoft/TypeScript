@@ -1,9 +1,0 @@
---- old.asyncClass_es5.js
-+++ new.asyncClass_es5.js
-@@= skipped -4, +4 lines =@@
- }
-
- //// [asyncClass_es5.js]
--class C {
-+async class C {
- }

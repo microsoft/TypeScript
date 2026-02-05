@@ -8,6 +8,7 @@ interface C {
 
 
 //// [paramterDestrcuturingDeclaration.js]
+"use strict";
 
 
 //// [paramterDestrcuturingDeclaration.d.ts]

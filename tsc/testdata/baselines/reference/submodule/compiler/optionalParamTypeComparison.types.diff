@@ -1,0 +1,32 @@
+--- old.optionalParamTypeComparison.types
++++ new.optionalParamTypeComparison.types
+@@= skipped -1, +1 lines =@@
+
+ === optionalParamTypeComparison.ts ===
+ declare var f: (s: string, n?: number) => void;
+->f : (s: string, n?: number) => void
++>f : (s: string, n?: number | undefined) => void
+ >s : string
+ >n : number | undefined
+
+ declare var g: (s: string, b?: boolean) => void;
+->g : (s: string, b?: boolean) => void
++>g : (s: string, b?: boolean | undefined) => void
+ >s : string
+ >b : boolean | undefined
+
+ f = g;
+->f = g : (s: string, b?: boolean) => void
+->f : (s: string, n?: number) => void
+->g : (s: string, b?: boolean) => void
++>f = g : (s: string, b?: boolean | undefined) => void
++>f : (s: string, n?: number | undefined) => void
++>g : (s: string, b?: boolean | undefined) => void
+
+ g = f;
+->g = f : (s: string, n?: number) => void
+->g : (s: string, b?: boolean) => void
+->f : (s: string, n?: number) => void
++>g = f : (s: string, n?: number | undefined) => void
++>g : (s: string, b?: boolean | undefined) => void
++>f : (s: string, n?: number | undefined) => void

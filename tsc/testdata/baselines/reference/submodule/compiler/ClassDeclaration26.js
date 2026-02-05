@@ -8,6 +8,7 @@ class C {
 }
 
 //// [ClassDeclaration26.js]
+"use strict";
 class C {
     var;
     export foo = 10;

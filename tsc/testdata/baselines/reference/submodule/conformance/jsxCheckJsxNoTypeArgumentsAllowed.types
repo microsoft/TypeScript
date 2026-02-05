@@ -1,5 +1,25 @@
 //// [tests/cases/conformance/jsx/jsxCheckJsxNoTypeArgumentsAllowed.tsx] ////
 
+=== file.jsx ===
+/// <reference path="react.d.ts" />
+import { MyComp, Prop } from "./component";
+>MyComp : typeof MyComp
+>Prop : any
+
+import * as React from "react";
+>React : typeof React
+
+let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
+>x : JSX.Element
+><MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js : JSX.Element
+><MyComp : JSX.Element
+>MyComp : typeof MyComp
+><Prop> a={10} b="hi" />; // error, no type arguments in js : JSX.Element
+>Prop : any
+>10 : 10
+
+> : any
+
 === component.d.ts ===
 import * as React from "react";
 >React : typeof React
@@ -21,23 +41,4 @@ export interface Prop {
     b: string
 >b : string
 }
-
-=== file.jsx ===
-import { MyComp, Prop } from "./component";
->MyComp : typeof MyComp
->Prop : any
-
-import * as React from "react";
->React : typeof React
-
-let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
->x : JSX.Element
-><MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js : JSX.Element
-><MyComp : JSX.Element
->MyComp : typeof MyComp
-><Prop> a={10} b="hi" />; // error, no type arguments in js : JSX.Element
->Prop : any
->10 : 10
-
-> : any
 

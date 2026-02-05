@@ -7,6 +7,7 @@ function yieldString() {
 
 
 //// [yieldStringLiteral.js]
+"use strict";
 function yieldString() {
     yield 'literal';
 }

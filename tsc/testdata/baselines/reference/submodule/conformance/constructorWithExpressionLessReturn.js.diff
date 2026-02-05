@@ -1,6 +1,6 @@
 --- old.constructorWithExpressionLessReturn.js
 +++ new.constructorWithExpressionLessReturn.js
-@@= skipped -32, +32 lines =@@
+@@= skipped -33, +33 lines =@@
      }
  }
  class D {

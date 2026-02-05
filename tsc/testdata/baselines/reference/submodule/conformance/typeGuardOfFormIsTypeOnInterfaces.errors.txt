@@ -1,0 +1,112 @@
+typeGuardOfFormIsTypeOnInterfaces.ts(36,1): error TS2322: Type 'string | false' is not assignable to type 'string'.
+  Type 'boolean' is not assignable to type 'string'.
+typeGuardOfFormIsTypeOnInterfaces.ts(36,12): error TS2454: Variable 'c1Orc2' is used before being assigned.
+typeGuardOfFormIsTypeOnInterfaces.ts(37,1): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardOfFormIsTypeOnInterfaces.ts(37,12): error TS2454: Variable 'c1Orc2' is used before being assigned.
+typeGuardOfFormIsTypeOnInterfaces.ts(38,1): error TS2322: Type 'string | false' is not assignable to type 'string'.
+  Type 'boolean' is not assignable to type 'string'.
+typeGuardOfFormIsTypeOnInterfaces.ts(38,12): error TS2454: Variable 'c1Orc2' is used before being assigned.
+typeGuardOfFormIsTypeOnInterfaces.ts(39,1): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardOfFormIsTypeOnInterfaces.ts(39,12): error TS2454: Variable 'c1Orc2' is used before being assigned.
+typeGuardOfFormIsTypeOnInterfaces.ts(42,1): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardOfFormIsTypeOnInterfaces.ts(42,12): error TS2454: Variable 'c2Ord1' is used before being assigned.
+typeGuardOfFormIsTypeOnInterfaces.ts(43,1): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardOfFormIsTypeOnInterfaces.ts(43,12): error TS2454: Variable 'c2Ord1' is used before being assigned.
+typeGuardOfFormIsTypeOnInterfaces.ts(44,1): error TS2322: Type 'string | false' is not assignable to type 'string'.
+  Type 'boolean' is not assignable to type 'string'.
+typeGuardOfFormIsTypeOnInterfaces.ts(44,12): error TS2454: Variable 'c2Ord1' is used before being assigned.
+typeGuardOfFormIsTypeOnInterfaces.ts(45,5): error TS2322: Type 'false | D1' is not assignable to type 'C2 | D1'.
+  Type 'boolean' is not assignable to type 'C2 | D1'.
+typeGuardOfFormIsTypeOnInterfaces.ts(45,24): error TS2454: Variable 'c2Ord1' is used before being assigned.
+
+
+==== typeGuardOfFormIsTypeOnInterfaces.ts (16 errors) ====
+    interface C1 {
+        (): C1;
+        prototype: C1;
+        p1: string;
+    }
+    interface C2 {
+        (): C2;
+        prototype: C2;
+        p2: number;
+    }
+    interface D1 extends C1 {
+        prototype: D1;
+        p3: number;
+    }
+    var str: string;
+    var num: number;
+    var strOrNum: string | number;
+    
+    
+    function isC1(x: any): x is C1 {
+        return true;
+    }
+    
+    function isC2(x: any): x is C2 {
+        return true;
+    }
+    
+    function isD1(x: any): x is D1 {
+        return true;
+    }
+    
+    var c1: C1;
+    var c2: C2;
+    var d1: D1;
+    var c1Orc2: C1 | C2;
+    str = isC1(c1Orc2) && c1Orc2.p1; // C1
+    ~~~
+!!! error TS2322: Type 'string | false' is not assignable to type 'string'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string'.
+               ~~~~~~
+!!! error TS2454: Variable 'c1Orc2' is used before being assigned.
+    num = isC2(c1Orc2) && c1Orc2.p2; // C2
+    ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+               ~~~~~~
+!!! error TS2454: Variable 'c1Orc2' is used before being assigned.
+    str = isD1(c1Orc2) && c1Orc2.p1; // D1
+    ~~~
+!!! error TS2322: Type 'string | false' is not assignable to type 'string'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string'.
+               ~~~~~~
+!!! error TS2454: Variable 'c1Orc2' is used before being assigned.
+    num = isD1(c1Orc2) && c1Orc2.p3; // D1
+    ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+               ~~~~~~
+!!! error TS2454: Variable 'c1Orc2' is used before being assigned.
+    
+    var c2Ord1: C2 | D1;
+    num = isC2(c2Ord1) && c2Ord1.p2; // C2
+    ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+               ~~~~~~
+!!! error TS2454: Variable 'c2Ord1' is used before being assigned.
+    num = isD1(c2Ord1) && c2Ord1.p3; // D1
+    ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+               ~~~~~~
+!!! error TS2454: Variable 'c2Ord1' is used before being assigned.
+    str = isD1(c2Ord1) && c2Ord1.p1; // D1
+    ~~~
+!!! error TS2322: Type 'string | false' is not assignable to type 'string'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string'.
+               ~~~~~~
+!!! error TS2454: Variable 'c2Ord1' is used before being assigned.
+    var r2: C2 | D1 = isC1(c2Ord1) && c2Ord1; // C2 | D1
+        ~~
+!!! error TS2322: Type 'false | D1' is not assignable to type 'C2 | D1'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'C2 | D1'.
+                           ~~~~~~
+!!! error TS2454: Variable 'c2Ord1' is used before being assigned.

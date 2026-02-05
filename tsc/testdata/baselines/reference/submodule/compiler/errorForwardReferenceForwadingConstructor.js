@@ -13,6 +13,7 @@ class derived extends base { }
 
 
 //// [errorForwardReferenceForwadingConstructor.js]
+"use strict";
 // Error forward referencing derived class with forwarding constructor
 function f() {
     var d1 = new derived();

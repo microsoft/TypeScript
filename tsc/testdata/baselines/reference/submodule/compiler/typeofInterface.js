@@ -12,6 +12,7 @@ var k: I;
 var j: typeof k.foo = { a: "hello" };
 
 //// [typeofInterface.js]
+"use strict";
 var I;
 var k;
 var j = { a: "hello" };

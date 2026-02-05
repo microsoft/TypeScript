@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/classDeclarationMergedInModuleWithContinuation.ts] ////
 
 === classDeclarationMergedInModuleWithContinuation.ts ===
-module M {
+namespace M {
 >M : typeof M
 
     export class N { }
 >N : N
 
-    export module N {
+    export namespace N {
 >N : typeof N
 
         export var v = 0;
@@ -16,7 +16,7 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
     export class O extends M.N {

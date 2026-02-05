@@ -22,7 +22,7 @@ f({ x: 42 }, { x(param) { param.toFixed() } });
 >x : (param: number) => void
 >param : number
 >param.toFixed() : string
->param.toFixed : (fractionDigits?: number) => string
+>param.toFixed : (fractionDigits?: number | undefined) => string
 >param : number
->toFixed : (fractionDigits?: number) => string
+>toFixed : (fractionDigits?: number | undefined) => string
 

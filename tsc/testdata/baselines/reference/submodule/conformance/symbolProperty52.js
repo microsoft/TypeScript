@@ -10,6 +10,7 @@ obj = {};
 obj[Symbol.nonsense];
 
 //// [symbolProperty52.js]
+"use strict";
 var obj = {
     [Symbol.nonsense]: 0
 };

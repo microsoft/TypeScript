@@ -1,7 +1,7 @@
 --- old.esDecorators-classDeclaration-commentPreservation(module=commonjs,target=esnext).js
 +++ new.esDecorators-classDeclaration-commentPreservation(module=commonjs,target=esnext).js
-@@= skipped -121, +121 lines =@@
- //// [file1.js]
+@@= skipped -122, +122 lines =@@
+ "use strict";
  /*1*/
  @dec
 -/*2*/

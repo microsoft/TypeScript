@@ -1,0 +1,10 @@
+--- old.jsDeclarationsExportAssignedConstructorFunction(target=es2015).js
++++ new.jsDeclarationsExportAssignedConstructorFunction(target=es2015).js
+@@= skipped -23, +23 lines =@@
+
+
+ //// [jsDeclarationsExportAssignedConstructorFunction.d.ts]
+-export class MyClass {
+-    a: () => void;
+-}
++export declare var MyClass: () => void;

@@ -16,4 +16,5 @@ fn(0);
 
 
 //// [unionTypeCallSignatures5.js]
+"use strict";
 fn(0);

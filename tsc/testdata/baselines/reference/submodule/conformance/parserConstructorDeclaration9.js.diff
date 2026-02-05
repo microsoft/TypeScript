@@ -1,8 +1,8 @@
 --- old.parserConstructorDeclaration9.js
 +++ new.parserConstructorDeclaration9.js
-@@= skipped -6, +6 lines =@@
-
+@@= skipped -7, +7 lines =@@
  //// [parserConstructorDeclaration9.js]
+ "use strict";
  class C {
 -    constructor<T>() { }
 +    constructor() { }

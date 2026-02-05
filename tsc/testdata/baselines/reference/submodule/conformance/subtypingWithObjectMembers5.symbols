@@ -18,11 +18,11 @@ interface Derived extends Base {
 
 // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
 // foo properties are valid, bar properties cause errors in the derived class declarations
-module NotOptional {
+namespace NotOptional {
 >NotOptional : Symbol(NotOptional, Decl(subtypingWithObjectMembers5.ts, 6, 1))
 
     interface A {
->A : Symbol(A, Decl(subtypingWithObjectMembers5.ts, 10, 20))
+>A : Symbol(A, Decl(subtypingWithObjectMembers5.ts, 10, 23))
 
         foo: Base;
 >foo : Symbol(A.foo, Decl(subtypingWithObjectMembers5.ts, 11, 17))
@@ -31,7 +31,7 @@ module NotOptional {
 
     class B implements A {
 >B : Symbol(B, Decl(subtypingWithObjectMembers5.ts, 13, 5))
->A : Symbol(A, Decl(subtypingWithObjectMembers5.ts, 10, 20))
+>A : Symbol(A, Decl(subtypingWithObjectMembers5.ts, 10, 23))
 
         fooo: Derived; // error
 >fooo : Symbol(B.fooo, Decl(subtypingWithObjectMembers5.ts, 15, 26))
@@ -74,11 +74,11 @@ module NotOptional {
 }
 
 // same cases as above but with optional
-module Optional {
+namespace Optional {
 >Optional : Symbol(Optional, Decl(subtypingWithObjectMembers5.ts, 34, 1))
 
     interface A {
->A : Symbol(A, Decl(subtypingWithObjectMembers5.ts, 37, 17))
+>A : Symbol(A, Decl(subtypingWithObjectMembers5.ts, 37, 20))
 
         foo?: Base;
 >foo : Symbol(A.foo, Decl(subtypingWithObjectMembers5.ts, 38, 17))
@@ -87,7 +87,7 @@ module Optional {
 
     class B implements A {
 >B : Symbol(B, Decl(subtypingWithObjectMembers5.ts, 40, 5))
->A : Symbol(A, Decl(subtypingWithObjectMembers5.ts, 37, 17))
+>A : Symbol(A, Decl(subtypingWithObjectMembers5.ts, 37, 20))
 
         fooo: Derived; // weak type error
 >fooo : Symbol(B.fooo, Decl(subtypingWithObjectMembers5.ts, 42, 26))

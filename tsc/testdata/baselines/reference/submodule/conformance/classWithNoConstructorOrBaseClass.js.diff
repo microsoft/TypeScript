@@ -1,8 +1,8 @@
 --- old.classWithNoConstructorOrBaseClass.js
 +++ new.classWithNoConstructorOrBaseClass.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [classWithNoConstructorOrBaseClass.js]
+ "use strict";
  class C {
 +    x;
  }

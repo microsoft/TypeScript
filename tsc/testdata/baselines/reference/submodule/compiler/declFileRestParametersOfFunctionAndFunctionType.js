@@ -12,6 +12,7 @@ var f6 = () => { return [<any>10]; }
 
 
 //// [declFileRestParametersOfFunctionAndFunctionType.js]
+"use strict";
 function f1(...args) { }
 function f2(x) { }
 function f3(x) { }

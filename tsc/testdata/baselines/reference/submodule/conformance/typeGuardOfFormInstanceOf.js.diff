@@ -1,6 +1,6 @@
 --- old.typeGuardOfFormInstanceOf.js
 +++ new.typeGuardOfFormInstanceOf.js
-@@= skipped -75, +75 lines =@@
+@@= skipped -76, +76 lines =@@
  //    it is a subtype of the type of x, or
  //  - when false, has no effect on the type of x.
  class C1 {

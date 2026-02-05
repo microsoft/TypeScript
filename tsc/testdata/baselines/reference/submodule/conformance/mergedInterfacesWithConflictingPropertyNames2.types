@@ -11,7 +11,7 @@ interface A {
 >x : string
 }
 
-module M {
+namespace M {
     interface A<T> {
         x: T;
 >x : T
@@ -23,28 +23,28 @@ module M {
     }
 }
 
-module M2 {
+namespace M2 {
     interface A<T> {
         x: T;
 >x : T
     }   
 }
 
-module M2 {
+namespace M2 {
     interface A<T> {
         x: T;  // ok, different declaration space than other M2
 >x : T
     }
 }
 
-module M3 {
+namespace M3 {
     export interface A<T> {
         x: T;
 >x : T
     }
 }
 
-module M3 {
+namespace M3 {
     export interface A<T> {
         x: T;  // error
 >x : T

@@ -3,7 +3,7 @@
 === substitutionTypeNoMergeOfAssignableType.ts ===
 interface Entry {
     comment?: string;
->comment : string
+>comment : string | undefined
  }
  
  interface Entity {

@@ -33,6 +33,7 @@ i = a;
 a = i;
 
 //// [typesWithOptionalProperty.js]
+"use strict";
 // basic uses of optional properties without errors
 var a;
 var b = { foo: '' };

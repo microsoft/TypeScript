@@ -1,6 +1,6 @@
 --- old.tsxStatelessFunctionComponentsWithTypeArguments4.types
 +++ new.tsxStatelessFunctionComponentsWithTypeArguments4.types
-@@= skipped -4, +4 lines =@@
+@@= skipped -6, +6 lines =@@
  >React : typeof React
 
  declare function OverloadComponent<U>(): JSX.Element;

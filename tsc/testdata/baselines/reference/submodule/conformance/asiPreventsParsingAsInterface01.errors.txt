@@ -1,0 +1,14 @@
+asiPreventsParsingAsInterface01.ts(3,1): error TS2454: Variable 'interface' is used before being assigned.
+asiPreventsParsingAsInterface01.ts(4,1): error TS2454: Variable 'I' is used before being assigned.
+
+
+==== asiPreventsParsingAsInterface01.ts (2 errors) ====
+    var interface: number, I: string;
+    
+    interface   // This should be the identifier 'interface'
+    ~~~~~~~~~
+!!! error TS2454: Variable 'interface' is used before being assigned.
+    I           // This should be the identifier 'I'
+    ~
+!!! error TS2454: Variable 'I' is used before being assigned.
+    {}          // This should be a block body

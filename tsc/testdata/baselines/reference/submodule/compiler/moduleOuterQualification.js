@@ -1,9 +1,9 @@
 //// [tests/cases/compiler/moduleOuterQualification.ts] ////
 
 //// [moduleOuterQualification.ts]
-declare module outer {
+declare namespace outer {
   interface Beta { }
-  module inner {
+  namespace inner {
     // .d.ts emit: should be 'extends outer.Beta'
     export interface Beta extends outer.Beta { }
   }
@@ -11,6 +11,7 @@ declare module outer {
 
 
 //// [moduleOuterQualification.js]
+"use strict";
 
 
 //// [moduleOuterQualification.d.ts]

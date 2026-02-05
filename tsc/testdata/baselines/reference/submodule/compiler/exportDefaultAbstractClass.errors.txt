@@ -1,0 +1,16 @@
+a.ts(1,35): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+
+
+==== a.ts (1 errors) ====
+    export default abstract class A { a: number; }
+                                      ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+    
+    class B extends A {}
+    new B().a.toExponential();
+    
+==== b.ts (0 errors) ====
+    import A from './a';
+    
+    class C extends A {}
+    new C().a.toExponential();

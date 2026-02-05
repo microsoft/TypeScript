@@ -1,0 +1,11 @@
+--- old.decoratorOnClassProperty3(target=es2015).js
++++ new.decoratorOnClassProperty3(target=es2015).js
+@@= skipped -15, +15 lines =@@
+     return c > 3 && r && Object.defineProperty(target, key, r), r;
+ };
+ class C {
++    public;
++    prop;
+ }
+ __decorate([
+     dec

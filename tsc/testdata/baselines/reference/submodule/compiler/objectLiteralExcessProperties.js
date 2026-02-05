@@ -54,6 +54,7 @@ function test<T extends IFoo>() {
 
 
 //// [objectLiteralExcessProperties.js]
+"use strict";
 var b1 = { forword: "oops" };
 var b2 = { foreward: "nope" };
 var b3 = [{ foreword: "hello" }, { forwards: "back" }];

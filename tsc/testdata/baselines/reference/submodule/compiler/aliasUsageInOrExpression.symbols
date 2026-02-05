@@ -16,26 +16,26 @@ interface IHasVisualizationModel {
 >Backbone : Symbol(Backbone, Decl(aliasUsageInOrExpression_main.ts, 0, 0))
 >Model : Symbol(Backbone.Model, Decl(aliasUsageInOrExpression_backbone.ts, 0, 0))
 }
-var i: IHasVisualizationModel;
->i : Symbol(i, Decl(aliasUsageInOrExpression_main.ts, 5, 3))
+declare var i: IHasVisualizationModel;
+>i : Symbol(i, Decl(aliasUsageInOrExpression_main.ts, 5, 11))
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInOrExpression_main.ts, 1, 63))
 
 var d1 = i || moduleA;
 >d1 : Symbol(d1, Decl(aliasUsageInOrExpression_main.ts, 6, 3))
->i : Symbol(i, Decl(aliasUsageInOrExpression_main.ts, 5, 3))
+>i : Symbol(i, Decl(aliasUsageInOrExpression_main.ts, 5, 11))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInOrExpression_main.ts, 0, 65))
 
 var d2: IHasVisualizationModel = i || moduleA;
 >d2 : Symbol(d2, Decl(aliasUsageInOrExpression_main.ts, 7, 3), Decl(aliasUsageInOrExpression_main.ts, 8, 3))
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInOrExpression_main.ts, 1, 63))
->i : Symbol(i, Decl(aliasUsageInOrExpression_main.ts, 5, 3))
+>i : Symbol(i, Decl(aliasUsageInOrExpression_main.ts, 5, 11))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInOrExpression_main.ts, 0, 65))
 
 var d2: IHasVisualizationModel = moduleA || i;
 >d2 : Symbol(d2, Decl(aliasUsageInOrExpression_main.ts, 7, 3), Decl(aliasUsageInOrExpression_main.ts, 8, 3))
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInOrExpression_main.ts, 1, 63))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInOrExpression_main.ts, 0, 65))
->i : Symbol(i, Decl(aliasUsageInOrExpression_main.ts, 5, 3))
+>i : Symbol(i, Decl(aliasUsageInOrExpression_main.ts, 5, 11))
 
 var e: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null || { x: moduleA };
 >e : Symbol(e, Decl(aliasUsageInOrExpression_main.ts, 9, 3))

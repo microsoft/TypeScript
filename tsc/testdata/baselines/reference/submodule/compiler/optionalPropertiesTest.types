@@ -2,10 +2,10 @@
 
 === optionalPropertiesTest.ts ===
 var x: {p1:number; p2?:string; p3?:{():number;};};
->x : { p1: number; p2?: string; p3?: () => number; }
+>x : { p1: number; p2?: string | undefined; p3?: (() => number) | undefined; }
 >p1 : number
->p2 : string
->p3 : () => number
+>p2 : string | undefined
+>p3 : (() => number) | undefined
 
 interface IFoo
 {
@@ -13,10 +13,10 @@ interface IFoo
 >id : number
 
     name?: string;
->name : string
+>name : string | undefined
 
     print?(): void;
->print : () => void
+>print : (() => void) | undefined
 }
 
 
@@ -58,16 +58,16 @@ foo = {id: 1234, print:()=>{}}	   // Ok
 var s = foo.name || "default";
 >s : string
 >foo.name || "default" : string
->foo.name : string
+>foo.name : string | undefined
 >foo : IFoo
->name : string
+>name : string | undefined
 >"default" : "default"
 
 if (foo.print !== undefined) foo.print();
 >foo.print !== undefined : boolean
->foo.print : () => void
+>foo.print : (() => void) | undefined
 >foo : IFoo
->print : () => void
+>print : (() => void) | undefined
 >undefined : undefined
 >foo.print() : void
 >foo.print : () => void
@@ -78,13 +78,13 @@ interface i1 { M: () => void; };
 >M : () => void
 
 interface i2 { M?: () => void; };
->M : () => void
+>M : (() => void) | undefined
 
 interface i3 { M: number; };
 >M : number
 
 interface i4 { M?: number; };
->M : number
+>M : number | undefined
 
 var test1: i1 = {};
 >test1 : i1
@@ -139,7 +139,7 @@ test8 = {};
 var test9_1: i2;
 >test9_1 : i2
 
-var test9_2: i1;
+declare var test9_2: i1;
 >test9_2 : i1
 
 test9_1 = test9_2;
@@ -150,7 +150,7 @@ test9_1 = test9_2;
 var test10_1: i1;
 >test10_1 : i1
 
-var test10_2: i2;
+declare var test10_2: i2;
 >test10_2 : i2
 
 test10_1 = test10_2;

@@ -1,0 +1,15 @@
+--- old.thisInObjectJs.js
++++ new.thisInObjectJs.js
+@@= skipped -20, +20 lines =@@
+
+
+ //// [index.js]
++export {};
+ let obj = {
+     x: 10,
+     y: [1],
+@@= skipped -16, +17 lines =@@
+         this; /*3*/
+     }),
+ };
+-export {};

@@ -7,7 +7,7 @@ namespace N {
     function S() {}
 >S : () => void
 }
-module M {
+namespace M {
 >M : typeof M
 
     function F() {}

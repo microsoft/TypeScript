@@ -1,0 +1,21 @@
+auxiliry.ts(2,5): error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
+test.ts(6,19): error TS2564: Property 'array' has no initializer and is not definitely assigned in the constructor.
+
+
+==== auxiliry.ts (1 errors) ====
+    export class SomeClass {
+        field: string;
+        ~~~~~
+!!! error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+==== test.ts (1 errors) ====
+    import { SomeClass } from './auxiliry';
+    function annotation(): PropertyDecorator {
+        return (target: any): void => { };
+    }
+    export class ClassA {
+        @annotation() array: SomeClass | null | string;
+                      ~~~~~
+!!! error TS2564: Property 'array' has no initializer and is not definitely assigned in the constructor.
+    }

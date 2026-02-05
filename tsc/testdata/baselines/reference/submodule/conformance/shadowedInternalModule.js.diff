@@ -1,6 +1,6 @@
 --- old.shadowedInternalModule.js
 +++ new.shadowedInternalModule.js
-@@= skipped -75, +75 lines =@@
+@@= skipped -76, +76 lines =@@
  var B;
  (function (B) {
      var A = { x: 0, y: 0 };

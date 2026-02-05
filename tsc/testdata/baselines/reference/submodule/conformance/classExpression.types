@@ -18,7 +18,7 @@ var y = {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
     var z = class C4 {

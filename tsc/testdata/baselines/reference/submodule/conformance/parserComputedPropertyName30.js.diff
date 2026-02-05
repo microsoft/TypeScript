@@ -1,6 +1,6 @@
 --- old.parserComputedPropertyName30.js
 +++ new.parserComputedPropertyName30.js
-@@= skipped -10, +10 lines =@@
+@@= skipped -11, +11 lines =@@
  var E;
  (function (E) {
      // no ASI, comma expected

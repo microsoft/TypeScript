@@ -1,6 +1,6 @@
 --- old.destructuringUnspreadableIntoRest.js
 +++ new.destructuringUnspreadableIntoRest.js
-@@= skipped -102, +102 lines =@@
+@@= skipped -103, +103 lines =@@
      return t;
  };
  class A {

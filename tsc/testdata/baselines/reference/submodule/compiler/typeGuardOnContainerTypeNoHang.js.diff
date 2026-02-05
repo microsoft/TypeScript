@@ -1,0 +1,12 @@
+--- old.typeGuardOnContainerTypeNoHang.js
++++ new.typeGuardOnContainerTypeNoHang.js
+@@= skipped -8, +8 lines =@@
+ }
+
+ //// [typeGuardOnContainerTypeNoHang.js]
+-export var TypeGuards;
++export { TypeGuards };
++var TypeGuards;
+ (function (TypeGuards) {
+     function IsObject(value) {
+         return typeof (value) === 'object';

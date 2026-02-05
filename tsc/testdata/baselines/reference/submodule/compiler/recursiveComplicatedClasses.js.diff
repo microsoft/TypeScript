@@ -1,8 +1,8 @@
 --- old.recursiveComplicatedClasses.js
 +++ new.recursiveComplicatedClasses.js
-@@= skipped -27, +27 lines =@@
-
+@@= skipped -28, +28 lines =@@
  //// [recursiveComplicatedClasses.js]
+ "use strict";
  class Signature {
 -    constructor() {
 -        this.parameters = null;

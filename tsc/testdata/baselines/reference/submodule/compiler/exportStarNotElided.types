@@ -3,7 +3,7 @@
 === register.ts ===
 const r: any[] = [];
 >r : any[]
->[] : undefined[]
+>[] : never[]
 
 export function register(data: any) {
 >register : (data: any) => void

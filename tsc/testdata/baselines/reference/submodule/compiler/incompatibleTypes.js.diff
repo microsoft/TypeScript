@@ -1,6 +1,6 @@
 --- old.incompatibleTypes.js
 +++ new.incompatibleTypes.js
-@@= skipped -88, +88 lines =@@
+@@= skipped -89, +89 lines =@@
      }
  }
  class C3 {

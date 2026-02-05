@@ -17,7 +17,7 @@ function main1() : number {
 >get : () => number
     }
     catch(e) {
->e : any
+>e : unknown
 
         log("in catch");
 >log("in catch") : void

@@ -23,13 +23,13 @@ protectedClassPropertyAccessibleWithinSubclass2.ts(94,4): error TS2445: Property
 
 ==== protectedClassPropertyAccessibleWithinSubclass2.ts (21 errors) ====
     class Base {
-        protected x: string;
+        protected x!: string;
         method() {
-            var b: Base;
-            var d1: Derived1;
-            var d2: Derived2;
-            var d3: Derived3;
-            var d4: Derived4;
+            var b: Base = undefined as any;
+            var d1: Derived1 = undefined as any;
+            var d2: Derived2 = undefined as any;
+            var d3: Derived3 = undefined as any;
+            var d4: Derived4 = undefined as any;
     
             b.x;            // OK, accessed within their declaring class
             d1.x;           // OK, accessed within their declaring class
@@ -43,11 +43,11 @@ protectedClassPropertyAccessibleWithinSubclass2.ts(94,4): error TS2445: Property
     
     class Derived1 extends Base {
         method1() {
-            var b: Base;
-            var d1: Derived1;
-            var d2: Derived2;
-            var d3: Derived3;
-            var d4: Derived4;
+            var b: Base = undefined as any;
+            var d1: Derived1 = undefined as any;
+            var d2: Derived2 = undefined as any;
+            var d3: Derived3 = undefined as any;
+            var d4: Derived4 = undefined as any;
     
             b.x;            // Error, isn't accessed through an instance of the enclosing class
               ~
@@ -67,11 +67,11 @@ protectedClassPropertyAccessibleWithinSubclass2.ts(94,4): error TS2445: Property
     
     class Derived2 extends Base {
         method2() {
-            var b: Base;
-            var d1: Derived1;
-            var d2: Derived2;
-            var d3: Derived3;
-            var d4: Derived4;
+            var b: Base = undefined as any;
+            var d1: Derived1 = undefined as any;
+            var d2: Derived2 = undefined as any;
+            var d3: Derived3 = undefined as any;
+            var d4: Derived4 = undefined as any;
     
             b.x;            // Error, isn't accessed through an instance of the enclosing class
               ~
@@ -88,13 +88,13 @@ protectedClassPropertyAccessibleWithinSubclass2.ts(94,4): error TS2445: Property
     }
     
     class Derived3 extends Derived1 {
-        protected x: string;
+        protected x!: string;
         method3() {
-            var b: Base;
-            var d1: Derived1;
-            var d2: Derived2;
-            var d3: Derived3;
-            var d4: Derived4;
+            var b: Base = undefined as any;
+            var d1: Derived1 = undefined as any;
+            var d2: Derived2 = undefined as any;
+            var d3: Derived3 = undefined as any;
+            var d4: Derived4 = undefined as any;
     
             b.x;            // Error, isn't accessed through an instance of the enclosing class
               ~
@@ -114,11 +114,11 @@ protectedClassPropertyAccessibleWithinSubclass2.ts(94,4): error TS2445: Property
     
     class Derived4 extends Derived2 {
         method4() {
-            var b: Base;
-            var d1: Derived1;
-            var d2: Derived2;
-            var d3: Derived3;
-            var d4: Derived4;
+            var b: Base = undefined as any;
+            var d1: Derived1 = undefined as any;
+            var d2: Derived2 = undefined as any;
+            var d3: Derived3 = undefined as any;
+            var d4: Derived4 = undefined as any;
     
             b.x;            // Error, isn't accessed through an instance of the enclosing class
               ~
@@ -137,11 +137,11 @@ protectedClassPropertyAccessibleWithinSubclass2.ts(94,4): error TS2445: Property
     }
     
     
-    var b: Base;
-    var d1: Derived1;
-    var d2: Derived2;
-    var d3: Derived3;
-    var d4: Derived4;
+    var b: Base = undefined as any;
+    var d1: Derived1 = undefined as any;
+    var d2: Derived2 = undefined as any;
+    var d3: Derived3 = undefined as any;
+    var d4: Derived4 = undefined as any;
     
     b.x;                    // Error, neither within their declaring class nor classes derived from their declaring class
       ~

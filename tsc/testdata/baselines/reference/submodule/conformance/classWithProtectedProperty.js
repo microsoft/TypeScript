@@ -30,6 +30,7 @@ class D extends C {
 }
 
 //// [classWithProtectedProperty.js]
+"use strict";
 // accessing any protected outside the class is an error
 class C {
     x;

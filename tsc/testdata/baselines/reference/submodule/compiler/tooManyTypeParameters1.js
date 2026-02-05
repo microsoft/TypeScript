@@ -14,6 +14,7 @@ interface I<T> {}
 var i: I<number,number>;
 
 //// [tooManyTypeParameters1.js]
+"use strict";
 function f() { }
 f();
 var x = () => { };

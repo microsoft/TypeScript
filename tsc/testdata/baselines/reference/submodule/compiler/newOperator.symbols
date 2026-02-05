@@ -11,11 +11,11 @@ var i = new ifc();
 // Parens are optional
 var x = new Date;
 >x : Symbol(x, Decl(newOperator.ts, 5, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var y = new Date();
 >y : Symbol(y, Decl(newOperator.ts, 6, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 // Target is not a class or var, good error
 var t1 = new 53();
@@ -29,7 +29,7 @@ new string;
 // Use in LHS of expression?
 (new Date()).toString();
 >(new Date()).toString : Symbol(Date.toString, Decl(lib.es5.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toString : Symbol(Date.toString, Decl(lib.es5.d.ts, --, --))
 
 // Various spacing
@@ -53,11 +53,11 @@ var f = new q();
 // not legal
 var t5 = new new Date;
 >t5 : Symbol(t5, Decl(newOperator.ts, 30, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 // Can be an expression
 new String;
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 
 // Error on union
 declare const union: { a: string } | { b: string }
@@ -89,11 +89,11 @@ declare const ctorUnion2: (new <T extends number>(a: T) => void) | (new <T>(a: s
 new ctorUnion2("");
 >ctorUnion2 : Symbol(ctorUnion2, Decl(newOperator.ts, 44, 13))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(newOperator.ts, 45, 19))
 
     export class T {
->T : Symbol(T, Decl(newOperator.ts, 47, 10))
+>T : Symbol(T, Decl(newOperator.ts, 47, 13))
 
         x: number;
 >x : Symbol(T.x, Decl(newOperator.ts, 48, 20))
@@ -106,12 +106,12 @@ class S {
     public get xs(): M.T[] {
 >xs : Symbol(S.xs, Decl(newOperator.ts, 53, 9))
 >M : Symbol(M, Decl(newOperator.ts, 45, 19))
->T : Symbol(M.T, Decl(newOperator.ts, 47, 10))
+>T : Symbol(M.T, Decl(newOperator.ts, 47, 13))
 
         return new M.T[];
->M.T : Symbol(M.T, Decl(newOperator.ts, 47, 10))
+>M.T : Symbol(M.T, Decl(newOperator.ts, 47, 13))
 >M : Symbol(M, Decl(newOperator.ts, 45, 19))
->T : Symbol(M.T, Decl(newOperator.ts, 47, 10))
+>T : Symbol(M.T, Decl(newOperator.ts, 47, 13))
     }
 }
 

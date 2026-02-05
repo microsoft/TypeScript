@@ -145,6 +145,7 @@ function f8(m: Message) {
 }
 
 //// [discriminatedUnionTypes1.js]
+"use strict";
 function area1(s) {
     if (s.kind === "square") {
         return s.size * s.size;

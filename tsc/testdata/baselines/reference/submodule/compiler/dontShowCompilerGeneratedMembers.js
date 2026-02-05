@@ -7,6 +7,7 @@ var f: {
 };
 
 //// [dontShowCompilerGeneratedMembers.js]
+"use strict";
 var f;
 -;
 ;

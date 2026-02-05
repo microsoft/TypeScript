@@ -55,6 +55,7 @@ namespace Consts2 {
 
 
 //// [stringLiteralTypesOverloads01.js]
+"use strict";
 function getFalsyPrimitive(x) {
     if (x === "string") {
         return "";

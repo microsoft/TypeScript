@@ -34,6 +34,7 @@ var r7 = d2.thing('');
 var r8 = D2.other(1);
 
 //// [classExtendingClass.js]
+"use strict";
 class C {
     foo;
     thing() { }

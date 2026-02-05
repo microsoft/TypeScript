@@ -18,7 +18,7 @@ var c: void = x;
 >x : string
 
 var d: typeof undefined = x;
->d : any
+>d : undefined
 >undefined : undefined
 >x : string
 
@@ -47,7 +47,7 @@ var g2: { 0: number } = 1;
 >0 : number
 >1 : 1
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : typeof M
 >x : number
 >1 : 1

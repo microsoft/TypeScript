@@ -5,4 +5,5 @@ declare var React: any;
 <foo data/>
 
 //// [jsxEmitAttributeWithPreserve.jsx]
+"use strict";
 <foo data/>;

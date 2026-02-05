@@ -12,6 +12,7 @@ async function foo() {
 //// [foo.js]
 export default "./foo";
 //// [index.js]
+"use strict";
 async function foo() {
     return await import((await import("./foo")).default);
 }

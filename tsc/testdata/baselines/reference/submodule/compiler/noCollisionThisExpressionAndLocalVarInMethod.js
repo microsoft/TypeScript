@@ -22,6 +22,7 @@ class a {
 }
 
 //// [noCollisionThisExpressionAndLocalVarInMethod.js]
+"use strict";
 var _this = 2;
 class a {
     method1() {

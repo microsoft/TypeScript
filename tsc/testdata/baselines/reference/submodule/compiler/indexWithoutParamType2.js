@@ -7,6 +7,7 @@ class C {
 }
 
 //// [indexWithoutParamType2.js]
+"use strict";
 class C {
     // Used to be indexer, now it is a computed property
     [x];

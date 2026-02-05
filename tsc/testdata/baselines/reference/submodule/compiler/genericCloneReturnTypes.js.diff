@@ -1,8 +1,8 @@
 --- old.genericCloneReturnTypes.js
 +++ new.genericCloneReturnTypes.js
-@@= skipped -28, +28 lines =@@
-
+@@= skipped -29, +29 lines =@@
  //// [genericCloneReturnTypes.js]
+ "use strict";
  class Bar {
 +    size;
 +    t;

@@ -1,0 +1,17 @@
+ES5For-of17.ts(3,14): error TS7022: 'v' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+ES5For-of17.ts(3,20): error TS2448: Block-scoped variable 'v' used before its declaration.
+
+
+==== ES5For-of17.ts (2 errors) ====
+    for (let v of []) {
+        v;
+        for (let v of [v]) {
+                 ~
+!!! error TS7022: 'v' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                       ~
+!!! error TS2448: Block-scoped variable 'v' used before its declaration.
+!!! related TS2728 ES5For-of17.ts:3:14: 'v' is declared here.
+            var x = v;
+            v++;
+        }
+    }

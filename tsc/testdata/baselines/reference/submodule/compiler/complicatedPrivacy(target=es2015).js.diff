@@ -1,0 +1,10 @@
+--- old.complicatedPrivacy(target=es2015).js
++++ new.complicatedPrivacy(target=es2015).js
+@@= skipped -150, +150 lines =@@
+     class C1 {
+     }
+     class C5 {
++        x;
+     }
+     m1.C5 = C5;
+ })(m1 || (m1 = {}));

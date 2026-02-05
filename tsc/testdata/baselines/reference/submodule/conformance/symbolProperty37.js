@@ -7,3 +7,4 @@ interface I {
 }
 
 //// [symbolProperty37.js]
+"use strict";

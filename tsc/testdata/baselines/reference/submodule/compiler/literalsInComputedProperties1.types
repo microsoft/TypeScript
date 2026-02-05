@@ -25,35 +25,35 @@ let x = {
 }
 x[1].toExponential();
 >x[1].toExponential() : string
->x[1].toExponential : (fractionDigits?: number) => string
+>x[1].toExponential : (fractionDigits?: number | undefined) => string
 >x[1] : number
 >x : { 1: number; 2: number; "3": number; "4": number; }
 >1 : 1
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
 x[2].toExponential();
 >x[2].toExponential() : string
->x[2].toExponential : (fractionDigits?: number) => string
+>x[2].toExponential : (fractionDigits?: number | undefined) => string
 >x[2] : number
 >x : { 1: number; 2: number; "3": number; "4": number; }
 >2 : 2
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
 x[3].toExponential();
 >x[3].toExponential() : string
->x[3].toExponential : (fractionDigits?: number) => string
+>x[3].toExponential : (fractionDigits?: number | undefined) => string
 >x[3] : number
 >x : { 1: number; 2: number; "3": number; "4": number; }
 >3 : 3
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
 x[4].toExponential();
 >x[4].toExponential() : string
->x[4].toExponential : (fractionDigits?: number) => string
+>x[4].toExponential : (fractionDigits?: number | undefined) => string
 >x[4] : number
 >x : { 1: number; 2: number; "3": number; "4": number; }
 >4 : 4
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
 interface A {
     1:number;
@@ -71,93 +71,93 @@ interface A {
 >"4" : "4"
 }
 
-let y:A;
+declare let y:A;
 >y : A
 
 y[1].toExponential();
 >y[1].toExponential() : string
->y[1].toExponential : (fractionDigits?: number) => string
+>y[1].toExponential : (fractionDigits?: number | undefined) => string
 >y[1] : number
 >y : A
 >1 : 1
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
 y[2].toExponential();
 >y[2].toExponential() : string
->y[2].toExponential : (fractionDigits?: number) => string
+>y[2].toExponential : (fractionDigits?: number | undefined) => string
 >y[2] : number
 >y : A
 >2 : 2
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
 y[3].toExponential();
 >y[3].toExponential() : string
->y[3].toExponential : (fractionDigits?: number) => string
+>y[3].toExponential : (fractionDigits?: number | undefined) => string
 >y[3] : number
 >y : A
 >3 : 3
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
 y[4].toExponential();
 >y[4].toExponential() : string
->y[4].toExponential : (fractionDigits?: number) => string
+>y[4].toExponential : (fractionDigits?: number | undefined) => string
 >y[4] : number
 >y : A
 >4 : 4
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
 class C {
 >C : C
 
-    1:number;
+    1!:number;
 >1 : number
 
-    [2]:number;
+    [2]!:number;
 >[2] : number
 >2 : 2
 
     "3":number;
 >"3" : number
 
-    ["4"]:number;
+    ["4"]!:number;
 >["4"] : number
 >"4" : "4"
 }
 
-let z:C;
+declare let z:C;
 >z : C
 
 z[1].toExponential();
 >z[1].toExponential() : string
->z[1].toExponential : (fractionDigits?: number) => string
+>z[1].toExponential : (fractionDigits?: number | undefined) => string
 >z[1] : number
 >z : C
 >1 : 1
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
 z[2].toExponential();
 >z[2].toExponential() : string
->z[2].toExponential : (fractionDigits?: number) => string
+>z[2].toExponential : (fractionDigits?: number | undefined) => string
 >z[2] : number
 >z : C
 >2 : 2
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
 z[3].toExponential();
 >z[3].toExponential() : string
->z[3].toExponential : (fractionDigits?: number) => string
+>z[3].toExponential : (fractionDigits?: number | undefined) => string
 >z[3] : number
 >z : C
 >3 : 3
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
 z[4].toExponential();
 >z[4].toExponential() : string
->z[4].toExponential : (fractionDigits?: number) => string
+>z[4].toExponential : (fractionDigits?: number | undefined) => string
 >z[4] : number
 >z : C
 >4 : 4
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
 enum X {
 >X : X

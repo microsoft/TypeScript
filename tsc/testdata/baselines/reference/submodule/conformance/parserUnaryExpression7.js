@@ -4,4 +4,5 @@
 ++ new Foo();
 
 //// [parserUnaryExpression7.js]
+"use strict";
 ++new Foo();

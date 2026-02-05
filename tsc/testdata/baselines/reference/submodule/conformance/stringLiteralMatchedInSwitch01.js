@@ -15,6 +15,7 @@ switch (foo) {
 }
 
 //// [stringLiteralMatchedInSwitch01.js]
+"use strict";
 var foo;
 switch (foo) {
     case "a":

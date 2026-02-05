@@ -2,7 +2,7 @@
 
 //// [interfaceDeclaration2.ts]
 interface I1 { }
-module I1 { }
+namespace I1 { }
 
 interface I2 { }
 class I2 { }
@@ -16,6 +16,7 @@ var I4:number;
 
 
 //// [interfaceDeclaration2.js]
+"use strict";
 class I2 {
 }
 function I3() { }

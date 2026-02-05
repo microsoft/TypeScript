@@ -1,6 +1,6 @@
 --- old.declFileTypeofFunction.js
 +++ new.declFileTypeofFunction.js
-@@= skipped -69, +69 lines =@@
+@@= skipped -70, +70 lines =@@
  declare function foo(): typeof foo;
  declare var foo1: typeof foo;
  declare var foo2: typeof foo;

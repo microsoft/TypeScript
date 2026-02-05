@@ -9,6 +9,7 @@ var v = {
 }
 
 //// [computedPropertyNames7_ES6.js]
+"use strict";
 var E;
 (function (E) {
     E[E["member"] = 0] = "member";

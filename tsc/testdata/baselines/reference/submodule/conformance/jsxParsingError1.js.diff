@@ -1,6 +1,6 @@
 --- old.jsxParsingError1.js
 +++ new.jsxParsingError1.js
-@@= skipped -17, +17 lines =@@
+@@= skipped -18, +18 lines =@@
  // This should be a parse error
  const class1 = "foo";
  const class2 = "bar";

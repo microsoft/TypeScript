@@ -3,11 +3,11 @@
 === innerTypeArgumentInference.ts ===
 interface Generator<T> { (): T; }
 function Generate<U>(func: Generator<U>): U {
->Generate : <U>(func: Generator<U>) => U
->func : Generator<U>
+>Generate : <U>(func: Generator<U, any, any>) => U
+>func : Generator<U, any, any>
 
     return Generate(func);
 >Generate(func) : U
->Generate : <U>(func: Generator<U>) => U
->func : Generator<U>
+>Generate : <U>(func: Generator<U, any, any>) => U
+>func : Generator<U, any, any>
 }

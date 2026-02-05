@@ -1,0 +1,17 @@
+metadataOfClassFromModule.ts(8,17): error TS2564: Property 'leftLeg' has no initializer and is not definitely assigned in the constructor.
+
+
+==== metadataOfClassFromModule.ts (1 errors) ====
+    namespace MyModule {
+    
+        export function inject(target: any, key: string): void { }
+    
+        export class Leg { }
+    
+        export class Person {
+            @inject leftLeg: Leg;
+                    ~~~~~~~
+!!! error TS2564: Property 'leftLeg' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+    }

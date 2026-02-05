@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/statements/for-inStatements/for-inStatementsArrayErrors.ts] ////
 
 === for-inStatementsArrayErrors.ts ===
-let a: Date[];
+declare let a: Date[];
 >a : Date[]
 
 for (let x in a) {

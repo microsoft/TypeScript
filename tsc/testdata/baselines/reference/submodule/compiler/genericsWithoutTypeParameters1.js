@@ -36,6 +36,7 @@ function f<T>(x: T): A {
 }
 
 //// [genericsWithoutTypeParameters1.js]
+"use strict";
 class C {
     foo() { return null; }
 }

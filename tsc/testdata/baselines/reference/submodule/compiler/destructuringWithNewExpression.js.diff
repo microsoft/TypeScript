@@ -1,8 +1,8 @@
 --- old.destructuringWithNewExpression.js
 +++ new.destructuringWithNewExpression.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
  //// [destructuringWithNewExpression.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.x = 0;

@@ -1,5 +1,5 @@
 module_augmentExistingVariable.ts(1,5): error TS2300: Duplicate identifier 'console'.
-module_augmentExistingVariable.ts(3,8): error TS2300: Duplicate identifier 'console'.
+module_augmentExistingVariable.ts(3,11): error TS2300: Duplicate identifier 'console'.
 
 
 ==== module_augmentExistingVariable.ts (2 errors) ====
@@ -7,8 +7,8 @@ module_augmentExistingVariable.ts(3,8): error TS2300: Duplicate identifier 'cons
         ~~~~~~~
 !!! error TS2300: Duplicate identifier 'console'.
     
-    module console {
-           ~~~~~~~
+    namespace console {
+              ~~~~~~~
 !!! error TS2300: Duplicate identifier 'console'.
         export var x = 2;
     }

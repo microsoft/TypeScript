@@ -3,7 +3,7 @@
 === letDeclarations-useBeforeDefinition.ts ===
 {
     l1;
->l1 : any
+>l1 : undefined
 
     let l1;
 >l1 : any

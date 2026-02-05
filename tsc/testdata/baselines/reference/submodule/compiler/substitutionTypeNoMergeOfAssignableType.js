@@ -28,6 +28,7 @@ interface Entry {
  
 
 //// [substitutionTypeNoMergeOfAssignableType.js]
+"use strict";
 function makeEntityStore(config) {
     return {};
 }

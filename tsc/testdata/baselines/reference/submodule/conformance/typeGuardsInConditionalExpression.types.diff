@@ -67,8 +67,8 @@
  >10 : 10
  }
  function foo8(x: number | string | boolean) {
-->foo8 : (x: number | string | boolean) => boolean
-+>foo8 : (x: string | number | boolean) => boolean
+->foo8 : (x: number | string | boolean) => 0 | boolean
++>foo8 : (x: string | number | boolean) => 0 | boolean
  >x : string | number | boolean
 
      var b: number | boolean;
@@ -76,8 +76,8 @@
  >10 : 10
  }
  function foo9(x: number | string) {
-->foo9 : (x: number | string) => boolean
-+>foo9 : (x: string | number) => boolean
+->foo9 : (x: number | string) => 0 | boolean
++>foo9 : (x: string | number) => 0 | boolean
  >x : string | number
 
      var y = 10;
@@ -85,26 +85,45 @@
  >10 : 10
  }
  function foo10(x: number | string | boolean) {
-->foo10 : (x: number | string | boolean) => string
-+>foo10 : (x: string | number | boolean) => string
+->foo10 : (x: number | string | boolean) => string | 0 | false
++>foo10 : (x: string | number | boolean) => string | 0 | false
  >x : string | number | boolean
 
      // Mixing typeguards
-@@= skipped -39, +39 lines =@@
- >toString : (radix?: number) => string
+@@= skipped -34, +34 lines =@@
+
+         && x.toString()); // x is number
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
  }
  function foo11(x: number | string | boolean) {
-->foo11 : (x: number | string | boolean) => string | number
-+>foo11 : (x: string | number | boolean) => string | number
+->foo11 : (x: number | string | boolean) => string | number | false
++>foo11 : (x: string | number | boolean) => string | number | false
  >x : string | number | boolean
 
      // Mixing typeguards
-@@= skipped -43, +43 lines =@@
+@@= skipped -48, +48 lines =@@
  >x : number
  }
  function foo12(x: number | string | boolean) {
-->foo12 : (x: number | string | boolean) => number
-+>foo12 : (x: string | number | boolean) => number
+->foo12 : (x: number | string | boolean) => number | false
++>foo12 : (x: string | number | boolean) => number | false
  >x : string | number | boolean
 
      // Mixing typeguards
+@@= skipped -23, +23 lines =@@
+ >10 : 10
+ >x.toString().length : number
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ >length : number
+
+         : ((b = x) // x is number | boolean

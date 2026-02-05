@@ -18,7 +18,7 @@ A.B = class {
         /** @type {string[]} */
         var x = [];
 >x : string[]
->[] : undefined[]
+>[] : never[]
 
         /** @type {number[]} */
         var y;

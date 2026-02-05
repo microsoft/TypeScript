@@ -7,3 +7,4 @@ interface IBar implements IFoo {
 }
 
 //// [interfaceWithImplements1.js]
+"use strict";

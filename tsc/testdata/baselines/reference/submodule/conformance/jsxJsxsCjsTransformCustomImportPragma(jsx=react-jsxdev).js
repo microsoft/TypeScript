@@ -26,8 +26,8 @@ export {};
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
-const _jsxFileName = "preact.tsx";
-/// <reference path="react16.d.ts" />
+const _jsxFileName = "/.src/preact.tsx";
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxImportSource preact */
 const a = jsx_dev_runtime_1.jsxDEV(jsx_dev_runtime_1.Fragment, { children: [
         jsx_dev_runtime_1.jsxDEV("p", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 3 }, this),
@@ -38,8 +38,8 @@ const a = jsx_dev_runtime_1.jsxDEV(jsx_dev_runtime_1.Fragment, { children: [
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-const _jsxFileName = "react.tsx";
-/// <reference path="react16.d.ts" />
+const _jsxFileName = "/.src/react.tsx";
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxImportSource react */
 require("./preact");
 const a = jsx_dev_runtime_1.jsxDEV(jsx_dev_runtime_1.Fragment, { children: [

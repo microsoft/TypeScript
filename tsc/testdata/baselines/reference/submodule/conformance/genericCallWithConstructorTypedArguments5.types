@@ -16,7 +16,7 @@ function foo<T, U>(arg: { cb: new(t: T) => U }) {
 >cb : new (t: T) => U
 }
 
-var arg: { cb: new<T>(x: T) => string };
+declare var arg: { cb: new<T>(x: T) => string };
 >arg : { cb: new <T>(x: T) => string; }
 >cb : new <T>(x: T) => string
 >x : T
@@ -28,7 +28,7 @@ var r = foo(arg); // {}
 >arg : { cb: new <T>(x: T) => string; }
 
 // more args not allowed
-var arg2: { cb: new <T>(x: T, y: T) => string };
+declare var arg2: { cb: new <T>(x: T, y: T) => string };
 >arg2 : { cb: new <T>(x: T, y: T) => string; }
 >cb : new <T>(x: T, y: T) => string
 >x : T
@@ -40,7 +40,7 @@ var r2 = foo(arg2); // error
 >foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
 >arg2 : { cb: new <T>(x: T, y: T) => string; }
 
-var arg3: { cb: new (x: string, y: number) => string };
+declare var arg3: { cb: new (x: string, y: number) => string };
 >arg3 : { cb: new (x: string, y: number) => string; }
 >cb : new (x: string, y: number) => string
 >x : string
@@ -73,7 +73,7 @@ var r4 = foo(arg); // {}
 >foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
 >arg : { cb: new <T>(x: T) => string; }
 
-var arg4: { cb: new (x: string) => string };
+declare var arg4: { cb: new (x: string) => string };
 >arg4 : { cb: new (x: string) => string; }
 >cb : new (x: string) => string
 >x : string
@@ -84,7 +84,7 @@ var r6 = foo(arg4); // string
 >foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
 >arg4 : { cb: new (x: string) => string; }
 
-var arg5: { cb: new () => string };
+declare var arg5: { cb: new () => string };
 >arg5 : { cb: new () => string; }
 >cb : new () => string
 

@@ -22,8 +22,8 @@ interface T3 {
     [c1]: string;
 }
 
-let t1: T1;
-let t2: T2;
+declare let t1: T1;
+declare let t2: T2;
 t1 = t2;
 t2 = t1;
 
@@ -67,8 +67,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ObjectLiteralVisibility = exports.ClassMemberVisibility = void 0;
 const c0 = "1";
 const c1 = 1;
-let t1;
-let t2;
 t1 = t2;
 t2 = t1;
 const x = Symbol();

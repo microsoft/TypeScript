@@ -24,6 +24,7 @@ var f4: {
 } = (x) => x;
 
 //// [functionLiteralForOverloads.js]
+"use strict";
 // basic uses of function literals with overloads
 var f = (x) => x;
 var f2 = (x) => x;

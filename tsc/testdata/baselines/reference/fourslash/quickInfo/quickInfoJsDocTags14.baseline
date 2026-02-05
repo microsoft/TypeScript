@@ -13,7 +13,7 @@
 //          ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | function fn(options: any, callback?: any): void
+// | function fn(options: any, callback?: null): void
 // | ```
 // | 
 // | 
@@ -39,7 +39,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction fn(options: any, callback?: any): void\n```\n\n\n*@param* `options` — the args object\n\n\n*@param* `callback` — the callback function\n\n\n*@returns*"
+        "value": "```tsx\nfunction fn(options: any, callback?: null): void\n```\n\n\n*@param* `options` — the args object\n\n\n*@param* `callback` — the callback function\n\n\n*@returns*"
       },
       "range": {
         "start": {

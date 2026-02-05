@@ -6,5 +6,6 @@ function f1<T>() {
 }
 
 //// [unusedTypeParameterInFunction1.js]
+"use strict";
 function f1() {
 }

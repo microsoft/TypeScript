@@ -1,14 +1,201 @@
 --- old.staticAnonymousTypeNotReferencingTypeParameter.types
 +++ new.staticAnonymousTypeNotReferencingTypeParameter.types
-@@= skipped -589, +589 lines =@@
+@@= skipped -34, +34 lines =@@
+ >ListWrapper2 : typeof ListWrapper2
+ >array : T[]
+ >array.slice(0) : T[]
+->array.slice : (start?: number, end?: number) => T[]
++>array.slice : (start?: number | undefined, end?: number | undefined) => T[]
+ >array : T[]
+->slice : (start?: number, end?: number) => T[]
++>slice : (start?: number | undefined, end?: number | undefined) => T[]
+ >0 : 0
+
+   static reversed<T>(dit: typeof ListWrapper2, array: T[]): T[] {
+@@= skipped -112, +112 lines =@@
+ >ListWrapper : typeof ListWrapper
+ >array : T[]
+ >array.slice(0) : T[]
+->array.slice : (start?: number, end?: number) => T[]
++>array.slice : (start?: number | undefined, end?: number | undefined) => T[]
+ >array : T[]
+->slice : (start?: number, end?: number) => T[]
++>slice : (start?: number | undefined, end?: number | undefined) => T[]
+ >0 : 0
+
+   static forEachWithIndex<T>(dit: typeof ListWrapper, array: T[], fn: (t: T, n: number) => void) {
+@@= skipped -85, +85 lines =@@
+
+     return array.indexOf(value, startIndex);
+ >array.indexOf(value, startIndex) : number
+->array.indexOf : (searchElement: T, fromIndex?: number) => number
++>array.indexOf : (searchElement: T, fromIndex?: number | undefined) => number
+ >array : T[]
+->indexOf : (searchElement: T, fromIndex?: number) => number
++>indexOf : (searchElement: T, fromIndex?: number | undefined) => number
+ >value : T
+ >startIndex : number
+   }
+@@= skipped -14, +14 lines =@@
+ >el : T
+ >list.indexOf(el) !== -1 : boolean
+ >list.indexOf(el) : number
+->list.indexOf : (searchElement: T, fromIndex?: number) => number
++>list.indexOf : (searchElement: T, fromIndex?: number | undefined) => number
+ >list : T[]
+->indexOf : (searchElement: T, fromIndex?: number) => number
++>indexOf : (searchElement: T, fromIndex?: number | undefined) => number
+ >el : T
+ >-1 : -1
+ >1 : 1
+@@= skipped -73, +73 lines =@@
+ >index : number
+ >value : T
+ >list.splice(index, 0, value) : T[]
+->list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
++>list.splice : { (start: number, deleteCount?: number | undefined): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+ >list : T[]
+->splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
++>splice : { (start: number, deleteCount?: number | undefined): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+ >index : number
+ >0 : 0
+ >value : T
+@@= skipped -22, +22 lines =@@
+
+     list.splice(index, 1);
+ >list.splice(index, 1) : T[]
+->list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
++>list.splice : { (start: number, deleteCount?: number | undefined): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+ >list : T[]
+->splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
++>splice : { (start: number, deleteCount?: number | undefined): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+ >index : number
+ >1 : 1
+
+@@= skipped -30, +30 lines =@@
+       var index = list.indexOf(items[i]);
+ >index : number
+ >list.indexOf(items[i]) : number
+->list.indexOf : (searchElement: T, fromIndex?: number) => number
++>list.indexOf : (searchElement: T, fromIndex?: number | undefined) => number
+ >list : T[]
+->indexOf : (searchElement: T, fromIndex?: number) => number
++>indexOf : (searchElement: T, fromIndex?: number | undefined) => number
+ >items[i] : T
+ >items : T[]
+ >i : number
+
+       list.splice(index, 1);
+ >list.splice(index, 1) : T[]
+->list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
++>list.splice : { (start: number, deleteCount?: number | undefined): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+ >list : T[]
+->splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
++>splice : { (start: number, deleteCount?: number | undefined): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+ >index : number
+ >1 : 1
+     }
+@@= skipped -26, +26 lines =@@
+     var index = list.indexOf(el);
+ >index : number
+ >list.indexOf(el) : number
+->list.indexOf : (searchElement: T, fromIndex?: number) => number
++>list.indexOf : (searchElement: T, fromIndex?: number | undefined) => number
+ >list : T[]
+->indexOf : (searchElement: T, fromIndex?: number) => number
++>indexOf : (searchElement: T, fromIndex?: number | undefined) => number
+ >el : T
+
+     if (index > -1) {
+@@= skipped -13, +13 lines =@@
+
+       list.splice(index, 1);
+ >list.splice(index, 1) : T[]
+->list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
++>list.splice : { (start: number, deleteCount?: number | undefined): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+ >list : T[]
+->splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
++>splice : { (start: number, deleteCount?: number | undefined): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+ >index : number
+ >1 : 1
+
+@@= skipped -46, +46 lines =@@
+
+     list.fill(value, start, end === null ? list.length : end);
+ >list.fill(value, start, end === null ? list.length : end) : void
+->list.fill : { (value: any, start?: number, end?: number): any[]; (value: any, start: number, end: number): void; }
++>list.fill : { (value: any, start?: number | undefined, end?: number | undefined): any[]; (value: any, start: number, end: number): void; }
+ >list : any[]
+->fill : { (value: any, start?: number, end?: number): any[]; (value: any, start: number, end: number): void; }
++>fill : { (value: any, start?: number | undefined, end?: number | undefined): any[]; (value: any, start: number, end: number): void; }
+ >value : any
+ >start : number
+ >end === null ? list.length : end : number
+@@= skipped -65, +65 lines =@@
+
+     return l.slice(from, to === null ? undefined : to);
+ >l.slice(from, to === null ? undefined : to) : T[]
+->l.slice : (start?: number, end?: number) => T[]
++>l.slice : (start?: number | undefined, end?: number | undefined) => T[]
+ >l : T[]
+->slice : (start?: number, end?: number) => T[]
++>slice : (start?: number | undefined, end?: number | undefined) => T[]
+ >from : number
+ >to === null ? undefined : to : number | undefined
+ >to === null : boolean
+@@= skipped -18, +18 lines =@@
+ >from : number
+ >length : number
+ >l.splice(from, length) : T[]
+->l.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
++>l.splice : { (start: number, deleteCount?: number | undefined): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+ >l : T[]
+->splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
++>splice : { (start: number, deleteCount?: number | undefined): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+ >from : number
+ >length : number
+
+   static sort<T>(dit: typeof ListWrapper, l: T[], compareFn?: (a: T, b: T) => number) {
+->sort : <T>(dit: typeof ListWrapper, l: T[], compareFn?: (a: T, b: T) => number) => void
++>sort : <T>(dit: typeof ListWrapper, l: T[], compareFn?: ((a: T, b: T) => number) | undefined) => void
+ >dit : typeof ListWrapper
+ >ListWrapper : typeof ListWrapper
+ >l : T[]
+@@= skipped -17, +17 lines =@@
+
+     if (isPresent(compareFn)) {
+ >isPresent(compareFn) : boolean
+->isPresent : <T_1>(compareFn?: (a: T_1, b: T_1) => number) => boolean
++>isPresent : <T_1>(compareFn?: ((a: T_1, b: T_1) => number) | undefined) => boolean
+ >compareFn : ((a: T, b: T) => number) | undefined
+
+       l.sort(compareFn);
+@@= skipped -34, +34 lines =@@
  >ListWrapper : typeof ListWrapper
  >l : T[]
  >JSON.stringify(l) : string
 ->JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
-+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
++>JSON.stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
  >JSON : JSON
 ->stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
-+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
++>stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
  >l : T[]
 
    static maximum<T>(dit: typeof ListWrapper, list: T[], predicate: (t: T) => number): T {
+@@= skipped -98, +98 lines =@@
+ >x : any
+
+ declare function isPresent<T>(compareFn?: (a: T, b: T) => number): boolean;
+->isPresent : <T>(compareFn?: (a: T, b: T) => number) => boolean
++>isPresent : <T>(compareFn?: ((a: T, b: T) => number) | undefined) => boolean
+ >compareFn : ((a: T, b: T) => number) | undefined
+ >a : T
+ >b : T
+
+ interface Array<T> {
+ 	fill(value: any, start: number, end: number): void;
+->fill : { (value: T, start?: number, end?: number): this; (value: any, start: number, end: number): void; }
++>fill : { (value: T, start?: number | undefined, end?: number | undefined): this; (value: any, start: number, end: number): void; }
+ >value : any
+ >start : number
+ >end : number

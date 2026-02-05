@@ -4,4 +4,5 @@
 var v = { foo() { }; a: b; get baz() { }; }
 
 //// [objectLiteralWithSemicolons5.js]
+"use strict";
 var v = { foo() { }, a: b, get baz() { }, };

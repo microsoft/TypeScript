@@ -1,8 +1,8 @@
 --- old.constructorParametersInVariableDeclarations.js
 +++ new.constructorParametersInVariableDeclarations.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [constructorParametersInVariableDeclarations.js]
+ "use strict";
  class A {
 +    a = x;
 +    b = { p: x };

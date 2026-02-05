@@ -1,8 +1,11 @@
+deleteOperatorWithStringType.ts(8,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 deleteOperatorWithStringType.ts(18,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithStringType.ts(19,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithStringType.ts(22,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithStringType.ts(23,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithStringType.ts(24,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(27,31): error TS2790: The operand of a 'delete' operator must be optional.
+deleteOperatorWithStringType.ts(28,31): error TS2790: The operand of a 'delete' operator must be optional.
 deleteOperatorWithStringType.ts(30,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithStringType.ts(31,32): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithStringType.ts(32,33): error TS2703: The operand of a 'delete' operator must be a property reference.
@@ -16,20 +19,23 @@ deleteOperatorWithStringType.ts(40,8): error TS2703: The operand of a 'delete' o
 deleteOperatorWithStringType.ts(41,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithStringType.ts(42,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithStringType.ts(43,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(44,8): error TS2790: The operand of a 'delete' operator must be optional.
 
 
-==== deleteOperatorWithStringType.ts (18 errors) ====
+==== deleteOperatorWithStringType.ts (22 errors) ====
     // delete  operator on string type
-    var STRING: string;
+    declare var STRING: string;
     var STRING1: string[] = ["", "abc"];
     
     function foo(): string { return "abc"; }
     
     class A {
         public a: string;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
         static foo() { return ""; }
     }
-    module M {
+    namespace M {
         export var n: string;
     }
     
@@ -56,7 +62,11 @@ deleteOperatorWithStringType.ts(43,8): error TS2703: The operand of a 'delete' o
     
     // string type expressions
     var ResultIsBoolean6 = delete objA.a;
+                                  ~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
     var ResultIsBoolean7 = delete M.n;
+                                  ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
     var ResultIsBoolean8 = delete STRING1[0];
     var ResultIsBoolean9 = delete foo();
                                   ~~~~~
@@ -99,3 +109,5 @@ deleteOperatorWithStringType.ts(43,8): error TS2703: The operand of a 'delete' o
            ~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     delete objA.a,M.n;
+           ~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.

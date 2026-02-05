@@ -1,6 +1,6 @@
 --- old.typeParameterExtendingUnion2.js
 +++ new.typeParameterExtendingUnion2.js
-@@= skipped -18, +18 lines =@@
+@@= skipped -19, +19 lines =@@
      run() { }
  }
  class Cat extends Animal {

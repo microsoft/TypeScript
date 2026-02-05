@@ -61,6 +61,7 @@ function f7() {
 
 
 //// [controlFlowDestructuringDeclaration.js]
+"use strict";
 function f1() {
     let x = 1;
     x;

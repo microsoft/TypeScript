@@ -1,0 +1,21 @@
+--- old.FunctionDeclaration3_es6.errors.txt
++++ new.FunctionDeclaration3_es6.errors.txt
+@@= skipped -0, +0 lines =@@
+-FunctionDeclaration3_es6.ts(1,12): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+ FunctionDeclaration3_es6.ts(1,12): error TS7022: 'yield' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+-FunctionDeclaration3_es6.ts(1,20): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+ FunctionDeclaration3_es6.ts(1,20): error TS2372: Parameter 'yield' cannot reference itself.
+
+
+-==== FunctionDeclaration3_es6.ts (4 errors) ====
++==== FunctionDeclaration3_es6.ts (2 errors) ====
+     function f(yield = yield) {
+-               ~~~~~
+-!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+                ~~~~~~~~~~~~~
+ !!! error TS7022: 'yield' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+-                       ~~~~~
+-!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+                        ~~~~~
+ !!! error TS2372: Parameter 'yield' cannot reference itself.
+     }

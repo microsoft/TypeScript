@@ -21,7 +21,7 @@ classPropertyAsPrivate.ts(23,3): error TS2341: Property 'foo' is private and onl
         private static foo() { }
     }
     
-    var c: C;
+    declare var c: C;
     // all errors
     c.x;
       ~

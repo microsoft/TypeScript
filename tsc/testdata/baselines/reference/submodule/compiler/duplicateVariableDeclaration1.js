@@ -5,5 +5,6 @@ var v
 var v
 
 //// [duplicateVariableDeclaration1.js]
+"use strict";
 var v;
 var v;

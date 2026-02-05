@@ -9,6 +9,7 @@ function foo3(a?:string, ...b:number[]){}
 foo3(); // error but shouldn't be
 
 //// [restParamsWithNonRestParams.js]
+"use strict";
 function foo(...b) { }
 foo(); // ok
 function foo2(a, ...b) { }

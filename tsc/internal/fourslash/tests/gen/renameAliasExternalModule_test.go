@@ -12,7 +12,7 @@ func TestRenameAliasExternalModule(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: a.ts
-module SomeModule { export class SomeClass { } }
+namespace SomeModule { export class SomeClass { } }
 export = SomeModule;
 // @Filename: b.ts
 [|import [|{| "contextRangeIndex": 0 |}M|] = require("./a");|]

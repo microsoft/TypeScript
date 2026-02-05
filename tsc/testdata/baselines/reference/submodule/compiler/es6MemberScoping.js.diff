@@ -1,8 +1,8 @@
 --- old.es6MemberScoping.js
 +++ new.es6MemberScoping.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [es6MemberScoping.js]
+ "use strict";
  class Foo {
 -    constructor(store) {
 -        this._store = store; // should be an error.

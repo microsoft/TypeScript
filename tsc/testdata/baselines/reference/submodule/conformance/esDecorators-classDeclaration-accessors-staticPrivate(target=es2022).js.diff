@@ -1,9 +1,9 @@
 --- old.esDecorators-classDeclaration-accessors-staticPrivate(target=es2022).js
 +++ new.esDecorators-classDeclaration-accessors-staticPrivate(target=es2022).js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
 
  //// [esDecorators-classDeclaration-accessors-staticPrivate.js]
+ "use strict";
 -let C = (() => {
 -    let _staticExtraInitializers = [];
 -    let _static_private_get_method1_decorators;

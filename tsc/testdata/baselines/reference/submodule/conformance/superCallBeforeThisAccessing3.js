@@ -16,6 +16,7 @@ class D extends Base {
 
 
 //// [superCallBeforeThisAccessing3.js]
+"use strict";
 class Base {
     constructor(c) { }
 }

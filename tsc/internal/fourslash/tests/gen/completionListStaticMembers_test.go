@@ -14,7 +14,8 @@ func TestCompletionListStaticMembers(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `class Foo {
+	const content = `// @lib: es5
+class Foo {
     static a() {}
     static b() {}
 }

@@ -1,6 +1,6 @@
 --- old.unionTypeWithLeadingOperator.js
 +++ new.unionTypeWithLeadingOperator.js
-@@= skipped -18, +18 lines =@@
+@@= skipped -17, +17 lines =@@
 
 
  //// [unionTypeWithLeadingOperator.d.ts]

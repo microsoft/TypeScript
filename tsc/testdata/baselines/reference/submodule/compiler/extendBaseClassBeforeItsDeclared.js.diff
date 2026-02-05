@@ -1,6 +1,6 @@
 --- old.extendBaseClassBeforeItsDeclared.js
 +++ new.extendBaseClassBeforeItsDeclared.js
-@@= skipped -8, +8 lines =@@
+@@= skipped -9, +9 lines =@@
  class derived extends base {
  }
  class base {

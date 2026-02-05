@@ -12,7 +12,8 @@ func TestCompletionsJSDocNoCrash2(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @strict: true
+	const content = `// @lib: es5
+// @strict: true
 // @filename: index.ts
 /**
  * @example

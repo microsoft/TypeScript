@@ -1,0 +1,20 @@
+--- old.parserArrowFunctionExpression14.types
++++ new.parserArrowFunctionExpression14.types
+@@= skipped -4, +4 lines =@@
+ >a() ? (b: number, c?: string): void => d() : e : any
+ >a() : any
+ >a : any
+->(b: number, c?: string): void => d() : (b: number, c?: string) => void
++>(b: number, c?: string): void => d() : (b: number, c?: string | undefined) => void
+ >b : number
+ >c : string | undefined
+ >d() : any
+@@= skipped -12, +12 lines =@@
+ >a() ? (b: number, c?: string): void => d() : e : any
+ >a() : any
+ >a : any
+->(b: number, c?: string): void => d() : (b: number, c?: string) => void
++>(b: number, c?: string): void => d() : (b: number, c?: string | undefined) => void
+ >b : number
+ >c : string | undefined
+ >d() : any

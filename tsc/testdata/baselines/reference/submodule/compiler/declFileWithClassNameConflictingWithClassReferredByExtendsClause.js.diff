@@ -1,7 +1,7 @@
 --- old.declFileWithClassNameConflictingWithClassReferredByExtendsClause.js
 +++ new.declFileWithClassNameConflictingWithClassReferredByExtendsClause.js
-@@= skipped -23, +23 lines =@@
- //// [declFileWithClassNameConflictingWithClassReferredByExtendsClause.js]
+@@= skipped -24, +24 lines =@@
+ "use strict";
  var X;
  (function (X) {
 -    var Y;

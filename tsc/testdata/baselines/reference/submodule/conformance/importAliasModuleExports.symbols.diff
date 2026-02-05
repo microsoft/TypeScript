@@ -13,11 +13,3 @@
  >Alias : Symbol(Alias, Decl(mod1.js, 0, 0))
 
  === main.js ===
-@@= skipped -18, +18 lines =@@
- >A.prototype : Symbol(A.prototype)
- >A : Symbol(A, Decl(main.js, 0, 6))
- >prototype : Symbol(A.prototype)
-->this : Symbol(A, Decl(mod1.js, 0, 0))
-
- Object.defineProperty(A.prototype, "def", { value: 0 });
- >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))

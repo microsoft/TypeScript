@@ -12,6 +12,7 @@ declare var React: any;
 
 
 //// [a.jsx]
+"use strict";
 <div>
     <div attr=<div />/>
     <div attr=<div>foo</div>/>

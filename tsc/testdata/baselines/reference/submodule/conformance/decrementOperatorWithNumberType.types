@@ -17,7 +17,7 @@ class A {
     public a: number;
 >a : number
 }
-module M {
+namespace M {
 >M : typeof M
 
     export var n: number;

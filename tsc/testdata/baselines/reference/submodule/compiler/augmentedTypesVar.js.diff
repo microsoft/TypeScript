@@ -1,6 +1,6 @@
 --- old.augmentedTypesVar.js
 +++ new.augmentedTypesVar.js
-@@= skipped -56, +56 lines =@@
+@@= skipped -57, +57 lines =@@
  } // error
  // var then enum
  var x5 = 1;

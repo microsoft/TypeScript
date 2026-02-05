@@ -1,0 +1,15 @@
+--- old.intersectionMemberOfUnionNarrowsCorrectly.types
++++ new.intersectionMemberOfUnionNarrowsCorrectly.types
+@@= skipped -11, +11 lines =@@
+ >Ex : Ex<T, U>
+
+ declare let x: Ex<U, { kind?: 'A' }>
+->x : { kind?: "A"; a: string; }
++>x : { kind?: "A" | undefined; a: string; }
+ >kind : "A" | undefined
+
+ x.a
+ >x.a : string
+->x : { kind?: "A"; a: string; }
++>x : { kind?: "A" | undefined; a: string; }
+ >a : string

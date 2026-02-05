@@ -2,17 +2,17 @@
 
 //// [logicalNotOperatorWithNumberType.ts]
 // ! operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
 
 function foo(): number { return 1; }
 
 class A {
-    public a: number;
+    public a!: number;
     static foo() { return 1; }
 }
-module M {
-    export var n: number;
+namespace M {
+    export declare var n: number;
 }
 
 var objA = new A();
@@ -48,8 +48,7 @@ var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
 !objA.a, M.n;
 
 //// [logicalNotOperatorWithNumberType.js]
-// ! operator on number type
-var NUMBER;
+"use strict";
 var NUMBER1 = [1, 2];
 function foo() { return 1; }
 class A {

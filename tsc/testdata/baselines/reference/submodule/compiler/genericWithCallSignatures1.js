@@ -19,7 +19,9 @@ class MyClass {
 }
 
 //// [genericWithCallSignatures_0.js]
+"use strict";
 //// [genericWithCallSignatures_1.js]
+"use strict";
 ///<reference path="genericWithCallSignatures_0.ts"/>
 class MyClass {
     callableThing;

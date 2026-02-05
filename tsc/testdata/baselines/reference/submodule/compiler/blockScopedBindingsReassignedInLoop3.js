@@ -94,6 +94,7 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
 
 
 //// [blockScopedBindingsReassignedInLoop3.js]
+"use strict";
 for (let x = 1, y = 2; x < y; ++x, --y) {
     let a = () => x++ + y++;
     if (x == 1) {

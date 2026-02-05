@@ -1,7 +1,7 @@
 // === Document Symbols ===
 // === /navigationItemsModuleVariables_0.ts ===
 //  
-// <|module [|{| name: Module1, kind: Namespace |}Module1|] {
+// <|namespace [|{| name: Module1, kind: Namespace |}Module1|] {
 //     export var <|[|{| name: x, kind: Variable |}x|] = 0|>;
 // }|>
 
@@ -15,7 +15,7 @@
 // === Document Symbols ===
 // === /navigationItemsModuleVariables_1.ts ===
 //  
-// <|module [|{| name: Module1.SubModule, kind: Namespace |}Module1.SubModule|] {
+// <|namespace [|{| name: Module1.SubModule, kind: Namespace |}Module1.SubModule|] {
 //     export var <|[|{| name: y, kind: Variable |}y|] = 0|>;
 // }|>
 

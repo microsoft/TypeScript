@@ -17,6 +17,7 @@ class B {
 }
 
 //// [emitClassDeclarationWithLiteralPropertyNameInES6.js]
+"use strict";
 class B {
     "hello" = 10;
     0b110 = "world";

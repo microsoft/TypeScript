@@ -1,6 +1,6 @@
 --- old.incrementOperatorWithUnsupportedStringType.js
 +++ new.incrementOperatorWithUnsupportedStringType.js
-@@= skipped -72, +72 lines =@@
+@@= skipped -71, +71 lines =@@
  var STRING1 = ["", ""];
  function foo() { return ""; }
  class A {

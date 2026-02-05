@@ -37,10 +37,10 @@ type AB = A | B;
 type ABC = C | AB;
 >ABC : ABC
 
-var ab: AB;
+declare var ab: AB;
 >ab : AB
 
-var abc: ABC;
+declare var abc: ABC;
 >abc : ABC
 
 declare const x: "foo" | "bar";

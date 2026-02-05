@@ -1,23 +1,37 @@
 --- old.namespaceMergedWithFunctionWithOverloadsUsage.types
 +++ new.namespaceMergedWithFunctionWithOverloadsUsage.types
-@@= skipped -17, +17 lines =@@
+@@= skipped -1, +1 lines =@@
+
+ === index.ts ===
+ import X = require("./file");
+->X : { (opts?: X.Whatever): void; (cb: Function, opts?: X.Whatever): void; }
++>X : { (opts?: X.Whatever | undefined): void; (cb: Function, opts?: X.Whatever | undefined): void; }
+
+ X(0); // shouldn't cause a crash
+ >X(0) : void
+->X : { (opts?: X.Whatever): void; (cb: Function, opts?: X.Whatever): void; }
++>X : { (opts?: X.Whatever | undefined): void; (cb: Function, opts?: X.Whatever | undefined): void; }
+ >0 : 0
+
+ === file.d.ts ===
+@@= skipped -16, +16 lines =@@
  }
 
  declare function Foo(opts?: Foo.Whatever): void;
 ->Foo : { (opts?: Foo.Whatever): void; (cb: Function, opts?: Foo.Whatever): void; }
-->opts : Foo.Whatever
-+>Foo : { (opts?: import("file").Whatever): void; (cb: Function, opts?: import("file").Whatever): void; }
-+>opts : import("file").Whatever
+->opts : Foo.Whatever | undefined
++>Foo : { (opts?: import("file").Whatever | undefined): void; (cb: Function, opts?: import("file").Whatever | undefined): void; }
++>opts : import("file").Whatever | undefined
  >Foo : any
 
  declare function Foo(cb: Function, opts?: Foo.Whatever): void;
 ->Foo : { (opts?: Foo.Whatever): void; (cb: Function, opts?: Foo.Whatever): void; }
-+>Foo : { (opts?: import("file").Whatever): void; (cb: Function, opts?: import("file").Whatever): void; }
++>Foo : { (opts?: import("file").Whatever | undefined): void; (cb: Function, opts?: import("file").Whatever | undefined): void; }
  >cb : Function
-->opts : Foo.Whatever
-+>opts : import("file").Whatever
+->opts : Foo.Whatever | undefined
++>opts : import("file").Whatever | undefined
  >Foo : any
 
  export = Foo;
 ->Foo : { (opts?: Foo.Whatever): void; (cb: Function, opts?: Foo.Whatever): void; }
-+>Foo : { (opts?: import("file").Whatever): void; (cb: Function, opts?: import("file").Whatever): void; }
++>Foo : { (opts?: import("file").Whatever | undefined): void; (cb: Function, opts?: import("file").Whatever | undefined): void; }

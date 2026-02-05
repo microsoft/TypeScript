@@ -136,8 +136,8 @@ s |= 0;
 str += (s || str);
 >str += (s || str) : string
 >str : string
->(s || str) : string | symbol
->s || str : string | symbol
+>(s || str) : symbol
+>s || str : symbol
 >s : symbol
 >str : string
 

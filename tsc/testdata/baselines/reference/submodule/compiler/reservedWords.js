@@ -20,6 +20,7 @@ var obj2 = {
 
 
 //// [reservedWords.js]
+"use strict";
 var obj = {
     if: 0,
     debugger: 2,

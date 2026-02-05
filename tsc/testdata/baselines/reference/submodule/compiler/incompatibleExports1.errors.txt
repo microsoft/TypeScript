@@ -12,11 +12,11 @@ incompatibleExports1.ts(16,5): error TS2309: An export assignment cannot be used
     }
      
     declare module "baz" {
-        export module a {
+        export namespace a {
             export var b: number;
         }
      
-        module c {
+        namespace c {
             export var c: string;
         }
      

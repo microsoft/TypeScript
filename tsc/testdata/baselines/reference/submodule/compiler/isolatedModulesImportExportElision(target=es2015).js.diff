@@ -1,0 +1,10 @@
+--- old.isolatedModulesImportExportElision(target=es2015).js
++++ new.isolatedModulesImportExportElision(target=es2015).js
+@@= skipped -57, +57 lines =@@
+ }
+ let x = new module_1.c();
+ let y = ns.value;
+-var module_3 = require("module");
++const module_3 = require("module");
+ Object.defineProperty(exports, "c1", { enumerable: true, get: function () { return module_3.c1; } });
+ exports.z = x;

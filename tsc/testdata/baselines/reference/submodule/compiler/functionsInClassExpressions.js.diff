@@ -1,7 +1,7 @@
 --- old.functionsInClassExpressions.js
 +++ new.functionsInClassExpressions.js
-@@= skipped -14, +14 lines =@@
- //// [functionsInClassExpressions.js]
+@@= skipped -15, +15 lines =@@
+ "use strict";
  let Foo = class {
      constructor() {
 -        this.bar = 0;

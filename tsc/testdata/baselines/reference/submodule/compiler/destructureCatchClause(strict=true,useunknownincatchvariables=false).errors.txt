@@ -1,9 +1,9 @@
 destructureCatchClause.ts(26,17): error TS2339: Property 'x' does not exist on type 'unknown'.
-destructureCatchClause.ts(27,15): error TS2461: Type 'unknown' is not an array type.
+destructureCatchClause.ts(27,15): error TS2488: Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
 destructureCatchClause.ts(29,17): error TS2339: Property 'a' does not exist on type 'unknown'.
 destructureCatchClause.ts(30,17): error TS2339: Property 'a' does not exist on type 'unknown'.
-destructureCatchClause.ts(32,15): error TS2461: Type 'unknown' is not an array type.
-destructureCatchClause.ts(33,15): error TS2461: Type 'unknown' is not an array type.
+destructureCatchClause.ts(32,15): error TS2488: Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
+destructureCatchClause.ts(33,15): error TS2488: Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
 destructureCatchClause.ts(35,17): error TS2339: Property 'a' does not exist on type 'unknown'.
 
 
@@ -38,7 +38,7 @@ destructureCatchClause.ts(35,17): error TS2339: Property 'a' does not exist on t
 !!! error TS2339: Property 'x' does not exist on type 'unknown'.
     try {} catch ([ x ]: unknown) { x }
                   ~~~~~
-!!! error TS2461: Type 'unknown' is not an array type.
+!!! error TS2488: Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
     
     try {} catch ({ a: { x } }: unknown) { x }
                     ~
@@ -49,10 +49,10 @@ destructureCatchClause.ts(35,17): error TS2339: Property 'a' does not exist on t
     
     try {} catch ([{ x }]: unknown) { x }
                   ~~~~~~~
-!!! error TS2461: Type 'unknown' is not an array type.
+!!! error TS2488: Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
     try {} catch ([[ x ]]: unknown) { x }
                   ~~~~~~~
-!!! error TS2461: Type 'unknown' is not an array type.
+!!! error TS2488: Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
     
     try {} catch ({ a: { b: { c: { x }} }}: unknown) { x }
                     ~

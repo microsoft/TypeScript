@@ -6,7 +6,7 @@ export class c {
 }
 export interface i {
 }
-export module m {
+export namespace m {
 >m : typeof m
 
     export var x = 10;
@@ -17,7 +17,7 @@ export var x = 10;
 >x : number
 >10 : 10
 
-export module uninstantiated {
+export namespace uninstantiated {
 }
 
 === client.ts ===

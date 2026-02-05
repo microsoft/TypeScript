@@ -16,6 +16,7 @@ class Foo2 {
 (<T extends UNKNOWN>(a) => { });
 
 //// [typeCheckTypeArgument.js]
+"use strict";
 var f;
 class Foo {
 }

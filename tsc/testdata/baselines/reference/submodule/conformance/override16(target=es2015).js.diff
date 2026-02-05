@@ -1,8 +1,8 @@
 --- old.override16(target=es2015).js
 +++ new.override16(target=es2015).js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [override16.js]
+ "use strict";
  class A {
 +    foo;
  }

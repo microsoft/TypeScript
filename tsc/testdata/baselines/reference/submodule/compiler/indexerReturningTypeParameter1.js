@@ -16,6 +16,7 @@ var a2: c;
 var r2 = a2.groupBy();
 
 //// [indexerReturningTypeParameter1.js]
+"use strict";
 var a;
 var r = a.groupBy();
 class c {

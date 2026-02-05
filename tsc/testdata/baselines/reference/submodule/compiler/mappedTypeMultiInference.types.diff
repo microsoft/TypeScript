@@ -1,0 +1,20 @@
+--- old.mappedTypeMultiInference.types
++++ new.mappedTypeMultiInference.types
+@@= skipped -6, +6 lines =@@
+ }
+
+ declare function mergeStyleSets<K extends string>(
+->mergeStyleSets : <K extends string>(...cssSets: { [P in K]?: Style; }[]) => { [P in K]: Style; }
++>mergeStyleSets : <K extends string>(...cssSets: { [P in K]?: Style | undefined; }[]) => { [P in K]: Style; }
+
+     ...cssSets: { [P in K]?: Style }[]): { [P in K]: Style };
+ >cssSets : { [P in K]?: Style | undefined; }[]
+@@= skipped -13, +13 lines =@@
+ let x = mergeStyleSets(
+ >x : { a: Style; b: Style; }
+ >mergeStyleSets(    {},    {        a: { flashy: true },    },    {        b: { flashy: true },    },) : { a: Style; b: Style; }
+->mergeStyleSets : <K extends string>(...cssSets: { [P in K]?: Style; }[]) => { [P in K]: Style; }
++>mergeStyleSets : <K extends string>(...cssSets: { [P in K]?: Style | undefined; }[]) => { [P in K]: Style; }
+
+     {},
+ >{} : {}

@@ -1,0 +1,13 @@
+typeofEnum.ts(7,1): error TS2454: Variable 'e1' is used before being assigned.
+
+
+==== typeofEnum.ts (1 errors) ====
+    enum E {
+        e1,
+        e2
+    }
+    
+    var e1: typeof E;
+    e1.e1;
+    ~~
+!!! error TS2454: Variable 'e1' is used before being assigned.

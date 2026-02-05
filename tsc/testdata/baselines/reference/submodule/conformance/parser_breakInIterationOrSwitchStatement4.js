@@ -6,6 +6,7 @@ for (var i in something) {
 }
 
 //// [parser_breakInIterationOrSwitchStatement4.js]
+"use strict";
 for (var i in something) {
     break;
 }

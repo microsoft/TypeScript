@@ -16,7 +16,7 @@ func TestGetOccurrencesExport3(t *testing.T) {
 declare var x;
 [|export|] declare var y, z;
 
-module m {
+namespace m {
     export class C1 {
         public pub1;
         public pub2;
@@ -46,12 +46,12 @@ module m {
     export interface I1 {
     }
 
-    export declare module ma.m1.m2.m3 {
+    export declare namespace ma.m1.m2.m3 {
         interface I2 {
         }
     }
 
-    export module mb.m1.m2.m3 {
+    export namespace mb.m1.m2.m3 {
         declare var foo;
 
         export class C2 {
@@ -70,7 +70,7 @@ module m {
 }
 
 declare [|export|] var v1, v2;
-declare module dm { }
+declare namespace dm { }
 [|export|] class EC { }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()

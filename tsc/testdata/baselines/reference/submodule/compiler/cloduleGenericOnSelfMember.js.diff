@@ -1,8 +1,8 @@
 --- old.cloduleGenericOnSelfMember.js
 +++ new.cloduleGenericOnSelfMember.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
  //// [cloduleGenericOnSelfMember.js]
+ "use strict";
  class ServiceBase {
 +    field;
  }

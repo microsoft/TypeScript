@@ -13,6 +13,7 @@ foo(person);
 var obj = { name: name, id: id };
 
 //// [objectLiteralShorthandPropertiesFunctionArgument.js]
+"use strict";
 var id = 10000;
 var name = "my name";
 var person = { name, id };

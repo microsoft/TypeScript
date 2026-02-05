@@ -64,8 +64,8 @@ s - 0;
 
 (s || "") + "";
 >(s || "") + "" : string
->(s || "") : symbol | ""
->s || "" : symbol | ""
+>(s || "") : symbol
+>s || "" : symbol
 >s : symbol
 >"" : ""
 >"" : ""
@@ -73,8 +73,8 @@ s - 0;
 "" + (s || "");
 >"" + (s || "") : string
 >"" : ""
->(s || "") : symbol | ""
->s || "" : symbol | ""
+>(s || "") : symbol
+>s || "" : symbol
 >s : symbol
 >"" : ""
 

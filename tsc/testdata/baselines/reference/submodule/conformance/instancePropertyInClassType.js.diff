@@ -1,6 +1,6 @@
 --- old.instancePropertyInClassType.js
 +++ new.instancePropertyInClassType.js
-@@= skipped -43, +43 lines =@@
+@@= skipped -44, +44 lines =@@
  var NonGeneric;
  (function (NonGeneric) {
      class C {

@@ -9,6 +9,7 @@ globalThis.y = 4 // should error
 
 
 //// [globalThisReadonlyProperties.js]
+"use strict";
 globalThis.globalThis = 1; // should error
 var x = 1;
 const y = 2;

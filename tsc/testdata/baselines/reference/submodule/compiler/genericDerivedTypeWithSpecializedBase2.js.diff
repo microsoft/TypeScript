@@ -1,13 +1,12 @@
 --- old.genericDerivedTypeWithSpecializedBase2.js
 +++ new.genericDerivedTypeWithSpecializedBase2.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [genericDerivedTypeWithSpecializedBase2.js]
+ "use strict";
  class A {
 +    x;
  }
  class B extends A {
 +    y;
  }
- var x;
- var y;
+ x = y; // error

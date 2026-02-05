@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/mergedDeclarations3.ts] ////
 
 === mergedDeclarations3.ts ===
-module M {
+namespace M {
 >M : typeof M
 
  export enum Color {
@@ -12,10 +12,10 @@ module M {
 >Green : Color.Green
  }
 }
-module M {
+namespace M {
 >M : typeof M
 
- export module Color {
+ export namespace Color {
 >Color : typeof Color
 
    export var Blue = 4;
@@ -31,7 +31,7 @@ var p = M.Color.Blue; // ok
 >Color : typeof M.Color
 >Blue : number
 
-module M {
+namespace M {
 >M : typeof M
 
     export function foo() {
@@ -39,10 +39,10 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
-    module foo {
+    namespace foo {
 >foo : typeof foo
 
         export var x = 1;
@@ -51,10 +51,10 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
-    export module foo {
+    export namespace foo {
 >foo : typeof foo
 
         export var y = 2
@@ -63,10 +63,10 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
-    module foo {
+    namespace foo {
 >foo : typeof foo
 
         export var z = 1;

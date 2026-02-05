@@ -57,6 +57,7 @@ var d8: number[][] = [[...temp1]]
 var d9 = [[...temp1], ...["hello"]];
 
 //// [arrayLiterals2ES6.js]
+"use strict";
 // ElementList:  ( Modified )
 //      Elisionopt   AssignmentExpression
 //      Elisionopt   SpreadElement

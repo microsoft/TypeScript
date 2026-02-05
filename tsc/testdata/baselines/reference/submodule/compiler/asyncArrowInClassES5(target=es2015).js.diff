@@ -1,0 +1,12 @@
+--- old.asyncArrowInClassES5(target=es2015).js
++++ new.asyncArrowInClassES5(target=es2015).js
+@@= skipped -12, +12 lines =@@
+ "use strict";
+ // https://github.com/Microsoft/TypeScript/issues/16924
+ // Should capture `this`
+-var _a;
+ class Test {
++    static member = async (x) => { };
+ }
+-_a = Test;
+-Test.member = (x) => __awaiter(void 0, void 0, void 0, function* () { });

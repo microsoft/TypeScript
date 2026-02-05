@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution10.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface ElementClass {
 		render: any;
@@ -12,18 +12,17 @@ declare module JSX {
 interface Obj1type {
 	new(n: string): { x: number };
 }
-var Obj1: Obj1type;
+declare var Obj1: Obj1type;
 <Obj1 x={10} />; // Error, no render member
 
 interface Obj2type {
 	(n: string): { x: number; render: any; };
 }
-var Obj2: Obj2type;
+declare var Obj2: Obj2type;
 <Obj2 x={32} render={100} />; // OK
 
 
 //// [file.jsx]
-var Obj1;
+"use strict";
 <Obj1 x={10}/>; // Error, no render member
-var Obj2;
 <Obj2 x={32} render={100}/>; // OK

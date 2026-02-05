@@ -1,8 +1,8 @@
 --- old.yieldStatementNoAsiAfterTransform(target=esnext).js
 +++ new.yieldStatementNoAsiAfterTransform(target=esnext).js
-@@= skipped -66, +66 lines =@@
-
+@@= skipped -67, +67 lines =@@
  //// [yieldStatementNoAsiAfterTransform.js]
+ "use strict";
  function* t1() {
 -    yield (
 +    yield 

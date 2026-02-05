@@ -5,11 +5,19 @@
 -
 -
 -==== /a.js (1 errors) ====
--    function C() { this.x = false; };
++/a.js(1,16): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++/a.js(4,1): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
++
++
++==== /a.js (2 errors) ====
+     function C() { this.x = false; };
 -                   ~~~~~~
 -!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
--    /** @type {number} */
--    C.prototype.x;
--    new C().x;
--    
-+<no content>
++                   ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+     /** @type {number} */
+     C.prototype.x;
+     new C().x;
++    ~~~~~~~
++!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+     

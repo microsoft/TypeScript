@@ -17,7 +17,7 @@ taggedTemplateStringsWithIncompatibleTypedTags.ts(28,57): error TS2345: Argument
         [x: number]: I;
     }
     
-    var f: I;
+    declare var f: I;
     
     f `abc`
     

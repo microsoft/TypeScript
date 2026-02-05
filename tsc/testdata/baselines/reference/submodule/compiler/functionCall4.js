@@ -6,6 +6,7 @@ function bar():()=>any{return foo};
 var x = bar();
 
 //// [functionCall4.js]
+"use strict";
 function foo() { return ""; }
 ;
 function bar() { return foo; }

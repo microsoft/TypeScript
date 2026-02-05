@@ -3,17 +3,17 @@
 === recursiveTypeComparison2.ts ===
 // Before fix this would cause compiler to hang (#1170)
 
-declare module Bacon {
+declare namespace Bacon {
 >Bacon : Symbol(Bacon, Decl(recursiveTypeComparison2.ts, 0, 0))
 
     interface Event<T> {
->Event : Symbol(Event, Decl(recursiveTypeComparison2.ts, 2, 22))
+>Event : Symbol(Event, Decl(recursiveTypeComparison2.ts, 2, 25))
 >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 3, 20))
     }
     interface Error<T> extends Event<T> {
 >Error : Symbol(Error, Decl(recursiveTypeComparison2.ts, 4, 5))
 >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 5, 20))
->Event : Symbol(Event, Decl(recursiveTypeComparison2.ts, 2, 22))
+>Event : Symbol(Event, Decl(recursiveTypeComparison2.ts, 2, 25))
 >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 5, 20))
     }
     interface Observable<T> {
@@ -74,7 +74,7 @@ declare module Bacon {
 >state : Symbol(state, Decl(recursiveTypeComparison2.ts, 12, 49))
 >U : Symbol(U, Decl(recursiveTypeComparison2.ts, 12, 25))
 >event : Symbol(event, Decl(recursiveTypeComparison2.ts, 12, 58))
->Event : Symbol(Event, Decl(recursiveTypeComparison2.ts, 2, 22))
+>Event : Symbol(Event, Decl(recursiveTypeComparison2.ts, 2, 25))
 >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 7, 25))
 >StateValue : Symbol(StateValue)
 >U : Symbol(U, Decl(recursiveTypeComparison2.ts, 12, 25))
@@ -108,7 +108,7 @@ declare module Bacon {
 >withHandler : Symbol(Observable.withHandler, Decl(recursiveTypeComparison2.ts, 15, 61))
 >f : Symbol(f, Decl(recursiveTypeComparison2.ts, 16, 20))
 >event : Symbol(event, Decl(recursiveTypeComparison2.ts, 16, 24))
->Event : Symbol(Event, Decl(recursiveTypeComparison2.ts, 2, 22))
+>Event : Symbol(Event, Decl(recursiveTypeComparison2.ts, 2, 25))
 >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 7, 25))
 >Observable : Symbol(Observable, Decl(recursiveTypeComparison2.ts, 6, 5))
 >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 7, 25))

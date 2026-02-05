@@ -4,4 +4,5 @@
 delete `abc${0}abc`;
 
 //// [templateStringInDeleteExpressionES6.js]
+"use strict";
 delete `abc${0}abc`;

@@ -84,6 +84,7 @@ var b = {
 var r4 = b.foo(aB, aB); // no inferences for T so constraint isn't satisfied, error
 
 //// [propertyAccessOnTypeParameterWithConstraints2.js]
+"use strict";
 // generic types should behave as if they have properties of their constraint type
 class A {
     foo() { return ''; }

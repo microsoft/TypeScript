@@ -27,6 +27,7 @@ var r2c = x.arguments;
 
 
 //// [objectTypeWithCallSignatureHidingMembersOfFunction.js]
+"use strict";
 // object types with call signatures can override members of Function
 // no errors expected below 
 var i;

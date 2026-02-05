@@ -7,5 +7,5 @@
 -    /**
 -     * @type object
 -     */
--    arguments: object;
+-    arguments: object | undefined;
  }

@@ -9,6 +9,7 @@ for (var key in a) {
 
 
 //// [nonPrimitiveIndexingWithForIn.js]
+"use strict";
 var a;
 for (var key in a) {
     var value = a[key];

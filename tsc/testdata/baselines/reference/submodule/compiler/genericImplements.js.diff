@@ -1,8 +1,8 @@
 --- old.genericImplements.js
 +++ new.genericImplements.js
-@@= skipped -23, +23 lines =@@
-
+@@= skipped -24, +24 lines =@@
  //// [genericImplements.js]
+ "use strict";
  class A {
 +    a;
  }

@@ -9,7 +9,7 @@
 +>(() => null! as ExpandRecursively<G>) : () => { readonly readonlyProperty: string; field: string; method: (p: string) => string; fnField: (p: string) => string; writeOnlyProperty: string; property: string; divergentProperty: string; }
 +>() => null! as ExpandRecursively<G> : () => { readonly readonlyProperty: string; field: string; method: (p: string) => string; fnField: (p: string) => string; writeOnlyProperty: string; property: string; divergentProperty: string; }
  >null! as ExpandRecursively<G> : { readonly readonlyProperty: string; field: string; method: (p: string) => string; fnField: (p: string) => string; writeOnlyProperty: string; property: string; divergentProperty: string; }
- >null! : null
+ >null! : never
 
 
  function makeV() {
@@ -24,7 +24,7 @@
    return null! as X<number>
 ->null! as X<number> : { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | number; set divergentProperty(p: number); }
 +>null! as X<number> : { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | T; set divergentProperty(p: number | T); }
- >null! : null
+ >null! : never
  }
 
  export const v = makeV();

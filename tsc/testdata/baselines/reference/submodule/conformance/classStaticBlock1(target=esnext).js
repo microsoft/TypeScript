@@ -13,6 +13,7 @@ class C {
 
 
 //// [classStaticBlock1.js]
+"use strict";
 const a = 2;
 class C {
     static {

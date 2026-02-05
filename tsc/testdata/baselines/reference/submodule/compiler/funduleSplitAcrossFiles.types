@@ -5,7 +5,7 @@ function D() { }
 >D : typeof D
 
 === funduleSplitAcrossFiles_module.ts ===
-module D {
+namespace D {
 >D : typeof D
 
     export var y = "hi";

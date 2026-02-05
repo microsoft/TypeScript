@@ -11,7 +11,7 @@ func TestQualifyModuleTypeNames(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module m { export class c { } };
+	const content = `namespace m { export class c { } };
 function x(arg: m.c) { return arg; }
 x(/**/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

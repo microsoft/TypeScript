@@ -18,6 +18,7 @@ enum Foo {
 
 
 //// [computedEnumMemberSyntacticallyString.js]
+"use strict";
 const BAR = 2..toFixed(0);
 var Foo;
 (function (Foo) {

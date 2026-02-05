@@ -25,6 +25,7 @@ var z = foo `${1}${2}${3}`;  // any (with error)
 
 
 //// [taggedTemplateStringsWithOverloadResolution1.js]
+"use strict";
 function foo(...stuff) {
     return undefined;
 }

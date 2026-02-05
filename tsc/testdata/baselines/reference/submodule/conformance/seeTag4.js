@@ -14,6 +14,7 @@ let foo;
 
 
 //// [seeTag4.js]
+"use strict";
 /**
  * @typedef {any} A
  */

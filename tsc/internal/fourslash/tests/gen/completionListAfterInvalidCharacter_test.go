@@ -13,7 +13,7 @@ func TestCompletionListAfterInvalidCharacter(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// Completion after invalid character
-module testModule {
+namespace testModule {
     export var foo = 1;
 }
 @

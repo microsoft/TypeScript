@@ -19,5 +19,6 @@ b.foo(); // should not error
 
 
 //// [mutuallyRecursiveGenericBaseTypes1.js]
+"use strict";
 var b;
 b.foo(); // should not error

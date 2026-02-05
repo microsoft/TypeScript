@@ -13,7 +13,6 @@ func TestQuickInfoImportMeta(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @module: esnext
 // @Filename: foo.ts
-/// <reference no-default-lib="true"/>
 /// <reference path='./bar.d.ts' />
 im/*1*/port.me/*2*/ta;
 //@Filename: bar.d.ts

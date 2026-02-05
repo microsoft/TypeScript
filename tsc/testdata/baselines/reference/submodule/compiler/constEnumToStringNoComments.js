@@ -25,6 +25,7 @@ let c1 = Foo["C"].toString();
 
 
 //// [constEnumToStringNoComments.js]
+"use strict";
 let x0 = 100..toString();
 let x1 = 100..toString();
 let y0 = 0.5.toString();

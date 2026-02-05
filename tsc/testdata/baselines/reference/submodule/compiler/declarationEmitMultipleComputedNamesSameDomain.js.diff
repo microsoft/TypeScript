@@ -1,13 +1,11 @@
 --- old.declarationEmitMultipleComputedNamesSameDomain.js
 +++ new.declarationEmitMultipleComputedNamesSameDomain.js
-@@= skipped -10, +10 lines =@@
+@@= skipped -9, +9 lines =@@
+ }
 
  //// [declarationEmitMultipleComputedNamesSameDomain.js]
- "use strict";
 -var _a, _b;
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Test = void 0;
- class Test {
+ export class Test {
 -    constructor() {
 -        this[_a] = 10;
 -        this[_b] = 10;
@@ -15,7 +13,6 @@
 +    [x] = 10;
 +    [y] = 10;
  }
- exports.Test = Test;
 -_a = x, _b = y;
 
 

@@ -6,6 +6,7 @@ function foo() {}
 
 
 //// [classOverloadForFunction.js]
+"use strict";
 class foo {
 }
 ;

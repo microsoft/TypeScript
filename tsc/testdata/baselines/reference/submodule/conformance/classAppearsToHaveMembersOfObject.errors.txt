@@ -1,0 +1,26 @@
+classAppearsToHaveMembersOfObject.ts(1,11): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+classAppearsToHaveMembersOfObject.ts(4,9): error TS2454: Variable 'c' is used before being assigned.
+classAppearsToHaveMembersOfObject.ts(5,10): error TS2454: Variable 'c' is used before being assigned.
+classAppearsToHaveMembersOfObject.ts(6,17): error TS2454: Variable 'c' is used before being assigned.
+classAppearsToHaveMembersOfObject.ts(7,14): error TS2454: Variable 'c' is used before being assigned.
+
+
+==== classAppearsToHaveMembersOfObject.ts (5 errors) ====
+    class C { foo: string; }
+              ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    
+    var c: C;
+    var r = c.toString();
+            ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r2 = c.hasOwnProperty('');
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var o: Object = c;
+                    ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var o2: {} = c;
+                 ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    

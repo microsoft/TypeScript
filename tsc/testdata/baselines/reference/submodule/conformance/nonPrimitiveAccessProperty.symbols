@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveAccessProperty.ts] ////
 
 === nonPrimitiveAccessProperty.ts ===
-var a: object;
+var a: object = {};
 >a : Symbol(a, Decl(nonPrimitiveAccessProperty.ts, 0, 3))
 
 a.toString();

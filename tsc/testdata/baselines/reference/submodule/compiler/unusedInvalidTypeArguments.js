@@ -45,43 +45,30 @@ export class C extends A<B> {
 
 
 //// [typeReference.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [classReference.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.D = void 0;
 class C {
 }
 // This uses getTypeFromClassOrInterfaceReference instead of getTypeFromTypeAliasReference.
-class D extends C {
+export class D extends C {
 }
-exports.D = D;
 //// [interface.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [call.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const unknown_1 = require("unknown");
-(0, unknown_1.foo)();
+import { foo } from "unknown";
+foo();
 //// [new.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const unkown_1 = require("unkown");
-new unkown_1.Foo();
+import { Foo } from "unkown";
+new Foo();
 //// [callAny.js]
+"use strict";
 g();
 g(); // Should get error for type argument
 //// [super.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-const unknown_1 = require("unknown");
-class C extends unknown_1.A {
+import { A } from "unknown";
+export class C extends A {
     m() {
         super.m(1);
         super.m(); // Should get error for type argument
     }
 }
-exports.C = C;

@@ -17,6 +17,7 @@ globalThis['hi']
 
 
 //// [globalThisUnknown.js]
+"use strict";
 // this access should be an error
 win.hi;
 // these two should be fine, with type any

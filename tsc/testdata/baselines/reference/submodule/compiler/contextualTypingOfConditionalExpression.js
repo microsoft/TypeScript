@@ -17,6 +17,7 @@ var x2: (a: A) => void = true ? (a) => a.foo : (b) => b.foo;
 
 
 //// [contextualTypingOfConditionalExpression.js]
+"use strict";
 var x = true ? (a) => a.toExponential() : (b) => b.toFixed();
 class A {
     foo;

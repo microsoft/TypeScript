@@ -104,6 +104,7 @@ new fn5((n) => n.blah); // Error
 
 
 //// [overloadResolutionClassConstructors.js]
+"use strict";
 class SomeBase {
     n;
     s;

@@ -11,7 +11,8 @@ func TestRename01(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `///<reference path="./Bar.ts" />
+	const content = `// @lib: es5
+///<reference path="./Bar.ts" />
 [|function [|{| "contextRangeIndex": 0 |}Bar|]() {
     // This is a reference to [|Bar|] in a comment.
     "this is a reference to [|Bar|] in a string"

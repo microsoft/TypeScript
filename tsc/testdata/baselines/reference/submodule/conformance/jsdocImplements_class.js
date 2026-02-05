@@ -81,7 +81,11 @@ declare var Ns: {
         };
     };
     /** @implements {A} */
-    C5: any;
+    C5: {
+        new (): {
+            method(): number;
+        };
+    };
 };
 declare namespace Ns {
     var C1: {
@@ -114,5 +118,9 @@ declare class CC {
 }
 declare var C5: any;
 declare namespace Ns {
-    var C5: any;
+    var C5: {
+        new (): {
+            method(): number;
+        };
+    };
 }

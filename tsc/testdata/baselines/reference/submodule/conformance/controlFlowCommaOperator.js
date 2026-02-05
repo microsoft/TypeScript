@@ -26,6 +26,7 @@ function f(x: string | number | boolean) {
 
 
 //// [controlFlowCommaOperator.js]
+"use strict";
 function f(x) {
     let y = false;
     let z = false;

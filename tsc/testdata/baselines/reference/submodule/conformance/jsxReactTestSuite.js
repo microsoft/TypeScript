@@ -119,6 +119,7 @@ var x =
 
 
 //// [jsxReactTestSuite.jsx]
+"use strict";
 <div>text</div>;
 <div>
   {this.props.children}

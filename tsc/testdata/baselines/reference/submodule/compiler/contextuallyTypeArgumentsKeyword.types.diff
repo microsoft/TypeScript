@@ -1,10 +1,12 @@
 --- old.contextuallyTypeArgumentsKeyword.types
 +++ new.contextuallyTypeArgumentsKeyword.types
-@@= skipped -11, +11 lines =@@
+@@= skipped -10, +10 lines =@@
+
          setTimeout(function() { arguments }, 0);
  >setTimeout(function() { arguments }, 0) : number
- >setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
+->setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
 ->function() { arguments } : (...args: any[]) => void
++>setTimeout : (handler: TimerHandler, timeout?: number | undefined, ...arguments: any[]) => number
 +>function() { arguments } : () => void
  >arguments : IArguments
  >0 : 0

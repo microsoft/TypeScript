@@ -1,6 +1,6 @@
 --- old.recursiveTypeParameterReferenceError1.js
 +++ new.recursiveTypeParameterReferenceError1.js
-@@= skipped -24, +24 lines =@@
+@@= skipped -25, +25 lines =@@
  var f;
  var r = f.z;
  class C2 {

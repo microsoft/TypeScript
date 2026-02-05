@@ -12,6 +12,7 @@ class DebugClass {
 }
 
 //// [commentsOnReturnStatement1.js]
+"use strict";
 class DebugClass {
     static debugFunc() {
         // Start Debugger Test Code

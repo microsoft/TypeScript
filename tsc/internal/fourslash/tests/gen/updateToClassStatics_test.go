@@ -11,7 +11,7 @@ func TestUpdateToClassStatics(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module TypeScript {
+	const content = `namespace TypeScript {
     export class PullSymbol {}
     export class Diagnostic {}
     export class SymbolAndDiagnostics<TSymbol extends PullSymbol> {
@@ -24,7 +24,7 @@ func TestUpdateToClassStatics(t *testing.T) {
         }
     }
 }
-module TypeScript {
+namespace TypeScript {
     var x : TypeScript.SymbolAndDiagnostics;
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

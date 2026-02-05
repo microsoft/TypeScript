@@ -14,6 +14,7 @@ class Bar extends Foo {
 }
 
 //// [superSymbolIndexedAccess2.js]
+"use strict";
 class Foo {
     [Symbol.isConcatSpreadable]() {
         return 0;

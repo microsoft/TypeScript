@@ -1,0 +1,18 @@
+--- old.importAliasInModuleAugmentation.errors.txt
++++ new.importAliasInModuleAugmentation.errors.txt
+@@= skipped -0, +0 lines =@@
+ importAliasInModuleAugmentation.ts(12,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+-importAliasInModuleAugmentation.ts(12,24): error TS2591: Cannot find name 'fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++importAliasInModuleAugmentation.ts(12,24): error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+
+
+ ==== importAliasInModuleAugmentation.ts (2 errors) ====
+@@= skipped -17, +17 lines =@@
+         ~~~~~~
+ !!! error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+                            ~~~~
+-!!! error TS2591: Cannot find name 'fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+     }
+     
+     const m: number = x;

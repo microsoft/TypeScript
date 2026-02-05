@@ -3,7 +3,7 @@
 // interface Foo { }
 // /*FIND ALL REFS*/module [|Foo|] {
 //     export interface Bar { }
-//     export module Bar { export interface Baz { } }
+//     export namespace Bar { export interface Baz { } }
 //     export function Bar() { }
 // }
 // 
@@ -17,7 +17,7 @@
 // interface Foo { }
 // module /*FIND ALL REFS*/[|Foo|] {
 //     export interface Bar { }
-//     export module Bar { export interface Baz { } }
+//     export namespace Bar { export interface Baz { } }
 //     export function Bar() { }
 // }
 // 
@@ -31,7 +31,7 @@
 // interface Foo { }
 // module [|Foo|] {
 //     export interface Bar { }
-//     export module Bar { export interface Baz { } }
+//     export namespace Bar { export interface Baz { } }
 //     export function Bar() { }
 // }
 // 

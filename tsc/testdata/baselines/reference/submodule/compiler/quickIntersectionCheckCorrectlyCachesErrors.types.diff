@@ -1,0 +1,11 @@
+--- old.quickIntersectionCheckCorrectlyCachesErrors.types
++++ new.quickIntersectionCheckCorrectlyCachesErrors.types
+@@= skipped -2, +2 lines =@@
+ === quickIntersectionCheckCorrectlyCachesErrors.tsx ===
+ interface F<P> {
+     (props: P & { children?: boolean }): void;
+->props : P & { children?: boolean; }
++>props : P & { children?: boolean | undefined; }
+ >children : boolean | undefined
+
+     propTypes: { [K in keyof P]: null extends P ? K : K };

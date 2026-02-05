@@ -23,6 +23,7 @@ b = d2;
 var r: Base[] = [d1, d2];
 
 //// [derivedTypeDoesNotRequireExtendsClause.js]
+"use strict";
 class Base {
     foo;
 }

@@ -4,4 +4,5 @@
 function* g1(): any { }
 
 //// [generatorTypeCheck5.js]
+"use strict";
 function* g1() { }

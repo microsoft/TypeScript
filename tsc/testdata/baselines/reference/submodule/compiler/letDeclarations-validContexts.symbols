@@ -129,7 +129,7 @@ var F3 = function () {
 };
 
 // modules
-module m {
+namespace m {
 >m : Symbol(m, Decl(letDeclarations-validContexts.ts, 81, 2))
 
     let l22 = 0;
@@ -215,7 +215,7 @@ function f3() {
     }
 }
 
-module m3 {
+namespace m3 {
 >m3 : Symbol(m3, Decl(letDeclarations-validContexts.ts, 133, 1))
 
     label: let l34 = 0;

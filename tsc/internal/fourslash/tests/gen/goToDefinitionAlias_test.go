@@ -13,7 +13,7 @@ func TestGoToDefinitionAlias(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: b.ts
 import /*alias1Definition*/alias1 = require("fileb");
-module Module {
+namespace Module {
     export import /*alias2Definition*/alias2 = alias1;
 }
 

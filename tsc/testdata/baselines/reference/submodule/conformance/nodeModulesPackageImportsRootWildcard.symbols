@@ -1,0 +1,74 @@
+//// [tests/cases/conformance/node/nodeModulesPackageImportsRootWildcard.ts] ////
+
+=== src/foo.ts ===
+export const foo = "foo";
+>foo : Symbol(foo, Decl(foo.ts, 0, 12))
+
+=== src/features/bar.ts ===
+export const bar = "bar";
+>bar : Symbol(bar, Decl(bar.ts, 0, 12))
+
+=== src/nested/deep/baz.ts ===
+export const baz = "baz";
+>baz : Symbol(baz, Decl(baz.ts, 0, 12))
+
+=== index.ts ===
+// esm format file
+import { foo } from "#/foo.js";
+>foo : Symbol(foo, Decl(index.ts, 1, 8))
+
+import { bar } from "#/features/bar.js";
+>bar : Symbol(bar, Decl(index.ts, 2, 8))
+
+import { baz } from "#/nested/deep/baz.js";
+>baz : Symbol(baz, Decl(index.ts, 3, 8))
+
+foo;
+>foo : Symbol(foo, Decl(index.ts, 1, 8))
+
+bar;
+>bar : Symbol(bar, Decl(index.ts, 2, 8))
+
+baz;
+>baz : Symbol(baz, Decl(index.ts, 3, 8))
+
+=== index.mts ===
+// esm format file
+import { foo } from "#/foo.js";
+>foo : Symbol(foo, Decl(index.mts, 1, 8))
+
+import { bar } from "#/features/bar.js";
+>bar : Symbol(bar, Decl(index.mts, 2, 8))
+
+import { baz } from "#/nested/deep/baz.js";
+>baz : Symbol(baz, Decl(index.mts, 3, 8))
+
+foo;
+>foo : Symbol(foo, Decl(index.mts, 1, 8))
+
+bar;
+>bar : Symbol(bar, Decl(index.mts, 2, 8))
+
+baz;
+>baz : Symbol(baz, Decl(index.mts, 3, 8))
+
+=== index.cts ===
+// cjs format file
+import { foo } from "#/foo.js";
+>foo : Symbol(foo, Decl(index.cts, 1, 8))
+
+import { bar } from "#/features/bar.js";
+>bar : Symbol(bar, Decl(index.cts, 2, 8))
+
+import { baz } from "#/nested/deep/baz.js";
+>baz : Symbol(baz, Decl(index.cts, 3, 8))
+
+foo;
+>foo : Symbol(foo, Decl(index.cts, 1, 8))
+
+bar;
+>bar : Symbol(bar, Decl(index.cts, 2, 8))
+
+baz;
+>baz : Symbol(baz, Decl(index.cts, 3, 8))
+

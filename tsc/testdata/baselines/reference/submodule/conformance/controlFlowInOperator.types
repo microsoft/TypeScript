@@ -75,10 +75,10 @@ if (d in c) {
 // repro from https://github.com/microsoft/TypeScript/issues/54790
 
 function uniqueID_54790(
->uniqueID_54790 : (id: string, seenIDs: { [key: string]: string; }) => string
+>uniqueID_54790 : (id: string | undefined, seenIDs: { [key: string]: string; }) => string
 
   id: string | undefined,
->id : string
+>id : string | undefined
 
   seenIDs: { [key: string]: string }
 >seenIDs : { [key: string]: string; }
@@ -87,12 +87,12 @@ function uniqueID_54790(
 ): string {
   if (id === undefined) {
 >id === undefined : boolean
->id : string
+>id : string | undefined
 >undefined : undefined
 
     id = "1";
 >id = "1" : "1"
->id : string
+>id : string | undefined
 >"1" : "1"
   }
   if (!(id in seenIDs)) {

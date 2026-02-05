@@ -11,6 +11,7 @@ class B extends A {
 
 
 //// [override16.js]
+"use strict";
 class A {
     foo;
 }

@@ -9,6 +9,7 @@ class C {
 }
 
 //// [multipleClassPropertyModifiers.js]
+"use strict";
 class C {
     static p1;
     static p2;

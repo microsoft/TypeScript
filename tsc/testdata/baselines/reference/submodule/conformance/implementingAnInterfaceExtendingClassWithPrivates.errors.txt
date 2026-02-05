@@ -1,16 +1,24 @@
+implementingAnInterfaceExtendingClassWithPrivates.ts(2,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 implementingAnInterfaceExtendingClassWithPrivates.ts(9,7): error TS2420: Class 'Bar' incorrectly implements interface 'I'.
   Type 'Bar' is missing the following properties from type 'I': y, x
 implementingAnInterfaceExtendingClassWithPrivates.ts(12,7): error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
   Property 'x' is missing in type 'Bar2' but required in type 'I'.
+implementingAnInterfaceExtendingClassWithPrivates.ts(13,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 implementingAnInterfaceExtendingClassWithPrivates.ts(16,7): error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
   Property 'x' is private in type 'I' but not in type 'Bar3'.
+implementingAnInterfaceExtendingClassWithPrivates.ts(17,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+implementingAnInterfaceExtendingClassWithPrivates.ts(18,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 implementingAnInterfaceExtendingClassWithPrivates.ts(21,7): error TS2420: Class 'Bar4' incorrectly implements interface 'I'.
   Types have separate declarations of a private property 'x'.
+implementingAnInterfaceExtendingClassWithPrivates.ts(22,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+implementingAnInterfaceExtendingClassWithPrivates.ts(23,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 
 
-==== implementingAnInterfaceExtendingClassWithPrivates.ts (4 errors) ====
+==== implementingAnInterfaceExtendingClassWithPrivates.ts (10 errors) ====
     class Foo {
         private x: string;
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     interface I extends Foo {
@@ -29,6 +37,8 @@ implementingAnInterfaceExtendingClassWithPrivates.ts(21,7): error TS2420: Class 
 !!! error TS2420:   Property 'x' is missing in type 'Bar2' but required in type 'I'.
 !!! related TS2728 implementingAnInterfaceExtendingClassWithPrivates.ts:2:13: 'x' is declared here.
         y: number;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Bar3 implements I { // error
@@ -36,7 +46,11 @@ implementingAnInterfaceExtendingClassWithPrivates.ts(21,7): error TS2420: Class 
 !!! error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'x' is private in type 'I' but not in type 'Bar3'.
         x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         y: number;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Bar4 implements I { // error
@@ -44,5 +58,9 @@ implementingAnInterfaceExtendingClassWithPrivates.ts(21,7): error TS2420: Class 
 !!! error TS2420: Class 'Bar4' incorrectly implements interface 'I'.
 !!! error TS2420:   Types have separate declarations of a private property 'x'.
         private x: string;
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         y: number;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }

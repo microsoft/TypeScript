@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/thisBinding.ts] ////
 
 //// [thisBinding.ts]
-module M {
+namespace M {
     export interface I {
 	z;
     }
@@ -24,6 +24,7 @@ class C {
 }
 
 //// [thisBinding.js]
+"use strict";
 var M;
 (function (M) {
     class C {

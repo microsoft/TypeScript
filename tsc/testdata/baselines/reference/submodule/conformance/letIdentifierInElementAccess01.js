@@ -5,5 +5,6 @@ var let: any = {};
 (let[0] = 100);
 
 //// [letIdentifierInElementAccess01.js]
+"use strict";
 var let = {};
 (let[0] = 100);

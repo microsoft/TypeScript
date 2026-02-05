@@ -1,0 +1,78 @@
+// === goToDefinition ===
+// === /goToDefinitionObjectLiteralProperties2.ts ===
+// type C = {
+//   <|[|foo|]: string;|>
+//   bar: number;
+// };
+// 
+// declare function fn<T extends C>(arg: T): T;
+// 
+// fn({
+//   foo/*GOTO DEF*/: "",
+//   bar: true,
+// });
+// 
+// --- (line: 13) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectLiteralProperties2.ts ===
+// type C = {
+//   foo: string;
+//   <|[|bar|]: number;|>
+// };
+// 
+// declare function fn<T extends C>(arg: T): T;
+// 
+// fn({
+//   foo: "",
+//   bar/*GOTO DEF*/: true,
+// });
+// 
+// const result = fn({
+// --- (line: 14) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectLiteralProperties2.ts ===
+// --- (line: 10) skipped ---
+// });
+// 
+// const result = fn({
+//   <|[|foo|]/*GOTO DEF*/: ""|>,
+//   bar: 1,
+// });
+// 
+// // this one shouldn't go to the constraint type
+// result.foo;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectLiteralProperties2.ts ===
+// --- (line: 11) skipped ---
+// 
+// const result = fn({
+//   foo: "",
+//   <|[|bar|]/*GOTO DEF*/: 1|>,
+// });
+// 
+// // this one shouldn't go to the constraint type
+// result.foo;
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectLiteralProperties2.ts ===
+// --- (line: 10) skipped ---
+// });
+// 
+// const result = fn({
+//   <|[|foo|]: ""|>,
+//   bar: 1,
+// });
+// 
+// // this one shouldn't go to the constraint type
+// result.foo/*GOTO DEF*/;

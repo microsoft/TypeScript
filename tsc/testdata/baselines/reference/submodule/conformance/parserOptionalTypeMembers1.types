@@ -3,21 +3,21 @@
 === parserOptionalTypeMembers1.ts ===
 interface PropertyDescriptor2 {
     configurable?: boolean;
->configurable : boolean
+>configurable : boolean | undefined
 
     enumerable?: boolean;
->enumerable : boolean
+>enumerable : boolean | undefined
 
     value?: any;
 >value : any
 
     writable?: boolean;
->writable : boolean
+>writable : boolean | undefined
 
     get?(): any;
->get : () => any
+>get : (() => any) | undefined
 
     set?(v: any): void;
->set : (v: any) => void
+>set : ((v: any) => void) | undefined
 >v : any
 }

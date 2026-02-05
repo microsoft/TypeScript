@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericCloduleInModule.ts] ////
 
 === genericCloduleInModule.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     export class B<T> {
@@ -13,7 +13,7 @@ module A {
         static bar() { }
 >bar : () => void
     }
-    export module B {
+    export namespace B {
 >B : typeof B
 
         export var x = 1;

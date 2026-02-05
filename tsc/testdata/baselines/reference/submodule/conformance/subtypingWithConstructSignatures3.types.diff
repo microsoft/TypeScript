@@ -100,16 +100,36 @@
 
      declare function foo16(a2: {
 ->foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): typeof a2; (a2: any): any; }
-+>foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
- >a2 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+->a2 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
++>foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }; (a2: any): any; }
++>a2 : { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }
 
          // type of parameter is overload set which means we can't do inference based on this type
-@@= skipped -32, +32 lines =@@
- >a2 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+         new (x: {
+->x : { new (a: number): number; new (a?: number): number; }
++>x : { new (a: number): number; new (a?: number | undefined): number; }
+
+             new (a: number): number;
+ >a : number
+@@= skipped -19, +19 lines =@@
+
+         }): number[];
+         new (x: {
+->x : { new (a: boolean): boolean; new (a?: boolean): boolean; }
++>x : { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }
+
+             new (a: boolean): boolean;
+ >a : boolean
+@@= skipped -10, +10 lines =@@
+
+         }): boolean[];
+     }): typeof a2;
+->a2 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
++>a2 : { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }
 
      declare function foo16(a2: any): any;
 ->foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): typeof a2; (a2: any): any; }
-+>foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
++>foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }; (a2: any): any; }
  >a2 : any
 
      declare function foo17(a2: {
@@ -118,7 +138,7 @@
  >a2 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
 
          new (x: {
-@@= skipped -31, +31 lines =@@
+@@= skipped -34, +34 lines =@@
  >a2 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
 
      declare function foo17(a2: any): any;
@@ -156,8 +176,8 @@
      var r3a = [r3arg2, r3arg1];
 @@= skipped -26, +26 lines =@@
      var r4 = foo10(r4arg1); // any
- >r4 : new (...x: Base[]) => Base
- >foo10(r4arg1) : new (...x: Base[]) => Base
+ >r4 : any
+ >foo10(r4arg1) : any
 ->foo10 : { (a2: new (...x: Base[]) => Base): typeof a2; (a2: any): any; }
 +>foo10 : { (a2: new (...x: Base[]) => Base): new (...x: Base[]) => Base; (a2: any): any; }
  >r4arg1 : new <T extends Derived>(...x: T[]) => T
@@ -165,8 +185,8 @@
      var r4a = [r4arg2, r4arg1];
 @@= skipped -31, +31 lines =@@
      var r5 = foo11(r5arg1); // any
- >r5 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
- >foo11(r5arg1) : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+ >r5 : any
+ >foo11(r5arg1) : any
 ->foo11 : { (a2: new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): typeof a2; (a2: any): any; }
 +>foo11 : { (a2: new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }
  >r5arg1 : new <T extends Derived>(x: T, y: T) => T
@@ -242,7 +262,7 @@
  >r8 : any
  >foo16(r8arg) : any
 ->foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): typeof a2; (a2: any): any; }
-+>foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
++>foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }; (a2: any): any; }
  >r8arg : new <T>(x: new (a: T) => T) => T[]
 
      var r9arg: new <T>(x: new (a: T) => T) => any[];

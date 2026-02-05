@@ -1,0 +1,11 @@
+--- old.checkJsdocOptionalParamOrder.types
++++ new.checkJsdocOptionalParamOrder.types
+@@= skipped -7, +7 lines =@@
+  * @param {number} c
+  */
+ function foo(a, b, c) {}
+->foo : (a: number, b?: number, c: number) => void
++>foo : (a: number, b?: number | undefined, c: number) => void
+ >a : number
+ >b : number | undefined
+ >c : number

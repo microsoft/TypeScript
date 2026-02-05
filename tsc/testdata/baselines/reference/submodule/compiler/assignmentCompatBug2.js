@@ -41,6 +41,7 @@ b3 = {
 }; // error
 
 //// [assignmentCompatBug2.js]
+"use strict";
 var b2 = { a: 0 }; // error
 b2 = { a: 0 }; // error
 b2 = { b: 0, a: 0 };

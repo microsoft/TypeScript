@@ -1,13 +1,16 @@
 --- old.genericCallWithObjectTypeArgsAndConstraints4.errors.txt
 +++ new.genericCallWithObjectTypeArgsAndConstraints4.errors.txt
 @@= skipped -0, +0 lines =@@
+ genericCallWithObjectTypeArgsAndConstraints4.ts(4,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+ genericCallWithObjectTypeArgsAndConstraints4.ts(8,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+ genericCallWithObjectTypeArgsAndConstraints4.ts(9,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 -genericCallWithObjectTypeArgsAndConstraints4.ts(19,17): error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
 -  Property 'y' is missing in type 'C' but required in type 'D'.
 +genericCallWithObjectTypeArgsAndConstraints4.ts(19,17): error TS2741: Property 'y' is missing in type 'C' but required in type 'D'.
+ genericCallWithObjectTypeArgsAndConstraints4.ts(22,18): error TS2345: Argument of type 'null' is not assignable to parameter of type '{}'.
+ genericCallWithObjectTypeArgsAndConstraints4.ts(23,20): error TS2345: Argument of type '{}' is not assignable to parameter of type 'null'.
  genericCallWithObjectTypeArgsAndConstraints4.ts(30,24): error TS2345: Argument of type 'C' is not assignable to parameter of type 'T'.
-   'T' could be instantiated with an arbitrary type which could be unrelated to 'C'.
-
-@@= skipped -24, +23 lines =@@
+@@= skipped -35, +34 lines =@@
      var r = foo(c, d);
      var r2 = foo(d, c); // error because C does not extend D
                      ~

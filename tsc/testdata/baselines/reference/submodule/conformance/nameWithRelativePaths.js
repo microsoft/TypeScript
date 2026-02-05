@@ -9,7 +9,7 @@ export function f(){
 }
 
 //// [foo_2.ts]
-export module M2 {
+export namespace M2 {
 	export var x = true;
 }
 

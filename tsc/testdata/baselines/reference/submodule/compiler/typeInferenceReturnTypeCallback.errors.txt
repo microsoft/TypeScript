@@ -1,0 +1,32 @@
+typeInferenceReturnTypeCallback.ts(7,9): error TS2322: Type 'null' is not assignable to type 'IList<D>'.
+typeInferenceReturnTypeCallback.ts(19,9): error TS2322: Type 'null' is not assignable to type 'E'.
+  'E' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+
+
+==== typeInferenceReturnTypeCallback.ts (2 errors) ====
+    interface IList<A> {
+        map<B>(f: (t: A) => B): IList<B>;
+    }
+    
+    class Nil<C> implements IList<C>{
+        map<D>(f: (t: C) => D): IList<D> {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'IList<D>'.
+        }
+    }
+    
+    class Cons<T> implements IList<T>{
+        map<U>(f: (t: T) => U): IList<U> {
+            return this.foldRight(new Nil<U>(), (t, acc) => {
+                return new Cons<U>();
+            });
+        }
+    
+        foldRight<E>(z: E, f: (t: T, acc: E) => E): E {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'E'.
+!!! error TS2322:   'E' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+        }
+    }

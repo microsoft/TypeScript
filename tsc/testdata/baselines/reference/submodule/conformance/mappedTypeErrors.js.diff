@@ -1,10 +1,10 @@
 --- old.mappedTypeErrors.js
 +++ new.mappedTypeErrors.js
-@@= skipped -208, +208 lines =@@
+@@= skipped -212, +212 lines =@@
  setState(foo, { a: undefined }); // Error
  setState(foo, { c: true }); // Error
  class C {
 +    state;
-     setState(props) {
-         for (let k in props) {
-             this.state[k] = props[k];
+     constructor(initialState) {
+         this.state = initialState;
+     }

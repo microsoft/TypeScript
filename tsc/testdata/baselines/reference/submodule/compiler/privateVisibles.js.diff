@@ -1,8 +1,8 @@
 --- old.privateVisibles.js
 +++ new.privateVisibles.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [privateVisibles.js]
+ "use strict";
  class Foo {
 +    pvar = 0;
      constructor() {

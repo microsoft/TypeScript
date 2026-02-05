@@ -1,0 +1,13 @@
+typeArgumentInferenceApparentType1.ts(2,5): error TS2322: Type 'undefined' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+
+
+==== typeArgumentInferenceApparentType1.ts (1 errors) ====
+    function method<T>(iterable: Iterable<T>): T {
+        return;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+    }
+    
+    var res: string = method("test");

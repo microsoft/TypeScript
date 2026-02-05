@@ -17,6 +17,7 @@ var xs = [(x: A) => { }, (x: B) => { }, (x: C) => { }];
 
 
 //// [contextualTypingArrayOfLambdas.js]
+"use strict";
 class A {
     foo;
 }

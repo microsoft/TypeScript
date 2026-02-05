@@ -9,6 +9,7 @@ function* g(): IterableIterator<Foo> {
 }
 
 //// [generatorTypeCheck21.js]
+"use strict";
 class Foo {
     x;
 }

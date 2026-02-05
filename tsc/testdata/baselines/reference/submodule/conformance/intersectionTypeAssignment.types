@@ -1,20 +1,20 @@
 //// [tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts] ////
 
 === intersectionTypeAssignment.ts ===
-var a: { a: string };
+declare var a: { a: string };
 >a : { a: string; }
 >a : string
 
-var b: { b: string };
+declare var b: { b: string };
 >b : { b: string; }
 >b : string
 
-var x: { a: string, b: string };
+declare var x: { a: string, b: string };
 >x : { a: string; b: string; }
 >a : string
 >b : string
 
-var y: { a: string } & { b: string };
+declare var y: { a: string } & { b: string };
 >y : { a: string; } & { b: string; }
 >a : string
 >b : string

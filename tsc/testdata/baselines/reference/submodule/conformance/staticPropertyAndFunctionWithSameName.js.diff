@@ -1,8 +1,8 @@
 --- old.staticPropertyAndFunctionWithSameName.js
 +++ new.staticPropertyAndFunctionWithSameName.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [staticPropertyAndFunctionWithSameName.js]
+ "use strict";
  class C {
 +    static f;
 +    f;

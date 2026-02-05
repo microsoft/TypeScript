@@ -4,4 +4,5 @@
 let
 
 //// [VariableDeclaration6_es6.js]
+"use strict";
 let;

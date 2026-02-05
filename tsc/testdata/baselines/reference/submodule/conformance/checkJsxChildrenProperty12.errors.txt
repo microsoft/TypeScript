@@ -1,0 +1,40 @@
+file.tsx(14,7): error TS2454: Variable 'condition' is used before being assigned.
+
+
+==== file.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
+    import React = require('react');
+    
+    interface ButtonProp {
+        a: number,
+        b: string,
+        children: Button;
+    }
+    
+    class Button extends React.Component<ButtonProp, any> {
+        render() {
+    		let condition: boolean;
+    		if (condition) {
+    		    ~~~~~~~~~
+!!! error TS2454: Variable 'condition' is used before being assigned.
+            	return <InnerButton {...this.props} />
+    		}
+    		else {
+    			return (<InnerButton {...this.props} >
+    				<div>Hello World</div>
+    				</InnerButton>);
+    		}
+        }
+    }
+    
+    interface InnerButtonProp {
+    	a: number
+    }
+    
+    class InnerButton extends React.Component<InnerButtonProp, any> {
+    	render() {
+    		return (<button>Hello</button>);
+    	}
+    }
+    

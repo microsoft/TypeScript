@@ -31,6 +31,7 @@ class G extends package { }
 class H extends package.A { }
 
 //// [strictModeReservedWordInClassDeclaration.js]
+"use strict";
 class Foo {
     constructor(private, public, static) {
         private = public = static;

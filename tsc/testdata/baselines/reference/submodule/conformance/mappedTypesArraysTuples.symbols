@@ -43,17 +43,17 @@ type T12 = Required<string[]>;
 type T13 = Boxified<ReadonlyArray<string>>;
 >T13 : Symbol(T13, Decl(mappedTypesArraysTuples.ts, 9, 30))
 >Boxified : Symbol(Boxified, Decl(mappedTypesArraysTuples.ts, 0, 27))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 type T14 = Partial<ReadonlyArray<string>>;
 >T14 : Symbol(T14, Decl(mappedTypesArraysTuples.ts, 10, 43))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 type T15 = Required<ReadonlyArray<string>>;
 >T15 : Symbol(T15, Decl(mappedTypesArraysTuples.ts, 11, 42))
 >Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 type T20 = Boxified<(string | undefined)[]>;
 >T20 : Symbol(T20, Decl(mappedTypesArraysTuples.ts, 12, 43))
@@ -70,17 +70,17 @@ type T22 = Required<(string | undefined)[]>;
 type T23 = Boxified<ReadonlyArray<string | undefined>>;
 >T23 : Symbol(T23, Decl(mappedTypesArraysTuples.ts, 16, 44))
 >Boxified : Symbol(Boxified, Decl(mappedTypesArraysTuples.ts, 0, 27))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 type T24 = Partial<ReadonlyArray<string | undefined>>;
 >T24 : Symbol(T24, Decl(mappedTypesArraysTuples.ts, 17, 55))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 type T25 = Required<ReadonlyArray<string | undefined>>;
 >T25 : Symbol(T25, Decl(mappedTypesArraysTuples.ts, 18, 54))
 >Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 type T30 = Boxified<Partial<string[]>>;
 >T30 : Symbol(T30, Decl(mappedTypesArraysTuples.ts, 19, 55))
@@ -105,7 +105,7 @@ type T40 = Boxified<A | A[] | ReadonlyArray<A> | [A, B] | string | string[]>;
 >Boxified : Symbol(Boxified, Decl(mappedTypesArraysTuples.ts, 0, 27))
 >A : Symbol(A, Decl(mappedTypesArraysTuples.ts, 22, 39))
 >A : Symbol(A, Decl(mappedTypesArraysTuples.ts, 22, 39))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >A : Symbol(A, Decl(mappedTypesArraysTuples.ts, 22, 39))
 >A : Symbol(A, Decl(mappedTypesArraysTuples.ts, 22, 39))
 >B : Symbol(B, Decl(mappedTypesArraysTuples.ts, 24, 23))
@@ -239,7 +239,7 @@ declare function all<T extends any[]>(...values: T): Promise<Awaitified<T>>;
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 62, 21))
 >values : Symbol(values, Decl(mappedTypesArraysTuples.ts, 62, 38))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 62, 21))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Awaitified : Symbol(Awaitified, Decl(mappedTypesArraysTuples.ts, 59, 59))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 62, 21))
 
@@ -247,10 +247,10 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >f1 : Symbol(f1, Decl(mappedTypesArraysTuples.ts, 62, 76))
 >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 64, 12))
 >b : Symbol(b, Decl(mappedTypesArraysTuples.ts, 64, 22))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >c : Symbol(c, Decl(mappedTypesArraysTuples.ts, 64, 42))
 >d : Symbol(d, Decl(mappedTypesArraysTuples.ts, 64, 55))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     let x1 = all(a);
 >x1 : Symbol(x1, Decl(mappedTypesArraysTuples.ts, 65, 7))
@@ -308,7 +308,7 @@ type ElementType<T> = T extends Array<infer U> ? U : never;
 >ElementType : Symbol(ElementType, Decl(mappedTypesArraysTuples.ts, 74, 1))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 78, 17))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 78, 17))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >U : Symbol(U, Decl(mappedTypesArraysTuples.ts, 78, 43))
 >U : Symbol(U, Decl(mappedTypesArraysTuples.ts, 78, 43))
 

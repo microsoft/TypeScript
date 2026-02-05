@@ -1,0 +1,17 @@
+test.tsx(4,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== modules.d.ts (0 errors) ====
+    declare module "my-React-Lib" {
+        var a: any;
+        export = a;
+    }
+    
+==== test.tsx (1 errors) ====
+    import * as myReactLib from "my-React-Lib"; // should not be elided
+    declare var foo: any;
+    
+    <foo data/>;
+    ~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    

@@ -1,6 +1,6 @@
 --- old.subtypingWithCallSignatures3.js
 +++ new.subtypingWithCallSignatures3.js
-@@= skipped -125, +125 lines =@@
+@@= skipped -126, +126 lines =@@
  var Errors;
  (function (Errors) {
      class Base {

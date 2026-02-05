@@ -8,23 +8,23 @@ interface I {
 >foo : string
 
     bar?: number;
->bar : number
+>bar : number | undefined
 
     baz? (): string;
->baz : () => string
+>baz : (() => string) | undefined
 }
 
 var a: {
->a : { foo: string; bar?: number; baz?(): string; }
+>a : { foo: string; bar?: number | undefined; baz?(): string; }
 
     foo: string;
 >foo : string
 
     bar?: number;
->bar : number
+>bar : number | undefined
 
     baz? (): string;
->baz : () => string
+>baz : (() => string) | undefined
 
 };
 
@@ -73,26 +73,26 @@ i = d;
 
 a = b;
 >a = b : { foo: string; }
->a : { foo: string; bar?: number; baz?(): string; }
+>a : { foo: string; bar?: number | undefined; baz?(): string; }
 >b : { foo: string; }
 
 a = c;
 >a = c : { foo: string; bar: number; }
->a : { foo: string; bar?: number; baz?(): string; }
+>a : { foo: string; bar?: number | undefined; baz?(): string; }
 >c : { foo: string; bar: number; }
 
 a = d;
 >a = d : { foo: string; bar: number; baz: () => string; }
->a : { foo: string; bar?: number; baz?(): string; }
+>a : { foo: string; bar?: number | undefined; baz?(): string; }
 >d : { foo: string; bar: number; baz: () => string; }
 
 i = a;
->i = a : { foo: string; bar?: number; baz?(): string; }
+>i = a : { foo: string; bar?: number | undefined; baz?(): string; }
 >i : I
->a : { foo: string; bar?: number; baz?(): string; }
+>a : { foo: string; bar?: number | undefined; baz?(): string; }
 
 a = i;
 >a = i : I
->a : { foo: string; bar?: number; baz?(): string; }
+>a : { foo: string; bar?: number | undefined; baz?(): string; }
 >i : I
 

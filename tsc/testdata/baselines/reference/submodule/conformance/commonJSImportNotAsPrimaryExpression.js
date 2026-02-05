@@ -11,7 +11,7 @@ export interface I1 {
 	age: number;
 }
 
-export module M1 {
+export namespace M1 {
 	export interface I2 {
 		foo: string;
 	}

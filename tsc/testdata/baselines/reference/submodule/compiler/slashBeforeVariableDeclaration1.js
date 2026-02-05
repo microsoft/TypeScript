@@ -4,3 +4,4 @@
 \ declare var v;
 
 //// [slashBeforeVariableDeclaration1.js]
+"use strict";

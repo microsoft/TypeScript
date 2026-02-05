@@ -11,7 +11,7 @@ func TestMemberOverloadEdits(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
+	const content = `namespace M {
     export class A {
         public m(n: number) {
             return 0;

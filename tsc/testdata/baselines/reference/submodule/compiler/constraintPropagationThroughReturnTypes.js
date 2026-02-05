@@ -12,6 +12,7 @@ function f<S extends { foo: string }>(x: S) {
 
 
 //// [constraintPropagationThroughReturnTypes.js]
+"use strict";
 function g(x) {
     return x;
 }

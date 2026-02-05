@@ -4,6 +4,7 @@
 var v = @decorate class C { static p = 1 };
 
 //// [classExpressionWithDecorator1.js]
+"use strict";
 var v = class C {
     static p = 1;
 };

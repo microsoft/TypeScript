@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/typeValueConflict1.ts] ////
 
 //// [typeValueConflict1.ts]
-module M1 {
+namespace M1 {
  export class A {
  }
 }
-module M2 {
+namespace M2 {
  var M1 = 0;
  // Should error.  M1 should bind to the variable, not to the module.
  class B extends M1.A {
@@ -14,6 +14,7 @@ module M2 {
 
 
 //// [typeValueConflict1.js]
+"use strict";
 var M1;
 (function (M1) {
     class A {

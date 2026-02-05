@@ -5,4 +5,5 @@ var x;
 
 
 //// [optionsStrictPropertyInitializationStrictNullChecks.js]
+"use strict";
 var x;

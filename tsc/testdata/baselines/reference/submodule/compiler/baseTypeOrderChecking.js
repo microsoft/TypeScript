@@ -39,6 +39,7 @@ class Class4<T> extends Class3<T>
 
 
 //// [baseTypeOrderChecking.js]
+"use strict";
 var someVariable;
 class Class1 {
 }

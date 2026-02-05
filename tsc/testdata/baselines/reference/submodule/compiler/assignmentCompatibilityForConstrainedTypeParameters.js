@@ -10,6 +10,7 @@ function foo<T extends { bar: string }>() {
 }
 
 //// [assignmentCompatibilityForConstrainedTypeParameters.js]
+"use strict";
 function foo() {
     function bar() {
         var x;

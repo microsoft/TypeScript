@@ -1,6 +1,7 @@
 //// [tests/cases/conformance/jsx/unicodeEscapesInJsxtags.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
 import * as React from "react";
 declare global {
     namespace JSX {
@@ -31,6 +32,7 @@ const x = { video: () => null }
 
 
 //// [file.js]
+/// <reference path="/.lib/react.d.ts" />
 import * as React from "react";
 const Compa = (x) => React.createElement("div", null, "" + x);
 const x = { video: () => null };

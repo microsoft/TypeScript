@@ -30,6 +30,7 @@ var e: E = bar("bye", []); // E
 var f: C = bar("um", []); // C
 
 //// [overloadingOnConstants2.js]
+"use strict";
 class C {
     x = 1;
 }

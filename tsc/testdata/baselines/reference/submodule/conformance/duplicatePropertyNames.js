@@ -51,6 +51,7 @@ var b = {
 
 
 //// [duplicatePropertyNames.js]
+"use strict";
 // duplicate property names are an error in all types
 class C {
     foo;

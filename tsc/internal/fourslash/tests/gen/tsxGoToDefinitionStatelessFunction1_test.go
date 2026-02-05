@@ -14,7 +14,7 @@ func TestTsxGoToDefinitionStatelessFunction1(t *testing.T) {
 	const content = `//@Filename: file.tsx
 // @jsx: preserve
 // @noLib: true
-declare module JSX {
+declare namespace JSX {
     interface Element { }
     interface IntrinsicElements {
     }

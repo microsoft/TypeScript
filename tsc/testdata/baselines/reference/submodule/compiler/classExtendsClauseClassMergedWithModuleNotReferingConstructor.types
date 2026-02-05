@@ -7,14 +7,14 @@ class A {
     a: number;
 >a : number
 }
-module A {
+namespace A {
 >A : typeof A
 
     export var v: string;
 >v : string
 }
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 
     var A = 1;

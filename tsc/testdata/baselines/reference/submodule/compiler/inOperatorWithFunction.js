@@ -6,5 +6,6 @@ fn("a" in { "a": true });
 
 
 //// [inOperatorWithFunction.js]
+"use strict";
 var fn = function (val) { return val; };
 fn("a" in { "a": true });

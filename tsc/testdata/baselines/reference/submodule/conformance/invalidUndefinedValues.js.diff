@@ -1,6 +1,6 @@
 --- old.invalidUndefinedValues.js
 +++ new.invalidUndefinedValues.js
-@@= skipped -41, +41 lines =@@
+@@= skipped -42, +42 lines =@@
  x = a;
  x = null;
  class C {

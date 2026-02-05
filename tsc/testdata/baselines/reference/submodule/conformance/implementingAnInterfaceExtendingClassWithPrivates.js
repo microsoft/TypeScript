@@ -27,6 +27,7 @@ class Bar4 implements I { // error
 }
 
 //// [implementingAnInterfaceExtendingClassWithPrivates.js]
+"use strict";
 class Foo {
     x;
 }

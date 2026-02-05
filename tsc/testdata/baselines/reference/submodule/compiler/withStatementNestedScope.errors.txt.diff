@@ -1,0 +1,16 @@
+--- old.withStatementNestedScope.errors.txt
++++ new.withStatementNestedScope.errors.txt
+@@= skipped -0, +0 lines =@@
+-withStatementNestedScope.ts(2,1): error TS1101: 'with' statements are not allowed in strict mode.
+ withStatementNestedScope.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+
+
+-==== withStatementNestedScope.ts (2 errors) ====
++==== withStatementNestedScope.ts (1 errors) ====
+     var x = 1;
+     with (x) {
+-    ~~~~
+-!!! error TS1101: 'with' statements are not allowed in strict mode.
+     ~~~~~~~~
+ !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+         function f(a: number) {

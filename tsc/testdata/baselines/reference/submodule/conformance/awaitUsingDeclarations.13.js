@@ -8,6 +8,7 @@ function f() {
 }
 
 //// [awaitUsingDeclarations.13.js]
+"use strict";
 await using x = null;
 function f() {
     await using x = null;

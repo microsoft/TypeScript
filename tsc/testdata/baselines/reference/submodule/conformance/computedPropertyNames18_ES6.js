@@ -8,6 +8,7 @@ function foo() {
 }
 
 //// [computedPropertyNames18_ES6.js]
+"use strict";
 function foo() {
     var obj = {
         [this.bar]: 0

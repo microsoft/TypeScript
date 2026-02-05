@@ -21,6 +21,7 @@ function f() {
 
 
 //// [autoAccessor8.js]
+"use strict";
 class C1 {
     accessor a;
     static accessor b;

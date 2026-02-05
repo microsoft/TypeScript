@@ -1,0 +1,11 @@
+--- old.tsxInArrowFunction.types
++++ new.tsxInArrowFunction.types
+@@= skipped -4, +4 lines =@@
+     interface Element { }
+     interface IntrinsicElements {
+         div: {
+->div : { text?: string; }
++>div : { text?: string | undefined; }
+
+             text?: string;
+ >text : string | undefined

@@ -7,5 +7,6 @@ return bar;
 }
 
 //// [parserErrorRecovery_ModuleElement1.js]
+"use strict";
 return foo;
 return bar;

@@ -1,7 +1,7 @@
 --- old.constructSignatureWithAccessibilityModifiersOnParameters2.js
 +++ new.constructSignatureWithAccessibilityModifiersOnParameters2.js
-@@= skipped -40, +40 lines =@@
- //// [constructSignatureWithAccessibilityModifiersOnParameters2.js]
+@@= skipped -41, +41 lines =@@
+ "use strict";
  // Parameter properties are not valid in overloads of constructors
  class C {
 +    x;

@@ -1,8 +1,8 @@
 --- old.comparisonOperatorWithSubtypeObjectOnCallSignature.js
 +++ new.comparisonOperatorWithSubtypeObjectOnCallSignature.js
-@@= skipped -262, +262 lines =@@
-
+@@= skipped -263, +263 lines =@@
  //// [comparisonOperatorWithSubtypeObjectOnCallSignature.js]
+ "use strict";
  class Base {
 +    a;
  }

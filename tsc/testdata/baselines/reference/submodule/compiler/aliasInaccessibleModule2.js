@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/aliasInaccessibleModule2.ts] ////
 
 //// [aliasInaccessibleModule2.ts]
-module M {
-    module N {
+namespace M {
+    namespace N {
         class C {
         }
         
@@ -12,6 +12,7 @@ module M {
 }
 
 //// [aliasInaccessibleModule2.js]
+"use strict";
 var M;
 (function (M) {
     let N;

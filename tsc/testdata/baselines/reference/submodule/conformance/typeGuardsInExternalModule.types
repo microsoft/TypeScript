@@ -26,9 +26,9 @@ if (typeof var1 === "string") {
 }
 else {
     num = var1; // number
->num = var1 : number
+>num = var1 : string | number
 >num : number
->var1 : number
+>var1 : string | number
 }
 
 // exported variable in external module
@@ -52,7 +52,7 @@ if (typeof var2 === "string") {
 }
 else {
     strOrNum = var2; // number | string
->strOrNum = var2 : number
+>strOrNum = var2 : string | number
 >strOrNum : string | number
->var2 : number
+>var2 : string | number
 }

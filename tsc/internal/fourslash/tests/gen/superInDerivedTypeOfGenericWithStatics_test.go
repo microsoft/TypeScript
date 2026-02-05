@@ -11,7 +11,8 @@ func TestSuperInDerivedTypeOfGenericWithStatics(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
+	const content = `// @strict: false
+namespace M {
    export class C<T extends Date> {
       static foo(): C<Date> {
           return null;

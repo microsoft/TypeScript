@@ -1,8 +1,8 @@
 --- old.returnStatementNoAsiAfterTransform(target=esnext).js
 +++ new.returnStatementNoAsiAfterTransform(target=esnext).js
-@@= skipped -66, +66 lines =@@
-
+@@= skipped -67, +67 lines =@@
  //// [returnStatementNoAsiAfterTransform.js]
+ "use strict";
  function t1() {
 -    return (
 +    return 

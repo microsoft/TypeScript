@@ -10,6 +10,7 @@ class Foo implements Qux {
 
 
 //// [publicMemberImplementedAsPrivateInDerivedClass.js]
+"use strict";
 class Foo {
     Bar;
 }

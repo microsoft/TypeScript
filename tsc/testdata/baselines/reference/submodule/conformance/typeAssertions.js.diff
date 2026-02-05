@@ -1,6 +1,6 @@
 --- old.typeAssertions.js
 +++ new.typeAssertions.js
-@@= skipped -63, +63 lines =@@
+@@= skipped -62, +62 lines =@@
  var a = "" + 4;
  var s = "" + 4;
  class SomeBase {

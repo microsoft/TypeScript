@@ -12,6 +12,7 @@ class UI {
 }
 
 //// [parameterReferencesOtherParameter1.js]
+"use strict";
 class Model {
     name;
 }

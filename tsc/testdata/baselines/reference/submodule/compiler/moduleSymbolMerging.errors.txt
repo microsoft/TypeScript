@@ -1,0 +1,16 @@
+B.ts(4,29): error TS2322: Type 'null' is not assignable to type 'I'.
+
+
+==== B.ts (1 errors) ====
+    ///<reference path="A.ts" preserve="true" />
+    namespace A { ; }
+    namespace B {
+    	export function f(): A.I { return null; }
+    	                           ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'I'.
+    }
+    
+    
+==== A.ts (0 errors) ====
+    namespace A { export interface I {} }
+    

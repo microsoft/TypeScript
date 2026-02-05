@@ -12,7 +12,8 @@ func TestJsDocFunctionTypeCompletionsNoCrash(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `/**
+	const content = `// @lib: es5
+/**
  * @returns {function/**/(): string}
  */
 function updateCalendarEvent() {

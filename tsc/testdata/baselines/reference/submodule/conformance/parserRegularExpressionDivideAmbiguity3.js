@@ -4,5 +4,6 @@
 if (1) /regexp/a.foo();
 
 //// [parserRegularExpressionDivideAmbiguity3.js]
+"use strict";
 if (1)
     /regexp/a.foo();

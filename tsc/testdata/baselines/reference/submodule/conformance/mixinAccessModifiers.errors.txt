@@ -1,3 +1,9 @@
+mixinAccessModifiers.ts(5,10): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+mixinAccessModifiers.ts(10,10): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+mixinAccessModifiers.ts(15,12): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+mixinAccessModifiers.ts(21,12): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+mixinAccessModifiers.ts(27,9): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+mixinAccessModifiers.ts(33,9): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
 mixinAccessModifiers.ts(38,4): error TS2339: Property 'p' does not exist on type 'never'.
   The intersection 'Private & Private2' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
 mixinAccessModifiers.ts(42,4): error TS2339: Property 'p' does not exist on type 'never'.
@@ -25,40 +31,52 @@ mixinAccessModifiers.ts(129,4): error TS2341: Property 'privateMethod' is privat
 mixinAccessModifiers.ts(130,4): error TS2445: Property 'protectedMethod' is protected and only accessible within class 'ProtectedGeneric<T>' and its subclasses.
 
 
-==== mixinAccessModifiers.ts (17 errors) ====
+==== mixinAccessModifiers.ts (23 errors) ====
     type Constructable = new (...args: any[]) => object;
     
     class Private {
     	constructor (...args: any[]) {}
     	private p: string;
+    	        ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Private2 {
     	constructor (...args: any[]) {}
     	private p: string;
+    	        ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Protected {
     	constructor (...args: any[]) {}
     	protected p: string;
+    	          ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
     	protected static s: string;
     }
     
     class Protected2 {
     	constructor (...args: any[]) {}
     	protected p: string;
+    	          ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
     	protected static s: string;
     }
     
     class Public {
     	constructor (...args: any[]) {}
     	public p: string;
+    	       ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
     	public static s: string;
     }
     
     class Public2 {
     	constructor (...args: any[]) {}
     	public p: string;
+    	       ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
     	public static s: string;
     }
     

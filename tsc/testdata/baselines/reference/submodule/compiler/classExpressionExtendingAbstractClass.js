@@ -11,6 +11,7 @@ var C = class extends A {     // no error reported!
 
 
 //// [classExpressionExtendingAbstractClass.js]
+"use strict";
 class A {
 }
 var C = class extends A {

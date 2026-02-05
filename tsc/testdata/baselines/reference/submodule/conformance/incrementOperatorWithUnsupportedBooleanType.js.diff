@@ -1,7 +1,7 @@
 --- old.incrementOperatorWithUnsupportedBooleanType.js
 +++ new.incrementOperatorWithUnsupportedBooleanType.js
-@@= skipped -60, +60 lines =@@
- var BOOLEAN;
+@@= skipped -59, +59 lines =@@
+ "use strict";
  function foo() { return true; }
  class A {
 +    a;

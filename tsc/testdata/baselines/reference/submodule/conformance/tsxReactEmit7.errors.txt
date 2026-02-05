@@ -10,7 +10,7 @@ file.tsx(18,10): error TS2874: This JSX tag requires 'React' to be in scope, but
 
 
 ==== file.tsx (9 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     		[s: string]: any;

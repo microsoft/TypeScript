@@ -1,0 +1,26 @@
+--- old.everyTypeWithAnnotationAndInvalidInitializer.types
++++ new.everyTypeWithAnnotationAndInvalidInitializer.types
+@@= skipped -51, +51 lines =@@
+ >F2 : (x: number) => string
+ >x : number
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ }
+
+ namespace N {
+@@= skipped -19, +19 lines =@@
+ >F2 : (x: number) => string
+ >x : number
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ }
+
+ var aNumber: number = 'this is a string';

@@ -1,22 +1,28 @@
 --- old.conflictingCommonJSES2015Exports.errors.txt
 +++ new.conflictingCommonJSES2015Exports.errors.txt
 @@= skipped -0, +0 lines =@@
--bug24934.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+-bug24934.js(2,1): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+-
+-
+-==== bug24934.js (1 errors) ====
++bug24934.js(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +bug24934.js(2,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-+use.js(1,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
-
-
- ==== bug24934.js (1 errors) ====
++use.js(1,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
++
++
++==== bug24934.js (2 errors) ====
      export function abc(a, b, c) { return 5; }
      module.exports = { abc };
 -    ~~~~~~
--!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 -==== use.js (0 errors) ====
++    ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +    ~~~~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +==== use.js (1 errors) ====
      import { abc } from './bug24934';
 +                        ~~~~~~~~~~~~
-+!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
++!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
      abc(1, 2, 3);
      

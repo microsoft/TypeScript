@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxGenericAttributesType9.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 export function makeP<P>(Ctor: React.ComponentClass<P>) {
@@ -17,6 +19,7 @@ export function makeP<P>(Ctor: React.ComponentClass<P>) {
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.makeP = makeP;
 const React = require("react");

@@ -83,6 +83,7 @@ const o1 = {
 }
 
 //// [modularizeLibrary_TargetES5UsingES6Lib.js]
+"use strict";
 // Using Es6 array
 function f(x, y, z) {
     return Array.from(arguments);

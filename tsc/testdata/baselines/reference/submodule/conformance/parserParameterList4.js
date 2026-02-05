@@ -5,5 +5,6 @@ function F(public A) {
 }
 
 //// [parserParameterList4.js]
+"use strict";
 function F(A) {
 }

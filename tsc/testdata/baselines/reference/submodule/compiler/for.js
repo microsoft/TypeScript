@@ -33,6 +33,7 @@ for () { // error
 }
 
 //// [for.js]
+"use strict";
 for (var i = 0; i < 10; i++) { // ok
     var x1 = i;
 }

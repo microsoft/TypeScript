@@ -1,7 +1,7 @@
 --- old.untypedFunctionCallsWithTypeParameters1.js
 +++ new.untypedFunctionCallsWithTypeParameters1.js
 @@= skipped -53, +53 lines =@@
- var c;
+ var r2 = y();
  var r3 = c(); // should be an error
  class C {
 -    constructor() {
@@ -15,5 +15,5 @@
 +    arguments = null;
 +    caller = () => { };
  }
- var c2;
  var r4 = c2(); // should be an error
+ class C2 extends Function {

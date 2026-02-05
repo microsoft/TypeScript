@@ -1,7 +1,7 @@
 --- old.mixingApparentTypeOverrides.js
 +++ new.mixingApparentTypeOverrides.js
-@@= skipped -32, +32 lines =@@
- //// [mixingApparentTypeOverrides.js]
+@@= skipped -33, +33 lines =@@
+ "use strict";
  function Tagged(Base) {
      return class extends Base {
 +        _tag;

@@ -20,9 +20,11 @@ interface I3 {
 }
 
 //// [a.js]
+"use strict";
 /*!=================
     Keep this pinned
    =================
 */
 //// [b.js]
+"use strict";
 ///<reference path='a.ts'/>

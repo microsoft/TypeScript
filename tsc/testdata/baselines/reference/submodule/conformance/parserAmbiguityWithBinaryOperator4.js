@@ -7,6 +7,7 @@ function g() {
 }
 
 //// [parserAmbiguityWithBinaryOperator4.js]
+"use strict";
 function g() {
     var a, b, c;
     if (a(c + 1)) { }

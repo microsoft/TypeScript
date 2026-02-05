@@ -15,6 +15,7 @@ class Derived extends Base {
 
 
 //// [privateNameAccessorssDerivedClasses.js]
+"use strict";
 class Base {
     get #prop() { return 123; }
     static method(x) {

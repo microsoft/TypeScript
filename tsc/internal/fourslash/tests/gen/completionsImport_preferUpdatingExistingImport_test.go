@@ -14,7 +14,8 @@ func TestCompletionsImport_preferUpdatingExistingImport(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @module: commonjs
+	const content = `// @lib: es5
+// @module: commonjs
 // @Filename: /deep/module/why/you/want/this/path.ts
 export const x = 0;
 export const y = 1;

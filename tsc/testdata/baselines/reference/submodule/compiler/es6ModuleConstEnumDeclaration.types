@@ -37,7 +37,7 @@ var y = e2.x;
 >e2 : typeof e2
 >x : e2.x
 
-export module m1 {
+export namespace m1 {
 >m1 : typeof m1
 
     export const enum e3 {
@@ -88,7 +88,7 @@ export module m1 {
 >e4 : typeof e4
 >x : e4.x
 }
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 
     export const enum e5 {

@@ -33,6 +33,7 @@ b.hue();
 
 
 //// [derivedClasses.js]
+"use strict";
 class Red extends Color {
     shade() {
         var getHue = () => { return this.hue(); };

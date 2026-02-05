@@ -4,19 +4,25 @@
      bar: function (x?): void {
                       ^
  {
--  "label": ": boolean",
+-  "label": ": boolean | undefined",
 +  "label": [
 +    {
 +      "value": ": "
 +    },
 +    {
 +      "value": "boolean"
++    },
++    {
++      "value": " | "
++    },
++    {
++      "value": "undefined"
 +    }
 +  ],
    "kind": 1,
    "paddingLeft": true
  }
-@@= skipped -8, +15 lines =@@
+@@= skipped -8, +21 lines =@@
      set foo(value) { this.#value = value; }
                   ^
  {

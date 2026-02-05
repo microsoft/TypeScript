@@ -36,7 +36,7 @@ Output::
 
 Found 1 error in src/main.ts[90m:2[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -96,8 +96,7 @@ export interface A {
 }
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts] *new* 
 export declare const a: {
@@ -107,21 +106,16 @@ export declare const a: {
 };
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-const a = class {
+export const a = class {
     p = 10;
 };
-exports.a = a;
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.d.ts] *new* 
 export {};
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 console.log("hi");
+export {};
 
 
 

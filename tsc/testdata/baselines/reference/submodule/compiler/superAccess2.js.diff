@@ -1,9 +1,9 @@
 --- old.superAccess2.js
 +++ new.superAccess2.js
-@@= skipped -26, +26 lines =@@
- }
+@@= skipped -27, +27 lines =@@
 
  //// [superAccess2.js]
+ "use strict";
 -var _a, _b;
  class P {
      x() { }

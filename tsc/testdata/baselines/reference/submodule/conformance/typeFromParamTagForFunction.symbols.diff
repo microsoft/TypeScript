@@ -12,11 +12,11 @@
 ->this.x : Symbol(A.x, Decl(a-ext.js, 0, 25))
 ->this : Symbol(A, Decl(a-ext.js, 0, 11))
 ->x : Symbol(A.x, Decl(a-ext.js, 0, 25))
--
++>this : Symbol("a-ext", Decl(a-ext.js, 0, 0))
+
  };
 
- === a.js ===
-@@= skipped -20, +16 lines =@@
+@@= skipped -20, +18 lines =@@
  function a(p) { p.x; }
  >a : Symbol(a, Decl(a.js, 0, 33))
  >p : Symbol(p, Decl(a.js, 3, 11))

@@ -2,7 +2,7 @@
 
 //// [cloduleWithPriorInstantiatedModule.ts]
 // Non-ambient & instantiated module.
-module Moclodule {
+namespace Moclodule {
     export interface Someinterface {
         foo(): void;
     }
@@ -13,12 +13,13 @@ class Moclodule {
 }
 
 // Instantiated module.
-module Moclodule {
+namespace Moclodule {
     export class Manager {
     }
 }
 
 //// [cloduleWithPriorInstantiatedModule.js]
+"use strict";
 // Non-ambient & instantiated module.
 var Moclodule;
 (function (Moclodule) {

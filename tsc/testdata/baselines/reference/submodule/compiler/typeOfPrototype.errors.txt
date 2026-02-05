@@ -1,0 +1,12 @@
+typeOfPrototype.ts(5,1): error TS2322: Type 'undefined' is not assignable to type 'number'.
+
+
+==== typeOfPrototype.ts (1 errors) ====
+    class Foo {
+        bar = 3;
+        static bar = '';
+    }
+    Foo.prototype.bar = undefined; // Should be OK
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'number'.
+    

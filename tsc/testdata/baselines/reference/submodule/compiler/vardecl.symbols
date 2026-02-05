@@ -129,7 +129,7 @@ var d4: {
     };
 }
 
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(vardecl.ts, 58, 1))
 
     export var a, b2: number = 10, b;

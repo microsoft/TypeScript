@@ -1,0 +1,9 @@
+--- old.findAllRefsFromContextualUnionType1.baseline.jsonc
++++ new.findAllRefsFromContextualUnionType1.baseline.jsonc
+@@= skipped -12, +12 lines =@@
+ // function test1(arg: { prop: "foo" }) {}
+ // test1({ prop: "bar" });
+ // 
+-// function test2(arg: { [|prop|]: "foo" } | undefined) {}
++// function test2(arg: { prop: "foo" } | undefined) {}
+ // test2({ /*FIND ALL REFS*/[|prop|]: "bar" });

@@ -1,7 +1,7 @@
 --- old.matchReturnTypeInAllBranches.js
 +++ new.matchReturnTypeInAllBranches.js
-@@= skipped -39, +39 lines =@@
- //// [matchReturnTypeInAllBranches.js]
+@@= skipped -40, +40 lines =@@
+ "use strict";
  // Represents a monster who enjoys ice cream
  class IceCreamMonster {
 +    iceCreamFlavor;

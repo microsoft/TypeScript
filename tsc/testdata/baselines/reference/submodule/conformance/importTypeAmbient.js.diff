@@ -1,6 +1,6 @@
 --- old.importTypeAmbient.js
 +++ new.importTypeAmbient.js
-@@= skipped -46, +46 lines =@@
+@@= skipped -47, +47 lines =@@
  const x = { x: 0, y: 0 };
  let y = { a: "", b: 0 };
  class Bar2 {

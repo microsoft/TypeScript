@@ -9,6 +9,7 @@ var c = new C(1);
 var c = new C(new C('')); // error
 
 //// [wrappedAndRecursiveConstraints2.js]
+"use strict";
 class C {
     constructor(x) { }
 }

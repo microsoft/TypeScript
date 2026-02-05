@@ -1,6 +1,6 @@
 --- old.collectionPatternNoError.js
 +++ new.collectionPatternNoError.js
-@@= skipped -48, +48 lines =@@
+@@= skipped -49, +49 lines =@@
      return null;
  }
  class DataProvider {

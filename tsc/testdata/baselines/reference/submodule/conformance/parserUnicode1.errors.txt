@@ -1,8 +1,9 @@
 parserUnicode1.ts(6,5): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
 parserUnicode1.ts(10,5): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+parserUnicode1.ts(10,60): error TS2454: Variable '\u0078x' is used before being assigned.
 
 
-==== parserUnicode1.ts (2 errors) ====
+==== parserUnicode1.ts (3 errors) ====
     try {
       var \u0078x = 6;
     
@@ -19,5 +20,7 @@ parserUnicode1.ts(10,5): error TS2552: Cannot find name '$ERROR'. Did you mean '
         ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
 !!! related TS2728 lib.es5.d.ts:--:--: 'Error' is declared here.
+                                                               ~~
+!!! error TS2454: Variable '\u0078x' is used before being assigned.
     
     }

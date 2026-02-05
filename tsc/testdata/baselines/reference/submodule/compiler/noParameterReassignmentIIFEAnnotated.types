@@ -2,26 +2,26 @@
 
 === index.js ===
 self.importScripts = (function (importScripts) {
->self.importScripts = (function (importScripts) {    /**     * @param {...unknown} rest     */    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : () => any
+>self.importScripts = (function (importScripts) {    /**     * @param {...unknown} rest     */    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : () => void
 >self.importScripts : (...urls: string[]) => void
 >self : Window & typeof globalThis
 >importScripts : (...urls: string[]) => void
->(function (importScripts) {    /**     * @param {...unknown} rest     */    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : () => any
->(function (importScripts) {    /**     * @param {...unknown} rest     */    return function () {        return importScripts.apply(this, arguments);    };}) : (importScripts: (...urls: string[]) => void) => () => any
->function (importScripts) {    /**     * @param {...unknown} rest     */    return function () {        return importScripts.apply(this, arguments);    };} : (importScripts: (...urls: string[]) => void) => () => any
+>(function (importScripts) {    /**     * @param {...unknown} rest     */    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : () => void
+>(function (importScripts) {    /**     * @param {...unknown} rest     */    return function () {        return importScripts.apply(this, arguments);    };}) : (importScripts: (...urls: string[]) => void) => () => void
+>function (importScripts) {    /**     * @param {...unknown} rest     */    return function () {        return importScripts.apply(this, arguments);    };} : (importScripts: (...urls: string[]) => void) => () => void
 >importScripts : (...urls: string[]) => void
 
     /**
      * @param {...unknown} rest
      */
     return function () {
->function () {        return importScripts.apply(this, arguments);    } : () => any
+>function () {        return importScripts.apply(this, arguments);    } : () => void
 
         return importScripts.apply(this, arguments);
->importScripts.apply(this, arguments) : any
->importScripts.apply : (this: Function, thisArg: any, argArray?: any) => any
+>importScripts.apply(this, arguments) : void
+>importScripts.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >importScripts : (...urls: string[]) => void
->apply : (this: Function, thisArg: any, argArray?: any) => any
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >this : any
 >arguments : IArguments
 

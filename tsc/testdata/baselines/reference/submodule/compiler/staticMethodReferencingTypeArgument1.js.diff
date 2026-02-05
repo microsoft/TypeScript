@@ -1,6 +1,6 @@
 --- old.staticMethodReferencingTypeArgument1.js
 +++ new.staticMethodReferencingTypeArgument1.js
-@@= skipped -21, +21 lines =@@
+@@= skipped -22, +22 lines =@@
  var Editor;
  (function (Editor) {
      class List {

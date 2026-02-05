@@ -9,16 +9,16 @@ interface IMenuItem {
 >type : string
 
     link?: string;
->link : string
+>link : string | undefined
 
     classes?: string;
->classes : string
+>classes : string | undefined
 
     text?: string;
->text : string
+>text : string | undefined
 
     icon?: string;
->icon : string
+>icon : string | undefined
 }
 var menuData: IMenuItem[] = [
 >menuData : IMenuItem[]

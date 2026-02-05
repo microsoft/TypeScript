@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/commentEmittingInPreserveJsx1.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 <div>
@@ -34,6 +36,7 @@ import React = require('react');
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 <div>

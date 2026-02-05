@@ -1,0 +1,298 @@
+--- old.assignmentCompatWithConstructSignaturesWithOptionalParameters.types
++++ new.assignmentCompatWithConstructSignaturesWithOptionalParameters.types
+@@= skipped -7, +7 lines =@@
+ >a : new () => number
+
+     a2: new (x?: number) => number;
+->a2 : new (x?: number) => number
++>a2 : new (x?: number | undefined) => number
+ >x : number | undefined
+
+     a3: new (x: number) => number;
+@@= skipped -8, +8 lines =@@
+ >x : number
+
+     a4: new (x: number, y?: number) => number;
+->a4 : new (x: number, y?: number) => number
++>a4 : new (x: number, y?: number | undefined) => number
+ >x : number
+ >y : number | undefined
+
+     a5: new (x?: number, y?: number) => number;
+->a5 : new (x?: number, y?: number) => number
++>a5 : new (x?: number | undefined, y?: number | undefined) => number
+ >x : number | undefined
+ >y : number | undefined
+
+@@= skipped -28, +28 lines =@@
+ >a : new () => number
+
+     a = b.a2; // ok
+->a = b.a2 : new (x?: number) => number
++>a = b.a2 : new (x?: number | undefined) => number
+ >a : new () => number
+->b.a2 : new (x?: number) => number
++>b.a2 : new (x?: number | undefined) => number
+ >b : Base
+->a2 : new (x?: number) => number
++>a2 : new (x?: number | undefined) => number
+
+     a = b.a3; // error
+ >a = b.a3 : new (x: number) => number
+@@= skipped -14, +14 lines =@@
+ >a3 : new (x: number) => number
+
+     a = b.a4; // error
+->a = b.a4 : new (x: number, y?: number) => number
++>a = b.a4 : new (x: number, y?: number | undefined) => number
+ >a : new () => number
+->b.a4 : new (x: number, y?: number) => number
++>b.a4 : new (x: number, y?: number | undefined) => number
+ >b : Base
+->a4 : new (x: number, y?: number) => number
++>a4 : new (x: number, y?: number | undefined) => number
+
+     a = b.a5; // ok
+->a = b.a5 : new (x?: number, y?: number) => number
++>a = b.a5 : new (x?: number | undefined, y?: number | undefined) => number
+ >a : new () => number
+->b.a5 : new (x?: number, y?: number) => number
++>b.a5 : new (x?: number | undefined, y?: number | undefined) => number
+ >b : Base
+->a5 : new (x?: number, y?: number) => number
++>a5 : new (x?: number | undefined, y?: number | undefined) => number
+
+     a = b.a6; // error
+ >a = b.a6 : new (x: number, y: number) => number
+@@= skipped -21, +21 lines =@@
+ >a6 : new (x: number, y: number) => number
+
+ declare var a2: new (x?: number) => number; 
+->a2 : new (x?: number) => number
++>a2 : new (x?: number | undefined) => number
+ >x : number | undefined
+
+     a2 = b.a; // ok
+ >a2 = b.a : new () => number
+->a2 : new (x?: number) => number
++>a2 : new (x?: number | undefined) => number
+ >b.a : new () => number
+ >b : Base
+ >a : new () => number
+
+     a2 = b.a2; // ok
+->a2 = b.a2 : new (x?: number) => number
+->a2 : new (x?: number) => number
+->b.a2 : new (x?: number) => number
++>a2 = b.a2 : new (x?: number | undefined) => number
++>a2 : new (x?: number | undefined) => number
++>b.a2 : new (x?: number | undefined) => number
+ >b : Base
+->a2 : new (x?: number) => number
++>a2 : new (x?: number | undefined) => number
+
+     a2 = b.a3; // ok
+ >a2 = b.a3 : new (x: number) => number
+->a2 : new (x?: number) => number
++>a2 : new (x?: number | undefined) => number
+ >b.a3 : new (x: number) => number
+ >b : Base
+ >a3 : new (x: number) => number
+
+     a2 = b.a4; // ok
+->a2 = b.a4 : new (x: number, y?: number) => number
+->a2 : new (x?: number) => number
+->b.a4 : new (x: number, y?: number) => number
++>a2 = b.a4 : new (x: number, y?: number | undefined) => number
++>a2 : new (x?: number | undefined) => number
++>b.a4 : new (x: number, y?: number | undefined) => number
+ >b : Base
+->a4 : new (x: number, y?: number) => number
++>a4 : new (x: number, y?: number | undefined) => number
+
+     a2 = b.a5; // ok
+->a2 = b.a5 : new (x?: number, y?: number) => number
+->a2 : new (x?: number) => number
+->b.a5 : new (x?: number, y?: number) => number
++>a2 = b.a5 : new (x?: number | undefined, y?: number | undefined) => number
++>a2 : new (x?: number | undefined) => number
++>b.a5 : new (x?: number | undefined, y?: number | undefined) => number
+ >b : Base
+->a5 : new (x?: number, y?: number) => number
++>a5 : new (x?: number | undefined, y?: number | undefined) => number
+
+     a2 = b.a6; // error
+ >a2 = b.a6 : new (x: number, y: number) => number
+->a2 : new (x?: number) => number
++>a2 : new (x?: number | undefined) => number
+ >b.a6 : new (x: number, y: number) => number
+ >b : Base
+ >a6 : new (x: number, y: number) => number
+@@= skipped -57, +57 lines =@@
+ >a : new () => number
+
+     a3 = b.a2; // ok
+->a3 = b.a2 : new (x?: number) => number
++>a3 = b.a2 : new (x?: number | undefined) => number
+ >a3 : new (x: number) => number
+->b.a2 : new (x?: number) => number
++>b.a2 : new (x?: number | undefined) => number
+ >b : Base
+->a2 : new (x?: number) => number
++>a2 : new (x?: number | undefined) => number
+
+     a3 = b.a3; // ok
+ >a3 = b.a3 : new (x: number) => number
+@@= skipped -14, +14 lines =@@
+ >a3 : new (x: number) => number
+
+     a3 = b.a4; // ok
+->a3 = b.a4 : new (x: number, y?: number) => number
++>a3 = b.a4 : new (x: number, y?: number | undefined) => number
+ >a3 : new (x: number) => number
+->b.a4 : new (x: number, y?: number) => number
++>b.a4 : new (x: number, y?: number | undefined) => number
+ >b : Base
+->a4 : new (x: number, y?: number) => number
++>a4 : new (x: number, y?: number | undefined) => number
+
+     a3 = b.a5; // ok
+->a3 = b.a5 : new (x?: number, y?: number) => number
++>a3 = b.a5 : new (x?: number | undefined, y?: number | undefined) => number
+ >a3 : new (x: number) => number
+->b.a5 : new (x?: number, y?: number) => number
++>b.a5 : new (x?: number | undefined, y?: number | undefined) => number
+ >b : Base
+->a5 : new (x?: number, y?: number) => number
++>a5 : new (x?: number | undefined, y?: number | undefined) => number
+
+     a3 = b.a6; // error
+ >a3 = b.a6 : new (x: number, y: number) => number
+@@= skipped -21, +21 lines =@@
+ >a6 : new (x: number, y: number) => number
+
+ declare var a4: new (x: number, y?: number) => number;
+->a4 : new (x: number, y?: number) => number
++>a4 : new (x: number, y?: number | undefined) => number
+ >x : number
+ >y : number | undefined
+
+     a4 = b.a; // ok
+ >a4 = b.a : new () => number
+->a4 : new (x: number, y?: number) => number
++>a4 : new (x: number, y?: number | undefined) => number
+ >b.a : new () => number
+ >b : Base
+ >a : new () => number
+
+     a4 = b.a2; // ok
+->a4 = b.a2 : new (x?: number) => number
+->a4 : new (x: number, y?: number) => number
+->b.a2 : new (x?: number) => number
++>a4 = b.a2 : new (x?: number | undefined) => number
++>a4 : new (x: number, y?: number | undefined) => number
++>b.a2 : new (x?: number | undefined) => number
+ >b : Base
+->a2 : new (x?: number) => number
++>a2 : new (x?: number | undefined) => number
+
+     a4 = b.a3; // ok
+ >a4 = b.a3 : new (x: number) => number
+->a4 : new (x: number, y?: number) => number
++>a4 : new (x: number, y?: number | undefined) => number
+ >b.a3 : new (x: number) => number
+ >b : Base
+ >a3 : new (x: number) => number
+
+     a4 = b.a4; // ok
+->a4 = b.a4 : new (x: number, y?: number) => number
+->a4 : new (x: number, y?: number) => number
+->b.a4 : new (x: number, y?: number) => number
++>a4 = b.a4 : new (x: number, y?: number | undefined) => number
++>a4 : new (x: number, y?: number | undefined) => number
++>b.a4 : new (x: number, y?: number | undefined) => number
+ >b : Base
+->a4 : new (x: number, y?: number) => number
++>a4 : new (x: number, y?: number | undefined) => number
+
+     a4 = b.a5; // ok
+->a4 = b.a5 : new (x?: number, y?: number) => number
+->a4 : new (x: number, y?: number) => number
+->b.a5 : new (x?: number, y?: number) => number
++>a4 = b.a5 : new (x?: number | undefined, y?: number | undefined) => number
++>a4 : new (x: number, y?: number | undefined) => number
++>b.a5 : new (x?: number | undefined, y?: number | undefined) => number
+ >b : Base
+->a5 : new (x?: number, y?: number) => number
++>a5 : new (x?: number | undefined, y?: number | undefined) => number
+
+     a4 = b.a6; // ok
+ >a4 = b.a6 : new (x: number, y: number) => number
+->a4 : new (x: number, y?: number) => number
++>a4 : new (x: number, y?: number | undefined) => number
+ >b.a6 : new (x: number, y: number) => number
+ >b : Base
+ >a6 : new (x: number, y: number) => number
+
+ declare var a5: new (x?: number, y?: number) => number;
+->a5 : new (x?: number, y?: number) => number
++>a5 : new (x?: number | undefined, y?: number | undefined) => number
+ >x : number | undefined
+ >y : number | undefined
+
+     a5 = b.a; // ok
+ >a5 = b.a : new () => number
+->a5 : new (x?: number, y?: number) => number
++>a5 : new (x?: number | undefined, y?: number | undefined) => number
+ >b.a : new () => number
+ >b : Base
+ >a : new () => number
+
+     a5 = b.a2; // ok
+->a5 = b.a2 : new (x?: number) => number
+->a5 : new (x?: number, y?: number) => number
+->b.a2 : new (x?: number) => number
++>a5 = b.a2 : new (x?: number | undefined) => number
++>a5 : new (x?: number | undefined, y?: number | undefined) => number
++>b.a2 : new (x?: number | undefined) => number
+ >b : Base
+->a2 : new (x?: number) => number
++>a2 : new (x?: number | undefined) => number
+
+     a5 = b.a3; // ok
+ >a5 = b.a3 : new (x: number) => number
+->a5 : new (x?: number, y?: number) => number
++>a5 : new (x?: number | undefined, y?: number | undefined) => number
+ >b.a3 : new (x: number) => number
+ >b : Base
+ >a3 : new (x: number) => number
+
+     a5 = b.a4; // ok
+->a5 = b.a4 : new (x: number, y?: number) => number
+->a5 : new (x?: number, y?: number) => number
+->b.a4 : new (x: number, y?: number) => number
++>a5 = b.a4 : new (x: number, y?: number | undefined) => number
++>a5 : new (x?: number | undefined, y?: number | undefined) => number
++>b.a4 : new (x: number, y?: number | undefined) => number
+ >b : Base
+->a4 : new (x: number, y?: number) => number
++>a4 : new (x: number, y?: number | undefined) => number
+
+     a5 = b.a5; // ok
+->a5 = b.a5 : new (x?: number, y?: number) => number
+->a5 : new (x?: number, y?: number) => number
+->b.a5 : new (x?: number, y?: number) => number
++>a5 = b.a5 : new (x?: number | undefined, y?: number | undefined) => number
++>a5 : new (x?: number | undefined, y?: number | undefined) => number
++>b.a5 : new (x?: number | undefined, y?: number | undefined) => number
+ >b : Base
+->a5 : new (x?: number, y?: number) => number
++>a5 : new (x?: number | undefined, y?: number | undefined) => number
+
+     a5 = b.a6; // ok
+ >a5 = b.a6 : new (x: number, y: number) => number
+->a5 : new (x?: number, y?: number) => number
++>a5 : new (x?: number | undefined, y?: number | undefined) => number
+ >b.a6 : new (x: number, y: number) => number
+ >b : Base
+ >a6 : new (x: number, y: number) => number

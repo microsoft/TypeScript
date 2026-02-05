@@ -5,5 +5,6 @@ var foo: string;
 foo.toUpperCase();
 
 //// [propertyAccess7.js]
+"use strict";
 var foo;
 foo.toUpperCase();

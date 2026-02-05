@@ -1,6 +1,6 @@
 --- old.innerModExport2.js
 +++ new.innerModExport2.js
-@@= skipped -29, +29 lines =@@
+@@= skipped -30, +30 lines =@@
      module;
      {
          var non_export_var = 0;

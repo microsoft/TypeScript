@@ -9,6 +9,7 @@ class D<T> extends C<number> extends C<string> {
 }
 
 //// [extendsClauseAlreadySeen2.js]
+"use strict";
 class C {
 }
 class D extends C extends C {

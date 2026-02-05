@@ -3,16 +3,20 @@
 @@= skipped -0, +0 lines =@@
 +classWithDuplicateIdentifier.ts(2,5): error TS2300: Duplicate identifier 'a'.
  classWithDuplicateIdentifier.ts(3,5): error TS2300: Duplicate identifier 'a'.
+ classWithDuplicateIdentifier.ts(3,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 -classWithDuplicateIdentifier.ts(3,5): error TS2717: Subsequent property declarations must have the same type.  Property 'a' must be of type '() => number', but here has type 'number'.
  classWithDuplicateIdentifier.ts(6,5): error TS2300: Duplicate identifier 'b'.
+ classWithDuplicateIdentifier.ts(6,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
  classWithDuplicateIdentifier.ts(7,5): error TS2300: Duplicate identifier 'b'.
 +classWithDuplicateIdentifier.ts(10,5): error TS2300: Duplicate identifier 'c'.
+ classWithDuplicateIdentifier.ts(10,5): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
  classWithDuplicateIdentifier.ts(11,5): error TS2300: Duplicate identifier 'c'.
+ classWithDuplicateIdentifier.ts(11,5): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
  classWithDuplicateIdentifier.ts(11,5): error TS2717: Subsequent property declarations must have the same type.  Property 'c' must be of type 'number', but here has type 'string'.
 
 
--==== classWithDuplicateIdentifier.ts (6 errors) ====
-+==== classWithDuplicateIdentifier.ts (7 errors) ====
+-==== classWithDuplicateIdentifier.ts (10 errors) ====
++==== classWithDuplicateIdentifier.ts (11 errors) ====
      class C {
          a(): number { return 0; } // error: duplicate identifier
 +        ~
@@ -20,18 +24,20 @@
          a: number;
          ~
  !!! error TS2300: Duplicate identifier 'a'.
+         ~
+ !!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 -        ~
 -!!! error TS2717: Subsequent property declarations must have the same type.  Property 'a' must be of type '() => number', but here has type 'number'.
 -!!! related TS6203 classWithDuplicateIdentifier.ts:2:5: 'a' was also declared here.
      }
      class K {
          b: number; // error: duplicate identifier
-@@= skipped -25, +25 lines =@@
+@@= skipped -33, +33 lines =@@
      }
      class D {
          c: number;
 +        ~
 +!!! error TS2300: Duplicate identifier 'c'.
-         c: string;
          ~
- !!! error TS2300: Duplicate identifier 'c'.
+ !!! error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
+         c: string;

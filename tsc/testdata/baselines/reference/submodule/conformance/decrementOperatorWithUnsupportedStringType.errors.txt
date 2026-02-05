@@ -1,3 +1,4 @@
+decrementOperatorWithUnsupportedStringType.ts(8,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 decrementOperatorWithUnsupportedStringType.ts(18,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 decrementOperatorWithUnsupportedStringType.ts(19,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 decrementOperatorWithUnsupportedStringType.ts(21,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
@@ -39,18 +40,20 @@ decrementOperatorWithUnsupportedStringType.ts(65,1): error TS2356: An arithmetic
 decrementOperatorWithUnsupportedStringType.ts(65,11): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== decrementOperatorWithUnsupportedStringType.ts (39 errors) ====
+==== decrementOperatorWithUnsupportedStringType.ts (40 errors) ====
     // -- operator on string type
-    var STRING: string;
+    declare var STRING: string;
     var STRING1: string[] = ["", ""];
     
     function foo(): string { return ""; }
     
     class A {
         public a: string;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
         static foo() { return ""; }
     }
-    module M {
+    namespace M {
         export var n: string;
     }
     

@@ -1,13 +1,17 @@
+file.tsx(5,3): error TS2564: Property 'props' has no initializer and is not definitely assigned in the constructor.
 file.tsx(9,14): error TS2322: Type 'number' is not assignable to type 'string'.
+react.d.ts(6,3): error TS7008: Member 'props' implicitly has an 'any' type.
 
 
-==== react.d.ts (0 errors) ====
-    declare module JSX {
+==== react.d.ts (1 errors) ====
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     	}
     	interface ElementAttributesProperty {
     		props;
+    		~~~~~
+!!! error TS7008: Member 'props' implicitly has an 'any' type.
     	}
     }
     
@@ -15,12 +19,14 @@ file.tsx(9,14): error TS2322: Type 'number' is not assignable to type 'string'.
       foo: string;
     }
     
-==== file.tsx (1 errors) ====
+==== file.tsx (2 errors) ====
     export class MyComponent {  
       render() {
       }
     
       props: { foo: string; }
+      ~~~~~
+!!! error TS2564: Property 'props' has no initializer and is not definitely assigned in the constructor.
     }
     
     <MyComponent foo="bar" />; // ok  

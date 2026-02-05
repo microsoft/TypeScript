@@ -5,5 +5,6 @@ function A(): (public B) => C {
 }
 
 //// [parserParameterList5.js]
+"use strict";
 function A() {
 }

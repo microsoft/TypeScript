@@ -11,6 +11,7 @@ class X2 {
 
 
 //// [propertyNamedConstructor.js]
+"use strict";
 class X1 {
     "constructor" = 3; // Error
 }

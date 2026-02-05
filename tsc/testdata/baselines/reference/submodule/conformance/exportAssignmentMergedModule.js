@@ -1,17 +1,17 @@
 //// [tests/cases/conformance/externalModules/exportAssignmentMergedModule.ts] ////
 
 //// [foo_0.ts]
-module Foo {
+namespace Foo {
 	export function a(){
 		return 5;
 	}
 	export var b = true;
 }
-module Foo {
+namespace Foo {
 	export function c(a: number){
 		return a;
 	}
-	export module Test {
+	export namespace Test {
 		export var answer = 42;
 	}
 }

@@ -1,3 +1,7 @@
+callSignatureAssignabilityInInheritance3.ts(5,18): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+callSignatureAssignabilityInInheritance3.ts(6,34): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+callSignatureAssignabilityInInheritance3.ts(7,38): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+callSignatureAssignabilityInInheritance3.ts(8,39): error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
 callSignatureAssignabilityInInheritance3.ts(51,19): error TS2430: Interface 'I2<T, U>' incorrectly extends interface 'A'.
   Types of property 'a2' are incompatible.
     Type '(x: T) => U[]' is not assignable to type '(x: number) => string[]'.
@@ -12,6 +16,16 @@ callSignatureAssignabilityInInheritance3.ts(60,19): error TS2430: Interface 'I4'
           Type '{ foo: number; }' is not assignable to type 'Base'.
             Types of property 'foo' are incompatible.
               Type 'number' is not assignable to type 'string'.
+callSignatureAssignabilityInInheritance3.ts(64,19): error TS2430: Interface 'I4B' incorrectly extends interface 'A'.
+  Types of property 'a10' are incompatible.
+    Type '<T extends Derived>(...x: T[]) => T' is not assignable to type '(...x: Base[]) => Base'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+callSignatureAssignabilityInInheritance3.ts(68,19): error TS2430: Interface 'I4C' incorrectly extends interface 'A'.
+  Types of property 'a11' are incompatible.
+    Type '<T extends Derived>(x: T, y: T) => T' is not assignable to type '(x: { foo: string; }, y: { foo: string; bar: string; }) => Base'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Property 'bar' is missing in type '{ foo: string; }' but required in type 'Derived'.
 callSignatureAssignabilityInInheritance3.ts(76,19): error TS2430: Interface 'I6' incorrectly extends interface 'A'.
   Types of property 'a15' are incompatible.
     Type '<T>(x: { a: T; b: T; }) => T' is not assignable to type '(x: { a: string; b: number; }) => number'.
@@ -37,17 +51,25 @@ callSignatureAssignabilityInInheritance3.ts(109,19): error TS2430: Interface 'I7
       Type 'T' is not assignable to type 'string'.
 
 
-==== callSignatureAssignabilityInInheritance3.ts (6 errors) ====
+==== callSignatureAssignabilityInInheritance3.ts (12 errors) ====
     // checking subtype relations for function types as it relates to contextual signature instantiation
     // error cases
     
-    module Errors {
+    namespace Errors {
         class Base { foo: string; }
+                     ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         class Derived extends Base { bar: string; }
+                                     ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
         class Derived2 extends Derived { baz: string; }
+                                         ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
         class OtherDerived extends Base { bing: string; }
+                                          ~~~~
+!!! error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
     
-        module WithNonGenericSignaturesInBaseType {
+        namespace WithNonGenericSignaturesInBaseType {
             // base type with non-generic call signatures
             interface A {
                 a2: (x: number) => string[];
@@ -118,10 +140,24 @@ callSignatureAssignabilityInInheritance3.ts(109,19): error TS2430: Interface 'I7
             }
     
             interface I4B extends A {
+                      ~~~
+!!! error TS2430: Interface 'I4B' incorrectly extends interface 'A'.
+!!! error TS2430:   Types of property 'a10' are incompatible.
+!!! error TS2430:     Type '<T extends Derived>(...x: T[]) => T' is not assignable to type '(...x: Base[]) => Base'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 callSignatureAssignabilityInInheritance3.ts:6:34: 'bar' is declared here.
                 a10: <T extends Derived>(...x: T[]) => T; // valid, parameter covariance works even after contextual signature instantiation
             }
     
             interface I4C extends A {
+                      ~~~
+!!! error TS2430: Interface 'I4C' incorrectly extends interface 'A'.
+!!! error TS2430:   Types of property 'a11' are incompatible.
+!!! error TS2430:     Type '<T extends Derived>(x: T, y: T) => T' is not assignable to type '(x: { foo: string; }, y: { foo: string; bar: string; }) => Base'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Property 'bar' is missing in type '{ foo: string; }' but required in type 'Derived'.
+!!! related TS2728 callSignatureAssignabilityInInheritance3.ts:6:34: 'bar' is declared here.
                 a11: <T extends Derived>(x: T, y: T) => T; // valid, even though x is a Base, parameter covariance works even after contextual signature instantiation
             }
     
@@ -163,7 +199,7 @@ callSignatureAssignabilityInInheritance3.ts(109,19): error TS2430: Interface 'I7
             }
         }
     
-        module WithGenericSignaturesInBaseType {
+        namespace WithGenericSignaturesInBaseType {
             // base type has generic call signature
             interface B {
                 a2: <T>(x: T) => T[];

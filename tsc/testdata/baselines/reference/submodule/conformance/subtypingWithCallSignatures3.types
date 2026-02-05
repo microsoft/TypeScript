@@ -4,7 +4,7 @@
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // error cases, so function calls will all result in 'any'
 
-module Errors {
+namespace Errors {
 >Errors : typeof Errors
 
     class Base { foo: string; }
@@ -110,35 +110,35 @@ module Errors {
 >a2 : any
 
     declare function foo16(a2: {
->foo16 : { (a2: { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
->a2 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }
+>foo16 : { (a2: { (x: { (a: number): number; (a?: number | undefined): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean | undefined): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number | undefined): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean | undefined): boolean; }): boolean[]; }; (a2: any): any; }
+>a2 : { (x: { (a: number): number; (a?: number | undefined): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean | undefined): boolean; }): boolean[]; }
 
         // type of parameter is overload set which means we can't do inference based on this type
         (x: {
->x : { (a: number): number; (a?: number): number; }
+>x : { (a: number): number; (a?: number | undefined): number; }
 
             (a: number): number;
 >a : number
 
             (a?: number): number;
->a : number
+>a : number | undefined
 
         }): number[];
         (x: {
->x : { (a: boolean): boolean; (a?: boolean): boolean; }
+>x : { (a: boolean): boolean; (a?: boolean | undefined): boolean; }
 
             (a: boolean): boolean;
 >a : boolean
 
             (a?: boolean): boolean;
->a : boolean
+>a : boolean | undefined
 
         }): boolean[];
     }): typeof a2;
->a2 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }
+>a2 : { (x: { (a: number): number; (a?: number | undefined): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean | undefined): boolean; }): boolean[]; }
 
     declare function foo16(a2: any): any;
->foo16 : { (a2: { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
+>foo16 : { (a2: { (x: { (a: number): number; (a?: number | undefined): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean | undefined): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number | undefined): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean | undefined): boolean; }): boolean[]; }; (a2: any): any; }
 >a2 : any
 
     declare function foo17(a2: {
@@ -292,20 +292,20 @@ module Errors {
 ><Base>null : Base
 
     var r4 = foo10(r4arg); // any
->r4 : (...x: Base[]) => Base
->foo10(r4arg) : (...x: Base[]) => Base
+>r4 : any
+>foo10(r4arg) : any
 >foo10 : { (a2: (...x: Base[]) => Base): (...x: Base[]) => Base; (a2: any): any; }
 >r4arg : <T extends Derived>(...x: T[]) => T
 
     var r4a = [r4arg2, r4arg];
->r4a : ((...x: Base[]) => Base)[]
->[r4arg2, r4arg] : ((...x: Base[]) => Base)[]
+>r4a : ((<T extends Derived>(...x: T[]) => T) | ((...x: Base[]) => Base))[]
+>[r4arg2, r4arg] : ((<T extends Derived>(...x: T[]) => T) | ((...x: Base[]) => Base))[]
 >r4arg2 : (...x: Base[]) => Base
 >r4arg : <T extends Derived>(...x: T[]) => T
 
     var r4b = [r4arg, r4arg2];
->r4b : ((...x: Base[]) => Base)[]
->[r4arg, r4arg2] : ((...x: Base[]) => Base)[]
+>r4b : ((<T extends Derived>(...x: T[]) => T) | ((...x: Base[]) => Base))[]
+>[r4arg, r4arg2] : ((<T extends Derived>(...x: T[]) => T) | ((...x: Base[]) => Base))[]
 >r4arg : <T extends Derived>(...x: T[]) => T
 >r4arg2 : (...x: Base[]) => Base
 
@@ -327,20 +327,20 @@ module Errors {
 ><Base>null : Base
 
     var r5 = foo11(r5arg); // any
->r5 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
->foo11(r5arg) : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+>r5 : any
+>foo11(r5arg) : any
 >foo11 : { (a2: (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }
 >r5arg : <T extends Derived>(x: T, y: T) => T
 
     var r5a = [r5arg2, r5arg];
->r5a : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
->[r5arg2, r5arg] : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
+>r5a : ((<T extends Derived>(x: T, y: T) => T) | ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base))[]
+>[r5arg2, r5arg] : ((<T extends Derived>(x: T, y: T) => T) | ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base))[]
 >r5arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >r5arg : <T extends Derived>(x: T, y: T) => T
 
     var r5b = [r5arg, r5arg2];
->r5b : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
->[r5arg, r5arg2] : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
+>r5b : ((<T extends Derived>(x: T, y: T) => T) | ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base))[]
+>[r5arg, r5arg2] : ((<T extends Derived>(x: T, y: T) => T) | ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base))[]
 >r5arg : <T extends Derived>(x: T, y: T) => T
 >r5arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 
@@ -446,7 +446,7 @@ module Errors {
     var r8 = foo16(r8arg); // any
 >r8 : any
 >foo16(r8arg) : any
->foo16 : { (a2: { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
+>foo16 : { (a2: { (x: { (a: number): number; (a?: number | undefined): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean | undefined): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number | undefined): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean | undefined): boolean; }): boolean[]; }; (a2: any): any; }
 >r8arg : <T>(x: (a: T) => T) => T[]
 
     var r9arg = <T>(x: (a: T) => T) => <any[]>null;
@@ -463,7 +463,7 @@ module Errors {
 >r9arg : <T>(x: (a: T) => T) => any[]
 }
 
-module WithGenericSignaturesInBaseType {
+namespace WithGenericSignaturesInBaseType {
 >WithGenericSignaturesInBaseType : typeof WithGenericSignaturesInBaseType
 
     declare function foo2(a2: <T>(x: T) => T[]): typeof a2;

@@ -1,0 +1,21 @@
+--- old.asiPreventsParsingAsInterface01.errors.txt
++++ new.asiPreventsParsingAsInterface01.errors.txt
+@@= skipped -0, +0 lines =@@
+-asiPreventsParsingAsInterface01.ts(1,5): error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
+-asiPreventsParsingAsInterface01.ts(3,1): error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
+ asiPreventsParsingAsInterface01.ts(3,1): error TS2454: Variable 'interface' is used before being assigned.
+ asiPreventsParsingAsInterface01.ts(4,1): error TS2454: Variable 'I' is used before being assigned.
+
+
+-==== asiPreventsParsingAsInterface01.ts (4 errors) ====
++==== asiPreventsParsingAsInterface01.ts (2 errors) ====
+     var interface: number, I: string;
+-        ~~~~~~~~~
+-!!! error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
+     
+     interface   // This should be the identifier 'interface'
+-    ~~~~~~~~~
+-!!! error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
+     ~~~~~~~~~
+ !!! error TS2454: Variable 'interface' is used before being assigned.
+     I           // This should be the identifier 'I'

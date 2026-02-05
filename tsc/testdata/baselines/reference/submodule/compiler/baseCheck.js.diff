@@ -1,6 +1,6 @@
 --- old.baseCheck.js
 +++ new.baseCheck.js
-@@= skipped -48, +48 lines =@@
+@@= skipped -49, +49 lines =@@
      }
  }
  class D extends C {

@@ -173,6 +173,7 @@ class Test<T extends Record<string, number>> {
 
 
 //// [keyofAndIndexedAccessErrors.js]
+"use strict";
 class Shape {
     name;
     width;

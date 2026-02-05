@@ -61,7 +61,7 @@
 // --- (line: 21) skipped ---
 // }
 // 
-// module m {
+// namespace m {
 //     var x = th/*HIGHLIGHTS*/is;
 //     function f() {
 //         this;

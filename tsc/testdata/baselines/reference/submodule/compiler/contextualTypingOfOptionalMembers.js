@@ -77,6 +77,7 @@ const a = <App4 state={100} foo={s => s} />; // TODO: should be number => number
 
 
 //// [index.jsx]
+"use strict";
 app({
     state: 100,
     actions: {

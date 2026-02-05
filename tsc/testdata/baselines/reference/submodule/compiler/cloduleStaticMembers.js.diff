@@ -1,8 +1,8 @@
 --- old.cloduleStaticMembers.js
 +++ new.cloduleStaticMembers.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [cloduleStaticMembers.js]
+ "use strict";
  class Clod {
 +    static x = 10;
 +    static y = 10;

@@ -6,6 +6,7 @@ abstract class A {
 }
 
 //// [classAbstractMethodWithImplementation.js]
+"use strict";
 class A {
     foo() { }
 }

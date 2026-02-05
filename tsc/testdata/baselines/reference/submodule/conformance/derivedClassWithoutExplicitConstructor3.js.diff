@@ -1,7 +1,7 @@
 --- old.derivedClassWithoutExplicitConstructor3.js
 +++ new.derivedClassWithoutExplicitConstructor3.js
-@@= skipped -50, +50 lines =@@
- //// [derivedClassWithoutExplicitConstructor3.js]
+@@= skipped -51, +51 lines =@@
+ "use strict";
  // automatic constructors with a class hieararchy of depth > 2
  class Base {
 -    constructor(x) {

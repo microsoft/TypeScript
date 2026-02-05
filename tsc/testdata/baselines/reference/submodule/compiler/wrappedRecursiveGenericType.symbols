@@ -34,19 +34,19 @@ interface B<T> {
 >val : Symbol(B.val, Decl(wrappedRecursiveGenericType.ts, 6, 15))
 >T : Symbol(T, Decl(wrappedRecursiveGenericType.ts, 5, 12))
 }
-var x: A<number>;
->x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 3))
+declare var x: A<number>;
+>x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 11))
 >A : Symbol(A, Decl(wrappedRecursiveGenericType.ts, 0, 24))
 
 x.val = 5;         // val -> number
 >x.val : Symbol(A.val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
->x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 3))
+>x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 11))
 >val : Symbol(A.val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
 
 x.a.val = 5;       // val -> number
 >x.a.val : Symbol(B.val, Decl(wrappedRecursiveGenericType.ts, 6, 15))
 >x.a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
->x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 3))
+>x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 11))
 >a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
 >val : Symbol(B.val, Decl(wrappedRecursiveGenericType.ts, 6, 15))
 
@@ -54,7 +54,7 @@ x.a.b.val = 5;     // val -> X<number> (This should be an error)
 >x.a.b.val : Symbol(A.val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
 >x.a.b : Symbol(B.b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
 >x.a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
->x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 3))
+>x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 11))
 >a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
 >b : Symbol(B.b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
 >val : Symbol(A.val, Decl(wrappedRecursiveGenericType.ts, 2, 12))
@@ -64,7 +64,7 @@ x.a.b.a.val = 5;   // val -> X<number> (This should be an error)
 >x.a.b.a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
 >x.a.b : Symbol(B.b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
 >x.a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
->x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 3))
+>x : Symbol(x, Decl(wrappedRecursiveGenericType.ts, 9, 11))
 >a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))
 >b : Symbol(B.b, Decl(wrappedRecursiveGenericType.ts, 5, 16))
 >a : Symbol(A.a, Decl(wrappedRecursiveGenericType.ts, 1, 16))

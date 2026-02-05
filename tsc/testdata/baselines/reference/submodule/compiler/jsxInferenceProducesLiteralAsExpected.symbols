@@ -1,68 +1,69 @@
 //// [tests/cases/compiler/jsxInferenceProducesLiteralAsExpected.tsx] ////
 
 === jsxInferenceProducesLiteralAsExpected.tsx ===
+/// <reference path="react.d.ts" />
 import React = require("react");
 >React : Symbol(React, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 0, 0))
 
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
->FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 0, 32))
->T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 27))
->K : Symbol(K, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 35))
->T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 27))
->T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 27))
->K : Symbol(K, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 35))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->K : Symbol(K, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 35))
->T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 27))
+>FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 32))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 2, 27))
+>K : Symbol(K, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 2, 35))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 2, 27))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 2, 27))
+>K : Symbol(K, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 2, 35))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>K : Symbol(K, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 2, 35))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 2, 27))
 
 class TestObject {
->TestObject : Symbol(TestObject, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 95))
+>TestObject : Symbol(TestObject, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 2, 95))
 
     a: string = '';
->a : Symbol(TestObject.a, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 2, 18))
+>a : Symbol(TestObject.a, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 3, 18))
 
     b: number = 1;
->b : Symbol(TestObject.b, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 3, 19))
+>b : Symbol(TestObject.b, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 4, 19))
 
     c: () => void = () => { };
->c : Symbol(TestObject.c, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 4, 18))
+>c : Symbol(TestObject.c, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 5, 18))
 }
 interface TestProps<T> {
->TestProps : Symbol(TestProps, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 6, 1))
->T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 7, 20))
+>TestProps : Symbol(TestProps, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 7, 1))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 8, 20))
 
     model: T;
->model : Symbol(TestProps.model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 7, 24))
->T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 7, 20))
+>model : Symbol(TestProps.model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 8, 24))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 8, 20))
 
     foo: FunctionPropertyNames<T>;
->foo : Symbol(TestProps.foo, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 8, 13))
->FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 0, 32))
->T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 7, 20))
+>foo : Symbol(TestProps.foo, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 9, 13))
+>FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 32))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 8, 20))
 }
 function Test<T>(props: TestProps<T>) { return <></>; }
->Test : Symbol(Test, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 10, 1))
->T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 11, 14))
->props : Symbol(props, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 11, 17))
->TestProps : Symbol(TestProps, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 6, 1))
->T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 11, 14))
+>Test : Symbol(Test, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 11, 1))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 12, 14))
+>props : Symbol(props, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 12, 17))
+>TestProps : Symbol(TestProps, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 7, 1))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 12, 14))
 
 const model = new TestObject();
->model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 12, 5))
->TestObject : Symbol(TestObject, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 95))
+>model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 13, 5))
+>TestObject : Symbol(TestObject, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 2, 95))
 
 const el1 = <Test model={model} foo="c" />;
->el1 : Symbol(el1, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 14, 5))
->Test : Symbol(Test, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 10, 1))
->model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 14, 17))
->model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 12, 5))
->foo : Symbol(foo, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 14, 31))
+>el1 : Symbol(el1, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 15, 5))
+>Test : Symbol(Test, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 11, 1))
+>model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 15, 17))
+>model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 13, 5))
+>foo : Symbol(foo, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 15, 31))
 
 const el2 = <Test<TestObject> model={model} foo="c" />;
->el2 : Symbol(el2, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 15, 5))
->Test : Symbol(Test, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 10, 1))
->TestObject : Symbol(TestObject, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 95))
->model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 15, 29))
->model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 12, 5))
->foo : Symbol(foo, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 15, 43))
+>el2 : Symbol(el2, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 16, 5))
+>Test : Symbol(Test, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 11, 1))
+>TestObject : Symbol(TestObject, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 2, 95))
+>model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 16, 29))
+>model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 13, 5))
+>foo : Symbol(foo, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 16, 43))
 

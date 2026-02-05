@@ -7,7 +7,7 @@ computedPropertyNames5_ES6.ts(8,5): error TS2464: A computed property name must 
 
 
 ==== computedPropertyNames5_ES6.ts (6 errors) ====
-    var b: boolean;
+    declare var b: boolean;
     var v = {
         [b]: 0,
         ~~~

@@ -1,8 +1,8 @@
 --- old.genericTypeWithCallableMembers.js
 +++ new.genericTypeWithCallableMembers.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [genericTypeWithCallableMembers.js]
+ "use strict";
  class C {
 +    data;
 +    data2;

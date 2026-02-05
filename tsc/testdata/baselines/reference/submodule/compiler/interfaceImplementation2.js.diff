@@ -1,8 +1,8 @@
 --- old.interfaceImplementation2.js
 +++ new.interfaceImplementation2.js
-@@= skipped -16, +16 lines =@@
-
+@@= skipped -17, +17 lines =@@
  //// [interfaceImplementation2.js]
+ "use strict";
  class C3 {
 +    iObj;
 +    iNum;

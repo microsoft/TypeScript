@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts] ////
 
 === invalidInstantiatedModule.ts ===
-module M {
+namespace M {
 >M : typeof M
 
     export class Point { x: number; y: number }
@@ -14,7 +14,7 @@ module M {
 >1 : 1
 }
 
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 
     export interface Point { x: number; y: number }

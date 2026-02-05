@@ -1,17 +1,21 @@
+classExtendingNonConstructor.ts(4,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 classExtendingNonConstructor.ts(7,18): error TS2507: Type 'undefined' is not a constructor function type.
 classExtendingNonConstructor.ts(8,18): error TS2507: Type 'true' is not a constructor function type.
 classExtendingNonConstructor.ts(9,18): error TS2507: Type 'false' is not a constructor function type.
 classExtendingNonConstructor.ts(10,18): error TS2507: Type '42' is not a constructor function type.
 classExtendingNonConstructor.ts(11,18): error TS2507: Type '"hello"' is not a constructor function type.
+classExtendingNonConstructor.ts(12,18): error TS2454: Variable 'x' is used before being assigned.
 classExtendingNonConstructor.ts(12,18): error TS2507: Type '{}' is not a constructor function type.
 classExtendingNonConstructor.ts(13,18): error TS2507: Type '() => void' is not a constructor function type.
 
 
-==== classExtendingNonConstructor.ts (7 errors) ====
+==== classExtendingNonConstructor.ts (9 errors) ====
     var x: {};
     
     function foo() {
         this.x = 1;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     
     class C1 extends undefined { }
@@ -30,6 +34,8 @@ classExtendingNonConstructor.ts(13,18): error TS2507: Type '() => void' is not a
                      ~~~~~~~
 !!! error TS2507: Type '"hello"' is not a constructor function type.
     class C6 extends x { }
+                     ~
+!!! error TS2454: Variable 'x' is used before being assigned.
                      ~
 !!! error TS2507: Type '{}' is not a constructor function type.
     class C7 extends foo { }

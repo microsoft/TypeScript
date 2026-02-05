@@ -1,6 +1,6 @@
 --- old.parserRealSource12.js
 +++ new.parserRealSource12.js
-@@= skipped -538, +538 lines =@@
+@@= skipped -539, +539 lines =@@
  var TypeScript;
  (function (TypeScript) {
      class AstWalkOptions {

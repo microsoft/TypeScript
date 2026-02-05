@@ -1,0 +1,10 @@
+--- old.decoratorOnClassProperty12(target=es2015).js
++++ new.decoratorOnClassProperty12(target=es2015).js
+@@= skipped -20, +20 lines =@@
+     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+ };
+ class A {
++    foo;
+ }
+ __decorate([
+     dec(),

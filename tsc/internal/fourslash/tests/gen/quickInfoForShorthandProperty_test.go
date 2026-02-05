@@ -11,7 +11,8 @@ func TestQuickInfoForShorthandProperty(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `var name1 = undefined, id1 = undefined;
+	const content = `// @strict: false
+var name1 = undefined, id1 = undefined;
 var /*obj1*/obj1 = {/*name1*/name1, /*id1*/id1};
 var name2 = "Hello";
 var id2 = 10000;

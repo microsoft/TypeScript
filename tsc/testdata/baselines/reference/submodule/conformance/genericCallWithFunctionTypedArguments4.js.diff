@@ -1,7 +1,7 @@
 --- old.genericCallWithFunctionTypedArguments4.js
 +++ new.genericCallWithFunctionTypedArguments4.js
-@@= skipped -26, +26 lines =@@
- //// [genericCallWithFunctionTypedArguments4.js]
+@@= skipped -27, +27 lines =@@
+ "use strict";
  // No inference is made from function typed arguments which have multiple call signatures
  class C {
 +    foo;

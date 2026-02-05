@@ -17,21 +17,21 @@ class Private {
     private member: number;
 }
 
-var v1: Default;
-var v2: Public;
-var v3: Protected;
-var v4: Private;
-var v5: Default | Public;
-var v6: Default | Protected;
-var v7: Default | Private;
-var v8: Public | Protected;
-var v9: Public | Private;
-var v10: Protected | Private;
-var v11: Default | Public | Protected;
-var v12: Default | Public | Private;
-var v13: Default | Protected | Private;
-var v14: Public | Private | Protected;
-var v15: Default | Public | Private | Protected;
+declare var v1: Default;
+declare var v2: Public;
+declare var v3: Protected;
+declare var v4: Private;
+declare var v5: Default | Public;
+declare var v6: Default | Protected;
+declare var v7: Default | Private;
+declare var v8: Public | Protected;
+declare var v9: Public | Private;
+declare var v10: Protected | Private;
+declare var v11: Default | Public | Protected;
+declare var v12: Default | Public | Private;
+declare var v13: Default | Protected | Private;
+declare var v14: Public | Private | Protected;
+declare var v15: Default | Public | Private | Protected;
 
 v1.member;
 v2.member;
@@ -51,6 +51,7 @@ v15.member;
 
 
 //// [unionTypePropertyAccessibility.js]
+"use strict";
 class Default {
     member;
 }
@@ -63,21 +64,6 @@ class Protected {
 class Private {
     member;
 }
-var v1;
-var v2;
-var v3;
-var v4;
-var v5;
-var v6;
-var v7;
-var v8;
-var v9;
-var v10;
-var v11;
-var v12;
-var v13;
-var v14;
-var v15;
 v1.member;
 v2.member;
 v3.member;

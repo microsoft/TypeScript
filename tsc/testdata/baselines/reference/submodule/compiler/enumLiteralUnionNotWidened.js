@@ -23,6 +23,7 @@ function fn1(x: C): List<C> { return asList(x); }
 function fn2(x: D): List<D> { return asList(x); }
 
 //// [enumLiteralUnionNotWidened.js]
+"use strict";
 // repro from #22093
 var A;
 (function (A) {

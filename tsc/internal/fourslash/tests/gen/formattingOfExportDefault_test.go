@@ -11,7 +11,7 @@ func TestFormattingOfExportDefault(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module Foo {
+	const content = `namespace Foo {
 /*1*/    export        default        class        Test { }
 }
 /*2*/export        default        function        bar() { }`

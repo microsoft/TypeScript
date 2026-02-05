@@ -8,3 +8,4 @@ type TypeStructure =
   | ["list", TypeStructure] // with just this it is ok
 
 //// [deferredTypeReferenceWithinArrayWithinTuple.js]
+"use strict";

@@ -5,7 +5,7 @@ async function bar() {
 >bar : () => Promise<void>
 
     !await 42; // OK
->!await 42 : boolean
+>!await 42 : false
 >await 42 : 42
 >42 : 42
 }

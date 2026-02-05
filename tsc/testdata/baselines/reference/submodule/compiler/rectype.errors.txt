@@ -1,0 +1,25 @@
+rectype.ts(8,7): error TS2454: Variable 'i' is used before being assigned.
+rectype.ts(9,9): error TS2454: Variable 'i' is used before being assigned.
+rectype.ts(10,12): error TS2454: Variable 'i' is used before being assigned.
+
+
+==== rectype.ts (3 errors) ====
+    namespace M {
+        interface I { (i:I):I; }
+    
+        export function f(p: I) { return f };
+    
+        var i:I;
+    
+        f(i);
+          ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+        f(f(i));
+            ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+        f((f(f(i))));
+               ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    }
+    
+    

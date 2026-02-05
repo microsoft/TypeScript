@@ -2,13 +2,37 @@ subtypingWithCallSignaturesWithOptionalParameters.ts(19,11): error TS2430: Inter
   Types of property 'a' are incompatible.
     Type '(x: number) => number' is not assignable to type '() => number'.
       Target signature provides too few arguments. Expected 1 or more, but got 0.
+subtypingWithCallSignaturesWithOptionalParameters.ts(32,11): error TS2430: Interface 'I6' incorrectly extends interface 'Base'.
+  Types of property 'a2' are incompatible.
+    Type '(x: number) => number' is not assignable to type '(x?: number | undefined) => number'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'number | undefined' is not assignable to type 'number'.
+          Type 'undefined' is not assignable to type 'number'.
 subtypingWithCallSignaturesWithOptionalParameters.ts(49,11): error TS2430: Interface 'I10' incorrectly extends interface 'Base'.
   Types of property 'a3' are incompatible.
     Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
+subtypingWithCallSignaturesWithOptionalParameters.ts(66,11): error TS2430: Interface 'I14' incorrectly extends interface 'Base'.
+  Types of property 'a4' are incompatible.
+    Type '(x: number, y: number) => number' is not assignable to type '(x: number, y?: number | undefined) => number'.
+      Types of parameters 'y' and 'y' are incompatible.
+        Type 'number | undefined' is not assignable to type 'number'.
+          Type 'undefined' is not assignable to type 'number'.
+subtypingWithCallSignaturesWithOptionalParameters.ts(79,11): error TS2430: Interface 'I17' incorrectly extends interface 'Base'.
+  Types of property 'a5' are incompatible.
+    Type '(x: number) => number' is not assignable to type '(x?: number | undefined, y?: number | undefined) => number'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'number | undefined' is not assignable to type 'number'.
+          Type 'undefined' is not assignable to type 'number'.
+subtypingWithCallSignaturesWithOptionalParameters.ts(83,11): error TS2430: Interface 'I18' incorrectly extends interface 'Base'.
+  Types of property 'a5' are incompatible.
+    Type '(x: number, y: number) => number' is not assignable to type '(x?: number | undefined, y?: number | undefined) => number'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'number | undefined' is not assignable to type 'number'.
+          Type 'undefined' is not assignable to type 'number'.
 
 
-==== subtypingWithCallSignaturesWithOptionalParameters.ts (2 errors) ====
+==== subtypingWithCallSignaturesWithOptionalParameters.ts (6 errors) ====
     // call signatures in derived types must have the same or fewer optional parameters as the base type
     
     interface Base { 
@@ -46,6 +70,13 @@ subtypingWithCallSignaturesWithOptionalParameters.ts(49,11): error TS2430: Inter
     }
     
     interface I6 extends Base {
+              ~~
+!!! error TS2430: Interface 'I6' incorrectly extends interface 'Base'.
+!!! error TS2430:   Types of property 'a2' are incompatible.
+!!! error TS2430:     Type '(x: number) => number' is not assignable to type '(x?: number | undefined) => number'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2430:           Type 'undefined' is not assignable to type 'number'.
         a2: (x: number) => number; // ok, same number of params
     }
     
@@ -85,6 +116,13 @@ subtypingWithCallSignaturesWithOptionalParameters.ts(49,11): error TS2430: Inter
     }
     
     interface I14 extends Base {
+              ~~~
+!!! error TS2430: Interface 'I14' incorrectly extends interface 'Base'.
+!!! error TS2430:   Types of property 'a4' are incompatible.
+!!! error TS2430:     Type '(x: number, y: number) => number' is not assignable to type '(x: number, y?: number | undefined) => number'.
+!!! error TS2430:       Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2430:         Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2430:           Type 'undefined' is not assignable to type 'number'.
         a4: (x: number, y: number) => number;  // ok, same number of params
     }
     
@@ -98,9 +136,23 @@ subtypingWithCallSignaturesWithOptionalParameters.ts(49,11): error TS2430: Inter
     }
     
     interface I17 extends Base {
+              ~~~
+!!! error TS2430: Interface 'I17' incorrectly extends interface 'Base'.
+!!! error TS2430:   Types of property 'a5' are incompatible.
+!!! error TS2430:     Type '(x: number) => number' is not assignable to type '(x?: number | undefined, y?: number | undefined) => number'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2430:           Type 'undefined' is not assignable to type 'number'.
         a5: (x: number) => number; // ok, all present params match
     }
     
     interface I18 extends Base {
+              ~~~
+!!! error TS2430: Interface 'I18' incorrectly extends interface 'Base'.
+!!! error TS2430:   Types of property 'a5' are incompatible.
+!!! error TS2430:     Type '(x: number, y: number) => number' is not assignable to type '(x?: number | undefined, y?: number | undefined) => number'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2430:           Type 'undefined' is not assignable to type 'number'.
         a5: (x: number, y: number) => number;  // ok, same number of params
     }

@@ -1,0 +1,26 @@
+--- old.overEagerReturnTypeSpecialization.types
++++ new.overEagerReturnTypeSpecialization.types
+@@= skipped -23, +23 lines =@@
+ >num => num.toString() : (num: number) => string
+ >num : number
+ >num.toString() : string
+->num.toString : (radix?: number) => string
++>num.toString : (radix?: number | undefined) => string
+ >num : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+            .func(str => str.length);    // should error
+ >func : <U>(callback: (value: string) => U) => I1<U>
+@@= skipped -23, +23 lines =@@
+ >num => num.toString() : (num: number) => string
+ >num : number
+ >num.toString() : string
+->num.toString : (radix?: number) => string
++>num.toString : (radix?: number | undefined) => string
+ >num : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+            .func(str => str.length);    // should be ok 
+ >func : <U>(callback: (value: string) => U) => I1<U>

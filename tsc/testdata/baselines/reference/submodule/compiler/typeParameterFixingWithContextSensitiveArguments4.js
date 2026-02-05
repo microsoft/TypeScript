@@ -10,6 +10,7 @@ var a: A, b: B;
 var d = f(a, b, x => x, x => <any>x); // Type [A, B]
 
 //// [typeParameterFixingWithContextSensitiveArguments4.js]
+"use strict";
 function f(y, y1, p, p1) { return [y, p1(y)]; }
 var a, b;
 var d = f(a, b, x => x, x => x); // Type [A, B]

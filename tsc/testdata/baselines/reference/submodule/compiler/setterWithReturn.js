@@ -13,6 +13,7 @@ class C234 {
 }
 
 //// [setterWithReturn.js]
+"use strict";
 class C234 {
     set p1(arg1) {
         if (true) {

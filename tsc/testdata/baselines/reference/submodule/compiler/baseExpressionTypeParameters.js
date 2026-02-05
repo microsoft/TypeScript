@@ -16,6 +16,7 @@ class Spec extends Gen<string> {}
 <string>Spec.prop;
 
 //// [baseExpressionTypeParameters.js]
+"use strict";
 // Repro from #17829
 function base() {
     class Base {

@@ -1,7 +1,7 @@
 --- old.mixinPrivateAndProtected.js
 +++ new.mixinPrivateAndProtected.js
-@@= skipped -93, +93 lines =@@
- //// [mixinPrivateAndProtected.js]
+@@= skipped -94, +94 lines =@@
+ "use strict";
  // Repro from #13830
  class A {
 -    constructor() {

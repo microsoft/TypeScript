@@ -1,8 +1,8 @@
 --- old.bestCommonTypeOfTuple2.js
 +++ new.bestCommonTypeOfTuple2.js
-@@= skipped -25, +25 lines =@@
-
+@@= skipped -26, +26 lines =@@
  //// [bestCommonTypeOfTuple2.js]
+ "use strict";
  class C {
 +    c;
  }
@@ -30,5 +30,5 @@
 +    i = "bar";
 +    d;
  }
- var t1;
- var t2;
+ var e11 = t1[4]; // base
+ var e21 = t2[4]; // {}

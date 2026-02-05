@@ -31,6 +31,7 @@ class C2 {
 
 
 //// [classStaticBlock10.js]
+"use strict";
 var a1 = 1;
 var a2 = 1;
 const b1 = 2;

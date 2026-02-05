@@ -1,6 +1,6 @@
 --- old.inheritanceStaticPropertyOverridingAccessor.js
 +++ new.inheritanceStaticPropertyOverridingAccessor.js
-@@= skipped -22, +22 lines =@@
+@@= skipped -23, +23 lines =@@
      }
  }
  class b extends a {

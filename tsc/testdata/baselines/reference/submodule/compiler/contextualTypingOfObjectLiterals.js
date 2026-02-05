@@ -13,6 +13,7 @@ f(obj1); // Ok
 f(obj2); // Error - indexer doesn't match
 
 //// [contextualTypingOfObjectLiterals.js]
+"use strict";
 var obj1;
 var obj2 = { x: "" };
 obj1 = {}; // Ok

@@ -22,6 +22,7 @@ class Foo {
 
 
 //// [propertyWrappedInTry.js]
+"use strict";
 class Foo {
 }
 try {

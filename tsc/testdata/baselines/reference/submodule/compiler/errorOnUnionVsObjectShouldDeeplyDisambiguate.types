@@ -3,7 +3,7 @@
 === errorOnUnionVsObjectShouldDeeplyDisambiguate.ts ===
 interface Stuff {
     a?: () => Promise<number[]>;
->a : () => Promise<number[]>
+>a : (() => Promise<number[]>) | undefined
 
     b: () => Promise<string>;
 >b : () => Promise<string>

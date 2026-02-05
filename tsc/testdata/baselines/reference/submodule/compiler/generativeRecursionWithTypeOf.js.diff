@@ -1,7 +1,7 @@
 --- old.generativeRecursionWithTypeOf.js
 +++ new.generativeRecursionWithTypeOf.js
-@@= skipped -14, +14 lines =@@
- //// [generativeRecursionWithTypeOf.js]
+@@= skipped -15, +15 lines =@@
+ "use strict";
  class C {
      static foo(x) { }
 +    type;

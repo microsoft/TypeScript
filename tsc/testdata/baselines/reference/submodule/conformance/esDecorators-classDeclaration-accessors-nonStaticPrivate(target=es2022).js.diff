@@ -1,9 +1,9 @@
 --- old.esDecorators-classDeclaration-accessors-nonStaticPrivate(target=es2022).js
 +++ new.esDecorators-classDeclaration-accessors-nonStaticPrivate(target=es2022).js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
 
  //// [esDecorators-classDeclaration-accessors-nonStaticPrivate.js]
+ "use strict";
 -let C = (() => {
 -    let _instanceExtraInitializers = [];
 -    let _private_get_method1_decorators;

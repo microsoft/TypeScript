@@ -5,11 +5,11 @@ declare var console;
 >console : Symbol(console, Decl(objectLitArrayDeclNoNew.ts, 0, 11))
 
 "use strict";
-module Test {
+namespace Test {
 >Test : Symbol(Test, Decl(objectLitArrayDeclNoNew.ts, 1, 13))
 
     export interface IState {
->IState : Symbol(IState, Decl(objectLitArrayDeclNoNew.ts, 2, 13))
+>IState : Symbol(IState, Decl(objectLitArrayDeclNoNew.ts, 2, 16))
     }
 
     export interface IToken {
@@ -25,7 +25,7 @@ module Test {
 
         endState: IState;
 >endState : Symbol(ILineTokens.endState, Decl(objectLitArrayDeclNoNew.ts, 10, 25))
->IState : Symbol(IState, Decl(objectLitArrayDeclNoNew.ts, 2, 13))
+>IState : Symbol(IState, Decl(objectLitArrayDeclNoNew.ts, 2, 16))
     }
 
     export class Gar {
@@ -41,7 +41,7 @@ module Test {
 
       var state:IState= null;
 >state : Symbol(state, Decl(objectLitArrayDeclNoNew.ts, 19, 9))
->IState : Symbol(IState, Decl(objectLitArrayDeclNoNew.ts, 2, 13))
+>IState : Symbol(IState, Decl(objectLitArrayDeclNoNew.ts, 2, 16))
 
       return {
        tokens: Gar[],//IToken[],  // Missing new. Correct syntax is: tokens: new IToken[]

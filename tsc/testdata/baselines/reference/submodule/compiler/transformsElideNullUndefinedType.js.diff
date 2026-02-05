@@ -1,6 +1,6 @@
 --- old.transformsElideNullUndefinedType.js
 +++ new.transformsElideNullUndefinedType.js
-@@= skipped -91, +91 lines =@@
+@@= skipped -92, +92 lines =@@
      constructor(p11) { }
  }
  class C4 {

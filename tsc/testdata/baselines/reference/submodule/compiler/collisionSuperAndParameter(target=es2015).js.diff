@@ -1,0 +1,20 @@
+--- old.collisionSuperAndParameter(target=es2015).js
++++ new.collisionSuperAndParameter(target=es2015).js
+@@= skipped -92, +92 lines =@@
+     }
+     set z(_super) {
+     }
++    prop3;
++    prop4 = {
++        doStuff: (_super) => {
++        }
++    };
+     constructor(_super) {
+         super();
+-        this.prop4 = {
+-            doStuff: (_super) => {
+-            }
+-        };
+     }
+ }
+ class Foo4 extends Foo {

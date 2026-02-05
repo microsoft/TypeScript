@@ -1,6 +1,6 @@
 --- old.staticAnonymousTypeNotReferencingTypeParameter.js
 +++ new.staticAnonymousTypeNotReferencingTypeParameter.js
-@@= skipped -147, +147 lines =@@
+@@= skipped -148, +148 lines =@@
  // this would cause the compiler to run out of memory.
  function outer(x) {
      class Inner {

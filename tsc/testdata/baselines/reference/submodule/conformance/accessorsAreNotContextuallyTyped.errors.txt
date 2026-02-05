@@ -1,0 +1,19 @@
+accessorsAreNotContextuallyTyped.ts(13,9): error TS2454: Variable 'c' is used before being assigned.
+
+
+==== accessorsAreNotContextuallyTyped.ts (1 errors) ====
+    // accessors are not contextually typed
+    
+    class C {
+        set x(v: (a: string) => string) {
+        }
+    
+        get x() {
+            return (x: string) => "";
+        }
+    }
+    
+    var c: C;
+    var r = c.x(''); // string
+            ~
+!!! error TS2454: Variable 'c' is used before being assigned.

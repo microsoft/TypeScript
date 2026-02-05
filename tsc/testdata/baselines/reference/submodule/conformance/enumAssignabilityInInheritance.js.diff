@@ -1,6 +1,6 @@
 --- old.enumAssignabilityInInheritance.js
 +++ new.enumAssignabilityInInheritance.js
-@@= skipped -127, +127 lines =@@
+@@= skipped -128, +128 lines =@@
  var r4 = foo7(E.A);
  var r4 = foo8(E.A);
  class A {

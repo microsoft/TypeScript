@@ -17,6 +17,7 @@ function Choice<T>(...v_args: any[]): A<T>{
 
 
 //// [functionOverloadsRecursiveGenericReturnType.js]
+"use strict";
 class B {
     id;
 }

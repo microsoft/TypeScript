@@ -7,7 +7,7 @@ interface I {
     new(): number;
 }
 
-var i: I;
+declare var i: I;
 >i : I
 
 var r2: number = i();
@@ -24,11 +24,11 @@ var r2c: (x: any, y?: any) => any = i.apply;
 >r2c : (x: any, y?: any) => any
 >x : any
 >y : any
->i.apply : (this: Function, thisArg: any, argArray?: any) => any
+>i.apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
 >i : I
->apply : (this: Function, thisArg: any, argArray?: any) => any
+>apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
 
-var b: {
+declare var b: {
 >b : new () => number
 
     new(): number;
@@ -48,7 +48,7 @@ var r4c: (x: any, y?: any) => any = b.apply;
 >r4c : (x: any, y?: any) => any
 >x : any
 >y : any
->b.apply : (this: Function, thisArg: any, argArray?: any) => any
+>b.apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
 >b : new () => number
->apply : (this: Function, thisArg: any, argArray?: any) => any
+>apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
 

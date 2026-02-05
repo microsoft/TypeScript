@@ -11,6 +11,7 @@ var lazyArray = new LazyArray<string>();
 var value: string = lazyArray.array()["test"]; // used to be an error
 
 //// [genericWithIndexerOfTypeParameterType1.js]
+"use strict";
 class LazyArray {
     objects = {};
     array() {

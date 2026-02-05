@@ -4,4 +4,5 @@
 ++this;
 
 //// [parserUnaryExpression1.js]
+"use strict";
 ++this;

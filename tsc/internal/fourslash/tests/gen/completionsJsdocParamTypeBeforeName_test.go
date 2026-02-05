@@ -12,7 +12,8 @@ func TestCompletionsJsdocParamTypeBeforeName(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `/** @param /*name1*/ {/*type*/} /*name2*/ */
+	const content = `// @lib: es5
+/** @param /*name1*/ {/*type*/} /*name2*/ */
 function toString(obj) {}`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()

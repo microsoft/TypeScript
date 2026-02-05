@@ -1,8 +1,8 @@
 --- old.duplicateIdentifierDifferentSpelling.js
 +++ new.duplicateIdentifierDifferentSpelling.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [duplicateIdentifierDifferentSpelling.js]
+ "use strict";
  class A {
 -    constructor() {
 -        this[0b11] = '';

@@ -7,6 +7,7 @@ namespace Validation {
 }
 
 //// [unusedFunctionsinNamespaces1.js]
+"use strict";
 var Validation;
 (function (Validation) {
     function function1() {

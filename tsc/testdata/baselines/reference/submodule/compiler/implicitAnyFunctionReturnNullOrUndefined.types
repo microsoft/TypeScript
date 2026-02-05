@@ -3,23 +3,23 @@
 === implicitAnyFunctionReturnNullOrUndefined.ts ===
 // this should be an error
 function nullWidenFunction() { return null;}             // error at "nullWidenFunction"
->nullWidenFunction : () => any
+>nullWidenFunction : () => null
 
 function undefinedWidenFunction() { return undefined; }  // error at "undefinedWidenFunction"
->undefinedWidenFunction : () => any
+>undefinedWidenFunction : () => undefined
 >undefined : undefined
 
 class C {
 >C : C
 
     nullWidenFuncOfC() {  // error at "nullWidenFuncOfC"
->nullWidenFuncOfC : () => any
+>nullWidenFuncOfC : () => null
 
         return null;
     }
 
     underfinedWidenFuncOfC() {  // error at "underfinedWidenFuncOfC"
->underfinedWidenFuncOfC : () => any
+>underfinedWidenFuncOfC : () => undefined
 
         return undefined;
 >undefined : undefined
@@ -44,10 +44,10 @@ function fooFoo() { return 5; }
 
 // this should not be an error as the error is raised by expr above
 nullWidenFunction();
->nullWidenFunction() : any
->nullWidenFunction : () => any
+>nullWidenFunction() : null
+>nullWidenFunction : () => null
 
 undefinedWidenFunction();
->undefinedWidenFunction() : any
->undefinedWidenFunction : () => any
+>undefinedWidenFunction() : undefined
+>undefinedWidenFunction : () => undefined
 

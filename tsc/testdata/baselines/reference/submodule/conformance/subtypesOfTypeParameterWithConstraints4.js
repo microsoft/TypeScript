@@ -81,6 +81,7 @@ class D9<T extends Foo, U extends Foo, V> extends B1<U> {
 }
 
 //// [subtypesOfTypeParameterWithConstraints4.js]
+"use strict";
 // checking whether other types are subtypes of type parameters with constraints
 class Foo {
     foo;

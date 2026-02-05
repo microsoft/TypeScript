@@ -22,34 +22,29 @@
 
      this.x = 1
  >this.x = 1 : 1
-->this.x : number
+ >this.x : number
 ->this : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
-->x : number
-+>this.x : any
-+>this : any
-+>x : any
++>this : { x: number; y: number[]; fun: () => void; f2: () => void; f3: () => void; }
+ >x : number
  >1 : 1
 
      this/*1*/
 ->this : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
-+>this : any
++>this : { x: number; y: number[]; fun: () => void; f2: () => void; f3: () => void; }
 
    },
    f2: function() {
-@@= skipped -19, +19 lines =@@
- >function() {    this.x    this/*2*/  } : () => void
+@@= skipped -20, +20 lines =@@
 
      this.x
-->this.x : number
+ >this.x : number
 ->this : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
-->x : number
-+>this.x : any
-+>this : any
-+>x : any
++>this : { x: number; y: number[]; fun: () => void; f2: () => void; f3: () => void; }
+ >x : number
 
      this/*2*/
 ->this : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
-+>this : any
++>this : { x: number; y: number[]; fun: () => void; f2: () => void; f3: () => void; }
 
    },
    f3: (function() {

@@ -1,6 +1,6 @@
 --- old.anyAssignabilityInInheritance.js
 +++ new.anyAssignabilityInInheritance.js
-@@= skipped -101, +101 lines =@@
+@@= skipped -102, +102 lines =@@
  var r3 = foo3(a); // any
  var r3 = foo3(a); // any
  class A {

@@ -10,6 +10,7 @@ function bar(): void {
 }
 
 //// [functionWithNoBestCommonType2.js]
+"use strict";
 var v = function () {
     return true;
     return bar();

@@ -4,4 +4,5 @@
 0
 
 //// [scannerES3NumericLiteral1.js]
+"use strict";
 0;

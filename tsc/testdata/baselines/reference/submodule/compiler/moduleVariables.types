@@ -8,7 +8,7 @@ var x = 1;
 >x : number
 >1 : 1
 
-module M {
+namespace M {
 >M : typeof M
 
     export var x = 2;
@@ -23,7 +23,7 @@ module M {
 >x : number
 }
  
-module M {
+namespace M {
 >M : typeof M
 
     console.log(x); // 2
@@ -34,7 +34,7 @@ module M {
 >x : number
 }
  
-module M {
+namespace M {
 >M : typeof M
 
     var x = 3;

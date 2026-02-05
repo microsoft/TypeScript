@@ -31,3 +31,4 @@ type OK4 = string | (()=> string | number);
 
 
 //// [unparenthesizedFunctionTypeInUnionOrIntersection.js]
+"use strict";

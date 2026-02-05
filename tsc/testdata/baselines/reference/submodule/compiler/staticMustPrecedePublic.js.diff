@@ -1,8 +1,8 @@
 --- old.staticMustPrecedePublic.js
 +++ new.staticMustPrecedePublic.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
  //// [staticMustPrecedePublic.js]
+ "use strict";
  class Outer {
 +    static intI;
 +    static stringF;

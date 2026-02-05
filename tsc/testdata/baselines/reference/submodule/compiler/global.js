@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/global.ts] ////
 
 //// [global.ts]
-module M {
+namespace M {
     export function f(y:number) {
         return x+y;
     }
@@ -13,6 +13,7 @@ M.f(3);
 
 
 //// [global.js]
+"use strict";
 var M;
 (function (M) {
     function f(y) {

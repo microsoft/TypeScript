@@ -1,0 +1,14 @@
+--- old.controlFlowInstanceOfGuardPrimitives.types
++++ new.controlFlowInstanceOfGuardPrimitives.types
+@@= skipped -47, +47 lines =@@
+ >"Aha!! It's the number " + thing.toPrecision(3) : string
+ >"Aha!! It's the number " : "Aha!! It's the number "
+ >thing.toPrecision(3) : string
+->thing.toPrecision : (precision?: number) => string
++>thing.toPrecision : (precision?: number | undefined) => string
+ >thing : number
+->toPrecision : (precision?: number) => string
++>toPrecision : (precision?: number | undefined) => string
+ >3 : 3
+     }
+ }

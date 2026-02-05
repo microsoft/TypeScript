@@ -1,6 +1,6 @@
 // === findRenameLocations ===
 // === /a.ts ===
-// module SomeModule { export class /*RENAME*/[|SomeClassRENAME|] { } }
+// namespace SomeModule { export class /*RENAME*/[|SomeClassRENAME|] { } }
 // export = SomeModule;
 
 // === /b.ts ===
@@ -11,7 +11,7 @@
 
 // === findRenameLocations ===
 // === /a.ts ===
-// module SomeModule { export class [|SomeClassRENAME|] { } }
+// namespace SomeModule { export class [|SomeClassRENAME|] { } }
 // export = SomeModule;
 
 // === /b.ts ===

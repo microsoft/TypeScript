@@ -8,6 +8,7 @@ try {} catch(e) {}
 try {} finally {}
 
 //// [tryCatchFinally.js]
+"use strict";
 try { }
 catch (e) { }
 finally { }

@@ -1,0 +1,11 @@
+--- old.thisTypeInObjectLiterals2(target=es2015).types
++++ new.thisTypeInObjectLiterals2(target=es2015).types
+@@= skipped -85, +85 lines =@@
+ >z : number | undefined
+
+     moveBy(dx: number, dy: number, dz?: number): void;
+->moveBy : (dx: number, dy: number, dz?: number) => void
++>moveBy : (dx: number, dy: number, dz?: number | undefined) => void
+ >dx : number
+ >dy : number
+ >dz : number | undefined

@@ -1,0 +1,16 @@
+--- old.YieldStarExpression1_es6.errors.txt
++++ new.YieldStarExpression1_es6.errors.txt
+@@= skipped -0, +0 lines =@@
+-YieldStarExpression1_es6.ts(1,1): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+ YieldStarExpression1_es6.ts(1,1): error TS2304: Cannot find name 'yield'.
+ YieldStarExpression1_es6.ts(1,9): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+
+
+-==== YieldStarExpression1_es6.ts (3 errors) ====
++==== YieldStarExpression1_es6.ts (2 errors) ====
+     yield * [];
+-    ~~~~~
+-!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+     ~~~~~
+ !!! error TS2304: Cannot find name 'yield'.
+             ~~

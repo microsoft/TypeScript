@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /referencesForOverrides.ts ===
-// module FindRef3 {
-// 	module SimpleClassTest {
+// namespace FindRef3 {
+// 	namespace SimpleClassTest {
 // 		export class Foo {
 // 			public /*FIND ALL REFS*/[|foo|](): void {
 // 			}
@@ -29,7 +29,7 @@
 // === /referencesForOverrides.ts ===
 // --- (line: 11) skipped ---
 // 
-// 	module SimpleInterfaceTest {
+// 	namespace SimpleInterfaceTest {
 // 		export interface IFoo {
 // 			/*FIND ALL REFS*/[|ifoo|](): void;
 // 		}
@@ -56,7 +56,7 @@
 // === /referencesForOverrides.ts ===
 // --- (line: 20) skipped ---
 // 
-// 	module SimpleClassInterfaceTest {
+// 	namespace SimpleClassInterfaceTest {
 // 		export interface IFoo {
 // 			/*FIND ALL REFS*/[|icfoo|](): void;
 // 		}
@@ -83,7 +83,7 @@
 // === /referencesForOverrides.ts ===
 // --- (line: 30) skipped ---
 // 
-// 	module Test {
+// 	namespace Test {
 // 		export interface IBase {
 // 			/*FIND ALL REFS*/[|field|]: string;
 // 			method(): void;
@@ -127,7 +127,7 @@
 // === findAllReferences ===
 // === /referencesForOverrides.ts ===
 // --- (line: 31) skipped ---
-// 	module Test {
+// 	namespace Test {
 // 		export interface IBase {
 // 			field: string;
 // 			/*FIND ALL REFS*/[|method|](): void;

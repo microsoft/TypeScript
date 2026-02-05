@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/exportPrivateType.ts] ////
 
 //// [exportPrivateType.ts]
-module foo {
+namespace foo {
     class C1 {
         x: string;
         y: C1;
@@ -33,6 +33,7 @@ var y = foo.g; // Exported variable 'y' has or is using private type 'foo.C2'.
 
 
 //// [exportPrivateType.js]
+"use strict";
 var foo;
 (function (foo) {
     class C1 {

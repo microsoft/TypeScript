@@ -37,6 +37,7 @@ t4[2] = 10;
 
 
 //// [castingTuple.js]
+"use strict";
 class A {
     a = 10;
 }

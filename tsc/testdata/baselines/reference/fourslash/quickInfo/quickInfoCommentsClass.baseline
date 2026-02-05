@@ -221,8 +221,8 @@
 //     }
 // }
 // new a("Hello");
-// module m {
-//     export module m2 {
+// namespace m {
+//     export namespace m2 {
 //         /** class comment */
 //         export class c1 {
 //             /** constructor comment*/
@@ -917,7 +917,7 @@
   },
   {
     "marker": {
-      "Position": 935,
+      "Position": 941,
       "LSPosition": {
         "line": 56,
         "character": 22

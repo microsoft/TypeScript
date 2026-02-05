@@ -1,10 +1,11 @@
+indexSignatureTypeCheck.ts(8,5): error TS2322: Type 'null' is not assignable to type 'IPropertySet'.
 indexSignatureTypeCheck.ts(14,8): error TS1019: An index signature parameter cannot have a question mark.
 indexSignatureTypeCheck.ts(15,6): error TS1017: An index signature cannot have a rest parameter.
 indexSignatureTypeCheck.ts(16,6): error TS1096: An index signature must have exactly one parameter.
 indexSignatureTypeCheck.ts(17,6): error TS1096: An index signature must have exactly one parameter.
 
 
-==== indexSignatureTypeCheck.ts (4 errors) ====
+==== indexSignatureTypeCheck.ts (5 errors) ====
     interface IPropertySet {
     
         [index: string]: any;
@@ -13,6 +14,8 @@ indexSignatureTypeCheck.ts(17,6): error TS1096: An index signature must have exa
     
     
     var ps: IPropertySet = null;
+        ~~
+!!! error TS2322: Type 'null' is not assignable to type 'IPropertySet'.
     var index: any = "hello";
     ps[index] = 12;
     

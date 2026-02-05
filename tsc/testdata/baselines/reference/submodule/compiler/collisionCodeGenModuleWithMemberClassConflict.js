@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/collisionCodeGenModuleWithMemberClassConflict.ts] ////
 
 //// [collisionCodeGenModuleWithMemberClassConflict.ts]
-module m1 {
+namespace m1 {
     export class m1 {
     }
 }
 var foo = new m1.m1();
 
-module m2 {
+namespace m2 {
     export class m2 {
     }
 
@@ -18,6 +18,7 @@ var foo = new m2.m2();
 var foo = new m2._m2();
 
 //// [collisionCodeGenModuleWithMemberClassConflict.js]
+"use strict";
 var m1;
 (function (m1_1) {
     class m1 {

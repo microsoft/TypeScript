@@ -12,6 +12,7 @@ n([4], 'foo');
 
 
 //// [restArgAssignmentCompat.js]
+"use strict";
 function f(...x) {
     x.forEach((n, i) => void ('item ' + i + ' = ' + n));
 }

@@ -1,8 +1,8 @@
 --- old.comparisonOperatorWithNoRelationshipObjectsOnProperty.js
 +++ new.comparisonOperatorWithNoRelationshipObjectsOnProperty.js
-@@= skipped -79, +79 lines =@@
-
+@@= skipped -80, +80 lines =@@
  //// [comparisonOperatorWithNoRelationshipObjectsOnProperty.js]
+ "use strict";
  class A1 {
 +    a;
  }
@@ -15,5 +15,5 @@
  class B2 {
 +    a;
  }
- var a1;
- var b1;
+ // operator <
+ var r1a1 = a1 < b1;

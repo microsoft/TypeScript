@@ -1,6 +1,6 @@
 --- old.overrideInterfaceProperty.js
 +++ new.overrideInterfaceProperty.js
-@@= skipped -25, +25 lines =@@
+@@= skipped -26, +26 lines =@@
      get size() { return 0; }
  }
  class Kasizz extends Mup {

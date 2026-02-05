@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/importOnAliasedIdentifiers.ts] ////
 
 === importOnAliasedIdentifiers.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     export interface X { s: string }
@@ -10,7 +10,7 @@ module A {
     export var X: X;
 >X : X
 }
-module B {
+namespace B {
 >B : typeof B
 
     interface A { n: number }

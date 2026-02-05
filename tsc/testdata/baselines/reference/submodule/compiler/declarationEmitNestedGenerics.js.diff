@@ -1,6 +1,6 @@
 --- old.declarationEmitNestedGenerics.js
 +++ new.declarationEmitNestedGenerics.js
-@@= skipped -22, +22 lines =@@
+@@= skipped -23, +23 lines =@@
 
 
  //// [declarationEmitNestedGenerics.d.ts]

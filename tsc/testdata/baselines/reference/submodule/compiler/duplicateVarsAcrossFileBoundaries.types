@@ -45,7 +45,7 @@ var z = 0;
 >0 : 0
 
 === duplicateVarsAcrossFileBoundaries_4.ts ===
-module P { }
+namespace P { }
 import p = P;
 >p : any
 >P : any
@@ -54,7 +54,7 @@ var q;
 >q : any
 
 === duplicateVarsAcrossFileBoundaries_5.ts ===
-module Q { }
+namespace Q { }
 import q = Q;
 >q : any
 >Q : any

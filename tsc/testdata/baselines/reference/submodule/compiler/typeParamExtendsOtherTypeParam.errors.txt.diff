@@ -1,6 +1,7 @@
 --- old.typeParamExtendsOtherTypeParam.errors.txt
 +++ new.typeParamExtendsOtherTypeParam.errors.txt
 @@= skipped -0, +0 lines =@@
+ typeParamExtendsOtherTypeParam.ts(3,5): error TS2564: Property 'data' has no initializer and is not definitely assigned in the constructor.
 -typeParamExtendsOtherTypeParam.ts(12,26): error TS2344: Type '{ b: string; }' does not satisfy the constraint '{ a: string; }'.
 -  Property 'a' is missing in type '{ b: string; }' but required in type '{ a: string; }'.
 +typeParamExtendsOtherTypeParam.ts(12,26): error TS2741: Property 'a' is missing in type '{ b: string; }' but required in type '{ a: string; }'.
@@ -27,8 +28,8 @@
 +typeParamExtendsOtherTypeParam.ts(29,15): error TS2741: Property 'b' is missing in type 'I1' but required in type 'I2'.
 
 
- ==== typeParamExtendsOtherTypeParam.ts (8 errors) ====
-@@= skipped -31, +25 lines =@@
+ ==== typeParamExtendsOtherTypeParam.ts (9 errors) ====
+@@= skipped -34, +28 lines =@@
      // Below should be in error
      var x1: A<{ a: string;}, { b: string }>;
                               ~~~~~~~~~~~~~

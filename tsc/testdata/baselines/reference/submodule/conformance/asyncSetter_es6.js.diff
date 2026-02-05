@@ -1,8 +1,8 @@
 --- old.asyncSetter_es6.js
 +++ new.asyncSetter_es6.js
-@@= skipped -7, +7 lines =@@
-
+@@= skipped -8, +8 lines =@@
  //// [asyncSetter_es6.js]
+ "use strict";
  class C {
 -    set foo(value) {
 +    async set foo(value) {

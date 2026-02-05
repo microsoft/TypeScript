@@ -11,6 +11,7 @@ var x = {
 }
 
 //// [symbolProperty1.js]
+"use strict";
 var s;
 var x = {
     [s]: 0,

@@ -1,8 +1,8 @@
 --- old.Protected9.js
 +++ new.Protected9.js
-@@= skipped -6, +6 lines =@@
-
+@@= skipped -7, +7 lines =@@
  //// [Protected9.js]
+ "use strict";
  class C {
 +    p;
      constructor(p) {

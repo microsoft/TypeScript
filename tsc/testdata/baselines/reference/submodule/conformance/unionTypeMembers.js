@@ -33,10 +33,10 @@ interface I2<T> {
 
 // a union type U has those members that are present in every one of its constituent types, 
 // with types that are unions of the respective members in the constituent types
-var x : I1<number> | I2<number>;
-var str: string;
-var num: number;
-var strOrNum: string | number;
+declare var x : I1<number> | I2<number>;
+declare var str: string;
+declare var num: number;
+declare var strOrNum: string | number;
 
 // If each type in U has a property P, U has a property P of a union type of the types of P from each type in U.
 str = x.commonPropertyType; // string
@@ -57,12 +57,7 @@ x.methodOnlyInI1("hello"); // error
 x.methodOnlyInI2(10); // error
 
 //// [unionTypeMembers.js]
-// a union type U has those members that are present in every one of its constituent types, 
-// with types that are unions of the respective members in the constituent types
-var x;
-var str;
-var num;
-var strOrNum;
+"use strict";
 // If each type in U has a property P, U has a property P of a union type of the types of P from each type in U.
 str = x.commonPropertyType; // string
 str = x.commonMethodType(str); // (a: string) => string so result should be string

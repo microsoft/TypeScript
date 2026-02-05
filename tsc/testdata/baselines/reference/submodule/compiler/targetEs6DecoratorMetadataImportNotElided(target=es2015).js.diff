@@ -1,0 +1,10 @@
+--- old.targetEs6DecoratorMetadataImportNotElided(target=es2015).js
++++ new.targetEs6DecoratorMetadataImportNotElided(target=es2015).js
+@@= skipped -31, +31 lines =@@
+ };
+ import { Input, TemplateRef } from './deps';
+ export class MyComponent {
++    _ref;
+     get ref() { return this._ref; }
+     set ref(value) { this._ref = value; }
+ }

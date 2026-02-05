@@ -1,0 +1,21 @@
+--- old.sourceMapValidationStatements.errors.txt
++++ new.sourceMapValidationStatements.errors.txt
+@@= skipped -0, +0 lines =@@
+-sourceMapValidationStatements.ts(43,5): error TS1101: 'with' statements are not allowed in strict mode.
+ sourceMapValidationStatements.ts(43,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+
+
+-==== sourceMapValidationStatements.ts (2 errors) ====
++==== sourceMapValidationStatements.ts (1 errors) ====
+     function f() {
+         var y;
+         var x = 0;
+@@= skipped -45, +44 lines =@@
+             y = 70;
+         }
+         with (obj) {
+-        ~~~~
+-!!! error TS1101: 'with' statements are not allowed in strict mode.
+         ~~~~~~~~~~
+ !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+             i = 2;

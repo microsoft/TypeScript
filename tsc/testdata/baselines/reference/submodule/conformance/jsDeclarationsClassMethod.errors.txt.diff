@@ -2,10 +2,11 @@
 +++ new.jsDeclarationsClassMethod.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
++jsDeclarationsClassMethod.js(8,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +jsDeclarationsClassMethod.js(51,14): error TS2551: Property 'method2' does not exist on type 'C2'. Did you mean 'method1'?
 +
 +
-+==== jsDeclarationsClassMethod.js (1 errors) ====
++==== jsDeclarationsClassMethod.js (2 errors) ====
 +    function C1() {
 +        /**
 +         * A comment prop
@@ -14,6 +15,8 @@
 +         * @returns {number}
 +         */
 +        this.prop = function (x, y) {
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +            return x + y;
 +        }
 +    }

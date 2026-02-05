@@ -7,5 +7,5 @@
 ->blah : () => void
 +>blah : { (): void; default: any; }
 
-     module M { }
+     namespace M { }
      export namespace N {

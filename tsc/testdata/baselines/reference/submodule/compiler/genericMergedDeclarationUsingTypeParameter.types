@@ -7,7 +7,7 @@ function foo<T extends U, U>(y: T, z: U) { return y; }
 >z : U
 >y : T
 
-module foo {
+namespace foo {
 >foo : typeof foo
 
     export var x: T;

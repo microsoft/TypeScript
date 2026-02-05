@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/innerAliases.ts] ////
 
 === innerAliases.ts ===
-module A {
+namespace A {
 >A : typeof A
 
-    export module B {
+    export namespace B {
 >B : typeof B
 
-        export module C {
+        export namespace C {
 >C : typeof C
 
             export class Class1 {}
@@ -16,7 +16,7 @@ module A {
     }
 }
 
-module D {
+namespace D {
 >D : typeof D
 
     import inner = A.B.C; 
@@ -32,7 +32,7 @@ module D {
 >inner : typeof inner
 >Class1 : typeof inner.Class1
 
-    export module E { 
+    export namespace E { 
 >E : typeof E
 
         export class Class2 {}

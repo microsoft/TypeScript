@@ -12,14 +12,14 @@ type b = 'b type';
 >b : "b type"
 
 declare const a: A | undefined;
->a : A
+>a : A | undefined
 
 a?.<b>();
->a?.<b>() : "b type"
->a : A
+>a?.<b>() : "b type" | undefined
+>a : A | undefined
 
 a<b>?.();
->a<b>?.() : "b type"
->a<b> : { (): "b type"; c: number; }
->a : A
+>a<b>?.() : "b type" | undefined
+>a<b> : { (): "b type"; c: number; } | undefined
+>a : A | undefined
 

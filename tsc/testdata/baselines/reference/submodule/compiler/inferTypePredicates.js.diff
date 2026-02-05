@@ -1,6 +1,6 @@
 --- old.inferTypePredicates.js
 +++ new.inferTypePredicates.js
-@@= skipped -318, +318 lines =@@
+@@= skipped -319, +319 lines =@@
  const numsOrNull = [1, 2, 3, 4, null];
  const filteredNumsTruthy = numsOrNull.filter(x => !!x); // should error
  const filteredNumsNonNullish = numsOrNull.filter(x => x !== null); // should ok

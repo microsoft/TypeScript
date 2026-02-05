@@ -1,6 +1,6 @@
 --- old.collisionSuperAndPropertyNameAsConstuctorParameter.js
 +++ new.collisionSuperAndPropertyNameAsConstuctorParameter.js
-@@= skipped -40, +40 lines =@@
+@@= skipped -41, +41 lines =@@
      }
  }
  class b2 extends a {

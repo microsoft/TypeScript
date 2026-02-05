@@ -3,16 +3,38 @@
 @@= skipped -59, +59 lines =@@
  >bar : string
 
-         var a12: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
+         declare var a12: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 ->a12 : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 +>a12 : (x: Base[], y: Derived2[]) => Derived[]
  >x : Base[]
  >y : Derived2[]
 
-@@= skipped -149, +149 lines =@@
+@@= skipped -21, +21 lines =@@
+ >b : number
+
+         declare var a16: {
+->a16 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }
++>a16 : { (x: { (a: number): number; (a?: number | undefined): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean | undefined): boolean; }): boolean[]; }
+
+                 (x: {
+->x : { (a: number): number; (a?: number): number; }
++>x : { (a: number): number; (a?: number | undefined): number; }
+
+                     (a: number): number;
+ >a : number
+@@= skipped -13, +13 lines =@@
+
+                 }): number[];
+                 (x: {
+->x : { (a: boolean): boolean; (a?: boolean): boolean; }
++>x : { (a: boolean): boolean; (a?: boolean | undefined): boolean; }
+
+                     (a: boolean): boolean;
+ >a : boolean
+@@= skipped -115, +115 lines =@@
  >a11 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 
-         var b12: <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
+         declare var b12: <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
 ->b12 : <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
 +>b12 : <T extends Derived2[]>(x: Base[], y: Base[]) => T
  >x : Base[]
@@ -34,5 +56,22 @@
 +>b12 : <T extends Derived2[]>(x: Base[], y: Base[]) => T
 +>a12 : (x: Base[], y: Derived2[]) => Derived[]
 
-         var b15: <T>(x: { a: T; b: T }) => T; 
+         declare var b15: <T>(x: { a: T; b: T }) => T; 
  >b15 : <T>(x: { a: T; b: T; }) => T
+@@= skipped -53, +53 lines =@@
+
+         a16 = b16;
+ >a16 = b16 : <T>(x: (a: T) => T) => T[]
+->a16 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }
++>a16 : { (x: { (a: number): number; (a?: number | undefined): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean | undefined): boolean; }): boolean[]; }
+ >b16 : <T>(x: (a: T) => T) => T[]
+
+         b16 = a16;
+->b16 = a16 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }
++>b16 = a16 : { (x: { (a: number): number; (a?: number | undefined): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean | undefined): boolean; }): boolean[]; }
+ >b16 : <T>(x: (a: T) => T) => T[]
+->a16 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }
++>a16 : { (x: { (a: number): number; (a?: number | undefined): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean | undefined): boolean; }): boolean[]; }
+
+         declare var b17: <T>(x: (a: T) => T) => any[];
+ >b17 : <T>(x: (a: T) => T) => any[]

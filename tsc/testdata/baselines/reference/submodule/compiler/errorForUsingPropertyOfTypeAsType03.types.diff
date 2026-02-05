@@ -1,0 +1,27 @@
+--- old.errorForUsingPropertyOfTypeAsType03.types
++++ new.errorForUsingPropertyOfTypeAsType03.types
+@@= skipped -29, +29 lines =@@
+ >Red : any
+
+     let a2: Color.Red["toString"];
+->a2 : (radix?: number) => string
++>a2 : (radix?: number | undefined) => string
+ >Color : any
+
+     let a3: Color["Red"]["toString"];
+@@= skipped -9, +9 lines =@@
+     //let b1: (typeof Color).Red.toString;
+     //let b2: (typeof Color).Red["toString"];
+     let b3: (typeof Color)["Red"]["toString"];
+->b3 : (radix?: number) => string
++>b3 : (radix?: number | undefined) => string
+ >Color : typeof Color
+
+     let c1: C1.Red.toString;
+@@= skipped -25, +25 lines =@@
+ >C2 : any
+
+     let d3: C2["Red"]["toString"];
+->d3 : (radix?: number) => string
++>d3 : (radix?: number | undefined) => string
+ }

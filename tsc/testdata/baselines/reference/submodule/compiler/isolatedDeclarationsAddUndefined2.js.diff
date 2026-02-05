@@ -1,30 +1,27 @@
 --- old.isolatedDeclarationsAddUndefined2.js
 +++ new.isolatedDeclarationsAddUndefined2.js
-@@= skipped -34, +34 lines =@@
- exports.test2 = test2;
- exports.test3 = test3;
- class Bar {
+@@= skipped -28, +28 lines =@@
+ //// [isolatedDeclarationsAddUndefined2.js]
+ // https://github.com/microsoft/TypeScript/issues/60123
+ export class Bar {
 +    x;
      constructor(x) {
          this.x = x;
      }
  }
- exports.Bar = Bar;
- class Bar2 {
+ export class Bar2 {
 +    x;
      constructor(x) {
          this.x = x;
      }
  }
- exports.Bar2 = Bar2;
- class Bar3 {
+ export class Bar3 {
 +    x;
      constructor(x) {
          this.x = x;
      }
  }
- exports.Bar3 = Bar3;
- class Bar4 {
+ export class Bar4 {
 +    x;
      constructor(x) {
          this.x = x;

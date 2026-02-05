@@ -201,6 +201,8 @@ var (
 	libs_lib_esnext_promise_d_ts string
 	//go:embed libs/lib.esnext.sharedmemory.d.ts
 	libs_lib_esnext_sharedmemory_d_ts string
+	//go:embed libs/lib.esnext.typedarrays.d.ts
+	libs_lib_esnext_typedarrays_d_ts string
 	//go:embed libs/lib.scripthost.d.ts
 	libs_lib_scripthost_d_ts string
 	//go:embed libs/lib.webworker.asynciterable.d.ts
@@ -309,6 +311,7 @@ var embeddedContents = map[string]string{
 	"libs/lib.esnext.iterator.d.ts":         libs_lib_esnext_iterator_d_ts,
 	"libs/lib.esnext.promise.d.ts":          libs_lib_esnext_promise_d_ts,
 	"libs/lib.esnext.sharedmemory.d.ts":     libs_lib_esnext_sharedmemory_d_ts,
+	"libs/lib.esnext.typedarrays.d.ts":      libs_lib_esnext_typedarrays_d_ts,
 	"libs/lib.scripthost.d.ts":              libs_lib_scripthost_d_ts,
 	"libs/lib.webworker.asynciterable.d.ts": libs_lib_webworker_asynciterable_d_ts,
 	"libs/lib.webworker.d.ts":               libs_lib_webworker_d_ts,
@@ -412,6 +415,7 @@ var libsEntries = []fs.DirEntry{
 	&fileInfo{name: "lib.esnext.iterator.d.ts", size: int64(len(libs_lib_esnext_iterator_d_ts))},
 	&fileInfo{name: "lib.esnext.promise.d.ts", size: int64(len(libs_lib_esnext_promise_d_ts))},
 	&fileInfo{name: "lib.esnext.sharedmemory.d.ts", size: int64(len(libs_lib_esnext_sharedmemory_d_ts))},
+	&fileInfo{name: "lib.esnext.typedarrays.d.ts", size: int64(len(libs_lib_esnext_typedarrays_d_ts))},
 	&fileInfo{name: "lib.scripthost.d.ts", size: int64(len(libs_lib_scripthost_d_ts))},
 	&fileInfo{name: "lib.webworker.asynciterable.d.ts", size: int64(len(libs_lib_webworker_asynciterable_d_ts))},
 	&fileInfo{name: "lib.webworker.d.ts", size: int64(len(libs_lib_webworker_d_ts))},

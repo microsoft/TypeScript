@@ -8,9 +8,9 @@ function f<A extends Number>(A: A): A {
     var r = A.toExponential(123);
 >r : string
 >A.toExponential(123) : string
->A.toExponential : (fractionDigits?: number) => string
+>A.toExponential : (fractionDigits?: number | undefined) => string
 >A : A
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 >123 : 123
 
     return null;

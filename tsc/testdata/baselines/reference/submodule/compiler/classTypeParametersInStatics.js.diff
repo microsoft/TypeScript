@@ -1,6 +1,6 @@
 --- old.classTypeParametersInStatics.js
 +++ new.classTypeParametersInStatics.js
-@@= skipped -38, +38 lines =@@
+@@= skipped -39, +39 lines =@@
  var Editor;
  (function (Editor) {
      class List {

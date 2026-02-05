@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/noImplicitAnyParametersInModule.ts] ////
 
 //// [noImplicitAnyParametersInModule.ts]
-module M {
+namespace M {
     // No implicit-'any' errors.
     function m_f1(): void { }
 
@@ -48,6 +48,7 @@ module M {
 }
 
 //// [noImplicitAnyParametersInModule.js]
+"use strict";
 var M;
 (function (M) {
     // No implicit-'any' errors.

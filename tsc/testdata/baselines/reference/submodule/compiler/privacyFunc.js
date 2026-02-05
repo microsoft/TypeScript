@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/privacyFunc.ts] ////
 
 //// [privacyFunc.ts]
-module m1 {
+namespace m1 {
     export class C1_public {
         private f1() {
         }
@@ -231,6 +231,7 @@ function f10_public(): C6_public {
 
 
 //// [privacyFunc.js]
+"use strict";
 var m1;
 (function (m1) {
     class C1_public {

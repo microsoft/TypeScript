@@ -1,8 +1,8 @@
 --- old.overloadResolution.js
 +++ new.overloadResolution.js
-@@= skipped -97, +97 lines =@@
-
+@@= skipped -98, +98 lines =@@
  //// [overloadResolution.js]
+ "use strict";
  class SomeBase {
 +    n;
 +    s;

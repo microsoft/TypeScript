@@ -39,6 +39,7 @@ var b: {
 }
 
 //// [constructSignatureWithAccessibilityModifiersOnParameters2.js]
+"use strict";
 // Parameter properties are not valid in overloads of constructors
 class C {
     x;

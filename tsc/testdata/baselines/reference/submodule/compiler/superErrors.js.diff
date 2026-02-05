@@ -1,6 +1,6 @@
 --- old.superErrors.js
 +++ new.superErrors.js
-@@= skipped -60, +60 lines =@@
+@@= skipped -61, +61 lines =@@
      var z = () => () => () => super.;
  }
  class User {

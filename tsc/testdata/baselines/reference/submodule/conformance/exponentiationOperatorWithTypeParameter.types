@@ -6,19 +6,19 @@ function foo<T>(t: T) {
 >foo : <T>(t: T) => void
 >t : T
 
-    var a: any;
+    var a!: any;
 >a : any
 
-    var b: boolean;
+    var b!: boolean;
 >b : boolean
 
-    var c: number;
+    var c!: number;
 >c : number
 
-    var d: string;
+    var d!: string;
 >d : string
 
-    var e: {};
+    var e!: {};
 >e : {}
 
     var r1a1 = a ** t;

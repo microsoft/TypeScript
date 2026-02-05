@@ -11,7 +11,8 @@ func TestGoToTypeDefinitionModifiers(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @Filename: /a.ts
+	const content = `// @lib: es5
+// @Filename: /a.ts
 /*export*/export class A/*A*/ {
 
     /*private*/private z/*z*/: string;

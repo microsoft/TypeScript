@@ -7,6 +7,7 @@ class X {
 
 
 //// [trailingCommasInGetter.js]
+"use strict";
 class X {
     get x() { return 0; }
 }

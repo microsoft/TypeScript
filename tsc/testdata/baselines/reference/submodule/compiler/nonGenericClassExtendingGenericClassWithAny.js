@@ -8,6 +8,7 @@ class Foo<T> {
 class Bar extends Foo<any> { } // Valid
 
 //// [nonGenericClassExtendingGenericClassWithAny.js]
+"use strict";
 class Foo {
     t;
 }

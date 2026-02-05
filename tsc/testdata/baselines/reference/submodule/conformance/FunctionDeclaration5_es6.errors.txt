@@ -1,8 +1,11 @@
 FunctionDeclaration5_es6.ts(1,14): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+FunctionDeclaration5_es6.ts(1,14): error TS7006: Parameter 'yield' implicitly has an 'any' type.
 
 
-==== FunctionDeclaration5_es6.ts (1 errors) ====
+==== FunctionDeclaration5_es6.ts (2 errors) ====
     function*foo(yield) {
                  ~~~~~
 !!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+                 ~~~~~
+!!! error TS7006: Parameter 'yield' implicitly has an 'any' type.
     }

@@ -12,6 +12,7 @@ class A {
 
 
 //// [privateNamesAndDecorators.js]
+"use strict";
 class A {
     #foo = 1;
     #bar() { }

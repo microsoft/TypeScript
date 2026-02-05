@@ -18,6 +18,7 @@ var w = v1.y.a; // should be 'string'
 var z = v1.z.a; // should be 'number'
 
 //// [genericClasses2.js]
+"use strict";
 class C {
     x;
     y;

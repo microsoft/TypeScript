@@ -15,6 +15,7 @@ function foo(): boolean {
 
 
 //// [ifElseWithStatements1.js]
+"use strict";
 if (true)
     f();
 else

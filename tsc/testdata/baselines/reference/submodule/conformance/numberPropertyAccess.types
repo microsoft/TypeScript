@@ -8,9 +8,9 @@ var x = 1;
 var a = x.toExponential();
 >a : string
 >x.toExponential() : string
->x.toExponential : (fractionDigits?: number) => string
+>x.toExponential : (fractionDigits?: number | undefined) => string
 >x : number
->toExponential : (fractionDigits?: number) => string
+>toExponential : (fractionDigits?: number | undefined) => string
 
 var b = x.hasOwnProperty('toFixed');
 >b : boolean
@@ -23,7 +23,7 @@ var b = x.hasOwnProperty('toFixed');
 var c = x['toExponential']();
 >c : string
 >x['toExponential']() : string
->x['toExponential'] : (fractionDigits?: number) => string
+>x['toExponential'] : (fractionDigits?: number | undefined) => string
 >x : number
 >'toExponential' : "toExponential"
 

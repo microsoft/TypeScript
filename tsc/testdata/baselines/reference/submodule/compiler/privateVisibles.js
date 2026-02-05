@@ -12,6 +12,7 @@ class Foo {
 
 
 //// [privateVisibles.js]
+"use strict";
 class Foo {
     pvar = 0;
     constructor() {

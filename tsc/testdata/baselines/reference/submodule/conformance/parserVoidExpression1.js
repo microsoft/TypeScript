@@ -4,4 +4,5 @@
 void 0;
 
 //// [parserVoidExpression1.js]
+"use strict";
 void 0;

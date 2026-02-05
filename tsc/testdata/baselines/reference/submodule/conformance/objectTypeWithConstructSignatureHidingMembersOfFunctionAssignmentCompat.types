@@ -5,10 +5,10 @@ interface I {
     new(): any;
 }
 
-var i: I;
+declare var i: I;
 >i : I
 
-var f: Object;
+declare var f: Object;
 >f : Object
 
 f = i;
@@ -21,7 +21,7 @@ i = f;
 >i : I
 >f : Object
 
-var a: {
+declare var a: {
 >a : new () => any
 
     new(): any

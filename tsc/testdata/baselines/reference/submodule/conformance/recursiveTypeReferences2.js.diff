@@ -1,6 +1,6 @@
 --- old.recursiveTypeReferences2.js
 +++ new.recursiveTypeReferences2.js
-@@= skipped -57, +57 lines =@@
+@@= skipped -58, +58 lines =@@
  /** @typedef {ReadonlyArray<Json>} JsonArray */
  /** @typedef {{ readonly [key: string]: Json }} JsonRecord */
  /** @typedef {boolean | number | string | null | JsonRecord | JsonArray | readonly []} Json */

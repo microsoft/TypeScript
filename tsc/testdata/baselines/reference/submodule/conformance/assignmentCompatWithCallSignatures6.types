@@ -71,10 +71,10 @@ interface A {
 >b : T
 }
 
-var x: A;
+declare var x: A;
 >x : A
 
-var b: <T>(x: T) => T[]; 
+declare var b: <T>(x: T) => T[]; 
 >b : <T>(x: T) => T[]
 >x : T
 
@@ -92,7 +92,7 @@ b = x.a;
 >x : A
 >a : <T>(x: T) => T[]
 
-var b2: <T>(x: T) => string[]; 
+declare var b2: <T>(x: T) => string[]; 
 >b2 : <T>(x: T) => string[]
 >x : T
 
@@ -110,7 +110,7 @@ b2 = x.a2;
 >x : A
 >a2 : <T>(x: T) => string[]
 
-var b3: <T>(x: T) => T;
+declare var b3: <T>(x: T) => T;
 >b3 : <T>(x: T) => T
 >x : T
 
@@ -128,7 +128,7 @@ b3 = x.a3;
 >x : A
 >a3 : <T>(x: T) => void
 
-var b4: <T, U>(x: T, y: U) => string; 
+declare var b4: <T, U>(x: T, y: U) => string; 
 >b4 : <T, U>(x: T, y: U) => string
 >x : T
 >y : U
@@ -147,7 +147,7 @@ b4 = x.a4;
 >x : A
 >a4 : <T, U>(x: T, y: U) => string
 
-var b5: <T, U>(x: (arg: T) => U) => T; 
+declare var b5: <T, U>(x: (arg: T) => U) => T; 
 >b5 : <T, U>(x: (arg: T) => U) => T
 >x : (arg: T) => U
 >arg : T
@@ -166,7 +166,7 @@ b5 = x.a5;
 >x : A
 >a5 : <T, U>(x: (arg: T) => U) => T
 
-var b11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
+declare var b11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
 >b11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
 >x : { foo: T; }
 >foo : T
@@ -188,7 +188,7 @@ b11 = x.a11;
 >x : A
 >a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
 
-var b16: <T>(x: { a: T; b: T }) => T[]; 
+declare var b16: <T>(x: { a: T; b: T }) => T[]; 
 >b16 : <T>(x: { a: T; b: T; }) => T[]
 >x : { a: T; b: T; }
 >a : T

@@ -23,6 +23,7 @@ new C().y;
 
 
 //// [bases.js]
+"use strict";
 class B {
     constructor() {
         this.y;

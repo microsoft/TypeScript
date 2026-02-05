@@ -32,5 +32,5 @@ console.log(_C__1)
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->_C__1 : any
+>_C__1 : undefined
 

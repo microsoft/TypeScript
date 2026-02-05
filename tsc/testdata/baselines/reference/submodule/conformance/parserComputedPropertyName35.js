@@ -6,6 +6,7 @@ var x = {
 }
 
 //// [parserComputedPropertyName35.js]
+"use strict";
 var x = {
     [(0, 1)]: {}
 };

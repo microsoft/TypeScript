@@ -1,6 +1,6 @@
 --- old.declarationEmitDestructuringParameterProperties.js
 +++ new.declarationEmitDestructuringParameterProperties.js
-@@= skipped -34, +34 lines =@@
+@@= skipped -35, +35 lines =@@
 
  //// [declarationEmitDestructuringParameterProperties.d.ts]
  declare class C1 {

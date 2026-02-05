@@ -4,3 +4,4 @@
 
 
 //// [indexSignatureWithoutTypeAnnotation1..js]
+"use strict";

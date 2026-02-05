@@ -1,9 +1,9 @@
 --- old.controlFlowPropertyDeclarations.js
 +++ new.controlFlowPropertyDeclarations.js
-@@= skipped -238, +238 lines =@@
+@@= skipped -235, +235 lines =@@
      return /^\d+px$/.test(value);
  }
- class HTMLtoJSX {
+ export class HTMLtoJSX {
 -    constructor() {
 -        /**
 -         * Handles processing of the specified text node
@@ -70,12 +70,11 @@
 +        this.output += text;
 +    };
  }
- exports.HTMLtoJSX = HTMLtoJSX;
  ;
-@@= skipped -39, +40 lines =@@
+ /**
   * Handles parsing of inline styles
   */
- class StyleParser {
+ export class StyleParser {
 -    constructor() {
 -        this.styles = {};
 -        this.toJSXString = () => {
@@ -92,4 +91,3 @@
 +        }
 +    };
  }
- exports.StyleParser = StyleParser;

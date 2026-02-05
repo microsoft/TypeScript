@@ -18,6 +18,7 @@ var gs = [(b: { x: number; z?: number }) => 2, (a: { x: number; y?: number }) =>
 
 
 //// [arrayLiteralWithMultipleBestCommonTypes.js]
+"use strict";
 // when multiple best common types exist we will choose the first candidate
 var a;
 var b;

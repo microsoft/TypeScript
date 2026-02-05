@@ -20,8 +20,6 @@ export type Cache<N extends string, QR> = {
 };
 
 //// [instantiationExpressionErrorNoCrash.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const createCacheReducer = (queries) => {
     const queriesMap = {};
     const initialState = {
@@ -29,3 +27,4 @@ const createCacheReducer = (queries) => {
     };
     return (state = initialState) => state;
 };
+export {};

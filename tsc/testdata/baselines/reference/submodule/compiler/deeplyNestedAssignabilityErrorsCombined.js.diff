@@ -1,6 +1,6 @@
 --- old.deeplyNestedAssignabilityErrorsCombined.js
 +++ new.deeplyNestedAssignabilityErrorsCombined.js
-@@= skipped -21, +21 lines =@@
+@@= skipped -22, +22 lines =@@
  let y = { a: { b: { c: { d: { e: { f() { return { g: 12345 }; } } } } } } };
  x = y;
  class Ctor1 {

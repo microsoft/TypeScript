@@ -262,6 +262,7 @@ var r8b11 = b11 !== a11;
 //var r8b12 = b12 !== a12;
 
 //// [comparisonOperatorWithSubtypeObjectOnCallSignature.js]
+"use strict";
 class Base {
     a;
 }

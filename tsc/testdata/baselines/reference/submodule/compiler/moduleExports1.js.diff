@@ -1,6 +1,6 @@
 --- old.moduleExports1.js
 +++ new.moduleExports1.js
-@@= skipped -26, +26 lines =@@
+@@= skipped -20, +20 lines =@@
  exports.TypeScript = void 0;
  var TypeScript;
  (function (TypeScript) {

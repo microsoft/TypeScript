@@ -1,0 +1,26 @@
+--- old.callOfConditionalTypeWithConcreteBranches.types
++++ new.callOfConditionalTypeWithConcreteBranches.types
+@@= skipped -22, +22 lines =@@
+ >m => m.toFixed() : (m: number) => string
+ >m : number
+ >m.toFixed() : string
+->m.toFixed : (fractionDigits?: number) => string
++>m.toFixed : (fractionDigits?: number | undefined) => string
+ >m : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+
+ fn<number>(m => m.toFixed());
+ >fn<number>(m => m.toFixed()) : void
+@@= skipped -10, +10 lines =@@
+ >m => m.toFixed() : (m: number) => string
+ >m : number
+ >m.toFixed() : string
+->m.toFixed : (fractionDigits?: number) => string
++>m.toFixed : (fractionDigits?: number | undefined) => string
+ >m : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+
+ // Ensure the following real-world example that relies on substitution still works
+ type ExtractParameters<T> = "parameters" extends keyof T

@@ -240,9 +240,6 @@ const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 
 
 //// [discriminantPropertyCheck.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = foo;
 function goo1(x) {
     if (x.kind === "A" && x.foo !== undefined) {
         x.foo.length;
@@ -308,7 +305,7 @@ const f = (_a, _b) => { };
 const u = {};
 u.a && u.b && f(u.a, u.b);
 u.b && u.a && f(u.a, u.b);
-function foo(obj) {
+export function foo(obj) {
     switch (obj.key) {
         case '+': {
             onlyPlus(obj.key);

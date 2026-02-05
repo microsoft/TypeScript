@@ -12,6 +12,7 @@ console.log(new C().m());
 
 
 //// [privateNameSetterNoGetter.js]
+"use strict";
 const C = class {
     set #x(x) { }
     m() {

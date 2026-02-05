@@ -1,6 +1,6 @@
 --- old.scopeResolutionIdentifiers.js
 +++ new.scopeResolutionIdentifiers.js
-@@= skipped -59, +59 lines =@@
+@@= skipped -61, +61 lines =@@
      var n;
  }
  class C {

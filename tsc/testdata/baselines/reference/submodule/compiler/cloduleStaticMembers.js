@@ -5,7 +5,7 @@ class Clod {
     private static x = 10;
     public static y = 10;
 }
-module Clod {
+namespace Clod {
     var p = Clod.x;
     var q = x;
 
@@ -15,6 +15,7 @@ module Clod {
 
 
 //// [cloduleStaticMembers.js]
+"use strict";
 class Clod {
     static x = 10;
     static y = 10;

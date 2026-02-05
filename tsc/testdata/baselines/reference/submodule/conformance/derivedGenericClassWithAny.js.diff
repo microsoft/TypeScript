@@ -1,8 +1,8 @@
 --- old.derivedGenericClassWithAny.js
 +++ new.derivedGenericClassWithAny.js
-@@= skipped -45, +45 lines =@@
-
+@@= skipped -46, +46 lines =@@
  //// [derivedGenericClassWithAny.js]
+ "use strict";
  class C {
 +    x;
      get X() { return null; }

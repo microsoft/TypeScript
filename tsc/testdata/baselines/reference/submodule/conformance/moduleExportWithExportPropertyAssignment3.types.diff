@@ -11,14 +11,16 @@
  >require : (name: string) => any
  >'./mod1' : "./mod1"
 
-@@= skipped -9, +9 lines =@@
+ mod1.justExport.toFixed()
  >mod1.justExport.toFixed() : string
- >mod1.justExport.toFixed : (fractionDigits?: number) => string
+->mod1.justExport.toFixed : (fractionDigits?: number) => string
++>mod1.justExport.toFixed : (fractionDigits?: number | undefined) => string
  >mod1.justExport : number
 ->mod1 : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
 +>mod1 : { justExport: number; bothBefore: number; bothAfter: number; }
  >justExport : number
- >toFixed : (fractionDigits?: number) => string
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
 
  mod1.bothBefore.toFixed() // error, 'toFixed' not on 'string | number'
 ->mod1.bothBefore.toFixed() : any
@@ -28,11 +30,11 @@
 ->bothBefore : number | "string"
 ->toFixed : any
 +>mod1.bothBefore.toFixed() : string
-+>mod1.bothBefore.toFixed : (fractionDigits?: number) => string
++>mod1.bothBefore.toFixed : (fractionDigits?: number | undefined) => string
 +>mod1.bothBefore : number
 +>mod1 : { justExport: number; bothBefore: number; bothAfter: number; }
 +>bothBefore : number
-+>toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
 
  mod1.bothAfter.toFixed() // error, 'toFixed' not on 'string | number'
 ->mod1.bothAfter.toFixed() : any
@@ -42,11 +44,11 @@
 ->bothAfter : number | "string"
 ->toFixed : any
 +>mod1.bothAfter.toFixed() : string
-+>mod1.bothAfter.toFixed : (fractionDigits?: number) => string
++>mod1.bothAfter.toFixed : (fractionDigits?: number | undefined) => string
 +>mod1.bothAfter : number
 +>mod1 : { justExport: number; bothBefore: number; bothAfter: number; }
 +>bothAfter : number
-+>toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
 
  mod1.justProperty.length
 ->mod1.justProperty.length : number
@@ -62,7 +64,7 @@
 
  === requires.d.ts ===
  declare var module: { exports: any };
-@@= skipped -40, +40 lines =@@
+@@= skipped -49, +49 lines =@@
  /// <reference path='./requires.d.ts' />
  module.exports.bothBefore = 'string'
  >module.exports.bothBefore = 'string' : "string"

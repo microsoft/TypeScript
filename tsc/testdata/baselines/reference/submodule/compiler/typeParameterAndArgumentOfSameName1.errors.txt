@@ -1,0 +1,12 @@
+typeParameterAndArgumentOfSameName1.ts(3,5): error TS2322: Type 'null' is not assignable to type 'A'.
+  'A' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+
+
+==== typeParameterAndArgumentOfSameName1.ts (1 errors) ====
+    function f<A extends Number>(A: A): A {
+        var r = A.toExponential(123);
+        return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'A'.
+!!! error TS2322:   'A' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+    }

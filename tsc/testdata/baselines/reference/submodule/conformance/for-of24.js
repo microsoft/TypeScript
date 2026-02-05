@@ -6,5 +6,6 @@ for (var v of x) { }
 
 
 //// [for-of24.js]
+"use strict";
 var x;
 for (var v of x) { }

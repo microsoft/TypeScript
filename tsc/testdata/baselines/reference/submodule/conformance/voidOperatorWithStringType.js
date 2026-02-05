@@ -11,7 +11,7 @@ class A {
     public a: string;
     static foo() { return ""; }
 }
-module M {
+namespace M {
     export var n: string;
 }
 
@@ -47,6 +47,7 @@ void foo();
 void objA.a,M.n;
 
 //// [voidOperatorWithStringType.js]
+"use strict";
 // void  operator on string type
 var STRING;
 var STRING1 = ["", "abc"];

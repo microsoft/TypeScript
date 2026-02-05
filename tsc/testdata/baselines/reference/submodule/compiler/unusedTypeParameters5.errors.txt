@@ -1,9 +1,12 @@
+unusedTypeParameters5.ts(2,12): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 unusedTypeParameters5.ts(6,16): error TS6196: 'K' is declared but never used.
 
 
-==== unusedTypeParameters5.ts (1 errors) ====
+==== unusedTypeParameters5.ts (2 errors) ====
     class A<Dummy> {
         public x: Dummy;
+               ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     var x: {

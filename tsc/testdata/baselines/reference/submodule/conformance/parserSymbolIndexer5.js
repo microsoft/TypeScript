@@ -6,6 +6,7 @@ var x = {
 }
 
 //// [parserSymbolIndexer5.js]
+"use strict";
 var x = {
     [s]: symbol, "": 
 };

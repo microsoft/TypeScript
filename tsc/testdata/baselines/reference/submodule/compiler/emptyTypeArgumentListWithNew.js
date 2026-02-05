@@ -9,6 +9,7 @@ class noParams {}
 new noParams<>();
 
 //// [emptyTypeArgumentListWithNew.js]
+"use strict";
 class foo {
 }
 new foo();

@@ -6,6 +6,7 @@ function* g() {
 }
 
 //// [generatorTypeCheck55.js]
+"use strict";
 function* g() {
     var x = class C extends (yield) {
     };

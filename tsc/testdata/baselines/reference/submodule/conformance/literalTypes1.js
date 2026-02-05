@@ -91,6 +91,7 @@ function f5(x: string | number | boolean) {
 }
 
 //// [literalTypes1.js]
+"use strict";
 let zero = 0;
 let one = 1;
 let two = 2;

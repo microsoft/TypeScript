@@ -1,6 +1,6 @@
 --- old.assignmentCompatWithCallSignatures4.js
 +++ new.assignmentCompatWithCallSignatures4.js
-@@= skipped -104, +104 lines =@@
+@@= skipped -105, +105 lines =@@
  var Errors;
  (function (Errors) {
      class Base {

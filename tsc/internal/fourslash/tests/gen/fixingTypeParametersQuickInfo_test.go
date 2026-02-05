@@ -11,7 +11,8 @@ func TestFixingTypeParametersQuickInfo(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `declare function f<T>(x: T, y: (p: T) => T, z: (p: T) => T): T;
+	const content = `// @strict: false
+declare function f<T>(x: T, y: (p: T) => T, z: (p: T) => T): T;
 var /*1*/result = /*2*/f(0, /*3*/x => null, /*4*/x => x.blahblah);`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()

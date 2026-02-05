@@ -1,9 +1,9 @@
 --- old.commentOnParameter3.js
 +++ new.commentOnParameter3.js
-@@= skipped -7, +7 lines =@@
- ) { }
+@@= skipped -8, +8 lines =@@
 
  //// [commentOnParameter3.js]
+ "use strict";
 -function commentedParameters(a /* parameter a */, b /* parameter b */) { }
 +function commentedParameters(a /* parameter a */, b /* parameter b */
 +/* extra comment */

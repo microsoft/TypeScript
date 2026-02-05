@@ -12,6 +12,7 @@ class B extends A<number> {
 }
 
 //// [superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.js]
+"use strict";
 class A {
     map;
     constructor(map) {

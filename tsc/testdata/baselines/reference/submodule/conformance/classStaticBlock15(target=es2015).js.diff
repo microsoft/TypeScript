@@ -1,9 +1,9 @@
 --- old.classStaticBlock15(target=es2015).js
 +++ new.classStaticBlock15(target=es2015).js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
 
  //// [classStaticBlock15.js]
+ "use strict";
 -var _a, _C__1_1, _C__3, _C__5;
  var _C__1;
  class C {

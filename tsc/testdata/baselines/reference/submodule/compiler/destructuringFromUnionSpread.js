@@ -9,4 +9,5 @@ const { a } = { ...x } // error
 
 
 //// [destructuringFromUnionSpread.js]
+"use strict";
 const { a } = Object.assign({}, x); // error

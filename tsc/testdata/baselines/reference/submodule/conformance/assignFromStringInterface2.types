@@ -26,14 +26,14 @@ interface NotString {
 >strings : string[]
 
     indexOf(searchString: string, position?: number): number;
->indexOf : (searchString: string, position?: number) => number
+>indexOf : (searchString: string, position?: number | undefined) => number
 >searchString : string
->position : number
+>position : number | undefined
 
     lastIndexOf(searchString: string, position?: number): number;
->lastIndexOf : (searchString: string, position?: number) => number
+>lastIndexOf : (searchString: string, position?: number | undefined) => number
 >searchString : string
->position : number
+>position : number | undefined
 
     localeCompare(that: string): number;
 >localeCompare : (that: string) => number
@@ -80,24 +80,24 @@ interface NotString {
 >regexp : RegExp
 
     slice(start?: number, end?: number): string;
->slice : (start?: number, end?: number) => string
->start : number
->end : number
+>slice : (start?: number | undefined, end?: number | undefined) => string
+>start : number | undefined
+>end : number | undefined
 
     split(separator: string, limit?: number): string[];
->split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
+>split : { (separator: string, limit?: number | undefined): string[]; (separator: RegExp, limit?: number | undefined): string[]; }
 >separator : string
->limit : number
+>limit : number | undefined
 
     split(separator: RegExp, limit?: number): string[];
->split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
+>split : { (separator: string, limit?: number | undefined): string[]; (separator: RegExp, limit?: number | undefined): string[]; }
 >separator : RegExp
->limit : number
+>limit : number | undefined
 
     substring(start: number, end?: number): string;
->substring : (start: number, end?: number) => string
+>substring : (start: number, end?: number | undefined) => string
 >start : number
->end : number
+>end : number | undefined
 
     toLowerCase(): string;
 >toLowerCase : () => string
@@ -118,9 +118,9 @@ interface NotString {
 >length : number
 
     substr(from: number, length?: number): string;
->substr : (from: number, length?: number) => string
+>substr : (from: number, length?: number | undefined) => string
 >from : number
->length : number
+>length : number | undefined
 
     valueOf(): string;
 >valueOf : () => string
@@ -133,10 +133,10 @@ var x = '';
 >x : string
 >'' : ""
 
-var a: String;
+declare var a: String;
 >a : String
 
-var b: NotString;
+declare var b: NotString;
 >b : NotString
 
 a = x;

@@ -7,3 +7,4 @@ declare function bar(): void;
 
 
 //// [parser509698.js]
+"use strict";

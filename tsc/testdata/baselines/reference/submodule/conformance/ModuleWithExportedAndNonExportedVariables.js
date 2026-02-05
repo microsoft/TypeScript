@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedVariables.ts] ////
 
 //// [ModuleWithExportedAndNonExportedVariables.ts]
-module A {
+namespace A {
     export var x = 'hello world'
     var y = 12;
 }
@@ -15,6 +15,7 @@ var y = A.y;
 
 
 //// [ModuleWithExportedAndNonExportedVariables.js]
+"use strict";
 var A;
 (function (A) {
     A.x = 'hello world';

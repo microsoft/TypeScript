@@ -15,6 +15,7 @@ console.log(obj.x); // number
 
 
 //// [accessorsOverrideProperty2.js]
+"use strict";
 class Base {
     x = 1;
 }

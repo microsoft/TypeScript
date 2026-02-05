@@ -11,6 +11,7 @@ export var y;
 import y = require("./a");
 
 //// [ref.js]
+"use strict";
 var x = 1;
 //// [a.js]
 "use strict";

@@ -4,3 +4,4 @@
 /*foo*/ \
 
 //// [parserSkippedTokens6.js]
+"use strict";

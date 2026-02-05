@@ -1,8 +1,8 @@
 --- old.collisionThisExpressionAndLocalVarInProperty.js
 +++ new.collisionThisExpressionAndLocalVarInProperty.js
-@@= skipped -22, +22 lines =@@
-
+@@= skipped -23, +23 lines =@@
  //// [collisionThisExpressionAndLocalVarInProperty.js]
+ "use strict";
  class class1 {
 -    constructor() {
 -        this.prop1 = {

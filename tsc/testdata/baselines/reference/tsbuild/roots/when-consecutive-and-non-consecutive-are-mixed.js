@@ -40,7 +40,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -67,67 +67,46 @@ declare const console: { log(msg: any): void; };
 export declare const nonConsecutive = "hello";
 
 //// [/home/src/workspaces/project/anotherNonConsecutive.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.nonConsecutive = void 0;
-exports.nonConsecutive = "hello";
+export const nonConsecutive = "hello";
 
 //// [/home/src/workspaces/project/asArray1.d.ts] *new* 
 export declare const x = "hello";
 
 //// [/home/src/workspaces/project/asArray1.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "hello";
+export const x = "hello";
 
 //// [/home/src/workspaces/project/asArray2.d.ts] *new* 
 export declare const x = "hello";
 
 //// [/home/src/workspaces/project/asArray2.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "hello";
+export const x = "hello";
 
 //// [/home/src/workspaces/project/asArray3.d.ts] *new* 
 export declare const x = "hello";
 
 //// [/home/src/workspaces/project/asArray3.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "hello";
+export const x = "hello";
 
 //// [/home/src/workspaces/project/file1.d.ts] *new* 
 export declare const x = "hello";
 
 //// [/home/src/workspaces/project/file1.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "hello";
+export const x = "hello";
 
 //// [/home/src/workspaces/project/file2.d.ts] *new* 
 export declare const y = "world";
 
 //// [/home/src/workspaces/project/file2.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = "world";
+export const y = "world";
 
 //// [/home/src/workspaces/project/nonconsecutive.d.ts] *new* 
 export declare const nonConsecutive = "hello";
 
 //// [/home/src/workspaces/project/nonconsecutive.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.nonConsecutive = void 0;
-exports.nonConsecutive = "hello";
+export const nonConsecutive = "hello";
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3],5,[7,9],11],"fileNames":["lib.d.ts","./file1.ts","./file2.ts","./random.d.ts","./nonconsecutive.ts","./random1.d.ts","./asArray1.ts","./asArray2.ts","./asArray3.ts","./random2.d.ts","./anotherNonConsecutive.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"cc7052ed344567798ec87f1c0f8f276c-export const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},{"version":"42f7437ec4aafe7a26fc38ec3ba035fe-export const y = \"world\";","signature":"64ca81919be0c5adb4964999189ddb2c-export declare const y = \"world\";\n","impliedNodeFormat":1},"cc6fd496b46fb211a7b922d3e31cdc4e-export const random = \"hello\";",{"version":"805bd15692edf65c8f946bb322e0a876-import { random } from \"./random\";\n    export const nonConsecutive = \"hello\";","signature":"ed1a51017d86c01f126fd5c93a77072d-export declare const nonConsecutive = \"hello\";\n","impliedNodeFormat":1},"cc6fd496b46fb211a7b922d3e31cdc4e-export const random = \"hello\";",{"version":"f1ff3ce44c97592c5ef5a510c8ed269d-import { random } from \"./random1\";\nexport const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},{"version":"cc7052ed344567798ec87f1c0f8f276c-export const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},{"version":"cc7052ed344567798ec87f1c0f8f276c-export const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},"cc6fd496b46fb211a7b922d3e31cdc4e-export const random = \"hello\";",{"version":"f5ecedece6d42fea3feb8b5832aacd89-import { random } from \"./random2\";\nexport const nonConsecutive = \"hello\";","signature":"ed1a51017d86c01f126fd5c93a77072d-export declare const nonConsecutive = \"hello\";\n","impliedNodeFormat":1}],"fileIdsList":[[10],[6],[4]],"options":{"composite":true},"referencedMap":[[11,1],[7,2],[5,3]],"latestChangedDtsFile":"./anotherNonConsecutive.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3],5,[7,9],11],"fileNames":["lib.es2024.full.d.ts","./file1.ts","./file2.ts","./random.d.ts","./nonconsecutive.ts","./random1.d.ts","./asArray1.ts","./asArray2.ts","./asArray3.ts","./random2.d.ts","./anotherNonConsecutive.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"cc7052ed344567798ec87f1c0f8f276c-export const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},{"version":"42f7437ec4aafe7a26fc38ec3ba035fe-export const y = \"world\";","signature":"64ca81919be0c5adb4964999189ddb2c-export declare const y = \"world\";\n","impliedNodeFormat":1},"cc6fd496b46fb211a7b922d3e31cdc4e-export const random = \"hello\";",{"version":"805bd15692edf65c8f946bb322e0a876-import { random } from \"./random\";\n    export const nonConsecutive = \"hello\";","signature":"ed1a51017d86c01f126fd5c93a77072d-export declare const nonConsecutive = \"hello\";\n","impliedNodeFormat":1},"cc6fd496b46fb211a7b922d3e31cdc4e-export const random = \"hello\";",{"version":"f1ff3ce44c97592c5ef5a510c8ed269d-import { random } from \"./random1\";\nexport const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},{"version":"cc7052ed344567798ec87f1c0f8f276c-export const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},{"version":"cc7052ed344567798ec87f1c0f8f276c-export const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},"cc6fd496b46fb211a7b922d3e31cdc4e-export const random = \"hello\";",{"version":"f5ecedece6d42fea3feb8b5832aacd89-import { random } from \"./random2\";\nexport const nonConsecutive = \"hello\";","signature":"ed1a51017d86c01f126fd5c93a77072d-export declare const nonConsecutive = \"hello\";\n","impliedNodeFormat":1}],"fileIdsList":[[10],[6],[4]],"options":{"composite":true},"referencedMap":[[11,1],[7,2],[5,3]],"latestChangedDtsFile":"./anotherNonConsecutive.d.ts"}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -167,7 +146,7 @@ exports.nonConsecutive = "hello";
     }
   ],
   "fileNames": [
-    "lib.d.ts",
+    "lib.es2024.full.d.ts",
     "./file1.ts",
     "./file2.ts",
     "./random.d.ts",
@@ -181,7 +160,7 @@ exports.nonConsecutive = "hello";
   ],
   "fileInfos": [
     {
-      "fileName": "lib.d.ts",
+      "fileName": "lib.es2024.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -314,12 +293,12 @@ exports.nonConsecutive = "hello";
     ]
   },
   "latestChangedDtsFile": "./anotherNonConsecutive.d.ts",
-  "size": 2836
+  "size": 2848
 }
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/project/file1.ts
 *refresh*    /home/src/workspaces/project/file2.ts
 *refresh*    /home/src/workspaces/project/random.d.ts
@@ -356,7 +335,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[2,4,[6,8],10],"fileNames":["lib.d.ts","./file2.ts","./random.d.ts","./nonconsecutive.ts","./random1.d.ts","./asArray1.ts","./asArray2.ts","./asArray3.ts","./random2.d.ts","./anotherNonConsecutive.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"42f7437ec4aafe7a26fc38ec3ba035fe-export const y = \"world\";","signature":"64ca81919be0c5adb4964999189ddb2c-export declare const y = \"world\";\n","impliedNodeFormat":1},"cc6fd496b46fb211a7b922d3e31cdc4e-export const random = \"hello\";",{"version":"805bd15692edf65c8f946bb322e0a876-import { random } from \"./random\";\n    export const nonConsecutive = \"hello\";","signature":"ed1a51017d86c01f126fd5c93a77072d-export declare const nonConsecutive = \"hello\";\n","impliedNodeFormat":1},"cc6fd496b46fb211a7b922d3e31cdc4e-export const random = \"hello\";",{"version":"f1ff3ce44c97592c5ef5a510c8ed269d-import { random } from \"./random1\";\nexport const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},{"version":"cc7052ed344567798ec87f1c0f8f276c-export const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},{"version":"cc7052ed344567798ec87f1c0f8f276c-export const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},"cc6fd496b46fb211a7b922d3e31cdc4e-export const random = \"hello\";",{"version":"f5ecedece6d42fea3feb8b5832aacd89-import { random } from \"./random2\";\nexport const nonConsecutive = \"hello\";","signature":"ed1a51017d86c01f126fd5c93a77072d-export declare const nonConsecutive = \"hello\";\n","impliedNodeFormat":1}],"fileIdsList":[[9],[5],[3]],"options":{"composite":true},"referencedMap":[[10,1],[6,2],[4,3]],"latestChangedDtsFile":"./anotherNonConsecutive.d.ts"}
+{"version":"FakeTSVersion","root":[2,4,[6,8],10],"fileNames":["lib.es2024.full.d.ts","./file2.ts","./random.d.ts","./nonconsecutive.ts","./random1.d.ts","./asArray1.ts","./asArray2.ts","./asArray3.ts","./random2.d.ts","./anotherNonConsecutive.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"42f7437ec4aafe7a26fc38ec3ba035fe-export const y = \"world\";","signature":"64ca81919be0c5adb4964999189ddb2c-export declare const y = \"world\";\n","impliedNodeFormat":1},"cc6fd496b46fb211a7b922d3e31cdc4e-export const random = \"hello\";",{"version":"805bd15692edf65c8f946bb322e0a876-import { random } from \"./random\";\n    export const nonConsecutive = \"hello\";","signature":"ed1a51017d86c01f126fd5c93a77072d-export declare const nonConsecutive = \"hello\";\n","impliedNodeFormat":1},"cc6fd496b46fb211a7b922d3e31cdc4e-export const random = \"hello\";",{"version":"f1ff3ce44c97592c5ef5a510c8ed269d-import { random } from \"./random1\";\nexport const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},{"version":"cc7052ed344567798ec87f1c0f8f276c-export const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},{"version":"cc7052ed344567798ec87f1c0f8f276c-export const x = \"hello\";","signature":"0c71c4d05f424f4dc52c978a9207cdf6-export declare const x = \"hello\";\n","impliedNodeFormat":1},"cc6fd496b46fb211a7b922d3e31cdc4e-export const random = \"hello\";",{"version":"f5ecedece6d42fea3feb8b5832aacd89-import { random } from \"./random2\";\nexport const nonConsecutive = \"hello\";","signature":"ed1a51017d86c01f126fd5c93a77072d-export declare const nonConsecutive = \"hello\";\n","impliedNodeFormat":1}],"fileIdsList":[[9],[5],[3]],"options":{"composite":true},"referencedMap":[[10,1],[6,2],[4,3]],"latestChangedDtsFile":"./anotherNonConsecutive.d.ts"}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -392,7 +371,7 @@ Output::
     }
   ],
   "fileNames": [
-    "lib.d.ts",
+    "lib.es2024.full.d.ts",
     "./file2.ts",
     "./random.d.ts",
     "./nonconsecutive.ts",
@@ -405,7 +384,7 @@ Output::
   ],
   "fileInfos": [
     {
-      "fileName": "lib.d.ts",
+      "fileName": "lib.es2024.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -527,7 +506,7 @@ Output::
     ]
   },
   "latestChangedDtsFile": "./anotherNonConsecutive.d.ts",
-  "size": 2636
+  "size": 2648
 }
 
 tsconfig.json::

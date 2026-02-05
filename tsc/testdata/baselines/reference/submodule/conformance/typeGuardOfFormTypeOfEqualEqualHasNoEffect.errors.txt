@@ -1,3 +1,4 @@
+typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(1,19): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
 typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(13,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r1' must be of type 'string', but here has type 'number'.
 typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(20,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r2' must be of type 'boolean', but here has type 'string'.
 typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(27,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r3' must be of type 'number', but here has type 'boolean'.
@@ -5,13 +6,15 @@ typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(30,5): error TS2367: This comparis
 typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(34,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'C', but here has type 'string'.
 
 
-==== typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts (5 errors) ====
+==== typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts (6 errors) ====
     class C { private p: string };
+                      ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
     
-    var strOrNum: string | number;
-    var strOrBool: string | boolean;
-    var numOrBool: number | boolean
-    var strOrC: string | C;
+    declare var strOrNum: string | number;
+    declare var strOrBool: string | boolean;
+    declare var numOrBool: number | boolean;
+    declare var strOrC: string | C;
     
     // typeof x == s has not effect on typeguard
     if (typeof strOrNum == "string") {

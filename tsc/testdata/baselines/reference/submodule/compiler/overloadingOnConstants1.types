@@ -38,7 +38,7 @@ interface Document2 {
 >tagName : string
 }
 
-var d2: Document2;
+declare var d2: Document2;
 >d2 : Document2
 
 // these are ok

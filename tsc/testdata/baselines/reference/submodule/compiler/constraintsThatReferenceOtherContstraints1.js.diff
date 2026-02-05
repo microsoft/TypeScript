@@ -1,6 +1,6 @@
 --- old.constraintsThatReferenceOtherContstraints1.js
 +++ new.constraintsThatReferenceOtherContstraints1.js
-@@= skipped -14, +14 lines =@@
+@@= skipped -15, +15 lines =@@
  class Foo {
  }
  class Bar {

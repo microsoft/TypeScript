@@ -4,16 +4,16 @@
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // error cases, so function calls will all result in 'any'
 
-module Errors {
+namespace Errors {
 >Errors : Symbol(Errors, Decl(subtypingWithCallSignatures3.ts, 0, 0))
 
     class Base { foo: string; }
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >foo : Symbol(Base.foo, Decl(subtypingWithCallSignatures3.ts, 4, 16))
 
     class Derived extends Base { bar: string; }
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >bar : Symbol(Derived.bar, Decl(subtypingWithCallSignatures3.ts, 5, 32))
 
     class Derived2 extends Derived { baz: string; }
@@ -23,7 +23,7 @@ module Errors {
 
     class OtherDerived extends Base { bing: string; }
 >OtherDerived : Symbol(OtherDerived, Decl(subtypingWithCallSignatures3.ts, 6, 51))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >bing : Symbol(OtherDerived.bing, Decl(subtypingWithCallSignatures3.ts, 7, 37))
 
     declare function foo2(a2: (x: number) => string[]): typeof a2;
@@ -41,10 +41,10 @@ module Errors {
 >a2 : Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 12, 26))
 >x : Symbol(x, Decl(subtypingWithCallSignatures3.ts, 12, 31))
 >arg : Symbol(arg, Decl(subtypingWithCallSignatures3.ts, 12, 35))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >r : Symbol(r, Decl(subtypingWithCallSignatures3.ts, 12, 62))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >Derived2 : Symbol(Derived2, Decl(subtypingWithCallSignatures3.ts, 5, 47))
 >a2 : Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 12, 26))
 
@@ -57,14 +57,14 @@ module Errors {
 >a2 : Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 15, 26))
 >x : Symbol(x, Decl(subtypingWithCallSignatures3.ts, 15, 31))
 >arg : Symbol(arg, Decl(subtypingWithCallSignatures3.ts, 15, 35))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >y : Symbol(y, Decl(subtypingWithCallSignatures3.ts, 15, 57))
 >arg2 : Symbol(arg2, Decl(subtypingWithCallSignatures3.ts, 15, 62))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >r : Symbol(r, Decl(subtypingWithCallSignatures3.ts, 15, 90))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >a2 : Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 15, 26))
 
@@ -76,8 +76,8 @@ module Errors {
 >foo10 : Symbol(foo10, Decl(subtypingWithCallSignatures3.ts, 16, 40), Decl(subtypingWithCallSignatures3.ts, 18, 66))
 >a2 : Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 18, 27))
 >x : Symbol(x, Decl(subtypingWithCallSignatures3.ts, 18, 32))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >a2 : Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 18, 27))
 
     declare function foo10(a2: any): any;
@@ -92,7 +92,7 @@ module Errors {
 >y : Symbol(y, Decl(subtypingWithCallSignatures3.ts, 21, 51))
 >foo : Symbol(foo, Decl(subtypingWithCallSignatures3.ts, 21, 56))
 >bar : Symbol(bar, Decl(subtypingWithCallSignatures3.ts, 21, 69))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >a2 : Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 21, 27))
 
     declare function foo11(a2: any): any;
@@ -103,12 +103,12 @@ module Errors {
 >foo12 : Symbol(foo12, Decl(subtypingWithCallSignatures3.ts, 22, 41), Decl(subtypingWithCallSignatures3.ts, 24, 98))
 >a2 : Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 24, 27))
 >x : Symbol(x, Decl(subtypingWithCallSignatures3.ts, 24, 32))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >y : Symbol(y, Decl(subtypingWithCallSignatures3.ts, 24, 47))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(subtypingWithCallSignatures3.ts, 5, 47))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >a2 : Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 24, 27))
 
@@ -176,7 +176,7 @@ module Errors {
 
             <T extends Base>(a: T): T;
 >T : Symbol(T, Decl(subtypingWithCallSignatures3.ts, 46, 13))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >a : Symbol(a, Decl(subtypingWithCallSignatures3.ts, 46, 29))
 >T : Symbol(T, Decl(subtypingWithCallSignatures3.ts, 46, 13))
 >T : Symbol(T, Decl(subtypingWithCallSignatures3.ts, 46, 13))
@@ -194,7 +194,7 @@ module Errors {
 
             <T extends Base>(a: T): T;
 >T : Symbol(T, Decl(subtypingWithCallSignatures3.ts, 50, 13))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >a : Symbol(a, Decl(subtypingWithCallSignatures3.ts, 50, 29))
 >T : Symbol(T, Decl(subtypingWithCallSignatures3.ts, 50, 13))
 >T : Symbol(T, Decl(subtypingWithCallSignatures3.ts, 50, 13))
@@ -237,7 +237,7 @@ module Errors {
     var r2arg = <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => <V>null;
 >r2arg : Symbol(r2arg, Decl(subtypingWithCallSignatures3.ts, 59, 7))
 >T : Symbol(T, Decl(subtypingWithCallSignatures3.ts, 59, 17))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >U : Symbol(U, Decl(subtypingWithCallSignatures3.ts, 59, 32))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >V : Symbol(V, Decl(subtypingWithCallSignatures3.ts, 59, 51))
@@ -254,10 +254,10 @@ module Errors {
 >r2arg2 : Symbol(r2arg2, Decl(subtypingWithCallSignatures3.ts, 60, 7))
 >x : Symbol(x, Decl(subtypingWithCallSignatures3.ts, 60, 18))
 >arg : Symbol(arg, Decl(subtypingWithCallSignatures3.ts, 60, 22))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >r : Symbol(r, Decl(subtypingWithCallSignatures3.ts, 60, 49))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >Derived2 : Symbol(Derived2, Decl(subtypingWithCallSignatures3.ts, 5, 47))
 
     var r2 = foo7(r2arg); // any
@@ -278,7 +278,7 @@ module Errors {
     var r3arg = <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => <U>null;
 >r3arg : Symbol(r3arg, Decl(subtypingWithCallSignatures3.ts, 65, 7))
 >T : Symbol(T, Decl(subtypingWithCallSignatures3.ts, 65, 17))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >U : Symbol(U, Decl(subtypingWithCallSignatures3.ts, 65, 32))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >x : Symbol(x, Decl(subtypingWithCallSignatures3.ts, 65, 52))
@@ -297,14 +297,14 @@ module Errors {
 >r3arg2 : Symbol(r3arg2, Decl(subtypingWithCallSignatures3.ts, 66, 7))
 >x : Symbol(x, Decl(subtypingWithCallSignatures3.ts, 66, 18))
 >arg : Symbol(arg, Decl(subtypingWithCallSignatures3.ts, 66, 22))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >y : Symbol(y, Decl(subtypingWithCallSignatures3.ts, 66, 44))
 >arg2 : Symbol(arg2, Decl(subtypingWithCallSignatures3.ts, 66, 49))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >r : Symbol(r, Decl(subtypingWithCallSignatures3.ts, 66, 77))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 
     var r3 = foo8(r3arg); // any
@@ -333,8 +333,8 @@ module Errors {
     var r4arg2 = (...x: Base[]) => <Base>null;
 >r4arg2 : Symbol(r4arg2, Decl(subtypingWithCallSignatures3.ts, 72, 7))
 >x : Symbol(x, Decl(subtypingWithCallSignatures3.ts, 72, 18))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 
     var r4 = foo10(r4arg); // any
 >r4 : Symbol(r4, Decl(subtypingWithCallSignatures3.ts, 73, 7))
@@ -368,7 +368,7 @@ module Errors {
 >y : Symbol(y, Decl(subtypingWithCallSignatures3.ts, 78, 37))
 >foo : Symbol(foo, Decl(subtypingWithCallSignatures3.ts, 78, 42))
 >bar : Symbol(bar, Decl(subtypingWithCallSignatures3.ts, 78, 55))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 
     var r5 = foo11(r5arg); // any
 >r5 : Symbol(r5, Decl(subtypingWithCallSignatures3.ts, 79, 7))
@@ -388,25 +388,25 @@ module Errors {
     var r6arg = (x: Array<Base>, y: Array<Derived2>) => <Array<Derived>>null;
 >r6arg : Symbol(r6arg, Decl(subtypingWithCallSignatures3.ts, 83, 7))
 >x : Symbol(x, Decl(subtypingWithCallSignatures3.ts, 83, 17))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >y : Symbol(y, Decl(subtypingWithCallSignatures3.ts, 83, 32))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(subtypingWithCallSignatures3.ts, 5, 47))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 
     var r6arg2 = <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => <T>null;
 >r6arg2 : Symbol(r6arg2, Decl(subtypingWithCallSignatures3.ts, 84, 7))
 >T : Symbol(T, Decl(subtypingWithCallSignatures3.ts, 84, 18))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(subtypingWithCallSignatures3.ts, 5, 47))
 >x : Symbol(x, Decl(subtypingWithCallSignatures3.ts, 84, 45))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >y : Symbol(y, Decl(subtypingWithCallSignatures3.ts, 84, 60))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >T : Symbol(T, Decl(subtypingWithCallSignatures3.ts, 84, 18))
 
     var r6 = foo12(r6arg); // (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
@@ -458,7 +458,7 @@ module Errors {
     var r7arg3 = <T extends Base>(x: { a: T; b: T }) => 1;
 >r7arg3 : Symbol(r7arg3, Decl(subtypingWithCallSignatures3.ts, 95, 7))
 >T : Symbol(T, Decl(subtypingWithCallSignatures3.ts, 95, 18))
->Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 18))
 >x : Symbol(x, Decl(subtypingWithCallSignatures3.ts, 95, 34))
 >a : Symbol(a, Decl(subtypingWithCallSignatures3.ts, 95, 38))
 >T : Symbol(T, Decl(subtypingWithCallSignatures3.ts, 95, 18))
@@ -508,11 +508,11 @@ module Errors {
 >r9arg : Symbol(r9arg, Decl(subtypingWithCallSignatures3.ts, 103, 7))
 }
 
-module WithGenericSignaturesInBaseType {
+namespace WithGenericSignaturesInBaseType {
 >WithGenericSignaturesInBaseType : Symbol(WithGenericSignaturesInBaseType, Decl(subtypingWithCallSignatures3.ts, 105, 1))
 
     declare function foo2(a2: <T>(x: T) => T[]): typeof a2;
->foo2 : Symbol(foo2, Decl(subtypingWithCallSignatures3.ts, 107, 40), Decl(subtypingWithCallSignatures3.ts, 108, 59))
+>foo2 : Symbol(foo2, Decl(subtypingWithCallSignatures3.ts, 107, 43), Decl(subtypingWithCallSignatures3.ts, 108, 59))
 >a2 : Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 108, 26))
 >T : Symbol(T, Decl(subtypingWithCallSignatures3.ts, 108, 31))
 >x : Symbol(x, Decl(subtypingWithCallSignatures3.ts, 108, 34))
@@ -521,7 +521,7 @@ module WithGenericSignaturesInBaseType {
 >a2 : Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 108, 26))
 
     declare function foo2(a2: any): any;
->foo2 : Symbol(foo2, Decl(subtypingWithCallSignatures3.ts, 107, 40), Decl(subtypingWithCallSignatures3.ts, 108, 59))
+>foo2 : Symbol(foo2, Decl(subtypingWithCallSignatures3.ts, 107, 43), Decl(subtypingWithCallSignatures3.ts, 108, 59))
 >a2 : Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 109, 26))
 
     var r2arg2 = <T>(x: T) => [''];
@@ -532,7 +532,7 @@ module WithGenericSignaturesInBaseType {
 
     var r2 = foo2(r2arg2); // <T>(x:T) => T[] since we can infer from generic signatures now
 >r2 : Symbol(r2, Decl(subtypingWithCallSignatures3.ts, 111, 7))
->foo2 : Symbol(foo2, Decl(subtypingWithCallSignatures3.ts, 107, 40), Decl(subtypingWithCallSignatures3.ts, 108, 59))
+>foo2 : Symbol(foo2, Decl(subtypingWithCallSignatures3.ts, 107, 43), Decl(subtypingWithCallSignatures3.ts, 108, 59))
 >r2arg2 : Symbol(r2arg2, Decl(subtypingWithCallSignatures3.ts, 110, 7))
 
     declare function foo3(a2: <T>(x: T) => string[]): typeof a2;

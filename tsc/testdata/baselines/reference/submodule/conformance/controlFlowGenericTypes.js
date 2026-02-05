@@ -223,9 +223,6 @@ function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
 
 
 //// [controlFlowGenericTypes.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.bounceAndTakeIfA = bounceAndTakeIfA;
 function f1(x, y, z) {
     if (x) {
         x;
@@ -270,7 +267,7 @@ function g4(x) {
         unbox(x); // Error
     }
 }
-function bounceAndTakeIfA(value) {
+export function bounceAndTakeIfA(value) {
     if (value === 'A') {
         takeA(value);
         return value;

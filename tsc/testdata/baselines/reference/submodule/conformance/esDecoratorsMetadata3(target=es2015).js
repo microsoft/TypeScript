@@ -21,6 +21,7 @@ D[Symbol.metadata].a; // ['x', 'z']
 
 
 //// [foo.js]
+"use strict";
 function appendMeta(key, value) {
     return (_, context) => {
         var _a;

@@ -9,6 +9,7 @@ f({ x: [1] }, { x: [null] }).x[0] = "" // was error TS2011: Cannot convert 'stri
 
 
 //// [inferentialTypingWithObjectLiteralProperties.js]
+"use strict";
 function f(x, y) {
     return x;
 }

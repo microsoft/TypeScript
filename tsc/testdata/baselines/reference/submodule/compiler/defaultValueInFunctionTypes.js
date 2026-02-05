@@ -8,5 +8,6 @@ var y = <(a : string = "") => any>(undefined)
 
 
 //// [defaultValueInFunctionTypes.js]
+"use strict";
 var x;
 var y = (undefined);

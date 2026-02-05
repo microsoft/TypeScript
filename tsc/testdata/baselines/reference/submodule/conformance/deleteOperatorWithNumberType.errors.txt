@@ -1,8 +1,11 @@
+deleteOperatorWithNumberType.ts(8,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 deleteOperatorWithNumberType.ts(18,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(19,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(22,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(23,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(24,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithNumberType.ts(27,31): error TS2790: The operand of a 'delete' operator must be optional.
+deleteOperatorWithNumberType.ts(28,31): error TS2790: The operand of a 'delete' operator must be optional.
 deleteOperatorWithNumberType.ts(30,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(31,32): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(32,33): error TS2703: The operand of a 'delete' operator must be a property reference.
@@ -15,20 +18,25 @@ deleteOperatorWithNumberType.ts(39,8): error TS2703: The operand of a 'delete' o
 deleteOperatorWithNumberType.ts(40,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(41,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithNumberType.ts(42,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithNumberType.ts(43,8): error TS2790: The operand of a 'delete' operator must be optional.
+deleteOperatorWithNumberType.ts(44,8): error TS2790: The operand of a 'delete' operator must be optional.
+deleteOperatorWithNumberType.ts(45,8): error TS2790: The operand of a 'delete' operator must be optional.
 
 
-==== deleteOperatorWithNumberType.ts (17 errors) ====
+==== deleteOperatorWithNumberType.ts (23 errors) ====
     // delete  operator on number type
-    var NUMBER: number;
+    declare var NUMBER: number;
     var NUMBER1: number[] = [1, 2];
     
     function foo(): number { return 1; }
     
     class A {
         public a: number;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
         static foo() { return 1; }
     }
-    module M {
+    namespace M {
         export var n: number;
     }
     
@@ -55,7 +63,11 @@ deleteOperatorWithNumberType.ts(42,8): error TS2703: The operand of a 'delete' o
     
     // number type expressions
     var ResultIsBoolean6 = delete objA.a;
+                                  ~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
     var ResultIsBoolean7 = delete M.n;
+                                  ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
     var ResultIsBoolean8 = delete NUMBER1[0];
     var ResultIsBoolean9 = delete foo();
                                   ~~~~~
@@ -95,5 +107,11 @@ deleteOperatorWithNumberType.ts(42,8): error TS2703: The operand of a 'delete' o
            ~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     delete objA.a;
+           ~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
     delete M.n;
+           ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
     delete objA.a, M.n;
+           ~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.

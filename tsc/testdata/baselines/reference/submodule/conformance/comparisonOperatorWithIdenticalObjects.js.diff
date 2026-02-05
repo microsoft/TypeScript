@@ -1,8 +1,8 @@
 --- old.comparisonOperatorWithIdenticalObjects.js
 +++ new.comparisonOperatorWithIdenticalObjects.js
-@@= skipped -197, +197 lines =@@
-
+@@= skipped -198, +198 lines =@@
  //// [comparisonOperatorWithIdenticalObjects.js]
+ "use strict";
  class A1 {
 +    a;
 +    b;

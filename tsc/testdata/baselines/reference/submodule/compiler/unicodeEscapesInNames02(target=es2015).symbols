@@ -2,11 +2,11 @@
 
 === extendedEscapesForAstralsInVarsAndClasses.ts ===
 // U+102A7 CARIAN LETTER A2
-var 𐊧: string;
->𐊧 : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 3), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 3))
+declare var 𐊧: string;
+>𐊧 : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 11), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 11))
 
-var \u{102A7}: string;
->\u{102A7} : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 3), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 3))
+declare var \u{102A7}: string;
+>\u{102A7} : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 11), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 11))
 
 if (Math.random()) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
@@ -14,11 +14,11 @@ if (Math.random()) {
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
     𐊧 = "hello";
->𐊧 : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 3), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 3))
+>𐊧 : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 11), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 11))
 }
 else {
     \u{102A7} = "hallo";
->\u{102A7} : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 3), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 3))
+>\u{102A7} : Symbol(𐊧, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 1, 11), Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 2, 11))
 }
 
 class Foo {

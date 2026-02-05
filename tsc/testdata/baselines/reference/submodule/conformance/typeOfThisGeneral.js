@@ -8,28 +8,28 @@ class MyTestClass {
     constructor() {
         //type of 'this' in constructor body is the class instance type
         var p = this.canary;
-        var p: number;
+        var p!: number;
         this.canary = 3;
     }
 
     //type of 'this' in member function param list is the class instance type
     memberFunc(t = this) {
-        var t: MyTestClass;
+        var t!: MyTestClass;
 
         //type of 'this' in member function body is the class instance type
         var p = this;
-        var p: MyTestClass;
+        var p!: MyTestClass;
     }
 
     //type of 'this' in member accessor(get and set) body is the class instance type
     get prop() {
         var p = this;
-        var p: MyTestClass;
+        var p!: MyTestClass;
         return this;
     }
     set prop(v) {
         var p = this;
-        var p: MyTestClass;
+        var p!: MyTestClass;
         p = v;
         v = p;
     }
@@ -37,18 +37,18 @@ class MyTestClass {
     someFunc = () => {
         //type of 'this' in member variable initializer is the class instance type
         var t = this;
-        var t: MyTestClass;
+        var t!: MyTestClass;
     };
 
     //type of 'this' in static function param list is constructor function type
     static staticFn(t = this) {
-        var t: typeof MyTestClass;
+        var t!: typeof MyTestClass;
         var t = MyTestClass;
         t.staticCanary;
 
         //type of 'this' in static function body is constructor function type
         var p = this;
-        var p: typeof MyTestClass;
+        var p!: typeof MyTestClass;
         var p = MyTestClass;
         p.staticCanary;
     }
@@ -56,7 +56,7 @@ class MyTestClass {
     static get staticProp() {
         //type of 'this' in static accessor body is constructor function type
         var p = this;
-        var p: typeof MyTestClass;
+        var p!: typeof MyTestClass;
         var p = MyTestClass;
         p.staticCanary;
         return this;
@@ -64,7 +64,7 @@ class MyTestClass {
     static set staticProp(v: typeof MyTestClass) {
         //type of 'this' in static accessor body is constructor function type
         var p = this;
-        var p: typeof MyTestClass;
+        var p!: typeof MyTestClass;
         var p = MyTestClass;
         p.staticCanary;
     }
@@ -77,28 +77,28 @@ class MyGenericTestClass<T, U> {
     constructor() {
         //type of 'this' in constructor body is the class instance type
         var p = this.canary;
-        var p: number;
+        var p!: number;
         this.canary = 3;
     }
 
     //type of 'this' in member function param list is the class instance type
     memberFunc(t = this) {
-        var t: MyGenericTestClass<T, U>;
+        var t!: MyGenericTestClass<T, U>;
 
         //type of 'this' in member function body is the class instance type
         var p = this;
-        var p: MyGenericTestClass<T, U>;
+        var p!: MyGenericTestClass<T, U>;
     }
 
     //type of 'this' in member accessor(get and set) body is the class instance type
     get prop() {
         var p = this;
-        var p: MyGenericTestClass<T, U>;
+        var p!: MyGenericTestClass<T, U>;
         return this;
     }
     set prop(v) {
         var p = this;
-        var p: MyGenericTestClass<T, U>;
+        var p!: MyGenericTestClass<T, U>;
         p = v;
         v = p;
     }
@@ -106,18 +106,18 @@ class MyGenericTestClass<T, U> {
     someFunc = () => {
         //type of 'this' in member variable initializer is the class instance type
         var t = this;
-        var t: MyGenericTestClass<T, U>;
+        var t!: MyGenericTestClass<T, U>;
     };
 
     //type of 'this' in static function param list is constructor function type
     static staticFn(t = this) {
-        var t: typeof MyGenericTestClass;
+        var t!: typeof MyGenericTestClass;
         var t = MyGenericTestClass;
         t.staticCanary;
 
         //type of 'this' in static function body is constructor function type
         var p = this;
-        var p: typeof MyGenericTestClass;
+        var p!: typeof MyGenericTestClass;
         var p = MyGenericTestClass;
         p.staticCanary;
     }
@@ -125,7 +125,7 @@ class MyGenericTestClass<T, U> {
     static get staticProp() {
         //type of 'this' in static accessor body is constructor function type
         var p = this;
-        var p: typeof MyGenericTestClass;
+        var p!: typeof MyGenericTestClass;
         var p = MyGenericTestClass;
         p.staticCanary;
         return this;
@@ -133,7 +133,7 @@ class MyGenericTestClass<T, U> {
     static set staticProp(v: typeof MyGenericTestClass) {
         //type of 'this' in static accessor body is constructor function type
         var p = this;
-        var p: typeof MyGenericTestClass;
+        var p!: typeof MyGenericTestClass;
         var p = MyGenericTestClass;
         p.staticCanary;
     }
@@ -141,45 +141,46 @@ class MyGenericTestClass<T, U> {
 
 //type of 'this' in a function declaration param list is Any
 function fn(s = this) {
-    var s: any;
+    var s!: any;
     s.spaaaaaaace = 4;
 
     //type of 'this' in a function declaration body is Any
-    var t: any;
+    var t!: any;
     var t = this;
     this.spaaaaace = 4;
 }
 
 //type of 'this' in a function expression param list list is Any
 var q1 = function (s = this) {
-    var s: any;
+    var s!: any;
     s.spaaaaaaace = 4;
 
     //type of 'this' in a function expression body is Any
-    var t: any;
+    var t!: any;
     var t = this;
     this.spaaaaace = 4;
 }
 
 //type of 'this' in a fat arrow expression param list is typeof globalThis
 var q2 = (s = this) => {
-    var s: typeof globalThis;
+    var s!: typeof globalThis;
     s.spaaaaaaace = 4;
 
     //type of 'this' in a fat arrow expression body is typeof globalThis
-    var t: typeof globalThis;
+    var t!: typeof globalThis;
     var t = this;
     this.spaaaaace = 4;
 }
 
-//type of 'this' in global module is GlobalThis
-var t: typeof globalThis;
+//type of 'this' in global namespace is GlobalThis
+var t!: typeof globalThis;
 var t = this;
 this.spaaaaace = 4;
 
 
 
 //// [typeOfThisGeneral.js]
+"use strict";
 class MyTestClass {
     canary;
     static staticCanary;
@@ -327,7 +328,7 @@ var q2 = (s = this) => {
     var t = this;
     this.spaaaaace = 4;
 };
-//type of 'this' in global module is GlobalThis
+//type of 'this' in global namespace is GlobalThis
 var t;
 var t = this;
 this.spaaaaace = 4;

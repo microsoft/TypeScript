@@ -15,7 +15,7 @@ func TestCompletionsImport_sortingModuleSpecifiers(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: tsconfig.json
-{ "compilerOptions": { "module": "commonjs" } }
+{ "compilerOptions": { "module": "commonjs", "lib": ["es5"] } }
 // @Filename: path.d.ts
 declare module "path/posix" {
     export function normalize(p: string): string;

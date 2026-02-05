@@ -25,6 +25,7 @@ void ENUM1["B"];
 void ENUM, ENUM1;
 
 //// [voidOperatorWithEnumType.js]
+"use strict";
 // void  operator on enum type
 var ENUM;
 (function (ENUM) {

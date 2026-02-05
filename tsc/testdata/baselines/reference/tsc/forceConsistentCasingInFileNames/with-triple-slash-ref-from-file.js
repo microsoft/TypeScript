@@ -22,7 +22,7 @@ Output::
 
 Found 1 error in src/c.ts[90m:1[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -46,8 +46,10 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/src/D.js] *new* 
+"use strict";
 
 //// [/home/src/workspaces/project/src/c.js] *new* 
+"use strict";
 /// <reference path="./D.ts"/>
 
 

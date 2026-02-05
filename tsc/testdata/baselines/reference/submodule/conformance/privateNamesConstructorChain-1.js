@@ -17,6 +17,7 @@ class Child extends Parent {
 
 
 //// [privateNamesConstructorChain-1.js]
+"use strict";
 class Parent {
     #foo = 3;
     static #bar = 5;

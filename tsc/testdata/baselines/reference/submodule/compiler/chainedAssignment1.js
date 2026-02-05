@@ -25,6 +25,7 @@ c1 = c2 = c3; // a bug made this not report the same error as below
 c2 = c3; // Error TS111: Cannot convert Z to Y
 
 //// [chainedAssignment1.js]
+"use strict";
 class X {
     z;
     constructor(z) {

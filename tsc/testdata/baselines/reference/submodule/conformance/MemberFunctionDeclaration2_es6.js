@@ -6,6 +6,7 @@ class C {
 }
 
 //// [MemberFunctionDeclaration2_es6.js]
+"use strict";
 class C {
     *foo() { }
 }

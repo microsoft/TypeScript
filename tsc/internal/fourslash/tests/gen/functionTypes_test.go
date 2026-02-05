@@ -12,7 +12,9 @@ func TestFunctionTypes(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `var f: Function;
+	const content = `// @lib: es5
+// @strict: false
+var f: Function;
 function g() { }
 
 class C {

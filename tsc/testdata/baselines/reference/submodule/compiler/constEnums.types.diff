@@ -32,7 +32,7 @@
 +>"-->" : typeof Comments["-->"]
  }
 
- module A {
+ namespace A {
 @@= skipped -385, +385 lines =@@
  }
 

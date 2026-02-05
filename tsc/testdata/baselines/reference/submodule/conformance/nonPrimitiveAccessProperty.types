@@ -1,8 +1,9 @@
 //// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveAccessProperty.ts] ////
 
 === nonPrimitiveAccessProperty.ts ===
-var a: object;
+var a: object = {};
 >a : object
+>{} : {}
 
 a.toString();
 >a.toString() : string

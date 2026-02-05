@@ -1,8 +1,8 @@
 --- old.topLevel.js
 +++ new.topLevel.js
-@@= skipped -30, +30 lines =@@
-
+@@= skipped -31, +31 lines =@@
  //// [topLevel.js]
+ "use strict";
  class Point {
 +    x;
 +    y;

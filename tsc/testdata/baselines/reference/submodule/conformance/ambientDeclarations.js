@@ -55,13 +55,13 @@ declare enum E2 {
 declare enum E3 {
     A
 }
-declare module E3 {
+declare namespace E3 {
     var B;
 }
 var x = E3.B;
 
 // Ambient module
-declare module M1 {
+declare namespace M1 {
     var x;
     function fn(): number;
 }
@@ -79,6 +79,7 @@ declare module 'external1' {
 
 
 //// [ambientDeclarations.js]
+"use strict";
 var x = E3.B;
 // Ambient module members are always exported with or without export keyword
 var p = M1.x;

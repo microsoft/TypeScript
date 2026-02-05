@@ -27,6 +27,7 @@ o(A);
 
 
 //// [infinitelyExpandingTypesNonGenericBase.js]
+"use strict";
 class Functionality {
     property;
 }

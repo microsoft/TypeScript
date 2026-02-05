@@ -12,5 +12,6 @@ var y: {
 }
 
 //// [objectTypeLiteralSyntax.js]
+"use strict";
 var x;
 var y;

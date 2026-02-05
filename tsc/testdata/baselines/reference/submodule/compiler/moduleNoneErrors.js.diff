@@ -1,9 +1,0 @@
---- old.moduleNoneErrors.js
-+++ new.moduleNoneErrors.js
-@@= skipped -10, +10 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Foo = void 0;
- class Foo {
-+    foo;
- }
- exports.Foo = Foo;

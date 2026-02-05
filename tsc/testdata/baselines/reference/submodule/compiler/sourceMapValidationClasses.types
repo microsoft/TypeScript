@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/sourceMapValidationClasses.ts] ////
 
 === sourceMapValidationClasses.ts ===
-module Foo.Bar {
+namespace Foo.Bar {
 >Foo : typeof Foo
 >Bar : typeof Bar
 
@@ -60,7 +60,7 @@ module Foo.Bar {
 
         var greeters: Greeter[] = []; /* inline block comment */
 >greeters : Greeter[]
->[] : undefined[]
+>[] : never[]
 
         greeters[0] = new Greeter(greeting);
 >greeters[0] = new Greeter(greeting) : Greeter

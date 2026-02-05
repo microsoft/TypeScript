@@ -28,7 +28,7 @@ var base: Base;
 var derived: Derived;
 var derived2: Derived2;
 
-module Derived {
+namespace Derived {
     var h = [{ foo: base, basear: derived }, { foo: base }]; // {foo: Base}[]
     var i = [{ foo: base, basear: derived }, { foo: derived }]; // {foo: Derived}[]
 
@@ -42,7 +42,7 @@ module Derived {
     var q = [[() => derived2], [() => derived]]; // {}[]
 }
 
-module WithContextualType {
+namespace WithContextualType {
     // no errors
     var a: Base[] = [derived, derived2];
     var b: Derived[] = [null];
@@ -134,6 +134,7 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 //}
 
 //// [heterogeneousArrayLiterals.js]
+"use strict";
 // type of an array is the best common type of its elements (plus its contextual type if it exists)
 var a = [1, '']; // {}[]
 var b = [1, null]; // number[]

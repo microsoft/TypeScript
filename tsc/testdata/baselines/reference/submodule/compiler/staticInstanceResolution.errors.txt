@@ -1,0 +1,20 @@
+staticInstanceResolution.ts(12,9): error TS2454: Variable 'c' is used before being assigned.
+
+
+==== staticInstanceResolution.ts (1 errors) ====
+    class Comment {
+    
+        public getDocCommentText()
+        {
+    
+        }
+    
+        static getDocCommentText(comments: Comment[])
+        {
+            comments[0].getDocCommentText();
+            var c: Comment;
+            c.getDocCommentText();
+            ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+        }
+    }

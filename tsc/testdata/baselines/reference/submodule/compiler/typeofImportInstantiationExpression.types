@@ -3,14 +3,14 @@
 === input.ts ===
 interface Arg<T = any, Params extends Record<string, any> = Record<string, any>> {
     "__is_argument__"?: true;
->"__is_argument__" : true
+>"__is_argument__" : true | undefined
 >true : true
 
     meta?: T;
->meta : T
+>meta : T | undefined
 
     params?: Params;
->params : Params
+>params : Params | undefined
 }
 
 export function myFunction<T = any, U extends Record<string, any> = Record<string, any>>(arg: Arg<T, U>) { return (arg.params || {}) as U }
@@ -19,9 +19,9 @@ export function myFunction<T = any, U extends Record<string, any> = Record<strin
 >(arg.params || {}) as U : U
 >(arg.params || {}) : U | {}
 >arg.params || {} : U | {}
->arg.params : U
+>arg.params : U | undefined
 >arg : Arg<T, U>
->params : U
+>params : U | undefined
 >{} : {}
 
 === main.ts ===

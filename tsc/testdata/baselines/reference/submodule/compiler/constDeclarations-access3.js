@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/constDeclarations-access3.ts] ////
 
 //// [constDeclarations-access3.ts]
-module M {
+namespace M {
     export const x = 0;
 }
 
@@ -46,6 +46,7 @@ M.x.toString();
 
 
 //// [constDeclarations-access3.js]
+"use strict";
 var M;
 (function (M) {
     M.x = 0;

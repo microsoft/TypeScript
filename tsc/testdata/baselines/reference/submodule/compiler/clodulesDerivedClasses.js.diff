@@ -1,8 +1,8 @@
 --- old.clodulesDerivedClasses.js
 +++ new.clodulesDerivedClasses.js
-@@= skipped -25, +25 lines =@@
-
+@@= skipped -26, +26 lines =@@
  //// [clodulesDerivedClasses.js]
+ "use strict";
  class Shape {
 +    id;
  }

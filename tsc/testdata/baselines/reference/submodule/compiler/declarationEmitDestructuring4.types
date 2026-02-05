@@ -5,7 +5,7 @@
 // we will not make any modification and will emit
 // the similar binding pattern users' have written
 function baz([]) { }
->baz : ([]: any[]) => void
+>baz : ([]: Iterable<any, void, undefined>) => void
 
 function baz1([] = [1,2,3]) { }
 >baz1 : ([]?: number[]) => void

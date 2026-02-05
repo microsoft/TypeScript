@@ -1,0 +1,43 @@
+accessorDeclarationOrder.ts(2,5): error TS2564: Property '#name' has no initializer and is not definitely assigned in the constructor.
+accessorDeclarationOrder.ts(14,5): error TS2564: Property '#name' has no initializer and is not definitely assigned in the constructor.
+
+
+==== accessorDeclarationOrder.ts (2 errors) ====
+    class C1 {
+        #name: string;
+        ~~~~~
+!!! error TS2564: Property '#name' has no initializer and is not definitely assigned in the constructor.
+    
+        public get name() {
+            return this.#name;
+        }
+    
+        private set name(name: string) {
+            this.#name = name;
+        }
+    }
+    
+    class C2 {
+        #name: string;
+        ~~~~~
+!!! error TS2564: Property '#name' has no initializer and is not definitely assigned in the constructor.
+    
+        private set name(name: string) {
+            this.#name = name;
+        }
+    
+        public get name() {
+            return this.#name;
+        }
+    }
+    
+    const c1 = new C1();
+    const c2 = new C2();
+    
+    
+    // no error
+    c1.name;
+    
+    // no error
+    c2.name;
+    

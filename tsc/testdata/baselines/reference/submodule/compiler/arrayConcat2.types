@@ -3,7 +3,7 @@
 === arrayConcat2.ts ===
 var a: string[] = [];
 >a : string[]
->[] : undefined[]
+>[] : never[]
 
 a.concat("hello", 'world');
 >a.concat("hello", 'world') : string[]

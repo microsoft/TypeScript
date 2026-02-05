@@ -1,13 +1,15 @@
 --- old.differentTypesWithSameName.errors.txt
 +++ new.differentTypesWithSameName.errors.txt
 @@= skipped -0, +0 lines =@@
+ differentTypesWithSameName.ts(3,5): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+ differentTypesWithSameName.ts(11,2): error TS2564: Property 't' has no initializer and is not definitely assigned in the constructor.
 -differentTypesWithSameName.ts(16,15): error TS2345: Argument of type 'variable' is not assignable to parameter of type 'm.variable'.
 -  Property 's' is missing in type 'variable' but required in type 'm.variable'.
 +differentTypesWithSameName.ts(16,15): error TS2741: Property 's' is missing in type 'variable' but required in type 'm.variable'.
 
 
- ==== differentTypesWithSameName.ts (1 errors) ====
-@@= skipped -19, +18 lines =@@
+ ==== differentTypesWithSameName.ts (3 errors) ====
+@@= skipped -25, +24 lines =@@
      var v: variable = new variable();
      m.doSomething(v);
                    ~

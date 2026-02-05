@@ -4,11 +4,11 @@
 interface IndexedWithThis {
     // this is a workaround for React
     init?: (this: this) => void;
->init : (this: this) => void
+>init : ((this: this) => void) | undefined
 >this : this
 
     willDestroy?: (this: any) => void;
->willDestroy : (this: any) => void
+>willDestroy : ((this: any) => void) | undefined
 >this : any
 
     [propName: string]: number | string | boolean | symbol | undefined | null | {} | ((this: any, ...args:any[]) => any);
@@ -19,10 +19,10 @@ interface IndexedWithThis {
 interface IndexedWithoutThis {
     // this is what React would like to write (and what they write today)
     init?: () => void;
->init : () => void
+>init : (() => void) | undefined
 
     willDestroy?: () => void;
->willDestroy : () => void
+>willDestroy : (() => void) | undefined
 
     [propName: string]: any;
 >propName : string
@@ -60,9 +60,9 @@ extend1({
 
         // this.mine
         this.willDestroy
->this.willDestroy : (this: any) => void
+>this.willDestroy : ((this: any) => void) | undefined
 >this : IndexedWithThis
->willDestroy : (this: any) => void
+>willDestroy : ((this: any) => void) | undefined
 
     },
     mine: 12,

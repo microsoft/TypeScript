@@ -1,7 +1,7 @@
 --- old.customAsyncIterator.js
 +++ new.customAsyncIterator.js
-@@= skipped -15, +15 lines =@@
- //// [customAsyncIterator.js]
+@@= skipped -16, +16 lines =@@
+ "use strict";
  // GH: https://github.com/microsoft/TypeScript/issues/33239
  class ConstantIterator {
 +    constant;

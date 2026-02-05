@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/classExtendingQualifiedName.ts] ////
 
 //// [classExtendingQualifiedName.ts]
-module M {
+namespace M {
     class C {
     }
 
@@ -10,6 +10,7 @@ module M {
 }
 
 //// [classExtendingQualifiedName.js]
+"use strict";
 var M;
 (function (M) {
     class C {

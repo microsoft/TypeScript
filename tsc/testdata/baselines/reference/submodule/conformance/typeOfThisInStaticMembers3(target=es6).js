@@ -14,6 +14,7 @@ class D extends C {
 
 
 //// [typeOfThisInStaticMembers3.js]
+"use strict";
 class C {
     static a = 1;
     static b = this.a + 1;

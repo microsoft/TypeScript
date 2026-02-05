@@ -1,18 +1,18 @@
 --- old.awaitUsingDeclarations.1(target=es2022).js
 +++ new.awaitUsingDeclarations.1(target=es2022).js
-@@= skipped -151, +151 lines =@@
+@@= skipped -162, +162 lines =@@
      var e = new Error(message);
      return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
  });
-+var d1, a, C1, env_1;
++var d1, a, C1;
  async function af() {
-     const env_15 = { stack: [], error: void 0, hasError: false };
+     const env_18 = { stack: [], error: void 0, hasError: false };
      try {
 @@= skipped -33, +34 lines =@@
-             await result_16;
+             await result_19;
      }
  }
--var d1, a, C1, env_1;
- const env_2 = { stack: [], error: void 0, hasError: false };
+-var d1, a, C1;
+ const env_1 = { stack: [], error: void 0, hasError: false };
  try {
-     d1 = __addDisposableResource(env_2, { async [Symbol.asyncDispose]() { } }, true);
+     d1 = __addDisposableResource(env_1, { async [Symbol.asyncDispose]() { } }, true);

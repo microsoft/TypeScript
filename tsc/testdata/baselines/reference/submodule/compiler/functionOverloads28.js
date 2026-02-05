@@ -8,6 +8,7 @@ var t:any; var x = foo(t);
 
 
 //// [functionOverloads28.js]
+"use strict";
 function foo(bar) { return ''; }
 var t;
 var x = foo(t);

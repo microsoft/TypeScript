@@ -1,0 +1,70 @@
+--- old.jsDeclarationsDefault(target=es2015).js
++++ new.jsDeclarationsDefault(target=es2015).js
+@@= skipped -57, +57 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Bar = exports.X = void 0;
+ class Foo {
+-    constructor() {
+-        this.a = (null);
+-    }
++    a = /** @type {Foo} */ null;
+ }
+ exports.default = Foo;
+ exports.Bar = Foo;
+@@= skipped -16, +14 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ const index3_1 = __importDefault(require("./index3"));
+ class Bar extends index3_1.default {
+-    constructor() {
+-        super(...arguments);
+-        this.x = (null);
+-    }
++    x = /** @type {Bar} */ null;
+ }
+ exports.default = Bar;
+ //// [index5.js]
+@@= skipped -27, +24 lines =@@
+
+
+ //// [index1.d.ts]
+-declare const _default: 12;
++declare const _default: number;
+ export default _default;
+ //// [index2.d.ts]
+ export default function foo(): typeof foo;
+-export function x(): typeof foo;
++export declare const x: typeof foo;
+ export { foo as bar };
+ //// [index3.d.ts]
+ export default class Foo {
+     a: Foo;
+ }
+-export const X: typeof Foo;
++export declare const X: typeof Foo;
+ export { Foo as Bar };
+ //// [index4.d.ts]
+-export default Bar;
++import Fab from "./index3";
+ declare class Bar extends Fab {
+     x: Bar;
+ }
+-import Fab from "./index3";
++export default Bar;
+ //// [index5.d.ts]
+-type _default = string | number;
+-declare const _default: 12;
++declare const _default: number;
+ export default _default;
++export type default = string | number;
++/**
++ * @typedef {string | number} default
++ */
+ //// [index6.d.ts]
+-declare function func(): void;
+-type func = string | number;
+-export default func;
++export default function func(): void;
++export type default = string | number;
++/**
++ * @typedef {string | number} default
++ */

@@ -1,6 +1,6 @@
 // === findAllReferences ===
 // === /referencesForExportedValues.ts ===
-// module M {
+// namespace M {
 //     /*FIND ALL REFS*/export var variable = 0;
 // 
 //     // local use
@@ -11,7 +11,7 @@
 
 // === findAllReferences ===
 // === /referencesForExportedValues.ts ===
-// module M {
+// namespace M {
 //     export var /*FIND ALL REFS*/[|variable|] = 0;
 // 
 //     // local use
@@ -25,7 +25,7 @@
 
 // === findAllReferences ===
 // === /referencesForExportedValues.ts ===
-// module M {
+// namespace M {
 //     export var [|variable|] = 0;
 // 
 //     // local use
@@ -39,7 +39,7 @@
 
 // === findAllReferences ===
 // === /referencesForExportedValues.ts ===
-// module M {
+// namespace M {
 //     export var [|variable|] = 0;
 // 
 //     // local use

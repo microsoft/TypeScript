@@ -1,6 +1,6 @@
 --- old.callSignatureWithoutReturnTypeAnnotationInference.js
 +++ new.callSignatureWithoutReturnTypeAnnotationInference.js
-@@= skipped -175, +175 lines =@@
+@@= skipped -176, +176 lines =@@
  }
  var r9 = foo9(1);
  class C {

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts] ////
 
 //// [ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts]
-module A {
+namespace A {
 
     interface Point {
         x: number;
@@ -26,6 +26,7 @@ module A {
 
 
 //// [ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.js]
+"use strict";
 var A;
 (function (A) {
     A.Origin = { x: 0, y: 0 };

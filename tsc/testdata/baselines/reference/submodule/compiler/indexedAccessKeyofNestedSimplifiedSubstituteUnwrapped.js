@@ -25,6 +25,7 @@ class B extends A {
 }
 
 //// [indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.js]
+"use strict";
 class A {
     foo;
 }

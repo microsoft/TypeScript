@@ -11,6 +11,7 @@ function foo(x: any) {
 }
 
 //// [reachabilityCheckWithEmptyDefault.js]
+"use strict";
 function foo(x) {
     switch (x) {
         case 1: return;

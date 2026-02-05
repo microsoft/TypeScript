@@ -12,6 +12,7 @@ class C implements I {
 }
 
 //// [symbolProperty25.js]
+"use strict";
 class C {
     [Symbol.toStringTag]() {
         return "";

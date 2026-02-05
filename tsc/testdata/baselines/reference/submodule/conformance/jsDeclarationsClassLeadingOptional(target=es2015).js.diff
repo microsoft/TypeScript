@@ -1,0 +1,10 @@
+--- old.jsDeclarationsClassLeadingOptional(target=es2015).js
++++ new.jsDeclarationsClassLeadingOptional(target=es2015).js
+@@= skipped -19, +19 lines =@@
+
+
+ //// [bar.d.ts]
+-export class Z {
++export declare class Z {
+     f(x: number, y: any): any[];
+ }

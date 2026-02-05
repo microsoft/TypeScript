@@ -12,6 +12,7 @@ var h = [{x: undefined}];
 
 
 //// [widenedTypes1.js]
+"use strict";
 var a = null;
 var b = undefined;
 var c = { x: null };

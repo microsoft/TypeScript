@@ -2,7 +2,7 @@
 
 === logicalNotOperatorWithBooleanType.ts ===
 // ! operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 >BOOLEAN : boolean
 
 function foo(): boolean { return true; }
@@ -12,17 +12,17 @@ function foo(): boolean { return true; }
 class A {
 >A : A
 
-    public a: boolean;
+    public a!: boolean;
 >a : boolean
 
     static foo() { return false; }
 >foo : () => boolean
 >false : false
 }
-module M {
+namespace M {
 >M : typeof M
 
-    export var n: boolean;
+    export declare var n: boolean;
 >n : boolean
 }
 
@@ -40,12 +40,12 @@ var ResultIsBoolean1 = !BOOLEAN;
 // boolean type literal
 var ResultIsBoolean2 = !true;
 >ResultIsBoolean2 : boolean
->!true : boolean
+>!true : false
 >true : true
 
 var ResultIsBoolean3 = !{ x: true, y: false };
 >ResultIsBoolean3 : boolean
->!{ x: true, y: false } : boolean
+>!{ x: true, y: false } : false
 >{ x: true, y: false } : { x: boolean; y: boolean; }
 >x : boolean
 >true : true
@@ -90,7 +90,7 @@ var ResultIsBoolean = !!BOOLEAN;
 
 // miss assignment operators
 !true;
->!true : boolean
+>!true : false
 >true : true
 
 !BOOLEAN;
@@ -104,7 +104,7 @@ var ResultIsBoolean = !!BOOLEAN;
 
 !true, false;
 >!true, false : false
->!true : boolean
+>!true : false
 >true : true
 >false : false
 

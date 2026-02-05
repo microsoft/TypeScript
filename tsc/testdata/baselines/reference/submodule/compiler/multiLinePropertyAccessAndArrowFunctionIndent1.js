@@ -8,6 +8,7 @@ return this.edit(role)
 
 
 //// [multiLinePropertyAccessAndArrowFunctionIndent1.js]
+"use strict";
 return this.edit(role)
     .then((role) => this.roleService.add(role)
     .then((data) => data.data));

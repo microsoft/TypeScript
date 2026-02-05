@@ -1,0 +1,24 @@
+--- old.genericCallWithOverloadedConstructorTypedArguments.errors.txt
++++ new.genericCallWithOverloadedConstructorTypedArguments.errors.txt
+@@= skipped -0, +0 lines =@@
+ genericCallWithOverloadedConstructorTypedArguments.ts(11,23): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(x: boolean): boolean', gave the following error.
+-    Argument of type 'null' is not assignable to parameter of type 'boolean'.
+-  Overload 2 of 2, '(x: string): string', gave the following error.
++  The last overload gave the following error.
+     Argument of type 'null' is not assignable to parameter of type 'string'.
+ genericCallWithOverloadedConstructorTypedArguments.ts(14,18): error TS2454: Variable 'a' is used before being assigned.
+ genericCallWithOverloadedConstructorTypedArguments.ts(16,19): error TS2454: Variable 'b' is used before being assigned.
+@@= skipped -27, +25 lines =@@
+             return new cb(null);
+                           ~~~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(x: boolean): boolean', gave the following error.
+-!!! error TS2769:     Argument of type 'null' is not assignable to parameter of type 'boolean'.
+-!!! error TS2769:   Overload 2 of 2, '(x: string): string', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'null' is not assignable to parameter of type 'string'.
++!!! related TS2771 genericCallWithOverloadedConstructorTypedArguments.ts:7:9: The last overload is declared here.
+         }
+     
+         var r = foo4(a);

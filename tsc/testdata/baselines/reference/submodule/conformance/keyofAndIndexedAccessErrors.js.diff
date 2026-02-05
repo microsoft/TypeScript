@@ -1,8 +1,8 @@
 --- old.keyofAndIndexedAccessErrors.js
 +++ new.keyofAndIndexedAccessErrors.js
-@@= skipped -173, +173 lines =@@
-
+@@= skipped -174, +174 lines =@@
  //// [keyofAndIndexedAccessErrors.js]
+ "use strict";
  class Shape {
 +    name;
 +    width;

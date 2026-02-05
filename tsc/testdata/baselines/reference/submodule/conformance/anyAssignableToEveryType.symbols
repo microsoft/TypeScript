@@ -46,7 +46,7 @@ var d: boolean = a;
 
 var e: Date = a;
 >e : Symbol(e, Decl(anyAssignableToEveryType.ts, 17, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
 
 var f: any = a;
@@ -72,7 +72,7 @@ var j: () => {} = a;
 
 var k: Function = a;
 >k : Symbol(k, Decl(anyAssignableToEveryType.ts, 23, 3))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
 
 var l: (x: number) => string = a;
@@ -116,7 +116,7 @@ var p: Number = a;
 
 var q: String = a;
 >q : Symbol(q, Decl(anyAssignableToEveryType.ts, 32, 3))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 >a : Symbol(a, Decl(anyAssignableToEveryType.ts, 0, 3))
 
 function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
@@ -124,7 +124,7 @@ function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
 >T : Symbol(T, Decl(anyAssignableToEveryType.ts, 34, 13))
 >U : Symbol(U, Decl(anyAssignableToEveryType.ts, 34, 15))
 >V : Symbol(V, Decl(anyAssignableToEveryType.ts, 34, 32))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(anyAssignableToEveryType.ts, 34, 49))
 >T : Symbol(T, Decl(anyAssignableToEveryType.ts, 34, 13))
 >y : Symbol(y, Decl(anyAssignableToEveryType.ts, 34, 54))

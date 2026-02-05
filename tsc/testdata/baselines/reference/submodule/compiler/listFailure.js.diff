@@ -1,6 +1,6 @@
 --- old.listFailure.js
 +++ new.listFailure.js
-@@= skipped -46, +46 lines =@@
+@@= skipped -47, +47 lines =@@
  var Editor;
  (function (Editor) {
      class Buffer {

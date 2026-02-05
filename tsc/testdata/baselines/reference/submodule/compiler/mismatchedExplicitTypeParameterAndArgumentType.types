@@ -9,7 +9,7 @@ function map<T, U>(xs: T[], f: (x: T) => U) {
 
     var ys: U[] = [];
 >ys : U[]
->[] : undefined[]
+>[] : never[]
 
     xs.forEach(x => ys.push(f(x)));
 >xs.forEach(x => ys.push(f(x))) : void
@@ -40,9 +40,9 @@ var r0 = map([1, ""], (x) => x.toString());
 >(x) => x.toString() : (x: string | number) => string
 >x : string | number
 >x.toString() : string
->x.toString : (() => string) | ((radix?: number) => string)
+>x.toString : (() => string) | ((radix?: number | undefined) => string)
 >x : string | number
->toString : (() => string) | ((radix?: number) => string)
+>toString : (() => string) | ((radix?: number | undefined) => string)
 
 var r5 = map<any, any>([1, ""], (x) => x.toString());
 >r5 : any[]
@@ -82,9 +82,9 @@ var r7 = map<number, string>([1, ""], (x) => x.toString()); // error
 >(x) => x.toString() : (x: number) => string
 >x : number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (radix?: number | undefined) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
 var r7b = map<number>([1, ""], (x) => x.toString()); // error
 >r7b : unknown[]
@@ -96,9 +96,9 @@ var r7b = map<number>([1, ""], (x) => x.toString()); // error
 >(x) => x.toString() : (x: number) => string
 >x : number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (radix?: number | undefined) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
 var r8 = map<any, string>([1, ""], (x) => x.toString());
 >r8 : string[]

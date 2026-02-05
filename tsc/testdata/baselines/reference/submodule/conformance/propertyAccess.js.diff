@@ -1,8 +1,8 @@
 --- old.propertyAccess.js
 +++ new.propertyAccess.js
-@@= skipped -153, +153 lines =@@
-
+@@= skipped -154, +154 lines =@@
  //// [propertyAccess.js]
+ "use strict";
  class A {
 +    a;
  }

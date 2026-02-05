@@ -1,0 +1,28 @@
+monorepo/context/src/bindingkey.ts(3,12): error TS2564: Property '__type' has no initializer and is not definitely assigned in the constructor.
+
+
+==== monorepo/core/src/application.ts (0 errors) ====
+    import { Constructor } from "@loopback/context";
+    export type ControllerClass = Constructor<any>;
+==== monorepo/core/src/usage.ts (0 errors) ====
+    import { ControllerClass } from './application';
+    import { BindingKey } from '@loopback/context';
+    
+    export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any); // line in question
+==== monorepo/context/src/value-promise.ts (0 errors) ====
+    export type Constructor<T> = (...args: any[]) => T;
+==== monorepo/context/src/bindingkey.ts (1 errors) ====
+    import { Constructor } from "@loopback/context"
+    export class BindingKey<T> {
+      readonly __type: T;
+               ~~~~~~
+!!! error TS2564: Property '__type' has no initializer and is not definitely assigned in the constructor.
+      static create<T extends Constructor<any>>(ctor: T) {
+        return new BindingKey<T>();
+      }
+    }
+    
+==== monorepo/context/index.ts (0 errors) ====
+    export * from "./src/value-promise";
+    export * from "./src/bindingkey";
+    

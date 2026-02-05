@@ -1,0 +1,74 @@
+typeOfThisInFunctionExpression.ts(4,13): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+typeOfThisInFunctionExpression.ts(9,13): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+typeOfThisInFunctionExpression.ts(14,13): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+typeOfThisInFunctionExpression.ts(21,17): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+typeOfThisInFunctionExpression.ts(25,17): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+typeOfThisInFunctionExpression.ts(31,17): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+typeOfThisInFunctionExpression.ts(36,17): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+typeOfThisInFunctionExpression.ts(41,17): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+==== typeOfThisInFunctionExpression.ts (8 errors) ====
+    // type of 'this' in FunctionExpression is Any
+    
+    function fn() {
+        var p = this;
+                ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+        var p: any;
+    }
+    
+    var t = function () {
+        var p = this;
+                ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+        var p: any;
+    }
+    
+    var t2 = function f() {
+        var x = this;
+                ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+        var x: any;
+    }
+    
+    class C {
+        x = function () {
+            var q: any;
+            var q = this;
+                    ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 typeOfThisInFunctionExpression.ts:19:9: An outer value of 'this' is shadowed by this container.
+        }
+        y = function ff() {
+            var q: any;
+            var q = this;
+                    ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 typeOfThisInFunctionExpression.ts:23:18: An outer value of 'this' is shadowed by this container.
+        }
+    }
+    
+    namespace M {
+        function fn() {
+            var p = this;
+                    ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+            var p: any;
+        }
+    
+        var t = function () {
+            var p = this;
+                    ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+            var p: any;
+        }
+    
+        var t2 = function f() {
+            var x = this;
+                    ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+            var x: any;
+        }
+    
+    }

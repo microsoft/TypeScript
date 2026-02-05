@@ -1,6 +1,6 @@
 --- old.implicitAnyCastedValue.js
 +++ new.implicitAnyCastedValue.js
-@@= skipped -87, +87 lines =@@
+@@= skipped -88, +88 lines =@@
      return "hello world"; // this should not be an error
  }
  class C {

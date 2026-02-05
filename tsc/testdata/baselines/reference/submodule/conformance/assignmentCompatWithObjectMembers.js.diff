@@ -1,6 +1,6 @@
 --- old.assignmentCompatWithObjectMembers.js
 +++ new.assignmentCompatWithObjectMembers.js
-@@= skipped -92, +92 lines =@@
+@@= skipped -93, +93 lines =@@
  var SimpleTypes;
  (function (SimpleTypes) {
      class S {

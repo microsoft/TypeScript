@@ -1,16 +1,16 @@
 //// [tests/cases/conformance/jsx/tsxAttributeInvalidNames.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: { "data-foo"?: string };
->test1 : { "data-foo"?: string; }
->"data-foo" : string
+>test1 : { "data-foo"?: string | undefined; }
+>"data-foo" : string | undefined
 
 		test2: { "data-foo"?: string };
->test2 : { "data-foo"?: string; }
->"data-foo" : string
+>test2 : { "data-foo"?: string | undefined; }
+>"data-foo" : string | undefined
 	}
 }
 

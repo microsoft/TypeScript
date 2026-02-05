@@ -1,8 +1,8 @@
 --- old.didYouMeanElaborationsForExpressionsWhichCouldBeCalled.js
 +++ new.didYouMeanElaborationsForExpressionsWhichCouldBeCalled.js
-@@= skipped -31, +31 lines =@@
-
+@@= skipped -32, +32 lines =@@
  //// [didYouMeanElaborationsForExpressionsWhichCouldBeCalled.js]
+ "use strict";
  class Bar {
 +    x;
  }

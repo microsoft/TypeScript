@@ -1,9 +1,9 @@
 --- old.privateNameDeclaration.js
 +++ new.privateNameDeclaration.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
 
  //// [privateNameDeclaration.js]
+ "use strict";
 -var _A_foo, _A_bar;
  class A {
 -    constructor() {

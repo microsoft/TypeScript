@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/functionTypeArgumentArrayAssignment.ts] ////
 
 === functionTypeArgumentArrayAssignment.ts ===
-module test {
+namespace test {
 >test : typeof test
 
     interface Array<T> {
@@ -17,7 +17,7 @@ module test {
 
         var ys: U[] = [];
 >ys : U[]
->[] : undefined[]
+>[] : never[]
     }
 }
 

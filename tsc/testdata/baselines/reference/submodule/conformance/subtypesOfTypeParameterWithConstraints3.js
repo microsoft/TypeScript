@@ -18,6 +18,7 @@ function f<T extends U, U, V>(t: T, u: U, v: V) {
 }
 
 //// [subtypesOfTypeParameterWithConstraints3.js]
+"use strict";
 // checking whether other types are subtypes of type parameters with constraints
 function f(t, u, v) {
     // ok

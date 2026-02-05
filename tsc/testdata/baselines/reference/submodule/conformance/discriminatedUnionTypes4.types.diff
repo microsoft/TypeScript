@@ -1,0 +1,71 @@
+--- old.discriminatedUnionTypes4.types
++++ new.discriminatedUnionTypes4.types
+@@= skipped -64, +64 lines =@@
+ >console : Console
+ >log : (...data: any[]) => void
+ >animal.meow : string
+->animal : { type: `${AnimalType.cat}`; meow: string; }
++>animal : { type: "cat"; meow: string; }
+ >meow : string
+
+   } else if (animal.type === AnimalType.dog) {
+ >animal.type === AnimalType.dog : boolean
+ >animal.type : "dog"
+->animal : { type: `${AnimalType.dog}`; bark: string; }
++>animal : { type: "dog"; bark: string; }
+ >type : "dog"
+ >AnimalType.dog : AnimalType.dog
+ >AnimalType : typeof AnimalType
+@@= skipped -18, +18 lines =@@
+ >console : Console
+ >log : (...data: any[]) => void
+ >animal.bark : string
+->animal : { type: `${AnimalType.dog}`; bark: string; }
++>animal : { type: "dog"; bark: string; }
+ >bark : string
+
+   } else {
+@@= skipped -32, +32 lines =@@
+ >console : Console
+ >log : (...data: any[]) => void
+ >animal.meow : string
+->animal : { type: `${AnimalType.cat}`; meow: string; }
++>animal : { type: "cat"; meow: string; }
+ >meow : string
+
+       break;
+@@= skipped -16, +16 lines =@@
+ >console : Console
+ >log : (...data: any[]) => void
+ >animal.bark : string
+->animal : { type: `${AnimalType.dog}`; bark: string; }
++>animal : { type: "dog"; bark: string; }
+ >bark : string
+
+       break;
+@@= skipped -32, +32 lines =@@
+ >console : Console
+ >log : (...data: any[]) => void
+ >animal.meow : string
+->animal : { type: `${AnimalType.cat}`; meow: string; }
++>animal : { type: "cat"; meow: string; }
+ >meow : string
+
+       break;
+@@= skipped -15, +15 lines =@@
+ >console : Console
+ >log : (...data: any[]) => void
+ >animal.bark : string
+->animal : { type: `${AnimalType.dog}`; bark: string; }
++>animal : { type: "dog"; bark: string; }
+ >bark : string
+
+       break;
+@@= skipped -8, +8 lines =@@
+       check(animal);
+ >check(animal) : void
+ >check : (p: never) => void
+->animal : never
++>animal : Animal
+   }
+ }

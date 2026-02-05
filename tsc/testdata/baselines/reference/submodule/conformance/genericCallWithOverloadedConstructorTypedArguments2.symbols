@@ -4,11 +4,11 @@
 // Function typed arguments with multiple signatures must be passed an implementation that matches all of them
 // Inferences are made quadratic-pairwise to and from these overload sets
 
-module NonGenericParameter {
+namespace NonGenericParameter {
 >NonGenericParameter : Symbol(NonGenericParameter, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 0, 0))
 
-    var a: {
->a : Symbol(a, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 4, 7))
+    declare var a: {
+>a : Symbol(a, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 4, 15))
 
         new(x: boolean): boolean;
 >x : Symbol(x, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 5, 12))
@@ -20,31 +20,31 @@ module NonGenericParameter {
     function foo4(cb: typeof a) {
 >foo4 : Symbol(foo4, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 7, 5))
 >cb : Symbol(cb, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 9, 18))
->a : Symbol(a, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 4, 7))
+>a : Symbol(a, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 4, 15))
 
         return cb;
 >cb : Symbol(cb, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 9, 18))
     }
 
-    var b: { new <T, U>(x: T): U }
->b : Symbol(b, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 7))
->T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 18))
->U : Symbol(U, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 20))
->x : Symbol(x, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 24))
->T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 18))
->U : Symbol(U, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 20))
+    declare var b: { new <T, U>(x: T): U }
+>b : Symbol(b, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 15))
+>T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 26))
+>U : Symbol(U, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 28))
+>x : Symbol(x, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 32))
+>T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 26))
+>U : Symbol(U, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 28))
 
     var r3 = foo4(b); // ok
 >r3 : Symbol(r3, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 14, 7))
 >foo4 : Symbol(foo4, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 7, 5))
->b : Symbol(b, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 7))
+>b : Symbol(b, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 13, 15))
 }
 
-module GenericParameter {
+namespace GenericParameter {
 >GenericParameter : Symbol(GenericParameter, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 15, 1))
 
     function foo5<T>(cb: { new(x: T): string; new(x: number): T }) {
->foo5 : Symbol(foo5, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 17, 25))
+>foo5 : Symbol(foo5, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 17, 28))
 >T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 18, 18))
 >cb : Symbol(cb, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 18, 21))
 >x : Symbol(x, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 18, 31))
@@ -56,17 +56,17 @@ module GenericParameter {
 >cb : Symbol(cb, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 18, 21))
     }
 
-    var a: { new <T>(x: T): T };
->a : Symbol(a, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 7))
->T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 18))
->x : Symbol(x, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 21))
->T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 18))
->T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 18))
+    declare var a: { new <T>(x: T): T };
+>a : Symbol(a, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 15))
+>T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 26))
+>x : Symbol(x, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 29))
+>T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 26))
+>T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 26))
 
     var r6 = foo5(a); // ok
 >r6 : Symbol(r6, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 23, 7))
->foo5 : Symbol(foo5, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 17, 25))
->a : Symbol(a, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 7))
+>foo5 : Symbol(foo5, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 17, 28))
+>a : Symbol(a, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 15))
 
     function foo6<T>(cb: { new(x: T): string; new(x: T, y?: T): string }) {
 >foo6 : Symbol(foo6, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 23, 21))
@@ -83,18 +83,18 @@ module GenericParameter {
 >cb : Symbol(cb, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 25, 21))
     }
 
-    var b: { new <T>(x: T, y: T): string };
->b : Symbol(b, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 7))
->T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 18))
->x : Symbol(x, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 21))
->T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 18))
->y : Symbol(y, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 26))
->T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 18))
+    declare var b: { new <T>(x: T, y: T): string };
+>b : Symbol(b, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 15))
+>T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 26))
+>x : Symbol(x, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 29))
+>T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 26))
+>y : Symbol(y, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 34))
+>T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 26))
 
     var r10 = foo6(b); // error
 >r10 : Symbol(r10, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 30, 7))
 >foo6 : Symbol(foo6, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 23, 21))
->b : Symbol(b, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 7))
+>b : Symbol(b, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 29, 15))
 
     function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {
 >foo7 : Symbol(foo7, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 30, 22))
@@ -116,19 +116,19 @@ module GenericParameter {
     var r13 = foo7(1, a); // ok
 >r13 : Symbol(r13, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 36, 7))
 >foo7 : Symbol(foo7, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 30, 22))
->a : Symbol(a, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 7))
+>a : Symbol(a, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 22, 15))
 
-    var c: { new<T>(x: T): number; new<T>(x: number): T; }
->c : Symbol(c, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 7))
->T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 17))
->x : Symbol(x, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 20))
->T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 17))
->T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 39))
->x : Symbol(x, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 42))
->T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 39))
+    declare var c: { new<T>(x: T): number; new<T>(x: number): T; }
+>c : Symbol(c, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 15))
+>T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 25))
+>x : Symbol(x, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 28))
+>T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 25))
+>T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 47))
+>x : Symbol(x, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 50))
+>T : Symbol(T, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 47))
 
     var r14 = foo7(1, c); // ok
 >r14 : Symbol(r14, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 38, 7))
 >foo7 : Symbol(foo7, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 30, 22))
->c : Symbol(c, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 7))
+>c : Symbol(c, Decl(genericCallWithOverloadedConstructorTypedArguments2.ts, 37, 15))
 }

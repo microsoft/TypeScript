@@ -8,6 +8,7 @@ function foo() {
 
 
 //// [awaitCallExpressionInSyncFunction.js]
+"use strict";
 function foo() {
     const foo = await(Promise.resolve(1));
     return foo;

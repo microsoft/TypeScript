@@ -43,10 +43,7 @@ export const narrowToLiterals = (str: string) => {
   };
 
 //// [switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.narrowToStringOrNumber = exports.narrowToString = exports.narrowToLiterals = void 0;
-const narrowToLiterals = (str) => {
+export const narrowToLiterals = (str) => {
     switch (str) {
         case 'abc': {
             // inferred type as `abc`
@@ -56,8 +53,7 @@ const narrowToLiterals = (str) => {
             return 'defaultValue';
     }
 };
-exports.narrowToLiterals = narrowToLiterals;
-const narrowToString = (str, someOtherStr) => {
+export const narrowToString = (str, someOtherStr) => {
     switch (str) {
         case 'abc': {
             // inferred type should be `abc`
@@ -71,8 +67,7 @@ const narrowToString = (str, someOtherStr) => {
             return 'defaultValue';
     }
 };
-exports.narrowToString = narrowToString;
-const narrowToStringOrNumber = (str, someNumber) => {
+export const narrowToStringOrNumber = (str, someNumber) => {
     switch (str) {
         case 'abc': {
             // inferred type should be `abc`
@@ -86,4 +81,3 @@ const narrowToStringOrNumber = (str, someNumber) => {
             return 'defaultValue';
     }
 };
-exports.narrowToStringOrNumber = narrowToStringOrNumber;

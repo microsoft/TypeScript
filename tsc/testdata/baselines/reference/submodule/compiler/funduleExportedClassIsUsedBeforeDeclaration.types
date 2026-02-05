@@ -9,7 +9,7 @@ declare function B(): B.C;  // function merged with module
 >B : typeof B
 >B : any
 
-declare module B {
+declare namespace B {
 >B : typeof B
 
     export class C {    // class defined in module 

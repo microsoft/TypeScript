@@ -110,15 +110,15 @@ var r5 = f3(new Derived(), x => x);
 >x : Derived
 
 var r6 = f3(null, null); // any
->r6 : any
->f3(null, null) : any
+>r6 : Base
+>f3(null, null) : Base
 >f3 : <T extends Base>(x: T, y: (a: T) => T) => T
 
 var r7 = f3(null, x => x); // any
->r7 : any
->f3(null, x => x) : any
+>r7 : Base
+>f3(null, x => x) : Base
 >f3 : <T extends Base>(x: T, y: (a: T) => T) => T
->x => x : (x: any) => any
->x : any
->x : any
+>x => x : (x: Base) => Base
+>x : Base
+>x : Base
 

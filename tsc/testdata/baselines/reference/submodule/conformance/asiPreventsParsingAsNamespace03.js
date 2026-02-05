@@ -11,6 +11,7 @@ namespace container {
 }
 
 //// [asiPreventsParsingAsNamespace03.js]
+"use strict";
 var namespace;
 var n;
 var container;

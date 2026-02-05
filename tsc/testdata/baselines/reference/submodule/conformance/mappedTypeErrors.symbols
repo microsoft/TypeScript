@@ -48,12 +48,12 @@ type T01 = { [P in number]: string };  // Error
 type T02 = { [P in Date]: number };  // Error
 >T02 : Symbol(T02, Decl(mappedTypeErrors.ts, 19, 37))
 >P : Symbol(P, Decl(mappedTypeErrors.ts, 20, 14))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 type T03 = Record<Date, number>;  // Error
 >T03 : Symbol(T03, Decl(mappedTypeErrors.ts, 20, 35))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 type T10 = Pick<Shape, "name">;
 >T10 : Symbol(T10, Decl(mappedTypeErrors.ts, 21, 32))
@@ -395,181 +395,193 @@ class C<T> {
 >state : Symbol(C.state, Decl(mappedTypeErrors.ts, 107, 12))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 107, 8))
 
-    setState<K extends keyof T>(props: Pick<T, K>) {
->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
->K : Symbol(K, Decl(mappedTypeErrors.ts, 109, 13))
+    constructor(initialState: T) {
+>initialState : Symbol(initialState, Decl(mappedTypeErrors.ts, 109, 16))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 107, 8))
->props : Symbol(props, Decl(mappedTypeErrors.ts, 109, 32))
+
+        this.state = initialState;
+>this.state : Symbol(C.state, Decl(mappedTypeErrors.ts, 107, 12))
+>this : Symbol(C, Decl(mappedTypeErrors.ts, 105, 27))
+>state : Symbol(C.state, Decl(mappedTypeErrors.ts, 107, 12))
+>initialState : Symbol(initialState, Decl(mappedTypeErrors.ts, 109, 16))
+    }
+    setState<K extends keyof T>(props: Pick<T, K>) {
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 112, 13))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 107, 8))
+>props : Symbol(props, Decl(mappedTypeErrors.ts, 112, 32))
 >Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeErrors.ts, 107, 8))
->K : Symbol(K, Decl(mappedTypeErrors.ts, 109, 13))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 112, 13))
 
         for (let k in props) {
->k : Symbol(k, Decl(mappedTypeErrors.ts, 110, 16))
->props : Symbol(props, Decl(mappedTypeErrors.ts, 109, 32))
+>k : Symbol(k, Decl(mappedTypeErrors.ts, 113, 16))
+>props : Symbol(props, Decl(mappedTypeErrors.ts, 112, 32))
 
             this.state[k] = props[k];
 >this.state : Symbol(C.state, Decl(mappedTypeErrors.ts, 107, 12))
 >this : Symbol(C, Decl(mappedTypeErrors.ts, 105, 27))
 >state : Symbol(C.state, Decl(mappedTypeErrors.ts, 107, 12))
->k : Symbol(k, Decl(mappedTypeErrors.ts, 110, 16))
->props : Symbol(props, Decl(mappedTypeErrors.ts, 109, 32))
->k : Symbol(k, Decl(mappedTypeErrors.ts, 110, 16))
+>k : Symbol(k, Decl(mappedTypeErrors.ts, 113, 16))
+>props : Symbol(props, Decl(mappedTypeErrors.ts, 112, 32))
+>k : Symbol(k, Decl(mappedTypeErrors.ts, 113, 16))
         }
     }
 }
 
-let c = new C<Foo>();
->c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
+let c = new C<Foo>({ a: "hello", b: 42 });
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 119, 3))
 >C : Symbol(C, Decl(mappedTypeErrors.ts, 105, 27))
 >Foo : Symbol(Foo, Decl(mappedTypeErrors.ts, 83, 1))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 119, 20))
+>b : Symbol(b, Decl(mappedTypeErrors.ts, 119, 32))
 
 c.setState({ a: "test", b: 43 });
->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
->c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
->a : Symbol(a, Decl(mappedTypeErrors.ts, 117, 12))
->b : Symbol(b, Decl(mappedTypeErrors.ts, 117, 23))
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 119, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 120, 12))
+>b : Symbol(b, Decl(mappedTypeErrors.ts, 120, 23))
 
 c.setState({ a: "hi" });
->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
->c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
->a : Symbol(a, Decl(mappedTypeErrors.ts, 118, 12))
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 119, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 121, 12))
 
 c.setState({ b: undefined });
->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
->c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
->b : Symbol(b, Decl(mappedTypeErrors.ts, 119, 12))
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 119, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
+>b : Symbol(b, Decl(mappedTypeErrors.ts, 122, 12))
 >undefined : Symbol(undefined)
 
 c.setState({ });
->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
->c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 119, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
 
 c.setState(foo);
->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
->c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 119, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
 >foo : Symbol(foo, Decl(mappedTypeErrors.ts, 98, 3))
 
 c.setState({ a: undefined });  // Error
->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
->c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
->a : Symbol(a, Decl(mappedTypeErrors.ts, 122, 12))
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 119, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 125, 12))
 >undefined : Symbol(undefined)
 
 c.setState({ c: true });  // Error
->c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
->c : Symbol(c, Decl(mappedTypeErrors.ts, 116, 3))
->setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 108, 13))
->c : Symbol(c, Decl(mappedTypeErrors.ts, 123, 12))
+>c.setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 119, 3))
+>setState : Symbol(C.setState, Decl(mappedTypeErrors.ts, 111, 5))
+>c : Symbol(c, Decl(mappedTypeErrors.ts, 126, 12))
 
 type T2 = { a?: number, [key: string]: any };
->T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 123, 24))
->a : Symbol(a, Decl(mappedTypeErrors.ts, 125, 11))
->key : Symbol(key, Decl(mappedTypeErrors.ts, 125, 25))
+>T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 126, 24))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 128, 11))
+>key : Symbol(key, Decl(mappedTypeErrors.ts, 128, 25))
 
 let x1: T2 = { a: 'no' };  // Error
->x1 : Symbol(x1, Decl(mappedTypeErrors.ts, 127, 3))
->T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 123, 24))
->a : Symbol(a, Decl(mappedTypeErrors.ts, 127, 14))
+>x1 : Symbol(x1, Decl(mappedTypeErrors.ts, 130, 3))
+>T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 126, 24))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 130, 14))
 
 let x2: Partial<T2> = { a: 'no' }; // Error
->x2 : Symbol(x2, Decl(mappedTypeErrors.ts, 128, 3))
+>x2 : Symbol(x2, Decl(mappedTypeErrors.ts, 131, 3))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 123, 24))
->a : Symbol(a, Decl(mappedTypeErrors.ts, 128, 23))
+>T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 126, 24))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 131, 23))
 
 let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
->x3 : Symbol(x3, Decl(mappedTypeErrors.ts, 129, 3))
->P : Symbol(P, Decl(mappedTypeErrors.ts, 129, 11))
->T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 123, 24))
->T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 123, 24))
->P : Symbol(P, Decl(mappedTypeErrors.ts, 129, 11))
->a : Symbol(a, Decl(mappedTypeErrors.ts, 129, 37))
+>x3 : Symbol(x3, Decl(mappedTypeErrors.ts, 132, 3))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 132, 11))
+>T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 126, 24))
+>T2 : Symbol(T2, Decl(mappedTypeErrors.ts, 126, 24))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 132, 11))
+>a : Symbol(a, Decl(mappedTypeErrors.ts, 132, 37))
 
 // Repro from #13044
 
 type Foo2<T, F extends keyof T> = {
->Foo2 : Symbol(Foo2, Decl(mappedTypeErrors.ts, 129, 48))
->T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
->F : Symbol(F, Decl(mappedTypeErrors.ts, 133, 12))
->T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
+>Foo2 : Symbol(Foo2, Decl(mappedTypeErrors.ts, 132, 48))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 136, 10))
+>F : Symbol(F, Decl(mappedTypeErrors.ts, 136, 12))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 136, 10))
 
     pf: {[P in F]?: T[P]},
->pf : Symbol(pf, Decl(mappedTypeErrors.ts, 133, 35))
->P : Symbol(P, Decl(mappedTypeErrors.ts, 134, 10))
->F : Symbol(F, Decl(mappedTypeErrors.ts, 133, 12))
->T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
->P : Symbol(P, Decl(mappedTypeErrors.ts, 134, 10))
+>pf : Symbol(pf, Decl(mappedTypeErrors.ts, 136, 35))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 137, 10))
+>F : Symbol(F, Decl(mappedTypeErrors.ts, 136, 12))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 136, 10))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 137, 10))
 
     pt: {[P in T]?: T[P]}, // note: should be in keyof T
->pt : Symbol(pt, Decl(mappedTypeErrors.ts, 134, 26))
->P : Symbol(P, Decl(mappedTypeErrors.ts, 135, 10))
->T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
->T : Symbol(T, Decl(mappedTypeErrors.ts, 133, 10))
->P : Symbol(P, Decl(mappedTypeErrors.ts, 135, 10))
+>pt : Symbol(pt, Decl(mappedTypeErrors.ts, 137, 26))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 138, 10))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 136, 10))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 136, 10))
+>P : Symbol(P, Decl(mappedTypeErrors.ts, 138, 10))
 
 };
 type O = {x: number, y: boolean};
->O : Symbol(O, Decl(mappedTypeErrors.ts, 136, 2))
->x : Symbol(x, Decl(mappedTypeErrors.ts, 137, 10))
->y : Symbol(y, Decl(mappedTypeErrors.ts, 137, 20))
+>O : Symbol(O, Decl(mappedTypeErrors.ts, 139, 2))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 140, 10))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 140, 20))
 
 let o: O = {x: 5, y: false};
->o : Symbol(o, Decl(mappedTypeErrors.ts, 138, 3))
->O : Symbol(O, Decl(mappedTypeErrors.ts, 136, 2))
->x : Symbol(x, Decl(mappedTypeErrors.ts, 138, 12))
->y : Symbol(y, Decl(mappedTypeErrors.ts, 138, 17))
+>o : Symbol(o, Decl(mappedTypeErrors.ts, 141, 3))
+>O : Symbol(O, Decl(mappedTypeErrors.ts, 139, 2))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 141, 12))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 141, 17))
 
 let f: Foo2<O, 'x'> = {
->f : Symbol(f, Decl(mappedTypeErrors.ts, 139, 3))
->Foo2 : Symbol(Foo2, Decl(mappedTypeErrors.ts, 129, 48))
->O : Symbol(O, Decl(mappedTypeErrors.ts, 136, 2))
+>f : Symbol(f, Decl(mappedTypeErrors.ts, 142, 3))
+>Foo2 : Symbol(Foo2, Decl(mappedTypeErrors.ts, 132, 48))
+>O : Symbol(O, Decl(mappedTypeErrors.ts, 139, 2))
 
     pf: {x: 7},
->pf : Symbol(pf, Decl(mappedTypeErrors.ts, 139, 23))
->x : Symbol(x, Decl(mappedTypeErrors.ts, 140, 9))
+>pf : Symbol(pf, Decl(mappedTypeErrors.ts, 142, 23))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 143, 9))
 
     pt: {x: 7, y: false},
->pt : Symbol(pt, Decl(mappedTypeErrors.ts, 140, 15))
->x : Symbol(x, Decl(mappedTypeErrors.ts, 141, 9))
->y : Symbol(y, Decl(mappedTypeErrors.ts, 141, 14))
+>pt : Symbol(pt, Decl(mappedTypeErrors.ts, 143, 15))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 144, 9))
+>y : Symbol(y, Decl(mappedTypeErrors.ts, 144, 14))
 
 };
 
 // Repro from #28170
 
 function test1<T, K extends keyof T>(obj: Pick<T, K>) {
->test1 : Symbol(test1, Decl(mappedTypeErrors.ts, 142, 2))
->T : Symbol(T, Decl(mappedTypeErrors.ts, 146, 15))
->K : Symbol(K, Decl(mappedTypeErrors.ts, 146, 17))
->T : Symbol(T, Decl(mappedTypeErrors.ts, 146, 15))
->obj : Symbol(obj, Decl(mappedTypeErrors.ts, 146, 37))
+>test1 : Symbol(test1, Decl(mappedTypeErrors.ts, 145, 2))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 149, 15))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 149, 17))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 149, 15))
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 149, 37))
 >Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(mappedTypeErrors.ts, 146, 15))
->K : Symbol(K, Decl(mappedTypeErrors.ts, 146, 17))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 149, 15))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 149, 17))
 
     let x = obj.foo;  // Error
->x : Symbol(x, Decl(mappedTypeErrors.ts, 147, 7))
->obj : Symbol(obj, Decl(mappedTypeErrors.ts, 146, 37))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 150, 7))
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 149, 37))
 }
 
 function test2<T, K extends keyof T>(obj: Record<K, number>) {
->test2 : Symbol(test2, Decl(mappedTypeErrors.ts, 148, 1))
->T : Symbol(T, Decl(mappedTypeErrors.ts, 150, 15))
->K : Symbol(K, Decl(mappedTypeErrors.ts, 150, 17))
->T : Symbol(T, Decl(mappedTypeErrors.ts, 150, 15))
->obj : Symbol(obj, Decl(mappedTypeErrors.ts, 150, 37))
+>test2 : Symbol(test2, Decl(mappedTypeErrors.ts, 151, 1))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 153, 15))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 153, 17))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 153, 15))
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 153, 37))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
->K : Symbol(K, Decl(mappedTypeErrors.ts, 150, 17))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 153, 17))
 
     let x = obj.foo;  // Error
->x : Symbol(x, Decl(mappedTypeErrors.ts, 151, 7))
->obj : Symbol(obj, Decl(mappedTypeErrors.ts, 150, 37))
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 154, 7))
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 153, 37))
 }
 

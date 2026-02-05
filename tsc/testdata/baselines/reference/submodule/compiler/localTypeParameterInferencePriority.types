@@ -22,7 +22,7 @@ class Table<S extends Schema>  {
 >getRows : <C extends keyof S>() => UnrollOnHover<Pick<S, C>>[]
 
         return null!
->null! : null
+>null! : never
     }
 }
 

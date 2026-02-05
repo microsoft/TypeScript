@@ -8,12 +8,12 @@ additionOperatorWithTypeParameter.ts(25,15): error TS2365: Operator '+' cannot b
 additionOperatorWithTypeParameter.ts(27,15): error TS2365: Operator '+' cannot be applied to types 'Object' and 'T'.
 additionOperatorWithTypeParameter.ts(28,15): error TS2365: Operator '+' cannot be applied to types 'E' and 'T'.
 additionOperatorWithTypeParameter.ts(29,15): error TS2365: Operator '+' cannot be applied to types 'void' and 'T'.
-additionOperatorWithTypeParameter.ts(32,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'null'.
-additionOperatorWithTypeParameter.ts(33,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'undefined'.
+additionOperatorWithTypeParameter.ts(32,19): error TS18050: The value 'null' cannot be used here.
+additionOperatorWithTypeParameter.ts(33,19): error TS18050: The value 'undefined' cannot be used here.
 additionOperatorWithTypeParameter.ts(34,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
 additionOperatorWithTypeParameter.ts(35,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'U'.
 additionOperatorWithTypeParameter.ts(36,15): error TS2365: Operator '+' cannot be applied to types 'T' and '() => void'.
-additionOperatorWithTypeParameter.ts(37,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'undefined[]'.
+additionOperatorWithTypeParameter.ts(37,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'never[]'.
 
 
 ==== additionOperatorWithTypeParameter.ts (16 errors) ====
@@ -21,13 +21,13 @@ additionOperatorWithTypeParameter.ts(37,15): error TS2365: Operator '+' cannot b
     enum E { a, b }
     
     function foo<T, U>(t: T, u: U) {
-        var a: any;
-        var b: boolean;
-        var c: number;
-        var d: string;
-        var e: Object;
-        var g: E;
-        var f: void;
+        let a!: any;
+        let b!: boolean;
+        let c!: number;
+        let d!: string;
+        let e!: Object;
+        let g!: E;
+        let f!: void;
     
         // type parameter as left operand
         var r1: any = t + a; // ok, one operand is any
@@ -69,11 +69,11 @@ additionOperatorWithTypeParameter.ts(37,15): error TS2365: Operator '+' cannot b
     
         // other cases
         var r15 = t + null;
-                  ~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'null'.
+                      ~~~~
+!!! error TS18050: The value 'null' cannot be used here.
         var r16 = t + undefined;
-                  ~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'undefined'.
+                      ~~~~~~~~~
+!!! error TS18050: The value 'undefined' cannot be used here.
         var r17 = t + t;
                   ~~~~~
 !!! error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
@@ -85,5 +85,5 @@ additionOperatorWithTypeParameter.ts(37,15): error TS2365: Operator '+' cannot b
 !!! error TS2365: Operator '+' cannot be applied to types 'T' and '() => void'.
         var r20 = t + [];
                   ~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'undefined[]'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'never[]'.
     }

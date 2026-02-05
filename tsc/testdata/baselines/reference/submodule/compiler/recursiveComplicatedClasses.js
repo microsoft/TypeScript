@@ -27,6 +27,7 @@ class TypeSymbol extends InferenceSymbol {
 }
 
 //// [recursiveComplicatedClasses.js]
+"use strict";
 class Signature {
     parameters = null;
 }

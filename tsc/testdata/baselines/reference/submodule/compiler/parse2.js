@@ -6,6 +6,7 @@ function foo() {
 }
 
 //// [parse2.js]
+"use strict";
 function foo() {
     foo();
 }

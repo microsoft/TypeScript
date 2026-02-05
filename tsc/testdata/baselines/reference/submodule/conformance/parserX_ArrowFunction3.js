@@ -6,6 +6,7 @@ var v = (a): => {
 };
 
 //// [parserX_ArrowFunction3.js]
+"use strict";
 var v = (a);
 {
 }

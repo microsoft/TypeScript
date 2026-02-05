@@ -15,7 +15,7 @@ func TestCompletionsImport_addToNamedWithDifferentCacheValue(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
-{ "compilerOptions": { "module": "commonjs" } }
+{ "compilerOptions": { "module": "commonjs", "lib": ["es5"] } }
 // @Filename: /home/src/workspaces/project/packages/mylib/package.json
 { "name": "mylib", "version": "1.0.0", "main": "index.js" }
 // @Filename: /home/src/workspaces/project/packages/mylib/index.ts
@@ -36,9 +36,9 @@ const b = new MyClass2/*2*/();`
 	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "1")
-	opts1251 := f.GetOptions()
-	opts1251.FormatCodeSettings.NewLineCharacter = "\n"
-	f.Configure(t, opts1251)
+	opts1267 := f.GetOptions()
+	opts1267.FormatCodeSettings.NewLineCharacter = "\n"
+	f.Configure(t, opts1267)
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

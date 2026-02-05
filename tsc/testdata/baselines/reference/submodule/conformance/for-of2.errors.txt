@@ -1,11 +1,14 @@
 for-of2.ts(1,7): error TS1155: 'const' declarations must be initialized.
+for-of2.ts(1,7): error TS7005: Variable 'v' implicitly has an 'any' type.
 for-of2.ts(2,6): error TS2588: Cannot assign to 'v' because it is a constant.
 
 
-==== for-of2.ts (2 errors) ====
+==== for-of2.ts (3 errors) ====
     const v;
           ~
 !!! error TS1155: 'const' declarations must be initialized.
+          ~
+!!! error TS7005: Variable 'v' implicitly has an 'any' type.
     for (v of []) { }
          ~
 !!! error TS2588: Cannot assign to 'v' because it is a constant.

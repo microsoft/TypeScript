@@ -1,0 +1,11 @@
+--- old.dataViewConstructor.types
++++ new.dataViewConstructor.types
+@@= skipped -1, +1 lines =@@
+
+ === dataViewConstructor.ts ===
+ new DataView(new Uint8Array(32)); // should error
+->new DataView(new Uint8Array(32)) : DataView<ArrayBuffer & { BYTES_PER_ELEMENT?: never; }>
++>new DataView(new Uint8Array(32)) : DataView<ArrayBuffer & { BYTES_PER_ELEMENT?: undefined; }>
+ >DataView : DataViewConstructor
+ >new Uint8Array(32) : Uint8Array<ArrayBuffer>
+ >Uint8Array : Uint8ArrayConstructor

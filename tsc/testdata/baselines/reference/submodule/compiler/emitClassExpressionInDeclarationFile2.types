@@ -29,7 +29,7 @@ export class FooItem {
 >foo : () => void
 
     name?: string;
->name : string
+>name : string | undefined
 
     private property = "capitalism"
 >property : string

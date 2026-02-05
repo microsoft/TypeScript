@@ -1,0 +1,15 @@
+importDeclarationUsedAsTypeQuery_require.ts(2,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+
+
+==== importDeclarationUsedAsTypeQuery_1.ts (0 errors) ====
+    ///<reference path='importDeclarationUsedAsTypeQuery_require.ts'/>
+    import a = require('./importDeclarationUsedAsTypeQuery_require');
+    export var x: typeof a;
+    
+==== importDeclarationUsedAsTypeQuery_require.ts (1 errors) ====
+    export class B {
+        id: number;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+    }
+    

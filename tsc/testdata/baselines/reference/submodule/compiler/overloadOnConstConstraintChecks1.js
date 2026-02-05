@@ -25,6 +25,7 @@ class D implements MyDoc {
 }
 
 //// [overloadOnConstConstraintChecks1.js]
+"use strict";
 class Base {
     foo() { }
 }

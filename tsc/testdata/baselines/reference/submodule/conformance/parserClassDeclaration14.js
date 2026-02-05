@@ -7,5 +7,6 @@ class C {
 }
 
 //// [parserClassDeclaration14.js]
+"use strict";
 class C {
 }

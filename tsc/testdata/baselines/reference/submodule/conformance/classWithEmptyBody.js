@@ -23,6 +23,7 @@ d = { foo: '' }
 d = () => { }
 
 //// [classWithEmptyBody.js]
+"use strict";
 class C {
 }
 var c;

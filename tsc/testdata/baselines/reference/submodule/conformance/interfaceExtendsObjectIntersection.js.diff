@@ -1,8 +1,8 @@
 --- old.interfaceExtendsObjectIntersection.js
 +++ new.interfaceExtendsObjectIntersection.js
-@@= skipped -57, +57 lines =@@
-
+@@= skipped -58, +58 lines =@@
  //// [interfaceExtendsObjectIntersection.js]
+ "use strict";
  class C1 extends Constructor() {
 +    x;
  }

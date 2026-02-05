@@ -1,0 +1,24 @@
+intersectionTypeOverloading.ts(10,9): error TS2454: Variable 'fg' is used before being assigned.
+intersectionTypeOverloading.ts(13,9): error TS2454: Variable 'gf' is used before being assigned.
+
+
+==== intersectionTypeOverloading.ts (2 errors) ====
+    // Check that order is preserved in intersection types for purposes of
+    // overload resolution
+    
+    type F = (s: string) => string;
+    type G = (x: any) => any;
+    
+    var fg: F & G;
+    var gf: G & F;
+    
+    var x = fg("abc");
+            ~~
+!!! error TS2454: Variable 'fg' is used before being assigned.
+    var x: string;
+    
+    var y = gf("abc");
+            ~~
+!!! error TS2454: Variable 'gf' is used before being assigned.
+    var y: any;
+    

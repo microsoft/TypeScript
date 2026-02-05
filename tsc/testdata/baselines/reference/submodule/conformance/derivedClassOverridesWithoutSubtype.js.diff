@@ -1,8 +1,8 @@
 --- old.derivedClassOverridesWithoutSubtype.js
 +++ new.derivedClassOverridesWithoutSubtype.js
-@@= skipped -26, +26 lines =@@
-
+@@= skipped -27, +27 lines =@@
  //// [derivedClassOverridesWithoutSubtype.js]
+ "use strict";
  class Base {
 +    x;
  }

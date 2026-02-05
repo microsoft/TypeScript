@@ -26,6 +26,7 @@ let broken = [
 
 
 //// [enumAssignmentCompat4.js]
+"use strict";
 var M;
 (function (M) {
     let MyEnum;

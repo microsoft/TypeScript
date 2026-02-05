@@ -1,8 +1,8 @@
 --- old.superWithTypeArgument3.js
 +++ new.superWithTypeArgument3.js
-@@= skipped -16, +16 lines =@@
-
+@@= skipped -17, +17 lines =@@
  //// [superWithTypeArgument3.js]
+ "use strict";
  class C {
 +    foo;
      bar(x) { }

@@ -1,6 +1,6 @@
 --- old.arrayBestCommonTypes.js
 +++ new.arrayBestCommonTypes.js
-@@= skipped -154, +154 lines =@@
+@@= skipped -155, +155 lines =@@
  var NonEmptyTypes;
  (function (NonEmptyTypes) {
      class base {

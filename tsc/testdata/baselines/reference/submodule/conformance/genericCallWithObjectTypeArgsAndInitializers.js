@@ -12,6 +12,7 @@ function foo6<T, U extends T, V extends U>(x: T, y: U, z: V = y) { } // error
 function foo7<T, U extends T, V extends U>(x: V, y: U = x) { } // should be ok
 
 //// [genericCallWithObjectTypeArgsAndInitializers.js]
+"use strict";
 // Generic typed parameters with initializers
 function foo(x = null) { return x; } // ok
 function foo2(x = undefined) { return x; } // ok

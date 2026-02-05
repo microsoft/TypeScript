@@ -5,7 +5,7 @@ file.tsx(19,2): error TS2322: Type '{ x: number; render: number; }' is not assig
 
 
 ==== file.tsx (3 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface ElementClass {
     		render: any;
@@ -16,7 +16,7 @@ file.tsx(19,2): error TS2322: Type '{ x: number; render: number; }' is not assig
     interface Obj1type {
     	new(n: string): { x: number };
     }
-    var Obj1: Obj1type;
+    declare var Obj1: Obj1type;
     <Obj1 x={10} />; // Error, no render member
      ~~~~
 !!! error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
@@ -28,7 +28,7 @@ file.tsx(19,2): error TS2322: Type '{ x: number; render: number; }' is not assig
     interface Obj2type {
     	(n: string): { x: number; render: any; };
     }
-    var Obj2: Obj2type;
+    declare var Obj2: Obj2type;
     <Obj2 x={32} render={100} />; // OK
      ~~~~
 !!! error TS2322: Type '{ x: number; render: number; }' is not assignable to type 'string'.

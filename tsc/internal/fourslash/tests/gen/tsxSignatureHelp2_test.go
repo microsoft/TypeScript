@@ -11,10 +11,8 @@ func TestTsxSignatureHelp2(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `//@Filename: file.tsx
-// @jsx: preserve
-// @noLib: true
-// @libFiles: react.d.ts,lib.d.ts
+	const content = `// @jsx: preserve
+//@Filename: file.tsx
 import React = require('react');
 export interface ClickableProps {
     children?: string;

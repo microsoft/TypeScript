@@ -130,7 +130,7 @@ function f3(a: Choice.Yes, b: YesNo) {
 
     var y = !b;
 >y : boolean
->!b : boolean
+>!b : false
 >b : YesNo
 }
 
@@ -257,7 +257,7 @@ function f12(x: UnknownYesNo) {
     }
     else {
         x;
->x : UnknownYesNo
+>x : Choice.Unknown
     }
 }
 

@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/privacyGloClass.ts] ////
 
 === privacyGloClass.ts ===
-module m1 {
+namespace m1 {
 >m1 : Symbol(m1, Decl(privacyGloClass.ts, 0, 0))
 
     export interface m1_i_public {
->m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 11))
+>m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 14))
     }
 
     interface m1_i_private {
@@ -43,7 +43,7 @@ module m1 {
 
     class m1_C5_private implements m1_i_public {
 >m1_C5_private : Symbol(m1_C5_private, Decl(privacyGloClass.ts, 22, 5))
->m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 11))
+>m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 14))
     }
     class m1_C6_private implements m1_i_private {
 >m1_C6_private : Symbol(m1_C6_private, Decl(privacyGloClass.ts, 25, 5))
@@ -51,7 +51,7 @@ module m1 {
     }
     export class m1_C7_public implements m1_i_public {
 >m1_C7_public : Symbol(m1_C7_public, Decl(privacyGloClass.ts, 27, 5))
->m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 11))
+>m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 14))
     }
     export class m1_C8_public implements m1_i_private {
 >m1_C8_public : Symbol(m1_C8_public, Decl(privacyGloClass.ts, 29, 5))
@@ -62,25 +62,25 @@ module m1 {
 >m1_C9_private : Symbol(m1_C9_private, Decl(privacyGloClass.ts, 31, 5))
 >m1_c_public : Symbol(m1_c_public, Decl(privacyGloClass.ts, 5, 5))
 >m1_i_private : Symbol(m1_i_private, Decl(privacyGloClass.ts, 2, 5))
->m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 11))
+>m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 14))
     }
     class m1_C10_private extends m1_c_private implements  m1_i_private, m1_i_public {
 >m1_C10_private : Symbol(m1_C10_private, Decl(privacyGloClass.ts, 34, 5))
 >m1_c_private : Symbol(m1_c_private, Decl(privacyGloClass.ts, 10, 5))
 >m1_i_private : Symbol(m1_i_private, Decl(privacyGloClass.ts, 2, 5))
->m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 11))
+>m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 14))
     }
     export class m1_C11_public extends m1_c_public implements  m1_i_private, m1_i_public {
 >m1_C11_public : Symbol(m1_C11_public, Decl(privacyGloClass.ts, 36, 5))
 >m1_c_public : Symbol(m1_c_public, Decl(privacyGloClass.ts, 5, 5))
 >m1_i_private : Symbol(m1_i_private, Decl(privacyGloClass.ts, 2, 5))
->m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 11))
+>m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 14))
     }
     export class m1_C12_public extends m1_c_private implements  m1_i_private, m1_i_public {
 >m1_C12_public : Symbol(m1_C12_public, Decl(privacyGloClass.ts, 38, 5))
 >m1_c_private : Symbol(m1_c_private, Decl(privacyGloClass.ts, 10, 5))
 >m1_i_private : Symbol(m1_i_private, Decl(privacyGloClass.ts, 2, 5))
->m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 11))
+>m1_i_public : Symbol(m1_i_public, Decl(privacyGloClass.ts, 0, 14))
     }
 }
 

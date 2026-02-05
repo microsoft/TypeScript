@@ -53,6 +53,7 @@ class C5 {
 
 
 //// [thisTypeInClasses.js]
+"use strict";
 class C1 {
     x;
     f(x) { return undefined; }

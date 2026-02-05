@@ -1,6 +1,6 @@
 --- old.enumBasics.js
 +++ new.enumBasics.js
-@@= skipped -108, +108 lines =@@
+@@= skipped -109, +109 lines =@@
  // Enum with only computed members
  var E3;
  (function (E3) {

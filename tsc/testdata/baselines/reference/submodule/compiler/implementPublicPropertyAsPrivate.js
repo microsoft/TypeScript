@@ -9,6 +9,7 @@ class C implements I {
 }
 
 //// [implementPublicPropertyAsPrivate.js]
+"use strict";
 class C {
     x = 0; // should raise error at class decl
 }

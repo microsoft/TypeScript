@@ -1,0 +1,11 @@
+--- old.jsDeclarationsClassImplementsGenericsSerialization(target=es2015).types
++++ new.jsDeclarationsClassImplementsGenericsSerialization(target=es2015).types
+@@= skipped -2, +2 lines =@@
+ === interface.ts ===
+ export interface Encoder<T> {
+     encode(value: T): Uint8Array
+->encode : (value: T) => Uint8Array
++>encode : (value: T) => Uint8Array<ArrayBuffer>
+ >value : T
+ }
+ === lib.js ===

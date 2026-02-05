@@ -15,6 +15,7 @@ class A3 {
 
 
 //// [privateNameStaticMethodAssignment.js]
+"use strict";
 class A3 {
     static #method() { }
     ;

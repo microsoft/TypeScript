@@ -15,7 +15,7 @@ for (var idx : number in {}) { }
 function fn(): void { }
 for (var x in fn()) { }
 
-var c : string, d:string, e;
+declare var c : string, d:string, e: any;
 
 for (var x in c || d) { }
 for (var x in e ? c : d) { }
@@ -60,12 +60,13 @@ interface I {
     id: number;
     [idx: number]: number;
 }
-var i: I;
+declare var i: I;
 
 for (var x in i[42]) { } 
 
 
 //// [for-inStatementsInvalid.js]
+"use strict";
 var aNumber;
 for (aNumber in {}) { }
 var aBoolean;
@@ -75,7 +76,6 @@ for (aRegExp in {}) { }
 for (var idx in {}) { }
 function fn() { }
 for (var x in fn()) { }
-var c, d, e;
 for (var x in c || d) { }
 for (var x in e ? c : d) { }
 for (var x in 42 ? c : d) { }
@@ -108,5 +108,4 @@ class B extends A {
         return null;
     }
 }
-var i;
 for (var x in i[42]) { }

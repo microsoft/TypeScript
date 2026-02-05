@@ -1,7 +1,7 @@
 --- old.derivedClassParameterProperties.js
 +++ new.derivedClassParameterProperties.js
-@@= skipped -98, +98 lines =@@
- //// [derivedClassParameterProperties.js]
+@@= skipped -99, +99 lines =@@
+ "use strict";
  // ordering of super calls in derived constructors matters depending on other class contents
  class Base {
 +    x;

@@ -7,7 +7,7 @@
 class C {
 >C : C
 
-    x: string;
+    x!: string;
 >x : string
 }
 
@@ -24,7 +24,7 @@ var r = new Foo<number>();
 >new Foo<number>() : any
 >Foo : () => void
 
-var f: { (): void };
+declare var f: { (): void };
 >f : () => void
 
 var r2 = new f<number>();

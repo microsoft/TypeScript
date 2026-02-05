@@ -6,7 +6,7 @@ innerModExport2.ts(20,7): error TS2551: Property 'NonExportFunc' does not exist 
 
 
 ==== innerModExport2.ts (5 errors) ====
-    module Outer {
+    namespace Outer {
     
         // inner mod 1
         var non_export_var: number;

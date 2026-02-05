@@ -30,18 +30,13 @@ export function flatten<T extends number|TypedArray>(arr: T) {
 
 
 //// [unionWithIndexSignature.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = foo;
-exports.isTypedArray = isTypedArray;
-exports.flatten = flatten;
-function foo(arr) {
+export function foo(arr) {
     let zz = arr[1]; // Error
 }
-function isTypedArray(a) {
+export function isTypedArray(a) {
     return a instanceof Int32Array || a instanceof Uint8Array;
 }
-function flatten(arr) {
+export function flatten(arr) {
     if (isTypedArray(arr)) {
         arr[1];
     }

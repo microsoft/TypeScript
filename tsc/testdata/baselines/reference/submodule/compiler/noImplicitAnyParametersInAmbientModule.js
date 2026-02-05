@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/noImplicitAnyParametersInAmbientModule.ts] ////
 
 //// [noImplicitAnyParametersInAmbientModule.ts]
-declare module D_M {
+declare namespace D_M {
     // No implicit-'any' errors.
     function dm_f1(): void;
 
@@ -48,3 +48,4 @@ declare module D_M {
 }
 
 //// [noImplicitAnyParametersInAmbientModule.js]
+"use strict";

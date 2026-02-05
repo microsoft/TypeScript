@@ -32,6 +32,7 @@ class C {
 
 
 //// [privateNameStaticFieldUnaryMutation.js]
+"use strict";
 class C {
     static #test = 24;
     constructor() {

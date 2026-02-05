@@ -19,6 +19,7 @@ function f(o: Or, x: {}, y: {}) {
 
 
 //// [typePredicatesInUnion_noMatch.js]
+"use strict";
 function f(o, x, y) {
     if (o.pred(x, y)) {
         x;

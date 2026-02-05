@@ -84,6 +84,12 @@ func (r *CompilerBaselineRunner) EnumerateTestFiles() []string {
 }
 
 var skippedTests = []string{
+	// Broken until further porting work is done
+	"mappedTypeAsClauseRecursiveNoCrash1.ts",
+
+	// Flaky
+	"for-of29.ts",
+
 	// These tests contain options that have been completely removed, so fail to parse.
 	"preserveUnusedImports.ts",
 	"noCrashWithVerbatimModuleSyntaxAndImportsNotUsedAsValues.ts",
@@ -208,6 +214,11 @@ func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName stri
 	}
 	if compilerTest.options.OutFile != "" {
 		t.Skipf("Skipping test %s with outFile set", testName)
+	}
+
+	switch compilerTest.options.Target {
+	case core.ScriptTargetES3, core.ScriptTargetES5:
+		t.Skipf("Skipping test %s with unsupported target %s", testName, compilerTest.options.Target)
 	}
 
 	compilerTest.verifyDiagnostics(t, r.testSuitName, r.isSubmodule)

@@ -1,7 +1,7 @@
 --- old.typeOfThisInStaticMembers.js
 +++ new.typeOfThisInStaticMembers.js
-@@= skipped -38, +38 lines =@@
- //// [typeOfThisInStaticMembers.js]
+@@= skipped -39, +39 lines =@@
+ "use strict";
  class C {
      constructor(x) { }
 +    static foo;

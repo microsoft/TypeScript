@@ -167,7 +167,7 @@ default: 0
 [94m--allowSyntheticDefaultImports[39m
 Allow 'import x from y' when a module doesn't have a default export.
 type: boolean
-default: module === "system" or esModuleInterop
+default: true
 
 [94m--erasableSyntaxOnly[39m
 Do not allow runtime constructs that are not part of ECMAScript.
@@ -219,7 +219,7 @@ default: undefined
 [94m--alwaysStrict[39m
 Ensure 'use strict' is always emitted.
 type: boolean
-default: `false`, unless `strict` is set
+default: true
 
 [94m--deduplicatePackages[39m
 Deduplicate packages with the same name and version.
@@ -239,7 +239,7 @@ default: false
 [94m--noImplicitAny[39m
 Enable error reporting for expressions and declarations with an implied 'any' type.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--noImplicitOverride[39m
 Ensure overriding members in derived classes are marked with an override modifier.
@@ -254,7 +254,7 @@ default: false
 [94m--noImplicitThis[39m
 Enable error reporting when 'this' is given the type 'any'.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--noPropertyAccessFromIndexSignature[39m
 Enforces using indexed accessors for keys declared using an indexed type.
@@ -279,37 +279,37 @@ default: false
 [94m--strict[39m
 Enable all strict type-checking options.
 type: boolean
-default: false
+default: true
 
 [94m--strictBindCallApply[39m
 Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--strictBuiltinIteratorReturn[39m
 Built-in iterators are instantiated with a 'TReturn' type of 'undefined' instead of 'any'.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--strictFunctionTypes[39m
 When assigning functions, check to ensure parameters and the return values are subtype-compatible.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--strictNullChecks[39m
 When type checking, take into account 'null' and 'undefined'.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--strictPropertyInitialization[39m
 Check for class properties that are declared but not set in the constructor.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--useUnknownInCatchVariables[39m
 Default catch clause variables as 'unknown' instead of 'any'.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 ### Watch and Build Modes
 
@@ -563,7 +563,7 @@ default: `React`
 [94m--target, -t[39m
 Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
 one of: es5, es6/es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, esnext
-default: es5
+default: es2024
 
 [94m--useDefineForClassFields[39m
 Emit ECMAScript-standard-compliant class fields.

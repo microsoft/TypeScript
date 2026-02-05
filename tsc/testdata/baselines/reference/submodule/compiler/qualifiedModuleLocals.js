@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/qualifiedModuleLocals.ts] ////
 
 //// [qualifiedModuleLocals.ts]
-module A {
+namespace A {
 
   function b() {}
 
@@ -13,6 +13,7 @@ A.a();
 
 
 //// [qualifiedModuleLocals.js]
+"use strict";
 var A;
 (function (A) {
     function b() { }

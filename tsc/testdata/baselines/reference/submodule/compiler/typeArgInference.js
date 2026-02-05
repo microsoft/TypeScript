@@ -18,6 +18,7 @@ var t4: { c: number; d: string };
 
 
 //// [typeArgInference.js]
+"use strict";
 var o = { a: 3, b: "test" };
 var x;
 var t1 = x.f([o], [o]);

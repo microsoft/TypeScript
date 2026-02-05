@@ -89,8 +89,6 @@ for (let x: y) {
 
 
 //// [unusedLocalsAndParameters.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // function declaration paramter
 function f(a) {
 }
@@ -158,3 +156,4 @@ var N;
 })(N || (N = {}));
 for (let x, { z }; (x); )
     ;
+export {};

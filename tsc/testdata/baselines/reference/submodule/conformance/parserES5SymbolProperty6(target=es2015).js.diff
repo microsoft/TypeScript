@@ -1,0 +1,14 @@
+--- old.parserES5SymbolProperty6(target=es2015).js
++++ new.parserES5SymbolProperty6(target=es2015).js
+@@= skipped -6, +6 lines =@@
+
+ //// [parserES5SymbolProperty6.js]
+ "use strict";
+-var _a;
+ class C {
+-    constructor() {
+-        this[_a] = "";
+-    }
++    [Symbol.toStringTag] = "";
+ }
+-_a = Symbol.toStringTag;

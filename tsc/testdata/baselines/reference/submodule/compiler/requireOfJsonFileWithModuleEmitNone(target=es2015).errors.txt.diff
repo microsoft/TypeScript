@@ -1,0 +1,18 @@
+--- old.requireOfJsonFileWithModuleEmitNone(target=es2015).errors.txt
++++ new.requireOfJsonFileWithModuleEmitNone(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5070: Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.
+-error TS5107: Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-
+-
+-!!! error TS5070: Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.
+-!!! error TS5107: Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-==== file1.ts (0 errors) ====
+-    import * as b from './b.json';
+-    
+-==== b.json (0 errors) ====
+-    {
+-        "a": true,
+-        "b": "hello"
+-    }
++<no content>

@@ -1,10 +1,13 @@
+assignToExistingClass.ts(3,9): error TS2564: Property 'myProp' has no initializer and is not definitely assigned in the constructor.
 assignToExistingClass.ts(8,13): error TS2629: Cannot assign to 'Mocked' because it is a class.
 
 
-==== assignToExistingClass.ts (1 errors) ====
-    module Test {
+==== assignToExistingClass.ts (2 errors) ====
+    namespace Test {
         class Mocked {
             myProp: string;
+            ~~~~~~
+!!! error TS2564: Property 'myProp' has no initializer and is not definitely assigned in the constructor.
         }
     
         class Tester {

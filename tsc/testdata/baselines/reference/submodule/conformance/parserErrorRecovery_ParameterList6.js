@@ -6,6 +6,7 @@ class Foo {
 }
 
 //// [parserErrorRecovery_ParameterList6.js]
+"use strict";
 class Foo {
     banana(x) { }
 }

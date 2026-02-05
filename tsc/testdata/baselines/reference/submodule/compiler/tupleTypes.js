@@ -69,6 +69,7 @@ b4.length = 0;
 
 
 //// [tupleTypes.js]
+"use strict";
 var v1; // Error
 var v2;
 var v3;

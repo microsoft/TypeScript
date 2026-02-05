@@ -29,7 +29,7 @@ overloadOnConstNoAnyImplementation2.ts(21,9): error TS2345: Argument of type '(x
         }
     }
     
-    var c: C;
+    declare var c: C;
     c.x1(1, (x: 'hi') => { return 1; } );
     c.x1(1, (x: 'bye') => { return 1; } );
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~

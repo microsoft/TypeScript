@@ -6,5 +6,6 @@ class C {
 }
 
 //// [parserIndexMemberDeclaration6.js]
+"use strict";
 class C {
 }

@@ -1,6 +1,6 @@
 --- old.optionalChainingInTypeAssertions(target=esnext).js
 +++ new.optionalChainingInTypeAssertions(target=esnext).js
-@@= skipped -25, +25 lines =@@
+@@= skipped -26, +26 lines =@@
  const foo = new Foo();
  foo.m?.();
  foo.m?.();

@@ -1,8 +1,8 @@
 --- old.classVarianceResolveCircularity2.js
 +++ new.classVarianceResolveCircularity2.js
-@@= skipped -24, +24 lines =@@
+@@= skipped -22, +22 lines =@@
+ //// [classVarianceResolveCircularity2.js]
  // Issue #52813
- Object.defineProperty(exports, "__esModule", { value: true });
  class Bar {
 -    constructor() {
 -        this.Value = callme(new Foo(this)).bar.num;

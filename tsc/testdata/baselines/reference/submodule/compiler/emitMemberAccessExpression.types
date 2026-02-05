@@ -6,7 +6,7 @@
 declare var OData: any;
 >OData : any
 
-module Microsoft.PeopleAtWork.Model {
+namespace Microsoft.PeopleAtWork.Model {
 >Microsoft : typeof Microsoft
 >PeopleAtWork : typeof PeopleAtWork
 >Model : typeof Model
@@ -25,7 +25,7 @@ module Microsoft.PeopleAtWork.Model {
 "use strict";
 >"use strict" : "use strict"
 
-module Microsoft.PeopleAtWork.Model {
+namespace Microsoft.PeopleAtWork.Model {
 >Microsoft : typeof Microsoft
 >PeopleAtWork : typeof PeopleAtWork
 >Model : typeof Model

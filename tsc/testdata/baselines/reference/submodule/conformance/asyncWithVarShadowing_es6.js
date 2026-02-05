@@ -225,6 +225,7 @@ async function fn40(x) {
 
 
 //// [asyncWithVarShadowing_es6.js]
+"use strict";
 async function fn1(x) {
     var x;
 }

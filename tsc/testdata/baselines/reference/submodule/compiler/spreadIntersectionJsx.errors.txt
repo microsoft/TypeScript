@@ -1,0 +1,21 @@
+spreadIntersectionJsx.tsx(2,11): error TS7008: Member 'a' implicitly has an 'any' type.
+spreadIntersectionJsx.tsx(3,11): error TS7008: Member 'c' implicitly has an 'any' type.
+spreadIntersectionJsx.tsx(5,15): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+spreadIntersectionJsx.tsx(5,25): error TS2454: Variable 'intersected' is used before being assigned.
+
+
+==== spreadIntersectionJsx.tsx (4 errors) ====
+    const React: any = null;
+    class A { a; }
+              ~
+!!! error TS7008: Member 'a' implicitly has an 'any' type.
+    class C { c; }
+              ~
+!!! error TS7008: Member 'c' implicitly has an 'any' type.
+    let intersected: A & C;
+    let element = <div { ...intersected } />;
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                            ~~~~~~~~~~~
+!!! error TS2454: Variable 'intersected' is used before being assigned.
+    

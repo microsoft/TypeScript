@@ -12,7 +12,7 @@ interface I<T> {
 
 interface A extends I<number>, I<string> { }
 
-var x: A;
+declare var x: A;
 >x : A
 
 // BUG 822524

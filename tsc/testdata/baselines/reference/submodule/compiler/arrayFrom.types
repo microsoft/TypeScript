@@ -16,11 +16,11 @@ interface B {
 
 const inputA: A[] = [];
 >inputA : A[]
->[] : undefined[]
+>[] : never[]
 
 const inputB: B[] = [];
 >inputB : B[]
->[] : undefined[]
+>[] : never[]
 
 const inputALike: ArrayLike<A> = { length: 0 };
 >inputALike : ArrayLike<A>

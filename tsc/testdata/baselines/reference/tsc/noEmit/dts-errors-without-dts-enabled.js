@@ -14,7 +14,7 @@ const a = class { private p = 10; };
 tsgo --noEmit
 ExitStatus:: Success
 Output::
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -72,6 +72,7 @@ tsgo
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/a.js] *new* 
+"use strict";
 const a = "hello";
 
 
@@ -101,6 +102,7 @@ tsgo
 ExitStatus:: Success
 Output::
 //// [/home/src/projects/project/a.js] *modified* 
+"use strict";
 const a = class {
     p = 10;
 };

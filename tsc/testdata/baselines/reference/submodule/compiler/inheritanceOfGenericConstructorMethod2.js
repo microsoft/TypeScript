@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/inheritanceOfGenericConstructorMethod2.ts] ////
 
 //// [inheritanceOfGenericConstructorMethod2.ts]
-module M {
+namespace M {
    export class C1 { }
    export class C2<T> { }
 }
-module N {
+namespace N {
    export class D1 extends M.C1 { }
    export class D2<T> extends M.C2<T> { }
 }
@@ -17,6 +17,7 @@ var n3 = new N.D2(); // no error, D2<any>
 
 
 //// [inheritanceOfGenericConstructorMethod2.js]
+"use strict";
 var M;
 (function (M) {
     class C1 {

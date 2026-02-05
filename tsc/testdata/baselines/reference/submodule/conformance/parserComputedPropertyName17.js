@@ -4,4 +4,5 @@
 var v = { set [e](v) { } }
 
 //// [parserComputedPropertyName17.js]
+"use strict";
 var v = { set [e](v) { } };

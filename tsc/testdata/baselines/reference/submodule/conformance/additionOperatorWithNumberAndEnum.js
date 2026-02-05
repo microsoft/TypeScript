@@ -27,6 +27,7 @@ var r14 = c + c;
 
 
 //// [additionOperatorWithNumberAndEnum.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

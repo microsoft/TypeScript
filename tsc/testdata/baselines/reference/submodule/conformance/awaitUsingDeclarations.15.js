@@ -6,6 +6,7 @@ async function f() {
 }
 
 //// [awaitUsingDeclarations.15.js]
+"use strict";
 async function f() {
     await using _ = { async [Symbol.asyncDispose]() { } };
 }

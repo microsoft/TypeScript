@@ -2,34 +2,34 @@
 
 === validUndefinedAssignments.ts ===
 var x: typeof undefined;
->x : any
+>x : undefined
 >undefined : undefined
 
 var a: number = x;
 >a : number
->x : any
+>x : undefined
 
 var b: boolean = x;
 >b : boolean
->x : any
+>x : undefined
 
 var c: string = x;
 >c : string
->x : any
+>x : undefined
 
 var d: void = x;
 >d : void
->x : any
+>x : undefined
 
 var e: typeof undefined = x;
->e : any
+>e : undefined
 >undefined : undefined
->x : any
+>x : undefined
 
 e = x; // should work
->e = x : any
->e : any
->x : any
+>e = x : undefined
+>e : undefined
+>x : undefined
 
 class C { foo: string }
 >C : C
@@ -39,9 +39,9 @@ var f: C;
 >f : C
 
 f = x;
->f = x : any
+>f = x : undefined
 >f : C
->x : any
+>x : undefined
 
 interface I { foo: string }
 >foo : string
@@ -50,21 +50,21 @@ var g: I;
 >g : I
 
 g = x;
->g = x : any
+>g = x : undefined
 >g : I
->x : any
+>x : undefined
 
 var h: { f(): void } = x;
 >h : { f(): void; }
 >f : () => void
->x : any
+>x : undefined
 
 function i<T>(a: T) {
 >i : <T>(a: T) => void
 >a : T
 
     a = x;
->a = x : any
+>a = x : undefined
 >a : T
->x : any
+>x : undefined
 }

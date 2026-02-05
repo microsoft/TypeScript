@@ -37,6 +37,7 @@ const g4 = g(C);
 
 
 //// [inferringReturnTypeFromConstructSignatureGeneric.js]
+"use strict";
 class GenericObject {
     give(value) {
         return value;

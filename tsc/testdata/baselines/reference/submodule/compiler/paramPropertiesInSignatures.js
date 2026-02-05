@@ -14,6 +14,7 @@ declare class C2 {
 }
 
 //// [paramPropertiesInSignatures.js]
+"use strict";
 class C1 {
     p3;
     constructor(p3) {

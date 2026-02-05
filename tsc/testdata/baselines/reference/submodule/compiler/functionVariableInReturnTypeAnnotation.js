@@ -7,6 +7,7 @@ function bar(): typeof b {
 }
 
 //// [functionVariableInReturnTypeAnnotation.js]
+"use strict";
 function bar() {
     var b = 1;
     return undefined;

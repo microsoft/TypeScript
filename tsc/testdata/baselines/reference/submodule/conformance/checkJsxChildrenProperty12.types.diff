@@ -1,0 +1,25 @@
+--- old.checkJsxChildrenProperty12.types
++++ new.checkJsxChildrenProperty12.types
+@@= skipped -34, +34 lines =@@
+         	return <InnerButton {...this.props} />
+ ><InnerButton {...this.props} /> : JSX.Element
+ >InnerButton : typeof InnerButton
+->this.props : ButtonProp & { children?: React.ReactNode; }
++>this.props : ButtonProp & { children?: React.ReactNode | undefined; }
+ >this : this
+->props : ButtonProp & { children?: React.ReactNode; }
++>props : ButtonProp & { children?: React.ReactNode | undefined; }
+ 		}
+ 		else {
+ 			return (<InnerButton {...this.props} >
+ >(<InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton>) : JSX.Element
+ ><InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton> : JSX.Element
+ >InnerButton : typeof InnerButton
+->this.props : ButtonProp & { children?: React.ReactNode; }
++>this.props : ButtonProp & { children?: React.ReactNode | undefined; }
+ >this : this
+->props : ButtonProp & { children?: React.ReactNode; }
++>props : ButtonProp & { children?: React.ReactNode | undefined; }
+
+ 				<div>Hello World</div>
+ ><div>Hello World</div> : JSX.Element

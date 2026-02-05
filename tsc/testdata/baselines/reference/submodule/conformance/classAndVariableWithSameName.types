@@ -9,7 +9,7 @@ var C = ''; // error
 >C : string
 >'' : ""
 
-module M {
+namespace M {
 >M : typeof M
 
     class D { // error

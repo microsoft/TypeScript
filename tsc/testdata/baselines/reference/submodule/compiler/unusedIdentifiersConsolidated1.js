@@ -104,6 +104,7 @@ namespace Greeter {
 }
 
 //// [unusedIdentifiersConsolidated1.js]
+"use strict";
 function greeter(person) {
     var unused = 20;
 }

@@ -35,6 +35,7 @@ declare let dec: any, f: any;
 
 
 //// [esDecorators-classExpression-namedEvaluation.10.js]
+"use strict";
 // 10.2.1.3 RS: EvaluateBody
 //   Initializer : `=` AssignmentExpression
 {

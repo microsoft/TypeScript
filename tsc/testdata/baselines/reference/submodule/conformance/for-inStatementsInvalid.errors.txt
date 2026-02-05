@@ -45,7 +45,7 @@ for-inStatementsInvalid.ts(62,15): error TS2407: The right-hand side of a 'for..
                   ~~~~
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'void'.
     
-    var c : string, d:string, e;
+    declare var c : string, d:string, e: any;
     
     for (var x in c || d) { }
                   ~~~~~~
@@ -120,7 +120,7 @@ for-inStatementsInvalid.ts(62,15): error TS2407: The right-hand side of a 'for..
         id: number;
         [idx: number]: number;
     }
-    var i: I;
+    declare var i: I;
     
     for (var x in i[42]) { } 
                   ~~~~~

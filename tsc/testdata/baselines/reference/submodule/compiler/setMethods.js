@@ -57,6 +57,7 @@ numberSet.isDisjointFrom(numberSetLike);
 
 
 //// [setMethods.js]
+"use strict";
 let numberSet = new Set([0, 1, 2]);
 let stringSet = new Set(["a", "b"]);
 let numberMap = new Map([[4, {}], [5, {}]]);

@@ -3,7 +3,7 @@
 //// [interfaceWithPropertyOfEveryType.ts]
 class C { foo: string; }
 function f1() { }
-module M {
+namespace M {
     export var y = 1;
 }
 enum E { A }
@@ -45,6 +45,7 @@ var a: Foo = {
 }
 
 //// [interfaceWithPropertyOfEveryType.js]
+"use strict";
 class C {
     foo;
 }

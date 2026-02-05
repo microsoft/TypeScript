@@ -1,0 +1,14 @@
+--- old.typeParameterAndArgumentOfSameName1.types
++++ new.typeParameterAndArgumentOfSameName1.types
+@@= skipped -7, +7 lines =@@
+     var r = A.toExponential(123);
+ >r : string
+ >A.toExponential(123) : string
+->A.toExponential : (fractionDigits?: number) => string
++>A.toExponential : (fractionDigits?: number | undefined) => string
+ >A : A
+->toExponential : (fractionDigits?: number) => string
++>toExponential : (fractionDigits?: number | undefined) => string
+ >123 : 123
+
+     return null;

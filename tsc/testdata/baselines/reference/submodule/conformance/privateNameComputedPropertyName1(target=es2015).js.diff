@@ -1,9 +1,9 @@
 --- old.privateNameComputedPropertyName1(target=es2015).js
 +++ new.privateNameComputedPropertyName1(target=es2015).js
-@@= skipped -39, +39 lines =@@
-
+@@= skipped -40, +40 lines =@@
 
  //// [privateNameComputedPropertyName1.js]
+ "use strict";
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
 -    if (kind === "m") throw new TypeError("Private method is not writable");
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");

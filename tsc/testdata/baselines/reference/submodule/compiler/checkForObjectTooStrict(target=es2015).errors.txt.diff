@@ -1,0 +1,41 @@
+--- old.checkForObjectTooStrict(target=es2015).errors.txt
++++ new.checkForObjectTooStrict(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-checkForObjectTooStrict.ts(3,18): error TS2725: Class name cannot be 'Object' when targeting ES5 and above with module CommonJS.
+-
+-
+-==== checkForObjectTooStrict.ts (1 errors) ====
+-    namespace Foo {
+-    
+-        export class Object {
+-                     ~~~~~~
+-!!! error TS2725: Class name cannot be 'Object' when targeting ES5 and above with module CommonJS.
+-    
+-        }
+-    
+-    }
+-    
+-     
+-    
+-    class Bar extends Foo.Object { // should work
+-    
+-        constructor () {
+-    
+-            super();
+-    
+-        }
+-    
+-    }
+-    
+-    
+-    class Baz extends Object {
+-    
+-        constructor () { // ERROR, as expected
+-    
+-            super();
+-    
+-        }
+-    
+-    }
+-    
++<no content>

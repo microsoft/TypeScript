@@ -1,6 +1,6 @@
 --- old.superPropertyAccess_ES6.js
 +++ new.superPropertyAccess_ES6.js
-@@= skipped -44, +44 lines =@@
+@@= skipped -45, +45 lines =@@
  var d = new MyDerived();
  var f3 = d.value;
  class A {

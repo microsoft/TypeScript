@@ -15,6 +15,7 @@ catch (e) {
 }
 
 //// [parserUnicode1.js]
+"use strict";
 try {
     var \u0078x = 6;
     if (xx !== 6) {

@@ -1,5 +1,9 @@
+destructuringParameterDeclaration4.ts(14,13): error TS7019: Rest parameter 'b' implicitly has an 'any[]' type.
 destructuringParameterDeclaration4.ts(14,17): error TS1047: A rest parameter cannot be optional.
 destructuringParameterDeclaration4.ts(15,16): error TS1048: A rest parameter cannot have an initializer.
+destructuringParameterDeclaration4.ts(16,14): error TS7031: Binding element 'a' implicitly has an 'any' type.
+destructuringParameterDeclaration4.ts(16,17): error TS7031: Binding element 'b' implicitly has an 'any' type.
+destructuringParameterDeclaration4.ts(16,22): error TS7031: Binding element 'c' implicitly has an 'any' type.
 destructuringParameterDeclaration4.ts(20,19): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
 destructuringParameterDeclaration4.ts(21,7): error TS2552: Cannot find name 'array2'. Did you mean 'Array'?
 destructuringParameterDeclaration4.ts(22,11): error TS2322: Type 'string' is not assignable to type '[[any]]'.
@@ -7,11 +11,12 @@ destructuringParameterDeclaration4.ts(23,4): error TS2345: Argument of type '[nu
   Source has 2 element(s) but target requires 3.
 destructuringParameterDeclaration4.ts(24,11): error TS2322: Type 'string' is not assignable to type 'number'.
 destructuringParameterDeclaration4.ts(29,17): error TS1317: A parameter property cannot be declared using a rest parameter.
+destructuringParameterDeclaration4.ts(29,17): error TS7019: Rest parameter 'temp' implicitly has an 'any[]' type.
 destructuringParameterDeclaration4.ts(34,22): error TS2304: Cannot find name 'E1'.
 destructuringParameterDeclaration4.ts(34,28): error TS2304: Cannot find name 'E'.
 
 
-==== destructuringParameterDeclaration4.ts (10 errors) ====
+==== destructuringParameterDeclaration4.ts (15 errors) ====
     // If the parameter is a rest parameter, the parameter type is any[]
     // A type annotation for a rest parameter must denote an array type.
     
@@ -26,12 +31,20 @@ destructuringParameterDeclaration4.ts(34,28): error TS2304: Cannot find name 'E'
     function a1(...x: (number|string)[]) { }
     function a2(...a: someArray) { }  // Error, rest parameter must be array type
     function a3(...b?) { }            // Error, can't be optional
+                ~~~~~
+!!! error TS7019: Rest parameter 'b' implicitly has an 'any[]' type.
                     ~
 !!! error TS1047: A rest parameter cannot be optional.
     function a4(...b = [1,2,3]) { }   // Error, can't have initializer
                    ~
 !!! error TS1048: A rest parameter cannot have an initializer.
     function a5([a, b, [[c]]]) { }
+                 ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                    ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+                         ~
+!!! error TS7031: Binding element 'c' implicitly has an 'any' type.
     function a6([a, b, c, ...x]: number[]) { }
     
     
@@ -59,6 +72,8 @@ destructuringParameterDeclaration4.ts(34,28): error TS2304: Cannot find name 'E'
         constructor(public ...temp) { }  // Error, rest parameter can't have properties
                     ~~~~~~~~~~~~~~
 !!! error TS1317: A parameter property cannot be declared using a rest parameter.
+                    ~~~~~~~~~~~~~~
+!!! error TS7019: Rest parameter 'temp' implicitly has an 'any[]' type.
     }
     
     // Rest parameter with generic

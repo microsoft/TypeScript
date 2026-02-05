@@ -28,6 +28,7 @@ var e3 = t3[2];  // any
 var e4 = t4[3];  // number
 
 //// [bestCommonTypeOfTuple.js]
+"use strict";
 function f1(x) { return "foo"; }
 function f2(x) { return 10; }
 function f3(x) { return true; }

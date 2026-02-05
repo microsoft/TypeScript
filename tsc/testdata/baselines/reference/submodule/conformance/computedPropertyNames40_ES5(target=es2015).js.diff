@@ -1,0 +1,14 @@
+--- old.computedPropertyNames40_ES5(target=es2015).js
++++ new.computedPropertyNames40_ES5(target=es2015).js
+@@= skipped -14, +14 lines =@@
+ //// [computedPropertyNames40_ES5.js]
+ "use strict";
+ class Foo {
++    x;
+ }
+ class Foo2 {
++    x;
++    y;
+ }
+ class C {
+     // Computed properties

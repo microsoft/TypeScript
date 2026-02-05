@@ -18,6 +18,7 @@ oldFoo.y();
 new oldFoo().x();
 
 //// [classNameReferencesInStaticElements.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/54607
 class Foo {
     static { console.log(this, Foo); }

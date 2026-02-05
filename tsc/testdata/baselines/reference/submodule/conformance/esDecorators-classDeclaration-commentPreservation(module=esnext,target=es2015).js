@@ -120,6 +120,7 @@ class G {
 
 
 //// [file1.js]
+"use strict";
 /*1*/
 @dec
 @dec

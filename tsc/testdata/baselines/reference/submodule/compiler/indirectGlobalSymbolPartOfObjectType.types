@@ -9,8 +9,8 @@ const Symbol = globalThis.Symbol;
 >Symbol : SymbolConstructor
 
 [][Symbol.iterator];
->[][Symbol.iterator] : () => ArrayIterator<undefined>
->[] : undefined[]
+>[][Symbol.iterator] : () => ArrayIterator<never>
+>[] : never[]
 >Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
 >iterator : unique symbol

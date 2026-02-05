@@ -1,8 +1,8 @@
 --- old.parser509630.js
 +++ new.parser509630.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [parser509630.js]
+ "use strict";
  class Type {
 -    constructor() {
 -        this.examples = []; // typing here

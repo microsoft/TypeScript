@@ -1,0 +1,9 @@
+--- old.parserGetAccessorWithTypeParameters1(target=es2015).js
++++ new.parserGetAccessorWithTypeParameters1(target=es2015).js
+@@= skipped -7, +7 lines =@@
+ //// [parserGetAccessorWithTypeParameters1.js]
+ "use strict";
+ class C {
+-    get foo<T>() { }
++    get foo() { }
+ }

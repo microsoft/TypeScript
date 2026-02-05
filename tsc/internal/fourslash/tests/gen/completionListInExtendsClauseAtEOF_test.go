@@ -12,7 +12,7 @@ func TestCompletionListInExtendsClauseAtEOF(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `declare module mod {
+	const content = `declare namespace mod {
     class Foo { }
 }
 class Bar extends mod./**/`

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleProperty2.ts] ////
 
 === moduleProperty2.ts ===
-module M {
+namespace M {
 >M : typeof M
 
     function f() {
@@ -25,7 +25,7 @@ module M {
 >y : any
 }
 
-module N {
+namespace N {
 >N : typeof N
 
     var test3=M.y; // nope y private property of M

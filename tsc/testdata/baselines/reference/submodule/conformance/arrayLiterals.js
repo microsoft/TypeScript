@@ -39,6 +39,7 @@ var context4: Base[] = [new Derived1(), new Derived1()];
 
 
 //// [arrayLiterals.js]
+"use strict";
 // Empty array literal with no contextual type has type Undefined[]
 var arr1 = [[], [1], ['']];
 var arr2 = [[null], [1], ['']];

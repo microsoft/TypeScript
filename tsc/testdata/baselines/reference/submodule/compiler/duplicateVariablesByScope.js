@@ -3,7 +3,7 @@
 //// [duplicateVariablesByScope.ts]
 // duplicate local variables are only reported at global scope
 
-module M {
+namespace M {
     for (var j = 0; j < 10; j++) {
     }
 
@@ -34,6 +34,7 @@ class C {
 }
 
 //// [duplicateVariablesByScope.js]
+"use strict";
 // duplicate local variables are only reported at global scope
 var M;
 (function (M) {

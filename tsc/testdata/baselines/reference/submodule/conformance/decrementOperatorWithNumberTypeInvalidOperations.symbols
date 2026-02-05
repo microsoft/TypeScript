@@ -2,8 +2,8 @@
 
 === decrementOperatorWithNumberTypeInvalidOperations.ts ===
 // -- operator on number type
-var NUMBER: number;
->NUMBER : Symbol(NUMBER, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 1, 3))
+declare var NUMBER: number;
+>NUMBER : Symbol(NUMBER, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 1, 11))
 
 var NUMBER1: number[] = [1, 2];
 >NUMBER1 : Symbol(NUMBER1, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 2, 3))
@@ -20,7 +20,7 @@ class A {
     static foo() { return 1; }
 >foo : Symbol(A.foo, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 7, 21))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 9, 1))
 
     export var n: number;
@@ -84,8 +84,8 @@ var ResultIsNumber10 = --A.foo();
 
 var ResultIsNumber11 = --(NUMBER + NUMBER);
 >ResultIsNumber11 : Symbol(ResultIsNumber11, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 32, 3))
->NUMBER : Symbol(NUMBER, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 1, 3))
->NUMBER : Symbol(NUMBER, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 1, 11))
+>NUMBER : Symbol(NUMBER, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 1, 11))
 
 var ResultIsNumber12 = foo()--;
 >ResultIsNumber12 : Symbol(ResultIsNumber12, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 34, 3))
@@ -99,8 +99,8 @@ var ResultIsNumber13 = A.foo()--;
 
 var ResultIsNumber14 = (NUMBER + NUMBER)--;
 >ResultIsNumber14 : Symbol(ResultIsNumber14, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 36, 3))
->NUMBER : Symbol(NUMBER, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 1, 3))
->NUMBER : Symbol(NUMBER, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 1, 11))
+>NUMBER : Symbol(NUMBER, Decl(decrementOperatorWithNumberTypeInvalidOperations.ts, 1, 11))
 
 // miss assignment operator
 --1;

@@ -9,6 +9,7 @@ class D {
 }
 
 //// [parserErrorRecovery_ClassElement1.js]
+"use strict";
 class C {
 }
 // Classes can't be nested.  So we should bail out of parsing here and recover

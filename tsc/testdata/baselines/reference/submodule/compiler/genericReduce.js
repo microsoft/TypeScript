@@ -16,6 +16,7 @@ n3.toExponential(2); // should error if 'n3' is correctly type 'string'
 n3.charAt(0);        // should not error if 'n3' is correctly type 'string'
 
 //// [genericReduce.js]
+"use strict";
 var a = ["An", "array", "of", "strings"];
 var b = a.map(s => s.length);
 var n1 = b.reduce((x, y) => x + y);

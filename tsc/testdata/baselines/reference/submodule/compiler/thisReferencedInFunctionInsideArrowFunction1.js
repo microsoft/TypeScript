@@ -10,6 +10,7 @@ function test()
 }
 
 //// [thisReferencedInFunctionInsideArrowFunction1.js]
+"use strict";
 var foo = (dummy) => { };
 function test() {
     foo(() => function () { return this; });

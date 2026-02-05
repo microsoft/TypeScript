@@ -18,6 +18,7 @@ class ColoredPoint extends Point {
 
 
 //// [accessOverriddenBaseClassMember1.js]
+"use strict";
 class Point {
     x;
     y;

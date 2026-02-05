@@ -6,7 +6,7 @@ interface BaseInterface {
 >required : number
 
     optional?: number;
->optional : number
+>optional : number | undefined
 }
 
 class BaseClass {
@@ -63,9 +63,9 @@ child.required;
 >required : number
 
 child.optional;
->child.optional : number
+>child.optional : number | undefined
 >child : Child
->optional : number
+>optional : number | undefined
 
 child.additional;
 >child.additional : number
@@ -103,9 +103,9 @@ grandchild.required;
 >required : number
 
 grandchild.optional;
->grandchild.optional : number
+>grandchild.optional : number | undefined
 >grandchild : Grandchild
->optional : number
+>optional : number | undefined
 
 grandchild.additional2;
 >grandchild.additional2 : string

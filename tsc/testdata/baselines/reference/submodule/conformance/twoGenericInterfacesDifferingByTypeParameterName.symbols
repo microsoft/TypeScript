@@ -41,11 +41,11 @@ interface B<T,V> { // error
 >V : Symbol(V, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 14, 14))
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 16, 1))
 
     interface A<T> {
->A : Symbol(A, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 18, 10), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 21, 5))
+>A : Symbol(A, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 18, 13), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 21, 5))
 >T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 19, 16))
 
         x: T;
@@ -54,7 +54,7 @@ module M {
     }
 
     interface A<U> { // error
->A : Symbol(A, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 18, 10), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 21, 5))
+>A : Symbol(A, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 18, 13), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 21, 5))
 >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 23, 16))
 
         y: U;
@@ -83,11 +83,11 @@ module M {
     }
 }
 
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 34, 1), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 40, 1))
 
     interface B<T, U> {
->B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 36, 11))
+>B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 36, 14))
 >T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 37, 16))
 >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 37, 18))
 
@@ -97,11 +97,11 @@ module M2 {
     }
 }
 
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 34, 1), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 40, 1))
 
     interface B<T, V> { // ok, different declaration space than other M2
->B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 42, 11))
+>B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 42, 14))
 >T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 43, 16))
 >V : Symbol(V, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 43, 18))
 
@@ -111,11 +111,11 @@ module M2 {
     }
 }
 
-module M3 {
+namespace M3 {
 >M3 : Symbol(M3, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 46, 1), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 52, 1))
 
     export interface B<T, U> {
->B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 48, 11), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 54, 11))
+>B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 48, 14), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 54, 14))
 >T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 49, 23), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 55, 23))
 >U : Symbol(U, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 49, 25))
 
@@ -125,11 +125,11 @@ module M3 {
     }
 }
 
-module M3 {
+namespace M3 {
 >M3 : Symbol(M3, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 46, 1), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 52, 1))
 
     export interface B<T, V> { // error
->B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 48, 11), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 54, 11))
+>B : Symbol(B, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 48, 14), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 54, 14))
 >T : Symbol(T, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 49, 23), Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 55, 23))
 >V : Symbol(V, Decl(twoGenericInterfacesDifferingByTypeParameterName.ts, 55, 25))
 

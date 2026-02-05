@@ -4,5 +4,6 @@
 for(d in _.jh[a]=_.jh[a]||[],b);
 
 //// [parserForStatement3.js]
+"use strict";
 for (d in _.jh[a] = _.jh[a] || [], b)
     ;

@@ -1,0 +1,11 @@
+--- old.asyncAliasReturnType_es5(target=es2015).js
++++ new.asyncAliasReturnType_es5(target=es2015).js
+@@= skipped -7, +7 lines =@@
+
+ //// [asyncAliasReturnType_es5.js]
+ "use strict";
+-function f() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-    });
++async function f() {
+ }

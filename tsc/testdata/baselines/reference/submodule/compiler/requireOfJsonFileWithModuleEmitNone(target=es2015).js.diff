@@ -1,0 +1,9 @@
+--- old.requireOfJsonFileWithModuleEmitNone(target=es2015).js
++++ new.requireOfJsonFileWithModuleEmitNone(target=es2015).js
+@@= skipped -14, +14 lines =@@
+     "b": "hello"
+ }
+ //// [out/file1.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
++export {};

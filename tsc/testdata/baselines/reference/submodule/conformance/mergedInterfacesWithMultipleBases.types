@@ -54,7 +54,7 @@ var r = a.a;
 >a : number
 
 // generic interfaces in a module
-module M {
+namespace M {
 >M : typeof M
 
     class C<T> {

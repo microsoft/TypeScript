@@ -1,0 +1,17 @@
+/src/a.ts(1,19): error TS2307: Cannot find module 'xyz' or its corresponding type declarations.
+
+
+==== /src/tsconfig.json (0 errors) ====
+    {}
+    
+==== /src/a.ts (1 errors) ====
+    import { x } from "xyz";
+                      ~~~~~
+!!! error TS2307: Cannot find module 'xyz' or its corresponding type declarations.
+    x;
+    
+==== /node_modules/@types/foo/index.d.ts (0 errors) ====
+    declare module "xyz" {
+        export const x: number;
+    }
+    

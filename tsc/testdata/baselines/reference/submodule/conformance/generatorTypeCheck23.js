@@ -14,6 +14,7 @@ function* g3() {
 }
 
 //// [generatorTypeCheck23.js]
+"use strict";
 class Foo {
     x;
 }

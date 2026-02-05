@@ -1,0 +1,46 @@
+--- old.letDeclarations-invalidContexts.errors.txt
++++ new.letDeclarations-invalidContexts.errors.txt
+@@= skipped -1, +1 lines =@@
+ letDeclarations-invalidContexts.ts(5,5): error TS1156: 'let' declarations can only be declared inside a block.
+ letDeclarations-invalidContexts.ts(8,5): error TS1156: 'let' declarations can only be declared inside a block.
+ letDeclarations-invalidContexts.ts(11,5): error TS1156: 'let' declarations can only be declared inside a block.
+-letDeclarations-invalidContexts.ts(15,1): error TS1101: 'with' statements are not allowed in strict mode.
+ letDeclarations-invalidContexts.ts(15,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+ letDeclarations-invalidContexts.ts(19,5): error TS1156: 'let' declarations can only be declared inside a block.
+ letDeclarations-invalidContexts.ts(22,5): error TS1156: 'let' declarations can only be declared inside a block.
+-letDeclarations-invalidContexts.ts(25,5): error TS1344: 'A label is not allowed here.
+ letDeclarations-invalidContexts.ts(25,12): error TS1156: 'let' declarations can only be declared inside a block.
+-letDeclarations-invalidContexts.ts(28,21): error TS1344: 'A label is not allowed here.
+ letDeclarations-invalidContexts.ts(28,29): error TS1156: 'let' declarations can only be declared inside a block.
+
+
+-==== letDeclarations-invalidContexts.ts (12 errors) ====
++==== letDeclarations-invalidContexts.ts (9 errors) ====
+     // Errors, let must be defined inside a block
+     if (true) 
+         let l1 = 0;
+@@= skipped -34, +31 lines =@@
+     
+     var obj;
+     with (obj) 
+-    ~~~~
+-!!! error TS1101: 'with' statements are not allowed in strict mode.
+     ~~~~~~~~~~
+ !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+         let l5 = 0;
+@@= skipped -18, +16 lines =@@
+     
+     if (true) 
+         label: let l8 = 0;
+-        ~~~~~
+-!!! error TS1344: 'A label is not allowed here.
+                ~~~~~~~~~~~
+ !!! error TS1156: 'let' declarations can only be declared inside a block.
+     
+     while (false)
+         label2: label3: label4: let l9 = 0;
+-                        ~~~~~~
+-!!! error TS1344: 'A label is not allowed here.
+                                 ~~~~~~~~~~~
+ !!! error TS1156: 'let' declarations can only be declared inside a block.
+     

@@ -1,7 +1,7 @@
 --- old.contextualTypingOfConditionalExpression.js
 +++ new.contextualTypingOfConditionalExpression.js
-@@= skipped -18, +18 lines =@@
- //// [contextualTypingOfConditionalExpression.js]
+@@= skipped -19, +19 lines =@@
+ "use strict";
  var x = true ? (a) => a.toExponential() : (b) => b.toFixed();
  class A {
 +    foo;

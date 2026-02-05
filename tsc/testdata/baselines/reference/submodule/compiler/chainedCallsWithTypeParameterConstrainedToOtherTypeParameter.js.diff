@@ -1,8 +1,8 @@
 --- old.chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.js
 +++ new.chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.js
-@@= skipped -22, +22 lines =@@
-
+@@= skipped -23, +23 lines =@@
  //// [chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.js]
+ "use strict";
  class Chain {
 +    value;
      constructor(value) {

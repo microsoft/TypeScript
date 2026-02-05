@@ -1,0 +1,13 @@
+--- old.nonPrimitiveIndexingWithForInNoImplicitAny.types
++++ new.nonPrimitiveIndexingWithForInNoImplicitAny.types
+@@= skipped -9, +9 lines =@@
+ >a : object
+
+     var value = a[key]; // error
+->value : error
+->a[key] : error
++>value : any
++>a[key] : any
+ >a : object
+ >key : string
+ }

@@ -1,7 +1,7 @@
 --- old.protectedStaticNotAccessibleInClodule.js
 +++ new.protectedStaticNotAccessibleInClodule.js
-@@= skipped -15, +15 lines =@@
- //// [protectedStaticNotAccessibleInClodule.js]
+@@= skipped -16, +16 lines =@@
+ "use strict";
  // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
  class C {
 +    static foo;

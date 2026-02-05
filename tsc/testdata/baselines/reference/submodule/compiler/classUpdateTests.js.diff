@@ -1,6 +1,6 @@
 --- old.classUpdateTests.js
 +++ new.classUpdateTests.js
-@@= skipped -119, +119 lines =@@
+@@= skipped -120, +120 lines =@@
  // test codegen for instance properties
  //
  class A {

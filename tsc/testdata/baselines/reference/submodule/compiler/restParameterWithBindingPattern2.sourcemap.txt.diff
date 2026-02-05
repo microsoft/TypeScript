@@ -1,6 +1,6 @@
 --- old.restParameterWithBindingPattern2.sourcemap.txt
 +++ new.restParameterWithBindingPattern2.sourcemap.txt
-@@= skipped -18, +18 lines =@@
+@@= skipped -19, +19 lines =@@
  8 >                ^^
  9 >                  ^
  10>                   ^
@@ -23,17 +23,17 @@
 +11>                    ) 
 +12>                      {
 +13>                         }
- 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
- 2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
- 3 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+ 1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+ 2 >Emitted(2, 10) Source(1, 10) + SourceIndex(0)
+ 3 >Emitted(2, 11) Source(1, 11) + SourceIndex(0)
 @@= skipped -12, +13 lines =@@
- 8 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
- 9 >Emitted(1, 20) Source(1, 20) + SourceIndex(0)
- 10>Emitted(1, 21) Source(1, 21) + SourceIndex(0)
--11>Emitted(1, 25) Source(1, 25) + SourceIndex(0)
--12>Emitted(1, 26) Source(1, 26) + SourceIndex(0)
-+11>Emitted(1, 23) Source(1, 23) + SourceIndex(0)
-+12>Emitted(1, 25) Source(1, 24) + SourceIndex(0)
-+13>Emitted(1, 26) Source(1, 26) + SourceIndex(0)
+ 8 >Emitted(2, 19) Source(1, 19) + SourceIndex(0)
+ 9 >Emitted(2, 20) Source(1, 20) + SourceIndex(0)
+ 10>Emitted(2, 21) Source(1, 21) + SourceIndex(0)
+-11>Emitted(2, 25) Source(1, 25) + SourceIndex(0)
+-12>Emitted(2, 26) Source(1, 26) + SourceIndex(0)
++11>Emitted(2, 23) Source(1, 23) + SourceIndex(0)
++12>Emitted(2, 25) Source(1, 24) + SourceIndex(0)
++13>Emitted(2, 26) Source(1, 26) + SourceIndex(0)
  ---
  >>>//# sourceMappingURL=restParameterWithBindingPattern2.js.map

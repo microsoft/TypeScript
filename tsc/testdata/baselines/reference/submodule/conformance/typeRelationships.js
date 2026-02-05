@@ -43,6 +43,7 @@ class D extends C {
 
 
 //// [typeRelationships.js]
+"use strict";
 class C {
     self = this;
     c = new C();

@@ -28,6 +28,9 @@
 //         <|[|{| name: d, kind: Property |}d|]: 1|>
 //     }|>
 // }|]|>
+// 
+// <|function [|{| name: foo, kind: Function |}foo|](props: { x: number; y: number }) {}|>
+// <|[|{| name: export=, kind: Variable |}export = foo({ <|[|{| name: x, kind: Property |}x|]: 1|>, <|[|{| name: y, kind: Property |}y|]: 1|> });|]|>
 
 // === Details ===
 (Variable) export=
@@ -54,3 +57,7 @@
   (Property) b
   (Property) c
     (Property) d
+(Function) foo
+(Variable) export=
+  (Property) x
+  (Property) y

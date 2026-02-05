@@ -32,7 +32,7 @@ if(!!foo.b){
 >42 : 42
 }
 === foo_0.ts ===
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 
 	export function a(){
@@ -45,7 +45,7 @@ module Foo {
 >b : boolean
 >true : true
 }
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 
 	export function c(a: number){
@@ -55,7 +55,7 @@ module Foo {
 		return a;
 >a : number
 	}
-	export module Test {
+	export namespace Test {
 >Test : typeof Test
 
 		export var answer = 42;

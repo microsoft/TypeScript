@@ -37,6 +37,7 @@ testRest((t2, ...t3: D[]) => {})
 
 
 //// [partiallyAnnotatedFunctionInferenceWithTypeParameter.js]
+"use strict";
 class C {
     test;
 }

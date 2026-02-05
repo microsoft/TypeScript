@@ -1,6 +1,6 @@
 --- old.importStatementsInterfaces.js
 +++ new.importStatementsInterfaces.js
-@@= skipped -46, +46 lines =@@
+@@= skipped -47, +47 lines =@@
  // no code gen expected
  var C;
  (function (C) {

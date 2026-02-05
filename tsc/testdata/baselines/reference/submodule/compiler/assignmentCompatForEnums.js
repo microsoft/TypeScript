@@ -17,6 +17,7 @@ function foo() {
 
 
 //// [assignmentCompatForEnums.js]
+"use strict";
 var TokenType;
 (function (TokenType) {
     TokenType[TokenType["One"] = 0] = "One";

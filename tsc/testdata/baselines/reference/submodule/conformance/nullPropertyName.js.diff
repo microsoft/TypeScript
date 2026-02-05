@@ -1,6 +1,6 @@
 --- old.nullPropertyName.js
 +++ new.nullPropertyName.js
-@@= skipped -171, +171 lines =@@
+@@= skipped -172, +172 lines =@@
  //// [nullPropertyName.d.ts]
  declare function foo(): void;
  declare namespace foo {

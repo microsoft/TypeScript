@@ -1,0 +1,14 @@
+--- old.readonlyMembers(target=es2015).js
++++ new.readonlyMembers(target=es2015).js
+@@= skipped -77, +77 lines =@@
+ x.a = 1; // Error
+ x.b = 1; // Error
+ class C {
++    a;
++    b = 1;
+     get c() { return 1; }
+     constructor() {
+-        this.b = 1;
+         this.a = 1; // Ok
+         this.b = 1; // Ok
+         this.c = 1; // Error

@@ -14,6 +14,7 @@ function foo(name: any): A {
 }
 
 //// [overloadOnConstConstraintChecks2.js]
+"use strict";
 class A {
 }
 class B extends A {

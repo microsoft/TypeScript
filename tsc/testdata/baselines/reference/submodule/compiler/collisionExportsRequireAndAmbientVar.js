@@ -3,11 +3,11 @@
 //// [collisionExportsRequireAndAmbientVar_externalmodule.ts]
 export declare var exports: number;
 export declare var require: string;
-declare module m1 {
+declare namespace m1 {
     var exports: string;
     var require: number;
 }
-module m2 {
+namespace m2 {
     export declare var exports: number;
     export declare var require: string;
     var a = 10;
@@ -16,11 +16,11 @@ module m2 {
 //// [collisionExportsRequireAndAmbientVar_globalFile.ts]
 declare var exports: number;
 declare var require: string;
-declare module m3 {
+declare namespace m3 {
     var exports: string;
     var require: number;
 }
-module m4 {
+namespace m4 {
     export declare var exports: string;
     export declare var require: number;
     var a = 10;
@@ -34,6 +34,7 @@ var m2;
     var a = 10;
 })(m2 || (m2 = {}));
 //// [collisionExportsRequireAndAmbientVar_globalFile.js]
+"use strict";
 var m4;
 (function (m4) {
     var a = 10;

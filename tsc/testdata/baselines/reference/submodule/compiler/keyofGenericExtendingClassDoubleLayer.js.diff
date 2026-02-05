@@ -1,8 +1,8 @@
 --- old.keyofGenericExtendingClassDoubleLayer.js
 +++ new.keyofGenericExtendingClassDoubleLayer.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [keyofGenericExtendingClassDoubleLayer.js]
+ "use strict";
  class Model {
 +    createdAt;
  }

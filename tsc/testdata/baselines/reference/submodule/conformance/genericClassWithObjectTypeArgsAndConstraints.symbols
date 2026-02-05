@@ -30,11 +30,11 @@ class X<T> {
 >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 12, 8))
 }
 
-module Class {
+namespace Class {
 >Class : Symbol(Class, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 14, 1))
 
     class G<T extends { x: string }> {
->G : Symbol(G, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 16, 14))
+>G : Symbol(G, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 16, 17))
 >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 12))
 >x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 17, 23))
 
@@ -70,7 +70,7 @@ module Class {
 
     var g: G<{ x: string; y: string }>;
 >g : Symbol(g, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 26, 7))
->G : Symbol(G, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 16, 14))
+>G : Symbol(G, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 16, 17))
 >x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 26, 14))
 >y : Symbol(y, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 26, 25))
 
@@ -136,11 +136,11 @@ module Class {
 >c1 : Symbol(c1, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 24, 7))
 }
 
-module Interface {
+namespace Interface {
 >Interface : Symbol(Interface, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 39, 1))
 
     interface G<T extends { x: string }> {
->G : Symbol(G, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 41, 18))
+>G : Symbol(G, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 41, 21))
 >T : Symbol(T, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 16))
 >x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 42, 27))
 
@@ -169,7 +169,7 @@ module Interface {
 
     var g: G<{ x: string; y: string }>;
 >g : Symbol(g, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 48, 7))
->G : Symbol(G, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 41, 18))
+>G : Symbol(G, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 41, 21))
 >x : Symbol(x, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 48, 14))
 >y : Symbol(y, Decl(genericClassWithObjectTypeArgsAndConstraints.ts, 48, 25))
 

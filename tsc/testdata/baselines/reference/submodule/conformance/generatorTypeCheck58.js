@@ -8,6 +8,7 @@ function* g() {
 }
 
 //// [generatorTypeCheck58.js]
+"use strict";
 function* g() {
     class C {
         static x = yield 0;

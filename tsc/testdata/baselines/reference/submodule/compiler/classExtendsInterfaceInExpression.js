@@ -11,6 +11,7 @@ class C extends factory(A) {}
 
 
 //// [classExtendsInterfaceInExpression.js]
+"use strict";
 function factory(a) {
     return null;
 }

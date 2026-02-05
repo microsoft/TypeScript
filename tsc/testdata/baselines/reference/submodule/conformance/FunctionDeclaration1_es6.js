@@ -5,5 +5,6 @@ function * foo() {
 }
 
 //// [FunctionDeclaration1_es6.js]
+"use strict";
 function* foo() {
 }

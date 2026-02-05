@@ -36,15 +36,15 @@ interface A2 {
 >y : Symbol(y, Decl(multiLineErrors.ts, 15, 8))
 }
 
-var t1: A1;
->t1 : Symbol(t1, Decl(multiLineErrors.ts, 18, 3))
+declare var t1: A1;
+>t1 : Symbol(t1, Decl(multiLineErrors.ts, 18, 11))
 >A1 : Symbol(A1, Decl(multiLineErrors.ts, 9, 1))
 
-var t2: A2;
->t2 : Symbol(t2, Decl(multiLineErrors.ts, 19, 3))
+declare var t2: A2;
+>t2 : Symbol(t2, Decl(multiLineErrors.ts, 19, 11))
 >A2 : Symbol(A2, Decl(multiLineErrors.ts, 13, 1))
 
 t1 = t2;
->t1 : Symbol(t1, Decl(multiLineErrors.ts, 18, 3))
->t2 : Symbol(t2, Decl(multiLineErrors.ts, 19, 3))
+>t1 : Symbol(t1, Decl(multiLineErrors.ts, 18, 11))
+>t2 : Symbol(t2, Decl(multiLineErrors.ts, 19, 11))
 

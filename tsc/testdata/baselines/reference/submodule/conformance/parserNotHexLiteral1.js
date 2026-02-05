@@ -9,6 +9,7 @@ console.info (x.e0);
 
 
 //// [parserNotHexLiteral1.js]
+"use strict";
 var x = { e0: 'cat', x0: 'dog' };
 console.info(x.x0);
 // tsc dies on this next line with "bug.ts (5,16): Expected ')'"

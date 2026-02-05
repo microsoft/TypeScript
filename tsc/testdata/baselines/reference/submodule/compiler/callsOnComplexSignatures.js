@@ -107,13 +107,8 @@ function test5() {
 
 
 //// [callsOnComplexSignatures.js]
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference path="react16.d.ts" />
-const react_1 = __importDefault(require("react"));
+/// <reference path="/.lib/react16.d.ts" />
+import React from "react";
 // Simple calls from real usecases
 function test1() {
     function test(t) {
@@ -154,16 +149,16 @@ function test5() {
     // Pair of non-like intrinsics
     function render(url) {
         const Tag = url ? 'a' : 'button';
-        return react_1.default.createElement(Tag, null, "test");
+        return React.createElement(Tag, null, "test");
     }
     // Union of all intrinsics and components of `any`
     function App(props) {
         const Comp = props.component;
-        return (react_1.default.createElement(Comp, null));
+        return (React.createElement(Comp, null));
     }
     // custom components with non-subset props
     function render2() {
         var C = null;
-        const a = react_1.default.createElement(C, { p: true });
+        const a = React.createElement(C, { p: true });
     }
 }

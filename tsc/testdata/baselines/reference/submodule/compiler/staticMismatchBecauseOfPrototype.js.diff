@@ -1,8 +1,8 @@
 --- old.staticMismatchBecauseOfPrototype.js
 +++ new.staticMismatchBecauseOfPrototype.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
  //// [staticMismatchBecauseOfPrototype.js]
+ "use strict";
  class B extends A {
 -    constructor() {
 -        super(...arguments);

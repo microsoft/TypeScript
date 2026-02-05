@@ -12,7 +12,8 @@ func TestCompletionListInvalidMemberNames2(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `declare var Symbol: SymbolConstructor;
+	const content = `// @lib: es5
+declare var Symbol: SymbolConstructor;
 interface SymbolConstructor {
     readonly hasInstance: symbol;
 }

@@ -93,7 +93,7 @@ function boundMethodLogger<This, Args extends any[], Return>(source: string, bou
         }
 
         return function (this, ...args) {
->function (this, ...args) {            console.log(`<${source}>: I'm logging stuff from ${context.name.toString()}!`);            return target.apply(this, args);        } : (this: This, ...args: Args) => any
+>function (this, ...args) {            console.log(`<${source}>: I'm logging stuff from ${context.name.toString()}!`);            return target.apply(this, args);        } : (this: This, ...args: Args) => Return
 >this : This
 >args : Args
 
@@ -112,10 +112,10 @@ function boundMethodLogger<This, Args extends any[], Return>(source: string, bou
 >toString : (() => string) | (() => string)
 
             return target.apply(this, args);
->target.apply(this, args) : any
->target.apply : (this: Function, thisArg: any, argArray?: any) => any
+>target.apply(this, args) : Return
+>target.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >target : (this: This, ...args: Args) => Return
->apply : (this: Function, thisArg: any, argArray?: any) => any
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >this : This
 >args : Args
         }

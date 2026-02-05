@@ -11,6 +11,7 @@ class A<T> {
 
 
 //// [overloadedStaticMethodSpecialization.js]
+"use strict";
 class A {
     static B(v) {
         return null;

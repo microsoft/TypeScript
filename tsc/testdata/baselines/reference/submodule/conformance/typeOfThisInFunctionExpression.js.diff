@@ -1,6 +1,6 @@
 --- old.typeOfThisInFunctionExpression.js
 +++ new.typeOfThisInFunctionExpression.js
-@@= skipped -61, +61 lines =@@
+@@= skipped -62, +62 lines =@@
      var x;
  };
  class C {

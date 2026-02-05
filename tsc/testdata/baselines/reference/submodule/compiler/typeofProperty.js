@@ -50,6 +50,7 @@ var x2: typeof viInstance.x; // x2: string
 
 
 //// [typeofProperty.js]
+"use strict";
 class C1 {
     a;
     b; // Should yield error (a is not a value)

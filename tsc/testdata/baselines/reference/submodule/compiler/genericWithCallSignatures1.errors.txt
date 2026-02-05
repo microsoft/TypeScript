@@ -1,0 +1,22 @@
+genericWithCallSignatures_1.ts(3,12): error TS2564: Property 'callableThing' has no initializer and is not definitely assigned in the constructor.
+
+
+==== genericWithCallSignatures_1.ts (1 errors) ====
+    ///<reference path="genericWithCallSignatures_0.ts"/>
+    class MyClass {
+        public callableThing: CallableExtention<string>;
+               ~~~~~~~~~~~~~
+!!! error TS2564: Property 'callableThing' has no initializer and is not definitely assigned in the constructor.
+    
+        public myMethod() {
+            var x = <string> this.callableThing();
+        }
+    }
+==== genericWithCallSignatures_0.ts (0 errors) ====
+    interface Callable<T> {
+        (): T;
+        (value: T): void;
+    }
+    
+    interface CallableExtention<T> extends Callable<T> { }
+    

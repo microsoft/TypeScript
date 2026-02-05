@@ -1,6 +1,6 @@
 --- old.parseBigInt.js
 +++ new.parseBigInt.js
-@@= skipped -121, +121 lines =@@
+@@= skipped -122, +122 lines =@@
  // Parsing errors
  // In separate blocks because they each declare an "n" variable
  {

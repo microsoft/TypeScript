@@ -34,7 +34,7 @@
 -                        ~~~~~~~~~~~~~
 -!!! error TS6053: File 'typescript.ts' not found.
      
-     module TypeScript {
+     namespace TypeScript {
          export class Binder {
 @@= skipped -115, +113 lines =@@
                          // check that last parameter has an array type

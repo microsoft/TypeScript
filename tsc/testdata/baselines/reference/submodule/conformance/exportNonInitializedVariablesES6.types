@@ -44,7 +44,7 @@ namespace B {
 >z : any
 }
 
-module C {
+namespace C {
 >C : typeof C
 
     export var a = 1, b, c = 2;

@@ -1,8 +1,8 @@
 --- old.unionPropertyOfProtectedAndIntersectionProperty.js
 +++ new.unionPropertyOfProtectedAndIntersectionProperty.js
-@@= skipped -39, +39 lines =@@
-
+@@= skipped -40, +40 lines =@@
  //// [unionPropertyOfProtectedAndIntersectionProperty.js]
+ "use strict";
  class Foo {
 -    constructor() {
 -        this.foo = 0;

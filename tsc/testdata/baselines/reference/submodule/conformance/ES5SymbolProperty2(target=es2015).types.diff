@@ -1,0 +1,11 @@
+--- old.ES5SymbolProperty2(target=es2015).types
++++ new.ES5SymbolProperty2(target=es2015).types
+@@= skipped -26, +26 lines =@@
+ }
+
+ (new M.C)[Symbol.iterator];
+->(new M.C)[Symbol.iterator] : error
++>(new M.C)[Symbol.iterator] : any
+ >(new M.C) : M.C
+ >new M.C : M.C
+ >M.C : typeof M.C

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/interfaceAssignmentCompat.ts] ////
 
 === interfaceAssignmentCompat.ts ===
-module M {
+namespace M {
 >M : typeof M
 
     export enum Color {
@@ -62,7 +62,7 @@ module M {
 
         var x:IEye[]= [];
 >x : IEye[]
->[] : undefined[]
+>[] : never[]
 
         var result="";
 >result : string
@@ -105,18 +105,18 @@ module M {
 >x=x.sort(CompareYeux) : IEye[]
 >x : IEye[]
 >x.sort(CompareYeux) : IEye[]
->x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
+>x.sort : (compareFn?: ((a: IEye, b: IEye) => number) | undefined) => IEye[]
 >x : IEye[]
->sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
+>sort : (compareFn?: ((a: IEye, b: IEye) => number) | undefined) => IEye[]
 >CompareYeux : (a: IFrenchEye, b: IFrenchEye) => number
 
         // type of z inferred from specialized array type
         var z=x.sort(CompareEyes); // ok
 >z : IEye[]
 >x.sort(CompareEyes) : IEye[]
->x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
+>x.sort : (compareFn?: ((a: IEye, b: IEye) => number) | undefined) => IEye[]
 >x : IEye[]
->sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
+>sort : (compareFn?: ((a: IEye, b: IEye) => number) | undefined) => IEye[]
 >CompareEyes : (a: IEye, b: IEye) => number
 
         for (var i=0,len=z.length;i<len;i++) {
@@ -152,7 +152,7 @@ module M {
 
         var eeks:IFrenchEye[] = [];
 >eeks : IFrenchEye[]
->[] : undefined[]
+>[] : never[]
 
         for (var j=z.length=1;j>=0;j--) {
 >j : number

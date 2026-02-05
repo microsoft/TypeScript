@@ -3,13 +3,13 @@ multipleExports.ts(9,13): error TS2484: Export declaration conflicts with export
 
 
 ==== multipleExports.ts (2 errors) ====
-    export module M {
+    export namespace M {
         export var v = 0;
         export let x;
     }
     
     const x = 0;
-    export module M {
+    export namespace M {
         v;
         export {x};
         ~~~~~~~~~~~

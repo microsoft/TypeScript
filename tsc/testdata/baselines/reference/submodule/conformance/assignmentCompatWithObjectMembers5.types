@@ -8,7 +8,7 @@ class C {
 >foo : string
 }
 
-var c: C;
+declare var c: C;
 >c : C
 
 interface I {
@@ -16,7 +16,7 @@ interface I {
 >fooo : string
 }
 
-var i: I;
+declare var i: I;
 >i : I
 
 c = i; // error

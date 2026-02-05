@@ -1,0 +1,18 @@
+--- old.externModule.errors.txt
++++ new.externModule.errors.txt
+@@= skipped -0, +0 lines =@@
+ externModule.ts(1,1): error TS2304: Cannot find name 'declare'.
+-externModule.ts(1,9): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++externModule.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ externModule.ts(1,16): error TS1437: Namespace must be given a name.
+ externModule.ts(3,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+ externModule.ts(4,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+@@= skipped -17, +17 lines =@@
+     ~~~~~~~
+ !!! error TS2304: Cannot find name 'declare'.
+             ~~~~~~
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                    ~
+ !!! error TS1437: Namespace must be given a name.
+         export class XDate {

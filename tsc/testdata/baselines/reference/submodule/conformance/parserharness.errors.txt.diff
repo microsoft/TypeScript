@@ -6,10 +6,21 @@
 -parserharness.ts(18,21): error TS6053: File '../services/typescriptServices.ts' not found.
 -parserharness.ts(19,21): error TS6053: File 'diff.ts' not found.
  parserharness.ts(21,21): error TS2749: 'Harness.Assert' refers to a value, but is being used as a type here. Did you mean 'typeof Harness.Assert'?
+ parserharness.ts(22,13): error TS7005: Variable 'it' implicitly has an 'any' type.
+ parserharness.ts(23,13): error TS7005: Variable 'describe' implicitly has an 'any' type.
+@@= skipped -8, +4 lines =@@
  parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
+ parserharness.ts(26,13): error TS7005: Variable '__dirname' implicitly has an 'any' type.
  parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
-@@= skipped -17, +13 lines =@@
- parserharness.ts(724,29): error TS2304: Cannot find name 'ITextWriter'.
+-parserharness.ts(43,19): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+-parserharness.ts(44,14): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++parserharness.ts(43,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++parserharness.ts(44,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ parserharness.ts(52,21): error TS7010: 'on', which lacks return-type annotation, implicitly has an 'any' return type.
+ parserharness.ts(116,31): error TS7006: Parameter 'actual' implicitly has an 'any' type.
+ parserharness.ts(116,39): error TS7006: Parameter 'expected' implicitly has an 'any' type.
+@@= skipped -64, +64 lines =@@
+   No index signature with a parameter of type 'string' was found on type '{}'.
  parserharness.ts(754,53): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
  parserharness.ts(764,56): error TS2503: Cannot find namespace 'TypeScript'.
 -parserharness.ts(765,37): error TS2304: Cannot find name 'TypeScript'.
@@ -23,10 +34,17 @@
  parserharness.ts(781,23): error TS2503: Cannot find namespace 'TypeScript'.
 -parserharness.ts(794,49): error TS2304: Cannot find name 'TypeScript'.
 -parserharness.ts(795,49): error TS2304: Cannot find name 'TypeScript'.
--parserharness.ts(987,53): error TS2304: Cannot find name 'TypeScript'.
--parserharness.ts(987,89): error TS2304: Cannot find name 'TypeScript'.
 +parserharness.ts(794,49): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 +parserharness.ts(795,49): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+ parserharness.ts(805,25): error TS7006: Parameter 'type' implicitly has an 'any' type.
+ parserharness.ts(805,38): error TS7006: Parameter 'code' implicitly has an 'any' type.
+ parserharness.ts(805,51): error TS7006: Parameter 'identifier' implicitly has an 'any' type.
+@@= skipped -14, +14 lines =@@
+ parserharness.ts(820,24): error TS18047: 'errors' is possibly 'null'.
+ parserharness.ts(976,21): error TS18047: 'errors' is possibly 'null'.
+ parserharness.ts(977,75): error TS18047: 'errors' is possibly 'null'.
+-parserharness.ts(987,53): error TS2304: Cannot find name 'TypeScript'.
+-parserharness.ts(987,89): error TS2304: Cannot find name 'TypeScript'.
 +parserharness.ts(987,53): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 +parserharness.ts(987,89): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
  parserharness.ts(987,115): error TS2503: Cannot find namespace 'TypeScript'.
@@ -82,9 +100,13 @@
  parserharness.ts(1080,35): error TS2503: Cannot find namespace 'TypeScript'.
  parserharness.ts(1080,74): error TS2503: Cannot find namespace 'TypeScript'.
  parserharness.ts(1107,173): error TS2503: Cannot find namespace 'TypeScript'.
- parserharness.ts(1176,132): error TS2503: Cannot find namespace 'TypeScript'.
+@@= skipped -45, +45 lines =@@
+ parserharness.ts(1177,21): error TS7034: Variable 'lines' implicitly has type 'any[]' in some locations where its type cannot be determined.
+ parserharness.ts(1178,50): error TS7005: Variable 'lines' implicitly has an 'any[]' type.
+ parserharness.ts(1179,29): error TS7005: Variable 'lines' implicitly has an 'any[]' type.
 -parserharness.ts(1193,29): error TS2304: Cannot find name 'WScript'.
 +parserharness.ts(1193,29): error TS2552: Cannot find name 'WScript'. Did you mean 'scripts'?
+ parserharness.ts(1236,45): error TS7006: Parameter 'value' implicitly has an 'any' type.
  parserharness.ts(1256,126): error TS2503: Cannot find namespace 'TypeScript'.
  parserharness.ts(1257,25): error TS2503: Cannot find namespace 'TypeScript'.
  parserharness.ts(1263,31): error TS2503: Cannot find namespace 'TypeScript'.
@@ -92,6 +114,7 @@
 +parserharness.ts(1280,45): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
  parserharness.ts(1286,124): error TS2503: Cannot find namespace 'TypeScript'.
  parserharness.ts(1286,209): error TS2503: Cannot find namespace 'TypeScript'.
+ parserharness.ts(1288,28): error TS2531: Object is possibly 'null'.
  parserharness.ts(1294,142): error TS2503: Cannot find namespace 'TypeScript'.
  parserharness.ts(1294,227): error TS2503: Cannot find namespace 'TypeScript'.
 -parserharness.ts(1302,43): error TS2304: Cannot find name 'TypeScript'.
@@ -104,12 +127,12 @@
 +parserharness.ts(1307,38): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 +parserharness.ts(1311,45): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 +parserharness.ts(1321,21): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+ parserharness.ts(1328,28): error TS2531: Object is possibly 'null'.
  parserharness.ts(1340,38): error TS2503: Cannot find namespace 'TypeScript'.
  parserharness.ts(1344,165): error TS2503: Cannot find namespace 'TypeScript'.
- parserharness.ts(1345,26): error TS2503: Cannot find namespace 'TypeScript'.
-@@= skipped -67, +67 lines =@@
- parserharness.ts(1466,36): error TS2304: Cannot find name 'optionRegex'.
- parserharness.ts(1484,21): error TS2304: Cannot find name 'optionRegex'.
+@@= skipped -34, +34 lines =@@
+ parserharness.ts(1489,25): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+ parserharness.ts(1508,25): error TS2322: Type 'null' is not assignable to type 'string'.
  parserharness.ts(1548,57): error TS2503: Cannot find namespace 'TypeScript'.
 -parserharness.ts(1571,32): error TS2304: Cannot find name 'TypeScript'.
 +parserharness.ts(1571,32): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
@@ -125,9 +148,13 @@
  parserharness.ts(1713,62): error TS2503: Cannot find namespace 'TypeScript'.
  parserharness.ts(1713,87): error TS2503: Cannot find namespace 'TypeScript'.
 -parserharness.ts(1714,30): error TS2304: Cannot find name 'TypeScript'.
++parserharness.ts(1714,30): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+ parserharness.ts(1716,37): error TS7006: Parameter 'a' implicitly has an 'any' type.
+ parserharness.ts(1716,40): error TS7006: Parameter 'b' implicitly has an 'any' type.
+ parserharness.ts(1716,43): error TS7006: Parameter 'c' implicitly has an 'any' type.
+ parserharness.ts(1716,46): error TS7006: Parameter 'd' implicitly has an 'any' type.
 -parserharness.ts(1724,34): error TS2304: Cannot find name 'TypeScript'.
 -parserharness.ts(1739,20): error TS2304: Cannot find name 'TypeScript'.
-+parserharness.ts(1714,30): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 +parserharness.ts(1724,34): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
 +parserharness.ts(1739,20): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
  parserharness.ts(1746,80): error TS2503: Cannot find namespace 'TypeScript'.
@@ -136,22 +163,25 @@
  parserharness.ts(1758,84): error TS2503: Cannot find namespace 'Services'.
  parserharness.ts(1769,51): error TS2503: Cannot find namespace 'Services'.
  parserharness.ts(1784,39): error TS2503: Cannot find namespace 'Services'.
-@@= skipped -22, +22 lines =@@
- parserharness.ts(1785,25): error TS2503: Cannot find namespace 'Services'.
- parserharness.ts(1787,38): error TS2503: Cannot find namespace 'Services'.
- parserharness.ts(1787,68): error TS2503: Cannot find namespace 'Services'.
+@@= skipped -29, +29 lines =@@
+ parserharness.ts(1872,39): error TS2531: Object is possibly 'null'.
+ parserharness.ts(1880,17): error TS2322: Type 'null' is not assignable to type 'string'.
+ parserharness.ts(1892,26): error TS2345: Argument of type 'null' is not assignable to parameter of type 'Error'.
 -parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
--
--
--==== parserharness.ts (110 errors) ====
 +parserharness.ts(2030,32): error TS2552: Cannot find name 'Diff'. Did you mean 'diff'?
-+
-+
-+==== parserharness.ts (106 errors) ====
+ parserharness.ts(2050,26): error TS2352: Conversion of type 'undefined' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+ parserharness.ts(2055,78): error TS2345: Argument of type 'BaselineOptions | undefined' is not assignable to parameter of type 'BaselineOptions'.
+   Type 'undefined' is not assignable to type 'BaselineOptions'.
+@@= skipped -12, +12 lines =@@
+ parserharness.ts(2067,62): error TS18048: 'comparison' is possibly 'undefined'.
+
+
+-==== parserharness.ts (193 errors) ====
++==== parserharness.ts (189 errors) ====
      //﻿
      // Copyright (c) Microsoft Corporation.  All rights reserved.
      // 
-@@= skipped -20, +20 lines =@@
+@@= skipped -17, +17 lines =@@
      //
      
      ///<reference path='..\compiler\io.ts'/>
@@ -169,7 +199,20 @@
      
      declare var assert: Harness.Assert;
                          ~~~~~~~~~~~~~~
-@@= skipped -790, +782 lines =@@
+@@= skipped -50, +42 lines =@@
+         eval(typescriptServiceFile);
+     } else if (typeof require === "function") {
+                       ~~~~~~~
+-!!! error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+         var vm = require('vm');
+                  ~~~~~~~
+-!!! error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+         vm.runInThisContext(typescriptServiceFile, 'typescriptServices.js');
+     } else {
+         throw new Error('Unknown context');
+@@= skipped -847, +847 lines =@@
  !!! error TS2503: Cannot find namespace 'TypeScript'.
                  var compiler = c || new TypeScript.TypeScriptCompiler(stderr);
                                          ~~~~~~~~~~
@@ -208,7 +251,7 @@
                      }
                  }
                  else {
-@@= skipped -197, +197 lines =@@
+@@= skipped -211, +211 lines =@@
                              var script = compiler.scripts.members[m];
                              var enclosingScopeContext = TypeScript.findEnclosingScopeAt(new TypeScript.NullLogger(), <TypeScript.Script>script, new TypeScript.StringSourceText(code), 0, false);
                                                          ~~~~~~~~~~
@@ -337,7 +380,7 @@
                              name = !(<TypeScript.FuncDecl>ast).name ? "" : (<TypeScript.FuncDecl>ast).name.actualText; // name == null for lambdas
                                        ~~~~~~~~~~
  !!! error TS2503: Cannot find namespace 'TypeScript'.
-@@= skipped -205, +205 lines =@@
+@@= skipped -222, +222 lines =@@
                              else {
                                  WScript.Echo("non-match on: " + errorLines[i]);
                                  ~~~~~~~
@@ -347,7 +390,7 @@
                              }
                          }
                      }
-@@= skipped -95, +96 lines =@@
+@@= skipped -97, +98 lines =@@
                  if (Harness.usePull) {
                      compiler.pullUpdateUnit(new TypeScript.StringSourceText(code), unitName, setRecovery);
                                                  ~~~~~~~~~~
@@ -356,7 +399,7 @@
                  } else {
                      compiler.updateUnit(code, unitName, setRecovery);
                  }
-@@= skipped -32, +32 lines =@@
+@@= skipped -34, +34 lines =@@
      
                  var oldCompilerSettings = new TypeScript.CompilationSettings();
                                                ~~~~~~~~~~
@@ -392,7 +435,7 @@
                      }
                  }
              }
-@@= skipped -274, +274 lines =@@
+@@= skipped -288, +288 lines =@@
                      length: this.content.length,
                      editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)
                                     ~~~~~~~~~~
@@ -427,8 +470,8 @@
 +!!! error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
                  parser.setErrorRecovery(null);
                  parser.errorCallback = (a, b, c, d) => { };
-     
-@@= skipped -12, +12 lines =@@
+                                         ~
+@@= skipped -20, +20 lines =@@
              public parseFile(fileName: string) {
                  var sourceText = new TypeScript.StringSourceText(IO.readFile(fileName))
                                       ~~~~~~~~~~
@@ -455,7 +498,7 @@
      
                  assert.is(result.line >= 0);
                  assert.is(result.col >= 0);
-@@= skipped -296, +296 lines =@@
+@@= skipped -302, +302 lines =@@
                      // Append diff to the report
                      var diff = new Diff.StringDiff(expected, actual);
                                     ~~~~

@@ -1,0 +1,61 @@
+--- old.jsDeclarationsEnumTag(target=es2015).types
++++ new.jsDeclarationsEnumTag(target=es2015).types
+@@= skipped -71, +71 lines =@@
+  */
+ export function consume(t,s,f) {
+ >consume : (t: Target, s: Second, f: Fs) => void
+->t : string
+->s : number
++>t : Target
++>s : Second
+ >f : Fs
+
+     /** @type {string} */
+     var str = t
+ >str : string
+->t : string
++>t : Target
+
+     /** @type {number} */
+     var num = s
+ >num : number
+->s : number
++>s : Second
+
+     /** @type {(n: number) => number} */
+     var fun = f
+@@= skipped -21, +21 lines =@@
+
+     /** @type {Target} */
+     var v = Target.START
+->v : string
++>v : Target
+ >Target.START : string
+ >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
+ >START : string
+
+     v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
+ >v = 'something else' : "something else"
+->v : string
++>v : Target
+ >'something else' : "something else"
+ }
+ /** @param {string} s */
+@@= skipped -18, +18 lines =@@
+     // element access with arbitrary string is an error only with noImplicitAny
+     if (!Target[s]) {
+ >!Target[s] : boolean
+->Target[s] : error
++>Target[s] : any
+ >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
+ >s : string
+
+@@= skipped -8, +8 lines =@@
+     }
+     else {
+         return Target[s]
+->Target[s] : error
++>Target[s] : any
+ >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
+ >s : string
+     }

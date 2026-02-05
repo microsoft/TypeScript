@@ -1,0 +1,8 @@
+--- old.referenceTypesPreferedToPathIfPossible.js
++++ new.referenceTypesPreferedToPathIfPossible.js
+@@= skipped -19, +19 lines =@@
+
+
+ //// [usage.d.ts]
+-export declare const thing: () => import("url").Url;
++export declare const thing: () => any;

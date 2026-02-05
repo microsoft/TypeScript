@@ -11,14 +11,15 @@ func TestQuickInfoOnMergedModule(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M2 {
+	const content = `// @strict: false
+namespace M2 {
     export interface A {
         foo: string;
     }
     var a: A;
     var r = a.foo + a.bar;
 }
-module M2 {
+namespace M2 {
     export interface A {
         bar: number;
     }

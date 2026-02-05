@@ -1,0 +1,11 @@
+--- old.ES5For-of36(target=es2015).errors.txt
++++ new.ES5For-of36(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+ ES5For-of36.ts(1,10): error TS2488: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+-!!! error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+ ==== ES5For-of36.ts (1 errors) ====
+     for (let [a = 0, b = 1] of [2, 3]) {
+              ~~~~~~~~~~~~~~

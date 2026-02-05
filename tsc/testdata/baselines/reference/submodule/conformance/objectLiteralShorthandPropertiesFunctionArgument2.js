@@ -11,6 +11,7 @@ foo(person);  // error
 
 
 //// [objectLiteralShorthandPropertiesFunctionArgument2.js]
+"use strict";
 var id = 10000;
 var name = "my name";
 var person = { name, id };

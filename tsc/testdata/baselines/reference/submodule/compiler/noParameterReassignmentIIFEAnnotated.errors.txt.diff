@@ -2,18 +2,30 @@
 +++ new.noParameterReassignmentIIFEAnnotated.errors.txt
 @@= skipped -0, +0 lines =@@
 -index.js(3,28): error TS8029: JSDoc '@param' tag has name 'rest', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+ index.js(6,36): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+-index.js(6,42): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
+-  Type 'IArguments' is missing the following properties from type 'string[]': pop, push, concat, join, and 23 more.
 -
 -
--==== index.js (1 errors) ====
--    self.importScripts = (function (importScripts) {
--        /**
--         * @param {...unknown} rest
+-==== index.js (3 errors) ====
++index.js(6,42): error TS2740: Type 'IArguments' is missing the following properties from type 'string[]': pop, push, concat, join, and 23 more.
++
++
++==== index.js (2 errors) ====
+     self.importScripts = (function (importScripts) {
+         /**
+          * @param {...unknown} rest
 -                               ~~~~
 -!!! error TS8029: JSDoc '@param' tag has name 'rest', but there is no parameter with that name. It would match 'arguments' if it had an array type.
--         */
--        return function () {
--            return importScripts.apply(this, arguments);
--        };
--    })(importScripts);
--    
-+<no content>
+          */
+         return function () {
+             return importScripts.apply(this, arguments);
+                                        ~~~~
+ !!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+                                              ~~~~~~~~~
+-!!! error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
+-!!! error TS2345:   Type 'IArguments' is missing the following properties from type 'string[]': pop, push, concat, join, and 23 more.
++!!! error TS2740: Type 'IArguments' is missing the following properties from type 'string[]': pop, push, concat, join, and 23 more.
+         };
+     })(importScripts);
+     

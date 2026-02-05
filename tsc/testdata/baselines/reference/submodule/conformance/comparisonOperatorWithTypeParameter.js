@@ -81,6 +81,7 @@ function foo<T, U/* extends T*/, V/* extends U*/>(t: T, u: U, v: V) {
 }
 
 //// [comparisonOperatorWithTypeParameter.js]
+"use strict";
 var a;
 var b;
 function foo(t, u, v) {

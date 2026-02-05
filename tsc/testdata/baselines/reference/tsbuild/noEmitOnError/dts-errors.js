@@ -31,7 +31,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -55,22 +55,16 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-const a = class {
+export const a = class {
     p = 10;
 };
-exports.a = a;
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 console.log("hi");
+export {};
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *new* 
 {"version":"FakeTSVersion","root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"]}
@@ -102,7 +96,7 @@ console.log("hi");
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
 *refresh*    /user/username/projects/noEmitOnError/src/other.ts
@@ -145,7 +139,7 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
 *refresh*    /user/username/projects/noEmitOnError/src/other.ts

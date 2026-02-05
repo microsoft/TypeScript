@@ -7,6 +7,7 @@ function fee<T>() {
 }
 
 //// [typeParameterAsElementType.js]
+"use strict";
 function fee() {
     var t;
     var arr = [t, ""];

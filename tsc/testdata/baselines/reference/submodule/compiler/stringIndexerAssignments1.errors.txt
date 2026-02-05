@@ -5,8 +5,8 @@ stringIndexerAssignments1.ts(5,1): error TS2322: Type '{ one: number; two: strin
 
 ==== stringIndexerAssignments1.ts (1 errors) ====
     var x: { [index: string]: string; one: string; };
-    var a: { one: string; };
-    var b: { one: number; two: string; };
+    declare var a: { one: string; };
+    declare var b: { one: number; two: string; };
     x = a;
     x = b; // error
     ~

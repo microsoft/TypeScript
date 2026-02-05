@@ -27,6 +27,7 @@ var arr = [
 ];
 
 //// [allowUnescapedParagraphAndLineSeparatorsInStringLiteral.js]
+"use strict";
 // Strings containing unescaped line / paragraph separators
 // Using both single quotes, double quotes and template literals
 var stringContainingUnescapedLineSeparator1 = " STRING_CONTENT ";

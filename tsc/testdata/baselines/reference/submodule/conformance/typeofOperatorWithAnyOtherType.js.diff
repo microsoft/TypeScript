@@ -1,6 +1,6 @@
 --- old.typeofOperatorWithAnyOtherType.js
 +++ new.typeofOperatorWithAnyOtherType.js
-@@= skipped -87, +87 lines =@@
+@@= skipped -85, +85 lines =@@
      return a;
  }
  class A {

@@ -18,6 +18,7 @@ class B extends A {
 }
 
 //// [emitSuperCallBeforeEmitPropertyDeclaration1.js]
+"use strict";
 class A {
     blub = 6;
 }

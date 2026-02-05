@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxGenericArrowFunctionParsing.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { isElement; }
 }
 
@@ -33,6 +33,7 @@ x6();
 
 
 //// [file.jsx]
+"use strict";
 var T, T1, T2;
 // This is an element
 var x1 = <T>() => </T>;

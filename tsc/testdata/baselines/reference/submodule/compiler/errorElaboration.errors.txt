@@ -22,7 +22,7 @@ errorElaboration.ts(23,19): error TS2339: Property 'bar' does not exist on type 
     declare function foo(x: () => Container<Ref<number>>): void;
                      ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
-    let a: () => Container<Ref<string>>;
+    declare let a: () => Container<Ref<string>>;
     foo(a);
         ~
 !!! error TS2345: Argument of type '() => Container<Ref<string>>' is not assignable to parameter of type '() => Container<Ref<number>>'.

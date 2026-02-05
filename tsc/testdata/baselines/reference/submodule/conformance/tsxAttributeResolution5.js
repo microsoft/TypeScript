@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution5.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: Attribs1;
@@ -34,6 +34,7 @@ function make3<T extends {y: string}> (obj: T) {
 
 
 //// [file.jsx]
+"use strict";
 function make1(obj) {
     return <test1 {...obj}/>; // OK
 }

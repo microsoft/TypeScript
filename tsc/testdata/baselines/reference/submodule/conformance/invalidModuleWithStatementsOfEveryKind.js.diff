@@ -1,6 +1,6 @@
 --- old.invalidModuleWithStatementsOfEveryKind.js
 +++ new.invalidModuleWithStatementsOfEveryKind.js
-@@= skipped -84, +84 lines =@@
+@@= skipped -85, +85 lines =@@
  var Y;
  (function (Y) {
      class A {

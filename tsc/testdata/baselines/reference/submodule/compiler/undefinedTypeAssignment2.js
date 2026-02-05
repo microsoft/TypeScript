@@ -5,4 +5,5 @@ var undefined = void 0;
 
 
 //// [undefinedTypeAssignment2.js]
+"use strict";
 var undefined = void 0;

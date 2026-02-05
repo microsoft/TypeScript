@@ -1,6 +1,6 @@
 --- old.superCallInNonStaticMethod.js
 +++ new.superCallInNonStaticMethod.js
-@@= skipped -87, +87 lines =@@
+@@= skipped -88, +88 lines =@@
      }
      constructor() {
          super();

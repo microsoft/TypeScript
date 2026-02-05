@@ -7,6 +7,7 @@ class C {
 }
 
 //// [parserComputedPropertyName28.js]
+"use strict";
 class C {
     [e] = 0;
     [e2];

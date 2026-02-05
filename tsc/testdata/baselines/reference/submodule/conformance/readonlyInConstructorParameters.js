@@ -16,6 +16,7 @@ class F {
 new F(1).x;
 
 //// [readonlyInConstructorParameters.js]
+"use strict";
 class C {
     x;
     constructor(x) {

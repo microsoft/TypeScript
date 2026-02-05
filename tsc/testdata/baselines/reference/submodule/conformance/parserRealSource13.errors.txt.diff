@@ -33,7 +33,7 @@
 -                        ~~~~~~~~~~~~~
 -!!! error TS6053: File 'typescript.ts' not found.
      
-     module TypeScript.AstWalkerWithDetailCallback {
+     namespace TypeScript.AstWalkerWithDetailCallback {
          export interface AstWalkerDetailCallback {
 @@= skipped -264, +262 lines =@@
  !!! error TS2304: Cannot find name 'AST'.

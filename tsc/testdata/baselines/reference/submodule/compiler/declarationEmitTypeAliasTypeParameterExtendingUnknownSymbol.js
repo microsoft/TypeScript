@@ -4,6 +4,7 @@
 type A<T extends Unknown> = {}
 
 //// [declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.js]
+"use strict";
 
 
 //// [declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.d.ts]

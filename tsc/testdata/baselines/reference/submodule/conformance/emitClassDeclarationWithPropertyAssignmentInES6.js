@@ -27,6 +27,7 @@ class F extends D{
 }
 
 //// [emitClassDeclarationWithPropertyAssignmentInES6.js]
+"use strict";
 class C {
     x = "Hello world";
 }

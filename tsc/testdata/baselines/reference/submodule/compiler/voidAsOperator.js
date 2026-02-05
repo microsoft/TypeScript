@@ -12,6 +12,7 @@ if (!null !== true) {
 
 
 //// [voidAsOperator.js]
+"use strict";
 if (!void 0 !== true) {
 }
 //CHECK#2

@@ -106,6 +106,36 @@
 
  a.pb.toFixed();
  >a.pb.toFixed() : string
+->a.pb.toFixed : (fractionDigits?: number) => string
++>a.pb.toFixed : (fractionDigits?: number | undefined) => string
+ >a.pb : number
+ >a : A
+ >pb : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+
+ a.ptd.toFixed();    // Error
+ >a.ptd.toFixed() : string
+->a.ptd.toFixed : (fractionDigits?: number) => string
++>a.ptd.toFixed : (fractionDigits?: number | undefined) => string
+ >a.ptd : number
+ >a : A
+ >ptd : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+
+ a.pvt.toFixed();    // Error
+ >a.pvt.toFixed() : string
+->a.pvt.toFixed : (fractionDigits?: number) => string
++>a.pvt.toFixed : (fractionDigits?: number | undefined) => string
+ >a.pvt : number
+ >a : A
+ >pvt : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+
+ ab.pb.toFixed();
+ >ab.pb.toFixed() : any
 @@= skipped -124, +124 lines =@@
  }
 

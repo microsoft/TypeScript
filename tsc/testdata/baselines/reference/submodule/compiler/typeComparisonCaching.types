@@ -32,13 +32,13 @@ interface D {
 var a: A;
 >a : A
 
-var b: B;
+declare var b: B;
 >b : B
 
 var c: C;
 >c : C
 
-var d: D;
+declare var d: D;
 >d : D
 
 a = b;

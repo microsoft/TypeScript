@@ -11,6 +11,7 @@ while (true) {
 }
 
 //// [duplicateLabel3.js]
+"use strict";
 target: while (true) {
     function f() {
         target: while (true) {

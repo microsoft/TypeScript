@@ -1,7 +1,7 @@
 --- old.abstractPropertyInConstructor.js
 +++ new.abstractPropertyInConstructor.js
-@@= skipped -97, +97 lines =@@
- //// [abstractPropertyInConstructor.js]
+@@= skipped -98, +98 lines =@@
+ "use strict";
  class AbstractClass {
      constructor(str, other) {
 -        this.other = this.prop;

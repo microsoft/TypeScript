@@ -4,4 +4,5 @@
 new <T>Foo()
 
 //// [parserTypeAssertionInObjectCreationExpression1.js]
+"use strict";
 new  < T > Foo();

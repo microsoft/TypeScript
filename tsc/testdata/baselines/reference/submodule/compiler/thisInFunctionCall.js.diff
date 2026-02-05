@@ -1,8 +1,8 @@
 --- old.thisInFunctionCall.js
 +++ new.thisInFunctionCall.js
-@@= skipped -39, +39 lines =@@
-
+@@= skipped -40, +40 lines =@@
  //// [thisInFunctionCall.js]
+ "use strict";
  class Test {
 +    data;
      constructor() {

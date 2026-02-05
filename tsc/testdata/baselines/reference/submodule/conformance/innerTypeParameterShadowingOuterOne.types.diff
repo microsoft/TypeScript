@@ -1,0 +1,26 @@
+--- old.innerTypeParameterShadowingOuterOne.types
++++ new.innerTypeParameterShadowingOuterOne.types
+@@= skipped -14, +14 lines =@@
+
+         x.toFixed();
+ >x.toFixed() : string
+->x.toFixed : (fractionDigits?: number) => string
++>x.toFixed : (fractionDigits?: number | undefined) => string
+ >x : T
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+     }
+     var x: T;
+ >x : T
+@@= skipped -25, +25 lines =@@
+
+         x.toFixed();
+ >x.toFixed() : string
+->x.toFixed : (fractionDigits?: number) => string
++>x.toFixed : (fractionDigits?: number | undefined) => string
+ >x : U
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+     }
+     var x: U;
+ >x : U

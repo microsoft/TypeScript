@@ -12,8 +12,9 @@ function returnObject(): object {
 >{} : {}
 }
 
-var nonPrimitive: object;
+var nonPrimitive: object = {};
 >nonPrimitive : object
+>{} : {}
 
 var primitive: boolean;
 >primitive : boolean

@@ -1,7 +1,7 @@
 --- old.circularIndexedAccessErrors.js
 +++ new.circularIndexedAccessErrors.js
-@@= skipped -43, +43 lines =@@
- //// [circularIndexedAccessErrors.js]
+@@= skipped -44, +44 lines =@@
+ "use strict";
  let x2x = x2.x;
  class C1 {
 +    x; // Error

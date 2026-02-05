@@ -22,9 +22,10 @@
 +file.js(16,20): error TS1005: '}' expected.
 +file.js(21,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +file.js(21,20): error TS1005: '}' expected.
++file.js(22,12): error TS7006: Parameter 'p' implicitly has an 'any' type.
 +
 +
-+==== file.js (10 errors) ====
++==== file.js (11 errors) ====
      // Error (good)
      /** @type {function(): string} */
 +               ~~~~~~~~
@@ -84,6 +85,8 @@
 +                       ~
 +!!! error TS1005: '}' expected.
      const f = (p) => {}
++               ~
++!!! error TS7006: Parameter 'p' implicitly has an 'any' type.
      
      // Error (good)
      f(async () => {

@@ -1,9 +1,8 @@
 --- old.parser509546.js
 +++ new.parser509546.js
-@@= skipped -10, +10 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Logger = void 0;
- class Logger {
+@@= skipped -7, +7 lines =@@
+
+ //// [parser509546.js]
+ export class Logger {
 +    public;
  }
- exports.Logger = Logger;

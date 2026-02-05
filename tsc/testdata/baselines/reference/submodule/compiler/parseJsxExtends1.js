@@ -10,10 +10,7 @@ export function Foo() {
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = Foo;
-function Foo() {
+export function Foo() {
     // No error; "const" is lowercase and therefore intrinsic.
     return React.createElement("const", { T: true, extends: true });
 }

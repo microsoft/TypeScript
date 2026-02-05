@@ -1,9 +1,0 @@
---- old.parserGetAccessorWithTypeParameters1.js
-+++ new.parserGetAccessorWithTypeParameters1.js
-@@= skipped -6, +6 lines =@@
-
- //// [parserGetAccessorWithTypeParameters1.js]
- class C {
--    get foo<T>() { }
-+    get foo() { }
- }

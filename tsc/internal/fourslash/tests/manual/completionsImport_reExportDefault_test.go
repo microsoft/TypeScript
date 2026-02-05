@@ -14,7 +14,8 @@ func TestCompletionsImport_reExportDefault(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @module: esnext
+	const content = `// @lib: es5
+// @module: esnext
 // @Filename: /a/b/impl.ts
 export default function foo() {}
 // @Filename: /a/index.ts

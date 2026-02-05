@@ -3,7 +3,7 @@ InvalidNonInstantiatedModule.ts(7,15): error TS2708: Cannot use namespace 'M' as
 
 
 ==== InvalidNonInstantiatedModule.ts (2 errors) ====
-    module M {
+    namespace M {
         export interface Point { x: number; y: number }
     }
     

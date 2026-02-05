@@ -1,6 +1,6 @@
 --- old.thisAndSuperInStaticMembers1(target=es2015).js
 +++ new.thisAndSuperInStaticMembers1(target=es2015).js
-@@= skipped -53, +53 lines =@@
+@@= skipped -54, +54 lines =@@
      return t;
  };
  var _a;

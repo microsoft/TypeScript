@@ -12,16 +12,16 @@ declare function getNum(): number;
 >getNum : () => number
 
 declare function foo(arg: { x: Bar, y: Date }, item: number, items?: [number, number, number]): void;
->foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
+>foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number] | undefined) => void
 >arg : { x: Bar; y: Date; }
 >x : Bar
 >y : Date
 >item : number
->items : [number, number, number]
+>items : [number, number, number] | undefined
 
 foo({
 >foo({    x: Bar,    y: Date}, getNum()) : void
->foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
+>foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number] | undefined) => void
 >{    x: Bar,    y: Date} : { x: typeof Bar; y: DateConstructor; }
 
     x: Bar,
@@ -38,7 +38,7 @@ foo({
 
 foo({
 >foo({    x: new Bar(),    y: new Date()}, getNum) : void
->foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
+>foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number] | undefined) => void
 >{    x: new Bar(),    y: new Date()} : { x: Bar; y: Date; }
 
     x: new Bar(),
@@ -57,7 +57,7 @@ foo({
 
 foo({
 >foo({    x: new Bar(),    y: new Date()}, getNum(), [    1,    2,    getNum]) : void
->foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
+>foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number] | undefined) => void
 >{    x: new Bar(),    y: new Date()} : { x: Bar; y: Date; }
 
     x: new Bar(),

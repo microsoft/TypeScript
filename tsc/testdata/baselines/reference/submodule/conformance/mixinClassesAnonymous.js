@@ -68,6 +68,7 @@ const Timestamped = <CT extends Constructor<object>>(Base: CT) => {
 
 
 //// [mixinClassesAnonymous.js]
+"use strict";
 class Base {
     x;
     y;

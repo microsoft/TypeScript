@@ -10,14 +10,10 @@ export class Test {
 }
 
 //// [declarationEmitMultipleComputedNamesSameDomain.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Test = void 0;
-class Test {
+export class Test {
     [x] = 10;
     [y] = 10;
 }
-exports.Test = Test;
 
 
 //// [declarationEmitMultipleComputedNamesSameDomain.d.ts]

@@ -6,9 +6,9 @@ interface I8 { [x: string]: number[]; }
 class A { foo: number; }
 class A2<T> { foo: T; }
 function f() { }
-module f { export var bar = 1; }
+namespace f { export var bar = 1; }
 class c { baz: string }
-module c { export var bar = 1; }
+namespace c { export var bar = 1; }
 
 // A type T is a subtype of a union type U if T is a subtype of any type in U.
 interface I1<T> {
@@ -55,6 +55,7 @@ interface I2<T> {
 }
 
 //// [subtypesOfUnion.js]
+"use strict";
 var E;
 (function (E) {
     E[E["e1"] = 0] = "e1";

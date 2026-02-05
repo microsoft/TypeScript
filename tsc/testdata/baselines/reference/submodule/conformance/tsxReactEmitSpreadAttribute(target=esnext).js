@@ -56,7 +56,7 @@ export function T12(a: any, b: any, c: any, d: any) {
 
 //// [test.js]
 import { jsx as _jsx } from "react/jsx-runtime";
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 export function T1(a) {
     return _jsx("div", { className: "T1", ...a, children: "T1" });
 }

@@ -44,6 +44,7 @@ function fn(x: boolean) {
 
 
 //// [catchClauseWithTypeAnnotation.js]
+"use strict";
 function fn(x) {
     // no type annotation allowed other than `any` and `unknown`
     try { }

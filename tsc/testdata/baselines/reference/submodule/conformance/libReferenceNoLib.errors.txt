@@ -1,0 +1,22 @@
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'NewableFunction'.
+
+
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+==== fakelib.ts (0 errors) ====
+    interface Object { }
+    interface Array<T> { }
+    interface String { }
+    interface Boolean { }
+    interface Number { }
+    interface Function { }
+    interface RegExp { }
+    interface IArguments { }
+    
+    
+==== file1.ts (0 errors) ====
+    /// <reference lib="dom" />
+    export declare interface HTMLElement { field: string; }
+    export const elem: HTMLElement = { field: 'a' };
+    

@@ -12,6 +12,7 @@ let c = t.slice(0, 1);
 
 
 //// [thisTypeInTuples.js]
+"use strict";
 let t = [42, "hello"];
 let a = t.slice();
 let b = t.slice(1);

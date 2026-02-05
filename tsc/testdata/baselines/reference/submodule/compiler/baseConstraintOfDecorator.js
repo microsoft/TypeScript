@@ -22,11 +22,7 @@ export function classExtender2<TFunction extends new (...args: string[]) => MyCl
 
 
 //// [baseConstraintOfDecorator.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.classExtender = classExtender;
-exports.classExtender2 = classExtender2;
-function classExtender(superClass, _instanceModifier) {
+export function classExtender(superClass, _instanceModifier) {
     return class decoratorFunc extends superClass {
         constructor(...args) {
             super(...args);
@@ -37,7 +33,7 @@ function classExtender(superClass, _instanceModifier) {
 class MyClass {
     x;
 }
-function classExtender2(superClass, _instanceModifier) {
+export function classExtender2(superClass, _instanceModifier) {
     return class decoratorFunc extends superClass {
         constructor(...args) {
             super(...args);

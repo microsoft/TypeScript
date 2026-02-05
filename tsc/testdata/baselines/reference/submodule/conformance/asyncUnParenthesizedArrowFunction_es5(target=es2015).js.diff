@@ -1,0 +1,10 @@
+--- old.asyncUnParenthesizedArrowFunction_es5(target=es2015).js
++++ new.asyncUnParenthesizedArrowFunction_es5(target=es2015).js
+@@= skipped -6, +6 lines =@@
+
+ //// [asyncUnParenthesizedArrowFunction_es5.js]
+ "use strict";
+-const x = (i) => __awaiter(void 0, void 0, void 0, function* () { return yield someOtherFunction(i); });
+-const x1 = (i) => __awaiter(void 0, void 0, void 0, function* () { return yield someOtherFunction(i); });
++const x = async i => await someOtherFunction(i);
++const x1 = async (i) => await someOtherFunction(i);

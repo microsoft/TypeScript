@@ -27,6 +27,7 @@ PRIVATE_METADATA.get(C[Symbol.metadata]).b; // 'y'
 
 
 //// [foo.js]
+"use strict";
 const PRIVATE_METADATA = new WeakMap();
 function meta(key, value) {
     return (_, context) => {

@@ -20,6 +20,7 @@ interface C {
 
 
 //// [privateNameConstructorSignature.js]
+"use strict";
 class C {
     #x;
     static test() {

@@ -7,6 +7,7 @@ class C {
 
 
 //// [thisExpressionInCallExpressionWithTypeArguments.js]
+"use strict";
 class C {
     foo() { [1, 2, 3].map((x) => { return this; }); }
 }

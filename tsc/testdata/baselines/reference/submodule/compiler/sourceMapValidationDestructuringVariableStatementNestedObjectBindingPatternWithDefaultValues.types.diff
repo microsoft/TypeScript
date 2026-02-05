@@ -1,0 +1,11 @@
+--- old.sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.types
++++ new.sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.types
+@@= skipped -12, +12 lines =@@
+ >name : string
+
+     skills: {
+->skills : { primary?: string; secondary?: string; }
++>skills : { primary?: string | undefined; secondary?: string | undefined; }
+
+         primary?: string;
+ >primary : string | undefined

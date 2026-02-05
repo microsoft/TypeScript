@@ -1,8 +1,8 @@
 --- old.numericIndexingResults.js
 +++ new.numericIndexingResults.js
-@@= skipped -59, +59 lines =@@
-
+@@= skipped -60, +60 lines =@@
  //// [numericIndexingResults.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this[1] = '';

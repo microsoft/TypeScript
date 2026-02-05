@@ -1,8 +1,8 @@
 --- old.recursiveSpecializationOfSignatures.js
 +++ new.recursiveSpecializationOfSignatures.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [recursiveSpecializationOfSignatures.js]
+ "use strict";
  class S0 {
 +    S17;
      set S1(S2) {

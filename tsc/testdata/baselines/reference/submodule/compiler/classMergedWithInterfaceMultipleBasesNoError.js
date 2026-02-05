@@ -13,12 +13,9 @@ export default class extends Foo {
 }
 
 //// [classMergedWithInterfaceMultipleBasesNoError.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 class Foo {
 }
-class default_1 extends Foo {
+export default class extends Foo {
     observer = this.handleIntersection;
     handleIntersection = () => { };
 }
-exports.default = default_1;

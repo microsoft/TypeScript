@@ -1,6 +1,6 @@
 --- old.assignAnyToEveryType.js
 +++ new.assignAnyToEveryType.js
-@@= skipped -65, +65 lines =@@
+@@= skipped -66, +66 lines =@@
  var g2 = E.A;
  g2 = x;
  class C {

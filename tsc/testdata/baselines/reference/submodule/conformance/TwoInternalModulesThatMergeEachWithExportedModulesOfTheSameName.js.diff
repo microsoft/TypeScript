@@ -1,7 +1,7 @@
 --- old.TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.js
 +++ new.TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.js
-@@= skipped -38, +38 lines =@@
- //// [TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.js]
+@@= skipped -39, +39 lines =@@
+ "use strict";
  var A;
  (function (A) {
 -    var B;

@@ -38,7 +38,7 @@
 //                   ^^^^^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (method) SubClass.doSomethingUseful(mySpecificStuff?: { tiger: string; lion: string; }): string
+// | (method) SubClass.doSomethingUseful(mySpecificStuff?: { tiger: string; lion: string; } | undefined): string
 // | ```
 // | 
 // | 
@@ -108,7 +108,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) SubClass.doSomethingUseful(mySpecificStuff?: { tiger: string; lion: string; }): string\n```\n\n\n*@inheritDoc*\n\n*@param* `mySpecificStuff` — Description of my specific parameter.\n"
+        "value": "```tsx\n(method) SubClass.doSomethingUseful(mySpecificStuff?: { tiger: string; lion: string; } | undefined): string\n```\n\n\n*@inheritDoc*\n\n*@param* `mySpecificStuff` — Description of my specific parameter.\n"
       },
       "range": {
         "start": {

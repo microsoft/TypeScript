@@ -1,8 +1,8 @@
 --- old.unusedTypeParameters5.js
 +++ new.unusedTypeParameters5.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [unusedTypeParameters5.js]
+ "use strict";
  class A {
 +    x;
  }

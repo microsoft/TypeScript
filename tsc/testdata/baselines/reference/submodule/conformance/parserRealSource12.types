@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : typeof TypeScript
 
     export interface IAstWalker {
@@ -1741,7 +1741,7 @@ module TypeScript {
 >globalAstWalkerFactory : AstWalkerFactory
     }
 
-    module ChildrenWalkers {
+    namespace ChildrenWalkers {
 >ChildrenWalkers : typeof ChildrenWalkers
 
         export function walkNone(preAst: ASTList, parent: AST, walker: IAstWalker): void {

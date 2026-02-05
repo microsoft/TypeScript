@@ -19,7 +19,7 @@ protectedMembers.ts(111,7): error TS2415: Class 'B3' incorrectly extends base cl
 ==== protectedMembers.ts (13 errors) ====
     // Class with protected members
     class C1 {
-        protected x: number;
+        protected x!: number;
         protected static sx: number;
         protected f() {
             return this.x;
@@ -41,8 +41,8 @@ protectedMembers.ts(111,7): error TS2415: Class 'B3' incorrectly extends base cl
     
     // Derived class making protected members public
     class C3 extends C2 {
-        x: number;
-        static sx: number;
+        x!: number;
+        static sx: number
         f() {
             return super.f();
         }
@@ -51,9 +51,9 @@ protectedMembers.ts(111,7): error TS2415: Class 'B3' incorrectly extends base cl
         }
     }
     
-    var c1: C1;
-    var c2: C2;
-    var c3: C3;
+    declare var c1: C1;
+    declare var c2: C2;
+    declare var c3: C3;
     
     // All of these should be errors
     c1.x;
@@ -131,8 +131,8 @@ protectedMembers.ts(111,7): error TS2415: Class 'B3' incorrectly extends base cl
     class B1 {
         x;
     }
-    var a1: A1;
-    var b1: B1;
+    declare var a1: A1;
+    declare var b1: B1;
     a1 = b1;  // Error, B1 doesn't derive from A1
     ~~
 !!! error TS2322: Type 'B1' is not assignable to type 'A1'.

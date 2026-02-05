@@ -28,6 +28,7 @@ class C<T extends Foo, U extends Foo> {
 }
 
 //// [typeParameterAssignability3.js]
+"use strict";
 // type parameters are not assignable to one another unless directly or indirectly constrained to one another
 class Foo {
     foo;

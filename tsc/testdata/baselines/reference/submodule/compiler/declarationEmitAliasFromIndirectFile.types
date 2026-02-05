@@ -41,7 +41,7 @@ import { Locale, CustomLocale, key as LocaleKey } from "./locale";
 
 export interface FlatpickrFn {
     l10ns: {[k in LocaleKey]?: CustomLocale } & { default: Locale };
->l10ns : { ar?: CustomLocale; bg?: CustomLocale; } & { default: Locale; }
+>l10ns : { ar?: CustomLocale | undefined; bg?: CustomLocale | undefined; } & { default: Locale; }
 >default : Locale
 }
 
@@ -57,7 +57,7 @@ const fp = { l10ns: {} } as FlatpickrFn;
 >{} : {}
 
 export default fp.l10ns;
->fp.l10ns : { ar?: import("locale").CustomLocale; bg?: import("locale").CustomLocale; } & { default: import("locale").Locale; }
+>fp.l10ns : { ar?: import("locale").CustomLocale | undefined; bg?: import("locale").CustomLocale | undefined; } & { default: import("locale").Locale; }
 >fp : FlatpickrFn
->l10ns : { ar?: import("locale").CustomLocale; bg?: import("locale").CustomLocale; } & { default: import("locale").Locale; }
+>l10ns : { ar?: import("locale").CustomLocale | undefined; bg?: import("locale").CustomLocale | undefined; } & { default: import("locale").Locale; }
 

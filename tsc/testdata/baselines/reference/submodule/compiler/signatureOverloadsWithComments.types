@@ -28,7 +28,7 @@ function Foo() {
 
         foo(bar?: string): string | void {
 >foo : { (bar: string): void; (): string; }
->bar : string
+>bar : string | undefined
 
             return 'hi'
 >'hi' : "hi"

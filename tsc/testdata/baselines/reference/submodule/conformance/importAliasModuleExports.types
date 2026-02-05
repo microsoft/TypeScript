@@ -38,7 +38,7 @@ A.prototype.func = function() { this._func = 0; }
 >function() { this._func = 0; } : () => void
 >this._func = 0 : 0
 >this._func : any
->this : any
+>this : A
 >_func : any
 >0 : 0
 

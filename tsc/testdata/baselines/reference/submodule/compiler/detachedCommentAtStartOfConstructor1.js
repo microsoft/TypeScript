@@ -13,6 +13,7 @@ class TestFile {
 }
 
 //// [detachedCommentAtStartOfConstructor1.js]
+"use strict";
 class TestFile {
     message;
     name;

@@ -1,6 +1,6 @@
 --- old.importOnAliasedIdentifiers.js
 +++ new.importOnAliasedIdentifiers.js
-@@= skipped -17, +17 lines =@@
+@@= skipped -18, +18 lines =@@
  })(A || (A = {}));
  var B;
  (function (B) {

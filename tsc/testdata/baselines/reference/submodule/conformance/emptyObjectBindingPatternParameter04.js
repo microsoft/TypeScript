@@ -6,6 +6,7 @@ function f({} = {a: 1, b: "2", c: true}) {
 }
 
 //// [emptyObjectBindingPatternParameter04.js]
+"use strict";
 function f({} = { a: 1, b: "2", c: true }) {
     var x, y, z;
 }

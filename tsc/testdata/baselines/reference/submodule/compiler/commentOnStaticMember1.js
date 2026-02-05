@@ -8,6 +8,7 @@ class Greeter {
 }
 
 //// [commentOnStaticMember1.js]
+"use strict";
 class Greeter {
     //Hello World
     static foo() {

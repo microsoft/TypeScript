@@ -1,0 +1,52 @@
+--- old.assignFromStringInterface2.types
++++ new.assignFromStringInterface2.types
+@@= skipped -25, +25 lines =@@
+ >strings : string[]
+
+     indexOf(searchString: string, position?: number): number;
+->indexOf : (searchString: string, position?: number) => number
++>indexOf : (searchString: string, position?: number | undefined) => number
+ >searchString : string
+ >position : number | undefined
+
+     lastIndexOf(searchString: string, position?: number): number;
+->lastIndexOf : (searchString: string, position?: number) => number
++>lastIndexOf : (searchString: string, position?: number | undefined) => number
+ >searchString : string
+ >position : number | undefined
+
+@@= skipped -54, +54 lines =@@
+ >regexp : RegExp
+
+     slice(start?: number, end?: number): string;
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+ >start : number | undefined
+ >end : number | undefined
+
+     split(separator: string, limit?: number): string[];
+->split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
++>split : { (separator: string, limit?: number | undefined): string[]; (separator: RegExp, limit?: number | undefined): string[]; }
+ >separator : string
+ >limit : number | undefined
+
+     split(separator: RegExp, limit?: number): string[];
+->split : { (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
++>split : { (separator: string, limit?: number | undefined): string[]; (separator: RegExp, limit?: number | undefined): string[]; }
+ >separator : RegExp
+ >limit : number | undefined
+
+     substring(start: number, end?: number): string;
+->substring : (start: number, end?: number) => string
++>substring : (start: number, end?: number | undefined) => string
+ >start : number
+ >end : number | undefined
+
+@@= skipped -38, +38 lines =@@
+ >length : number
+
+     substr(from: number, length?: number): string;
+->substr : (from: number, length?: number) => string
++>substr : (from: number, length?: number | undefined) => string
+ >from : number
+ >length : number | undefined

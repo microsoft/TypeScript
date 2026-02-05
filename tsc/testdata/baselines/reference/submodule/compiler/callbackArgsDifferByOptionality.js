@@ -8,6 +8,7 @@ function x3(callback: (x: any) => number) {
 }
 
 //// [callbackArgsDifferByOptionality.js]
+"use strict";
 function x3(callback) {
     cb();
 }

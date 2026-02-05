@@ -20,6 +20,7 @@ var n = /\d+/g;
 var o = /[3-5]+/i;
 
 //// [literals1.js]
+"use strict";
 var a = 42;
 var b = 0xFA34;
 var c = 0.1715;

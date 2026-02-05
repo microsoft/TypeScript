@@ -7,6 +7,7 @@ x.text = "bar"
 
 
 //// [stringLiteralPropertyNameWithLineContinuation1.js]
+"use strict";
 var x = { 'text\
 ': 'hello' };
 x.text = "bar";

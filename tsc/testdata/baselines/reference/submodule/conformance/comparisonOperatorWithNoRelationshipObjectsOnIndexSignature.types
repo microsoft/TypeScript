@@ -23,35 +23,35 @@ class C {
 >c : string
 }
 
-var a1: { [a: string]: string };
+declare var a1: { [a: string]: string };
 >a1 : { [a: string]: string; }
 >a : string
 
-var b1: { [b: string]: number };
+declare var b1: { [b: string]: number };
 >b1 : { [b: string]: number; }
 >b : string
 
-var a2: { [index: string]: Base };
+declare var a2: { [index: string]: Base };
 >a2 : { [index: string]: Base; }
 >index : string
 
-var b2: { [index: string]: C };
+declare var b2: { [index: string]: C };
 >b2 : { [index: string]: C; }
 >index : string
 
-var a3: { [index: number]: Base };
+declare var a3: { [index: number]: Base };
 >a3 : { [index: number]: Base; }
 >index : number
 
-var b3: { [index: number]: C };
+declare var b3: { [index: number]: C };
 >b3 : { [index: number]: C; }
 >index : number
 
-var a4: { [index: number]: Derived };
+declare var a4: { [index: number]: Derived };
 >a4 : { [index: number]: Derived; }
 >index : number
 
-var b4: { [index: string]: Base };
+declare var b4: { [index: string]: Base };
 >b4 : { [index: string]: Base; }
 >index : string
 

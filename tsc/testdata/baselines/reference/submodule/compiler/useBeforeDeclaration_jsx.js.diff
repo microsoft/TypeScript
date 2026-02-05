@@ -1,8 +1,8 @@
 --- old.useBeforeDeclaration_jsx.js
 +++ new.useBeforeDeclaration_jsx.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [useBeforeDeclaration_jsx.jsx]
+ "use strict";
  class C {
 +    static a = <C.z></C.z>;
 +    static b = <C.z />;

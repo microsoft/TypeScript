@@ -5,7 +5,7 @@
 // no errors expected here
 
 function f1() {
->f1 : () => number
+>f1 : () => 1 | null
 
     if (true) {
 >true : true
@@ -19,7 +19,7 @@ function f1() {
 }
 
 function f2() {
->f2 : () => 1 | 2
+>f2 : () => 1 | 2 | null
 
     if (true) {
 >true : true
@@ -38,14 +38,14 @@ function f2() {
 }
 
 function f4() {
->f4 : () => number
+>f4 : () => 1 | undefined
 
     try {
         return 1;
 >1 : 1
     }
     catch (e) {
->e : any
+>e : unknown
 
         return undefined;
 >undefined : undefined
@@ -68,7 +68,7 @@ function f5() {
 }
 
 function f6<T>(x: T) {
->f6 : <T>(x: T) => T
+>f6 : <T>(x: T) => T | null
 >x : T
 
     if (true) {
@@ -91,44 +91,44 @@ function f6<T>(x: T) {
 //}
 
 var a: { x: number; y?: number };
->a : { x: number; y?: number; }
+>a : { x: number; y?: number | undefined; }
 >x : number
->y : number
+>y : number | undefined
 
 var b: { x: number; z?: number };
->b : { x: number; z?: number; }
+>b : { x: number; z?: number | undefined; }
 >x : number
->z : number
+>z : number | undefined
 
 // returns typeof a
 function f9() {
->f9 : () => { x: number; y?: number; } | { x: number; z?: number; }
+>f9 : () => { x: number; y?: number | undefined; } | { x: number; z?: number | undefined; }
 
     if (true) {
 >true : true
 
         return a;
->a : { x: number; y?: number; }
+>a : { x: number; y?: number | undefined; }
 
     } else {
         return b;
->b : { x: number; z?: number; }
+>b : { x: number; z?: number | undefined; }
     }
 }
 
 // returns typeof b
 function f10() {
->f10 : () => { x: number; y?: number; } | { x: number; z?: number; }
+>f10 : () => { x: number; y?: number | undefined; } | { x: number; z?: number | undefined; }
 
     if (true) {
 >true : true
 
         return b;
->b : { x: number; z?: number; }
+>b : { x: number; z?: number | undefined; }
 
     } else {
         return a;
->a : { x: number; y?: number; }
+>a : { x: number; y?: number | undefined; }
     }
 }
 

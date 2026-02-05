@@ -3,10 +3,10 @@
 === sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts ===
 interface Robot {
     name?: string;
->name : string
+>name : string | undefined
 
     skill?: string;
->skill : string
+>skill : string | undefined
 }
 declare var console: {
 >console : { log(msg: string): void; }

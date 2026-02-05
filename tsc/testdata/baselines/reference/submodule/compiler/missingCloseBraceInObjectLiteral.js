@@ -8,6 +8,7 @@ var foo = {
 
 
 //// [missingCloseBraceInObjectLiteral.js]
+"use strict";
 var foo = {
     a: 'a',
     b: 'b',

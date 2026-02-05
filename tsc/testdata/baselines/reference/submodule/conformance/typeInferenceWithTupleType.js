@@ -36,6 +36,7 @@ expected = f2(undefined as ["a"[], "b"[]]);
 
 
 //// [typeInferenceWithTupleType.js]
+"use strict";
 function combine(x, y) {
     return [x, y];
 }

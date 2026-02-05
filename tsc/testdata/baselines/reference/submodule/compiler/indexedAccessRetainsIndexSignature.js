@@ -14,7 +14,4 @@ export const o: O = { b: '' }
 
 
 //// [indexedAccessRetainsIndexSignature.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.o = void 0;
-exports.o = { b: '' };
+export const o = { b: '' };

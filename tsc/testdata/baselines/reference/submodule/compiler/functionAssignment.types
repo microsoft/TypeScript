@@ -23,10 +23,10 @@ interface baz {
 >callback : Function
 }
 
-var barbaz: baz;
+declare var barbaz: baz;
 >barbaz : baz
 
-var test: foo;
+declare var test: foo;
 >test : foo
 
 test.get(function (param) {

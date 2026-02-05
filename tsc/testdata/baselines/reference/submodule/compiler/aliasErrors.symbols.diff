@@ -6,7 +6,7 @@
  >foo : Symbol(foo, Decl(aliasErrors.ts, 0, 0))
 ->bar : Symbol(provide.bar, Decl(aliasErrors.ts, 2, 5))
 +>bar : Symbol(beez, Decl(aliasErrors.ts, 2, 5))
- >baz : Symbol(booz, Decl(aliasErrors.ts, 3, 23))
+ >baz : Symbol(booz, Decl(aliasErrors.ts, 3, 26))
 
  import beez = foo.bar;
  >beez : Symbol(beez, Decl(aliasErrors.ts, 7, 26))

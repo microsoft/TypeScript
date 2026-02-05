@@ -14,6 +14,7 @@ var c = new C<number>();
 var r: string = c.x;
 
 //// [genericGetter3.js]
+"use strict";
 class A {
 }
 class C {

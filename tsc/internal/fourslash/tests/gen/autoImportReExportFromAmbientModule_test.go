@@ -17,7 +17,9 @@ func TestAutoImportReExportFromAmbientModule(t *testing.T) {
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
 {
   "compilerOptions": {
-    "module": "commonjs"
+    "module": "commonjs",
+    "types": ["*"],
+    "lib": ["es5"]
   }
 }
 // @Filename: /home/src/workspaces/project/node_modules/@types/node/index.d.ts

@@ -8,6 +8,7 @@ class C {
 }
 
 //// [parserSuperExpression3.js]
+"use strict";
 class C {
     M() {
         this.super(0);

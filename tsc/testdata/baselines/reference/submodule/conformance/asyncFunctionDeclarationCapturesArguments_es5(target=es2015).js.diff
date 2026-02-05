@@ -1,0 +1,16 @@
+--- old.asyncFunctionDeclarationCapturesArguments_es5(target=es2015).js
++++ new.asyncFunctionDeclarationCapturesArguments_es5(target=es2015).js
+@@= skipped -15, +15 lines =@@
+ class C {
+     method() {
+         function other() { }
+-        function fn() {
+-            var arguments_1 = arguments;
+-            return __awaiter(this, void 0, void 0, function* () {
+-                yield other.apply(this, arguments_1);
+-            });
++        async function fn() {
++            await other.apply(this, arguments);
+         }
+     }
+ }

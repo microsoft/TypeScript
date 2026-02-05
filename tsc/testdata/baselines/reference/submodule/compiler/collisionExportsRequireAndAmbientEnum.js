@@ -9,7 +9,7 @@ export declare enum exports {
     _thisVal1,
     _thisVal2,
 }
-declare module m1 {
+declare namespace m1 {
     enum require {
         _thisVal1,
         _thisVal2,
@@ -19,7 +19,7 @@ declare module m1 {
         _thisVal2,
     }
 }
-module m2 {
+namespace m2 {
     export declare enum require { 
         _thisVal1,
         _thisVal2,
@@ -39,7 +39,7 @@ declare enum exports {
     _thisVal1,
     _thisVal2,
 }
-declare module m3 {
+declare namespace m3 {
     enum require {
         _thisVal1,
         _thisVal2,
@@ -49,7 +49,7 @@ declare module m3 {
         _thisVal2,
     }
 }
-module m4 {
+namespace m4 {
     export declare enum require {
         _thisVal1,
         _thisVal2,
@@ -67,6 +67,7 @@ var m2;
 (function (m2) {
 })(m2 || (m2 = {}));
 //// [collisionExportsRequireAndAmbientEnum_globalFile.js]
+"use strict";
 var m4;
 (function (m4) {
 })(m4 || (m4 = {}));

@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedClasses.ts] ////
 
 === ModuleWithExportedAndNonExportedClasses.ts ===
-module A {
+namespace A {
 >A : Symbol(A, Decl(ModuleWithExportedAndNonExportedClasses.ts, 0, 0))
 
     export class A {
->A : Symbol(A, Decl(ModuleWithExportedAndNonExportedClasses.ts, 0, 10))
+>A : Symbol(A, Decl(ModuleWithExportedAndNonExportedClasses.ts, 0, 13))
 
         id: number;
 >id : Symbol(A.id, Decl(ModuleWithExportedAndNonExportedClasses.ts, 1, 20))
@@ -61,9 +61,9 @@ var a: { id: number; name: string };
 
 var a = new A.A();
 >a : Symbol(a, Decl(ModuleWithExportedAndNonExportedClasses.ts, 23, 3), Decl(ModuleWithExportedAndNonExportedClasses.ts, 24, 3))
->A.A : Symbol(A.A, Decl(ModuleWithExportedAndNonExportedClasses.ts, 0, 10))
+>A.A : Symbol(A.A, Decl(ModuleWithExportedAndNonExportedClasses.ts, 0, 13))
 >A : Symbol(A, Decl(ModuleWithExportedAndNonExportedClasses.ts, 0, 0))
->A : Symbol(A.A, Decl(ModuleWithExportedAndNonExportedClasses.ts, 0, 10))
+>A : Symbol(A.A, Decl(ModuleWithExportedAndNonExportedClasses.ts, 0, 13))
 
 var AG = new A.AG<number, string>()
 >AG : Symbol(AG, Decl(ModuleWithExportedAndNonExportedClasses.ts, 26, 3))

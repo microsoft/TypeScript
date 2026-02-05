@@ -13,15 +13,15 @@ declare const a: { error: { prop: string }, result: undefined } | { error: undef
 if (typeof a.error === 'undefined') {
 >typeof a.error === 'undefined' : boolean
 >typeof a.error : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->a.error : { prop: string; }
+>a.error : { prop: string; } | undefined
 >a : { error: { prop: string; }; result: undefined; } | { error: undefined; result: { prop: number; }; }
->error : { prop: string; }
+>error : { prop: string; } | undefined
 >'undefined' : "undefined"
 
     a.result.prop; // number
 >a.result.prop : number
 >a.result : { prop: number; }
->a : { error: { prop: string; }; result: undefined; } | { error: undefined; result: { prop: number; }; }
+>a : { error: undefined; result: { prop: number; }; }
 >result : { prop: number; }
 >prop : number
 }
@@ -29,7 +29,7 @@ else {
     a.error.prop; // string
 >a.error.prop : string
 >a.error : { prop: string; }
->a : { error: { prop: string; }; result: undefined; } | { error: undefined; result: { prop: number; }; }
+>a : { error: { prop: string; }; result: undefined; }
 >error : { prop: string; }
 >prop : string
 }
@@ -37,15 +37,15 @@ else {
 if (typeof a.error !== 'undefined') {
 >typeof a.error !== 'undefined' : boolean
 >typeof a.error : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->a.error : { prop: string; }
+>a.error : { prop: string; } | undefined
 >a : { error: { prop: string; }; result: undefined; } | { error: undefined; result: { prop: number; }; }
->error : { prop: string; }
+>error : { prop: string; } | undefined
 >'undefined' : "undefined"
 
     a.error.prop; // string
 >a.error.prop : string
 >a.error : { prop: string; }
->a : { error: { prop: string; }; result: undefined; } | { error: undefined; result: { prop: number; }; }
+>a : { error: { prop: string; }; result: undefined; }
 >error : { prop: string; }
 >prop : string
 }
@@ -53,7 +53,7 @@ else {
     a.result.prop; // number
 >a.result.prop : number
 >a.result : { prop: number; }
->a : { error: { prop: string; }; result: undefined; } | { error: undefined; result: { prop: number; }; }
+>a : { error: undefined; result: { prop: number; }; }
 >result : { prop: number; }
 >prop : number
 }

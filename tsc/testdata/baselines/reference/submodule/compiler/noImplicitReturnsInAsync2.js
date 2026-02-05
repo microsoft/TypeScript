@@ -38,6 +38,7 @@ async function test7(isError: boolean = true) {
 }
 
 //// [noImplicitReturnsInAsync2.js]
+"use strict";
 // Should be an error, Promise<number>, currently retorted correctly 
 async function test3(isError = true) {
     if (isError === true) {

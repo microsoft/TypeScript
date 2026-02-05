@@ -13,6 +13,7 @@ class D {
 }
 
 //// [emitClassDeclarationOverloadInES6.js]
+"use strict";
 class C {
     constructor(x) {
     }

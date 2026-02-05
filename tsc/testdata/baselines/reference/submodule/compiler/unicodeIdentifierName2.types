@@ -6,5 +6,5 @@ var a₁ = "hello"; alert(a₁)
 >"hello" : "hello"
 >alert(a₁) : void
 >alert : (message?: any) => void
->a : any
+>a : undefined
 

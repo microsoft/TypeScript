@@ -1,6 +1,6 @@
 --- old.capturedLetConstInLoop9_ES6.js
 +++ new.capturedLetConstInLoop9_ES6.js
-@@= skipped -235, +235 lines =@@
+@@= skipped -236, +236 lines =@@
      }
  }
  class C {

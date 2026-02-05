@@ -9,6 +9,7 @@ function foo(x: unknown) {
 
 
 //// [narrowUnknownByTypeofObject.js]
+"use strict";
 function foo(x) {
     if (typeof x === "object") {
         x;

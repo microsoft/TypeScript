@@ -11,6 +11,7 @@ clone.value = 'bar';
 
 
 //// [spreadTypeRemovesReadonly.js]
+"use strict";
 const data = { value: 'foo' };
 const clone = Object.assign({}, data);
 clone.value = 'bar';

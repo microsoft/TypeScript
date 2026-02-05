@@ -77,6 +77,7 @@ a = b;
 
 
 //// [genericTypeAliases.js]
+"use strict";
 var tree = {
     left: {
         left: 0,

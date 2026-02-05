@@ -1,6 +1,6 @@
 --- old.assignmentCompatability39.js
 +++ new.assignmentCompatability39.js
-@@= skipped -21, +21 lines =@@
+@@= skipped -22, +22 lines =@@
  var __test2__;
  (function (__test2__) {
      class classWithTwoPublic {

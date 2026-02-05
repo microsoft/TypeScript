@@ -88,6 +88,7 @@ arr_any = c3; // should be an error - is
 arr_any = i1; // should be an error - is
 
 //// [arrayAssignmentTest1.js]
+"use strict";
 class C1 {
     IM1() { return null; }
     C1M1() { return null; }

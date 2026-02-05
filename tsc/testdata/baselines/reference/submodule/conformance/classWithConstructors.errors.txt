@@ -7,7 +7,7 @@ classWithConstructors.ts(46,13): error TS2554: Expected 1-2 arguments, but got 0
 
 
 ==== classWithConstructors.ts (6 errors) ====
-    module NonGeneric {
+    namespace NonGeneric {
         class C {
             constructor(x: string) { }
         }
@@ -41,7 +41,7 @@ classWithConstructors.ts(46,13): error TS2554: Expected 1-2 arguments, but got 0
         var d3 = new D(''); // ok
     }
     
-    module Generics {
+    namespace Generics {
         class C<T> {
             constructor(x: T) { }
         }

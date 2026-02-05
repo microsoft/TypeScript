@@ -12,6 +12,7 @@ for (let i = 0; i < 3; i++) {
 arr.forEach(C => console.log(C.y()));
 
 //// [classExpressionWithStaticPropertiesES63.js]
+"use strict";
 const arr = [];
 for (let i = 0; i < 3; i++) {
     arr.push(class C {

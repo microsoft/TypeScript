@@ -1,0 +1,24 @@
+--- old.jsDeclarationsClassStatic(target=es2015).types
++++ new.jsDeclarationsClassStatic(target=es2015).types
+@@= skipped -37, +37 lines =@@
+ module.exports = Handler;
+ >module.exports = Handler : typeof Handler
+ >module.exports : typeof Handler
+->module : { exports: typeof Handler; }
++>module : { Handler: typeof Handler; }
+ >exports : typeof Handler
+ >Handler : typeof Handler
+
+ module.exports.Strings = Strings
+ >module.exports.Strings = Strings : { a: string; b: string; }
+->module.exports.Strings : { a: string; b: string; }
++>module.exports.Strings : any
+ >module.exports : typeof Handler
+->module : { exports: typeof Handler; }
++>module : { Handler: typeof Handler; }
+ >exports : typeof Handler
+->Strings : { a: string; b: string; }
++>Strings : any
+ >Strings : { a: string; b: string; }
+
+ /**

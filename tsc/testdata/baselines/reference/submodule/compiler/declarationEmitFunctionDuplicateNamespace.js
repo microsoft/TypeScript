@@ -11,6 +11,7 @@ f.x = 2;
 
 
 //// [declarationEmitFunctionDuplicateNamespace.js]
+"use strict";
 function f(a) {
     return a;
 }

@@ -14,6 +14,7 @@ class D {
 }
 
 //// [propertyAndFunctionWithSameName.js]
+"use strict";
 class C {
     x;
     x() {

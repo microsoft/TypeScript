@@ -1,6 +1,6 @@
 --- old.inferFromGenericFunctionReturnTypes2.js
 +++ new.inferFromGenericFunctionReturnTypes2.js
-@@= skipped -110, +110 lines =@@
+@@= skipped -111, +111 lines =@@
  let a6 = ["a", "b"].map(combine(wrap(s => s.length), identity));
  // This is a contrived class. We could do the same thing with Observables, etc.
  class SetOf {

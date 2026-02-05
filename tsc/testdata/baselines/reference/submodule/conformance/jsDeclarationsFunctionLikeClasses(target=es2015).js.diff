@@ -1,0 +1,24 @@
+--- old.jsDeclarationsFunctionLikeClasses(target=es2015).js
++++ new.jsDeclarationsFunctionLikeClasses(target=es2015).js
+@@= skipped -56, +56 lines =@@
+  * @param {number} x
+  * @param {number} y
+  */
+-export function Point(x: number, y: number): Point;
+-export class Point {
+-    /**
+-     * @param {number} x
+-     * @param {number} y
+-     */
+-    constructor(x: number, y: number);
+-    x: number | undefined;
+-    y: number | undefined;
+-}
++export declare function Point(x: number, y: number): any;
+ //// [referencer.d.ts]
+ /**
+  * @param {Point} p
+  */
+-export function magnitude(p: Point): number;
+-import { Point } from "./source";
++export declare function magnitude(p: Point): number;

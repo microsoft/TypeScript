@@ -25,6 +25,7 @@ var f7 = _ => undefined;
 var f8 = function (_) { };
 
 //// [unusedParametersWithUnderscore.js]
+"use strict";
 function f(a, _b, c, ___, d, e___, _f) {
 }
 function f2({ _a, __b }) {

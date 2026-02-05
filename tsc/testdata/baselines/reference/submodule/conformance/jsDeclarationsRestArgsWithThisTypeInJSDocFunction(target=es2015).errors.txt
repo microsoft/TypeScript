@@ -1,0 +1,16 @@
+bug38550.js(3,22): error TS1005: '}' expected.
+bug38550.js(5,10): error TS7006: Parameter 'functionDeclaration' implicitly has an 'any' type.
+
+
+==== bug38550.js (2 errors) ====
+    export class Clazz {
+      /**
+       * @param {function(this:Object, ...*):*} functionDeclaration
+                         ~
+!!! error TS1005: '}' expected.
+       */
+      method(functionDeclaration) {}
+             ~~~~~~~~~~~~~~~~~~~
+!!! error TS7006: Parameter 'functionDeclaration' implicitly has an 'any' type.
+    }
+    

@@ -63,5 +63,5 @@ function f(x = 0, b = false) {
 function f2(_: ReadonlyArray<number>): void {}
 >f2 : Symbol(f2, Decl(noUnusedLocals_writeOnly.ts, 17, 1))
 >_ : Symbol(_, Decl(noUnusedLocals_writeOnly.ts, 18, 12))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 

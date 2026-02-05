@@ -1,6 +1,6 @@
 --- old.duplicateIdentifiersAcrossContainerBoundaries.js
 +++ new.duplicateIdentifiersAcrossContainerBoundaries.js
-@@= skipped -89, +89 lines =@@
+@@= skipped -90, +90 lines =@@
      M.v = 3;
  })(M || (M = {}));
  (function (M) {

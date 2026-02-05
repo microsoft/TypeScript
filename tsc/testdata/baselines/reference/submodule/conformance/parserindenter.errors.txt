@@ -22,10 +22,12 @@ parserindenter.ts(69,34): error TS2304: Cannot find name 'IndentationInfo'.
 parserindenter.ts(110,40): error TS2304: Cannot find name 'AuthorTokenKind'.
 parserindenter.ts(110,113): error TS2304: Cannot find name 'AuthorTokenKind'.
 parserindenter.ts(140,40): error TS2304: Cannot find name 'AuthorTokenKind'.
+parserindenter.ts(142,47): error TS7006: Parameter 'item' implicitly has an 'any' type.
 parserindenter.ts(152,51): error TS2304: Cannot find name 'TokenSpan'.
 parserindenter.ts(152,63): error TS2304: Cannot find name 'List_TextEditInfo'.
 parserindenter.ts(153,30): error TS2304: Cannot find name 'List_TextEditInfo'.
 parserindenter.ts(155,32): error TS2304: Cannot find name 'AuthorTokenKind'.
+parserindenter.ts(162,105): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
 parserindenter.ts(182,79): error TS2503: Cannot find namespace 'Services'.
 parserindenter.ts(183,20): error TS2662: Cannot find name 'GetIndentSizeFromText'. Did you mean the static member 'Indenter.GetIndentSizeFromText'?
 parserindenter.ts(186,67): error TS2503: Cannot find namespace 'Services'.
@@ -79,6 +81,7 @@ parserindenter.ts(321,22): error TS2304: Cannot find name 'AuthorParseNodeKind'.
 parserindenter.ts(324,22): error TS2304: Cannot find name 'AuthorParseNodeKind'.
 parserindenter.ts(331,36): error TS2304: Cannot find name 'ParseNodeExtensions'.
 parserindenter.ts(331,83): error TS2304: Cannot find name 'AuthorParseNodeEdge'.
+parserindenter.ts(332,39): error TS7006: Parameter 'argumentNode' implicitly has an 'any' type.
 parserindenter.ts(343,84): error TS2304: Cannot find name 'ParseTree'.
 parserindenter.ts(396,43): error TS2304: Cannot find name 'IndentationInfo'.
 parserindenter.ts(396,114): error TS2304: Cannot find name 'TextEditInfo'.
@@ -89,6 +92,8 @@ parserindenter.ts(413,33): error TS2304: Cannot find name 'Debug'.
 parserindenter.ts(418,32): error TS2304: Cannot find name 'TextEditInfo'.
 parserindenter.ts(431,21): error TS2304: Cannot find name 'StringUtils'.
 parserindenter.ts(435,17): error TS2304: Cannot find name 'StringUtils'.
+parserindenter.ts(435,59): error TS7006: Parameter 'c' implicitly has an 'any' type.
+parserindenter.ts(446,49): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
 parserindenter.ts(454,51): error TS2304: Cannot find name 'StringUtils'.
 parserindenter.ts(457,18): error TS2304: Cannot find name 'StringUtils'.
 parserindenter.ts(477,57): error TS2304: Cannot find name 'TokenSpan'.
@@ -99,8 +104,10 @@ parserindenter.ts(484,89): error TS2304: Cannot find name 'AuthorParseNodeKind'.
 parserindenter.ts(494,84): error TS2304: Cannot find name 'IndentationInfo'.
 parserindenter.ts(497,41): error TS2304: Cannot find name 'Span'.
 parserindenter.ts(504,79): error TS2304: Cannot find name 'IndentationInfo'.
+parserindenter.ts(515,50): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
 parserindenter.ts(517,28): error TS2304: Cannot find name 'IndentationInfo'.
 parserindenter.ts(524,13): error TS2304: Cannot find name 'Debug'.
+parserindenter.ts(532,21): error TS2322: Type 'null' is not assignable to type 'number'.
 parserindenter.ts(534,64): error TS2304: Cannot find name 'Span'.
 parserindenter.ts(556,69): error TS2304: Cannot find name 'Span'.
 parserindenter.ts(571,48): error TS2304: Cannot find name 'ParseTree'.
@@ -108,6 +115,7 @@ parserindenter.ts(574,29): error TS2552: Cannot find name 'ParseNode'. Did you m
 parserindenter.ts(596,33): error TS2552: Cannot find name 'ParseNode'. Did you mean 'ParentNode'?
 parserindenter.ts(622,77): error TS2304: Cannot find name 'AuthorParseNodeKind'.
 parserindenter.ts(634,21): error TS2304: Cannot find name 'ParseNodeExtensions'.
+parserindenter.ts(634,81): error TS7006: Parameter 'sibling' implicitly has an 'any' type.
 parserindenter.ts(665,34): error TS2304: Cannot find name 'IndentationEditInfo'.
 parserindenter.ts(686,45): error TS2304: Cannot find name 'TextEditInfo'.
 parserindenter.ts(688,34): error TS2304: Cannot find name 'IndentationEditInfo'.
@@ -127,7 +135,7 @@ parserindenter.ts(735,42): error TS2304: Cannot find name 'TokenSpan'.
 parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
 
 
-==== parserindenter.ts (127 errors) ====
+==== parserindenter.ts (135 errors) ====
     //﻿
     // Copyright (c) Microsoft Corporation.  All rights reserved.
     // 
@@ -146,7 +154,7 @@ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
     ///<reference path='formatting.ts' />
     
     
-    module Formatting {
+    namespace Formatting {
         export class Indenter implements ILineIndenationResolver  {
                                          ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'ILineIndenationResolver'.
@@ -318,6 +326,8 @@ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
 !!! error TS2304: Cannot find name 'AuthorTokenKind'.
                             var commentEdits = this.GetCommentIndentationEdits(token);
                             commentEdits.foreach((item) => {
+                                                  ~~~~
+!!! error TS7006: Parameter 'item' implicitly has an 'any' type.
                                 result.add(item);
                             });
                         }
@@ -346,6 +356,8 @@ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
                     return result;
     
                 var commentFirstLineIndentationDelta = this.GetIndentationDelta(token.Span.startPosition(), null);
+                                                                                                            ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
                 if (commentFirstLineIndentationDelta != undefined) {
                     for (var line = token.lineNumber() + 1; line <= commentLastLineNumber; line++) {
                         var lineStartPosition = this.snapshot.GetLineFromLineNumber(line).startPosition();
@@ -622,6 +634,8 @@ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
                                                                                       ~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'AuthorParseNodeEdge'.
                         children.foreach((argumentNode) => {
+                                          ~~~~~~~~~~~~
+!!! error TS7006: Parameter 'argumentNode' implicitly has an 'any' type.
                             if (token.Span.startPosition() < argumentNode.AuthorNode.Details.StartOffset)
                                 result = false;
                         });
@@ -745,6 +759,8 @@ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
                     StringUtils.foreach(existingIndentation, (c) => {
                     ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'StringUtils'.
+                                                              ~
+!!! error TS7006: Parameter 'c' implicitly has an 'any' type.
                         if (c == '\t')
                             totalIndent += tabSize;
                         else
@@ -756,6 +772,8 @@ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
                         return "";
                     else
                         return this.GetIndentString(null, totalIndent, tabSize, convertTabsToSpaces);
+                                                    ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
                 }
     
                 var totalIndentSize = level * indentSize;
@@ -845,6 +863,8 @@ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
                 }
     
                 var newIndent = this.GetIndentString(null, newIndentSize, this.editorOptions.TabSize, this.editorOptions.ConvertTabsToSpaces);
+                                                     ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
                 if (newIndent != null) {
                     return new IndentationInfo(newIndent, 0);
                                ~~~~~~~~~~~~~~~
@@ -866,6 +886,8 @@ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
                     // No recorded indentation, return null
                     if (indentEditInfo == null)
                         return null;
+                        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'number'.
     
                     var origIndentText = this.snapshot.GetText(new Span(indentEditInfo.OrigIndentPosition, indentEditInfo.OrigIndentLength()));
                                                                    ~~~~
@@ -982,6 +1004,8 @@ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
                         ParseNodeExtensions.GetChildren(indentNode.Parent).foreach((sibling) => {
                         ~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'ParseNodeExtensions'.
+                                                                                    ~~~~~~~
+!!! error TS7006: Parameter 'sibling' implicitly has an 'any' type.
                             if (sibling !== indentNode) {
                                 if (sibling.CanIndent())
                                     sibling.SetIndentationOverride(indentOverride);

@@ -1,0 +1,19 @@
+--- old.ES5For-ofTypeCheck9(target=es2015).errors.txt
++++ new.ES5For-ofTypeCheck9(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-ES5For-ofTypeCheck9.ts(2,15): error TS2488: Type 'string | number | symbol | string[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+-
+-
+-==== ES5For-ofTypeCheck9.ts (1 errors) ====
++ES5For-ofTypeCheck9.ts(2,15): error TS2488: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.
++ES5For-ofTypeCheck9.ts(2,15): error TS2488: Type 'symbol' must have a '[Symbol.iterator]()' method that returns an iterator.
++
++
++==== ES5For-ofTypeCheck9.ts (2 errors) ====
+     declare var union: string | string[] | number | symbol;
+     for (let v of union) { }
+                   ~~~~~
+-!!! error TS2488: Type 'string | number | symbol | string[]' must have a '[Symbol.iterator]()' method that returns an iterator.
++!!! error TS2488: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.
++                  ~~~~~
++!!! error TS2488: Type 'symbol' must have a '[Symbol.iterator]()' method that returns an iterator.

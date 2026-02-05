@@ -1,15 +1,16 @@
 //// [tests/cases/compiler/genericClassImplementingGenericInterfaceFromAnotherModule.ts] ////
 
 //// [genericClassImplementingGenericInterfaceFromAnotherModule.ts]
-module foo {
+namespace foo {
     export interface IFoo<T> { }
 }
-module bar {
+namespace bar {
     export class Foo<T> implements foo.IFoo<T> { }
 }
 
 
 //// [genericClassImplementingGenericInterfaceFromAnotherModule.js]
+"use strict";
 var bar;
 (function (bar) {
     class Foo {

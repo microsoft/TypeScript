@@ -1,7 +1,7 @@
 --- old.privateIndexer2.js
 +++ new.privateIndexer2.js
-@@= skipped -13, +13 lines =@@
- //// [privateIndexer2.js]
+@@= skipped -14, +14 lines =@@
+ "use strict";
  // private indexers not allowed
  var x = {
 -    [x]: string, string

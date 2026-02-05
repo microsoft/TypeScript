@@ -61,9 +61,10 @@
 @@= skipped -12, +12 lines =@@
   * @type {Ns.One}
   */
- var one;
+ var one = undefined;
 ->one : One
 +>one : Ns.One
+ >undefined : undefined
 
  one.wat;
  >one.wat : any
@@ -74,9 +75,10 @@
  /**
   * @type {Ns.Two}
   */
- var two;
+ var two = undefined;
 ->two : Two
 +>two : Ns.Two
+ >undefined : undefined
 
  two.wat;
  >two.wat : any

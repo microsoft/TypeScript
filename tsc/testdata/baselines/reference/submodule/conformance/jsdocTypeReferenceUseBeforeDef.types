@@ -3,7 +3,7 @@
 === bug25097.js ===
 /** @type {C | null} */
 const c = null
->c : C
+>c : C | null
 
 class C {
 >C : C

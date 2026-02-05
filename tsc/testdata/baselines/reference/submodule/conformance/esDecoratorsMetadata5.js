@@ -8,6 +8,7 @@ class C {
 
 
 //// [foo.js]
+"use strict";
 class C {
     @metadata
     m() { }

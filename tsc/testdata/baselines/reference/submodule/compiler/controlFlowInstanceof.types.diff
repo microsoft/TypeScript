@@ -1,8 +1,8 @@
 --- old.controlFlowInstanceof.types
 +++ new.controlFlowInstanceof.types
-@@= skipped -265, +265 lines =@@
- === uglify.js ===
- /** @constructor */
+@@= skipped -272, +272 lines =@@
+  * @param {any} val
+  */
  function AtTop(val) { this.val = val }
 ->AtTop : typeof AtTop
 +>AtTop : (val: any) => void

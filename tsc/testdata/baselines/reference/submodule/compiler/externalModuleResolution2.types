@@ -10,7 +10,7 @@ x.X // .ts should be picked
 >X : number
 
 === foo.ts ===
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 
     export var X = 1;

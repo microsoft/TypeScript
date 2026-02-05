@@ -21,7 +21,7 @@ class D extends C {
 >baz : number
 }
 
-module D {
+namespace D {
 >D : typeof D
 
     export var y = D.bar; // error

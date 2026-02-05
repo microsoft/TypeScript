@@ -1,6 +1,6 @@
 --- old.missingImportAfterModuleImport.js
 +++ new.missingImportAfterModuleImport.js
-@@= skipped -25, +25 lines =@@
+@@= skipped -26, +26 lines =@@
  //// [missingImportAfterModuleImport_1.js]
  "use strict";
  class MainModule {

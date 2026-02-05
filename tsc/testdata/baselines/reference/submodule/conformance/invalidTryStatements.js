@@ -23,6 +23,7 @@ function fn2() {
 }
 
 //// [invalidTryStatements.js]
+"use strict";
 function fn() {
     try {
     }

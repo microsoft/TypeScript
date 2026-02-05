@@ -22,6 +22,7 @@ interface I {
 var f: (a = 3) => number;
 
 //// [defaultArgsInOverloads.js]
+"use strict";
 function fun(a = null) { }
 class C {
     fun(a = null) { }

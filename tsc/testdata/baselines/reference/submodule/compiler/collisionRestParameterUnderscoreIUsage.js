@@ -11,6 +11,7 @@ class Foo {
 new Foo();
 
 //// [collisionRestParameterUnderscoreIUsage.js]
+"use strict";
 var _i = "This is what I'd expect to see";
 class Foo {
     constructor(...args) {

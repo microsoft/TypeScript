@@ -1,9 +1,9 @@
 --- old.parser0_004152.js
 +++ new.parser0_004152.js
-@@= skipped -10, +10 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Game = void 0;
- class Game {
+@@= skipped -7, +7 lines =@@
+
+ //// [parser0_004152.js]
+ export class Game {
 -    constructor() {
 -        this.position = new DisplayPosition([]);
 -    }
@@ -26,4 +26,3 @@
      ;
 +    prevConfig;
  }
- exports.Game = Game;

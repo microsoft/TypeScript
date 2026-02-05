@@ -1,0 +1,10 @@
+--- old.decoratorMetadata(target=es2015).js
++++ new.decoratorMetadata(target=es2015).js
+@@= skipped -40, +40 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ const service_1 = __importDefault(require("./service"));
+ let MyComponent = class MyComponent {
++    Service;
+     constructor(Service) {
+         this.Service = Service;
+     }

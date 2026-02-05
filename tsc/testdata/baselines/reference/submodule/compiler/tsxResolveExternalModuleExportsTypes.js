@@ -18,6 +18,7 @@ declare module 'a' {
 }
 
 //// [foo.tsx]
+/// <reference path="/.lib/react.d.ts" />
 import { Test } from 'a';
 const Foo = (<h1></h1>);
 

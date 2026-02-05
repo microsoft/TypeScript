@@ -9,8 +9,8 @@ typeParameterArgumentEquivalence.ts(5,5): error TS2322: Type '(item: number) => 
 
 ==== typeParameterArgumentEquivalence.ts (2 errors) ====
     function foo<T>() {
-        var x: (item: number) => boolean;
-        var y: (item: T) => boolean;
+        var x!: (item: number) => boolean;
+        var y!: (item: T) => boolean;
         x = y;  // Should be an error
         ~
 !!! error TS2322: Type '(item: T) => boolean' is not assignable to type '(item: number) => boolean'.

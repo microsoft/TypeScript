@@ -13,6 +13,7 @@ to
 limit
 
 //// [a.js]
+"use strict";
 const a = !();
 !();
 const b = !();
@@ -25,6 +26,7 @@ GOTTA;
 GO;
 FAST;
 //// [b.js]
+"use strict";
 fhqwhgads;
 to;
 limit;

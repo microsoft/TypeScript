@@ -8,3 +8,4 @@ x: () => <A, A>() => void;
 
 
 //// [duplicateTypeParameters3.js]
+"use strict";

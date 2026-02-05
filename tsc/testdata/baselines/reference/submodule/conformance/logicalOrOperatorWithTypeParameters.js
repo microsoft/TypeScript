@@ -26,6 +26,7 @@ function fn3<T extends { a: string; b: string }, U extends { a: string; b: numbe
 }
 
 //// [logicalOrOperatorWithTypeParameters.js]
+"use strict";
 function fn1(t, u) {
     var r1 = t || t;
     var r2 = t || t;

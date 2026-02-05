@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileModuleWithPropertyOfTypeModule.ts] ////
 
 //// [declFileModuleWithPropertyOfTypeModule.ts]
-module m {
+namespace m {
     export class c {
     }
 
@@ -9,6 +9,7 @@ module m {
 }
 
 //// [declFileModuleWithPropertyOfTypeModule.js]
+"use strict";
 var m;
 (function (m) {
     class c {

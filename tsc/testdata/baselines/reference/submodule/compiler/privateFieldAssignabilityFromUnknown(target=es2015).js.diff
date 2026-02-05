@@ -1,0 +1,15 @@
+--- old.privateFieldAssignabilityFromUnknown(target=es2015).js
++++ new.privateFieldAssignabilityFromUnknown(target=es2015).js
+@@= skipped -8, +8 lines =@@
+
+
+ //// [privateFieldAssignabilityFromUnknown.js]
+-var _Class_field;
+ export class Class {
+-    constructor() {
+-        _Class_field.set(this, void 0);
+-    }
++    #field;
+ }
+-_Class_field = new WeakMap();
+ const task = {};

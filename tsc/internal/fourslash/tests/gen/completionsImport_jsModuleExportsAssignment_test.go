@@ -15,7 +15,7 @@ func TestCompletionsImport_jsModuleExportsAssignment(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
-{ "compilerOptions": { "module": "commonjs", "allowJs": true } }
+{ "compilerOptions": { "module": "commonjs", "allowJs": true, "lib": ["es5"] } }
 // @Filename: /home/src/workspaces/project/third_party/marked/src/defaults.js
 function getDefaults() {
   return {
@@ -37,9 +37,9 @@ module.exports = {
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.MarkTestAsStradaServer()
-	opts650 := f.GetOptions()
-	opts650.FormatCodeSettings.NewLineCharacter = "\n"
-	f.Configure(t, opts650)
+	opts666 := f.GetOptions()
+	opts666.FormatCodeSettings.NewLineCharacter = "\n"
+	f.Configure(t, opts666)
 	f.GoToMarker(t, "")
 	f.VerifyCompletions(t, "", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,

@@ -11,7 +11,7 @@ interface Item {
 >name : string
 
     description?: string;
->description : string
+>description : string | undefined
 }
 
 declare function foo(item: Item): string;
@@ -71,14 +71,14 @@ var w: number;
 >w : number
 
 declare function bar<T>(param: { x?: T }): T;
->bar : <T>(param: { x?: T; }) => T
->param : { x?: T; }
->x : T
+>bar : <T>(param: { x?: T | undefined; }) => T
+>param : { x?: T | undefined; }
+>x : T | undefined
 
 var b = bar({});
 >b : unknown
 >bar({}) : unknown
->bar : <T>(param: { x?: T; }) => T
+>bar : <T>(param: { x?: T | undefined; }) => T
 >{} : {}
 
 var b: {};

@@ -24,6 +24,7 @@ var v2: ([a, b, c]) => string;
 
 
 //// [destructuringInFunctionType.js]
+"use strict";
 var v1 = ([a, b, c]) => "hello";
 var v2;
 

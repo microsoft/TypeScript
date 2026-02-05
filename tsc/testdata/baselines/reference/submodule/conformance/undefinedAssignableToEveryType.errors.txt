@@ -1,0 +1,114 @@
+undefinedAssignableToEveryType.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+undefinedAssignableToEveryType.ts(13,5): error TS2322: Type 'undefined' is not assignable to type 'number'.
+undefinedAssignableToEveryType.ts(14,5): error TS2322: Type 'undefined' is not assignable to type 'string'.
+undefinedAssignableToEveryType.ts(15,5): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
+undefinedAssignableToEveryType.ts(16,5): error TS2322: Type 'undefined' is not assignable to type 'Date'.
+undefinedAssignableToEveryType.ts(19,5): error TS2322: Type 'undefined' is not assignable to type 'Object'.
+undefinedAssignableToEveryType.ts(20,5): error TS2322: Type 'undefined' is not assignable to type '{}'.
+undefinedAssignableToEveryType.ts(21,5): error TS2322: Type 'undefined' is not assignable to type '() => {}'.
+undefinedAssignableToEveryType.ts(22,5): error TS2322: Type 'undefined' is not assignable to type 'Function'.
+undefinedAssignableToEveryType.ts(23,5): error TS2322: Type 'undefined' is not assignable to type '(x: number) => string'.
+undefinedAssignableToEveryType.ts(24,1): error TS2322: Type 'undefined' is not assignable to type 'C'.
+undefinedAssignableToEveryType.ts(25,1): error TS2322: Type 'undefined' is not assignable to type 'I'.
+undefinedAssignableToEveryType.ts(26,1): error TS2322: Type 'undefined' is not assignable to type 'E'.
+undefinedAssignableToEveryType.ts(27,5): error TS2322: Type 'undefined' is not assignable to type 'number[]'.
+undefinedAssignableToEveryType.ts(28,5): error TS2322: Type 'undefined' is not assignable to type '{ foo: string; }'.
+undefinedAssignableToEveryType.ts(29,5): error TS2322: Type 'undefined' is not assignable to type '<T>(x: T) => T'.
+undefinedAssignableToEveryType.ts(30,5): error TS2322: Type 'undefined' is not assignable to type 'Number'.
+undefinedAssignableToEveryType.ts(31,5): error TS2322: Type 'undefined' is not assignable to type 'String'.
+undefinedAssignableToEveryType.ts(34,5): error TS2322: Type 'undefined' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+undefinedAssignableToEveryType.ts(35,5): error TS2322: Type 'undefined' is not assignable to type 'U'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+undefinedAssignableToEveryType.ts(36,5): error TS2322: Type 'undefined' is not assignable to type 'V'.
+  'V' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+
+
+==== undefinedAssignableToEveryType.ts (21 errors) ====
+    class C {
+        foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    var ac: C;
+    interface I {
+        foo: string;
+    }
+    var ai: I;
+    
+    enum E { A }
+    var ae: E;
+    
+    var b: number = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'number'.
+    var c: string = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+    var d: boolean = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'boolean'.
+    var e: Date = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Date'.
+    var f: any = undefined;
+    var g: void = undefined;
+    var h: Object = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Object'.
+    var i: {} = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type '{}'.
+    var j: () => {} = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type '() => {}'.
+    var k: Function = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Function'.
+    var l: (x: number) => string = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type '(x: number) => string'.
+    ac = undefined;
+    ~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'C'.
+    ai = undefined;
+    ~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'I'.
+    ae = undefined;
+    ~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'E'.
+    var m: number[] = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'number[]'.
+    var n: { foo: string } = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type '{ foo: string; }'.
+    var o: <T>(x: T) => T = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type '<T>(x: T) => T'.
+    var p: Number = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Number'.
+    var q: String = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'String'.
+    
+    function foo<T, U, V extends Date>(x: T, y: U, z: V) {
+        x = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+        y = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'U'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+        z = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'V'.
+!!! error TS2322:   'V' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+    }
+    //function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
+    //    x = undefined;
+    //    y = undefined;
+    //    z = undefined;
+    //}

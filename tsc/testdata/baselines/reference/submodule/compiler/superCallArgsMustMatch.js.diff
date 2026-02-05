@@ -1,8 +1,8 @@
 --- old.superCallArgsMustMatch.js
 +++ new.superCallArgsMustMatch.js
-@@= skipped -28, +28 lines =@@
-
+@@= skipped -29, +29 lines =@@
  //// [superCallArgsMustMatch.js]
+ "use strict";
  class T5 {
 +    bar;
 +    foo;

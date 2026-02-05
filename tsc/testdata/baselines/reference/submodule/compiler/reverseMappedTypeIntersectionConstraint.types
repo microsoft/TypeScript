@@ -392,34 +392,34 @@ declare function createXMachine<
 >config : { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }
 
 const child = () => Promise.resolve("foo");
->child : () => any
->() => Promise.resolve("foo") : () => any
->Promise.resolve("foo") : any
->Promise.resolve : any
->Promise : any
->resolve : any
+>child : () => Promise<string>
+>() => Promise.resolve("foo") : () => Promise<string>
+>Promise.resolve("foo") : Promise<string>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >"foo" : "foo"
 
 const config = createXMachine({
->config : { types: { actors: { src: "str"; logic: () => any; }; }; invoke: { readonly src: "str"; }; }
->createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : { types: { actors: { src: "str"; logic: () => any; }; }; invoke: { readonly src: "str"; }; }
+>config : { types: { actors: { src: "str"; logic: () => Promise<string>; }; }; invoke: { readonly src: "str"; }; }
+>createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : { types: { actors: { src: "str"; logic: () => Promise<string>; }; }; invoke: { readonly src: "str"; }; }
 >createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
->{  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: { actors: { src: "str"; logic: () => any; }; }; invoke: { src: "str"; }; extra: number; }
+>{  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: { actors: { src: "str"; logic: () => Promise<string>; }; }; invoke: { src: "str"; }; extra: number; }
 
   types: {} as {
->types : { actors: { src: "str"; logic: () => any; }; }
->{} as {    actors: {      src: "str";      logic: typeof child;    };  } : { actors: { src: "str"; logic: () => any; }; }
+>types : { actors: { src: "str"; logic: () => Promise<string>; }; }
+>{} as {    actors: {      src: "str";      logic: typeof child;    };  } : { actors: { src: "str"; logic: () => Promise<string>; }; }
 >{} : {}
 
     actors: {
->actors : { src: "str"; logic: () => any; }
+>actors : { src: "str"; logic: () => Promise<string>; }
 
       src: "str";
 >src : "str"
 
       logic: typeof child;
->logic : () => any
->child : () => any
+>logic : () => Promise<string>
+>child : () => Promise<string>
 
     };
   },

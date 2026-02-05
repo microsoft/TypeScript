@@ -1,6 +1,6 @@
 --- old.assignmentNonObjectTypeConstraints.js
 +++ new.assignmentNonObjectTypeConstraints.js
-@@= skipped -27, +27 lines =@@
+@@= skipped -28, +28 lines =@@
  foo(5);
  foo(0 /* E.A */);
  class A {

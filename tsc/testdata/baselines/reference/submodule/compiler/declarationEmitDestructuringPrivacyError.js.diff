@@ -1,7 +1,7 @@
 --- old.declarationEmitDestructuringPrivacyError.js
 +++ new.declarationEmitDestructuringPrivacyError.js
-@@= skipped -9, +9 lines =@@
- //// [declarationEmitDestructuringPrivacyError.js]
+@@= skipped -10, +10 lines =@@
+ "use strict";
  var m;
  (function (m) {
 -    var _a;

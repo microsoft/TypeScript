@@ -1,0 +1,16 @@
+spreadIntersection.ts(4,15): error TS2454: Variable 'intersection' is used before being assigned.
+spreadIntersection.ts(7,15): error TS2454: Variable 'intersection' is used before being assigned.
+
+
+==== spreadIntersection.ts (2 errors) ====
+    var intersection: { a: number } & { b: string };
+    
+    var o1: { a: number, b: string };
+    var o1 = { ...intersection };
+                  ~~~~~~~~~~~~
+!!! error TS2454: Variable 'intersection' is used before being assigned.
+    
+    var o2: { a: number, b: string, c: boolean };
+    var o2 = { ...intersection, c: false };
+                  ~~~~~~~~~~~~
+!!! error TS2454: Variable 'intersection' is used before being assigned.

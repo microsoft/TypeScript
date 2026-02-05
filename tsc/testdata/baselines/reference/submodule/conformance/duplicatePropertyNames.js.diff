@@ -1,7 +1,7 @@
 --- old.duplicatePropertyNames.js
 +++ new.duplicatePropertyNames.js
-@@= skipped -52, +52 lines =@@
- //// [duplicatePropertyNames.js]
+@@= skipped -53, +53 lines =@@
+ "use strict";
  // duplicate property names are an error in all types
  class C {
 -    constructor() {

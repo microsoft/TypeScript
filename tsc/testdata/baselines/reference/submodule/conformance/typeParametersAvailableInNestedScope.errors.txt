@@ -1,0 +1,33 @@
+typeParametersAvailableInNestedScope.ts(2,5): error TS2564: Property 'data' has no initializer and is not definitely assigned in the constructor.
+typeParametersAvailableInNestedScope.ts(6,16): error TS2454: Variable 'y' is used before being assigned.
+typeParametersAvailableInNestedScope.ts(12,20): error TS2454: Variable 'y' is used before being assigned.
+
+
+==== typeParametersAvailableInNestedScope.ts (3 errors) ====
+    class C<T> {
+        data: T;
+        ~~~~
+!!! error TS2564: Property 'data' has no initializer and is not definitely assigned in the constructor.
+    
+        x = <U>(a: U) => {
+            var y: T;
+            return y;
+                   ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+        }
+    
+        foo() {
+            function temp<U>(a: U) {
+                var y: T;
+                return y;
+                       ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+            }
+            return temp(<T>null);
+        }
+    }
+    
+    var c = new C<number>();
+    c.data = c.x(null);
+    c.data = c.foo();
+    

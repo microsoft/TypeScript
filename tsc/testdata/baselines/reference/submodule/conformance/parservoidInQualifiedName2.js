@@ -4,4 +4,5 @@
 var v : x.void;
 
 //// [parservoidInQualifiedName2.js]
+"use strict";
 var v;

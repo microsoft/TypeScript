@@ -1,7 +1,7 @@
 --- old.argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js
 +++ new.argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js
-@@= skipped -117, +117 lines =@@
- //// [argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js]
+@@= skipped -118, +118 lines =@@
+ "use strict";
  function A() {
      return class T {
 -        constructor() {

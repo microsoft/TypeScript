@@ -7,6 +7,7 @@ var foo:any;
 var _ = module.exports = foo
 
 //// [modKeyword.js]
+"use strict";
 var module;
 var foo;
 var _ = module.exports = foo;

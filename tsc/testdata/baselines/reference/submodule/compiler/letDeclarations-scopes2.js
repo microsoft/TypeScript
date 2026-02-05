@@ -29,6 +29,7 @@ local2; // Error
 
 
 //// [letDeclarations-scopes2.js]
+"use strict";
 let global = 0;
 {
     let local = 0;

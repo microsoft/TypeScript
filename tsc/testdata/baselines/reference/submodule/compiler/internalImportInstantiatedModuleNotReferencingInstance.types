@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalImportInstantiatedModuleNotReferencingInstance.ts] ////
 
 === internalImportInstantiatedModuleNotReferencingInstance.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     export interface X { s: string }
@@ -12,7 +12,7 @@ module A {
 >10 : 10
 }
 
-module B {
+namespace B {
 >B : typeof B
 
     var A = 1;

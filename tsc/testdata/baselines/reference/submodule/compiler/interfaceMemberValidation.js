@@ -14,3 +14,4 @@ interface foo {
 }
 
 //// [interfaceMemberValidation.js]
+"use strict";

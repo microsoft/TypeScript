@@ -83,9 +83,6 @@ export function g(pair: [number, string?]): string {
 
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.g = g;
 function area(s) {
     switch (s['dash-ok']) {
         case "square": return s['square-size'] * s['square-size'];
@@ -120,6 +117,6 @@ function check(z, c) {
             break;
     }
 }
-function g(pair) {
+export function g(pair) {
     return pair[1] ? pair[1] : 'nope';
 }

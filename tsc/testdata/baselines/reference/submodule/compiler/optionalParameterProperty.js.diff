@@ -1,10 +1,13 @@
 --- old.optionalParameterProperty.js
 +++ new.optionalParameterProperty.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [optionalParameterProperty.js]
+ "use strict";
  class C {
-+    p;
+-    constructor() {
+-        this.p = 0;
+-    }
++    p = 0;
  }
  class D extends C {
 +    p;

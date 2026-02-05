@@ -2,19 +2,19 @@
 
 //// [conditionalOperatorConditionIsNumberType.ts]
 //Cond ? Expr1 : Expr2,  Cond is of number type, Expr1 and Expr2 have the same type
-var condNumber: number;
+declare var condNumber: number;
 
-var exprAny1: any;
-var exprBoolean1: boolean;
-var exprNumber1: number;
-var exprString1: string;
-var exprIsObject1: Object;
+declare var exprAny1: any;
+declare var exprBoolean1: boolean;
+declare var exprNumber1: number;
+declare var exprString1: string;
+declare var exprIsObject1: Object;
 
-var exprAny2: any;
-var exprBoolean2: boolean;
-var exprNumber2: number;
-var exprString2: string;
-var exprIsObject2: Object;
+declare var exprAny2: any;
+declare var exprBoolean2: boolean;
+declare var exprNumber2: number;
+declare var exprString2: string;
+declare var exprIsObject2: Object;
 
 //Cond is a number type variable
 condNumber ? exprAny1 : exprAny2;
@@ -66,18 +66,7 @@ var resultIsObject3 = foo() / array[1] ? exprIsObject1 : exprIsObject2;
 var resultIsStringOrBoolean3 = foo() / array[1] ? exprString1 : exprBoolean1; // Union
 
 //// [conditionalOperatorConditionIsNumberType.js]
-//Cond ? Expr1 : Expr2,  Cond is of number type, Expr1 and Expr2 have the same type
-var condNumber;
-var exprAny1;
-var exprBoolean1;
-var exprNumber1;
-var exprString1;
-var exprIsObject1;
-var exprAny2;
-var exprBoolean2;
-var exprNumber2;
-var exprString2;
-var exprIsObject2;
+"use strict";
 //Cond is a number type variable
 condNumber ? exprAny1 : exprAny2;
 condNumber ? exprBoolean1 : exprBoolean2;

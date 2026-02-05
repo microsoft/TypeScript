@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInNoImplicitAny.ts] ////
 
 //// [nonPrimitiveIndexingWithForInNoImplicitAny.ts]
-var a: object;
+var a: object = {};
 
 for (var key in a) {
     var value = a[key]; // error
@@ -9,7 +9,8 @@ for (var key in a) {
 
 
 //// [nonPrimitiveIndexingWithForInNoImplicitAny.js]
-var a;
+"use strict";
+var a = {};
 for (var key in a) {
     var value = a[key]; // error
 }

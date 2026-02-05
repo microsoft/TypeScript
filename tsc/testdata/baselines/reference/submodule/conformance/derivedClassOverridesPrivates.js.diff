@@ -1,8 +1,8 @@
 --- old.derivedClassOverridesPrivates.js
 +++ new.derivedClassOverridesPrivates.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [derivedClassOverridesPrivates.js]
+ "use strict";
  class Base {
 +    x;
  }

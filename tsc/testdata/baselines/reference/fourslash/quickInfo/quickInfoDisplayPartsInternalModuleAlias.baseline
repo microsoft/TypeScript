@@ -1,10 +1,10 @@
 // === QuickInfo ===
 === /quickInfoDisplayPartsInternalModuleAlias.ts ===
-// module m.m1 {
+// namespace m.m1 {
 //     export class c {
 //     }
 // }
-// module m2 {
+// namespace m2 {
 //     import a1 = m;
 //            ^^
 // | ----------------------------------------------------------------------
@@ -73,7 +73,7 @@
 [
   {
     "marker": {
-      "Position": 66,
+      "Position": 72,
       "LSPosition": {
         "line": 5,
         "character": 11
@@ -100,7 +100,7 @@
   },
   {
     "marker": {
-      "Position": 82,
+      "Position": 88,
       "LSPosition": {
         "line": 6,
         "character": 8
@@ -127,7 +127,7 @@
   },
   {
     "marker": {
-      "Position": 104,
+      "Position": 110,
       "LSPosition": {
         "line": 7,
         "character": 11
@@ -154,7 +154,7 @@
   },
   {
     "marker": {
-      "Position": 123,
+      "Position": 129,
       "LSPosition": {
         "line": 8,
         "character": 8
@@ -181,7 +181,7 @@
   },
   {
     "marker": {
-      "Position": 149,
+      "Position": 155,
       "LSPosition": {
         "line": 9,
         "character": 18
@@ -208,7 +208,7 @@
   },
   {
     "marker": {
-      "Position": 165,
+      "Position": 171,
       "LSPosition": {
         "line": 10,
         "character": 8
@@ -235,7 +235,7 @@
   },
   {
     "marker": {
-      "Position": 194,
+      "Position": 200,
       "LSPosition": {
         "line": 11,
         "character": 18
@@ -262,7 +262,7 @@
   },
   {
     "marker": {
-      "Position": 213,
+      "Position": 219,
       "LSPosition": {
         "line": 12,
         "character": 8

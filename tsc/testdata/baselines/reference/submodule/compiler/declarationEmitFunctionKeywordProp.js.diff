@@ -1,6 +1,6 @@
 --- old.declarationEmitFunctionKeywordProp.js
 +++ new.declarationEmitFunctionKeywordProp.js
-@@= skipped -31, +31 lines =@@
+@@= skipped -32, +32 lines =@@
  declare function bar(): void;
  declare namespace bar {
      var async: boolean;

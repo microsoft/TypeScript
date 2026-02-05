@@ -22,6 +22,7 @@ class F<T> {
 }
 
 //// [memberFunctionOverloadMixingStaticAndInstance.js]
+"use strict";
 class C {
 }
 class D {

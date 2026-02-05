@@ -495,6 +495,7 @@ const t03c04 = (<t03<number, 1>>x).a;
 interface SelfReference<T = SelfReference<string>> {}
 
 //// [genericDefaults.js]
+"use strict";
 // no inference
 f00();
 f00(a);

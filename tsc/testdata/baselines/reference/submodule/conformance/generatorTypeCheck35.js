@@ -9,6 +9,7 @@ function* g() {
 }
 
 //// [generatorTypeCheck35.js]
+"use strict";
 function* g() {
     yield 0;
     function g2() {

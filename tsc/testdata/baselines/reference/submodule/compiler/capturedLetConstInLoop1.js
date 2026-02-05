@@ -141,6 +141,7 @@ for (let ix in iobj) {
 }
 
 //// [capturedLetConstInLoop1.js]
+"use strict";
 //==== let
 for (let x in {}) {
     (function () { return x; });

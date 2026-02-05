@@ -12,32 +12,32 @@ func TestNavigationBarMerging(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: file1.ts
-module a {
+namespace a {
     function foo() {}
 }
-module b {
+namespace b {
     function foo() {}
 }
-module a {
+namespace a {
     function bar() {}
 }
 // @Filename: file2.ts
-module a {}
+namespace a {}
 function a() {}
 // @Filename: file3.ts
-module a {
+namespace a {
     interface A {
         foo: number;
     }
 }
-module a {
+namespace a {
     interface A {
         bar: number;
     }
 }
 // @Filename: file4.ts
-module A { export var x; }
-module A.B { export var y; }`
+namespace A { export var x; }
+namespace A.B { export var y; }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.VerifyBaselineDocumentSymbol(t)

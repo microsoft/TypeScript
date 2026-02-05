@@ -9,7 +9,7 @@ interface MyComponentProps {
 interface StatelessComponent<P> {
     (): any;
     defaultProps?: Partial<P>;
->defaultProps : Partial<P>
+>defaultProps : Partial<P> | undefined
 }
 
 const MyComponent: StatelessComponent<MyComponentProps> = () => null as any;
@@ -19,9 +19,9 @@ const MyComponent: StatelessComponent<MyComponentProps> = () => null as any;
 
 MyComponent.defaultProps = {
 >MyComponent.defaultProps = {    color: "red"} : { color: "red"; }
->MyComponent.defaultProps : Partial<MyComponentProps>
+>MyComponent.defaultProps : Partial<MyComponentProps> | undefined
 >MyComponent : StatelessComponent<MyComponentProps>
->defaultProps : Partial<MyComponentProps>
+>defaultProps : Partial<MyComponentProps> | undefined
 >{    color: "red"} : { color: "red"; }
 
     color: "red"

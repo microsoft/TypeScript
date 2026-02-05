@@ -9,7 +9,7 @@ var b;
 var result1 = b+;   //expect error
 >result1 : any
 >b+ : any
->b : any
+>b : undefined
 > : any
 
 // miss  an operand

@@ -1,9 +1,9 @@
 --- old.thisInOuterClassBody.js
 +++ new.thisInOuterClassBody.js
-@@= skipped -22, +22 lines =@@
- }
+@@= skipped -23, +23 lines =@@
 
  //// [thisInOuterClassBody.js]
+ "use strict";
 -var _a;
  class Foo {
 -    constructor() {

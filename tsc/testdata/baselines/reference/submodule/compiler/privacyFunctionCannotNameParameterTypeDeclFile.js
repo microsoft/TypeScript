@@ -7,7 +7,7 @@ declare module "GlobalWidgets" {
     }
     export function createWidget3(): Widget3;
 
-    export module SpecializedGlobalWidget {
+    export namespace SpecializedGlobalWidget {
         export class Widget4 {
             name: string;
         }
@@ -23,7 +23,7 @@ export function createWidget1() {
     return new Widget1();
 }
 
-export module SpecializedWidget {
+export namespace SpecializedWidget {
     export class Widget2 {
         name = 'one';
     }
@@ -155,6 +155,7 @@ function privateFunctionWithPrivateModuleParameterTypes1(param= exporter.createE
 }
 
 //// [privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.js]
+"use strict";
 //// [privacyFunctionCannotNameParameterTypeDeclFile_Widgets.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

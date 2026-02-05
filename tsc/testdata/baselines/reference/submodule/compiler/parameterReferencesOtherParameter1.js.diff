@@ -1,8 +1,8 @@
 --- old.parameterReferencesOtherParameter1.js
 +++ new.parameterReferencesOtherParameter1.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [parameterReferencesOtherParameter1.js]
+ "use strict";
  class Model {
 +    name;
  }

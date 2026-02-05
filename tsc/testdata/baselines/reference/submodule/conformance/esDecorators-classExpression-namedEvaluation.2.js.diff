@@ -1,9 +1,9 @@
 --- old.esDecorators-classExpression-namedEvaluation.2.js
 +++ new.esDecorators-classExpression-namedEvaluation.2.js
-@@= skipped -33, +33 lines =@@
- ({ ["__proto__"]: @dec class { } });
+@@= skipped -34, +34 lines =@@
 
  //// [esDecorators-classExpression-namedEvaluation.2.js]
+ "use strict";
 -var _a, _b;
  let x, f;
  // 13.2.5.5 RS: PropertyDefinitionEvaluation

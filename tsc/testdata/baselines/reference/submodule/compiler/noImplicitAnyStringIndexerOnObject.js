@@ -75,12 +75,12 @@ declare const sym : unique symbol;
 o[sym];
 
 enum NumEnum { a, b }
-let numEnumKey: NumEnum;
+declare let numEnumKey: NumEnum;
 o[numEnumKey];
 
 
 enum StrEnum { a = "a", b = "b" }
-let strEnumKey: StrEnum;
+declare let strEnumKey: StrEnum;
 o[strEnumKey];
 
 
@@ -103,6 +103,7 @@ m.prop['a'];
 
 
 //// [noImplicitAnyStringIndexerOnObject.js]
+"use strict";
 var a = {}["hello"];
 var b = { '': 'foo' }[''];
 var c = {
@@ -165,14 +166,12 @@ var NumEnum;
     NumEnum[NumEnum["a"] = 0] = "a";
     NumEnum[NumEnum["b"] = 1] = "b";
 })(NumEnum || (NumEnum = {}));
-let numEnumKey;
 o[numEnumKey];
 var StrEnum;
 (function (StrEnum) {
     StrEnum["a"] = "a";
     StrEnum["b"] = "b";
 })(StrEnum || (StrEnum = {}));
-let strEnumKey;
 o[strEnumKey];
 let rover = { bark() { } };
 map[rover] = "Rover";

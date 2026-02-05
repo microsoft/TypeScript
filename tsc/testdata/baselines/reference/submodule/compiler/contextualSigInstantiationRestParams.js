@@ -7,4 +7,5 @@ declare function contextual(...s: string[]): string
 var sig: typeof contextual = toInstantiate;
 
 //// [contextualSigInstantiationRestParams.js]
+"use strict";
 var sig = toInstantiate;

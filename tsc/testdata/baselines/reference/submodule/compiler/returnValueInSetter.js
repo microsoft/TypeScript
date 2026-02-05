@@ -10,6 +10,7 @@ class f {
 
 
 //// [returnValueInSetter.js]
+"use strict";
 class f {
     set x(value) {
         return null; // Should be an error

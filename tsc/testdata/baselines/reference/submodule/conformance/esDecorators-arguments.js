@@ -10,6 +10,7 @@ class C1 {}
 
 
 //// [esDecorators-arguments.js]
+"use strict";
 @(() => { })
 @((a) => { })
 @((a, b) => { })

@@ -17,7 +17,7 @@ func TestRenameInConfiguredProject(t *testing.T) {
 // @Filename: referencesForGlobals_2.ts
 var y = [|globalName|];
 // @Filename: tsconfig.json
-{ "files": ["referencesForGlobals_1.ts", "referencesForGlobals_2.ts"] }`
+{ "files": ["referencesForGlobals_1.ts", "referencesForGlobals_2.ts"], "compilerOptions": { "lib": ["es5"] } }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.MarkTestAsStradaServer()

@@ -4,7 +4,7 @@
 class C {
 >C : C
 
-    private x: number;
+    private x!: number;
 >x : number
 }
 
@@ -21,30 +21,30 @@ interface A {
 class D implements A { // error
 >D : D
 
-    private x: number;
+    private x!: number;
 >x : number
 
-    y: string;
+    y!: string;
 >y : string
 
-    z: string;
+    z!: string;
 >z : string
 }
 
 class E implements A { // error
 >E : E
 
-    x: number;
+    x!: number;
 >x : number
 
-    y: string;
+    y!: string;
 >y : string
 
-    z: string;
+    z!: string;
 >z : string
 }
 
-var a: A;
+declare var a: A;
 >a : A
 
 var r = a.x; // error

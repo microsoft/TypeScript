@@ -4,7 +4,7 @@ moduleAsBaseType.ts(4,21): error TS2709: Cannot use namespace 'M' as a type.
 
 
 ==== moduleAsBaseType.ts (3 errors) ====
-    module M {}
+    namespace M {}
     class C extends M {}
                     ~
 !!! error TS2708: Cannot use namespace 'M' as a value.

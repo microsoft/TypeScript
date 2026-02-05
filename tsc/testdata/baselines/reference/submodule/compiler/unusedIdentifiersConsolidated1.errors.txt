@@ -1,8 +1,11 @@
 unusedIdentifiersConsolidated1.ts(1,18): error TS6133: 'person' is declared but its value is never read.
 unusedIdentifiersConsolidated1.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
 unusedIdentifiersConsolidated1.ts(5,32): error TS6196: 'unusedtypeparameter' is declared but never used.
+unusedIdentifiersConsolidated1.ts(6,13): error TS2564: Property 'unusedprivatevariable' has no initializer and is not definitely assigned in the constructor.
 unusedIdentifiersConsolidated1.ts(6,13): error TS6133: 'unusedprivatevariable' is declared but its value is never read.
 unusedIdentifiersConsolidated1.ts(7,13): error TS6133: 'greeting' is declared but its value is never read.
+unusedIdentifiersConsolidated1.ts(8,12): error TS2564: Property 'unusedpublicvariable' has no initializer and is not definitely assigned in the constructor.
+unusedIdentifiersConsolidated1.ts(9,12): error TS2564: Property 'typedvariable' has no initializer and is not definitely assigned in the constructor.
 unusedIdentifiersConsolidated1.ts(11,17): error TS6133: 'message' is declared but its value is never read.
 unusedIdentifiersConsolidated1.ts(12,13): error TS6133: 'unused2' is declared but its value is never read.
 unusedIdentifiersConsolidated1.ts(16,20): error TS6133: 'person' is declared but its value is never read.
@@ -17,7 +20,7 @@ unusedIdentifiersConsolidated1.ts(79,11): error TS6196: 'class3' is declared but
 unusedIdentifiersConsolidated1.ts(99,15): error TS6196: 'interface5' is declared but never used.
 
 
-==== unusedIdentifiersConsolidated1.ts (17 errors) ====
+==== unusedIdentifiersConsolidated1.ts (20 errors) ====
     function greeter(person: string) {
                      ~~~~~~
 !!! error TS6133: 'person' is declared but its value is never read.
@@ -31,12 +34,18 @@ unusedIdentifiersConsolidated1.ts(99,15): error TS6196: 'interface5' is declared
 !!! error TS6196: 'unusedtypeparameter' is declared but never used.
         private unusedprivatevariable: string;
                 ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'unusedprivatevariable' has no initializer and is not definitely assigned in the constructor.
+                ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS6133: 'unusedprivatevariable' is declared but its value is never read.
         private greeting: string;
                 ~~~~~~~~
 !!! error TS6133: 'greeting' is declared but its value is never read.
         public unusedpublicvariable: string;
+               ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'unusedpublicvariable' has no initializer and is not definitely assigned in the constructor.
         public typedvariable: usedtypeparameter;
+               ~~~~~~~~~~~~~
+!!! error TS2564: Property 'typedvariable' has no initializer and is not definitely assigned in the constructor.
     
         constructor(message: string) {
                     ~~~~~~~

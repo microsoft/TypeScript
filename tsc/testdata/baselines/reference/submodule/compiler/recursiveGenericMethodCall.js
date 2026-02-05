@@ -9,6 +9,7 @@ function Generate<T>(func: Generator<T>): T {
 
 
 //// [recursiveGenericMethodCall.js]
+"use strict";
 function Generate(func) {
     return Generate(func);
 }

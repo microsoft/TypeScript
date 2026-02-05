@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/aliasInaccessibleModule2.ts] ////
 
 === aliasInaccessibleModule2.ts ===
-module M {
+namespace M {
 >M : typeof M
 
-    module N {
+    namespace N {
 >N : typeof N
 
         class C {

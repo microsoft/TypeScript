@@ -38,8 +38,6 @@ const o2 = {
 
 
 //// [divergentAccessorsTypes6.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 element.style = "color: red";
 element.style.animationTimingFunction;
 element.style = element.style; // error
@@ -54,6 +52,7 @@ const o2 = {
     get p2() { return 0; }, // ok - explicit annotation
     set p2(value) { },
 };
+export {};
 
 
 //// [divergentAccessorsTypes6.d.ts]

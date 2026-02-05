@@ -9,6 +9,7 @@ class C1 {
 }
 
 //// [symbolProperty30.js]
+"use strict";
 class C1 {
     [Symbol.toStringTag]() {
         return { x: "" };

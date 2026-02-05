@@ -1,8 +1,8 @@
 --- old.inheritance1.js
 +++ new.inheritance1.js
-@@= skipped -64, +64 lines =@@
-
+@@= skipped -65, +65 lines =@@
  //// [inheritance1.js]
+ "use strict";
  class Control {
 +    state;
  }

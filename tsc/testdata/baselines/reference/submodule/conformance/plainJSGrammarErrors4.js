@@ -11,6 +11,7 @@ class A {
 
 
 //// [plainJSGrammarErrors4.js]
+"use strict";
 class A {
     #a;
     m() {

@@ -20,6 +20,7 @@ async function bar4() {
 }
 
 //// [await_unaryExpression_es6_3.js]
+"use strict";
 async function bar1() {
     ++;
     await 42; // Error

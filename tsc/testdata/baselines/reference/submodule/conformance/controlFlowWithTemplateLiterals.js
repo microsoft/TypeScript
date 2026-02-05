@@ -13,6 +13,7 @@ if (`test` in obj) {
 
 
 //// [controlFlowWithTemplateLiterals.js]
+"use strict";
 if (typeof envVar === `string`) {
     envVar.slice(0);
 }

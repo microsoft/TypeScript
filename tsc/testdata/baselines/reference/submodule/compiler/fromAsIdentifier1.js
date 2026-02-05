@@ -4,4 +4,5 @@
 var from;
 
 //// [fromAsIdentifier1.js]
+"use strict";
 var from;

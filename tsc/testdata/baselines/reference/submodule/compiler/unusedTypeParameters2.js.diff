@@ -1,8 +1,8 @@
 --- old.unusedTypeParameters2.js
 +++ new.unusedTypeParameters2.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [unusedTypeParameters2.js]
+ "use strict";
  class greeter {
 +    x;
      function1() {

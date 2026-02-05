@@ -1,3 +1,11 @@
+argumentExpressionContextualTyping.ts(2,19): error TS7031: Binding element 'a' implicitly has an 'any' type.
+argumentExpressionContextualTyping.ts(2,22): error TS7031: Binding element 'b' implicitly has an 'any' type.
+argumentExpressionContextualTyping.ts(2,30): error TS7031: Binding element 'c' implicitly has an 'any' type.
+argumentExpressionContextualTyping.ts(2,33): error TS7031: Binding element 'd' implicitly has an 'any' type.
+argumentExpressionContextualTyping.ts(2,36): error TS7031: Binding element 'e' implicitly has an 'any' type.
+argumentExpressionContextualTyping.ts(3,19): error TS7031: Binding element 'a' implicitly has an 'any' type.
+argumentExpressionContextualTyping.ts(3,35): error TS7031: Binding element 'c' implicitly has an 'any' type.
+argumentExpressionContextualTyping.ts(3,38): error TS7031: Binding element 'd' implicitly has an 'any' type.
 argumentExpressionContextualTyping.ts(16,5): error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type '[string, number, boolean]'.
   Target requires 3 element(s) but source may have fewer.
 argumentExpressionContextualTyping.ts(17,5): error TS2345: Argument of type '[string, number, true, ...(string | number | boolean)[]]' is not assignable to parameter of type '[string, number, boolean]'.
@@ -8,10 +16,26 @@ argumentExpressionContextualTyping.ts(18,5): error TS2345: Argument of type '{ x
       Target requires 2 element(s) but source may have fewer.
 
 
-==== argumentExpressionContextualTyping.ts (3 errors) ====
+==== argumentExpressionContextualTyping.ts (11 errors) ====
     // In a typed function call, argument expressions are contextually typed by their corresponding parameter types.
     function foo({x: [a, b], y: {c, d, e}}) { }
+                      ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                         ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+                                 ~
+!!! error TS7031: Binding element 'c' implicitly has an 'any' type.
+                                    ~
+!!! error TS7031: Binding element 'd' implicitly has an 'any' type.
+                                       ~
+!!! error TS7031: Binding element 'e' implicitly has an 'any' type.
     function bar({x: [a, b = 10], y: {c, d, e = { f:1 }}}) { }
+                      ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                                      ~
+!!! error TS7031: Binding element 'c' implicitly has an 'any' type.
+                                         ~
+!!! error TS7031: Binding element 'd' implicitly has an 'any' type.
     function baz(x: [string, number, boolean]) { }
     
     var o = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };

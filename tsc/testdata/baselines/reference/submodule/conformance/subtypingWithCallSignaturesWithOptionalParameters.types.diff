@@ -1,0 +1,71 @@
+--- old.subtypingWithCallSignaturesWithOptionalParameters.types
++++ new.subtypingWithCallSignaturesWithOptionalParameters.types
+@@= skipped -7, +7 lines =@@
+ >a : () => number
+
+     a2: (x?: number) => number;
+->a2 : (x?: number) => number
++>a2 : (x?: number | undefined) => number
+ >x : number | undefined
+
+     a3: (x: number) => number;
+@@= skipped -8, +8 lines =@@
+ >x : number
+
+     a4: (x: number, y?: number) => number;
+->a4 : (x: number, y?: number) => number
++>a4 : (x: number, y?: number | undefined) => number
+ >x : number
+ >y : number | undefined
+
+     a5: (x?: number, y?: number) => number;
+->a5 : (x?: number, y?: number) => number
++>a5 : (x?: number | undefined, y?: number | undefined) => number
+ >x : number | undefined
+ >y : number | undefined
+ }
+@@= skipped -17, +17 lines =@@
+
+ interface I2 extends Base {
+     a: (x?: number) => number; // ok, same number of required params
+->a : (x?: number) => number
++>a : (x?: number | undefined) => number
+ >x : number | undefined
+ }
+
+@@= skipped -18, +18 lines =@@
+
+ interface I5 extends Base {
+     a2: (x?: number) => number; // ok, same number of required params
+->a2 : (x?: number) => number
++>a2 : (x?: number | undefined) => number
+ >x : number | undefined
+ }
+
+@@= skipped -18, +18 lines =@@
+
+ interface I8 extends Base {
+     a3: (x?: number) => number; // ok, fewer required params
+->a3 : (x?: number) => number
++>a3 : (x?: number | undefined) => number
+ >x : number | undefined
+ }
+
+@@= skipped -25, +25 lines =@@
+
+ interface I12 extends Base {
+     a4: (x?: number, y?: number) => number; // ok, fewer required params
+->a4 : (x?: number, y?: number) => number
++>a4 : (x?: number | undefined, y?: number | undefined) => number
+ >x : number | undefined
+ >y : number | undefined
+ }
+@@= skipped -26, +26 lines =@@
+
+ interface I16 extends Base {
+     a5: (x?: number, y?: number) => number; // ok, fewer required params
+->a5 : (x?: number, y?: number) => number
++>a5 : (x?: number | undefined, y?: number | undefined) => number
+ >x : number | undefined
+ >y : number | undefined
+ }

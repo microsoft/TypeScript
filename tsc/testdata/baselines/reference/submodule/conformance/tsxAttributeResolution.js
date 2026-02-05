@@ -11,3 +11,4 @@ declare namespace JSX {
 
 
 //// [tsxAttributeResolution.jsx]
+"use strict";

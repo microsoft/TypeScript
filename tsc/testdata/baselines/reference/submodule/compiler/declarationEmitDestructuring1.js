@@ -8,6 +8,7 @@ function baz({a2, b2: {b1, c1}}: { a2: number, b2: { b1: boolean, c1: string } }
 
 
 //// [declarationEmitDestructuring1.js]
+"use strict";
 function foo([a, b, c]) { }
 function far([a, [b], [[c]]]) { }
 function bar({ a1, b1, c1 }) { }

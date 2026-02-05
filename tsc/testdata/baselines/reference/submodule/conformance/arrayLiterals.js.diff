@@ -1,6 +1,6 @@
 --- old.arrayLiterals.js
 +++ new.arrayLiterals.js
-@@= skipped -47, +47 lines =@@
+@@= skipped -48, +48 lines =@@
  var numberArr = [0, 0.0, 0x00, 1e1];
  var boolArr = [false, true, false, true];
  class C {

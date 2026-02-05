@@ -10,6 +10,7 @@ var v = a
     : g;
 
 //// [conditionalExpressionNewLine10.js]
+"use strict";
 var v = a
     ? b
         ? d

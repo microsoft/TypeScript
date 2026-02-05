@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/errorMessageOnObjectLiteralType.ts] ////
 
 === errorMessageOnObjectLiteralType.ts ===
-var x: {
+declare var x: {
 >x : { a: string; b: number; }
 
     a: string;

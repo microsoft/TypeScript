@@ -17,8 +17,8 @@ exponentiationOperatorWithUndefinedValueAndValidOperands.ts(20,18): error TS1805
         b
     }
     
-    var a: any;
-    var b: number;
+    declare var a: any;
+    declare var b: number;
     
     // operator *
     var rk1 = undefined ** a;

@@ -23,5 +23,5 @@ try {
 
     ) {}
 } catch (e) {}
->e : any
+>e : unknown
 

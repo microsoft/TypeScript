@@ -28,7 +28,7 @@
 //   ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (property) language: string
+// | (property) language: string | undefined
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -46,7 +46,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) language: string\n```\n"
+        "value": "```tsx\n(property) language: string | undefined\n```\n"
       },
       "range": {
         "start": {

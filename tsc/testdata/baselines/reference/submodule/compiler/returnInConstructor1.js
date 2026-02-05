@@ -69,6 +69,7 @@ class I extends G {
 
 
 //// [returnInConstructor1.js]
+"use strict";
 class A {
     foo() { }
     constructor() {

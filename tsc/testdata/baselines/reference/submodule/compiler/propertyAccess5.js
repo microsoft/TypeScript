@@ -4,4 +4,5 @@
 undefined.toBAZ();
 
 //// [propertyAccess5.js]
+"use strict";
 undefined.toBAZ();

@@ -1,7 +1,7 @@
 --- old.implicitAnyGetAndSetAccessorWithAnyReturnType.js
 +++ new.implicitAnyGetAndSetAccessorWithAnyReturnType.js
-@@= skipped -27, +27 lines =@@
- //// [implicitAnyGetAndSetAccessorWithAnyReturnType.js]
+@@= skipped -28, +28 lines =@@
+ "use strict";
  // these should be errors
  class GetAndSet {
 -    constructor() {

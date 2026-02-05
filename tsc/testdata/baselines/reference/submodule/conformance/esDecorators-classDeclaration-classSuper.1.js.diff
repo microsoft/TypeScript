@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-classSuper.1.js
 +++ new.esDecorators-classDeclaration-classSuper.1.js
-@@= skipped -24, +24 lines =@@
-
+@@= skipped -25, +25 lines =@@
  //// [esDecorators-classDeclaration-classSuper.1.js]
+ "use strict";
  const method = "method";
 -let C = (() => {
 -    let _classDecorators = [dec];

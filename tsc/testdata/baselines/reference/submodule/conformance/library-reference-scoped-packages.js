@@ -8,4 +8,5 @@ export const y = 0;
 
 
 //// [a.js]
+"use strict";
 /// <reference types="@beep/boop" />

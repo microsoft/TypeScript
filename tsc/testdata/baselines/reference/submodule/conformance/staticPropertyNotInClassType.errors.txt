@@ -8,7 +8,7 @@ staticPropertyNotInClassType.ts(38,16): error TS2576: Property 'x' does not exis
 
 
 ==== staticPropertyNotInClassType.ts (7 errors) ====
-    module NonGeneric {
+    namespace NonGeneric {
         class C {
             fn() { return this; }
             static get x() { return 1; }
@@ -17,7 +17,7 @@ staticPropertyNotInClassType.ts(38,16): error TS2576: Property 'x' does not exis
             static foo: string; // not reflected in class type
         }
     
-        module C {
+        namespace C {
             export var bar = ''; // not reflected in class type
         }
     
@@ -34,7 +34,7 @@ staticPropertyNotInClassType.ts(38,16): error TS2576: Property 'x' does not exis
 !!! error TS2576: Property 'x' does not exist on type 'C'. Did you mean to access the static member 'C.x' instead?
     }
     
-    module Generic {
+    namespace Generic {
         class C<T, U> {
             fn() { return this; }
             static get x() { return 1; }
@@ -45,7 +45,7 @@ staticPropertyNotInClassType.ts(38,16): error TS2576: Property 'x' does not exis
 !!! error TS2302: Static members cannot reference class type parameters.
         }
     
-        module C {
+        namespace C {
             export var bar = ''; // not reflected in class type
         }
     

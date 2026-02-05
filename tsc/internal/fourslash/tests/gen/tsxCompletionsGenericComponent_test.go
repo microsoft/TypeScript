@@ -15,7 +15,7 @@ func TestTsxCompletionsGenericComponent(t *testing.T) {
 	const content = `// @jsx: preserve
 // @skipLibCheck: true
 // @Filename: file.tsx
- declare module JSX {
+ declare namespace JSX {
      interface Element { }
      interface IntrinsicElements {
      }

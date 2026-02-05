@@ -1,8 +1,8 @@
 --- old.incompatibleAssignmentOfIdenticallyNamedTypes.js
 +++ new.incompatibleAssignmentOfIdenticallyNamedTypes.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [incompatibleAssignmentOfIdenticallyNamedTypes.js]
+ "use strict";
  class Foo {
 +    x;
      fn() {

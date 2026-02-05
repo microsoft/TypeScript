@@ -4,4 +4,5 @@
 var x: HTMLElement;
 
 //// [verifyDefaultLib_dom.js]
+"use strict";
 var x;

@@ -1,6 +1,7 @@
 --- old.tsxElementResolution9.errors.txt
 +++ new.tsxElementResolution9.errors.txt
 @@= skipped -0, +0 lines =@@
+ file.tsx(2,22): error TS7008: Member 'something' implicitly has an 'any' type.
  file.tsx(11,2): error TS2769: No overload matches this call.
 -  Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
 -    Type '{}' is not assignable to type 'string'.
@@ -14,9 +15,7 @@
 +  The last overload gave the following error.
      Type '{}' is not assignable to type 'number'.
  file.tsx(18,2): error TS2786: 'Obj2' cannot be used as a JSX component.
--  Its return type '{ x: number; } & { y: string; }' is not a valid JSX element.
--    Property 'something' is missing in type '{ x: number; } & { y: string; }' but required in type 'Element'.
-+  Property 'something' is missing in type '{ x: number; } & { y: string; }' but required in type 'Element'.
+   Its return type '{ x: number; } & { y: string; }' is not a valid JSX element.
  file.tsx(25,2): error TS2769: No overload matches this call.
 -  Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
 -    Type '{ x: number; }' is not assignable to type 'string'.
@@ -24,13 +23,8 @@
 +  The last overload gave the following error.
      Type '{ x: number; }' is not assignable to type 'number'.
  file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
--  Its return type '{ x: number; } & { x: number; y: string; }' is not a valid JSX element.
--    Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
-+  Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
-
-
- ==== file.tsx (5 errors) ====
-@@= skipped -34, +26 lines =@@
+   Its return type '{ x: number; } & { x: number; y: string; }' is not a valid JSX element.
+@@= skipped -35, +29 lines =@@
      <Obj1 />; // Error, return type is not an object type
       ~~~~
  !!! error TS2769: No overload matches this call.
@@ -55,13 +49,8 @@
 +!!! related TS2771 file.tsx:15:2: The last overload is declared here.
       ~~~~
  !!! error TS2786: 'Obj2' cannot be used as a JSX component.
--!!! error TS2786:   Its return type '{ x: number; } & { y: string; }' is not a valid JSX element.
--!!! error TS2786:     Property 'something' is missing in type '{ x: number; } & { y: string; }' but required in type 'Element'.
-+!!! error TS2786:   Property 'something' is missing in type '{ x: number; } & { y: string; }' but required in type 'Element'.
- !!! related TS2728 file.tsx:2:22: 'something' is declared here.
-     
-     interface Obj3 {
-@@= skipped -18, +16 lines =@@
+ !!! error TS2786:   Its return type '{ x: number; } & { y: string; }' is not a valid JSX element.
+@@= skipped -16, +15 lines =@@
      <Obj3 x={42} />; // OK
       ~~~~
  !!! error TS2769: No overload matches this call.
@@ -73,8 +62,4 @@
 +!!! related TS2771 file.tsx:22:2: The last overload is declared here.
       ~~~~
  !!! error TS2786: 'Obj3' cannot be used as a JSX component.
--!!! error TS2786:   Its return type '{ x: number; } & { x: number; y: string; }' is not a valid JSX element.
--!!! error TS2786:     Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
-+!!! error TS2786:   Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
- !!! related TS2728 file.tsx:2:22: 'something' is declared here.
-     
+ !!! error TS2786:   Its return type '{ x: number; } & { x: number; y: string; }' is not a valid JSX element.

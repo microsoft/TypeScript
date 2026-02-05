@@ -14,6 +14,7 @@ class C2 extends C1 {
 }
 
 //// [symbolProperty26.js]
+"use strict";
 class C1 {
     [Symbol.toStringTag]() {
         return "";

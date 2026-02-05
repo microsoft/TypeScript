@@ -1,9 +1,9 @@
 --- old.classExpressionWithStaticPropertiesES64.js
 +++ new.classExpressionWithStaticPropertiesES64.js
-@@= skipped -4, +4 lines =@@
-
+@@= skipped -5, +5 lines =@@
 
  //// [classExpressionWithStaticPropertiesES64.js]
+ "use strict";
 -var _a;
 -(_a = class {
 -    },

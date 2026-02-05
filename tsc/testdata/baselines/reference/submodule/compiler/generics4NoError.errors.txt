@@ -1,0 +1,12 @@
+generics4NoError.ts(1,22): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== generics4NoError.ts (1 errors) ====
+    class C<T> { private x: T; }
+                         ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    interface X { f(): string; }
+    interface Y { f(): boolean; }
+    var a: C<X>;
+    var b: C<Y>;
+    

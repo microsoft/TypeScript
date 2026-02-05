@@ -12,3 +12,4 @@ declare module 'M' {
 
 
 //// [usingDeclarations.16.js]
+"use strict";

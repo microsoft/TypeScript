@@ -1,6 +1,6 @@
 // === documentHighlights ===
 // === /getOccurrencesPropertyInAliasedInterface.ts ===
-// module m {
+// namespace m {
 //     export interface Foo {
 //         /*HIGHLIGHTS*/[|abc|]
 //     }
@@ -22,7 +22,7 @@
 
 // === documentHighlights ===
 // === /getOccurrencesPropertyInAliasedInterface.ts ===
-// module m {
+// namespace m {
 //     export interface Foo {
 //         [|abc|]
 //     }
@@ -44,7 +44,7 @@
 
 // === documentHighlights ===
 // === /getOccurrencesPropertyInAliasedInterface.ts ===
-// module m {
+// namespace m {
 //     export interface Foo {
 //         [|abc|]
 //     }
@@ -66,7 +66,7 @@
 
 // === documentHighlights ===
 // === /getOccurrencesPropertyInAliasedInterface.ts ===
-// module m {
+// namespace m {
 //     export interface Foo {
 //         [|abc|]
 //     }

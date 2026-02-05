@@ -25,9 +25,9 @@ exports.x;
 
         this.x = 0;
 >this.x = 0 : 0
->this.x : any
->this : any
->x : any
+>this.x : 0
+>this : typeof import("/a")
+>x : 0
 >0 : 0
     }
 }

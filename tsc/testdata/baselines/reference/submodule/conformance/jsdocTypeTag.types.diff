@@ -63,39 +63,7 @@
 
  /** @type {null} */
  var nl;
-@@= skipped -12, +12 lines =@@
-
- /** @type {array} */
- var a;
-->a : any[]
-+>a : array
-
- /** @type {Promise} */
- var P;
-@@= skipped -8, +8 lines =@@
-
- /** @type {promise} */
- var p;
-->p : Promise<any>
-+>p : promise
-
- /** @type {?number} */
- var nullable;
-@@= skipped -8, +8 lines =@@
-
- /** @type {Object} */
- var Obj;
-->Obj : any
-+>Obj : Object
-
- /** @type {object} */
- var obj;
-->obj : any
-+>obj : object
-
- /** @type {Function} */
- var Func;
-@@= skipped -20, +20 lines =@@
+@@= skipped -48, +48 lines =@@
 
  === b.ts ===
  var S: string;
@@ -146,30 +114,3 @@
 
  var nl: null;
  >nl : null
-@@= skipped -45, +45 lines =@@
- >A : any[]
-
- var a: any[];
-->a : any[]
-+>a : array
-
- var P: Promise<any>;
- >P : Promise<any>
-
- var p: Promise<any>;
-->p : Promise<any>
-+>p : promise
-
- var nullable: number | null;
- >nullable : number | null
-
- var Obj: any;
-->Obj : any
-+>Obj : Object
-
- var obj: any;
-->obj : any
-+>obj : object
-
- var Func: Function;
- >Func : Function

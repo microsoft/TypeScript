@@ -27,6 +27,7 @@ lion.makeSound() // with [[Define]]: Expected "RAWR!" but got "rustling noise in
 
 
 //// [propertyOverridesAccessors3.js]
+"use strict";
 class Animal {
     _sound = 'rustling noise in the bushes';
     get sound() { return this._sound; }

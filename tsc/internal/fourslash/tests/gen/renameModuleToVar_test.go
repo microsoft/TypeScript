@@ -17,7 +17,7 @@ func TestRenameModuleToVar(t *testing.T) {
 declare module/**/ X: IMod;// {
 //    export var y: numb;
 var y: number;
-module Y {
+namespace Y {
     var z = y + 5;
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

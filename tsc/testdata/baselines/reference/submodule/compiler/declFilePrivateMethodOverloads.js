@@ -25,6 +25,7 @@ declare class c2 {
 }
 
 //// [declFilePrivateMethodOverloads.js]
+"use strict";
 class c1 {
     _forEachBindingContext(context, fn) {
         // Function here

@@ -1,0 +1,36 @@
+implicitAnyGenerics.ts(2,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+implicitAnyGenerics.ts(20,24): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+
+
+==== implicitAnyGenerics.ts (2 errors) ====
+    class C<T> {
+        x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var c = new C();
+    var c2 = new C<any>();
+    var c3 = new C<number>();
+    var c4: C<any> = new C();
+    
+    class D<T> {
+        constructor(x: T) { }
+    }
+    
+    var d = new D(null);
+    var d2 = new D(1);
+    var d3 = new D<any>(1);
+    var d4 = new D(<any>1);
+    var d5: D<any> = new D(null);
+    
+    function foo<T>(): T { return null; };
+                           ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+    foo() 
+    foo<any>();
+    
+    
+        

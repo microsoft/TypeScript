@@ -1,0 +1,43 @@
+--- old.functionCall11.types
++++ new.functionCall11.types
+@@= skipped -1, +1 lines =@@
+
+ === functionCall11.ts ===
+ function foo(a:string, b?:number){} 
+->foo : (a: string, b?: number) => void
++>foo : (a: string, b?: number | undefined) => void
+ >a : string
+ >b : number | undefined
+
+ foo('foo', 1); 
+ >foo('foo', 1) : void
+->foo : (a: string, b?: number) => void
++>foo : (a: string, b?: number | undefined) => void
+ >'foo' : "foo"
+ >1 : 1
+
+ foo('foo'); 
+ >foo('foo') : void
+->foo : (a: string, b?: number) => void
++>foo : (a: string, b?: number | undefined) => void
+ >'foo' : "foo"
+
+ foo();
+ >foo() : void
+->foo : (a: string, b?: number) => void
++>foo : (a: string, b?: number | undefined) => void
+
+ foo(1, 'bar');
+ >foo(1, 'bar') : void
+->foo : (a: string, b?: number) => void
++>foo : (a: string, b?: number | undefined) => void
+ >1 : 1
+ >'bar' : "bar"
+
+ foo('foo', 1, 'bar');
+ >foo('foo', 1, 'bar') : void
+->foo : (a: string, b?: number) => void
++>foo : (a: string, b?: number | undefined) => void
+ >'foo' : "foo"
+ >1 : 1
+ >'bar' : "bar"

@@ -16,7 +16,7 @@
 //     ^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (property) SubClass.prop: T
+// | (property) SubClass.prop: T | undefined
 // | ```
 // | 
 // | 
@@ -38,7 +38,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(property) SubClass.prop: T\n```\n\n\n*@inheritdoc* — SubClass.prop\n"
+        "value": "```tsx\n(property) SubClass.prop: T | undefined\n```\n\n\n*@inheritdoc* — SubClass.prop\n"
       },
       "range": {
         "start": {

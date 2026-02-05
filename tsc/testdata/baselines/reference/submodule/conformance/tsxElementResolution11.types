@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution11.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface ElementAttributesProperty { }
 	interface IntrinsicElements { }
@@ -11,7 +11,7 @@ interface Obj1type {
 	new(n: string): any;
 >n : string
 }
-var Obj1: Obj1type;
+declare var Obj1: Obj1type;
 >Obj1 : Obj1type
 
 <Obj1 x={10} />; // OK
@@ -23,9 +23,9 @@ var Obj1: Obj1type;
 interface Obj2type {
 	new(n: string): { q?: number };
 >n : string
->q : number
+>q : number | undefined
 }
-var Obj2: Obj2type;
+declare var Obj2: Obj2type;
 >Obj2 : Obj2type
 
 <Obj2 x={10} />; // Error
@@ -39,7 +39,7 @@ interface Obj3type {
 >n : string
 >x : number
 }
-var Obj3: Obj3type;
+declare var Obj3: Obj3type;
 >Obj3 : Obj3type
 
 <Obj3 x={10} />; // OK

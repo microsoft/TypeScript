@@ -8,6 +8,7 @@ class C {
 }
 
 //// [parserSuperExpression2.js]
+"use strict";
 class C {
     M() {
         super(0);

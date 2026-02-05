@@ -1,7 +1,7 @@
 --- old.nestedClassDeclaration.js
 +++ new.nestedClassDeclaration.js
-@@= skipped -22, +22 lines =@@
- //// [nestedClassDeclaration.js]
+@@= skipped -23, +23 lines =@@
+ "use strict";
  // nested classes are not allowed
  class C {
 +    x;

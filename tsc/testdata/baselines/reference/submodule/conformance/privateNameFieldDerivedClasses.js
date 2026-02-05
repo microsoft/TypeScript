@@ -16,6 +16,7 @@ class Derived extends Base {
 
 
 //// [privateNameFieldDerivedClasses.js]
+"use strict";
 class Base {
     #prop = 123;
     static method(x) {

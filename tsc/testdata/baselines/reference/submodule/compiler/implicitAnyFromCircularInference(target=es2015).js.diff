@@ -1,0 +1,13 @@
+--- old.implicitAnyFromCircularInference(target=es2015).js
++++ new.implicitAnyFromCircularInference(target=es2015).js
+@@= skipped -76, +76 lines =@@
+ }
+ function foo(x) { return "abc"; }
+ class C {
+-    constructor() {
+-        this.s = foo(this);
+-    }
++    s = foo(this);
+ }
+ class D {
+     // Error expected

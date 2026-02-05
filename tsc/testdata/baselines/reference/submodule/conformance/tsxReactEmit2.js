@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxReactEmit2.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -18,6 +18,7 @@ var spreads5 = <div x={p2} {...p1} y={p3}>{p2}</div>;
 
 
 //// [file.js]
+"use strict";
 var p1, p2, p3;
 var spreads1 = React.createElement("div", Object.assign({}, p1), p2);
 var spreads2 = React.createElement("div", Object.assign({}, p1), p2);

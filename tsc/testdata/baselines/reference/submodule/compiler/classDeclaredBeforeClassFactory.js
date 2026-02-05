@@ -10,6 +10,7 @@ function makeBaseClass() {
 
 
 //// [classDeclaredBeforeClassFactory.js]
+"use strict";
 // Should be OK due to hoisting
 class Derived extends makeBaseClass() {
 }

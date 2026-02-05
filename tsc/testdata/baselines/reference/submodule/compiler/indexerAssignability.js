@@ -13,6 +13,7 @@ c = a;
 c = b;
 
 //// [indexerAssignability.js]
+"use strict";
 var a;
 var b;
 var c;

@@ -1,8 +1,8 @@
 --- old.invalidThisEmitInContextualObjectLiteral.js
 +++ new.invalidThisEmitInContextualObjectLiteral.js
-@@= skipped -16, +16 lines =@@
-
+@@= skipped -17, +17 lines =@@
  //// [invalidThisEmitInContextualObjectLiteral.js]
+ "use strict";
  class TestController {
 -    constructor() {
 -        this.p = this.m({

@@ -1,16 +1,26 @@
+mergedInterfacesWithInheritedPrivates3.ts(2,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithInheritedPrivates3.ts(6,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 mergedInterfacesWithInheritedPrivates3.ts(9,11): error TS2320: Interface 'A' cannot simultaneously extend types 'C' and 'C2'.
   Named property 'x' of types 'C' and 'C2' are not identical.
+mergedInterfacesWithInheritedPrivates3.ts(18,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithInheritedPrivates3.ts(19,5): error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithInheritedPrivates3.ts(24,17): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+mergedInterfacesWithInheritedPrivates3.ts(28,17): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 mergedInterfacesWithInheritedPrivates3.ts(31,15): error TS2320: Interface 'A' cannot simultaneously extend types 'C' and 'C2'.
   Named property 'x' of types 'C' and 'C2' are not identical.
 
 
-==== mergedInterfacesWithInheritedPrivates3.ts (2 errors) ====
+==== mergedInterfacesWithInheritedPrivates3.ts (8 errors) ====
     class C {
         private x: number;
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C2 {
         private x: number;
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     interface A extends C { // error
@@ -26,16 +36,24 @@ mergedInterfacesWithInheritedPrivates3.ts(31,15): error TS2320: Interface 'A' ca
     
     class D extends C implements A { // error
         y: string;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
         z: string;
+        ~
+!!! error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
     }
     
-    module M {
+    namespace M {
         class C {
             private x: string;
+                    ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         }
     
         class C2 {
             private x: number;
+                    ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         }
     
         interface A extends C { // error, privates conflict

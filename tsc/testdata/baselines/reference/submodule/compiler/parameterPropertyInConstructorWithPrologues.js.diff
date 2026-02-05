@@ -1,6 +1,6 @@
 --- old.parameterPropertyInConstructorWithPrologues.js
 +++ new.parameterPropertyInConstructorWithPrologues.js
-@@= skipped -88, +88 lines =@@
+@@= skipped -89, +89 lines =@@
  class C {
  }
  class Foo1 {

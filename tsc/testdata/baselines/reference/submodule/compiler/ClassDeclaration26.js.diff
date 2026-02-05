@@ -1,8 +1,8 @@
 --- old.ClassDeclaration26.js
 +++ new.ClassDeclaration26.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
  //// [ClassDeclaration26.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.foo = 10;

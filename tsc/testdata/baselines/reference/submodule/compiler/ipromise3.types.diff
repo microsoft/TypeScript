@@ -5,34 +5,54 @@
  interface IPromise3<T> {
      then<U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void ): IPromise3<U>;
 ->then : { <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U_1>(success?: (value: T) => IPromise3<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): IPromise3<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => IPromise3<U_1>, progress?: (progress: any) => void): IPromise3<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => U_1, progress?: (progress: any) => void): IPromise3<U_1>; }
-+>then : { <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }
- >success : (value: T) => IPromise3<U>
++>then : { <U>(success?: ((value: T) => IPromise3<U>) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: T) => IPromise3<U>) | undefined, error?: ((error: any) => U) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: T) => U) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: T) => U) | undefined, error?: ((error: any) => U) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; }
+ >success : ((value: T) => IPromise3<U>) | undefined
  >value : T
- >error : (error: any) => IPromise3<U>
+ >error : ((error: any) => IPromise3<U>) | undefined
 @@= skipped -9, +9 lines =@@
  >progress : any
 
      then<U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void ): IPromise3<U>;
 ->then : { <U_1>(success?: (value: T) => IPromise3<U_1>, error?: (error: any) => IPromise3<U_1>, progress?: (progress: any) => void): IPromise3<U_1>; <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => IPromise3<U_1>, progress?: (progress: any) => void): IPromise3<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => U_1, progress?: (progress: any) => void): IPromise3<U_1>; }
-+>then : { <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }
- >success : (value: T) => IPromise3<U>
++>then : { <U>(success?: ((value: T) => IPromise3<U>) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: T) => IPromise3<U>) | undefined, error?: ((error: any) => U) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: T) => U) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: T) => U) | undefined, error?: ((error: any) => U) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; }
+ >success : ((value: T) => IPromise3<U>) | undefined
  >value : T
- >error : (error: any) => U
+ >error : ((error: any) => U) | undefined
 @@= skipped -9, +9 lines =@@
  >progress : any
 
      then<U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void ): IPromise3<U>;
 ->then : { <U_1>(success?: (value: T) => IPromise3<U_1>, error?: (error: any) => IPromise3<U_1>, progress?: (progress: any) => void): IPromise3<U_1>; <U_1>(success?: (value: T) => IPromise3<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): IPromise3<U_1>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => U_1, progress?: (progress: any) => void): IPromise3<U_1>; }
-+>then : { <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }
- >success : (value: T) => U
++>then : { <U>(success?: ((value: T) => IPromise3<U>) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: T) => IPromise3<U>) | undefined, error?: ((error: any) => U) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: T) => U) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: T) => U) | undefined, error?: ((error: any) => U) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; }
+ >success : ((value: T) => U) | undefined
  >value : T
- >error : (error: any) => IPromise3<U>
+ >error : ((error: any) => IPromise3<U>) | undefined
 @@= skipped -9, +9 lines =@@
  >progress : any
 
      then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void ): IPromise3<U>;
 ->then : { <U_1>(success?: (value: T) => IPromise3<U_1>, error?: (error: any) => IPromise3<U_1>, progress?: (progress: any) => void): IPromise3<U_1>; <U_1>(success?: (value: T) => IPromise3<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): IPromise3<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => IPromise3<U_1>, progress?: (progress: any) => void): IPromise3<U_1>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }
-+>then : { <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }
- >success : (value: T) => U
++>then : { <U>(success?: ((value: T) => IPromise3<U>) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: T) => IPromise3<U>) | undefined, error?: ((error: any) => U) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: T) => U) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: T) => U) | undefined, error?: ((error: any) => U) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; }
+ >success : ((value: T) => U) | undefined
  >value : T
- >error : (error: any) => U
+ >error : ((error: any) => U) | undefined
+@@= skipped -9, +9 lines =@@
+ >progress : any
+
+     done? <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void ): void;
+->done : (<U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void) => void) | undefined
++>done : (<U>(success?: ((value: T) => any) | undefined, error?: ((error: any) => any) | undefined, progress?: ((progress: any) => void) | undefined) => void) | undefined
+ >success : ((value: T) => any) | undefined
+ >value : T
+ >error : ((error: any) => any) | undefined
+@@= skipped -14, +14 lines =@@
+ var p2: IPromise3<string> = p1.then(function (x) {
+ >p2 : IPromise3<string>
+ >p1.then(function (x) {    return x;}) : IPromise3<string>
+->p1.then : { <U>(success?: ((value: string) => IPromise3<U>) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: ((value: string) => IPromise3<U>) | undefined, error?: ((error: any) => U) | undefined, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: ((value: string) => U) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: ((value: string) => U) | undefined, error?: ((error: any) => U) | undefined, progress?: (progress: any) => void): IPromise3<U>; }
++>p1.then : { <U>(success?: ((value: string) => IPromise3<U>) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: string) => IPromise3<U>) | undefined, error?: ((error: any) => U) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: string) => U) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: string) => U) | undefined, error?: ((error: any) => U) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; }
+ >p1 : IPromise3<string>
+->then : { <U>(success?: ((value: string) => IPromise3<U>) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: ((value: string) => IPromise3<U>) | undefined, error?: ((error: any) => U) | undefined, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: ((value: string) => U) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: ((value: string) => U) | undefined, error?: ((error: any) => U) | undefined, progress?: (progress: any) => void): IPromise3<U>; }
++>then : { <U>(success?: ((value: string) => IPromise3<U>) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: string) => IPromise3<U>) | undefined, error?: ((error: any) => U) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: string) => U) | undefined, error?: ((error: any) => IPromise3<U>) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; <U>(success?: ((value: string) => U) | undefined, error?: ((error: any) => U) | undefined, progress?: ((progress: any) => void) | undefined): IPromise3<U>; }
+ >function (x) {    return x;} : (x: string) => string
+ >x : string

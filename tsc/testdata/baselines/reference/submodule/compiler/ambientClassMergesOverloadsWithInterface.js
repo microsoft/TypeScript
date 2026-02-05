@@ -12,3 +12,4 @@ interface C {
 
 
 //// [ambientClassMergesOverloadsWithInterface.js]
+"use strict";

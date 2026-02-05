@@ -18,8 +18,8 @@ typeParameterAssignmentCompat1.ts(17,9): error TS2322: Type 'Foo<T>' is not assi
     }
     
     function f<T, U>(): Foo<U> {
-        var x: Foo<T>;
-        var y: Foo<U>;
+        var x!: Foo<T>;
+        var y!: Foo<U>;
         x = y; // should be an error
         ~
 !!! error TS2322: Type 'Foo<U>' is not assignable to type 'Foo<T>'.
@@ -36,8 +36,8 @@ typeParameterAssignmentCompat1.ts(17,9): error TS2322: Type 'Foo<T>' is not assi
     
     class C<T> {
         f<U>(): Foo<U> {
-            var x: Foo<T>;
-            var y: Foo<U>;
+            var x!: Foo<T>;
+            var y!: Foo<U>;
             x = y; // should be an error
             ~
 !!! error TS2322: Type 'Foo<U>' is not assignable to type 'Foo<T>'.

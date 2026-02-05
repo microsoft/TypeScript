@@ -366,7 +366,7 @@ enum NumEnum { a, b }
 >a : NumEnum.a
 >b : NumEnum.b
 
-let numEnumKey: NumEnum;
+declare let numEnumKey: NumEnum;
 >numEnumKey : NumEnum
 
 o[numEnumKey];
@@ -382,7 +382,7 @@ enum StrEnum { a = "a", b = "b" }
 >b : StrEnum.b
 >"b" : "b"
 
-let strEnumKey: StrEnum;
+declare let strEnumKey: StrEnum;
 >strEnumKey : StrEnum
 
 o[strEnumKey];

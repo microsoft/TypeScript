@@ -6,14 +6,15 @@ class C {
     static set y(z) { }
 }
 
-module C {
+namespace C {
     export var x = 1;
 }
-module C {
+namespace C {
     export function x() { }
 }
 
 //// [cloduleWithDuplicateMember2.js]
+"use strict";
 class C {
     set x(y) { }
     static set y(z) { }

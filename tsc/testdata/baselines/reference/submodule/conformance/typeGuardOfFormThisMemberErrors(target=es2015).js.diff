@@ -1,0 +1,43 @@
+--- old.typeGuardOfFormThisMemberErrors(target=es2015).js
++++ new.typeGuardOfFormThisMemberErrors(target=es2015).js
+@@= skipped -39, +39 lines =@@
+ var Test;
+ (function (Test) {
+     class FileSystemObject {
++        path;
++        isFSO;
+         get isFile() {
+             return this instanceof File;
+         }
+@@= skipped -9, +11 lines =@@
+         get isDirectory() {
+             return this instanceof Directory;
+         }
++        isNetworked;
+         constructor(path) {
+             this.path = path;
+         }
+     }
+     Test.FileSystemObject = FileSystemObject;
+     class File extends FileSystemObject {
++        content;
+         constructor(path, content) {
+             super(path);
+             this.content = content;
+@@= skipped -13, +15 lines =@@
+     }
+     Test.File = File;
+     class Directory extends FileSystemObject {
++        children;
+     }
+     Test.Directory = Directory;
+     let file = new File("foo/bar.txt", "foo");
+@@= skipped -15, +16 lines =@@
+         path: string;
+         isFSO: this is FileSystemObject;
+         get isFile(): this is File;
+-        set isFile(param: this is File);
++        set isFile(param: boolean);
+         get isDirectory(): this is Directory;
+         isNetworked: this is (Networked & this);
+         constructor(path: string);

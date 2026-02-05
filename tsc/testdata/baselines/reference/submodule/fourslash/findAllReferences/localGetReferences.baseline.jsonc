@@ -526,7 +526,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }
@@ -583,7 +583,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }
@@ -631,7 +631,7 @@
 //     return [|x|]++;
 // }
 // 
-// module modTest {
+// namespace modTest {
 // --- (line: 38) skipped ---
 
 
@@ -849,7 +849,7 @@
 //     return /*FIND ALL REFS*/[|x|]++;
 // }
 // 
-// module modTest {
+// namespace modTest {
 // --- (line: 38) skipped ---
 
 
@@ -1016,7 +1016,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }
@@ -1073,7 +1073,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }
@@ -1264,7 +1264,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = /*FIND ALL REFS*/[|foo|];
 //     }
 // }
@@ -1393,7 +1393,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }
@@ -1872,7 +1872,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }
@@ -1929,7 +1929,7 @@
 //         modVar++;
 //     }
 // 
-//     module testMod {
+//     namespace testMod {
 //         var boo = [|foo|];
 //     }
 // }

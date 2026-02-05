@@ -7,11 +7,12 @@ class C {
 
 // x should be an optional property
 var v: C = {}; // Should succeed
-var v2: { x? }
+declare var v2: { x? }
 v = v2; // Should succeed
 var v3: { x } = new C; // Should fail
 
 //// [propertyParameterWithQuestionMark.js]
+"use strict";
 class C {
     x;
     constructor(x) {
@@ -20,6 +21,5 @@ class C {
 }
 // x should be an optional property
 var v = {}; // Should succeed
-var v2;
 v = v2; // Should succeed
 var v3 = new C; // Should fail

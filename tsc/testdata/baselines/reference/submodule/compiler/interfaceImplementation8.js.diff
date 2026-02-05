@@ -1,8 +1,8 @@
 --- old.interfaceImplementation8.js
 +++ new.interfaceImplementation8.js
-@@= skipped -43, +43 lines =@@
-
+@@= skipped -44, +44 lines =@@
  //// [interfaceImplementation8.js]
+ "use strict";
  class C1 {
 +    name;
  }

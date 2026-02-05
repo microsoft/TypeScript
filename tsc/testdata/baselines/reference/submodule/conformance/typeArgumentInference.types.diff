@@ -1,0 +1,45 @@
+--- old.typeArgumentInference.types
++++ new.typeArgumentInference.types
+@@= skipped -80, +80 lines =@@
+ >(n) => n.substr(0) : (n: string) => string
+ >n : string
+ >n.substr(0) : string
+->n.substr : (from: number, length?: number) => string
++>n.substr : (from: number, length?: number | undefined) => string
+ >n : string
+->substr : (from: number, length?: number) => string
++>substr : (from: number, length?: number | undefined) => string
+ >0 : 0
+
+ function someGenerics2b<T, U>(n: (x: T, y: U) => void) { }
+@@= skipped -34, +34 lines =@@
+ >n : string
+ >t : number
+ >n.substr(t * t) : string
+->n.substr : (from: number, length?: number) => string
++>n.substr : (from: number, length?: number | undefined) => string
+ >n : string
+->substr : (from: number, length?: number) => string
++>substr : (from: number, length?: number | undefined) => string
+ >t * t : number
+ >t : number
+ >t : number
+@@= skipped -213, +213 lines =@@
+ >a9a : string
+
+ var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
+->a9b : { a?: number; b?: string; }
+->someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number; b?: string; }
++>a9b : { a?: number | undefined; b?: string | undefined; }
++>someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number | undefined; b?: string | undefined; }
+ >someGenerics9 : <T>(a: T, b: T, c: T) => T
+ >a : number | undefined
+ >b : string | undefined
+@@= skipped -13, +13 lines =@@
+ >'' : ""
+
+ var a9b: { a?: number; b?: string; };
+->a9b : { a?: number; b?: string; }
++>a9b : { a?: number | undefined; b?: string | undefined; }
+ >a : number | undefined
+ >b : string | undefined

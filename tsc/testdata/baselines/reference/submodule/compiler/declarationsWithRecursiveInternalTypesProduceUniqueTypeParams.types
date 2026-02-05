@@ -67,13 +67,13 @@ export const updateIfChanged = <T>(t: T) => {
 >Object.assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_1 extends {}, U_1, V, W>(target: T_1, source1: U_1, source2: V, source3: W): T_1 & U_1 & V & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
 >assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_1 extends {}, U_1, V, W>(target: T_1, source1: U_1, source2: V, source3: W): T_1 & U_1 & V & W; (target: object, ...sources: any[]): any; }
->Array.isArray(u) ? [] : {} : undefined[] | {}
+>Array.isArray(u) ? [] : {} : never[] | {}
 >Array.isArray(u) : boolean
 >Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
 >isArray : (arg: any) => arg is any[]
 >u : U
->[] : undefined[]
+>[] : never[]
 >{} : {}
 >u : U
 >{ [key]: v } : { [x: string]: Value<K, U>; }

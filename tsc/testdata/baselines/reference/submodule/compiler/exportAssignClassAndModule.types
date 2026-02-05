@@ -25,7 +25,7 @@ class Foo {
 >x : import("exportAssignClassAndModule_0").Bar
 >Foo : any
 }
-module Foo {
+namespace Foo {
     export interface Bar {
     }
 }

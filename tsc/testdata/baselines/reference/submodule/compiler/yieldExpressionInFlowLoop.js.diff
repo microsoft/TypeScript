@@ -1,6 +1,6 @@
 --- old.yieldExpressionInFlowLoop.js
 +++ new.yieldExpressionInFlowLoop.js
-@@= skipped -12, +12 lines =@@
+@@= skipped -13, +13 lines =@@
  function* f() {
      let result;
      while (1) {

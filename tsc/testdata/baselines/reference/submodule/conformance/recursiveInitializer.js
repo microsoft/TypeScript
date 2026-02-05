@@ -22,6 +22,7 @@ var b4 = (!b4) && b4; // expected boolean here. actually 'any'
 var f = (x: string) => f(x);
 
 //// [recursiveInitializer.js]
+"use strict";
 // number unless otherwise specified
 var n1 = n1++;
 var n2 = n2 + n2;

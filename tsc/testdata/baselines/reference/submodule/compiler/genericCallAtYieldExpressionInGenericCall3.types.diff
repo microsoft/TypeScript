@@ -1,0 +1,29 @@
+--- old.genericCallAtYieldExpressionInGenericCall3.types
++++ new.genericCallAtYieldExpressionInGenericCall3.types
+@@= skipped -11, +11 lines =@@
+
+ interface MicroIterator<T extends Micro<any, any, any>> {
+   next(...args: ReadonlyArray<any>): IteratorResult<T, Success<T>>;
+->next : (...args: ReadonlyArray<any>) => IteratorResult<T, Success<T>>
++>next : (...args: readonly any[]) => IteratorResult<T, Success<T>>
+ >args : readonly any[]
+ }
+
+@@= skipped -22, +22 lines =@@
+ }
+
+ declare function runPromise<A, E>(effect: Micro<A, E>): Promise<A>;
+->runPromise : <A, E>(effect: Micro<A, E>) => Promise<A>
++>runPromise : <A, E>(effect: Micro<A, E, never>) => Promise<A>
+ >effect : Micro<A, E, never>
+
+ declare function gen<Eff extends Micro<any, any, any>, AEff>(
+@@= skipped -37, +37 lines =@@
+
+ runPromise(
+ >runPromise(  gen(function* () {    yield* traverse({ a: 1, b: 2 }, (n) =>      gen(function* () {        return n + 1;      }),    );  }),) : Promise<void>
+->runPromise : <A, E>(effect: Micro<A, E>) => Promise<A>
++>runPromise : <A, E>(effect: Micro<A, E, never>) => Promise<A>
+
+   gen(function* () {
+ >gen(function* () {    yield* traverse({ a: 1, b: 2 }, (n) =>      gen(function* () {        return n + 1;      }),    );  }) : Micro<void, any, never>

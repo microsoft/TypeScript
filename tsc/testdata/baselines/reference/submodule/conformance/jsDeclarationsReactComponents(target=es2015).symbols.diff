@@ -1,0 +1,151 @@
+--- old.jsDeclarationsReactComponents(target=es2015).symbols
++++ new.jsDeclarationsReactComponents(target=es2015).symbols
+@@= skipped -8, +8 lines =@@
+ >PropTypes : Symbol(PropTypes, Decl(jsDeclarationsReactComponents1.jsx, 2, 6))
+
+ const TabbedShowLayout = ({
+->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents1.jsx, 4, 5), Decl(jsDeclarationsReactComponents1.jsx, 9, 2), Decl(jsDeclarationsReactComponents1.jsx, 14, 2))
++>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents1.jsx, 4, 5))
+
+ }) => {
+     return (
+@@= skipped -12, +12 lines =@@
+
+ TabbedShowLayout.propTypes = {
+ >TabbedShowLayout.propTypes : Symbol(TabbedShowLayout.propTypes, Decl(jsDeclarationsReactComponents1.jsx, 9, 2))
+->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents1.jsx, 4, 5), Decl(jsDeclarationsReactComponents1.jsx, 9, 2), Decl(jsDeclarationsReactComponents1.jsx, 14, 2))
++>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents1.jsx, 4, 5))
+ >propTypes : Symbol(TabbedShowLayout.propTypes, Decl(jsDeclarationsReactComponents1.jsx, 9, 2))
+
+     version: PropTypes.number,
+@@= skipped -13, +13 lines =@@
+
+ TabbedShowLayout.defaultProps = {
+ >TabbedShowLayout.defaultProps : Symbol(TabbedShowLayout.defaultProps, Decl(jsDeclarationsReactComponents1.jsx, 14, 2))
+->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents1.jsx, 4, 5), Decl(jsDeclarationsReactComponents1.jsx, 9, 2), Decl(jsDeclarationsReactComponents1.jsx, 14, 2))
++>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents1.jsx, 4, 5))
+ >defaultProps : Symbol(TabbedShowLayout.defaultProps, Decl(jsDeclarationsReactComponents1.jsx, 14, 2))
+
+     tabs: undefined
+@@= skipped -10, +10 lines =@@
+ };
+
+ export default TabbedShowLayout;
+->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents1.jsx, 4, 5), Decl(jsDeclarationsReactComponents1.jsx, 9, 2), Decl(jsDeclarationsReactComponents1.jsx, 14, 2))
++>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents1.jsx, 4, 5))
+
+ === jsDeclarationsReactComponents2.jsx ===
+ import React from "react";
+@@= skipped -10, +10 lines =@@
+  * @type {React.SFC}
+  */
+ const TabbedShowLayout = () => {
+->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents2.jsx, 4, 5), Decl(jsDeclarationsReactComponents2.jsx, 10, 2))
++>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents2.jsx, 4, 5))
+
+     return (
+         <div className="" key="">
+@@= skipped -17, +17 lines =@@
+
+ TabbedShowLayout.defaultProps = {
+ >TabbedShowLayout.defaultProps : Symbol(React.StatelessComponent.defaultProps, Decl(react16.d.ts, 410, 46))
+->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents2.jsx, 4, 5), Decl(jsDeclarationsReactComponents2.jsx, 10, 2))
++>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents2.jsx, 4, 5))
+ >defaultProps : Symbol(React.StatelessComponent.defaultProps, Decl(react16.d.ts, 410, 46))
+
+     tabs: "default value"
+@@= skipped -9, +9 lines =@@
+ };
+
+ export default TabbedShowLayout;
+->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents2.jsx, 4, 5), Decl(jsDeclarationsReactComponents2.jsx, 10, 2))
++>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents2.jsx, 4, 5))
+
+ === jsDeclarationsReactComponents3.jsx ===
+ import React from "react";
+@@= skipped -10, +10 lines =@@
+  * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
+  */
+ const TabbedShowLayout = () => {
+->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents3.jsx, 4, 5), Decl(jsDeclarationsReactComponents3.jsx, 10, 2))
++>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents3.jsx, 4, 5))
+
+     return (
+         <div className="" key="">
+@@= skipped -17, +17 lines =@@
+
+ TabbedShowLayout.defaultProps = {
+ >TabbedShowLayout.defaultProps : Symbol(defaultProps, Decl(jsDeclarationsReactComponents3.jsx, 2, 11))
+->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents3.jsx, 4, 5), Decl(jsDeclarationsReactComponents3.jsx, 10, 2))
++>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents3.jsx, 4, 5))
+ >defaultProps : Symbol(defaultProps, Decl(jsDeclarationsReactComponents3.jsx, 2, 11))
+
+     tabs: "default value"
+@@= skipped -9, +9 lines =@@
+ };
+
+ export default TabbedShowLayout;
+->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents3.jsx, 4, 5), Decl(jsDeclarationsReactComponents3.jsx, 10, 2))
++>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents3.jsx, 4, 5))
+
+ === jsDeclarationsReactComponents4.jsx ===
+ import React from "react";
+ >React : Symbol(React, Decl(jsDeclarationsReactComponents4.jsx, 0, 6))
+
+ const TabbedShowLayout = (/** @type {{className: string}}*/prop) => {
+->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents4.jsx, 1, 5), Decl(jsDeclarationsReactComponents4.jsx, 7, 2))
++>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents4.jsx, 1, 5))
+ >prop : Symbol(prop, Decl(jsDeclarationsReactComponents4.jsx, 1, 26))
+
+     return (
+@@= skipped -28, +28 lines =@@
+
+ TabbedShowLayout.defaultProps = {
+ >TabbedShowLayout.defaultProps : Symbol(TabbedShowLayout.defaultProps, Decl(jsDeclarationsReactComponents4.jsx, 7, 2))
+->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents4.jsx, 1, 5), Decl(jsDeclarationsReactComponents4.jsx, 7, 2))
++>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents4.jsx, 1, 5))
+ >defaultProps : Symbol(TabbedShowLayout.defaultProps, Decl(jsDeclarationsReactComponents4.jsx, 7, 2))
+
+     tabs: "default value"
+@@= skipped -9, +9 lines =@@
+ };
+
+ export default TabbedShowLayout;
+->TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents4.jsx, 1, 5), Decl(jsDeclarationsReactComponents4.jsx, 7, 2))
++>TabbedShowLayout : Symbol(TabbedShowLayout, Decl(jsDeclarationsReactComponents4.jsx, 1, 5))
+
+ === jsDeclarationsReactComponents5.jsx ===
+ import React from 'react';
+@@= skipped -10, +10 lines =@@
+ >PropTypes : Symbol(PropTypes, Decl(jsDeclarationsReactComponents5.jsx, 1, 6))
+
+ function Tree({ allowDropOnRoot }) {
+->Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35), Decl(jsDeclarationsReactComponents5.jsx, 5, 1), Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
++>Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35))
+ >allowDropOnRoot : Symbol(allowDropOnRoot, Decl(jsDeclarationsReactComponents5.jsx, 3, 15))
+
+   return <div />
+@@= skipped -9, +9 lines =@@
+
+ Tree.propTypes = {
+ >Tree.propTypes : Symbol(Tree.propTypes, Decl(jsDeclarationsReactComponents5.jsx, 5, 1))
+->Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35), Decl(jsDeclarationsReactComponents5.jsx, 5, 1), Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
++>Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35))
+ >propTypes : Symbol(Tree.propTypes, Decl(jsDeclarationsReactComponents5.jsx, 5, 1))
+
+     classes: PropTypes.object,
+@@= skipped -13, +13 lines =@@
+
+ Tree.defaultProps = {
+ >Tree.defaultProps : Symbol(Tree.defaultProps, Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+->Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35), Decl(jsDeclarationsReactComponents5.jsx, 5, 1), Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
++>Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35))
+ >defaultProps : Symbol(Tree.defaultProps, Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
+
+     classes: {},
+@@= skipped -12, +12 lines =@@
+ };
+
+ export default Tree;
+->Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35), Decl(jsDeclarationsReactComponents5.jsx, 5, 1), Decl(jsDeclarationsReactComponents5.jsx, 9, 2))
++>Tree : Symbol(Tree, Decl(jsDeclarationsReactComponents5.jsx, 1, 35))

@@ -7,6 +7,7 @@ class Foo2 {
 
 
 //// [parser585151.js]
+"use strict";
 class Foo2 {
 }
 var icecream = "chocolate";

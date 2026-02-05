@@ -1,0 +1,97 @@
+//// [tests/cases/compiler/inferenceContextualReturnTypeUnion2.ts] ////
+
+=== inferenceContextualReturnTypeUnion2.ts ===
+type Query = (
+>Query : Symbol(Query, Decl(inferenceContextualReturnTypeUnion2.ts, 0, 0))
+
+  container: HTMLElement,
+>container : Symbol(container, Decl(inferenceContextualReturnTypeUnion2.ts, 0, 14))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  ...args: any[]
+>args : Symbol(args, Decl(inferenceContextualReturnTypeUnion2.ts, 1, 25))
+
+) =>
+  | Error
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+  | HTMLElement
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  | HTMLElement[]
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  | Promise<HTMLElement[]>
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  | Promise<HTMLElement>
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  | null;
+
+interface Queries {
+>Queries : Symbol(Queries, Decl(inferenceContextualReturnTypeUnion2.ts, 9, 9))
+
+  [T: string]: Query;
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion2.ts, 12, 3))
+>Query : Symbol(Query, Decl(inferenceContextualReturnTypeUnion2.ts, 0, 0))
+}
+
+type FindByText<T extends HTMLElement = HTMLElement> = (
+>FindByText : Symbol(FindByText, Decl(inferenceContextualReturnTypeUnion2.ts, 13, 1))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion2.ts, 15, 16))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  container: HTMLElement,
+>container : Symbol(container, Decl(inferenceContextualReturnTypeUnion2.ts, 15, 56))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  text: string,
+>text : Symbol(text, Decl(inferenceContextualReturnTypeUnion2.ts, 16, 25))
+
+) => Promise<T>;
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion2.ts, 15, 16))
+
+declare function findByLabelText<T extends HTMLElement = HTMLElement>(
+>findByLabelText : Symbol(findByLabelText, Decl(inferenceContextualReturnTypeUnion2.ts, 18, 16))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion2.ts, 20, 33))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  ...args: Parameters<FindByText<T>>
+>args : Symbol(args, Decl(inferenceContextualReturnTypeUnion2.ts, 20, 70))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>FindByText : Symbol(FindByText, Decl(inferenceContextualReturnTypeUnion2.ts, 13, 1))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion2.ts, 20, 33))
+
+): ReturnType<FindByText<T>>;
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>FindByText : Symbol(FindByText, Decl(inferenceContextualReturnTypeUnion2.ts, 13, 1))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion2.ts, 20, 33))
+
+const queries = {
+>queries : Symbol(queries, Decl(inferenceContextualReturnTypeUnion2.ts, 24, 5))
+
+  findByLabelText,
+>findByLabelText : Symbol(findByLabelText, Decl(inferenceContextualReturnTypeUnion2.ts, 24, 17))
+
+};
+
+type MapQueries<Q extends Queries = typeof queries> = {
+>MapQueries : Symbol(MapQueries, Decl(inferenceContextualReturnTypeUnion2.ts, 26, 2))
+>Q : Symbol(Q, Decl(inferenceContextualReturnTypeUnion2.ts, 28, 16))
+>Queries : Symbol(Queries, Decl(inferenceContextualReturnTypeUnion2.ts, 9, 9))
+>queries : Symbol(queries, Decl(inferenceContextualReturnTypeUnion2.ts, 24, 5))
+
+  [P in keyof Q]: Q[P];
+>P : Symbol(P, Decl(inferenceContextualReturnTypeUnion2.ts, 29, 3))
+>Q : Symbol(Q, Decl(inferenceContextualReturnTypeUnion2.ts, 28, 16))
+>Q : Symbol(Q, Decl(inferenceContextualReturnTypeUnion2.ts, 28, 16))
+>P : Symbol(P, Decl(inferenceContextualReturnTypeUnion2.ts, 29, 3))
+
+};
+

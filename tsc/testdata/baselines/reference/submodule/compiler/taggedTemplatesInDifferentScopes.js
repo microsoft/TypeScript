@@ -19,10 +19,7 @@ bar();
 
 
 //// [taggedTemplatesInDifferentScopes.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.tag = tag;
-function tag(parts, ...values) {
+export function tag(parts, ...values) {
     return parts[0];
 }
 function foo() {

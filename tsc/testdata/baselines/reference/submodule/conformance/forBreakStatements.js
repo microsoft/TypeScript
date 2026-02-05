@@ -40,6 +40,7 @@ for (; ;) {
 
 
 //// [forBreakStatements.js]
+"use strict";
 for (;;) {
     break;
 }

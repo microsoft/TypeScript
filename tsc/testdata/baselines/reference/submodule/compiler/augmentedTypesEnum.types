@@ -57,13 +57,13 @@ enum e6 { One }
 >e6 : e6
 >One : e6.One
 
-module e6 { } // ok
+namespace e6 { } // ok
 
 enum e6a { One }
 >e6a : e6a
 >One : e6a.One
 
-module e6a { var y = 2; } // should be error
+namespace e6a { var y = 2; } // should be error
 >e6a : typeof e6a
 >y : number
 >2 : 2
@@ -72,7 +72,7 @@ enum e6b { One }
 >e6b : e6b
 >One : e6b.One
 
-module e6b { export var y = 2; } // should be error
+namespace e6b { export var y = 2; } // should be error
 >e6b : typeof e6b
 >y : number
 >2 : 2

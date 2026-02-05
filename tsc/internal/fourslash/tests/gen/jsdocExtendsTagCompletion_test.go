@@ -12,7 +12,8 @@ func TestJsdocExtendsTagCompletion(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `/** @extends {/**/} */
+	const content = `// @lib: es5
+/** @extends {/**/} */
 class A {}`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()

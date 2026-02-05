@@ -10,5 +10,6 @@ function foo() {
 
 
 //// [a.js]
+"use strict";
 class c {
 }

@@ -14,6 +14,7 @@ if (isNumber((otherValue(), value))) {
 }
 
 //// [controlFlowCommaExpressionFunctionCall.js]
+"use strict";
 const otherValue = () => true;
 const value = null;
 function isNumber(obj) {

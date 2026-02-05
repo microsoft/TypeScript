@@ -1,8 +1,8 @@
 --- old.staticVisibility.js
 +++ new.staticVisibility.js
-@@= skipped -39, +39 lines =@@
-
+@@= skipped -40, +40 lines =@@
  //// [staticVisibility.js]
+ "use strict";
  class C1 {
 +    p;
 +    static s;

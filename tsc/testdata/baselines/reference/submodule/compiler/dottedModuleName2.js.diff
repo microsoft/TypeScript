@@ -1,7 +1,7 @@
 --- old.dottedModuleName2.js
 +++ new.dottedModuleName2.js
-@@= skipped -47, +47 lines =@@
- //// [dottedModuleName2.js]
+@@= skipped -48, +48 lines =@@
+ "use strict";
  var A;
  (function (A) {
 -    var B;

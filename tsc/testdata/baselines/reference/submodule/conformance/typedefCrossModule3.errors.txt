@@ -1,0 +1,12 @@
+mod2.js(4,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+
+==== mod2.js (1 errors) ====
+    /** @typedef {number} Foo */
+    const ns = {};
+    ns.Foo = class {}
+    module.exports = ns;
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    
+    

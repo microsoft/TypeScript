@@ -1,8 +1,8 @@
 --- old.undefinedAssignableToEveryType.js
 +++ new.undefinedAssignableToEveryType.js
-@@= skipped -45, +45 lines =@@
-
+@@= skipped -46, +46 lines =@@
  //// [undefinedAssignableToEveryType.js]
+ "use strict";
  class C {
 +    foo;
  }

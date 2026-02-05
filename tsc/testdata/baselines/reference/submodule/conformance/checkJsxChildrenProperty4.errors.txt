@@ -1,9 +1,11 @@
-file.tsx(24,28): error TS2551: Property 'NAme' does not exist on type 'IUser'. Did you mean 'Name'?
-file.tsx(36,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
-file.tsx(39,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
+file.tsx(26,28): error TS2551: Property 'NAme' does not exist on type 'IUser'. Did you mean 'Name'?
+file.tsx(38,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
+file.tsx(41,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
 
 
 ==== file.tsx (3 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react');
     
     interface IUser {
@@ -30,7 +32,7 @@ file.tsx(39,15): error TS2322: Type '(user: IUser) => Element' is not assignable
                     <h1>{ user.NAme }</h1>
                                ~~~~
 !!! error TS2551: Property 'NAme' does not exist on type 'IUser'. Did you mean 'Name'?
-!!! related TS2728 file.tsx:4:5: 'Name' is declared here.
+!!! related TS2728 file.tsx:6:5: 'Name' is declared here.
                 ) }
             </FetchUser>
         );
@@ -49,7 +51,7 @@ file.tsx(39,15): error TS2322: Type '(user: IUser) => Element' is not assignable
                 ) }
     ~~~~~~~~~~~~~
 !!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
-!!! related TS6212 file.tsx:36:15: Did you mean to call this expression?
+!!! related TS6212 file.tsx:38:15: Did you mean to call this expression?
                 { user => (
                   ~~~~~~~~~
                     <h1>{ user.Name }</h1>
@@ -57,7 +59,7 @@ file.tsx(39,15): error TS2322: Type '(user: IUser) => Element' is not assignable
                 ) }
     ~~~~~~~~~~~~~
 !!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
-!!! related TS6212 file.tsx:39:15: Did you mean to call this expression?
+!!! related TS6212 file.tsx:41:15: Did you mean to call this expression?
             </FetchUser>
         );
     }

@@ -41,29 +41,29 @@ interface Beta { y: number; }
 >Beta : Symbol(Beta, Decl(elaboratedErrors.ts, 13, 30))
 >y : Symbol(Beta.y, Decl(elaboratedErrors.ts, 14, 16))
 
-var x: Alpha;
->x : Symbol(x, Decl(elaboratedErrors.ts, 15, 3))
+declare var x: Alpha;
+>x : Symbol(x, Decl(elaboratedErrors.ts, 15, 11))
 >Alpha : Symbol(Alpha, Decl(elaboratedErrors.ts, 11, 1))
 
-var y: Beta;
->y : Symbol(y, Decl(elaboratedErrors.ts, 16, 3))
+declare var y: Beta;
+>y : Symbol(y, Decl(elaboratedErrors.ts, 16, 11))
 >Beta : Symbol(Beta, Decl(elaboratedErrors.ts, 13, 30))
 
 // Only one of these errors should be large
 x = y;
->x : Symbol(x, Decl(elaboratedErrors.ts, 15, 3))
->y : Symbol(y, Decl(elaboratedErrors.ts, 16, 3))
+>x : Symbol(x, Decl(elaboratedErrors.ts, 15, 11))
+>y : Symbol(y, Decl(elaboratedErrors.ts, 16, 11))
 
 x = y;
->x : Symbol(x, Decl(elaboratedErrors.ts, 15, 3))
->y : Symbol(y, Decl(elaboratedErrors.ts, 16, 3))
+>x : Symbol(x, Decl(elaboratedErrors.ts, 15, 11))
+>y : Symbol(y, Decl(elaboratedErrors.ts, 16, 11))
 
 // Only one of these errors should be large
 y = x;
->y : Symbol(y, Decl(elaboratedErrors.ts, 16, 3))
->x : Symbol(x, Decl(elaboratedErrors.ts, 15, 3))
+>y : Symbol(y, Decl(elaboratedErrors.ts, 16, 11))
+>x : Symbol(x, Decl(elaboratedErrors.ts, 15, 11))
 
 y = x;
->y : Symbol(y, Decl(elaboratedErrors.ts, 16, 3))
->x : Symbol(x, Decl(elaboratedErrors.ts, 15, 3))
+>y : Symbol(y, Decl(elaboratedErrors.ts, 16, 11))
+>x : Symbol(x, Decl(elaboratedErrors.ts, 15, 11))
 

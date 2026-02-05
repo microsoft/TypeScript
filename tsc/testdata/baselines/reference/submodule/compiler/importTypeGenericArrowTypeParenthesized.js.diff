@@ -1,6 +1,6 @@
 --- old.importTypeGenericArrowTypeParenthesized.js
 +++ new.importTypeGenericArrowTypeParenthesized.js
-@@= skipped -32, +32 lines =@@
+@@= skipped -29, +29 lines =@@
 
 
  //// [index.d.ts]

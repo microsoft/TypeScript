@@ -10,27 +10,27 @@ export const b = 2;
 >2 : 2
 
 === 1.ts ===
-export {} from './0' assert { type: "json" }
+export {} from './0' with { type: "json" }
 >type : any
 
-export { a, b } from './0' assert { type: "json" }
+export { a, b } from './0' with { type: "json" }
 >a : 1
 >b : 2
 >type : any
 
-export * from './0' assert { type: "json" }
+export * from './0' with { type: "json" }
 >type : any
 
-export * as ns from './0' assert { type: "json" }
+export * as ns from './0' with { type: "json" }
 >ns : typeof import("0")
 >type : any
 
 === 2.ts ===
-export { a, b } from './0' assert {}
+export { a, b } from './0' with {}
 >a : 1
 >b : 2
 
-export { a as c, b as d } from './0' assert { a: "a", b: "b", c: "c" }
+export { a as c, b as d } from './0' with { a: "a", b: "b", c: "c" }
 >a : 1
 >c : 1
 >b : 2

@@ -23,13 +23,13 @@ export function Foo() { }
  * @return {void}
  */
 Foo.prototype.bar = function (a, b) { }
->Foo.prototype.bar = function (a, b) { } : (a: string | number, b?: string) => void
+>Foo.prototype.bar = function (a, b) { } : (a: string | number, b?: string | undefined) => void
 >Foo.prototype.bar : any
 >Foo.prototype : any
 >Foo : () => void
 >prototype : any
 >bar : any
->function (a, b) { } : (a: string | number, b?: string) => void
+>function (a, b) { } : (a: string | number, b?: string | undefined) => void
 >a : string | number
->b : string
+>b : string | undefined
 

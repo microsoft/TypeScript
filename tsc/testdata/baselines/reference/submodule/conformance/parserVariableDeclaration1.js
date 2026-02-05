@@ -7,4 +7,5 @@
 			support = d;
 
 //// [parserVariableDeclaration1.js]
+"use strict";
 var selection = a, position = b, model = c, support = d;

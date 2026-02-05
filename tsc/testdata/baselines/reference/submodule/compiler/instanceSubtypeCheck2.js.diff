@@ -1,8 +1,8 @@
 --- old.instanceSubtypeCheck2.js
 +++ new.instanceSubtypeCheck2.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [instanceSubtypeCheck2.js]
+ "use strict";
  class C1 {
 +    x;
  }

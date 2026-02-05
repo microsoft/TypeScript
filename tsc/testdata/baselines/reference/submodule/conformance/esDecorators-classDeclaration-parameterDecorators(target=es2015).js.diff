@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-parameterDecorators(target=es2015).js
 +++ new.esDecorators-classDeclaration-parameterDecorators(target=es2015).js
-@@= skipped -20, +20 lines =@@
-
+@@= skipped -21, +21 lines =@@
  //// [esDecorators-classDeclaration-parameterDecorators.js]
+ "use strict";
  class C {
 -    constructor(x) { }
 -    method(x) { }

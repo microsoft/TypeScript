@@ -64,8 +64,8 @@ var x = {
 >a : number
 
         var r3 = this; // any
->r3 : any
->this : any
+>r3 : { readonly a: number; }
+>this : { readonly a: number; }
 
         return 1;
 >1 : 1

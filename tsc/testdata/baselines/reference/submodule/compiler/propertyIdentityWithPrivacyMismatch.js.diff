@@ -1,6 +1,6 @@
 --- old.propertyIdentityWithPrivacyMismatch.js
 +++ new.propertyIdentityWithPrivacyMismatch.js
-@@= skipped -33, +33 lines =@@
+@@= skipped -34, +34 lines =@@
  var x;
  var x; // Should be error (mod1.Foo !== mod2.Foo)
  class Foo1 {

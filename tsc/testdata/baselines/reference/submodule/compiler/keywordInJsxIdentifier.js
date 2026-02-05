@@ -9,6 +9,7 @@ declare var React: any;
 
 
 //// [keywordInJsxIdentifier.js]
+"use strict";
 React.createElement("foo", { "class-id": true });
 React.createElement("foo", { class: true });
 React.createElement("foo", { "class-id": "1" });

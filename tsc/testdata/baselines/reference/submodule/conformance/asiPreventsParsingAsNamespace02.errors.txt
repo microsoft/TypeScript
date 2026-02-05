@@ -1,0 +1,15 @@
+asiPreventsParsingAsNamespace02.ts(4,1): error TS2454: Variable 'module' is used before being assigned.
+asiPreventsParsingAsNamespace02.ts(5,1): error TS2454: Variable 'm' is used before being assigned.
+
+
+==== asiPreventsParsingAsNamespace02.ts (2 errors) ====
+    var module: number;
+    var m: string;
+    
+    module       // this is the identifier 'namespace'
+    ~~~~~~
+!!! error TS2454: Variable 'module' is used before being assigned.
+    m            // this is the identifier 'm'
+    ~
+!!! error TS2454: Variable 'm' is used before being assigned.
+    { }          // this is a block body

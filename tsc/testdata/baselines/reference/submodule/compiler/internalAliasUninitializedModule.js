@@ -1,21 +1,22 @@
 //// [tests/cases/compiler/internalAliasUninitializedModule.ts] ////
 
 //// [internalAliasUninitializedModule.ts]
-module a {
-    export module b {
+namespace a {
+    export namespace b {
         export interface I {
             foo();
         }
     }
 }
 
-module c {
+namespace c {
     import b = a.b;
     export var x: b.I;
     x.foo();
 }
 
 //// [internalAliasUninitializedModule.js]
+"use strict";
 var c;
 (function (c) {
     var b = a.b;

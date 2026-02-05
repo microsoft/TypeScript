@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts] ////
 
 === resolvingClassDeclarationWhenInBaseTypeResolution.ts ===
-module rionegrensis {
+namespace rionegrensis {
 >rionegrensis : typeof rionegrensis
 
   export class caniventer extends Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana> {
@@ -151,7 +151,7 @@ module rionegrensis {
 >x : samarensis.pallidus
   }
 }
-module julianae {
+namespace julianae {
 >julianae : typeof julianae
 
   export class steerii {
@@ -985,7 +985,7 @@ module julianae {
 >x : sagitta.stolzmanni
   }
 }
-module ruatanica {
+namespace ruatanica {
 >ruatanica : typeof ruatanica
 
   export class hector<T0, T1> {
@@ -1020,7 +1020,7 @@ module ruatanica {
 >x : panamensis.linulus<Praseodymium<Lanthanum.jugularis, dammermani.melanops>, lavali.wilsoni>
   }
 }
-module Lanthanum {
+namespace Lanthanum {
 >Lanthanum : typeof Lanthanum
 
   export class suillus<T0, T1> {
@@ -1466,7 +1466,7 @@ module Lanthanum {
 >x : quasiater.carolinensis
   }
 }
-module rendalli {
+namespace rendalli {
 >rendalli : typeof rendalli
 
   export class zuluensis extends julianae.steerii {
@@ -1837,7 +1837,7 @@ module rendalli {
 >x : lutreolus.cor<imperfecta.lasiurus<howi.marcanoi, imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>>, rionegrensis.caniventer>
   }
 }
-module trivirgatus {
+namespace trivirgatus {
 >trivirgatus : typeof trivirgatus
 
   export class tumidifrons<T0, T1> {
@@ -2379,7 +2379,7 @@ module trivirgatus {
 >x : lavali.xanthognathus
   }
 }
-module quasiater {
+namespace quasiater {
 >quasiater : typeof quasiater
 
   export class bobrinskoi {
@@ -2442,7 +2442,7 @@ module quasiater {
 >x : argurus.netscheri<carolinensis, dogramacii.kaiseri>
   }
 }
-module ruatanica {
+namespace ruatanica {
 >ruatanica : typeof ruatanica
 
   export class americanus extends imperfecta.ciliolabrum<argurus.germaini, lutreolus.foina> {
@@ -2498,7 +2498,7 @@ module ruatanica {
 >x : gabriellae.amicus
   }
 }
-module lavali {
+namespace lavali {
 >lavali : typeof lavali
 
   export class wilsoni extends Lanthanum.nitidus<rionegrensis.caniventer, Lanthanum.jugularis> {
@@ -3164,7 +3164,7 @@ module lavali {
 >x : sagitta.cinereus<petrophilus.sodyi<quasiater.wattsi<julianae.galapagoensis, panamensis.linulus<xanthognathus, macrorhinos.konganensis>>, petrophilus.minutilla>, Lanthanum.jugularis>
   }
 }
-module dogramacii {
+namespace dogramacii {
 >dogramacii : typeof dogramacii
 
   export class robustulus extends lavali.wilsoni {
@@ -3581,7 +3581,7 @@ module dogramacii {
 >x : caurinus.johorensis<panglima.fundatus<samarensis.pallidus, sagitta.stolzmanni>, nigra.dolichurus<lavali.lepturus, samarensis.pallidus>>
   }
 }
-module lutreolus {
+namespace lutreolus {
 >lutreolus : typeof lutreolus
 
   export class schlegeli extends lavali.beisa {
@@ -3791,7 +3791,7 @@ module lutreolus {
 >x : panamensis.linulus<dogramacii.kaiseri, minutus.portoricensis>
   }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 
   export class dauricus<T0, T1> {
@@ -3956,7 +3956,7 @@ module argurus {
 >x : macrorhinos.marmosurus<daubentonii.arboreus<quasiater.carolinensis, rionegrensis.caniventer>, gabriellae.echinatus>
   }
 }
-module nigra {
+namespace nigra {
 >nigra : typeof nigra
 
   export class dolichurus<T0, T1> {
@@ -4091,7 +4091,7 @@ module nigra {
 >x : howi.marcanoi
   }
 }
-module panglima {
+namespace panglima {
 >panglima : typeof panglima
 
     export class amphibius<T0, T1> extends caurinus.johorensis<Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana>, Lanthanum.jugularis> {
@@ -4323,7 +4323,7 @@ module panglima {
 >x : imperfecta.lasiurus<julianae.acariensis, howi.coludo<argurus.oreas, howi.marcanoi>>
     }
 }
-module quasiater {
+namespace quasiater {
 >quasiater : typeof quasiater
 
     export class carolinensis {
@@ -4412,7 +4412,7 @@ module quasiater {
 >x : Lanthanum.megalonyx
     }
 }
-module minutus {
+namespace minutus {
 >minutus : typeof minutus
 
     export class himalayana<T0, T1> extends lutreolus.punicus {
@@ -4586,7 +4586,7 @@ module minutus {
 >x : Lanthanum.megalonyx
     }
 }
-module caurinus {
+namespace caurinus {
 >caurinus : typeof caurinus
 
     export class mahaganus<T0, T1> extends panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon> {
@@ -4726,7 +4726,7 @@ module caurinus {
 >x : argurus.luctuosa
     }
 }
-module macrorhinos {
+namespace macrorhinos {
 >macrorhinos : typeof macrorhinos
 
     export class marmosurus<T0, T1> {
@@ -4743,7 +4743,7 @@ module macrorhinos {
 >x : lutreolus.punicus
     }
 }
-module howi {
+namespace howi {
 >howi : typeof howi
 
     export class angulatus<T0, T1> extends sagitta.stolzmanni {
@@ -4763,14 +4763,14 @@ module howi {
 >x : marcanoi
     }
 }
-module daubentonii {
+namespace daubentonii {
 >daubentonii : typeof daubentonii
 
     export class nesiotes<T0, T1> {
 >nesiotes : nesiotes<T0, T1>
     }
 }
-module nigra {
+namespace nigra {
 >nigra : typeof nigra
 
     export class thalia<T0, T1> {
@@ -4893,7 +4893,7 @@ module nigra {
 >x : chrysaeolus.sarasinorum<julianae.steerii, ruatanica.americanus>
     }
 }
-module sagitta {
+namespace sagitta {
 >sagitta : typeof sagitta
 
     export class walkeri extends minutus.portoricensis {
@@ -4917,7 +4917,7 @@ module sagitta {
 >x : samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americanus>
     }
 }
-module minutus {
+namespace minutus {
 >minutus : typeof minutus
 
     export class inez<T0, T1> extends samarensis.pelurus<argurus.germaini, julianae.durangae> {
@@ -4943,7 +4943,7 @@ module minutus {
 >x : samarensis.cahirinus<lavali.lepturus, lavali.wilsoni>
     }
 }
-module macrorhinos {
+namespace macrorhinos {
 >macrorhinos : typeof macrorhinos
 
     export class konganensis extends imperfecta.lasiurus<caurinus.psilurus, caurinus.psilurus> {
@@ -4955,7 +4955,7 @@ module macrorhinos {
 >caurinus : any
     }
 }
-module panamensis {
+namespace panamensis {
 >panamensis : typeof panamensis
 
     export class linulus<T0, T1> extends ruatanica.hector<julianae.sumatrana, samarensis.pelurus<Lanthanum.jugularis, sagitta.walkeri>> {
@@ -5091,7 +5091,7 @@ module panamensis {
 >x : rionegrensis.veraecrucis<caurinus.psilurus, minutus.inez<rendalli.zuluensis, rionegrensis.caniventer>>
     }
 }
-module nigra {
+namespace nigra {
 >nigra : typeof nigra
 
     export class gracilis<T0, T1> {
@@ -5280,7 +5280,7 @@ module nigra {
 >x : panglima.amphibius<trivirgatus.falconeri, gabriellae.echinatus>
     }
 }
-module samarensis {
+namespace samarensis {
 >samarensis : typeof samarensis
 
     export class pelurus<T0, T1> extends sagitta.stolzmanni {
@@ -5798,7 +5798,7 @@ module samarensis {
 >x : rendalli.crenulata<gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>, argurus.netscheri<minutus.inez<argurus.peninsulae, julianae.nudicaudus>, julianae.oralis<lavali.xanthognathus, argurus.oreas>>>
     }
 }
-module sagitta {
+namespace sagitta {
 >sagitta : typeof sagitta
 
     export class leptoceros<T0, T1> extends caurinus.johorensis<argurus.peninsulae, daubentonii.arboreus<argurus.germaini, sagitta.stolzmanni>> {
@@ -5878,7 +5878,7 @@ module sagitta {
 >x : trivirgatus.tumidifrons<lutreolus.schlegeli, ruatanica.americanus>
     }
 }
-module daubentonii {
+namespace daubentonii {
 >daubentonii : typeof daubentonii
 
     export class nigricans<T0, T1> extends sagitta.stolzmanni {
@@ -5898,14 +5898,14 @@ module daubentonii {
 >x : dogramacii.robustulus
     }
 }
-module dammermani {
+namespace dammermani {
 >dammermani : typeof dammermani
 
     export class siberu<T0, T1> {
 >siberu : siberu<T0, T1>
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 
     export class pygmaea<T0, T1> extends rendalli.moojeni<macrorhinos.konganensis, gabriellae.echinatus> {
@@ -5947,7 +5947,7 @@ module argurus {
 >x : rionegrensis.caniventer
     }
 }
-module chrysaeolus {
+namespace chrysaeolus {
 >chrysaeolus : typeof chrysaeolus
 
     export class sarasinorum<T0, T1> extends caurinus.psilurus {
@@ -6039,7 +6039,7 @@ module chrysaeolus {
 >x : minutus.portoricensis
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 
     export class wetmorei<T0, T1> {
@@ -6132,7 +6132,7 @@ module argurus {
 >x : sagitta.stolzmanni
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 
     export class oreas extends lavali.wilsoni {
@@ -6238,7 +6238,7 @@ module argurus {
 >x : peninsulae
     }
 }
-module daubentonii {
+namespace daubentonii {
 >daubentonii : typeof daubentonii
 
     export class arboreus<T0, T1> {
@@ -6405,7 +6405,7 @@ module daubentonii {
 >x : howi.marcanoi
     }
 }
-module patas {
+namespace patas {
 >patas : typeof patas
 
     export class uralensis {
@@ -6590,7 +6590,7 @@ module patas {
 >x : rendalli.crenulata<rendalli.zuluensis, dogramacii.robustulus>
     }
 }
-module provocax {
+namespace provocax {
 >provocax : typeof provocax
 
     export class melanoleuca extends lavali.wilsoni {
@@ -6632,7 +6632,7 @@ module provocax {
 >x : imperfecta.lasiurus<lavali.lepturus, ruatanica.americanus>
     }
 }
-module sagitta {
+namespace sagitta {
 >sagitta : typeof sagitta
 
     export class sicarius<T0, T1> {
@@ -6687,7 +6687,7 @@ module sagitta {
 >x : macrorhinos.marmosurus<Lanthanum.nitidus<dammermani.melanops, lavali.lepturus>, macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, stolzmanni>>
     }
 }
-module howi {
+namespace howi {
 >howi : typeof howi
 
     export class marcanoi extends Lanthanum.megalonyx {
@@ -6889,7 +6889,7 @@ module howi {
 >x : julianae.oralis<lavali.beisa, argurus.oreas>
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 
     export class gilbertii<T0, T1> {
@@ -7044,14 +7044,14 @@ module argurus {
 >x : daubentonii.arboreus<lavali.otion, macrorhinos.konganensis>
     }
 }
-module petrophilus {
+namespace petrophilus {
 >petrophilus : typeof petrophilus
 
     export class minutilla {
 >minutilla : minutilla
     }
 }
-module lutreolus {
+namespace lutreolus {
 >lutreolus : typeof lutreolus
 
     export class punicus {
@@ -7212,7 +7212,7 @@ module lutreolus {
 >x : julianae.acariensis
     }
 }
-module macrorhinos {
+namespace macrorhinos {
 >macrorhinos : typeof macrorhinos
 
     export class daphaenodon {
@@ -7303,7 +7303,7 @@ module macrorhinos {
 >x : trivirgatus.lotor<lutreolus.foina, dogramacii.robustulus>
     }
 }
-module sagitta {
+namespace sagitta {
 >sagitta : typeof sagitta
 
     export class cinereus<T0, T1> {
@@ -7474,14 +7474,14 @@ module sagitta {
 >x : samarensis.fuscus<quasiater.carolinensis, stolzmanni>
     }
 }
-module nigra {
+namespace nigra {
 >nigra : typeof nigra
 
     export class caucasica<T0, T1> {
 >caucasica : caucasica<T0, T1>
     }
 }
-module gabriellae {
+namespace gabriellae {
 >gabriellae : typeof gabriellae
 
     export class klossii<T0, T1> extends imperfecta.lasiurus<dogramacii.robustulus, caurinus.psilurus> {
@@ -7653,7 +7653,7 @@ module gabriellae {
 >x : howi.coludo<macrorhinos.daphaenodon, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>>
     }
 }
-module imperfecta {
+namespace imperfecta {
 >imperfecta : typeof imperfecta
 
     export class lasiurus<T0, T1> {
@@ -7913,7 +7913,7 @@ module imperfecta {
 >x : macrorhinos.marmosurus<macrorhinos.daphaenodon, gabriellae.amicus>
     }
 }
-module quasiater {
+namespace quasiater {
 >quasiater : typeof quasiater
 
     export class wattsi<T0, T1> {
@@ -7972,9 +7972,9 @@ module quasiater {
 >x : lavali.lepturus
     }
 }
-module butleri {
+namespace butleri {
 }
-module petrophilus {
+namespace petrophilus {
 >petrophilus : typeof petrophilus
 
     export class sodyi<T0, T1> extends quasiater.bobrinskoi {
@@ -8082,7 +8082,7 @@ module petrophilus {
 >x : lavali.beisa
     }
 }
-module caurinus {
+namespace caurinus {
 >caurinus : typeof caurinus
 
     export class megaphyllus extends imperfecta.lasiurus<julianae.acariensis, howi.coludo<argurus.oreas, howi.marcanoi>> {
@@ -8188,7 +8188,7 @@ module caurinus {
 >x : quasiater.carolinensis
     }
 }
-module minutus {
+namespace minutus {
 >minutus : typeof minutus
 
     export class portoricensis {
@@ -8233,7 +8233,7 @@ module minutus {
 >x : samarensis.cahirinus<quasiater.carolinensis, julianae.durangae>
     }
 }
-module lutreolus {
+namespace lutreolus {
 >lutreolus : typeof lutreolus
 
     export class foina {
@@ -8406,7 +8406,7 @@ module lutreolus {
 >x : trivirgatus.mixtus<gabriellae.amicus, punicus>
     }
 }
-module lutreolus {
+namespace lutreolus {
 >lutreolus : typeof lutreolus
 
     export class cor<T0, T1> extends panglima.fundatus<panamensis.linulus<trivirgatus.lotor<argurus.luctuosa, lavali.wilsoni>, lavali.beisa>, dammermani.melanops> {
@@ -8558,7 +8558,7 @@ module lutreolus {
 >x : Lanthanum.jugularis
     }
 }
-module howi {
+namespace howi {
 >howi : typeof howi
 
     export class coludo<T0, T1> {
@@ -8585,7 +8585,7 @@ module howi {
 >x : argurus.germaini
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 
     export class germaini extends gabriellae.amicus {
@@ -8619,7 +8619,7 @@ module argurus {
 >x : macrorhinos.marmosurus<Lanthanum.megalonyx, lavali.thaeleri>
     }
 }
-module sagitta {
+namespace sagitta {
 >sagitta : typeof sagitta
 
     export class stolzmanni {
@@ -8752,7 +8752,7 @@ module sagitta {
 >x : rendalli.zuluensis
     }
 }
-module dammermani {
+namespace dammermani {
 >dammermani : typeof dammermani
 
     export class melanops extends minutus.inez<sagitta.stolzmanni, dammermani.melanops> {
@@ -8934,7 +8934,7 @@ module dammermani {
 >x : julianae.albidens<lavali.wilsoni, lavali.thaeleri>
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 
     export class peninsulae extends patas.uralensis {
@@ -9044,7 +9044,7 @@ module argurus {
 >x : minutus.inez<gabriellae.echinatus, luctuosa>
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 
     export class netscheri<T0, T1> {
@@ -9257,7 +9257,7 @@ module argurus {
 >x : panglima.amphibius<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>>
     }
 }
-module ruatanica {
+namespace ruatanica {
 >ruatanica : typeof ruatanica
 
     export class Praseodymium<T0, T1> extends ruatanica.hector<lutreolus.punicus, gabriellae.amicus> {
@@ -9487,7 +9487,7 @@ module ruatanica {
 >x : quasiater.carolinensis
     }
 }
-module caurinus {
+namespace caurinus {
 >caurinus : typeof caurinus
 
     export class johorensis<T0, T1> extends lutreolus.punicus {
@@ -9511,7 +9511,7 @@ module caurinus {
 >x : ruatanica.Praseodymium<lavali.thaeleri, julianae.acariensis>
     }
 }
-module argurus {
+namespace argurus {
 >argurus : typeof argurus
 
     export class luctuosa {
@@ -9544,7 +9544,7 @@ module argurus {
 >x : rendalli.moojeni<macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni>, lutreolus.punicus>
     }
 }
-module panamensis {
+namespace panamensis {
 >panamensis : typeof panamensis
 
     export class setulosus<T0, T1> {
@@ -9683,7 +9683,7 @@ module panamensis {
 >x : julianae.oralis<lutreolus.foina, provocax.melanoleuca>
     }
 }
-module petrophilus {
+namespace petrophilus {
 >petrophilus : typeof petrophilus
 
     export class rosalia<T0, T1> {
@@ -9784,7 +9784,7 @@ module petrophilus {
 >x : panamensis.setulosus<lavali.beisa, panamensis.linulus<caurinus.megaphyllus, caurinus.megaphyllus>>
     }
 }
-module caurinus {
+namespace caurinus {
 >caurinus : typeof caurinus
 
     export class psilurus extends lutreolus.punicus {

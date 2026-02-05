@@ -1,6 +1,6 @@
 --- old.superCallInConstructorWithNoBaseType.js
 +++ new.superCallInConstructorWithNoBaseType.js
-@@= skipped -19, +19 lines =@@
+@@= skipped -20, +20 lines =@@
      }
  }
  class D {

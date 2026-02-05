@@ -5,5 +5,6 @@ class C extends A, {
 }
 
 //// [parserErrorRecovery_ExtendsOrImplementsClause2.js]
+"use strict";
 class C extends A {
 }

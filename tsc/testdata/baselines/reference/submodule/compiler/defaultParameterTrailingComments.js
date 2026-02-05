@@ -8,6 +8,7 @@ class C {
 function foo(defaultParam = 10 /*emit only once*/) {}
 
 //// [defaultParameterTrailingComments.js]
+"use strict";
 class C {
     constructor(defaultParam = false /* Emit only once*/) { }
 }

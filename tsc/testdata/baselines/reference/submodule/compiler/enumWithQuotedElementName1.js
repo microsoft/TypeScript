@@ -6,6 +6,7 @@ enum E {
 }
 
 //// [enumWithQuotedElementName1.js]
+"use strict";
 var E;
 (function (E) {
     E[E["fo\"o"] = 0] = "fo\"o";

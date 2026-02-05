@@ -13,7 +13,8 @@ func TestCompletionListForGenericInstance1(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface Iterator<T, U> {
+	const content = `// @lib: es5
+interface Iterator<T, U> {
     (value: T, index: any, list: any): U
 }
 var i: Iterator<string, number>;

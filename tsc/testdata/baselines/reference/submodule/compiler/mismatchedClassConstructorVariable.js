@@ -6,6 +6,7 @@ class baz { }
 class foo { }
 
 //// [mismatchedClassConstructorVariable.js]
+"use strict";
 var baz;
 class baz {
 }

@@ -1,6 +1,6 @@
 --- old.declarationEmitFirstTypeArgumentGenericFunctionType.js
 +++ new.declarationEmitFirstTypeArgumentGenericFunctionType.js
-@@= skipped -52, +52 lines =@@
+@@= skipped -53, +53 lines =@@
  //// [declarationEmitFirstTypeArgumentGenericFunctionType.d.ts]
  declare class X<A> {
  }

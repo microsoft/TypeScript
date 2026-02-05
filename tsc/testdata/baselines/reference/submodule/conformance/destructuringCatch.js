@@ -31,6 +31,7 @@ catch (/*Test comment ranges*/[/*a*/a]) {
 
 
 //// [destructuringCatch.js]
+"use strict";
 try {
     throw [0, 1];
 }

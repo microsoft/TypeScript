@@ -393,11 +393,11 @@ let d = new D();
 >d : Symbol(d, Decl(thisTypeInFunctionsNegative.ts, 102, 3))
 >D : Symbol(D, Decl(thisTypeInFunctionsNegative.ts, 17, 1))
 
-let explicitXProperty: (this: { x: number }, m: number) => number;
->explicitXProperty : Symbol(explicitXProperty, Decl(thisTypeInFunctionsNegative.ts, 103, 3))
->this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 103, 24))
->x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 103, 31))
->m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 103, 44))
+declare let explicitXProperty: (this: { x: number }, m: number) => number;
+>explicitXProperty : Symbol(explicitXProperty, Decl(thisTypeInFunctionsNegative.ts, 103, 11))
+>this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 103, 32))
+>x : Symbol(x, Decl(thisTypeInFunctionsNegative.ts, 103, 39))
+>m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 103, 52))
 
 // from differing object types
 c.explicitC = function(this: D, m: number) { return this.x + m };
@@ -416,7 +416,7 @@ c.explicitProperty = explicitXProperty;
 >c.explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
 >c : Symbol(c, Decl(thisTypeInFunctionsNegative.ts, 70, 3))
 >explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctionsNegative.ts, 10, 5))
->explicitXProperty : Symbol(explicitXProperty, Decl(thisTypeInFunctionsNegative.ts, 103, 3))
+>explicitXProperty : Symbol(explicitXProperty, Decl(thisTypeInFunctionsNegative.ts, 103, 11))
 
 c.explicitC = d.explicitD;
 >c.explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctionsNegative.ts, 7, 5))

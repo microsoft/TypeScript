@@ -19,12 +19,12 @@ let c: "foo" = b;
 >b : "foo"
 
 let d = b || "bar";
->d : string
->b || "bar" : "bar" | "foo"
+>d : "foo"
+>b || "bar" : "foo"
 >b : "foo"
 >"bar" : "bar"
 
 let e: "foo" | "bar" = d;
 >e : "bar" | "foo"
->d : string
+>d : "foo"
 

@@ -29,24 +29,19 @@ export function assertNodeProperty<
 
 
 //// [intersectionsOfLargeUnions.js]
-"use strict";
 // Repro from #23977
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.assertIsElement = assertIsElement;
-exports.assertNodeTagName = assertNodeTagName;
-exports.assertNodeProperty = assertNodeProperty;
-function assertIsElement(node) {
+export function assertIsElement(node) {
     let nodeType = node === null ? null : node.nodeType;
     return nodeType === 1;
 }
-function assertNodeTagName(node, tagName) {
+export function assertNodeTagName(node, tagName) {
     if (assertIsElement(node)) {
         const nodeTagName = node.tagName.toLowerCase();
         return nodeTagName === tagName;
     }
     return false;
 }
-function assertNodeProperty(node, tagName, prop, value) {
+export function assertNodeProperty(node, tagName, prop, value) {
     if (assertNodeTagName(node, tagName)) {
         node[prop];
     }

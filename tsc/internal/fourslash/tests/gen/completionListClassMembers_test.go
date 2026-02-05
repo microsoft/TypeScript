@@ -14,7 +14,8 @@ func TestCompletionListClassMembers(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `class Class {
+	const content = `// @lib: es5
+class Class {
     private privateInstanceMethod() { }
     public publicInstanceMethod() { }
 

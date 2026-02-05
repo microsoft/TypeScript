@@ -27,6 +27,7 @@ class A {
 
 
 //// [privateNameFieldDestructuredBinding.js]
+"use strict";
 class A {
     #field = 1;
     otherObject = new A();

@@ -20,5 +20,6 @@ declare var alpha: any;
 
 
 //// [root.js]
+"use strict";
 /// <reference types="foo" />
 /// <reference types="bar" />

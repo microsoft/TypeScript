@@ -1,8 +1,8 @@
 --- old.contextualTyping14.js
 +++ new.contextualTyping14.js
-@@= skipped -4, +4 lines =@@
-
+@@= skipped -5, +5 lines =@@
  //// [contextualTyping14.js]
+ "use strict";
  class foo {
 -    constructor() {
 -        this.bar = function (a) { return a; };

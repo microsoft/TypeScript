@@ -51,7 +51,7 @@ class A {
 >1 : 1
 
     async *#asyncGenMethod() { return 1; }     //OK
->#asyncGenMethod : () => {}
+>#asyncGenMethod : () => AsyncIterableIterator<never, number, unknown>
 >1 : 1
 
     public get #fooProp() { return  3; }         // Error

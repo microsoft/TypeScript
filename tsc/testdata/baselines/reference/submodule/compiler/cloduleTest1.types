@@ -10,7 +10,7 @@
 >addClass : (className: string) => $
 >className : string
   }
-  module $ {
+  namespace $ {
 >$ : typeof $
 
     export interface AjaxSettings {

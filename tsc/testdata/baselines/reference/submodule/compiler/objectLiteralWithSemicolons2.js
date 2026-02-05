@@ -8,6 +8,7 @@ var v = {
 }
 
 //// [objectLiteralWithSemicolons2.js]
+"use strict";
 var v = {
     a,
     b,

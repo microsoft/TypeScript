@@ -1,0 +1,24 @@
+--- old.returnTypeInferenceContextualParameterTypesInGenerator1.types
++++ new.returnTypeInferenceContextualParameterTypesInGenerator1.types
+@@= skipped -6, +6 lines =@@
+ }
+
+ declare function gen<Eff extends Effect<any>, AEff>(
+->gen : <Eff extends Effect<any>, AEff>(f: () => Generator<Eff, AEff>) => Effect<AEff>
++>gen : <Eff extends Effect<any>, AEff>(f: () => Generator<Eff, AEff, any>) => Effect<AEff>
+
+   f: () => Generator<Eff, AEff>
+->f : () => Generator<Eff, AEff>
++>f : () => Generator<Eff, AEff, any>
+
+ ): Effect<AEff>;
+
+@@= skipped -75, +75 lines =@@
+
+   gen(function* () {
+ >gen(function* () {    return {      Register: (id) => String(id),    };  }) : Effect<{ Register: (id: number) => string; }>
+->gen : <Eff extends Effect<any>, AEff>(f: () => Generator<Eff, AEff>) => Effect<AEff>
++>gen : <Eff extends Effect<any>, AEff>(f: () => Generator<Eff, AEff, any>) => Effect<AEff>
+ >function* () {    return {      Register: (id) => String(id),    };  } : () => Generator<never, { Register: (id: number) => string; }, any>
+
+     return {

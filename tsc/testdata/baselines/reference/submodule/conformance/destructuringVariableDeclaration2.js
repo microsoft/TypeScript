@@ -22,6 +22,7 @@ var [c1, c2, { c3: c4, c5 }, , ...c6] = [1, 2, { c3: 4, c5: 0 }];  // Error
 var {d: {d1 = ["string", null]}}: { d: { d1: number[] } } = { d: { d1: [1, 2] } };  // Error
 
 //// [destructuringVariableDeclaration2.js]
+"use strict";
 // The type T associated with a destructuring variable declaration is determined as follows:
 //      If the declaration includes a type annotation, T is that type.
 var { a1, a2 } = { a1: true, a2: 1 }; // Error

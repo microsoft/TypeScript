@@ -4,3 +4,4 @@
 abstract interface I {}
 
 //// [classAbstractWithInterface.js]
+"use strict";

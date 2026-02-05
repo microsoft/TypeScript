@@ -11,5 +11,7 @@ new P<string>(r => { r('foo') });
 
 
 //// [first.js]
+"use strict";
 //// [second.js]
+"use strict";
 new P(r => { r('foo'); });

@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/iterableWithNeverAsUnionMember.ts] ////
+
+=== iterableWithNeverAsUnionMember.ts ===
+declare const o1: { a: "foo" } & { a: "bar" };
+>o1 : Symbol(o1, Decl(iterableWithNeverAsUnionMember.ts, 0, 13))
+>a : Symbol(a, Decl(iterableWithNeverAsUnionMember.ts, 0, 19))
+>a : Symbol(a, Decl(iterableWithNeverAsUnionMember.ts, 0, 34))
+
+const [el1] = o1; // error
+>el1 : Symbol(el1, Decl(iterableWithNeverAsUnionMember.ts, 1, 7))
+>o1 : Symbol(o1, Decl(iterableWithNeverAsUnionMember.ts, 0, 13))
+
+// https://github.com/microsoft/TypeScript/issues/62462
+declare var x: number[] | ({ t: "a" } & { t: "b" });
+>x : Symbol(x, Decl(iterableWithNeverAsUnionMember.ts, 4, 11))
+>t : Symbol(t, Decl(iterableWithNeverAsUnionMember.ts, 4, 28))
+>t : Symbol(t, Decl(iterableWithNeverAsUnionMember.ts, 4, 41))
+
+let [el2] = x; // ok
+>el2 : Symbol(el2, Decl(iterableWithNeverAsUnionMember.ts, 5, 5))
+>x : Symbol(x, Decl(iterableWithNeverAsUnionMember.ts, 4, 11))
+
+for (const elem of x) { // ok
+>elem : Symbol(elem, Decl(iterableWithNeverAsUnionMember.ts, 7, 10))
+>x : Symbol(x, Decl(iterableWithNeverAsUnionMember.ts, 4, 11))
+
+  elem.toFixed();
+>elem.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>elem : Symbol(elem, Decl(iterableWithNeverAsUnionMember.ts, 7, 10))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+}
+
+type Shape =
+>Shape : Symbol(Shape, Decl(iterableWithNeverAsUnionMember.ts, 9, 1))
+
+  | { kind: "circle"; radius: number }
+>kind : Symbol(kind, Decl(iterableWithNeverAsUnionMember.ts, 12, 5))
+>radius : Symbol(radius, Decl(iterableWithNeverAsUnionMember.ts, 12, 21))
+
+  | { kind: "rectangle"; width: number; height: number };
+>kind : Symbol(kind, Decl(iterableWithNeverAsUnionMember.ts, 13, 5))
+>width : Symbol(width, Decl(iterableWithNeverAsUnionMember.ts, 13, 24))
+>height : Symbol(height, Decl(iterableWithNeverAsUnionMember.ts, 13, 39))
+
+type Circle = Shape & { kind: "circle" };
+>Circle : Symbol(Circle, Decl(iterableWithNeverAsUnionMember.ts, 13, 57))
+>Shape : Symbol(Shape, Decl(iterableWithNeverAsUnionMember.ts, 9, 1))
+>kind : Symbol(kind, Decl(iterableWithNeverAsUnionMember.ts, 15, 23))
+
+function doStuffWithCircle(arg: Circle | [Circle, (newValue: Circle) => void]) {
+>doStuffWithCircle : Symbol(doStuffWithCircle, Decl(iterableWithNeverAsUnionMember.ts, 15, 41))
+>arg : Symbol(arg, Decl(iterableWithNeverAsUnionMember.ts, 17, 27))
+>Circle : Symbol(Circle, Decl(iterableWithNeverAsUnionMember.ts, 13, 57))
+>Circle : Symbol(Circle, Decl(iterableWithNeverAsUnionMember.ts, 13, 57))
+>newValue : Symbol(newValue, Decl(iterableWithNeverAsUnionMember.ts, 17, 51))
+>Circle : Symbol(Circle, Decl(iterableWithNeverAsUnionMember.ts, 13, 57))
+
+  if (Array.isArray(arg)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(iterableWithNeverAsUnionMember.ts, 17, 27))
+
+    let [value, setValue] = arg; // ok
+>value : Symbol(value, Decl(iterableWithNeverAsUnionMember.ts, 19, 9))
+>setValue : Symbol(setValue, Decl(iterableWithNeverAsUnionMember.ts, 19, 15))
+>arg : Symbol(arg, Decl(iterableWithNeverAsUnionMember.ts, 17, 27))
+  }
+}
+
+function f1<T extends { a: "foo" } & { a: "bar" }>(x: T) {
+>f1 : Symbol(f1, Decl(iterableWithNeverAsUnionMember.ts, 21, 1))
+>T : Symbol(T, Decl(iterableWithNeverAsUnionMember.ts, 23, 12))
+>a : Symbol(a, Decl(iterableWithNeverAsUnionMember.ts, 23, 23))
+>a : Symbol(a, Decl(iterableWithNeverAsUnionMember.ts, 23, 38))
+>x : Symbol(x, Decl(iterableWithNeverAsUnionMember.ts, 23, 51))
+>T : Symbol(T, Decl(iterableWithNeverAsUnionMember.ts, 23, 12))
+
+  let [y] = x; // error
+>y : Symbol(y, Decl(iterableWithNeverAsUnionMember.ts, 24, 7))
+>x : Symbol(x, Decl(iterableWithNeverAsUnionMember.ts, 23, 51))
+}
+
+declare const o2: ({ a: "foo" } & { a: "bar" }) | ({ b: "qwe" } & { b: "rty" });
+>o2 : Symbol(o2, Decl(iterableWithNeverAsUnionMember.ts, 27, 13))
+>a : Symbol(a, Decl(iterableWithNeverAsUnionMember.ts, 27, 20))
+>a : Symbol(a, Decl(iterableWithNeverAsUnionMember.ts, 27, 35))
+>b : Symbol(b, Decl(iterableWithNeverAsUnionMember.ts, 27, 52))
+>b : Symbol(b, Decl(iterableWithNeverAsUnionMember.ts, 27, 67))
+
+const [el3] = o2; // error
+>el3 : Symbol(el3, Decl(iterableWithNeverAsUnionMember.ts, 28, 7))
+>o2 : Symbol(o2, Decl(iterableWithNeverAsUnionMember.ts, 27, 13))
+

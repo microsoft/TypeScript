@@ -5,5 +5,6 @@ function bar(...rest) { }
 function foo(x: number, y: string, ...rest) { }
 
 //// [emitRestParametersFunctionES6.js]
+"use strict";
 function bar(...rest) { }
 function foo(x, y, ...rest) { }

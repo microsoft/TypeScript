@@ -1,8 +1,8 @@
 --- old.classExpressionWithResolutionOfNamespaceOfSameName01.js
 +++ new.classExpressionWithResolutionOfNamespaceOfSameName01.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [classExpressionWithResolutionOfNamespaceOfSameName01.js]
+ "use strict";
  var x = class C {
 +    prop;
  };

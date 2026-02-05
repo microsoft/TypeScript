@@ -16,6 +16,7 @@ func TestImportStatementCompletions_esModuleInterop1(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @esModuleInterop: false
 // @allowSyntheticDefaultImports: false
+// @module: commonjs
 // @Filename: /mod.ts
 const foo = 0;
 export = foo;

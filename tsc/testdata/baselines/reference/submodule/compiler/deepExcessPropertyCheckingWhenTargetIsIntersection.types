@@ -3,22 +3,22 @@
 === deepExcessPropertyCheckingWhenTargetIsIntersection.ts ===
 interface StatelessComponent<P = {}> {
   (props: P & { children?: number }, context?: any): null;
->props : P & { children?: number; }
->children : number
+>props : P & { children?: number | undefined; }
+>children : number | undefined
 >context : any
 }
  
 const TestComponent: StatelessComponent<TestProps> = (props) => {
 >TestComponent : StatelessComponent<TestProps>
->(props) => {  return null;} : (props: TestProps & { children?: number; }) => any
->props : TestProps & { children?: number; }
+>(props) => {  return null;} : (props: TestProps & { children?: number | undefined; }) => null
+>props : TestProps & { children?: number | undefined; }
 
   return null;
 }
  
 interface ITestProps {
   ariaLabel?: string;
->ariaLabel : string
+>ariaLabel : string | undefined
 }
  
 interface NestedProp<TProps> {
@@ -48,8 +48,8 @@ const TestComponent2: StatelessComponent<TestProps | {props2: {x: number}}> = (p
 >TestComponent2 : StatelessComponent<TestProps | { props2: { x: number; }; }>
 >props2 : { x: number; }
 >x : number
->(props) => {  return null;} : (props: (TestProps | { props2: { x: number; }; }) & { children?: number; }) => any
->props : (TestProps | { props2: { x: number; }; }) & { children?: number; }
+>(props) => {  return null;} : (props: (TestProps | { props2: { x: number; }; }) & { children?: number | undefined; }) => null
+>props : (TestProps | { props2: { x: number; }; }) & { children?: number | undefined; }
 
   return null;
 }

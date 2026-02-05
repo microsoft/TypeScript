@@ -1,8 +1,8 @@
 --- old.canFollowGetSetKeyword.js
 +++ new.canFollowGetSetKeyword.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [canFollowGetSetKeyword.js]
+ "use strict";
  class A {
 +    get;
      *x() { }

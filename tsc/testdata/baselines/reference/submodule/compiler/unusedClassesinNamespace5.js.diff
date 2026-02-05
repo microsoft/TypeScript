@@ -1,6 +1,6 @@
 --- old.unusedClassesinNamespace5.js
 +++ new.unusedClassesinNamespace5.js
-@@= skipped -23, +23 lines =@@
+@@= skipped -24, +24 lines =@@
      }
      Validation.c2 = c2;
      class c3 {

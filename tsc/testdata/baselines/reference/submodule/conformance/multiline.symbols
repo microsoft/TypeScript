@@ -1,45 +1,21 @@
 //// [tests/cases/conformance/directives/multiline.tsx] ////
 
-=== a.ts ===
-export const texts: string[] = [];
->texts : Symbol(texts, Decl(a.ts, 0, 12))
-
-/**
- @ts-ignore */
-texts.push(100);
->texts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
->texts : Symbol(texts, Decl(a.ts, 0, 12))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
-
-/**
- @ts-expect-error */
-texts.push(100);
->texts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
->texts : Symbol(texts, Decl(a.ts, 0, 12))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
-
-/**
- @ts-expect-error */
-texts.push("100");
->texts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
->texts : Symbol(texts, Decl(a.ts, 0, 12))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
-
 === b.tsx ===
+/// <reference path="react.d.ts" />
 import * as React from "react";
->React : Symbol(React, Decl(b.tsx, 0, 6))
+>React : Symbol(React, Decl(b.tsx, 1, 6))
 
 export function MyComponent(props: { foo: string }) {
->MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
->props : Symbol(props, Decl(b.tsx, 2, 28))
->foo : Symbol(foo, Decl(b.tsx, 2, 36))
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 1, 31))
+>props : Symbol(props, Decl(b.tsx, 3, 28))
+>foo : Symbol(foo, Decl(b.tsx, 3, 36))
 
   return <div />;
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 }
 
 let x = (
->x : Symbol(x, Decl(b.tsx, 6, 3))
+>x : Symbol(x, Decl(b.tsx, 7, 3))
 
   <div>
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
@@ -47,42 +23,42 @@ let x = (
     {/*
    @ts-ignore */}
     <MyComponent foo={100} />
->MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
->foo : Symbol(foo, Decl(b.tsx, 10, 16))
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 1, 31))
+>foo : Symbol(foo, Decl(b.tsx, 11, 16))
 
     {/*@ts-ignore*/}
     <MyComponent foo={100} />
->MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
->foo : Symbol(foo, Decl(b.tsx, 13, 16))
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 1, 31))
+>foo : Symbol(foo, Decl(b.tsx, 14, 16))
 
     {/*
    @ts-expect-error */}
     <MyComponent foo={100} />
->MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
->foo : Symbol(foo, Decl(b.tsx, 17, 16))
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 1, 31))
+>foo : Symbol(foo, Decl(b.tsx, 18, 16))
 
     {/*
    // @ts-expect-error */}
     <MyComponent foo={100} />
->MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
->foo : Symbol(foo, Decl(b.tsx, 21, 16))
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 1, 31))
+>foo : Symbol(foo, Decl(b.tsx, 22, 16))
 
     {/*
    * @ts-expect-error */}
     <MyComponent foo={100} />
->MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
->foo : Symbol(foo, Decl(b.tsx, 25, 16))
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 1, 31))
+>foo : Symbol(foo, Decl(b.tsx, 26, 16))
 
     {/*@ts-expect-error*/}
     <MyComponent foo={100} />
->MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
->foo : Symbol(foo, Decl(b.tsx, 28, 16))
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 1, 31))
+>foo : Symbol(foo, Decl(b.tsx, 29, 16))
 
     {/*
    @ts-expect-error */}
     <MyComponent foo={"hooray"} />
->MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
->foo : Symbol(foo, Decl(b.tsx, 32, 16))
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 1, 31))
+>foo : Symbol(foo, Decl(b.tsx, 33, 16))
 
   </div>
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))

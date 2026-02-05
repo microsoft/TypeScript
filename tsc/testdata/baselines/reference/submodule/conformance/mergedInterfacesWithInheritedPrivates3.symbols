@@ -43,11 +43,11 @@ class D extends C implements A { // error
 >z : Symbol(D.z, Decl(mergedInterfacesWithInheritedPrivates3.ts, 17, 14))
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(mergedInterfacesWithInheritedPrivates3.ts, 19, 1))
 
     class C {
->C : Symbol(C, Decl(mergedInterfacesWithInheritedPrivates3.ts, 21, 10))
+>C : Symbol(C, Decl(mergedInterfacesWithInheritedPrivates3.ts, 21, 13))
 
         private x: string;
 >x : Symbol(C.x, Decl(mergedInterfacesWithInheritedPrivates3.ts, 22, 13))
@@ -62,7 +62,7 @@ module M {
 
     interface A extends C { // error, privates conflict
 >A : Symbol(A, Decl(mergedInterfacesWithInheritedPrivates3.ts, 28, 5), Decl(mergedInterfacesWithInheritedPrivates3.ts, 32, 5))
->C : Symbol(C, Decl(mergedInterfacesWithInheritedPrivates3.ts, 21, 10))
+>C : Symbol(C, Decl(mergedInterfacesWithInheritedPrivates3.ts, 21, 13))
 
         y: string;
 >y : Symbol(A.y, Decl(mergedInterfacesWithInheritedPrivates3.ts, 30, 27))

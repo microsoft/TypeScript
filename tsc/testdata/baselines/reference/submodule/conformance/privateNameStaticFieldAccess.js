@@ -11,6 +11,7 @@ class A {
 
 
 //// [privateNameStaticFieldAccess.js]
+"use strict";
 class A {
     static #myField = "hello world";
     constructor() {

@@ -31,8 +31,8 @@ Output::
 [7m1[0m import { m } from '../alpha/a'
 [7m [0m [91m         ~[0m
 
-../../tslibs/TS/Lib/lib.d.ts
-   Default library for target 'ES5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+   Default library for target 'ES2024'
 alpha/bin/a.d.ts
    Imported via '../alpha/a' from file 'beta/b.ts'
    File is output of project reference source 'alpha/a.ts'
@@ -41,7 +41,7 @@ beta/b.ts
 
 Found 1 error in beta/b.ts[90m:1[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -68,11 +68,10 @@ declare const console: { log(msg: any): void; };
 export {};
 
 //// [/home/src/workspaces/project/beta/bin/b.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 //// [/home/src/workspaces/project/beta/bin/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.d.ts","../../alpha/bin/a.d.ts","../b.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"3145b36c4687eb0550eabb198d0c0d22-export { };",{"version":"fcbf49879e154aae077c688a18cd60c0-import { m } from '../alpha/a'","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":9,"end":10,"code":2305,"category":1,"messageKey":"Module_0_has_no_exported_member_1_2305","messageArgs":["\"../alpha/a\"","m"]}]]],"latestChangedDtsFile":"./b.d.ts"}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2024.full.d.ts","../../alpha/bin/a.d.ts","../b.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"3145b36c4687eb0550eabb198d0c0d22-export { };",{"version":"fcbf49879e154aae077c688a18cd60c0-import { m } from '../alpha/a'","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"pos":9,"end":10,"code":2305,"category":1,"messageKey":"Module_0_has_no_exported_member_1_2305","messageArgs":["\"../alpha/a\"","m"]}]]],"latestChangedDtsFile":"./b.d.ts"}
 //// [/home/src/workspaces/project/beta/bin/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -85,13 +84,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
     }
   ],
   "fileNames": [
-    "lib.d.ts",
+    "lib.es2024.full.d.ts",
     "../../alpha/bin/a.d.ts",
     "../b.ts"
   ],
   "fileInfos": [
     {
-      "fileName": "lib.d.ts",
+      "fileName": "lib.es2024.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -153,12 +152,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
     ]
   ],
   "latestChangedDtsFile": "./b.d.ts",
-  "size": 1382
+  "size": 1394
 }
 
 beta/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/project/alpha/bin/a.d.ts
 *refresh*    /home/src/workspaces/project/beta/b.ts
 Signatures::

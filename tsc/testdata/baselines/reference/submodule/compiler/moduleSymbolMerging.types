@@ -2,10 +2,10 @@
 
 === B.ts ===
 ///<reference path="A.ts" preserve="true" />
-module A { ; }
+namespace A { ; }
 >A : typeof A
 
-module B {
+namespace B {
 >B : typeof B
 
 	export function f(): A.I { return null; }
@@ -16,5 +16,5 @@ module B {
 
 === A.ts ===
 
-module A { export interface I {} }
+namespace A { export interface I {} }
 

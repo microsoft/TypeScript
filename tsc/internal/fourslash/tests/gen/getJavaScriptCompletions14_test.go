@@ -15,7 +15,6 @@ func TestGetJavaScriptCompletions14(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @allowNonTsExtensions: true
 // @Filename: file1.js
-/// <reference no-default-lib="true"/>
 interface Number {
     toExponential(fractionDigits?: number): string;
 }

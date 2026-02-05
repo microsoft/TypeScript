@@ -62,21 +62,21 @@
 
          this.z = this.y; return this
 ->this.z = this.y : T
-->this.z : T
+->this.z : T | undefined
 ->this : this
-->z : T
+->z : T | undefined
 ->this.y : T
 ->this : this
 ->y : T
 ->this : this
 +>this.z = this.y : any
 +>this.z : any
-+>this : any
++>this : { m4(): any; }
 +>z : any
 +>this.y : any
-+>this : any
++>this : { m4(): any; }
 +>y : any
-+>this : any
++>this : { m4(): any; }
      }
  }
 
@@ -111,9 +111,9 @@
 
      this.z = this.y; return this
 ->this.z = this.y : T
-->this.z : T
+->this.z : T | undefined
 ->this : this
-->z : T
+->z : T | undefined
 ->this.y : T
 ->this : this
 ->y : T

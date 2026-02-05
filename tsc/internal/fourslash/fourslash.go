@@ -195,6 +195,8 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 	// !!! use default compiler options for inferred project as base
 	compilerOptions := &core.CompilerOptions{
 		SkipDefaultLibCheck: core.TSTrue,
+		Target:              core.ScriptTargetLatestStandard,
+		Jsx:                 core.JsxEmitPreserve,
 	}
 	harnessutil.SetCompilerOptionsFromTestConfig(t, testData.GlobalOptions, compilerOptions, rootDir)
 	if commandLines := testData.GlobalOptions["tsc"]; commandLines != "" {
@@ -224,6 +226,10 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 	}
 	if compilerOptions.AllowSyntheticDefaultImports == core.TSFalse {
 		t.Skipf("Test uses unsupported 'allowSyntheticDefaultImports: false' option")
+	}
+	switch compilerOptions.Target {
+	case core.ScriptTargetES3, core.ScriptTargetES5:
+		t.Skipf("Test uses unsupported target: %s", compilerOptions.Target.String())
 	}
 
 	inputReader, inputWriter := newLSPPipe()

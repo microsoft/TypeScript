@@ -1,47 +1,51 @@
 --- old.constructorParameterProperties2.errors.txt
 +++ new.constructorParameterProperties2.errors.txt
 @@= skipped -0, +0 lines =@@
+ constructorParameterProperties2.ts(2,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 +constructorParameterProperties2.ts(10,5): error TS2300: Duplicate identifier 'y'.
+ constructorParameterProperties2.ts(10,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
  constructorParameterProperties2.ts(11,24): error TS2300: Duplicate identifier 'y'.
 +constructorParameterProperties2.ts(18,5): error TS2300: Duplicate identifier 'y'.
+ constructorParameterProperties2.ts(18,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
  constructorParameterProperties2.ts(18,5): error TS2687: All declarations of 'y' must have identical modifiers.
  constructorParameterProperties2.ts(19,25): error TS2300: Duplicate identifier 'y'.
  constructorParameterProperties2.ts(19,25): error TS2687: All declarations of 'y' must have identical modifiers.
 +constructorParameterProperties2.ts(26,5): error TS2300: Duplicate identifier 'y'.
+ constructorParameterProperties2.ts(26,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
  constructorParameterProperties2.ts(26,5): error TS2687: All declarations of 'y' must have identical modifiers.
  constructorParameterProperties2.ts(27,27): error TS2300: Duplicate identifier 'y'.
  constructorParameterProperties2.ts(27,27): error TS2687: All declarations of 'y' must have identical modifiers.
 
 
--==== constructorParameterProperties2.ts (7 errors) ====
-+==== constructorParameterProperties2.ts (10 errors) ====
+-==== constructorParameterProperties2.ts (11 errors) ====
++==== constructorParameterProperties2.ts (14 errors) ====
      class C {
          y: number;
-         constructor(y: number) { } // ok
-@@= skipped -17, +20 lines =@@
-     
+         ~
+@@= skipped -24, +27 lines =@@
      class D {
          y: number;
-+        ~
+         ~
 +!!! error TS2300: Duplicate identifier 'y'.
++        ~
+ !!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
          constructor(public y: number) { } // error
                             ~
- !!! error TS2300: Duplicate identifier 'y'.
-@@= skipped -11, +13 lines =@@
+@@= skipped -12, +14 lines =@@
      class E {
          y: number;
          ~
 +!!! error TS2300: Duplicate identifier 'y'.
 +        ~
+ !!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+         ~
  !!! error TS2687: All declarations of 'y' must have identical modifiers.
-         constructor(private y: number) { } // error
-                             ~
-@@= skipped -13, +15 lines =@@
+@@= skipped -15, +17 lines =@@
      
      class F {
          y: number;
 +        ~
 +!!! error TS2300: Duplicate identifier 'y'.
          ~
- !!! error TS2687: All declarations of 'y' must have identical modifiers.
-         constructor(protected y: number) { } // error
+ !!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+         ~

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/ipromise4.ts] ////
 
 //// [ipromise4.ts]
-declare module Windows.Foundation {
+declare namespace Windows.Foundation {
     export interface IPromise<T> {
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
@@ -19,6 +19,7 @@ p.then(function (x) { return "hello"; } ).then(function (x) { return x } ); // s
 
 
 //// [ipromise4.js]
+"use strict";
 var p = null;
 p.then(function (x) { }); // should not error
 p.then(function (x) { return "hello"; }).then(function (x) { return x; }); // should not error

@@ -22,6 +22,7 @@ namespace Bar {
 }
 
 //// [doubleUnderscoreEnumEmit.js]
+"use strict";
 var Foo;
 (function (Foo) {
     Foo[Foo["__a"] = 1] = "__a";

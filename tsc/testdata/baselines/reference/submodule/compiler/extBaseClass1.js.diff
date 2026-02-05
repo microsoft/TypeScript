@@ -1,6 +1,6 @@
 --- old.extBaseClass1.js
 +++ new.extBaseClass1.js
-@@= skipped -24, +24 lines =@@
+@@= skipped -25, +25 lines =@@
  var M;
  (function (M) {
      class B {

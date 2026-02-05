@@ -9,6 +9,7 @@ class C {
 }
 
 //// [symbolDeclarationEmit11.js]
+"use strict";
 class C {
     static [Symbol.iterator] = 0;
     static [Symbol.isConcatSpreadable]() { }

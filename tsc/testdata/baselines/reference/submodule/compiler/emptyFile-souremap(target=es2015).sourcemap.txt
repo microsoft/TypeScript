@@ -1,0 +1,8 @@
+===================================================================
+JsFile: emptyFile-souremap.js
+mapUrl: emptyFile-souremap.js.map
+sourceRoot: 
+sources: emptyFile-souremap.ts
+===================================================================
+>>>"use strict";
+>>>//# sourceMappingURL=emptyFile-souremap.js.map

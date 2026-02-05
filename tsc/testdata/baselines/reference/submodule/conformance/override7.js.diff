@@ -1,8 +1,8 @@
 --- old.override7.js
 +++ new.override7.js
-@@= skipped -56, +56 lines =@@
-
+@@= skipped -57, +57 lines =@@
  //// [override7.js]
+ "use strict";
  class B {
 -    constructor() {
 -        this.p1 = 1;

@@ -12,7 +12,7 @@ func TestTripleSlashReferenceResolutionMode(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
- { "compilerOptions": { "module": "nodenext", "declaration": true, "strict": true, "outDir": "out" }, "files": ["./index.ts"] }
+ { "compilerOptions": { "lib": ["es5"], "module": "nodenext", "declaration": true, "strict": true, "outDir": "out" }, "files": ["./index.ts"] }
 // @Filename: /home/src/workspaces/project/package.json
  { "private": true, "type": "commonjs" }
 // @Filename: /home/src/workspaces/project/node_modules/pkg/package.json

@@ -1,6 +1,6 @@
 --- old.unusedPrivateStaticMembers.js
 +++ new.unusedPrivateStaticMembers.js
-@@= skipped -52, +52 lines =@@
+@@= skipped -53, +53 lines =@@
      }
  }
  class Test2 {

@@ -7,13 +7,13 @@ assignmentCompatWithObjectMembers5.ts(14,1): error TS2741: Property 'fooo' is mi
         foo: string;
     }
     
-    var c: C;
+    declare var c: C;
     
     interface I {
         fooo: string;
     }
     
-    var i: I;
+    declare var i: I;
     
     c = i; // error
     ~

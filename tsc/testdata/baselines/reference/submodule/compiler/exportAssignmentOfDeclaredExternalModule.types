@@ -15,7 +15,7 @@ var y = Sammy(); // error to use interface name as call target
 >Sammy() : any
 >Sammy : any
 
-var z: Sammy; // no error - z is of type interface Sammy from module 'M'
+declare var z: Sammy; // no error - z is of type interface Sammy from module 'M'
 >z : Sammy
 
 var a = new z(); // constructor - no error

@@ -23,7 +23,7 @@ class A {
     public a: any;
 >a : Symbol(A.a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(decrementOperatorWithAnyOtherType.ts, 8, 1))
 
     export var n: any;

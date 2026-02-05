@@ -38,6 +38,7 @@ class Foo5 {
 }  
 
 //// [collisionThisExpressionAndPropertyNameAsConstuctorParameter.js]
+"use strict";
 class Foo2 {
     constructor(_this) {
         var lambda = () => {

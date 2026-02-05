@@ -1,8 +1,8 @@
 --- old.typeAliasesForObjectTypes.js
 +++ new.typeAliasesForObjectTypes.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [typeAliasesForObjectTypes.js]
+ "use strict";
  class C1 {
 +    x;
  }

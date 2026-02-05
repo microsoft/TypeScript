@@ -9,6 +9,7 @@ class A {
 
 
 //// [unusedParameterProperty2.js]
+"use strict";
 class A {
     used;
     constructor(used) {

@@ -16,7 +16,7 @@ interface T {
 
 interface S extends T {
     Foo2?: Derived // ok
->Foo2 : Derived
+>Foo2 : Derived | undefined
 }
 
 interface T2 {
@@ -26,7 +26,7 @@ interface T2 {
 
 interface S2 extends T2 {
     2?: Derived; // ok
->2 : Derived
+>2 : Derived | undefined
 }
 
 interface T3 {
@@ -36,7 +36,7 @@ interface T3 {
 
 interface S3 extends T3 {
     '1.0'?: Derived; // ok
->'1.0' : Derived
+>'1.0' : Derived | undefined
 }
 
 // object literal case
@@ -45,13 +45,13 @@ var a: { Foo: Base; }
 >Foo : Base
 
 var b: { Foo2?: Derived; }
->b : { Foo2?: Derived; }
->Foo2 : Derived
+>b : { Foo2?: Derived | undefined; }
+>Foo2 : Derived | undefined
 
 var r = true ? a : b; // ok
->r : { Foo: Base; } | { Foo2?: Derived; }
->true ? a : b : { Foo: Base; } | { Foo2?: Derived; }
+>r : { Foo: Base; } | { Foo2?: Derived | undefined; }
+>true ? a : b : { Foo: Base; } | { Foo2?: Derived | undefined; }
 >true : true
 >a : { Foo: Base; }
->b : { Foo2?: Derived; }
+>b : { Foo2?: Derived | undefined; }
 

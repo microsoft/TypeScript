@@ -9,7 +9,7 @@ var myCars=new Array();
 var myCars2 = new [];
 >myCars2 : any
 >new [] : any
->[] : undefined[]
+>[] : never[]
 
 var myCars3 = new Array({});
 >myCars3 : {}[]
@@ -17,10 +17,10 @@ var myCars3 = new Array({});
 >Array : ArrayConstructor
 >{} : {}
 
-var myCars4: Array; // error
+declare var myCars4: Array; // error
 >myCars4 : any
 
-var myCars5: Array<any>[];
+declare var myCars5: Array<any>[];
 >myCars5 : any[][]
  
 myCars = myCars2;

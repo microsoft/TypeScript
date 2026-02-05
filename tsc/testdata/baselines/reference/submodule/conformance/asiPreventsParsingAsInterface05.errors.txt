@@ -6,7 +6,7 @@ asiPreventsParsingAsInterface05.ts(11,1): error TS2304: Cannot find name 'I'.
 ==== asiPreventsParsingAsInterface05.ts (3 errors) ====
     "use strict"
     
-    var interface: number;
+    var interface: number = 123;
         ~~~~~~~~~
 !!! error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
     

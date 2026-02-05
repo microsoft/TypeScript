@@ -11,7 +11,8 @@ func TestQuickinfo01(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface One {
+	const content = `// @lib: es5
+interface One {
     commonProperty: number;
     commonFunction(): number;
 }

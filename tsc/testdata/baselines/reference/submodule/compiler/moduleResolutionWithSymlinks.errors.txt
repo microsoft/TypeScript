@@ -1,3 +1,4 @@
+/src/library-a/index.ts(1,32): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 /src/library-b/index.ts(1,23): error TS2307: Cannot find module 'library-a' or its corresponding type declarations.
 
 
@@ -29,8 +30,10 @@
     tsc app.ts # Should write to library-a/index.js, library-b/index.js, and app.js
     */
     
-==== /src/library-a/index.ts (0 errors) ====
+==== /src/library-a/index.ts (1 errors) ====
     export class MyClass { private x: number; }
+                                   ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     
 ==== /src/library-b/index.ts (1 errors) ====
     import {MyClass} from "library-a";

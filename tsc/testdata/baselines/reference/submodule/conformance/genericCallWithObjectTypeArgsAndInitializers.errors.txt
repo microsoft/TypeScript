@@ -1,3 +1,7 @@
+genericCallWithObjectTypeArgsAndInitializers.ts(3,17): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+genericCallWithObjectTypeArgsAndInitializers.ts(4,18): error TS2322: Type 'undefined' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
 genericCallWithObjectTypeArgsAndInitializers.ts(5,33): error TS2322: Type 'number' is not assignable to type 'T'.
   'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Number'.
 genericCallWithObjectTypeArgsAndInitializers.ts(6,37): error TS2322: Type 'T' is not assignable to type 'U'.
@@ -6,11 +10,17 @@ genericCallWithObjectTypeArgsAndInitializers.ts(8,56): error TS2322: Type 'U' is
   'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 
 
-==== genericCallWithObjectTypeArgsAndInitializers.ts (3 errors) ====
+==== genericCallWithObjectTypeArgsAndInitializers.ts (5 errors) ====
     // Generic typed parameters with initializers
     
     function foo<T>(x: T = null) { return x; } // ok
+                    ~~~~~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
     function foo2<T>(x: T = undefined) { return x; } // ok
+                     ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
     function foo3<T extends Number>(x: T = 1) { } // error
                                     ~~~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'T'.

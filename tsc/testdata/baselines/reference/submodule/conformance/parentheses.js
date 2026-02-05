@@ -13,6 +13,7 @@ declare const o4: { b: ((...args: any[]) => { c: (...args: any[]) => number } ) 
 
 
 //// [parentheses.js]
+"use strict";
 var _a;
 (o1)(o1 !== null && o1 !== void 0 ? o1 : 1);
 (o2 === null || o2 === void 0 ? void 0 : o2.b).call(o2, o1 !== null && o1 !== void 0 ? o1 : 1);

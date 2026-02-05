@@ -3,7 +3,7 @@
 @@= skipped -46, +46 lines =@@
      import b = a.inA;
  >b : Symbol(b, Decl(importStatementsInterfaces.ts, 20, 17))
- >a : Symbol(a, Decl(importStatementsInterfaces.ts, 19, 10))
+ >a : Symbol(a, Decl(importStatementsInterfaces.ts, 19, 13))
 ->inA : Symbol(a.inA, Decl(importStatementsInterfaces.ts, 4, 5))
 +>inA : Symbol(b, Decl(importStatementsInterfaces.ts, 4, 5))
 

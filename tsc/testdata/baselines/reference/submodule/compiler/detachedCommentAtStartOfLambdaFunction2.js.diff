@@ -1,8 +1,8 @@
 --- old.detachedCommentAtStartOfLambdaFunction2.js
 +++ new.detachedCommentAtStartOfLambdaFunction2.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
  //// [detachedCommentAtStartOfLambdaFunction2.js]
+ "use strict";
  class TestFile {
 +    name;
      foo(message) {

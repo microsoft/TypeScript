@@ -1,7 +1,7 @@
 --- old.instanceAndStaticDeclarations1.js
 +++ new.instanceAndStaticDeclarations1.js
-@@= skipped -16, +16 lines =@@
- //// [instanceAndStaticDeclarations1.js]
+@@= skipped -17, +17 lines =@@
+ "use strict";
  // from spec
  class Point {
 +    x;

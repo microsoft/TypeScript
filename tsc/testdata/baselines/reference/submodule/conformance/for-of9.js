@@ -6,6 +6,7 @@ for (v of ["hello"]) { }
 for (v of "hello") { }
 
 //// [for-of9.js]
+"use strict";
 var v;
 for (v of ["hello"]) { }
 for (v of "hello") { }

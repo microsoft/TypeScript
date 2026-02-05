@@ -2,9 +2,9 @@
 
 //// [genericOfACloduleType1.ts]
 class G<T>{ bar(x: T) { return x; } }
-module M {
+namespace M {
     export class C { foo() { } }
-    export module C {
+    export namespace C {
         export class X {
         }
     }
@@ -15,6 +15,7 @@ module M {
 var g2 = new G<M.C>() // was: error Type reference cannot refer to container 'M.C'.
 
 //// [genericOfACloduleType1.js]
+"use strict";
 class G {
     bar(x) { return x; }
 }

@@ -1,6 +1,15 @@
 --- old.resolveNameWithNamspace.types
 +++ new.resolveNameWithNamspace.types
-@@= skipped -29, +29 lines =@@
+@@= skipped -8, +8 lines =@@
+ >"assert" : typeof import("assert")
+
+     export function equal(actual: any, expected: any, message?: string | Error): void;
+->equal : (actual: any, expected: any, message?: string | Error) => void
++>equal : (actual: any, expected: any, message?: string | Error | undefined) => void
+ >actual : any
+ >expected : any
+ >message : string | Error | undefined
+@@= skipped -21, +21 lines =@@
  === app.js ===
  exports.equal = myAssert.equal
  >exports.equal = myAssert.equal : any

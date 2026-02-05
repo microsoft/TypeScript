@@ -1,0 +1,10 @@
+--- old.asyncArrowFunction6_es5(target=es2015).js
++++ new.asyncArrowFunction6_es5(target=es2015).js
+@@= skipped -5, +5 lines =@@
+
+ //// [asyncArrowFunction6_es5.js]
+ "use strict";
+-var foo = (...args_1) => __awaiter(void 0, [...args_1], void 0, function* (a = yield ) {
+-});
++var foo = async (a = await ) => {
++};

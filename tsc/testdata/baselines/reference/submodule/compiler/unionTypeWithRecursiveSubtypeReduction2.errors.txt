@@ -1,3 +1,7 @@
+unionTypeWithRecursiveSubtypeReduction2.ts(2,12): error TS2564: Property 'members' has no initializer and is not definitely assigned in the constructor.
+unionTypeWithRecursiveSubtypeReduction2.ts(6,12): error TS2564: Property 'members' has no initializer and is not definitely assigned in the constructor.
+unionTypeWithRecursiveSubtypeReduction2.ts(10,12): error TS2564: Property 'parent' has no initializer and is not definitely assigned in the constructor.
+unionTypeWithRecursiveSubtypeReduction2.ts(14,12): error TS2564: Property 'parent' has no initializer and is not definitely assigned in the constructor.
 unionTypeWithRecursiveSubtypeReduction2.ts(19,1): error TS2322: Type 'Property' is not assignable to type 'Class'.
   Types of property 'parent' are incompatible.
     Type 'Class | Module' is not assignable to type 'Namespace'.
@@ -15,25 +19,33 @@ unionTypeWithRecursiveSubtypeReduction2.ts(20,1): error TS2322: Type 'Class' is 
                     Property 'members' is missing in type 'Class' but required in type 'Namespace'.
 
 
-==== unionTypeWithRecursiveSubtypeReduction2.ts (2 errors) ====
+==== unionTypeWithRecursiveSubtypeReduction2.ts (6 errors) ====
     class Module {
         public members: Class[];
+               ~~~~~~~
+!!! error TS2564: Property 'members' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Namespace {
         public members: (Class | Property)[];
+               ~~~~~~~
+!!! error TS2564: Property 'members' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Class {
         public parent: Namespace;
+               ~~~~~~
+!!! error TS2564: Property 'parent' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Property {
         public parent: Module | Class;
+               ~~~~~~
+!!! error TS2564: Property 'parent' has no initializer and is not definitely assigned in the constructor.
     }
     
-    var c: Class;
-    var p: Property;
+    declare var c: Class;
+    declare var p: Property;
     c = p;
     ~
 !!! error TS2322: Type 'Property' is not assignable to type 'Class'.

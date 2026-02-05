@@ -1,8 +1,8 @@
 --- old.arrayconcat.js
 +++ new.arrayconcat.js
-@@= skipped -31, +31 lines =@@
-
+@@= skipped -32, +32 lines =@@
  //// [arrayconcat.js]
+ "use strict";
  class parser {
 +    options;
      m() {

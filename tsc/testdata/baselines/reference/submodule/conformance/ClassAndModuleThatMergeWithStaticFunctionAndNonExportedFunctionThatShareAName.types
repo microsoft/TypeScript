@@ -17,7 +17,7 @@ class Point {
 >0 : 0
 }
 
-module Point {
+namespace Point {
 >Point : typeof Point
 
     function Origin() { return ""; }// not an error, since not exported
@@ -26,7 +26,7 @@ module Point {
 }
 
 
-module A {
+namespace A {
 >A : typeof A
 
     export class Point {
@@ -45,7 +45,7 @@ module A {
 >0 : 0
     }
 
-    export module Point {
+    export namespace Point {
 >Point : typeof Point
 
         function Origin() { return ""; }// not an error since not exported

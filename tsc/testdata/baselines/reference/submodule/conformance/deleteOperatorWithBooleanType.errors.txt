@@ -1,6 +1,9 @@
+deleteOperatorWithBooleanType.ts(7,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 deleteOperatorWithBooleanType.ts(17,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(20,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(21,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithBooleanType.ts(24,31): error TS2790: The operand of a 'delete' operator must be optional.
+deleteOperatorWithBooleanType.ts(25,31): error TS2790: The operand of a 'delete' operator must be optional.
 deleteOperatorWithBooleanType.ts(26,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(27,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(30,31): error TS2703: The operand of a 'delete' operator must be a property reference.
@@ -9,19 +12,23 @@ deleteOperatorWithBooleanType.ts(33,8): error TS2703: The operand of a 'delete' 
 deleteOperatorWithBooleanType.ts(34,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(35,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(36,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithBooleanType.ts(37,8): error TS2790: The operand of a 'delete' operator must be optional.
+deleteOperatorWithBooleanType.ts(38,8): error TS2790: The operand of a 'delete' operator must be optional.
 
 
-==== deleteOperatorWithBooleanType.ts (11 errors) ====
+==== deleteOperatorWithBooleanType.ts (16 errors) ====
     // delete  operator on boolean type
-    var BOOLEAN: boolean;
+    declare var BOOLEAN: boolean;
     
     function foo(): boolean { return true; }
     
     class A {
         public a: boolean;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
         static foo() { return false; }
     }
-    module M {
+    namespace M {
         export var n: boolean;
     }
     
@@ -42,7 +49,11 @@ deleteOperatorWithBooleanType.ts(36,8): error TS2703: The operand of a 'delete' 
     
     // boolean type expressions
     var ResultIsBoolean4 = delete objA.a;
+                                  ~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
     var ResultIsBoolean5 = delete M.n;
+                                  ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
     var ResultIsBoolean6 = delete foo();
                                   ~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
@@ -71,4 +82,8 @@ deleteOperatorWithBooleanType.ts(36,8): error TS2703: The operand of a 'delete' 
            ~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     delete objA.a;
+           ~~~~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
     delete M.n;
+           ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.

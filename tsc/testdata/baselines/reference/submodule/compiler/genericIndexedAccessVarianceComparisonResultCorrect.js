@@ -29,6 +29,7 @@ b = a;      // should be no error
 c = d;
 
 //// [genericIndexedAccessVarianceComparisonResultCorrect.js]
+"use strict";
 class A {
     x = 'A';
     y = 0;

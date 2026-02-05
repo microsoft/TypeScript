@@ -26,7 +26,7 @@ interface NamedColors {
 >"pale blue" : Symbol(NamedColors["pale blue"], Decl(propertyNamesWithStringLiteral.ts, 6, 19))
 >_Color : Symbol(_Color, Decl(propertyNamesWithStringLiteral.ts, 0, 0))
 }
-module Color {
+namespace Color {
 >Color : Symbol(Color, Decl(propertyNamesWithStringLiteral.ts, 8, 1))
 
     export var namedColors: NamedColors;

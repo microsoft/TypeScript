@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts] ////
 
 === TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts ===
-module A.B {
+namespace A.B {
 >A : typeof A
 >B : typeof B
 
@@ -9,10 +9,10 @@ module A.B {
 >x : number
 }
 
-module A{ 
+namespace A{ 
 >A : typeof A
 
-    module B {
+    namespace B {
 >B : typeof B
 
         export var x: string;
@@ -32,7 +32,7 @@ var x = A.B.x;
 >B : typeof A.B
 >x : number
 
-module X.Y.Z {
+namespace X.Y.Z {
 >X : typeof X
 >Y : typeof Y
 >Z : typeof Z
@@ -45,13 +45,13 @@ module X.Y.Z {
     }
 }
 
-module X {
+namespace X {
 >X : typeof X
 
-    export module Y {
+    export namespace Y {
 >Y : typeof Y
 
-        module Z {
+        namespace Z {
 >Z : typeof Z
 
             export class Line {

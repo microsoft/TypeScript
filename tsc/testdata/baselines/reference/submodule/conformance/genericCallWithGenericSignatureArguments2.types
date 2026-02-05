@@ -4,7 +4,7 @@
 // When a function expression is inferentially typed (section 4.9.3) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, 
 // the corresponding inferred type arguments to become fixed and no further candidate inferences are made for them.
 
-module onlyT {
+namespace onlyT {
 >onlyT : typeof onlyT
 
     function foo<T>(a: (x: T) => T, b: (x: T) => T) {
@@ -14,7 +14,7 @@ module onlyT {
 >b : (x: T) => T
 >x : T
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : (x: T) => T
 >x : T
 
@@ -71,7 +71,7 @@ module onlyT {
 >b : (x: T) => T
 >x : T
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : (x: T) => T
 >x : T
 
@@ -122,7 +122,7 @@ module onlyT {
 >b : (x: T) => T
 >x : T
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : (x: T) => T
 >x : T
 
@@ -149,7 +149,7 @@ module onlyT {
 >A : F
 }
 
-module TU {
+namespace TU {
 >TU : typeof TU
 
     function foo<T, U>(a: (x: T) => T, b: (x: U) => U) {
@@ -159,7 +159,7 @@ module TU {
 >b : (x: U) => U
 >x : U
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : (x: T) => T
 >x : T
 
@@ -215,7 +215,7 @@ module TU {
 >b : (x: U) => U
 >x : U
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : (x: T) => T
 >x : T
 
@@ -266,7 +266,7 @@ module TU {
 >b : (x: U) => U
 >x : U
 
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
 >r : (x: T) => T
 >x : T
 

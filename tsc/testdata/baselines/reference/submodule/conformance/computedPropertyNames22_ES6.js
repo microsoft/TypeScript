@@ -11,6 +11,7 @@ class C {
 }
 
 //// [computedPropertyNames22_ES6.js]
+"use strict";
 class C {
     bar() {
         var obj = {

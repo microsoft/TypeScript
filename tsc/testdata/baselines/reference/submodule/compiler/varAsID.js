@@ -21,6 +21,7 @@ var f2 = new Foo2();
 
 
 //// [varAsID.js]
+"use strict";
 class Foo {
     var; // ok
     x = 1;

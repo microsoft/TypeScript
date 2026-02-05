@@ -6,8 +6,9 @@
  * @callback B
  */
 /** @type {B<string>} */
-let b;
+let b = {};
 >b : B<string>
+>{} : {}
 
 b();
 >b() : any

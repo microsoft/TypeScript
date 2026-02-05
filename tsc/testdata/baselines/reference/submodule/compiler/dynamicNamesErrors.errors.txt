@@ -9,9 +9,10 @@ dynamicNamesErrors.ts(24,1): error TS2322: Type 'T2' is not assignable to type '
 dynamicNamesErrors.ts(25,1): error TS2322: Type 'T1' is not assignable to type 'T2'.
   Types of property '[c0]' are incompatible.
     Type 'number' is not assignable to type 'string'.
+dynamicNamesErrors.ts(43,5): error TS2564: Property '[x]' has no initializer and is not definitely assigned in the constructor.
 
 
-==== dynamicNamesErrors.ts (7 errors) ====
+==== dynamicNamesErrors.ts (8 errors) ====
     const c0 = "1";
     const c1 = 1;
     
@@ -44,8 +45,8 @@ dynamicNamesErrors.ts(25,1): error TS2322: Type 'T1' is not assignable to type '
 !!! related TS6203 dynamicNamesErrors.ts:18:5: '[c1]' was also declared here.
     }
     
-    let t1: T1;
-    let t2: T2;
+    declare let t1: T1;
+    declare let t2: T2;
     t1 = t2;
     ~~
 !!! error TS2322: Type 'T2' is not assignable to type 'T1'.
@@ -74,6 +75,8 @@ dynamicNamesErrors.ts(25,1): error TS2322: Type 'T1' is not assignable to type '
         static set [w](value: number) { }
     
         [x]: number;
+        ~~~
+!!! error TS2564: Property '[x]' has no initializer and is not definitely assigned in the constructor.
         [y](): number { return 0; }
         get [z](): number { return 0; }
         set [w](value: number) { }

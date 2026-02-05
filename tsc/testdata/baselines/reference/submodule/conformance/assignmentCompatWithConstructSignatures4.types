@@ -3,7 +3,7 @@
 === assignmentCompatWithConstructSignatures4.ts ===
 // checking assignment compatibility relations for function types.
 
-module Errors {
+namespace Errors {
 >Errors : typeof Errors
 
     class Base { foo: string; }
@@ -25,21 +25,21 @@ module Errors {
 >Base : Base
 >bing : string
 
-    module WithNonGenericSignaturesInBaseType {
+    namespace WithNonGenericSignaturesInBaseType {
 >WithNonGenericSignaturesInBaseType : typeof WithNonGenericSignaturesInBaseType
 
         // target type with non-generic call signatures
-        var a2: new (x: number) => string[];
+        declare var a2: new (x: number) => string[];
 >a2 : new (x: number) => string[]
 >x : number
 
-        var a7: new (x: (arg: Base) => Derived) => (r: Base) => Derived2;
+        declare var a7: new (x: (arg: Base) => Derived) => (r: Base) => Derived2;
 >a7 : new (x: (arg: Base) => Derived) => (r: Base) => Derived2
 >x : (arg: Base) => Derived
 >arg : Base
 >r : Base
 
-        var a8: new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived;
+        declare var a8: new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived;
 >a8 : new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 >x : (arg: Base) => Derived
 >arg : Base
@@ -47,11 +47,11 @@ module Errors {
 >arg2 : Base
 >r : Base
 
-        var a10: new (...x: Base[]) => Base;
+        declare var a10: new (...x: Base[]) => Base;
 >a10 : new (...x: Base[]) => Base
 >x : Base[]
 
-        var a11: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
+        declare var a11: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
 >a11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >x : { foo: string; }
 >foo : string
@@ -59,12 +59,12 @@ module Errors {
 >foo : string
 >bar : string
 
-        var a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
+        declare var a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : new (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
 >y : Derived2[]
 
-        var a14: {
+        declare var a14: {
 >a14 : { new (x: number): number[]; new (x: string): string[]; }
 
                 new (x: number): number[];
@@ -74,37 +74,37 @@ module Errors {
 >x : string
 
             };
-        var a15: new (x: { a: string; b: number }) => number;
+        declare var a15: new (x: { a: string; b: number }) => number;
 >a15 : new (x: { a: string; b: number; }) => number
 >x : { a: string; b: number; }
 >a : string
 >b : number
 
-        var a16: {
->a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+        declare var a16: {
+>a16 : { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }
 
                 new (x: {
->x : { new (a: number): number; new (a?: number): number; }
+>x : { new (a: number): number; new (a?: number | undefined): number; }
 
                     new (a: number): number;
 >a : number
 
                     new (a?: number): number;
->a : number
+>a : number | undefined
 
                 }): number[];
                 new (x: {
->x : { new (a: boolean): boolean; new (a?: boolean): boolean; }
+>x : { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }
 
                     new (a: boolean): boolean;
 >a : boolean
 
                     new (a?: boolean): boolean;
->a : boolean
+>a : boolean | undefined
 
                 }): boolean[];
             };
-        var a17: {
+        declare var a17: {
 >a17 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
 
                 new (x: {
@@ -129,7 +129,7 @@ module Errors {
                 }): any[];
             };
 
-        var b2: new <T, U>(x: T) => U[]; 
+        declare var b2: new <T, U>(x: T) => U[]; 
 >b2 : new <T, U>(x: T) => U[]
 >x : T
 
@@ -143,7 +143,7 @@ module Errors {
 >b2 : new <T, U>(x: T) => U[]
 >a2 : new (x: number) => string[]
 
-        var b7: new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V;
+        declare var b7: new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V;
 >b7 : new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
 >x : (arg: T) => U
 >arg : T
@@ -159,7 +159,7 @@ module Errors {
 >b7 : new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
 >a7 : new (x: (arg: Base) => Derived) => (r: Base) => Derived2
 
-        var b8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
+        declare var b8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
 >b8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
 >x : (arg: T) => U
 >arg : T
@@ -179,7 +179,7 @@ module Errors {
 >a8 : new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 
         
-        var b10: new <T extends Derived>(...x: T[]) => T; 
+        declare var b10: new <T extends Derived>(...x: T[]) => T; 
 >b10 : new <T extends Derived>(...x: T[]) => T
 >x : T[]
 
@@ -193,7 +193,7 @@ module Errors {
 >b10 : new <T extends Derived>(...x: T[]) => T
 >a10 : new (...x: Base[]) => Base
 
-        var b11: new <T extends Derived>(x: T, y: T) => T; 
+        declare var b11: new <T extends Derived>(x: T, y: T) => T; 
 >b11 : new <T extends Derived>(x: T, y: T) => T
 >x : T
 >y : T
@@ -208,7 +208,7 @@ module Errors {
 >b11 : new <T extends Derived>(x: T, y: T) => T
 >a11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 
-        var b12: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
+        declare var b12: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
 >b12 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
 >x : Base[]
 >y : Base[]
@@ -223,7 +223,7 @@ module Errors {
 >b12 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
 >a12 : new (x: Base[], y: Derived2[]) => Derived[]
 
-        var b15: new <T>(x: { a: T; b: T }) => T; 
+        declare var b15: new <T>(x: { a: T; b: T }) => T; 
 >b15 : new <T>(x: { a: T; b: T; }) => T
 >x : { a: T; b: T; }
 >a : T
@@ -239,7 +239,7 @@ module Errors {
 >b15 : new <T>(x: { a: T; b: T; }) => T
 >a15 : new (x: { a: string; b: number; }) => number
 
-        var b15a: new <T extends Base>(x: { a: T; b: T }) => number; 
+        declare var b15a: new <T extends Base>(x: { a: T; b: T }) => number; 
 >b15a : new <T extends Base>(x: { a: T; b: T; }) => number
 >x : { a: T; b: T; }
 >a : T
@@ -255,22 +255,22 @@ module Errors {
 >b15a : new <T extends Base>(x: { a: T; b: T; }) => number
 >a15 : new (x: { a: string; b: number; }) => number
 
-        var b16: new <T>(x: (a: T) => T) => T[];
+        declare var b16: new <T>(x: (a: T) => T) => T[];
 >b16 : new <T>(x: (a: T) => T) => T[]
 >x : (a: T) => T
 >a : T
 
         a16 = b16; // error
 >a16 = b16 : new <T>(x: (a: T) => T) => T[]
->a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+>a16 : { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }
 >b16 : new <T>(x: (a: T) => T) => T[]
 
         b16 = a16; // error
->b16 = a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+>b16 = a16 : { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }
 >b16 : new <T>(x: (a: T) => T) => T[]
->a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
+>a16 : { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }
 
-        var b17: new <T>(x: (a: T) => T) => any[];
+        declare var b17: new <T>(x: (a: T) => T) => any[];
 >b17 : new <T>(x: (a: T) => T) => any[]
 >x : (a: T) => T
 >a : T
@@ -286,15 +286,15 @@ module Errors {
 >a17 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
     }
 
-    module WithGenericSignaturesInBaseType {
+    namespace WithGenericSignaturesInBaseType {
 >WithGenericSignaturesInBaseType : typeof WithGenericSignaturesInBaseType
 
         // target type has generic call signature
-        var a2: new <T>(x: T) => T[];
+        declare var a2: new <T>(x: T) => T[];
 >a2 : new <T>(x: T) => T[]
 >x : T
 
-        var b2: new <T>(x: T) => string[];
+        declare var b2: new <T>(x: T) => string[];
 >b2 : new <T>(x: T) => string[]
 >x : T
 
@@ -309,11 +309,11 @@ module Errors {
 >a2 : new <T>(x: T) => T[]
 
         // target type has generic call signature
-        var a3: new <T>(x: T) => string[];
+        declare var a3: new <T>(x: T) => string[];
 >a3 : new <T>(x: T) => string[]
 >x : T
 
-        var b3: new <T>(x: T) => T[]; 
+        declare var b3: new <T>(x: T) => T[]; 
 >b3 : new <T>(x: T) => T[]
 >x : T
 

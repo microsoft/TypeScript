@@ -29,7 +29,7 @@ export const y = 10;
 tsgo -p project1 --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-======== Resolving module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
+======== Resolving module '@typescript/lib-es2024/full' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es2024.full.d.ts__.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
 Resolving in CJS mode with conditions 'require', 'types'.
 File '/home/src/workspace/projects/project1/package.json' does not exist.
@@ -38,6 +38,43 @@ File '/home/src/workspace/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
+Loading module '@typescript/lib-es2024/full' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/workspace/projects/project1/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2024/full'
+Directory '/home/src/workspace/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2024/full'
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/workspace/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2024/full'
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2024/full'
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2024/full'
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'typescript__lib-es2024/full'
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
+Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/workspace/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name '@typescript/lib-es2024/full' was not resolved. ========
+======== Resolving module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'require', 'types'.
+File '/home/src/workspace/projects/project1/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
@@ -76,10 +113,10 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 [7m2[0m /// <reference lib="unknownlib"/>
 [7m [0m [91m                    ~~~~~~~~~~[0m
 
-../../tslibs/TS/Lib/lib.d.ts
-   Default library for target 'ES5'
 ../../tslibs/TS/Lib/lib.scripthost.d.ts
    Library referenced via 'scripthost' from file 'project1/file2.ts'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+   Default library for target 'ES2024'
 project1/core.d.ts
    Matched by default include pattern '**/*'
 project1/file.ts
@@ -93,7 +130,7 @@ project1/utils.d.ts
 
 Found 2 errors in the same file, starting at: project1/file2.ts[90m:1[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -120,14 +157,12 @@ declare const console: { log(msg: any): void; };
 export declare const file = 10;
 
 //// [/home/src/workspace/projects/project1/file.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.file = void 0;
-exports.file = 10;
+export const file = 10;
 
 //// [/home/src/workspace/projects/project1/file2.d.ts] *new* 
 
 //// [/home/src/workspace/projects/project1/file2.js] *new* 
+"use strict";
 /// <reference lib="webworker2"/>
 /// <reference lib="unknownlib"/>
 /// <reference lib="scripthost"/>
@@ -136,13 +171,10 @@ exports.file = 10;
 export declare const x = "type1";
 
 //// [/home/src/workspace/projects/project1/index.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "type1";
+export const x = "type1";
 
 //// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","errors":true,"root":[[3,7]],"fileNames":["lib.d.ts","lib.scripthost.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"2fa71959819338965a3c6b2122d95c96-interface ScriptHostInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},"a1f9b824326bab2c3c8f13eccf69f182-export const core = 10;",{"version":"69c4ea0c9ff13ab7fc078607d9363624-export const file = 10;","signature":"a224c1b0cbd2f5fe611e588db48243cb-export declare const file = 10;\n","impliedNodeFormat":1},{"version":"aceac74b29bc0f88aeca1c3e8d6b44c0-/// <reference lib=\"webworker2\"/>\n/// <reference lib=\"unknownlib\"/>\n/// <reference lib=\"scripthost\"/>","signature":"99aa06d3014798d86001c324468d497f-","impliedNodeFormat":1},{"version":"aeb695aed936d7539a32fc3cd25af558-export const x = \"type1\";","signature":"e2f8d12de2edba256e37cf4a656ac52d-export declare const x = \"type1\";\n","impliedNodeFormat":1},"4e905e76b648aae5f92e8bd5418e19b3-export const y = 10;"],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","errors":true,"root":[[3,7]],"fileNames":["lib.scripthost.d.ts","lib.es2024.full.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"2fa71959819338965a3c6b2122d95c96-interface ScriptHostInterface { }","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"a1f9b824326bab2c3c8f13eccf69f182-export const core = 10;",{"version":"69c4ea0c9ff13ab7fc078607d9363624-export const file = 10;","signature":"a224c1b0cbd2f5fe611e588db48243cb-export declare const file = 10;\n","impliedNodeFormat":1},{"version":"aceac74b29bc0f88aeca1c3e8d6b44c0-/// <reference lib=\"webworker2\"/>\n/// <reference lib=\"unknownlib\"/>\n/// <reference lib=\"scripthost\"/>","signature":"99aa06d3014798d86001c324468d497f-","impliedNodeFormat":1},{"version":"aeb695aed936d7539a32fc3cd25af558-export const x = \"type1\";","signature":"e2f8d12de2edba256e37cf4a656ac52d-export declare const x = \"type1\";\n","impliedNodeFormat":1},"4e905e76b648aae5f92e8bd5418e19b3-export const y = 10;"],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspace/projects/project1/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -163,8 +195,8 @@ exports.x = "type1";
     }
   ],
   "fileNames": [
-    "lib.d.ts",
     "lib.scripthost.d.ts",
+    "lib.es2024.full.d.ts",
     "./core.d.ts",
     "./file.ts",
     "./file2.ts",
@@ -173,18 +205,6 @@ exports.x = "type1";
   ],
   "fileInfos": [
     {
-      "fileName": "lib.d.ts",
-      "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-      "affectsGlobalScope": true,
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedNodeFormat": 1
-      }
-    },
-    {
       "fileName": "lib.scripthost.d.ts",
       "version": "2fa71959819338965a3c6b2122d95c96-interface ScriptHostInterface { }",
       "signature": "2fa71959819338965a3c6b2122d95c96-interface ScriptHostInterface { }",
@@ -192,6 +212,18 @@ exports.x = "type1";
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "2fa71959819338965a3c6b2122d95c96-interface ScriptHostInterface { }",
+        "affectsGlobalScope": true,
+        "impliedNodeFormat": 1
+      }
+    },
+    {
+      "fileName": "lib.es2024.full.d.ts",
+      "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedNodeFormat": "CommonJS",
+      "original": {
+        "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedNodeFormat": 1
       }
@@ -246,13 +278,13 @@ exports.x = "type1";
     "composite": true
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1848
+  "size": 1860
 }
 
 project1/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
 *refresh*    /home/src/tslibs/TS/Lib/lib.scripthost.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspace/projects/project1/core.d.ts
 *refresh*    /home/src/workspace/projects/project1/file.ts
 *refresh*    /home/src/workspace/projects/project1/file2.ts

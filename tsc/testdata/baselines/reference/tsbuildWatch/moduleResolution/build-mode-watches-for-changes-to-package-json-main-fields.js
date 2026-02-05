@@ -53,7 +53,7 @@ Output::
 
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const.js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File name '/user/username/projects/myproject/packages/pkg2/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
@@ -64,7 +64,7 @@ File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it 
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
@@ -90,14 +90,14 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const.js', target file types: TypeScript, JavaScript, Declaration, JSON.
 File name '/user/username/projects/myproject/packages/pkg2/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -121,10 +121,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.theNum = void 0;
-exports.theNum = 42;
+export const theNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo] *new* 
 {"version":"FakeTSVersion","root":["../index.ts"]}
@@ -145,25 +142,22 @@ exports.theNum = 42;
 export type TheNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg2/build/const.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 //// [/user/username/projects/myproject/packages/pkg2/build/index.d.ts] *new* 
 export type { TheNum } from './const.js';
 
 //// [/user/username/projects/myproject/packages/pkg2/build/index.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 //// [/user/username/projects/myproject/packages/pkg2/build/other.d.ts] *new* 
 export type TheStr = string;
 
 //// [/user/username/projects/myproject/packages/pkg2/build/other.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"be0f939ab1143e4064a3742586332724-export type TheNum = 42;","signature":"56e2d69d2edd1f0edd1a64ecfdf6de0d-export type TheNum = 42;\n","impliedNodeFormat":1},{"version":"c95c354b23966e289caeaece40bb8d0a-export type { TheNum } from './const.js';","signature":"f257912cfebb94a04c6ba4e8f754166a-export type { TheNum } from './const.js';\n","impliedNodeFormat":1},{"version":"dfadcd1940a5dc36721d3311ebd8eb8b-export type TheStr = string;","signature":"9551f60bc06319547b96535db4cb8520-export type TheStr = string;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./other.d.ts"}
+{"version":"FakeTSVersion","root":[[2,4]],"fileNames":["lib.es2024.full.d.ts","../const.ts","../index.ts","../other.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"be0f939ab1143e4064a3742586332724-export type TheNum = 42;","signature":"56e2d69d2edd1f0edd1a64ecfdf6de0d-export type TheNum = 42;\n","impliedNodeFormat":1},{"version":"c95c354b23966e289caeaece40bb8d0a-export type { TheNum } from './const.js';","signature":"f257912cfebb94a04c6ba4e8f754166a-export type { TheNum } from './const.js';\n","impliedNodeFormat":1},{"version":"dfadcd1940a5dc36721d3311ebd8eb8b-export type TheStr = string;","signature":"9551f60bc06319547b96535db4cb8520-export type TheStr = string;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./other.d.ts"}
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -181,14 +175,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
     }
   ],
   "fileNames": [
-    "lib.d.ts",
+    "lib.es2024.full.d.ts",
     "../const.ts",
     "../index.ts",
     "../other.ts"
   ],
   "fileInfos": [
     {
-      "fileName": "lib.d.ts",
+      "fileName": "lib.es2024.full.d.ts",
       "version": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "signature": "8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
@@ -248,12 +242,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
     ]
   },
   "latestChangedDtsFile": "./other.d.ts",
-  "size": 1564
+  "size": 1576
 }
 
 packages/pkg2/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /user/username/projects/myproject/packages/pkg2/const.ts
 *refresh*    /user/username/projects/myproject/packages/pkg2/index.ts
 *refresh*    /user/username/projects/myproject/packages/pkg2/other.ts
@@ -264,7 +258,7 @@ Signatures::
 
 packages/pkg1/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /user/username/projects/myproject/packages/pkg2/build/const.d.ts
 *refresh*    /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 *refresh*    /user/username/projects/myproject/packages/pkg1/index.ts

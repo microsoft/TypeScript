@@ -19,6 +19,7 @@ class E {
 }
 
 //// [emitDefaultParametersMethodES6.js]
+"use strict";
 class C {
     constructor(t, z, x, y = "hello") { }
     foo(x, t = false) { }

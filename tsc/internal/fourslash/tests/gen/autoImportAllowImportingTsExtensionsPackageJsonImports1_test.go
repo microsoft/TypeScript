@@ -11,7 +11,8 @@ func TestAutoImportAllowImportingTsExtensionsPackageJsonImports1(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @module: node18
+	const content = `// @lib: es5
+// @module: node18
 // @allowImportingTsExtensions: true
 // @Filename: /node_modules/pkg/package.json
 {

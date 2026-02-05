@@ -1,9 +1,9 @@
 --- old.awaitBinaryExpression4_es6.js
 +++ new.awaitBinaryExpression4_es6.js
-@@= skipped -11, +11 lines =@@
- }
+@@= skipped -12, +12 lines =@@
 
  //// [awaitBinaryExpression4_es6.js]
+ "use strict";
 -function func() {
 -    return __awaiter(this, void 0, void 0, function* () {
 -        before();

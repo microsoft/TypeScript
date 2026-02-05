@@ -1,9 +1,9 @@
 --- old.esDecorators-classDeclaration-multipleDecorators(target=es2015).js
 +++ new.esDecorators-classDeclaration-multipleDecorators(target=es2015).js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
 
  //// [esDecorators-classDeclaration-multipleDecorators.js]
+ "use strict";
 -let C = (() => {
 -    let _classDecorators = [dec1, dec2];
 -    let _classDescriptor;

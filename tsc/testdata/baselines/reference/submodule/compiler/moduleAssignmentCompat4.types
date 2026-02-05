@@ -1,20 +1,20 @@
 //// [tests/cases/compiler/moduleAssignmentCompat4.ts] ////
 
 === moduleAssignmentCompat4.ts ===
-module A {
+namespace A {
 >A : typeof A
 
-   export module M {
+   export namespace M {
 >M : typeof M
 
         class C { }
 >C : C
     }
 }
-module B {
+namespace B {
 >B : typeof B
 
-    export module M {
+    export namespace M {
 >M : typeof M
 
         export class D { }

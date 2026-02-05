@@ -148,15 +148,15 @@
 ->x : number
 +>m1 : () => any
 +>this.x : any
-+>this : any
++>this : { m1(): any; m2(): any; }
 +>x : any
 
      m2() { this.z = this.x + 1; return this.y }
 ->m2 : () => T
 ->this.z = this.x + 1 : number
-->this.z : number
+->this.z : number | undefined
 ->this : this
-->z : number
+->z : number | undefined
 ->this.x + 1 : number
 ->this.x : number
 ->this : this
@@ -164,18 +164,18 @@
 +>m2 : () => any
 +>this.z = this.x + 1 : any
 +>this.z : any
-+>this : any
++>this : { m1(): any; m2(): any; }
 +>z : any
 +>this.x + 1 : any
 +>this.x : any
-+>this : any
++>this : { m1(): any; m2(): any; }
 +>x : any
  >1 : 1
 ->this.y : T
 ->this : this
 ->y : T
 +>this.y : any
-+>this : any
++>this : { m1(): any; m2(): any; }
 +>y : any
  }
  var cp = new Cp(1)

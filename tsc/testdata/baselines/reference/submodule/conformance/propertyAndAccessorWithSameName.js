@@ -22,6 +22,7 @@ class E {
 }
 
 //// [propertyAndAccessorWithSameName.js]
+"use strict";
 class C {
     x;
     get x() {

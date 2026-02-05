@@ -13,6 +13,7 @@ class BulkEditPreviewProvider {
 }
 
 //// [decoratorOnClassConstructorParameter5.js]
+"use strict";
 let BulkEditPreviewProvider = class BulkEditPreviewProvider {
     _modeService;
     static Schema = 'vscode-bulkeditpreview';

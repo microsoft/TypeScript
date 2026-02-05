@@ -1,8 +1,8 @@
 --- old.objectRestNegative.js
 +++ new.objectRestNegative.js
-@@= skipped -44, +44 lines =@@
+@@= skipped -45, +45 lines =@@
      return rest;
  }
- let rest;
+ let rest = { b: "" };
 -({ a } = o, rest.b + rest.b = __rest(o, ["a"]));
 +({ a } = o, (rest.b + rest.b) = __rest(o, ["a"]));

@@ -11,7 +11,7 @@ func TestFormattingOfMultilineBlockConstructs(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module InternalModule/*1*/
+	const content = `namespace InternalModule/*1*/
 {
 }
 interface MyInterface/*2*/
@@ -51,7 +51,7 @@ var x :/*12*/
 	defer done()
 	f.FormatDocument(t, "")
 	f.GoToMarker(t, "1")
-	f.VerifyCurrentLineContent(t, `module InternalModule {`)
+	f.VerifyCurrentLineContent(t, `namespace InternalModule {`)
 	f.GoToMarker(t, "2")
 	f.VerifyCurrentLineContent(t, `interface MyInterface {`)
 	f.GoToMarker(t, "3")

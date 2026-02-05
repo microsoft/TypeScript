@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ExportClassWhichExtendsInterfaceWithInaccessibleType.ts] ////
 
 //// [ExportClassWhichExtendsInterfaceWithInaccessibleType.ts]
-module A {
+namespace A {
 
     interface Point {
         x: number;
@@ -22,6 +22,7 @@ module A {
 
 
 //// [ExportClassWhichExtendsInterfaceWithInaccessibleType.js]
+"use strict";
 var A;
 (function (A) {
     class Point2d {

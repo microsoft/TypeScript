@@ -1,0 +1,35 @@
+--- old.noCrashOnMixin2.types
++++ new.noCrashOnMixin2.types
+@@= skipped -19, +19 lines =@@
+ >args : any[] | undefined
+
+ function Mixin<TBase extends Constructor>(Base: TBase) {
+->Mixin : <TBase extends Constructor>(Base: TBase) => { new (...args?: any[]): (Anonymous class); prototype: Mixin<any>.(Anonymous class); } & TBase
++>Mixin : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args?: any[] | undefined): (Anonymous class); prototype: Mixin.(Anonymous class); } & TBase
+ >Base : TBase
+
+     return class extends Base {
+->class extends Base {    } : { new (...args?: any[]): (Anonymous class); prototype: Mixin<any>.(Anonymous class); } & TBase
++>class extends Base {    } : { new (...args?: any[] | undefined): (Anonymous class); prototype: Mixin.(Anonymous class); } & TBase
+ >Base : {}
+
+     };
+@@= skipped -16, +16 lines =@@
+
+ class CrashTrigger extends Mixin(Empty) {
+ >CrashTrigger : CrashTrigger
+->Mixin(Empty) : Mixin<typeof Empty>.(Anonymous class)
+->Mixin : <TBase extends Constructor>(Base: TBase) => { new (...args?: any[]): (Anonymous class); prototype: Mixin<any>.(Anonymous class); } & TBase
++>Mixin(Empty) : Mixin.(Anonymous class)
++>Mixin : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args?: any[] | undefined): (Anonymous class); prototype: Mixin.(Anonymous class); } & TBase
+ >Empty : typeof Empty
+
+     public trigger() {
+ >trigger : () => void
+
+         new Concrete();
+->new Concrete() : any
++>new Concrete() : Concrete
+ >Concrete : typeof Concrete
+     }
+ }

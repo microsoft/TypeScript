@@ -1,0 +1,123 @@
+commaOperatorWithSecondOperandObjectType.ts(8,5): error TS2564: Property 'num' has no initializer and is not definitely assigned in the constructor.
+commaOperatorWithSecondOperandObjectType.ts(12,6): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(13,1): error TS2454: Variable 'BOOLEAN' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(13,10): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(14,1): error TS2454: Variable 'NUMBER' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(14,9): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(15,1): error TS2454: Variable 'STRING' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(15,9): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(16,1): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(16,9): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(19,29): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(20,24): error TS2454: Variable 'BOOLEAN' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(20,33): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(21,24): error TS2454: Variable 'NUMBER' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(21,32): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(22,24): error TS2454: Variable 'STRING' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(22,32): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(23,24): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(23,32): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(26,7): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(27,13): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(29,2): error TS2454: Variable 'BOOLEAN' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(31,1): error TS2454: Variable 'STRING' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(33,30): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(34,36): error TS2454: Variable 'OBJECT' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(36,25): error TS2454: Variable 'BOOLEAN' is used before being assigned.
+commaOperatorWithSecondOperandObjectType.ts(38,25): error TS2454: Variable 'STRING' is used before being assigned.
+
+
+==== commaOperatorWithSecondOperandObjectType.ts (27 errors) ====
+    var ANY: any;
+    var BOOLEAN: boolean;
+    var NUMBER: number;
+    var STRING: string;
+    var OBJECT: Object;
+    
+    class CLASS {
+        num: number;
+        ~~~
+!!! error TS2564: Property 'num' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    //The second operand type is Object
+    ANY, OBJECT;
+         ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    BOOLEAN, OBJECT;
+    ~~~~~~~
+!!! error TS2454: Variable 'BOOLEAN' is used before being assigned.
+             ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    NUMBER, OBJECT;
+    ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+            ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    STRING, OBJECT;
+    ~~~~~~
+!!! error TS2454: Variable 'STRING' is used before being assigned.
+            ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    OBJECT, OBJECT;
+    ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+            ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    
+    //Return type is Object
+    var resultIsObject1 = (ANY, OBJECT);
+                                ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    var resultIsObject2 = (BOOLEAN, OBJECT);
+                           ~~~~~~~
+!!! error TS2454: Variable 'BOOLEAN' is used before being assigned.
+                                    ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    var resultIsObject3 = (NUMBER, OBJECT);
+                           ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+                                   ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    var resultIsObject4 = (STRING, OBJECT);
+                           ~~~~~~
+!!! error TS2454: Variable 'STRING' is used before being assigned.
+                                   ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    var resultIsObject5 = (OBJECT, OBJECT);
+                           ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+                                   ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    
+    //Literal and expression
+    null, OBJECT
+          ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    ANY = null, OBJECT
+                ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    true, {}
+    !BOOLEAN, []
+     ~~~~~~~
+!!! error TS2454: Variable 'BOOLEAN' is used before being assigned.
+    "string", new Date()
+    STRING.toLowerCase(), new CLASS()
+    ~~~~~~
+!!! error TS2454: Variable 'STRING' is used before being assigned.
+    
+    var resultIsObject6 = (null, OBJECT);
+                                 ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    var resultIsObject7 = (ANY = null, OBJECT);
+                                       ~~~~~~
+!!! error TS2454: Variable 'OBJECT' is used before being assigned.
+    var resultIsObject8 = (true, {});
+    var resultIsObject9 = (!BOOLEAN, { a: 1, b: "s" });
+                            ~~~~~~~
+!!! error TS2454: Variable 'BOOLEAN' is used before being assigned.
+    var resultIsObject10 = ("string", new Date());
+    var resultIsObject11 = (STRING.toLowerCase(), new CLASS());
+                            ~~~~~~
+!!! error TS2454: Variable 'STRING' is used before being assigned.
+    

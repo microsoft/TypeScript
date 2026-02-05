@@ -12,7 +12,7 @@ class C<T> {
 >type : T
 }
 
-module M {
+namespace M {
 >M : typeof M
 
     export function f(x: typeof C) {   

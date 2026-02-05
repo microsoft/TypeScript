@@ -21,6 +21,7 @@ class c extends Foo {
 }
 
 //// [collisionSuperAndLocalVarInMethod.js]
+"use strict";
 var _super = 10; // No Error
 class Foo {
     x() {

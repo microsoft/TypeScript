@@ -23,10 +23,11 @@ class B<T extends Date, U extends Date> extends A<T, U> {
     }
 }
 
-var b: B<Date, Date>;
+declare var b: B<Date, Date>;
 var c: A<Date, Date> = <A<Date, Date>>b;
 
 //// [genericTypeAssertions6.js]
+"use strict";
 class A {
     constructor(x) {
         var y = x;
@@ -46,5 +47,4 @@ class B extends A {
         var e = new Date();
     }
 }
-var b;
 var c = b;

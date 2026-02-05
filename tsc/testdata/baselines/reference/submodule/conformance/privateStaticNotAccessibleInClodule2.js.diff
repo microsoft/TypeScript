@@ -1,7 +1,7 @@
 --- old.privateStaticNotAccessibleInClodule2.js
 +++ new.privateStaticNotAccessibleInClodule2.js
-@@= skipped -18, +18 lines =@@
- //// [privateStaticNotAccessibleInClodule2.js]
+@@= skipped -19, +19 lines =@@
+ "use strict";
  // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
  class C {
 +    foo;

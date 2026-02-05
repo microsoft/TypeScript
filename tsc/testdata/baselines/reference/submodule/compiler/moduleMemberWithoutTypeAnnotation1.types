@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleMemberWithoutTypeAnnotation1.ts] ////
 
 === moduleMemberWithoutTypeAnnotation1.ts ===
-module TypeScript.Parser {
+namespace TypeScript.Parser {
 >TypeScript : typeof TypeScript
 >Parser : typeof Parser
 
@@ -16,7 +16,7 @@ module TypeScript.Parser {
     }
 }
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : typeof TypeScript
 
     export interface ISyntaxElement { };
@@ -48,7 +48,7 @@ module TypeScript {
     }
 }
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : typeof TypeScript
 
     export class SyntaxNode {
@@ -82,7 +82,7 @@ module TypeScript {
     }
 }
 
-module TypeScript.Syntax {
+namespace TypeScript.Syntax {
 >TypeScript : typeof TypeScript
 >Syntax : typeof Syntax
 

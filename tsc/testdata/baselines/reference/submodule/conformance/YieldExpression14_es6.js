@@ -8,6 +8,7 @@ class C {
 }
 
 //// [YieldExpression14_es6.js]
+"use strict";
 class C {
     foo() {
         yield foo;

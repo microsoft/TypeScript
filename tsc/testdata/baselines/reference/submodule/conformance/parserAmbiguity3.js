@@ -4,4 +4,5 @@
 f(g < A, B > +(7));
 
 //// [parserAmbiguity3.js]
+"use strict";
 f(g < A, B > +(7));

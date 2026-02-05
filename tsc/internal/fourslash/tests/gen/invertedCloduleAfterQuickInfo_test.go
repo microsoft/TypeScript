@@ -11,8 +11,9 @@ func TestInvertedCloduleAfterQuickInfo(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
-    module A {
+	const content = `// @strict: false
+namespace M {
+    namespace A {
         var o;
     }
     class A {

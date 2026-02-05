@@ -24,6 +24,7 @@
 ->this.x : Symbol(K.x, Decl(mod.js, 1, 27))
 ->this : Symbol(K, Decl(mod.js, 1, 13))
 ->x : Symbol(K.x, Decl(mod.js, 1, 27))
++>this : Symbol(__object, Decl(mod.js, 0, 11))
  }
  exports.Classic = class {
  >exports.Classic : Symbol(Classic, Decl(mod.js, 3, 1))
@@ -32,7 +33,7 @@
  >Classic : Symbol(Classic, Decl(mod.js, 3, 1))
 
      constructor() {
-@@= skipped -35, +30 lines =@@
+@@= skipped -35, +31 lines =@@
 
  var k = new s.n.K()
  >k : Symbol(k, Decl(use.js, 2, 3))

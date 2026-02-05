@@ -8,6 +8,7 @@ enum E {
 }
 
 //// [decoratorOnEnum.js]
+"use strict";
 var E;
 (function (E) {
 })(E || (E = {}));

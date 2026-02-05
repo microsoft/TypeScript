@@ -2,8 +2,8 @@
 
 === deleteOperatorWithNumberType.ts ===
 // delete  operator on number type
-var NUMBER: number;
->NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 3))
+declare var NUMBER: number;
+>NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 11))
 
 var NUMBER1: number[] = [1, 2];
 >NUMBER1 : Symbol(NUMBER1, Decl(deleteOperatorWithNumberType.ts, 2, 3))
@@ -20,7 +20,7 @@ class A {
     static foo() { return 1; }
 >foo : Symbol(A.foo, Decl(deleteOperatorWithNumberType.ts, 7, 21))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(deleteOperatorWithNumberType.ts, 9, 1))
 
     export var n: number;
@@ -34,7 +34,7 @@ var objA = new A();
 // number type var
 var ResultIsBoolean1 = delete NUMBER;
 >ResultIsBoolean1 : Symbol(ResultIsBoolean1, Decl(deleteOperatorWithNumberType.ts, 17, 3))
->NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 11))
 
 var ResultIsBoolean2 = delete NUMBER1;
 >ResultIsBoolean2 : Symbol(ResultIsBoolean2, Decl(deleteOperatorWithNumberType.ts, 18, 3))
@@ -85,23 +85,23 @@ var ResultIsBoolean10 = delete A.foo();
 
 var ResultIsBoolean11 = delete (NUMBER + NUMBER);
 >ResultIsBoolean11 : Symbol(ResultIsBoolean11, Decl(deleteOperatorWithNumberType.ts, 31, 3))
->NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 3))
->NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 11))
+>NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 11))
 
 // multiple delete  operator
 var ResultIsBoolean12 = delete delete NUMBER;
 >ResultIsBoolean12 : Symbol(ResultIsBoolean12, Decl(deleteOperatorWithNumberType.ts, 34, 3))
->NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 11))
 
 var ResultIsBoolean13 = delete delete delete (NUMBER + NUMBER);
 >ResultIsBoolean13 : Symbol(ResultIsBoolean13, Decl(deleteOperatorWithNumberType.ts, 35, 3))
->NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 3))
->NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 11))
+>NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 11))
 
 // miss assignment operators
 delete 1;
 delete NUMBER;
->NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(deleteOperatorWithNumberType.ts, 1, 11))
 
 delete NUMBER1;
 >NUMBER1 : Symbol(NUMBER1, Decl(deleteOperatorWithNumberType.ts, 2, 3))

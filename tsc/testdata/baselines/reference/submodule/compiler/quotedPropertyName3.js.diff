@@ -1,8 +1,8 @@
 --- old.quotedPropertyName3.js
 +++ new.quotedPropertyName3.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [quotedPropertyName3.js]
+ "use strict";
  class Test {
 +    "prop1";
      foo() {

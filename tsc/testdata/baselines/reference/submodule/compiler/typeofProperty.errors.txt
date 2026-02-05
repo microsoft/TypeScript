@@ -1,12 +1,15 @@
 typeofProperty.ts(3,15): error TS2304: Cannot find name 'a'.
 typeofProperty.ts(7,15): error TS2304: Cannot find name 'd'.
 typeofProperty.ts(12,15): error TS2304: Cannot find name 'e'.
+typeofProperty.ts(16,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 typeofProperty.ts(17,15): error TS2304: Cannot find name 'a'.
 typeofProperty.ts(22,15): error TS2304: Cannot find name 'd'.
+typeofProperty.ts(23,5): error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
 typeofProperty.ts(27,15): error TS2304: Cannot find name 'e'.
+typeofProperty.ts(37,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 
 
-==== typeofProperty.ts (6 errors) ====
+==== typeofProperty.ts (9 errors) ====
     interface I1 {
         a: number;
         b: typeof a; // Should yield error (a is not a value)
@@ -29,6 +32,8 @@ typeofProperty.ts(27,15): error TS2304: Cannot find name 'e'.
     
     class C1 {
         a: number;
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
         b: typeof a; // Should yield error (a is not a value)
                   ~
 !!! error TS2304: Cannot find name 'a'.
@@ -40,6 +45,8 @@ typeofProperty.ts(27,15): error TS2304: Cannot find name 'e'.
                   ~
 !!! error TS2304: Cannot find name 'd'.
         d: string;
+        ~
+!!! error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C3 {
@@ -56,6 +63,8 @@ typeofProperty.ts(27,15): error TS2304: Cannot find name 'e'.
     
     class ValidClass implements ValidInterface {
         x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     var vcInstance = new ValidClass();

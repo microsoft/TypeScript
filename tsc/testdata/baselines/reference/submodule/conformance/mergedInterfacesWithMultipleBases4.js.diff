@@ -1,7 +1,7 @@
 --- old.mergedInterfacesWithMultipleBases4.js
 +++ new.mergedInterfacesWithMultipleBases4.js
-@@= skipped -38, +38 lines =@@
- //// [mergedInterfacesWithMultipleBases4.js]
+@@= skipped -39, +39 lines =@@
+ "use strict";
  // merged interfaces behave as if all extends clauses from each declaration are merged together
  class C {
 +    a;

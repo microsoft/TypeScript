@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/nameCollisionWithBlockScopedVariable1.ts] ////
 
 //// [nameCollisionWithBlockScopedVariable1.ts]
-module M {
+namespace M {
     export class C { }
 }
-module M {
+namespace M {
     {
         let M = 0;
         new C();
@@ -12,6 +12,7 @@ module M {
 }
 
 //// [nameCollisionWithBlockScopedVariable1.js]
+"use strict";
 var M;
 (function (M) {
     class C {

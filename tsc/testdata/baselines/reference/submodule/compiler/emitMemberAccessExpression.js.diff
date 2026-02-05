@@ -12,7 +12,7 @@
          (function (Model) {
              class _Person {
                  populate(raw) {
-@@= skipped -21, +21 lines =@@
+@@= skipped -22, +22 lines =@@
  /// <reference path="emitMemberAccessExpression_file1.ts" />
  var Microsoft;
  (function (Microsoft) {

@@ -1,6 +1,6 @@
 --- old.renamingDestructuredPropertyInFunctionType.js
 +++ new.renamingDestructuredPropertyInFunctionType.js
-@@= skipped -170, +170 lines =@@
+@@= skipped -171, +171 lines =@@
  declare function f1({ a: string }: O): void;
  declare const f2: ({ a: string }: O) => void;
  declare const f3: ({ a: string, b, c }: O) => void;

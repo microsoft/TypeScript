@@ -27,6 +27,7 @@ class B {
 
 
 //// [emitClassDeclarationWithConstructorInES6.js]
+"use strict";
 class A {
     y;
     constructor(x) {

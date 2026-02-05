@@ -1,0 +1,27 @@
+declarationEmitTypeParameterNameReusedInOverloads.ts(1,21): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+declarationEmitTypeParameterNameReusedInOverloads.ts(2,37): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+declarationEmitTypeParameterNameReusedInOverloads.ts(3,41): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+
+
+==== declarationEmitTypeParameterNameReusedInOverloads.ts (3 errors) ====
+    export class Base { foo: string; }
+                        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    export class Derived extends Base { bar: string; }
+                                        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+    export class Derived2 extends Derived { baz: string; }
+                                            ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+    
+    export type Foo = {
+        new (x: {
+            new <T extends Derived>(a: T): T;
+            new <T extends Base>(a: T): T;
+        }): any[];
+        new (x: {
+            new <T extends Derived2>(a: T): T;
+                new <T extends Base>(a: T): T;
+        }): any[];
+    }
+    

@@ -1,8 +1,8 @@
 --- old.numericClassMembers1.js
 +++ new.numericClassMembers1.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [numericClassMembers1.js]
+ "use strict";
  class C234 {
 -    constructor() {
 -        this[0] = 1;

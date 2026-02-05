@@ -13,7 +13,7 @@ func TestTsxCompletion5(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `//@Filename: file.tsx
-declare module JSX {
+declare namespace JSX {
     interface Element { }
     interface IntrinsicElements {
         div: { ONE: string; TWO: number; }

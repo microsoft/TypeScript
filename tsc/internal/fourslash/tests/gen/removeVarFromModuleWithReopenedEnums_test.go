@@ -11,14 +11,14 @@ func TestRemoveVarFromModuleWithReopenedEnums(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module A {
+	const content = `namespace A {
     /**/var o;
 }
 enum A {
 }
 enum A {
 }
-module A {
+namespace A {
     var p;
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

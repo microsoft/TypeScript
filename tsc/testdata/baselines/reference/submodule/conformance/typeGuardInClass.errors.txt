@@ -5,7 +5,7 @@ typeGuardInClass.ts(13,17): error TS2322: Type 'string | number' is not assignab
 
 
 ==== typeGuardInClass.ts (2 errors) ====
-    let x: string | number;
+    declare var x: string | number;
     
     if (typeof x === "string") {
         let n = class {

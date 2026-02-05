@@ -15,7 +15,7 @@ class clodule<T> {
 >id : string
 }
 
-module clodule {
+namespace clodule {
 >clodule : typeof clodule
 
     // error: duplicate identifier expected

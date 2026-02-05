@@ -30,7 +30,7 @@ export = y;
 >y : y
 
 === foo3.ts ===
-module x {
+namespace x {
 >x : typeof import("foo3")
 
 	export var x = 10;

@@ -12,7 +12,7 @@ func TestReferencesForGlobals5(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: referencesForGlobals_1.ts
-module globalModule {
+namespace globalModule {
     export var x;
 }
 

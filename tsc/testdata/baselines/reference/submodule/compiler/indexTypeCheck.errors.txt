@@ -61,8 +61,8 @@ indexTypeCheck.ts(51,8): error TS2538: Type 'Blue' cannot be used as an index ty
 !!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
     }
     
-    var yellow: Yellow;
-    var blue: Blue;
+    declare var yellow: Yellow;
+    declare var blue: Blue;
     var s = "some string";
     
     yellow[5]; // ok
@@ -77,7 +77,7 @@ indexTypeCheck.ts(51,8): error TS2538: Type 'Blue' cannot be used as an index ty
            ~~~~
 !!! error TS2538: Type 'Blue' cannot be used as an index type.
     
-    var x:number[];
+    declare var x:number[];
     x[0];
     
     class Benchmark {

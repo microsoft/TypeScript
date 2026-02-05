@@ -4,5 +4,6 @@
 a\u
 
 //// [invalidUnicodeEscapeSequance3.js]
+"use strict";
 a;
 u;

@@ -16,6 +16,7 @@ class D {
 
 
 //// [classWithDuplicateIdentifier.js]
+"use strict";
 class C {
     a() { return 0; } // error: duplicate identifier
     a;

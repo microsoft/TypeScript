@@ -9,6 +9,7 @@ function* g() {
 }
 
 //// [generatorTypeCheck53.js]
+"use strict";
 class Foo {
     x;
 }

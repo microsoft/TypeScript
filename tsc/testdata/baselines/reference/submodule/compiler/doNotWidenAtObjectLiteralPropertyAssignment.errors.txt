@@ -1,0 +1,18 @@
+doNotWidenAtObjectLiteralPropertyAssignment.ts(10,60): error TS2322: Type 'null' is not assignable to type 'IIntervalTreeNode[] | undefined'.
+
+
+==== doNotWidenAtObjectLiteralPropertyAssignment.ts (1 errors) ====
+    interface ITestEventInterval {
+        begin: number;
+    }
+    
+    interface IIntervalTreeNode {
+        interval: ITestEventInterval;
+        children?: IIntervalTreeNode[];
+    }
+    
+    var test: IIntervalTreeNode[] = [{ interval: { begin: 0 }, children: null }]; // was error here because best common type is {}
+                                                               ~~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'IIntervalTreeNode[] | undefined'.
+!!! related TS6500 doNotWidenAtObjectLiteralPropertyAssignment.ts:7:5: The expected type comes from property 'children' which is declared here on type 'IIntervalTreeNode'
+    

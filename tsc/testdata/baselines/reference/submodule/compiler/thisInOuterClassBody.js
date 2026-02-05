@@ -23,6 +23,7 @@ class Foo {
 }
 
 //// [thisInOuterClassBody.js]
+"use strict";
 class Foo {
     x = this;
     static y = this;

@@ -6,6 +6,7 @@ while (true) {
 }
 
 //// [continueTarget6.js]
+"use strict";
 while (true) {
     continue target;
 }

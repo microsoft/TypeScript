@@ -1,13 +1,14 @@
 //// [tests/cases/compiler/collisionThisExpressionAndAliasInGlobal.ts] ////
 
 //// [collisionThisExpressionAndAliasInGlobal.ts]
-module a {
+namespace a {
     export var b = 10;
 }
 var f = () => this;
 import _this = a; // Error
 
 //// [collisionThisExpressionAndAliasInGlobal.js]
+"use strict";
 var a;
 (function (a) {
     a.b = 10;

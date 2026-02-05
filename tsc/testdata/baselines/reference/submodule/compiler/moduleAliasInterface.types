@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleAliasInterface.ts] ////
 
 === moduleAliasInterface.ts ===
-module _modes {
+namespace _modes {
 >_modes : typeof _modes
 
  export interface IMode {
@@ -16,7 +16,7 @@ module _modes {
 
 // _modes. // produces an internal error - please implement in derived class
 
-module editor {
+namespace editor {
 >editor : typeof editor
 
  import modes = _modes;
@@ -50,7 +50,7 @@ import modesOuter = _modes;
 >modesOuter : typeof _modes
 >_modes : typeof _modes
 
-module editor2 {
+namespace editor2 {
 >editor2 : typeof editor2
  
  var i : modesOuter.IMode;
@@ -68,7 +68,7 @@ module editor2 {
   
  }
  
-  module Foo { export class Bar{} }
+  namespace Foo { export class Bar{} }
 >Foo : typeof Foo
 >Bar : Bar
  
@@ -83,7 +83,7 @@ module editor2 {
   }
 }
 
-module A1 {
+namespace A1 {
 >A1 : typeof A1
 
     export interface A1I1 {}
@@ -91,7 +91,7 @@ module A1 {
 >A1C1 : A1C1
 }
 
-module B1 {
+namespace B1 {
 >B1 : typeof B1
 
     import A1Alias1 = A1;

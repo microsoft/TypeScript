@@ -21,6 +21,7 @@ x; // RegExp | string | number | boolean
 
 
 //// [controlFlowForInStatement.js]
+"use strict";
 let x;
 let obj;
 let cond;

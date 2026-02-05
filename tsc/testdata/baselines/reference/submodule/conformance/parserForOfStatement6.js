@@ -5,5 +5,6 @@ for (var a = 1, b = 2 of X) {
 }
 
 //// [parserForOfStatement6.js]
+"use strict";
 for (var a = 1, b = 2 of X) {
 }

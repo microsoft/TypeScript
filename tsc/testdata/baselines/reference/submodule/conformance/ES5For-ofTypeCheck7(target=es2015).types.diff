@@ -1,0 +1,9 @@
+--- old.ES5For-ofTypeCheck7(target=es2015).types
++++ new.ES5For-ofTypeCheck7(target=es2015).types
+@@= skipped -4, +4 lines =@@
+ >union : string | number
+
+ for (var v of union) { }
+->v : any
++>v : string
+ >union : string | number

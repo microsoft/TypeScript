@@ -7,6 +7,7 @@ i.foo;
 i["foo"];
 
 //// [indexedAccessImplicitlyAny.js]
+"use strict";
 ;
 i.foo;
 i["foo"];

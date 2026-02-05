@@ -6,26 +6,26 @@
 getResults1([]);
 >getResults1([]) : Results
 >getResults1 : (value: Results | { data: Results; }) => Results
->[] : undefined[]
+>[] : never[]
 
 getResults1({data: []});
 >getResults1({data: []}) : Results
 >getResults1 : (value: Results | { data: Results; }) => Results
->{data: []} : { data: undefined[]; }
->data : undefined[]
->[] : undefined[]
+>{data: []} : { data: never[]; }
+>data : never[]
+>[] : never[]
 
 getResults2([]);
 >getResults2([]) : Results
 >getResults2 : (value: Results | { data: Results; }) => Results
->[] : undefined[]
+>[] : never[]
 
 getResults2({data: []});
 >getResults2({data: []}) : Results
 >getResults2 : (value: Results | { data: Results; }) => Results
->{data: []} : { data: undefined[]; }
->data : undefined[]
->[] : undefined[]
+>{data: []} : { data: never[]; }
+>data : never[]
+>[] : never[]
 
 type Result = { value: string };
 >Result : Result
@@ -41,10 +41,10 @@ function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
 >data : T
 
     return value.hasOwnProperty('data');
->value.hasOwnProperty('data') : boolean
->value.hasOwnProperty : (v: PropertyKey) => boolean
+>value.hasOwnProperty('data') : any
+>value.hasOwnProperty : any
 >value : T | { data: T; }
->hasOwnProperty : (v: PropertyKey) => boolean
+>hasOwnProperty : any
 >'data' : "data"
 }
 
@@ -71,10 +71,10 @@ function isPlainResponse<T>(value: T | { data: T}): value is T {
 
     return !value.hasOwnProperty('data');
 >!value.hasOwnProperty('data') : boolean
->value.hasOwnProperty('data') : boolean
->value.hasOwnProperty : (v: PropertyKey) => boolean
+>value.hasOwnProperty('data') : any
+>value.hasOwnProperty : any
 >value : T | { data: T; }
->hasOwnProperty : (v: PropertyKey) => boolean
+>hasOwnProperty : any
 >'data' : "data"
 }
 

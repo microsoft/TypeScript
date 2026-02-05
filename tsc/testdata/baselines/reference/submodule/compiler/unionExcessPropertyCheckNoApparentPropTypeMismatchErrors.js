@@ -15,5 +15,6 @@ forEach({ toString: 123 }, () => count++);
 
 
 //// [unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.js]
+"use strict";
 let count = 0;
 forEach({ toString: 123 }, () => count++);

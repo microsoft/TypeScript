@@ -1,0 +1,13 @@
+--- old.restParameterInDownlevelGenerator(target=es2015).errors.txt
++++ new.restParameterInDownlevelGenerator(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-
+-
+-!!! error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-==== restParameterInDownlevelGenerator.ts (0 errors) ====
+-    // https://github.com/Microsoft/TypeScript/issues/30653
+-    function * mergeStringLists(...strings: string[]) {
+-        for (var str of strings);
+-    }
++<no content>

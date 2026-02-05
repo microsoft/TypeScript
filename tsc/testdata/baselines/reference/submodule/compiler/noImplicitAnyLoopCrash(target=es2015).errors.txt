@@ -1,0 +1,18 @@
+noImplicitAnyLoopCrash.ts(4,16): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+noImplicitAnyLoopCrash.ts(4,19): error TS2488: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.
+noImplicitAnyLoopCrash.ts(4,19): error TS2488: Type 'undefined' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== noImplicitAnyLoopCrash.ts (3 errors) ====
+    let foo = () => {};
+    let bar;
+    while (1) {
+        bar = ~foo(...bar);
+                   ~~~~~~
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+                      ~~~
+!!! error TS2488: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.
+                      ~~~
+!!! error TS2488: Type 'undefined' must have a '[Symbol.iterator]()' method that returns an iterator.
+    }
+    

@@ -9,12 +9,13 @@ var y = {
     }
 }
 
-module M {
+namespace M {
     var z = class C4 {
     }
 }
 
 //// [classExpression.js]
+"use strict";
 var x = class C {
 };
 var y = {

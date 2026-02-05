@@ -1,8 +1,8 @@
 --- old.thisTypeInClasses.js
 +++ new.thisTypeInClasses.js
-@@= skipped -53, +53 lines =@@
-
+@@= skipped -54, +54 lines =@@
  //// [thisTypeInClasses.js]
+ "use strict";
  class C1 {
 +    x;
      f(x) { return undefined; }

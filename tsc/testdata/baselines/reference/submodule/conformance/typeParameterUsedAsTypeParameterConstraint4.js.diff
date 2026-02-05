@@ -1,6 +1,6 @@
 --- old.typeParameterUsedAsTypeParameterConstraint4.js
 +++ new.typeParameterUsedAsTypeParameterConstraint4.js
-@@= skipped -58, +58 lines =@@
+@@= skipped -59, +59 lines =@@
  // Type parameters are in scope in their own and other type parameter lists
  // Some negative cases
  class C {

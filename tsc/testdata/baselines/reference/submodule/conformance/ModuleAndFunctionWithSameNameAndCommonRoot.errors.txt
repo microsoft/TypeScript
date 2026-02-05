@@ -1,18 +1,18 @@
-module.ts(2,19): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
-simple.ts(3,19): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+module.ts(2,22): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+simple.ts(3,22): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
 
 
 ==== module.ts (1 errors) ====
-    module A {
-        export module Point {
-                      ~~~~~
+    namespace A {
+        export namespace Point {
+                         ~~~~~
 !!! error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
             export var Origin = { x: 0, y: 0 };
         }
     }
     
 ==== function.ts (0 errors) ====
-    module A {
+    namespace A {
         // duplicate identifier error
         export function Point() {
             return { x: 0, y: 0 };
@@ -20,10 +20,10 @@ simple.ts(3,19): error TS2434: A namespace declaration cannot be located prior t
     }
     
 ==== simple.ts (1 errors) ====
-    module B {
+    namespace B {
     
-        export module Point {
-                      ~~~~~
+        export namespace Point {
+                         ~~~~~
 !!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
             export var Origin = { x: 0, y: 0 };
         }

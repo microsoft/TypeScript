@@ -1,0 +1,62 @@
+validMultipleVariableDeclarations.ts(9,9): error TS2352: Conversion of type 'undefined' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+validMultipleVariableDeclarations.ts(20,24): error TS2322: Type 'undefined' is not assignable to type 'number'.
+validMultipleVariableDeclarations.ts(21,20): error TS2352: Conversion of type 'undefined' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+validMultipleVariableDeclarations.ts(23,9): error TS2352: Conversion of type '{ x: number; y: undefined; }' to type '{ x: number; y: number; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Types of property 'y' are incompatible.
+    Type 'undefined' is not comparable to type 'number'.
+validMultipleVariableDeclarations.ts(30,10): error TS2352: Conversion of type 'null' to type '(s: string) => number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== validMultipleVariableDeclarations.ts (5 errors) ====
+    // all expected to be valid
+    
+    var x: number;
+    var x = 2;
+    if (true) {
+        var x = 3;
+        for (var x = 0; ;) { }
+    }
+    var x = <number>undefined;
+            ~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'undefined' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    
+    // new declaration space, making redeclaring x as a string valid
+    function declSpace() {
+        var x = 'this is a string';
+    }
+    
+    interface Point { x: number; y: number; }
+    
+    var p: Point;
+    var p = { x: 1, y: 2 };
+    var p: Point = { x: 0, y: undefined };
+                           ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'number'.
+!!! related TS6500 validMultipleVariableDeclarations.ts:16:30: The expected type comes from property 'y' which is declared here on type 'Point'
+    var p = { x: 1, y: <number>undefined };
+                       ~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'undefined' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    var p: { x: number; y: number; } = { x: 1, y: 2 };
+    var p = <{ x: number; y: number; }>{ x: 0, y: undefined };
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type '{ x: number; y: undefined; }' to type '{ x: number; y: number; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   Types of property 'y' are incompatible.
+!!! error TS2352:     Type 'undefined' is not comparable to type 'number'.
+    var p: typeof p;
+    
+    var fn = function (s: string) { return 42; }
+    var fn = (s: string) => 3;
+    var fn: (s: string) => number;
+    var fn: { (s: string): number };
+    var fn = <(s: string) => number> null;
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'null' to type '(s: string) => number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    var fn: typeof fn;
+    
+    var a: string[]; 
+    var a = ['a', 'b']
+    var a = <string[]>[];
+    var a: string[] = [];
+    var a = new Array<string>();
+    var a: typeof a;
+    

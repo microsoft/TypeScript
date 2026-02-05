@@ -5,10 +5,18 @@
 -
 -
 -==== index.js (1 errors) ====
--    function toString() {
--        this.yadda
++index.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++index.js(3,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++
++
++==== index.js (2 errors) ====
+     function toString() {
+         this.yadda
 -             ~~~~~
 -!!! error TS2339: Property 'yadda' does not exist on type 'toString'.
--        this.someValue = "";
--    }
-+<no content>
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+         this.someValue = "";
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+     }

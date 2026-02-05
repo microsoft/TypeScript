@@ -57,6 +57,7 @@ class C23 extends Constructor<Identifiable<T1 & { b: number}>>() { x: string }
 
 
 //// [interfaceExtendsObjectIntersection.js]
+"use strict";
 class C1 extends Constructor() {
     x;
 }

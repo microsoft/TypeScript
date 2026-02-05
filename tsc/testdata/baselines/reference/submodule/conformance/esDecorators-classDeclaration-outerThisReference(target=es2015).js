@@ -38,6 +38,7 @@ class C {
 }
 
 //// [esDecorators-classDeclaration-outerThisReference.js]
+"use strict";
 // `this` should point to the outer `this` in both cases.
 @dec(this)
 class A {

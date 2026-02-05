@@ -12,6 +12,7 @@ function base_init() {
 
 
 //// [missingCloseBrace.js]
+"use strict";
 function base_init() {
     {
     }

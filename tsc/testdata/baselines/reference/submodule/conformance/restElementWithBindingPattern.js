@@ -4,4 +4,5 @@
 var [...[a, b]] = [0, 1];
 
 //// [restElementWithBindingPattern.js]
+"use strict";
 var [...[a, b]] = [0, 1];

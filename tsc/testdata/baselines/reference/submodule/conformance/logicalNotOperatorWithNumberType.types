@@ -2,7 +2,7 @@
 
 === logicalNotOperatorWithNumberType.ts ===
 // ! operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 >NUMBER : number
 
 var NUMBER1: number[] = [1, 2];
@@ -18,17 +18,17 @@ function foo(): number { return 1; }
 class A {
 >A : A
 
-    public a: number;
+    public a!: number;
 >a : number
 
     static foo() { return 1; }
 >foo : () => number
 >1 : 1
 }
-module M {
+namespace M {
 >M : typeof M
 
-    export var n: number;
+    export declare var n: number;
 >n : number
 }
 
@@ -45,18 +45,18 @@ var ResultIsBoolean1 = !NUMBER;
 
 var ResultIsBoolean2 = !NUMBER1;
 >ResultIsBoolean2 : boolean
->!NUMBER1 : boolean
+>!NUMBER1 : false
 >NUMBER1 : number[]
 
 // number type literal
 var ResultIsBoolean3 = !1;
 >ResultIsBoolean3 : boolean
->!1 : boolean
+>!1 : false
 >1 : 1
 
 var ResultIsBoolean4 = !{ x: 1, y: 2};
 >ResultIsBoolean4 : boolean
->!{ x: 1, y: 2} : boolean
+>!{ x: 1, y: 2} : false
 >{ x: 1, y: 2} : { x: number; y: number; }
 >x : number
 >1 : 1
@@ -65,7 +65,7 @@ var ResultIsBoolean4 = !{ x: 1, y: 2};
 
 var ResultIsBoolean5 = !{ x: 1, y: (n: number) => { return n; } };
 >ResultIsBoolean5 : boolean
->!{ x: 1, y: (n: number) => { return n; } } : boolean
+>!{ x: 1, y: (n: number) => { return n; } } : false
 >{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
 >x : number
 >1 : 1
@@ -137,7 +137,7 @@ var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
 
 // miss assignment operators
 !1;
->!1 : boolean
+>!1 : false
 >1 : 1
 
 !NUMBER;
@@ -145,7 +145,7 @@ var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
 >NUMBER : number
 
 !NUMBER1;
->!NUMBER1 : boolean
+>!NUMBER1 : false
 >NUMBER1 : number[]
 
 !foo();

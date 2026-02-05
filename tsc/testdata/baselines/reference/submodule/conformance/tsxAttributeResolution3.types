@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution3.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: Attribs1;
@@ -13,10 +13,10 @@ interface Attribs1 {
 >x : string
 
 	y?: number;
->y : number
+>y : number | undefined
 
 	z?: string;
->z : string
+>z : string | undefined
 }
 
 // OK

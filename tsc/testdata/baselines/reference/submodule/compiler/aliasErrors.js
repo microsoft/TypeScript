@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/aliasErrors.ts] ////
 
 //// [aliasErrors.ts]
-module foo {    
+namespace foo {    
     export class Provide {
     }
-    export module bar { export module baz {export class boo {}}}
+    export namespace bar { export namespace baz {export class boo {}}}
 }
 
 import provide = foo;
@@ -33,6 +33,7 @@ function use() {
 
 
 //// [aliasErrors.js]
+"use strict";
 var foo;
 (function (foo) {
     class Provide {

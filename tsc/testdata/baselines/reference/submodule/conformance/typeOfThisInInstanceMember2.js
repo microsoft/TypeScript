@@ -38,6 +38,7 @@ rs.forEach(x => {
 });
 
 //// [typeOfThisInInstanceMember2.js]
+"use strict";
 class C {
     x = this;
     foo() {

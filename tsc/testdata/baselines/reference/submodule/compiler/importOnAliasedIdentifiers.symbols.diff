@@ -4,8 +4,8 @@
      import Z = A.X; // Alias for both type and member A.X
  >Z : Symbol(Z, Decl(importOnAliasedIdentifiers.ts, 6, 17))
  >A : Symbol(Y, Decl(importOnAliasedIdentifiers.ts, 0, 0))
-->X : Symbol(Y.X, Decl(importOnAliasedIdentifiers.ts, 0, 10), Decl(importOnAliasedIdentifiers.ts, 2, 14))
-+>X : Symbol(Z, Decl(importOnAliasedIdentifiers.ts, 0, 10), Decl(importOnAliasedIdentifiers.ts, 2, 14))
+->X : Symbol(Y.X, Decl(importOnAliasedIdentifiers.ts, 0, 13), Decl(importOnAliasedIdentifiers.ts, 2, 14))
++>X : Symbol(Z, Decl(importOnAliasedIdentifiers.ts, 0, 13), Decl(importOnAliasedIdentifiers.ts, 2, 14))
 
      var v: Z = Z;
  >v : Symbol(v, Decl(importOnAliasedIdentifiers.ts, 8, 7))

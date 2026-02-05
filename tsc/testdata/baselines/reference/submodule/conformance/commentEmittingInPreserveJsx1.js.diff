@@ -1,6 +1,6 @@
 --- old.commentEmittingInPreserveJsx1.js
 +++ new.commentEmittingInPreserveJsx1.js
-@@= skipped -40, +40 lines =@@
+@@= skipped -43, +43 lines =@@
  </div>;
  <div>
      // Not Comment

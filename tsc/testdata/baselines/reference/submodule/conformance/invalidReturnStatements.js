@@ -23,6 +23,7 @@ function fn11(): D { return new C(); }
 
 
 //// [invalidReturnStatements.js]
+"use strict";
 // all the following should be error
 function fn1() { }
 function fn2() { }

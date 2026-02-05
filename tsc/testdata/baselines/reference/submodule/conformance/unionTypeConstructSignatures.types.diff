@@ -1,0 +1,124 @@
+--- old.unionTypeConstructSignatures.types
++++ new.unionTypeConstructSignatures.types
+@@= skipped -126, +126 lines =@@
+ >10 : 10
+
+ declare var unionWithOptionalParameter1: { new (a: string, b?: number): string; } | { new (a: string, b?: number): number; };
+->unionWithOptionalParameter1 : (new (a: string, b?: number) => string) | (new (a: string, b?: number) => number)
++>unionWithOptionalParameter1 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b?: number | undefined) => number)
+ >a : string
+ >b : number | undefined
+ >a : string
+@@= skipped -10, +10 lines =@@
+ >strOrNum = new unionWithOptionalParameter1('hello') : string | number
+ >strOrNum : string | number
+ >new unionWithOptionalParameter1('hello') : string | number
+->unionWithOptionalParameter1 : (new (a: string, b?: number) => string) | (new (a: string, b?: number) => number)
++>unionWithOptionalParameter1 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b?: number | undefined) => number)
+ >'hello' : "hello"
+
+ strOrNum = new unionWithOptionalParameter1('hello', 10);
+ >strOrNum = new unionWithOptionalParameter1('hello', 10) : string | number
+ >strOrNum : string | number
+ >new unionWithOptionalParameter1('hello', 10) : string | number
+->unionWithOptionalParameter1 : (new (a: string, b?: number) => string) | (new (a: string, b?: number) => number)
++>unionWithOptionalParameter1 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b?: number | undefined) => number)
+ >'hello' : "hello"
+ >10 : 10
+
+@@= skipped -15, +15 lines =@@
+ >strOrNum = new unionWithOptionalParameter1('hello', "hello") : string | number
+ >strOrNum : string | number
+ >new unionWithOptionalParameter1('hello', "hello") : string | number
+->unionWithOptionalParameter1 : (new (a: string, b?: number) => string) | (new (a: string, b?: number) => number)
++>unionWithOptionalParameter1 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b?: number | undefined) => number)
+ >'hello' : "hello"
+ >"hello" : "hello"
+
+@@= skipped -8, +8 lines =@@
+ >strOrNum = new unionWithOptionalParameter1() : string | number
+ >strOrNum : string | number
+ >new unionWithOptionalParameter1() : string | number
+->unionWithOptionalParameter1 : (new (a: string, b?: number) => string) | (new (a: string, b?: number) => number)
++>unionWithOptionalParameter1 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b?: number | undefined) => number)
+
+ declare var unionWithOptionalParameter2: { new (a: string, b?: number): string; } | { new (a: string, b: number): number };
+->unionWithOptionalParameter2 : (new (a: string, b?: number) => string) | (new (a: string, b: number) => number)
++>unionWithOptionalParameter2 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b: number) => number)
+ >a : string
+ >b : number | undefined
+ >a : string
+@@= skipped -13, +13 lines =@@
+ >strOrNum = new unionWithOptionalParameter2('hello') : string | number
+ >strOrNum : string | number
+ >new unionWithOptionalParameter2('hello') : string | number
+->unionWithOptionalParameter2 : (new (a: string, b?: number) => string) | (new (a: string, b: number) => number)
++>unionWithOptionalParameter2 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b: number) => number)
+ >'hello' : "hello"
+
+ strOrNum = new unionWithOptionalParameter2('hello', 10); // error no call signature
+ >strOrNum = new unionWithOptionalParameter2('hello', 10) : string | number
+ >strOrNum : string | number
+ >new unionWithOptionalParameter2('hello', 10) : string | number
+->unionWithOptionalParameter2 : (new (a: string, b?: number) => string) | (new (a: string, b: number) => number)
++>unionWithOptionalParameter2 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b: number) => number)
+ >'hello' : "hello"
+ >10 : 10
+
+@@= skipped -15, +15 lines =@@
+ >strOrNum = new unionWithOptionalParameter2('hello', "hello") : string | number
+ >strOrNum : string | number
+ >new unionWithOptionalParameter2('hello', "hello") : string | number
+->unionWithOptionalParameter2 : (new (a: string, b?: number) => string) | (new (a: string, b: number) => number)
++>unionWithOptionalParameter2 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b: number) => number)
+ >'hello' : "hello"
+ >"hello" : "hello"
+
+@@= skipped -8, +8 lines =@@
+ >strOrNum = new unionWithOptionalParameter2() : string | number
+ >strOrNum : string | number
+ >new unionWithOptionalParameter2() : string | number
+->unionWithOptionalParameter2 : (new (a: string, b?: number) => string) | (new (a: string, b: number) => number)
++>unionWithOptionalParameter2 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b: number) => number)
+
+ declare var unionWithOptionalParameter3: { new (a: string, b?: number): string; } | { new (a: string): number; };
+->unionWithOptionalParameter3 : (new (a: string, b?: number) => string) | (new (a: string) => number)
++>unionWithOptionalParameter3 : (new (a: string, b?: number | undefined) => string) | (new (a: string) => number)
+ >a : string
+ >b : number | undefined
+ >a : string
+@@= skipped -12, +12 lines =@@
+ >strOrNum = new unionWithOptionalParameter3('hello') : string | number
+ >strOrNum : string | number
+ >new unionWithOptionalParameter3('hello') : string | number
+->unionWithOptionalParameter3 : (new (a: string, b?: number) => string) | (new (a: string) => number)
++>unionWithOptionalParameter3 : (new (a: string, b?: number | undefined) => string) | (new (a: string) => number)
+ >'hello' : "hello"
+
+ strOrNum = new unionWithOptionalParameter3('hello', 10); // ok
+ >strOrNum = new unionWithOptionalParameter3('hello', 10) : string | number
+ >strOrNum : string | number
+ >new unionWithOptionalParameter3('hello', 10) : string | number
+->unionWithOptionalParameter3 : (new (a: string, b?: number) => string) | (new (a: string) => number)
++>unionWithOptionalParameter3 : (new (a: string, b?: number | undefined) => string) | (new (a: string) => number)
+ >'hello' : "hello"
+ >10 : 10
+
+@@= skipped -15, +15 lines =@@
+ >strOrNum = new unionWithOptionalParameter3('hello', "hello") : string | number
+ >strOrNum : string | number
+ >new unionWithOptionalParameter3('hello', "hello") : string | number
+->unionWithOptionalParameter3 : (new (a: string, b?: number) => string) | (new (a: string) => number)
++>unionWithOptionalParameter3 : (new (a: string, b?: number | undefined) => string) | (new (a: string) => number)
+ >'hello' : "hello"
+ >"hello" : "hello"
+
+@@= skipped -8, +8 lines =@@
+ >strOrNum = new unionWithOptionalParameter3() : string | number
+ >strOrNum : string | number
+ >new unionWithOptionalParameter3() : string | number
+->unionWithOptionalParameter3 : (new (a: string, b?: number) => string) | (new (a: string) => number)
++>unionWithOptionalParameter3 : (new (a: string, b?: number | undefined) => string) | (new (a: string) => number)
+
+ declare var unionWithRestParameter1: { new (a: string, ...b: number[]): string; } | { new (a: string, ...b: number[]): number };
+ >unionWithRestParameter1 : (new (a: string, ...b: number[]) => string) | (new (a: string, ...b: number[]) => number)

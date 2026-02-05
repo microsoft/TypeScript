@@ -1,24 +1,24 @@
 //// [tests/cases/compiler/nameCollisions.ts] ////
 
 === nameCollisions.ts ===
-module T {
+namespace T {
 >T : Symbol(T, Decl(nameCollisions.ts, 0, 0))
 
     var x = 2;
 >x : Symbol(x, Decl(nameCollisions.ts, 1, 7))
 
-    module x { // error
+    namespace x { // error
 >x : Symbol(x, Decl(nameCollisions.ts, 1, 14))
 
         export class Bar {
->Bar : Symbol(Bar, Decl(nameCollisions.ts, 3, 14))
+>Bar : Symbol(Bar, Decl(nameCollisions.ts, 3, 17))
 
             test: number;
 >test : Symbol(Bar.test, Decl(nameCollisions.ts, 4, 26))
         }
     }
 
-    module z {
+    namespace z {
 >z : Symbol(z, Decl(nameCollisions.ts, 7, 5))
 
         var t;
@@ -27,7 +27,7 @@ module T {
     var z; // error
 >z : Symbol(z, Decl(nameCollisions.ts, 12, 7))
 
-    module y {
+    namespace y {
 >y : Symbol(y, Decl(nameCollisions.ts, 12, 10), Decl(nameCollisions.ts, 16, 5))
 
         var b;
@@ -40,7 +40,7 @@ module T {
     var w;
 >w : Symbol(w, Decl(nameCollisions.ts, 20, 7), Decl(nameCollisions.ts, 20, 10))
 
-    module w { } //ok
+    namespace w { } //ok
 >w : Symbol(w, Decl(nameCollisions.ts, 20, 7), Decl(nameCollisions.ts, 20, 10))
 
     var f;

@@ -44,8 +44,6 @@ export type AddFirstParameterToFunctions<Target> = {
 };
 
 //// [callOfConditionalTypeWithConcreteBranches.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function fn(arg) {
     // Expected: OK
     // Actual: Cannot convert 10 to number & T
@@ -62,3 +60,4 @@ function fn2(arg) {
 // Legal invocations are not problematic
 fn2(m => m(42));
 fn2(m => m(42));
+export {};

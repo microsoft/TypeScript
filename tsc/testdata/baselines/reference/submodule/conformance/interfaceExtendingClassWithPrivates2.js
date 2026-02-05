@@ -2,11 +2,11 @@
 
 //// [interfaceExtendingClassWithPrivates2.ts]
 class Foo {
-    private x: string;
+    private x!: string;
 }
 
 class Bar {
-    private x: string;
+    private x!: string;
 }
 
 interface I3 extends Foo, Bar { // error
@@ -17,19 +17,20 @@ interface I4 extends Foo, Bar { // error
 }
 
 class Baz {
-    private y: string;
+    private y!: string;
 }
 
 interface I5 extends Foo, Baz {
     z: string;
 }
 
-var i: I5;
+declare var i: I5;
 var r: string = i.z;
 var r2 = i.x; // error
 var r3 = i.y; // error
 
 //// [interfaceExtendingClassWithPrivates2.js]
+"use strict";
 class Foo {
     x;
 }
@@ -39,7 +40,6 @@ class Bar {
 class Baz {
     y;
 }
-var i;
 var r = i.z;
 var r2 = i.x; // error
 var r3 = i.y; // error

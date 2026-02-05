@@ -11,6 +11,7 @@ function unreachable() {
 
 
 //// [unreachable.js]
+"use strict";
 function unreachable() {
     return f();
     return 2;

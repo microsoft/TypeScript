@@ -4,4 +4,5 @@
 var v = || b;
 
 //// [parseIncompleteBinaryExpression1.js]
+"use strict";
 var v =  || b;

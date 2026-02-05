@@ -1,0 +1,11 @@
+--- old.parserEnum3.js
++++ new.parserEnum3.js
+@@= skipped -4, +4 lines =@@
+     }
+
+ //// [parserEnum3.js]
+-export var SignatureFlags;
++export { SignatureFlags };
++var SignatureFlags;
+ (function (SignatureFlags) {
+ })(SignatureFlags || (SignatureFlags = {}));

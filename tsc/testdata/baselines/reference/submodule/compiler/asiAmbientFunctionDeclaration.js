@@ -4,3 +4,4 @@
 declare function foo()
 
 //// [asiAmbientFunctionDeclaration.js]
+"use strict";

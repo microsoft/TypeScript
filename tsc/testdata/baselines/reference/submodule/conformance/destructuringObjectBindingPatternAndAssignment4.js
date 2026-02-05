@@ -12,6 +12,7 @@ const {
 
 
 //// [destructuringObjectBindingPatternAndAssignment4.js]
+"use strict";
 const { a = 1, b = 2, c = b, // ok
 d = a, // ok
 e = f, // error

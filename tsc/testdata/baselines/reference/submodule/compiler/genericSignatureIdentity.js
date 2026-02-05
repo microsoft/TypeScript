@@ -24,6 +24,7 @@ var x: {
 
 
 //// [genericSignatureIdentity.js]
+"use strict";
 // This test is here to remind us of our current limits of type identity checking.
 // Ideally all of the below declarations would be considered different (and thus errors)
 // but they aren't because we erase type parameters to type any and don't check that

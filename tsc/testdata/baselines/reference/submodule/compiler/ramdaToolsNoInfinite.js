@@ -123,3 +123,4 @@ declare namespace Curry {
 
 
 //// [ramdaToolsNoInfinite.js]
+"use strict";

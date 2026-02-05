@@ -5,5 +5,6 @@ for (let v of X) {
 }
 
 //// [parserForOfStatement9.js]
+"use strict";
 for (let v of X) {
 }

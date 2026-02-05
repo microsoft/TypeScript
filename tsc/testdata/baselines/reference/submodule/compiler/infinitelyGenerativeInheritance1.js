@@ -12,3 +12,4 @@ interface MyStack<T> extends Stack<T> {
 
 
 //// [infinitelyGenerativeInheritance1.js]
+"use strict";

@@ -66,6 +66,7 @@ export default abstract @dec class C15 {}
 
 
 //// [global.js]
+"use strict";
 /** @type {*} */
 var dec;
 //// [file1.js]
@@ -111,6 +112,7 @@ export default
 class C7 {
 }
 //// [file8.js]
+"use strict";
 // ok
 @dec
 class C8 {
@@ -138,12 +140,14 @@ export default
 class C12 {
 }
 //// [file13.js]
+"use strict";
 // error
 abstract;
 @dec
 class C13 {
 }
 //// [file14.js]
+"use strict";
 abstract;
 @dec
 class C14 {

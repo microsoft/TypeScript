@@ -12,7 +12,8 @@ func TestCompletions03(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface Foo {
+	const content = `// @lib: es5
+interface Foo {
    one: any;
    two: any;
    three: any;

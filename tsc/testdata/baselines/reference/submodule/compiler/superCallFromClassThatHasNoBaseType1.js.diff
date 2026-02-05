@@ -1,8 +1,8 @@
 --- old.superCallFromClassThatHasNoBaseType1.js
 +++ new.superCallFromClassThatHasNoBaseType1.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [superCallFromClassThatHasNoBaseType1.js]
+ "use strict";
  class A {
 +    map;
      constructor(map) {

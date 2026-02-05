@@ -22,7 +22,7 @@ privateVisibility.ts(24,3): error TS2341: Property 'priv' is private and only ac
     f.pubMeth(); // should work
     f.pubProp; // should work
     
-    module M {
+    namespace M {
         export class C { public pub = 0; private priv = 1; }
         export var V = 0;
     }

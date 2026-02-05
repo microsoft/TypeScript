@@ -1,8 +1,8 @@
 --- old.classExpressions.js
 +++ new.classExpressions.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [classExpressions.js]
+ "use strict";
  let x = class B {
 -    constructor() {
 -        this.func = () => {

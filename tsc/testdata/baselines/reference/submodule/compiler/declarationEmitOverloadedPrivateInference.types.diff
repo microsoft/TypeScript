@@ -5,22 +5,47 @@
 
      private proxy<T, U>(fn: (options: T) => U): (options: T) => U;
 ->proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T_1, U_1>(fn: (options?: T_1) => U_1, noArgs: true): (options?: T_1) => U_1; }
-+>proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
++>proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T | undefined) => U, noArgs: true): (options?: T | undefined) => U; }
  >fn : (options: T) => U
  >options : T
  >options : T
 
      private proxy<T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U;
 ->proxy : { <T_1, U_1>(fn: (options: T_1) => U_1): (options: T_1) => U_1; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
-+>proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
- >fn : (options?: T) => U
- >options : T
+->fn : (options?: T) => U
++>proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T | undefined) => U, noArgs: true): (options?: T | undefined) => U; }
++>fn : (options?: T | undefined) => U
+ >options : T | undefined
  >noArgs : true
-@@= skipped -14, +14 lines =@@
- >options : T
+ >true : true
+ >options : T | undefined
 
      private proxy<T, U>(fn: (options: T) => U) {
 ->proxy : { <T_1, U_1>(fn: (options: T_1) => U_1): (options: T_1) => U_1; <T_1, U_1>(fn: (options?: T_1) => U_1, noArgs: true): (options?: T_1) => U_1; }
-+>proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
++>proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T | undefined) => U, noArgs: true): (options?: T | undefined) => U; }
  >fn : (options: T) => U
  >options : T
+
+@@= skipped -29, +29 lines =@@
+         Failure: this.proxy(noArgs, true),
+ >Failure : (options?: unknown) => string
+ >this.proxy(noArgs, true) : (options?: unknown) => string
+->this.proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
++>this.proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T | undefined) => U, noArgs: true): (options?: T | undefined) => U; }
+ >this : this
+->proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
++>proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T | undefined) => U, noArgs: true): (options?: T | undefined) => U; }
+ >noArgs : () => string
+ >true : true
+
+         Success: this.proxy(oneArg),
+ >Success : (options: string) => string
+ >this.proxy(oneArg) : (options: string) => string
+->this.proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
++>this.proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T | undefined) => U, noArgs: true): (options?: T | undefined) => U; }
+ >this : this
+->proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
++>proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T | undefined) => U, noArgs: true): (options?: T | undefined) => U; }
+ >oneArg : (input: string) => string
+
+     };

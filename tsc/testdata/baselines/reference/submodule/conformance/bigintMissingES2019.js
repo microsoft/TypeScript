@@ -10,6 +10,7 @@ test<{t?: string}, bigint>();
 
 
 //// [bigintMissingES2019.js]
+"use strict";
 test();
 test();
 // no error when bigint is used even when ES2020 lib is not present

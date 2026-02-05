@@ -1,0 +1,52 @@
+stringLiteralTypeAssertion01.ts(10,8): error TS2454: Variable 't' is used before being assigned.
+stringLiteralTypeAssertion01.ts(11,5): error TS2454: Variable 't' is used before being assigned.
+stringLiteralTypeAssertion01.ts(13,8): error TS2454: Variable 'str' is used before being assigned.
+stringLiteralTypeAssertion01.ts(14,5): error TS2454: Variable 'str' is used before being assigned.
+stringLiteralTypeAssertion01.ts(21,8): error TS2454: Variable 'str' is used before being assigned.
+stringLiteralTypeAssertion01.ts(22,5): error TS2454: Variable 'str' is used before being assigned.
+
+
+==== stringLiteralTypeAssertion01.ts (6 errors) ====
+    type S = "a" | "b";
+    type T = S[] | S;
+    
+    var s: S;
+    var t: T;
+    var str: string;
+    
+    ////////////////
+    
+    s = <S>t;
+           ~
+!!! error TS2454: Variable 't' is used before being assigned.
+    s = t as S;
+        ~
+!!! error TS2454: Variable 't' is used before being assigned.
+    
+    s = <S>str;
+           ~~~
+!!! error TS2454: Variable 'str' is used before being assigned.
+    s = str as S;
+        ~~~
+!!! error TS2454: Variable 'str' is used before being assigned.
+    
+    ////////////////
+    
+    t = <T>s;
+    t = s as T;
+    
+    t = <T>str;
+           ~~~
+!!! error TS2454: Variable 'str' is used before being assigned.
+    t = str as T;
+        ~~~
+!!! error TS2454: Variable 'str' is used before being assigned.
+    
+    ////////////////
+    
+    str = <string>s;
+    str = s as string;
+    
+    str = <string>t;
+    str = t as string;
+    

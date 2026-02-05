@@ -31,6 +31,7 @@ var y = 10;
 
 
 //// [emitPostComments.js]
+"use strict";
 var y = 10;
 /**
 * @name Foo

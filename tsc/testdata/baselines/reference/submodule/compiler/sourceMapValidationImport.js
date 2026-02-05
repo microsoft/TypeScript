@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/sourceMapValidationImport.ts] ////
 
 //// [sourceMapValidationImport.ts]
-export module m {
+export namespace m {
     export class c {
     }
 }

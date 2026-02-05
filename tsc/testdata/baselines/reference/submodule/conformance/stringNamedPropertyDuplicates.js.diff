@@ -1,8 +1,8 @@
 --- old.stringNamedPropertyDuplicates.js
 +++ new.stringNamedPropertyDuplicates.js
-@@= skipped -24, +24 lines =@@
-
+@@= skipped -25, +25 lines =@@
  //// [stringNamedPropertyDuplicates.js]
+ "use strict";
  class C {
 +    "a b";
 +    "a b";

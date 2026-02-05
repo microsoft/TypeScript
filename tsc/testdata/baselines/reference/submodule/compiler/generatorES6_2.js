@@ -8,6 +8,7 @@ class C {
 }
 
 //// [generatorES6_2.js]
+"use strict";
 class C {
     *foo() {
         yield 1;

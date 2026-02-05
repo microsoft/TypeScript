@@ -27,6 +27,7 @@ else if (y != z || z != y) {
 }
 
 //// [equalityWithIntersectionTypes01.js]
+"use strict";
 var x = { p1: 10, p2: 20, p3: 30 };
 var y = x;
 var z = x;

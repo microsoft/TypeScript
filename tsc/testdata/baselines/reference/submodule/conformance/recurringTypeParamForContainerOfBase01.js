@@ -14,6 +14,7 @@ interface Bar<T extends Bar<T>> extends Foo<T> {
 }
 
 //// [recurringTypeParamForContainerOfBase01.js]
+"use strict";
 
 
 //// [recurringTypeParamForContainerOfBase01.d.ts]

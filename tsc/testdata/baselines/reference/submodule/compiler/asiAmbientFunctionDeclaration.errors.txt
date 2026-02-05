@@ -1,0 +1,7 @@
+asiAmbientFunctionDeclaration.ts(1,18): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
+
+
+==== asiAmbientFunctionDeclaration.ts (1 errors) ====
+    declare function foo()
+                     ~~~
+!!! error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.

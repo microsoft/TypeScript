@@ -1,8 +1,8 @@
 --- old.genericBaseClassLiteralProperty.js
 +++ new.genericBaseClassLiteralProperty.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [genericBaseClassLiteralProperty.js]
+ "use strict";
  class BaseClass {
 +    _getValue1;
 +    _getValue2;

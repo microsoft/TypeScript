@@ -1,8 +1,8 @@
 --- old.modifierOnClassExpressionMemberInFunction.js
 +++ new.modifierOnClassExpressionMemberInFunction.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [modifierOnClassExpressionMemberInFunction.js]
+ "use strict";
  function g() {
 -    var _a;
 -    var x = (_a = class C {

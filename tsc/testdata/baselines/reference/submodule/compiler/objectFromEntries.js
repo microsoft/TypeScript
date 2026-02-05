@@ -13,6 +13,7 @@ const o5 = Object.fromEntries(frozenArray2);
 
 
 //// [objectFromEntries.js]
+"use strict";
 const o = Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]);
 const o2 = Object.fromEntries(new URLSearchParams());
 const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));

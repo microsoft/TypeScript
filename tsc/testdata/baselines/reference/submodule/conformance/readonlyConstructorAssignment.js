@@ -42,6 +42,7 @@ class E extends D {
 
 
 //// [readonlyConstructorAssignment.js]
+"use strict";
 // Tests that readonly parameter properties behave like regular readonly properties
 class A {
     x;

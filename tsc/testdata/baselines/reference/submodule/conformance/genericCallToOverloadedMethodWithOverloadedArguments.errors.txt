@@ -19,20 +19,20 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
 
 
 ==== genericCallToOverloadedMethodWithOverloadedArguments.ts (4 errors) ====
-    module m1 {
+    namespace m1 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         }
     
         declare function testFunction(n: number): Promise<number>;
     
-        var numPromise: Promise<number>;
+        declare var numPromise: Promise<number>;
         var newPromise = numPromise.then(testFunction);
     }
     
     //////////////////////////////////////
     
-    module m2 {
+    namespace m2 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         }
@@ -40,7 +40,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
         declare function testFunction(n: number): Promise<number>;
         declare function testFunction(s: string): Promise<string>;
     
-        var numPromise: Promise<number>;
+        declare var numPromise: Promise<number>;
         var newPromise = numPromise.then(testFunction);
                                          ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
@@ -50,7 +50,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m3 {
+    namespace m3 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -58,13 +58,13 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
         declare function testFunction(n: number): Promise<number>;
     
-        var numPromise: Promise<number>;
+        declare var numPromise: Promise<number>;
         var newPromise = numPromise.then(testFunction);
     }
     
     //////////////////////////////////////
     
-    module m4 {
+    namespace m4 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -73,7 +73,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
         declare function testFunction(n: number): Promise<number>;
         declare function testFunction(s: string): Promise<string>;
     
-        var numPromise: Promise<number>;
+        declare var numPromise: Promise<number>;
         var newPromise = numPromise.then(testFunction);
                                          ~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -86,7 +86,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m5 {
+    namespace m5 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -96,7 +96,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
         declare function testFunction(n: number): Promise<number>;
         declare function testFunction(s: string): Promise<string>;
     
-        var numPromise: Promise<number>;
+        declare var numPromise: Promise<number>;
         var newPromise = numPromise.then(testFunction);
                                          ~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -109,7 +109,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
     
     //////////////////////////////////////
     
-    module m6 {
+    namespace m6 {
         interface Promise<T> {
             then<U>(cb: (x: T) => Promise<U>): Promise<U>;
             then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -119,7 +119,7 @@ genericCallToOverloadedMethodWithOverloadedArguments.ts(84,38): error TS2769: No
         declare function testFunction(s: string): Promise<string>;
         declare function testFunction(b: boolean): Promise<boolean>;
     
-        var numPromise: Promise<number>;
+        declare var numPromise: Promise<number>;
         var newPromise = numPromise.then(testFunction);
                                          ~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.

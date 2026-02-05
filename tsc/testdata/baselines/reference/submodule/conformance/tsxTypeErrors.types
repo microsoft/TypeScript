@@ -41,15 +41,15 @@ class MyClass {
 >MyClass : MyClass
 
   props: {
->props : { pt?: { x: number; y: number; }; name?: string; reqd: boolean; }
+>props : { pt?: { x: number; y: number; } | undefined; name?: string | undefined; reqd: boolean; }
 
     pt?: { x: number; y: number; };
->pt : { x: number; y: number; }
+>pt : { x: number; y: number; } | undefined
 >x : number
 >y : number
 
 	name?: string;
->name : string
+>name : string | undefined
 
 	reqd: boolean;
 >reqd : boolean

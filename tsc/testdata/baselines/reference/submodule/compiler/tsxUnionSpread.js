@@ -25,8 +25,6 @@ var props2:AnimalInfo = { type: 'Cat', subType: 'Large' };
 var component2 = <AnimalComponent {...props2} />
 
 //// [index.jsx]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function AnimalComponent(info) {
     return undefined;
 }
@@ -38,3 +36,4 @@ var props = getProps();
 var component = <AnimalComponent {...props}/>;
 var props2 = { type: 'Cat', subType: 'Large' };
 var component2 = <AnimalComponent {...props2}/>;
+export {};

@@ -39,7 +39,7 @@ interface fn1 {
     new (s: number): number;
 >s : number
 }
-var fn1: fn1;
+declare var fn1: fn1;
 >fn1 : fn1
 
 // Ambiguous call picks the first overload in declaration order
@@ -68,7 +68,7 @@ interface fn2 {
 >n : number
 >t : T
 }
-var fn2: fn2;
+declare var fn2: fn2;
 >fn2 : fn2
 
 var d = new fn2<Date>(0, undefined);
@@ -118,7 +118,7 @@ interface fn3 {
 >u : U
 >t : T
 }
-var fn3: fn3;
+declare var fn3: fn3;
 >fn3 : fn3
 
 var s = new fn3(3);
@@ -184,7 +184,7 @@ interface fn4 {
 >n : T
 >m : U
 }
-var fn4: fn4;
+declare var fn4: fn4;
 >fn4 : fn4
 
 new fn4<string, number>('', 3);
@@ -261,7 +261,7 @@ interface fn5 {
 >f : (n: number) => void
 >n : number
 }
-var fn5: fn5;
+declare var fn5: fn5;
 >fn5 : fn5
 
 var n = new fn5((n) => n.toFixed());

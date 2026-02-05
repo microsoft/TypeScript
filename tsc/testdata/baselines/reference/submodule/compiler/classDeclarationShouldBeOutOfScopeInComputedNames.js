@@ -13,6 +13,7 @@ class A {
 
 
 //// [classDeclarationShouldBeOutOfScopeInComputedNames.js]
+"use strict";
 class A {
     static p1 = Symbol();
     static p2 = Symbol();

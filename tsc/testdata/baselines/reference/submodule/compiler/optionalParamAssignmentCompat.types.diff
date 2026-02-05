@@ -1,0 +1,20 @@
+--- old.optionalParamAssignmentCompat.types
++++ new.optionalParamAssignmentCompat.types
+@@= skipped -10, +10 lines =@@
+ >p1 : I1
+
+     m1(p1?: string): I1;
+->m1 : (p1?: string) => I1
++>m1 : (p1?: string | undefined) => I1
+ >p1 : string | undefined
+ }
+ declare var i2: I2;
+@@= skipped -14, +14 lines =@@
+
+ var d: I1 = i2.m1; // should error
+ >d : I1
+->i2.m1 : (p1?: string) => I1
++>i2.m1 : (p1?: string | undefined) => I1
+ >i2 : I2
+->m1 : (p1?: string) => I1
++>m1 : (p1?: string | undefined) => I1

@@ -22,10 +22,10 @@ class Foo {
 >x : number
 }
 
-module N {
+namespace N {
 >N : typeof N
 
-    export module F {
+    export namespace F {
 >F : typeof F
 
         var t;
@@ -48,14 +48,14 @@ var v = 3;
 >v : number
 >3 : 3
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 
     export var x: number; // error for redeclaring var in a different parent
 >x : number
 }
 
-declare module N {
+declare namespace N {
 >N : typeof N
 
     export function F(); // no error because function is ambient

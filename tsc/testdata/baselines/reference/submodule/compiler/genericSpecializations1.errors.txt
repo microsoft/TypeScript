@@ -2,13 +2,17 @@ genericSpecializations1.ts(6,5): error TS2416: Property 'foo' in type 'IntFooBad
   Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
     Types of parameters 'x' and 'x' are incompatible.
       Type 'T' is not assignable to type 'string'.
+genericSpecializations1.ts(6,30): error TS2322: Type 'null' is not assignable to type 'string'.
 genericSpecializations1.ts(10,5): error TS2416: Property 'foo' in type 'StringFoo2' is not assignable to the same property in base type 'IFoo<string>'.
   Type '(x: string) => string' is not assignable to type '<T>(x: T) => T'.
     Types of parameters 'x' and 'x' are incompatible.
       Type 'T' is not assignable to type 'string'.
+genericSpecializations1.ts(10,30): error TS2322: Type 'null' is not assignable to type 'string'.
+genericSpecializations1.ts(14,23): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 
 
-==== genericSpecializations1.ts (2 errors) ====
+==== genericSpecializations1.ts (5 errors) ====
     interface IFoo<T> {
         foo<T>(x: T): T; // no error on implementors because IFoo's T is different from foo's T
     }
@@ -21,6 +25,8 @@ genericSpecializations1.ts(10,5): error TS2416: Property 'foo' in type 'StringFo
 !!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2416:       Type 'T' is not assignable to type 'string'.
 !!! related TS2208 genericSpecializations1.ts:2:9: This type parameter might need an `extends string` constraint.
+                                 ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'string'.
     }
     
     class StringFoo2 implements IFoo<string> {
@@ -31,8 +37,13 @@ genericSpecializations1.ts(10,5): error TS2416: Property 'foo' in type 'StringFo
 !!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2416:       Type 'T' is not assignable to type 'string'.
 !!! related TS2208 genericSpecializations1.ts:2:9: This type parameter might need an `extends string` constraint.
+                                 ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'string'.
     }
     
     class StringFoo3 implements IFoo<string> {
         foo<T>(x: T): T { return null; }
+                          ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
     }

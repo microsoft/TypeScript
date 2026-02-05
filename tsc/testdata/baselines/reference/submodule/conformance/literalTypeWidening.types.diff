@@ -15,21 +15,3 @@
  >result : Result<T>
 
    return result === FAILURE;
-@@= skipped -57, +57 lines =@@
- // Repro from #23649
-
- export function Set<K extends string>(...keys: K[]): Record<K, true | undefined> {
-->Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
-+>Set : <K extends string>(...keys: K[]) => Record<K, true>
- >keys : K[]
- >true : true
-
-@@= skipped -47, +47 lines =@@
- const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
- >langCodeSet : Record<"en" | "es" | "fr" | "it" | "nl", true>
- >Set('fr', 'en', 'es', 'it', 'nl') : Record<"en" | "es" | "fr" | "it" | "nl", true>
-->Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
-+>Set : <K extends string>(...keys: K[]) => Record<K, true>
- >'fr' : "fr"
- >'en' : "en"
- >'es' : "es"

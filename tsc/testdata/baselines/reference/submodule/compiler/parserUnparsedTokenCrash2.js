@@ -5,8 +5,7 @@ export = } x = ( y = z ==== 'function') {
 
 
 //// [parserUnparsedTokenCrash2.js]
-"use strict";
 x = (y = z === ) = 'function';
 {
 }
-module.exports = ;
+export {};

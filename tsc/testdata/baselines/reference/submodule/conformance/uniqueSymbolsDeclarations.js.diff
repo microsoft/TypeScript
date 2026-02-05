@@ -1,6 +1,6 @@
 --- old.uniqueSymbolsDeclarations.js
 +++ new.uniqueSymbolsDeclarations.js
-@@= skipped -284, +284 lines =@@
+@@= skipped -285, +285 lines =@@
  async function* asyncGenFuncYieldVarCall() { yield varCall; }
  // classes
  class C {

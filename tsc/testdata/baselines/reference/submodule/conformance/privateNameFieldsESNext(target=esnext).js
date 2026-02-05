@@ -23,6 +23,7 @@ class C {
 
 
 //// [privateNameFieldsESNext.js]
+"use strict";
 class C {
     a = 123;
     #a = 10;

@@ -1,0 +1,105 @@
+genericClassWithObjectTypeArgsAndConstraints.ts(5,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+genericClassWithObjectTypeArgsAndConstraints.ts(9,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+genericClassWithObjectTypeArgsAndConstraints.ts(10,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+genericClassWithObjectTypeArgsAndConstraints.ts(14,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+genericClassWithObjectTypeArgsAndConstraints.ts(21,20): error TS2454: Variable 'x' is used before being assigned.
+genericClassWithObjectTypeArgsAndConstraints.ts(28,13): error TS2454: Variable 'g' is used before being assigned.
+genericClassWithObjectTypeArgsAndConstraints.ts(29,14): error TS2454: Variable 'g' is used before being assigned.
+genericClassWithObjectTypeArgsAndConstraints.ts(34,20): error TS2454: Variable 'x' is used before being assigned.
+genericClassWithObjectTypeArgsAndConstraints.ts(38,13): error TS2454: Variable 'g2' is used before being assigned.
+genericClassWithObjectTypeArgsAndConstraints.ts(39,14): error TS2454: Variable 'g2' is used before being assigned.
+genericClassWithObjectTypeArgsAndConstraints.ts(50,13): error TS2454: Variable 'g' is used before being assigned.
+genericClassWithObjectTypeArgsAndConstraints.ts(51,14): error TS2454: Variable 'g' is used before being assigned.
+genericClassWithObjectTypeArgsAndConstraints.ts(58,13): error TS2454: Variable 'g2' is used before being assigned.
+genericClassWithObjectTypeArgsAndConstraints.ts(59,14): error TS2454: Variable 'g2' is used before being assigned.
+
+
+==== genericClassWithObjectTypeArgsAndConstraints.ts (14 errors) ====
+    // Generic call with constraints infering type parameter from object member properties
+    // No errors expected
+    
+    class C {
+        x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class D {
+        x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+        y: string;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class X<T> {
+        x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    namespace Class {
+        class G<T extends { x: string }> {
+            foo<T extends { x: string }>(t: X<T>, t2: X<T>) {
+                var x: T;
+                return x;
+                       ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+            }
+        }
+    
+        var c1 = new X<C>();
+        var d1 = new X<D>();
+        var g: G<{ x: string; y: string }>;
+        var r = g.foo(c1, d1);
+                ~
+!!! error TS2454: Variable 'g' is used before being assigned.
+        var r2 = g.foo(c1, c1);
+                 ~
+!!! error TS2454: Variable 'g' is used before being assigned.
+    
+        class G2<T extends C> {
+            foo2<T extends C>(t: X<T>, t2: X<T>) {
+                var x: T;
+                return x;
+                       ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+            }
+        }
+        var g2: G2<D>;
+        var r = g2.foo2(c1, d1);
+                ~~
+!!! error TS2454: Variable 'g2' is used before being assigned.
+        var r2 = g2.foo2(c1, c1);
+                 ~~
+!!! error TS2454: Variable 'g2' is used before being assigned.
+    }
+    
+    namespace Interface {
+        interface G<T extends { x: string }> {
+            foo<T extends { x: string }>(t: X<T>, t2: X<T>): T;
+        }
+    
+        var c1 = new X<C>();
+        var d1 = new X<D>();
+        var g: G<{ x: string; y: string }>;
+        var r = g.foo(c1, d1);
+                ~
+!!! error TS2454: Variable 'g' is used before being assigned.
+        var r2 = g.foo(c1, c1);
+                 ~
+!!! error TS2454: Variable 'g' is used before being assigned.
+    
+        interface G2<T extends C> {
+            foo2<T extends C>(t: X<T>, t2: X<T>): T;
+        }
+    
+        var g2: G2<D>;
+        var r = g2.foo2(c1, d1);
+                ~~
+!!! error TS2454: Variable 'g2' is used before being assigned.
+        var r2 = g2.foo2(c1, c1);
+                 ~~
+!!! error TS2454: Variable 'g2' is used before being assigned.
+    }

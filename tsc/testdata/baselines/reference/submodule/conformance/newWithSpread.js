@@ -99,6 +99,7 @@ new i["a-b"][1](1, 2, ...a);
 new i["a-b"][1](1, 2, ...a, "string");
 
 //// [newWithSpread.js]
+"use strict";
 function f(x, y, ...z) {
 }
 function f2(...x) {

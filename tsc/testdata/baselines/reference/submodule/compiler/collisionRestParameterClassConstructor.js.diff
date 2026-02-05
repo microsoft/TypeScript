@@ -1,6 +1,6 @@
 --- old.collisionRestParameterClassConstructor.js
 +++ new.collisionRestParameterClassConstructor.js
-@@= skipped -90, +90 lines =@@
+@@= skipped -91, +91 lines =@@
      }
  }
  class c3 {

@@ -1,8 +1,8 @@
 --- old.parserMemberVariableDeclaration1.js
 +++ new.parserMemberVariableDeclaration1.js
-@@= skipped -6, +6 lines =@@
-
+@@= skipped -7, +7 lines =@@
  //// [parserMemberVariableDeclaration1.js]
+ "use strict";
  class C {
 +    Foo;
  }

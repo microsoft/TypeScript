@@ -10,3 +10,4 @@ type LoadCallback = void;
 
 
 //// [jsdocTwoLineTypedef.js]
+"use strict";

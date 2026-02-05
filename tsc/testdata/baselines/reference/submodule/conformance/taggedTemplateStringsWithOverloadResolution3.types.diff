@@ -39,3 +39,14 @@
  >strs : TemplateStringsArray
  >n : T
  >m : U
+@@= skipped -100, +100 lines =@@
+ >(n) => n.substr(0) : (n: string) => string
+ >n : string
+ >n.substr(0) : string
+->n.substr : (from: number, length?: number) => string
++>n.substr : (from: number, length?: number | undefined) => string
+ >n : string
+->substr : (from: number, length?: number) => string
++>substr : (from: number, length?: number | undefined) => string
+ >0 : 0
+

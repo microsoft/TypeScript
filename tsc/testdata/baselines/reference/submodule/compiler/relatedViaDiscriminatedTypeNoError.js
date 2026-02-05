@@ -14,6 +14,7 @@ class B extends A<Model> { }
 
 
 //// [relatedViaDiscriminatedTypeNoError.js]
+"use strict";
 class Model {
     flag;
     constructor(flag) {

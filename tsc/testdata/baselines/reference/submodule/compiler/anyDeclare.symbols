@@ -4,7 +4,7 @@
 declare var x: any;
 >x : Symbol(x, Decl(anyDeclare.ts, 0, 11))
 
-module myMod {
+namespace myMod {
 >myMod : Symbol(myMod, Decl(anyDeclare.ts, 0, 19))
 
     var myFn;

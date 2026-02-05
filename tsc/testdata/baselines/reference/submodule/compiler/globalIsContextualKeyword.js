@@ -19,6 +19,7 @@ let obj = {
 }
 
 //// [globalIsContextualKeyword.js]
+"use strict";
 function a() {
     let global = 1;
 }

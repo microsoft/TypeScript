@@ -1,8 +1,8 @@
 --- old.prototypeInstantiatedWithBaseConstraint.js
 +++ new.prototypeInstantiatedWithBaseConstraint.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
  //// [prototypeInstantiatedWithBaseConstraint.js]
+ "use strict";
  class C {
 +    x;
  }

@@ -6,5 +6,6 @@ let x: any;
 
 
 //// [explicitAnyAfterSpreadNoImplicitAnyError.js]
+"use strict";
 (Object.assign({ a: [] }, null));
 let x;

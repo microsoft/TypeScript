@@ -7,7 +7,7 @@ class foo<T> { constructor(x: T) { } }
 >x : Symbol(x, Decl(genericMergedDeclarationUsingTypeParameter2.ts, 0, 27))
 >T : Symbol(T, Decl(genericMergedDeclarationUsingTypeParameter2.ts, 0, 10))
 
-module foo {
+namespace foo {
 >foo : Symbol(foo, Decl(genericMergedDeclarationUsingTypeParameter2.ts, 0, 0), Decl(genericMergedDeclarationUsingTypeParameter2.ts, 0, 38))
 
     export var x: T;

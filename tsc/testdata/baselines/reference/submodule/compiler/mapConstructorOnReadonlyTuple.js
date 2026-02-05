@@ -7,6 +7,7 @@ new WeakMap(pairs);
 
 
 //// [mapConstructorOnReadonlyTuple.js]
+"use strict";
 const pairs = [[{}, 1], [{}, 2]];
 new Map(pairs);
 new WeakMap(pairs);

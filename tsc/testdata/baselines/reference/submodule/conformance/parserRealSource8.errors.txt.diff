@@ -5,7 +5,7 @@
  parserRealSource8.ts(9,41): error TS2304: Cannot find name 'ScopeChain'.
  parserRealSource8.ts(10,39): error TS2304: Cannot find name 'TypeFlow'.
  parserRealSource8.ts(11,43): error TS2304: Cannot find name 'ModuleDeclaration'.
-@@= skipped -39, +38 lines =@@
+@@= skipped -41, +40 lines =@@
  parserRealSource8.ts(160,76): error TS2304: Cannot find name 'StringHashTable'.
  parserRealSource8.ts(160,99): error TS2304: Cannot find name 'StringHashTable'.
  parserRealSource8.ts(162,28): error TS2304: Cannot find name 'Type'.
@@ -14,7 +14,7 @@
  parserRealSource8.ts(170,40): error TS2339: Property 'SymbolScopeBuilder' does not exist on type 'typeof TypeScript'.
  parserRealSource8.ts(176,50): error TS2304: Cannot find name 'AST'.
  parserRealSource8.ts(177,25): error TS2304: Cannot find name 'FuncDecl'.
-@@= skipped -50, +50 lines =@@
+@@= skipped -52, +52 lines =@@
  parserRealSource8.ts(353,26): error TS2304: Cannot find name 'TypeSymbol'.
  parserRealSource8.ts(354,39): error TS2304: Cannot find name 'FncFlags'.
  parserRealSource8.ts(354,62): error TS2304: Cannot find name 'FncFlags'.
@@ -37,11 +37,11 @@
 -parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
 -
 -
--==== parserRealSource8.ts (130 errors) ====
+-==== parserRealSource8.ts (134 errors) ====
 +parserRealSource8.ts(454,35): error TS2552: Cannot find name 'Catch'. Did you mean 'Cache'?
 +
 +
-+==== parserRealSource8.ts (129 errors) ====
++==== parserRealSource8.ts (133 errors) ====
      // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
      // See LICENSE.txt in the project root for complete license information.
      
@@ -49,9 +49,9 @@
 -                        ~~~~~~~~~~~~~
 -!!! error TS6053: File 'typescript.ts' not found.
      
-     module TypeScript {
+     namespace TypeScript {
      
-@@= skipped -252, +250 lines =@@
+@@= skipped -256, +254 lines =@@
  !!! error TS2304: Cannot find name 'Type'.
              var withSymbol = new WithSymbol(withStmt.minChar, context.typeFlow.checker.locationInfo.unitIndex, withType);
                                   ~~~~~~~~~~
@@ -61,7 +61,7 @@
              withType.members = members;
              withType.ambientMembers = ambientMembers;
              withType.symbol = withSymbol;
-@@= skipped -300, +301 lines =@@
+@@= skipped -304, +305 lines =@@
                      for (var i = 0; i < len; i++) {
                          var paramSym: ParameterSymbol = signature.parameters[i];
                                        ~~~~~~~~~~~~~~~

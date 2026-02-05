@@ -7,6 +7,7 @@ class foo<T> {
 } 
 
 //// [typeParametersInStaticAccessors.js]
+"use strict";
 class foo {
     static get Foo() { return null; }
     static set Bar(v) { }

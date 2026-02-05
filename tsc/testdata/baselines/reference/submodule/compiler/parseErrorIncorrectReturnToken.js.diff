@@ -1,6 +1,6 @@
 --- old.parseErrorIncorrectReturnToken.js
 +++ new.parseErrorIncorrectReturnToken.js
-@@= skipped -18, +18 lines =@@
+@@= skipped -19, +19 lines =@@
  string; // should be => not :
  // doesn't work in non-type contexts, where the return type is optional
  let f = (n) => string => n.toString();

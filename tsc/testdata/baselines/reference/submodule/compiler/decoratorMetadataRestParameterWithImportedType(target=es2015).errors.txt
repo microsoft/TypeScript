@@ -1,0 +1,49 @@
+aux.ts(2,5): error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
+aux1.ts(2,5): error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
+aux2.ts(2,5): error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
+
+
+==== aux.ts (1 errors) ====
+    export class SomeClass {
+        field: string;
+        ~~~~~
+!!! error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+==== aux1.ts (1 errors) ====
+    export class SomeClass1 {
+        field: string;
+        ~~~~~
+!!! error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+==== aux2.ts (1 errors) ====
+    export class SomeClass2 {
+        field: string;
+        ~~~~~
+!!! error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
+    }
+==== main.ts (0 errors) ====
+    import { SomeClass } from './aux';
+    import { SomeClass1 } from './aux1';
+    
+    function annotation(): ClassDecorator {
+        return (target: any): void => { };
+    }
+    
+    function annotation1(): MethodDecorator {
+        return (target: any): void => { };
+    }
+    
+    @annotation()
+    export class ClassA {
+        array: SomeClass[];
+    
+        constructor(...init: SomeClass[]) {
+            this.array = init;
+        }
+    
+        @annotation1()
+        foo(... args: SomeClass1[]) {
+        }
+    }

@@ -1,26 +1,32 @@
-file.tsx(11,22): error TS2322: Type '{ bar: string; }' is not assignable to type 'IntrinsicAttributes & { ref?: string; }'.
-  Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
+file.tsx(5,3): error TS2564: Property 'props' has no initializer and is not definitely assigned in the constructor.
+file.tsx(11,22): error TS2322: Type '{ bar: string; }' is not assignable to type 'IntrinsicAttributes & { ref?: string | undefined; }'.
+  Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string | undefined; }'.
+react.d.ts(6,3): error TS7008: Member 'props' implicitly has an 'any' type.
 
 
-==== react.d.ts (0 errors) ====
-    declare module JSX {
+==== react.d.ts (1 errors) ====
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     	}
     	interface ElementAttributesProperty {
     		props;
+    		~~~~~
+!!! error TS7008: Member 'props' implicitly has an 'any' type.
     	}
     	interface IntrinsicAttributes {
     		ref?: string;
     	}
     }
     
-==== file.tsx (1 errors) ====
+==== file.tsx (2 errors) ====
     class MyComponent {  
       render() {
       }
     
       props: {
+      ~~~~~
+!!! error TS2564: Property 'props' has no initializer and is not definitely assigned in the constructor.
     	  ref?: string;
       }
     }
@@ -28,7 +34,7 @@ file.tsx(11,22): error TS2322: Type '{ bar: string; }' is not assignable to type
     // Should be an OK
     var x = <MyComponent bar='world' />;
                          ~~~
-!!! error TS2322: Type '{ bar: string; }' is not assignable to type 'IntrinsicAttributes & { ref?: string; }'.
-!!! error TS2322:   Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
+!!! error TS2322: Type '{ bar: string; }' is not assignable to type 'IntrinsicAttributes & { ref?: string | undefined; }'.
+!!! error TS2322:   Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string | undefined; }'.
     
     

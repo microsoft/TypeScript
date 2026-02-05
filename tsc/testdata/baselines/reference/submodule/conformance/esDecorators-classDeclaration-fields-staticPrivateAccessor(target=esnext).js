@@ -18,6 +18,7 @@ class D {
 
 
 //// [esDecorators-classDeclaration-fields-staticPrivateAccessor.js]
+"use strict";
 class C {
     @dec
     static accessor #field1 = 0;

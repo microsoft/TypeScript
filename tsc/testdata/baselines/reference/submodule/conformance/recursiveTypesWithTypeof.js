@@ -55,6 +55,7 @@ var hy3: Foo2<typeof hy3, { x: typeof hy3 }>;
 var hy3: any;
 
 //// [recursiveTypesWithTypeof.js]
+"use strict";
 // The following are errors because of circular references
 var c;
 var c;

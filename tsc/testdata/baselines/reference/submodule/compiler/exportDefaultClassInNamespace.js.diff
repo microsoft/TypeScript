@@ -1,7 +1,7 @@
 --- old.exportDefaultClassInNamespace.js
 +++ new.exportDefaultClassInNamespace.js
-@@= skipped -12, +12 lines =@@
- //// [exportDefaultClassInNamespace.js]
+@@= skipped -13, +13 lines =@@
+ "use strict";
  var ns_class;
  (function (ns_class) {
 -    class default_1 {

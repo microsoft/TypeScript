@@ -14,6 +14,7 @@ namespace Service {
 }
 
 //// [cloduleGenericOnSelfMember.js]
+"use strict";
 class ServiceBase {
     field;
 }

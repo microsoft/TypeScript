@@ -31,6 +31,7 @@ function foo2() {
 
 
 //// [anyAndUnknownHaveFalsyComponents.js]
+"use strict";
 const y1 = x1 && 3;
 function foo1() {
     return Object.assign({ display: "block" }, (isTreeHeader1 && {

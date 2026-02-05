@@ -7,14 +7,14 @@ class G<T>{ bar(x: T) { return x; } }
 >x : T
 >x : T
 
-module M {
+namespace M {
 >M : typeof M
 
     export class C { foo() { } }
 >C : C
 >foo : () => void
 
-    export module C {
+    export namespace C {
 >C : typeof C
 
         export class X {
@@ -37,7 +37,7 @@ module M {
 >foo : () => void
 }
 
-module N {
+namespace N {
 >N : typeof N
 
     var g2 = new G<M.C>()

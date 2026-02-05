@@ -1,0 +1,118 @@
+--- old.doYouNeedToChangeYourTargetLibraryES2015.types
++++ new.doYouNeedToChangeYourTargetLibraryES2015.types
+@@= skipped -18, +18 lines =@@
+ const testReflectConstruct = Reflect.construct(noOp, []);
+ >testReflectConstruct : any
+ >Reflect.construct(noOp, []) : any
+->Reflect.construct : { <A extends readonly any[], R>(target: new (...args: A) => R, argumentsList: Readonly<A>, newTarget?: new (...args: any) => any): R; (target: Function, argumentsList: ArrayLike<any>, newTarget?: Function): any; }
++>Reflect.construct : { <A extends readonly any[], R>(target: new (...args: A) => R, argumentsList: Readonly<A>, newTarget?: (new (...args: any) => any) | undefined): R; (target: Function, argumentsList: ArrayLike<any>, newTarget?: Function | undefined): any; }
+ >Reflect : typeof Reflect
+->construct : { <A extends readonly any[], R>(target: new (...args: A) => R, argumentsList: Readonly<A>, newTarget?: new (...args: any) => any): R; (target: Function, argumentsList: ArrayLike<any>, newTarget?: Function): any; }
++>construct : { <A extends readonly any[], R>(target: new (...args: A) => R, argumentsList: Readonly<A>, newTarget?: (new (...args: any) => any) | undefined): R; (target: Function, argumentsList: ArrayLike<any>, newTarget?: Function | undefined): any; }
+ >noOp : () => void
+ >[] : never[]
+
+@@= skipped -129, +129 lines =@@
+ const testArrayFill = [""].fill("fill");
+ >testArrayFill : string[]
+ >[""].fill("fill") : string[]
+->[""].fill : (value: string, start?: number, end?: number) => string[]
++>[""].fill : (value: string, start?: number | undefined, end?: number | undefined) => string[]
+ >[""] : string[]
+ >"" : ""
+->fill : (value: string, start?: number, end?: number) => string[]
++>fill : (value: string, start?: number | undefined, end?: number | undefined) => string[]
+ >"fill" : "fill"
+
+ const testArrayCopyWithin = [""].copyWithin(0, 0);
+ >testArrayCopyWithin : string[]
+ >[""].copyWithin(0, 0) : string[]
+->[""].copyWithin : (target: number, start: number, end?: number) => string[]
++>[""].copyWithin : (target: number, start: number, end?: number | undefined) => string[]
+ >[""] : string[]
+ >"" : ""
+->copyWithin : (target: number, start: number, end?: number) => string[]
++>copyWithin : (target: number, start: number, end?: number | undefined) => string[]
+ >0 : 0
+ >0 : 0
+
+@@= skipped -43, +43 lines =@@
+ const testArrayConstructorFrom = Array.from([]);
+ >testArrayConstructorFrom : never[]
+ >Array.from([]) : never[]
+->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+ >Array : ArrayConstructor
+->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+ >[] : never[]
+
+ const testArrayConstructorOf = Array.of([]);
+@@= skipped -99, +99 lines =@@
+ const testNumberConstructorParseInt = Number.parseInt("0");
+ >testNumberConstructorParseInt : number
+ >Number.parseInt("0") : number
+->Number.parseInt : (string: string, radix?: number) => number
++>Number.parseInt : (string: string, radix?: number | undefined) => number
+ >Number : NumberConstructor
+->parseInt : (string: string, radix?: number) => number
++>parseInt : (string: string, radix?: number | undefined) => number
+ >"0" : "0"
+
+ const testMathClz32 = Math.clz32(0);
+@@= skipped -224, +224 lines =@@
+ const testStringIncludes = "".includes("");
+ >testStringIncludes : boolean
+ >"".includes("") : boolean
+->"".includes : (searchString: string, position?: number) => boolean
++>"".includes : (searchString: string, position?: number | undefined) => boolean
+ >"" : ""
+->includes : (searchString: string, position?: number) => boolean
++>includes : (searchString: string, position?: number | undefined) => boolean
+ >"" : ""
+
+ const testStringEndsWith = "".endsWith("");
+ >testStringEndsWith : boolean
+ >"".endsWith("") : boolean
+->"".endsWith : (searchString: string, endPosition?: number) => boolean
++>"".endsWith : (searchString: string, endPosition?: number | undefined) => boolean
+ >"" : ""
+->endsWith : (searchString: string, endPosition?: number) => boolean
++>endsWith : (searchString: string, endPosition?: number | undefined) => boolean
+ >"" : ""
+
+ const testStringNormalize = "".normalize();
+ >testStringNormalize : string
+ >"".normalize() : string
+->"".normalize : { (form: "NFC" | "NFD" | "NFKC" | "NFKD"): string; (form?: string): string; }
++>"".normalize : { (form: "NFC" | "NFD" | "NFKC" | "NFKD"): string; (form?: string | undefined): string; }
+ >"" : ""
+->normalize : { (form: "NFC" | "NFD" | "NFKC" | "NFKD"): string; (form?: string): string; }
++>normalize : { (form: "NFC" | "NFD" | "NFKC" | "NFKD"): string; (form?: string | undefined): string; }
+
+ const testStringRepeat = "".repeat(0);
+ >testStringRepeat : string
+@@= skipped -31, +31 lines =@@
+ const testStringStartsWith = "".startsWith("");
+ >testStringStartsWith : boolean
+ >"".startsWith("") : boolean
+->"".startsWith : (searchString: string, position?: number) => boolean
++>"".startsWith : (searchString: string, position?: number | undefined) => boolean
+ >"" : ""
+->startsWith : (searchString: string, position?: number) => boolean
++>startsWith : (searchString: string, position?: number | undefined) => boolean
+ >"" : ""
+
+ const testStringAnchor = "".anchor("");
+@@= skipped -110, +110 lines =@@
+ const testStringConstructorRaw = String.raw``;
+ >testStringConstructorRaw : string
+ >String.raw`` : string
+->String.raw : (template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]) => string
++>String.raw : (template: { raw: ArrayLike<string> | readonly string[]; }, ...substitutions: any[]) => string
+ >String : StringConstructor
+->raw : (template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]) => string
++>raw : (template: { raw: ArrayLike<string> | readonly string[]; }, ...substitutions: any[]) => string
+ >`` : ""
+
+ const testRegExpFlags = /abc/g.flags;

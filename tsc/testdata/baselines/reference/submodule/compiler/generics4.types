@@ -11,10 +11,10 @@ interface X { f(): string; }
 interface Y { f(): boolean; }
 >f : () => boolean
 
-var a: C<X>;
+declare var a: C<X>;
 >a : C<X>
 
-var b: C<Y>;
+declare var b: C<Y>;
 >b : C<Y>
 
 a = b; // Not ok - return types of "f" are different

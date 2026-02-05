@@ -25,6 +25,7 @@ class B {
 
 
 //// [privateNameStaticFieldClassExpression.js]
+"use strict";
 class B {
     static #foo = class {
         constructor() {

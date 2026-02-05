@@ -1,8 +1,8 @@
 --- old.asiInES6Classes.js
 +++ new.asiInES6Classes.js
-@@= skipped -25, +25 lines =@@
-
+@@= skipped -26, +26 lines =@@
  //// [asiInES6Classes.js]
+ "use strict";
  class Foo {
 -    constructor() {
 -        this.defaults = {

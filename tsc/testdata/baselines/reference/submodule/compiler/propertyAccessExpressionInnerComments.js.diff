@@ -1,6 +1,6 @@
 --- old.propertyAccessExpressionInnerComments.js
 +++ new.propertyAccessExpressionInnerComments.js
-@@= skipped -46, +46 lines =@@
+@@= skipped -47, +47 lines =@@
      // Single-line comment
      /*2*/ . /*3*/toString; /*4*/
  /* Existing issue: the "2" comments below are duplicated and "3"s are missing */

@@ -13,7 +13,7 @@ export const v1 = (...a: [n: "n", a: "a"]): {
 
 } => {
     return null!
->null! : null
+>null! : never
 }
 
 === v2.ts ===
@@ -39,5 +39,5 @@ export const v2 = (...a: [n: "n", a: "a"]): {
 
 } => {
     return null!
->null! : null
+>null! : never
 }

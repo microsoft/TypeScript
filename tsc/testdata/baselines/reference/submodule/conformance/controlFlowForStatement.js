@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/controlFlow/controlFlowForStatement.ts] ////
 
 //// [controlFlowForStatement.ts]
-let cond: boolean;
+declare let cond: boolean;
 function a() {
     let x: string | number | boolean;
     for (x = ""; cond; x = 5) {
@@ -45,7 +45,7 @@ function f() {
 
 
 //// [controlFlowForStatement.js]
-let cond;
+"use strict";
 function a() {
     let x;
     for (x = ""; cond; x = 5) {

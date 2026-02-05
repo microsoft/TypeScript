@@ -1,0 +1,10 @@
+--- old.optionalBindingParameters3.types
++++ new.optionalBindingParameters3.types
+@@= skipped -9, +9 lines =@@
+  * @param {Foo} [options]
+  */
+ function f({ a = "a" }) {}
+->f : ({ a }?: Foo) => void
++>f : ({ a }?: Foo | undefined) => void
+ >a : string
+ >"a" : "a"

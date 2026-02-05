@@ -109,6 +109,7 @@ function f(i: Indexed) {
 
 
 //// [typeGuardOfFromPropNameInUnionType.js]
+"use strict";
 class A {
     a;
 }

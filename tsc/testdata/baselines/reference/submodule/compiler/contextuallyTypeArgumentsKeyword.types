@@ -11,7 +11,7 @@ const x = {
 
         setTimeout(function() { arguments }, 0);
 >setTimeout(function() { arguments }, 0) : number
->setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
+>setTimeout : (handler: TimerHandler, timeout?: number | undefined, ...arguments: any[]) => number
 >function() { arguments } : () => void
 >arguments : IArguments
 >0 : 0

@@ -22,7 +22,7 @@
 -declare class SomeConstructor3 {
 -    x: number;
 -}
--declare function SelfReference(): SelfReference;
+-declare function SelfReference(): SelfReference | undefined;
 +    var staticMember: string;
 +}
 +declare function SelfReference(): any;
@@ -31,6 +31,6 @@
 -    export { staticMember_2 as staticMember };
 -}
 -declare class SelfReference {
--    x: number;
+-    x: number | undefined;
 +    var staticMember: string;
  }

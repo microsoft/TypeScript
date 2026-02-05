@@ -1,0 +1,36 @@
+genericClasses2.ts(6,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+genericClasses2.ts(7,9): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+genericClasses2.ts(8,9): error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+genericClasses2.ts(13,9): error TS2454: Variable 'v1' is used before being assigned.
+genericClasses2.ts(14,9): error TS2454: Variable 'v1' is used before being assigned.
+genericClasses2.ts(15,9): error TS2454: Variable 'v1' is used before being assigned.
+
+
+==== genericClasses2.ts (6 errors) ====
+    interface Foo<T> {
+    	a: T;
+    }
+    
+    class C<T> {
+    	public x: T;
+    	       ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    	public y: Foo<T>;
+    	       ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+    	public z: Foo<number>;
+    	       ~
+!!! error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var v1 : C<string>;
+    
+    var y = v1.x; // should be 'string'
+            ~~
+!!! error TS2454: Variable 'v1' is used before being assigned.
+    var w = v1.y.a; // should be 'string'
+            ~~
+!!! error TS2454: Variable 'v1' is used before being assigned.
+    var z = v1.z.a; // should be 'number'
+            ~~
+!!! error TS2454: Variable 'v1' is used before being assigned.

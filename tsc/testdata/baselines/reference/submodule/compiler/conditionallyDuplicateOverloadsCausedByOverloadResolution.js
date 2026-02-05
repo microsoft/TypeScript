@@ -23,6 +23,7 @@ var out2 = foo2((x, y) => {
 });
 
 //// [conditionallyDuplicateOverloadsCausedByOverloadResolution.js]
+"use strict";
 var out = foo((x, y) => {
     function bar() { }
     return bar;

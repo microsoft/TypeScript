@@ -7,19 +7,19 @@ class C {
 >C : C
 
     x?: string;
->x : string
+>x : string | undefined
 
     f?() {}
->f : () => void
+>f : (() => void) | undefined
 }
 
 class C2<T> {
 >C2 : C2<T>
 
     x?: T;
->x : T
+>x : T | undefined
 
     f?(x: T) {}
->f : (x: T) => void
+>f : ((x: T) => void) | undefined
 >x : T
 }

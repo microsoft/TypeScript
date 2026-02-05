@@ -1,6 +1,6 @@
 --- old.parserSuperExpression1.js
 +++ new.parserSuperExpression1.js
-@@= skipped -22, +22 lines =@@
+@@= skipped -23, +23 lines =@@
  }
  var M1;
  (function (M1) {

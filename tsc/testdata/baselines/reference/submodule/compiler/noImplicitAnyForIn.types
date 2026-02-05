@@ -61,8 +61,8 @@ for (var a in x) {
 >b : any
 
     var c = a || b;
->c : string
->a || b : string
+>c : string | undefined
+>a || b : string | undefined
 >a : string
 >b : undefined
 }
@@ -82,15 +82,15 @@ var m = [1, 2, 3, 4, 5];
 
 // Should yield an implicit 'any' error.
 var n = [[]] || [];
->n : any[][]
->[[]] || [] : undefined[][]
->[[]] : undefined[][]
->[] : undefined[]
->[] : undefined[]
+>n : never[][]
+>[[]] || [] : never[][]
+>[[]] : never[][]
+>[] : never[]
+>[] : never[]
 
 for (n[idx++] in m);
->n[idx++] : any[]
->n : any[][]
+>n[idx++] : never[]
+>n : never[][]
 >idx++ : number
 >idx : number
 >m : number[]

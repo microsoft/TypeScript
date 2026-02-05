@@ -4,4 +4,5 @@
 var v = { foo(); }
 
 //// [objectLiteralMemberWithoutBlock1.js]
+"use strict";
 var v = {};

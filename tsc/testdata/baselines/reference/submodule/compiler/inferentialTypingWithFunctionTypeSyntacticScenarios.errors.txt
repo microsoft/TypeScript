@@ -1,0 +1,39 @@
+inferentialTypingWithFunctionTypeSyntacticScenarios.ts(20,17): error TS2454: Variable 'ic' is used before being assigned.
+
+
+==== inferentialTypingWithFunctionTypeSyntacticScenarios.ts (1 errors) ====
+    declare function map<T, U>(array: T, func: (x: T) => U): U;
+    declare function identity<V>(y: V): V;
+    var s: string;
+    
+    // dotted name
+    var dottedIdentity = { x: identity };
+    s = map("", dottedIdentity.x);
+    
+    // index expression
+    s = map("", dottedIdentity['x']);
+    
+    // function call
+    s = map("", (() => identity)());
+    
+    // construct
+    interface IdentityConstructor {
+        new (): typeof identity;
+    }
+    var ic: IdentityConstructor;
+    s = map("", new ic());
+                    ~~
+!!! error TS2454: Variable 'ic' is used before being assigned.
+    
+    // assignment
+    var t;
+    s = map("", t = identity);
+    
+    // type assertion
+    s = map("", <typeof identity>identity);
+    
+    // parenthesized expression
+    s = map("", (identity));
+    
+    // comma
+    s = map("", ("", identity));

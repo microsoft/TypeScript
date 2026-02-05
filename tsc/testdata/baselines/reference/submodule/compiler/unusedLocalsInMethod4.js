@@ -146,8 +146,6 @@ function transformClassFields() {
 }
 
 //// [unusedLocalsInMethod4.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function f() {
     let x1; // should error
     let x2; // should error
@@ -216,7 +214,7 @@ function f4() {
 function f5() {
     x.toString();
 }
-exports.default = {};
+export default {};
 function f6() {
     let key; // should not error
     for (key in {}) {

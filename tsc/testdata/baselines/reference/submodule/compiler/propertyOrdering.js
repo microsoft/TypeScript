@@ -26,6 +26,7 @@ class Bar {
 
 
 //// [propertyOrdering.js]
+"use strict";
 class Foo {
     constructor(store) { }
     foo() {

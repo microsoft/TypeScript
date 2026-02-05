@@ -44,7 +44,7 @@ var c1 = new C1([]);
 >c1 : C1
 >new C1([]) : C1
 >C1 : typeof C1
->[] : undefined[]
+>[] : never[]
 
 c1 = new C1(["larry", "{curly}", "moe"]);
 >c1 = new C1(["larry", "{curly}", "moe"]) : C1
@@ -78,11 +78,11 @@ var c2 = new C2(["10", 10, !!10]);
 >c2 : C2
 >new C2(["10", 10, !!10]) : C2
 >C2 : typeof C2
->["10", 10, !!10] : [string, number, boolean]
+>["10", 10, !!10] : [string, number, true]
 >"10" : "10"
 >10 : 10
->!!10 : boolean
->!10 : boolean
+>!!10 : true
+>!10 : false
 >10 : 10
 
 var [c2_x, c2_y, c2_z] = [c2.x, c2.y, c2.z];

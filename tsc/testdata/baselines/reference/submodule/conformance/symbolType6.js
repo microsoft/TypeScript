@@ -18,6 +18,7 @@ s - 0;
 "" + (s || "");
 
 //// [symbolType6.js]
+"use strict";
 var s = Symbol.for("add");
 var a;
 s + s;

@@ -3,5 +3,5 @@
 === commentOnArrayElement13.ts ===
 const array = [/* comment */];
 >array : any[]
->[/* comment */] : undefined[]
+>[/* comment */] : never[]
 

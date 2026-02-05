@@ -14,7 +14,7 @@ enumAssignmentCompat2.ts(33,5): error TS2322: Type '3' is not assignable to type
     
     }
     
-    module W {
+    namespace W {
         export class D { }
     }
     

@@ -1,0 +1,63 @@
+file1.ts(35,1): error TS2454: Variable 'c5' is used before being assigned.
+file1.ts(36,1): error TS2454: Variable 'c5' is used before being assigned.
+file1.ts(37,1): error TS2454: Variable 'c5' is used before being assigned.
+file1.ts(38,1): error TS2454: Variable 'c5' is used before being assigned.
+
+
+==== file1.ts (4 errors) ====
+    declare class C1 { }
+    
+    interface C1 { }
+    
+    interface C2 { }
+    
+    declare class C2 { }
+    
+    class C3 { }
+    
+    interface C3 { }
+    
+    interface C4 { }
+    
+    class C4 { }
+    
+    interface C5 {
+        x1: number;
+    }
+    
+    declare class C5 {
+        x2: number;
+    }
+    
+    interface C5 {
+        x3: number;
+    }
+    
+    interface C5 {
+        x4: number;
+    }
+    
+    // checks if properties actually were merged
+    var c5 : C5;
+    c5.x1;
+    ~~
+!!! error TS2454: Variable 'c5' is used before being assigned.
+    c5.x2;
+    ~~
+!!! error TS2454: Variable 'c5' is used before being assigned.
+    c5.x3;
+    ~~
+!!! error TS2454: Variable 'c5' is used before being assigned.
+    c5.x4;
+    ~~
+!!! error TS2454: Variable 'c5' is used before being assigned.
+    
+==== file2.ts (0 errors) ====
+    declare class C6 { }
+    
+    interface C7 { }
+    
+==== file3.ts (0 errors) ====
+    interface C6 { }
+    
+    declare class C7 { }

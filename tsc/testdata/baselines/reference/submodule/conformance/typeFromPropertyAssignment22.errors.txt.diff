@@ -1,23 +1,35 @@
 --- old.typeFromPropertyAssignment22.errors.txt
 +++ new.typeFromPropertyAssignment22.errors.txt
 @@= skipped -0, +0 lines =@@
++npm-install.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+ npm-install.js(4,49): error TS7006: Parameter 'next' implicitly has an 'any' type.
+ npm-install.js(6,6): error TS7006: Parameter 'args' implicitly has an 'any' type.
 -npm-install.js(7,9): error TS2322: Type 'string' is not assignable to type 'number'.
 -
 -
--==== npm-install.js (1 errors) ====
--    function Installer () {
--        this.args = 0
--    }
--    Installer.prototype.loadArgMetadata = function (next) {
--        // ArrowFunction isn't treated as a this-container
--        (args) => {
--            this.args = 'hi'
+-==== npm-install.js (3 errors) ====
++npm-install.js(11,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
++
++
++==== npm-install.js (4 errors) ====
+     function Installer () {
+         this.args = 0
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+     }
+     Installer.prototype.loadArgMetadata = function (next) {
+                                                     ~~~~
+@@= skipped -14, +17 lines =@@
+          ~~~~
+ !!! error TS7006: Parameter 'args' implicitly has an 'any' type.
+             this.args = 'hi'
 -            ~~~~~~~~~
 -!!! error TS2322: Type 'string' is not assignable to type 'number'.
--            this.newProperty = 1
--        }
--    }
--    var i = new Installer()
--    i.newProperty = i.args // ok, number ==> number | undefined
--    
-+<no content>
+             this.newProperty = 1
+         }
+     }
+     var i = new Installer()
++            ~~~~~~~~~~~~~~~
++!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+     i.newProperty = i.args // ok, number ==> number | undefined
+     

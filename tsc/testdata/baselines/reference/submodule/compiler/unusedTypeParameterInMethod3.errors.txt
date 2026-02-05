@@ -6,8 +6,8 @@ unusedTypeParameterInMethod3.ts(2,21): error TS6196: 'Z' is declared but never u
         public f1<X, Y, Z>() {
                         ~
 !!! error TS6196: 'Z' is declared but never used.
-            var a: X;
-            var b: Y;
+            var a!: X;
+            var b!: Y;
             a;
             b;
         }

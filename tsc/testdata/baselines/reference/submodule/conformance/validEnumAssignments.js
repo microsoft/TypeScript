@@ -6,9 +6,9 @@ enum E {
     B
 }
 
-var n: number;
-var a: any;
-var e: E;
+declare var n: number;
+declare var a: any;
+declare var e: E;
 
 n = e;
 n = E.A;
@@ -29,14 +29,12 @@ e = 1.0;
 e = -1;
 
 //// [validEnumAssignments.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";
 })(E || (E = {}));
-var n;
-var a;
-var e;
 n = e;
 n = E.A;
 a = n;

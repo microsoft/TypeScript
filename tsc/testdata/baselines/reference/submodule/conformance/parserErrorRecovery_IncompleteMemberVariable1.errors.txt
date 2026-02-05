@@ -1,0 +1,34 @@
+parserErrorRecovery_IncompleteMemberVariable1.ts(12,16): error TS2564: Property 'con' has no initializer and is not definitely assigned in the constructor.
+
+
+==== parserErrorRecovery_IncompleteMemberVariable1.ts (1 errors) ====
+    // Interface
+    interface IPoint {
+        getDist(): number;
+    }
+    
+    // Module
+    namespace Shapes {
+    
+        // Class
+        export class Point implements IPoint {
+    
+            public con: "hello";
+                   ~~~
+!!! error TS2564: Property 'con' has no initializer and is not definitely assigned in the constructor.
+            // Constructor
+            constructor (public x: number, public y: number) { }
+    
+            // Instance member
+            getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+    
+            // Static member
+            static origin = new Point(0, 0);
+        }
+    
+    }
+    
+    // Local variables
+    var p: IPoint = new Shapes.Point(3, 4);
+    var dist = p.getDist();
+    

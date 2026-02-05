@@ -1,20 +1,20 @@
 --- old.controlFlowInstanceof.symbols
 +++ new.controlFlowInstanceof.symbols
-@@= skipped -254, +254 lines =@@
+@@= skipped -257, +257 lines =@@
  function AtTop(val) { this.val = val }
  >AtTop : Symbol(AtTop, Decl(uglify.js, 0, 0))
- >val : Symbol(val, Decl(uglify.js, 1, 15))
-->this.val : Symbol(AtTop.val, Decl(uglify.js, 1, 21))
+ >val : Symbol(val, Decl(uglify.js, 4, 15))
+->this.val : Symbol(AtTop.val, Decl(uglify.js, 4, 21))
 ->this : Symbol(AtTop, Decl(uglify.js, 0, 0))
-->val : Symbol(AtTop.val, Decl(uglify.js, 1, 21))
- >val : Symbol(val, Decl(uglify.js, 1, 15))
+->val : Symbol(AtTop.val, Decl(uglify.js, 4, 21))
+ >val : Symbol(val, Decl(uglify.js, 4, 15))
 
  /** @type {*} */
 @@= skipped -14, +11 lines =@@
  >AtTop : Symbol(AtTop, Decl(uglify.js, 0, 0))
 
      v.val
-->v.val : Symbol(AtTop.val, Decl(uglify.js, 1, 21))
- >v : Symbol(v, Decl(uglify.js, 3, 3))
-->val : Symbol(AtTop.val, Decl(uglify.js, 1, 21))
+->v.val : Symbol(AtTop.val, Decl(uglify.js, 4, 21))
+ >v : Symbol(v, Decl(uglify.js, 6, 3))
+->val : Symbol(AtTop.val, Decl(uglify.js, 4, 21))
  }

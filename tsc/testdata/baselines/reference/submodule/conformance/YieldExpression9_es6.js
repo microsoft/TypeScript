@@ -6,6 +6,7 @@ var v = function*() {
 }
 
 //// [YieldExpression9_es6.js]
+"use strict";
 var v = function* () {
     yield (foo);
 };

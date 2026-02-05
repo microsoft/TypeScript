@@ -6,12 +6,12 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource3.ts, 0, 0))
 
     // Note: Any addition to the NodeType should also be supported with addition to AstWalkerDetailCallback
     export enum NodeType {
->NodeType : Symbol(NodeType, Decl(parserRealSource3.ts, 5, 19))
+>NodeType : Symbol(NodeType, Decl(parserRealSource3.ts, 5, 22))
 
         None,
 >None : Symbol(NodeType.None, Decl(parserRealSource3.ts, 7, 26))

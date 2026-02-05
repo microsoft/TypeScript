@@ -21,6 +21,7 @@ C3 as Record<string, unknown>;
 
 
 //// [mergedClassNamespaceRecordCast.js]
+"use strict";
 class C1 {
     foo() { }
 }

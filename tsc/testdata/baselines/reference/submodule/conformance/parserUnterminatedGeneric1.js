@@ -5,3 +5,4 @@
         all(promises: IPromise < any > []): IPromise<
 
 //// [parserUnterminatedGeneric1.js]
+"use strict";

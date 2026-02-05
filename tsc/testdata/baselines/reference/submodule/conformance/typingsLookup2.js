@@ -7,3 +7,4 @@
 
 
 //// [a.js]
+"use strict";

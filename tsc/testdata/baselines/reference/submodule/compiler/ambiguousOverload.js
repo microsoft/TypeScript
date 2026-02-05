@@ -14,6 +14,7 @@ var x2: string = foof2("s", null);
 var y2: number = foof2("s", null);
 
 //// [ambiguousOverload.js]
+"use strict";
 function foof(bar) { return bar; }
 ;
 var x = foof("s", null);

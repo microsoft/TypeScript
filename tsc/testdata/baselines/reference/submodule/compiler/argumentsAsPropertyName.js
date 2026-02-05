@@ -18,6 +18,7 @@ function myFunction(myType: MyType) {
 }
 
 //// [argumentsAsPropertyName.js]
+"use strict";
 function myFunction(myType) {
     for (let i = 0; i < 10; i++) {
         use(myType.arguments[i]);

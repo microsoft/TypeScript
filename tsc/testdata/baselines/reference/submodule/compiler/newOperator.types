@@ -118,7 +118,7 @@ new ctorUnion2("");
 >ctorUnion2 : (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
 >"" : ""
 
-module M {
+namespace M {
 >M : typeof M
 
     export class T {

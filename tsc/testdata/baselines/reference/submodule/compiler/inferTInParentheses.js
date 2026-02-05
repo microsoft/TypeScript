@@ -17,3 +17,4 @@ type T8 = F1 extends (args: [...((((infer T))))]) => void ? T : never;
 type T9<T> = T extends IsNumber<((((infer N))))> ? true : false;
 
 //// [inferTInParentheses.js]
+"use strict";

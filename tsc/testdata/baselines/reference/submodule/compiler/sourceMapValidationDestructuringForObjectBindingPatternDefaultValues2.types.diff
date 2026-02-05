@@ -1,0 +1,11 @@
+--- old.sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.types
++++ new.sourceMapValidationDestructuringForObjectBindingPatternDefaultValues2.types
+@@= skipped -20, +20 lines =@@
+ >name : string
+
+     skills: {
+->skills : { primary?: string; secondary?: string; }
++>skills : { primary?: string | undefined; secondary?: string | undefined; }
+
+         primary?: string;
+ >primary : string | undefined

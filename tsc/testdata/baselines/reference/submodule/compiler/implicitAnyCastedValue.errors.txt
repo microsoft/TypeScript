@@ -1,12 +1,8 @@
-implicitAnyCastedValue.ts(10,5): error TS7008: Member 'bar' implicitly has an 'any' type.
-implicitAnyCastedValue.ts(11,5): error TS7008: Member 'foo' implicitly has an 'any' type.
-implicitAnyCastedValue.ts(26,5): error TS7008: Member 'getValue' implicitly has an 'any' type.
-implicitAnyCastedValue.ts(41,10): error TS7010: 'notCastedNull', which lacks return-type annotation, implicitly has an 'any' return type.
 implicitAnyCastedValue.ts(53,24): error TS7006: Parameter 'x' implicitly has an 'any' type.
 implicitAnyCastedValue.ts(62,24): error TS7006: Parameter 'x' implicitly has an 'any' type.
 
 
-==== implicitAnyCastedValue.ts (6 errors) ====
+==== implicitAnyCastedValue.ts (2 errors) ====
     var x = function () {
         return <any>0;  // this should not be an error
     }
@@ -17,11 +13,7 @@ implicitAnyCastedValue.ts(62,24): error TS7006: Parameter 'x' implicitly has an 
     
     class C {
         bar = null;  // this should be an error
-        ~~~
-!!! error TS7008: Member 'bar' implicitly has an 'any' type.
         foo = undefined;  // this should be an error
-        ~~~
-!!! error TS7008: Member 'foo' implicitly has an 'any' type.
         public get tempVar() {
             return <any>0;  // this should not be an error
         }
@@ -37,8 +29,6 @@ implicitAnyCastedValue.ts(62,24): error TS7006: Parameter 'x' implicitly has an 
     
     class C1 {
         getValue = null;  // this should be an error
-        ~~~~~~~~
-!!! error TS7008: Member 'getValue' implicitly has an 'any' type.
     
         public get castedGet() {
             return <any>this.getValue;  // this should not be an error
@@ -54,8 +44,6 @@ implicitAnyCastedValue.ts(62,24): error TS7006: Parameter 'x' implicitly has an 
     }
     
     function notCastedNull() {
-             ~~~~~~~~~~~~~
-!!! error TS7010: 'notCastedNull', which lacks return-type annotation, implicitly has an 'any' return type.
         return null;  // this should be an error
     }
     

@@ -27,7 +27,7 @@ export const MultipleUnicodeChars = () => {
 
 //// [jsxUnicodeEscapeSequence.js]
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 export const InlineUnicodeChar = () => {
     // This should work correctly - inline character with other content
     return _jsx("div", { children: _jsx("span", { children: "Warning: \u26A0 Error" }) });

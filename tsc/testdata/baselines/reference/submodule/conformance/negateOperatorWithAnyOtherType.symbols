@@ -32,11 +32,11 @@ function foo(): any {
 class A {
 >A : Symbol(A, Decl(negateOperatorWithAnyOtherType.ts, 11, 1))
 
-    public a: any;
+    public a!: any;
 >a : Symbol(A.a, Decl(negateOperatorWithAnyOtherType.ts, 12, 9))
 
     static foo(): any {
->foo : Symbol(A.foo, Decl(negateOperatorWithAnyOtherType.ts, 13, 18))
+>foo : Symbol(A.foo, Decl(negateOperatorWithAnyOtherType.ts, 13, 19))
 
         var a;
 >a : Symbol(a, Decl(negateOperatorWithAnyOtherType.ts, 15, 11))
@@ -45,7 +45,7 @@ class A {
 >a : Symbol(a, Decl(negateOperatorWithAnyOtherType.ts, 15, 11))
     }
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(negateOperatorWithAnyOtherType.ts, 18, 1))
 
     export var n: any;
@@ -123,9 +123,9 @@ var ResultIsNumber13 = -foo();
 
 var ResultIsNumber14 = -A.foo();
 >ResultIsNumber14 : Symbol(ResultIsNumber14, Decl(negateOperatorWithAnyOtherType.ts, 43, 3))
->A.foo : Symbol(A.foo, Decl(negateOperatorWithAnyOtherType.ts, 13, 18))
+>A.foo : Symbol(A.foo, Decl(negateOperatorWithAnyOtherType.ts, 13, 19))
 >A : Symbol(A, Decl(negateOperatorWithAnyOtherType.ts, 11, 1))
->foo : Symbol(A.foo, Decl(negateOperatorWithAnyOtherType.ts, 13, 18))
+>foo : Symbol(A.foo, Decl(negateOperatorWithAnyOtherType.ts, 13, 19))
 
 var ResultIsNumber15 = -(ANY - ANY1);
 >ResultIsNumber15 : Symbol(ResultIsNumber15, Decl(negateOperatorWithAnyOtherType.ts, 44, 3))

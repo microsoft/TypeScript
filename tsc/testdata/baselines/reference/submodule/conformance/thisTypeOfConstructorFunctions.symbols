@@ -29,6 +29,9 @@ Cp.prototype = {
 >m4 : Symbol(m4, Decl(thisTypeOfConstructorFunctions.js, 13, 16))
 
         this.z = this.y; return this
+>this : Symbol(__object, Decl(thisTypeOfConstructorFunctions.js, 13, 14))
+>this : Symbol(__object, Decl(thisTypeOfConstructorFunctions.js, 13, 14))
+>this : Symbol(__object, Decl(thisTypeOfConstructorFunctions.js, 13, 14))
     }
 }
 

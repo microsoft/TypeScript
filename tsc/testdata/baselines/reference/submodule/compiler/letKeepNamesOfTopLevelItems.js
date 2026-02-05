@@ -6,11 +6,12 @@ function foo() {
     let x;
 }
 
-module A {
+namespace A {
     let x;
 }
 
 //// [letKeepNamesOfTopLevelItems.js]
+"use strict";
 let x;
 function foo() {
     let x;

@@ -1,6 +1,6 @@
 --- old.bitwiseNotOperatorWithAnyOtherType.js
 +++ new.bitwiseNotOperatorWithAnyOtherType.js
-@@= skipped -75, +75 lines =@@
+@@= skipped -71, +71 lines =@@
      return a;
  }
  class A {

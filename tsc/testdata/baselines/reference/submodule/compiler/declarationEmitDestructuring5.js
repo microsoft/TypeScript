@@ -8,6 +8,7 @@ function bar1([z, , , ] = [1, 3, 4, 6, 7]) { }
 function bar2([,,z, , , ]) { }
 
 //// [declarationEmitDestructuring5.js]
+"use strict";
 function baz([, z, ,]) { }
 function foo([, b,]) { }
 function bar([z, , ,]) { }

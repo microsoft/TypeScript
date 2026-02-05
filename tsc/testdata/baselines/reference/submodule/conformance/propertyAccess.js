@@ -2,10 +2,10 @@
 
 //// [propertyAccess.ts]
 class A {
-    a: number;
+    a!: number;
 }
 class B extends A {
-    b: number;
+    b!: number;
 }
 enum Compass {
     North, South, East, West
@@ -13,7 +13,7 @@ enum Compass {
 
 var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
 var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
-var bothIndex:
+declare var bothIndex:
     {
         [n: string]: A;
         [m: number]: B;
@@ -29,8 +29,8 @@ var obj = {
     'literal property': 100
 };
 var anyVar: any = {};
-var stringOrNumber: string | number;
-var someObject: { name: string };
+declare var stringOrNumber: string | number;
+declare var someObject: { name: string };
 
 // Assign to a property access
 obj.y = 4;
@@ -153,6 +153,7 @@ var x3: A;
 
 
 //// [propertyAccess.js]
+"use strict";
 class A {
     a;
 }
@@ -168,7 +169,6 @@ var Compass;
 })(Compass || (Compass = {}));
 var numIndex = { 3: 'three', 'three': 'three' };
 var strIndex = { 'N': Compass.North, 'E': Compass.East };
-var bothIndex;
 function noIndex() { }
 var obj = {
     10: 'ten',
@@ -178,8 +178,6 @@ var obj = {
     'literal property': 100
 };
 var anyVar = {};
-var stringOrNumber;
-var someObject;
 // Assign to a property access
 obj.y = 4;
 // Property access on value of type 'any'

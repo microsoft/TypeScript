@@ -11,7 +11,8 @@ func TestImplementation01(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface Fo/*1*/o {}
+	const content = `// @lib: es5
+interface Fo/*1*/o {}
 class /*2*/Bar implements Foo {}`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()

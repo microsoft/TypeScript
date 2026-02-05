@@ -17,6 +17,7 @@ class B {
 
 
 //// [privateNameFieldClassExpression.js]
+"use strict";
 class B {
     #foo = class {
         constructor() {

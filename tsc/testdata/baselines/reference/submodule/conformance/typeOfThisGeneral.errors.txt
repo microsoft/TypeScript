@@ -18,20 +18,20 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
         constructor() {
             //type of 'this' in constructor body is the class instance type
             var p = this.canary;
-            var p: number;
+            var p!: number;
             this.canary = 3;
         }
     
         //type of 'this' in member function param list is the class instance type
         memberFunc(t = this) {
-            var t: MyTestClass;
+            var t!: MyTestClass;
                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyTestClass'.
 !!! related TS6203 typeOfThisGeneral.ts:13:16: 't' was also declared here.
     
             //type of 'this' in member function body is the class instance type
             var p = this;
-            var p: MyTestClass;
+            var p!: MyTestClass;
                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'.
 !!! related TS6203 typeOfThisGeneral.ts:17:13: 'p' was also declared here.
@@ -40,7 +40,7 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
         //type of 'this' in member accessor(get and set) body is the class instance type
         get prop() {
             var p = this;
-            var p: MyTestClass;
+            var p!: MyTestClass;
                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'.
 !!! related TS6203 typeOfThisGeneral.ts:23:13: 'p' was also declared here.
@@ -48,7 +48,7 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
         }
         set prop(v) {
             var p = this;
-            var p: MyTestClass;
+            var p!: MyTestClass;
                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'.
 !!! related TS6203 typeOfThisGeneral.ts:28:13: 'p' was also declared here.
@@ -59,7 +59,7 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
         someFunc = () => {
             //type of 'this' in member variable initializer is the class instance type
             var t = this;
-            var t: MyTestClass;
+            var t!: MyTestClass;
                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyTestClass'.
 !!! related TS6203 typeOfThisGeneral.ts:36:13: 't' was also declared here.
@@ -67,13 +67,13 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
     
         //type of 'this' in static function param list is constructor function type
         static staticFn(t = this) {
-            var t: typeof MyTestClass;
+            var t!: typeof MyTestClass;
             var t = MyTestClass;
             t.staticCanary;
     
             //type of 'this' in static function body is constructor function type
             var p = this;
-            var p: typeof MyTestClass;
+            var p!: typeof MyTestClass;
             var p = MyTestClass;
             p.staticCanary;
         }
@@ -81,7 +81,7 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
         static get staticProp() {
             //type of 'this' in static accessor body is constructor function type
             var p = this;
-            var p: typeof MyTestClass;
+            var p!: typeof MyTestClass;
             var p = MyTestClass;
             p.staticCanary;
             return this;
@@ -89,7 +89,7 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
         static set staticProp(v: typeof MyTestClass) {
             //type of 'this' in static accessor body is constructor function type
             var p = this;
-            var p: typeof MyTestClass;
+            var p!: typeof MyTestClass;
             var p = MyTestClass;
             p.staticCanary;
         }
@@ -102,20 +102,20 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
         constructor() {
             //type of 'this' in constructor body is the class instance type
             var p = this.canary;
-            var p: number;
+            var p!: number;
             this.canary = 3;
         }
     
         //type of 'this' in member function param list is the class instance type
         memberFunc(t = this) {
-            var t: MyGenericTestClass<T, U>;
+            var t!: MyGenericTestClass<T, U>;
                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
 !!! related TS6203 typeOfThisGeneral.ts:82:16: 't' was also declared here.
     
             //type of 'this' in member function body is the class instance type
             var p = this;
-            var p: MyGenericTestClass<T, U>;
+            var p!: MyGenericTestClass<T, U>;
                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
 !!! related TS6203 typeOfThisGeneral.ts:86:13: 'p' was also declared here.
@@ -124,7 +124,7 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
         //type of 'this' in member accessor(get and set) body is the class instance type
         get prop() {
             var p = this;
-            var p: MyGenericTestClass<T, U>;
+            var p!: MyGenericTestClass<T, U>;
                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
 !!! related TS6203 typeOfThisGeneral.ts:92:13: 'p' was also declared here.
@@ -132,7 +132,7 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
         }
         set prop(v) {
             var p = this;
-            var p: MyGenericTestClass<T, U>;
+            var p!: MyGenericTestClass<T, U>;
                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
 !!! related TS6203 typeOfThisGeneral.ts:97:13: 'p' was also declared here.
@@ -143,7 +143,7 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
         someFunc = () => {
             //type of 'this' in member variable initializer is the class instance type
             var t = this;
-            var t: MyGenericTestClass<T, U>;
+            var t!: MyGenericTestClass<T, U>;
                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
 !!! related TS6203 typeOfThisGeneral.ts:105:13: 't' was also declared here.
@@ -151,13 +151,13 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
     
         //type of 'this' in static function param list is constructor function type
         static staticFn(t = this) {
-            var t: typeof MyGenericTestClass;
+            var t!: typeof MyGenericTestClass;
             var t = MyGenericTestClass;
             t.staticCanary;
     
             //type of 'this' in static function body is constructor function type
             var p = this;
-            var p: typeof MyGenericTestClass;
+            var p!: typeof MyGenericTestClass;
             var p = MyGenericTestClass;
             p.staticCanary;
         }
@@ -165,7 +165,7 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
         static get staticProp() {
             //type of 'this' in static accessor body is constructor function type
             var p = this;
-            var p: typeof MyGenericTestClass;
+            var p!: typeof MyGenericTestClass;
             var p = MyGenericTestClass;
             p.staticCanary;
             return this;
@@ -173,7 +173,7 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
         static set staticProp(v: typeof MyGenericTestClass) {
             //type of 'this' in static accessor body is constructor function type
             var p = this;
-            var p: typeof MyGenericTestClass;
+            var p!: typeof MyGenericTestClass;
             var p = MyGenericTestClass;
             p.staticCanary;
         }
@@ -181,39 +181,39 @@ typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations mus
     
     //type of 'this' in a function declaration param list is Any
     function fn(s = this) {
-        var s: any;
+        var s!: any;
         s.spaaaaaaace = 4;
     
         //type of 'this' in a function declaration body is Any
-        var t: any;
+        var t!: any;
         var t = this;
         this.spaaaaace = 4;
     }
     
     //type of 'this' in a function expression param list list is Any
     var q1 = function (s = this) {
-        var s: any;
+        var s!: any;
         s.spaaaaaaace = 4;
     
         //type of 'this' in a function expression body is Any
-        var t: any;
+        var t!: any;
         var t = this;
         this.spaaaaace = 4;
     }
     
     //type of 'this' in a fat arrow expression param list is typeof globalThis
     var q2 = (s = this) => {
-        var s: typeof globalThis;
+        var s!: typeof globalThis;
         s.spaaaaaaace = 4;
     
         //type of 'this' in a fat arrow expression body is typeof globalThis
-        var t: typeof globalThis;
+        var t!: typeof globalThis;
         var t = this;
         this.spaaaaace = 4;
     }
     
-    //type of 'this' in global module is GlobalThis
-    var t: typeof globalThis;
+    //type of 'this' in global namespace is GlobalThis
+    var t!: typeof globalThis;
     var t = this;
     this.spaaaaace = 4;
     

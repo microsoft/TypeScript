@@ -5,3 +5,4 @@ interface I extends A extends B {
 }
 
 //// [parserInterfaceDeclaration1.js]
+"use strict";

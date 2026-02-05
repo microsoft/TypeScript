@@ -31,14 +31,14 @@ declare function foo(x: () => Container<Ref<number>>): void;
 >Container : Symbol(Container, Decl(errorElaboration.ts, 4, 1))
 >Ref : Symbol(Ref, Decl(errorElaboration.ts, 0, 0))
 
-let a: () => Container<Ref<string>>;
->a : Symbol(a, Decl(errorElaboration.ts, 10, 3))
+declare let a: () => Container<Ref<string>>;
+>a : Symbol(a, Decl(errorElaboration.ts, 10, 11))
 >Container : Symbol(Container, Decl(errorElaboration.ts, 4, 1))
 >Ref : Symbol(Ref, Decl(errorElaboration.ts, 0, 0))
 
 foo(a);
 >foo : Symbol(foo, Decl(errorElaboration.ts, 8, 1))
->a : Symbol(a, Decl(errorElaboration.ts, 10, 3))
+>a : Symbol(a, Decl(errorElaboration.ts, 10, 11))
 
 // Repro for #25498
 

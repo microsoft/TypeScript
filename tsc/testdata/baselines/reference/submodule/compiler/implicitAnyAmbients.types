@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/implicitAnyAmbients.ts] ////
 
 === implicitAnyAmbients.ts ===
-declare module m {
+declare namespace m {
 >m : typeof m
 
     var x; // error
@@ -50,7 +50,7 @@ declare module m {
 >x : any
     }
 
-    module n {
+    namespace n {
 >n : typeof n
 
         var y; // error

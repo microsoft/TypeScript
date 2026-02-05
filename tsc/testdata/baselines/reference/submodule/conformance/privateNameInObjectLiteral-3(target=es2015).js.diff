@@ -1,0 +1,11 @@
+--- old.privateNameInObjectLiteral-3(target=es2015).js
++++ new.privateNameInObjectLiteral-3(target=es2015).js
+@@= skipped -10, +10 lines =@@
+ //// [privateNameInObjectLiteral-3.js]
+ "use strict";
+ const obj = {
+-    get () {
++    get #foo() {
+         return "";
+     }
+ };

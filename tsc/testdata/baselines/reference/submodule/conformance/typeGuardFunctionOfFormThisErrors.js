@@ -33,7 +33,7 @@ function invalidGuard(c: any): this is number {
     return false;
 }
 
-let c: number | number[];
+declare var c: number | number[];
 if (invalidGuard(c)) {
     c;
 }
@@ -62,6 +62,7 @@ else {
 }
 
 //// [typeGuardFunctionOfFormThisErrors.js]
+"use strict";
 class RoyalGuard {
     isLeader() {
         return this instanceof LeadGuard;
@@ -88,7 +89,6 @@ a.isLeader = a.isFollower;
 function invalidGuard(c) {
     return false;
 }
-let c;
 if (invalidGuard(c)) {
     c;
 }
@@ -129,7 +129,7 @@ interface GuardInterface extends RoyalGuard {
 declare let a: RoyalGuard;
 declare let b: GuardInterface;
 declare function invalidGuard(c: any): this is number;
-declare let c: number | number[];
+declare var c: number | number[];
 declare let holder: {
     invalidGuard: typeof invalidGuard;
 };

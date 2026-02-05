@@ -1,0 +1,16 @@
+--- old.tsxSpreadChildrenInvalidType(jsx=react-jsx,target=es2015).types
++++ new.tsxSpreadChildrenInvalidType(jsx=react-jsx,target=es2015).types
+@@= skipped -32, +32 lines =@@
+ >div : any
+ >prop.key.toString() + prop.todo : string
+ >prop.key.toString() : string
+->prop.key.toString : (radix?: number) => string
++>prop.key.toString : (radix?: number | undefined) => string
+ >prop.key : number
+ >prop : { key: number; todo: string; }
+ >key : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ >prop.todo : string
+ >prop : { key: number; todo: string; }
+ >todo : string

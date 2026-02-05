@@ -45,6 +45,14 @@ function f6<K extends string>(obj: Mapped6<K>, key: keyof Mapped6<K>) {
   let s: `_${string}` = obj[key]; // Error
 }
 
+type Mapped7<K extends string> = {
+  [P in K as [P] extends [`_${string}`] ? P : never]: P;
+};
+
+function f7<K extends string>(obj: Mapped7<K>, key: keyof Mapped7<K>) {
+  let s: `_${string}` = obj[key];
+}
+
 // Repro from #47794
 
 type Foo<T extends string> = {
@@ -106,6 +114,9 @@ function f5(obj, key) {
 function f6(obj, key) {
     let s = obj[key]; // Error
 }
+function f7(obj, key) {
+    let s = obj[key];
+}
 const get = (t, foo) => foo[`get${t}`]; // Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'
 function validate(obj, bounds) {
     for (const [key, val] of Object.entries(obj)) {
@@ -154,6 +165,10 @@ type Mapped6<K extends string> = {
     [P in K as `_${P}`]: P;
 };
 declare function f6<K extends string>(obj: Mapped6<K>, key: keyof Mapped6<K>): void;
+type Mapped7<K extends string> = {
+    [P in K as [P] extends [`_${string}`] ? P : never]: P;
+};
+declare function f7<K extends string>(obj: Mapped7<K>, key: keyof Mapped7<K>): void;
 type Foo<T extends string> = {
     [RemappedT in T as `get${RemappedT}`]: RemappedT;
 };

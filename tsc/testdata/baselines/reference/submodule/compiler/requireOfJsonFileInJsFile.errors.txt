@@ -1,3 +1,4 @@
+/js.js(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 /user.js(2,7): error TS2339: Property 'b' does not exist on type '{ a: number; }'.
 /user.js(5,7): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ b: number; }'.
 /user.js(9,7): error TS2339: Property 'b' does not exist on type '{ a: number; }'.
@@ -31,6 +32,8 @@
 ==== /json.json (0 errors) ====
     { "a": 0 }
     
-==== /js.js (0 errors) ====
+==== /js.js (1 errors) ====
     module.exports = { a: 0 };
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     

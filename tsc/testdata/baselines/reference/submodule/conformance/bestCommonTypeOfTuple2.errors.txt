@@ -1,3 +1,10 @@
+bestCommonTypeOfTuple2.ts(2,19): error TS7008: Member 'i' implicitly has an 'any' type.
+bestCommonTypeOfTuple2.ts(3,27): error TS7008: Member 'c' implicitly has an 'any' type.
+bestCommonTypeOfTuple2.ts(4,27): error TS7008: Member 'd' implicitly has an 'any' type.
+bestCommonTypeOfTuple2.ts(5,27): error TS7008: Member 'e' implicitly has an 'any' type.
+bestCommonTypeOfTuple2.ts(6,21): error TS7008: Member 'f' implicitly has an 'any' type.
+bestCommonTypeOfTuple2.ts(8,40): error TS7008: Member 'c' implicitly has an 'any' type.
+bestCommonTypeOfTuple2.ts(9,34): error TS7008: Member 'd' implicitly has an 'any' type.
 bestCommonTypeOfTuple2.ts(17,14): error TS2493: Tuple type '[C, base]' of length '2' has no element at index '4'.
 bestCommonTypeOfTuple2.ts(18,14): error TS2493: Tuple type '[C, D]' of length '2' has no element at index '4'.
 bestCommonTypeOfTuple2.ts(19,14): error TS2493: Tuple type '[C1, D1]' of length '2' has no element at index '4'.
@@ -5,22 +12,36 @@ bestCommonTypeOfTuple2.ts(20,14): error TS2493: Tuple type '[base1, C1]' of leng
 bestCommonTypeOfTuple2.ts(21,14): error TS2493: Tuple type '[C1, F]' of length '2' has no element at index '2'.
 
 
-==== bestCommonTypeOfTuple2.ts (5 errors) ====
+==== bestCommonTypeOfTuple2.ts (12 errors) ====
     interface base { }
     interface base1 { i }
+                      ~
+!!! error TS7008: Member 'i' implicitly has an 'any' type.
     class C implements base { c }
+                              ~
+!!! error TS7008: Member 'c' implicitly has an 'any' type.
     class D implements base { d }
+                              ~
+!!! error TS7008: Member 'd' implicitly has an 'any' type.
     class E implements base { e }
+                              ~
+!!! error TS7008: Member 'e' implicitly has an 'any' type.
     class F extends C { f }
+                        ~
+!!! error TS7008: Member 'f' implicitly has an 'any' type.
     
     class C1 implements base1 { i = "foo"; c }
+                                           ~
+!!! error TS7008: Member 'c' implicitly has an 'any' type.
     class D1 extends C1 { i = "bar"; d }
+                                     ~
+!!! error TS7008: Member 'd' implicitly has an 'any' type.
     
-    var t1: [C, base];
-    var t2: [C, D];
-    var t3: [C1, D1];
-    var t4: [base1, C1];
-    var t5: [C1, F]
+    declare var t1: [C, base];
+    declare var t2: [C, D];
+    declare var t3: [C1, D1];
+    declare var t4: [base1, C1];
+    declare var t5: [C1, F]
     
     var e11 = t1[4]; // base
                  ~

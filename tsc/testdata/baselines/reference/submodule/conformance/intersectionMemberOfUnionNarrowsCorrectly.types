@@ -3,20 +3,20 @@
 === intersectionMemberOfUnionNarrowsCorrectly.ts ===
 export type U = { kind?: 'A', a: string } | { kind?: 'B' } & { b: string };
 >U : U
->kind : "A"
+>kind : "A" | undefined
 >a : string
->kind : "B"
+>kind : "B" | undefined
 >b : string
 
 type Ex<T, U> = T extends U ? T : never;
 >Ex : Ex<T, U>
 
 declare let x: Ex<U, { kind?: 'A' }>
->x : { kind?: "A"; a: string; }
->kind : "A"
+>x : { kind?: "A" | undefined; a: string; }
+>kind : "A" | undefined
 
 x.a
 >x.a : string
->x : { kind?: "A"; a: string; }
+>x : { kind?: "A" | undefined; a: string; }
 >a : string
 

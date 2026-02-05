@@ -17,6 +17,7 @@ var j: <T, U>(x: T, y: U) => T;
 var j: <T, U>(x: any, y: any) => string;
 
 //// [identityForSignaturesWithTypeParametersAndAny.js]
+"use strict";
 var f;
 var f;
 var g;

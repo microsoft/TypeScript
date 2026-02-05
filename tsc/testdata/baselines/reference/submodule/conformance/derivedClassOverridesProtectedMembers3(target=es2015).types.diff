@@ -1,0 +1,73 @@
+--- old.derivedClassOverridesProtectedMembers3(target=es2015).types
++++ new.derivedClassOverridesProtectedMembers3(target=es2015).types
+@@= skipped -17, +17 lines =@@
+ >x : { foo: string; }
+
+     b(a: typeof x) { }
+->b : (a: typeof x) => void
++>b : (a: { foo: string; }) => void
+ >a : { foo: string; }
+ >x : { foo: string; }
+
+@@= skipped -14, +14 lines =@@
+ >x : { foo: string; }
+
+     d: (a: typeof x) => void;
+->d : (a: typeof x) => void
++>d : (a: { foo: string; }) => void
+ >a : { foo: string; }
+ >x : { foo: string; }
+
+@@= skipped -9, +9 lines =@@
+ >x : { foo: string; }
+
+     static s(a: typeof x) { }
+->s : (a: typeof x) => void
++>s : (a: { foo: string; }) => void
+ >a : { foo: string; }
+ >x : { foo: string; }
+
+@@= skipped -14, +14 lines =@@
+ >x : { foo: string; }
+
+     static u: (a: typeof x) => void;
+->u : (a: typeof x) => void
++>u : (a: { foo: string; }) => void
+ >a : { foo: string; }
+ >x : { foo: string; }
+
+@@= skipped -32, +32 lines =@@
+ >Base : Base
+
+     protected b(a: typeof x) { }
+->b : (a: typeof x) => void
++>b : (a: { foo: string; }) => void
+ >a : { foo: string; }
+ >x : { foo: string; }
+
+@@= skipped -50, +50 lines =@@
+ >Base : Base
+
+     protected d: (a: typeof x) => void ;
+->d : (a: typeof x) => void
++>d : (a: { foo: string; }) => void
+ >a : { foo: string; }
+ >x : { foo: string; }
+
+@@= skipped -33, +33 lines =@@
+ >Base : Base
+
+     protected static s(a: typeof x) { }
+->s : (a: typeof x) => void
++>s : (a: { foo: string; }) => void
+ >a : { foo: string; }
+ >x : { foo: string; }
+
+@@= skipped -50, +50 lines =@@
+ >Base : Base
+
+     protected static u: (a: typeof x) => void ;
+->u : (a: typeof x) => void
++>u : (a: { foo: string; }) => void
+ >a : { foo: string; }
+ >x : { foo: string; }

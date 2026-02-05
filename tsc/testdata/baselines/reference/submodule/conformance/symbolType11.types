@@ -15,9 +15,9 @@ s && s;
 >s : symbol
 
 s && [];
->s && [] : undefined[]
+>s && [] : never[]
 >s : symbol
->[] : undefined[]
+>[] : never[]
 
 0 && s;
 >0 && s : 0
@@ -27,10 +27,10 @@ s && [];
 s || s;
 >s || s : symbol
 >s : symbol
->s : symbol
+>s : never
 
 s || 1;
->s || 1 : symbol | 1
+>s || 1 : symbol
 >s : symbol
 >1 : 1
 

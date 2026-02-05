@@ -1,0 +1,7 @@
+arrowFunctionWithObjectLiteralBody2.ts(1,9): error TS7006: Parameter 'a' implicitly has an 'any' type.
+
+
+==== arrowFunctionWithObjectLiteralBody2.ts (1 errors) ====
+    var v = a => <any><any>{}
+            ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.

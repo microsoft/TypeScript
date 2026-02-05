@@ -239,19 +239,19 @@ function f3() {
 >E : typeof E
 >A : E.A
 >cond ? true : 123 : 123 | true
->cond : boolean
+>cond : false
 >true : true
 >123 : 123
 
     const c4 = cond ? "abc" : null;
->c4 : "abc"
->cond ? "abc" : null : "abc"
+>c4 : "abc" | null
+>cond ? "abc" : null : "abc" | null
 >cond : boolean
 >"abc" : "abc"
 
     const c5 = cond ? 456 : undefined;
->c5 : 456
->cond ? 456 : undefined : 456
+>c5 : 456 | undefined
+>cond ? 456 : undefined : 456 | undefined
 >cond : boolean
 >456 : 456
 >undefined : undefined
@@ -275,7 +275,7 @@ function f3() {
 >cond : boolean
 >c6 : { kind: 123; }
 >cond ? c7 : "hello" : "hello" | [1 | 2, "bar" | "foo"]
->cond : boolean
+>cond : false
 >c7 : [1 | 2, "bar" | "foo"]
 >"hello" : "hello"
 
@@ -292,12 +292,12 @@ function f3() {
 >c3 : 123 | true | E.A
 
     let x4 = c4;
->x4 : string
->c4 : "abc"
+>x4 : string | null
+>c4 : "abc" | null
 
     let x5 = c5;
->x5 : number
->c5 : 456
+>x5 : number | undefined
+>c5 : 456 | undefined
 
     let x6 = c6;
 >x6 : { kind: 123; }
@@ -741,9 +741,9 @@ function append<T>(a: T[], x: T): T[] {
     let result = a.slice();
 >result : T[]
 >a.slice() : T[]
->a.slice : (start?: number, end?: number) => T[]
+>a.slice : (start?: number | undefined, end?: number | undefined) => T[]
 >a : T[]
->slice : (start?: number, end?: number) => T[]
+>slice : (start?: number | undefined, end?: number | undefined) => T[]
 
     result.push(x);
 >result.push(x) : number

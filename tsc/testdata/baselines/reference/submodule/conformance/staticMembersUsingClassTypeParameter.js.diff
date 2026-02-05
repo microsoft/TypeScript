@@ -1,7 +1,7 @@
 --- old.staticMembersUsingClassTypeParameter.js
 +++ new.staticMembersUsingClassTypeParameter.js
-@@= skipped -19, +19 lines =@@
- //// [staticMembersUsingClassTypeParameter.js]
+@@= skipped -20, +20 lines =@@
+ "use strict";
  // BUG 745747
  class C {
 +    static x;

@@ -4,21 +4,17 @@
  	 */
  	m(foo = {}) {
  >m : (foo?: object) => void
-->foo : any
+->foo : object | undefined
 +>foo : object
  >{} : {}
 
  		/**
- 		 * @type object
+@@= skipped -8, +8 lines =@@
  		 */
  		this["arguments"] = foo;
-->this["arguments"] = foo : any
-->this["arguments"] : any
-+>this["arguments"] = foo : object
+ >this["arguments"] = foo : object
+->this["arguments"] : object | undefined
 +>this["arguments"] : object
  >this : this
  >"arguments" : "arguments"
-->foo : any
-+>foo : object
- 	}
- }
+ >foo : object

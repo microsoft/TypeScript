@@ -4,4 +4,5 @@
 import TypeScript = TypeScriptServices.TypeScript;
 
 //// [parserImportDeclaration1.js]
+"use strict";
 var TypeScript = TypeScriptServices.TypeScript;

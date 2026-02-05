@@ -37,6 +37,7 @@ y
 
 
 //// [asiArith.js]
+"use strict";
 var x = 1;
 var y = 1;
 var z = x

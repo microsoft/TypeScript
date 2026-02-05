@@ -20,6 +20,7 @@ Box<number> instanceof Object; // OK
 
 
 //// [instanceofOnInstantiationExpression.js]
+"use strict";
 maybeBox instanceof Box; // OK
 maybeBox instanceof Box; // error
 maybeBox instanceof (Box); // error

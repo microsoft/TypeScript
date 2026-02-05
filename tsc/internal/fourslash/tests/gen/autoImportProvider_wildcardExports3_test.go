@@ -38,7 +38,8 @@ export const Card = () => null;
     "module": "esnext",
     "moduleResolution": "bundler",
     "noEmit": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "lib": ["es5"]
   },
  "include": ["app"]
 }

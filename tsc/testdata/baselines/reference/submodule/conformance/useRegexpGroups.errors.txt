@@ -1,0 +1,51 @@
+useRegexpGroups.ts(4,12): error TS18047: 'result' is possibly 'null'.
+useRegexpGroups.ts(6,13): error TS18047: 'result' is possibly 'null'.
+useRegexpGroups.ts(6,13): error TS18048: 'result.groups' is possibly 'undefined'.
+useRegexpGroups.ts(7,13): error TS18047: 'result' is possibly 'null'.
+useRegexpGroups.ts(9,14): error TS18047: 'result' is possibly 'null'.
+useRegexpGroups.ts(9,14): error TS18048: 'result.groups' is possibly 'undefined'.
+useRegexpGroups.ts(10,14): error TS18047: 'result' is possibly 'null'.
+useRegexpGroups.ts(12,12): error TS18047: 'result' is possibly 'null'.
+useRegexpGroups.ts(12,12): error TS18048: 'result.groups' is possibly 'undefined'.
+useRegexpGroups.ts(13,12): error TS18047: 'result' is possibly 'null'.
+useRegexpGroups.ts(15,11): error TS2532: Object is possibly 'undefined'.
+
+
+==== useRegexpGroups.ts (11 errors) ====
+    let re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/u;
+    let result = re.exec("2015-01-02");
+    
+    let date = result[0];
+               ~~~~~~
+!!! error TS18047: 'result' is possibly 'null'.
+    
+    let year1 = result.groups.year;
+                ~~~~~~
+!!! error TS18047: 'result' is possibly 'null'.
+                ~~~~~~~~~~~~~
+!!! error TS18048: 'result.groups' is possibly 'undefined'.
+    let year2 = result[1];
+                ~~~~~~
+!!! error TS18047: 'result' is possibly 'null'.
+    
+    let month1 = result.groups.month;
+                 ~~~~~~
+!!! error TS18047: 'result' is possibly 'null'.
+                 ~~~~~~~~~~~~~
+!!! error TS18048: 'result.groups' is possibly 'undefined'.
+    let month2 = result[2];
+                 ~~~~~~
+!!! error TS18047: 'result' is possibly 'null'.
+    
+    let day1 = result.groups.day;
+               ~~~~~~
+!!! error TS18047: 'result' is possibly 'null'.
+               ~~~~~~~~~~~~~
+!!! error TS18048: 'result.groups' is possibly 'undefined'.
+    let day2 = result[3];
+               ~~~~~~
+!!! error TS18047: 'result' is possibly 'null'.
+    
+    let foo = "foo".match(/(?<bar>foo)/)!.groups.foo;
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.

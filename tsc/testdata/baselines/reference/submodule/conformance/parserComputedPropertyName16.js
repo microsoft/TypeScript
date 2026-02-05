@@ -6,6 +6,7 @@ enum E {
 }
 
 //// [parserComputedPropertyName16.js]
+"use strict";
 var E;
 (function (E) {
     E[E[e] = 1] = e;

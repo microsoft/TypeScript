@@ -7,5 +7,6 @@ while (true) {
 }
 
 //// [parser_duplicateLabel1.js]
+"use strict";
 target: target: while (true) {
 }

@@ -1,0 +1,24 @@
+genericReversingTypeParameters.ts(2,13): error TS2564: Property 'inverseBiMap' has no initializer and is not definitely assigned in the constructor.
+genericReversingTypeParameters.ts(3,29): error TS2322: Type 'null' is not assignable to type 'V'.
+  'V' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+genericReversingTypeParameters.ts(4,37): error TS2322: Type 'null' is not assignable to type 'BiMap<V, K>'.
+
+
+==== genericReversingTypeParameters.ts (3 errors) ====
+    class BiMap<K, V> {
+        private inverseBiMap: BiMap<V, K>;
+                ~~~~~~~~~~~~
+!!! error TS2564: Property 'inverseBiMap' has no initializer and is not definitely assigned in the constructor.
+        public get(key: K): V { return null; }
+                                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'V'.
+!!! error TS2322:   'V' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+        public inverse(): BiMap<V, K> { return null; }
+                                        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'BiMap<V, K>'.
+    }
+    
+    var b = new BiMap<string, number>();
+    var r1 = b.get(''); 
+    var i = b.inverse(); // used to get the type wrong here.
+    var r2b = i.get(1); 

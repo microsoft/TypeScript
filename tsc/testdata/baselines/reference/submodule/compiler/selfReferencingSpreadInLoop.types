@@ -3,7 +3,7 @@
 === selfReferencingSpreadInLoop.ts ===
 let additional = [];
 >additional : any[]
->[] : undefined[]
+>[] : never[]
 
 for (const subcomponent of [1, 2, 3]) {
 >subcomponent : number

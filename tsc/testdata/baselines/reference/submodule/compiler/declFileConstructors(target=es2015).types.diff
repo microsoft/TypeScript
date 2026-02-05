@@ -1,0 +1,26 @@
+--- old.declFileConstructors(target=es2015).types
++++ new.declFileConstructors(target=es2015).types
+@@= skipped -35, +35 lines =@@
+ >a + rests.join("") : string
+ >a : string
+ >rests.join("") : string
+->rests.join : (separator?: string) => string
++>rests.join : (separator?: string | undefined) => string
+ >rests : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"" : ""
+     }
+ }
+@@= skipped -90, +90 lines =@@
+ >a + rests.join("") : string
+ >a : string
+ >rests.join("") : string
+->rests.join : (separator?: string) => string
++>rests.join : (separator?: string | undefined) => string
+ >rests : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"" : ""
+     }
+ }

@@ -1,0 +1,11 @@
+typeParameterAssignmentWithConstraints.ts(4,9): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== typeParameterAssignmentWithConstraints.ts (1 errors) ====
+    function f<A, B extends A>() {
+        var a: A;
+        var b: B;
+        a = b; // Error: Can't convert B to A
+            ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    }

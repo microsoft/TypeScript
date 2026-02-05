@@ -5,18 +5,18 @@
 -mod1.js(4,7): error TS2300: Duplicate identifier 'Foo'.
 -mod1.js(9,23): error TS2300: Duplicate identifier 'Baz'.
 -mod1.js(11,5): error TS2300: Duplicate identifier 'Baz'.
--
--
--==== use.js (0 errors) ====
+-use.js(6,15): error TS18048: 'mod.Baz' is possibly 'undefined'.
++mod1.js(10,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +mod1.js(10,1): error TS2300: Duplicate identifier 'export='.
 +mod1.js(10,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-+mod1.js(23,1): error TS2741: Property 'Baz' is missing in type '{ Quack: number; }' but required in type '{ Baz: typeof Baz; }'.
++mod1.js(23,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +mod1.js(23,1): error TS2300: Duplicate identifier 'export='.
++mod1.js(24,5): error TS2353: Object literal may only specify known properties, and 'Quack' does not exist in type '{ Baz: typeof Baz; }'.
 +use.js(4,12): error TS2503: Cannot find namespace 'mod'.
-+
-+
-+==== use.js (1 errors) ====
-     var mod = require('./mod1.js');
+
+
+ ==== use.js (1 errors) ====
+@@= skipped -9, +11 lines =@@
      /** @type {import("./mod1.js").Baz} */
      var b;
      /** @type {mod.Baz} */
@@ -24,8 +24,11 @@
 +!!! error TS2503: Cannot find namespace 'mod'.
      var bb;
      var bbb = new mod.Baz();
+-                  ~~~~~~~
+-!!! error TS18048: 'mod.Baz' is possibly 'undefined'.
      
-@@= skipped -15, +18 lines =@@
+-==== mod1.js (4 errors) ====
++==== mod1.js (6 errors) ====
      // error
      
      /** @typedef {number} Foo */
@@ -45,13 +48,17 @@
      module.exports = {
 +    ~~~~~~~~~~~~~~~~~~
 +    ~~~~~~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~~~~~~
          Baz: class { }
 -        ~~~
 -!!! error TS2300: Duplicate identifier 'Baz'.
 -!!! related TS6203 mod1.js:9:23: 'Baz' was also declared here.
 +    ~~~~~~~~~~~~~~~~~~
 +    ~~~~~~~~~~~~~~~~~~
++    ~~~~~~~~~~~~~~~~~~
      }
++    ~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +    ~
 +!!! error TS2300: Duplicate identifier 'export='.
 +    ~
@@ -59,17 +66,20 @@
      
      // ok
      
-@@= skipped -30, +28 lines =@@
+@@= skipped -39, +41 lines =@@
      
      /** @typedef {number} Quack */
      module.exports = {
-+    ~~~~~~~~~~~~~~
-+!!! error TS2741: Property 'Baz' is missing in type '{ Quack: number; }' but required in type '{ Baz: typeof Baz; }'.
-+!!! related TS2728 mod1.js:11:5: 'Baz' is declared here.
++    ~~~~~~~~~~~~~~~~~~
 +    ~~~~~~~~~~~~~~~~~~
          Quack: 2
 +    ~~~~~~~~~~~~
++    ~~~~~~~~~~~~
++        ~~~~~
++!!! error TS2353: Object literal may only specify known properties, and 'Quack' does not exist in type '{ Baz: typeof Baz; }'.
      }
++    ~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +    ~
 +!!! error TS2300: Duplicate identifier 'export='.
      

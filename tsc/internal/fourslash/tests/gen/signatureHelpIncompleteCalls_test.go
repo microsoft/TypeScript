@@ -11,7 +11,7 @@ func TestSignatureHelpIncompleteCalls(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module IncompleteCalls {
+	const content = `namespace IncompleteCalls {
     class Foo {
         public f1() { }
         public f2(n: number): number { return 0; }

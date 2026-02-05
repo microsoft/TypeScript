@@ -1,0 +1,10 @@
+reverseInferenceInContextualInstantiation.ts(3,1): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== reverseInferenceInContextualInstantiation.ts (1 errors) ====
+    function compare<T>(a: T, b: T): number { return 0; }
+    var x: number[];
+    x.sort(compare); // Error, but shouldn't be
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    

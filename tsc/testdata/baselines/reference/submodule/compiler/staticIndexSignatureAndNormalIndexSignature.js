@@ -7,5 +7,6 @@ class Foo {
 }
 
 //// [staticIndexSignatureAndNormalIndexSignature.js]
+"use strict";
 class Foo {
 }

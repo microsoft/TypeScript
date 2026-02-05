@@ -1,6 +1,6 @@
 --- old.inferFromGenericFunctionReturnTypes1.js
 +++ new.inferFromGenericFunctionReturnTypes1.js
-@@= skipped -76, +76 lines =@@
+@@= skipped -77, +77 lines =@@
  // Repro from #15680
  // This is a contrived class. We could do the same thing with Observables, etc.
  class SetOf {

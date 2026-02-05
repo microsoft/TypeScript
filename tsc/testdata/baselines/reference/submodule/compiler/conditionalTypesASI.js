@@ -10,6 +10,7 @@ interface JSONSchema4 {
 
 
 //// [conditionalTypesASI.js]
+"use strict";
 // Repro from #21637
 
 

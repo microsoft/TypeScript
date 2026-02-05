@@ -5,9 +5,9 @@ function f() {
 >f : () => void
 
     try {} catch(e) { }
->e : any
+>e : unknown
 
     try {} catch(e) { }
->e : any
+>e : unknown
 }
 

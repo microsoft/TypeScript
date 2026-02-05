@@ -11,8 +11,8 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
     ~~~~~~~~~~
     
     
-    module A {
-    ~~~~~~~~~~
+    namespace A {
+    ~~~~~~~~~~~~~
         while (true);
     ~~~~~~~~~~~~~~~~~
         let x;
@@ -21,12 +21,12 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
     ~
     
     
-    module A1 {
-    ~~~~~~~~~~~
+    namespace A1 {
+    ~~~~~~~~~~~~~~
         do {} while(true);
     ~~~~~~~~~~~~~~~~~~~~~~
-        module A {
-    ~~~~~~~~~~~~~~
+        namespace A {
+    ~~~~~~~~~~~~~~~~~
             interface F {}
     ~~~~~~~~~~~~~~~~~~~~~~
         }
@@ -35,12 +35,12 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
     ~
     
     
-    module A2 {
-    ~~~~~~~~~~~
+    namespace A2 {
+    ~~~~~~~~~~~~~~
         while (true);
     ~~~~~~~~~~~~~~~~~
-        module A {
-    ~~~~~~~~~~~~~~
+        namespace A {
+    ~~~~~~~~~~~~~~~~~
             var x = 1;
     ~~~~~~~~~~~~~~~~~~
         }
@@ -49,8 +49,8 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
     ~
     
     
-    module A3 {
-    ~~~~~~~~~~~
+    namespace A3 {
+    ~~~~~~~~~~~~~~
         while (true);
     ~~~~~~~~~~~~~~~~~
         type T = string;
@@ -59,12 +59,12 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
     ~
     
     
-    module A4 {
-    ~~~~~~~~~~~
+    namespace A4 {
+    ~~~~~~~~~~~~~~
         while (true);
     ~~~~~~~~~~~~~~~~~
-        module A {
-    ~~~~~~~~~~~~~~
+        namespace A {
+    ~~~~~~~~~~~~~~~~~
             const enum E { X }
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
         }
@@ -92,12 +92,12 @@ reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
 !!! error TS7027: Unreachable code detected.
     }
     
-    module B {
-    ~~~~~~~~~~
+    namespace B {
+    ~~~~~~~~~~~~~
         for (; ;);
     ~~~~~~~~~~~~~~
-        module C {
-    ~~~~~~~~~~~~~~
+        namespace C {
+    ~~~~~~~~~~~~~~~~~
         }
     ~~~~~
     }

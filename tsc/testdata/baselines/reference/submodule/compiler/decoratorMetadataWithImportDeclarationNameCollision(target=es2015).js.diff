@@ -1,0 +1,10 @@
+--- old.decoratorMetadataWithImportDeclarationNameCollision(target=es2015).js
++++ new.decoratorMetadataWithImportDeclarationNameCollision(target=es2015).js
+@@= skipped -40, +40 lines =@@
+     return target;
+ }
+ let MyClass = class MyClass {
++    db;
+     constructor(db) {
+         this.db = db;
+         this.db.doSomething();

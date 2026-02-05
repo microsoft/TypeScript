@@ -1,0 +1,18 @@
+decoratorMetadataConditionalType.ts(4,12): error TS2564: Property 'attributes' has no initializer and is not definitely assigned in the constructor.
+decoratorMetadataConditionalType.ts(8,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== decoratorMetadataConditionalType.ts (2 errors) ====
+    declare function d(): PropertyDecorator;
+    abstract class BaseEntity<T> {
+        @d()
+        public attributes: T extends { attributes: infer A } ? A : undefined;
+               ~~~~~~~~~~
+!!! error TS2564: Property 'attributes' has no initializer and is not definitely assigned in the constructor.
+    }
+    class C {
+        @d()
+        x: number extends string ? false : true;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }

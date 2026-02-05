@@ -1,20 +1,20 @@
 --- old.thisInTupleTypeParameterConstraints.types
 +++ new.thisInTupleTypeParameterConstraints.types
-@@= skipped -14, +14 lines =@@
+@@= skipped -12, +12 lines =@@
      // 4 methods will run out of memory if this-types are not instantiated
      // correctly for tuple types that are type parameter constraints
      map<U>(arg: this): void;
-->map : <U>(arg: this) => void
+->map : { <U_1>(callbackfn: (value: T, index: number, array: T[]) => U_1, thisArg?: any): U_1[]; <U>(arg: this): void; }
 +>map : { <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[]; <U>(arg: this): void; }
  >arg : this
 
      reduceRight<U>(arg: this): void;
-->reduceRight : <U>(arg: this) => void
+->reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U_1>(callbackfn: (previousValue: U_1, currentValue: T, currentIndex: number, array: T[]) => U_1, initialValue: U_1): U_1; <U>(arg: this): void; }
 +>reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; <U>(arg: this): void; }
  >arg : this
 
      reduce<U>(arg: this): void;
-->reduce : <U>(arg: this) => void
+->reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U_1>(callbackfn: (previousValue: U_1, currentValue: T, currentIndex: number, array: T[]) => U_1, initialValue: U_1): U_1; <U>(arg: this): void; }
 +>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; <U>(arg: this): void; }
  >arg : this
 

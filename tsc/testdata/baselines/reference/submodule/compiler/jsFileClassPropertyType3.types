@@ -28,10 +28,10 @@ class C {
 === bar.ts ===
 (new C()).p = "string"; // Error
 >(new C()).p = "string" : "string"
->(new C()).p : number
+>(new C()).p : number | null
 >(new C()) : C
 >new C() : C
 >C : typeof C
->p : number
+>p : number | null
 >"string" : "string"
 

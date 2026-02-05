@@ -1,0 +1,10 @@
+--- old.noImplicitAnyMissingGetAccessor(target=es2015).js
++++ new.noImplicitAnyMissingGetAccessor(target=es2015).js
+@@= skipped -17, +17 lines =@@
+ class Parent {
+ }
+ class Child extends Parent {
++    _x;
+     set message(str) {
+         this._x = str;
+     }

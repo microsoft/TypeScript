@@ -1,6 +1,6 @@
 --- old.usingModuleWithExportImportInValuePosition.js
 +++ new.usingModuleWithExportImportInValuePosition.js
-@@= skipped -25, +25 lines =@@
+@@= skipped -26, +26 lines =@@
  (function (A) {
      A.x = 'hello world';
      class Point {

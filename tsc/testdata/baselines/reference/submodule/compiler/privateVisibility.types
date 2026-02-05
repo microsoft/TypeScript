@@ -50,7 +50,7 @@ f.pubProp; // should work
 >f : Foo
 >pubProp : number
 
-module M {
+namespace M {
 >M : typeof M
 
     export class C { public pub = 0; private priv = 1; }

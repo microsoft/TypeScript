@@ -1,6 +1,6 @@
 --- old.tsxEmit3.js
 +++ new.tsxEmit3.js
-@@= skipped -59, +59 lines =@@
+@@= skipped -60, +60 lines =@@
  })(M || (M = {}));
  (function (M) {
      // Emit M.Foo

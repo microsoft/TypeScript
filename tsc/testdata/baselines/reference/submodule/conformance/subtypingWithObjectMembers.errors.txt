@@ -1,35 +1,60 @@
+subtypingWithObjectMembers.ts(1,14): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+subtypingWithObjectMembers.ts(2,30): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+subtypingWithObjectMembers.ts(3,34): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+subtypingWithObjectMembers.ts(8,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+subtypingWithObjectMembers.ts(9,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+subtypingWithObjectMembers.ts(13,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 subtypingWithObjectMembers.ts(14,5): error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
   Type 'string' is not assignable to type 'Base'.
+subtypingWithObjectMembers.ts(14,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
 subtypingWithObjectMembers.ts(24,5): error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'A2'.
   Type 'string' is not assignable to type 'Base'.
 subtypingWithObjectMembers.ts(34,5): error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
   Type 'string' is not assignable to type 'Base'.
+subtypingWithObjectMembers.ts(39,9): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+subtypingWithObjectMembers.ts(40,9): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+subtypingWithObjectMembers.ts(44,9): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 subtypingWithObjectMembers.ts(45,9): error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
   Type 'string' is not assignable to type 'Base'.
+subtypingWithObjectMembers.ts(45,9): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
 subtypingWithObjectMembers.ts(55,9): error TS2416: Property '2' in type 'B2' is not assignable to the same property in base type 'A2'.
   Type 'string' is not assignable to type 'Base'.
 subtypingWithObjectMembers.ts(65,9): error TS2416: Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'.
   Type 'string' is not assignable to type 'Base'.
 
 
-==== subtypingWithObjectMembers.ts (6 errors) ====
+==== subtypingWithObjectMembers.ts (17 errors) ====
     class Base { foo: string; }
+                 ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     class Derived extends Base { bar: string; }
+                                 ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
     class Derived2 extends Derived { baz: string; }
+                                     ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
     
     // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
     // foo properties are valid, bar properties cause errors in the derived class declarations
     class A {
         foo: Base;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         bar: Base;
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
     }
     
     class B extends A {
         foo: Derived; // ok
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         bar: string; // error
         ~~~
 !!! error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
     }
     
     class A2 {
@@ -58,18 +83,26 @@ subtypingWithObjectMembers.ts(65,9): error TS2416: Property ''2.0'' in type 'B3'
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
     }
     
-    module TwoLevels {
+    namespace TwoLevels {
         class A {
             foo: Base;
+            ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
             bar: Base;
+            ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
         }
     
         class B extends A {
             foo: Derived2; // ok
+            ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
             bar: string; // error
             ~~~
 !!! error TS2416: Property 'bar' in type 'B' is not assignable to the same property in base type 'A'.
 !!! error TS2416:   Type 'string' is not assignable to type 'Base'.
+            ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
         }
     
         class A2 {

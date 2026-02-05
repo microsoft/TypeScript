@@ -6,3 +6,4 @@ declare class C {
 }
 
 //// [parserComputedPropertyName22.js]
+"use strict";

@@ -1,0 +1,95 @@
+--- old.sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues3(target=es2015).sourcemap.txt
++++ new.sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues3(target=es2015).sourcemap.txt
+@@= skipped -1420, +1420 lines =@@
+ 1->
+ 2 >^^^^^^^^^
+ 3 >         ^^^^^^^^^
+-4 >                  ^->
++4 >                  ^^^
+ 1->
+   >
+   >
+ 2 >function 
+ 3 >         getRobotB
++4 >                  () 
+ 1->Emitted(35, 1) Source(48, 1) + SourceIndex(0)
+ 2 >Emitted(35, 10) Source(48, 10) + SourceIndex(0)
+ 3 >Emitted(35, 19) Source(48, 19) + SourceIndex(0)
++4 >Emitted(35, 22) Source(48, 22) + SourceIndex(0)
+ ---
+ >>>    return robotB;
+-1->^^^^
++1 >^^^^
+ 2 >    ^^^^^^^
+ 3 >           ^^^^^^
+ 4 >                 ^
+-1->() {
++1 >{
+   >    
+ 2 >    return 
+ 3 >           robotB
+ 4 >                 ;
+-1->Emitted(36, 5) Source(49, 5) + SourceIndex(0)
++1 >Emitted(36, 5) Source(49, 5) + SourceIndex(0)
+ 2 >Emitted(36, 12) Source(49, 12) + SourceIndex(0)
+ 3 >Emitted(36, 18) Source(49, 18) + SourceIndex(0)
+ 4 >Emitted(36, 19) Source(49, 19) + SourceIndex(0)
+@@= skipped -30, +32 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(37, 1) Source(50, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(37, 1) Source(49, 19) + SourceIndex(0)
+ 2 >Emitted(37, 2) Source(50, 2) + SourceIndex(0)
+ ---
+ >>>function getMultiRobotB() {
+ 1->
+ 2 >^^^^^^^^^
+ 3 >         ^^^^^^^^^^^^^^
+-4 >                       ^->
++4 >                       ^^^
+ 1->
+   >
+   >
+ 2 >function 
+ 3 >         getMultiRobotB
++4 >                       () 
+ 1->Emitted(38, 1) Source(52, 1) + SourceIndex(0)
+ 2 >Emitted(38, 10) Source(52, 10) + SourceIndex(0)
+ 3 >Emitted(38, 24) Source(52, 24) + SourceIndex(0)
++4 >Emitted(38, 27) Source(52, 27) + SourceIndex(0)
+ ---
+ >>>    return multiRobotB;
+-1->^^^^
++1 >^^^^
+ 2 >    ^^^^^^^
+ 3 >           ^^^^^^^^^^^
+ 4 >                      ^
+-1->() {
++1 >{
+   >    
+ 2 >    return 
+ 3 >           multiRobotB
+ 4 >                      ;
+-1->Emitted(39, 5) Source(53, 5) + SourceIndex(0)
++1 >Emitted(39, 5) Source(53, 5) + SourceIndex(0)
+ 2 >Emitted(39, 12) Source(53, 12) + SourceIndex(0)
+ 3 >Emitted(39, 23) Source(53, 23) + SourceIndex(0)
+ 4 >Emitted(39, 24) Source(53, 24) + SourceIndex(0)
+@@= skipped -39, +41 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(40, 1) Source(54, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(40, 1) Source(53, 24) + SourceIndex(0)
+ 2 >Emitted(40, 2) Source(54, 2) + SourceIndex(0)
+ ---
+ >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues3.js.map

@@ -7,5 +7,5 @@
 ->diamondBottom : <Bottom extends Top | T | U>() => void
 +>diamondBottom : <Bottom extends T | Top | U>() => void
 
-             var top: Top;
+             var top!: Top;
  >top : Top

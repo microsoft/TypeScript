@@ -238,46 +238,46 @@ num = ~"3"; num = -false; // should infer number
 >num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
 >num : Symbol(num, Decl(numberVsBigIntOperations.ts, 1, 16))
 
-let bigIntOrNumber: bigint | number;
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+declare let bigIntOrNumber: bigint | number;
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
 
 bigIntOrNumber + bigIntOrNumber; // should error, result in any
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
 
 bigIntOrNumber << bigIntOrNumber; // should error, result in any
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
 
 if (typeof bigIntOrNumber === "bigint") {
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
 
     // Allowed, as type is narrowed to bigint
     bigIntOrNumber = bigIntOrNumber << bigIntOrNumber;
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
 }
 if (typeof bigIntOrNumber === "number") {
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
 
     // Allowed, as type is narrowed to number
     bigIntOrNumber = bigIntOrNumber << bigIntOrNumber;
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
 }
 +bigIntOrNumber; // should error, result in number
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
 
 ~bigIntOrNumber; // should infer number | bigint
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
 
 bigIntOrNumber++; // should infer number | bigint
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
 
 ++bigIntOrNumber; // should infer number | bigint
->bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 3))
+>bigIntOrNumber : Symbol(bigIntOrNumber, Decl(numberVsBigIntOperations.ts, 58, 11))
 
 let anyValue: any;
 >anyValue : Symbol(anyValue, Decl(numberVsBigIntOperations.ts, 73, 3))
@@ -319,17 +319,17 @@ const isNumber: (x: 0 | 1) => number = (x: 0 | 1) => x;
 >x : Symbol(x, Decl(numberVsBigIntOperations.ts, 84, 40))
 >x : Symbol(x, Decl(numberVsBigIntOperations.ts, 84, 40))
 
-const zeroOrBigOne: 0 | 1n;
->zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 5))
+declare const zeroOrBigOne: 0 | 1n;
+>zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 13))
 
 if (typeof zeroOrBigOne === "bigint") isBigInt(zeroOrBigOne);
->zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 5))
+>zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 13))
 >isBigInt : Symbol(isBigInt, Decl(numberVsBigIntOperations.ts, 83, 5))
->zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 5))
+>zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 13))
 
 else isNumber(zeroOrBigOne);
 >isNumber : Symbol(isNumber, Decl(numberVsBigIntOperations.ts, 84, 5))
->zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 5))
+>zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 13))
 
 // Distinguishing truthy from falsy
 const isOne = (x: 1 | 1n) => x;
@@ -338,17 +338,17 @@ const isOne = (x: 1 | 1n) => x;
 >x : Symbol(x, Decl(numberVsBigIntOperations.ts, 90, 15))
 
 if (zeroOrBigOne) isOne(zeroOrBigOne);
->zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 5))
+>zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 13))
 >isOne : Symbol(isOne, Decl(numberVsBigIntOperations.ts, 90, 5))
->zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 5))
+>zeroOrBigOne : Symbol(zeroOrBigOne, Decl(numberVsBigIntOperations.ts, 85, 13))
 
-const bigZeroOrOne: 0n | 1;
->bigZeroOrOne : Symbol(bigZeroOrOne, Decl(numberVsBigIntOperations.ts, 92, 5))
+declare const bigZeroOrOne: 0n | 1;
+>bigZeroOrOne : Symbol(bigZeroOrOne, Decl(numberVsBigIntOperations.ts, 92, 13))
 
 if (bigZeroOrOne) isOne(bigZeroOrOne);
->bigZeroOrOne : Symbol(bigZeroOrOne, Decl(numberVsBigIntOperations.ts, 92, 5))
+>bigZeroOrOne : Symbol(bigZeroOrOne, Decl(numberVsBigIntOperations.ts, 92, 13))
 >isOne : Symbol(isOne, Decl(numberVsBigIntOperations.ts, 90, 5))
->bigZeroOrOne : Symbol(bigZeroOrOne, Decl(numberVsBigIntOperations.ts, 92, 5))
+>bigZeroOrOne : Symbol(bigZeroOrOne, Decl(numberVsBigIntOperations.ts, 92, 13))
 
 type NumberOrBigint = number | bigint;
 >NumberOrBigint : Symbol(NumberOrBigint, Decl(numberVsBigIntOperations.ts, 93, 38))

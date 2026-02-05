@@ -10,5 +10,5 @@ symbolProperty17.ts(2,5): error TS2411: Property '[Symbol.iterator]' of type 'nu
         "__@iterator": string;
     }
     
-    var i: I;
+    declare var i: I;
     var it = i[Symbol.iterator];

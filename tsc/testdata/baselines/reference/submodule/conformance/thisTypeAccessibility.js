@@ -65,6 +65,7 @@ function extension4<T extends number>(this: MyGenericClass<T>, p: T) {
 
 
 //// [thisTypeAccessibility.js]
+"use strict";
 class MyClass {
     p = 123;
     pp = 123;

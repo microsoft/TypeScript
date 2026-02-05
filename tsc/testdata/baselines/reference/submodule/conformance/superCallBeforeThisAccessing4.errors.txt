@@ -1,10 +1,14 @@
+superCallBeforeThisAccessing4.ts(2,13): error TS7008: Member '_t' implicitly has an 'any' type.
 superCallBeforeThisAccessing4.ts(5,9): error TS17005: A constructor cannot contain a 'super' call when its class extends 'null'.
+superCallBeforeThisAccessing4.ts(10,13): error TS7008: Member '_t' implicitly has an 'any' type.
 superCallBeforeThisAccessing4.ts(12,9): error TS17005: A constructor cannot contain a 'super' call when its class extends 'null'.
 
 
-==== superCallBeforeThisAccessing4.ts (2 errors) ====
+==== superCallBeforeThisAccessing4.ts (4 errors) ====
     class D extends null {
         private _t;
+                ~~
+!!! error TS7008: Member '_t' implicitly has an 'any' type.
         constructor() {
             this._t;
             super();
@@ -15,6 +19,8 @@ superCallBeforeThisAccessing4.ts(12,9): error TS17005: A constructor cannot cont
     
     class E extends null {
         private _t;
+                ~~
+!!! error TS7008: Member '_t' implicitly has an 'any' type.
         constructor() {
             super();
             ~~~~~~~

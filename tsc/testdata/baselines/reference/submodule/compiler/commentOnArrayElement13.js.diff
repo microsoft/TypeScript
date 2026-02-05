@@ -1,8 +1,8 @@
 --- old.commentOnArrayElement13.js
 +++ new.commentOnArrayElement13.js
-@@= skipped -4, +4 lines =@@
-
+@@= skipped -5, +5 lines =@@
 
  //// [commentOnArrayElement13.js]
+ "use strict";
 -const array = [ /* comment */];
 +const array = [ /* comment */ /* comment */];

@@ -39,4 +39,4 @@ export const foo = function (a, b) { }
  * @param {string | number} a
  * @param {number} [b]
  */
-export declare const foo: (a: string | number, b?: number) => void;
+export declare const foo: (a: string | number, b?: number | undefined) => void;

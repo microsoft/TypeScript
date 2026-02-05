@@ -36,10 +36,10 @@ class C1 implements I1,I2 {
     private iAny:any;
 >iAny : any
 
-    private iNum:number;
+    private iNum!:number;
 >iNum : number
 
-    private iObj:{ };
+    private iObj!:{ };
 >iObj : {}
 }
 
@@ -79,7 +79,7 @@ new a();
 new b();
 */
 
-var c:I4;
+declare var c:I4;
 >c : I4
 
 c[5];

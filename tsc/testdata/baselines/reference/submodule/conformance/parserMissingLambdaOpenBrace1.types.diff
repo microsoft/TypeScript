@@ -1,0 +1,11 @@
+--- old.parserMissingLambdaOpenBrace1.types
++++ new.parserMissingLambdaOpenBrace1.types
+@@= skipped -4, +4 lines =@@
+ >C : C
+
+     where(filter: Iterator<T, boolean>): Query<T> {
+->where : (filter: Iterator<T, boolean>) => Query<T>
++>where : (filter: Iterator<T, boolean, any>) => Query<T>
+ >filter : Iterator<T, boolean, any>
+
+         return fromDoWhile(test =>

@@ -37,6 +37,7 @@ wasAbstract.abstractBaseMethod();
 wasAbstract.mixinMethod();
 
 //// [mixinAbstractClasses.js]
+"use strict";
 function Mixin(baseClass) {
     class MixinClass extends baseClass {
         mixinMethod() {

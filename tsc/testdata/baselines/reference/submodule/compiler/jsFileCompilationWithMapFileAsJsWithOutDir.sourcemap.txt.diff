@@ -1,6 +1,6 @@
 --- old.jsFileCompilationWithMapFileAsJsWithOutDir.sourcemap.txt
 +++ new.jsFileCompilationWithMapFileAsJsWithOutDir.sourcemap.txt
-@@= skipped -39, +39 lines =@@
+@@= skipped -41, +41 lines =@@
  1 >
  2 >^^^^^^^^^
  3 >         ^^^
@@ -9,10 +9,10 @@
  2 >function 
  3 >         bar
 +4 >            () 
- 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
- 2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
- 3 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
-+4 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+ 1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+ 2 >Emitted(2, 10) Source(1, 10) + SourceIndex(0)
+ 3 >Emitted(2, 13) Source(1, 13) + SourceIndex(0)
++4 >Emitted(2, 16) Source(1, 16) + SourceIndex(0)
  ---
  >>>}
  1 >
@@ -21,11 +21,11 @@
 -1 >() {
 -  >
 -2 >}
--1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+-1 >Emitted(3, 1) Source(2, 1) + SourceIndex(0)
 +1 >{
 +2 >
 +  >}
-+1 >Emitted(2, 1) Source(1, 17) + SourceIndex(0)
- 2 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
++1 >Emitted(3, 1) Source(1, 17) + SourceIndex(0)
+ 2 >Emitted(3, 2) Source(2, 2) + SourceIndex(0)
  ---
  >>>//# sourceMappingURL=b.js.map

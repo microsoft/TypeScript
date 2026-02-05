@@ -5,7 +5,7 @@ class D { }
 >D : D
 
 === cloduleSplitAcrossFiles_module.ts ===
-module D {
+namespace D {
 >D : typeof D
 
     export var y = "hi";

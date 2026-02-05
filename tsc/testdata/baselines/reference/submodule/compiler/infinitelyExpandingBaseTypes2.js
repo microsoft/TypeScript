@@ -16,5 +16,6 @@ var b: B<string> = a
 
 
 //// [infinitelyExpandingBaseTypes2.js]
+"use strict";
 var a;
 var b = a;

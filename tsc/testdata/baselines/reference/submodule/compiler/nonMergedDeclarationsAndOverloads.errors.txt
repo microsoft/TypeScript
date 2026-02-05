@@ -1,14 +1,17 @@
 nonMergedDeclarationsAndOverloads.ts(2,5): error TS2300: Duplicate identifier 'm1'.
+nonMergedDeclarationsAndOverloads.ts(2,5): error TS2564: Property 'm1' has no initializer and is not definitely assigned in the constructor.
 nonMergedDeclarationsAndOverloads.ts(4,5): error TS2300: Duplicate identifier 'm1'.
 nonMergedDeclarationsAndOverloads.ts(5,5): error TS2300: Duplicate identifier 'm1'.
 nonMergedDeclarationsAndOverloads.ts(6,5): error TS2300: Duplicate identifier 'm1'.
 
 
-==== nonMergedDeclarationsAndOverloads.ts (4 errors) ====
+==== nonMergedDeclarationsAndOverloads.ts (5 errors) ====
     class A {
         m1: string;
         ~~
 !!! error TS2300: Duplicate identifier 'm1'.
+        ~~
+!!! error TS2564: Property 'm1' has no initializer and is not definitely assigned in the constructor.
         f() {}
         m1 (a: string): void;
         ~~

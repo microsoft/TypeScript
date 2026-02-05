@@ -1,6 +1,6 @@
 --- old.stringIndexerConstrainsPropertyDeclarations2.js
 +++ new.stringIndexerConstrainsPropertyDeclarations2.js
-@@= skipped -49, +49 lines =@@
+@@= skipped -50, +50 lines =@@
      bar() { return ''; }
  }
  class Foo {

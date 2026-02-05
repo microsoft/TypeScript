@@ -29,6 +29,7 @@ class Widget<TValue> {
 }
 
 //// [infinitelyExpandingOverloads.js]
+"use strict";
 class Validator2 {
     _subscription;
 }

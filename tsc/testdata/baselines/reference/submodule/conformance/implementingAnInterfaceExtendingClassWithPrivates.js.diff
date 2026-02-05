@@ -1,8 +1,8 @@
 --- old.implementingAnInterfaceExtendingClassWithPrivates.js
 +++ new.implementingAnInterfaceExtendingClassWithPrivates.js
-@@= skipped -27, +27 lines =@@
-
+@@= skipped -28, +28 lines =@@
  //// [implementingAnInterfaceExtendingClassWithPrivates.js]
+ "use strict";
  class Foo {
 +    x;
  }

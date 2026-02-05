@@ -7,4 +7,5 @@ declare const b: boolean;
 
 
 //// [uncalledFunctionChecksInConditionalPerf.js]
+"use strict";
 ((((((((((((((((((((((((((b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b);

@@ -11,7 +11,7 @@ declare module "react" {
 >key : `do-${string}`
 
         "ns:thing"?: string;
->"ns:thing" : string
+>"ns:thing" : string | undefined
     }
 }
 

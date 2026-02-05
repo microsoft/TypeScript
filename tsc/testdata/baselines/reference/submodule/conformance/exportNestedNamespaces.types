@@ -20,7 +20,7 @@ exports.n.K = function () {
     this.x = 10;
 >this.x = 10 : 10
 >this.x : any
->this : any
+>this : {}
 >x : any
 >10 : 10
 }

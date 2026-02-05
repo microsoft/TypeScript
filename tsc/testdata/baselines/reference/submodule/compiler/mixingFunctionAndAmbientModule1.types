@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/mixingFunctionAndAmbientModule1.ts] ////
 
 === mixingFunctionAndAmbientModule1.ts ===
-module A {
+namespace A {
 >A : typeof A
 
-    declare module My {
+    declare namespace My {
 >My : typeof My
 
         export var x: number;
@@ -15,10 +15,10 @@ module A {
 >s : string
 }
 
-module B {
+namespace B {
 >B : typeof B
 
-    declare module My {
+    declare namespace My {
 >My : typeof My
 
         export var x: number;
@@ -33,10 +33,10 @@ module B {
 >s : any
 }
 
-module C {
+namespace C {
 >C : typeof C
 
-    declare module My {
+    declare namespace My {
 >My : typeof My
 
         export var x: number;
@@ -47,10 +47,10 @@ module C {
 >s : boolean
 }
 
-module D {
+namespace D {
 >D : typeof D
 
-    declare module My {
+    declare namespace My {
 >My : typeof My
 
         export var x: number;
@@ -66,10 +66,10 @@ module D {
 }
 
 
-module E {
+namespace E {
 >E : typeof E
 
-    declare module My {
+    declare namespace My {
 >My : typeof My
 
         export var x: number;
@@ -79,7 +79,7 @@ module E {
 >My : typeof My
 >s : boolean
 
-    declare module My {
+    declare namespace My {
 >My : typeof My
 
         export var y: number;

@@ -7,6 +7,7 @@ class greeter {
 }
 
 //// [unusedParametersinConstructor1.js]
+"use strict";
 class greeter {
     constructor(param1) {
     }

@@ -1,0 +1,10 @@
+--- old.parserSetAccessorWithTypeAnnotation1(target=es2015).js
++++ new.parserSetAccessorWithTypeAnnotation1(target=es2015).js
+@@= skipped -8, +8 lines =@@
+ //// [parserSetAccessorWithTypeAnnotation1.js]
+ "use strict";
+ class C {
+-    set foo(v): number {
++    set foo(v) {
+     }
+ }

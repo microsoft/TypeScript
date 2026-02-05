@@ -1,7 +1,7 @@
 --- old.typeGuardConstructorDerivedClass.js
 +++ new.typeGuardConstructorDerivedClass.js
-@@= skipped -70, +70 lines =@@
- //// [typeGuardConstructorDerivedClass.js]
+@@= skipped -71, +71 lines =@@
+ "use strict";
  // Derived class with different structures
  class C1 {
 +    property1;
@@ -9,9 +9,9 @@
  class C2 extends C1 {
 +    property2;
  }
- let var1;
  if (var1.constructor === C1) {
-@@= skipped -26, +28 lines =@@
+     var1; // never
+@@= skipped -24, +26 lines =@@
  }
  // Disjointly structured classes
  class C5 {
@@ -20,9 +20,9 @@
  class C6 {
 +    property2;
  }
- let let3;
  if (let3.constructor === C5) {
-@@= skipped -12, +14 lines =@@
+     let3; // never
+@@= skipped -11, +13 lines =@@
  }
  // Classes with the same structure
  class C7 {
@@ -31,5 +31,5 @@
  class C8 {
 +    property1;
  }
- let let4;
  if (let4.constructor === C7) {
+     let4; // never

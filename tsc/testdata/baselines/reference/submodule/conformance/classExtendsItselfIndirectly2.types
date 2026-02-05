@@ -8,7 +8,7 @@ class C extends N.E { foo: string; } // error
 >E : typeof N.E
 >foo : string
 
-module M {
+namespace M {
 >M : typeof M
 
     export class D extends C { bar: string; }
@@ -18,7 +18,7 @@ module M {
 
 }
 
-module N {
+namespace N {
 >N : typeof N
 
     export class E extends M.D { baz: number; }
@@ -29,7 +29,7 @@ module N {
 >baz : number
 }
 
-module O {
+namespace O {
 >O : typeof O
 
     class C2<T> extends Q.E2<T> { foo: T; } // error
@@ -39,7 +39,7 @@ module O {
 >E2 : typeof Q.E2
 >foo : T
 
-    module P {
+    namespace P {
 >P : typeof P
 
         export class D2<T> extends C2<T> { bar: T; }
@@ -48,7 +48,7 @@ module O {
 >bar : T
     }
 
-    module Q {
+    namespace Q {
 >Q : typeof Q
 
         export class E2<T> extends P.D2<T> { baz: T; }

@@ -1,6 +1,6 @@
 --- old.deleteOperatorInvalidOperations.js
 +++ new.deleteOperatorInvalidOperations.js
-@@= skipped -26, +26 lines =@@
+@@= skipped -27, +27 lines =@@
  var BOOLEAN2 = delete ;
  // delete global variable s
  class testADelx {

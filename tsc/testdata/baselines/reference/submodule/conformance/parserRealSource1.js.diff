@@ -1,6 +1,6 @@
 --- old.parserRealSource1.js
 +++ new.parserRealSource1.js
-@@= skipped -198, +198 lines =@@
+@@= skipped -199, +199 lines =@@
      }
      TypeScript.NullLogger = NullLogger;
      class LoggerAdapter {

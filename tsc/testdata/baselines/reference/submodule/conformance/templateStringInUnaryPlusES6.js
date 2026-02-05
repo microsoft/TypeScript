@@ -4,4 +4,5 @@
 var x = +`abc${ 123 }def`;
 
 //// [templateStringInUnaryPlusES6.js]
+"use strict";
 var x = +`abc${123}def`;

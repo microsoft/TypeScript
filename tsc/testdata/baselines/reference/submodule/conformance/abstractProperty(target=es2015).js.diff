@@ -1,6 +1,6 @@
 --- old.abstractProperty(target=es2015).js
 +++ new.abstractProperty(target=es2015).js
-@@= skipped -23, +23 lines =@@
+@@= skipped -24, +24 lines =@@
      }
  }
  class B extends A {

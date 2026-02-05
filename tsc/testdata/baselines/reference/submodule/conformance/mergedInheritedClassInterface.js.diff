@@ -1,7 +1,7 @@
 --- old.mergedInheritedClassInterface.js
 +++ new.mergedInheritedClassInterface.js
-@@= skipped -50, +50 lines =@@
- //// [mergedInheritedClassInterface.js]
+@@= skipped -51, +51 lines =@@
+ "use strict";
  class BaseClass {
      baseMethod() { }
 +    baseNumber;

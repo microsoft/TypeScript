@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/expressions/typeGuards/typeGuardInClass.ts] ////
 
 === typeGuardInClass.ts ===
-let x: string | number;
->x : Symbol(x, Decl(typeGuardInClass.ts, 0, 3))
+declare var x: string | number;
+>x : Symbol(x, Decl(typeGuardInClass.ts, 0, 11))
 
 if (typeof x === "string") {
->x : Symbol(x, Decl(typeGuardInClass.ts, 0, 3))
+>x : Symbol(x, Decl(typeGuardInClass.ts, 0, 11))
 
     let n = class {
 >n : Symbol(n, Decl(typeGuardInClass.ts, 3, 7))
@@ -13,7 +13,7 @@ if (typeof x === "string") {
         constructor() {
             let y: string = x;
 >y : Symbol(y, Decl(typeGuardInClass.ts, 5, 15))
->x : Symbol(x, Decl(typeGuardInClass.ts, 0, 3))
+>x : Symbol(x, Decl(typeGuardInClass.ts, 0, 11))
         }
     }
 }
@@ -24,7 +24,7 @@ else {
         constructor() {
             let y: number = x;
 >y : Symbol(y, Decl(typeGuardInClass.ts, 12, 15))
->x : Symbol(x, Decl(typeGuardInClass.ts, 0, 3))
+>x : Symbol(x, Decl(typeGuardInClass.ts, 0, 11))
         }
     }
 }

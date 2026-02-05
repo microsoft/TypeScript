@@ -27,6 +27,7 @@ function other3<T extends U, U extends Date>(arg: T) {
 }
 
 //// [genericCallWithObjectTypeArgsAndIndexersErrors.js]
+"use strict";
 // Type inference infers from indexers in target type, error cases
 function foo(x) {
     return x;

@@ -1,7 +1,7 @@
 --- old.emitCapturingThisInTupleDestructuring2.js
 +++ new.emitCapturingThisInTupleDestructuring2.js
-@@= skipped -14, +14 lines =@@
- //// [emitCapturingThisInTupleDestructuring2.js]
+@@= skipped -15, +15 lines =@@
+ "use strict";
  var array1 = [1, 2];
  class B {
 +    test;

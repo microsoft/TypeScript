@@ -43,7 +43,7 @@ namespace Foo {
   }
 }
 
-module Foo.Bar {
+namespace Foo.Bar {
   const sameName = () => new Foo.C();
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

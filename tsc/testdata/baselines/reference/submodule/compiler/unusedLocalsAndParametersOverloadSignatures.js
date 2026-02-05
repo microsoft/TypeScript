@@ -25,15 +25,10 @@ export function genericFunc(details: number, message: any): any {
 }
 
 //// [unusedLocalsAndParametersOverloadSignatures.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-exports.func = func;
-exports.genericFunc = genericFunc;
-function func(details, message) {
+export function func(details, message) {
     return details + message;
 }
-class C {
+export class C {
     constructor(details, message) {
         details + message;
     }
@@ -41,7 +36,6 @@ class C {
         return details + message;
     }
 }
-exports.C = C;
-function genericFunc(details, message) {
+export function genericFunc(details, message) {
     return details + message;
 }

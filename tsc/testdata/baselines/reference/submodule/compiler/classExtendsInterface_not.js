@@ -5,5 +5,6 @@ class C extends "".bogus {}
 
 
 //// [classExtendsInterface_not.js]
+"use strict";
 class C extends "".bogus {
 }

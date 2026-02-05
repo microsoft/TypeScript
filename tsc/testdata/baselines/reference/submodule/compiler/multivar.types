@@ -14,7 +14,7 @@ var x=1,y=2,z=3;
 >z : number
 >3 : 3
 
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 
     export var a, b2: number = 10, b;

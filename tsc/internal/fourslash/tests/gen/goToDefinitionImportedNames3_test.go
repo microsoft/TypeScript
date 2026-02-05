@@ -21,7 +21,7 @@ export {Module as M, Class as C, Interface as I} from "./b";
 // @Filename: b.ts
 export * from "./a";
 // @Filename: a.ts
-export module Module {
+export namespace Module {
 }
 export class /*classDefinition*/Class {
     private f;

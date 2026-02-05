@@ -19,8 +19,10 @@ exports.equal = myAssert.equal
 exports.equal()
 
 //// [ns.js]
+"use strict";
 /// <reference path="node.d.ts"/>
 var myAssert = require('assert');
 //// [app.js]
+"use strict";
 exports.equal = myAssert.equal;
 exports.equal();

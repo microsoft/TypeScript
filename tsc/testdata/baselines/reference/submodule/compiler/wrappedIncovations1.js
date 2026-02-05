@@ -7,6 +7,7 @@ var v = this
   .baz();
 
 //// [wrappedIncovations1.js]
+"use strict";
 var v = this
     .foo()
     .bar()

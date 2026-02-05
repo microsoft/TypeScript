@@ -1,0 +1,49 @@
+--- old.parser15.4.4.14-9-2.types
++++ new.parser15.4.4.14-9-2.types
+@@= skipped -66, +66 lines =@@
+ >a.indexOf(-(4/3)) === 14 &&      // a[14]=_float===-(4/3)      a.indexOf(0) === 7 : boolean
+ >a.indexOf(-(4/3)) === 14 : boolean
+ >a.indexOf(-(4/3)) : number
+->a.indexOf : (searchElement: boolean | null | undefined, fromIndex?: number) => number
++>a.indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
+ >a : (boolean | null | undefined)[]
+->indexOf : (searchElement: boolean | null | undefined, fromIndex?: number) => number
++>indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
+ >-(4/3) : number
+ >(4/3) : number
+ >4/3 : number
+@@= skipped -13, +13 lines =@@
+       a.indexOf(0) === 7      &&       // a[7] = +0, 0===+0
+ >a.indexOf(0) === 7 : boolean
+ >a.indexOf(0) : number
+->a.indexOf : (searchElement: boolean | null | undefined, fromIndex?: number) => number
++>a.indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
+ >a : (boolean | null | undefined)[]
+->indexOf : (searchElement: boolean | null | undefined, fromIndex?: number) => number
++>indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
+ >0 : 0
+ >7 : 7
+
+       a.indexOf(-0) === 7      &&     // a[7] = +0, -0===+0
+ >a.indexOf(-0) === 7 : boolean
+ >a.indexOf(-0) : number
+->a.indexOf : (searchElement: boolean | null | undefined, fromIndex?: number) => number
++>a.indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
+ >a : (boolean | null | undefined)[]
+->indexOf : (searchElement: boolean | null | undefined, fromIndex?: number) => number
++>indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
+ >-0 : 0
+ >0 : 0
+ >7 : 7
+@@= skipped -19, +19 lines =@@
+       a.indexOf(1) === 10 )            // a[10] =one=== 1
+ >a.indexOf(1) === 10 : boolean
+ >a.indexOf(1) : number
+->a.indexOf : (searchElement: boolean | null | undefined, fromIndex?: number) => number
++>a.indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
+ >a : (boolean | null | undefined)[]
+->indexOf : (searchElement: boolean | null | undefined, fromIndex?: number) => number
++>indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
+ >1 : 1
+ >10 : 10
+   {

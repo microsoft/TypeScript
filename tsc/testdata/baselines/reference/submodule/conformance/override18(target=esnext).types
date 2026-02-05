@@ -5,7 +5,7 @@ class A {
 >A : A
 
     foo?: string;
->foo : string
+>foo : string | undefined
 }
 
 class B extends A {

@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/es5/es5DateAPIs.ts] ////
+
+=== es5DateAPIs.ts ===
+Date.UTC(2017); // should error
+>Date.UTC(2017) : number
+>Date.UTC : (year: number, monthIndex: number, date?: number | undefined, hours?: number | undefined, minutes?: number | undefined, seconds?: number | undefined, ms?: number | undefined) => number
+>Date : DateConstructor
+>UTC : (year: number, monthIndex: number, date?: number | undefined, hours?: number | undefined, minutes?: number | undefined, seconds?: number | undefined, ms?: number | undefined) => number
+>2017 : 2017
+

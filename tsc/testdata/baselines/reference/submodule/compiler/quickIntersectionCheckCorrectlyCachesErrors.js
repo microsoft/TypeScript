@@ -17,10 +17,7 @@ export function wu<CP extends { o: object }>(CC: F<CP>) {
 
 
 //// [quickIntersectionCheckCorrectlyCachesErrors.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.wu = wu;
-function wu(CC) {
+export function wu(CC) {
     class WU {
         m() {
             g(CC);

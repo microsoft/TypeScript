@@ -32,10 +32,10 @@ interface Alpha { x: string; }
 interface Beta { y: number; }
 >y : number
 
-var x: Alpha;
+declare var x: Alpha;
 >x : Alpha
 
-var y: Beta;
+declare var y: Beta;
 >y : Beta
 
 // Only one of these errors should be large

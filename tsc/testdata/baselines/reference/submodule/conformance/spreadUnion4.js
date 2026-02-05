@@ -8,4 +8,5 @@ const c = { ...a, ...b };
 
 
 //// [spreadUnion4.js]
+"use strict";
 const c = Object.assign(Object.assign({}, a), b);

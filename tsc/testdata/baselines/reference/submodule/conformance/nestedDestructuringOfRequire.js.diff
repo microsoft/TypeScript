@@ -1,6 +1,6 @@
 --- old.nestedDestructuringOfRequire.js
 +++ new.nestedDestructuringOfRequire.js
-@@= skipped -25, +25 lines =@@
+@@= skipped -27, +27 lines =@@
 
 
  //// [mod1.d.ts]

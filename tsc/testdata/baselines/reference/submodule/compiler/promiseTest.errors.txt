@@ -1,0 +1,20 @@
+promiseTest.ts(7,5): error TS2322: Type 'null' is not assignable to type 'Promise<number>'.
+
+
+==== promiseTest.ts (1 errors) ====
+    interface Promise<T> {
+        then<A>(success?: (value: T) => Promise<A>): Promise<A>;
+        then<B>(success?: (value: T) => B): Promise<B>;
+        data: T;
+    }
+    
+    var p: Promise<number> = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'Promise<number>'.
+    var p2 = p.then(function (x) {
+        return p;
+    } );
+    
+    var x = p2.data; // number
+    
+    

@@ -1,8 +1,8 @@
 --- old.typeRelationships.js
 +++ new.typeRelationships.js
-@@= skipped -43, +43 lines =@@
-
+@@= skipped -44, +44 lines =@@
  //// [typeRelationships.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.self = this;

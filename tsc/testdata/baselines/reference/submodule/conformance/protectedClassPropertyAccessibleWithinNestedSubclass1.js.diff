@@ -1,8 +1,8 @@
 --- old.protectedClassPropertyAccessibleWithinNestedSubclass1.js
 +++ new.protectedClassPropertyAccessibleWithinNestedSubclass1.js
-@@= skipped -117, +117 lines =@@
-
+@@= skipped -118, +118 lines =@@
  //// [protectedClassPropertyAccessibleWithinNestedSubclass1.js]
+ "use strict";
  class Base {
 +    x;
      method() {

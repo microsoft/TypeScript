@@ -15,7 +15,7 @@ func TestQuickInfoDisplayPartsVar(t *testing.T) {
 function foo() {
     var /*2*/b = /*3*/a;
 }
-module m {
+namespace m {
     var /*4*/c = 10;
     export var /*5*/d = 10;
 }

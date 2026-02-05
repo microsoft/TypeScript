@@ -6,6 +6,7 @@ function* foo() {
 }
 
 //// [generatorES6_5.js]
+"use strict";
 function* foo() {
     yield a ? b : c;
 }

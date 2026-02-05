@@ -9,4 +9,5 @@ declare namespace JSX {
 
 
 //// [index.jsx]
+"use strict";
 <a />;

@@ -44,7 +44,7 @@ parserRealSource9.ts(200,48): error TS2304: Cannot find name 'IHashTable'.
     
     ///<reference path='typescript.ts' />
     
-    module TypeScript {
+    namespace TypeScript {
         export class Binder {
             constructor (public checker: TypeChecker) { }
                                          ~~~~~~~~~~~

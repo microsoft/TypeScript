@@ -17,7 +17,7 @@ declare const c3 = null, c4 :string = "", c5: any = 0;
 >c5 : any
 >0 : 0
 
-declare module M {
+declare namespace M {
 >M : typeof M
 
     const c6 = 0;

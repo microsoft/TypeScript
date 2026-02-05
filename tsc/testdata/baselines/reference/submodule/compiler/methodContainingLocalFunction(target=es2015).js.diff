@@ -1,0 +1,16 @@
+--- old.methodContainingLocalFunction(target=es2015).js
++++ new.methodContainingLocalFunction(target=es2015).js
+@@= skipped -94, +94 lines =@@
+ })(M || (M = {}));
+ var E;
+ (function (E) {
+-    E[E["A"] = (() => {
++    E["A"] = (() => {
+         function localFunction() { }
+         var x;
+         x = localFunction;
+         return 0;
+-    })()] = "A";
++    })();
++    if (typeof E.A !== "string") E[E.A] = "A";
+ })(E || (E = {}));

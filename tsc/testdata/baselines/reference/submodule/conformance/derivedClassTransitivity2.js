@@ -15,14 +15,15 @@ class E extends D {
     foo(x: number, y?: string) { } // ok to add optional parameters
 }
 
-var c: C;
-var d: D;
-var e: E;
+declare var c: C;
+declare var d: D;
+declare var e: E;
 c = e;
 var r = c.foo(1, 1);
 var r2 = e.foo(1, '');
 
 //// [derivedClassTransitivity2.js]
+"use strict";
 // subclassing is not transitive when you can remove required parameters and add optional parameters
 class C {
     foo(x, y) { }
@@ -33,9 +34,6 @@ class D extends C {
 class E extends D {
     foo(x, y) { } // ok to add optional parameters
 }
-var c;
-var d;
-var e;
 c = e;
 var r = c.foo(1, 1);
 var r2 = e.foo(1, '');

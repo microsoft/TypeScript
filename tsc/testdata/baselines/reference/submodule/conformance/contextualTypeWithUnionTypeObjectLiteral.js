@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts] ////
 
 //// [contextualTypeWithUnionTypeObjectLiteral.ts]
-var str: string;
-var num: number;
+declare var str: string;
+declare var num: number;
 var strOrNumber: string | number = str || num;
-var objStr: { prop: string };
-var objNum: { prop: number };
+declare var objStr: { prop: string };
+declare var objNum: { prop: number };
 var objStrOrNum1: { prop: string } | { prop: number } = objStr || objNum;
 var objStrOrNum2: { prop: string | number } = objStr || objNum;
 // Below is error because :
@@ -40,8 +40,8 @@ interface I11 {
 interface I21 {
     commonMethodDifferentReturnType(a: string, b: number): number;
 }
-var i11: I11;
-var i21: I21;
+declare var i11: I11;
+declare var i21: I21;
 var i11Ori21: I11 | I21 = i11;
 var i11Ori21: I11 | I21 = i21;
 var i11Ori21: I11 | I21 = { // Like i1
@@ -56,17 +56,14 @@ var i11Ori21: I11 | I21 = { // Like i2
         return z;
     },
 };
-var strOrNumber: string | number;
+declare var strOrNumber: string | number;
 var i11Ori21: I11 | I21 = { // Like i1 and i2 both
     commonMethodDifferentReturnType: (a, b) => strOrNumber,
 };
 
 //// [contextualTypeWithUnionTypeObjectLiteral.js]
-var str;
-var num;
+"use strict";
 var strOrNumber = str || num;
-var objStr;
-var objNum;
 var objStrOrNum1 = objStr || objNum;
 var objStrOrNum2 = objStr || objNum;
 // Below is error because :
@@ -95,8 +92,6 @@ var objStrOrNum8 = {
     anotherP: str,
     anotherP1: num
 };
-var i11;
-var i21;
 var i11Ori21 = i11;
 var i11Ori21 = i21;
 var i11Ori21 = {
@@ -111,7 +106,6 @@ var i11Ori21 = {
         return z;
     },
 };
-var strOrNumber;
 var i11Ori21 = {
     commonMethodDifferentReturnType: (a, b) => strOrNumber,
 };

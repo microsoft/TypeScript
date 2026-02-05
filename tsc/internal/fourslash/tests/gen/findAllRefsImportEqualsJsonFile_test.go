@@ -14,6 +14,7 @@ func TestFindAllRefsImportEqualsJsonFile(t *testing.T) {
 	const content = `// @allowJs: true
 // @checkJs: true
 // @resolveJsonModule: true
+// @module: commonjs
 // @Filename: /a.ts
 import /*0*/j = require("/*1*/./j.json");
 /*2*/j;

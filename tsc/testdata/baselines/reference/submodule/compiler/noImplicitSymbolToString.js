@@ -50,6 +50,7 @@ function getKey2<S extends string>(key: S) {
 
 
 //// [noImplicitSymbolToString.js]
+"use strict";
 // Fix #19666
 let symbol;
 let str = "hello ";

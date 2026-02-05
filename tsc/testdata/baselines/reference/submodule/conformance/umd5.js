@@ -9,7 +9,7 @@ export as namespace Foo;
 //// [a.ts]
 import * as Bar from './foo';
 Bar.fn();
-let x: Bar.Thing;
+declare let x: Bar.Thing;
 let y: number = x.n;
 // should error
 let z = Foo;
@@ -53,7 +53,6 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bar = __importStar(require("./foo"));
 Bar.fn();
-let x;
 let y = x.n;
 // should error
 let z = Foo;

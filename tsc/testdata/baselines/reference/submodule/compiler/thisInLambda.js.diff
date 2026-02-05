@@ -1,8 +1,8 @@
 --- old.thisInLambda.js
 +++ new.thisInLambda.js
-@@= skipped -21, +21 lines =@@
-
+@@= skipped -22, +22 lines =@@
  //// [thisInLambda.js]
+ "use strict";
  class Foo {
 -    constructor() {
 -        this.x = "hello";

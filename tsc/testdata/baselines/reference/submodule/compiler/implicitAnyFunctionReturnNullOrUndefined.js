@@ -27,6 +27,7 @@ undefinedWidenFunction();
 
 
 //// [implicitAnyFunctionReturnNullOrUndefined.js]
+"use strict";
 // this should be an error
 function nullWidenFunction() { return null; } // error at "nullWidenFunction"
 function undefinedWidenFunction() { return undefined; } // error at "undefinedWidenFunction"

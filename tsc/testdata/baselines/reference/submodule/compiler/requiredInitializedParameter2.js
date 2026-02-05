@@ -10,6 +10,7 @@ class C1 implements I1 {
 }
 
 //// [requiredInitializedParameter2.js]
+"use strict";
 class C1 {
     method(a = 0, b) { }
 }

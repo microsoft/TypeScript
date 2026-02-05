@@ -1,8 +1,8 @@
 --- old.classExpressionInClassStaticDeclarations.js
 +++ new.classExpressionInClassStaticDeclarations.js
-@@= skipped -6, +6 lines =@@
-
+@@= skipped -7, +7 lines =@@
  //// [classExpressionInClassStaticDeclarations.js]
+ "use strict";
  class C {
 +    static D = class extends C {
 +    };

@@ -21,7 +21,7 @@ interface Implemented1 {}
 /*typeDecl_typeKeyword*/type T = { }
 /*enumDecl_enumKeyword*/enum E { }
 /*namespaceDecl_namespaceKeyword*/namespace N { }
-/*moduleDecl_moduleKeyword*/module M { }
+/*moduleDecl_moduleKeyword*/namespace M { }
 /*functionDecl_functionKeyword*/function fn() {}
 /*varDecl_varKeyword*/var x;
 /*letDecl_letKeyword*/let y;

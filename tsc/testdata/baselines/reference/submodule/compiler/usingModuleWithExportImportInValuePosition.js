@@ -1,18 +1,18 @@
 //// [tests/cases/compiler/usingModuleWithExportImportInValuePosition.ts] ////
 
 //// [usingModuleWithExportImportInValuePosition.ts]
-module A {
+namespace A {
 export var x = 'hello world'
 export class Point {
         constructor(public x: number, public y: number) { }
     }
-    export module B {
+    export namespace B {
         export interface Id {
             name: string;
         }
     }
 }
-module C {
+namespace C {
     export import a = A;
 }
 
@@ -22,6 +22,7 @@ var c: { name: string };
 var c: C.a.B.Id;
 
 //// [usingModuleWithExportImportInValuePosition.js]
+"use strict";
 var A;
 (function (A) {
     A.x = 'hello world';

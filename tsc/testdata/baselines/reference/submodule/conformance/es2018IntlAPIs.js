@@ -12,6 +12,7 @@ console.log(part.type, part.value);
 
 
 //// [es2018IntlAPIs.js]
+"use strict";
 // Sample from
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/supportedLocalesOf
 const locales = ['ban', 'id-u-co-pinyin', 'de-ID'];

@@ -5,5 +5,6 @@ var a,
 return;
 
 //// [parserErrorRecovery_VariableList1.js]
+"use strict";
 var a;
 return;

@@ -15,7 +15,7 @@ func TestImportStatementCompletions_pnpm1(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
-{ "compilerOptions": { "module": "commonjs" } }
+{ "compilerOptions": { "module": "commonjs", "types": ["*"], "lib": ["es5"] } }
 // @Filename: /home/src/workspaces/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts
 export declare function Component(): void;
 // @Filename: /home/src/workspaces/project/index.ts

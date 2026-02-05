@@ -3,7 +3,7 @@
 @@= skipped -4, +4 lines =@@
  >m : typeof m
 
-     export module c {
+     export namespace c {
 ->c : typeof m.c
 +>c : typeof import("declarationEmitImportInExportAssignmentModule").c
 

@@ -1,9 +1,9 @@
 --- old.callbackOnConstructor.js
 +++ new.callbackOnConstructor.js
-@@= skipped -20, +20 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Preferences = void 0;
- class Preferences {
+@@= skipped -17, +17 lines =@@
+
+ //// [callbackOnConstructor.js]
+ export class Preferences {
 +    assignability = "no";
      /**
       * @callback ValueGetter_2
@@ -15,9 +15,8 @@
 -    }
 +    constructor() { }
  }
- exports.Preferences = Preferences;
  /** @type {ValueGetter_2} */
-@@= skipped -15, +14 lines =@@
+ var ooscope2 = s => s.length > 0;
 
 
  //// [callbackOnConstructor.d.ts]

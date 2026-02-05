@@ -6,5 +6,6 @@ a /= 1; // parse as infix
 a = /=/; // parse as regexp
 
 //// [parserRegularExpression6.js]
+"use strict";
 a /= 1; // parse as infix
 a = /=/; // parse as regexp

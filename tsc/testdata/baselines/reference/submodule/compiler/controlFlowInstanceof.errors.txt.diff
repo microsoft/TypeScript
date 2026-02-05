@@ -2,7 +2,8 @@
 +++ new.controlFlowInstanceof.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+uglify.js(6,7): error TS2339: Property 'val' does not exist on type '{}'.
++uglify.js(5,23): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++uglify.js(9,7): error TS2339: Property 'val' does not exist on type '{}'.
 +
 +
 +==== controlFlowInstanceof.ts (0 errors) ====
@@ -51,9 +52,9 @@
 +    
 +    // More tests
 +    
-+    class A { a: string }
-+    class B extends A { b: string }
-+    class C extends A { c: string }
++    class A { a: string = "" }
++    class B extends A { b: string = "" }
++    class C extends A { c: string = "" }
 +    
 +    function foo(x: A | undefined) {
 +        x;  // A | undefined
@@ -89,11 +90,11 @@
 +    // Y is assignable to X, but not a subtype of X
 +    
 +    interface X {
-+        x?: string;
++        x?: string
 +    }
 +    
 +    class Y {
-+        y: string;
++        y: string = "";
 +    }
 +    
 +    function goo(x: X) {
@@ -114,9 +115,14 @@
 +    }
 +    
 +    // Repro from #27550 (based on uglify code)
-+==== uglify.js (1 errors) ====
-+    /** @constructor */
++==== uglify.js (2 errors) ====
++    /**
++     * @constructor
++     * @param {any} val
++     */
 +    function AtTop(val) { this.val = val }
++                          ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +    /** @type {*} */
 +    var v = 1;
 +    if (v instanceof AtTop) {

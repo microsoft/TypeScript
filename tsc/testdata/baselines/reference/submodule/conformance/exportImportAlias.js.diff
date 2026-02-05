@@ -1,6 +1,6 @@
 --- old.exportImportAlias.js
 +++ new.exportImportAlias.js
-@@= skipped -75, +75 lines =@@
+@@= skipped -76, +76 lines =@@
  (function (A) {
      A.x = 'hello world';
      class Point {

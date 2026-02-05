@@ -2,14 +2,20 @@
 +++ new.constructorFunctions3.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
++a.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +a.js(4,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
++a.js(9,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +a.js(12,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
++a.js(18,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(20,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +a.js(30,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 +
 +
-+==== a.js (3 errors) ====
++==== a.js (7 errors) ====
 +    function Instance() {
 +        this.i = 'simple'
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +    }
 +    var i = new Instance();
 +            ~~~~~~~~~~~~~~
@@ -19,6 +25,8 @@
 +    
 +    function StaticToo() {
 +        this.i = 'more complex'
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +    }
 +    StaticToo.property = 'yep'
 +    var s = new StaticToo();
@@ -30,8 +38,12 @@
 +    // Both!
 +    function A () {
 +        this.x = 1
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +        /** @type {1} */
 +        this.second = 1
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +    }
 +    /** @param {number} n */
 +    A.prototype.z = function f(n) {

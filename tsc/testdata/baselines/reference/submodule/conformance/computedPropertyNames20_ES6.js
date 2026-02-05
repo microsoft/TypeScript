@@ -6,6 +6,7 @@ var obj = {
 }
 
 //// [computedPropertyNames20_ES6.js]
+"use strict";
 var obj = {
     [this.bar]: 0
 };

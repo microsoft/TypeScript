@@ -22,6 +22,7 @@ namespace SomeOther.Thing {
 }
 
 //// [internal.js]
+"use strict";
 var My;
 (function (My) {
     let Internal;
@@ -31,6 +32,7 @@ var My;
     })(Internal = My.Internal || (My.Internal = {}));
 })(My || (My = {}));
 //// [usage.js]
+"use strict";
 /// <reference path="./internal.ts" preserve="true" />
 var SomeOther;
 (function (SomeOther) {

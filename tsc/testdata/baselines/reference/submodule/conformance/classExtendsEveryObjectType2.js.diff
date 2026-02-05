@@ -1,9 +1,9 @@
 --- old.classExtendsEveryObjectType2.js
 +++ new.classExtendsEveryObjectType2.js
-@@= skipped -5, +5 lines =@@
- class C6 extends []{ } // error
+@@= skipped -6, +6 lines =@@
 
  //// [classExtendsEveryObjectType2.js]
+ "use strict";
 -class C2 extends { foo: string } {
 +class C2 extends { foo: string, } {
  } // error

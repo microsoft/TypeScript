@@ -11,6 +11,7 @@ class C2 {
 
 
 //// [privateNameStaticFieldNoInitializer.js]
+"use strict";
 const C = class {
     static #x;
 };

@@ -7,6 +7,7 @@ function test() {
 
 
 //// [invalidSymbolInTypeParameter1.js]
+"use strict";
 function test() {
     var cats = new Array(); // WAWA is not a valid type
 }

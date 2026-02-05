@@ -1,8 +1,8 @@
 --- old.noUnusedLocals_writeOnlyProperty.js
 +++ new.noUnusedLocals_writeOnlyProperty.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [noUnusedLocals_writeOnlyProperty.js]
+ "use strict";
  class C {
 +    x;
      m() {

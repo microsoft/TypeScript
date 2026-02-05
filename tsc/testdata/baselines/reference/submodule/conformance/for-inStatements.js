@@ -67,7 +67,7 @@ var i: I;
 for (var x in i[42]) { } 
 
 
-module M {
+namespace M {
     export class X<T> {
         name:string
     }
@@ -83,6 +83,7 @@ for (var x in Color.Blue) { }
 
 
 //// [for-inStatements.js]
+"use strict";
 var aString;
 for (aString in {}) { }
 var anAny;

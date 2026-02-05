@@ -16,6 +16,7 @@ class C {
 }
 
 //// [selfReferencesInFunctionParameters.js]
+"use strict";
 function foo(x = x) {
 }
 function bar(x0 = "", x = x) {

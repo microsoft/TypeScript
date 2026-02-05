@@ -4,4 +4,5 @@
 Foo(!/(\\?|&)adurl=/);
 
 //// [parserRegularExpression3.js]
+"use strict";
 Foo(!/(\\?|&)adurl=/);

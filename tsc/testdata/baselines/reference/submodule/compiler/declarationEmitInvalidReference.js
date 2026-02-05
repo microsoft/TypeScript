@@ -5,6 +5,7 @@
 var x = 0;
 
 //// [declarationEmitInvalidReference.js]
+"use strict";
 /// <reference path="invalid.ts" />
 var x = 0;
 

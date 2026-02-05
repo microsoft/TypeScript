@@ -77,11 +77,11 @@ var f = new Foo();
 >f : Symbol(f, Decl(es6ClassTest.ts, 31, 3))
 >Foo : Symbol(Foo, Decl(es6ClassTest.ts, 7, 1))
 
-declare module AmbientMod {
+declare namespace AmbientMod {
 >AmbientMod : Symbol(AmbientMod, Decl(es6ClassTest.ts, 31, 18))
 
 	export class Provide {
->Provide : Symbol(Provide, Decl(es6ClassTest.ts, 33, 27))
+>Provide : Symbol(Provide, Decl(es6ClassTest.ts, 33, 30))
 
 		foo:number;
 >foo : Symbol(Provide.foo, Decl(es6ClassTest.ts, 34, 23))

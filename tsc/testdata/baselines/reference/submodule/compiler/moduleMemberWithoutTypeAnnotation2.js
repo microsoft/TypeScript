@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/moduleMemberWithoutTypeAnnotation2.ts] ////
 
 //// [moduleMemberWithoutTypeAnnotation2.ts]
-module TypeScript {
-    export module CompilerDiagnostics {
+namespace TypeScript {
+    export namespace CompilerDiagnostics {
 
         export interface IDiagnosticWriter {
             Alert(output: string): void;
@@ -20,6 +20,7 @@ module TypeScript {
 
 
 //// [moduleMemberWithoutTypeAnnotation2.js]
+"use strict";
 var TypeScript;
 (function (TypeScript) {
     let CompilerDiagnostics;

@@ -4,4 +4,5 @@
 var x = `abc${ 0 }def` instanceof String;
 
 //// [templateStringInInstanceOfES6.js]
+"use strict";
 var x = `abc${0}def` instanceof String;

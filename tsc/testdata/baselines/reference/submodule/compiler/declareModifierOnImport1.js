@@ -4,3 +4,4 @@
 declare import a = b;
 
 //// [declareModifierOnImport1.js]
+"use strict";

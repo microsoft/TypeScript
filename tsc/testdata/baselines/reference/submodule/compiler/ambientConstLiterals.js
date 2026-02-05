@@ -24,6 +24,7 @@ const c13 = Math.random() > 0.5 ? "abc" : "def";
 const c14 = Math.random() > 0.5 ? 123 : 456;
 
 //// [ambientConstLiterals.js]
+"use strict";
 function f(x) {
     return x;
 }

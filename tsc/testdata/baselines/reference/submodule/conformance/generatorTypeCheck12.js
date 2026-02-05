@@ -6,6 +6,7 @@ function* g(): IterableIterator<number, string> {
 }
 
 //// [generatorTypeCheck12.js]
+"use strict";
 function* g() {
     return "";
 }

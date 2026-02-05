@@ -20,12 +20,12 @@ async function countEverything(): Promise<number> {
     const providerA = async (): Promise<A[]> => { return [] }
 >providerA : () => Promise<A[]>
 >async (): Promise<A[]> => { return [] } : () => Promise<A[]>
->[] : undefined[]
+>[] : never[]
 
     const providerB = async (): Promise<B[]> => { return [] }
 >providerB : () => Promise<B[]>
 >async (): Promise<B[]> => { return [] } : () => Promise<B[]>
->[] : undefined[]
+>[] : never[]
 
     const [resultA, resultB] = await Promise.all([
 >resultA : A[]

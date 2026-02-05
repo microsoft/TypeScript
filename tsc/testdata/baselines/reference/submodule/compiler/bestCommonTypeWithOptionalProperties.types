@@ -5,7 +5,7 @@ interface X { foo: string }
 >foo : string
 
 interface Y extends X { bar?: number }
->bar : number
+>bar : number | undefined
 
 interface Z extends X { bar: string }
 >bar : string

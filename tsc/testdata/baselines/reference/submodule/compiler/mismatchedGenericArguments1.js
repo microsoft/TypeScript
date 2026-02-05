@@ -18,6 +18,7 @@ class C2<T> implements IFoo<T> {
 
 
 //// [mismatchedGenericArguments1.js]
+"use strict";
 class C {
     foo(x) {
         return null;

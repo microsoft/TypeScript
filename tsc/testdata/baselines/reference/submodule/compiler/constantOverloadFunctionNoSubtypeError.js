@@ -17,6 +17,7 @@ function foo(tagName: any): Base {
 
 
 //// [constantOverloadFunctionNoSubtypeError.js]
+"use strict";
 class Base {
     foo() { }
 }

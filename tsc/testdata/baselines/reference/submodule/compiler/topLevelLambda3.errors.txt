@@ -1,0 +1,7 @@
+topLevelLambda3.ts(1,16): error TS7041: The containing arrow function captures the global value of 'this'.
+
+
+==== topLevelLambda3.ts (1 errors) ====
+    var f = () => {this.window;}
+                   ~~~~
+!!! error TS7041: The containing arrow function captures the global value of 'this'.

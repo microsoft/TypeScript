@@ -1,8 +1,8 @@
 --- old.interfacePropertiesWithSameName3.js
 +++ new.interfacePropertiesWithSameName3.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [interfacePropertiesWithSameName3.js]
+ "use strict";
  class D2 {
 +    a;
  }

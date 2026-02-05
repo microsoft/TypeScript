@@ -10,7 +10,7 @@ const foo = Symbol.for("foo");
 >"foo" : "foo"
 
 const o = { [foo]: undefined };
->o : { [foo]: any; }
+>o : { [foo]: undefined; }
 >{ [foo]: undefined } : { [foo]: undefined; }
 >[foo] : undefined
 >foo : unique symbol

@@ -1,0 +1,46 @@
+--- old.sourceMapValidationVarInDownLevelGenerator(target=es2015).sourcemap.txt
++++ new.sourceMapValidationVarInDownLevelGenerator(target=es2015).sourcemap.txt
+@@= skipped -14, +14 lines =@@
+ 3 >        ^
+ 4 >         ^
+ 5 >          ^
+-6 >           ^^^^^^^->
++6 >           ^^^
++7 >              ^^^^->
+ 1 >
+ 2 >function 
+ 3 >        *
+ 4 >          
+ 5 >          f
++6 >           () 
+ 1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+ 2 >Emitted(2, 9) Source(1, 10) + SourceIndex(0)
+ 3 >Emitted(2, 10) Source(1, 11) + SourceIndex(0)
+ 4 >Emitted(2, 11) Source(1, 12) + SourceIndex(0)
+ 5 >Emitted(2, 12) Source(1, 13) + SourceIndex(0)
++6 >Emitted(2, 15) Source(1, 16) + SourceIndex(0)
+ ---
+ >>>    var x = 1, y;
+ 1->^^^^
+@@= skipped -21, +24 lines =@@
+ 6 >             ^^
+ 7 >               ^
+ 8 >                ^
+-1->() {
++1->{
+   >    
+ 2 >    var 
+ 3 >        x
+@@= skipped -23, +23 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(4, 1) Source(3, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(4, 1) Source(2, 18) + SourceIndex(0)
+ 2 >Emitted(4, 2) Source(3, 2) + SourceIndex(0)
+ ---
+ >>>//# sourceMappingURL=sourceMapValidationVarInDownLevelGenerator.js.map

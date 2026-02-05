@@ -19,13 +19,13 @@ other.js(7,11): error TS2503: Cannot find namespace 'Ns'.
               ~~
 !!! error TS2503: Cannot find namespace 'Ns'.
      */
-    var one;
+    var one = undefined;
     one.wat;
     /**
      * @type {Ns.Two}
               ~~
 !!! error TS2503: Cannot find namespace 'Ns'.
      */
-    var two;
+    var two = undefined;
     two.wat;
     

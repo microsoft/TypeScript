@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     export class Binder {
         constructor (public checker: TypeChecker) { }
         public resolveBaseTypeLinks(typeLinks: TypeLink[], scope: SymbolScope) {
@@ -212,6 +212,7 @@ module TypeScript {
 }
 
 //// [parserRealSource9.js]
+"use strict";
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />

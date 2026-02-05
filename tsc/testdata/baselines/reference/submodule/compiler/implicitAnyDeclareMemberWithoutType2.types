@@ -6,7 +6,7 @@ class C {
 >C : C
 
     public x = null;// error at "x"
->x : any
+>x : null
 
     public x1: string  // no error
 >x1 : string

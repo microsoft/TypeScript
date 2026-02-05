@@ -197,7 +197,7 @@ class D<T> {
 >y : any
 }
 
-var c: C;
+declare var c: C;
 >c : C
 
 var r = c.foo(1); // error
@@ -208,7 +208,7 @@ var r = c.foo(1); // error
 >foo : { (x: number): any; (x: number, y: string): any; }
 >1 : 1
 
-var d: D<number>;
+declare var d: D<number>;
 >d : D<number>
 
 var r2 = d.foo(2); // error

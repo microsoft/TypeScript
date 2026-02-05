@@ -13,7 +13,7 @@ function f() {
 >"WAT" : "WAT"
     }
     catch (e) {
->e : any
+>e : unknown
 
     }
     finally {

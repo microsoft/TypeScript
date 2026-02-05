@@ -1,6 +1,6 @@
 --- old.assignmentToVoidZero2.js
 +++ new.assignmentToVoidZero2.js
-@@= skipped -40, +40 lines =@@
+@@= skipped -41, +41 lines =@@
 
 
  //// [assignmentToVoidZero2.d.ts]

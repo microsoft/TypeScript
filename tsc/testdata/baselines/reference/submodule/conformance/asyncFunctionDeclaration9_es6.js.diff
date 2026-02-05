@@ -1,9 +1,9 @@
 --- old.asyncFunctionDeclaration9_es6.js
 +++ new.asyncFunctionDeclaration9_es6.js
-@@= skipped -5, +5 lines =@@
- }
+@@= skipped -6, +6 lines =@@
 
  //// [asyncFunctionDeclaration9_es6.js]
+ "use strict";
 -function foo() {
 -    return __awaiter(this, void 0, void 0, function* () {
 -        var v = { [yield ]: foo };

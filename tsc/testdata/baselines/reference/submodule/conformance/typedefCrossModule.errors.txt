@@ -1,0 +1,60 @@
+mod1.js(5,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+mod1.js(7,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+mod2.js(7,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+mod3.js(7,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+mod3.js(7,10): error TS2339: Property 'p' does not exist on type 'typeof import("mod3")'.
+
+
+==== commonjs.d.ts (0 errors) ====
+    declare var module: { exports: any};
+==== mod1.js (2 errors) ====
+    /// <reference path="./commonjs.d.ts"/>
+    /** @typedef {{ type: "a", x: 1 }} A */
+    /** @typedef {{ type: "b", y: 1 }} B */
+    /** @typedef {A | B} Both */
+    module.exports = C
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    function C() {
+        this.p = 1
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+    }
+    
+==== mod2.js (1 errors) ====
+    /// <reference path="./commonjs.d.ts"/>
+    /** @typedef {{ type: "a", x: 1 }} A */
+    /** @typedef {{ type: "b", y: 1 }} B */
+    /** @typedef {A | B} Both */
+    
+    export function C() {
+        this.p = 1
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 mod2.js:6:17: An outer value of 'this' is shadowed by this container.
+    }
+    
+==== mod3.js (2 errors) ====
+    /// <reference path="./commonjs.d.ts"/>
+    /** @typedef {{ type: "a", x: 1 }} A */
+    /** @typedef {{ type: "b", y: 1 }} B */
+    /** @typedef {A | B} Both */
+    
+    exports.C = function() {
+        this.p = 1
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+             ~
+!!! error TS2339: Property 'p' does not exist on type 'typeof import("mod3")'.
+    }
+    
+==== use.js (0 errors) ====
+    /** @type {import('./mod1').Both} */
+    var both1 = { type: 'a', x: 1 };
+    /** @type {import('./mod2').Both} */
+    var both2 = both1;
+    /** @type {import('./mod3').Both} */
+    var both3 = both2;
+    
+    
+    

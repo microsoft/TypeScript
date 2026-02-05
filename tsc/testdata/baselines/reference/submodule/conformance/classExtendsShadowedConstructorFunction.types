@@ -5,7 +5,7 @@ class C { foo: string; }
 >C : C
 >foo : string
 
-module M {
+namespace M {
 >M : typeof M
 
     var C = 1;

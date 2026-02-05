@@ -1,0 +1,10 @@
+--- old.dynamicImportDefer(module=preserve).js
++++ new.dynamicImportDefer(module=preserve).js
+@@= skipped -15, +15 lines =@@
+     console.log("foo from a");
+ }
+ //// [b.js]
+-"use strict";
+ import.defer("./a.js").then(ns => {
+     ns.foo();
+ });

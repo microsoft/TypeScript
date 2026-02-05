@@ -1,7 +1,7 @@
 --- old.derivedClassConstructorWithoutSuperCall.js
 +++ new.derivedClassConstructorWithoutSuperCall.js
-@@= skipped -36, +36 lines =@@
- //// [derivedClassConstructorWithoutSuperCall.js]
+@@= skipped -37, +37 lines =@@
+ "use strict";
  // derived class constructors must contain a super call
  class Base {
 +    x;

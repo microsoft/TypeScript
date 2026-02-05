@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/innerModExport1.ts] ////
 
 === innerModExport1.ts ===
-module Outer {
+namespace Outer {
 >Outer : Symbol(Outer, Decl(innerModExport1.ts, 0, 0))
 
     // inner mod 1

@@ -26,6 +26,7 @@ q1 = q3; // should not error
 
 
 //// [infinitelyExpandingTypes4.js]
+"use strict";
 var q1;
 var q2;
 var q3;

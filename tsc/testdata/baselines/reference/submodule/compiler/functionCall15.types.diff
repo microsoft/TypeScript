@@ -1,0 +1,11 @@
+--- old.functionCall15.types
++++ new.functionCall15.types
+@@= skipped -1, +1 lines =@@
+
+ === functionCall15.ts ===
+ function foo(a?:string, b?:number, ...b:number[]){}
+->foo : (a?: string, b?: number, ...b: number[]) => void
++>foo : (a?: string | undefined, b?: number | undefined, ...b: number[]) => void
+ >a : string | undefined
+ >b : number | undefined
+ >b : number[]

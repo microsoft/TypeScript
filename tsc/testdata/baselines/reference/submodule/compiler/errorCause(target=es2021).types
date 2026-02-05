@@ -105,7 +105,7 @@ new URIError("foo", { cause: new Error("bar") });
 new AggregateError([], "foo", { cause: new Error("bar") });
 >new AggregateError([], "foo", { cause: new Error("bar") }) : AggregateError
 >AggregateError : AggregateErrorConstructor
->[] : undefined[]
+>[] : never[]
 >"foo" : "foo"
 >{ cause: new Error("bar") } : { cause: Error; }
 >cause : Error

@@ -4,4 +4,5 @@
 var v = ()({});
 
 //// [parserErrorRecovery_Expression1.js]
+"use strict";
 var v = ()({});

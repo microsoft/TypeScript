@@ -13,8 +13,8 @@ func TestFindAllRefsWithShorthandPropertyAssignment2(t *testing.T) {
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `var /*0*/dx = "Foo";
 
-module M { export var /*1*/dx; }
-module M {
+namespace M { export var /*1*/dx; }
+namespace M {
    var z = 100;
    export var y = { /*2*/dx, z };
 }

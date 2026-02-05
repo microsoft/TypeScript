@@ -16,6 +16,7 @@ function foo() {
 }
 
 //// [capturedLetConstInLoop11.js]
+"use strict";
 for (;;) {
     let x = 1;
     () => x;

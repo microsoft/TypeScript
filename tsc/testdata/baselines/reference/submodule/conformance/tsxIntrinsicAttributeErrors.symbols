@@ -58,11 +58,11 @@ interface I {
 >render : Symbol(render, Decl(tsxIntrinsicAttributeErrors.tsx, 23, 17))
     }
 }
-var E: I;
->E : Symbol(E, Decl(tsxIntrinsicAttributeErrors.tsx, 27, 3))
+declare var E: I;
+>E : Symbol(E, Decl(tsxIntrinsicAttributeErrors.tsx, 27, 11))
 >I : Symbol(I, Decl(tsxIntrinsicAttributeErrors.tsx, 19, 1))
 
 <E x={10} />
->E : Symbol(E, Decl(tsxIntrinsicAttributeErrors.tsx, 27, 3))
+>E : Symbol(E, Decl(tsxIntrinsicAttributeErrors.tsx, 27, 11))
 >x : Symbol(x, Decl(tsxIntrinsicAttributeErrors.tsx, 28, 2))
 

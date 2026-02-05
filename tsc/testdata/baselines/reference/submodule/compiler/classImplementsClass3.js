@@ -17,6 +17,7 @@ c = c2;
 c2 = c;
 
 //// [classImplementsClass3.js]
+"use strict";
 class A {
     foo() { return 1; }
 }

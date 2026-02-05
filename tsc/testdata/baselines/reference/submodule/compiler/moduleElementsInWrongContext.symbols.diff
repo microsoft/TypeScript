@@ -1,0 +1,16 @@
+--- old.moduleElementsInWrongContext.symbols
++++ new.moduleElementsInWrongContext.symbols
+@@= skipped -27, +27 lines =@@
+ >v : Symbol(v, Decl(moduleElementsInWrongContext.ts, 14, 7))
+
+     function foo() { }
+->foo : Symbol(foo, Decl(moduleElementsInWrongContext.ts, 14, 10))
++>foo : Symbol(foo, Decl(moduleElementsInWrongContext.ts, 14, 10), Decl(moduleElementsInWrongContext.ts, 17, 12))
+
+     export * from "ambient";
+     export { foo };
+->foo : Symbol(foo, Decl(moduleElementsInWrongContext.ts, 17, 12))
++>foo : Symbol(foo, Decl(moduleElementsInWrongContext.ts, 14, 10), Decl(moduleElementsInWrongContext.ts, 17, 12))
+
+     export { baz as b } from "ambient";
+ >b : Symbol(b, Decl(moduleElementsInWrongContext.ts, 18, 12))

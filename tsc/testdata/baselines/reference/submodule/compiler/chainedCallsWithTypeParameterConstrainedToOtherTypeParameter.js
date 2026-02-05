@@ -22,6 +22,7 @@ class C extends B {
 (new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then(b => new A);
 
 //// [chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.js]
+"use strict";
 class Chain {
     value;
     constructor(value) {

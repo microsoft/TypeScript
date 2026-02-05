@@ -11,6 +11,7 @@ class C {
 }
 
 //// [symbolProperty6.js]
+"use strict";
 class C {
     [Symbol.iterator] = 0;
     [Symbol.unscopables];

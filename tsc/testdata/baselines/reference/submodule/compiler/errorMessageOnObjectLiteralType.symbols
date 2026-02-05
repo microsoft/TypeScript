@@ -1,18 +1,18 @@
 //// [tests/cases/compiler/errorMessageOnObjectLiteralType.ts] ////
 
 === errorMessageOnObjectLiteralType.ts ===
-var x: {
->x : Symbol(x, Decl(errorMessageOnObjectLiteralType.ts, 0, 3))
+declare var x: {
+>x : Symbol(x, Decl(errorMessageOnObjectLiteralType.ts, 0, 11))
 
     a: string;
->a : Symbol(a, Decl(errorMessageOnObjectLiteralType.ts, 0, 8))
+>a : Symbol(a, Decl(errorMessageOnObjectLiteralType.ts, 0, 16))
 
     b: number;
 >b : Symbol(b, Decl(errorMessageOnObjectLiteralType.ts, 1, 14))
 
 };
 x.getOwnPropertyNamess();
->x : Symbol(x, Decl(errorMessageOnObjectLiteralType.ts, 0, 3))
+>x : Symbol(x, Decl(errorMessageOnObjectLiteralType.ts, 0, 11))
 
 Object.getOwnPropertyNamess(null);
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

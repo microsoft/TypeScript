@@ -49,6 +49,7 @@ var d2 = new D2(new Date()); // error
 var d3 = new D2(new Date(), new Date()); // ok
 
 //// [derivedClassWithoutExplicitConstructor3.js]
+"use strict";
 // automatic constructors with a class hieararchy of depth > 2
 class Base {
     a = 1;

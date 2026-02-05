@@ -9,6 +9,7 @@ enum foo {
 
 
 //// [enumCodeGenNewLines1.js]
+"use strict";
 var foo;
 (function (foo) {
     foo[foo["b"] = 1] = "b";

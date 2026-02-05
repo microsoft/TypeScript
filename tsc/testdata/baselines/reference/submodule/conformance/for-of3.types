@@ -7,5 +7,5 @@ var v: any;
 for (v++ of []) { }
 >v++ : number
 >v : any
->[] : undefined[]
+>[] : never[]
 

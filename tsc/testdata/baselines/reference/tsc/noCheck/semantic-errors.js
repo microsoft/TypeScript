@@ -16,7 +16,7 @@ export const b = 10;
 tsgo --noCheck
 ExitStatus:: Success
 Output::
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -43,19 +43,13 @@ declare const console: { log(msg: any): void; };
 export declare const a: number;
 
 //// [/home/src/workspaces/project/a.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = "hello";
+export const a = "hello";
 
 //// [/home/src/workspaces/project/b.d.ts] *new* 
 export declare const b = 10;
 
 //// [/home/src/workspaces/project/b.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-exports.b = 10;
+export const b = 10;
 
 
 
@@ -235,10 +229,7 @@ Found 1 error in c.ts[90m:1[0m
 export declare const c: number;
 
 //// [/home/src/workspaces/project/c.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-exports.c = "hello";
+export const c = "hello";
 
 
 

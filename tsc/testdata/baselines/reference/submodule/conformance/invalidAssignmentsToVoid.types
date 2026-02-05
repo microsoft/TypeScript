@@ -24,11 +24,11 @@ x = {}
 >x : void
 >{} : {}
 
-class C { foo: string; }
+class C { foo!: string; }
 >C : C
 >foo : string
 
-var c: C;
+declare var c: C;
 >c : C
 
 x = C;
@@ -44,7 +44,7 @@ x = c;
 interface I { foo: string; }
 >foo : string
 
-var i: I;
+declare var i: I;
 >i : I
 
 x = i;
@@ -52,7 +52,7 @@ x = i;
 >x : void
 >i : I
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : typeof M
 >x : number
 >1 : 1

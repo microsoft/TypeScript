@@ -1,0 +1,16 @@
+foo_0.ts(2,2): error TS2564: Property 'test' has no initializer and is not definitely assigned in the constructor.
+
+
+==== foo_1.ts (0 errors) ====
+    import foo = require("./foo_0");
+    var x = new foo<number>();
+    var y:number = x.test;
+    
+==== foo_0.ts (1 errors) ====
+    class Foo<T>{
+    	test: T;
+    	~~~~
+!!! error TS2564: Property 'test' has no initializer and is not definitely assigned in the constructor.
+    }
+    export = Foo;
+    

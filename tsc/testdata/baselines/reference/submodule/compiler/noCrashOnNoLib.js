@@ -2,18 +2,15 @@
 
 //// [noCrashOnNoLib.ts]
 export function f() {
-    let e: {}[];
+    let e: {}[] = [];
     while (true) {
       e = [...(e || [])];
     }
 }
 
 //// [noCrashOnNoLib.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = f;
-function f() {
-    let e;
+export function f() {
+    let e = [];
     while (true) {
         e = [...(e || [])];
     }

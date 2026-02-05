@@ -1,6 +1,6 @@
 --- old.fatArrowSelf.js
 +++ new.fatArrowSelf.js
-@@= skipped -37, +37 lines =@@
+@@= skipped -38, +38 lines =@@
  var Consumer;
  (function (Consumer) {
      class EventEmitterConsummer {

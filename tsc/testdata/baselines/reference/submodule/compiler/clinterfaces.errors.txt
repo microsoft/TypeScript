@@ -1,0 +1,34 @@
+clinterfaces.ts(13,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+clinterfaces.ts(17,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+
+
+==== clinterfaces.ts (2 errors) ====
+    namespace M {
+        class C { }
+        interface C { }
+        interface D { }
+        class D { }
+    }
+    
+    interface Foo<T> {
+        a: string;
+    }
+    
+    class Foo<T>{
+        b: number;
+        ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class Bar<T>{
+        b: number;
+        ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    interface Bar<T> {
+        a: string;
+    }
+    
+    export = Foo;
+    

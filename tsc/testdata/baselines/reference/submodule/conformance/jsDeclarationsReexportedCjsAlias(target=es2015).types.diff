@@ -1,0 +1,38 @@
+--- old.jsDeclarationsReexportedCjsAlias(target=es2015).types
++++ new.jsDeclarationsReexportedCjsAlias(target=es2015).types
+@@= skipped -4, +4 lines =@@
+ >SomeClass : typeof SomeClass
+ >SomeClass : any
+ >Another : typeof SomeClass
+->require('./lib') : typeof import("lib")
++>require('./lib') : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
+ >require : any
+ >'./lib' : "./lib"
+
+ module.exports = {
+->module.exports = {    SomeClass,    Another} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports = {    SomeClass,    Another} : { SomeClass: typeof SomeClass; Another: typeof SomeClass; }
++>module.exports : { SomeClass: typeof SomeClass; Another: typeof SomeClass; }
++>module : { "export=": { SomeClass: typeof SomeClass; Another: typeof SomeClass; }; }
++>exports : { SomeClass: typeof SomeClass; Another: typeof SomeClass; }
+ >{    SomeClass,    Another} : { SomeClass: typeof SomeClass; Another: typeof SomeClass; }
+
+     SomeClass,
+@@= skipped -43, +43 lines =@@
+ }
+
+ module.exports = {
+->module.exports = {    bar,    SomeClass} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports = {    bar,    SomeClass} : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
++>module.exports : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
++>module : { "export=": { bar: (a: string) => string; SomeClass: typeof SomeClass; }; }
++>exports : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
+ >{    bar,    SomeClass} : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
+
+     bar,

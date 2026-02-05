@@ -18,6 +18,7 @@ function f([, a, , b, , , , s, , , ] = results) {
 }
 
 //// [arrayBindingPatternOmittedExpressions.js]
+"use strict";
 var results;
 {
     let [, b, , a] = results;

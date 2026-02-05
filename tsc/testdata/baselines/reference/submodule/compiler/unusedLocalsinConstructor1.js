@@ -8,6 +8,7 @@ class greeter {
 }
 
 //// [unusedLocalsinConstructor1.js]
+"use strict";
 class greeter {
     constructor() {
         var unused = 20;

@@ -13,17 +13,17 @@ class C {
     public c: string;
 }
 
-var a1: { [a: string]: string };
-var b1: { [b: string]: number };
+declare var a1: { [a: string]: string };
+declare var b1: { [b: string]: number };
 
-var a2: { [index: string]: Base };
-var b2: { [index: string]: C };
+declare var a2: { [index: string]: Base };
+declare var b2: { [index: string]: C };
 
-var a3: { [index: number]: Base };
-var b3: { [index: number]: C };
+declare var a3: { [index: number]: Base };
+declare var b3: { [index: number]: C };
 
-var a4: { [index: number]: Derived };
-var b4: { [index: string]: Base };
+declare var a4: { [index: number]: Derived };
+declare var b4: { [index: string]: Base };
 
 // operator <
 var r1a1 = a1 < b1;
@@ -114,6 +114,7 @@ var r8b3 = b3 !== a3;
 var r8b4 = b4 !== a4;
 
 //// [comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.js]
+"use strict";
 class Base {
     a;
 }
@@ -123,14 +124,6 @@ class Derived extends Base {
 class C {
     c;
 }
-var a1;
-var b1;
-var a2;
-var b2;
-var a3;
-var b3;
-var a4;
-var b4;
 // operator <
 var r1a1 = a1 < b1;
 var r1a2 = a2 < b2;

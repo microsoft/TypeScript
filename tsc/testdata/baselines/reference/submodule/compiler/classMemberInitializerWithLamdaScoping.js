@@ -33,6 +33,7 @@ class Test1 {
 }
 
 //// [classMemberInitializerWithLamdaScoping.js]
+"use strict";
 class Test {
     field;
     constructor(field) {

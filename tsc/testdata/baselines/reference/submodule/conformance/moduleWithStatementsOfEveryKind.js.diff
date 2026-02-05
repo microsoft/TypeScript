@@ -1,6 +1,6 @@
 --- old.moduleWithStatementsOfEveryKind.js
 +++ new.moduleWithStatementsOfEveryKind.js
-@@= skipped -63, +63 lines =@@
+@@= skipped -64, +64 lines =@@
  var A;
  (function (A_1) {
      class A {

@@ -1,0 +1,10 @@
+--- old.declarationEmitClassMemberNameConflict(target=es2015).js
++++ new.declarationEmitClassMemberNameConflict(target=es2015).js
+@@= skipped -49, +49 lines =@@
+ }
+ exports.C1 = C1;
+ class C2 {
++    C2; // has to be the same as the class name
+     bar() {
+         return function (t) {
+         };

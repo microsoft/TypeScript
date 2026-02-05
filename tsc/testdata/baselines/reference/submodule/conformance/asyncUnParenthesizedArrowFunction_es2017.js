@@ -6,5 +6,6 @@ const x = async i => await someOtherFunction(i)
 const x1 = async (i) => await someOtherFunction(i);
 
 //// [asyncUnParenthesizedArrowFunction_es2017.js]
+"use strict";
 const x = async i => await someOtherFunction(i);
 const x1 = async (i) => await someOtherFunction(i);

@@ -15,6 +15,7 @@ const obj: { foo: [one: number, two: string] } = {
 
 
 //// [contextualReturnTypeOfIIFE.js]
+"use strict";
 const test1 = (async () => {
     return [1, 'two'];
 })();

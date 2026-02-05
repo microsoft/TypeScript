@@ -1,19 +1,20 @@
 //// [tests/cases/compiler/internalAliasInitializedModule.ts] ////
 
 //// [internalAliasInitializedModule.ts]
-module a {
-    export module b {
+namespace a {
+    export namespace b {
         export class c {
         }
     }
 }
 
-module c {
+namespace c {
     import b = a.b;
     export var x: b.c = new b.c();
 }
 
 //// [internalAliasInitializedModule.js]
+"use strict";
 var a;
 (function (a) {
     let b;

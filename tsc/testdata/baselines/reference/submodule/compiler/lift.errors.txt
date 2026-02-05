@@ -1,14 +1,17 @@
+lift.ts(4,12): error TS2564: Property 'll' has no initializer and is not definitely assigned in the constructor.
 lift.ts(14,32): error TS2304: Cannot find name 'x'.
 lift.ts(14,34): error TS2304: Cannot find name 'z'.
 lift.ts(15,37): error TS2304: Cannot find name 'x'.
 lift.ts(15,39): error TS2304: Cannot find name 'z'.
 
 
-==== lift.ts (4 errors) ====
+==== lift.ts (5 errors) ====
     class B {
         constructor(public y:number) {
         }
         public ll:number;  // to be shadowed
+               ~~
+!!! error TS2564: Property 'll' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C extends B {

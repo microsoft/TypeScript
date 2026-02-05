@@ -72,15 +72,15 @@ a1([1, 2, [["world"]], 3]);
 // the parameter type is the widened form (section 3.11) of the type of the initializer expression.
 
 function b1(z = [undefined, null]) { };
->b1 : (z?: any[]) => void
->z : any[]
->[undefined, null] : null[]
+>b1 : (z?: (null | undefined)[]) => void
+>z : (null | undefined)[]
+>[undefined, null] : (null | undefined)[]
 >undefined : undefined
 
 function b2(z = null, o = { x: 0, y: undefined }) { }
->b2 : (z?: any, o?: { x: number; y: any; }) => void
->z : any
->o : { x: number; y: any; }
+>b2 : (z?: null, o?: { x: number; y: undefined; }) => void
+>z : null
+>o : { x: number; y: undefined; }
 >{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
 >0 : 0
@@ -117,20 +117,20 @@ interface F1 {
 }
 
 function b6([a, z, y] = [undefined, null, undefined]) { }
->b6 : ([a, z, y]?: [any, any, any]) => void
->a : any
->z : any
->y : any
+>b6 : ([a, z, y]?: [undefined, null, undefined]) => void
+>a : undefined
+>z : null
+>y : undefined
 >[undefined, null, undefined] : [undefined, null, undefined]
 >undefined : undefined
 >undefined : undefined
 
 function b7([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined]]]) { }
->b7 : ([[a], b, [[c, d]]]?: [[any], any, [[any, any]]]) => void
->a : any
->b : any
->c : any
->d : any
+>b7 : ([[a], b, [[c, d]]]?: [[undefined], undefined, [[undefined, undefined]]]) => void
+>a : undefined
+>b : undefined
+>c : undefined
+>d : undefined
 >[[undefined], undefined, [[undefined, undefined]]] : [[undefined], undefined, [[undefined, undefined]]]
 >[undefined] : [undefined]
 >undefined : undefined
@@ -142,7 +142,7 @@ function b7([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined
 
 b1([1, 2, 3]);  // z is widen to the type any[]
 >b1([1, 2, 3]) : void
->b1 : (z?: any[]) => void
+>b1 : (z?: (null | undefined)[]) => void
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
@@ -150,7 +150,7 @@ b1([1, 2, 3]);  // z is widen to the type any[]
 
 b2("string", { x: 200, y: "string" });
 >b2("string", { x: 200, y: "string" }) : void
->b2 : (z?: any, o?: { x: number; y: any; }) => void
+>b2 : (z?: null, o?: { x: number; y: undefined; }) => void
 >"string" : "string"
 >{ x: 200, y: "string" } : { x: number; y: string; }
 >x : number
@@ -160,7 +160,7 @@ b2("string", { x: 200, y: "string" });
 
 b2("string", { x: 200, y: true });
 >b2("string", { x: 200, y: true }) : void
->b2 : (z?: any, o?: { x: number; y: any; }) => void
+>b2 : (z?: null, o?: { x: number; y: undefined; }) => void
 >"string" : "string"
 >{ x: 200, y: true } : { x: number; y: boolean; }
 >x : number
@@ -189,7 +189,7 @@ function c1({z} = { z: 10 }) { }
 >10 : 10
 
 function c2({z = 10}) { }
->c2 : ({ z }: { z?: number; }) => void
+>c2 : ({ z }: { z?: number | undefined; }) => void
 >z : number
 >10 : 10
 
@@ -208,7 +208,7 @@ function c5([a, b, [[c]]]) { }
 >c : any
 
 function c6([a, b, [[c=1]]]) { }
->c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
+>c6 : ([a, b, [[c]]]: [any, any, [[(number | undefined)?]]]) => void
 >a : any
 >b : any
 >c : number
@@ -253,12 +253,12 @@ c1({ z: 1 })      // Implied type is {z:number}?
 
 c2({});         // Implied type is {z?: number}
 >c2({}) : void
->c2 : ({ z }: { z?: number; }) => void
+>c2 : ({ z }: { z?: number | undefined; }) => void
 >{} : {}
 
 c2({z:1});      // Implied type is {z?: number}
 >c2({z:1}) : void
->c2 : ({ z }: { z?: number; }) => void
+>c2 : ({ z }: { z?: number | undefined; }) => void
 >{z:1} : { z: number; }
 >z : number
 >1 : 1
@@ -384,9 +384,9 @@ function e2({x}: { x: number }) { }  // x is type number
 >x : number
 
 function e3({x}: { x?: number }) { }  // x is an optional with type number
->e3 : ({ x }: { x?: number; }) => void
->x : number
->x : number
+>e3 : ({ x }: { x?: number | undefined; }) => void
+>x : number | undefined
+>x : number | undefined
 
 function e4({x: [number,string,any] }) { }  // x has type [any, any, any]
 >e4 : ({ x: [number, string, any] }: { x: [any, any, any]; }) => void

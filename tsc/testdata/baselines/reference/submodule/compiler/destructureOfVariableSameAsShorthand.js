@@ -29,6 +29,7 @@ async function main() {
 }
 
 //// [destructureOfVariableSameAsShorthand.js]
+"use strict";
 async function main() {
     // These work examples as expected
     get().then((response) => {

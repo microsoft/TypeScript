@@ -1,6 +1,6 @@
 --- old.assignmentCompatWithObjectMembersStringNumericNames.js
 +++ new.assignmentCompatWithObjectMembersStringNumericNames.js
-@@= skipped -92, +92 lines =@@
+@@= skipped -93, +93 lines =@@
  var JustStrings;
  (function (JustStrings) {
      class S {
@@ -9,9 +9,9 @@
      class T {
 +        '1.';
      }
-     var s;
-     var t;
-@@= skipped -34, +36 lines =@@
+     var a2 = { '1.0': '' };
+     var b2 = { '1': '' };
+@@= skipped -28, +30 lines =@@
  var NumbersAndStrings;
  (function (NumbersAndStrings) {
      class S {
@@ -20,5 +20,5 @@
      class T {
 +        1;
      }
-     var s;
-     var t;
+     var a2 = { '1.0': '' };
+     var b2 = { 1.: '' };

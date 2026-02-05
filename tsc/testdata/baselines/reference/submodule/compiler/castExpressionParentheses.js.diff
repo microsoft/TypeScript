@@ -1,6 +1,6 @@
 --- old.castExpressionParentheses.js
 +++ new.castExpressionParentheses.js
-@@= skipped -87, +87 lines =@@
+@@= skipped -88, +88 lines =@@
  (-A).x;
  new (A());
  (() => { })();

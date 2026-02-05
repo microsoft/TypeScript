@@ -1,8 +1,8 @@
 --- old.thisInPropertyBoundDeclarations.js
 +++ new.thisInPropertyBoundDeclarations.js
-@@= skipped -70, +70 lines =@@
-
+@@= skipped -71, +71 lines =@@
  //// [thisInPropertyBoundDeclarations.js]
+ "use strict";
  class Bug {
 +    name;
 +    static func = [

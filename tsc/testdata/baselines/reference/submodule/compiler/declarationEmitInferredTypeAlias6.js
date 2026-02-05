@@ -28,5 +28,5 @@ exports.v = v;
 //// [0.d.ts]
 export {};
 //// [1.d.ts]
-declare let v: string | boolean;
+declare let v: string;
 export { v };

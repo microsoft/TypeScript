@@ -14,31 +14,31 @@
 
          public toString<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) {
 ->toString : <A, B, C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) => any
-+>toString : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean) => any
++>toString : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean | undefined) => any
  >scopeSymbol : any
- >useConstraintInName : boolean
+ >useConstraintInName : boolean | undefined
 
 @@= skipped -9, +9 lines =@@
  >this.getScopedNameEx(scopeSymbol, useConstraintInName).toString() : any
  >this.getScopedNameEx(scopeSymbol, useConstraintInName).toString : any
  >this.getScopedNameEx(scopeSymbol, useConstraintInName) : any
 ->this.getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
-+>this.getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
++>this.getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean | undefined, getPrettyTypeName?: boolean | undefined, getTypeParamMarkerInfo?: boolean | undefined) => any
  >this : this
 ->getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
-+>getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
++>getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean | undefined, getPrettyTypeName?: boolean | undefined, getTypeParamMarkerInfo?: boolean | undefined) => any
  >scopeSymbol : any
- >useConstraintInName : boolean
+ >useConstraintInName : boolean | undefined
  >toString : any
 @@= skipped -11, +11 lines =@@
  >s : any
          }
          public getScopedNameEx<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) {
 ->getScopedNameEx : <A, B, C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
-+>getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
++>getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean | undefined, getPrettyTypeName?: boolean | undefined, getTypeParamMarkerInfo?: boolean | undefined) => any
  >scopeSymbol : any
- >useConstraintInName : boolean
- >getPrettyTypeName : boolean
+ >useConstraintInName : boolean | undefined
+ >getPrettyTypeName : boolean | undefined
 @@= skipped -62, +62 lines =@@
 
                  return MemberName.create(elementMemberName, "", "[]");

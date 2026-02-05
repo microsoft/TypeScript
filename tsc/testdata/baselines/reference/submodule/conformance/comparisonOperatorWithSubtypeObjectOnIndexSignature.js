@@ -110,6 +110,7 @@ var r8b1 = b3 !== a3;
 var r8b1 = b4 !== a4;
 
 //// [comparisonOperatorWithSubtypeObjectOnIndexSignature.js]
+"use strict";
 class Base {
     a;
 }

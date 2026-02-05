@@ -1,18 +1,18 @@
 --- old.protectedClassPropertyAccessibleWithinSubclass2.js
 +++ new.protectedClassPropertyAccessibleWithinSubclass2.js
-@@= skipped -97, +97 lines =@@
-
+@@= skipped -98, +98 lines =@@
  //// [protectedClassPropertyAccessibleWithinSubclass2.js]
+ "use strict";
  class Base {
 +    x;
      method() {
-         var b;
-         var d1;
+         var b = undefined;
+         var d1 = undefined;
 @@= skipped -42, +43 lines =@@
      }
  }
  class Derived3 extends Derived1 {
 +    x;
      method3() {
-         var b;
-         var d1;
+         var b = undefined;
+         var d1 = undefined;

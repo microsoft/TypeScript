@@ -1,0 +1,18 @@
+--- old.protectedStaticClassPropertyAccessibleWithinSubclass2(target=es2015).js
++++ new.protectedStaticClassPropertyAccessibleWithinSubclass2(target=es2015).js
+@@= skipped -25, +25 lines =@@
+ //// [protectedStaticClassPropertyAccessibleWithinSubclass2.js]
+ "use strict";
+ class Base {
++    static x;
+     static staticMethod() {
+         this.x; // OK, accessed within their declaring class
+     }
+@@= skipped -11, +12 lines =@@
+     }
+ }
+ class Derived2 extends Derived1 {
++    static x;
+     static staticMethod3() {
+         this.x; // OK, accessed within a class derived from their declaring class
+         super.x; // Error, x is not public

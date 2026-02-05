@@ -13,6 +13,7 @@ class C extends B {
 
 
 //// [inheritanceGrandParentPrivateMemberCollisionWithPublicMember.js]
+"use strict";
 class A {
     myMethod() { }
 }

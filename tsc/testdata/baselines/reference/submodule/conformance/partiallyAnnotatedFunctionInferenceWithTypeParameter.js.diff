@@ -1,8 +1,8 @@
 --- old.partiallyAnnotatedFunctionInferenceWithTypeParameter.js
 +++ new.partiallyAnnotatedFunctionInferenceWithTypeParameter.js
-@@= skipped -37, +37 lines =@@
-
+@@= skipped -38, +38 lines =@@
  //// [partiallyAnnotatedFunctionInferenceWithTypeParameter.js]
+ "use strict";
  class C {
 +    test;
  }

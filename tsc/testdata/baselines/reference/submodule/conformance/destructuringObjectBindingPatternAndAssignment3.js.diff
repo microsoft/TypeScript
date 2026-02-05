@@ -1,8 +1,8 @@
 --- old.destructuringObjectBindingPatternAndAssignment3.js
 +++ new.destructuringObjectBindingPatternAndAssignment3.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [destructuringObjectBindingPatternAndAssignment3.js]
+ "use strict";
  // Error
 -var { h } = { h: 1 };
 +var { h, } = { h: 1 };

@@ -1,0 +1,14 @@
+--- old.useUnknownInCatchVariables01.types
++++ new.useUnknownInCatchVariables01.types
+@@= skipped -63, +63 lines =@@
+
+         e.toExponential();
+ >e.toExponential() : string
+->e.toExponential : (fractionDigits?: number) => string
++>e.toExponential : (fractionDigits?: number | undefined) => string
+ >e : number
+->toExponential : (fractionDigits?: number) => string
++>toExponential : (fractionDigits?: number | undefined) => string
+
+         e++;
+ >e++ : number

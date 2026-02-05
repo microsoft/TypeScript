@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/assignToExistingClass.ts] ////
 
 === assignToExistingClass.ts ===
-module Test {
+namespace Test {
 >Test : typeof Test
 
     class Mocked {
@@ -18,9 +18,9 @@ module Test {
 >willThrowError : () => void
 
             Mocked = Mocked || function () { // => Error: Invalid left-hand side of assignment expression.
->Mocked = Mocked || function () { // => Error: Invalid left-hand side of assignment expression.                return { myProp: "test" };            } : typeof Mocked | (() => { myProp: string; })
+>Mocked = Mocked || function () { // => Error: Invalid left-hand side of assignment expression.                return { myProp: "test" };            } : typeof Mocked
 >Mocked : any
->Mocked || function () { // => Error: Invalid left-hand side of assignment expression.                return { myProp: "test" };            } : typeof Mocked | (() => { myProp: string; })
+>Mocked || function () { // => Error: Invalid left-hand side of assignment expression.                return { myProp: "test" };            } : typeof Mocked
 >Mocked : typeof Mocked
 >function () { // => Error: Invalid left-hand side of assignment expression.                return { myProp: "test" };            } : () => { myProp: string; }
 

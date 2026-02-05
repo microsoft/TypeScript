@@ -4,26 +4,36 @@
 class Base {
 >Base : Base
 
-    protected x: string;
+    protected x!: string;
 >x : string
 
     method() {
 >method : () => void
 
-        var b: Base;
+        var b: Base = undefined as any;
 >b : Base
+>undefined as any : any
+>undefined : undefined
 
-        var d1: Derived1;
+        var d1: Derived1 = undefined as any;
 >d1 : Derived1
+>undefined as any : any
+>undefined : undefined
 
-        var d2: Derived2;
+        var d2: Derived2 = undefined as any;
 >d2 : Derived2
+>undefined as any : any
+>undefined : undefined
 
-        var d3: Derived3;
+        var d3: Derived3 = undefined as any;
 >d3 : Derived3
+>undefined as any : any
+>undefined : undefined
 
-        var d4: Derived4;
+        var d4: Derived4 = undefined as any;
 >d4 : Derived4
+>undefined as any : any
+>undefined : undefined
 
         b.x;            // OK, accessed within their declaring class
 >b.x : string
@@ -59,20 +69,30 @@ class Derived1 extends Base {
     method1() {
 >method1 : () => void
 
-        var b: Base;
+        var b: Base = undefined as any;
 >b : Base
+>undefined as any : any
+>undefined : undefined
 
-        var d1: Derived1;
+        var d1: Derived1 = undefined as any;
 >d1 : Derived1
+>undefined as any : any
+>undefined : undefined
 
-        var d2: Derived2;
+        var d2: Derived2 = undefined as any;
 >d2 : Derived2
+>undefined as any : any
+>undefined : undefined
 
-        var d3: Derived3;
+        var d3: Derived3 = undefined as any;
 >d3 : Derived3
+>undefined as any : any
+>undefined : undefined
 
-        var d4: Derived4;
+        var d4: Derived4 = undefined as any;
 >d4 : Derived4
+>undefined as any : any
+>undefined : undefined
 
         b.x;            // Error, isn't accessed through an instance of the enclosing class
 >b.x : string
@@ -108,20 +128,30 @@ class Derived2 extends Base {
     method2() {
 >method2 : () => void
 
-        var b: Base;
+        var b: Base = undefined as any;
 >b : Base
+>undefined as any : any
+>undefined : undefined
 
-        var d1: Derived1;
+        var d1: Derived1 = undefined as any;
 >d1 : Derived1
+>undefined as any : any
+>undefined : undefined
 
-        var d2: Derived2;
+        var d2: Derived2 = undefined as any;
 >d2 : Derived2
+>undefined as any : any
+>undefined : undefined
 
-        var d3: Derived3;
+        var d3: Derived3 = undefined as any;
 >d3 : Derived3
+>undefined as any : any
+>undefined : undefined
 
-        var d4: Derived4;
+        var d4: Derived4 = undefined as any;
 >d4 : Derived4
+>undefined as any : any
+>undefined : undefined
 
         b.x;            // Error, isn't accessed through an instance of the enclosing class
 >b.x : string
@@ -154,26 +184,36 @@ class Derived3 extends Derived1 {
 >Derived3 : Derived3
 >Derived1 : Derived1
 
-    protected x: string;
+    protected x!: string;
 >x : string
 
     method3() {
 >method3 : () => void
 
-        var b: Base;
+        var b: Base = undefined as any;
 >b : Base
+>undefined as any : any
+>undefined : undefined
 
-        var d1: Derived1;
+        var d1: Derived1 = undefined as any;
 >d1 : Derived1
+>undefined as any : any
+>undefined : undefined
 
-        var d2: Derived2;
+        var d2: Derived2 = undefined as any;
 >d2 : Derived2
+>undefined as any : any
+>undefined : undefined
 
-        var d3: Derived3;
+        var d3: Derived3 = undefined as any;
 >d3 : Derived3
+>undefined as any : any
+>undefined : undefined
 
-        var d4: Derived4;
+        var d4: Derived4 = undefined as any;
 >d4 : Derived4
+>undefined as any : any
+>undefined : undefined
 
         b.x;            // Error, isn't accessed through an instance of the enclosing class
 >b.x : string
@@ -209,20 +249,30 @@ class Derived4 extends Derived2 {
     method4() {
 >method4 : () => void
 
-        var b: Base;
+        var b: Base = undefined as any;
 >b : Base
+>undefined as any : any
+>undefined : undefined
 
-        var d1: Derived1;
+        var d1: Derived1 = undefined as any;
 >d1 : Derived1
+>undefined as any : any
+>undefined : undefined
 
-        var d2: Derived2;
+        var d2: Derived2 = undefined as any;
 >d2 : Derived2
+>undefined as any : any
+>undefined : undefined
 
-        var d3: Derived3;
+        var d3: Derived3 = undefined as any;
 >d3 : Derived3
+>undefined as any : any
+>undefined : undefined
 
-        var d4: Derived4;
+        var d4: Derived4 = undefined as any;
 >d4 : Derived4
+>undefined as any : any
+>undefined : undefined
 
         b.x;            // Error, isn't accessed through an instance of the enclosing class
 >b.x : string
@@ -252,20 +302,30 @@ class Derived4 extends Derived2 {
 }
 
 
-var b: Base;
+var b: Base = undefined as any;
 >b : Base
+>undefined as any : any
+>undefined : undefined
 
-var d1: Derived1;
+var d1: Derived1 = undefined as any;
 >d1 : Derived1
+>undefined as any : any
+>undefined : undefined
 
-var d2: Derived2;
+var d2: Derived2 = undefined as any;
 >d2 : Derived2
+>undefined as any : any
+>undefined : undefined
 
-var d3: Derived3;
+var d3: Derived3 = undefined as any;
 >d3 : Derived3
+>undefined as any : any
+>undefined : undefined
 
-var d4: Derived4;
+var d4: Derived4 = undefined as any;
 >d4 : Derived4
+>undefined as any : any
+>undefined : undefined
 
 b.x;                    // Error, neither within their declaring class nor classes derived from their declaring class
 >b.x : string

@@ -1,0 +1,34 @@
+--- old.jsDeclarationsExportedClassAliases.errors.txt
++++ new.jsDeclarationsExportedClassAliases.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++utils/errors.js(7,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++utils/index.js(4,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++
++
++==== utils/index.js (1 errors) ====
++    // issue arises here on compilation
++    const errors = require("./errors");
++    
++    module.exports = {
++    ~~~~~~~~~~~~~~~~~~
++        errors
++    ~~~~~~~~~~
++    };
++    ~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++==== utils/errors.js (1 errors) ====
++    class FancyError extends Error {
++        constructor(status) {
++            super(`error with status ${status}`);
++        }
++    }
++    
++    module.exports = {
++    ~~~~~~~~~~~~~~~~~~
++        FancyError
++    ~~~~~~~~~~~~~~
++    };
++    ~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++    

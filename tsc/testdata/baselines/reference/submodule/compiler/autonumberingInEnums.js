@@ -10,6 +10,7 @@ enum Foo {
 }
 
 //// [autonumberingInEnums.js]
+"use strict";
 var Foo;
 (function (Foo) {
     Foo[Foo["a"] = 1] = "a";

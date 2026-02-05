@@ -21,7 +21,7 @@ genericAndNonGenericInterfaceWithTheSameName.ts(40,22): error TS2428: All declar
         bar: T;
     }
     
-    module M {
+    namespace M {
         interface A<T> { 
                   ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.
@@ -35,19 +35,19 @@ genericAndNonGenericInterfaceWithTheSameName.ts(40,22): error TS2428: All declar
         }
     }
     
-    module M2 {
+    namespace M2 {
         interface A {
             foo: string;
         }
     }
     
-    module M2 {
+    namespace M2 {
         interface A<T> { // ok, different declaration space than other M2
             bar: T;
         }
     }
     
-    module M3 {
+    namespace M3 {
         export interface A {
                          ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.
@@ -55,7 +55,7 @@ genericAndNonGenericInterfaceWithTheSameName.ts(40,22): error TS2428: All declar
         }
     }
     
-    module M3 {
+    namespace M3 {
         export interface A<T> { // error
                          ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.

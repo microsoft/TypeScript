@@ -12,7 +12,8 @@ func TestCompletions01(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `var x: string[] = [];
+	const content = `// @lib: es5
+var x: string[] = [];
 x.forEach(function (y) { y/*1*/
 x.forEach(y => y/*2*/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

@@ -7,6 +7,7 @@ function declare(x: any, ...ys: any[]) {
 declare `Hello ${0} world!`;
 
 //// [taggedTemplateStringsWithTagNamedDeclare.js]
+"use strict";
 function declare(x, ...ys) {
 }
 declare `Hello ${0} world!`;

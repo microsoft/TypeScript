@@ -6,5 +6,6 @@ function Test() { }
 
 
 //// [test.jsx]
+"use strict";
 function Test() { }
 <Test></Test>;

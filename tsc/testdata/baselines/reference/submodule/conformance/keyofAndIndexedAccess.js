@@ -661,6 +661,7 @@ const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, 
 
 
 //// [keyofAndIndexedAccess.js]
+"use strict";
 class Shape {
     name;
     width;

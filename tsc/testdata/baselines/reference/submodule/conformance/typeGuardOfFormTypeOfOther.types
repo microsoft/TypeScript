@@ -26,13 +26,13 @@ var numOrBool: number | boolean
 var strOrNumOrBool: string | number | boolean;
 >strOrNumOrBool : string | number | boolean
 
-var strOrC: string | C;
+declare var strOrC: string | C;
 >strOrC : string | C
 
-var numOrC: number | C;
+declare var numOrC: number | C;
 >numOrC : number | C
 
-var boolOrC: boolean | C;
+declare var boolOrC: boolean | C;
 >boolOrC : boolean | C
 
 var emptyObj: {};

@@ -62,6 +62,7 @@ var x = {
 
         var r3 = this; // any
 >r3 : Symbol(r3, Decl(typeOfThisInAccessor.ts, 27, 11))
+>this : Symbol(x, Decl(typeOfThisInAccessor.ts, 25, 7))
 
         return 1;
     }

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/importInTypePosition.ts] ////
 
 === importInTypePosition.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     export class Point {
@@ -20,14 +20,14 @@ module A {
 }
 
 // no code gen expected
-module B {
+namespace B {
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
 >a : typeof a
 >A : typeof a
 }
 // no code gen expected
-module C {
+namespace C {
 >C : typeof C
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'

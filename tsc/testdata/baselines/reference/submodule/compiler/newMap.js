@@ -5,4 +5,5 @@ new Map<string>();
 
 
 //// [newMap.js]
+"use strict";
 new Map();

@@ -5,5 +5,6 @@ class C<K,V> {
 }
 
 //// [parserGenericClass2.js]
+"use strict";
 class C {
 }

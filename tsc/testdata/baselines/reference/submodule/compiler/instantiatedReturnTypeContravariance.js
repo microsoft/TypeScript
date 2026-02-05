@@ -33,6 +33,7 @@ return null;
 
 
 //// [instantiatedReturnTypeContravariance.js]
+"use strict";
 class c {
     foo() {
         return null;

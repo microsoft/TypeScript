@@ -52,9 +52,12 @@ function generic<T extends { x, y }>(t: T) {
 >rest : Omit<T, "x">
 }
 
-let rest: { b: string }
+let rest: { b: string } = { b: "" };
 >rest : { b: string; }
 >b : string
+>{ b: "" } : { b: string; }
+>b : string
+>"" : ""
 
 ({a, ...rest.b + rest.b} = o);
 >({a, ...rest.b + rest.b} = o) : { a: number; b: string; }

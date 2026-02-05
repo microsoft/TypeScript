@@ -10,6 +10,7 @@
 (arg1 = 1, arg2) => 1; 
 
 //// [fatarrowfunctionsOptionalArgsErrors1.js]
+"use strict";
 (arg1, arg2) => 101;
 (...arg) => 102;
 (...arg) => 103;

@@ -7,10 +7,10 @@ class A {
     public f1<X, Y, Z>() {
 >f1 : <X, Y, Z>() => void
 
-        var a: X;
+        var a!: X;
 >a : X
 
-        var b: Z;
+        var b!: Z;
 >b : Z
 
         a;

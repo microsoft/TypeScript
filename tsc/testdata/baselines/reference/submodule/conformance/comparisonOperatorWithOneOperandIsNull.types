@@ -92,25 +92,25 @@ function foo<T>(t: T) {
 >t : T
 }
 
-var a: boolean;
+declare var a: boolean;
 >a : boolean
 
-var b: number;
+declare var b: number;
 >b : number
 
-var c: string;
+declare var c: string;
 >c : string
 
-var d: void;
+declare var d: void;
 >d : void
 
-var e: E;
+declare var e: E;
 >e : E
 
-var f: {};
+declare var f: {};
 >f : {}
 
-var g: string[];
+declare var g: string[];
 >g : string[]
 
 // operator <

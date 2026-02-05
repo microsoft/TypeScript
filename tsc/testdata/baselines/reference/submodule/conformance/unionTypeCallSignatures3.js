@@ -15,6 +15,7 @@ fUnion(""); // All constituents can be called by passing a single string.
 
 
 //// [unionTypeCallSignatures3.js]
+"use strict";
 function f1(s) { }
 function f2(s) { }
 function f3(...s) { }

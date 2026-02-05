@@ -17,6 +17,7 @@ var i: I;
 bar(i);
 
 //// [symbolProperty15.js]
+"use strict";
 class C {
 }
 foo(new C);

@@ -59,6 +59,7 @@ var r3: typeof D;
 var r4: typeof d;
 
 //// [typeQueryOnClass.js]
+"use strict";
 class C {
     x;
     constructor(x) {

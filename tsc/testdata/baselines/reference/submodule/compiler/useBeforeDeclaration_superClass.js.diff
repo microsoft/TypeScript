@@ -1,8 +1,8 @@
 --- old.useBeforeDeclaration_superClass.js
 +++ new.useBeforeDeclaration_superClass.js
-@@= skipped -31, +31 lines =@@
-
+@@= skipped -32, +32 lines =@@
  //// [useBeforeDeclaration_superClass.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.x = 0;

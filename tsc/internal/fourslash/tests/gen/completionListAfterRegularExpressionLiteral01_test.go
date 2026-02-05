@@ -14,7 +14,8 @@ func TestCompletionListAfterRegularExpressionLiteral01(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `let v = 100;
+	const content = `// @lib: es5
+let v = 100;
 /a/./**/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()

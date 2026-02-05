@@ -15,11 +15,11 @@ var z1 = void 0;
 
 // these are not widened
 
-var x2: null;
->x2 : Symbol(x2, Decl(initializersWidened.ts, 8, 3))
+declare var x2: null;
+>x2 : Symbol(x2, Decl(initializersWidened.ts, 8, 11))
 
-var y2: undefined;
->y2 : Symbol(y2, Decl(initializersWidened.ts, 9, 3))
+declare var y2: undefined;
+>y2 : Symbol(y2, Decl(initializersWidened.ts, 9, 11))
 
 var x3: null = null;
 >x3 : Symbol(x3, Decl(initializersWidened.ts, 11, 3))
@@ -46,14 +46,14 @@ var z4 = void 0 || void 0;
 
 var x5 = null || x2;
 >x5 : Symbol(x5, Decl(initializersWidened.ts, 21, 3))
->x2 : Symbol(x2, Decl(initializersWidened.ts, 8, 3))
+>x2 : Symbol(x2, Decl(initializersWidened.ts, 8, 11))
 
 var y5 = undefined || y2;
 >y5 : Symbol(y5, Decl(initializersWidened.ts, 22, 3))
 >undefined : Symbol(undefined)
->y2 : Symbol(y2, Decl(initializersWidened.ts, 9, 3))
+>y2 : Symbol(y2, Decl(initializersWidened.ts, 9, 11))
 
 var z5 = void 0 || y2;
 >z5 : Symbol(z5, Decl(initializersWidened.ts, 23, 3))
->y2 : Symbol(y2, Decl(initializersWidened.ts, 9, 3))
+>y2 : Symbol(y2, Decl(initializersWidened.ts, 9, 11))
 

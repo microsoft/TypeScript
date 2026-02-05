@@ -15,7 +15,7 @@ var ANY2: any[] = ["", ""];
 >"" : ""
 >"" : ""
 
-var obj: () => {}
+declare var obj: () => {}
 >obj : () => {}
 
 var obj1 = { x: "", y: () => { }};
@@ -33,7 +33,7 @@ function foo(): any {
 >a : any
 
     return a;
->a : any
+>a : undefined
 }
 class A {
 >A : A
@@ -42,16 +42,16 @@ class A {
 >a : any
 
     static foo() {
->foo : () => any
+>foo : () => undefined
 
         var a;
 >a : any
 
         return a;
->a : any
+>a : undefined
     }
 }
-module M {
+namespace M {
 >M : typeof M
 
     export var n: any;
@@ -65,32 +65,32 @@ var objA = new A();
 // any type var
 var ResultIsBoolean1 = !ANY1;
 >ResultIsBoolean1 : boolean
->!ANY1 : boolean
->ANY1 : any
+>!ANY1 : true
+>ANY1 : undefined
 
 var ResultIsBoolean2 = !ANY2;
 >ResultIsBoolean2 : boolean
->!ANY2 : boolean
+>!ANY2 : false
 >ANY2 : any[]
 
 var ResultIsBoolean3 = !A;
 >ResultIsBoolean3 : boolean
->!A : boolean
+>!A : false
 >A : typeof A
 
 var ResultIsBoolean4 = !M;
 >ResultIsBoolean4 : boolean
->!M : boolean
+>!M : false
 >M : typeof M
 
 var ResultIsBoolean5 = !obj;
 >ResultIsBoolean5 : boolean
->!obj : boolean
+>!obj : false
 >obj : () => {}
 
 var ResultIsBoolean6 = !obj1;
 >ResultIsBoolean6 : boolean
->!obj1 : boolean
+>!obj1 : false
 >obj1 : { x: string; y: () => void; }
 
 // any type literal
@@ -120,7 +120,7 @@ var ResultIsBoolean10 = !obj1.x;
 
 var ResultIsBoolean11 = !obj1.y;
 >ResultIsBoolean11 : boolean
->!obj1.y : boolean
+>!obj1.y : false
 >obj1.y : () => void
 >obj1 : { x: string; y: () => void; }
 >y : () => void
@@ -147,11 +147,11 @@ var ResultIsBoolean14 = !foo();
 
 var ResultIsBoolean15 = !A.foo();
 >ResultIsBoolean15 : boolean
->!A.foo() : boolean
->A.foo() : any
->A.foo : () => any
+>!A.foo() : true
+>A.foo() : undefined
+>A.foo : () => undefined
 >A : typeof A
->foo : () => any
+>foo : () => undefined
 
 var ResultIsBoolean16 = !(ANY + ANY1);
 >ResultIsBoolean16 : boolean
@@ -159,7 +159,7 @@ var ResultIsBoolean16 = !(ANY + ANY1);
 >(ANY + ANY1) : any
 >ANY + ANY1 : any
 >ANY : any
->ANY1 : any
+>ANY1 : undefined
 
 var ResultIsBoolean17 = !(null + undefined);
 >ResultIsBoolean17 : boolean
@@ -197,7 +197,7 @@ var ResultIsBoolean21 = !!!(ANY + ANY1);
 >(ANY + ANY1) : any
 >ANY + ANY1 : any
 >ANY : any
->ANY1 : any
+>ANY1 : undefined
 
 // miss assignment operators
 !ANY;
@@ -205,8 +205,8 @@ var ResultIsBoolean21 = !!!(ANY + ANY1);
 >ANY : any
 
 !ANY1;
->!ANY1 : boolean
->ANY1 : any
+>!ANY1 : true
+>ANY1 : undefined
 
 !ANY2[0];
 >!ANY2[0] : boolean
@@ -215,10 +215,10 @@ var ResultIsBoolean21 = !!!(ANY + ANY1);
 >0 : 0
 
 !ANY, ANY1;
->!ANY, ANY1 : any
+>!ANY, ANY1 : undefined
 >!ANY : boolean
 >ANY : any
->ANY1 : any
+>ANY1 : undefined
 
 !objA.a;
 >!objA.a : boolean

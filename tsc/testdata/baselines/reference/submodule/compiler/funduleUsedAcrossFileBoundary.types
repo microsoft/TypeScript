@@ -5,7 +5,7 @@ declare function Q<T>(value: T): string;
 >Q : typeof Q
 >value : T
 
-declare module Q {
+declare namespace Q {
 >Q : typeof Q
 
     interface Promise<T> {

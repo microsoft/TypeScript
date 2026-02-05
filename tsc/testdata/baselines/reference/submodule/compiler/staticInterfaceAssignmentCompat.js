@@ -15,6 +15,7 @@ var x: ShapeFactory = Shape;
 
 
 //// [staticInterfaceAssignmentCompat.js]
+"use strict";
 class Shape {
     static create() {
         return new Shape();

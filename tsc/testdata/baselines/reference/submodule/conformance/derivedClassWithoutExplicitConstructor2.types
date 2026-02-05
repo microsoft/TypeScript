@@ -10,12 +10,12 @@ class Base {
 
     constructor(x: number, y?: number, z?: number);
 >x : number
->y : number
->z : number
+>y : number | undefined
+>z : number | undefined
 
     constructor(x: number, y?: number);
 >x : number
->y : number
+>y : number | undefined
 
     constructor(x: number) { this.a = x; }
 >x : number
@@ -73,12 +73,12 @@ class Base2<T> {
 
     constructor(x: T, y?: T, z?: T);
 >x : T
->y : T
->z : T
+>y : T | undefined
+>z : T | undefined
 
     constructor(x: T, y?: T);
 >x : T
->y : T
+>y : T | undefined
 
     constructor(x: T) { this.a = x; }
 >x : T

@@ -14,6 +14,7 @@ export function foo() {
     console.log("foo from a");
 }
 //// [b.js]
+"use strict";
 defer * as;
 ns;
 from;

@@ -3,14 +3,14 @@
 === objectLiteralShorthandPropertiesWithModule.ts ===
 // module export
 
-module m {
+namespace m {
 >m : typeof m
 
     export var x;
 >x : any
 }
 
-module m {
+namespace m {
 >m : typeof m
 
     var z = x;

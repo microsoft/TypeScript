@@ -11,9 +11,9 @@ interface Base {
     a5: (x?: number, y?: number) => number;
     a6: (x: number, y: number) => number;
 }
-var b: Base;
+declare var b: Base;
 
-var a: () => number;
+declare var a: () => number;
     a = () => 1 // ok, same number of required params
     a = (x?: number) => 1; // ok, same number of required params
     a = (x: number) => 1; // error, too many required params
@@ -24,7 +24,7 @@ var a: () => number;
     a = b.a5; // ok
     a = b.a6; // error
 
-var a2: (x?: number) => number; 
+declare var a2: (x?: number) => number; 
     a2 = () => 1; // ok, same number of required params
     a2 = (x?: number) => 1; // ok, same number of required params
     a2 = (x: number) => 1; // ok, same number of params
@@ -35,7 +35,7 @@ var a2: (x?: number) => number;
     a2 = b.a5; // ok
     a2 = b.a6; // error
 
-var a3: (x: number) => number; 
+declare var a3: (x: number) => number; 
     a3 = () => 1; // ok, fewer required params
     a3 = (x?: number) => 1; // ok, fewer required params
     a3 = (x: number) => 1; // ok, same number of required params
@@ -47,7 +47,7 @@ var a3: (x: number) => number;
     a3 = b.a5; // ok
     a3 = b.a6; // error
 
-var a4: (x: number, y?: number) => number;
+declare var a4: (x: number, y?: number) => number;
     a4 = () => 1; // ok, fewer required params
     a4 = (x?: number, y?: number) => 1; // ok, fewer required params
     a4 = (x: number) => 1; // ok, same number of required params
@@ -59,7 +59,7 @@ var a4: (x: number, y?: number) => number;
     a4 = b.a5; // ok
     a4 = b.a6; // ok, same number of params
 
-var a5: (x?: number, y?: number) => number;
+declare var a5: (x?: number, y?: number) => number;
     a5 = () => 1; // ok, fewer required params
     a5 = (x?: number, y?: number) => 1; // ok, fewer required params
     a5 = (x: number) => 1; // ok, fewer params in lambda
@@ -72,9 +72,8 @@ var a5: (x?: number, y?: number) => number;
     a5 = b.a6; // ok, same number of params
 
 //// [assignmentCompatWithCallSignaturesWithOptionalParameters.js]
+"use strict";
 // call signatures in derived types must have the same or fewer optional parameters as the base type
-var b;
-var a;
 a = () => 1; // ok, same number of required params
 a = (x) => 1; // ok, same number of required params
 a = (x) => 1; // error, too many required params
@@ -84,7 +83,6 @@ a = b.a3; // error
 a = b.a4; // error
 a = b.a5; // ok
 a = b.a6; // error
-var a2;
 a2 = () => 1; // ok, same number of required params
 a2 = (x) => 1; // ok, same number of required params
 a2 = (x) => 1; // ok, same number of params
@@ -94,7 +92,6 @@ a2 = b.a3; // ok, same number of params
 a2 = b.a4; // ok, excess params are optional in b.a3
 a2 = b.a5; // ok
 a2 = b.a6; // error
-var a3;
 a3 = () => 1; // ok, fewer required params
 a3 = (x) => 1; // ok, fewer required params
 a3 = (x) => 1; // ok, same number of required params
@@ -105,7 +102,6 @@ a3 = b.a3; // ok
 a3 = b.a4; // ok
 a3 = b.a5; // ok
 a3 = b.a6; // error
-var a4;
 a4 = () => 1; // ok, fewer required params
 a4 = (x, y) => 1; // ok, fewer required params
 a4 = (x) => 1; // ok, same number of required params
@@ -116,7 +112,6 @@ a4 = b.a3; // ok
 a4 = b.a4; // ok
 a4 = b.a5; // ok
 a4 = b.a6; // ok, same number of params
-var a5;
 a5 = () => 1; // ok, fewer required params
 a5 = (x, y) => 1; // ok, fewer required params
 a5 = (x) => 1; // ok, fewer params in lambda

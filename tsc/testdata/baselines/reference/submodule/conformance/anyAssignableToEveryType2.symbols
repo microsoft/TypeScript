@@ -52,7 +52,7 @@ interface I5 {
 
     [x: string]: Date;
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 27, 5))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo: any;
 >foo : Symbol(I5.foo, Decl(anyAssignableToEveryType2.ts, 27, 22))
@@ -64,7 +64,7 @@ interface I6 {
 
     [x: string]: RegExp;
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 33, 5))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo: any;
 >foo : Symbol(I6.foo, Decl(anyAssignableToEveryType2.ts, 33, 24))
@@ -184,7 +184,7 @@ interface I14 {
 function f() { }
 >f : Symbol(f, Decl(anyAssignableToEveryType2.ts, 84, 1), Decl(anyAssignableToEveryType2.ts, 87, 16))
 
-module f {
+namespace f {
 >f : Symbol(f, Decl(anyAssignableToEveryType2.ts, 84, 1), Decl(anyAssignableToEveryType2.ts, 87, 16))
 
     export var bar = 1;
@@ -206,7 +206,7 @@ class c { baz: string }
 >c : Symbol(c, Decl(anyAssignableToEveryType2.ts, 94, 1), Decl(anyAssignableToEveryType2.ts, 97, 23))
 >baz : Symbol(c.baz, Decl(anyAssignableToEveryType2.ts, 97, 9))
 
-module c {
+namespace c {
 >c : Symbol(c, Decl(anyAssignableToEveryType2.ts, 94, 1), Decl(anyAssignableToEveryType2.ts, 97, 23))
 
     export var bar = 1;

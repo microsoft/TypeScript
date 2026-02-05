@@ -9,5 +9,6 @@ class d {
 }
 
 //// [a.js]
+"use strict";
 class d {
 }

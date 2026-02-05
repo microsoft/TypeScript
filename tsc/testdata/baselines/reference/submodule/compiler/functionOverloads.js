@@ -7,6 +7,7 @@ function foo(bar?: string): any { return "" };
 var x = foo(5);
 
 //// [functionOverloads.js]
+"use strict";
 function foo(bar) { return ""; }
 ;
 var x = foo(5);

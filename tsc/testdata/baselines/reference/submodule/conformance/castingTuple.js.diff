@@ -1,8 +1,8 @@
 --- old.castingTuple.js
 +++ new.castingTuple.js
-@@= skipped -37, +37 lines =@@
-
+@@= skipped -38, +38 lines =@@
  //// [castingTuple.js]
+ "use strict";
  class A {
 -    constructor() {
 -        this.a = 10;

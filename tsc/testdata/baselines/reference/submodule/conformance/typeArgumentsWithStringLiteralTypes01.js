@@ -114,6 +114,7 @@ namespace n3 {
 }
 
 //// [typeArgumentsWithStringLiteralTypes01.js]
+"use strict";
 function fun1(x, y) {
     return randBool() ? x : y;
 }

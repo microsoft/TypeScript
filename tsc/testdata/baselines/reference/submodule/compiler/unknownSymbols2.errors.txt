@@ -11,7 +11,7 @@ unknownSymbols2.ts(29,16): error TS2503: Cannot find namespace 'asdf'.
 
 
 ==== unknownSymbols2.ts (10 errors) ====
-    module M {
+    namespace M {
         var x: asdf;
                ~~~~
 !!! error TS2304: Cannot find name 'asdf'.
@@ -53,7 +53,7 @@ unknownSymbols2.ts(29,16): error TS2503: Cannot find namespace 'asdf'.
                                    ~~~~~~
 !!! error TS2304: Cannot find name 'qwerty'.
     
-        module N {
+        namespace N {
             var x = 1;
         }
         import c = N;

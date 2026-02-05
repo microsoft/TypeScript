@@ -61,7 +61,7 @@ interface BookDef {
 >author : string
 
     readonly numPages: number | null;
->numPages : number
+>numPages : number | null
 }
 
 

@@ -1,0 +1,16 @@
+--- old.tsxAttributeInvalidNames.types
++++ new.tsxAttributeInvalidNames.types
+@@= skipped -4, +4 lines =@@
+ 	interface Element { }
+ 	interface IntrinsicElements {
+ 		test1: { "data-foo"?: string };
+->test1 : { "data-foo"?: string; }
++>test1 : { "data-foo"?: string | undefined; }
+ >"data-foo" : string | undefined
+
+ 		test2: { "data-foo"?: string };
+->test2 : { "data-foo"?: string; }
++>test2 : { "data-foo"?: string | undefined; }
+ >"data-foo" : string | undefined
+ 	}
+ }

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/expressions/typeGuards/typeGuardInClass.ts] ////
 
 //// [typeGuardInClass.ts]
-let x: string | number;
+declare var x: string | number;
 
 if (typeof x === "string") {
     let n = class {
@@ -20,7 +20,7 @@ else {
 
 
 //// [typeGuardInClass.js]
-let x;
+"use strict";
 if (typeof x === "string") {
     let n = class {
         constructor() {

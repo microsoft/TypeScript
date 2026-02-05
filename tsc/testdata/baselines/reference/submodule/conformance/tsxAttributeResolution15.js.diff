@@ -1,6 +1,6 @@
 --- old.tsxAttributeResolution15.js
 +++ new.tsxAttributeResolution15.js
-@@= skipped -24, +24 lines =@@
+@@= skipped -27, +27 lines =@@
      render() {
          return <div>Default hi</div>;
      }

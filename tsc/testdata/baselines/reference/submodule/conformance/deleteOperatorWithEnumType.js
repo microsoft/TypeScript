@@ -25,6 +25,7 @@ delete ENUM1.B;
 delete ENUM, ENUM1;
 
 //// [deleteOperatorWithEnumType.js]
+"use strict";
 // delete  operator on enum type
 var ENUM;
 (function (ENUM) {

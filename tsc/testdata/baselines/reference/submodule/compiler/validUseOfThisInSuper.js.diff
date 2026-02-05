@@ -1,8 +1,8 @@
 --- old.validUseOfThisInSuper.js
 +++ new.validUseOfThisInSuper.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [validUseOfThisInSuper.js]
+ "use strict";
  class Base {
 +    b;
      constructor(b) {

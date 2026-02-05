@@ -1,8 +1,8 @@
 --- old.internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.js
 +++ new.internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.js
-@@= skipped -16, +16 lines =@@
-
+@@= skipped -17, +17 lines =@@
  //// [internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.js]
+ "use strict";
  class A {
 +    aProp;
  }

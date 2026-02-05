@@ -101,6 +101,7 @@ class C3 extends Mixed3 {
 
 
 //// [mixinClassesMembers.js]
+"use strict";
 function f1() {
     let x1 = new Mixed1("hello");
     let x2 = new Mixed1(42);

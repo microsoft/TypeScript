@@ -1,6 +1,6 @@
 --- old.arrayOfFunctionTypes3.js
 +++ new.arrayOfFunctionTypes3.js
-@@= skipped -32, +32 lines =@@
+@@= skipped -33, +33 lines =@@
  var x = [() => 1, () => { }];
  var r2 = x[0]();
  class C {

@@ -11,3 +11,4 @@ interface Bar extends Foo {
 
 
 //// [addMoreOverloadsToBaseSignature.js]
+"use strict";

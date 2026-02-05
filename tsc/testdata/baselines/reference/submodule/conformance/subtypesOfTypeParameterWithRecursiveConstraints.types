@@ -214,7 +214,7 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >v : V
 }
 
-module M1 {
+namespace M1 {
 >M1 : typeof M1
 
     class Base<T> {
@@ -325,7 +325,7 @@ module M1 {
 }
 
 
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 
     class Base2<T> {

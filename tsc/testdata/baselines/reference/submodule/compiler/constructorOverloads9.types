@@ -5,7 +5,7 @@ export class C {
 >C : C
 
     a;
->a : any
+>a : string
 
     constructor();
     constructor(x = '') {
@@ -14,9 +14,9 @@ export class C {
 
         this.a = x;
 >this.a = x : string
->this.a : any
+>this.a : string
 >this : this
->a : any
+>a : string
 >x : string
     }
 }

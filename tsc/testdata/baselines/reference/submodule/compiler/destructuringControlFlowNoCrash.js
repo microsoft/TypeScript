@@ -20,6 +20,7 @@ const { constructor } = async () => {};
 
 
 //// [destructuringControlFlowNoCrash.js]
+"use strict";
 // legal JS, if nonsensical, which also triggers the issue
 const { date, } = (inspectedElement) => 0;
 date.toISOString();

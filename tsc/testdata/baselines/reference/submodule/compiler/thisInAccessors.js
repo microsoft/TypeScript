@@ -33,6 +33,7 @@ class GetterAndSetter {
 }
 
 //// [thisInAccessors.js]
+"use strict";
 // this capture only in getter
 class GetterOnly {
     get Value() {

@@ -4,4 +4,5 @@
 throw
 
 //// [throwWithoutNewLine1.js]
+"use strict";
 throw ;

@@ -16,6 +16,7 @@ oobj["obj"][incr()] ??= incr();
 
 
 //// [logicalAssignment10.js]
+"use strict";
 var _a, _b;
 var _c, _d, _e;
 var count = 0;

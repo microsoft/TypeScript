@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/moduleDeclarations/nonInstantiatedModule.ts] ////
 
 === nonInstantiatedModule.ts ===
-module M {
+namespace M {
 >M : typeof M
 
     export interface Point { x: number; y: number }
@@ -40,10 +40,10 @@ var a2 = m.a;
 >m : typeof M
 >a : number
 
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 
-    export module Point {
+    export namespace Point {
 >Point : typeof Point
 
         export function Origin(): Point {
@@ -88,10 +88,10 @@ var p2: typeof M2.Point;
 >M2 : typeof M2
 >Point : typeof M2.Point
 
-module M3 {
+namespace M3 {
 >M3 : typeof M3
 
-    export module Utils {
+    export namespace Utils {
         export interface Point {
             x: number; y: number;
 >x : number

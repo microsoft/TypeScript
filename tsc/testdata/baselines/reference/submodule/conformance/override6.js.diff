@@ -1,8 +1,8 @@
 --- old.override6.js
 +++ new.override6.js
-@@= skipped -17, +17 lines =@@
-
+@@= skipped -18, +18 lines =@@
  //// [override6.js]
+ "use strict";
  class B {
 +    foo;
 +    bar;

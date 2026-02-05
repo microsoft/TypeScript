@@ -68,10 +68,6 @@ export async function adaptSession(input: GatewayPayload) {
 
 
 //// [neverAsDiscriminantType.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.GatewayOpcode = void 0;
-exports.adaptSession = adaptSession;
 function f1(foo) {
     if (foo.kind === 'a') {
         foo.a;
@@ -82,6 +78,7 @@ function f2(foo) {
         foo.a;
     }
 }
+export { GatewayOpcode };
 var GatewayOpcode;
 (function (GatewayOpcode) {
     GatewayOpcode[GatewayOpcode["DISPATCH"] = 0] = "DISPATCH";
@@ -95,9 +92,9 @@ var GatewayOpcode;
     GatewayOpcode[GatewayOpcode["INVALID_SESSION"] = 9] = "INVALID_SESSION";
     GatewayOpcode[GatewayOpcode["HELLO"] = 10] = "HELLO";
     GatewayOpcode[GatewayOpcode["HEARTBEAT_ACK"] = 11] = "HEARTBEAT_ACK";
-})(GatewayOpcode || (exports.GatewayOpcode = GatewayOpcode = {}));
+})(GatewayOpcode || (GatewayOpcode = {}));
 function assertMessage(event) { }
-async function adaptSession(input) {
+export async function adaptSession(input) {
     if (input.t === 'MESSAGE_CREATE') {
         assertMessage(input.d);
     }

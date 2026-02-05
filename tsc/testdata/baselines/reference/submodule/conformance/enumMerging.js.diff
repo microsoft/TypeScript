@@ -1,6 +1,6 @@
 --- old.enumMerging.js
 +++ new.enumMerging.js
-@@= skipped -101, +101 lines =@@
+@@= skipped -102, +102 lines =@@
  (function (M2) {
      let EComp2;
      (function (EComp2) {

@@ -5,5 +5,6 @@ for (a = 1 in b) {
 }
 
 //// [parserForStatement4.js]
+"use strict";
 for (a = 1 in b) {
 }

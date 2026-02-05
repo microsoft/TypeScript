@@ -1,6 +1,6 @@
 --- old.missingTypeArguments1.js
 +++ new.missingTypeArguments1.js
-@@= skipped -59, +59 lines =@@
+@@= skipped -60, +60 lines =@@
  class Y {
  }
  class X {

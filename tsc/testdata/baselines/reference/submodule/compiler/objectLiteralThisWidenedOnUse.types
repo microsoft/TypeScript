@@ -37,8 +37,8 @@ var GlobalIns = {
 
     return !!foo && !!foo.bar;
 >!!foo && !!foo.bar : boolean
->!!foo : boolean
->!foo : boolean
+>!!foo : true
+>!foo : false
 >foo : Foo
 >!!foo.bar : boolean
 >!foo.bar : boolean

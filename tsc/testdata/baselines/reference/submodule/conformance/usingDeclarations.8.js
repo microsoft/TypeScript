@@ -6,6 +6,7 @@
 }
 
 //// [usingDeclarations.8.js]
+"use strict";
 {
     using a;
 }

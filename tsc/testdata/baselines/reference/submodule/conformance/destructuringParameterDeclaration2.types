@@ -58,9 +58,9 @@ interface F1 {
 }
 
 function b1(z = null, o = { x: 0, y: undefined }) { }
->b1 : (z?: any, o?: { x: number; y: any; }) => void
->z : any
->o : { x: number; y: any; }
+>b1 : (z?: null, o?: { x: number; y: undefined; }) => void
+>z : null
+>o : { x: number; y: undefined; }
 >{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
 >0 : 0
@@ -68,20 +68,20 @@ function b1(z = null, o = { x: 0, y: undefined }) { }
 >undefined : undefined
 
 function b2([a, z, y] = [undefined, null, undefined]) { }
->b2 : ([a, z, y]?: [any, any, any]) => void
->a : any
->z : any
->y : any
+>b2 : ([a, z, y]?: [undefined, null, undefined]) => void
+>a : undefined
+>z : null
+>y : undefined
 >[undefined, null, undefined] : [undefined, null, undefined]
 >undefined : undefined
 >undefined : undefined
 
 function b3([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined]]]) { }
->b3 : ([[a], b, [[c, d]]]?: [[any], any, [[any, any]]]) => void
->a : any
->b : any
->c : any
->d : any
+>b3 : ([[a], b, [[c, d]]]?: [[undefined], undefined, [[undefined, undefined]]]) => void
+>a : undefined
+>b : undefined
+>c : undefined
+>d : undefined
 >[[undefined], undefined, [[undefined, undefined]]] : [[undefined], undefined, [[undefined, undefined]]]
 >[undefined] : [undefined]
 >undefined : undefined
@@ -93,7 +93,7 @@ function b3([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined
 
 b1("string", { x: "string", y: true });  // Error
 >b1("string", { x: "string", y: true }) : void
->b1 : (z?: any, o?: { x: number; y: any; }) => void
+>b1 : (z?: null, o?: { x: number; y: undefined; }) => void
 >"string" : "string"
 >{ x: "string", y: true } : { x: string; y: boolean; }
 >x : string
@@ -117,7 +117,7 @@ function c1({z} = { z: 10 }) { }
 >10 : 10
 
 function c2({z = 10}) { }
->c2 : ({ z }: { z?: number; }) => void
+>c2 : ({ z }: { z?: number | undefined; }) => void
 >z : number
 >10 : 10
 
@@ -141,7 +141,7 @@ function c5([a, b, [[c]]]) { }
 >c : any
 
 function c6([a, b, [[c = 1]]]) { }
->c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
+>c6 : ([a, b, [[c]]]: [any, any, [[(number | undefined)?]]]) => void
 >a : any
 >b : any
 >c : number
@@ -168,7 +168,7 @@ c1({ z: true });   // Error, implied type is {z:number}?
 
 c2({ z: false });  // Error, implied type is {z?: number}
 >c2({ z: false }) : void
->c2 : ({ z }: { z?: number; }) => void
+>c2 : ({ z }: { z?: number | undefined; }) => void
 >{ z: false } : { z: boolean; }
 >z : boolean
 >false : false
@@ -191,7 +191,7 @@ c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
 
 c6([1, 2, [["string"]]]);  // Error, implied type is [any, any, [[number]]]  // Use initializer
 >c6([1, 2, [["string"]]]) : void
->c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
+>c6 : ([a, b, [[c]]]: [any, any, [[(number | undefined)?]]]) => void
 >[1, 2, [["string"]]] : [number, number, [[string]]]
 >1 : 1
 >2 : 2

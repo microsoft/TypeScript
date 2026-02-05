@@ -1,8 +1,8 @@
 --- old.genericCallWithObjectTypeArgs.js
 +++ new.genericCallWithObjectTypeArgs.js
-@@= skipped -24, +24 lines =@@
-
+@@= skipped -25, +25 lines =@@
  //// [genericCallWithObjectTypeArgs.js]
+ "use strict";
  class C {
 +    x;
  }

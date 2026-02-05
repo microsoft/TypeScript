@@ -1,6 +1,6 @@
 --- old.asiAbstract.js
 +++ new.asiAbstract.js
-@@= skipped -21, +21 lines =@@
+@@= skipped -22, +22 lines =@@
  class NonAbstractClass {
  }
  class C2 {

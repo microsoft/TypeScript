@@ -4,26 +4,26 @@
  recursiveFunctionTypes.ts(34,4): error TS2345: Argument of type 'string' is not assignable to parameter of type '{ (): typeof f6; (a: typeof f6): () => number; }'.
  recursiveFunctionTypes.ts(42,8): error TS2554: Expected 0-1 arguments, but got 2.
  recursiveFunctionTypes.ts(43,4): error TS2769: No overload matches this call.
--  Overload 1 of 4, '(a: { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }): () => number', gave the following error.
--    Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
+-  Overload 1 of 4, '(a: { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7 | undefined): typeof f7; }): () => number', gave the following error.
+-    Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7 | undefined): typeof f7; }'.
 -  Overload 2 of 4, '(a: number): number', gave the following error.
 -    Argument of type 'string' is not assignable to parameter of type 'number'.
--  Overload 3 of 4, '(a?: { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }): { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }', gave the following error.
+-  Overload 3 of 4, '(a?: { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7 | undefined): typeof f7; } | undefined): { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7 | undefined): typeof f7; }', gave the following error.
 +  The last overload gave the following error.
-     Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
+     Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7 | undefined): typeof f7; }'.
 
 
 @@= skipped -81, +77 lines =@@
      f7(""); // ok (function takes an any param)
         ~~
  !!! error TS2769: No overload matches this call.
--!!! error TS2769:   Overload 1 of 4, '(a: { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }): () => number', gave the following error.
--!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
+-!!! error TS2769:   Overload 1 of 4, '(a: { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7 | undefined): typeof f7; }): () => number', gave the following error.
+-!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7 | undefined): typeof f7; }'.
 -!!! error TS2769:   Overload 2 of 4, '(a: number): number', gave the following error.
 -!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.
--!!! error TS2769:   Overload 3 of 4, '(a?: { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }): { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }', gave the following error.
--!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
+-!!! error TS2769:   Overload 3 of 4, '(a?: { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7 | undefined): typeof f7; } | undefined): { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7 | undefined): typeof f7; }', gave the following error.
+-!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7 | undefined): typeof f7; }'.
 +!!! error TS2769:   The last overload gave the following error.
-+!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
++!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7 | undefined): typeof f7; }'.
 +!!! related TS2771 recursiveFunctionTypes.ts:40:18: The last overload is declared here.
      f7(); // ok

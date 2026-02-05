@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/missingReturnStatement.ts] ////
 
 //// [missingReturnStatement.ts]
-module Test {
+namespace Test {
     export class Bug {
         public foo():string {
         }
@@ -10,6 +10,7 @@ module Test {
 
 
 //// [missingReturnStatement.js]
+"use strict";
 var Test;
 (function (Test) {
     class Bug {

@@ -5,7 +5,7 @@ class Foo { foo() { } }
 >Foo : Foo
 >foo : () => void
 
-var x: { [index: string]: number; };
+declare var x: { [index: string]: number; };
 >x : { [index: string]: number; }
 >index : string
 

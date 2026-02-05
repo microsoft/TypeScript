@@ -6,3 +6,4 @@ interface I {
 }
 
 //// [parserParameterList13.js]
+"use strict";

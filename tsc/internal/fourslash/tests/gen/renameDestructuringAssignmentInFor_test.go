@@ -11,7 +11,8 @@ func TestRenameDestructuringAssignmentInFor(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface I {
+	const content = `// @strict: false
+interface I {
     [|[|{| "contextRangeIndex": 0 |}property1|]: number;|]
     property2: string;
 }

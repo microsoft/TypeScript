@@ -29,7 +29,7 @@ tsxIntrinsicAttributeErrors.tsx(29,2): error TS2741: Property 'key' is missing i
             render(): void
         }
     }
-    var E: I;
+    declare var E: I;
     <E x={10} />
      ~
 !!! error TS2741: Property 'key' is missing in type '{ x: number; }' but required in type 'IntrinsicAttributes'.

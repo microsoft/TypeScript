@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxDynamicTagName4.tsx] ////
 
 //// [tsxDynamicTagName4.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		div: any
@@ -13,5 +13,6 @@ var CustomTag: "h1" = "h1";
 <CustomTag> Hello World </CustomTag>
 
 //// [tsxDynamicTagName4.jsx]
+"use strict";
 var CustomTag = "h1";
 <CustomTag> Hello World </CustomTag>;

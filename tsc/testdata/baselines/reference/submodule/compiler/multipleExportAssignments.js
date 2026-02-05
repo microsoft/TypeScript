@@ -8,7 +8,7 @@ interface connectExport {
     use: (mod: connectModule) => connectExport;
     listen: (port: number) => void;
 }
-var server: {
+declare const server: {
     (): connectExport;
     test1: connectModule;
     test2(): connectModule;
@@ -20,5 +20,4 @@ export = connectExport;
 
 //// [multipleExportAssignments.js]
 "use strict";
-var server;
 module.exports = server;

@@ -1,7 +1,7 @@
 --- old.aliasInaccessibleModule.js
 +++ new.aliasInaccessibleModule.js
-@@= skipped -9, +9 lines =@@
- //// [aliasInaccessibleModule.js]
+@@= skipped -10, +10 lines =@@
+ "use strict";
  var M;
  (function (M) {
 +    M.X = N;

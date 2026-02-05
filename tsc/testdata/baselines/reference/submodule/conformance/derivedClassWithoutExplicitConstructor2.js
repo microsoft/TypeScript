@@ -36,6 +36,7 @@ var d3 = new D(new Date(), new Date());
 var d4 = new D(new Date(), new Date(), new Date());
 
 //// [derivedClassWithoutExplicitConstructor2.js]
+"use strict";
 class Base {
     a = 1;
     constructor(x) { this.a = x; }

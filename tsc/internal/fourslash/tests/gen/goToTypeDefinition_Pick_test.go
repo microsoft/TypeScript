@@ -11,7 +11,8 @@ func TestGoToTypeDefinition_Pick(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `type User = { id: number; name: string; };
+	const content = `// @lib: es5
+type User = { id: number; name: string; };
 declare const user: Pick<User, "name">
 /*reference*/user
 

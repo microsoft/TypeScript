@@ -21,7 +21,7 @@ class ClassWithInitializer extends BaseErrClass {
     }
 }
 
-module M {
+namespace M {
     //'this' in module variable
     var x = this; // Error
 }
@@ -46,6 +46,7 @@ enum SomeEnum {
 
 
 //// [thisInInvalidContexts.js]
+"use strict";
 class BaseErrClass {
     constructor(t) { }
 }

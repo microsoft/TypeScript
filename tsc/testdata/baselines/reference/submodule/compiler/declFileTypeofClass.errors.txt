@@ -1,0 +1,24 @@
+declFileTypeofClass.ts(4,13): error TS2564: Property 'x3' has no initializer and is not definitely assigned in the constructor.
+declFileTypeofClass.ts(5,12): error TS2564: Property 'y3' has no initializer and is not definitely assigned in the constructor.
+
+
+==== declFileTypeofClass.ts (2 errors) ====
+    class c {
+        static x : string;
+        private static y: number;
+        private x3: string;
+                ~~
+!!! error TS2564: Property 'x3' has no initializer and is not definitely assigned in the constructor.
+        public y3: number;
+               ~~
+!!! error TS2564: Property 'y3' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var x: c;
+    var y = c;
+    var z: typeof c;
+    class genericC<T>
+    {
+    }
+    var genericX = genericC;
+    

@@ -8,6 +8,7 @@ class C {
 }
 
 //// [classWithOverloadImplementationOfWrongName2.js]
+"use strict";
 class C {
     bar(x) { }
 }

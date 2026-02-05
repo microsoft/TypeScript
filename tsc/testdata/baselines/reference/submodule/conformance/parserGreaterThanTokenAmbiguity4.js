@@ -5,5 +5,6 @@
 > 2;
 
 //// [parserGreaterThanTokenAmbiguity4.js]
+"use strict";
 1 >
     > 2;

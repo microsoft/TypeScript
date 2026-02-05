@@ -16,6 +16,7 @@ var f2NoError = () => {
 }
 
 //// [collisionRestParameterArrowFunctions.js]
+"use strict";
 var f1 = (_i, ...restParameters) => {
     var _i = 10; // no error
 };

@@ -11,7 +11,9 @@ func TestJsdocCallbackTag(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @allowNonTsExtensions: true
+	const content = `// @lib: es5
+// @strict: false
+// @allowNonTsExtensions: true
 // @Filename: jsdocCallbackTag.js
 /**
  * @callback FooHandler - A kind of magic

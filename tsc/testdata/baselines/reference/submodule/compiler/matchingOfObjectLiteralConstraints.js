@@ -7,5 +7,6 @@ foo2({ y: "foo" }, "foo");
 
 
 //// [matchingOfObjectLiteralConstraints.js]
+"use strict";
 function foo2(x, z) { }
 foo2({ y: "foo" }, "foo");

@@ -1,8 +1,8 @@
 --- old.override8.js
 +++ new.override8.js
-@@= skipped -33, +33 lines =@@
-
+@@= skipped -34, +34 lines =@@
  //// [override8.js]
+ "use strict";
  class B {
 +    a;
  }

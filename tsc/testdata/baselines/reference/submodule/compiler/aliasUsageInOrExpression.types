@@ -14,7 +14,7 @@ interface IHasVisualizationModel {
 >Backbone : typeof Backbone
 >Model : typeof Backbone.Model
 }
-var i: IHasVisualizationModel;
+declare var i: IHasVisualizationModel;
 >i : IHasVisualizationModel
 
 var d1 = i || moduleA;
@@ -31,7 +31,7 @@ var d2: IHasVisualizationModel = i || moduleA;
 
 var d2: IHasVisualizationModel = moduleA || i;
 >d2 : IHasVisualizationModel
->moduleA || i : IHasVisualizationModel
+>moduleA || i : typeof moduleA
 >moduleA : typeof moduleA
 >i : IHasVisualizationModel
 
@@ -48,7 +48,7 @@ var e: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null || { 
 var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x: moduleA } : null;
 >f : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
-><{ x: IHasVisualizationModel }>null ? { x: moduleA } : null : { x: typeof moduleA; }
+><{ x: IHasVisualizationModel }>null ? { x: moduleA } : null : { x: typeof moduleA; } | null
 ><{ x: IHasVisualizationModel }>null : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
 >{ x: moduleA } : { x: typeof moduleA; }

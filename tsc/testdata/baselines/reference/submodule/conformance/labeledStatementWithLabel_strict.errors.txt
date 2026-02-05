@@ -44,10 +44,10 @@ labeledStatementWithLabel_strict.ts(14,1): error TS1344: 'A label is not allowed
     ~~~~~
 !!! error TS1344: 'A label is not allowed here.
     
-    label: module M { }
+    label: namespace M { }
     ~~~~~
 !!! error TS1344: 'A label is not allowed here.
-           ~~~~~~
+           ~~~~~~~~~
 !!! error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
     label: namespace N {}
     ~~~~~

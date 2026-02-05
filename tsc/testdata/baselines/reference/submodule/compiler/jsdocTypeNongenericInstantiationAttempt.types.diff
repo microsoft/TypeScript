@@ -102,7 +102,24 @@
  }
 
 
-@@= skipped -32, +32 lines =@@
+@@= skipped -15, +15 lines =@@
+  * @param {<T>(m: Object<T>) => string} somebody
+  */
+ function sayHello7(somebody) {
+->sayHello7 : (somebody: <T>(m: Object<T>) => string) => string
+->somebody : <T>(m: Object<T>) => string
++>sayHello7 : (somebody: <T>(m: any) => string) => string
++>somebody : <T>(m: any) => string
+
+     return 'Hello ' + somebody;
+ >'Hello ' + somebody : string
+ >'Hello ' : "Hello "
+->somebody : <T>(m: Object<T>) => string
++>somebody : <T>(m: any) => string
+ }
+
+ === index8.js ===
+@@= skipped -17, +17 lines =@@
   * @param {fn<T>} somebody
   */
  function sayHello8(somebody) { }

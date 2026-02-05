@@ -1,42 +1,10 @@
 --- old.assignmentCompatWithDiscriminatedUnion.types
 +++ new.assignmentCompatWithDiscriminatedUnion.types
-@@= skipped -300, +300 lines =@@
- >val : Blue | Yellow
-
-     function drawWithColor(currentColor: 'blue' | 'yellow' | undefined) {
-->drawWithColor : (currentColor: "blue" | "yellow" | undefined) => void
-+>drawWithColor : (currentColor: "blue" | "yellow") => void
- >currentColor : "blue" | "yellow"
-
-         return draw({ color: currentColor });
-@@= skipped -251, +251 lines =@@
- >value : undefined
+@@= skipped -529, +529 lines =@@
+ >a : MyType
      
-     function test(obj: { kind: "a" | "b", value: number | undefined }) {
-->test : (obj: { kind: "a" | "b"; value: number | undefined; }) => void
-->obj : { kind: "a" | "b"; value: number | undefined; }
-+>test : (obj: { kind: "a" | "b"; value: number; }) => void
-+>obj : { kind: "a" | "b"; value: number; }
- >kind : "a" | "b"
- >value : number
-
-         let x1: Foo = obj;
- >x1 : Foo
-->obj : { kind: "a" | "b"; value: number | undefined; }
-+>obj : { kind: "a" | "b"; value: number; }
-
-         let x2: Foo = { kind: obj.kind, value: obj.value };
- >x2 : Foo
- >{ kind: obj.kind, value: obj.value } : { kind: "a" | "b"; value: number; }
- >kind : "a" | "b"
- >obj.kind : "a" | "b"
-->obj : { kind: "a" | "b"; value: number | undefined; }
-+>obj : { kind: "a" | "b"; value: number; }
- >kind : "a" | "b"
- >value : number
- >obj.value : number
-->obj : { kind: "a" | "b"; value: number | undefined; }
-+>obj : { kind: "a" | "b"; value: number; }
- >value : number
-     }
- }
+     function indirect(kind: MyEnum, id?: number): void {
+->indirect : (kind: MyEnum, id?: number) => void
++>indirect : (kind: MyEnum, id?: number | undefined) => void
+ >kind : MyEnum
+ >id : number | undefined

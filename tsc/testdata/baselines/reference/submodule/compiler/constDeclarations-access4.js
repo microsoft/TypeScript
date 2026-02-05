@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/constDeclarations-access4.ts] ////
 
 //// [constDeclarations-access4.ts]
-declare module M {
+declare namespace M {
     const x: number;
 }
 
@@ -46,6 +46,7 @@ M.x.toString();
 
 
 //// [constDeclarations-access4.js]
+"use strict";
 // Errors
 M.x = 1;
 M.x += 2;

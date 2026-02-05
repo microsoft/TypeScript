@@ -1,11 +1,11 @@
 --- old.declarationEmitNameConflictsWithAlias.types
 +++ new.declarationEmitNameConflictsWithAlias.types
 @@= skipped -3, +3 lines =@@
- export module C { export interface I { } }
+ export namespace C { export interface I { } }
  export import v = C;
  >v : any
 ->C : error
 +>C : any
 
- export module M {
+ export namespace M {
  >M : typeof M

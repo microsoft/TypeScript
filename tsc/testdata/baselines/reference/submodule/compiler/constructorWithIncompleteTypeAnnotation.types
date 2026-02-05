@@ -26,7 +26,7 @@ import fs = module("fs");
 >"fs" : "fs"
 
 
-module TypeScriptAllInOne {
+namespace TypeScriptAllInOne {
 >TypeScriptAllInOne : typeof TypeScriptAllInOne
 
     export class Program {
@@ -126,14 +126,14 @@ module TypeScriptAllInOne {
                 }
             }
             catch (e) {
->e : any
+>e : unknown
 
                 console.log(e);
 >console.log(e) : any
 >console.log : any
 >console : any
 >log : any
->e : any
+>e : unknown
             }
             finally {
 
@@ -284,13 +284,13 @@ module TypeScriptAllInOne {
 >f : string
 >hexchar : boolean
 >float.toString() : string
->float.toString : (radix?: number) => string
+>float.toString : (radix?: number | undefined) => string
 >float : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 >float2.toString() : string
->float2.toString : (radix?: number) => string
+>float2.toString : (radix?: number | undefined) => string
 >float2 : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 >reg.toString() : string
 >reg.toString : () => string
 >reg : RegExp
@@ -490,12 +490,12 @@ module TypeScriptAllInOne {
                 throw null;
             }
             catch (Exception)  ? 
->Exception : any
+>Exception : unknown
             }
             finally {
                 try { }
                 catch (Exception) { }
->Exception : any
+>Exception : unknown
             }
 
             return retVal;

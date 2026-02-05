@@ -1,0 +1,13 @@
+instanceMemberWithComputedPropertyName2.ts(5,5): error TS2564: Property '[x]' has no initializer and is not definitely assigned in the constructor.
+
+
+==== instanceMemberWithComputedPropertyName2.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/33857
+    "use strict";
+    const x = 1;
+    class C {
+        [x]: string;
+        ~~~
+!!! error TS2564: Property '[x]' has no initializer and is not definitely assigned in the constructor.
+    }
+    

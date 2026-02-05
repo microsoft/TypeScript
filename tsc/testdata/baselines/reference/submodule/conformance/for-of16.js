@@ -13,6 +13,7 @@ for (v of new MyStringIterator) { } // Should fail
 for (v of new MyStringIterator) { } // Should still fail (related errors should still be shown even though type is cached).
 
 //// [for-of16.js]
+"use strict";
 class MyStringIterator {
     [Symbol.iterator]() {
         return this;

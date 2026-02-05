@@ -34,6 +34,7 @@ str = t as string;
 
 
 //// [stringLiteralTypeAssertion01.js]
+"use strict";
 var s;
 var t;
 var str;

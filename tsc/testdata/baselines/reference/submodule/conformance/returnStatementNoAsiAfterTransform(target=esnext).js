@@ -66,6 +66,7 @@ function t10() {
 
 
 //// [returnStatementNoAsiAfterTransform.js]
+"use strict";
 function t1() {
     return 
     // comment

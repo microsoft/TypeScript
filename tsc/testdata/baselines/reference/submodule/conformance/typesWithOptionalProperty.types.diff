@@ -1,0 +1,43 @@
+--- old.typesWithOptionalProperty.types
++++ new.typesWithOptionalProperty.types
+@@= skipped -14, +14 lines =@@
+ }
+
+ var a: {
+->a : { foo: string; bar?: number; baz?(): string; }
++>a : { foo: string; bar?: number | undefined; baz?(): string; }
+
+     foo: string;
+ >foo : string
+@@= skipped -58, +58 lines =@@
+
+ a = b;
+ >a = b : { foo: string; }
+->a : { foo: string; bar?: number; baz?(): string; }
++>a : { foo: string; bar?: number | undefined; baz?(): string; }
+ >b : { foo: string; }
+
+ a = c;
+ >a = c : { foo: string; bar: number; }
+->a : { foo: string; bar?: number; baz?(): string; }
++>a : { foo: string; bar?: number | undefined; baz?(): string; }
+ >c : { foo: string; bar: number; }
+
+ a = d;
+ >a = d : { foo: string; bar: number; baz: () => string; }
+->a : { foo: string; bar?: number; baz?(): string; }
++>a : { foo: string; bar?: number | undefined; baz?(): string; }
+ >d : { foo: string; bar: number; baz: () => string; }
+
+ i = a;
+->i = a : { foo: string; bar?: number; baz?(): string; }
++>i = a : { foo: string; bar?: number | undefined; baz?(): string; }
+ >i : I
+->a : { foo: string; bar?: number; baz?(): string; }
++>a : { foo: string; bar?: number | undefined; baz?(): string; }
+
+ a = i;
+ >a = i : I
+->a : { foo: string; bar?: number; baz?(): string; }
++>a : { foo: string; bar?: number | undefined; baz?(): string; }
+ >i : I

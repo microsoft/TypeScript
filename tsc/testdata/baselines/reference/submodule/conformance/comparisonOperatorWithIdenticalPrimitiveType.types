@@ -7,19 +7,19 @@ enum E { a, b, c }
 >b : E.b
 >c : E.c
 
-var a: number;
+declare var a: number;
 >a : number
 
-var b: boolean;
+declare var b: boolean;
 >b : boolean
 
-var c: string;
+declare var c: string;
 >c : string
 
-var d: void;
+declare var d: void;
 >d : void
 
-var e: E;
+declare var e: E;
 >e : E
 
 // operator <

@@ -1,6 +1,6 @@
 --- old.constructorWithIncompleteTypeAnnotation.js
 +++ new.constructorWithIncompleteTypeAnnotation.js
-@@= skipped -286, +286 lines =@@
+@@= skipped -287, +287 lines =@@
  var TypeScriptAllInOne;
  (function (TypeScriptAllInOne) {
      class Program {

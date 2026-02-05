@@ -8,6 +8,7 @@ s.map(// do something
 
 
 //// [commentInMethodCall.js]
+"use strict";
 //commment here
 var s;
 s.map(// do something

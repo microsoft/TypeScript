@@ -1,0 +1,37 @@
+--- old.contextualParamTypeVsNestedReturnTypeInference4.types
++++ new.contextualParamTypeVsNestedReturnTypeInference4.types
+@@= skipped -24, +24 lines =@@
+ ): Effect<AEff, E, R>;
+
+ declare function effectFn<A, E, R, AEff, Args extends Array<any>>(
+->effectFn : <A, E, R, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Effect<A, E, R>, AEff, never>) => (...args: Args) => Effect<AEff, E, R>
++>effectFn : <A, E, R, AEff, Args extends any[]>(body: (...args: Args) => Generator<Effect<A, E, R>, AEff, never>) => (...args: Args) => Effect<AEff, E, R>
+
+   body: (...args: Args) => Generator<Effect<A, E, R>, AEff, never>,
+ >body : (...args: Args) => Generator<Effect<A, E, R>, AEff, never>
+@@= skipped -57, +57 lines =@@
+
+ class Foo extends Tag("Foo")<
+ >Foo : Foo
+->Tag("Foo")<  Foo,  {    fn: (a: string) => Effect<void>;  }>() : TagClassShape<"Foo", { fn: (a: string) => Effect<void>; }>
++>Tag("Foo")<  Foo,  {    fn: (a: string) => Effect<void>;  }>() : TagClassShape<"Foo", { fn: (a: string) => Effect<void, never, never>; }>
+ >Tag("Foo") : <Self, Shape>() => TagClass<Self, "Foo", Shape>
+ >Tag : <const Id extends string>(id: Id) => <Self, Shape>() => TagClass<Self, Id, Shape>
+ >"Foo" : "Foo"
+@@= skipped -8, +8 lines =@@
+   Foo,
+   {
+     fn: (a: string) => Effect<void>;
+->fn : (a: string) => Effect<void>
++>fn : (a: string) => Effect<void, never, never>
+ >a : string
+   }
+ >() {}
+@@= skipped -23, +23 lines =@@
+       fn: effectFn(function* (a) {
+ >fn : (a: string) => Effect<void, never, never>
+ >effectFn(function* (a) {        a; // string      }) : (a: string) => Effect<void, never, never>
+->effectFn : <A, E, R, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Effect<A, E, R>, AEff, never>) => (...args: Args) => Effect<AEff, E, R>
++>effectFn : <A, E, R, AEff, Args extends any[]>(body: (...args: Args) => Generator<Effect<A, E, R>, AEff, never>) => (...args: Args) => Effect<AEff, E, R>
+ >function* (a) {        a; // string      } : (a: string) => Generator<never, void, never>
+ >a : string

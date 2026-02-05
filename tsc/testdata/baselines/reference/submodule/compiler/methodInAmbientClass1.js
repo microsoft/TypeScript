@@ -7,3 +7,4 @@
     }
 
 //// [methodInAmbientClass1.js]
+"use strict";

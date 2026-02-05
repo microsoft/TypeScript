@@ -16,6 +16,7 @@ class X {
   
 
 //// [privateStaticNameShadowing.js]
+"use strict";
 class X {
     static #f = X.#m();
     constructor() {

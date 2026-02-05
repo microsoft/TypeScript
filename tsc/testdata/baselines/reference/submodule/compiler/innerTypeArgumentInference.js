@@ -7,6 +7,7 @@ function Generate<U>(func: Generator<U>): U {
 }
 
 //// [innerTypeArgumentInference.js]
+"use strict";
 function Generate(func) {
     return Generate(func);
 }

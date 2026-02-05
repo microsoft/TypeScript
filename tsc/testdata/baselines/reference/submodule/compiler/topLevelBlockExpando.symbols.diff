@@ -7,7 +7,7 @@
 ->dice1 : Symbol(dice1, Decl(check.js, 12, 5), Decl(check.js, 12, 50))
 +>dice1 : Symbol(dice1, Decl(check.js, 12, 5))
  >Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
- >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  >floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
 @@= skipped -11, +11 lines =@@
  // dice1.first = 'Rando';

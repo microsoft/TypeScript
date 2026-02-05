@@ -4,7 +4,7 @@
 declare module "m2" {
 >"m2" : typeof import("m2")
 
-    export module X {
+    export namespace X {
         interface I { }
     }
     function Y();

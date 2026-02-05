@@ -38,6 +38,7 @@ var cookieMonster: IceCreamMonster;
 cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cookie Monster");
 
 //// [matchReturnTypeInAllBranches.js]
+"use strict";
 // Represents a monster who enjoys ice cream
 class IceCreamMonster {
     iceCreamFlavor;

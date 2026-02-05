@@ -21,7 +21,7 @@ interface A { a: A; }
 interface B extends A { b; }
 >b : any
 
-var a: A, b: B;
+declare var a: A, b: B;
 >a : A
 >b : B
 

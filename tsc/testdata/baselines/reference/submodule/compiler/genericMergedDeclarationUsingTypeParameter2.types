@@ -5,7 +5,7 @@ class foo<T> { constructor(x: T) { } }
 >foo : foo<T>
 >x : T
 
-module foo {
+namespace foo {
 >foo : typeof foo
 
     export var x: T;

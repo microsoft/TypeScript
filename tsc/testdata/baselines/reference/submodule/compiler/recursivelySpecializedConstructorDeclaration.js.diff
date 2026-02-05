@@ -1,7 +1,7 @@
 --- old.recursivelySpecializedConstructorDeclaration.js
 +++ new.recursivelySpecializedConstructorDeclaration.js
-@@= skipped -33, +33 lines =@@
- //// [recursivelySpecializedConstructorDeclaration.js]
+@@= skipped -34, +34 lines =@@
+ "use strict";
  var MsPortal;
  (function (MsPortal) {
 -    var Controls;

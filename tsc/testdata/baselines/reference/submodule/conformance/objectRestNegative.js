@@ -16,11 +16,12 @@ function generic<T extends { x, y }>(t: T) {
     return rest;
 }
 
-let rest: { b: string }
+let rest: { b: string } = { b: "" };
 ({a, ...rest.b + rest.b} = o);
 
 
 //// [objectRestNegative.js]
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -44,5 +45,5 @@ function generic(t) {
     let { x } = t, rest = __rest(t, ["x"]);
     return rest;
 }
-let rest;
+let rest = { b: "" };
 ({ a } = o, (rest.b + rest.b) = __rest(o, ["a"]));

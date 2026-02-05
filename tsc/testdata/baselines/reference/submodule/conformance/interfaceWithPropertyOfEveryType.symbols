@@ -8,7 +8,7 @@ class C { foo: string; }
 function f1() { }
 >f1 : Symbol(f1, Decl(interfaceWithPropertyOfEveryType.ts, 0, 24))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(interfaceWithPropertyOfEveryType.ts, 1, 17))
 
     export var y = 1;

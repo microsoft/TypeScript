@@ -1,0 +1,139 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionClassesCjsExportAssignment.ts] ////
+
+=== timer.js ===
+/**
+ * @param {number} timeout
+ */
+function Timer(timeout) {
+>Timer : (timeout: number) => void
+>timeout : number
+
+    this.timeout = timeout;
+>this.timeout = timeout : number
+>this.timeout : any
+>this : any
+>timeout : any
+>timeout : number
+}
+module.exports = Timer;
+>module.exports = Timer : (timeout: number) => void
+>module.exports : (timeout: number) => void
+>module : { Timer(timeout: number): void; }
+>exports : (timeout: number) => void
+>Timer : (timeout: number) => void
+
+=== hook.js ===
+/**
+ * @typedef {(arg: import("./context")) => void} HookHandler
+ */
+/**
+ * @param {HookHandler} handle
+ */
+function Hook(handle) {
+>Hook : (handle: HookHandler) => void
+>handle : HookHandler
+
+    this.handle = handle;
+>this.handle = handle : HookHandler
+>this.handle : any
+>this : any
+>handle : any
+>handle : HookHandler
+}
+module.exports = Hook;
+>module.exports = Hook : (handle: HookHandler) => void
+>module.exports : (handle: HookHandler) => void
+>module : { Hook(handle: HookHandler): void; }
+>exports : (handle: HookHandler) => void
+>Hook : (handle: HookHandler) => void
+
+=== context.js ===
+/**
+ * Imports
+ *
+ * @typedef {import("./timer")} Timer
+ * @typedef {import("./hook")} Hook
+ * @typedef {import("./hook").HookHandler} HookHandler
+ */
+
+/**
+ * Input type definition
+ *
+ * @typedef {Object} Input
+ * @prop {Timer} timer
+ * @prop {Hook} hook
+ */
+ 
+/**
+ * State type definition
+ *
+ * @typedef {Object} State
+ * @prop {Timer} timer
+ * @prop {Hook} hook
+ */
+
+/**
+ * New `Context`
+ *
+ * @class
+ * @param {Input} input
+ */
+
+function Context(input) {
+>Context : { (input: Input): any; prototype: { construct(input: Input, handle?: import("hook").HookHandler | undefined): State; }; }
+>input : Input
+
+    if (!(this instanceof Context)) {
+>!(this instanceof Context) : boolean
+>(this instanceof Context) : boolean
+>this instanceof Context : boolean
+>this : any
+>Context : { (input: Input): any; prototype: { construct(input: Input, handle?: import("hook").HookHandler | undefined): State; }; }
+
+      return new Context(input)
+>new Context(input) : any
+>Context : { (input: Input): any; prototype: { construct(input: Input, handle?: import("hook").HookHandler | undefined): State; }; }
+>input : Input
+    }
+    this.state = this.construct(input);
+>this.state = this.construct(input) : any
+>this.state : any
+>this : any
+>state : any
+>this.construct(input) : any
+>this.construct : any
+>this : any
+>construct : any
+>input : Input
+}
+Context.prototype = {
+>Context.prototype = {    /**     * @param {Input} input     * @param {HookHandler=} handle     * @returns {State}     */    construct(input, handle = () => void 0) {        return input;    }} : { construct(input: Input, handle?: import("hook").HookHandler | undefined): State; }
+>Context.prototype : { construct(input: Input, handle?: import("hook").HookHandler | undefined): State; }
+>Context : { (input: Input): any; prototype: { construct(input: Input, handle?: import("hook").HookHandler | undefined): State; }; }
+>prototype : { construct(input: Input, handle?: import("hook").HookHandler | undefined): State; }
+>{    /**     * @param {Input} input     * @param {HookHandler=} handle     * @returns {State}     */    construct(input, handle = () => void 0) {        return input;    }} : { construct(input: Input, handle?: import("hook").HookHandler | undefined): State; }
+
+    /**
+     * @param {Input} input
+     * @param {HookHandler=} handle
+     * @returns {State}
+     */
+    construct(input, handle = () => void 0) {
+>construct : (input: Input, handle?: import("hook").HookHandler | undefined) => State
+>input : Input
+>handle : import("hook").HookHandler | undefined
+>() => void 0 : () => undefined
+>void 0 : undefined
+>0 : 0
+
+        return input;
+>input : Input
+    }
+}
+module.exports = Context;
+>module.exports = Context : { (input: Input): any; prototype: { construct(input: Input, handle?: import("hook").HookHandler | undefined): State; }; }
+>module.exports : { (input: Input): any; prototype: { construct(input: Input, handle?: import("hook").HookHandler | undefined): State; }; }
+>module : { Context: { (input: Input): any; prototype: { construct(input: Input, handle?: import("hook").HookHandler | undefined): State; }; }; }
+>exports : { (input: Input): any; prototype: { construct(input: Input, handle?: import("hook").HookHandler | undefined): State; }; }
+>Context : { (input: Input): any; prototype: { construct(input: Input, handle?: import("hook").HookHandler | undefined): State; }; }
+

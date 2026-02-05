@@ -67,11 +67,11 @@ new c();
 new c2();
 >c2 : Symbol(c2, Decl(es6ModuleClassDeclaration.ts, 15, 1))
 
-export module m1 {
+export namespace m1 {
 >m1 : Symbol(m1, Decl(es6ModuleClassDeclaration.ts, 33, 9))
 
     export class c3 {
->c3 : Symbol(c3, Decl(es6ModuleClassDeclaration.ts, 35, 18))
+>c3 : Symbol(c3, Decl(es6ModuleClassDeclaration.ts, 35, 21))
 
         constructor() {
         }
@@ -137,16 +137,16 @@ export module m1 {
 >c2 : Symbol(c2, Decl(es6ModuleClassDeclaration.ts, 15, 1))
 
     new c3();
->c3 : Symbol(c3, Decl(es6ModuleClassDeclaration.ts, 35, 18))
+>c3 : Symbol(c3, Decl(es6ModuleClassDeclaration.ts, 35, 21))
 
     new c4();
 >c4 : Symbol(c4, Decl(es6ModuleClassDeclaration.ts, 51, 5))
 }
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(es6ModuleClassDeclaration.ts, 72, 1))
 
     export class c3 {
->c3 : Symbol(c3, Decl(es6ModuleClassDeclaration.ts, 73, 11))
+>c3 : Symbol(c3, Decl(es6ModuleClassDeclaration.ts, 73, 14))
 
         constructor() {
         }
@@ -212,13 +212,13 @@ module m2 {
 >c2 : Symbol(c2, Decl(es6ModuleClassDeclaration.ts, 15, 1))
 
     new c3();
->c3 : Symbol(c3, Decl(es6ModuleClassDeclaration.ts, 73, 11))
+>c3 : Symbol(c3, Decl(es6ModuleClassDeclaration.ts, 73, 14))
 
     new c4();
 >c4 : Symbol(c4, Decl(es6ModuleClassDeclaration.ts, 89, 5))
 
     new m1.c3();
->m1.c3 : Symbol(m1.c3, Decl(es6ModuleClassDeclaration.ts, 35, 18))
+>m1.c3 : Symbol(m1.c3, Decl(es6ModuleClassDeclaration.ts, 35, 21))
 >m1 : Symbol(m1, Decl(es6ModuleClassDeclaration.ts, 33, 9))
->c3 : Symbol(m1.c3, Decl(es6ModuleClassDeclaration.ts, 35, 18))
+>c3 : Symbol(m1.c3, Decl(es6ModuleClassDeclaration.ts, 35, 21))
 }

@@ -15,6 +15,7 @@ let l = <_T, U>() => { };
 
 
 //// [unusedTypeParametersWithUnderscore.js]
+"use strict";
 function f() { }
 ;
 class C {

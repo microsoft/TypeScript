@@ -17,6 +17,7 @@ foo(function(x) { x });
 
 
 //// [targetTypeArgs.js]
+"use strict";
 function foo(callback) {
     callback("hello");
 }

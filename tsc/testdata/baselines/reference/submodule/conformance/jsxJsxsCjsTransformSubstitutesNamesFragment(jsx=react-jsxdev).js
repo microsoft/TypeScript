@@ -14,8 +14,8 @@ export {};
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-const _jsxFileName = "jsxJsxsCjsTransformSubstitutesNamesFragment.tsx";
-/// <reference path="react16.d.ts" />
+const _jsxFileName = "/.src/jsxJsxsCjsTransformSubstitutesNamesFragment.tsx";
+/// <reference path="/.lib/react16.d.ts" />
 const a = jsx_dev_runtime_1.jsxDEV(jsx_dev_runtime_1.Fragment, { children: [
         jsx_dev_runtime_1.jsxDEV("p", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 3 }, this),
         "text",

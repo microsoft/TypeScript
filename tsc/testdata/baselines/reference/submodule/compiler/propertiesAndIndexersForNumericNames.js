@@ -45,6 +45,7 @@ class C {
 
 
 //// [propertiesAndIndexersForNumericNames.js]
+"use strict";
 class C {
     // These all have numeric names; they should error
     // because their types are not compatible with the numeric indexer.

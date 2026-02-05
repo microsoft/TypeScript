@@ -87,13 +87,10 @@ d?.foo;
 
 d?.["foo"]
 >d : Symbol(d, Decl(noPropertyAccessFromIndexSignature1.ts, 16, 13))
->"foo" : Symbol(C.foo, Decl(noPropertyAccessFromIndexSignature1.ts, 8, 13))
 
 // optional access index signature
 d?.bar;
->d?.bar : Symbol(C[__index], Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
 >d : Symbol(d, Decl(noPropertyAccessFromIndexSignature1.ts, 16, 13))
->bar : Symbol(C[__index], Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
 
 d?.["bar"];
 >d : Symbol(d, Decl(noPropertyAccessFromIndexSignature1.ts, 16, 13))

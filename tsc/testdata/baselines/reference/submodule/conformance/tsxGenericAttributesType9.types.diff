@@ -1,0 +1,14 @@
+--- old.tsxGenericAttributesType9.types
++++ new.tsxGenericAttributesType9.types
+@@= skipped -26, +26 lines =@@
+ 				<Ctor {...this.props } />
+ ><Ctor {...this.props } /> : JSX.Element
+ >Ctor : React.ComponentClass<P>
+->this.props : P & { children?: React.ReactNode; }
++>this.props : P & { children?: React.ReactNode | undefined; }
+ >this : this
+->props : P & { children?: React.ReactNode; }
++>props : P & { children?: React.ReactNode | undefined; }
+
+ 			);
+ 		}

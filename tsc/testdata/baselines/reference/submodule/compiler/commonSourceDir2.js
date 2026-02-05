@@ -7,6 +7,8 @@ var x: number;
 var y: number;
 
 //// [bar.js]
+"use strict";
 var x;
 //// [baz.js]
+"use strict";
 var y;

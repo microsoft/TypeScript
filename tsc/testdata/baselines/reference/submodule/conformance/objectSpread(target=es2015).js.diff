@@ -1,0 +1,13 @@
+--- old.objectSpread(target=es2015).js
++++ new.objectSpread(target=es2015).js
+@@= skipped -191, +191 lines =@@
+ let spreadAny = Object.assign({}, anything);
+ // methods are not enumerable
+ class C {
+-    constructor() {
+-        this.p = 1;
+-    }
++    p = 1;
+     m() { }
+ }
+ let c = new C();

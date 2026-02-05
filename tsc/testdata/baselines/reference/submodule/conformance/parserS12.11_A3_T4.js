@@ -31,6 +31,7 @@ var x = SwitchTest(0);
 
 
 //// [parserS12.11_A3_T4.js]
+"use strict";
 // Copyright 2009 the Sputnik authors.  All rights reserved.
 // This code is governed by the BSD license found in the LICENSE file.
 /**

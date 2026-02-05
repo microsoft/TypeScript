@@ -170,6 +170,7 @@ class D29<T extends U, U extends V, V extends Date> extends C3<V> {
 }
 
 //// [subtypesOfTypeParameterWithConstraints.js]
+"use strict";
 // checking whether other types are subtypes of type parameters with constraints
 class C3 {
     foo;

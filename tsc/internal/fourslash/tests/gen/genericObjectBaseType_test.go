@@ -11,7 +11,8 @@ func TestGenericObjectBaseType(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `class C<T> {
+	const content = `// @strict: false
+class C<T> {
     constructor(){}
     foo(a: T) {
         return a.toString();

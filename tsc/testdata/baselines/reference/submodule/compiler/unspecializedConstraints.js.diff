@@ -1,6 +1,6 @@
 --- old.unspecializedConstraints.js
 +++ new.unspecializedConstraints.js
-@@= skipped -219, +219 lines =@@
+@@= skipped -220, +220 lines =@@
          }
      }
      class Property extends Symbol {

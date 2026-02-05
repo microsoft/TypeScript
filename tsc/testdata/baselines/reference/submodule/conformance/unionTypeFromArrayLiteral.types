@@ -33,7 +33,7 @@ var arr4Tuple: [number, string] = [3, "three", "hello"]; // [number, string, str
 
 var arrEmpty = [];
 >arrEmpty : any[]
->[] : undefined[]
+>[] : never[]
 
 var arr5Tuple: {
 >arr5Tuple : { 0: string; 5: number; }
@@ -72,7 +72,7 @@ class F extends C { foo4() { } }
 >C : C
 >foo4 : () => void
 
-var c: C, d: D, e: E, f: F;
+declare var c: C, d: D, e: E, f: F;
 >c : C
 >d : D
 >e : E

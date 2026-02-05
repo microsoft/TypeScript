@@ -1,6 +1,6 @@
 --- old.tsxSfcReturnUndefinedStrictNullChecks.types
 +++ new.tsxSfcReturnUndefinedStrictNullChecks.types
-@@= skipped -10, +10 lines =@@
+@@= skipped -12, +12 lines =@@
  >undefined : undefined
 
  function Greet(x: {name?: string}) {

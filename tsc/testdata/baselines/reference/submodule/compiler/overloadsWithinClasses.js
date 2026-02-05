@@ -26,6 +26,7 @@ class X {
 
 
 //// [overloadsWithinClasses.js]
+"use strict";
 class foo {
     static fnOverload() { }
     static fnOverload(foo) { } // error

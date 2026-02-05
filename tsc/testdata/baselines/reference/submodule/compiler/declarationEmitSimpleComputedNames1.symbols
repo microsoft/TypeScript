@@ -4,7 +4,7 @@
 export const fieldName = Math.random() > 0.5 ? "f1" : "f2";
 >fieldName : Symbol(fieldName, Decl(declarationEmitSimpleComputedNames1.ts, 0, 12))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
 export const conatainer = {
@@ -21,7 +21,7 @@ export const conatainer = {
 const classFieldName = Math.random() > 0.5 ? "g1" : "g2";
 >classFieldName : Symbol(classFieldName, Decl(declarationEmitSimpleComputedNames1.ts, 7, 5))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
 const otherField = classFieldName === "g1" ? "g2" : "g1";
@@ -31,7 +31,7 @@ const otherField = classFieldName === "g1" ? "g2" : "g1";
 const staticField = Math.random() > 0.5 ? "s1" : "s2";
 >staticField : Symbol(staticField, Decl(declarationEmitSimpleComputedNames1.ts, 9, 5))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
 export class Holder {

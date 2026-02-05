@@ -14,6 +14,7 @@ class Greeter {
 }
 
 //// [classMemberInitializerWithLamdaScoping5.js]
+"use strict";
 class Greeter {
     constructor(message) {
     }

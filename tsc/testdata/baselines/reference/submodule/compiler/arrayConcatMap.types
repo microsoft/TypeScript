@@ -4,11 +4,11 @@
 var x = [].concat([{ a: 1 }], [{ a: 2 }])
 >x : any[]
 >[].concat([{ a: 1 }], [{ a: 2 }])          .map(b => b.a) : any[]
->[].concat([{ a: 1 }], [{ a: 2 }])          .map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->[].concat([{ a: 1 }], [{ a: 2 }]) : any[]
->[].concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
->[] : undefined[]
->concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
+>[].concat([{ a: 1 }], [{ a: 2 }])          .map : <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
+>[].concat([{ a: 1 }], [{ a: 2 }]) : never[]
+>[].concat : { (...items: ConcatArray<never>[]): never[]; (...items: ConcatArray<never>[]): never[]; }
+>[] : never[]
+>concat : { (...items: ConcatArray<never>[]): never[]; (...items: ConcatArray<never>[]): never[]; }
 >[{ a: 1 }] : { a: number; }[]
 >{ a: 1 } : { a: number; }
 >a : number
@@ -19,10 +19,10 @@ var x = [].concat([{ a: 1 }], [{ a: 2 }])
 >2 : 2
 
           .map(b => b.a);
->map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->b => b.a : (b: any) => any
->b : any
+>map : <U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]
+>b => b.a : (b: never) => any
+>b : never
 >b.a : any
->b : any
+>b : never
 >a : any
 

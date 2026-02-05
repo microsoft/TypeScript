@@ -1,3 +1,10 @@
+forStatementsMultipleInvalidDecl.ts(6,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+forStatementsMultipleInvalidDecl.ts(7,5): error TS2564: Property 'valid' has no initializer and is not definitely assigned in the constructor.
+forStatementsMultipleInvalidDecl.ts(11,5): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+forStatementsMultipleInvalidDecl.ts(15,5): error TS2564: Property 'source' has no initializer and is not definitely assigned in the constructor.
+forStatementsMultipleInvalidDecl.ts(16,5): error TS2564: Property 'recurse' has no initializer and is not definitely assigned in the constructor.
+forStatementsMultipleInvalidDecl.ts(17,5): error TS2564: Property 'wrapped' has no initializer and is not definitely assigned in the constructor.
+forStatementsMultipleInvalidDecl.ts(24,9): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
 forStatementsMultipleInvalidDecl.ts(32,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'number'.
 forStatementsMultipleInvalidDecl.ts(33,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
 forStatementsMultipleInvalidDecl.ts(34,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'C'.
@@ -12,31 +19,45 @@ forStatementsMultipleInvalidDecl.ts(50,10): error TS2403: Subsequent variable de
 forStatementsMultipleInvalidDecl.ts(53,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'm' must be of type 'typeof M', but here has type 'typeof A'.
 
 
-==== forStatementsMultipleInvalidDecl.ts (12 errors) ====
+==== forStatementsMultipleInvalidDecl.ts (19 errors) ====
     interface I {
         id: number;
     }
     
     class C implements I {
         id: number;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         valid: boolean;
+        ~~~~~
+!!! error TS2564: Property 'valid' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C2 extends C {
         name: string;
+        ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
     }
     
     class D<T>{
         source: T;
+        ~~~~~~
+!!! error TS2564: Property 'source' has no initializer and is not definitely assigned in the constructor.
         recurse: D<T>;
+        ~~~~~~~
+!!! error TS2564: Property 'recurse' has no initializer and is not definitely assigned in the constructor.
         wrapped: D<D<T>>
+        ~~~~~~~
+!!! error TS2564: Property 'wrapped' has no initializer and is not definitely assigned in the constructor.
     }
     
     function F(x: string): number { return 42; }
     
-    module M {
+    namespace M {
         export class A {
             name: string;
+            ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
         }
     
         export function F2(x: number): string { return x.toString(); }

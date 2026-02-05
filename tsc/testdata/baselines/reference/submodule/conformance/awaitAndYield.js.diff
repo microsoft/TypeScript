@@ -1,6 +1,6 @@
 --- old.awaitAndYield.js
 +++ new.awaitAndYield.js
-@@= skipped -11, +11 lines =@@
+@@= skipped -12, +12 lines =@@
  async function* test(x) {
      let E;
      (function (E) {

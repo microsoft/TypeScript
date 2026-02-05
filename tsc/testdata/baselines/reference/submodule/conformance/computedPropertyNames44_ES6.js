@@ -14,6 +14,7 @@ class D extends C {
 }
 
 //// [computedPropertyNames44_ES6.js]
+"use strict";
 class Foo {
     x;
 }

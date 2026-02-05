@@ -1,8 +1,8 @@
 --- old.implementPublicPropertyAsPrivate.js
 +++ new.implementPublicPropertyAsPrivate.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [implementPublicPropertyAsPrivate.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.x = 0; // should raise error at class decl

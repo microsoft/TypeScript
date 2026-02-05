@@ -1,8 +1,8 @@
 --- old.propertyOrdering.js
 +++ new.propertyOrdering.js
-@@= skipped -26, +26 lines =@@
-
+@@= skipped -27, +27 lines =@@
  //// [propertyOrdering.js]
+ "use strict";
  class Foo {
 -    constructor(store) {
 -        this._store = store; // no repro if this is first line in class body

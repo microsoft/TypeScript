@@ -9,6 +9,7 @@ var c = x['toExponential']();
 var d = x['hasOwnProperty']('toFixed');
 
 //// [numberPropertyAccess.js]
+"use strict";
 var x = 1;
 var a = x.toExponential();
 var b = x.hasOwnProperty('toFixed');

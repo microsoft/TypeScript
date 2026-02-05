@@ -1,7 +1,7 @@
 --- old.assignmentCompatWithCallSignatures5.js
 +++ new.assignmentCompatWithCallSignatures5.js
-@@= skipped -69, +69 lines =@@
- //// [assignmentCompatWithCallSignatures5.js]
+@@= skipped -70, +70 lines =@@
+ "use strict";
  // checking assignment compat for function types. No errors in this file
  class Base {
 +    foo;
@@ -15,5 +15,5 @@
  class OtherDerived extends Base {
 +    bing;
  }
- var a;
- var a2;
+ a = b; // ok
+ b = a; // ok

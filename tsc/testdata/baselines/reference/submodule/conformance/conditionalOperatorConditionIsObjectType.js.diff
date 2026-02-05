@@ -1,6 +1,6 @@
 --- old.conditionalOperatorConditionIsObjectType.js
 +++ new.conditionalOperatorConditionIsObjectType.js
-@@= skipped -81, +81 lines =@@
+@@= skipped -70, +70 lines =@@
  function foo() { }
  ;
  class C {

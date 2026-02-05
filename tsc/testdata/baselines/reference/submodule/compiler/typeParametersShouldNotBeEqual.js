@@ -2,7 +2,7 @@
 
 //// [typeParametersShouldNotBeEqual.ts]
 function ff<T, U>(x: T, y: U) {
-    var z: Object;
+    var z!: Object;
     x = x;  // Ok
     x = y;  // Error
     x = z;  // Error
@@ -11,6 +11,7 @@ function ff<T, U>(x: T, y: U) {
 
 
 //// [typeParametersShouldNotBeEqual.js]
+"use strict";
 function ff(x, y) {
     var z;
     x = x; // Ok

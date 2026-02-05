@@ -6,10 +6,10 @@ interface I {
 >toString : () => number
 }
 
-var i: I;
+declare var i: I;
 >i : I
 
-var o: Object;
+declare var o: Object;
 >o : Object
 
 o = i; // error
@@ -29,7 +29,7 @@ class C {
 >toString : () => number
 >1 : 1
 }
-var c: C;
+declare var c: C;
 >c : C
 
 o = c; // error

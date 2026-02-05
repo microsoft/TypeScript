@@ -1,3 +1,4 @@
+typeGuardOfFormTypeOfOther.ts(1,19): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
 typeGuardOfFormTypeOfOther.ts(21,5): error TS2367: This comparison appears to be unintentional because the types '"bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"' and '"Object"' have no overlap.
 typeGuardOfFormTypeOfOther.ts(27,5): error TS2367: This comparison appears to be unintentional because the types '"bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"' and '"Object"' have no overlap.
 typeGuardOfFormTypeOfOther.ts(33,5): error TS2367: This comparison appears to be unintentional because the types '"bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"' and '"Object"' have no overlap.
@@ -6,14 +7,20 @@ typeGuardOfFormTypeOfOther.ts(40,5): error TS2322: Type 'string | C' is not assi
 typeGuardOfFormTypeOfOther.ts(43,9): error TS2322: Type 'string | C' is not assignable to type 'string'.
   Type 'C' is not assignable to type 'string'.
 typeGuardOfFormTypeOfOther.ts(46,5): error TS2367: This comparison appears to be unintentional because the types '"bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"' and '"Object"' have no overlap.
+typeGuardOfFormTypeOfOther.ts(46,12): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormTypeOfOther.ts(50,41): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
 typeGuardOfFormTypeOfOther.ts(56,5): error TS2367: This comparison appears to be unintentional because the types '"bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"' and '"Object"' have no overlap.
 typeGuardOfFormTypeOfOther.ts(62,5): error TS2367: This comparison appears to be unintentional because the types '"bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"' and '"Object"' have no overlap.
 typeGuardOfFormTypeOfOther.ts(68,5): error TS2367: This comparison appears to be unintentional because the types '"bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"' and '"Object"' have no overlap.
 typeGuardOfFormTypeOfOther.ts(75,5): error TS2367: This comparison appears to be unintentional because the types '"bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"' and '"Object"' have no overlap.
+typeGuardOfFormTypeOfOther.ts(75,12): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormTypeOfOther.ts(76,41): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
 
 
-==== typeGuardOfFormTypeOfOther.ts (10 errors) ====
+==== typeGuardOfFormTypeOfOther.ts (15 errors) ====
     class C { private p: string };
+                      ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
     
     var str: string;
     var bool: boolean;
@@ -22,9 +29,9 @@ typeGuardOfFormTypeOfOther.ts(75,5): error TS2367: This comparison appears to be
     var strOrBool: string | boolean;
     var numOrBool: number | boolean
     var strOrNumOrBool: string | number | boolean;
-    var strOrC: string | C;
-    var numOrC: number | C;
-    var boolOrC: boolean | C;
+    declare var strOrC: string | C;
+    declare var numOrC: number | C;
+    declare var boolOrC: boolean | C;
     var emptyObj: {};
     var c: C;
     
@@ -73,10 +80,14 @@ typeGuardOfFormTypeOfOther.ts(75,5): error TS2367: This comparison appears to be
     if (typeof strOrNumOrBool === "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2367: This comparison appears to be unintentional because the types '"bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"' and '"Object"' have no overlap.
+               ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
         let q1: {} = strOrNumOrBool; // {}
     }
     else {
         let q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
+                                            ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
     }
     
     // A type guard of the form typeof x !== s, where s is a string literal,
@@ -110,7 +121,11 @@ typeGuardOfFormTypeOfOther.ts(75,5): error TS2367: This comparison appears to be
     if (typeof strOrNumOrBool !== "Object") {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2367: This comparison appears to be unintentional because the types '"bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"' and '"Object"' have no overlap.
+               ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
         let q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
+                                            ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
     }
     else {
         let q2: {} = strOrNumOrBool; // {}

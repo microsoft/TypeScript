@@ -4,11 +4,11 @@
 class Narrow {
 >Narrow : Narrow
 
-    narrowed: boolean
+    narrowed!: boolean
 >narrowed : boolean
 }
 
-var a: object
+declare var a: object;
 >a : object
 
 if (a instanceof Narrow) {
@@ -40,19 +40,19 @@ if (typeof a === 'number') {
 >toFixed : any
 }
 
-var b: object | null
->b : object
+declare var b: object | null;
+>b : object | null
 
 if (typeof b === 'object') {
 >typeof b === 'object' : boolean
 >typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->b : object
+>b : object | null
 >'object' : "object"
 
    b.toString(); // ok, object | null
 >b.toString() : string
 >b.toString : () => string
->b : object
+>b : object | null
 >toString : () => string
 
 } else {

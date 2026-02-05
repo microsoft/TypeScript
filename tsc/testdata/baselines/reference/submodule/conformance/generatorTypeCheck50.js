@@ -6,6 +6,7 @@ function* g() {
 }
 
 //// [generatorTypeCheck50.js]
+"use strict";
 function* g() {
     yield yield;
 }

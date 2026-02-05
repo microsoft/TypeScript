@@ -5,11 +5,11 @@
 -  Overload 1 of 2, '(iterable: Iterable<object>): WeakSet<object>', gave the following error.
 -    Argument of type 'symbol[]' is not assignable to parameter of type 'Iterable<object>'.
 -      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
--        Type 'IteratorResult<symbol, any>' is not assignable to type 'IteratorResult<object, any>'.
+-        Type 'IteratorResult<symbol, undefined>' is not assignable to type 'IteratorResult<object, any>'.
 -          Type 'IteratorYieldResult<symbol>' is not assignable to type 'IteratorResult<object, any>'.
 -            Type 'IteratorYieldResult<symbol>' is not assignable to type 'IteratorYieldResult<object>'.
 -              Type 'symbol' is not assignable to type 'object'.
--  Overload 2 of 2, '(values?: readonly object[]): WeakSet<object>', gave the following error.
+-  Overload 2 of 2, '(values?: readonly object[] | null | undefined): WeakSet<object>', gave the following error.
 +dissallowSymbolAsWeakType.ts(3,25): error TS2769: No overload matches this call.
 +  The last overload gave the following error.
      Type 'symbol' is not assignable to type 'object'.
@@ -20,13 +20,13 @@
 -  Overload 1 of 2, '(iterable: Iterable<readonly [object, boolean]>): WeakMap<object, boolean>', gave the following error.
 -    Argument of type '[symbol, false][]' is not assignable to parameter of type 'Iterable<readonly [object, boolean]>'.
 -      The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
--        Type 'IteratorResult<[symbol, false], any>' is not assignable to type 'IteratorResult<readonly [object, boolean], any>'.
+-        Type 'IteratorResult<[symbol, false], undefined>' is not assignable to type 'IteratorResult<readonly [object, boolean], any>'.
 -          Type 'IteratorYieldResult<[symbol, false]>' is not assignable to type 'IteratorResult<readonly [object, boolean], any>'.
 -            Type 'IteratorYieldResult<[symbol, false]>' is not assignable to type 'IteratorYieldResult<readonly [object, boolean]>'.
 -              Type '[symbol, false]' is not assignable to type 'readonly [object, boolean]'.
 -                Type at position 0 in source is not compatible with type at position 0 in target.
 -                  Type 'symbol' is not assignable to type 'object'.
--  Overload 2 of 2, '(entries?: readonly (readonly [object, boolean])[]): WeakMap<object, boolean>', gave the following error.
+-  Overload 2 of 2, '(entries?: readonly (readonly [object, boolean])[] | null | undefined): WeakMap<object, boolean>', gave the following error.
 +dissallowSymbolAsWeakType.ts(8,26): error TS2769: No overload matches this call.
 +  The last overload gave the following error.
      Type 'symbol' is not assignable to type 'object'.
@@ -42,11 +42,11 @@
 -!!! error TS2769:   Overload 1 of 2, '(iterable: Iterable<object>): WeakSet<object>', gave the following error.
 -!!! error TS2769:     Argument of type 'symbol[]' is not assignable to parameter of type 'Iterable<object>'.
 -!!! error TS2769:       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
--!!! error TS2769:         Type 'IteratorResult<symbol, any>' is not assignable to type 'IteratorResult<object, any>'.
+-!!! error TS2769:         Type 'IteratorResult<symbol, undefined>' is not assignable to type 'IteratorResult<object, any>'.
 -!!! error TS2769:           Type 'IteratorYieldResult<symbol>' is not assignable to type 'IteratorResult<object, any>'.
 -!!! error TS2769:             Type 'IteratorYieldResult<symbol>' is not assignable to type 'IteratorYieldResult<object>'.
 -!!! error TS2769:               Type 'symbol' is not assignable to type 'object'.
--!!! error TS2769:   Overload 2 of 2, '(values?: readonly object[]): WeakSet<object>', gave the following error.
+-!!! error TS2769:   Overload 2 of 2, '(values?: readonly object[] | null | undefined): WeakSet<object>', gave the following error.
 +!!! error TS2769:   The last overload gave the following error.
  !!! error TS2769:     Type 'symbol' is not assignable to type 'object'.
 +!!! related TS2771 lib.es2015.collection.d.ts:--:--: The last overload is declared here.
@@ -63,13 +63,13 @@
 -!!! error TS2769:   Overload 1 of 2, '(iterable: Iterable<readonly [object, boolean]>): WeakMap<object, boolean>', gave the following error.
 -!!! error TS2769:     Argument of type '[symbol, false][]' is not assignable to parameter of type 'Iterable<readonly [object, boolean]>'.
 -!!! error TS2769:       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
--!!! error TS2769:         Type 'IteratorResult<[symbol, false], any>' is not assignable to type 'IteratorResult<readonly [object, boolean], any>'.
+-!!! error TS2769:         Type 'IteratorResult<[symbol, false], undefined>' is not assignable to type 'IteratorResult<readonly [object, boolean], any>'.
 -!!! error TS2769:           Type 'IteratorYieldResult<[symbol, false]>' is not assignable to type 'IteratorResult<readonly [object, boolean], any>'.
 -!!! error TS2769:             Type 'IteratorYieldResult<[symbol, false]>' is not assignable to type 'IteratorYieldResult<readonly [object, boolean]>'.
 -!!! error TS2769:               Type '[symbol, false]' is not assignable to type 'readonly [object, boolean]'.
 -!!! error TS2769:                 Type at position 0 in source is not compatible with type at position 0 in target.
 -!!! error TS2769:                   Type 'symbol' is not assignable to type 'object'.
--!!! error TS2769:   Overload 2 of 2, '(entries?: readonly (readonly [object, boolean])[]): WeakMap<object, boolean>', gave the following error.
+-!!! error TS2769:   Overload 2 of 2, '(entries?: readonly (readonly [object, boolean])[] | null | undefined): WeakMap<object, boolean>', gave the following error.
 +!!! error TS2769:   The last overload gave the following error.
  !!! error TS2769:     Type 'symbol' is not assignable to type 'object'.
 +!!! related TS2771 lib.es2015.collection.d.ts:--:--: The last overload is declared here.

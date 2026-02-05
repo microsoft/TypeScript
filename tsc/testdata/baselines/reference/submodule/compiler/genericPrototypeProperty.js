@@ -12,6 +12,7 @@ var r2 = r.x
 var r3 = r.foo(null);
 
 //// [genericPrototypeProperty.js]
+"use strict";
 class C {
     x;
     foo(x) { return null; }

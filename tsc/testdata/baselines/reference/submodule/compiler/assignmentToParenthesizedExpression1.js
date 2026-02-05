@@ -5,5 +5,6 @@ var x;
 (1, x)=0;
 
 //// [assignmentToParenthesizedExpression1.js]
+"use strict";
 var x;
 (1, x) = 0;

@@ -8,6 +8,7 @@ sources: classStaticBlock25.ts
 emittedFile:classStaticBlock25.js
 sourceFile:classStaticBlock25.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>const a = 1;
 1 >
 2 >^^^^^^
@@ -22,12 +23,12 @@ sourceFile:classStaticBlock25.ts
 4 >        = 
 5 >          1
 6 >           ;
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
-3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
-4 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
-5 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
-6 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(2, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(2, 11) Source(1, 11) + SourceIndex(0)
+5 >Emitted(2, 12) Source(1, 12) + SourceIndex(0)
+6 >Emitted(2, 13) Source(1, 13) + SourceIndex(0)
 ---
 >>>const b = 2;
 1->
@@ -43,12 +44,12 @@ sourceFile:classStaticBlock25.ts
 4 >        = 
 5 >          2
 6 >           ;
-1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
-3 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
-4 >Emitted(2, 11) Source(2, 11) + SourceIndex(0)
-5 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
-6 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+1->Emitted(3, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(3, 7) Source(2, 7) + SourceIndex(0)
+3 >Emitted(3, 8) Source(2, 8) + SourceIndex(0)
+4 >Emitted(3, 11) Source(2, 11) + SourceIndex(0)
+5 >Emitted(3, 12) Source(2, 12) + SourceIndex(0)
+6 >Emitted(3, 13) Source(2, 13) + SourceIndex(0)
 ---
 >>>class C {
 1 >
@@ -60,9 +61,9 @@ sourceFile:classStaticBlock25.ts
   >
 2 >class 
 3 >      C
-1 >Emitted(3, 1) Source(4, 1) + SourceIndex(0)
-2 >Emitted(3, 7) Source(4, 7) + SourceIndex(0)
-3 >Emitted(3, 8) Source(4, 8) + SourceIndex(0)
+1 >Emitted(4, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 7) Source(4, 7) + SourceIndex(0)
+3 >Emitted(4, 8) Source(4, 8) + SourceIndex(0)
 ---
 >>>    static {
 1->^^^^
@@ -71,8 +72,8 @@ sourceFile:classStaticBlock25.ts
 1-> {
   >    
 2 >    static 
-1->Emitted(4, 5) Source(5, 5) + SourceIndex(0)
-2 >Emitted(4, 12) Source(5, 12) + SourceIndex(0)
+1->Emitted(5, 5) Source(5, 5) + SourceIndex(0)
+2 >Emitted(5, 12) Source(5, 12) + SourceIndex(0)
 ---
 >>>        const a = 11;
 1->^^^^^^^^
@@ -88,12 +89,12 @@ sourceFile:classStaticBlock25.ts
 4 >                = 
 5 >                  11
 6 >                    ;
-1->Emitted(5, 9) Source(6, 9) + SourceIndex(0)
-2 >Emitted(5, 15) Source(6, 15) + SourceIndex(0)
-3 >Emitted(5, 16) Source(6, 16) + SourceIndex(0)
-4 >Emitted(5, 19) Source(6, 19) + SourceIndex(0)
-5 >Emitted(5, 21) Source(6, 21) + SourceIndex(0)
-6 >Emitted(5, 22) Source(6, 22) + SourceIndex(0)
+1->Emitted(6, 9) Source(6, 9) + SourceIndex(0)
+2 >Emitted(6, 15) Source(6, 15) + SourceIndex(0)
+3 >Emitted(6, 16) Source(6, 16) + SourceIndex(0)
+4 >Emitted(6, 19) Source(6, 19) + SourceIndex(0)
+5 >Emitted(6, 21) Source(6, 21) + SourceIndex(0)
+6 >Emitted(6, 22) Source(6, 22) + SourceIndex(0)
 ---
 >>>        a;
 1 >^^^^^^^^
@@ -105,9 +106,9 @@ sourceFile:classStaticBlock25.ts
   >        
 2 >        a
 3 >         ;
-1 >Emitted(6, 9) Source(8, 9) + SourceIndex(0)
-2 >Emitted(6, 10) Source(8, 10) + SourceIndex(0)
-3 >Emitted(6, 11) Source(8, 11) + SourceIndex(0)
+1 >Emitted(7, 9) Source(8, 9) + SourceIndex(0)
+2 >Emitted(7, 10) Source(8, 10) + SourceIndex(0)
+3 >Emitted(7, 11) Source(8, 11) + SourceIndex(0)
 ---
 >>>        b;
 1->^^^^^^^^
@@ -117,9 +118,9 @@ sourceFile:classStaticBlock25.ts
   >        
 2 >        b
 3 >         ;
-1->Emitted(7, 9) Source(9, 9) + SourceIndex(0)
-2 >Emitted(7, 10) Source(9, 10) + SourceIndex(0)
-3 >Emitted(7, 11) Source(9, 11) + SourceIndex(0)
+1->Emitted(8, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(8, 10) Source(9, 10) + SourceIndex(0)
+3 >Emitted(8, 11) Source(9, 11) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -128,8 +129,8 @@ sourceFile:classStaticBlock25.ts
 1 >
 2 >    
   >        }
-1 >Emitted(8, 5) Source(9, 11) + SourceIndex(0)
-2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
+1 >Emitted(9, 5) Source(9, 11) + SourceIndex(0)
+2 >Emitted(9, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>    static {
 1->^^^^
@@ -139,8 +140,8 @@ sourceFile:classStaticBlock25.ts
   >
   >    
 2 >    static 
-1->Emitted(9, 5) Source(12, 5) + SourceIndex(0)
-2 >Emitted(9, 12) Source(12, 12) + SourceIndex(0)
+1->Emitted(10, 5) Source(12, 5) + SourceIndex(0)
+2 >Emitted(10, 12) Source(12, 12) + SourceIndex(0)
 ---
 >>>        const a = 11;
 1->^^^^^^^^
@@ -156,12 +157,12 @@ sourceFile:classStaticBlock25.ts
 4 >                = 
 5 >                  11
 6 >                    ;
-1->Emitted(10, 9) Source(13, 9) + SourceIndex(0)
-2 >Emitted(10, 15) Source(13, 15) + SourceIndex(0)
-3 >Emitted(10, 16) Source(13, 16) + SourceIndex(0)
-4 >Emitted(10, 19) Source(13, 19) + SourceIndex(0)
-5 >Emitted(10, 21) Source(13, 21) + SourceIndex(0)
-6 >Emitted(10, 22) Source(13, 22) + SourceIndex(0)
+1->Emitted(11, 9) Source(13, 9) + SourceIndex(0)
+2 >Emitted(11, 15) Source(13, 15) + SourceIndex(0)
+3 >Emitted(11, 16) Source(13, 16) + SourceIndex(0)
+4 >Emitted(11, 19) Source(13, 19) + SourceIndex(0)
+5 >Emitted(11, 21) Source(13, 21) + SourceIndex(0)
+6 >Emitted(11, 22) Source(13, 22) + SourceIndex(0)
 ---
 >>>        a;
 1 >^^^^^^^^
@@ -173,9 +174,9 @@ sourceFile:classStaticBlock25.ts
   >        
 2 >        a
 3 >         ;
-1 >Emitted(11, 9) Source(15, 9) + SourceIndex(0)
-2 >Emitted(11, 10) Source(15, 10) + SourceIndex(0)
-3 >Emitted(11, 11) Source(15, 11) + SourceIndex(0)
+1 >Emitted(12, 9) Source(15, 9) + SourceIndex(0)
+2 >Emitted(12, 10) Source(15, 10) + SourceIndex(0)
+3 >Emitted(12, 11) Source(15, 11) + SourceIndex(0)
 ---
 >>>        b;
 1->^^^^^^^^
@@ -185,9 +186,9 @@ sourceFile:classStaticBlock25.ts
   >        
 2 >        b
 3 >         ;
-1->Emitted(12, 9) Source(16, 9) + SourceIndex(0)
-2 >Emitted(12, 10) Source(16, 10) + SourceIndex(0)
-3 >Emitted(12, 11) Source(16, 11) + SourceIndex(0)
+1->Emitted(13, 9) Source(16, 9) + SourceIndex(0)
+2 >Emitted(13, 10) Source(16, 10) + SourceIndex(0)
+3 >Emitted(13, 11) Source(16, 11) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -195,15 +196,15 @@ sourceFile:classStaticBlock25.ts
 1 >
 2 >    
   >        }
-1 >Emitted(13, 5) Source(16, 11) + SourceIndex(0)
-2 >Emitted(13, 6) Source(17, 6) + SourceIndex(0)
+1 >Emitted(14, 5) Source(16, 11) + SourceIndex(0)
+2 >Emitted(14, 6) Source(17, 6) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(14, 2) Source(18, 2) + SourceIndex(0)
+1 >Emitted(15, 2) Source(18, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=classStaticBlock25.js.map===================================================================
 JsFile: classStaticBlock25.d.ts

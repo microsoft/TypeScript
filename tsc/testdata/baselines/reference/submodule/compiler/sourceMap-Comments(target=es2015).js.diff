@@ -1,0 +1,11 @@
+--- old.sourceMap-Comments(target=es2015).js
++++ new.sourceMap-Comments(target=es2015).js
+@@= skipped -25, +25 lines =@@
+ "use strict";
+ var sas;
+ (function (sas) {
+-    var tools;
++    let tools;
+     (function (tools) {
+         class Test {
+             doX() {

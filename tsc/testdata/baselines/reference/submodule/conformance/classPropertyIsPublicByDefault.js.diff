@@ -1,8 +1,8 @@
 --- old.classPropertyIsPublicByDefault.js
 +++ new.classPropertyIsPublicByDefault.js
-@@= skipped -25, +25 lines =@@
-
+@@= skipped -26, +26 lines =@@
  //// [classPropertyIsPublicByDefault.js]
+ "use strict";
  class C {
 +    x;
      get y() { return null; }

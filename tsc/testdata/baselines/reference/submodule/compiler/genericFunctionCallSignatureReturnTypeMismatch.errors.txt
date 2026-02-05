@@ -6,9 +6,9 @@ genericFunctionCallSignatureReturnTypeMismatch.ts(6,1): error TS2322: Type '<S>(
 ==== genericFunctionCallSignatureReturnTypeMismatch.ts (1 errors) ====
     interface Array<T> {}
     
-    var f : { <T>(x:T): T; }
+    declare var f : { <T>(x:T): T; }
     
-    var g : { <S>() : S[]; };
+    declare var g : { <S>() : S[]; };
     f = g;
     ~
 !!! error TS2322: Type '<S>() => S[]' is not assignable to type '<T>(x: T) => T'.

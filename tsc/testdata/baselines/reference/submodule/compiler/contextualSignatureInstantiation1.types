@@ -8,10 +8,10 @@ declare function map<S, T>(f: (x: S) => T): (a: S[]) => T[];
 >a : S[]
 
 var e = <K>(x: string, y?: K) => x.length;
->e : <K>(x: string, y?: K) => number
-><K>(x: string, y?: K) => x.length : <K>(x: string, y?: K) => number
+>e : <K>(x: string, y?: K | undefined) => number
+><K>(x: string, y?: K) => x.length : <K>(x: string, y?: K | undefined) => number
 >x : string
->y : K
+>y : K | undefined
 >x.length : number
 >x : string
 >length : number
@@ -20,7 +20,7 @@ var r99 = map(e); // should be {}[] for S since a generic lambda is not inferent
 >r99 : <K>(a: string[]) => number[]
 >map(e) : <K>(a: string[]) => number[]
 >map : <S, T>(f: (x: S) => T) => (a: S[]) => T[]
->e : <K>(x: string, y?: K) => number
+>e : <K>(x: string, y?: K | undefined) => number
 
 declare function map2<S extends { length: number }, T>(f: (x: S) => T): (a: S[]) => T[];
 >map2 : <S extends { length: number; }, T>(f: (x: S) => T) => (a: S[]) => T[]
@@ -30,10 +30,10 @@ declare function map2<S extends { length: number }, T>(f: (x: S) => T): (a: S[])
 >a : S[]
 
 var e2 = <K>(x: string, y?: K) => x.length;
->e2 : <K>(x: string, y?: K) => number
-><K>(x: string, y?: K) => x.length : <K>(x: string, y?: K) => number
+>e2 : <K>(x: string, y?: K | undefined) => number
+><K>(x: string, y?: K) => x.length : <K>(x: string, y?: K | undefined) => number
 >x : string
->y : K
+>y : K | undefined
 >x.length : number
 >x : string
 >length : number
@@ -42,5 +42,5 @@ var r100 = map2(e2); // type arg inference should fail for S since a generic lam
 >r100 : <K>(a: string[]) => number[]
 >map2(e2) : <K>(a: string[]) => number[]
 >map2 : <S extends { length: number; }, T>(f: (x: S) => T) => (a: S[]) => T[]
->e2 : <K>(x: string, y?: K) => number
+>e2 : <K>(x: string, y?: K | undefined) => number
 

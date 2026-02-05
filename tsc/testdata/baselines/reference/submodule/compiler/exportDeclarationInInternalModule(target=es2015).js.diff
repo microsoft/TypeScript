@@ -1,0 +1,9 @@
+--- old.exportDeclarationInInternalModule(target=es2015).js
++++ new.exportDeclarationInInternalModule(target=es2015).js
+@@= skipped -33, +33 lines =@@
+     class SomeType {
+     }
+     Bbb.SomeType = SomeType;
++    export * from Aaa; // this line causes the nullref
+ })(Bbb || (Bbb = {}));
+ var a;

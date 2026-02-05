@@ -1,0 +1,55 @@
+--- old.contextualParamTypeVsNestedReturnTypeInference2.types
++++ new.contextualParamTypeVsNestedReturnTypeInference2.types
+@@= skipped -16, +16 lines =@@
+ }
+
+ declare function effectGen<Eff extends Effect<any, any, any>, AEff>(
+->effectGen : <Eff extends Effect<any, any, any>, AEff>(f: () => Generator<Eff, AEff, never>) => Effect<AEff, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A, infer _E, infer R>] ? R : never>
++>effectGen : <Eff extends Effect<any, any, any>, AEff>(f: () => Generator<Eff, AEff, never>) => Effect<AEff, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A_1, infer _E, infer R>] ? R : never>
+
+   f: () => Generator<Eff, AEff, never>
+ >f : () => Generator<Eff, AEff, never>
+@@= skipped -20, +20 lines =@@
+ >;
+
+ declare function effectFn<
+->effectFn : <Eff extends Effect<any, any, any>, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Eff, AEff, never>) => (...args: Args) => Effect<AEff, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A, infer _E, infer R>] ? R : never>
++>effectFn : <Eff extends Effect<any, any, any>, AEff, Args extends any[]>(body: (...args: Args) => Generator<Eff, AEff, never>) => (...args: Args) => Effect<AEff, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A_1, infer _E, infer R>] ? R : never>
+
+   Eff extends Effect<any, any, any>,
+   AEff,
+@@= skipped -76, +76 lines =@@
+
+ class Foo extends Tag("Foo")<
+ >Foo : Foo
+->Tag("Foo")<  Foo,  {    fn: (a: string) => Effect<void>;  }>() : TagClassShape<"Foo", { fn: (a: string) => Effect<void>; }>
++>Tag("Foo")<  Foo,  {    fn: (a: string) => Effect<void>;  }>() : TagClassShape<"Foo", { fn: (a: string) => Effect<void, never, never>; }>
+ >Tag("Foo") : <Self, Shape>() => TagClass<Self, "Foo", Shape>
+ >Tag : <const Id extends string>(id: Id) => <Self, Shape>() => TagClass<Self, Id, Shape>
+ >"Foo" : "Foo"
+@@= skipped -8, +8 lines =@@
+   Foo,
+   {
+     fn: (a: string) => Effect<void>;
+->fn : (a: string) => Effect<void>
++>fn : (a: string) => Effect<void, never, never>
+ >a : string
+   }
+ >() {}
+@@= skipped -14, +14 lines =@@
+
+   effectGen(function* () {
+ >effectGen(function* () {    return {      fn: effectFn(function* (a) {        a; // string      }),    };  }) : Effect<{ fn: (a: string) => Effect<void, never, never>; }, never, never>
+->effectGen : <Eff extends Effect<any, any, any>, AEff>(f: () => Generator<Eff, AEff, never>) => Effect<AEff, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A, infer _E, infer R>] ? R : never>
++>effectGen : <Eff extends Effect<any, any, any>, AEff>(f: () => Generator<Eff, AEff, never>) => Effect<AEff, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A_1, infer _E, infer R>] ? R : never>
+ >function* () {    return {      fn: effectFn(function* (a) {        a; // string      }),    };  } : () => Generator<never, { fn: (a: string) => Effect<void, never, never>; }, never>
+
+     return {
+@@= skipped -9, +9 lines =@@
+       fn: effectFn(function* (a) {
+ >fn : (a: string) => Effect<void, never, never>
+ >effectFn(function* (a) {        a; // string      }) : (a: string) => Effect<void, never, never>
+->effectFn : <Eff extends Effect<any, any, any>, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Eff, AEff, never>) => (...args: Args) => Effect<AEff, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A, infer _E, infer R>] ? R : never>
++>effectFn : <Eff extends Effect<any, any, any>, AEff, Args extends any[]>(body: (...args: Args) => Generator<Eff, AEff, never>) => (...args: Args) => Effect<AEff, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [never] ? never : [Eff] extends [Effect<infer _A_1, infer _E, infer R>] ? R : never>
+ >function* (a) {        a; // string      } : (a: string) => Generator<never, void, never>
+ >a : string

@@ -1,6 +1,6 @@
 --- old.propertiesAndIndexers.js
 +++ new.propertiesAndIndexers.js
-@@= skipped -56, +56 lines =@@
+@@= skipped -57, +57 lines =@@
  class P {
  }
  class Q extends P {

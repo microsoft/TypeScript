@@ -13,6 +13,7 @@ function suggest(){
 
 
 //// [targetTypeObjectLiteralToAny.js]
+"use strict";
 function suggest() {
     var TypeScriptKeywords;
     var result;

@@ -1,8 +1,8 @@
 --- old.typeGuardFunctionErrors.js
 +++ new.typeGuardFunctionErrors.js
-@@= skipped -170, +170 lines =@@
-
+@@= skipped -171, +171 lines =@@
  //// [typeGuardFunctionErrors.js]
+ "use strict";
  class A {
 +    propA;
  }

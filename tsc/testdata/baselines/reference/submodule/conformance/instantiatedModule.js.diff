@@ -1,6 +1,6 @@
 --- old.instantiatedModule.js
 +++ new.instantiatedModule.js
-@@= skipped -80, +80 lines =@@
+@@= skipped -81, +81 lines =@@
  var M2;
  (function (M2) {
      class Point {

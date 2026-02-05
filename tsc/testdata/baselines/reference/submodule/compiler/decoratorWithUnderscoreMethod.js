@@ -18,6 +18,7 @@ class A {
 }
 
 //// [decoratorWithUnderscoreMethod.js]
+"use strict";
 function dec() {
     return function (target, propKey, descr) {
         console.log(target[propKey]);

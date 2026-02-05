@@ -7,6 +7,7 @@ var x = {
 }
 
 //// [symbolProperty36.js]
+"use strict";
 var x = {
     [Symbol.isConcatSpreadable]: 0,
     [Symbol.isConcatSpreadable]: 1

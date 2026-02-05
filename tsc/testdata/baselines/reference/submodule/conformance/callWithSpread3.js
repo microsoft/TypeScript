@@ -39,6 +39,7 @@ fs5(...s2, "foo", ...s2);
 
 
 //// [callWithSpread3.js]
+"use strict";
 // error
 fs2('a', ...s2); // error on ...s2
 fs2('a', 'b', 'c', ...s2); // error on 'c' and ...s2

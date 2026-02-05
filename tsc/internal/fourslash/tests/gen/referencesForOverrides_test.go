@@ -11,8 +11,8 @@ func TestReferencesForOverrides(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module FindRef3 {
-	module SimpleClassTest {
+	const content = `namespace FindRef3 {
+	namespace SimpleClassTest {
 		export class Foo {
 			public /*foo*/foo(): void {
 			}
@@ -23,7 +23,7 @@ func TestReferencesForOverrides(t *testing.T) {
 		}
 	}
 
-	module SimpleInterfaceTest {
+	namespace SimpleInterfaceTest {
 		export interface IFoo {
 			/*ifoo*/ifoo(): void;
 		}
@@ -32,7 +32,7 @@ func TestReferencesForOverrides(t *testing.T) {
 		}
 	}
 
-	module SimpleClassInterfaceTest {
+	namespace SimpleClassInterfaceTest {
 		export interface IFoo {
 			/*icfoo*/icfoo(): void;
 		}
@@ -42,7 +42,7 @@ func TestReferencesForOverrides(t *testing.T) {
 		}
 	}
 
-	module Test {
+	namespace Test {
 		export interface IBase {
 			/*field*/field: string;
 			/*method*/method(): void;

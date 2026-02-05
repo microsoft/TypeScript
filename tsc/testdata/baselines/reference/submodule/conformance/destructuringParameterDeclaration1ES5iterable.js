@@ -100,6 +100,7 @@ function e5({x: [a, b, c]}: { x: [number, number, number] }) { }  // x has type 
 
 
 //// [destructuringParameterDeclaration1ES5iterable.js]
+"use strict";
 // A parameter declaration may specify either an identifier or a binding pattern.
 // The identifiers specified in parameter declarations and binding patterns
 // in a parameter list must be unique within that parameter list.

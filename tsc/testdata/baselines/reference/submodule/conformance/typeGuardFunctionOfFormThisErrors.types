@@ -94,7 +94,7 @@ function invalidGuard(c: any): this is number {
 >false : false
 }
 
-let c: number | number[];
+declare var c: number | number[];
 >c : number | number[]
 
 if (invalidGuard(c)) {

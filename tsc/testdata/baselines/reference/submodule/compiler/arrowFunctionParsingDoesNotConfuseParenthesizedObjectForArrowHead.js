@@ -18,6 +18,7 @@ const test = () => ({
 
 
 //// [arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.js]
+"use strict";
 const test = () => ({
     // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.
     prop: !value, // remove ! to see that errors will be gone

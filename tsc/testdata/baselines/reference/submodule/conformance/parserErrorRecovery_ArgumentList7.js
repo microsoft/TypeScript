@@ -4,4 +4,5 @@
 Foo(a,,
 
 //// [parserErrorRecovery_ArgumentList7.js]
+"use strict";
 Foo(a);

@@ -7,6 +7,7 @@ enum A {
 
 
 //// [enumWithNaNProperty.js]
+"use strict";
 var A;
 (function (A) {
     A[A["NaN"] = 1] = "NaN";

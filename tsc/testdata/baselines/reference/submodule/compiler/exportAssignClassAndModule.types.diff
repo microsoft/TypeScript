@@ -8,4 +8,4 @@
 +>x : import("exportAssignClassAndModule_0").Bar
  >Foo : any
  }
- module Foo {
+ namespace Foo {

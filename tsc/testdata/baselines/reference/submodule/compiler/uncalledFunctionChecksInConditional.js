@@ -58,6 +58,7 @@ if (x && z) {
 }
 
 //// [uncalledFunctionChecksInConditional.js]
+"use strict";
 if (isFoo) {
     // error on isFoo
 }

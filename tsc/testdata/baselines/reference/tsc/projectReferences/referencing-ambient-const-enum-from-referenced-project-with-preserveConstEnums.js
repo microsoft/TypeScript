@@ -28,7 +28,7 @@ export const enum E { A = 1 }
 tsgo --p project
 ExitStatus:: Success
 Output::
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -52,9 +52,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/solution/project/index.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("../utils");
-utils_1.E.A;
+import { E } from "../utils";
+E.A;
 
 

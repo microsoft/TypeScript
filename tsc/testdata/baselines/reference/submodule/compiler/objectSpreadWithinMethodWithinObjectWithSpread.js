@@ -14,6 +14,7 @@ const a = {
 
 
 //// [objectSpreadWithinMethodWithinObjectWithSpread.js]
+"use strict";
 const obj = {};
 const a = Object.assign(Object.assign({}, obj), { prop() {
         return Object.assign(Object.assign({}, obj), { metadata: 213 });

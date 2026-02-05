@@ -27,6 +27,7 @@ var z: Derived = b.foo();
 */
 
 //// [baseIndexSignatureResolution.js]
+"use strict";
 class Base {
     a;
 }

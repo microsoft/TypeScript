@@ -12,6 +12,7 @@ function f1() {
 
 
 //// [asyncIIFE.js]
+"use strict";
 function f1() {
     (async () => {
         await 10;

@@ -130,6 +130,7 @@ function a9() {
 
 
 //// [nestedBlockScopedBindings2.js]
+"use strict";
 function a0() {
     {
         let x = 1;

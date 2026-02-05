@@ -45,8 +45,6 @@ const E = class {
 
 
 //// [mappedTypeProperties.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 class C {
     [P in PlaceType];
 }
@@ -56,6 +54,7 @@ const D = class {
 const E = class {
     [P in 'a' | 'b'];
 };
+export {};
 
 
 //// [mappedTypeProperties.d.ts]

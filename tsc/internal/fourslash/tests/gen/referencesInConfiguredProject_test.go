@@ -18,7 +18,7 @@ class /*0*/globalClass {
 // @Filename: /home/src/workspaces/project/referencesForGlobals_2.ts
 var c = /*1*/globalClass();
 // @Filename: /home/src/workspaces/project/tsconfig.json
-{ "files": ["referencesForGlobals_1.ts", "referencesForGlobals_2.ts"] }`
+{ "files": ["referencesForGlobals_1.ts", "referencesForGlobals_2.ts"], "compilerOptions": { "lib": ["es5"] } }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.MarkTestAsStradaServer()

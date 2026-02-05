@@ -1,6 +1,6 @@
 --- old.enumBasics2.js
 +++ new.enumBasics2.js
-@@= skipped -21, +21 lines =@@
+@@= skipped -22, +22 lines =@@
  (function (Foo) {
      Foo[Foo["a"] = 2] = "a";
      Foo[Foo["b"] = 3] = "b";

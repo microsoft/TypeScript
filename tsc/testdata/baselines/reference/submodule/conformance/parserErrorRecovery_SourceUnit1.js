@@ -8,6 +8,7 @@ class D {
 }
 
 //// [parserErrorRecovery_SourceUnit1.js]
+"use strict";
 class C {
 }
 class D {

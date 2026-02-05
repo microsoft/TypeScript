@@ -1,8 +1,8 @@
 --- old.privateVisibility.js
 +++ new.privateVisibility.js
-@@= skipped -29, +29 lines =@@
-
+@@= skipped -30, +30 lines =@@
  //// [privateVisibility.js]
+ "use strict";
  class Foo {
 -    constructor() {
 -        this.pubProp = 0;

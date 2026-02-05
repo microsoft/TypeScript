@@ -28,7 +28,7 @@ class X<T> {
 >x : T
 }
 
-module Class {
+namespace Class {
 >Class : typeof Class
 
     class G<T extends { x: string }> {
@@ -119,7 +119,7 @@ module Class {
 >c1 : X<C>
 }
 
-module Interface {
+namespace Interface {
 >Interface : typeof Interface
 
     interface G<T extends { x: string }> {

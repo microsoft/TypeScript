@@ -1,13 +1,14 @@
 //// [tests/cases/compiler/collisionThisExpressionAndModuleInGlobal.ts] ////
 
 //// [collisionThisExpressionAndModuleInGlobal.ts]
-module _this { //Error
+namespace _this { //Error
     class c {
     }
 }
 var f = () => this;
 
 //// [collisionThisExpressionAndModuleInGlobal.js]
+"use strict";
 var _this;
 (function (_this) {
     class c {

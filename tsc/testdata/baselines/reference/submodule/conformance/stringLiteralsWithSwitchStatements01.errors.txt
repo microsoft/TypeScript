@@ -2,8 +2,8 @@ stringLiteralsWithSwitchStatements01.ts(7,10): error TS2678: Type '"bar"' is not
 
 
 ==== stringLiteralsWithSwitchStatements01.ts (1 errors) ====
-    let x: "foo";
-    let y: "foo" | "bar"; 
+    declare let x: "foo";
+    declare let y: "foo" | "bar";
     
     switch (x) {
         case "foo":

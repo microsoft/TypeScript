@@ -2,7 +2,7 @@
 
 === negateOperatorWithBooleanType.ts ===
 // - operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 >BOOLEAN : boolean
 
 function foo(): boolean { return true; }
@@ -12,17 +12,17 @@ function foo(): boolean { return true; }
 class A {
 >A : A
 
-    public a: boolean;
+    public a!: boolean;
 >a : boolean
 
     static foo() { return false; }
 >foo : () => boolean
 >false : false
 }
-module M {
+namespace M {
 >M : typeof M
 
-    export var n: boolean;
+    export declare var n: boolean;
 >n : boolean
 }
 

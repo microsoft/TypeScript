@@ -12,7 +12,8 @@ func TestJsdocTypedefTagRename02(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @allowNonTsExtensions: true
+	const content = `// @lib: es5
+// @allowNonTsExtensions: true
 // @Filename: jsDocTypedef_form2.js
 
 /** [|@typedef {(string | number)} [|{| "contextRangeIndex": 0 |}NumberLike|]|] */

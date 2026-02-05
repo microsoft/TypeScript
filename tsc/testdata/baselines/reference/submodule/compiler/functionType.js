@@ -9,6 +9,7 @@ salt.apply("hello", []);
 
 
 //// [functionType.js]
+"use strict";
 function salt() { }
 salt.apply("hello", []);
 (new Function("return 5"))();

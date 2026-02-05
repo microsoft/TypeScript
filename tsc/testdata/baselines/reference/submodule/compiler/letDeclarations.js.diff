@@ -1,0 +1,8 @@
+--- old.letDeclarations.js
++++ new.letDeclarations.js
+@@= skipped -31, +31 lines =@@
+ declare let l3: any, l4: any, l5: string, l6: any;
+ declare let l7: boolean;
+ declare let l8: number;
+-declare let l9: number, l10: string, l11: null;
++declare let l9: number, l10: string, l11: any;

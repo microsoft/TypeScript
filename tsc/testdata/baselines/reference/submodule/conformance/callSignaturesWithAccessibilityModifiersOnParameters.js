@@ -41,6 +41,7 @@ var b = {
 }
 
 //// [callSignaturesWithAccessibilityModifiersOnParameters.js]
+"use strict";
 // Call signature parameters do not allow accessibility modifiers
 function foo(x, y) { }
 var f = function foo(x, y) { };

@@ -14,6 +14,7 @@ class Unrelated {
 
 
 //// [classConstructorAccessibility5.js]
+"use strict";
 class Base {
     constructor() { }
 }

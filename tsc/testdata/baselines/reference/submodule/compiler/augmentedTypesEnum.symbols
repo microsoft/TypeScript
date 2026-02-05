@@ -55,24 +55,24 @@ enum e6 { One }
 >e6 : Symbol(e6, Decl(augmentedTypesEnum.ts, 20, 16), Decl(augmentedTypesEnum.ts, 23, 15))
 >One : Symbol(e6.One, Decl(augmentedTypesEnum.ts, 23, 9))
 
-module e6 { } // ok
+namespace e6 { } // ok
 >e6 : Symbol(e6, Decl(augmentedTypesEnum.ts, 20, 16), Decl(augmentedTypesEnum.ts, 23, 15))
 
 enum e6a { One }
->e6a : Symbol(e6a, Decl(augmentedTypesEnum.ts, 24, 13), Decl(augmentedTypesEnum.ts, 26, 16))
+>e6a : Symbol(e6a, Decl(augmentedTypesEnum.ts, 24, 16), Decl(augmentedTypesEnum.ts, 26, 16))
 >One : Symbol(e6a.One, Decl(augmentedTypesEnum.ts, 26, 10))
 
-module e6a { var y = 2; } // should be error
->e6a : Symbol(e6a, Decl(augmentedTypesEnum.ts, 24, 13), Decl(augmentedTypesEnum.ts, 26, 16))
->y : Symbol(y, Decl(augmentedTypesEnum.ts, 27, 16))
+namespace e6a { var y = 2; } // should be error
+>e6a : Symbol(e6a, Decl(augmentedTypesEnum.ts, 24, 16), Decl(augmentedTypesEnum.ts, 26, 16))
+>y : Symbol(y, Decl(augmentedTypesEnum.ts, 27, 19))
 
 enum e6b { One }
->e6b : Symbol(e6b, Decl(augmentedTypesEnum.ts, 27, 25), Decl(augmentedTypesEnum.ts, 29, 16))
+>e6b : Symbol(e6b, Decl(augmentedTypesEnum.ts, 27, 28), Decl(augmentedTypesEnum.ts, 29, 16))
 >One : Symbol(e6b.One, Decl(augmentedTypesEnum.ts, 29, 10))
 
-module e6b { export var y = 2; } // should be error
->e6b : Symbol(e6b, Decl(augmentedTypesEnum.ts, 27, 25), Decl(augmentedTypesEnum.ts, 29, 16))
->y : Symbol(y, Decl(augmentedTypesEnum.ts, 30, 23))
+namespace e6b { export var y = 2; } // should be error
+>e6b : Symbol(e6b, Decl(augmentedTypesEnum.ts, 27, 28), Decl(augmentedTypesEnum.ts, 29, 16))
+>y : Symbol(y, Decl(augmentedTypesEnum.ts, 30, 26))
 
 // enum then import, messes with error reporting
 //enum e7 { One }

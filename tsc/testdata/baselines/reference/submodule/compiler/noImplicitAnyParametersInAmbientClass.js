@@ -94,3 +94,4 @@ declare class D_C {
 }
 
 //// [noImplicitAnyParametersInAmbientClass.js]
+"use strict";

@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/jsxSpreadOverwritesAttributeStrict.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 interface Props {
@@ -27,6 +29,7 @@ const b4 = <Foo a={1} d={1} {...props} {...{ a: 1, d: 1 }}></Foo>;
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const props = { a: 1, b: 1 };

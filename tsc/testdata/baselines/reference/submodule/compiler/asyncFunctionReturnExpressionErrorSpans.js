@@ -24,6 +24,7 @@ async function asyncFoo(): Promise<Foo> {
 }
 
 //// [asyncFunctionReturnExpressionErrorSpans.js]
+"use strict";
 async function asyncFoo() {
     return {
         bar: {

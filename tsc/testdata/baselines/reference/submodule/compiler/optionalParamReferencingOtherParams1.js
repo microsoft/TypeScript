@@ -6,6 +6,7 @@ function strange(x: number, y = x * 1, z = x + y) {
 }
 
 //// [optionalParamReferencingOtherParams1.js]
+"use strict";
 function strange(x, y = x * 1, z = x + y) {
     return z;
 }

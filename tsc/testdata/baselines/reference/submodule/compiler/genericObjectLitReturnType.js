@@ -14,6 +14,7 @@ t1.a = 5; // Should not error: t1 should have type {a: number}, instead has type
 
 
 //// [genericObjectLitReturnType.js]
+"use strict";
 class X {
     f(t) { return { a: t }; }
 }

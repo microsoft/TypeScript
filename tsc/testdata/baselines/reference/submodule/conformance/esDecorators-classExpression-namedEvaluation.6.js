@@ -11,6 +11,7 @@ declare let dec: any, obj: any, x: any;
 
 
 //// [esDecorators-classExpression-namedEvaluation.6.js]
+"use strict";
 // 13.15.5.6 RS: KeyedDestructuringAssignmentEvaluation
 //   AssignmentElement : DestructuringAssignmentTarget Initializer?
 ({ y: x = 

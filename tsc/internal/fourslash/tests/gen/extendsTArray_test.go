@@ -11,7 +11,8 @@ func TestExtendsTArray(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface I1<T> {
+	const content = `// @strict: false
+interface I1<T> {
     (a: T): T;
 }
 interface I2<T> extends I1<T[]> {

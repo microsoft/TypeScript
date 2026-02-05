@@ -1,8 +1,8 @@
 --- old.staticVisibility2.js
 +++ new.staticVisibility2.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [staticVisibility2.js]
+ "use strict";
  class Square {
 +    static sideLength;
      constructor(sideLength) {

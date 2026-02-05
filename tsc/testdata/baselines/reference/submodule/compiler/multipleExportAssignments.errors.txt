@@ -10,7 +10,7 @@ multipleExportAssignments.ts(14,10): error TS2300: Duplicate identifier 'export=
         use: (mod: connectModule) => connectExport;
         listen: (port: number) => void;
     }
-    var server: {
+    declare const server: {
         (): connectExport;
         test1: connectModule;
         test2(): connectModule;

@@ -1,6 +1,6 @@
 --- old.classExpressionLoop.js
 +++ new.classExpressionLoop.js
-@@= skipped -12, +12 lines =@@
+@@= skipped -13, +13 lines =@@
  let arr = [];
  for (let i = 0; i < 10; ++i) {
      arr.push(class C {

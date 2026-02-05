@@ -10,3 +10,4 @@ declare module ".\\relativeModule" {
 }
 
 //// [ambientExternalModuleWithRelativeModuleName.js]
+"use strict";

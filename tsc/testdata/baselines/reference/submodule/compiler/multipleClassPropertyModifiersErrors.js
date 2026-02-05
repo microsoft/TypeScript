@@ -12,6 +12,7 @@ class C {
 }
 
 //// [multipleClassPropertyModifiersErrors.js]
+"use strict";
 class C {
     p1;
     p2;

@@ -1,9 +1,9 @@
 --- old.privateNameJsx.js
 +++ new.privateNameJsx.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
 
  //// [privateNameJsx.jsx]
+ "use strict";
 -var _Test_prop;
  class Test {
 -    constructor() {

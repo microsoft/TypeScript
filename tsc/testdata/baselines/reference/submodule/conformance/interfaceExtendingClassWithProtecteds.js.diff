@@ -1,10 +1,10 @@
 --- old.interfaceExtendingClassWithProtecteds.js
 +++ new.interfaceExtendingClassWithProtecteds.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [interfaceExtendingClassWithProtecteds.js]
+ "use strict";
  class Foo {
 +    x;
  }
- var i;
  var r = i.y;
+ var r2 = i.x; // error

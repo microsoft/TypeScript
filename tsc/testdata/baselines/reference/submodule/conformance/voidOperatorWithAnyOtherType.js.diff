@@ -1,6 +1,6 @@
 --- old.voidOperatorWithAnyOtherType.js
 +++ new.voidOperatorWithAnyOtherType.js
-@@= skipped -73, +73 lines =@@
+@@= skipped -71, +71 lines =@@
      return a;
  }
  class A {

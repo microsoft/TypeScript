@@ -71,13 +71,13 @@ class E<T extends string> extends D {
     }
 }
 
-var c: C<number>;
+declare var c: C<number>;
 >c : C<number>
 
-var d: D;
+declare var d: D;
 >d : D
 
-var e: E<string>;
+declare var e: E<string>;
 >e : E<string>
 
 c = d;

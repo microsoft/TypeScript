@@ -1,3 +1,4 @@
+nestedClassDeclaration.ts(4,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 nestedClassDeclaration.ts(5,5): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 nestedClassDeclaration.ts(7,1): error TS1128: Declaration or statement expected.
 nestedClassDeclaration.ts(15,11): error TS1005: ':' expected.
@@ -6,11 +7,13 @@ nestedClassDeclaration.ts(15,14): error TS1005: ',' expected.
 nestedClassDeclaration.ts(17,1): error TS1128: Declaration or statement expected.
 
 
-==== nestedClassDeclaration.ts (6 errors) ====
+==== nestedClassDeclaration.ts (7 errors) ====
     // nested classes are not allowed
     
     class C {
         x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         class C2 {
         ~~~~~
 !!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.

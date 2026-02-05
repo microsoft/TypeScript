@@ -5,5 +5,6 @@ var foo = async (): Promise<void> => {
 };
 
 //// [asyncArrowFunction1_es2017.js]
+"use strict";
 var foo = async () => {
 };

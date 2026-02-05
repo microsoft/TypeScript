@@ -13,6 +13,7 @@ function bar() {
 }
 
 //// [a.js]
+"use strict";
 class c {
 }
 //# sourceMappingURL=a.js.map

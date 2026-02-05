@@ -9,6 +9,7 @@ var z: number = h<number>(f);
 var z: number = h(f);
 
 //// [compositeGenericFunction.js]
+"use strict";
 function f(value) { return value; }
 ;
 function h(func) { return null; }

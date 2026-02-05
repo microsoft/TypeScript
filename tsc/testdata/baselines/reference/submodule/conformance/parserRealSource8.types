@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : typeof TypeScript
 
     export class AssignScopeContext {
@@ -838,8 +838,8 @@ module TypeScript {
 >Static : any
 
         var isInnerStatic = isStatic && context.scopeChain.fnc != null;
->isInnerStatic : boolean
->isStatic && context.scopeChain.fnc != null : boolean
+>isInnerStatic : any
+>isStatic && context.scopeChain.fnc != null : any
 >isStatic : any
 >context.scopeChain.fnc != null : boolean
 >context.scopeChain.fnc : any
@@ -852,7 +852,7 @@ module TypeScript {
         var parentScope = isInnerStatic ? context.scopeChain.fnc.type.memberScope : context.scopeChain.scope;
 >parentScope : any
 >isInnerStatic ? context.scopeChain.fnc.type.memberScope : context.scopeChain.scope : any
->isInnerStatic : boolean
+>isInnerStatic : any
 >context.scopeChain.fnc.type.memberScope : any
 >context.scopeChain.fnc.type : any
 >context.scopeChain.fnc : any
@@ -954,7 +954,7 @@ module TypeScript {
             else {
                 if (context.scopeChain.previous.scope.container &&
 >context.scopeChain.previous.scope.container &&                    context.scopeChain.previous.scope.container.declAST &&                    context.scopeChain.previous.scope.container.declAST.nodeType == NodeType.FuncDecl &&                    (<FuncDecl>context.scopeChain.previous.scope.container.declAST).isConstructor : any
->context.scopeChain.previous.scope.container &&                    context.scopeChain.previous.scope.container.declAST &&                    context.scopeChain.previous.scope.container.declAST.nodeType == NodeType.FuncDecl : boolean
+>context.scopeChain.previous.scope.container &&                    context.scopeChain.previous.scope.container.declAST &&                    context.scopeChain.previous.scope.container.declAST.nodeType == NodeType.FuncDecl : any
 >context.scopeChain.previous.scope.container &&                    context.scopeChain.previous.scope.container.declAST : any
 >context.scopeChain.previous.scope.container : any
 >context.scopeChain.previous.scope : any
@@ -1227,11 +1227,11 @@ module TypeScript {
             else {
 
                 if (!funcDecl.isConstructor &&
->!funcDecl.isConstructor &&                    container &&                    container.declAST &&                    container.declAST.nodeType == NodeType.FuncDecl &&                    (<FuncDecl>container.declAST).isConstructor &&                    !funcDecl.isMethod() : boolean
+>!funcDecl.isConstructor &&                    container &&                    container.declAST &&                    container.declAST.nodeType == NodeType.FuncDecl &&                    (<FuncDecl>container.declAST).isConstructor &&                    !funcDecl.isMethod() : any
 >!funcDecl.isConstructor &&                    container &&                    container.declAST &&                    container.declAST.nodeType == NodeType.FuncDecl &&                    (<FuncDecl>container.declAST).isConstructor : any
->!funcDecl.isConstructor &&                    container &&                    container.declAST &&                    container.declAST.nodeType == NodeType.FuncDecl : boolean
+>!funcDecl.isConstructor &&                    container &&                    container.declAST &&                    container.declAST.nodeType == NodeType.FuncDecl : any
 >!funcDecl.isConstructor &&                    container &&                    container.declAST : any
->!funcDecl.isConstructor &&                    container : Symbol
+>!funcDecl.isConstructor &&                    container : false | Symbol
 >!funcDecl.isConstructor : boolean
 >funcDecl.isConstructor : any
 >funcDecl : FuncDecl
@@ -1299,8 +1299,8 @@ module TypeScript {
             // accidentally coalescing function signatures with the same name (E.g., a function
             // 'f' the outer scope and a setter 'f' in an object literal within that scope)
             if (nameText && nameText != "__missing" && !funcDecl.isAccessor()) {
->nameText && nameText != "__missing" && !funcDecl.isAccessor() : boolean
->nameText && nameText != "__missing" : boolean
+>nameText && nameText != "__missing" && !funcDecl.isAccessor() : any
+>nameText && nameText != "__missing" : any
 >nameText : any
 >nameText != "__missing" : boolean
 >nameText : any
@@ -1362,8 +1362,8 @@ module TypeScript {
             if (!funcDecl.accessorSymbol && 
 >!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container &&                 ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) ||                     (fgSym && fgSym.isAccessor()) : any
 >!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container &&                 ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) : any
->!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container : Symbol
->!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) : number
+>!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container : 0 | false | Symbol
+>!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) : number | false
 >!funcDecl.accessorSymbol : boolean
 >funcDecl.accessorSymbol : any
 >funcDecl : FuncDecl
@@ -1392,7 +1392,7 @@ module TypeScript {
 >fgSym.declAST.nodeType != NodeType.FuncDecl : boolean
 >fgSym.declAST.nodeType : any
 >fgSym.declAST : any
->fgSym : TypeSymbol
+>fgSym : any
 >declAST : any
 >nodeType : any
 >NodeType.FuncDecl : any
@@ -1409,7 +1409,7 @@ module TypeScript {
 >fgSym : TypeSymbol
 >fgSym.isAccessor() : any
 >fgSym.isAccessor : any
->fgSym : TypeSymbol
+>fgSym : any
 >isAccessor : any
             {
                 funcDecl.accessorSymbol = context.typeFlow.checker.createAccessorSymbol(funcDecl, fgSym, container.getType(), (funcDecl.isMethod() && isStatic), true, funcScope, container);
@@ -1998,7 +1998,7 @@ module TypeScript {
             if (ast.nodeType == NodeType.List) {
 >ast.nodeType == NodeType.List : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.List : any
 >NodeType : any
@@ -2007,7 +2007,7 @@ module TypeScript {
                 var list = <ASTList>ast;
 >list : ASTList
 ><ASTList>ast : ASTList
->ast : AST
+>ast : any
 
                 list.enclosingScope = context.scopeChain.scope;
 >list.enclosingScope = context.scopeChain.scope : any
@@ -2023,7 +2023,7 @@ module TypeScript {
             else if (ast.nodeType == NodeType.ModuleDeclaration) {
 >ast.nodeType == NodeType.ModuleDeclaration : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.ModuleDeclaration : any
 >NodeType : any
@@ -2032,13 +2032,13 @@ module TypeScript {
                 preAssignModuleScopes(ast, context);
 >preAssignModuleScopes(ast, context) : void
 >preAssignModuleScopes : (ast: AST, context: AssignScopeContext) => void
->ast : AST
+>ast : any
 >context : AssignScopeContext
             }
             else if (ast.nodeType == NodeType.ClassDeclaration) {
 >ast.nodeType == NodeType.ClassDeclaration : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.ClassDeclaration : any
 >NodeType : any
@@ -2047,13 +2047,13 @@ module TypeScript {
                 preAssignClassScopes(ast, context);
 >preAssignClassScopes(ast, context) : void
 >preAssignClassScopes : (ast: AST, context: AssignScopeContext) => void
->ast : AST
+>ast : any
 >context : AssignScopeContext
             }
             else if (ast.nodeType == NodeType.InterfaceDeclaration) {
 >ast.nodeType == NodeType.InterfaceDeclaration : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.InterfaceDeclaration : any
 >NodeType : any
@@ -2062,13 +2062,13 @@ module TypeScript {
                 preAssignInterfaceScopes(ast, context);
 >preAssignInterfaceScopes(ast, context) : void
 >preAssignInterfaceScopes : (ast: AST, context: AssignScopeContext) => void
->ast : AST
+>ast : any
 >context : AssignScopeContext
             }
             else if (ast.nodeType == NodeType.With) {
 >ast.nodeType == NodeType.With : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.With : any
 >NodeType : any
@@ -2077,13 +2077,13 @@ module TypeScript {
                 preAssignWithScopes(ast, context);
 >preAssignWithScopes(ast, context) : void
 >preAssignWithScopes : (ast: AST, context: AssignScopeContext) => void
->ast : AST
+>ast : any
 >context : AssignScopeContext
             }
             else if (ast.nodeType == NodeType.FuncDecl) {
 >ast.nodeType == NodeType.FuncDecl : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.FuncDecl : any
 >NodeType : any
@@ -2092,13 +2092,13 @@ module TypeScript {
                 preAssignFuncDeclScopes(ast, context);
 >preAssignFuncDeclScopes(ast, context) : void
 >preAssignFuncDeclScopes : (ast: AST, context: AssignScopeContext) => void
->ast : AST
+>ast : any
 >context : AssignScopeContext
             }
             else if (ast.nodeType == NodeType.Catch) {
 >ast.nodeType == NodeType.Catch : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.Catch : any
 >NodeType : any
@@ -2107,13 +2107,13 @@ module TypeScript {
                 preAssignCatchScopes(ast, context);
 >preAssignCatchScopes(ast, context) : void
 >preAssignCatchScopes : (ast: AST, context: AssignScopeContext) => void
->ast : AST
+>ast : any
 >context : AssignScopeContext
             }
             else if (ast.nodeType == NodeType.TypeRef) {
 >ast.nodeType == NodeType.TypeRef : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.TypeRef : any
 >NodeType : any
@@ -2160,7 +2160,7 @@ module TypeScript {
             if (ast.nodeType == NodeType.ModuleDeclaration) {
 >ast.nodeType == NodeType.ModuleDeclaration : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.ModuleDeclaration : any
 >NodeType : any
@@ -2169,7 +2169,7 @@ module TypeScript {
                 var prevModDecl = <ModuleDeclaration>ast;
 >prevModDecl : ModuleDeclaration
 ><ModuleDeclaration>ast : ModuleDeclaration
->ast : AST
+>ast : any
 
                 popAssignScope(context);
 >popAssignScope(context) : void
@@ -2177,12 +2177,12 @@ module TypeScript {
 >context : AssignScopeContext
 
                 context.modDeclChain.pop();
->context.modDeclChain.pop() : ModuleDeclaration
->context.modDeclChain.pop : () => ModuleDeclaration
+>context.modDeclChain.pop() : any
+>context.modDeclChain.pop : () => any
 >context.modDeclChain : ModuleDeclaration[]
 >context : AssignScopeContext
 >modDeclChain : ModuleDeclaration[]
->pop : () => ModuleDeclaration
+>pop : () => any
 
                 if (context.modDeclChain.length >= 1) {
 >context.modDeclChain.length >= 1 : boolean
@@ -2218,7 +2218,7 @@ module TypeScript {
             else if (ast.nodeType == NodeType.ClassDeclaration) {
 >ast.nodeType == NodeType.ClassDeclaration : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.ClassDeclaration : any
 >NodeType : any
@@ -2232,7 +2232,7 @@ module TypeScript {
             else if (ast.nodeType == NodeType.InterfaceDeclaration) {
 >ast.nodeType == NodeType.InterfaceDeclaration : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.InterfaceDeclaration : any
 >NodeType : any
@@ -2246,7 +2246,7 @@ module TypeScript {
             else if (ast.nodeType == NodeType.With) {
 >ast.nodeType == NodeType.With : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.With : any
 >NodeType : any
@@ -2260,7 +2260,7 @@ module TypeScript {
             else if (ast.nodeType == NodeType.FuncDecl) {
 >ast.nodeType == NodeType.FuncDecl : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.FuncDecl : any
 >NodeType : any
@@ -2269,10 +2269,10 @@ module TypeScript {
                 var funcDecl = <FuncDecl>ast;
 >funcDecl : FuncDecl
 ><FuncDecl>ast : FuncDecl
->ast : AST
+>ast : any
 
                 if ((!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) && !funcDecl.isOverload) {
->(!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) && !funcDecl.isOverload : boolean
+>(!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) && !funcDecl.isOverload : any
 >(!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) : any
 >!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
 >!funcDecl.isConstructor : boolean
@@ -2301,7 +2301,7 @@ module TypeScript {
             else if (ast.nodeType == NodeType.Catch) {
 >ast.nodeType == NodeType.Catch : boolean
 >ast.nodeType : any
->ast : AST
+>ast : any
 >nodeType : any
 >NodeType.Catch : any
 >NodeType : any
@@ -2310,7 +2310,7 @@ module TypeScript {
                 var catchBlock = <Catch>ast;
 >catchBlock : Catch
 ><Catch>ast : Catch
->ast : AST
+>ast : any
 
                 if (catchBlock.param) {
 >catchBlock.param : any

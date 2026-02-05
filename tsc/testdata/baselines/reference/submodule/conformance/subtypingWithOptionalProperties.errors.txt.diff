@@ -1,0 +1,11 @@
+--- old.subtypingWithOptionalProperties.errors.txt
++++ new.subtypingWithOptionalProperties.errors.txt
+@@= skipped -8, +8 lines =@@
+         var b: { s?: number } = a;
+             ~
+ !!! error TS2322: Type 'T' is not assignable to type '{ s?: number | undefined; }'.
+-!!! related TS2208 subtypingWithOptionalProperties.ts:4:12: This type parameter might need an `extends { s?: number; }` constraint.
++!!! related TS2208 subtypingWithOptionalProperties.ts:4:12: This type parameter might need an `extends { s?: number | undefined; }` constraint.
+         return b;
+     }
+     

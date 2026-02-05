@@ -1,13 +1,16 @@
 undefinedTypeAssignment4.ts(1,7): error TS2414: Class name cannot be 'undefined'.
+undefinedTypeAssignment4.ts(2,2): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 undefinedTypeAssignment4.ts(4,11): error TS2427: Interface name cannot be 'undefined'.
 undefinedTypeAssignment4.ts(7,11): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
 
 
-==== undefinedTypeAssignment4.ts (3 errors) ====
+==== undefinedTypeAssignment4.ts (4 errors) ====
     class undefined {
           ~~~~~~~~~
 !!! error TS2414: Class name cannot be 'undefined'.
     	foo: string;
+    	~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     interface undefined {
               ~~~~~~~~~

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/thisAssignmentInNamespaceDeclaration1.ts] ////
 
 === a.js ===
-module foo {
+namespace foo {
 >foo : Symbol(foo, Decl(a.js, 0, 0))
 
     this.bar = 4;

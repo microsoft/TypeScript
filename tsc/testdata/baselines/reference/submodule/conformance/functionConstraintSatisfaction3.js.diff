@@ -1,6 +1,6 @@
 --- old.functionConstraintSatisfaction3.js
 +++ new.functionConstraintSatisfaction3.js
-@@= skipped -47, +47 lines =@@
+@@= skipped -48, +48 lines =@@
  function foo(x) { return x; }
  var i;
  class C {

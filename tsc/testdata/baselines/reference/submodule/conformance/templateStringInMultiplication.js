@@ -4,4 +4,5 @@
 var x = 1 * `abc${ 1 }def`;
 
 //// [templateStringInMultiplication.js]
+"use strict";
 var x = 1 * `abc${1}def`;

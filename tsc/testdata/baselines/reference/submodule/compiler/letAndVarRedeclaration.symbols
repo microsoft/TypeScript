@@ -38,7 +38,7 @@ function f1() {
     }
 }
 
-module M0 {
+namespace M0 {
 >M0 : Symbol(M0, Decl(letAndVarRedeclaration.ts, 18, 1))
 
     let x2;
@@ -51,7 +51,7 @@ module M0 {
 >x2 : Symbol(x2, Decl(letAndVarRedeclaration.ts, 22, 11))
 }
 
-module M1 {
+namespace M1 {
 >M1 : Symbol(M1, Decl(letAndVarRedeclaration.ts, 24, 1))
 
     let x2;
@@ -84,7 +84,7 @@ function f2() {
     }
 }
 
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(letAndVarRedeclaration.ts, 44, 1))
 
     let x11;

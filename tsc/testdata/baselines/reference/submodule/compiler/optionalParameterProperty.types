@@ -4,8 +4,9 @@
 class C {
 >C : C
 
-    p: number;
+    p: number = 0;
 >p : number
+>0 : 0
 }
 
 class D extends C { 

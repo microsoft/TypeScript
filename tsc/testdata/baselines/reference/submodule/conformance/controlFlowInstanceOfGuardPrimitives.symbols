@@ -4,7 +4,7 @@
 function distinguish(thing: string | number | Date) {
 >distinguish : Symbol(distinguish, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 0))
 >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     if (thing instanceof Object) {
 >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
@@ -42,7 +42,7 @@ function distinguish(thing: string | number | Date) {
 
 distinguish(new Date());
 >distinguish : Symbol(distinguish, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 distinguish("beef");
 >distinguish : Symbol(distinguish, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 0))

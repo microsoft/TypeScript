@@ -28,7 +28,7 @@ const f20: () => undefined = () => {
 const f21: () => undefined | number = () => {
 >f21 : Symbol(f21, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 16, 5))
 
-    // Error, regular void function because contextual type for implicit return isn't just undefined
+    // Ok, contextual type for implicit return contains undefined
 }
 
 const f22: () => number = () => {
@@ -91,4 +91,32 @@ function h2(): undefined {
 f(h2);
 >f : Symbol(f, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 34, 1))
 >h2 : Symbol(h2, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 51, 6))
+
+// https://github.com/microsoft/TypeScript/issues/57840
+
+type FN = () => Promise<undefined> | undefined;
+>FN : Symbol(FN, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 56, 6))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+const fn1: FN = () => {
+>fn1 : Symbol(fn1, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 62, 5))
+>FN : Symbol(FN, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 56, 6))
+
+    return;
+};
+
+const fn2: FN = async () => {
+>fn2 : Symbol(fn2, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 66, 5))
+>FN : Symbol(FN, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 56, 6))
+
+    return;
+};
+
+const fn3: FN = () => {};
+>fn3 : Symbol(fn3, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 70, 5))
+>FN : Symbol(FN, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 56, 6))
+
+const fn4: FN = async () => {};
+>fn4 : Symbol(fn4, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 72, 5))
+>FN : Symbol(FN, Decl(functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts, 56, 6))
 

@@ -18,47 +18,47 @@ class B extends X { propertyB: string };
 >X : Symbol(X, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 0, 0))
 >propertyB : Symbol(B.propertyB, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 3, 19))
 
-var x: X;
->x : Symbol(x, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 5, 3))
+declare var x: X;
+>x : Symbol(x, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 5, 11))
 >X : Symbol(X, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 0, 0))
 
-var a: A;
->a : Symbol(a, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 6, 3))
+declare var a: A;
+>a : Symbol(a, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 6, 11))
 >A : Symbol(A, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 1, 67))
 
-var b: B;
->b : Symbol(b, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 7, 3))
+declare var b: B;
+>b : Symbol(b, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 7, 11))
 >B : Symbol(B, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 2, 40))
 
 // No errors anymore, uses union types
 true ? a : b;
->a : Symbol(a, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 6, 3))
->b : Symbol(b, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 7, 3))
+>a : Symbol(a, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 6, 11))
+>b : Symbol(b, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 7, 11))
 
 var result1 = true ? a : b;
 >result1 : Symbol(result1, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 11, 3))
->a : Symbol(a, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 6, 3))
->b : Symbol(b, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 7, 3))
+>a : Symbol(a, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 6, 11))
+>b : Symbol(b, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 7, 11))
 
 //Be contextually typed and and bct is not identical, results in errors that union type is not assignable to target
 var result2: A = true ? a : b;
 >result2 : Symbol(result2, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 14, 3))
 >A : Symbol(A, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 1, 67))
->a : Symbol(a, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 6, 3))
->b : Symbol(b, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 7, 3))
+>a : Symbol(a, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 6, 11))
+>b : Symbol(b, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 7, 11))
 
 var result3: B = true ? a : b;
 >result3 : Symbol(result3, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 15, 3))
 >B : Symbol(B, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 2, 40))
->a : Symbol(a, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 6, 3))
->b : Symbol(b, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 7, 3))
+>a : Symbol(a, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 6, 11))
+>b : Symbol(b, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 7, 11))
 
 var result31: A | B = true ? a : b;
 >result31 : Symbol(result31, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 16, 3))
 >A : Symbol(A, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 1, 67))
 >B : Symbol(B, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 2, 40))
->a : Symbol(a, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 6, 3))
->b : Symbol(b, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 7, 3))
+>a : Symbol(a, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 6, 11))
+>b : Symbol(b, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 7, 11))
 
 var result4: (t: X) => number = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 >result4 : Symbol(result4, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 18, 3))

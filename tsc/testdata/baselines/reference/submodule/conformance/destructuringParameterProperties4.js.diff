@@ -1,8 +1,8 @@
 --- old.destructuringParameterProperties4.js
 +++ new.destructuringParameterProperties4.js
-@@= skipped -29, +29 lines =@@
-
+@@= skipped -30, +30 lines =@@
  //// [destructuringParameterProperties4.js]
+ "use strict";
  class C1 {
 +    k;
      constructor(k, [a, b, c]) {

@@ -27,6 +27,7 @@ k6 = [1, ...sbb_];
 
 
 //// [spliceTuples.js]
+"use strict";
 let k1;
 k1 = [1, ...sb];
 let k2;

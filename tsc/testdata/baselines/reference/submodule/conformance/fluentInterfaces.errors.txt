@@ -1,0 +1,18 @@
+fluentInterfaces.ts(11,9): error TS2454: Variable 'c' is used before being assigned.
+
+
+==== fluentInterfaces.ts (1 errors) ====
+    interface A {
+        foo(): this;
+    }
+    interface B extends A {
+        bar(): this;
+    }
+    interface C extends B {
+        baz(): this;
+    }
+    var c: C;
+    var z = c.foo().bar().baz();  // Fluent pattern
+            ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    

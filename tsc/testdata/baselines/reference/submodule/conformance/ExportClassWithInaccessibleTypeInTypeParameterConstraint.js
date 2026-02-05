@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts] ////
 
 //// [ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts]
-module A {
+namespace A {
 
     class Point {
         x: number;
@@ -27,6 +27,7 @@ module A {
 
 
 //// [ExportClassWithInaccessibleTypeInTypeParameterConstraint.js]
+"use strict";
 var A;
 (function (A) {
     class Point {

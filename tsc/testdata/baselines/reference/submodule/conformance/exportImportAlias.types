@@ -3,7 +3,7 @@
 === exportImportAlias.ts ===
 // expect no errors here
 
-module A {
+namespace A {
 >A : typeof A
 
     export var x = 'hello world'
@@ -17,7 +17,7 @@ module A {
 >x : number
 >y : number
     }
-    export module B {
+    export namespace B {
         export interface Id {
             name: string;
 >name : string
@@ -25,7 +25,7 @@ module A {
     }
 }
 
-module C {
+namespace C {
 >C : typeof C
 
     export import a = A;
@@ -64,7 +64,7 @@ var c: C.a.B.Id;
 >a : any
 >B : any
 
-module X {
+namespace X {
 >X : typeof X
 
     export function Y() {
@@ -74,7 +74,7 @@ module X {
 >42 : 42
     }
 
-    export module Y {
+    export namespace Y {
 >Y : typeof Y
 
         export class Point {
@@ -87,7 +87,7 @@ module X {
     }
 }
 
-module Z {
+namespace Z {
 >Z : typeof Z
 
     // 'y' should be a fundule here
@@ -117,7 +117,7 @@ var n: { x: number; y: number; } = new Z.y.Point(0, 0);
 >0 : 0
 >0 : 0
 
-module K {
+namespace K {
 >K : typeof K
 
     export class L {
@@ -127,7 +127,7 @@ module K {
 >name : string
     }
 
-    export module L {
+    export namespace L {
 >L : typeof L
 
         export var y = 12;
@@ -144,7 +144,7 @@ module K {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
     export import D = K.L;

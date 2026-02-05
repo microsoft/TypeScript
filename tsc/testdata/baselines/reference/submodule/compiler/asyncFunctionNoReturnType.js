@@ -8,6 +8,7 @@ async () => {
 
 
 //// [asyncFunctionNoReturnType.js]
+"use strict";
 async () => {
     if (window)
         return;

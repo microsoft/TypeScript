@@ -6,5 +6,6 @@ for (using x in {}) {
 
 
 //// [usingDeclarationsInForIn.js]
+"use strict";
 for (using x in {}) {
 }

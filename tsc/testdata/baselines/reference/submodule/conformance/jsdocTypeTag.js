@@ -101,6 +101,7 @@ var ctor: new (s: string) => { s: string };
 
 
 //// [a.js]
+"use strict";
 /** @type {String} */
 var S;
 /** @type {string} */
@@ -150,6 +151,7 @@ var f;
 /** @type {new (s: string) => { s: string }} */
 var ctor;
 //// [b.js]
+"use strict";
 var S;
 var s;
 var N;

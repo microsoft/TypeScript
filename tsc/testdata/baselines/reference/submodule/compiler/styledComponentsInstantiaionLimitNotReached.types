@@ -258,10 +258,10 @@ export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
 
 type WithOptionalTheme<P extends { theme?: T }, T> = Omit<P, 'theme'> & {
 >WithOptionalTheme : WithOptionalTheme<P, T>
->theme : T
+>theme : T | undefined
 
     theme?: T;
->theme : T
+>theme : T | undefined
 
 };
 
@@ -283,8 +283,8 @@ type StyledComponentPropsWithAs<
 >React : any
 
     > = StyledComponentProps<C, T, O, A> & { as?: C; forwardedAs?: F };
->as : C
->forwardedAs : F
+>as : C | undefined
+>forwardedAs : F | undefined
 
 export type StyledComponentInnerOtherProps<C extends AnyStyledComponent> = C extends StyledComponent<
 >StyledComponentInnerOtherProps : StyledComponentInnerOtherProps<C>
@@ -314,9 +314,9 @@ export interface StyledComponentBase<
     > extends ForwardRefExoticBase<StyledComponentProps<C, T, O, A>> {
     // add our own fake call signature to implement the polymorphic 'as' prop
     (props: StyledComponentProps<C, T, O, A> & { as?: never; forwardedAs?: never }): React.ReactElement<
->props : StyledComponentProps<C, T, O, A> & { as?: never; forwardedAs?: never; }
->as : never
->forwardedAs : never
+>props : StyledComponentProps<C, T, O, A> & { as?: undefined; forwardedAs?: undefined; }
+>as : undefined
+>forwardedAs : undefined
 >React : any
 
         StyledComponentProps<C, T, O, A>

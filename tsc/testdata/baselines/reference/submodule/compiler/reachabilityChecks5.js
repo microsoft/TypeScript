@@ -131,6 +131,7 @@ function f11(x): number {
 }
 
 //// [reachabilityChecks5.js]
+"use strict";
 function f0(x) {
     while (true)
         ;

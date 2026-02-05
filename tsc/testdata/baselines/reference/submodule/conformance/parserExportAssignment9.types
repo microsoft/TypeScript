@@ -8,7 +8,7 @@ namespace Foo {
 >foo : any
 }
 
-module Bar {
+namespace Bar {
 >Bar : typeof Bar
 
   export default bar;

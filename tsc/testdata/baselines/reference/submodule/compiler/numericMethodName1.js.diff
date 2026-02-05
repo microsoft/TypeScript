@@ -1,8 +1,8 @@
 --- old.numericMethodName1.js
 +++ new.numericMethodName1.js
-@@= skipped -7, +7 lines =@@
-
+@@= skipped -8, +8 lines =@@
  //// [numericMethodName1.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this[1] = 2;

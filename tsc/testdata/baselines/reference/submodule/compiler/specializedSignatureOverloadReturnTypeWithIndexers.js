@@ -19,3 +19,4 @@ interface D {
 }
 
 //// [specializedSignatureOverloadReturnTypeWithIndexers.js]
+"use strict";

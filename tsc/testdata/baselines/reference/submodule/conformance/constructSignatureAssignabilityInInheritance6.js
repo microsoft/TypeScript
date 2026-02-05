@@ -53,6 +53,7 @@ interface I9<T> extends A {
 }
 
 //// [constructSignatureAssignabilityInInheritance6.js]
+"use strict";
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // same as subtypingWithConstructSignatures4 but using class type parameters instead of generic signatures
 // all are errors

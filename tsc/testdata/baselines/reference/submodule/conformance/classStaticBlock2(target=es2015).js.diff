@@ -1,6 +1,6 @@
 --- old.classStaticBlock2(target=es2015).js
 +++ new.classStaticBlock2(target=es2015).js
-@@= skipped -24, +24 lines =@@
+@@= skipped -25, +25 lines =@@
  const a = 1;
  const b = 2;
  class C {

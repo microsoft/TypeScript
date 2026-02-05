@@ -1,8 +1,8 @@
 --- old.setterBeforeGetter.js
 +++ new.setterBeforeGetter.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [setterBeforeGetter.js]
+ "use strict";
  class Foo {
 +    _bar;
      // should not be an error to order them this way

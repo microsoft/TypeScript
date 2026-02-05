@@ -39,7 +39,7 @@ Output::
 
 Found 1 error in src/main.ts[90m:2[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -93,7 +93,7 @@ declare const console: { log(msg: any): void; };
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
 *refresh*    /user/username/projects/noEmitOnError/src/other.ts
@@ -125,7 +125,7 @@ Found 1 error in src/main.ts[90m:2[0m
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
 *refresh*    /user/username/projects/noEmitOnError/src/other.ts
@@ -153,24 +153,21 @@ export interface A {
 }
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts] *new* 
 export {};
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const a = "hello";
+export {};
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.d.ts] *new* 
 export {};
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 console.log("hi");
+export {};
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] *modified* 
 {"version":"FakeTSVersion","root":["../shared/types/db.ts","../src/main.ts","../src/other.ts"]}
@@ -202,7 +199,7 @@ console.log("hi");
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /user/username/projects/noEmitOnError/shared/types/db.ts
 *refresh*    /user/username/projects/noEmitOnError/src/main.ts
 *refresh*    /user/username/projects/noEmitOnError/src/other.ts

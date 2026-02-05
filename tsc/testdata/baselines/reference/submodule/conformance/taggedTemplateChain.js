@@ -7,5 +7,6 @@ a?.`b`;
 a?.`b${1}c`;
 
 //// [taggedTemplateChain.js]
+"use strict";
 a `b`;
 a `b${1}c`;

@@ -6,5 +6,6 @@ wrap(({ cancelable } = {}) => {});
 
 
 //// [inferredRestTypeFixedOnce.js]
+"use strict";
 function wrap(_) { }
 wrap(({ cancelable } = {}) => { });

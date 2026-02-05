@@ -7,4 +7,5 @@
 
 
 //// [parserSkippedTokens10.js]
+"use strict";
 /*existing trivia*/ ;

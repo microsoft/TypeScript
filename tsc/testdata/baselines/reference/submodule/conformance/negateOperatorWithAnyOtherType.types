@@ -33,12 +33,12 @@ function foo(): any {
 >a : any
 
     return a;
->a : any
+>a : undefined
 }
 class A {
 >A : A
 
-    public a: any;
+    public a!: any;
 >a : any
 
     static foo(): any {
@@ -48,10 +48,10 @@ class A {
 >a : any
 
         return a;
->a : any
+>a : undefined
     }
 }
-module M {
+namespace M {
 >M : typeof M
 
     export var n: any;

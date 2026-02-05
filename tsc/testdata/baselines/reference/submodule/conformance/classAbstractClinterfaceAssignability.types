@@ -16,7 +16,7 @@ interface IConstructor {
 >prototype : I
 }
 
-var I: IConstructor;
+declare var I: IConstructor;
 >I : IConstructor
 
 abstract class A {
@@ -29,7 +29,7 @@ abstract class A {
 >y : number
 }
 
-var AA: typeof A;
+declare var AA: typeof A;
 >AA : typeof A
 >A : typeof A
 
@@ -38,7 +38,7 @@ AA = I;
 >AA : typeof A
 >I : IConstructor
 
-var AAA: typeof I;
+declare var AAA: typeof I;
 >AAA : IConstructor
 >I : IConstructor
 

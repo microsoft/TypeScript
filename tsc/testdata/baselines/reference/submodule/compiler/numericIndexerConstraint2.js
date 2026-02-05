@@ -2,14 +2,14 @@
 
 //// [numericIndexerConstraint2.ts]
 class Foo { foo() { } }
-var x: { [index: string]: Foo; };
-var a: { one: number; };
+declare var x: { [index: string]: Foo; };
+var a: { one: number; } = { one: 1 };
 x = a;
 
 //// [numericIndexerConstraint2.js]
+"use strict";
 class Foo {
     foo() { }
 }
-var x;
-var a;
+var a = { one: 1 };
 x = a;

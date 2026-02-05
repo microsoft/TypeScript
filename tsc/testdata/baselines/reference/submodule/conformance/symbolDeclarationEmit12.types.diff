@@ -14,7 +14,7 @@
          }
          get [Symbol.toPrimitive]() { return undefined; }
 ->[Symbol.toPrimitive] : I
-+>[Symbol.toPrimitive] : any
++>[Symbol.toPrimitive] : undefined
  >Symbol.toPrimitive : unique symbol
  >Symbol : SymbolConstructor
  >toPrimitive : unique symbol

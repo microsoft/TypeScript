@@ -7,34 +7,34 @@ class C1 {
     [index: string]: string
 >index : string
 
-    one: string;
+    one!: string;
 >one : string
 }
 
 class C2 {
 >C2 : C2
 
-    one: string;
+    one!: string;
 >one : string
 }
 
 class C3 {
 >C3 : C3
 
-    one: number;
+    one!: number;
 >one : number
 
-    two: string;
+    two!: string;
 >two : string
 }
 
-var x: C1;
+declare var x: C1;
 >x : C1
 
-var a: C2;
+declare var a: C2;
 >a : C2
 
-var b: C3;
+declare var b: C3;
 >b : C3
 
 x = a;

@@ -1,48 +1,50 @@
 //// [tests/cases/conformance/jsx/checkJsxChildrenProperty15.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : Symbol(React, Decl(file.tsx, 0, 0))
 
 const Tag = (x: {}) => <div></div>;
->Tag : Symbol(Tag, Decl(file.tsx, 2, 5))
->x : Symbol(x, Decl(file.tsx, 2, 13))
+>Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
+>x : Symbol(x, Decl(file.tsx, 4, 13))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
 // OK
 const k1 = <Tag />;
->k1 : Symbol(k1, Decl(file.tsx, 5, 5))
->Tag : Symbol(Tag, Decl(file.tsx, 2, 5))
+>k1 : Symbol(k1, Decl(file.tsx, 7, 5))
+>Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
 
 const k2 = <Tag></Tag>;
->k2 : Symbol(k2, Decl(file.tsx, 6, 5))
->Tag : Symbol(Tag, Decl(file.tsx, 2, 5))
->Tag : Symbol(Tag, Decl(file.tsx, 2, 5))
+>k2 : Symbol(k2, Decl(file.tsx, 8, 5))
+>Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
+>Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
 
 // Not OK (excess children)
 const k3 = <Tag children={<div></div>} />;
->k3 : Symbol(k3, Decl(file.tsx, 9, 5))
->Tag : Symbol(Tag, Decl(file.tsx, 2, 5))
->children : Symbol(children, Decl(file.tsx, 9, 15))
+>k3 : Symbol(k3, Decl(file.tsx, 11, 5))
+>Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
+>children : Symbol(children, Decl(file.tsx, 11, 15))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
 const k4 = <Tag key="1"><div></div></Tag>;
->k4 : Symbol(k4, Decl(file.tsx, 10, 5))
->Tag : Symbol(Tag, Decl(file.tsx, 2, 5))
->key : Symbol(key, Decl(file.tsx, 10, 15))
+>k4 : Symbol(k4, Decl(file.tsx, 12, 5))
+>Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
+>key : Symbol(key, Decl(file.tsx, 12, 15))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->Tag : Symbol(Tag, Decl(file.tsx, 2, 5))
+>Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
 
 const k5 = <Tag key="1"><div></div><div></div></Tag>;
->k5 : Symbol(k5, Decl(file.tsx, 11, 5))
->Tag : Symbol(Tag, Decl(file.tsx, 2, 5))
->key : Symbol(key, Decl(file.tsx, 11, 15))
+>k5 : Symbol(k5, Decl(file.tsx, 13, 5))
+>Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
+>key : Symbol(key, Decl(file.tsx, 13, 15))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->Tag : Symbol(Tag, Decl(file.tsx, 2, 5))
+>Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
 

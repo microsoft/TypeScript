@@ -5,5 +5,6 @@ class C<T extends List<T>> {
 }
 
 //// [parserGenericConstraint3.js]
+"use strict";
 class C {
 }

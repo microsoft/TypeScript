@@ -10,5 +10,6 @@ $.foo();
 
 
 //// [consumer.js]
+"use strict";
 /// <reference types="jquery" />
 $.foo();

@@ -10,6 +10,7 @@ s || 1;
 ({}) || s;
 
 //// [symbolType11.js]
+"use strict";
 var s = Symbol.for("logical");
 s && s;
 s && [];

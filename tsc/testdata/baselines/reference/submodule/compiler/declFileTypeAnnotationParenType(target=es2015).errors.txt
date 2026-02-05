@@ -1,0 +1,21 @@
+declFileTypeAnnotationParenType.ts(2,13): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+declFileTypeAnnotationParenType.ts(8,29): error TS2872: This kind of expression is always truthy.
+declFileTypeAnnotationParenType.ts(9,9): error TS2872: This kind of expression is always truthy.
+
+
+==== declFileTypeAnnotationParenType.ts (3 errors) ====
+    class c {
+        private p: string;
+                ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var x: (() => c)[] = [() => new c()];
+    var y = [() => new c()];
+    
+    var k: (() => c) | string = (() => new c()) || "";
+                                ~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    var l = (() => new c()) || "";
+            ~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.

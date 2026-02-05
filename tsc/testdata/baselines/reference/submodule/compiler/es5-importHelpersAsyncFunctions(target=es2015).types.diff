@@ -1,0 +1,11 @@
+--- old.es5-importHelpersAsyncFunctions(target=es2015).types
++++ new.es5-importHelpersAsyncFunctions(target=es2015).types
+@@= skipped -21, +21 lines =@@
+ >sources : any[]
+
+ export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
+->__decorate : (decorators: Function[], target: any, key?: string | symbol, desc?: any) => any
++>__decorate : (decorators: Function[], target: any, key?: string | symbol | undefined, desc?: any) => any
+ >decorators : Function[]
+ >target : any
+ >key : string | symbol | undefined

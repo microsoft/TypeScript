@@ -4,4 +4,5 @@
 eval++;
 
 //// [parserStrictMode6-negative.js]
+"use strict";
 eval++;

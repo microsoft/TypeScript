@@ -21,12 +21,12 @@ declare let opts:
 
 opts.objectRef || opts.getObjectRef();
 >opts.objectRef || opts.getObjectRef() : any
->opts.objectRef : A | B
+>opts.objectRef : A | B | undefined
 >opts : { objectRef?: undefined; getObjectRef: () => any; } | { objectRef: A | B; getObjectRef?: undefined; }
->objectRef : A | B
+>objectRef : A | B | undefined
 >opts.getObjectRef() : any
 >opts.getObjectRef : () => any
->opts : { objectRef?: undefined; getObjectRef: () => any; } | { objectRef: A | B; getObjectRef?: undefined; }
+>opts : { objectRef?: undefined; getObjectRef: () => any; }
 >getObjectRef : () => any
 
 // repro #49643 issuecomment-1174455723
@@ -60,16 +60,16 @@ const testMethod = (m: A2 | B2) => {
 >m : A2 | B2
 
     if (m.error) {
->m.error : X | Y
+>m.error : X | Y | undefined
 >m : A2 | B2
->error : X | Y
+>error : X | Y | undefined
 
         m; // should be A2 | B2
->m : A2 | B2
+>m : B2
 
     } else {
         m; // should be A2 | B2
->m : A2 | B2
+>m : A2
     }
 }
 

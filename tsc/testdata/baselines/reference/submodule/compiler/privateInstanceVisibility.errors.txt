@@ -1,0 +1,47 @@
+privateInstanceVisibility.ts(5,17): error TS2564: Property 'someNumber' has no initializer and is not definitely assigned in the constructor.
+privateInstanceVisibility.ts(29,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== privateInstanceVisibility.ts (2 errors) ====
+    namespace Test {
+     
+        export class Example {
+     
+            private someNumber: number;
+                    ~~~~~~~~~~
+!!! error TS2564: Property 'someNumber' has no initializer and is not definitely assigned in the constructor.
+     
+            
+    
+            public doSomething() {
+     
+                var that = this;                      
+    
+                function innerFunction() {
+                    
+                    var num = that.someNumber;
+     
+                }
+     
+            }        
+    
+        }
+     
+    }
+    
+    
+    
+    class C {
+    
+        private x: number;
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    
+        getX() { return this.x; }
+    
+        clone(other: C) {
+            this.x = other.x;
+    
+        }
+    }
+    

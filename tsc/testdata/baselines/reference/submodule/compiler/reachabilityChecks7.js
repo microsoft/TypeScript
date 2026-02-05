@@ -32,6 +32,7 @@ declare function use(s: string): void;
 let x1 = () => { use("Test"); }
 
 //// [reachabilityChecks7.js]
+"use strict";
 // async function without return type annotation - error
 async function f1() {
 }

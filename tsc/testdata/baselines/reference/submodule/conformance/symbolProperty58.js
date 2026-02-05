@@ -10,6 +10,7 @@ var obj = {
 }
 
 //// [symbolProperty58.js]
+"use strict";
 var obj = {
     [Symbol.foo]: 0
 };

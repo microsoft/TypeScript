@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxReactEmit5.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -20,6 +20,7 @@ var spread1 = <div x='' {...foo} y='' />;
 
 
 //// [file.js]
+"use strict";
 //// [react-consumer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

@@ -1,9 +1,9 @@
 --- old.emitter.forAwait(target=es2017).js
 +++ new.emitter.forAwait(target=es2017).js
-@@= skipped -50, +50 lines =@@
- }
+@@= skipped -51, +51 lines =@@
 
  //// [file1.js]
+ "use strict";
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;
@@ -31,6 +31,7 @@
      }
  }
  //// [file2.js]
+ "use strict";
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;
@@ -58,6 +59,7 @@
      }
  }
  //// [file3.js]
+ "use strict";
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;
@@ -103,6 +105,7 @@
 +    }
  }
  //// [file4.js]
+ "use strict";
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;
@@ -148,6 +151,7 @@
 +    }
  }
  //// [file5.js]
+ "use strict";
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;
@@ -178,6 +182,7 @@
      }
  }
  //// [file6.js]
+ "use strict";
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;
@@ -226,6 +231,7 @@
 +    }
  }
  //// [file7.js]
+ "use strict";
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;

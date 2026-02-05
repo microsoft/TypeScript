@@ -7,6 +7,7 @@
 void 0;
 
 //// [tripleSlashInCommentNotParsed.js]
+"use strict";
 /*
 /// <reference path="non-existing-file.d.ts" />
 */

@@ -1,6 +1,6 @@
 --- old.generatorTypeCheck39.js
 +++ new.generatorTypeCheck39.js
-@@= skipped -22, +22 lines =@@
+@@= skipped -23, +23 lines =@@
  }
  function* g() {
      let C = class C {

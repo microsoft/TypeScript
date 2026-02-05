@@ -1,0 +1,114 @@
+everyTypeAssignableToAny.ts(4,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+everyTypeAssignableToAny.ts(32,5): error TS2454: Variable 'b' is used before being assigned.
+everyTypeAssignableToAny.ts(33,5): error TS2454: Variable 'c' is used before being assigned.
+everyTypeAssignableToAny.ts(34,5): error TS2454: Variable 'd' is used before being assigned.
+everyTypeAssignableToAny.ts(35,5): error TS2454: Variable 'e' is used before being assigned.
+everyTypeAssignableToAny.ts(38,5): error TS2454: Variable 'h' is used before being assigned.
+everyTypeAssignableToAny.ts(39,5): error TS2454: Variable 'i' is used before being assigned.
+everyTypeAssignableToAny.ts(40,5): error TS2454: Variable 'j' is used before being assigned.
+everyTypeAssignableToAny.ts(41,5): error TS2454: Variable 'k' is used before being assigned.
+everyTypeAssignableToAny.ts(42,5): error TS2454: Variable 'l' is used before being assigned.
+everyTypeAssignableToAny.ts(43,5): error TS2454: Variable 'm' is used before being assigned.
+everyTypeAssignableToAny.ts(44,5): error TS2454: Variable 'o' is used before being assigned.
+everyTypeAssignableToAny.ts(45,5): error TS2454: Variable 'p' is used before being assigned.
+everyTypeAssignableToAny.ts(46,5): error TS2454: Variable 'q' is used before being assigned.
+everyTypeAssignableToAny.ts(47,5): error TS2454: Variable 'ac' is used before being assigned.
+everyTypeAssignableToAny.ts(48,5): error TS2454: Variable 'ai' is used before being assigned.
+everyTypeAssignableToAny.ts(49,5): error TS2454: Variable 'ae' is used before being assigned.
+
+
+==== everyTypeAssignableToAny.ts (17 errors) ====
+    var a: any;
+    
+    class C {
+        foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    var ac: C;
+    interface I {
+        foo: string;
+    }
+    var ai: I;
+    
+    enum E { A }
+    var ae: E;
+    
+    var b: number;
+    var c: string;
+    var d: boolean;
+    var e: Date;
+    var f: any;
+    var g: void;
+    var h: Object;
+    var i: {};
+    var j: () => {};
+    var k: Function;
+    var l: (x: number) => string;
+    var m: number[];
+    var n: { foo: string };
+    var o: <T>(x: T) => T;
+    var p: Number;
+    var q: String;
+    
+    a = b;
+        ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    a = c;
+        ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    a = d;
+        ~
+!!! error TS2454: Variable 'd' is used before being assigned.
+    a = e;
+        ~
+!!! error TS2454: Variable 'e' is used before being assigned.
+    a = f;
+    a = g;
+    a = h;
+        ~
+!!! error TS2454: Variable 'h' is used before being assigned.
+    a = i;
+        ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    a = j;
+        ~
+!!! error TS2454: Variable 'j' is used before being assigned.
+    a = k;
+        ~
+!!! error TS2454: Variable 'k' is used before being assigned.
+    a = l;
+        ~
+!!! error TS2454: Variable 'l' is used before being assigned.
+    a = m;
+        ~
+!!! error TS2454: Variable 'm' is used before being assigned.
+    a = o;
+        ~
+!!! error TS2454: Variable 'o' is used before being assigned.
+    a = p; 
+        ~
+!!! error TS2454: Variable 'p' is used before being assigned.
+    a = q;
+        ~
+!!! error TS2454: Variable 'q' is used before being assigned.
+    a = ac;
+        ~~
+!!! error TS2454: Variable 'ac' is used before being assigned.
+    a = ai;
+        ~~
+!!! error TS2454: Variable 'ai' is used before being assigned.
+    a = ae;
+        ~~
+!!! error TS2454: Variable 'ae' is used before being assigned.
+    
+    function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
+        a = x;
+        a = y;
+        a = z;
+    }
+    //function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
+    //    a = x;
+    //    a = y;
+    //    a = z;
+    //}

@@ -22,6 +22,7 @@ var z1: string | typeof BC;
 
 
 //// [unionTypeEquivalence.js]
+"use strict";
 // A | B is equivalent to A if B is a subtype of A
 class C {
 }

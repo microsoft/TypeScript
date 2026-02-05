@@ -1,6 +1,6 @@
 --- old.constructorArgs.js
 +++ new.constructorArgs.js
-@@= skipped -22, +22 lines =@@
+@@= skipped -23, +23 lines =@@
      }
  }
  class Sub extends Super {

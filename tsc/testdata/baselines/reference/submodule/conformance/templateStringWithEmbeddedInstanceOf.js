@@ -4,4 +4,5 @@
 var x = `abc${ "hello" instanceof String }def`;
 
 //// [templateStringWithEmbeddedInstanceOf.js]
+"use strict";
 var x = `abc${"hello" instanceof String}def`;

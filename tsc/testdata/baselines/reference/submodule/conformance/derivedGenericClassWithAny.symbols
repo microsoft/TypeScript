@@ -76,29 +76,29 @@ class E<T extends string> extends D {
     }
 }
 
-var c: C<number>;
->c : Symbol(c, Decl(derivedGenericClassWithAny.ts, 35, 3))
+declare var c: C<number>;
+>c : Symbol(c, Decl(derivedGenericClassWithAny.ts, 35, 11))
 >C : Symbol(C, Decl(derivedGenericClassWithAny.ts, 0, 0))
 
-var d: D;
->d : Symbol(d, Decl(derivedGenericClassWithAny.ts, 36, 3))
+declare var d: D;
+>d : Symbol(d, Decl(derivedGenericClassWithAny.ts, 36, 11))
 >D : Symbol(D, Decl(derivedGenericClassWithAny.ts, 6, 1))
 
-var e: E<string>;
->e : Symbol(e, Decl(derivedGenericClassWithAny.ts, 37, 3))
+declare var e: E<string>;
+>e : Symbol(e, Decl(derivedGenericClassWithAny.ts, 37, 11))
 >E : Symbol(E, Decl(derivedGenericClassWithAny.ts, 24, 1))
 
 c = d;
->c : Symbol(c, Decl(derivedGenericClassWithAny.ts, 35, 3))
->d : Symbol(d, Decl(derivedGenericClassWithAny.ts, 36, 3))
+>c : Symbol(c, Decl(derivedGenericClassWithAny.ts, 35, 11))
+>d : Symbol(d, Decl(derivedGenericClassWithAny.ts, 36, 11))
 
 c = e;
->c : Symbol(c, Decl(derivedGenericClassWithAny.ts, 35, 3))
->e : Symbol(e, Decl(derivedGenericClassWithAny.ts, 37, 3))
+>c : Symbol(c, Decl(derivedGenericClassWithAny.ts, 35, 11))
+>e : Symbol(e, Decl(derivedGenericClassWithAny.ts, 37, 11))
 
 var r = c.foo(); // e.foo would return string
 >r : Symbol(r, Decl(derivedGenericClassWithAny.ts, 41, 3))
 >c.foo : Symbol(C.foo, Decl(derivedGenericClassWithAny.ts, 2, 31))
->c : Symbol(c, Decl(derivedGenericClassWithAny.ts, 35, 3))
+>c : Symbol(c, Decl(derivedGenericClassWithAny.ts, 35, 11))
 >foo : Symbol(C.foo, Decl(derivedGenericClassWithAny.ts, 2, 31))
 

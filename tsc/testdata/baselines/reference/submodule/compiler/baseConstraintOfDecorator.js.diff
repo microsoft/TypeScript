@@ -1,10 +1,10 @@
 --- old.baseConstraintOfDecorator.js
 +++ new.baseConstraintOfDecorator.js
-@@= skipped -34, +34 lines =@@
+@@= skipped -30, +30 lines =@@
      };
  }
  class MyClass {
 +    x;
  }
- function classExtender2(superClass, _instanceModifier) {
+ export function classExtender2(superClass, _instanceModifier) {
      return class decoratorFunc extends superClass {

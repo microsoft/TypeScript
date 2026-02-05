@@ -1,7 +1,7 @@
 --- old.ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.js
 +++ new.ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.js
-@@= skipped -53, +53 lines =@@
- //// [ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.js]
+@@= skipped -54, +54 lines =@@
+ "use strict";
  // all expected to be errors
  class clodule1 {
 +    id;

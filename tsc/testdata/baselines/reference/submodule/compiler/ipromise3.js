@@ -15,6 +15,7 @@ var p2: IPromise3<string> = p1.then(function (x) {
 
 
 //// [ipromise3.js]
+"use strict";
 var p1;
 var p2 = p1.then(function (x) {
     return x;

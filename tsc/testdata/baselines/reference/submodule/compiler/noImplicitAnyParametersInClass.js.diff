@@ -1,8 +1,8 @@
 --- old.noImplicitAnyParametersInClass.js
 +++ new.noImplicitAnyParametersInClass.js
-@@= skipped -94, +94 lines =@@
-
+@@= skipped -95, +95 lines =@@
  //// [noImplicitAnyParametersInClass.js]
+ "use strict";
  class C {
 -    constructor() {
 -        // No implicit-'any' errors.

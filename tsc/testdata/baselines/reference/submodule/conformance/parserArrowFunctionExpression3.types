@@ -2,9 +2,9 @@
 
 === parserArrowFunctionExpression3.ts ===
 a = (() => { } || a)
->a = (() => { } || a : any
+>a = (() => { } || a : () => void
 >a : any
->(() => { } || a : any
+>(() => { } || a : () => void
 >(() => { } : () => void
 >() => { } : () => void
 >a : any

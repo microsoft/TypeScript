@@ -1,8 +1,8 @@
 --- old.classMemberInitializerWithLamdaScoping2.js
 +++ new.classMemberInitializerWithLamdaScoping2.js
-@@= skipped -20, +20 lines =@@
- var field1;
+@@= skipped -22, +22 lines =@@
  //// [classMemberInitializerWithLamdaScoping2_1.js]
+ "use strict";
  class Test1 {
 +    field1;
      constructor(field1) {

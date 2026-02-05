@@ -1,0 +1,32 @@
+--- old.deepExcessPropertyCheckingWhenTargetIsIntersection.types
++++ new.deepExcessPropertyCheckingWhenTargetIsIntersection.types
+@@= skipped -2, +2 lines =@@
+ === deepExcessPropertyCheckingWhenTargetIsIntersection.ts ===
+ interface StatelessComponent<P = {}> {
+   (props: P & { children?: number }, context?: any): null;
+->props : P & { children?: number; }
++>props : P & { children?: number | undefined; }
+ >children : number | undefined
+ >context : any
+ }
+  
+ const TestComponent: StatelessComponent<TestProps> = (props) => {
+ >TestComponent : StatelessComponent<TestProps>
+->(props) => {  return null;} : (props: TestProps & { children?: number; }) => null
+->props : TestProps & { children?: number; }
++>(props) => {  return null;} : (props: TestProps & { children?: number | undefined; }) => null
++>props : TestProps & { children?: number | undefined; }
+
+   return null;
+ }
+@@= skipped -45, +45 lines =@@
+ >TestComponent2 : StatelessComponent<TestProps | { props2: { x: number; }; }>
+ >props2 : { x: number; }
+ >x : number
+->(props) => {  return null;} : (props: (TestProps | { props2: { x: number; }; }) & { children?: number; }) => null
+->props : (TestProps | { props2: { x: number; }; }) & { children?: number; }
++>(props) => {  return null;} : (props: (TestProps | { props2: { x: number; }; }) & { children?: number | undefined; }) => null
++>props : (TestProps | { props2: { x: number; }; }) & { children?: number | undefined; }
+
+   return null;
+ }

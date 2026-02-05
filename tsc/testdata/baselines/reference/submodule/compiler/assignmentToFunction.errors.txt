@@ -8,7 +8,7 @@ assignmentToFunction.ts(8,9): error TS2630: Cannot assign to 'bar' because it is
     ~~
 !!! error TS2630: Cannot assign to 'fn' because it is a function.
     
-    module foo {
+    namespace foo {
         function xyz() {
             function bar() {
             }

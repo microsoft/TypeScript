@@ -1,9 +1,9 @@
 --- old.scannerClass2.js
 +++ new.scannerClass2.js
-@@= skipped -11, +11 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.LoggerAdapter = void 0;
- class LoggerAdapter {
+@@= skipped -8, +8 lines =@@
+
+ //// [scannerClass2.js]
+ export class LoggerAdapter {
 +    logger;
      constructor(logger) {
          this.logger = logger;

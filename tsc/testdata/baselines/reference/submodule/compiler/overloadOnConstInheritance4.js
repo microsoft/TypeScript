@@ -12,6 +12,7 @@ class C implements I {
 
 
 //// [overloadOnConstInheritance4.js]
+"use strict";
 class C {
     x1(a, callback) {
     }

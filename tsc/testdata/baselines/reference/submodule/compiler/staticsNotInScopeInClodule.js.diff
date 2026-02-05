@@ -1,8 +1,8 @@
 --- old.staticsNotInScopeInClodule.js
 +++ new.staticsNotInScopeInClodule.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [staticsNotInScopeInClodule.js]
+ "use strict";
  class Clod {
 +    static x = 10;
  }

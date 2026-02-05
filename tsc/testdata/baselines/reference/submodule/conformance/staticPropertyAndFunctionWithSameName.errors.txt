@@ -1,0 +1,15 @@
+staticPropertyAndFunctionWithSameName.ts(3,5): error TS2564: Property 'f' has no initializer and is not definitely assigned in the constructor.
+
+
+==== staticPropertyAndFunctionWithSameName.ts (1 errors) ====
+    class C {
+        static f: number;
+        f: number;
+        ~
+!!! error TS2564: Property 'f' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class D {
+        static f: number;
+        f() { }
+    }

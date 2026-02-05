@@ -25,7 +25,7 @@ class A {
 >foo : () => number
 >1 : 1
 }
-module M {
+namespace M {
 >M : typeof M
 
     export var n: number;

@@ -51,6 +51,7 @@ interface I31<T> extends T { x: string }
 
 
 //// [interfaceExtendsObjectIntersectionErrors.js]
+"use strict";
 class C1 extends Constructor() {
     a;
 }

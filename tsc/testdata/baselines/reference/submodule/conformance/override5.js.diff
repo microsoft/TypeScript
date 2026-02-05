@@ -1,8 +1,8 @@
 --- old.override5.js
 +++ new.override5.js
-@@= skipped -59, +59 lines =@@
-
+@@= skipped -60, +60 lines =@@
  //// [override5.js]
+ "use strict";
  class B {
 -    constructor() {
 -        this.p1 = 1;

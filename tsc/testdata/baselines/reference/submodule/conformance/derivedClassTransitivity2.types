@@ -26,18 +26,18 @@ class E extends D {
 >D : D
 
     foo(x: number, y?: string) { } // ok to add optional parameters
->foo : (x: number, y?: string) => void
+>foo : (x: number, y?: string | undefined) => void
 >x : number
->y : string
+>y : string | undefined
 }
 
-var c: C;
+declare var c: C;
 >c : C
 
-var d: D;
+declare var d: D;
 >d : D
 
-var e: E;
+declare var e: E;
 >e : E
 
 c = e;
@@ -57,9 +57,9 @@ var r = c.foo(1, 1);
 var r2 = e.foo(1, '');
 >r2 : void
 >e.foo(1, '') : void
->e.foo : (x: number, y?: string) => void
+>e.foo : (x: number, y?: string | undefined) => void
 >e : E
->foo : (x: number, y?: string) => void
+>foo : (x: number, y?: string | undefined) => void
 >1 : 1
 >'' : ""
 

@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponents1.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 function EmptyPropSFC() {
 >EmptyPropSFC : () => JSX.Element
 
@@ -22,7 +24,7 @@ function Greet(x: {name: string}) {
 >div : any
 }
 function Meet({name = 'world'}) {
->Meet : ({ name }: { name?: string; }) => JSX.Element
+>Meet : ({ name }: { name?: string | undefined; }) => JSX.Element
 >name : string
 >'world' : "world"
 
@@ -68,26 +70,26 @@ let b = <Greet naaame='world' />;
 let c = <Meet />;
 >c : JSX.Element
 ><Meet /> : JSX.Element
->Meet : ({ name }: { name?: string; }) => JSX.Element
+>Meet : ({ name }: { name?: string | undefined; }) => JSX.Element
 
 let c1 = <Meet extra-prop/>;
 >c1 : JSX.Element
 ><Meet extra-prop/> : JSX.Element
->Meet : ({ name }: { name?: string; }) => JSX.Element
+>Meet : ({ name }: { name?: string | undefined; }) => JSX.Element
 >extra-prop : true
 
 // OK
 let d = <Meet name='me' />;
 >d : JSX.Element
 ><Meet name='me' /> : JSX.Element
->Meet : ({ name }: { name?: string; }) => JSX.Element
+>Meet : ({ name }: { name?: string | undefined; }) => JSX.Element
 >name : string
 
 // Error
 let e = <Meet name={42} />;
 >e : JSX.Element
 ><Meet name={42} /> : JSX.Element
->Meet : ({ name }: { name?: string; }) => JSX.Element
+>Meet : ({ name }: { name?: string | undefined; }) => JSX.Element
 >name : number
 >42 : 42
 
@@ -95,7 +97,7 @@ let e = <Meet name={42} />;
 let f = <Meet naaaaaaame='no' />;
 >f : JSX.Element
 ><Meet naaaaaaame='no' /> : JSX.Element
->Meet : ({ name }: { name?: string; }) => JSX.Element
+>Meet : ({ name }: { name?: string | undefined; }) => JSX.Element
 >naaaaaaame : string
 
 // OK

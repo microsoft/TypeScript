@@ -6,28 +6,28 @@ class GetAndSet {
 >GetAndSet : GetAndSet
 
     getAndSet = null;             // error at "getAndSet"
->getAndSet : any
+>getAndSet : null
 
     public get haveGetAndSet() {  // this should not be an error
->haveGetAndSet : any
+>haveGetAndSet : null
 
         return this.getAndSet;
->this.getAndSet : any
+>this.getAndSet : null
 >this : this
->getAndSet : any
+>getAndSet : null
     }
     
     // this shouldn't be an error
     public set haveGetAndSet(value) {  // error at "value"
->haveGetAndSet : any
->value : any
+>haveGetAndSet : null
+>value : null
 
         this.getAndSet = value;
->this.getAndSet = value : any
->this.getAndSet : any
+>this.getAndSet = value : null
+>this.getAndSet : null
 >this : this
->getAndSet : any
->value : any
+>getAndSet : null
+>value : null
     }
 }
 
@@ -44,7 +44,7 @@ class GetterOnly {
 >GetterOnly : GetterOnly
 
     public get haveOnlyGet() {  // error at "haveOnlyGet"
->haveOnlyGet : any
+>haveOnlyGet : null
 
         return null;
     }

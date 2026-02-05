@@ -1,0 +1,9 @@
+parserES5SymbolProperty4.ts(2,13): error TS2339: Property 'isRegExp' does not exist on type 'SymbolConstructor'.
+
+
+==== parserES5SymbolProperty4.ts (1 errors) ====
+    declare class C {
+        [Symbol.isRegExp]: string;
+                ~~~~~~~~
+!!! error TS2339: Property 'isRegExp' does not exist on type 'SymbolConstructor'.
+    }

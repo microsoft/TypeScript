@@ -1,7 +1,7 @@
 --- old.mergedModuleDeclarationCodeGen2.js
 +++ new.mergedModuleDeclarationCodeGen2.js
-@@= skipped -12, +12 lines =@@
- //// [mergedModuleDeclarationCodeGen2.js]
+@@= skipped -13, +13 lines =@@
+ "use strict";
  var my;
  (function (my) {
 -    var data;

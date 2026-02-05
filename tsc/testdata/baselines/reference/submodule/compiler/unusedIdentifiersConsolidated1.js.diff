@@ -1,6 +1,6 @@
 --- old.unusedIdentifiersConsolidated1.js
 +++ new.unusedIdentifiersConsolidated1.js
-@@= skipped -107, +107 lines =@@
+@@= skipped -108, +108 lines =@@
      var unused = 20;
  }
  class Dummy {

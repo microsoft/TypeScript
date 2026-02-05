@@ -1,8 +1,8 @@
 --- old.objectTypesIdentityWithPrivates3.js
 +++ new.objectTypesIdentityWithPrivates3.js
-@@= skipped -28, +28 lines =@@
-
+@@= skipped -29, +29 lines =@@
  //// [objectTypesIdentityWithPrivates3.js]
+ "use strict";
  class C1 {
 +    x;
  }

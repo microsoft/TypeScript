@@ -1,6 +1,6 @@
 --- old.moduleElementsInWrongContext.js
 +++ new.moduleElementsInWrongContext.js
-@@= skipped -43, +43 lines =@@
+@@= skipped -44, +44 lines =@@
      export default class C {
      }
      export function bee() { }

@@ -8,4 +8,5 @@ declare function foo<T, U>(x: T, y: Int<T, U>, z: Int<U, T>): T;
 foo("", { method(p1) { return p1.length } }, { method(p2) { return undefined } });
 
 //// [inferentialTypingObjectLiteralMethod1.js]
+"use strict";
 foo("", { method(p1) { return p1.length; } }, { method(p2) { return undefined; } });

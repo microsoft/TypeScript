@@ -11,7 +11,9 @@ func TestJsDocTypeTagQuickInfo2(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @allowJs: true
+	const content = `// @lib: es5
+// @strict: true
+// @allowJs: true
 // @Filename: jsDocTypeTag2.js
 /** @type {string} */
 var /*1*/s;

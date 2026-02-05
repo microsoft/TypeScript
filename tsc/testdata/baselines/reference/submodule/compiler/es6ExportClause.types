@@ -6,7 +6,7 @@ class c {
 }
 interface i {
 }
-module m {
+namespace m {
 >m : typeof m
 
     export var x = 10;
@@ -17,7 +17,7 @@ var x = 10;
 >x : number
 >10 : 10
 
-module uninstantiated {
+namespace uninstantiated {
 }
 export { c };
 >c : typeof c

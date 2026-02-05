@@ -37,10 +37,10 @@ function f0() {
 >1 : 1
 >2 : 2
 
-    var x: number;
+    var x!: number;
 >x : number
 
-    var y: string;
+    var y!: string;
 >y : string
 }
 
@@ -68,13 +68,13 @@ function f1() {
 >z : string | number
 >a : (string | number)[]
 
-    var x: number | string;
+    var x!: number | string;
 >x : string | number
 
-    var y: number | string;
+    var y!: number | string;
 >y : string | number
 
-    var z: number | string;
+    var z!: number | string;
 >z : string | number
 }
 
@@ -113,10 +113,10 @@ function f2() {
 >y : string
 >"hello" : "hello"
 
-    var x: number;
+    var x!: number;
 >x : number
 
-    var y: string;
+    var y!: string;
 >y : string
 
     var { x: a } = { x: 5, y: "hello" };  // Error, no y in target
@@ -148,10 +148,10 @@ function f2() {
 >y : string
 >"hello" : "hello"
 
-    var a: number;
+    var a!: number;
 >a : number
 
-    var b: string;
+    var b!: string;
 >b : string
 }
 
@@ -169,13 +169,13 @@ function f3() {
 >[true] : [boolean]
 >true : true
 
-    var x: number;
+    var x!: number;
 >x : number
 
-    var y: string;
+    var y!: string;
 >y : string
 
-    var z: boolean;
+    var z!: boolean;
 >z : boolean
 }
 
@@ -203,13 +203,13 @@ function f4() {
 >a : boolean
 >true : true
 
-    var x: number;
+    var x!: number;
 >x : number
 
-    var y: string;
+    var y!: string;
 >y : string
 
-    var z: boolean;
+    var z!: boolean;
 >z : boolean
 }
 
@@ -225,10 +225,10 @@ function f6() {
 >1 : 1
 >"hello" : "hello"
 
-    var x: number;
+    var x!: number;
 >x : number
 
-    var y: string;
+    var y!: string;
 >y : string
 }
 
@@ -244,10 +244,10 @@ function f7() {
 >1 : 1
 >"hello" : "hello"
 
-    var x: number;
+    var x!: number;
 >x : number
 
-    var y: string;
+    var y!: string;
 >y : string | number
 }
 
@@ -346,10 +346,10 @@ function f11() {
 >10 : 10
 >"hello" : "hello"
 
-    var a: number;
+    var a!: number;
 >a : number
 
-    var b: string;
+    var b!: string;
 >b : string
 }
 
@@ -379,16 +379,16 @@ function f12() {
 >y : true
 >true : true
 
-    var a: number;
+    var a!: number;
 >a : number
 
-    var b: string;
+    var b!: string;
 >b : string
 
-    var x: number;
+    var x!: number;
 >x : number
 
-    var c: boolean;
+    var c!: boolean;
 >c : boolean
 }
 
@@ -427,13 +427,13 @@ function f14([a = 1, [b = "hello", { x, y: c = false }]]) {
 >c : boolean
 >false : false
 
-    var a: number;
+    var a!: number;
 >a : number
 
-    var b: string;
+    var b!: string;
 >b : string
 
-    var c: boolean;
+    var c!: boolean;
 >c : boolean
 }
 f14([2, ["abc", { x: 0, y: true }]]);
@@ -471,7 +471,7 @@ f14([2, ["abc", { y: false }]]);  // Error, no x
 >y : false
 >false : false
 
-module M {
+namespace M {
 >M : typeof M
 
     export var [a, b] = [1, 2];
@@ -553,13 +553,13 @@ f17(f15());
 function f18() {
 >f18 : () => void
 
-    var a: number;
+    var a!: number;
 >a : number
 
-    var b: string;
+    var b!: string;
 >b : string
 
-    var aa: number[];
+    var aa!: number[];
 >aa : number[]
 
     ({ a, b } = { a, b });
@@ -682,25 +682,25 @@ function f20(v: [number, number, number]) {
 >f20 : (v: [number, number, number]) => void
 >v : [number, number, number]
 
-    var x: number;
+    var x!: number;
 >x : number
 
-    var y: number;
+    var y!: number;
 >y : number
 
-    var z: number;
+    var z!: number;
 >z : number
 
-    var a0: [];
+    var a0!: [];
 >a0 : []
 
-    var a1: [number];
+    var a1!: [number];
 >a1 : [number]
 
-    var a2: [number, number];
+    var a2!: [number, number];
 >a2 : [number, number]
 
-    var a3: [number, number, number];
+    var a3!: [number, number, number];
 >a3 : [number, number, number]
 
     var [...a3] = v;
@@ -764,25 +764,25 @@ function f21(v: [number, string, boolean]) {
 >f21 : (v: [number, string, boolean]) => void
 >v : [number, string, boolean]
 
-    var x: number;
+    var x!: number;
 >x : number
 
-    var y: string;
+    var y!: string;
 >y : string
 
-    var z: boolean;
+    var z!: boolean;
 >z : boolean
 
-    var a0: [number, string, boolean];
+    var a0!: [number, string, boolean];
 >a0 : [number, string, boolean]
 
-    var a1: [string, boolean];
+    var a1!: [string, boolean];
 >a1 : [string, boolean]
 
-    var a2: [boolean];
+    var a2!: [boolean];
 >a2 : [boolean]
 
-    var a3: [];
+    var a3!: [];
 >a3 : []
 
     var [...a0] = v;

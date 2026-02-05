@@ -17,6 +17,7 @@ class D {
 
 
 //// [emitRestParametersMethodES6.js]
+"use strict";
 class C {
     constructor(name, ...rest) { }
     bar(...rest) { }

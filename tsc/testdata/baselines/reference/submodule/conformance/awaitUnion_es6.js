@@ -15,6 +15,7 @@ async function f() {
 }
 
 //// [awaitUnion_es6.js]
+"use strict";
 async function f() {
     let await_a = await a;
     let await_b = await b;

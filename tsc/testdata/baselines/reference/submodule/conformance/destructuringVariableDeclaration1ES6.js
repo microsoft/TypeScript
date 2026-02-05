@@ -44,6 +44,7 @@ var {h: {h1 = [undefined, null]}}: { h: { h1: number[] } } = { h: { h1: [1, 2] }
 
 
 //// [destructuringVariableDeclaration1ES6.js]
+"use strict";
 // The type T associated with a destructuring variable declaration is determined as follows:
 //      If the declaration includes a type annotation, T is that type.
 var { a1, a2 } = { a1: 10, a2: "world" };

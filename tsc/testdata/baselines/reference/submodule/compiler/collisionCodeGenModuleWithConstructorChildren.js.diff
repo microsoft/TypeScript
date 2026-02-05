@@ -1,6 +1,6 @@
 --- old.collisionCodeGenModuleWithConstructorChildren.js
 +++ new.collisionCodeGenModuleWithConstructorChildren.js
-@@= skipped -35, +35 lines =@@
+@@= skipped -36, +36 lines =@@
  })(M || (M = {}));
  (function (M_2) {
      class d {

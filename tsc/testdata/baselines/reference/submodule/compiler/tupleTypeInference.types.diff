@@ -19,3 +19,59 @@
  >x : [IPromise<T1>]
 
      when<T>(t?: T): IPromise<T>;
+->when : <T>(t?: T) => IPromise<T>
++>when : <T>(t?: T | undefined) => IPromise<T>
+ >t : T | undefined
+ }
+
+@@= skipped -32, +32 lines =@@
+ >all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>; <T1>(x: [IPromise<T1>]): IPromise<[T1]>; }
+ >[$q.when<string>(), $q.when<number>()] : [IPromise<string>, IPromise<number>]
+ >$q.when<string>() : IPromise<string>
+->$q.when : <T>(t?: T) => IPromise<T>
++>$q.when : <T>(t?: T | undefined) => IPromise<T>
+ >$q : IQService
+->when : <T>(t?: T) => IPromise<T>
++>when : <T>(t?: T | undefined) => IPromise<T>
+ >$q.when<number>() : IPromise<number>
+->$q.when : <T>(t?: T) => IPromise<T>
++>$q.when : <T>(t?: T | undefined) => IPromise<T>
+ >$q : IQService
+->when : <T>(t?: T) => IPromise<T>
++>when : <T>(t?: T | undefined) => IPromise<T>
+
+ // Explicit different types
+ var b = $q.all<string, number>([$q.when<string>(), $q.when<number>()]);
+@@= skipped -17, +17 lines =@@
+ >all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>; <T1>(x: [IPromise<T1>]): IPromise<[T1]>; }
+ >[$q.when<string>(), $q.when<number>()] : [IPromise<string>, IPromise<number>]
+ >$q.when<string>() : IPromise<string>
+->$q.when : <T>(t?: T) => IPromise<T>
++>$q.when : <T>(t?: T | undefined) => IPromise<T>
+ >$q : IQService
+->when : <T>(t?: T) => IPromise<T>
++>when : <T>(t?: T | undefined) => IPromise<T>
+ >$q.when<number>() : IPromise<number>
+->$q.when : <T>(t?: T) => IPromise<T>
++>$q.when : <T>(t?: T | undefined) => IPromise<T>
+ >$q : IQService
+->when : <T>(t?: T) => IPromise<T>
++>when : <T>(t?: T | undefined) => IPromise<T>
+
+ // Implicit identical types
+ var c = $q.all([$q.when<string>(), $q.when<string>()]);
+@@= skipped -17, +17 lines =@@
+ >all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>; <T1>(x: [IPromise<T1>]): IPromise<[T1]>; }
+ >[$q.when<string>(), $q.when<string>()] : [IPromise<string>, IPromise<string>]
+ >$q.when<string>() : IPromise<string>
+->$q.when : <T>(t?: T) => IPromise<T>
++>$q.when : <T>(t?: T | undefined) => IPromise<T>
+ >$q : IQService
+->when : <T>(t?: T) => IPromise<T>
++>when : <T>(t?: T | undefined) => IPromise<T>
+ >$q.when<string>() : IPromise<string>
+->$q.when : <T>(t?: T) => IPromise<T>
++>$q.when : <T>(t?: T | undefined) => IPromise<T>
+ >$q : IQService
+->when : <T>(t?: T) => IPromise<T>
++>when : <T>(t?: T | undefined) => IPromise<T>

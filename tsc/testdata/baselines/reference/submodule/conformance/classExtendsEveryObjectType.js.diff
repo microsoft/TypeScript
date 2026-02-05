@@ -1,11 +1,11 @@
 --- old.classExtendsEveryObjectType.js
 +++ new.classExtendsEveryObjectType.js
-@@= skipped -20, +20 lines =@@
- //// [classExtendsEveryObjectType.js]
+@@= skipped -21, +21 lines =@@
+ "use strict";
  class C extends I {
  } // error
 -class C2 extends { foo: string } {
 +class C2 extends { foo: string, } {
  } // error
- var x;
  class C3 extends x {
+ } // error

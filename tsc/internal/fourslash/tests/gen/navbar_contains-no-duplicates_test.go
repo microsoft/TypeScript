@@ -11,8 +11,8 @@ func TestNavbar_contains_no_duplicates(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `declare module Windows {
-    export module Foundation {
+	const content = `declare namespace Windows {
+    export namespace Foundation {
         export var A;
         export class Test {
             public wow();
@@ -20,10 +20,10 @@ func TestNavbar_contains_no_duplicates(t *testing.T) {
     }
 }
 
-declare module Windows {
-    export module Foundation {
+declare namespace Windows {
+    export namespace Foundation {
         export var B;
-        export module Test {
+        export namespace Test {
             export function Boom(): number;
         }
     }
@@ -35,7 +35,7 @@ class ABC {
     }
 }
 
-module ABC {
+namespace ABC {
     export var x = 3;
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

@@ -92,7 +92,7 @@ var anyVar: any;
 //
 // Property signatures
 //
-var obj0: i1;
+declare var obj0: i1;
 var obj1: i1 = {
     p: null,
     p3: function ():any { return 0; },
@@ -111,7 +111,7 @@ var obj10: i1 = new {};
 //
 // Call signatures
 //
-var obj11: i2;
+declare var obj11: i2;
 var obj12: i2 = {};
 var obj13: i2 = new Object();
 var obj14: i2 = new obj11;
@@ -125,7 +125,7 @@ var obj21: i2 = new {};
 //
 // Construct Signatures
 //
-var obj22: i3;
+declare var obj22: i3;
 var obj23: i3 = {};
 var obj24: i3 = new Object();
 var obj25: i3 = new obj22;
@@ -139,7 +139,7 @@ var obj32: i3 = new {};
 //
 // Index Signatures
 //
-var obj33: i4;
+declare var obj33: i4;
 var obj34: i4 = {};
 var obj35: i4 = new Object();
 var obj36: i4 = new obj33;
@@ -153,7 +153,7 @@ var obj43: i4 = new {};
 //
 // Interface Derived I1
 //
-var obj44: i5;
+declare var obj44: i5;
 var obj45: i5 = {};
 var obj46: i5 = new Object();
 var obj47: i5 = new obj44;
@@ -167,7 +167,7 @@ var obj54: i5 = new {};
 //
 // Interface Derived I2
 //
-var obj55: i6;
+declare var obj55: i6;
 var obj56: i6 = {};
 var obj57: i6 = new Object();
 var obj58: i6 = new obj55;
@@ -181,7 +181,7 @@ var obj65: i6 = new {};
 //
 // Interface Derived I3
 //
-var obj66: i7;
+declare var obj66: i7;
 var obj67: i7 = {};
 var obj68: i7 = new Object();
 var obj69: i7 = new obj66;
@@ -195,7 +195,7 @@ var obj76: i7 = new {};
 //
 // Interface Derived I4
 //
-var obj77: i8;
+declare var obj77: i8;
 var obj78: i8 = {};
 var obj79: i8 = new Object();
 var obj80: i8 = new obj77;
@@ -208,14 +208,11 @@ var obj86: i8 = new <i8> anyVar;
 var obj87: i8 = new {};
 
 //// [intTypeCheck.js]
+"use strict";
 class Base {
     foo() { }
 }
 var anyVar;
-//
-// Property signatures
-//
-var obj0;
 var obj1 = {
     p: null,
     p3: function () { return 0; },
@@ -231,10 +228,6 @@ var obj6 = function () { };
 var obj8 = anyVar;
 var obj9 = new  < i1 > anyVar;
 var obj10 = new {};
-//
-// Call signatures
-//
-var obj11;
 var obj12 = {};
 var obj13 = new Object();
 var obj14 = new obj11;
@@ -245,10 +238,6 @@ var obj17 = function () { return 0; };
 var obj19 = anyVar;
 var obj20 = new  < i2 > anyVar;
 var obj21 = new {};
-//
-// Construct Signatures
-//
-var obj22;
 var obj23 = {};
 var obj24 = new Object();
 var obj25 = new obj22;
@@ -259,10 +248,6 @@ var obj28 = function () { };
 var obj30 = anyVar;
 var obj31 = new  < i3 > anyVar;
 var obj32 = new {};
-//
-// Index Signatures
-//
-var obj33;
 var obj34 = {};
 var obj35 = new Object();
 var obj36 = new obj33;
@@ -273,10 +258,6 @@ var obj39 = function () { };
 var obj41 = anyVar;
 var obj42 = new  < i4 > anyVar;
 var obj43 = new {};
-//
-// Interface Derived I1
-//
-var obj44;
 var obj45 = {};
 var obj46 = new Object();
 var obj47 = new obj44;
@@ -287,10 +268,6 @@ var obj50 = function () { };
 var obj52 = anyVar;
 var obj53 = new  < i5 > anyVar;
 var obj54 = new {};
-//
-// Interface Derived I2
-//
-var obj55;
 var obj56 = {};
 var obj57 = new Object();
 var obj58 = new obj55;
@@ -301,10 +278,6 @@ var obj61 = function () { };
 var obj63 = anyVar;
 var obj64 = new  < i6 > anyVar;
 var obj65 = new {};
-//
-// Interface Derived I3
-//
-var obj66;
 var obj67 = {};
 var obj68 = new Object();
 var obj69 = new obj66;
@@ -315,10 +288,6 @@ var obj72 = function () { };
 var obj74 = anyVar;
 var obj75 = new  < i7 > anyVar;
 var obj76 = new {};
-//
-// Interface Derived I4
-//
-var obj77;
 var obj78 = {};
 var obj79 = new Object();
 var obj80 = new obj77;

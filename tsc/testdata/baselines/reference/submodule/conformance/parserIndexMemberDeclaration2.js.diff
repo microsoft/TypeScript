@@ -1,8 +1,8 @@
 --- old.parserIndexMemberDeclaration2.js
 +++ new.parserIndexMemberDeclaration2.js
-@@= skipped -7, +7 lines =@@
-
+@@= skipped -8, +8 lines =@@
  //// [parserIndexMemberDeclaration2.js]
+ "use strict";
  class C {
 +    v;
  }

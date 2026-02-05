@@ -7,6 +7,7 @@
 }
 
 //// [parserFunctionDeclaration6.js]
+"use strict";
 {
     function bar() { }
 }

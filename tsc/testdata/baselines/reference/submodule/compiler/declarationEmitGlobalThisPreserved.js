@@ -112,24 +112,24 @@ export type AsFunctionType = (isNaN: typeof globalThis.isNaN) => typeof globalTh
 
 //// [declarationEmitGlobalThisPreserved.d.ts]
 export declare const a1: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
-export declare const a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+export declare const a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN | undefined) => typeof globalThis.isNaN;
 export declare const a3: (isNaN: number, bar: typeof globalThis.isNaN) => typeof globalThis.isNaN;
 export declare const a4: (isNaN: number) => typeof globalThis.isNaN;
 export declare const aObj: {
     a1: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
-    a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+    a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN | undefined) => typeof globalThis.isNaN;
     a3: (isNaN: number, bar: typeof globalThis.isNaN) => typeof globalThis.isNaN;
     a4: (isNaN: number) => typeof globalThis.isNaN;
 };
 export type a4Return = ReturnType<ReturnType<typeof a4>>;
 export type a4oReturn = ReturnType<ReturnType<typeof aObj['a4']>>;
 export declare const b1: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
-export declare const b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+export declare const b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN | undefined) => typeof globalThis.isNaN;
 export declare const b3: (isNaN: number, bar: typeof globalThis.isNaN) => typeof globalThis.isNaN;
 export declare const b4: (isNaN: number) => typeof globalThis.isNaN;
 export declare const bObj: {
     b1: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
-    b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+    b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN | undefined) => typeof globalThis.isNaN;
     b3: (isNaN: number, bar: typeof globalThis.isNaN) => typeof globalThis.isNaN;
     b4: (isNaN: number) => typeof globalThis.isNaN;
 };
@@ -141,14 +141,14 @@ export declare function c3(isNaN: number, bar: typeof globalThis.isNaN): typeof 
 export declare function c4(isNaN: number): typeof globalThis.isNaN;
 export declare const cObj: {
     c1(isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN;
-    c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN;
+    c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN | undefined): typeof globalThis.isNaN;
     c3(isNaN: number, bar: typeof globalThis.isNaN): typeof globalThis.isNaN;
     c4(isNaN: number): typeof globalThis.isNaN;
 };
 export type c4Return = ReturnType<ReturnType<typeof c4>>;
 export type c4oReturn = ReturnType<ReturnType<typeof cObj['c4']>>;
 export declare function d1(): () => (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
-export declare function d2(): () => (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN;
+export declare function d2(): () => (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN | undefined) => typeof globalThis.isNaN;
 export declare function d3(): () => (isNaN: number, bar: typeof globalThis.isNaN) => typeof globalThis.isNaN;
 export declare function d4(): () => (isNaN: number) => typeof globalThis.isNaN;
 export type d4Return = ReturnType<ReturnType<ReturnType<ReturnType<typeof d4>>>>;

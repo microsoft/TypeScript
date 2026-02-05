@@ -3,7 +3,7 @@ innerModExport1.ts(5,12): error TS1437: Namespace must be given a name.
 
 
 ==== innerModExport1.ts (2 errors) ====
-    module Outer {
+    namespace Outer {
     
         // inner mod 1
         var non_export_var: number;

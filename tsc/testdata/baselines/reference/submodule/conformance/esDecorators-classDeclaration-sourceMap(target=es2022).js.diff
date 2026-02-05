@@ -1,9 +1,9 @@
 --- old.esDecorators-classDeclaration-sourceMap(target=es2022).js
 +++ new.esDecorators-classDeclaration-sourceMap(target=es2022).js
-@@= skipped -48, +48 lines =@@
-
+@@= skipped -49, +49 lines =@@
 
  //// [esDecorators-classDeclaration-sourceMap.js]
+ "use strict";
 -var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
 -    var useValue = arguments.length > 2;
 -    for (var i = 0; i < initializers.length; i++) {

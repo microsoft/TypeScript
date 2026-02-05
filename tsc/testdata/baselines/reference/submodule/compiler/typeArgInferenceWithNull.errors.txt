@@ -1,0 +1,25 @@
+typeArgInferenceWithNull.ts(4,5): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
+typeArgInferenceWithNull.ts(7,7): error TS2322: Type 'null' is not assignable to type 'string'.
+typeArgInferenceWithNull.ts(10,7): error TS2322: Type 'null' is not assignable to type 'string'.
+
+
+==== typeArgInferenceWithNull.ts (3 errors) ====
+    // All legal
+    
+    function fn4<T extends string>(n: T) { }
+    fn4(null);
+        ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
+    
+    function fn5<T extends { x: string }>(n: T) { }
+    fn5({ x: null });
+          ~
+!!! error TS2322: Type 'null' is not assignable to type 'string'.
+!!! related TS6500 typeArgInferenceWithNull.ts:6:26: The expected type comes from property 'x' which is declared here on type '{ x: string; }'
+    
+    function fn6<T extends { x: string }>(n: T, fun: (x: T) => void, n2: T) { }
+    fn6({ x: null }, y => { }, { x: "" }); // y has type { x: any }, but ideally would have type { x: string }
+          ~
+!!! error TS2322: Type 'null' is not assignable to type 'string'.
+!!! related TS6500 typeArgInferenceWithNull.ts:9:26: The expected type comes from property 'x' which is declared here on type '{ x: string; }'
+    

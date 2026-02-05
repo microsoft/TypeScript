@@ -40,6 +40,8 @@ class Test extends Array1 {
 }
 
 //// [other.js]
+"use strict";
 //// [index.js]
+"use strict";
 class Test extends Array1 {
 }

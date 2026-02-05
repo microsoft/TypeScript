@@ -9,6 +9,7 @@
 <{ id: number; }[]>[{ foo: "s" }, {}]; 
 
 //// [arrayCast.js]
+"use strict";
 // Should fail. Even though the array is contextually typed with { id: number }[], it still
 // has type { foo: string }[], which is not assignable to { id: number }[].
 [{ foo: "s" }];

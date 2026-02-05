@@ -1,7 +1,7 @@
 --- old.typeInferenceLiteralUnion.js
 +++ new.typeInferenceLiteralUnion.js
-@@= skipped -43, +43 lines =@@
- exports.extent = extent;
+@@= skipped -40, +40 lines =@@
+ //// [typeInferenceLiteralUnion.js]
  // Not very useful, but meets Numeric
  class NumCoercible {
 +    a;

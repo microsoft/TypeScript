@@ -20,6 +20,7 @@ class MyMap<K, V> {
 }
 
 //// [instanceMemberInitialization.js]
+"use strict";
 class C {
     x = 1;
 }

@@ -3,11 +3,12 @@
 //// [module_augmentExistingVariable.ts]
 var console: any;
 
-module console {
+namespace console {
     export var x = 2;
 }
 
 //// [module_augmentExistingVariable.js]
+"use strict";
 var console;
 (function (console) {
     console.x = 2;

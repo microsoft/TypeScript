@@ -5,16 +5,16 @@ class C { private p: string };
 >C : C
 >p : string
 
-var strOrNum: string | number;
+declare var strOrNum: string | number;
 >strOrNum : string | number
 
-var strOrBool: string | boolean;
+declare var strOrBool: string | boolean;
 >strOrBool : string | boolean
 
-var numOrBool: number | boolean
+declare var numOrBool: number | boolean;
 >numOrBool : number | boolean
 
-var strOrC: string | C;
+declare var strOrC: string | C;
 >strOrC : string | C
 
 // typeof x == s has not effect on typeguard

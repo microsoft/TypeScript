@@ -20,7 +20,7 @@ var r2 = y<string>();
 >y<string>() : any
 >y : any
 
-var c: Function;
+declare var c: Function;
 >c : Function
 
 var r3 = c<number>(); // should be an error
@@ -46,7 +46,7 @@ class C implements Function {
 >() => { } : () => void
 }
 
-var c2: C;
+declare var c2: C;
 >c2 : C
 
 var r4 = c2<number>(); // should be an error
@@ -58,7 +58,7 @@ class C2 extends Function { } // error
 >C2 : C2
 >Function : Function
 
-var c3: C2;
+declare var c3: C2;
 >c3 : C2
 
 var r5 = c3<number>(); // error
@@ -70,7 +70,7 @@ interface I {
     (number): number;
 >number : any
 }
-var z: I;
+declare var z: I;
 >z : I
 
 var r6 = z<string>(1); // error
@@ -84,7 +84,7 @@ interface callable2<T> {
 >a : T
 }
 
-var c4: callable2<number>;
+declare var c4: callable2<number>;
 >c4 : callable2<number>
 
 c4<number>(1);
@@ -97,7 +97,7 @@ interface callable3<T> {
 >a : T
 }
 
-var c5: callable3<number>;
+declare var c5: callable3<number>;
 >c5 : callable3<number>
 
 c5<string>(1); // error

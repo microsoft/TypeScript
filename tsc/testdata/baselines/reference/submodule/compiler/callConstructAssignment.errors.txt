@@ -5,9 +5,9 @@ callConstructAssignment.ts(6,1): error TS2322: Type '() => void' is not assignab
 
 
 ==== callConstructAssignment.ts (2 errors) ====
-    var foo:{ ( ):void; }
+    declare var foo:{ ( ):void; }
     
-    var bar:{ new ( ):any; }
+    declare var bar:{ new ( ):any; }
     
     foo = bar; // error
     ~~~

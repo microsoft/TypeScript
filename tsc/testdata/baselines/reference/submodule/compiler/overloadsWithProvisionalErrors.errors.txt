@@ -9,7 +9,7 @@ overloadsWithProvisionalErrors.ts(8,17): error TS2304: Cannot find name 'blah'.
 
 
 ==== overloadsWithProvisionalErrors.ts (4 errors) ====
-    var func: {
+    declare var func: {
         (s: string): number;
         (lambda: (s: string) => { a: number; b: number }): string;
     };

@@ -1,0 +1,26 @@
+--- old.genericReduce.types
++++ new.genericReduce.types
+@@= skipped -55, +55 lines =@@
+
+ n1.toExponential(2); // should not error if 'n1' is correctly number.
+ >n1.toExponential(2) : string
+->n1.toExponential : (fractionDigits?: number) => string
++>n1.toExponential : (fractionDigits?: number | undefined) => string
+ >n1 : number
+->toExponential : (fractionDigits?: number) => string
++>toExponential : (fractionDigits?: number | undefined) => string
+ >2 : 2
+
+ n2.x = "fail";       // should error, as 'n2' should be type 'number', not 'any'.
+@@= skipped -14, +14 lines =@@
+
+ n2.toExponential(2); // should not error if 'n2' is correctly number.
+ >n2.toExponential(2) : string
+->n2.toExponential : (fractionDigits?: number) => string
++>n2.toExponential : (fractionDigits?: number | undefined) => string
+ >n2 : number
+->toExponential : (fractionDigits?: number) => string
++>toExponential : (fractionDigits?: number | undefined) => string
+ >2 : 2
+
+ var n3 = b.reduce<string>( (x, y) => x + y, ""); // Initial value is of type string

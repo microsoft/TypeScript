@@ -1,13 +1,14 @@
 //// [tests/cases/compiler/collisionCodeGenModuleWithMemberVariable.ts] ////
 
 //// [collisionCodeGenModuleWithMemberVariable.ts]
-module m1 {
+namespace m1 {
     export var m1 = 10;
     var b = m1;
 }
 var foo = m1.m1;
 
 //// [collisionCodeGenModuleWithMemberVariable.js]
+"use strict";
 var m1;
 (function (m1_1) {
     m1_1.m1 = 10;

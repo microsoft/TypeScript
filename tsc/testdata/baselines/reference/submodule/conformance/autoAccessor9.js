@@ -49,6 +49,7 @@ class C7 {
 
 
 //// [autoAccessor9.js]
+"use strict";
 // Auto-accessors do not use Set semantics themselves, so do not need to be transformed if there are no other
 // initializers that need to be transformed:
 class C1 {

@@ -13,7 +13,7 @@ type X =
  | { x: 'y', y: number, z?: boolean } & { y: number }
 >x : "y"
 >y : number
->z : boolean
+>z : boolean | undefined
 >y : number
 
 // error
@@ -35,7 +35,7 @@ type Y =
  | { x: 'y', y: number, z?: boolean }
 >x : "y"
 >y : number
->z : boolean
+>z : boolean | undefined
 
 // no  error
 const y: Y = 4 as any as { x: 'x' | 'y', y: number };

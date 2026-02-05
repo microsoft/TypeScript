@@ -15,6 +15,7 @@ var c = 'some'
     'text';
 
 //// [commentOnBinaryOperator1.js]
+"use strict";
 var a = 'some'
     // comment
     + 'text';

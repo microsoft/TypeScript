@@ -2,7 +2,7 @@ augmentedClassWithPrototypePropertyOnModule.ts(3,9): error TS2300: Duplicate ide
 
 
 ==== augmentedClassWithPrototypePropertyOnModule.ts (1 errors) ====
-    declare module m {
+    declare namespace m {
         var f;
         var prototype; // This should be error since prototype would be static property on class m
             ~~~~~~~~~

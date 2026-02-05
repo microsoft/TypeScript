@@ -5,7 +5,7 @@
 class C1 {
 >C1 : C1
 
-    protected x: number;
+    protected x!: number;
 >x : number
 
     protected static sx: number;
@@ -67,10 +67,10 @@ class C3 extends C2 {
 >C3 : C3
 >C2 : C2
 
-    x: number;
+    x!: number;
 >x : number
 
-    static sx: number;
+    static sx: number
 >sx : number
 
     f() {
@@ -93,13 +93,13 @@ class C3 extends C2 {
     }
 }
 
-var c1: C1;
+declare var c1: C1;
 >c1 : C1
 
-var c2: C2;
+declare var c2: C2;
 >c2 : C2
 
-var c3: C3;
+declare var c3: C3;
 >c3 : C3
 
 // All of these should be errors
@@ -270,10 +270,10 @@ class B1 {
     x;
 >x : any
 }
-var a1: A1;
+declare var a1: A1;
 >a1 : A1
 
-var b1: B1;
+declare var b1: B1;
 >b1 : B1
 
 a1 = b1;  // Error, B1 doesn't derive from A1

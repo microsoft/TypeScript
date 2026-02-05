@@ -47,6 +47,7 @@ var u: Proxy<Blah>; // ok
 
 
 //// [nonPrimitiveInGeneric.js]
+"use strict";
 function generic(t) {
     var o = t; // expect error
 }

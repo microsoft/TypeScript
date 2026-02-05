@@ -27,6 +27,7 @@ class A {
 
 
 //// [privateNameStaticFieldDestructuredBinding.js]
+"use strict";
 class A {
     static #field = 1;
     otherClass = A;

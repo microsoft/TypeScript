@@ -1,13 +1,20 @@
 typeGuardFunctionErrors.ts(1,7): error TS2300: Duplicate identifier 'A'.
+typeGuardFunctionErrors.ts(2,5): error TS2564: Property 'propA' has no initializer and is not definitely assigned in the constructor.
+typeGuardFunctionErrors.ts(6,5): error TS2564: Property 'propB' has no initializer and is not definitely assigned in the constructor.
+typeGuardFunctionErrors.ts(10,5): error TS2564: Property 'propC' has no initializer and is not definitely assigned in the constructor.
+typeGuardFunctionErrors.ts(13,40): error TS7006: Parameter 'x' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(14,5): error TS2322: Type 'string' is not assignable to type 'boolean'.
+typeGuardFunctionErrors.ts(17,46): error TS7006: Parameter 'x' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(17,55): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
 typeGuardFunctionErrors.ts(17,57): error TS1144: '{' or ';' expected.
 typeGuardFunctionErrors.ts(17,60): error TS1434: Unexpected keyword or identifier.
 typeGuardFunctionErrors.ts(21,33): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
 typeGuardFunctionErrors.ts(25,33): error TS1225: Cannot find parameter 'x'.
 typeGuardFunctionErrors.ts(29,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+typeGuardFunctionErrors.ts(29,40): error TS7006: Parameter 'x' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(30,5): error TS1131: Property or signature expected.
 typeGuardFunctionErrors.ts(31,1): error TS1128: Declaration or statement expected.
+typeGuardFunctionErrors.ts(33,34): error TS7006: Parameter 'y' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(33,38): error TS1225: Cannot find parameter 'x'.
 typeGuardFunctionErrors.ts(37,51): error TS2677: A type predicate's type must be assignable to its parameter's type.
   Property 'propA' is missing in type 'B' but required in type 'A'.
@@ -15,26 +22,43 @@ typeGuardFunctionErrors.ts(41,56): error TS2677: A type predicate's type must be
   Type 'number' is not assignable to type 'string'.
 typeGuardFunctionErrors.ts(45,56): error TS2677: A type predicate's type must be assignable to its parameter's type.
   Type 'T[]' is not assignable to type 'string'.
+typeGuardFunctionErrors.ts(52,22): error TS7006: Parameter 'p1' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(53,22): error TS7006: Parameter 'p1' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(55,18): error TS7010: 'hasNoTypeGuard', which lacks return-type annotation, implicitly has an 'any' return type.
+typeGuardFunctionErrors.ts(55,33): error TS7006: Parameter 'x' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(59,7): error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
 typeGuardFunctionErrors.ts(64,7): error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
 typeGuardFunctionErrors.ts(69,7): error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
+typeGuardFunctionErrors.ts(73,18): error TS7010: 'acceptingDifferentSignatureTypeGuardFunction', which lacks return-type annotation, implicitly has an 'any' return type.
+typeGuardFunctionErrors.ts(73,68): error TS7006: Parameter 'p1' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(74,46): error TS2345: Argument of type '(p1: any) => p1 is C' is not assignable to parameter of type '(p1: any) => p1 is B'.
   Type predicate 'p1 is C' is not assignable to 'p1 is B'.
     Property 'propB' is missing in type 'C' but required in type 'B'.
+typeGuardFunctionErrors.ts(77,15): error TS7006: Parameter 'p1' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(77,19): error TS7006: Parameter 'p2' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(78,1): error TS2322: Type '(p1: any, p2: any) => boolean' is not assignable to type '(p1: any, p2: any) => p1 is A'.
   Signature '(p1: any, p2: any): boolean' must be a type predicate.
+typeGuardFunctionErrors.ts(83,15): error TS7006: Parameter 'p1' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(83,19): error TS7006: Parameter 'p2' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(84,1): error TS2322: Type '(p1: any, p2: any) => p2 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
   Type predicate 'p2 is A' is not assignable to 'p1 is A'.
     Parameter 'p2' is not in the same position as parameter 'p1'.
+typeGuardFunctionErrors.ts(89,15): error TS7006: Parameter 'p1' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(89,19): error TS7006: Parameter 'p2' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(90,1): error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
   Target signature provides too few arguments. Expected 3 or more, but got 2.
+typeGuardFunctionErrors.ts(90,20): error TS7006: Parameter 'p1' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(90,24): error TS7006: Parameter 'p2' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(90,28): error TS7006: Parameter 'p3' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(95,9): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
 typeGuardFunctionErrors.ts(95,11): error TS1005: ',' expected.
 typeGuardFunctionErrors.ts(95,14): error TS1005: ',' expected.
 typeGuardFunctionErrors.ts(95,14): error TS2300: Duplicate identifier 'A'.
 typeGuardFunctionErrors.ts(96,16): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
 typeGuardFunctionErrors.ts(96,18): error TS1005: ',' expected.
+typeGuardFunctionErrors.ts(96,18): error TS7006: Parameter 'is' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(96,21): error TS1005: ',' expected.
+typeGuardFunctionErrors.ts(96,21): error TS7006: Parameter 'A' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(97,20): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
 typeGuardFunctionErrors.ts(97,22): error TS1144: '{' or ';' expected.
 typeGuardFunctionErrors.ts(97,25): error TS1434: Unexpected keyword or identifier.
@@ -48,9 +72,25 @@ typeGuardFunctionErrors.ts(115,18): error TS1228: A type predicate is only allow
 typeGuardFunctionErrors.ts(119,22): error TS2304: Cannot find name 'p1'.
 typeGuardFunctionErrors.ts(119,25): error TS1005: ';' expected.
 typeGuardFunctionErrors.ts(120,1): error TS1128: Declaration or statement expected.
+typeGuardFunctionErrors.ts(123,13): error TS7019: Rest parameter 'a' implicitly has an 'any[]' type.
 typeGuardFunctionErrors.ts(123,20): error TS1229: A type predicate cannot reference a rest parameter.
+typeGuardFunctionErrors.ts(128,14): error TS7031: Binding element 'a' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(128,17): error TS7031: Binding element 'b' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(128,20): error TS7031: Binding element 'p1' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(128,25): error TS7006: Parameter 'p2' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(128,29): error TS7006: Parameter 'p3' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(128,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
+typeGuardFunctionErrors.ts(132,14): error TS7031: Binding element 'a' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(132,17): error TS7031: Binding element 'b' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(132,20): error TS7031: Binding element 'p1' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(132,25): error TS7006: Parameter 'p2' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(132,29): error TS7006: Parameter 'p3' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(132,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
+typeGuardFunctionErrors.ts(136,14): error TS7031: Binding element 'a' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(136,17): error TS7031: Binding element 'b' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(136,24): error TS7031: Binding element 'p1' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(136,30): error TS7006: Parameter 'p2' implicitly has an 'any' type.
+typeGuardFunctionErrors.ts(136,34): error TS7006: Parameter 'p3' implicitly has an 'any' type.
 typeGuardFunctionErrors.ts(136,39): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
 typeGuardFunctionErrors.ts(152,68): error TS2344: Type '"d" | T' does not satisfy the constraint 'Keys'.
   Type '"d"' is not assignable to type 'Keys'.
@@ -70,28 +110,38 @@ typeGuardFunctionErrors.ts(166,45): error TS2677: A type predicate's type must b
 typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
 
 
-==== typeGuardFunctionErrors.ts (53 errors) ====
+==== typeGuardFunctionErrors.ts (93 errors) ====
     class A {
           ~
 !!! error TS2300: Duplicate identifier 'A'.
         propA: number;
+        ~~~~~
+!!! error TS2564: Property 'propA' has no initializer and is not definitely assigned in the constructor.
     }
     
     class B {
         propB: number;
+        ~~~~~
+!!! error TS2564: Property 'propB' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C extends A {
         propC: number;
+        ~~~~~
+!!! error TS2564: Property 'propC' has no initializer and is not definitely assigned in the constructor.
     }
     
     function hasANonBooleanReturnStatement(x): x is A {
+                                           ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
         return '';
         ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
     }
     
     function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
+                                                 ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
                                                           ~
 !!! error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
                                                             ~~
@@ -116,6 +166,8 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
     function hasMissingTypeInTypeGuardType(x): x is {
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
+                                           ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
         return true;
         ~~~~~~
 !!! error TS1131: Property or signature expected.
@@ -124,6 +176,8 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
 !!! error TS1128: Declaration or statement expected.
     
     function hasNonMatchingParameter(y): x is A {
+                                     ~
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
                                          ~
 !!! error TS1225: Cannot find parameter 'x'.
         return true;
@@ -155,9 +209,17 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
     let b: B;
     
     declare function isB(p1): p1 is B;
+                         ~~
+!!! error TS7006: Parameter 'p1' implicitly has an 'any' type.
     declare function isC(p1): p1 is C;
+                         ~~
+!!! error TS7006: Parameter 'p1' implicitly has an 'any' type.
     declare function funA(p1: any, p2: any): p1 is B;
     declare function hasNoTypeGuard(x);
+                     ~~~~~~~~~~~~~~
+!!! error TS7010: 'hasNoTypeGuard', which lacks return-type annotation, implicitly has an 'any' return type.
+                                    ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
     
     // Passed argument is not the same as the one being guarded.
     if (isB(b)) {
@@ -185,6 +247,10 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
     
     // Type predicate type is not assignable
     declare function acceptingDifferentSignatureTypeGuardFunction(p1: (p1) => p1 is B);
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7010: 'acceptingDifferentSignatureTypeGuardFunction', which lacks return-type annotation, implicitly has an 'any' return type.
+                                                                       ~~
+!!! error TS7006: Parameter 'p1' implicitly has an 'any' type.
     acceptingDifferentSignatureTypeGuardFunction(isC);
                                                  ~~~
 !!! error TS2345: Argument of type '(p1: any) => p1 is C' is not assignable to parameter of type '(p1: any) => p1 is B'.
@@ -194,6 +260,10 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
     
     // Boolean not assignable to type guard
     var assign1: (p1, p2) => p1 is A;
+                  ~~
+!!! error TS7006: Parameter 'p1' implicitly has an 'any' type.
+                      ~~
+!!! error TS7006: Parameter 'p2' implicitly has an 'any' type.
     assign1 = function(p1, p2): boolean {
     ~~~~~~~
 !!! error TS2322: Type '(p1: any, p2: any) => boolean' is not assignable to type '(p1: any, p2: any) => p1 is A'.
@@ -203,6 +273,10 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
     
     // Must have matching parameter index
     var assign2: (p1, p2) => p1 is A;
+                  ~~
+!!! error TS7006: Parameter 'p1' implicitly has an 'any' type.
+                      ~~
+!!! error TS7006: Parameter 'p2' implicitly has an 'any' type.
     assign2 = function(p1, p2): p2 is A {
     ~~~~~~~
 !!! error TS2322: Type '(p1: any, p2: any) => p2 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
@@ -213,10 +287,20 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
     
     // No matching signature
     var assign3: (p1, p2) => p1 is A;
+                  ~~
+!!! error TS7006: Parameter 'p1' implicitly has an 'any' type.
+                      ~~
+!!! error TS7006: Parameter 'p2' implicitly has an 'any' type.
     assign3 = function(p1, p2, p3): p1 is A {
     ~~~~~~~
 !!! error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
 !!! error TS2322:   Target signature provides too few arguments. Expected 3 or more, but got 2.
+                       ~~
+!!! error TS7006: Parameter 'p1' implicitly has an 'any' type.
+                           ~~
+!!! error TS7006: Parameter 'p2' implicitly has an 'any' type.
+                               ~~
+!!! error TS7006: Parameter 'p3' implicitly has an 'any' type.
         return true;
     };
     
@@ -235,8 +319,12 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
 !!! error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
                      ~~
 !!! error TS1005: ',' expected.
+                     ~~
+!!! error TS7006: Parameter 'is' implicitly has an 'any' type.
                         ~
 !!! error TS1005: ',' expected.
+                        ~
+!!! error TS7006: Parameter 'A' implicitly has an 'any' type.
     function b3(): A | b is A {
                        ~
 !!! error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
@@ -290,6 +378,8 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
     
     // Reference to rest parameter
     function b4(...a): a is A {
+                ~~~~
+!!! error TS7019: Rest parameter 'a' implicitly has an 'any[]' type.
                        ~
 !!! error TS1229: A type predicate cannot reference a rest parameter.
         return true;
@@ -297,18 +387,48 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
     
     // Reference to binding pattern
     function b5({a, b, p1}, p2, p3): p1 is A {
+                 ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                    ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+                       ~~
+!!! error TS7031: Binding element 'p1' implicitly has an 'any' type.
+                            ~~
+!!! error TS7006: Parameter 'p2' implicitly has an 'any' type.
+                                ~~
+!!! error TS7006: Parameter 'p3' implicitly has an 'any' type.
                                      ~~
 !!! error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
         return true;
     }
     
     function b6([a, b, p1], p2, p3): p1 is A {
+                 ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                    ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+                       ~~
+!!! error TS7031: Binding element 'p1' implicitly has an 'any' type.
+                            ~~
+!!! error TS7006: Parameter 'p2' implicitly has an 'any' type.
+                                ~~
+!!! error TS7006: Parameter 'p3' implicitly has an 'any' type.
                                      ~~
 !!! error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
         return true;
     }
     
     function b7({a, b, c: {p1}}, p2, p3): p1 is A {
+                 ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                    ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+                           ~~
+!!! error TS7031: Binding element 'p1' implicitly has an 'any' type.
+                                 ~~
+!!! error TS7006: Parameter 'p2' implicitly has an 'any' type.
+                                     ~~
+!!! error TS7006: Parameter 'p3' implicitly has an 'any' type.
                                           ~~
 !!! error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
         return true;

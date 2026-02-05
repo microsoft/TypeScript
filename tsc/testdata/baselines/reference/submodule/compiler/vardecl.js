@@ -61,7 +61,7 @@ var d4: {
     };
 }
 
-module m2 {
+namespace m2 {
 
     export var a, b2: number = 10, b;
     var m1;
@@ -113,6 +113,7 @@ var b = 10;
 
 
 //// [vardecl.js]
+"use strict";
 var simpleVar;
 var anotherVar;
 var varWithSimpleType;

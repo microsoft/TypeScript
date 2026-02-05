@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/jsx/tsxOpeningClosingNames.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 }
 
-declare module A.B.C {
+declare namespace A.B.C {
   var D: any;
 }
 
@@ -13,4 +13,5 @@ declare module A.B.C {
 
 
 //// [file.jsx]
+"use strict";
 <A.B.C.D>foo</A.B.C.D>;

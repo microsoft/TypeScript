@@ -1,7 +1,7 @@
 --- old.thisTypeInFunctions.js
 +++ new.thisTypeInFunctions.js
-@@= skipped -198, +198 lines =@@
- //// [thisTypeInFunctions.js]
+@@= skipped -199, +199 lines =@@
+ "use strict";
  // body checking
  class B {
 +    n;
@@ -11,7 +11,7 @@
      explicitThis(m) {
          return this.n + m;
      }
-@@= skipped -112, +114 lines =@@
+@@= skipped -110, +112 lines =@@
  c.explicitVoid = n => n;
  // class-based assignability
  class Base1 {

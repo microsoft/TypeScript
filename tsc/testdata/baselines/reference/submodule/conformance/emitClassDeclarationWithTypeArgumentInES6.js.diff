@@ -1,8 +1,8 @@
 --- old.emitClassDeclarationWithTypeArgumentInES6.js
 +++ new.emitClassDeclarationWithTypeArgumentInES6.js
-@@= skipped -17, +17 lines =@@
-
+@@= skipped -18, +18 lines =@@
  //// [emitClassDeclarationWithTypeArgumentInES6.js]
+ "use strict";
  class B {
 +    x;
 +    B;

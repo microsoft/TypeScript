@@ -17,6 +17,7 @@ for (x in String)
 }
 
 //// [sourceMapValidationForIn.js]
+"use strict";
 for (var x in String) {
     WScript.Echo(x);
 }

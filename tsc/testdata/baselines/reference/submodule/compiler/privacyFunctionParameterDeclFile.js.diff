@@ -162,7 +162,7 @@
          static myPublicStaticMethod(param) {
          }
          myPublicMethod(param) {
-@@= skipped -16, +18 lines =@@
+@@= skipped -17, +19 lines =@@
  class publicClassInGlobal {
  }
  class publicClassWithWithPublicParmeterTypesInGlobal {

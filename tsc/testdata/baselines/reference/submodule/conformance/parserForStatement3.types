@@ -16,6 +16,6 @@ for(d in _.jh[a]=_.jh[a]||[],b);
 >_ : any
 >jh : any
 >a : any
->[] : undefined[]
+>[] : never[]
 >b : any
 

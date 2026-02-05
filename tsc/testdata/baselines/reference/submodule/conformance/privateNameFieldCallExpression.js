@@ -23,6 +23,7 @@ class A {
 
 
 //// [privateNameFieldCallExpression.js]
+"use strict";
 class A {
     #fieldFunc = function () { this.x = 10; };
     #fieldFunc2 = function (a, ...b) { };

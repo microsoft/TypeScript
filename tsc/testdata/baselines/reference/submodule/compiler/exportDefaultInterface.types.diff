@@ -1,0 +1,27 @@
+--- old.exportDefaultInterface.types
++++ new.exportDefaultInterface.types
+@@= skipped -8, +8 lines =@@
+
+ a.value.toExponential();
+ >a.value.toExponential() : string
+->a.value.toExponential : (fractionDigits?: number) => string
++>a.value.toExponential : (fractionDigits?: number | undefined) => string
+ >a.value : number
+ >a : A
+ >value : number
+->toExponential : (fractionDigits?: number) => string
++>toExponential : (fractionDigits?: number | undefined) => string
+
+ === b.ts ===
+ import A from './a';
+@@= skipped -15, +15 lines =@@
+
+ a.value.toExponential();
+ >a.value.toExponential() : string
+->a.value.toExponential : (fractionDigits?: number) => string
++>a.value.toExponential : (fractionDigits?: number | undefined) => string
+ >a.value : number
+ >a : A
+ >value : number
+->toExponential : (fractionDigits?: number) => string
++>toExponential : (fractionDigits?: number | undefined) => string

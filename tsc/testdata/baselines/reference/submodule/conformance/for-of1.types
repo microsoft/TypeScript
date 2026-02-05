@@ -6,5 +6,5 @@ var v;
 
 for (v of []) { }
 >v : any
->[] : undefined[]
+>[] : never[]
 

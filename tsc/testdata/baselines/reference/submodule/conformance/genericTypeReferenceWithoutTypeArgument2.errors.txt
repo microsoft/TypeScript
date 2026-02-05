@@ -83,7 +83,7 @@ genericTypeReferenceWithoutTypeArgument2.ts(37,10): error TS2314: Generic type '
                         ~
 !!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
     
-    module M {
+    namespace M {
         export interface E<T> { foo: T }
     }
     

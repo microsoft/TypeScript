@@ -34,6 +34,7 @@ class C6 implements I1 {
 
 
 //// [interfaceImplementation5.js]
+"use strict";
 class C1 {
     get getset1() { return 1; }
 }

@@ -4,7 +4,7 @@ parserErrantAccessibilityModifierInModule1.ts(4,18): error TS2304: Cannot find n
 
 
 ==== parserErrantAccessibilityModifierInModule1.ts (3 errors) ====
-    module M {
+    namespace M {
         var x=10;  // variable local to this module body
         private y=x;  // property visible only in module
         ~~~~~~~

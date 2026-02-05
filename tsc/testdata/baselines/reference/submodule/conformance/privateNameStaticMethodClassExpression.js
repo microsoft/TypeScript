@@ -15,6 +15,7 @@ C.getClass().#field; // Error
 
 
 //// [privateNameStaticMethodClassExpression.js]
+"use strict";
 const C = class D {
     static #field = D.#method();
     static #method() { return 42; }

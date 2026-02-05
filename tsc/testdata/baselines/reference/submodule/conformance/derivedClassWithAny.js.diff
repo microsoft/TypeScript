@@ -1,8 +1,8 @@
 --- old.derivedClassWithAny.js
 +++ new.derivedClassWithAny.js
-@@= skipped -62, +62 lines =@@
-
+@@= skipped -63, +63 lines =@@
  //// [derivedClassWithAny.js]
+ "use strict";
  class C {
 +    x;
      get X() { return 1; }

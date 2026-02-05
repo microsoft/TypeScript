@@ -16,6 +16,7 @@ class C {
 
 
 //// [conflictMarkerTrivia2.js]
+"use strict";
 class C {
     foo() {
         a();

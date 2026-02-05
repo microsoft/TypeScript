@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/recursiveMods.ts] ////
 
 === recursiveMods.ts ===
-export module Foo {
+export namespace Foo {
 >Foo : typeof Foo
 
 	export class C {}
 >C : C
 }
 
-export module Foo {
+export namespace Foo {
 >Foo : typeof Foo
 
 	function Bar() : C {

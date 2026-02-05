@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/overloadsInDifferentContainersDisagreeOnAmbient.ts] ////
 
 === overloadsInDifferentContainersDisagreeOnAmbient.ts ===
-declare module M {
+declare namespace M {
 >M : typeof M
 
     // Error because body is not ambient and this overload is
@@ -9,7 +9,7 @@ declare module M {
 >f : { (): any; (): void; }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
     export function f() { }

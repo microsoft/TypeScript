@@ -1,0 +1,39 @@
+instantiatedReturnTypeContravariance.ts(13,1): error TS2322: Type 'null' is not assignable to type 'B<void>'.
+instantiatedReturnTypeContravariance.ts(23,1): error TS2322: Type 'null' is not assignable to type 'B<number>'.
+
+
+==== instantiatedReturnTypeContravariance.ts (2 errors) ====
+    interface B<T> {
+    
+    name: string;
+    
+    x(): T;
+    
+    }
+     
+    class c {
+    
+    foo(): B<void> {
+    
+    return null;
+    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'B<void>'.
+    
+    }
+    
+    }
+     
+    class d extends c {
+    
+    foo(): B<number> {
+    
+    return null;
+    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'B<number>'.
+    
+    }
+    
+    }
+    
+     
+    

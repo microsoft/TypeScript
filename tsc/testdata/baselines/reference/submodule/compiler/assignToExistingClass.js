@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/assignToExistingClass.ts] ////
 
 //// [assignToExistingClass.ts]
-module Test {
+namespace Test {
     class Mocked {
         myProp: string;
     }
@@ -18,6 +18,7 @@ module Test {
 
 
 //// [assignToExistingClass.js]
+"use strict";
 var Test;
 (function (Test) {
     class Mocked {

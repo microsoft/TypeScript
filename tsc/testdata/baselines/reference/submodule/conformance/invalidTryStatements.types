@@ -5,7 +5,7 @@ function fn() {
 >fn : () => void
 
     catch(x) { } // error missing try
->x : any
+>x : unknown
 
     finally { } // potential error; can be absorbed by the 'catch'
 
@@ -17,15 +17,15 @@ function fn2() {
 
     finally { } // error missing try
     catch (x) { } // error missing try
->x : any
+>x : unknown
     
     try { } finally { } // statement is here, so the 'catch' clause above doesn't absorb errors from the 'finally' clause below
 
     finally { } // error missing try
     
     catch (x) { } // error missing try
->x : any
+>x : unknown
 
     try { } catch () { } // error missing catch binding
-> : any
+> : unknown
 }

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/importDeclWithDeclareModifier.ts] ////
 
 //// [importDeclWithDeclareModifier.ts]
-module x {
+namespace x {
     interface c {
     }
 }
@@ -10,6 +10,5 @@ var b: a;
 
 
 //// [importDeclWithDeclareModifier.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var b;
+export {};

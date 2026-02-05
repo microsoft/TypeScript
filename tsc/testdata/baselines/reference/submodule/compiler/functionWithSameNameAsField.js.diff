@@ -1,8 +1,8 @@
 --- old.functionWithSameNameAsField.js
 +++ new.functionWithSameNameAsField.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [functionWithSameNameAsField.js]
+ "use strict";
  class TestProgressBar {
 +    total;
      total(total) {

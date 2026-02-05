@@ -37,12 +37,6 @@ const y = x + 1;
 /// <reference types="node" />
 
 const y = x + 1;
-// @Filename: /e.ts
-// some comment
-
-/// <reference no-default-lib="true" />
-
-const y = x + 1;
 // @Filename: /f.ts
 // some comment
 
@@ -82,16 +76,6 @@ const y = x + 1;`,
 		`// some comment
 
 /// <reference types="node" />
-
-import { x } from "./a";
-
-const y = x + 1;`,
-	}, nil /*preferences*/)
-	f.GoToFile(t, "/e.ts")
-	f.VerifyImportFixAtPosition(t, []string{
-		`// some comment
-
-/// <reference no-default-lib="true" />
 
 import { x } from "./a";
 

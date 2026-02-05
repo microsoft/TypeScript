@@ -10,6 +10,7 @@ class A {
 }
 
 //// [argumentsUsedInObjectLiteralProperty.js]
+"use strict";
 class A {
     static createSelectableViewModel(initialState, selectedValue) {
         return {

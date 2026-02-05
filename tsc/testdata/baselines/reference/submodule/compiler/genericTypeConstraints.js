@@ -16,6 +16,7 @@ class BarExtended extends Bar<FooExtended> {
 }
 
 //// [genericTypeConstraints.js]
+"use strict";
 class Foo {
     fooMethod() { }
 }

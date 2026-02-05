@@ -12,7 +12,8 @@ func TestJsdocTypedefTag(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @allowNonTsExtensions: true
+	const content = `// @lib: es5
+// @allowNonTsExtensions: true
 // @Filename: jsdocCompletion_typedef.js
 /** @typedef {(string | number)} NumberLike */
 

@@ -5,5 +5,6 @@
 1)
 
 //// [parseCommaSeparatedNewlineNumber.js]
+"use strict";
 (a,
     1);

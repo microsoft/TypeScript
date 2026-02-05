@@ -1,8 +1,8 @@
 --- old.emitOneLineVariableDeclarationRemoveCommentsFalse.js
 +++ new.emitOneLineVariableDeclarationRemoveCommentsFalse.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [emitOneLineVariableDeclarationRemoveCommentsFalse.js]
+ "use strict";
  let a = /*[[${something}]]*/ {};
 -let b = /*[[${something}]]*/ {};
 -let c = /*[[${something}]]*/ { hoge: true };

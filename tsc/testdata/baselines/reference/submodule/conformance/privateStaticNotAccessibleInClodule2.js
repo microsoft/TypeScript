@@ -12,11 +12,12 @@ class D extends C {
     baz: number;   
 }
 
-module D {
+namespace D {
     export var y = D.bar; // error
 }
 
 //// [privateStaticNotAccessibleInClodule2.js]
+"use strict";
 // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
 class C {
     foo;

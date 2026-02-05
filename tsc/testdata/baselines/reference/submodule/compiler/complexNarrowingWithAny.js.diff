@@ -1,6 +1,6 @@
 --- old.complexNarrowingWithAny.js
 +++ new.complexNarrowingWithAny.js
-@@= skipped -692, +692 lines =@@
+@@= skipped -689, +689 lines =@@
      import51.ControlContainer = ControlContainer;
  })(import51 || (import51 = {}));
  class _View_AppComponent0 {

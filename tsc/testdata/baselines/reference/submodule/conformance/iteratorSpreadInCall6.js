@@ -31,6 +31,7 @@ class _StringIterator {
 foo(...new SymbolIterator, ...new _StringIterator);
 
 //// [iteratorSpreadInCall6.js]
+"use strict";
 function foo(...s) { }
 class SymbolIterator {
     next() {

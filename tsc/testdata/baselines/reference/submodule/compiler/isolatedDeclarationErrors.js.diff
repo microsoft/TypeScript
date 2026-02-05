@@ -1,6 +1,6 @@
 --- old.isolatedDeclarationErrors.js
 +++ new.isolatedDeclarationErrors.js
-@@= skipped -17, +17 lines =@@
+@@= skipped -18, +18 lines =@@
  errorOnAssignmentBelow.a = "";
  const errorOnMissingReturn = () => { };
  errorOnMissingReturn.a = "";

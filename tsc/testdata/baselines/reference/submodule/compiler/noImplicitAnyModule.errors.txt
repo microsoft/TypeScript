@@ -5,7 +5,7 @@ noImplicitAnyModule.ts(17,14): error TS7010: 'f', which lacks return-type annota
 
 
 ==== noImplicitAnyModule.ts (4 errors) ====
-    declare module Module {
+    declare namespace Module {
         interface Interface {
             // Should return error for implicit any on return type.
             new ();

@@ -1,6 +1,6 @@
 --- old.importTypeInJSDoc.js
 +++ new.importTypeInJSDoc.js
-@@= skipped -29, +29 lines =@@
+@@= skipped -30, +30 lines =@@
  /**
   * @typedef {import("./externs")} Foo
   */

@@ -37,29 +37,29 @@ interface C {
 >s : Symbol(s, Decl(orderMattersForSignatureGroupIdentity.ts, 12, 9))
 }
 
-var v: A;
->v : Symbol(v, Decl(orderMattersForSignatureGroupIdentity.ts, 15, 3), Decl(orderMattersForSignatureGroupIdentity.ts, 16, 3))
+declare var v: A;
+>v : Symbol(v, Decl(orderMattersForSignatureGroupIdentity.ts, 15, 11), Decl(orderMattersForSignatureGroupIdentity.ts, 16, 11))
 >A : Symbol(A, Decl(orderMattersForSignatureGroupIdentity.ts, 0, 0))
 
-var v: B;
->v : Symbol(v, Decl(orderMattersForSignatureGroupIdentity.ts, 15, 3), Decl(orderMattersForSignatureGroupIdentity.ts, 16, 3))
+declare var v: B;
+>v : Symbol(v, Decl(orderMattersForSignatureGroupIdentity.ts, 15, 11), Decl(orderMattersForSignatureGroupIdentity.ts, 16, 11))
 >B : Symbol(B, Decl(orderMattersForSignatureGroupIdentity.ts, 3, 1))
 
 v({ s: "", n: 0 }).toLowerCase();
->v : Symbol(v, Decl(orderMattersForSignatureGroupIdentity.ts, 15, 3), Decl(orderMattersForSignatureGroupIdentity.ts, 16, 3))
+>v : Symbol(v, Decl(orderMattersForSignatureGroupIdentity.ts, 15, 11), Decl(orderMattersForSignatureGroupIdentity.ts, 16, 11))
 >s : Symbol(s, Decl(orderMattersForSignatureGroupIdentity.ts, 18, 3))
 >n : Symbol(n, Decl(orderMattersForSignatureGroupIdentity.ts, 18, 10))
 
-var w: A;
->w : Symbol(w, Decl(orderMattersForSignatureGroupIdentity.ts, 20, 3), Decl(orderMattersForSignatureGroupIdentity.ts, 21, 3))
+declare var w: A;
+>w : Symbol(w, Decl(orderMattersForSignatureGroupIdentity.ts, 20, 11), Decl(orderMattersForSignatureGroupIdentity.ts, 21, 11))
 >A : Symbol(A, Decl(orderMattersForSignatureGroupIdentity.ts, 0, 0))
 
-var w: C;
->w : Symbol(w, Decl(orderMattersForSignatureGroupIdentity.ts, 20, 3), Decl(orderMattersForSignatureGroupIdentity.ts, 21, 3))
+declare var w: C;
+>w : Symbol(w, Decl(orderMattersForSignatureGroupIdentity.ts, 20, 11), Decl(orderMattersForSignatureGroupIdentity.ts, 21, 11))
 >C : Symbol(C, Decl(orderMattersForSignatureGroupIdentity.ts, 8, 1))
 
 w({ s: "", n: 0 }).toLowerCase();
->w : Symbol(w, Decl(orderMattersForSignatureGroupIdentity.ts, 20, 3), Decl(orderMattersForSignatureGroupIdentity.ts, 21, 3))
+>w : Symbol(w, Decl(orderMattersForSignatureGroupIdentity.ts, 20, 11), Decl(orderMattersForSignatureGroupIdentity.ts, 21, 11))
 >s : Symbol(s, Decl(orderMattersForSignatureGroupIdentity.ts, 23, 3))
 >n : Symbol(n, Decl(orderMattersForSignatureGroupIdentity.ts, 23, 10))
 

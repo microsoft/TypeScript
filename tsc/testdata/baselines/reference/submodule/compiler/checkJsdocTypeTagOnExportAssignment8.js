@@ -17,6 +17,7 @@ export default {
 
 
 //// [checkJsdocTypeTagOnExportAssignment8.js]
+"use strict";
 //// [a.js]
 "use strict";
 /**

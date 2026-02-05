@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/ambient/ambientInsideNonAmbient.ts] ////
 
 === ambientInsideNonAmbient.ts ===
-module M {
+namespace M {
 >M : typeof M
 
     export declare var x;
@@ -16,10 +16,10 @@ module M {
     export declare enum E { }
 >E : E
 
-    export declare module M { }
+    export declare namespace M { }
 }
 
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 
     declare var x;
@@ -34,5 +34,5 @@ module M2 {
     declare enum E { }
 >E : E
 
-    declare module M { }
+    declare namespace M { }
 }

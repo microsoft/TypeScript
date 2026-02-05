@@ -1,6 +1,6 @@
 --- old.sourceMapValidationWithComments.sourcemap.txt
 +++ new.sourceMapValidationWithComments.sourcemap.txt
-@@= skipped -24, +24 lines =@@
+@@= skipped -25, +25 lines =@@
  2 >    ^^^^^^
  3 >          ^
  4 >           ^^^^^^^^^
@@ -14,11 +14,11 @@
  3 >           
  4 >           debugFunc
 +5 >                    () 
- 1->Emitted(2, 5) Source(3, 12) + SourceIndex(0)
- 2 >Emitted(2, 11) Source(3, 18) + SourceIndex(0)
- 3 >Emitted(2, 12) Source(3, 19) + SourceIndex(0)
- 4 >Emitted(2, 21) Source(3, 28) + SourceIndex(0)
-+5 >Emitted(2, 24) Source(3, 31) + SourceIndex(0)
+ 1->Emitted(3, 5) Source(3, 12) + SourceIndex(0)
+ 2 >Emitted(3, 11) Source(3, 18) + SourceIndex(0)
+ 3 >Emitted(3, 12) Source(3, 19) + SourceIndex(0)
+ 4 >Emitted(3, 21) Source(3, 28) + SourceIndex(0)
++5 >Emitted(3, 24) Source(3, 31) + SourceIndex(0)
  ---
  >>>        // Start Debugger Test Code
  1->^^^^^^^^
@@ -34,10 +34,10 @@
  1 >
 -  >    
 -2 >    }
--1 >Emitted(16, 5) Source(20, 5) + SourceIndex(0)
+-1 >Emitted(17, 5) Source(20, 5) + SourceIndex(0)
 +2 >    
 +  >        }
-+1 >Emitted(16, 5) Source(19, 21) + SourceIndex(0)
- 2 >Emitted(16, 6) Source(20, 6) + SourceIndex(0)
++1 >Emitted(17, 5) Source(19, 21) + SourceIndex(0)
+ 2 >Emitted(17, 6) Source(20, 6) + SourceIndex(0)
  ---
  >>>}

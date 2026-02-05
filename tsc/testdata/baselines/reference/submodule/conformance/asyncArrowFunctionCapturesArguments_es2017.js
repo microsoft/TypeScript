@@ -10,6 +10,7 @@ class C {
 
 
 //// [asyncArrowFunctionCapturesArguments_es2017.js]
+"use strict";
 class C {
     method() {
         function other() { }

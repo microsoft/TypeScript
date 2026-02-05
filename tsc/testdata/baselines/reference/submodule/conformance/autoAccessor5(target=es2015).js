@@ -14,6 +14,7 @@ class C2 {
 }
 
 //// [autoAccessor5.js]
+"use strict";
 class C1 {
     accessor ["w"];
     accessor ["x"] = 1;

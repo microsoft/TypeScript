@@ -375,7 +375,7 @@ interface NodeArray<T extends Node> extends Array<T> {
 >NodeArray : Symbol(NodeArray, Decl(coAndContraVariantInferences2.ts, 107, 1))
 >T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 109, 20))
 >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 109, 20))
 
     someProp: string;

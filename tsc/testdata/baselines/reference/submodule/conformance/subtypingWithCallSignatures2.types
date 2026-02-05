@@ -787,8 +787,8 @@ var r18arg1 = <T>(x: (a: T) => T) => <T[]>null;
 ><T[]>null : T[]
 
 var r18 = foo18(r18arg1); 
->r18 : { (x: { (a: number): number; (a: string): string; }): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }
->foo18(r18arg1) : { (x: { (a: number): number; (a: string): string; }): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }
+>r18 : any
+>foo18(r18arg1) : any
 >foo18 : { (a: { (x: { (a: number): number; (a: string): string; }): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }): { (x: { (a: number): number; (a: string): string; }): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }; (a: any): any; }
 >r18arg1 : <T>(x: (a: T) => T) => T[]
 

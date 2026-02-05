@@ -16,6 +16,8 @@ exports.A = function () {
 >A : Symbol(A, Decl(a-ext.js, 0, 0))
 
     this.x = 1;
+>this : Symbol("a-ext", Decl(a-ext.js, 0, 0))
+
 };
 
 === a.js ===

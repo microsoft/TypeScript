@@ -1,6 +1,6 @@
 --- old.subtypesOfTypeParameterWithConstraints2.js
 +++ new.subtypesOfTypeParameterWithConstraints2.js
-@@= skipped -187, +187 lines =@@
+@@= skipped -188, +188 lines =@@
      var r3 = true ? new Date() : y;
  }
  class C1 {

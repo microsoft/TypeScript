@@ -1,6 +1,6 @@
 --- old.typeParametersAvailableInNestedScope3.js
 +++ new.typeParametersAvailableInNestedScope3.js
-@@= skipped -29, +29 lines =@@
+@@= skipped -30, +30 lines =@@
 
  //// [typeParametersAvailableInNestedScope3.d.ts]
  declare function foo<T>(v: T): {

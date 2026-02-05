@@ -1,9 +1,9 @@
 --- old.symbolDeclarationEmit11.js
 +++ new.symbolDeclarationEmit11.js
-@@= skipped -8, +8 lines =@@
- }
+@@= skipped -9, +9 lines =@@
 
  //// [symbolDeclarationEmit11.js]
+ "use strict";
 -var _a;
  class C {
 -    static [(_a = Symbol.iterator, Symbol.isConcatSpreadable)]() { }

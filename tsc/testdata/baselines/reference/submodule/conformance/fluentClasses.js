@@ -21,6 +21,7 @@ var z = c.foo().bar().baz();  // Fluent pattern
 
 
 //// [fluentClasses.js]
+"use strict";
 class A {
     foo() {
         return this;

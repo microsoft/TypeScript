@@ -1,19 +1,25 @@
 invalidInstantiatedModule.ts(2,18): error TS2300: Duplicate identifier 'Point'.
+invalidInstantiatedModule.ts(2,26): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+invalidInstantiatedModule.ts(2,37): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 invalidInstantiatedModule.ts(3,16): error TS2300: Duplicate identifier 'Point'.
 invalidInstantiatedModule.ts(12,8): error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
 
 
-==== invalidInstantiatedModule.ts (3 errors) ====
-    module M {
+==== invalidInstantiatedModule.ts (5 errors) ====
+    namespace M {
         export class Point { x: number; y: number }
                      ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
+                             ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+                                        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
         export var Point = 1;  // Error
                    ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
     }
     
-    module M2 {
+    namespace M2 {
         export interface Point { x: number; y: number }
         export var Point = 1;
     }
@@ -22,7 +28,7 @@ invalidInstantiatedModule.ts(12,8): error TS2833: Cannot find namespace 'm'. Did
     var p: m.Point; // Error
            ~
 !!! error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
-!!! related TS2728 invalidInstantiatedModule.ts:1:8: 'M' is declared here.
+!!! related TS2728 invalidInstantiatedModule.ts:1:11: 'M' is declared here.
     
     
      

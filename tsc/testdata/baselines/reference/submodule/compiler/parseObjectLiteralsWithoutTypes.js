@@ -7,6 +7,7 @@ let z: { foo, bar: number }
 
 
 //// [parseObjectLiteralsWithoutTypes.js]
+"use strict";
 let x;
 let y;
 let z;

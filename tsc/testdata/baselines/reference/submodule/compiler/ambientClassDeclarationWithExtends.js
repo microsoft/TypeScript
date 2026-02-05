@@ -24,15 +24,18 @@ var f: E = new F();
 
 
 //// [ambientClassDeclarationExtends_singleFile.js]
+"use strict";
 var D;
 (function (D) {
     var x;
 })(D || (D = {}));
 var d = new D();
 //// [ambientClassDeclarationExtends_file1.js]
+"use strict";
 var F;
 (function (F) {
     var y;
 })(F || (F = {}));
 //// [ambientClassDeclarationExtends_file2.js]
+"use strict";
 var f = new F();

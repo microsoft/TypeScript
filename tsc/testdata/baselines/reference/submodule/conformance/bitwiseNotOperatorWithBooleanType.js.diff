@@ -1,6 +1,6 @@
 --- old.bitwiseNotOperatorWithBooleanType.js
 +++ new.bitwiseNotOperatorWithBooleanType.js
-@@= skipped -44, +44 lines =@@
+@@= skipped -45, +45 lines =@@
  var BOOLEAN;
  function foo() { return true; }
  class A {

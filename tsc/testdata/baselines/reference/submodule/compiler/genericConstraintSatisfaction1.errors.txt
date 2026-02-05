@@ -1,13 +1,17 @@
-genericConstraintSatisfaction1.ts(6,6): error TS2322: Type 'number' is not assignable to type 'string'.
+genericConstraintSatisfaction1.ts(7,1): error TS2454: Variable 'x' is used before being assigned.
+genericConstraintSatisfaction1.ts(7,6): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== genericConstraintSatisfaction1.ts (1 errors) ====
+==== genericConstraintSatisfaction1.ts (2 errors) ====
     interface I<S> {
        f: <T extends S>(x: T) => void
     }
      
     var x: I<{s: string}>
+    declare var x: I<{s: string}>
     x.f({s: 1})
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
          ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
 !!! related TS6500 genericConstraintSatisfaction1.ts:5:11: The expected type comes from property 's' which is declared here on type '{ s: string; }'

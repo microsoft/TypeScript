@@ -1,0 +1,7 @@
+parserFunctionDeclaration1.d.ts(1,18): error TS7010: 'F', which lacks return-type annotation, implicitly has an 'any' return type.
+
+
+==== parserFunctionDeclaration1.d.ts (1 errors) ====
+    declare function F();
+                     ~
+!!! error TS7010: 'F', which lacks return-type annotation, implicitly has an 'any' return type.

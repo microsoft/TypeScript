@@ -11,49 +11,67 @@
 -
 -
 -==== a.js (7 errors) ====
--    function Installer () {
--        // arg: number
--        this.arg = 0
--        // unknown: string | boolean | null
--        this.unknown = null
--        // twice: string | undefined
--        this.twice = undefined
--        this.twice = 'hi'
--        // twices: any[] | null
--        this.twices = []
++a.js(3,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(5,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(7,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(8,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(10,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(11,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++
++
++==== a.js (6 errors) ====
+     function Installer () {
+         // arg: number
+         this.arg = 0
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+         // unknown: string | boolean | null
+         this.unknown = null
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+         // twice: string | undefined
+         this.twice = undefined
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+         this.twice = 'hi'
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+         // twices: any[] | null
+         this.twices = []
 -        ~~~~~~~~~~~~~~~~
 -!!! error TS7008: Member 'twices' implicitly has an 'any[]' type.
--        this.twices = null
--    }
--    Installer.prototype.first = function () {
--        this.arg = 'hi' // error
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+         this.twices = null
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+     }
+     Installer.prototype.first = function () {
+         this.arg = 'hi' // error
 -        ~~~~~~~~
 -!!! error TS2322: Type 'string' is not assignable to type 'number'.
--        this.unknown = 'hi' // ok
--        this.newProperty = 1 // ok: number | boolean
--        this.twice = undefined // ok
+         this.unknown = 'hi' // ok
+         this.newProperty = 1 // ok: number | boolean
+         this.twice = undefined // ok
 -        ~~~~~~~~~~
 -!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
--        this.twice = 'hi' // ok
--    }
--    Installer.prototype.second = function () {
--        this.arg = false // error
+         this.twice = 'hi' // ok
+     }
+     Installer.prototype.second = function () {
+         this.arg = false // error
 -        ~~~~~~~~
 -!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
--        this.unknown = false // ok
--        this.newProperty = false // ok
--        this.twice = null // error
+         this.unknown = false // ok
+         this.newProperty = false // ok
+         this.twice = null // error
 -        ~~~~~~~~~~
 -!!! error TS2322: Type 'null' is not assignable to type 'string'.
--        this.twice = false // error
+         this.twice = false // error
 -        ~~~~~~~~~~
 -!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
--        this.twices.push(1) // error: Object is possibly null
+         this.twices.push(1) // error: Object is possibly null
 -        ~~~~~~~~~~~
 -!!! error TS2531: Object is possibly 'null'.
--        if (this.twices != null) {
--            this.twices.push('hi')
--        }
--    }
--    
-+<no content>
+         if (this.twices != null) {
+             this.twices.push('hi')
+         }

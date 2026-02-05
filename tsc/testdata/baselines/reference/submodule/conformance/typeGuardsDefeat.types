@@ -37,7 +37,7 @@ function foo(x: number | string) {
     }
 }
 function foo2(x: number | string) {
->foo2 : (x: string | number) => number
+>foo2 : (x: string | number) => number | undefined
 >x : string | number
 
     if (typeof x === "string") {
@@ -73,7 +73,7 @@ function foo2(x: number | string) {
 >f : () => number
 }
 function foo3(x: number | string) {
->foo3 : (x: string | number) => number
+>foo3 : (x: string | number) => number | undefined
 >x : string | number
 
     if (typeof x === "string") {

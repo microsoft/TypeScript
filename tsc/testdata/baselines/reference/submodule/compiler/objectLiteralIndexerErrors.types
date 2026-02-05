@@ -11,10 +11,10 @@ interface B extends A {
 >y : string
 }
 
-var a: A;
+declare var a: A;
 >a : A
 
-var b: B;
+declare var b: B;
 >b : B
 
 var c: any;

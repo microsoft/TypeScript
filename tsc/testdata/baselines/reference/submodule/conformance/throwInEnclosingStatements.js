@@ -49,6 +49,7 @@ var aa = {
 
 
 //// [throwInEnclosingStatements.js]
+"use strict";
 function fn(x) {
     throw x;
 }

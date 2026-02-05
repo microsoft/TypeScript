@@ -1,0 +1,18 @@
+--- old.goToDefinitionObjectLiteralProperties3.baseline.jsonc
++++ new.goToDefinitionObjectLiteralProperties3.baseline.jsonc
+@@= skipped -22, +22 lines =@@
+ // === goToDefinition ===
+ // === /goToDefinitionObjectLiteralProperties3.ts ===
+ // type A = {
+-//   <|[|foo|]: unknown;|>
++//   foo: unknown;
+ // };
+ // 
+ // type B = {
+@@= skipped -14, +14 lines =@@
+ // function test2<T extends A>(arg: T | B) {}
+ // 
+ // test2({
+-//   foo/*GOTO DEF*/: 2,
++//   <|[|foo|]/*GOTO DEF*/: 2|>,
+ // });

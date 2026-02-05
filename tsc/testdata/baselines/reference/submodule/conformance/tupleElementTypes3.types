@@ -3,7 +3,7 @@
 === tupleElementTypes3.ts ===
 var [a, b] = [0, undefined];
 >a : number
->b : any
+>b : undefined
 >[0, undefined] : [number, undefined]
 >0 : 0
 >undefined : undefined

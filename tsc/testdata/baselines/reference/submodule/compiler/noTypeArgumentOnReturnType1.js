@@ -9,6 +9,7 @@ class A<T>{
 }
 
 //// [noTypeArgumentOnReturnType1.js]
+"use strict";
 class A {
     foo() {
         return null;

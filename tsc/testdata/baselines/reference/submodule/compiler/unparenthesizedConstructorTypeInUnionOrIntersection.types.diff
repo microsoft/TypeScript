@@ -1,11 +1,20 @@
 --- old.unparenthesizedConstructorTypeInUnionOrIntersection.types
 +++ new.unparenthesizedConstructorTypeInUnionOrIntersection.types
-@@= skipped -39, +39 lines =@@
+@@= skipped -11, +11 lines =@@
+ >U3 : new () => number
+
+ type U4 = | new (foo?: number) => void;
+->U4 : new (foo?: number) => void
++>U4 : new (foo?: number | undefined) => void
+ >foo : number | undefined
+
+ type U5 = string | new (number: number, foo?: string) => void | number;
+@@= skipped -28, +28 lines =@@
  >I3 : new () => boolean
 
  type I4 = & new () => boolean & null;
 ->I4 : new () => boolean & null
-+>I4 : new () => null
++>I4 : new () => never
 
  type I5 = string & new (any: any, any2: any) => any & any;
  >I5 : I5

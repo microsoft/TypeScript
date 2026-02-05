@@ -10,6 +10,7 @@ function f() {
 
 
 //// [parseLinkTag.js]
+"use strict";
 /** trailing @link tag {@link */
 var x;
 /** @returns trailing @link tag {@link */

@@ -23,3 +23,4 @@ type WithIndexKey = keyof WithIndex;       // string | number <-- Expected: stri
 type WithoutIndexKey = keyof WithoutIndex; // number          <-- Expected: "foo" | "bar"
 
 //// [computedTypesKeyofNoIndexSignatureType.js]
+"use strict";

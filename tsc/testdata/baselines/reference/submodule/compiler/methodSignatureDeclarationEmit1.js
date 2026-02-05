@@ -9,6 +9,7 @@ class C {
 }
 
 //// [methodSignatureDeclarationEmit1.js]
+"use strict";
 class C {
     foo(a) {
     }

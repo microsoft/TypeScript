@@ -17,7 +17,7 @@ interface Ellement {
 >p : any
 }
 
-var e: Ellement;
+declare var e: Ellement;
 >e : Ellement
 
 // All of these should pass. Neither type is a supertype of the other, but the RHS should

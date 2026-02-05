@@ -1,7 +1,7 @@
 --- old.typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.js
 +++ new.typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.js
-@@= skipped -29, +29 lines =@@
- //// [typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.js]
+@@= skipped -30, +30 lines =@@
+ "use strict";
  // implement
  class Identity {
 +    item;

@@ -9,7 +9,7 @@ function panic(val: string[], ...opt: string[]) { }
 panic([], 'one', 'two');
 >panic([], 'one', 'two') : void
 >panic : (val: string[], ...opt: string[]) => void
->[] : undefined[]
+>[] : never[]
 >'one' : "one"
 >'two' : "two"
 

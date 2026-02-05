@@ -3,10 +3,10 @@
 === voidOperatorWithAnyOtherType.ts ===
 // void  operator on any type
 
-var ANY: any;
+declare var ANY: any;
 >ANY : any
 
-var ANY1;
+declare var ANY1;
 >ANY1 : any
 
 var ANY2: any[] = ["", ""];
@@ -15,7 +15,7 @@ var ANY2: any[] = ["", ""];
 >"" : ""
 >"" : ""
 
-var obj: () => {}
+declare var obj: () => {};
 >obj : () => {}
 
 var obj1 = {x:"",y:1};
@@ -29,7 +29,7 @@ var obj1 = {x:"",y:1};
 function foo(): any {
 >foo : () => any
 
-    var a;
+    var a!: any;
 >a : any
 
     return a;
@@ -44,17 +44,17 @@ class A {
     static foo() {
 >foo : () => any
 
-        var a;
+        var a!: any;
 >a : any
 
         return a;
 >a : any
     }
 }
-module M {
+namespace M {
 >M : typeof M
 
-    export var n: any;
+    export var n!: any;
 >n : any
 }
 var objA = new A();
@@ -64,89 +64,89 @@ var objA = new A();
 
 // any type var
 var ResultIsAny1 = void ANY1;
->ResultIsAny1 : any
+>ResultIsAny1 : undefined
 >void ANY1 : undefined
 >ANY1 : any
 
 var ResultIsAny2 = void ANY2;
->ResultIsAny2 : any
+>ResultIsAny2 : undefined
 >void ANY2 : undefined
 >ANY2 : any[]
 
 var ResultIsAny3 = void A;
->ResultIsAny3 : any
+>ResultIsAny3 : undefined
 >void A : undefined
 >A : typeof A
 
 var ResultIsAny4 = void M;
->ResultIsAny4 : any
+>ResultIsAny4 : undefined
 >void M : undefined
 >M : typeof M
 
 var ResultIsAny5 = void obj;
->ResultIsAny5 : any
+>ResultIsAny5 : undefined
 >void obj : undefined
 >obj : () => {}
 
 var ResultIsAny6 = void obj1;
->ResultIsAny6 : any
+>ResultIsAny6 : undefined
 >void obj1 : undefined
 >obj1 : { x: string; y: number; }
 
 // any type literal
 var ResultIsAny7 = void undefined;
->ResultIsAny7 : any
+>ResultIsAny7 : undefined
 >void undefined : undefined
 >undefined : undefined
 
 var ResultIsAny8 = void null;
->ResultIsAny8 : any
+>ResultIsAny8 : undefined
 >void null : undefined
 
 // any type expressions
 var ResultIsAny9 = void ANY2[0]
->ResultIsAny9 : any
+>ResultIsAny9 : undefined
 >void ANY2[0] : undefined
 >ANY2[0] : any
 >ANY2 : any[]
 >0 : 0
 
 var ResultIsAny10 = void obj1.x;
->ResultIsAny10 : any
+>ResultIsAny10 : undefined
 >void obj1.x : undefined
 >obj1.x : string
 >obj1 : { x: string; y: number; }
 >x : string
 
 var ResultIsAny11 = void obj1.y;
->ResultIsAny11 : any
+>ResultIsAny11 : undefined
 >void obj1.y : undefined
 >obj1.y : number
 >obj1 : { x: string; y: number; }
 >y : number
 
 var ResultIsAny12 = void objA.a;
->ResultIsAny12 : any
+>ResultIsAny12 : undefined
 >void objA.a : undefined
 >objA.a : any
 >objA : A
 >a : any
 
 var ResultIsAny13 = void M.n;
->ResultIsAny13 : any
+>ResultIsAny13 : undefined
 >void M.n : undefined
 >M.n : any
 >M : typeof M
 >n : any
 
 var ResultIsAny14 = void foo();
->ResultIsAny14 : any
+>ResultIsAny14 : undefined
 >void foo() : undefined
 >foo() : any
 >foo : () => any
 
 var ResultIsAny15 = void A.foo();
->ResultIsAny15 : any
+>ResultIsAny15 : undefined
 >void A.foo() : undefined
 >A.foo() : any
 >A.foo : () => any
@@ -154,7 +154,7 @@ var ResultIsAny15 = void A.foo();
 >foo : () => any
 
 var ResultIsAny16 = void (ANY + ANY1);
->ResultIsAny16 : any
+>ResultIsAny16 : undefined
 >void (ANY + ANY1) : undefined
 >(ANY + ANY1) : any
 >ANY + ANY1 : any
@@ -162,20 +162,20 @@ var ResultIsAny16 = void (ANY + ANY1);
 >ANY1 : any
 
 var ResultIsAny17 = void (null + undefined);
->ResultIsAny17 : any
+>ResultIsAny17 : undefined
 >void (null + undefined) : undefined
 >(null + undefined) : any
 >null + undefined : any
 >undefined : undefined
 
 var ResultIsAny18 = void (null + null);
->ResultIsAny18 : any
+>ResultIsAny18 : undefined
 >void (null + null) : undefined
 >(null + null) : any
 >null + null : any
 
 var ResultIsAny19 = void (undefined + undefined);
->ResultIsAny19 : any
+>ResultIsAny19 : undefined
 >void (undefined + undefined) : undefined
 >(undefined + undefined) : any
 >undefined + undefined : any
@@ -184,13 +184,13 @@ var ResultIsAny19 = void (undefined + undefined);
 
 // multiple void  operators
 var ResultIsAny20 = void void ANY;
->ResultIsAny20 : any
+>ResultIsAny20 : undefined
 >void void ANY : undefined
 >void ANY : undefined
 >ANY : any
 
 var ResultIsAny21 = void void void (ANY + ANY1);
->ResultIsAny21 : any
+>ResultIsAny21 : undefined
 >void void void (ANY + ANY1) : undefined
 >void void (ANY + ANY1) : undefined
 >void (ANY + ANY1) : undefined

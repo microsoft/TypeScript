@@ -17,6 +17,7 @@ function getSecurity(level) {
 }
 
 //// [commentsAfterCaseClauses1.js]
+"use strict";
 function getSecurity(level) {
     switch (level) {
         case 0: // Zero

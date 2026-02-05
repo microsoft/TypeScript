@@ -8,9 +8,13 @@ functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(29,23): error 
 functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(33,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(52,3): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => undefined'.
   Type 'void' is not assignable to type 'undefined'.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(63,7): error TS2322: Type '() => void' is not assignable to type 'FN'.
+  Type 'void' is not assignable to type 'Promise<undefined> | undefined'.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(71,7): error TS2322: Type '() => void' is not assignable to type 'FN'.
+  Type 'void' is not assignable to type 'Promise<undefined> | undefined'.
 
 
-==== functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts (7 errors) ====
+==== functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts (9 errors) ====
     function f10(): undefined {
         // Ok, return type allows implicit return of undefined
     }
@@ -35,7 +39,7 @@ functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(52,3): error T
           ~~~
 !!! error TS2322: Type '() => void' is not assignable to type '() => number | undefined'.
 !!! error TS2322:   Type 'void' is not assignable to type 'number | undefined'.
-        // Error, regular void function because contextual type for implicit return isn't just undefined
+        // Ok, contextual type for implicit return contains undefined
     }
     
     const f22: () => number = () => {
@@ -85,4 +89,26 @@ functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(52,3): error T
     }
     
     f(h2);
+    
+    // https://github.com/microsoft/TypeScript/issues/57840
+    
+    type FN = () => Promise<undefined> | undefined;
+    
+    const fn1: FN = () => {
+          ~~~
+!!! error TS2322: Type '() => void' is not assignable to type 'FN'.
+!!! error TS2322:   Type 'void' is not assignable to type 'Promise<undefined> | undefined'.
+        return;
+    };
+    
+    const fn2: FN = async () => {
+        return;
+    };
+    
+    const fn3: FN = () => {};
+          ~~~
+!!! error TS2322: Type '() => void' is not assignable to type 'FN'.
+!!! error TS2322:   Type 'void' is not assignable to type 'Promise<undefined> | undefined'.
+    
+    const fn4: FN = async () => {};
     

@@ -61,9 +61,7 @@ if (fixed.thing?.name !== "Correct") {
 }
 
 //// [narrowingUnionWithBang.js]
-"use strict";
 var _a;
-Object.defineProperty(exports, "__esModule", { value: true });
 const working = null;
 if (working.thing.name !== "Correct") {
     console.log(working.thing.message);
@@ -85,3 +83,4 @@ if (((_a = fixed.thing) === null || _a === void 0 ? void 0 : _a.name) !== "Corre
 else {
     console.log(fixed.thing.id);
 }
+export {};

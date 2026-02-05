@@ -14,11 +14,12 @@ interface Foo extends Date {
     foo: string;
 }
 
-var y: Foo = null;
+var y: Foo = {} as Foo;
 var c = new C(y);
 var r = c.foo(y);
 
 //// [wrappedAndRecursiveConstraints.js]
+"use strict";
 // no errors expected
 class C {
     data;
@@ -29,6 +30,6 @@ class C {
         return x;
     }
 }
-var y = null;
+var y = {};
 var c = new C(y);
 var r = c.foo(y);

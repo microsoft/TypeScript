@@ -3,18 +3,18 @@
 === comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts ===
 interface A1 {
     b?: number;
->b : number
+>b : number | undefined
 }
 
 interface B1 {
     b?: string;
->b : string
+>b : string | undefined
 }
 
-var a: A1;
+declare var a: A1;
 >a : A1
 
-var b: B1;
+declare var b: B1;
 >b : B1
 
 // operator <

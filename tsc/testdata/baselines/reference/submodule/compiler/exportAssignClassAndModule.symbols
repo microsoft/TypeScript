@@ -8,7 +8,7 @@ import Foo = require('./exportAssignClassAndModule_0');
 var z: Foo.Bar;
 >z : Symbol(z, Decl(exportAssignClassAndModule_1.ts, 3, 3))
 >Foo : Symbol(Foo, Decl(exportAssignClassAndModule_1.ts, 0, 0))
->Bar : Symbol(Foo.Bar, Decl(exportAssignClassAndModule_0.ts, 3, 12))
+>Bar : Symbol(Foo.Bar, Decl(exportAssignClassAndModule_0.ts, 3, 15))
 
 var zz: Foo;
 >zz : Symbol(zz, Decl(exportAssignClassAndModule_1.ts, 4, 3))
@@ -26,13 +26,13 @@ class Foo {
     x: Foo.Bar;
 >x : Symbol(Foo.x, Decl(exportAssignClassAndModule_0.ts, 0, 11))
 >Foo : Symbol(Foo, Decl(exportAssignClassAndModule_0.ts, 0, 0), Decl(exportAssignClassAndModule_0.ts, 2, 1))
->Bar : Symbol(Foo.Bar, Decl(exportAssignClassAndModule_0.ts, 3, 12))
+>Bar : Symbol(Foo.Bar, Decl(exportAssignClassAndModule_0.ts, 3, 15))
 }
-module Foo {
+namespace Foo {
 >Foo : Symbol(Foo, Decl(exportAssignClassAndModule_0.ts, 0, 0), Decl(exportAssignClassAndModule_0.ts, 2, 1))
 
     export interface Bar {
->Bar : Symbol(Bar, Decl(exportAssignClassAndModule_0.ts, 3, 12))
+>Bar : Symbol(Bar, Decl(exportAssignClassAndModule_0.ts, 3, 15))
     }
 }
 export = Foo;

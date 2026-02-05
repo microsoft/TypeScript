@@ -1,6 +1,5 @@
 // === QuickInfo ===
 === /foo.ts ===
-// /// <reference no-default-lib="true"/>
 // /// <reference path='./bar.d.ts' />
 // import.meta;
 //   ^
@@ -17,9 +16,9 @@
 [
   {
     "marker": {
-      "Position": 77,
+      "Position": 38,
       "LSPosition": {
-        "line": 2,
+        "line": 1,
         "character": 2
       },
       "Name": "1",
@@ -29,9 +28,9 @@
   },
   {
     "marker": {
-      "Position": 84,
+      "Position": 45,
       "LSPosition": {
-        "line": 2,
+        "line": 1,
         "character": 9
       },
       "Name": "2",
@@ -44,11 +43,11 @@
       },
       "range": {
         "start": {
-          "line": 2,
+          "line": 1,
           "character": 0
         },
         "end": {
-          "line": 2,
+          "line": 1,
           "character": 11
         }
       }

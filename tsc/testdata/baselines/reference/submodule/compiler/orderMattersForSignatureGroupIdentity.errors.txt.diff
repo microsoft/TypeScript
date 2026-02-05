@@ -9,7 +9,7 @@
 +  The last overload gave the following error.
      Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
  orderMattersForSignatureGroupIdentity.ts(19,20): error TS2339: Property 'toLowerCase' does not exist on type 'never'.
- orderMattersForSignatureGroupIdentity.ts(22,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' must be of type 'A', but here has type 'C'.
+ orderMattersForSignatureGroupIdentity.ts(22,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' must be of type 'A', but here has type 'C'.
 -orderMattersForSignatureGroupIdentity.ts(24,1): error TS2769: No overload matches this call.
 -  Overload 1 of 2, '(x: { s: string; }): string', gave the following error.
 -    Object literal may only specify known properties, and 'n' does not exist in type '{ s: string; }'.
@@ -20,7 +20,7 @@
  orderMattersForSignatureGroupIdentity.ts(24,20): error TS2339: Property 'toLowerCase' does not exist on type 'never'.
 
 @@= skipped -32, +28 lines =@@
-     var v: B;
+     declare var v: B;
      
      v({ s: "", n: 0 }).toLowerCase();
 -    ~
@@ -36,7 +36,7 @@
  !!! error TS2339: Property 'toLowerCase' does not exist on type 'never'.
      
 @@= skipped -16, +15 lines =@@
- !!! related TS6203 orderMattersForSignatureGroupIdentity.ts:21:5: 'w' was also declared here.
+ !!! related TS6203 orderMattersForSignatureGroupIdentity.ts:21:13: 'w' was also declared here.
      
      w({ s: "", n: 0 }).toLowerCase();
 -    ~

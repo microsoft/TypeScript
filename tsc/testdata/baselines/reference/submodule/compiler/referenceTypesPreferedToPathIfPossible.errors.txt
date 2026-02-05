@@ -1,0 +1,14 @@
+usage.ts(1,23): error TS2307: Cannot find module 'url' or its corresponding type declarations.
+
+
+==== usage.ts (1 errors) ====
+    import { parse } from "url";
+                          ~~~~~
+!!! error TS2307: Cannot find module 'url' or its corresponding type declarations.
+    export const thing = () => parse();
+    
+==== node_modules/@types/node/index.d.ts (0 errors) ====
+    declare module "url" {
+        export class Url {}
+        export function parse(): Url; 
+    }

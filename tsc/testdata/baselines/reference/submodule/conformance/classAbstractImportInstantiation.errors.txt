@@ -3,7 +3,7 @@ classAbstractImportInstantiation.ts(9,1): error TS2511: Cannot create an instanc
 
 
 ==== classAbstractImportInstantiation.ts (2 errors) ====
-    module M {
+    namespace M {
         export abstract class A {}
         
         new A;

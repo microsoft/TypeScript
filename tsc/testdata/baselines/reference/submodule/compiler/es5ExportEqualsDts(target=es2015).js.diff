@@ -1,0 +1,11 @@
+--- old.es5ExportEqualsDts(target=es2015).js
++++ new.es5ExportEqualsDts(target=es2015).js
+@@= skipped -26, +26 lines =@@
+
+ //// [es5ExportEqualsDts.d.ts]
+ declare class A {
+-    foo(): A.B;
++    foo(): import("./es5ExportEqualsDts").B;
+ }
+ declare namespace A {
+     interface B {

@@ -6,6 +6,7 @@ class AtomicNumbers {
 }
 
 //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration.js]
+"use strict";
 class AtomicNumbers {
     static H = 1;
 }

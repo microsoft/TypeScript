@@ -1,0 +1,14 @@
+--- old.invalidSplice.types
++++ new.invalidSplice.types
+@@= skipped -3, +3 lines =@@
+ var arr = [].splice(0,3,4,5);
+ >arr : never[]
+ >[].splice(0,3,4,5) : never[]
+->[].splice : { (start: number, deleteCount?: number): never[]; (start: number, deleteCount: number, ...items: never[]): never[]; }
++>[].splice : { (start: number, deleteCount?: number | undefined): never[]; (start: number, deleteCount: number, ...items: never[]): never[]; }
+ >[] : never[]
+->splice : { (start: number, deleteCount?: number): never[]; (start: number, deleteCount: number, ...items: never[]): never[]; }
++>splice : { (start: number, deleteCount?: number | undefined): never[]; (start: number, deleteCount: number, ...items: never[]): never[]; }
+ >0 : 0
+ >3 : 3
+ >4 : 4

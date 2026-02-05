@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxReactEmit4.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -20,6 +20,7 @@ var openClosed1 = <div>
 var spread1 = <div {...p} x={0} />;
 
 //// [file.js]
+"use strict";
 var p;
 var openClosed1 = React.createElement("div", null, blah);
 // Should emit React.__spread({}, p, {x: 0})

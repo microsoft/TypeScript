@@ -2,7 +2,7 @@
 
 === index.js ===
 function Color(obj) {
->Color : { (obj: any): void; prototype: { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }; }
+>Color : { (obj: any): void; prototype: { negate: () => { negate: any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }; }
 >obj : any
 
     this.example = true
@@ -14,70 +14,70 @@ function Color(obj) {
 
 };
 Color.prototype = {
->Color.prototype = {	negate: function () {return this;},	lighten: function (ratio) {return this;},	darken: function (ratio) {return this;},	saturate: function (ratio) {return this;},	desaturate: function (ratio) {return this;},	whiten: function (ratio) {return this;},	blacken: function (ratio) {return this;},	greyscale: function () {return this;},	clearer: function (ratio) {return this;},	toJSON: function () {return this.rgb();},} : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
->Color.prototype : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
->Color : { (obj: any): void; prototype: { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }; }
->prototype : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
->{	negate: function () {return this;},	lighten: function (ratio) {return this;},	darken: function (ratio) {return this;},	saturate: function (ratio) {return this;},	desaturate: function (ratio) {return this;},	whiten: function (ratio) {return this;},	blacken: function (ratio) {return this;},	greyscale: function () {return this;},	clearer: function (ratio) {return this;},	toJSON: function () {return this.rgb();},} : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
+>Color.prototype = {	negate: function () {return this;},	lighten: function (ratio) {return this;},	darken: function (ratio) {return this;},	saturate: function (ratio) {return this;},	desaturate: function (ratio) {return this;},	whiten: function (ratio) {return this;},	blacken: function (ratio) {return this;},	greyscale: function () {return this;},	clearer: function (ratio) {return this;},	toJSON: function () {return this.rgb();},} : { negate: () => { negate: any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
+>Color.prototype : { negate: () => { negate: any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
+>Color : { (obj: any): void; prototype: { negate: () => { negate: any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }; }
+>prototype : { negate: () => { negate: any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
+>{	negate: function () {return this;},	lighten: function (ratio) {return this;},	darken: function (ratio) {return this;},	saturate: function (ratio) {return this;},	desaturate: function (ratio) {return this;},	whiten: function (ratio) {return this;},	blacken: function (ratio) {return this;},	greyscale: function () {return this;},	clearer: function (ratio) {return this;},	toJSON: function () {return this.rgb();},} : { negate: () => { negate: any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 
 	negate: function () {return this;},
->negate : () => any
->function () {return this;} : () => any
->this : any
+>negate : () => { negate: any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
+>function () {return this;} : () => { negate: any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
+>this : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 
 	lighten: function (ratio) {return this;},
->lighten : (ratio: any) => any
->function (ratio) {return this;} : (ratio: any) => any
+>lighten : (ratio: any) => { negate: () => any; lighten: any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
+>function (ratio) {return this;} : (ratio: any) => { negate: () => any; lighten: any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 >ratio : any
->this : any
+>this : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 
 	darken: function (ratio) {return this;},
->darken : (ratio: any) => any
->function (ratio) {return this;} : (ratio: any) => any
+>darken : (ratio: any) => { negate: () => any; lighten: (ratio: any) => any; darken: any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
+>function (ratio) {return this;} : (ratio: any) => { negate: () => any; lighten: (ratio: any) => any; darken: any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 >ratio : any
->this : any
+>this : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 
 	saturate: function (ratio) {return this;},
->saturate : (ratio: any) => any
->function (ratio) {return this;} : (ratio: any) => any
+>saturate : (ratio: any) => { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
+>function (ratio) {return this;} : (ratio: any) => { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 >ratio : any
->this : any
+>this : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 
 	desaturate: function (ratio) {return this;},
->desaturate : (ratio: any) => any
->function (ratio) {return this;} : (ratio: any) => any
+>desaturate : (ratio: any) => { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
+>function (ratio) {return this;} : (ratio: any) => { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 >ratio : any
->this : any
+>this : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 
 	whiten: function (ratio) {return this;},
->whiten : (ratio: any) => any
->function (ratio) {return this;} : (ratio: any) => any
+>whiten : (ratio: any) => { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
+>function (ratio) {return this;} : (ratio: any) => { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 >ratio : any
->this : any
+>this : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 
 	blacken: function (ratio) {return this;},
->blacken : (ratio: any) => any
->function (ratio) {return this;} : (ratio: any) => any
+>blacken : (ratio: any) => { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
+>function (ratio) {return this;} : (ratio: any) => { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 >ratio : any
->this : any
+>this : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 
 	greyscale: function () {return this;},
->greyscale : () => any
->function () {return this;} : () => any
->this : any
+>greyscale : () => { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: any; clearer: (ratio: any) => any; toJSON: () => any; }
+>function () {return this;} : () => { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: any; clearer: (ratio: any) => any; toJSON: () => any; }
+>this : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 
 	clearer: function (ratio) {return this;},
->clearer : (ratio: any) => any
->function (ratio) {return this;} : (ratio: any) => any
+>clearer : (ratio: any) => { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: any; toJSON: () => any; }
+>function (ratio) {return this;} : (ratio: any) => { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: any; toJSON: () => any; }
 >ratio : any
->this : any
+>this : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 
 	toJSON: function () {return this.rgb();},
 >toJSON : () => any
 >function () {return this.rgb();} : () => any
 >this.rgb() : any
 >this.rgb : any
->this : any
+>this : { negate: () => any; lighten: (ratio: any) => any; darken: (ratio: any) => any; saturate: (ratio: any) => any; desaturate: (ratio: any) => any; whiten: (ratio: any) => any; blacken: (ratio: any) => any; greyscale: () => any; clearer: (ratio: any) => any; toJSON: () => any; }
 >rgb : any
 
 };

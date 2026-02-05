@@ -12,6 +12,7 @@ s !== s;
 false !== s;
 
 //// [symbolType9.js]
+"use strict";
 var s = Symbol.for("equal");
 s == s;
 s == true;

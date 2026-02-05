@@ -1,19 +1,27 @@
+MC.js(6,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 MW.js(1,15): error TS1340: Module './MC' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./MC')'?
+MW.js(12,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
-==== MC.js (0 errors) ====
+==== MC.js (1 errors) ====
     const MW = require("./MW");
     
     /** @typedef {number} Meyerhauser */
     
     /** @class */
     module.exports = function MC() {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         /** @type {any} */
+    ~~~~~~~~~~~~~~~~~~~~~~
         var x = {}
+    ~~~~~~~~~~~~~~
         return new MW(x);
+    ~~~~~~~~~~~~~~~~~~~~~
     };
+    ~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== MW.js (1 errors) ====
+==== MW.js (2 errors) ====
     /** @typedef {import("./MC")} MC */
                   ~~~~~~~~~~~~~~
 !!! error TS1340: Module './MC' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./MC')'?
@@ -28,4 +36,6 @@ MW.js(1,15): error TS1340: Module './MC' does not refer to a type, but is used a
     }
     
     module.exports = MW;
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     

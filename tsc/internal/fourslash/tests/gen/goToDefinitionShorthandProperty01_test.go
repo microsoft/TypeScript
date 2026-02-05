@@ -11,7 +11,8 @@ func TestGoToDefinitionShorthandProperty01(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `var /*valueDeclaration1*/name = "hello";
+	const content = `// @lib: es5
+var /*valueDeclaration1*/name = "hello";
 var /*valueDeclaration2*/id = 100000;
 declare var /*valueDeclaration3*/id;
 var obj = {[|/*valueDefinition1*/name|], [|/*valueDefinition2*/id|]};

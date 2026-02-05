@@ -4,3 +4,4 @@
 
 
 //// [parserUnaryExpression6.js]
+"use strict";

@@ -1,0 +1,10 @@
+--- old.metadataOfClassFromModule(target=es2015).js
++++ new.metadataOfClassFromModule(target=es2015).js
+@@= skipped -31, +31 lines =@@
+     }
+     MyModule.Leg = Leg;
+     class Person {
++        leftLeg;
+     }
+     __decorate([
+         inject,

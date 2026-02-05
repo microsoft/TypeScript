@@ -17,7 +17,7 @@ function fn<T extends { x: Map<T['x']> }>(sliceIndex: T): AllArg<T['x']> {
 >sliceIndex : T
 
     return null!;
->null! : null
+>null! : never
 }
 
 export default { fn };

@@ -7,7 +7,7 @@ export declare var exports: number;
 export declare var require: string;
 >require : string
 
-declare module m1 {
+declare namespace m1 {
 >m1 : typeof m1
 
     var exports: string;
@@ -16,7 +16,7 @@ declare module m1 {
     var require: number;
 >require : number
 }
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 
     export declare var exports: number;
@@ -37,7 +37,7 @@ declare var exports: number;
 declare var require: string;
 >require : string
 
-declare module m3 {
+declare namespace m3 {
 >m3 : typeof m3
 
     var exports: string;
@@ -46,7 +46,7 @@ declare module m3 {
     var require: number;
 >require : number
 }
-module m4 {
+namespace m4 {
 >m4 : typeof m4
 
     export declare var exports: string;

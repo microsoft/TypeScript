@@ -16,3 +16,4 @@ type E = _E<Sync<number, string, void>>;
 type A = _A<Sync<number, string, void>>;
 
 //// [nondistributiveConditionalTypeInfer.js]
+"use strict";

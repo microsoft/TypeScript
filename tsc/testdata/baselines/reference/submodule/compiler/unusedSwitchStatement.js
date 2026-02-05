@@ -21,6 +21,7 @@ switch (2) {
 }
 
 //// [unusedSwitchStatement.js]
+"use strict";
 switch (1) {
     case 0:
         let x;

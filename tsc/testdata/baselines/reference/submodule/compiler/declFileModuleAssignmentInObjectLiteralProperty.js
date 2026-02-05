@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileModuleAssignmentInObjectLiteralProperty.ts] ////
 
 //// [declFileModuleAssignmentInObjectLiteralProperty.ts]
-module m1 {
+namespace m1 {
     export class c {
     }
 }
@@ -11,6 +11,7 @@ var d = {
 };
 
 //// [declFileModuleAssignmentInObjectLiteralProperty.js]
+"use strict";
 var m1;
 (function (m1) {
     class c {

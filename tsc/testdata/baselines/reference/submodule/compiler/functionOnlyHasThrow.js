@@ -6,6 +6,7 @@ function clone():number {
 }
 
 //// [functionOnlyHasThrow.js]
+"use strict";
 function clone() {
     throw new Error("To be implemented");
 }

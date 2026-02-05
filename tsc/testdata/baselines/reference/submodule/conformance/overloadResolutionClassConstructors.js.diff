@@ -1,8 +1,8 @@
 --- old.overloadResolutionClassConstructors.js
 +++ new.overloadResolutionClassConstructors.js
-@@= skipped -104, +104 lines =@@
-
+@@= skipped -105, +105 lines =@@
  //// [overloadResolutionClassConstructors.js]
+ "use strict";
  class SomeBase {
 +    n;
 +    s;

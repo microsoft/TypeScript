@@ -13,5 +13,6 @@ var d: Derived;
 var r = d();
 
 //// [interfaceWithCallSignaturesThatHidesBaseSignature2.js]
+"use strict";
 var d;
 var r = d();

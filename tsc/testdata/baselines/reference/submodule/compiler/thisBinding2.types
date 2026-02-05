@@ -4,7 +4,7 @@
 class C {
 >C : C
 
- x: number;
+ x!: number;
 >x : number
 
     constructor() {
@@ -48,9 +48,9 @@ class C {
     }  
 }
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
->setTimeout : { (handler: TimerHandler, timeout?: number, ...arguments: any[]): number; (expression: any, msec?: number, language?: any): number; }
+>setTimeout : { (handler: TimerHandler, timeout?: number | undefined, ...arguments: any[]): number; (expression: any, msec?: number | undefined, language?: any): number; }
 >expression : any
->msec : number
+>msec : number | undefined
 >language : any
 
 var messenger = {
@@ -67,7 +67,7 @@ var messenger = {
 
         return setTimeout(() => { var x = this.message; }, 3000);
 >setTimeout(() => { var x = this.message; }, 3000) : number
->setTimeout : { (handler: TimerHandler, timeout?: number, ...arguments: any[]): number; (expression: any, msec?: number, language?: any): number; }
+>setTimeout : { (handler: TimerHandler, timeout?: number | undefined, ...arguments: any[]): number; (expression: any, msec?: number | undefined, language?: any): number; }
 >() => { var x = this.message; } : () => void
 >x : string
 >this.message : string

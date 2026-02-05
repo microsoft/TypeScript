@@ -9,4 +9,5 @@ interface IDirectChildrenMap {
 var directChildrenMap = <IDirectChildrenMap>{}; 
 
 //// [indexer2.js]
+"use strict";
 var directChildrenMap = {};

@@ -16,9 +16,10 @@ overloadresolutionWithConstraintCheckingDeferred.ts(18,27): error TS2769: No ove
       Types of parameters 'x' and 'x' are incompatible.
         Property 'q' is missing in type 'B' but required in type 'D'.
 overloadresolutionWithConstraintCheckingDeferred.ts(19,14): error TS2741: Property 'x' is missing in type 'D' but required in type 'A'.
+overloadresolutionWithConstraintCheckingDeferred.ts(19,32): error TS2741: Property 'x' is missing in type 'D' but required in type 'A'.
 
 
-==== overloadresolutionWithConstraintCheckingDeferred.ts (6 errors) ====
+==== overloadresolutionWithConstraintCheckingDeferred.ts (7 errors) ====
     interface A { x }
     interface B { x; y }
     interface C { z }
@@ -67,8 +68,11 @@ overloadresolutionWithConstraintCheckingDeferred.ts(19,14): error TS2741: Proper
 !!! error TS2769:         Property 'q' is missing in type 'B' but required in type 'D'.
 !!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
 !!! related TS2771 overloadresolutionWithConstraintCheckingDeferred.ts:12:18: The last overload is declared here.
-        var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
+        var y: G<typeof x> = new G(x); // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
                  ~~~~~~~~
+!!! error TS2741: Property 'x' is missing in type 'D' but required in type 'A'.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here.
+                                   ~
 !!! error TS2741: Property 'x' is missing in type 'D' but required in type 'A'.
 !!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here.
         return y;

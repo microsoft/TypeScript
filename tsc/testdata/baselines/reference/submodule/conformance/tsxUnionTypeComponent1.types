@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxUnionTypeComponent1.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : typeof React
 
@@ -22,9 +24,9 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 
         const { AnyComponent } = this.props;
 >AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
->this.props : ComponentProps & { children?: React.ReactNode; }
+>this.props : ComponentProps & { children?: React.ReactNode | undefined; }
 >this : this
->props : ComponentProps & { children?: React.ReactNode; }
+>props : ComponentProps & { children?: React.ReactNode | undefined; }
 
         return (<AnyComponent />);
 >(<AnyComponent />) : JSX.Element

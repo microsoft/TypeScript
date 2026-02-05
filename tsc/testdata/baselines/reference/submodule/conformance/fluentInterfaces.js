@@ -15,5 +15,6 @@ var z = c.foo().bar().baz();  // Fluent pattern
 
 
 //// [fluentInterfaces.js]
+"use strict";
 var c;
 var z = c.foo().bar().baz(); // Fluent pattern

@@ -8,7 +8,7 @@ interface Book {
 
 interface Cover {
     color?: string;
->color : string
+>color : string | undefined
 }
 
 var b1: Book = { forword: "oops" };

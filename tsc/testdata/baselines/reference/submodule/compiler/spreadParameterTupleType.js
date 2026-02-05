@@ -19,6 +19,7 @@ function f2() {
 
 
 //// [spreadParameterTupleType.js]
+"use strict";
 function f1() {
     return function fn(...args) { };
 }

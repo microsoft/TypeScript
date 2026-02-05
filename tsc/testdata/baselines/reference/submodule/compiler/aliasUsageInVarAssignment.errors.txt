@@ -1,0 +1,27 @@
+aliasUsageInVarAssignment_backbone.ts(2,12): error TS2564: Property 'someData' has no initializer and is not definitely assigned in the constructor.
+aliasUsageInVarAssignment_main.ts(7,25): error TS2454: Variable 'i' is used before being assigned.
+
+
+==== aliasUsageInVarAssignment_main.ts (1 errors) ====
+    import Backbone = require("./aliasUsageInVarAssignment_backbone");
+    import moduleA = require("./aliasUsageInVarAssignment_moduleA");
+    interface IHasVisualizationModel {
+        VisualizationModel: typeof Backbone.Model;
+    }
+    var i: IHasVisualizationModel;
+    var m: typeof moduleA = i;
+                            ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+==== aliasUsageInVarAssignment_backbone.ts (1 errors) ====
+    export class Model {
+        public someData: string;
+               ~~~~~~~~
+!!! error TS2564: Property 'someData' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+==== aliasUsageInVarAssignment_moduleA.ts (0 errors) ====
+    import Backbone = require("./aliasUsageInVarAssignment_backbone");
+    export class VisualizationModel extends Backbone.Model {
+        // interesting stuff here
+    }
+    

@@ -1,0 +1,23 @@
+generatorTypeCheck24.ts(1,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+generatorTypeCheck24.ts(2,25): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+generatorTypeCheck24.ts(3,13): error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+
+
+==== generatorTypeCheck24.ts (3 errors) ====
+    class Foo { x: number }
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    class Bar extends Foo { y: string }
+                            ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+    class Baz { z: number }
+                ~
+!!! error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+    function* g3() {
+        yield;
+        yield * [new Foo];
+        yield new Bar;
+        yield new Baz;
+        yield *[new Bar];
+        yield *[new Baz];
+    }

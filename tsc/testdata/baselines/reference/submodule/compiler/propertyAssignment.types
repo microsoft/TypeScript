@@ -1,26 +1,26 @@
 //// [tests/cases/compiler/propertyAssignment.ts] ////
 
 === propertyAssignment.ts ===
-var foo1: { new ():any; }   
+declare var foo1: { new ():any; }   
 >foo1 : new () => any
 
-var bar1: { x : number; }
+declare var bar1: { x : number; }
 >bar1 : { x: number; }
 >x : number
 
-var foo2: { [index]; } // should be an error, used to be indexer, now it is a computed property
+declare var foo2: { [index]; } // should be an error, used to be indexer, now it is a computed property
 >foo2 : { [x: number]: any; }
 >[index] : any
 >index : any
 
-var bar2: { x : number; }
+declare var bar2: { x : number; }
 >bar2 : { x: number; }
 >x : number
 
-var foo3: { ():void; }
+declare var foo3: { ():void; }
 >foo3 : () => void
 
-var bar3: { x : number; }
+declare var bar3: { x : number; }
 >bar3 : { x: number; }
 >x : number
 

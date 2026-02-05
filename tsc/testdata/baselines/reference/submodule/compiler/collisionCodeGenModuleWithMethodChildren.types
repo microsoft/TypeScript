@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/collisionCodeGenModuleWithMethodChildren.ts] ////
 
 === collisionCodeGenModuleWithMethodChildren.ts ===
-module M {
+namespace M {
 >M : typeof M
 
     export var x = 3;
@@ -19,7 +19,7 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
     class d {
@@ -38,7 +38,7 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
     class e {
@@ -58,7 +58,7 @@ module M {
     }
 }
 
-module M { // Shouldnt bn _M
+namespace M { // Shouldnt bn _M
 >M : typeof M
 
     class f {

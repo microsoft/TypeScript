@@ -4,3 +4,4 @@
  
 
 //// [ClassAndModuleThatMergeWithStringIndexerAndExportedFunctionWithTypeIncompatibleWithIndexer.js]
+"use strict";

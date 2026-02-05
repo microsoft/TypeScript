@@ -11,6 +11,7 @@ var z1 = foo1({ x: undefined, y: undefined });
 
 
 //// [undefinedArgumentInference.js]
+"use strict";
 function foo1(f1) {
     return undefined;
 }

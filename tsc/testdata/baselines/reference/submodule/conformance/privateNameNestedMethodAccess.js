@@ -27,6 +27,7 @@ class C {
 
 
 //// [privateNameNestedMethodAccess.js]
+"use strict";
 class C {
     #foo = 42;
     #bar() { new C().#baz; }

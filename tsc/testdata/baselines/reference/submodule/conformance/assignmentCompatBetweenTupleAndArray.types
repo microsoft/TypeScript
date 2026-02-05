@@ -1,22 +1,22 @@
 //// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts] ////
 
 === assignmentCompatBetweenTupleAndArray.ts ===
-var numStrTuple: [number, string];
+declare var numStrTuple: [number, string];
 >numStrTuple : [number, string]
 
-var numNumTuple: [number, number];
+declare var numNumTuple: [number, number];
 >numNumTuple : [number, number]
 
-var numEmptyObjTuple: [number, {}];
+declare var numEmptyObjTuple: [number, {}];
 >numEmptyObjTuple : [number, {}]
 
-var emptyObjTuple: [{}];
+declare var emptyObjTuple: [{}];
 >emptyObjTuple : [{}]
 
-var numArray: number[];
+declare var numArray: number[];
 >numArray : number[]
 
-var emptyObjArray: {}[];
+declare var emptyObjArray: {}[];
 >emptyObjArray : {}[]
 
 // no error

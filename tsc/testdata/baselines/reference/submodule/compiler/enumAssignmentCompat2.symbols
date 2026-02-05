@@ -11,11 +11,11 @@ enum W {
 
 }
 
-module W {
+namespace W {
 >W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
 
     export class D { }
->D : Symbol(D, Decl(enumAssignmentCompat2.ts, 6, 10))
+>D : Symbol(D, Decl(enumAssignmentCompat2.ts, 6, 13))
 }
 
 interface WStatic {
@@ -112,12 +112,12 @@ i = W.a;
 >a : Symbol(W.a, Decl(enumAssignmentCompat2.ts, 0, 8))
 
 W.D;
->W.D : Symbol(W.D, Decl(enumAssignmentCompat2.ts, 6, 10))
+>W.D : Symbol(W.D, Decl(enumAssignmentCompat2.ts, 6, 13))
 >W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
->D : Symbol(W.D, Decl(enumAssignmentCompat2.ts, 6, 10))
+>D : Symbol(W.D, Decl(enumAssignmentCompat2.ts, 6, 13))
 
 var p: W.D;
 >p : Symbol(p, Decl(enumAssignmentCompat2.ts, 36, 3))
 >W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
->D : Symbol(W.D, Decl(enumAssignmentCompat2.ts, 6, 10))
+>D : Symbol(W.D, Decl(enumAssignmentCompat2.ts, 6, 13))
 

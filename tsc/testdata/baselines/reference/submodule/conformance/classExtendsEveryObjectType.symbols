@@ -14,20 +14,20 @@ class C2 extends { foo: string; } { } // error
 >C2 : Symbol(C2, Decl(classExtendsEveryObjectType.ts, 3, 21))
 >foo : Symbol(foo, Decl(classExtendsEveryObjectType.ts, 5, 18))
 
-var x: { foo: string; }
->x : Symbol(x, Decl(classExtendsEveryObjectType.ts, 6, 3))
->foo : Symbol(foo, Decl(classExtendsEveryObjectType.ts, 6, 8))
+declare var x: { foo: string; }
+>x : Symbol(x, Decl(classExtendsEveryObjectType.ts, 6, 11))
+>foo : Symbol(foo, Decl(classExtendsEveryObjectType.ts, 6, 16))
 
 class C3 extends x { } // error
->C3 : Symbol(C3, Decl(classExtendsEveryObjectType.ts, 6, 23))
->x : Symbol(x, Decl(classExtendsEveryObjectType.ts, 6, 3))
+>C3 : Symbol(C3, Decl(classExtendsEveryObjectType.ts, 6, 31))
+>x : Symbol(x, Decl(classExtendsEveryObjectType.ts, 6, 11))
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : Symbol(M, Decl(classExtendsEveryObjectType.ts, 7, 22))
->x : Symbol(x, Decl(classExtendsEveryObjectType.ts, 9, 21))
+>x : Symbol(x, Decl(classExtendsEveryObjectType.ts, 9, 24))
 
 class C4 extends M { } // error
->C4 : Symbol(C4, Decl(classExtendsEveryObjectType.ts, 9, 30))
+>C4 : Symbol(C4, Decl(classExtendsEveryObjectType.ts, 9, 33))
 >M : Symbol(M, Decl(classExtendsEveryObjectType.ts, 7, 22))
 
 function foo() { }

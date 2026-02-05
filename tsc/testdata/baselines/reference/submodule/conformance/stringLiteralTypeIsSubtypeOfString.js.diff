@@ -1,6 +1,6 @@
 --- old.stringLiteralTypeIsSubtypeOfString.js
 +++ new.stringLiteralTypeIsSubtypeOfString.js
-@@= skipped -132, +132 lines =@@
+@@= skipped -133, +133 lines =@@
      toUpperCase() { return null; }
      toLocaleUpperCase() { return null; }
      trim() { return null; }

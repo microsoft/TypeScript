@@ -11,7 +11,8 @@ func TestCallHierarchyContainerNameServer(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `function /**/f() {}
+	const content = `// @lib: es5
+function /**/f() {}
 
 class A {
   static sameName() {
@@ -43,7 +44,7 @@ namespace Foo {
   }
 }
 
-module Foo.Bar {
+namespace Foo.Bar {
   const sameName = () => new Foo.C();
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/ambientModuleExports.ts] ////
 
 === ambientModuleExports.ts ===
-declare module Foo {
+declare namespace Foo {
 >Foo : typeof Foo
 
 	function a():void;
@@ -32,7 +32,7 @@ var c = new Foo.C();
 >Foo : typeof Foo
 >C : typeof Foo.C
 
-declare module Foo2 {
+declare namespace Foo2 {
 >Foo2 : typeof Foo2
 
     export function a(): void;

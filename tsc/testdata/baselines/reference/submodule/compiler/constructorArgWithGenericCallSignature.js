@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/constructorArgWithGenericCallSignature.ts] ////
 
 //// [constructorArgWithGenericCallSignature.ts]
-module Test {
+namespace Test {
     export interface MyFunc {
         <T>(value1: T): T;
     }
@@ -17,6 +17,7 @@ var test = new Test.MyClass(func); // Should be OK
 
 
 //// [constructorArgWithGenericCallSignature.js]
+"use strict";
 var Test;
 (function (Test) {
     class MyClass {

@@ -1,0 +1,20 @@
+--- old.interfaceWithMultipleBaseTypes2.types
++++ new.interfaceWithMultipleBaseTypes2.types
+@@= skipped -2, +2 lines =@@
+ === interfaceWithMultipleBaseTypes2.ts ===
+ interface Base {
+     x: {
+->x : { a?: string; b: string; }
++>x : { a?: string | undefined; b: string; }
+
+         a?: string; b: string;
+ >a : string | undefined
+@@= skipped -10, +10 lines =@@
+
+ interface Base2 {
+     x: {
+->x : { b: string; c?: number; }
++>x : { b: string; c?: number | undefined; }
+
+         b: string; c?: number;
+ >b : string

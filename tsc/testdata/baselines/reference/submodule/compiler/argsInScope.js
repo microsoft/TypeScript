@@ -14,6 +14,7 @@ c.P(1,2,3);
 
 
 //// [argsInScope.js]
+"use strict";
 class C {
     P(ii, j, k) {
         for (var i = 0; i < arguments.length; i++) {

@@ -8,6 +8,8 @@ parserRealSource8.ts(19,14): error TS2304: Cannot find name 'FuncDecl'.
 parserRealSource8.ts(21,25): error TS2304: Cannot find name 'ScopeChain'.
 parserRealSource8.ts(33,33): error TS2339: Property 'isInstanceProperty' does not exist on type 'Symbol'.
 parserRealSource8.ts(42,18): error TS2339: Property 'isInstanceProperty' does not exist on type 'Symbol'.
+parserRealSource8.ts(50,16): error TS2322: Type 'null' is not assignable to type 'Symbol'.
+parserRealSource8.ts(53,13): error TS2322: Type 'null' is not assignable to type 'Symbol'.
 parserRealSource8.ts(69,48): error TS2304: Cannot find name 'AST'.
 parserRealSource8.ts(70,27): error TS2304: Cannot find name 'ModuleDeclaration'.
 parserRealSource8.ts(71,26): error TS2304: Cannot find name 'SymbolTableScope'.
@@ -43,6 +45,8 @@ parserRealSource8.ts(163,30): error TS2552: Cannot find name 'WithSymbol'. Did y
 parserRealSource8.ts(170,40): error TS2339: Property 'SymbolScopeBuilder' does not exist on type 'typeof TypeScript'.
 parserRealSource8.ts(176,50): error TS2304: Cannot find name 'AST'.
 parserRealSource8.ts(177,25): error TS2304: Cannot find name 'FuncDecl'.
+parserRealSource8.ts(179,13): error TS2322: Type 'null' is not assignable to type 'Symbol'.
+parserRealSource8.ts(180,13): error TS2322: Type 'null' is not assignable to type 'Symbol'.
 parserRealSource8.ts(185,24): error TS2304: Cannot find name 'hasFlag'.
 parserRealSource8.ts(185,51): error TS2304: Cannot find name 'FncFlags'.
 parserRealSource8.ts(195,41): error TS2304: Cannot find name 'hasFlag'.
@@ -129,13 +133,13 @@ parserRealSource8.ts(453,38): error TS2304: Cannot find name 'NodeType'.
 parserRealSource8.ts(454,35): error TS2552: Cannot find name 'Catch'. Did you mean 'Cache'?
 
 
-==== parserRealSource8.ts (129 errors) ====
+==== parserRealSource8.ts (133 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
     
-    module TypeScript {
+    namespace TypeScript {
     
         export class AssignScopeContext {
             constructor (public scopeChain: ScopeChain,
@@ -200,9 +204,13 @@ parserRealSource8.ts(454,35): error TS2552: Cannot find name 'Catch'. Did you me
                                 public stop: (s: Symbol) =>boolean) { }
     
             public result: Symbol = null;
+                   ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Symbol'.
     
             public reset() {
                 this.result = null;
+                ~~~~~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Symbol'.
             }
     
             public update(b: Symbol): boolean {
@@ -400,7 +408,11 @@ parserRealSource8.ts(454,35): error TS2552: Cannot find name 'Catch'. Did you me
 !!! error TS2304: Cannot find name 'FuncDecl'.
     
             var container: Symbol = null;
+                ~~~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Symbol'.
             var localContainer: Symbol = null;
+                ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Symbol'.
             if (funcDecl.type) {
                 localContainer = ast.type.symbol;
             }

@@ -1,6 +1,6 @@
 --- old.typeOfThisInStaticMembers10(target=es2022).js
 +++ new.typeOfThisInStaticMembers10(target=es2022).js
-@@= skipped -57, +57 lines =@@
+@@= skipped -58, +58 lines =@@
      return c > 3 && r && Object.defineProperty(target, key, r), r;
  };
  let C = class C {

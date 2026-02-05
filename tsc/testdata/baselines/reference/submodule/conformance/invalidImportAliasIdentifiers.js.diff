@@ -1,6 +1,6 @@
 --- old.invalidImportAliasIdentifiers.js
 +++ new.invalidImportAliasIdentifiers.js
-@@= skipped -30, +30 lines =@@
+@@= skipped -31, +31 lines =@@
  var V = 12;
  var v = V;
  class C {

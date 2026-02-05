@@ -11,11 +11,12 @@ func TestFormat01(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `/**/module Default{var x= ( { } ) ;}`
+	const content = `// @lib: es5
+/**/namespace Default{var x= ( { } ) ;}`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.MarkTestAsStradaServer()
 	f.FormatDocument(t, "")
 	f.GoToMarker(t, "")
-	f.VerifyCurrentLineContent(t, `module Default { var x = ({}); }`)
+	f.VerifyCurrentLineContent(t, `namespace Default { var x = ({}); }`)
 }

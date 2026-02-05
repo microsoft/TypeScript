@@ -69,6 +69,7 @@ function intersection2<T>(thing: T & (0 | 1 | 2)) {
 
 
 //// [inDoesNotOperateOnPrimitiveTypes.js]
+"use strict";
 const validHasKey = (thing, key) => {
     return key in thing; // Ok
 };

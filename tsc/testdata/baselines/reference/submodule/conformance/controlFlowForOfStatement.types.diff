@@ -1,0 +1,14 @@
+--- old.controlFlowForOfStatement.types
++++ new.controlFlowForOfStatement.types
+@@= skipped -22, +22 lines =@@
+ >x = x.toExponential() : string
+ >x : string | number | boolean | RegExp
+ >x.toExponential() : string
+->x.toExponential : (fractionDigits?: number) => string
++>x.toExponential : (fractionDigits?: number | undefined) => string
+ >x : number
+->toExponential : (fractionDigits?: number) => string
++>toExponential : (fractionDigits?: number | undefined) => string
+     }
+     x; // string | boolean
+ >x : string | true

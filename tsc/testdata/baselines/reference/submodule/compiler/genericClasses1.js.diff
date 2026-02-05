@@ -1,8 +1,8 @@
 --- old.genericClasses1.js
 +++ new.genericClasses1.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [genericClasses1.js]
+ "use strict";
  class C {
 +    x;
  }

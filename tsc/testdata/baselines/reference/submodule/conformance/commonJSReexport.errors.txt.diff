@@ -1,0 +1,32 @@
+--- old.commonJSReexport.errors.txt
++++ new.commonJSReexport.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++first.js(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++second.js(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++
++
++==== main.js (0 errors) ====
++    const { hardline } = require('./second').nested;
++    hardline
++    
++==== first.js (1 errors) ====
++    const hardline = { type: "hard" }
++    module.exports = {
++    ~~~~~~~~~~~~~~~~~~
++      hardline
++    ~~~~~~~~~~
++    }
++    ~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++    
++    
++==== second.js (1 errors) ====
++    module.exports = {
++    ~~~~~~~~~~~~~~~~~~
++      nested: require('./first')
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++    };
++    ~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++    

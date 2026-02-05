@@ -13,6 +13,7 @@ class C extends B {
 }
 
 //// [superInConstructorParam1.js]
+"use strict";
 class B {
     foo() {
         return 0;

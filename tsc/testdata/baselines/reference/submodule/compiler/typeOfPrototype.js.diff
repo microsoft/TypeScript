@@ -1,8 +1,8 @@
 --- old.typeOfPrototype.js
 +++ new.typeOfPrototype.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [typeOfPrototype.js]
+ "use strict";
  class Foo {
 -    constructor() {
 -        this.bar = 3;

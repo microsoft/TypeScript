@@ -12,6 +12,7 @@ func TestFindAllRefsReExportLocal(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @noLib: true
+// @strict: false
 // @Filename: /a.ts
 [|var /*ax0*/[|{| "isDefinition": true, "contextRangeIndex": 0 |}x|];|]
 [|export { /*ax1*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}x|] };|]

@@ -8,5 +8,6 @@ declare const a: Test<number>;
 const b: { notArray: number } = a; // Works
 
 //// [recursiveConditionalEvaluationNonInfinite.js]
+"use strict";
 const y = x; // Error
 const b = a; // Works

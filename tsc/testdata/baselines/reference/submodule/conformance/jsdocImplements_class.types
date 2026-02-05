@@ -36,14 +36,14 @@ class B3  {
 
 
 var Ns = {};
->Ns : { C1: typeof C1; C5: any; }
->{} : { C1: typeof C1; C5: any; }
+>Ns : { C1: typeof C1; C5: typeof C5; }
+>{} : { C1: typeof C1; C5: typeof C5; }
 
 /** @implements {A} */
 Ns.C1 = class {
 >Ns.C1 = class {    method() { return 11; }} : typeof C1
 >Ns.C1 : typeof C1
->Ns : { C1: typeof C1; C5: any; }
+>Ns : { C1: typeof C1; C5: typeof C5; }
 >C1 : typeof C1
 >class {    method() { return 11; }} : typeof C1
 
@@ -96,12 +96,12 @@ var C5;
 
 /** @implements {A} */
 Ns.C5 = C5 || class {
->Ns.C5 = C5 || class {    method() {        return 15;    }} : any
->Ns.C5 : any
->Ns : { C1: typeof C1; C5: any; }
->C5 : any
->C5 || class {    method() {        return 15;    }} : any
->C5 : any
+>Ns.C5 = C5 || class {    method() {        return 15;    }} : typeof C5
+>Ns.C5 : typeof C5
+>Ns : { C1: typeof C1; C5: typeof C5; }
+>C5 : typeof C5
+>C5 || class {    method() {        return 15;    }} : typeof C5
+>C5 : undefined
 >class {    method() {        return 15;    }} : typeof C5
 
     method() {

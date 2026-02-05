@@ -1,6 +1,6 @@
 --- old.voidOperatorWithBooleanType.js
 +++ new.voidOperatorWithBooleanType.js
-@@= skipped -44, +44 lines =@@
+@@= skipped -45, +45 lines =@@
  var BOOLEAN;
  function foo() { return true; }
  class A {

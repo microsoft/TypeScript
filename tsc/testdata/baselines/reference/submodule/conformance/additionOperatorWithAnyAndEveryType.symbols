@@ -19,9 +19,9 @@ enum E { a, b, c }
 >b : Symbol(E.b, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 11))
 >c : Symbol(E.c, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 14))
 
-module M { export var a }
+namespace M { export var a }
 >M : Symbol(M, Decl(additionOperatorWithAnyAndEveryType.ts, 5, 18))
->a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 6, 21))
+>a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 6, 24))
 
 var a: any;
 >a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 8, 3))

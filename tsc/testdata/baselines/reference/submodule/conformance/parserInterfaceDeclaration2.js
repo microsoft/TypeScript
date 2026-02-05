@@ -5,3 +5,4 @@ interface I implements A {
 }
 
 //// [parserInterfaceDeclaration2.js]
+"use strict";

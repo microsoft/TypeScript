@@ -1,0 +1,29 @@
+--- old.exportDefaultAbstractClass.types
++++ new.exportDefaultAbstractClass.types
+@@= skipped -10, +10 lines =@@
+
+ new B().a.toExponential();
+ >new B().a.toExponential() : string
+->new B().a.toExponential : (fractionDigits?: number) => string
++>new B().a.toExponential : (fractionDigits?: number | undefined) => string
+ >new B().a : number
+ >new B() : B
+ >B : typeof B
+ >a : number
+->toExponential : (fractionDigits?: number) => string
++>toExponential : (fractionDigits?: number | undefined) => string
+
+ === b.ts ===
+ import A from './a';
+@@= skipped -17, +17 lines =@@
+
+ new C().a.toExponential();
+ >new C().a.toExponential() : string
+->new C().a.toExponential : (fractionDigits?: number) => string
++>new C().a.toExponential : (fractionDigits?: number | undefined) => string
+ >new C().a : number
+ >new C() : C
+ >C : typeof C
+ >a : number
+->toExponential : (fractionDigits?: number) => string
++>toExponential : (fractionDigits?: number | undefined) => string

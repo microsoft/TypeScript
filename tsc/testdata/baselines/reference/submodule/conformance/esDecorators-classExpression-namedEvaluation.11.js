@@ -15,6 +15,7 @@ declare let dec: any;
 
 
 //// [esDecorators-classExpression-namedEvaluation.11.js]
+"use strict";
 // No NamedEvaluation, no class name
 (
 @dec

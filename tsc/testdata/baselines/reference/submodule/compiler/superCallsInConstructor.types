@@ -41,7 +41,7 @@ class Derived extends Base {
         }
 
         try {} catch(e) { super(); }
->e : any
+>e : unknown
 >super() : void
 >super : typeof Base
     }

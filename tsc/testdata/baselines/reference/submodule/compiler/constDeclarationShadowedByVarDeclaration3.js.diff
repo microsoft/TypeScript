@@ -1,7 +1,7 @@
 --- old.constDeclarationShadowedByVarDeclaration3.js
 +++ new.constDeclarationShadowedByVarDeclaration3.js
-@@= skipped -13, +13 lines =@@
- //// [constDeclarationShadowedByVarDeclaration3.js]
+@@= skipped -14, +14 lines =@@
+ "use strict";
  // Ensure only checking for const declarations shadowed by vars
  class Rule {
 +    regex = new RegExp('');

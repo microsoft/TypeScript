@@ -1,8 +1,8 @@
 --- old.subSubClassCanAccessProtectedConstructor.js
 +++ new.subSubClassCanAccessProtectedConstructor.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [subSubClassCanAccessProtectedConstructor.js]
+ "use strict";
  class Base {
 -    constructor() {
 -        this.instance1 = new Base(); // allowed

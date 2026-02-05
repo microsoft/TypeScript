@@ -1,0 +1,15 @@
+--- old.emptyVariableDeclarationBindingPatterns02_ES5iterable(target=es2015).errors.txt
++++ new.emptyVariableDeclarationBindingPatterns02_ES5iterable(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+ emptyVariableDeclarationBindingPatterns02_ES5iterable.ts(2,9): error TS1182: A destructuring declaration must have an initializer.
+ emptyVariableDeclarationBindingPatterns02_ES5iterable.ts(3,9): error TS1182: A destructuring declaration must have an initializer.
+ emptyVariableDeclarationBindingPatterns02_ES5iterable.ts(4,11): error TS1182: A destructuring declaration must have an initializer.
+@@= skipped -6, +5 lines =@@
+ emptyVariableDeclarationBindingPatterns02_ES5iterable.ts(8,11): error TS1182: A destructuring declaration must have an initializer.
+
+
+-!!! error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+ ==== emptyVariableDeclarationBindingPatterns02_ES5iterable.ts (6 errors) ====
+     (function () {
+         var {};

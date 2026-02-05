@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/semicolonsInModuleDeclarations.ts] ////
 
 //// [semicolonsInModuleDeclarations.ts]
-declare module ambiModule {
+declare namespace ambiModule {
    export interface i1 { };
    export interface i2 { }
 }
@@ -11,5 +11,6 @@ var n2: ambiModule.i2;
 
 
 //// [semicolonsInModuleDeclarations.js]
+"use strict";
 var n1;
 var n2;

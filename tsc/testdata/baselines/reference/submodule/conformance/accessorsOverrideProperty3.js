@@ -12,6 +12,7 @@ class Lion extends Animal {
 
 
 //// [accessorsOverrideProperty3.js]
+"use strict";
 class Lion extends Animal {
     _sound = 'grrr';
     get sound() { return this._sound; } // error here

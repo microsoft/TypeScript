@@ -104,8 +104,8 @@ type AOrArrA<T> = T | T[];
 >AOrArrA : AOrArrA<T>
 
 const arr: AOrArrA<{x?: "ok"}> = [{ x: "ok" }]; // weak type
->arr : AOrArrA<{ x?: "ok"; }>
->x : "ok"
+>arr : AOrArrA<{ x?: "ok" | undefined; }>
+>x : "ok" | undefined
 >[{ x: "ok" }] : { x: "ok"; }[]
 >{ x: "ok" } : { x: "ok"; }
 >x : "ok"
@@ -113,9 +113,9 @@ const arr: AOrArrA<{x?: "ok"}> = [{ x: "ok" }]; // weak type
 
 arr.push({ x: "ok" });
 >arr.push({ x: "ok" }) : number
->arr.push : (...items: { x?: "ok"; }[]) => number
->arr : { x?: "ok"; }[]
->push : (...items: { x?: "ok"; }[]) => number
+>arr.push : (...items: { x?: "ok" | undefined; }[]) => number
+>arr : { x?: "ok" | undefined; }[]
+>push : (...items: { x?: "ok" | undefined; }[]) => number
 >{ x: "ok" } : { x: "ok"; }
 >x : "ok"
 >"ok" : "ok"

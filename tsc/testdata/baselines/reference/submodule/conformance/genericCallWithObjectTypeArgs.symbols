@@ -34,7 +34,7 @@ function foo<T>(t: X<T>, t2: X<T>) {
 >X : Symbol(X, Decl(genericCallWithObjectTypeArgs.ts, 6, 1))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgs.ts, 12, 13))
 
-    var x: T;
+    var x!: T;
 >x : Symbol(x, Decl(genericCallWithObjectTypeArgs.ts, 13, 7))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgs.ts, 12, 13))
 

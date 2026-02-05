@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution4.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: Attribs1;
@@ -19,6 +19,7 @@ interface Attribs1 {
 
 
 //// [file.jsx]
+"use strict";
 // OK
 <test1 {...{ x: (n) => 0 }}/>;
 // Error, no member 'len' on 'string'

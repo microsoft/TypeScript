@@ -12,7 +12,7 @@ func TestGetOccurrencesPropertyInAliasedInterface(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module m {
+	const content = `namespace m {
     export interface Foo {
         [|abc|]
     }

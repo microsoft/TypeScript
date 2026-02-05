@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleScopingBug.ts] ////
 
 === moduleScopingBug.ts ===
-module M
+namespace M
 >M : typeof M
 
 {
@@ -29,7 +29,7 @@ module M
 
     }
 
-    module X {
+    namespace X {
 >X : typeof X
 
         var inner = outer;   // Error: outer not visible

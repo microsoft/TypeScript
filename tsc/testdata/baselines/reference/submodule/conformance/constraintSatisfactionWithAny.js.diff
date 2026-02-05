@@ -1,6 +1,6 @@
 --- old.constraintSatisfactionWithAny.js
 +++ new.constraintSatisfactionWithAny.js
-@@= skipped -73, +73 lines =@@
+@@= skipped -74, +74 lines =@@
  //foo5(a, a);
  //foo5<any, any>(b, b);
  class C {

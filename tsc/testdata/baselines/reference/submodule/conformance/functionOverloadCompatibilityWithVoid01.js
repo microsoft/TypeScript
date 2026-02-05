@@ -7,6 +7,7 @@ function f(x: string): void {
 } 
 
 //// [functionOverloadCompatibilityWithVoid01.js]
+"use strict";
 function f(x) {
     return;
 }

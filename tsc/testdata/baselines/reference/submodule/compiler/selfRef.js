@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/selfRef.ts] ////
 
 //// [selfRef.ts]
-module M
+namespace M
 {
     export class Test
     {
@@ -21,6 +21,7 @@ module M
 
 
 //// [selfRef.js]
+"use strict";
 var M;
 (function (M) {
     class Test {

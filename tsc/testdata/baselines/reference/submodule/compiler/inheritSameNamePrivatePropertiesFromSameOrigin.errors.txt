@@ -1,0 +1,16 @@
+inheritSameNamePrivatePropertiesFromSameOrigin.ts(2,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== inheritSameNamePrivatePropertiesFromSameOrigin.ts (1 errors) ====
+    class B {
+        private x: number;
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    class C extends B { }
+    
+    class C2 extends B { }
+    
+    interface A extends C, C2 { // ok
+        y: string;
+    }

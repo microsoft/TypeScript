@@ -4,4 +4,5 @@
 `${function (x: number) { x = "bad"; } }`;
 
 //// [templateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpressionES6.js]
+"use strict";
 `${function (x) { x = "bad"; }}`;

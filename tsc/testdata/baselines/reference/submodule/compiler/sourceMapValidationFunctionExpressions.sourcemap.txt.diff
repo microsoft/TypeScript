@@ -1,6 +1,6 @@
 --- old.sourceMapValidationFunctionExpressions.sourcemap.txt
 +++ new.sourceMapValidationFunctionExpressions.sourcemap.txt
-@@= skipped -37, +37 lines =@@
+@@= skipped -38, +38 lines =@@
  6 >             ^^^^^^^^
  7 >                     ^^
  8 >                       ^^
@@ -13,14 +13,14 @@
  7 >                     ): number 
  8 >                       =>
 +9 >                          
- 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
- 2 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
- 3 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+ 1->Emitted(3, 1) Source(2, 1) + SourceIndex(0)
+ 2 >Emitted(3, 5) Source(2, 5) + SourceIndex(0)
+ 3 >Emitted(3, 10) Source(2, 10) + SourceIndex(0)
 @@= skipped -8, +9 lines =@@
- 6 >Emitted(2, 22) Source(2, 30) + SourceIndex(0)
- 7 >Emitted(2, 24) Source(2, 40) + SourceIndex(0)
- 8 >Emitted(2, 26) Source(2, 42) + SourceIndex(0)
-+9 >Emitted(2, 27) Source(2, 43) + SourceIndex(0)
+ 6 >Emitted(3, 22) Source(2, 30) + SourceIndex(0)
+ 7 >Emitted(3, 24) Source(2, 40) + SourceIndex(0)
+ 8 >Emitted(3, 26) Source(2, 42) + SourceIndex(0)
++9 >Emitted(3, 27) Source(2, 43) + SourceIndex(0)
  ---
  >>>    greetings++;
  1 >^^^^
@@ -42,8 +42,8 @@
 +2 >
 +  >}
  3 > 
--1 >Emitted(5, 1) Source(5, 1) + SourceIndex(0)
-+1 >Emitted(5, 1) Source(4, 22) + SourceIndex(0)
- 2 >Emitted(5, 2) Source(5, 2) + SourceIndex(0)
- 3 >Emitted(5, 3) Source(5, 2) + SourceIndex(0)
+-1 >Emitted(6, 1) Source(5, 1) + SourceIndex(0)
++1 >Emitted(6, 1) Source(4, 22) + SourceIndex(0)
+ 2 >Emitted(6, 2) Source(5, 2) + SourceIndex(0)
+ 3 >Emitted(6, 3) Source(5, 2) + SourceIndex(0)
  ---

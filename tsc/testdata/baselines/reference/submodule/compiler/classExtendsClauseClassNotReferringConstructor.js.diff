@@ -1,8 +1,8 @@
 --- old.classExtendsClauseClassNotReferringConstructor.js
 +++ new.classExtendsClauseClassNotReferringConstructor.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [classExtendsClauseClassNotReferringConstructor.js]
+ "use strict";
  class A {
 +    a;
  }

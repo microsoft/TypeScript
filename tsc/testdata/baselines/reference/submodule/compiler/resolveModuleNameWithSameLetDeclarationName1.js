@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/resolveModuleNameWithSameLetDeclarationName1.ts] ////
 
 //// [resolveModuleNameWithSameLetDeclarationName1.ts]
-declare module foo {
+declare namespace foo {
 
     interface Bar {
 
@@ -11,4 +11,5 @@ declare module foo {
 let foo: foo.Bar; 
 
 //// [resolveModuleNameWithSameLetDeclarationName1.js]
+"use strict";
 let foo;

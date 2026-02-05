@@ -1,6 +1,6 @@
 --- old.thisTypeErrors.js
 +++ new.thisTypeErrors.js
-@@= skipped -66, +66 lines =@@
+@@= skipped -67, +67 lines =@@
      return this;
  }
  class C1 {

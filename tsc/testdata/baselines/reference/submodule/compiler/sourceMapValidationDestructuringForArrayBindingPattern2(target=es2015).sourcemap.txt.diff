@@ -1,0 +1,94 @@
+--- old.sourceMapValidationDestructuringForArrayBindingPattern2(target=es2015).sourcemap.txt
++++ new.sourceMapValidationDestructuringForArrayBindingPattern2(target=es2015).sourcemap.txt
+@@= skipped -56, +56 lines =@@
+ 1 >
+ 2 >^^^^^^^^^
+ 3 >         ^^^^^^^^
+-4 >                 ^^->
++4 >                 ^^^
+ 1 >
+   >
+ 2 >function 
+ 3 >         getRobot
++4 >                 () 
+ 1 >Emitted(3, 1) Source(8, 1) + SourceIndex(0)
+ 2 >Emitted(3, 10) Source(8, 10) + SourceIndex(0)
+ 3 >Emitted(3, 18) Source(8, 18) + SourceIndex(0)
++4 >Emitted(3, 21) Source(8, 21) + SourceIndex(0)
+ ---
+ >>>    return robotA;
+-1->^^^^
++1 >^^^^
+ 2 >    ^^^^^^^
+ 3 >           ^^^^^^
+ 4 >                 ^
+-1->() {
++1 >{
+   >    
+ 2 >    return 
+ 3 >           robotA
+ 4 >                 ;
+-1->Emitted(4, 5) Source(9, 5) + SourceIndex(0)
++1 >Emitted(4, 5) Source(9, 5) + SourceIndex(0)
+ 2 >Emitted(4, 12) Source(9, 12) + SourceIndex(0)
+ 3 >Emitted(4, 18) Source(9, 18) + SourceIndex(0)
+ 4 >Emitted(4, 19) Source(9, 19) + SourceIndex(0)
+@@= skipped -29, +31 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(5, 1) Source(10, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(5, 1) Source(9, 19) + SourceIndex(0)
+ 2 >Emitted(5, 2) Source(10, 2) + SourceIndex(0)
+ ---
+ >>>let multiRobotA = ["mower", ["mowing", ""]];
+@@= skipped -101, +101 lines =@@
+ 1 >
+ 2 >^^^^^^^^^
+ 3 >         ^^^^^^^^^^^^^
+-4 >                      ^^->
++4 >                      ^^^
+ 1 >
+   >
+ 2 >function 
+ 3 >         getMultiRobot
++4 >                      () 
+ 1 >Emitted(8, 1) Source(14, 1) + SourceIndex(0)
+ 2 >Emitted(8, 10) Source(14, 10) + SourceIndex(0)
+ 3 >Emitted(8, 23) Source(14, 23) + SourceIndex(0)
++4 >Emitted(8, 26) Source(14, 26) + SourceIndex(0)
+ ---
+ >>>    return multiRobotA;
+-1->^^^^
++1 >^^^^
+ 2 >    ^^^^^^^
+ 3 >           ^^^^^^^^^^^
+ 4 >                      ^
+-1->() {
++1 >{
+   >    
+ 2 >    return 
+ 3 >           multiRobotA
+ 4 >                      ;
+-1->Emitted(9, 5) Source(15, 5) + SourceIndex(0)
++1 >Emitted(9, 5) Source(15, 5) + SourceIndex(0)
+ 2 >Emitted(9, 12) Source(15, 12) + SourceIndex(0)
+ 3 >Emitted(9, 23) Source(15, 23) + SourceIndex(0)
+ 4 >Emitted(9, 24) Source(15, 24) + SourceIndex(0)
+@@= skipped -29, +31 lines =@@
+ 2 >^
+ 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
+-  >
+-2 >}
+-1 >Emitted(10, 1) Source(16, 1) + SourceIndex(0)
++2 >
++  >}
++1 >Emitted(10, 1) Source(15, 24) + SourceIndex(0)
+ 2 >Emitted(10, 2) Source(16, 2) + SourceIndex(0)
+ ---
+ >>>let nameA, primarySkillA, secondarySkillA;

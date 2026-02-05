@@ -35,6 +35,7 @@ class D {
 }
 
 //// [classConstructorOverloadsAccessibility.js]
+"use strict";
 class A {
     constructor() {
     }

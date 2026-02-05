@@ -119,7 +119,7 @@ declare function foo<T>(a: ReadonlyArray<T>): T;
 >foo : Symbol(foo, Decl(strictFunctionTypes1.ts, 20, 30))
 >T : Symbol(T, Decl(strictFunctionTypes1.ts, 24, 21))
 >a : Symbol(a, Decl(strictFunctionTypes1.ts, 24, 24))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(strictFunctionTypes1.ts, 24, 21))
 >T : Symbol(T, Decl(strictFunctionTypes1.ts, 24, 21))
 

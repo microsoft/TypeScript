@@ -1,0 +1,28 @@
+--- old.destructuringParameterDeclaration3ES5iterable(target=es2015).types
++++ new.destructuringParameterDeclaration3ES5iterable(target=es2015).types
+@@= skipped -16, +16 lines =@@
+ >stringOrNumArray : stringOrNumArray
+
+ function a1(...x: (number|string)[]) { }
+->a1 : (...x: (number | string)[]) => void
++>a1 : (...x: (string | number)[]) => void
+ >x : (string | number)[]
+
+ function a2(...a) { }
+@@= skipped -8, +8 lines =@@
+ >a : any[]
+
+ function a3(...a: Array<String>) { }
+->a3 : (...a: Array<String>) => void
++>a3 : (...a: String[]) => void
+ >a : String[]
+
+ function a4(...a: arrayString) { }
+@@= skipped -55, +55 lines =@@
+
+ a1(...array);
+ >a1(...array) : void
+->a1 : (...x: (number | string)[]) => void
++>a1 : (...x: (string | number)[]) => void
+ >...array : number
+ >array : number[]

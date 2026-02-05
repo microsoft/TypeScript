@@ -12,8 +12,8 @@ interface StringMap<T> {
 declare function numberMapToArray<T>(object: NumberMap<T>): T[];
 declare function stringMapToArray<T>(object: StringMap<T>): T[];
 
-var numberMap: NumberMap<Function>;
-var stringMap: StringMap<Function>;
+declare var numberMap: NumberMap<Function>;
+declare var stringMap: StringMap<Function>;
 
 var v1: Function[];
 var v1 = numberMapToArray(numberMap);  // Ok
@@ -23,8 +23,7 @@ var v1 = stringMapToArray(stringMap);  // Ok
 
 
 //// [indexSignatureTypeInference.js]
-var numberMap;
-var stringMap;
+"use strict";
 var v1;
 var v1 = numberMapToArray(numberMap); // Ok
 var v1 = numberMapToArray(stringMap); // Ok

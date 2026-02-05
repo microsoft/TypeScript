@@ -16,6 +16,7 @@ function foo<T>(v: T) {
 
 
 //// [typeParametersAvailableInNestedScope3.js]
+"use strict";
 function foo(v) {
     function a(a) { return a; }
     function b() { return v; }

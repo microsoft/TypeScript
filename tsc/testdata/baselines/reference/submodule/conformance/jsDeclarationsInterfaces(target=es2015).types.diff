@@ -1,0 +1,25 @@
+--- old.jsDeclarationsInterfaces(target=es2015).types
++++ new.jsDeclarationsInterfaces(target=es2015).types
+@@= skipped -38, +38 lines =@@
+ >x : Q
+
+     method<Q = number>(): number;
+->method : { <Q = number>(): number; <Q_1>(a: T & Q_1): Q_1 & number; (a?: number): number; (...args: any[]): number; }
++>method : { <Q = number>(): number; <Q>(a: T & Q): Q & number; (a?: number | undefined): number; (...args: any[]): number; }
+
+     method<Q>(a: T & Q): Q & number;
+->method : { <Q_1 = number>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
++>method : { <Q_1 = number>(): number; <Q>(a: T & Q): Q & number; (a?: number | undefined): number; (...args: any[]): number; }
+ >a : T & Q
+
+     method(a?: number): number;
+->method : { <Q = number>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
++>method : { <Q = number>(): number; <Q>(a: T & Q): Q & number; (a?: number | undefined): number; (...args: any[]): number; }
+ >a : number | undefined
+
+     method(...args: any[]): number;
+->method : { <Q = number>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
++>method : { <Q = number>(): number; <Q>(a: T & Q): Q & number; (a?: number | undefined): number; (...args: any[]): number; }
+ >args : any[]
+
+     optMethod?(): number;

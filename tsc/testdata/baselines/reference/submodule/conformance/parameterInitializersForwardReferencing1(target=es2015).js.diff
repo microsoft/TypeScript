@@ -1,0 +1,11 @@
+--- old.parameterInitializersForwardReferencing1(target=es2015).js
++++ new.parameterInitializersForwardReferencing1(target=es2015).js
+@@= skipped -66, +66 lines =@@
+     let foo = 2;
+ }
+ class Foo {
++    x;
++    y;
+     constructor(x = 12, y = x) {
+         this.x = x;
+         this.y = y;

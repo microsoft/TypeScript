@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/ModuleAndClassWithSameNameAndCommonRoot.ts] ////
 
 === module.ts ===
-module X.Y {
+namespace X.Y {
 >X : typeof X
 >Y : typeof Y
 
-    export module Point {
+    export namespace Point {
 >Point : typeof Point
 
         export var Origin = new Point(0, 0);
@@ -18,7 +18,7 @@ module X.Y {
 }
 
 === classPoint.ts ===
-module X.Y {
+namespace X.Y {
 >X : typeof X
 >Y : typeof Y
 
@@ -53,7 +53,7 @@ module X.Y {
 }
 
 === simple.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     export var Instance = new A();

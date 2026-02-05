@@ -1,6 +1,6 @@
 --- old.asiPreventsParsingAsNamespace05.js
 +++ new.asiPreventsParsingAsNamespace05.js
-@@= skipped -14, +14 lines =@@
+@@= skipped -15, +15 lines =@@
  let namespace = 10;
  var a;
  (function (a) {

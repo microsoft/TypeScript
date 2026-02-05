@@ -218,9 +218,6 @@ foo("abaTest"); // ok
 foo("abcTest"); // error
 
 //// [templateLiteralTypesPatterns.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BB = exports.AA = void 0;
 // ok
 const a = "/bin";
 // not ok
@@ -351,15 +348,13 @@ function ff1(x) {
     let s1 = x && 42; // number
     let s2 = x || 42; // `${string}-${string}`
 }
-class AA {
+export class AA {
 }
-exports.AA = AA;
-class BB {
+export class BB {
     update(id) {
         this.get(id);
     }
 }
-exports.BB = BB;
 // repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
 function conversionTest(groupName) { }
 conversionTest("testDowncast");

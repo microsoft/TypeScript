@@ -1,0 +1,17 @@
+ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts(7,16): error TS2322: Type 'null' is not assignable to type '{ top: { left: Point; right: Point; }; bottom: { left: Point; right: Point; }; }'.
+
+
+==== ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts (1 errors) ====
+    namespace A {
+    
+        class Point {
+            constructor(public x: number, public y: number) { }
+        }
+    
+        export var UnitSquare : {
+                   ~~~~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type '{ top: { left: Point; right: Point; }; bottom: { left: Point; right: Point; }; }'.
+            top: { left: Point, right: Point },
+            bottom: { left: Point, right: Point }
+        } = null;
+    }

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/superAccessInFatArrow1.ts] ////
 
 //// [superAccessInFatArrow1.ts]
-module test {
+namespace test {
     export class A {
         foo() {
         }
@@ -18,6 +18,7 @@ module test {
 }
 
 //// [superAccessInFatArrow1.js]
+"use strict";
 var test;
 (function (test) {
     class A {

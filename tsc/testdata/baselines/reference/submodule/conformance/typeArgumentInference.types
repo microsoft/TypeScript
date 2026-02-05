@@ -81,9 +81,9 @@ someGenerics2a<string>((n) => n.substr(0));
 >(n) => n.substr(0) : (n: string) => string
 >n : string
 >n.substr(0) : string
->n.substr : (from: number, length?: number) => string
+>n.substr : (from: number, length?: number | undefined) => string
 >n : string
->substr : (from: number, length?: number) => string
+>substr : (from: number, length?: number | undefined) => string
 >0 : 0
 
 function someGenerics2b<T, U>(n: (x: T, y: U) => void) { }
@@ -115,9 +115,9 @@ someGenerics2b<string, number>((n, t) => n.substr(t * t));
 >n : string
 >t : number
 >n.substr(t * t) : string
->n.substr : (from: number, length?: number) => string
+>n.substr : (from: number, length?: number | undefined) => string
 >n : string
->substr : (from: number, length?: number) => string
+>substr : (from: number, length?: number | undefined) => string
 >t * t : number
 >t : number
 >t : number
@@ -136,7 +136,7 @@ someGenerics3(() => '');
 someGenerics3<Date>(() => undefined);
 >someGenerics3<Date>(() => undefined) : void
 >someGenerics3 : <T>(producer: () => T) => void
->() => undefined : () => any
+>() => undefined : () => undefined
 >undefined : undefined
 
 someGenerics3<number>(() => 3);
@@ -156,7 +156,7 @@ someGenerics4(4, () => null);
 >someGenerics4(4, () => null) : void
 >someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
 >4 : 4
->() => null : () => any
+>() => null : () => null
 
 someGenerics4<string, number>('', () => 3);
 >someGenerics4<string, number>('', () => 3) : void
@@ -180,7 +180,7 @@ someGenerics5(4, () => null);
 >someGenerics5(4, () => null) : void
 >someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
 >4 : 4
->() => null : () => any
+>() => null : () => null
 
 someGenerics5<number, string>('', () => 3);
 >someGenerics5<number, string>('', () => 3) : void
@@ -322,17 +322,17 @@ var a9a = someGenerics9('', 0, []);
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
 >'' : ""
 >0 : 0
->[] : undefined[]
+>[] : never[]
 
 var a9a: {};
 >a9a : string
 
 var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
->a9b : { a?: number; b?: string; }
->someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number; b?: string; }
+>a9b : { a?: number | undefined; b?: string | undefined; }
+>someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number | undefined; b?: string | undefined; }
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
->a : number
->b : string
+>a : number | undefined
+>b : string | undefined
 >{ a: 0 } : { a: number; }
 >a : number
 >0 : 0
@@ -341,9 +341,9 @@ var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >'' : ""
 
 var a9b: { a?: number; b?: string; };
->a9b : { a?: number; b?: string; }
->a : number
->b : string
+>a9b : { a?: number | undefined; b?: string | undefined; }
+>a : number | undefined
+>b : string | undefined
 
 // Generic call with multiple parameters of generic type passed arguments with multiple best common types
 interface A91 {
@@ -351,18 +351,18 @@ interface A91 {
 >x : number
 
     y?: string;
->y : string
+>y : string | undefined
 }
 interface A92 {
     x: number;
 >x : number
 
     z?: Date;
->z : Date
+>z : Date | undefined
 }
 var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
->a9e : { x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; }
->someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }) : { x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; }
+>a9e : { x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; } | undefined
+>someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }) : { x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; } | undefined
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
 >undefined : undefined
 >{ x: 6, z: new Date() } : { x: number; z: Date; }
@@ -378,7 +378,7 @@ var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 >'' : ""
 
 var a9e: {};
->a9e : { x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; }
+>a9e : { x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; } | undefined
 
 var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 >a9f : A92
@@ -436,13 +436,13 @@ var a: any;
 
 // Generic call with multiple parameters of generic type where one argument is [] and the other is not 'any'
 var arr = someGenerics9([], null, undefined);
->arr : any[]
->someGenerics9([], null, undefined) : any[]
+>arr : never[] | null | undefined
+>someGenerics9([], null, undefined) : never[] | null | undefined
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
->[] : undefined[]
+>[] : never[]
 >undefined : undefined
 
 var arr: any[];
->arr : any[]
+>arr : never[] | null | undefined
 
 

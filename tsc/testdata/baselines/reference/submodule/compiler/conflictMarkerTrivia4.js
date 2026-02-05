@@ -5,4 +5,5 @@ const x = <div>
 <<<<<<< HEAD
 
 //// [conflictMarkerTrivia4.js]
+"use strict";
 const x = ;

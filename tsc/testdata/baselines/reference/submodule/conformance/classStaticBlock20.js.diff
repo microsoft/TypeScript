@@ -1,8 +1,8 @@
 --- old.classStaticBlock20.js
 +++ new.classStaticBlock20.js
-@@= skipped -17, +17 lines =@@
-
+@@= skipped -18, +18 lines =@@
  //// [classStaticBlock20.js]
+ "use strict";
  class C {
 +    static {
 +        // something

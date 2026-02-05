@@ -60,10 +60,10 @@ interface Magenta {
 >p : Purple
 }
 
-var yellow: Yellow;
+declare var yellow: Yellow;
 >yellow : Yellow
 
-var blue: Blue;
+declare var blue: Blue;
 >blue : Blue
 
 var s = "some string";
@@ -107,7 +107,7 @@ yellow[blue]; // error
 >yellow : Yellow
 >blue : Blue
 
-var x:number[];
+declare var x:number[];
 >x : number[]
 
 x[0];

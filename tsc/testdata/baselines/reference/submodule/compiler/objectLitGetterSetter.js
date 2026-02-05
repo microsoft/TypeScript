@@ -13,6 +13,7 @@
 
 
 //// [objectLitGetterSetter.js]
+"use strict";
 var obj = {};
 Object.defineProperty(obj, "accProperty", ({
     get: function () {

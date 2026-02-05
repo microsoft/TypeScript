@@ -1,6 +1,6 @@
 --- old.typeParamExtendsOtherTypeParam.js
 +++ new.typeParamExtendsOtherTypeParam.js
-@@= skipped -35, +35 lines =@@
+@@= skipped -36, +36 lines =@@
  class A {
  }
  class B {

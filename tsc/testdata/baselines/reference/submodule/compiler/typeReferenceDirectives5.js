@@ -22,3 +22,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 export interface A {
     x: typeof $;
 }
+
+
+//// [DtsFileErrors]
+
+
+/app.d.ts(2,15): error TS2592: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig.
+
+
+==== /app.d.ts (1 errors) ====
+    export interface A {
+        x: typeof $;
+                  ~
+!!! error TS2592: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig.
+    }
+    
+==== /ref.d.ts (0 errors) ====
+    export interface $ { x }
+    
+==== /types/lib/index.d.ts (0 errors) ====
+    declare let $: { x: number }
+    

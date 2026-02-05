@@ -1,20 +1,29 @@
 --- old.promiseTry.types
 +++ new.promiseTry.types
-@@= skipped -78, +78 lines =@@
+@@= skipped -157, +157 lines =@@
  >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
  >Promise : PromiseConstructor
  >try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
-->(foo: string | undefined) => "Async result" : (foo: string | undefined) => string
-+>(foo: string | undefined) => "Async result" : (foo: string) => string
+->(foo: string, bar?: number) => "Async result" : (foo: string, bar?: number) => string
++>(foo: string, bar?: number) => "Async result" : (foo: string, bar?: number | undefined) => string
  >foo : string
+ >bar : number | undefined
  >"Async result" : "Async result"
- >undefined : undefined
-@@= skipped -10, +10 lines =@@
+@@= skipped -11, +11 lines =@@
  >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
  >Promise : PromiseConstructor
  >try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
-->(foo: string | undefined) => "Async result" : (foo: string | undefined) => string
-+>(foo: string | undefined) => "Async result" : (foo: string) => string
+->(foo: string, bar?: number) => "Async result" : (foo: string, bar?: number) => string
++>(foo: string, bar?: number) => "Async result" : (foo: string, bar?: number | undefined) => string
  >foo : string
+ >bar : number | undefined
  >"Async result" : "Async result"
- >"foo" : "foo"
+@@= skipped -12, +12 lines =@@
+ >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
+ >Promise : PromiseConstructor
+ >try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
+->(foo: string, bar?: number) => "Async result" : (foo: string, bar?: number) => string
++>(foo: string, bar?: number) => "Async result" : (foo: string, bar?: number | undefined) => string
+ >foo : string
+ >bar : number | undefined
+ >"Async result" : "Async result"

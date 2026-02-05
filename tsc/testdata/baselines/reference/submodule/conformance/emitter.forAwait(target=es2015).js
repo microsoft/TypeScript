@@ -51,30 +51,35 @@ async function* f7() {
 }
 
 //// [file1.js]
+"use strict";
 async function f1() {
     let y;
     for await (const x of y) {
     }
 }
 //// [file2.js]
+"use strict";
 async function f2() {
     let x, y;
     for await (x of y) {
     }
 }
 //// [file3.js]
+"use strict";
 async function* f3() {
     let y;
     for await (const x of y) {
     }
 }
 //// [file4.js]
+"use strict";
 async function* f4() {
     let x, y;
     for await (x of y) {
     }
 }
 //// [file5.js]
+"use strict";
 // https://github.com/Microsoft/TypeScript/issues/21363
 async function f5() {
     let y;
@@ -83,6 +88,7 @@ async function f5() {
     }
 }
 //// [file6.js]
+"use strict";
 // https://github.com/Microsoft/TypeScript/issues/21363
 async function* f6() {
     let y;
@@ -91,6 +97,7 @@ async function* f6() {
     }
 }
 //// [file7.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/36166
 async function* f7() {
     let y;

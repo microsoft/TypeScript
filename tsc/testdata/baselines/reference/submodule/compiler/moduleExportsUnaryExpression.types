@@ -6,7 +6,7 @@ let x = 1;
 >1 : 1
 
 export function foo(y: number) {
->foo : (y: number) => boolean
+>foo : (y: number) => boolean | undefined
 >y : number
 
     if (y <= x++) return y <= x++;

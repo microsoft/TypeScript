@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/forInStatement2.ts] ////
 
 //// [forInStatement2.ts]
-var expr: number;
+declare var expr: number;
 for (var a in expr) {
 }
 
 //// [forInStatement2.js]
-var expr;
+"use strict";
 for (var a in expr) {
 }

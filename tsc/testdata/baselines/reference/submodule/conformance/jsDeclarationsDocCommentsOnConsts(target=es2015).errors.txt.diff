@@ -1,0 +1,25 @@
+--- old.jsDeclarationsDocCommentsOnConsts(target=es2015).errors.txt
++++ new.jsDeclarationsDocCommentsOnConsts(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++index1.js(15,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++
++
++==== index1.js (1 errors) ====
++    /**
++     * const doc comment
++     */
++    const x = (a) => {
++        return '';
++    };
++    
++    /**
++     * function doc comment
++     */
++    function b() {
++        return 0;
++    }
++    
++    module.exports = {x, b}
++    ~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.

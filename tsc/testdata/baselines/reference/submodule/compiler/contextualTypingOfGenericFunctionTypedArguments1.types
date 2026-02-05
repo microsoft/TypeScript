@@ -22,10 +22,10 @@ interface Combinators {
 >x : T
 }
 
-var c2: Collection<number>;
+declare var c2: Collection<number>;
 >c2 : Collection<number>
 
-var _: Combinators;
+declare var _: Combinators;
 >_ : Combinators
 
 // errors on all 3 lines, bug was that r5 was the only line with errors

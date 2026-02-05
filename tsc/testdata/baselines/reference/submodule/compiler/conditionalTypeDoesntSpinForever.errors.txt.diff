@@ -1,0 +1,28 @@
+--- old.conditionalTypeDoesntSpinForever.errors.txt
++++ new.conditionalTypeDoesntSpinForever.errors.txt
+@@= skipped -11, +11 lines =@@
+ conditionalTypeDoesntSpinForever.ts(78,38): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
+ conditionalTypeDoesntSpinForever.ts(94,21): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
+ conditionalTypeDoesntSpinForever.ts(96,41): error TS2769: No overload matches this call.
+-  Overload 1 of 2, '(o: {}): string[]', gave the following error.
+-    Argument of type 'SO_FAR' is not assignable to parameter of type '{}'.
+-  Overload 2 of 2, '(o: object): string[]', gave the following error.
++  The last overload gave the following error.
+     Argument of type 'SO_FAR' is not assignable to parameter of type 'object'.
+ conditionalTypeDoesntSpinForever.ts(97,71): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
+
+@@= skipped -136, +134 lines =@@
+           fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),
+                                             ~~~~~
+ !!! error TS2769: No overload matches this call.
+-!!! error TS2769:   Overload 1 of 2, '(o: {}): string[]', gave the following error.
+-!!! error TS2769:     Argument of type 'SO_FAR' is not assignable to parameter of type '{}'.
+-!!! error TS2769:   Overload 2 of 2, '(o: object): string[]', gave the following error.
++!!! error TS2769:   The last overload gave the following error.
+ !!! error TS2769:     Argument of type 'SO_FAR' is not assignable to parameter of type 'object'.
+-!!! related TS2208 conditionalTypeDoesntSpinForever.ts:93:22: This type parameter might need an `extends {}` constraint.
+ !!! related TS2208 conditionalTypeDoesntSpinForever.ts:93:22: This type parameter might need an `extends object` constraint.
++!!! related TS2771 lib.es5.d.ts:--:--: The last overload is declared here.
+           hasField: (fieldName: string | number | symbol) => fieldName in soFar
+                                                                           ~~~~~
+ !!! error TS2322: Type 'SO_FAR' is not assignable to type 'object'.

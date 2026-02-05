@@ -1,7 +1,7 @@
 --- old.importedModuleAddToGlobal.js
 +++ new.importedModuleAddToGlobal.js
-@@= skipped -20, +20 lines =@@
- //// [importedModuleAddToGlobal.js]
+@@= skipped -21, +21 lines =@@
+ "use strict";
  var B;
  (function (B_1) {
 +    var a = A;

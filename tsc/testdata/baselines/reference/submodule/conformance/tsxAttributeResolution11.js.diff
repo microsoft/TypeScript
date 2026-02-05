@@ -1,6 +1,6 @@
 --- old.tsxAttributeResolution11.js
 +++ new.tsxAttributeResolution11.js
-@@= skipped -31, +31 lines =@@
+@@= skipped -32, +32 lines =@@
  class MyComponent {
      render() {
      }

@@ -4,5 +4,6 @@
 if (a) / (\\ ? | & ) rct = j / .test(c.href);
 
 //// [parserRegularExpression5.js]
+"use strict";
 if (a)
     / (\\ ? | & ) rct = j /.test(c.href);

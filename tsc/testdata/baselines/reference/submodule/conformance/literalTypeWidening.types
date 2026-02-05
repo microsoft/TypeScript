@@ -359,13 +359,13 @@ let x = onMouseOver();
 // Repro from #23649
 
 export function Set<K extends string>(...keys: K[]): Record<K, true | undefined> {
->Set : <K extends string>(...keys: K[]) => Record<K, true>
+>Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
 >keys : K[]
 >true : true
 
   const result = {} as Record<K, true | undefined>
->result : Record<K, true>
->{} as Record<K, true | undefined> : Record<K, true>
+>result : Record<K, true | undefined>
+>{} as Record<K, true | undefined> : Record<K, true | undefined>
 >{} : {}
 >true : true
 
@@ -377,13 +377,13 @@ export function Set<K extends string>(...keys: K[]): Record<K, true | undefined>
 >key => result[key] = true : (key: K) => boolean
 >key : K
 >result[key] = true : true
->result[key] : Record<K, true>[K]
->result : Record<K, true>
+>result[key] : Record<K, true | undefined>[K]
+>result : Record<K, true | undefined>
 >key : K
 >true : true
 
   return result
->result : Record<K, true>
+>result : Record<K, true | undefined>
 }
 
 export function keys<K extends string, V>(obj: Record<K, V>): K[] {
@@ -393,9 +393,9 @@ export function keys<K extends string, V>(obj: Record<K, V>): K[] {
   return Object.keys(obj) as K[]
 >Object.keys(obj) as K[] : K[]
 >Object.keys(obj) : string[]
->Object.keys : (o: object) => string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
 >Object : ObjectConstructor
->keys : (o: object) => string[]
+>keys : { (o: object): string[]; (o: {}): string[]; }
 >obj : Record<K, V>
 }
 
@@ -404,9 +404,9 @@ type Obj = { code: LangCode }
 >code : "en" | "es" | "fr" | "it" | "nl"
 
 const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
->langCodeSet : Record<"en" | "es" | "fr" | "it" | "nl", true>
->Set('fr', 'en', 'es', 'it', 'nl') : Record<"en" | "es" | "fr" | "it" | "nl", true>
->Set : <K extends string>(...keys: K[]) => Record<K, true>
+>langCodeSet : Record<"en" | "es" | "fr" | "it" | "nl", true | undefined>
+>Set('fr', 'en', 'es', 'it', 'nl') : Record<"en" | "es" | "fr" | "it" | "nl", true | undefined>
+>Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
 >'fr' : "fr"
 >'en' : "en"
 >'es' : "es"
@@ -415,13 +415,13 @@ const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
 
 export type LangCode = keyof typeof langCodeSet
 >LangCode : "en" | "es" | "fr" | "it" | "nl"
->langCodeSet : Record<"en" | "es" | "fr" | "it" | "nl", true>
+>langCodeSet : Record<"en" | "es" | "fr" | "it" | "nl", true | undefined>
 
 export const langCodes = keys(langCodeSet)
 >langCodes : ("en" | "es" | "fr" | "it" | "nl")[]
 >keys(langCodeSet) : ("en" | "es" | "fr" | "it" | "nl")[]
 >keys : <K extends string, V>(obj: Record<K, V>) => K[]
->langCodeSet : Record<"en" | "es" | "fr" | "it" | "nl", true>
+>langCodeSet : Record<"en" | "es" | "fr" | "it" | "nl", true | undefined>
 
 const arr: Obj[] = langCodes.map(code => ({ code }))
 >arr : Obj[]

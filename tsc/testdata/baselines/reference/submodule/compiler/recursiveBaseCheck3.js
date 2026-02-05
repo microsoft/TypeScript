@@ -7,6 +7,7 @@ class C<T> extends A<T> { }
 (new C).blah;
 
 //// [recursiveBaseCheck3.js]
+"use strict";
 class A extends C {
 }
 class C extends A {

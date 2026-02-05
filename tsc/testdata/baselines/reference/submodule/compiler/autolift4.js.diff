@@ -1,8 +1,8 @@
 --- old.autolift4.js
 +++ new.autolift4.js
-@@= skipped -26, +26 lines =@@
-
+@@= skipped -27, +27 lines =@@
  //// [autolift4.js]
+ "use strict";
  class Point {
 +    x;
 +    y;

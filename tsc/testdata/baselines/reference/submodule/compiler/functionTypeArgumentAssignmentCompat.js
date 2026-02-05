@@ -16,6 +16,7 @@ console.log(s);
 
 
 //// [functionTypeArgumentAssignmentCompat.js]
+"use strict";
 var f;
 var g = () => [];
 f = g;

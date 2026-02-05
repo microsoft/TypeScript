@@ -1,6 +1,6 @@
 --- old.classBodyWithStatements.js
 +++ new.classBodyWithStatements.js
-@@= skipped -24, +24 lines =@@
+@@= skipped -25, +25 lines =@@
  var x = 1;
  var y = 2;
  class C3 {

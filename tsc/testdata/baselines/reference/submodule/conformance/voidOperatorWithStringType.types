@@ -25,7 +25,7 @@ class A {
 >foo : () => string
 >"" : ""
 }
-module M {
+namespace M {
 >M : typeof M
 
     export var n: string;

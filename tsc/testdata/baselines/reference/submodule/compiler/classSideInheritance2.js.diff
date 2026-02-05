@@ -1,6 +1,6 @@
 --- old.classSideInheritance2.js
 +++ new.classSideInheritance2.js
-@@= skipped -28, +28 lines =@@
+@@= skipped -29, +29 lines =@@
      }
  }
  class TextBase {

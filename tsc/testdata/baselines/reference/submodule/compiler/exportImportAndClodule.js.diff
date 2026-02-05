@@ -1,6 +1,6 @@
 --- old.exportImportAndClodule.js
 +++ new.exportImportAndClodule.js
-@@= skipped -24, +24 lines =@@
+@@= skipped -25, +25 lines =@@
  var K;
  (function (K) {
      class L {

@@ -1,0 +1,36 @@
+inheritedGenericCallSignature.ts(24,9): error TS2454: Variable 'x' is used before being assigned.
+inheritedGenericCallSignature.ts(24,11): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Date[]'.
+
+
+==== inheritedGenericCallSignature.ts (2 errors) ====
+    interface I1<T> {
+    
+        (a: T): T;
+    
+    }
+    
+    
+    interface Object {}
+    
+     
+    
+    interface I2<T> extends I1<T[]> {
+    
+        b: T;
+    
+    }
+    
+     
+    
+    var x: I2<Date>;
+    
+     
+    
+    var y = x(undefined);
+            ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+              ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Date[]'.
+    
+    y.length;  // should not error
+    

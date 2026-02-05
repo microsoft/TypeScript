@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts] ////
 
 === variableDeclaratorResolvedDuringContextualTyping.ts ===
-module WinJS {
+namespace WinJS {
 >WinJS : Symbol(WinJS, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 0))
 
     export interface ValueCallback {
->ValueCallback : Symbol(ValueCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 14))
+>ValueCallback : Symbol(ValueCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 17))
 
         (value: any): any;
 >value : Symbol(value, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 2, 9))
@@ -38,7 +38,7 @@ module WinJS {
         constructor(init: (complete: ValueCallback, error: ErrorCallback, progress: ProgressCallback) => void, oncancel?: any);
 >init : Symbol(init, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 18, 20))
 >complete : Symbol(complete, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 18, 27))
->ValueCallback : Symbol(ValueCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 14))
+>ValueCallback : Symbol(ValueCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 17))
 >error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 18, 51))
 >ErrorCallback : Symbol(ErrorCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 7, 5))
 >progress : Symbol(progress, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 18, 73))
@@ -92,7 +92,7 @@ module WinJS {
         public then(success?: ValueCallback, error?: ErrorCallback, progress?: ProgressCallback): Promise;
 >then : Symbol(Promise.then, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 27, 65))
 >success : Symbol(success, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 29, 20))
->ValueCallback : Symbol(ValueCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 14))
+>ValueCallback : Symbol(ValueCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 17))
 >error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 29, 44))
 >ErrorCallback : Symbol(ErrorCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 7, 5))
 >progress : Symbol(progress, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 29, 67))
@@ -102,7 +102,7 @@ module WinJS {
         public done(success?: ValueCallback, error?: ErrorCallback, progress?: ProgressCallback): void;
 >done : Symbol(Promise.done, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 29, 106))
 >success : Symbol(success, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 30, 20))
->ValueCallback : Symbol(ValueCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 14))
+>ValueCallback : Symbol(ValueCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 17))
 >error : Symbol(error, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 30, 44))
 >ErrorCallback : Symbol(ErrorCallback, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 7, 5))
 >progress : Symbol(progress, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 30, 67))
@@ -273,11 +273,11 @@ module WinJS {
     }
 }
 
-module Services {
+namespace Services {
 >Services : Symbol(Services, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 63, 1))
 
     export interface IRequestService {
->IRequestService : Symbol(IRequestService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 65, 17))
+>IRequestService : Symbol(IRequestService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 65, 20))
 
         /**
          * Returns the URL that can be used to access the provided service. The optional second argument can
@@ -309,11 +309,11 @@ module Services {
     }
 }
 
-module Errors {
+namespace Errors {
 >Errors : Symbol(Errors, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 81, 1))
 
     export class ConnectionError /* extends Error */ {
->ConnectionError : Symbol(ConnectionError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 83, 15))
+>ConnectionError : Symbol(ConnectionError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 83, 18))
 
         constructor(request: XMLHttpRequest) {
 >request : Symbol(request, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 85, 20))
@@ -322,11 +322,11 @@ module Errors {
     }
 }
 
-module Files {
+namespace Files {
 >Files : Symbol(Files, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 88, 1))
 
     export interface IUploadResult {
->IUploadResult : Symbol(IUploadResult, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 90, 14))
+>IUploadResult : Symbol(IUploadResult, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 90, 17))
 
         stat: string;
 >stat : Symbol(IUploadResult.stat, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 91, 36))
@@ -356,14 +356,14 @@ class FileService {
     private requestService: Services.IRequestService;
 >requestService : Symbol(FileService.requestService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 104, 19))
 >Services : Symbol(Services, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 63, 1))
->IRequestService : Symbol(Services.IRequestService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 65, 17))
+>IRequestService : Symbol(Services.IRequestService, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 65, 20))
 
     public uploadData(): WinJS.TPromise<Files.IUploadResult> {
 >uploadData : Symbol(FileService.uploadData, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 105, 53))
 >WinJS : Symbol(WinJS, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 0))
 >TPromise : Symbol(WinJS.TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
 >Files : Symbol(Files, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 88, 1))
->IUploadResult : Symbol(Files.IUploadResult, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 90, 14))
+>IUploadResult : Symbol(Files.IUploadResult, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 90, 17))
 
         var path = "";
 >path : Symbol(path, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 107, 11))
@@ -422,7 +422,7 @@ class FileService {
 >TPromise : Symbol(WinJS.TPromise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 32, 5))
 >as : Symbol(WinJS.TPromise.as, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 44, 30))
 >Files : Symbol(Files, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 88, 1))
->IUploadResult : Symbol(Files.IUploadResult, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 90, 14))
+>IUploadResult : Symbol(Files.IUploadResult, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 90, 17))
 >result : Symbol(result, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 114, 19))
 
             }, (xhr: XMLHttpRequest) => {
@@ -435,9 +435,9 @@ class FileService {
 >WinJS : Symbol(WinJS, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 0, 0))
 >Promise : Symbol(WinJS.Promise, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 15, 5))
 >wrapError : Symbol(WinJS.Promise.wrapError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 24, 47))
->Errors.ConnectionError : Symbol(Errors.ConnectionError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 83, 15))
+>Errors.ConnectionError : Symbol(Errors.ConnectionError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 83, 18))
 >Errors : Symbol(Errors, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 81, 1))
->ConnectionError : Symbol(Errors.ConnectionError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 83, 15))
+>ConnectionError : Symbol(Errors.ConnectionError, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 83, 18))
 >xhr : Symbol(xhr, Decl(variableDeclaratorResolvedDuringContextualTyping.ts, 120, 16))
 
             });

@@ -25,6 +25,7 @@ let f7 = function() { return function() { return this } };
 
 
 //// [noImplicitThisFunctions.js]
+"use strict";
 function f1(x) {
     // implicit any is still allowed
     return x + 1;

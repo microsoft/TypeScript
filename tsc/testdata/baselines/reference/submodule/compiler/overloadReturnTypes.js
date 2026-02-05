@@ -26,6 +26,7 @@ interface IFace {
 
 
 //// [overloadReturnTypes.js]
+"use strict";
 class Accessor {
 }
 function attr(nameOrMap, value) {

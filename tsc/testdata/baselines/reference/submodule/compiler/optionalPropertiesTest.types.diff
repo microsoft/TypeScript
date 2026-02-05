@@ -5,7 +5,7 @@
  === optionalPropertiesTest.ts ===
  var x: {p1:number; p2?:string; p3?:{():number;};};
 ->x : { p1: number; p2?: string; p3?: { (): number; }; }
-+>x : { p1: number; p2?: string; p3?: () => number; }
++>x : { p1: number; p2?: string | undefined; p3?: (() => number) | undefined; }
  >p1 : number
- >p2 : string
- >p3 : () => number
+ >p2 : string | undefined
+ >p3 : (() => number) | undefined

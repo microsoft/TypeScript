@@ -1,0 +1,9 @@
+--- old.destructuringWithNumberLiteral.types
++++ new.destructuringWithNumberLiteral.types
+@@= skipped -1, +1 lines =@@
+
+ === destructuringWithNumberLiteral.ts ===
+ var { toExponential } = 0;
+->toExponential : (fractionDigits?: number) => string
++>toExponential : (fractionDigits?: number | undefined) => string
+ >0 : 0

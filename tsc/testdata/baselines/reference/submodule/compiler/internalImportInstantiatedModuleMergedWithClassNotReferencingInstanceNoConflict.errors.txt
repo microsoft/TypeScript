@@ -1,0 +1,18 @@
+internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.ts(2,5): error TS2564: Property 'aProp' has no initializer and is not definitely assigned in the constructor.
+
+
+==== internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.ts (1 errors) ====
+    class A {
+        aProp: string;
+        ~~~~~
+!!! error TS2564: Property 'aProp' has no initializer and is not definitely assigned in the constructor.
+    }
+    namespace A {
+        export interface X { s: string }
+        export var a = 10;
+    }
+    
+    namespace B {
+        import Y = A;
+    }
+    

@@ -17,6 +17,7 @@ class Derived extends Base {
 }
 
 //// [derivedClassFunctionOverridesBaseClassAccessor.js]
+"use strict";
 class Base {
     get x() {
         return 1;

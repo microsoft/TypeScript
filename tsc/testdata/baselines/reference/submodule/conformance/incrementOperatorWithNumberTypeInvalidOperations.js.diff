@@ -1,6 +1,6 @@
 --- old.incrementOperatorWithNumberTypeInvalidOperations.js
 +++ new.incrementOperatorWithNumberTypeInvalidOperations.js
-@@= skipped -53, +53 lines =@@
+@@= skipped -52, +52 lines =@@
  var NUMBER1 = [1, 2];
  function foo() { return 1; }
  class A {

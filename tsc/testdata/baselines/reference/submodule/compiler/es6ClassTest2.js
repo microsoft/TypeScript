@@ -161,6 +161,7 @@ var ccwc = new ChildClassWithoutConstructor(1, "s");
 
 
 //// [es6ClassTest2.js]
+"use strict";
 class BasicMonster {
     name;
     health;

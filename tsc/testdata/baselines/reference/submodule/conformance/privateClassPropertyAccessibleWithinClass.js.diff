@@ -1,7 +1,7 @@
 --- old.privateClassPropertyAccessibleWithinClass.js
 +++ new.privateClassPropertyAccessibleWithinClass.js
-@@= skipped -35, +35 lines =@@
- //// [privateClassPropertyAccessibleWithinClass.js]
+@@= skipped -36, +36 lines =@@
+ "use strict";
  // no errors
  class C {
 +    x;

@@ -9,6 +9,7 @@ class boolean { }
 class string { }
 
 //// [classWithPredefinedTypesAsNames.js]
+"use strict";
 // classes cannot use predefined types as names
 class any {
 }

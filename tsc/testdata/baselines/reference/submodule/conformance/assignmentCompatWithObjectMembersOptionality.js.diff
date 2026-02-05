@@ -1,7 +1,7 @@
 --- old.assignmentCompatWithObjectMembersOptionality.js
 +++ new.assignmentCompatWithObjectMembersOptionality.js
-@@= skipped -92, +92 lines =@@
- //// [assignmentCompatWithObjectMembersOptionality.js]
+@@= skipped -93, +93 lines =@@
+ "use strict";
  // Derived member is not optional but base member is, should be ok
  class Base {
 +    foo;

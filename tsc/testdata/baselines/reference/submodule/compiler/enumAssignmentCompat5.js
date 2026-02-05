@@ -9,7 +9,7 @@ enum Computed {
     B = 1 << 2,
     C = 1 << 3,
 }
-let n: number;
+declare let n: number;
 let e: E = n; // ok because it's too inconvenient otherwise
 e = 0; // ok, in range
 e = 4; // ok, out of range, but allowed computed enums don't have all members
@@ -27,6 +27,7 @@ let ca: Computed.A = 1; // error, Computed.A isn't a literal type because Comput
 
 
 //// [enumAssignmentCompat5.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -39,7 +40,6 @@ var Computed;
     Computed[Computed["B"] = 4] = "B";
     Computed[Computed["C"] = 8] = "C";
 })(Computed || (Computed = {}));
-let n;
 let e = n; // ok because it's too inconvenient otherwise
 e = 0; // ok, in range
 e = 4; // ok, out of range, but allowed computed enums don't have all members

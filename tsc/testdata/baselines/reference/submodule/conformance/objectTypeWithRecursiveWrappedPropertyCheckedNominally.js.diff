@@ -1,7 +1,7 @@
 --- old.objectTypeWithRecursiveWrappedPropertyCheckedNominally.js
 +++ new.objectTypeWithRecursiveWrappedPropertyCheckedNominally.js
-@@= skipped -56, +56 lines =@@
- //// [objectTypeWithRecursiveWrappedPropertyCheckedNominally.js]
+@@= skipped -57, +57 lines =@@
+ "use strict";
  // Types with infinitely expanding recursive types are type checked nominally
  class List {
 +    data;

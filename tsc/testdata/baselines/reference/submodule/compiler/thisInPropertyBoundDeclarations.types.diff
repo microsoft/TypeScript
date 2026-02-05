@@ -1,0 +1,11 @@
+--- old.thisInPropertyBoundDeclarations.types
++++ new.thisInPropertyBoundDeclarations.types
+@@= skipped -80, +80 lines =@@
+
+     prop4 = {
+ >prop4 : { a: () => any; }
+->{        a: function() { return this; },    } : { a: () => any; }
++>{        a: function() { return this; },    } : { a: () => { a: any; }; }
+
+         a: function() { return this; },
+ >a : () => { a: any; }

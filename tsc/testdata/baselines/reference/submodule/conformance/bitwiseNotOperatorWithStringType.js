@@ -11,7 +11,7 @@ class A {
     public a: string;
     static foo() { return ""; }
 }
-module M {
+namespace M {
     export var n: string;
 }
 
@@ -46,6 +46,7 @@ var ResultIsNumber14 = ~~~(STRING + STRING);
 ~objA.a,M.n;
 
 //// [bitwiseNotOperatorWithStringType.js]
+"use strict";
 // ~ operator on string type
 var STRING;
 var STRING1 = ["", "abc"];

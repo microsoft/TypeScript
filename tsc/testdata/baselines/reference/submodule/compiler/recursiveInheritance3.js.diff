@@ -1,8 +1,8 @@
 --- old.recursiveInheritance3.js
 +++ new.recursiveInheritance3.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [recursiveInheritance3.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.x = 1;

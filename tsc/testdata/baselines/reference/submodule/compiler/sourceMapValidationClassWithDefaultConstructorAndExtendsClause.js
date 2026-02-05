@@ -10,6 +10,7 @@ class Greeter extends AbstractGreeter {
 }
 
 //// [sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js]
+"use strict";
 class AbstractGreeter {
 }
 class Greeter extends AbstractGreeter {

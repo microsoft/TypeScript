@@ -1,8 +1,8 @@
 --- old.getAndSetAsMemberNames.js
 +++ new.getAndSetAsMemberNames.js
-@@= skipped -24, +24 lines =@@
-
+@@= skipped -25, +25 lines =@@
  //// [getAndSetAsMemberNames.js]
+ "use strict";
  class C1 {
 -    constructor() {
 -        this.get = 1;

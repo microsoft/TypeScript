@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload4.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react')
 >React : typeof React
 
@@ -94,53 +96,53 @@ const c7 = <OneThing {...obj2} yy />;  // Should error as there is extra attribu
 >yy : true
 
 declare function TestingOneThing(j: {"extra-data": string}): JSX.Element;
->TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number; }): JSX.Element; }
+>TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number | undefined; }): JSX.Element; }
 >j : { "extra-data": string; }
 >"extra-data" : string
 >JSX : any
 
 declare function TestingOneThing(n: {yy: string, direction?: number}): JSX.Element;
->TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number; }): JSX.Element; }
->n : { yy: string; direction?: number; }
+>TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number | undefined; }): JSX.Element; }
+>n : { yy: string; direction?: number | undefined; }
 >yy : string
->direction : number
+>direction : number | undefined
 >JSX : any
 
 // Error
 const d1 = <TestingOneThing extra-data />
 >d1 : JSX.Element
 ><TestingOneThing extra-data /> : JSX.Element
->TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number; }): JSX.Element; }
+>TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number | undefined; }): JSX.Element; }
 >extra-data : true
 
 const d2 = <TestingOneThing yy="hello" direction="left" />
 >d2 : JSX.Element
 ><TestingOneThing yy="hello" direction="left" /> : JSX.Element
->TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number; }): JSX.Element; }
+>TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number | undefined; }): JSX.Element; }
 >yy : string
 >direction : string
 
 declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
->TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
->a : { y1?: string; y2?: number; }
->y1 : string
->y2 : number
+>TestingOptional : { (a: { y1?: string | undefined; y2?: number | undefined; }): JSX.Element; (a: { y1?: string | undefined; y2?: number | undefined; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number | undefined; y3: boolean; }): JSX.Element; }
+>a : { y1?: string | undefined; y2?: number | undefined; }
+>y1 : string | undefined
+>y2 : number | undefined
 >JSX : any
 
 declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
->TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
->a : { y1?: string; y2?: number; children: JSX.Element; }
->y1 : string
->y2 : number
+>TestingOptional : { (a: { y1?: string | undefined; y2?: number | undefined; }): JSX.Element; (a: { y1?: string | undefined; y2?: number | undefined; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number | undefined; y3: boolean; }): JSX.Element; }
+>a : { y1?: string | undefined; y2?: number | undefined; children: JSX.Element; }
+>y1 : string | undefined
+>y2 : number | undefined
 >children : JSX.Element
 >JSX : any
 >JSX : any
 
 declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
->TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
->a : { y1: boolean; y2?: number; y3: boolean; }
+>TestingOptional : { (a: { y1?: string | undefined; y2?: number | undefined; }): JSX.Element; (a: { y1?: string | undefined; y2?: number | undefined; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number | undefined; y3: boolean; }): JSX.Element; }
+>a : { y1: boolean; y2?: number | undefined; y3: boolean; }
 >y1 : boolean
->y2 : number
+>y2 : number | undefined
 >y3 : boolean
 >JSX : any
 
@@ -148,14 +150,14 @@ declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JS
 const e1 = <TestingOptional y1 y3="hello"/>
 >e1 : JSX.Element
 ><TestingOptional y1 y3="hello"/> : JSX.Element
->TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
+>TestingOptional : { (a: { y1?: string | undefined; y2?: number | undefined; }): JSX.Element; (a: { y1?: string | undefined; y2?: number | undefined; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number | undefined; y3: boolean; }): JSX.Element; }
 >y1 : true
 >y3 : string
 
 const e2 = <TestingOptional y1="hello" y2={1000} y3 />
 >e2 : JSX.Element
 ><TestingOptional y1="hello" y2={1000} y3 /> : JSX.Element
->TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
+>TestingOptional : { (a: { y1?: string | undefined; y2?: number | undefined; }): JSX.Element; (a: { y1?: string | undefined; y2?: number | undefined; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number | undefined; y3: boolean; }): JSX.Element; }
 >y1 : string
 >y2 : number
 >1000 : 1000
@@ -164,7 +166,7 @@ const e2 = <TestingOptional y1="hello" y2={1000} y3 />
 const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
 >e3 : JSX.Element
 ><TestingOptional y1="hello" y2={1000} children="hi" /> : JSX.Element
->TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
+>TestingOptional : { (a: { y1?: string | undefined; y2?: number | undefined; }): JSX.Element; (a: { y1?: string | undefined; y2?: number | undefined; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number | undefined; y3: boolean; }): JSX.Element; }
 >y1 : string
 >y2 : number
 >1000 : 1000
@@ -173,9 +175,9 @@ const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
 const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
 >e4 : JSX.Element
 ><TestingOptional y1="hello" y2={1000}>Hi</TestingOptional> : JSX.Element
->TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
+>TestingOptional : { (a: { y1?: string | undefined; y2?: number | undefined; }): JSX.Element; (a: { y1?: string | undefined; y2?: number | undefined; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number | undefined; y3: boolean; }): JSX.Element; }
 >y1 : string
 >y2 : number
 >1000 : 1000
->TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
+>TestingOptional : { (a: { y1?: string | undefined; y2?: number | undefined; }): JSX.Element; (a: { y1?: string | undefined; y2?: number | undefined; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number | undefined; y3: boolean; }): JSX.Element; }
 

@@ -1,15 +1,17 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload5.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react')
 >React : typeof React
 
 export interface ClickableProps {
     children?: string;
->children : string
+>children : string | undefined
 
     className?: string;
->className : string
+>className : string | undefined
 }
 
 export interface ButtonProps extends ClickableProps {

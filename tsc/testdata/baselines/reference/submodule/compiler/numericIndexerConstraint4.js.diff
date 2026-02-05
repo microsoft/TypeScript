@@ -1,8 +1,8 @@
 --- old.numericIndexerConstraint4.js
 +++ new.numericIndexerConstraint4.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [numericIndexerConstraint4.js]
+ "use strict";
  class A {
 +    foo;
  }

@@ -1,6 +1,6 @@
 --- old.declFileGenericType2.js
 +++ new.declFileGenericType2.js
-@@= skipped -46, +46 lines =@@
+@@= skipped -47, +47 lines =@@
  // Module
  var templa;
  (function (templa) {

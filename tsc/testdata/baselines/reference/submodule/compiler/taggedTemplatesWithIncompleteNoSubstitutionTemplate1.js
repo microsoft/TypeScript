@@ -8,6 +8,7 @@ function f(x: TemplateStringsArray, y: string, z: string) {
 f `123qdawdrqw
 
 //// [taggedTemplatesWithIncompleteNoSubstitutionTemplate1.js]
+"use strict";
 function f(x, y, z) {
 }
 // Incomplete call, not enough parameters.

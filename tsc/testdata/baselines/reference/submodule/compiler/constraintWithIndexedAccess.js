@@ -33,5 +33,4 @@ export type TypeGeneric3<T extends keyof DataFetchFns, F extends keyof DataFetch
 
 
 //// [constraintWithIndexedAccess.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

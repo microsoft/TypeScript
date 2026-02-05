@@ -1,15 +1,15 @@
 //// [tests/cases/compiler/declarationEmitNameConflicts.ts] ////
 
 //// [declarationEmit_nameConflicts_1.ts]
-module f { export class c { } }
+namespace f { export class c { } }
 export = f;
 
 //// [declarationEmit_nameConflicts_0.ts]
 import im = require('./declarationEmit_nameConflicts_1');
-export module M {
+export namespace M {
     export function f() { }
     export class C { }
-    export module N {
+    export namespace N {
         export function g() { };
         export interface I { }
     }
@@ -20,10 +20,10 @@ export module M {
     export import d = im;
 }
 
-export module M.P {
+export namespace M.P {
     export function f() { }
     export class C { }
-    export module N {
+    export namespace N {
         export function g() { };
         export interface I { }
     }
@@ -35,16 +35,16 @@ export module M.P {
     export var d = M.d; // emitted incorrectly as typeof im
 }
 
-export module M.Q {
+export namespace M.Q {
     export function f() { }
     export class C { }
-    export module N {
+    export namespace N {
         export function g() { };
         export interface I { }
     }
     export interface b extends M.b { } // ok
     export interface I extends M.c.I { } // ok
-    export module c {
+    export namespace c {
         export interface I extends M.c.I { } // ok
     }
 }

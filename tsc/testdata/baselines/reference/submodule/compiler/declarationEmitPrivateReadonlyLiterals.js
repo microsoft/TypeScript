@@ -10,6 +10,7 @@ class Foo {
 
 
 //// [declarationEmitPrivateReadonlyLiterals.js]
+"use strict";
 class Foo {
     static A = "a";
     B = "b";

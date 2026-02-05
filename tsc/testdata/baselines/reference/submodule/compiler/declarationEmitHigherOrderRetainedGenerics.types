@@ -33,7 +33,7 @@ export declare const URI: unique symbol;
 
 export interface TypeClass<F extends TypeLambda> {
     readonly [URI]?: F
->[URI] : F
+>[URI] : F | undefined
 >URI : unique symbol
 }
 

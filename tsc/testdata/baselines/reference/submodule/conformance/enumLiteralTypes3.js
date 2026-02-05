@@ -122,6 +122,7 @@ function f13(x: Choice): Choice {
 }
 
 //// [enumLiteralTypes3.js]
+"use strict";
 ;
 function f1(a, b, c, d) {
     a = a;

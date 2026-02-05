@@ -1,7 +1,7 @@
 // === goToDefinition ===
 // === /b.ts ===
 // <|import [|alias1|] = require("fileb");|>
-// module Module {
+// namespace Module {
 //     export import alias2 = alias1;
 // }
 // 
@@ -18,7 +18,7 @@
 // === goToDefinition ===
 // === /b.ts ===
 // <|import [|alias1|] = require("fileb");|>
-// module Module {
+// namespace Module {
 //     export import alias2 = alias1;
 // }
 // 
@@ -35,7 +35,7 @@
 // === goToDefinition ===
 // === /b.ts ===
 // import alias1 = require("fileb");
-// module Module {
+// namespace Module {
 //     <|export import [|alias2|] = alias1;|>
 // }
 // 
@@ -52,7 +52,7 @@
 // === goToDefinition ===
 // === /b.ts ===
 // import alias1 = require("fileb");
-// module Module {
+// namespace Module {
 //     <|export import [|alias2|] = alias1;|>
 // }
 // 

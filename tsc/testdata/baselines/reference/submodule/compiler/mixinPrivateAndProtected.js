@@ -92,6 +92,7 @@ class Customer extends PersonMixin(Person) {
 
 
 //// [mixinPrivateAndProtected.js]
+"use strict";
 // Repro from #13830
 class A {
     pb = 2;

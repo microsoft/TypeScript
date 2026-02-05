@@ -1,6 +1,6 @@
 --- old.dottedModuleName.js
 +++ new.dottedModuleName.js
-@@= skipped -25, +25 lines =@@
+@@= skipped -26, +26 lines =@@
  (function (M) {
      let N;
      (function (N) {

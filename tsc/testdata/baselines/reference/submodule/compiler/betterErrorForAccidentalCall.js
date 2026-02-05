@@ -18,6 +18,7 @@ foo()
 
 
 //// [betterErrorForAccidentalCall.js]
+"use strict";
 foo()(1).toString();
 foo()(1).toString();
 foo()(1).toString();

@@ -17,6 +17,7 @@ function test(strInput: string & MyBrand) {
 
 
 //// [switchComparableCompatForBrands.js]
+"use strict";
 class MyBrand {
     _a;
 }

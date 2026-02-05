@@ -7,6 +7,7 @@ let y = true;
 x = y && (a => a);
 
 //// [contextuallyTypeLogicalAnd01.js]
+"use strict";
 let x;
 let y = true;
 x = y && (a => a);

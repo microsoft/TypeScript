@@ -265,7 +265,7 @@ namespace GH14865 {
 >data : string
 >"whatevs" : "whatevs"
 
-    let b: Style1;
+    declare let b: Style1;
 >b : Style1
 
     a.type; // "A" | "B"
@@ -294,22 +294,22 @@ namespace GH30170 {
     }
     interface Yellow {
         color?: 'yellow',
->color : "yellow"
+>color : "yellow" | undefined
     }
     function draw(val: Blue | Yellow) { }
 >draw : (val: Blue | Yellow) => void
 >val : Blue | Yellow
 
     function drawWithColor(currentColor: 'blue' | 'yellow' | undefined) {
->drawWithColor : (currentColor: "blue" | "yellow") => void
->currentColor : "blue" | "yellow"
+>drawWithColor : (currentColor: "blue" | "yellow" | undefined) => void
+>currentColor : "blue" | "yellow" | undefined
 
         return draw({ color: currentColor });
 >draw({ color: currentColor }) : void
 >draw : (val: Blue | Yellow) => void
->{ color: currentColor } : { color: "blue" | "yellow"; }
->color : "blue" | "yellow"
->currentColor : "blue" | "yellow"
+>{ color: currentColor } : { color: "blue" | "yellow" | undefined; }
+>color : "blue" | "yellow" | undefined
+>currentColor : "blue" | "yellow" | undefined
     }
 }
 
@@ -513,7 +513,7 @@ namespace GH58603 {
 >TypeA : TypeA
 >kind : MyEnum.A
 >MyEnum : any
->id : number
+>id : number | undefined
     
     type TypeB = { kind: MyEnum.B } & ({ id?: undefined } | { id: number });
 >TypeB : TypeB
@@ -530,16 +530,16 @@ namespace GH58603 {
 >a : MyType
     
     function indirect(kind: MyEnum, id?: number): void {
->indirect : (kind: MyEnum, id?: number) => void
+>indirect : (kind: MyEnum, id?: number | undefined) => void
 >kind : MyEnum
->id : number
+>id : number | undefined
 
         something({ kind, id });
 >something({ kind, id }) : void
 >something : (a: MyType) => void
->{ kind, id } : { kind: MyEnum; id: number; }
+>{ kind, id } : { kind: MyEnum; id: number | undefined; }
 >kind : MyEnum
->id : number
+>id : number | undefined
     }
     
     type Foo = { kind: "a" | "b", value: number } | { kind: "a", value: undefined } | { kind: "b", value: undefined };
@@ -552,26 +552,26 @@ namespace GH58603 {
 >value : undefined
     
     function test(obj: { kind: "a" | "b", value: number | undefined }) {
->test : (obj: { kind: "a" | "b"; value: number; }) => void
->obj : { kind: "a" | "b"; value: number; }
+>test : (obj: { kind: "a" | "b"; value: number | undefined; }) => void
+>obj : { kind: "a" | "b"; value: number | undefined; }
 >kind : "a" | "b"
->value : number
+>value : number | undefined
 
         let x1: Foo = obj;
 >x1 : Foo
->obj : { kind: "a" | "b"; value: number; }
+>obj : { kind: "a" | "b"; value: number | undefined; }
 
         let x2: Foo = { kind: obj.kind, value: obj.value };
 >x2 : Foo
->{ kind: obj.kind, value: obj.value } : { kind: "a" | "b"; value: number; }
+>{ kind: obj.kind, value: obj.value } : { kind: "a" | "b"; value: number | undefined; }
 >kind : "a" | "b"
 >obj.kind : "a" | "b"
->obj : { kind: "a" | "b"; value: number; }
+>obj : { kind: "a" | "b"; value: number | undefined; }
 >kind : "a" | "b"
->value : number
->obj.value : number
->obj : { kind: "a" | "b"; value: number; }
->value : number
+>value : number | undefined
+>obj.value : number | undefined
+>obj : { kind: "a" | "b"; value: number | undefined; }
+>value : number | undefined
     }
 }
 

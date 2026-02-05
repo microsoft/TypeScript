@@ -8,11 +8,11 @@ interface I2<T> {
 >p : T
 }
 
-var x: <T extends I2<T>>(z: T) => void
+declare var x: <T extends I2<T>>(z: T) => void;
 >x : <T extends I2<T>>(z: T) => void
 >z : T
 
-var y: <T extends I2<I2<T>>>(z: T) => void
+declare var y: <T extends I2<I2<T>>>(z: T) => void;
 >y : <T extends I2<I2<T>>>(z: T) => void
 >z : T
 

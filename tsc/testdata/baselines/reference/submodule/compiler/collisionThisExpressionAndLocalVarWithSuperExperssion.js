@@ -21,6 +21,7 @@ class b2 extends a {
 }
 
 //// [collisionThisExpressionAndLocalVarWithSuperExperssion.js]
+"use strict";
 class a {
     foo() {
     }

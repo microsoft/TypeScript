@@ -16,6 +16,7 @@ var x: string = alpha.a + beta.b;
 
 
 //// [foo.js]
+"use strict";
 /// <reference types="alpha" />
 /// <reference types="beta" />
 var x = alpha.a + beta.b;

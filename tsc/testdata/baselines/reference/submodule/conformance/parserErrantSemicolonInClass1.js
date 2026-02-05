@@ -38,6 +38,7 @@ class a {
 
 
 //// [parserErrantSemicolonInClass1.js]
+"use strict";
 class a {
     constructor(ns) {
     }

@@ -83,18 +83,18 @@ interface N2<T> extends N1<T> {
 // Test that complex recursive collections can pass the `extends` assignability check without
 // running out of memory. This bug was exposed in Typescript 2.4 when more generic signatures
 // started being checked.
-declare module Immutable {
+declare namespace Immutable {
 >Immutable : typeof Immutable
 
   export function fromJS(jsValue: any, reviver?: (key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any): any;
->fromJS : (jsValue: any, reviver?: (key: string | number, sequence: Collection.Indexed<any> | Collection.Keyed<string, any>, path?: (string | number)[]) => any) => any
+>fromJS : (jsValue: any, reviver?: ((key: string | number, sequence: Collection.Indexed<any> | Collection.Keyed<string, any>, path?: (string | number)[] | undefined) => any) | undefined) => any
 >jsValue : any
->reviver : (key: string | number, sequence: Collection.Indexed<any> | Collection.Keyed<string, any>, path?: (string | number)[]) => any
+>reviver : ((key: string | number, sequence: Collection.Indexed<any> | Collection.Keyed<string, any>, path?: (string | number)[] | undefined) => any) | undefined
 >key : string | number
 >sequence : Collection.Indexed<any> | Collection.Keyed<string, any>
 >Collection : any
 >Collection : any
->path : (string | number)[]
+>path : (string | number)[] | undefined
 
   export function is(first: any, second: any): boolean;
 >is : (first: any, second: any) => boolean
@@ -145,7 +145,7 @@ declare module Immutable {
     hashCode(): number;
 >hashCode : () => number
   }
-  export module List {
+  export namespace List {
 >List : typeof List
 
     function isList(maybeList: any): maybeList is List<any>;
@@ -341,7 +341,7 @@ declare module Immutable {
 >iter : this
 >context : any
   }
-  export module Map {
+  export namespace Map {
 >Map : typeof Map
 
     function isMap(maybeMap: any): maybeMap is Map<any, any>;
@@ -552,7 +552,7 @@ declare module Immutable {
 >iter : this
 >context : any
   }
-  export module OrderedMap {
+  export namespace OrderedMap {
 >OrderedMap : typeof OrderedMap
 
     function isOrderedMap(maybeOrderedMap: any): maybeOrderedMap is OrderedMap<any, any>;
@@ -637,7 +637,7 @@ declare module Immutable {
 >iter : this
 >context : any
   }
-  export module Set {
+  export namespace Set {
 >Set : typeof Set
 
     function isSet(maybeSet: any): maybeSet is Set<any>;
@@ -759,7 +759,7 @@ declare module Immutable {
 >iter : this
 >context : any
   }
-  export module OrderedSet {
+  export namespace OrderedSet {
 >OrderedSet : typeof OrderedSet
 
     function isOrderedSet(maybeOrderedSet: any): boolean;
@@ -853,7 +853,7 @@ declare module Immutable {
 >any : any[]
 >collections : Collection<any, any>[]
   }
-  export module Stack {
+  export namespace Stack {
 >Stack : typeof Stack
 
     function isStack(maybeStack: any): maybeStack is Stack<any>;
@@ -879,7 +879,7 @@ declare module Immutable {
 
     // Reading values
     peek(): T | undefined;
->peek : () => T
+>peek : () => T | undefined
 
     // Persistent changes
     clear(): Stack<T>;
@@ -957,19 +957,19 @@ declare module Immutable {
 >context : any
   }
   export function Range(start?: number, end?: number, step?: number): Seq.Indexed<number>;
->Range : (start?: number, end?: number, step?: number) => Seq.Indexed<number>
->start : number
->end : number
->step : number
+>Range : (start?: number | undefined, end?: number | undefined, step?: number | undefined) => Seq.Indexed<number>
+>start : number | undefined
+>end : number | undefined
+>step : number | undefined
 >Seq : any
 
   export function Repeat<T>(value: T, times?: number): Seq.Indexed<T>;
->Repeat : <T>(value: T, times?: number) => Seq.Indexed<T>
+>Repeat : <T>(value: T, times?: number | undefined) => Seq.Indexed<T>
 >value : T
->times : number
+>times : number | undefined
 >Seq : any
 
-  export module Record {
+  export namespace Record {
 >Record : typeof Record
 
     export function isRecord(maybeRecord: any): maybeRecord is Record.Instance<any>;
@@ -983,10 +983,10 @@ declare module Immutable {
 
     export interface Class<T extends Object> {
       (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
->values : Iterable<[string, any]> | Partial<T>
+>values : Iterable<[string, any]> | Partial<T> | undefined
 
       new (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
->values : Iterable<[string, any]> | Partial<T>
+>values : Iterable<[string, any]> | Partial<T> | undefined
     }
     export interface Instance<T extends Object> {
       readonly size: number;
@@ -1132,10 +1132,10 @@ declare module Immutable {
   export function Record<T>(defaultValues: T, name?: string): Record.Class<T>;
 >Record : typeof Record
 >defaultValues : T
->name : string
+>name : string | undefined
 >Record : any
 
-  export module Seq {
+  export namespace Seq {
 >Seq : typeof Seq
 
     function isSeq(maybeSeq: any): maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>;
@@ -1149,7 +1149,7 @@ declare module Immutable {
 >values : T[]
 >Seq : any
 
-    export module Keyed {}
+    export namespace Keyed {}
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>;
 >Keyed : { <K, V>(collection: Iterable<[K, V]>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; <K_1, V_1>(): Keyed<K_1, V_1>; (): Keyed<any, any>; }
 >collection : Iterable<[K, V]>
@@ -1246,7 +1246,7 @@ declare module Immutable {
 >iter : this
 >context : any
     }
-    module Indexed {
+    namespace Indexed {
 >Indexed : typeof Indexed
 
       function of<T>(...values: Array<T>): Seq.Indexed<T>;
@@ -1319,7 +1319,7 @@ declare module Immutable {
 >iter : this
 >context : any
     }
-    export module Set {
+    export namespace Set {
 >Set : typeof Set
 
       function of<T>(...values: Array<T>): Seq.Set<T>;
@@ -1431,7 +1431,7 @@ declare module Immutable {
 
   export interface Seq<K, V> extends Collection<K, V> {
     readonly size: number | undefined;
->size : number
+>size : number | undefined
 
     // Force evaluation
     cacheResult(): this;
@@ -1470,7 +1470,7 @@ declare module Immutable {
 >iter : this
 >context : any
   }
-  export module Collection {
+  export namespace Collection {
 >Collection : typeof Collection
 
     function isKeyed(maybeKeyed: any): maybeKeyed is Collection.Keyed<any, any>;
@@ -1493,7 +1493,7 @@ declare module Immutable {
 >isOrdered : (maybeOrdered: any) => boolean
 >maybeOrdered : any
 
-    export module Keyed {}
+    export namespace Keyed {}
     export function Keyed<K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>;
 >Keyed : { <K, V>(collection: Iterable<[K, V]>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; }
 >collection : Iterable<[K, V]>
@@ -1591,7 +1591,7 @@ declare module Immutable {
 >Symbol : SymbolConstructor
 >iterator : unique symbol
     }
-    export module Indexed {}
+    export namespace Indexed {}
     export function Indexed<T>(collection: Iterable<T>): Collection.Indexed<T>;
 >Indexed : <T>(collection: Iterable<T>) => Indexed<T>
 >collection : Iterable<T>
@@ -1606,12 +1606,12 @@ declare module Immutable {
 
       // Reading values
       get<NSV>(index: number, notSetValue: NSV): T | NSV;
->get : { <NSV>(index: number, notSetValue: NSV): NSV | T; (index: number): T; }
+>get : { <NSV>(index: number, notSetValue: NSV): NSV | T; (index: number): T | undefined; }
 >index : number
 >notSetValue : NSV
 
       get(index: number): T | undefined;
->get : { <NSV>(index: number, notSetValue: NSV): NSV | T; (index: number): T; }
+>get : { <NSV>(index: number, notSetValue: NSV): NSV | T; (index: number): T | undefined; }
 >index : number
 
       // Conversion to Seq
@@ -1740,7 +1740,7 @@ declare module Immutable {
 >Symbol : SymbolConstructor
 >iterator : unique symbol
     }
-    export module Set {}
+    export namespace Set {}
     export function Set<T>(collection: Iterable<T>): Collection.Set<T>;
 >Set : <T>(collection: Iterable<T>) => Set<T>
 >collection : Iterable<T>
@@ -1831,12 +1831,12 @@ declare module Immutable {
 
     // Reading values
     get<NSV>(key: K, notSetValue: NSV): V | NSV;
->get : { <NSV>(key: K, notSetValue: NSV): NSV | V; (key: K): V; }
+>get : { <NSV>(key: K, notSetValue: NSV): NSV | V; (key: K): V | undefined; }
 >key : K
 >notSetValue : NSV
 
     get(key: K): V | undefined;
->get : { <NSV>(key: K, notSetValue: NSV): NSV | V; (key: K): V; }
+>get : { <NSV>(key: K, notSetValue: NSV): NSV | V; (key: K): V | undefined; }
 >key : K
 
     has(key: K): boolean;
@@ -1852,10 +1852,10 @@ declare module Immutable {
 >value : V
 
     first(): V | undefined;
->first : () => V
+>first : () => V | undefined
 
     last(): V | undefined;
->last : () => V
+>last : () => V | undefined
 
     // Reading deep values
     getIn(searchKeyPath: Iterable<any>, notSetValue?: any): any;
@@ -1984,18 +1984,18 @@ declare module Immutable {
 >reverse : () => this
 
     sort(comparator?: (valueA: V, valueB: V) => number): this;
->sort : (comparator?: (valueA: V, valueB: V) => number) => this
->comparator : (valueA: V, valueB: V) => number
+>sort : (comparator?: ((valueA: V, valueB: V) => number) | undefined) => this
+>comparator : ((valueA: V, valueB: V) => number) | undefined
 >valueA : V
 >valueB : V
 
     sortBy<C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number): this;
->sortBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number) => this
+>sortBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: ((valueA: C, valueB: C) => number) | undefined) => this
 >comparatorValueMapper : (value: V, key: K, iter: this) => C
 >value : V
 >key : K
 >iter : this
->comparator : (valueA: C, valueB: C) => number
+>comparator : ((valueA: C, valueB: C) => number) | undefined
 >valueA : C
 >valueB : C
 
@@ -2019,9 +2019,9 @@ declare module Immutable {
 
     // Creating subsets
     slice(begin?: number, end?: number): this;
->slice : (begin?: number, end?: number) => this
->begin : number
->end : number
+>slice : (begin?: number | undefined, end?: number | undefined) => this
+>begin : number | undefined
+>end : number | undefined
 
     rest(): this;
 >rest : () => this
@@ -2083,12 +2083,12 @@ declare module Immutable {
 >valuesOrCollections : any[]
 
     flatten(depth?: number): Collection<any, any>;
->flatten : { (depth?: number): Collection<any, any>; (shallow?: boolean): Collection<any, any>; }
->depth : number
+>flatten : { (depth?: number | undefined): Collection<any, any>; (shallow?: boolean | undefined): Collection<any, any>; }
+>depth : number | undefined
 
     flatten(shallow?: boolean): Collection<any, any>;
->flatten : { (depth?: number): Collection<any, any>; (shallow?: boolean): Collection<any, any>; }
->shallow : boolean
+>flatten : { (depth?: number | undefined): Collection<any, any>; (shallow?: boolean | undefined): Collection<any, any>; }
+>shallow : boolean | undefined
 
     flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Collection<K, M>;
 >flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any) => Collection<K, M>
@@ -2152,8 +2152,8 @@ declare module Immutable {
 >context : any
 
     join(separator?: string): string;
->join : (separator?: string) => string
->separator : string
+>join : (separator?: string | undefined) => string
+>separator : string | undefined
 
     isEmpty(): boolean;
 >isEmpty : () => boolean
@@ -2179,43 +2179,43 @@ declare module Immutable {
 
     // Search for value
     find(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): V | undefined;
->find : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => V
+>find : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V | undefined) => V | undefined
 >predicate : (value: V, key: K, iter: this) => boolean
 >value : V
 >key : K
 >iter : this
 >context : any
->notSetValue : V
+>notSetValue : V | undefined
 
     findLast(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): V | undefined;
->findLast : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => V
+>findLast : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V | undefined) => V | undefined
 >predicate : (value: V, key: K, iter: this) => boolean
 >value : V
 >key : K
 >iter : this
 >context : any
->notSetValue : V
+>notSetValue : V | undefined
 
     findEntry(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): [K, V] | undefined;
->findEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => [K, V]
+>findEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V | undefined) => [K, V] | undefined
 >predicate : (value: V, key: K, iter: this) => boolean
 >value : V
 >key : K
 >iter : this
 >context : any
->notSetValue : V
+>notSetValue : V | undefined
 
     findLastEntry(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): [K, V] | undefined;
->findLastEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => [K, V]
+>findLastEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V | undefined) => [K, V] | undefined
 >predicate : (value: V, key: K, iter: this) => boolean
 >value : V
 >key : K
 >iter : this
 >context : any
->notSetValue : V
+>notSetValue : V | undefined
 
     findKey(predicate: (value: V, key: K, iter: this) => boolean, context?: any): K | undefined;
->findKey : (predicate: (value: V, key: K, iter: this) => boolean, context?: any) => K
+>findKey : (predicate: (value: V, key: K, iter: this) => boolean, context?: any) => K | undefined
 >predicate : (value: V, key: K, iter: this) => boolean
 >value : V
 >key : K
@@ -2223,7 +2223,7 @@ declare module Immutable {
 >context : any
 
     findLastKey(predicate: (value: V, key: K, iter: this) => boolean, context?: any): K | undefined;
->findLastKey : (predicate: (value: V, key: K, iter: this) => boolean, context?: any) => K
+>findLastKey : (predicate: (value: V, key: K, iter: this) => boolean, context?: any) => K | undefined
 >predicate : (value: V, key: K, iter: this) => boolean
 >value : V
 >key : K
@@ -2231,42 +2231,42 @@ declare module Immutable {
 >context : any
 
     keyOf(searchValue: V): K | undefined;
->keyOf : (searchValue: V) => K
+>keyOf : (searchValue: V) => K | undefined
 >searchValue : V
 
     lastKeyOf(searchValue: V): K | undefined;
->lastKeyOf : (searchValue: V) => K
+>lastKeyOf : (searchValue: V) => K | undefined
 >searchValue : V
 
     max(comparator?: (valueA: V, valueB: V) => number): V | undefined;
->max : (comparator?: (valueA: V, valueB: V) => number) => V
->comparator : (valueA: V, valueB: V) => number
+>max : (comparator?: ((valueA: V, valueB: V) => number) | undefined) => V | undefined
+>comparator : ((valueA: V, valueB: V) => number) | undefined
 >valueA : V
 >valueB : V
 
     maxBy<C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number): V | undefined;
->maxBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number) => V
+>maxBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: ((valueA: C, valueB: C) => number) | undefined) => V | undefined
 >comparatorValueMapper : (value: V, key: K, iter: this) => C
 >value : V
 >key : K
 >iter : this
->comparator : (valueA: C, valueB: C) => number
+>comparator : ((valueA: C, valueB: C) => number) | undefined
 >valueA : C
 >valueB : C
 
     min(comparator?: (valueA: V, valueB: V) => number): V | undefined;
->min : (comparator?: (valueA: V, valueB: V) => number) => V
->comparator : (valueA: V, valueB: V) => number
+>min : (comparator?: ((valueA: V, valueB: V) => number) | undefined) => V | undefined
+>comparator : ((valueA: V, valueB: V) => number) | undefined
 >valueA : V
 >valueB : V
 
     minBy<C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number): V | undefined;
->minBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number) => V
+>minBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: ((valueA: C, valueB: C) => number) | undefined) => V | undefined
 >comparatorValueMapper : (value: V, key: K, iter: this) => C
 >value : V
 >key : K
 >iter : this
->comparator : (valueA: C, valueB: C) => number
+>comparator : ((valueA: C, valueB: C) => number) | undefined
 >valueA : C
 >valueB : C
 

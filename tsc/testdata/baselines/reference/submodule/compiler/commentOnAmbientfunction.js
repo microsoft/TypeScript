@@ -17,9 +17,11 @@ declare function bar();
 declare function foobar(a: typeof foo): typeof bar;
 
 //// [a.js]
+"use strict";
 /*!=========
     Keep this pinned comment
    =========
 */
 //// [b.js]
+"use strict";
 ///<reference path="a.ts"/>

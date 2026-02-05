@@ -4,4 +4,5 @@
 foo(a,,b);
 
 //// [missingArgument1.js]
+"use strict";
 foo(a, b);

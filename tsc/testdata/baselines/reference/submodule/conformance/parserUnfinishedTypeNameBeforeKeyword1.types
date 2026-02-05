@@ -5,6 +5,6 @@ var x: TypeModule1.
 >x : any
 >TypeModule1 : any
 
-module TypeModule2 {
+namespace TypeModule2 {
 }
 

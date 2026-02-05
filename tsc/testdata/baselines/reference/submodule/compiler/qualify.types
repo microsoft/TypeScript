@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/qualify.ts] ////
 
 === qualify.ts ===
-module M {
+namespace M {
 >M : typeof M
 
     export var m=0;
 >m : number
 >0 : 0
 
-    export module N {
+    export namespace N {
 >N : typeof N
 
         export var n=1;
@@ -17,10 +17,10 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
-    export module N {
+    export namespace N {
 >N : typeof N
 
         var y=m;
@@ -36,14 +36,14 @@ module M {
 }
 
 
-module T {
+namespace T {
 >T : typeof T
 
     export interface I {
         p;
 >p : any
     }
-    export module U {
+    export namespace U {
 >U : typeof U
 
         var z:I=3;
@@ -57,10 +57,10 @@ module T {
     }
 }
 
-module Peer {
+namespace Peer {
 >Peer : typeof Peer
 
-    export module U2 {
+    export namespace U2 {
 >U2 : typeof U2
 
         var z:T.U.I2=3;
@@ -71,24 +71,26 @@ module Peer {
     }
 }
 
-module Everest {
+namespace Everest {
 >Everest : typeof Everest
 
-    export module K1 {
+    export namespace K1 {
         export interface I3 {
             zeep;
 >zeep : any
         }
     }
-    export module K2 {
+    export namespace K2 {
 >K2 : typeof K2
 
         export interface I4 {
             z;
 >z : any
         }
-        var v1:I4;
+        var v1:I4 = undefined as any;
 >v1 : I4
+>undefined as any : any
+>undefined : undefined
 
         var v2:K1.I3=v1;
 >v2 : K1.I3
@@ -124,8 +126,10 @@ interface I {
 >k : any
 }
 
-var y:I;
+var y:I = undefined as any;
 >y : I
+>undefined as any : any
+>undefined : undefined
 
 var x:T.I=y;
 >x : T.I

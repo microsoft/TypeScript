@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/genericRecursiveImplicitConstructorErrors2.ts] ////
 
 === genericRecursiveImplicitConstructorErrors2.ts ===
-module TypeScript2 {
+namespace TypeScript2 {
 >TypeScript2 : Symbol(TypeScript2, Decl(genericRecursiveImplicitConstructorErrors2.ts, 0, 0))
 
   export interface DeclKind { };
->DeclKind : Symbol(DeclKind, Decl(genericRecursiveImplicitConstructorErrors2.ts, 0, 20))
+>DeclKind : Symbol(DeclKind, Decl(genericRecursiveImplicitConstructorErrors2.ts, 0, 23))
 
   export interface PullTypesymbol { };
 >PullTypesymbol : Symbol(PullTypesymbol, Decl(genericRecursiveImplicitConstructorErrors2.ts, 1, 32))
@@ -29,7 +29,7 @@ module TypeScript2 {
     constructor (name: string, declKind: DeclKind) {
 >name : Symbol(name, Decl(genericRecursiveImplicitConstructorErrors2.ts, 10, 17))
 >declKind : Symbol(declKind, Decl(genericRecursiveImplicitConstructorErrors2.ts, 10, 30))
->DeclKind : Symbol(DeclKind, Decl(genericRecursiveImplicitConstructorErrors2.ts, 0, 20))
+>DeclKind : Symbol(DeclKind, Decl(genericRecursiveImplicitConstructorErrors2.ts, 0, 23))
 
     }
     // link methods

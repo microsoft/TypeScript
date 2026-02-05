@@ -12,7 +12,7 @@ func TestCompletionListInScope(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module TestModule {
+	const content = `namespace TestModule {
     var localVariable = "";
     export var exportedVariable = 0;
 
@@ -25,10 +25,10 @@ func TestCompletionListInScope(t *testing.T) {
     interface localInterface {}
     export interface exportedInterface {}
 
-    module localModule {
+    namespace localModule {
         export var x = 0;
     }
-    export module exportedModule {
+    export namespace exportedModule {
         export var x = 0;
     }
 
@@ -37,7 +37,7 @@ func TestCompletionListInScope(t *testing.T) {
 }
 
 // Add some new items to the module
-module TestModule {
+namespace TestModule {
     var localVariable2 = "";
     export var exportedVariable2 = 0;
 
@@ -50,10 +50,10 @@ module TestModule {
     interface localInterface2 {}
     export interface exportedInterface2 {}
 
-    module localModule2 {
+    namespace localModule2 {
         export var x = 0;
     }
-    export module exportedModule2 {
+    export namespace exportedModule2 {
         export var x = 0;
     }
 }

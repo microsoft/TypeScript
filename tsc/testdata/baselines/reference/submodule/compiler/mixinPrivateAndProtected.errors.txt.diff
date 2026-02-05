@@ -30,10 +30,10 @@
  mixinPrivateAndProtected.ts(59,6): error TS2339: Property 'pvt' does not exist on type 'never'.
 -  The intersection 'mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class) & mixB2<typeof A>.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
 +  The intersection 'mixC.(Anonymous class) & mixB2.(Anonymous class) & A' was reduced to 'never' because property 'pvt' exists in multiple constituents and is private in some.
+ mixinPrivateAndProtected.ts(85,2): error TS2564: Property 'accountBalance' has no initializer and is not definitely assigned in the constructor.
 
 
- ==== mixinPrivateAndProtected.ts (11 errors) ====
-@@= skipped -75, +75 lines =@@
+@@= skipped -76, +76 lines =@@
      ab.pb.toFixed();
         ~~
  !!! error TS2339: Property 'pb' does not exist on type 'never'.

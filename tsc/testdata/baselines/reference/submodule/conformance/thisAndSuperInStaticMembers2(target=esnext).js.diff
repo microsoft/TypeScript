@@ -1,8 +1,8 @@
 --- old.thisAndSuperInStaticMembers2(target=esnext).js
 +++ new.thisAndSuperInStaticMembers2(target=esnext).js
-@@= skipped -42, +42 lines =@@
-
+@@= skipped -43, +43 lines =@@
  //// [thisAndSuperInStaticMembers2.js]
+ "use strict";
  class C extends B {
 -    constructor() {
 -        super(...arguments);

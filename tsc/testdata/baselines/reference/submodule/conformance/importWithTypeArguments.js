@@ -6,5 +6,6 @@ const a = import<string, number>
 
 
 //// [importWithTypeArguments.js]
+"use strict";
 import;
 const a = import;

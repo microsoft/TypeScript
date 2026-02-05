@@ -17,6 +17,7 @@ class Comment {
 }
 
 //// [staticInstanceResolution.js]
+"use strict";
 class Comment {
     getDocCommentText() {
     }

@@ -1,8 +1,8 @@
 --- old.comparisonOperatorWithSubtypeObjectOnProperty.js
 +++ new.comparisonOperatorWithSubtypeObjectOnProperty.js
-@@= skipped -81, +81 lines =@@
-
+@@= skipped -82, +82 lines =@@
  //// [comparisonOperatorWithSubtypeObjectOnProperty.js]
+ "use strict";
  class Base {
 +    a;
  }

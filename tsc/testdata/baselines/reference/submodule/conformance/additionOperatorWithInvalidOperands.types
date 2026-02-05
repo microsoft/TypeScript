@@ -19,20 +19,20 @@ enum E { a, b, c }
 >b : E.b
 >c : E.c
 
-module M { export var a }
+namespace M { export var a }
 >M : typeof M
 >a : any
 
-var a: boolean;
+declare var a: boolean;
 >a : boolean
 
-var b: number;
+declare var b: number;
 >b : number
 
-var c: Object;
+declare var c: Object;
 >c : Object
 
-var d: Number;
+declare var d: Number;
 >d : Number
 
 // boolean + every type except any and string

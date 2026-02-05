@@ -3,10 +3,10 @@
 === weakType.ts ===
 interface Settings {
     timeout?: number;
->timeout : number
+>timeout : number | undefined
 
     onError?(): void;
->onError : () => void
+>onError : (() => void) | undefined
 }
 
 function getDefaultSettings() {
@@ -66,37 +66,38 @@ doSomething(false);
 // this example is from services/textChanges.ts
 type ConfigurableStart = { useStart?: boolean }
 >ConfigurableStart : ConfigurableStart
->useStart : boolean
+>useStart : boolean | undefined
 
 type ConfigurableEnd = { useEnd?: boolean }
 >ConfigurableEnd : ConfigurableEnd
->useEnd : boolean
+>useEnd : boolean | undefined
 
 type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd
 >ConfigurableStartEnd : ConfigurableStartEnd
 
 interface InsertOptions {
     prefix?: string
->prefix : string
+>prefix : string | undefined
 
     suffix?: string
->suffix : string
+>suffix : string | undefined
 }
 type ChangeOptions = ConfigurableStartEnd & InsertOptions;
 >ChangeOptions : ChangeOptions
 
 function del(options: ConfigurableStartEnd = {},
->del : (options?: ConfigurableStartEnd, error?: { error?: number; }) => void
+>del : (options?: ConfigurableStartEnd, error?: { error?: number | undefined; }) => void
 >options : ConfigurableStartEnd
 >{} : {}
 
              error: { error?: number } = {}) {
->error : { error?: number; }
->error : number
+>error : { error?: number | undefined; }
+>error : number | undefined
 >{} : {}
 
-    let changes: ChangeOptions[];
+    let changes: ChangeOptions[] = [];
 >changes : ChangeOptions[]
+>[] : never[]
 
     changes.push(options);
 >changes.push(options) : number
@@ -110,7 +111,7 @@ function del(options: ConfigurableStartEnd = {},
 >changes.push : (...items: ChangeOptions[]) => number
 >changes : ChangeOptions[]
 >push : (...items: ChangeOptions[]) => number
->error : { error?: number; }
+>error : { error?: number | undefined; }
 }
 
 class K {
@@ -125,7 +126,7 @@ interface Ctor {
 >s : string
 
     n?: number
->n : number
+>n : number | undefined
 }
 let ctor: Ctor = K
 >ctor : Ctor
@@ -133,19 +134,19 @@ let ctor: Ctor = K
 
 type Spoiler = { nope?: string }
 >Spoiler : Spoiler
->nope : string
+>nope : string | undefined
 
 type Weak = {
 >Weak : Weak
 
     a?: number
->a : number
+>a : number | undefined
 
     properties?: {
->properties : { b?: number; }
+>properties : { b?: number | undefined; } | undefined
 
         b?: number
->b : number
+>b : number | undefined
     }
 }
 declare let propertiesWrong: {

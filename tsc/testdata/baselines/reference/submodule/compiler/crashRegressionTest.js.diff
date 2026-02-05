@@ -1,7 +1,7 @@
 --- old.crashRegressionTest.js
 +++ new.crashRegressionTest.js
-@@= skipped -29, +29 lines =@@
- //// [crashRegressionTest.js]
+@@= skipped -30, +30 lines =@@
+ "use strict";
  var MsPortal;
  (function (MsPortal) {
 -    var Util;

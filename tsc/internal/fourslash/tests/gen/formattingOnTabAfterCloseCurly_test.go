@@ -11,7 +11,7 @@ func TestFormattingOnTabAfterCloseCurly(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module Tools {/*1*/
+	const content = `namespace Tools {/*1*/
     export enum NodeType {/*2*/
         Error,/*3*/
         Comment,/*4*/
@@ -25,7 +25,7 @@ func TestFormattingOnTabAfterCloseCurly(t *testing.T) {
 	defer done()
 	f.FormatDocument(t, "")
 	f.GoToMarker(t, "1")
-	f.VerifyCurrentLineContent(t, `module Tools {`)
+	f.VerifyCurrentLineContent(t, `namespace Tools {`)
 	f.GoToMarker(t, "2")
 	f.VerifyCurrentLineContent(t, `    export enum NodeType {`)
 	f.GoToMarker(t, "3")

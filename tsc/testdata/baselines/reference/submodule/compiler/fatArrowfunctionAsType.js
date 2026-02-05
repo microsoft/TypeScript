@@ -9,5 +9,6 @@ b = c;
 
 
 //// [fatArrowfunctionAsType.js]
+"use strict";
 var c = function (x) { return 42; };
 b = c;

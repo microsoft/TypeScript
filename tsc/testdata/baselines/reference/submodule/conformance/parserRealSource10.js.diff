@@ -1,6 +1,6 @@
 --- old.parserRealSource10.js
 +++ new.parserRealSource10.js
-@@= skipped -629, +629 lines =@@
+@@= skipped -630, +630 lines =@@
          Reservation[Reservation["TypeScriptAndJSFutureStrict"] = 12] = "TypeScriptAndJSFutureStrict";
      })(Reservation = TypeScript.Reservation || (TypeScript.Reservation = {}));
      class TokenInfo {

@@ -9,7 +9,7 @@ parserErrorRecovery_IncompleteMemberVariable2.ts(12,22): error TS1442: Expected 
     }
     
     // Module
-    module Shapes {
+    namespace Shapes {
     
         // Class
         export class Point implements IPoint {

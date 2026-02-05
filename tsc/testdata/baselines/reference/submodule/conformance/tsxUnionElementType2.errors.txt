@@ -1,7 +1,9 @@
-file.tsx(12,10): error TS2322: Type 'string' is not assignable to type 'never'.
+file.tsx(14,10): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== file.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react');
     
     function SFC1(prop: { x: number }) {
@@ -15,4 +17,5 @@ file.tsx(12,10): error TS2322: Type 'string' is not assignable to type 'never'.
     var SFCComp = SFC1 || SFC2;
     <SFCComp x={"hi"}/>
              ~
-!!! error TS2322: Type 'string' is not assignable to type 'never'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 file.tsx:5:23: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & { x: number; }'

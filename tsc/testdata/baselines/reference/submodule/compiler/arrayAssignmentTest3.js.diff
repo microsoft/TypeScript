@@ -1,6 +1,6 @@
 --- old.arrayAssignmentTest3.js
 +++ new.arrayAssignmentTest3.js
-@@= skipped -22, +22 lines =@@
+@@= skipped -23, +23 lines =@@
  class B {
  }
  class a {

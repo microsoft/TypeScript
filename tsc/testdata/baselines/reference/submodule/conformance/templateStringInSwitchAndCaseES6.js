@@ -9,6 +9,7 @@ switch (`abc${0}abc`) {
 }
 
 //// [templateStringInSwitchAndCaseES6.js]
+"use strict";
 switch (`abc${0}abc`) {
     case `abc`:
     case `123`:

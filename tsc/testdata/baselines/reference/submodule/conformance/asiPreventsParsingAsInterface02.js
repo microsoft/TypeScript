@@ -8,6 +8,7 @@ function f(interface: number, I: string) {
 }
 
 //// [asiPreventsParsingAsInterface02.js]
+"use strict";
 function f(interface, I) {
     interface; // This should be the identifier 'interface'
     I; // This should be the identifier 'I'

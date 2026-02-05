@@ -1,7 +1,7 @@
 --- old.wrappedAndRecursiveConstraints.js
 +++ new.wrappedAndRecursiveConstraints.js
-@@= skipped -20, +20 lines =@@
- //// [wrappedAndRecursiveConstraints.js]
+@@= skipped -21, +21 lines =@@
+ "use strict";
  // no errors expected
  class C {
 +    data;

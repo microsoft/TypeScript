@@ -21,6 +21,7 @@ function minimalExample1() {
 }
 
 //// [errorsForCallAndAssignmentAreSimilar.js]
+"use strict";
 function minimalExample1() {
     function foo(x) {
     }

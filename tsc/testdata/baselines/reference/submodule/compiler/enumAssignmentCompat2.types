@@ -11,7 +11,7 @@ enum W {
 
 }
 
-module W {
+namespace W {
 >W : typeof W
 
     export class D { }

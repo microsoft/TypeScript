@@ -7,7 +7,7 @@ class A {
     aProp: string;
 >aProp : string
 }
-module A {
+namespace A {
 >A : typeof A
 
     export interface X { s: string }
@@ -18,7 +18,7 @@ module A {
 >10 : 10
 }
 
-module B {
+namespace B {
     import Y = A;
 >Y : typeof Y
 >A : Y

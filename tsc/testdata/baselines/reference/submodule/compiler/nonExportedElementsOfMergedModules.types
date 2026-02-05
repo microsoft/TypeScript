@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/nonExportedElementsOfMergedModules.ts] ////
 
 === nonExportedElementsOfMergedModules.ts ===
-module One {
+namespace One {
 >One : typeof One
 
     enum A { X }
 >A : A
 >X : A.X
 
-    module B {
+    namespace B {
 >B : typeof B
 
         export var x;
@@ -16,14 +16,14 @@ module One {
     }
 }
 
-module One {
+namespace One {
 >One : typeof One
 
     enum A { Y }
 >A : A
 >Y : A.Y
 
-    module B {
+    namespace B {
 >B : typeof B
 
         export var y;

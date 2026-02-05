@@ -8,6 +8,7 @@
 
 
 //// [parserModifierOnStatementInBlock4.js]
+"use strict";
 {
     export function bar() {
     }

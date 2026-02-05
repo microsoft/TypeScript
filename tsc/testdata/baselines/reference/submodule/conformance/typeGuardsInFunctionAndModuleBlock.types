@@ -41,9 +41,9 @@ function foo(x: number | string | boolean) {
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (radix?: number | undefined) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
         } ();
 }
@@ -86,9 +86,9 @@ function foo2(x: number | string | boolean) {
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (radix?: number | undefined) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
         } (x); // x here is narrowed to number | boolean
 >x : number | boolean
@@ -131,9 +131,9 @@ function foo3(x: number | string | boolean) {
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (radix?: number | undefined) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
         })();
 }
@@ -176,9 +176,9 @@ function foo4(x: number | string | boolean) {
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (radix?: number | undefined) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
         })(x); // x here is narrowed to number | boolean
 >x : number | boolean
@@ -207,13 +207,13 @@ function foo5(x: number | string | boolean) {
         }
     }
 }
-module m {
+namespace m {
 >m : typeof m
 
     var x: number | string | boolean;
 >x : string | number | boolean
 
-    module m2 {
+    namespace m2 {
 >m2 : typeof m2
 
         var b = x; // new scope - number | boolean | string
@@ -252,19 +252,19 @@ module m {
 
             : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (radix?: number | undefined) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
         }
     }
 }
-module m1 {
+namespace m1 {
 >m1 : typeof m1
 
     var x: number | string | boolean;
 >x : string | number | boolean
 
-    module m2.m3 {
+    namespace m2.m3 {
 >m2 : typeof m2
 >m3 : typeof m3
 
@@ -304,9 +304,9 @@ module m1 {
 
             : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (radix?: number | undefined) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
         }
     }
 }

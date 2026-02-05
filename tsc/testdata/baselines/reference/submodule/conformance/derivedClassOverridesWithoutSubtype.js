@@ -26,6 +26,7 @@ class Derived2 extends Base2 {
 }
 
 //// [derivedClassOverridesWithoutSubtype.js]
+"use strict";
 class Base {
     x;
 }

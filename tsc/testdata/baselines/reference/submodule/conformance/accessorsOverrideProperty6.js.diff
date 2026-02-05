@@ -1,8 +1,8 @@
 --- old.accessorsOverrideProperty6.js
 +++ new.accessorsOverrideProperty6.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [accessorsOverrideProperty6.js]
+ "use strict";
  class A {
 -    constructor() {
 -        this.p = 'yep';

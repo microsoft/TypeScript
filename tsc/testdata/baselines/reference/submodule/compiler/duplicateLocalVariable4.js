@@ -9,6 +9,7 @@ var x = E;
 var x = E.a;
 
 //// [duplicateLocalVariable4.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

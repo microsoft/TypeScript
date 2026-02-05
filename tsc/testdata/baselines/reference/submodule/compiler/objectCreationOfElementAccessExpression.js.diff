@@ -1,8 +1,8 @@
 --- old.objectCreationOfElementAccessExpression.js
 +++ new.objectCreationOfElementAccessExpression.js
-@@= skipped -58, +58 lines =@@
-
+@@= skipped -59, +59 lines =@@
  //// [objectCreationOfElementAccessExpression.js]
+ "use strict";
  class Food {
 +    name;
 +    amount;

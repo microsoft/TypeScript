@@ -32,6 +32,7 @@ let { stringIdentity: id = arg => arg }: StringIdentity = { stringIdentity: x =>
 
 
 //// [contextuallyTypedBindingInitializer.js]
+"use strict";
 function f({ show = v => v.toString() }) { }
 function f2({ "show": showRename = v => v.toString() }) { }
 function f3({ ["show"]: showRename = v => v.toString() }) { }

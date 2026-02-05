@@ -1,0 +1,24 @@
+Class2.ts(13,9): error TS2322: Type 'undefined' is not assignable to type 'Class1'.
+
+
+==== Class1.ts (0 errors) ====
+    export class Class1 {
+    }
+==== Class2.ts (1 errors) ====
+    import { Class1 } from './Class1';
+    
+    function decorate(target: any, propertyKey: string) {
+    }
+    
+    export class Class2 {
+        @decorate
+        get maybeProp(): Class1 | undefined {
+            return undefined;
+        }
+        @decorate
+        get prop(): Class1 {
+            return undefined;
+            ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Class1'.
+        }
+    }

@@ -6,6 +6,7 @@ class C {
 }
 
 //// [Protected3.js]
+"use strict";
 class C {
     constructor() { }
 }

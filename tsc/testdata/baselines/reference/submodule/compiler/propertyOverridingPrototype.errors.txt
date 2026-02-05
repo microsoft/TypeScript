@@ -1,0 +1,16 @@
+propertyOverridingPrototype.ts(7,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+
+
+==== propertyOverridingPrototype.ts (1 errors) ====
+    class Base {
+        foo() {
+        }
+    }
+    
+    class Derived extends Base {
+        foo: () => { };
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    

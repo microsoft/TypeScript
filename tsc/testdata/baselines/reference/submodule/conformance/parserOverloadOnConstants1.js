@@ -9,3 +9,4 @@ interface Document {
 }
 
 //// [parserOverloadOnConstants1.js]
+"use strict";

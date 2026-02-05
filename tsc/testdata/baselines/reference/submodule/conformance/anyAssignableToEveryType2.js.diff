@@ -1,7 +1,7 @@
 --- old.anyAssignableToEveryType2.js
 +++ new.anyAssignableToEveryType2.js
-@@= skipped -134, +134 lines =@@
- //// [anyAssignableToEveryType2.js]
+@@= skipped -135, +135 lines =@@
+ "use strict";
  // any is not a subtype of any other types, but is assignable, all the below should work
  class A {
 +    foo;

@@ -6,13 +6,14 @@
  gettersAndSettersErrors.ts(5,12): error TS2300: Duplicate identifier 'Foo'.
 -gettersAndSettersErrors.ts(5,12): error TS2717: Subsequent property declarations must have the same type.  Property 'Foo' must be of type 'string', but here has type 'number'.
  gettersAndSettersErrors.ts(6,16): error TS1054: A 'get' accessor cannot have parameters.
+ gettersAndSettersErrors.ts(6,38): error TS2322: Type 'null' is not assignable to type 'string'.
  gettersAndSettersErrors.ts(7,16): error TS1095: A 'set' accessor cannot have a return type annotation.
- gettersAndSettersErrors.ts(11,17): error TS2808: A get accessor must be at least as accessible as the setter
+@@= skipped -6, +7 lines =@@
  gettersAndSettersErrors.ts(12,16): error TS2808: A get accessor must be at least as accessible as the setter
 
 
--==== gettersAndSettersErrors.ts (6 errors) ====
-+==== gettersAndSettersErrors.ts (7 errors) ====
+-==== gettersAndSettersErrors.ts (7 errors) ====
++==== gettersAndSettersErrors.ts (8 errors) ====
      class C {
          public get Foo() { return "foo";} // ok
 +                   ~~~

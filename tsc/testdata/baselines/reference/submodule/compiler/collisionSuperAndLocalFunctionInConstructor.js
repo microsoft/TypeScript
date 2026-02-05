@@ -27,6 +27,7 @@ class c extends Foo {
 }
 
 //// [collisionSuperAndLocalFunctionInConstructor.js]
+"use strict";
 function _super() {
 }
 class Foo {

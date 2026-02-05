@@ -8,13 +8,19 @@ strictModeReservedWord.ts(8,9): error TS2300: Duplicate identifier 'package'.
 strictModeReservedWord.ts(9,14): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
 strictModeReservedWord.ts(9,14): error TS2300: Duplicate identifier 'package'.
 strictModeReservedWord.ts(10,18): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWord.ts(10,18): error TS7006: Parameter 'private' implicitly has an 'any' type.
 strictModeReservedWord.ts(10,27): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
+strictModeReservedWord.ts(10,27): error TS7006: Parameter 'implements' implicitly has an 'any' type.
 strictModeReservedWord.ts(10,39): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+strictModeReservedWord.ts(10,39): error TS7006: Parameter 'let' implicitly has an 'any' type.
 strictModeReservedWord.ts(11,18): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
 strictModeReservedWord.ts(11,30): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
 strictModeReservedWord.ts(12,24): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+strictModeReservedWord.ts(12,24): error TS7006: Parameter 'private' implicitly has an 'any' type.
 strictModeReservedWord.ts(12,33): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+strictModeReservedWord.ts(12,33): error TS7006: Parameter 'public' implicitly has an 'any' type.
 strictModeReservedWord.ts(12,41): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+strictModeReservedWord.ts(12,41): error TS7006: Parameter 'package' implicitly has an 'any' type.
 strictModeReservedWord.ts(13,11): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
 strictModeReservedWord.ts(13,20): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
 strictModeReservedWord.ts(13,28): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
@@ -39,7 +45,7 @@ strictModeReservedWord.ts(24,5): error TS2349: This expression is not callable.
   Type 'String' has no call signatures.
 
 
-==== strictModeReservedWord.ts (38 errors) ====
+==== strictModeReservedWord.ts (44 errors) ====
     let let = 10;
         ~~~
 !!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
@@ -70,10 +76,16 @@ strictModeReservedWord.ts(24,5): error TS2349: This expression is not callable.
         function bar(private, implements, let) { }
                      ~~~~~~~
 !!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+                     ~~~~~~~
+!!! error TS7006: Parameter 'private' implicitly has an 'any' type.
                               ~~~~~~~~~~
 !!! error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
+                              ~~~~~~~~~~
+!!! error TS7006: Parameter 'implements' implicitly has an 'any' type.
                                           ~~~
 !!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+                                          ~~~
+!!! error TS7006: Parameter 'let' implicitly has an 'any' type.
         function baz<implements, protected>() { }
                      ~~~~~~~~~~
 !!! error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
@@ -82,10 +94,16 @@ strictModeReservedWord.ts(24,5): error TS2349: This expression is not callable.
         function barn(cb: (private, public, package) => void) { }
                            ~~~~~~~
 !!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+                           ~~~~~~~
+!!! error TS7006: Parameter 'private' implicitly has an 'any' type.
                                     ~~~~~~
 !!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+                                    ~~~~~~
+!!! error TS7006: Parameter 'public' implicitly has an 'any' type.
                                             ~~~~~~~
 !!! error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+                                            ~~~~~~~
+!!! error TS7006: Parameter 'package' implicitly has an 'any' type.
         barn((private, public, package) => { });
               ~~~~~~~
 !!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.

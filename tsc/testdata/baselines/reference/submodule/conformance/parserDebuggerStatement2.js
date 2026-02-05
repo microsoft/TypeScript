@@ -4,4 +4,5 @@
 debugger;
 
 //// [parserDebuggerStatement2.js]
+"use strict";
 debugger;

@@ -1,6 +1,6 @@
 --- old.baseTypeOrderChecking.js
 +++ new.baseTypeOrderChecking.js
-@@= skipped -44, +44 lines =@@
+@@= skipped -45, +45 lines =@@
  class Class2 extends Class1 {
  }
  class Class3 {

@@ -26,6 +26,7 @@ Foo();
 
 
 //// [callOverloads2.js]
+"use strict";
 class Foo {
     bar1() { }
     constructor(x) {

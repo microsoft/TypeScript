@@ -1,8 +1,8 @@
 --- old.parserParameterList7.js
 +++ new.parserParameterList7.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
  //// [parserParameterList7.js]
+ "use strict";
  class C1 {
 +    p3;
      constructor(p3) {

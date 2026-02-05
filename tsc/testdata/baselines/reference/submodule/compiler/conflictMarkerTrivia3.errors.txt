@@ -1,10 +1,13 @@
+conflictMarkerTrivia3.tsx(1,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 conflictMarkerTrivia3.tsx(1,11): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
 conflictMarkerTrivia3.tsx(1,16): error TS1005: '</' expected.
 conflictMarkerTrivia3.tsx(2,1): error TS1185: Merge conflict marker encountered.
 
 
-==== conflictMarkerTrivia3.tsx (3 errors) ====
+==== conflictMarkerTrivia3.tsx (4 errors) ====
     const x = <div>
+              ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
               ~~~~~
 !!! error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
                    

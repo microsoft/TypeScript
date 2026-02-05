@@ -4,7 +4,7 @@ functionCall7.ts(7,1): error TS2554: Expected 1 arguments, but got 0.
 
 
 ==== functionCall7.ts (3 errors) ====
-    module m1 { export class c1 { public a; }}
+    namespace m1 { export class c1 { public a; }}
     function foo(a:m1.c1){ a.a = 1; }; 
     var myC = new m1.c1(); 
     foo(myC); 

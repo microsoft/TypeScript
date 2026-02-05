@@ -1,6 +1,6 @@
 --- old.varArgConstructorMemberParameter.js
 +++ new.varArgConstructorMemberParameter.js
-@@= skipped -18, +18 lines =@@
+@@= skipped -19, +19 lines =@@
      constructor(...args) { }
  }
  class Foo2 {

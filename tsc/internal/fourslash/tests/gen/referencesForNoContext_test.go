@@ -11,7 +11,7 @@ func TestReferencesForNoContext(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module modTest {
+	const content = `namespace modTest {
     //Declare
     export var modVar:number;
     /*1*/
@@ -28,7 +28,7 @@ func TestReferencesForNoContext(t *testing.T) {
         modVar++;
     }  /*3*/
 /*4*/
-    module testMod {
+    namespace testMod {
     }
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

@@ -1,0 +1,30 @@
+restUnion.ts(4,22): error TS2454: Variable 'union' is used before being assigned.
+restUnion.ts(9,6): error TS2339: Property 'n' does not exist on type '{ n: number; } | undefined'.
+restUnion.ts(14,6): error TS2339: Property 'n' does not exist on type '{ n: number; } | null'.
+restUnion.ts(14,22): error TS2454: Variable 'nullUnion' is used before being assigned.
+
+
+==== restUnion.ts (4 errors) ====
+    var union: { a: number, c: boolean } | { a: string, b: string };
+    
+    var rest1: { c: boolean } | { b: string };
+    var {a, ...rest1 } = union;
+                         ~~~~~
+!!! error TS2454: Variable 'union' is used before being assigned.
+    
+    
+    var undefinedUnion: { n: number } | undefined;
+    var rest2: {};
+    var {n, ...rest2 } = undefinedUnion;
+         ~
+!!! error TS2339: Property 'n' does not exist on type '{ n: number; } | undefined'.
+    
+    
+    var nullUnion: { n: number } | null;
+    var rest3: {};
+    var {n, ...rest3 } = nullUnion;
+         ~
+!!! error TS2339: Property 'n' does not exist on type '{ n: number; } | null'.
+                         ~~~~~~~~~
+!!! error TS2454: Variable 'nullUnion' is used before being assigned.
+    

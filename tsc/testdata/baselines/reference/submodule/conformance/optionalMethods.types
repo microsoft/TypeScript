@@ -73,8 +73,9 @@ function test1(x: Foo) {
 class Bar {
 >Bar : Bar
 
-    a: number;
+    a: number = 0;
 >a : number
+>0 : 0
 
     b?: number;
 >b : number | undefined

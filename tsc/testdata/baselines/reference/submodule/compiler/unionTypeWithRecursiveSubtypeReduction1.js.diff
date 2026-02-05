@@ -1,8 +1,8 @@
 --- old.unionTypeWithRecursiveSubtypeReduction1.js
 +++ new.unionTypeWithRecursiveSubtypeReduction1.js
-@@= skipped -22, +22 lines =@@
-
+@@= skipped -23, +23 lines =@@
  //// [unionTypeWithRecursiveSubtypeReduction1.js]
+ "use strict";
  class Module {
 +    members;
  }

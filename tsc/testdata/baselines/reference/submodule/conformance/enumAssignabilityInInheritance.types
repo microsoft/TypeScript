@@ -265,7 +265,7 @@ var r4 = foo13(E.A);
 function f() { }
 >f : typeof f
 
-module f {
+namespace f {
 >f : typeof f
 
     export var bar = 1;
@@ -294,7 +294,7 @@ class CC { baz: string }
 >CC : CC
 >baz : string
 
-module CC {
+namespace CC {
 >CC : typeof CC
 
     export var bar = 1;

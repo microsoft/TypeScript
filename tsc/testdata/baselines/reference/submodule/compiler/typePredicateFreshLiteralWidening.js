@@ -30,6 +30,7 @@ const filteredValues1 = values1.filter(isNotNull);
 
 
 //// [typePredicateFreshLiteralWidening.js]
+"use strict";
 const satisfies = () => (narrow) => narrow;
 /* ========================================================================== */
 const isNotNull = (value) => value !== null;

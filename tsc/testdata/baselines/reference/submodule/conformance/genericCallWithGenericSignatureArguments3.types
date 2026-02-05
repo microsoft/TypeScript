@@ -12,7 +12,7 @@ function foo<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
 >b : (x: T) => T
 >x : T
 
-    var r: (x: T) => T;
+    var r!: (x: T) => T;
 >r : (x: T) => T
 >x : T
 
@@ -124,7 +124,7 @@ function foo2<T, U>(x: T, a: (x: T) => U, b: (x: T) => U) {
 >b : (x: T) => U
 >x : T
 
-    var r: (x: T) => U;
+    var r!: (x: T) => U;
 >r : (x: T) => U
 >x : T
 
@@ -165,7 +165,7 @@ var r10 = foo2(null, (x: Object) => '', (x: string) => ''); // Object => Object
 >x : string
 >'' : ""
 
-var x: (a: string) => boolean;
+declare var x: (a: string) => boolean;
 >x : (a: string) => boolean
 >a : string
 

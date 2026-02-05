@@ -19,11 +19,12 @@ function f15() {
 }
 var { a4, b4, c4 } = f15();
 
-module m {
+namespace m {
     export var { a4, b4, c4 } = f15();
 }
 
 //// [declarationEmitDestructuringObjectLiteralPattern.js]
+"use strict";
 var {} = { x: 5, y: "hello" };
 var { x4 } = { x4: 5, y4: "hello" };
 var { y5 } = { x5: 5, y5: "hello" };

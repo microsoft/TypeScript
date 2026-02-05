@@ -1,8 +1,8 @@
 --- old.classPropertyAsPrivate.js
 +++ new.classPropertyAsPrivate.js
-@@= skipped -26, +26 lines =@@
-
+@@= skipped -27, +27 lines =@@
  //// [classPropertyAsPrivate.js]
+ "use strict";
  class C {
 +    x;
      get y() { return null; }

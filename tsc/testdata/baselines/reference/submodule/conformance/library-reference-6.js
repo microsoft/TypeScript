@@ -9,5 +9,6 @@ var x: string = alpha.a;
 
 
 //// [foo.js]
+"use strict";
 /// <reference types="alpha" />
 var x = alpha.a;

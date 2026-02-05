@@ -1,0 +1,20 @@
+--- old.complexRecursiveCollections.errors.txt
++++ new.complexRecursiveCollections.errors.txt
+@@= skipped -5, +5 lines =@@
+ immutable.ts(305,22): error TS2320: Interface 'Set<T>' cannot simultaneously extend types 'Seq<never, T>' and 'Set<T>'.
+   Named property 'size' of types 'Seq<never, T>' and 'Set<T>' are not identical.
+ immutable.ts(323,20): error TS2430: Interface 'Seq<K, V>' incorrectly extends interface 'Collection<K, V>'.
+-  The types of 'map(...).size' are incompatible between these types.
++  The types returned by 'map(...).size' are incompatible between these types.
+     Type 'number | undefined' is not assignable to type 'number'.
+       Type 'undefined' is not assignable to type 'number'.
+ immutable.ts(341,22): error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
+@@= skipped -376, +376 lines =@@
+       export interface Seq<K, V> extends Collection<K, V> {
+                        ~~~
+ !!! error TS2430: Interface 'Seq<K, V>' incorrectly extends interface 'Collection<K, V>'.
+-!!! error TS2430:   The types of 'map(...).size' are incompatible between these types.
++!!! error TS2430:   The types returned by 'map(...).size' are incompatible between these types.
+ !!! error TS2430:     Type 'number | undefined' is not assignable to type 'number'.
+ !!! error TS2430:       Type 'undefined' is not assignable to type 'number'.
+         readonly size: number | undefined;

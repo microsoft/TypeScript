@@ -1,0 +1,20 @@
+--- old.generatorTypeCheck64.types
++++ new.generatorTypeCheck64.types
+@@= skipped -1, +1 lines =@@
+
+ === generatorTypeCheck64.ts ===
+ function* g3(): Generator<Generator<(x: string) => number>> {
+->g3 : () => Generator<Generator<(x: string) => number>>
++>g3 : () => Generator<Generator<(x: string) => number, any, any>, any, any>
+ >x : string
+
+     yield function* () {
+@@= skipped -20, +20 lines =@@
+ }
+
+ function* g4(): Iterator<Iterable<(x: string) => number>> {
+->g4 : () => Iterator<Iterable<(x: string) => number>>
++>g4 : () => Iterator<Iterable<(x: string) => number>, any, any>
+ >x : string
+
+   yield (function* () {

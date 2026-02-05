@@ -13,6 +13,7 @@ class C {
 }
 
 //// [scopeCheckInsideStaticMethod1.js]
+"use strict";
 class C {
     v;
     p;

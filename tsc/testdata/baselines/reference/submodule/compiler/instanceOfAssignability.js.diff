@@ -1,7 +1,7 @@
 --- old.instanceOfAssignability.js
 +++ new.instanceOfAssignability.js
-@@= skipped -93, +93 lines =@@
- //// [instanceOfAssignability.js]
+@@= skipped -94, +94 lines =@@
+ "use strict";
  // Derived1 is assignable to, but not a subtype of, Base
  class Derived1 {
 +    foo;

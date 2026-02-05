@@ -1,9 +1,9 @@
 --- old.typedefOnSemicolonClassElement.js
 +++ new.typedefOnSemicolonClassElement.js
-@@= skipped -13, +13 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Preferences = void 0;
- class Preferences {
+@@= skipped -10, +10 lines =@@
+
+ //// [typedefOnSemicolonClassElement.js]
+ export class Preferences {
 -    constructor() {
 -        /** @type {A} */
 -        this.a = 'ok';
@@ -13,7 +13,6 @@
 +    /** @type {A} */
 +    a = 'ok';
  }
- exports.Preferences = Preferences;
 
 
  //// [typedefOnSemicolonClassElement.d.ts]

@@ -20,6 +20,7 @@ var d = <I1>y;
 
 
 //// [typeAssertionsWithUnionTypes01.js]
+"use strict";
 var x = { p1: 10, p2: 20 };
 var y = x;
 var z = x;

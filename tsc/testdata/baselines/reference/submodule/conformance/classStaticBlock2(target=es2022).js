@@ -22,6 +22,7 @@ class C {
 
 
 //// [classStaticBlock2.js]
+"use strict";
 const a = 1;
 const b = 2;
 class C {

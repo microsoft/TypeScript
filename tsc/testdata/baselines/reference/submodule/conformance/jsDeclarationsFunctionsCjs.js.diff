@@ -1,6 +1,6 @@
 --- old.jsDeclarationsFunctionsCjs.js
 +++ new.jsDeclarationsFunctionsCjs.js
-@@= skipped -72, +72 lines =@@
+@@= skipped -73, +73 lines =@@
   * @param {number} b
   * @return {string}
   */
@@ -60,7 +60,7 @@
 -        cat: string;
 -    };
 +    y: typeof module.exports.b;
- }): void;
+ }): void | "";
 +export declare var g: typeof g;
  /**
   * @param {{x: string}} a
@@ -74,7 +74,7 @@
 -        cat: string;
 -    };
 +    y: typeof module.exports.b;
- }): void;
+ }): void | "";
 -export { hh as h, i as ii, j as jj };
 +export declare var h: typeof hh;
 +export declare var i: () => void;

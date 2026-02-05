@@ -1,0 +1,61 @@
+input.js(48,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+
+==== input.js (1 errors) ====
+    /** @typedef {{ color: "red" | "blue" }} MyComponentProps */
+    
+    /**
+     * @template P 
+     * @typedef {{ (): any; defaultProps?: Partial<P> }} StatelessComponent */
+    
+     /**
+      * @type {StatelessComponent<MyComponentProps>}
+      */
+    const MyComponent = () => /* @type {any} */(null);
+    
+    MyComponent.defaultProps = {
+        color: "red"
+    };
+    
+    const MyComponent2 = () => null;
+    
+    /**
+     * @type {MyComponentProps}
+     */
+    MyComponent2.defaultProps = {
+        color: "red"
+    }
+    
+    /**
+      * @type {StatelessComponent<MyComponentProps>}
+     */
+    const check = MyComponent2;
+    
+    /**
+     * 
+     * @param {{ props: MyComponentProps }} p 
+     */
+    function expectLiteral(p) {}
+    
+    function foo() {
+        /**
+         * @type {MyComponentProps}
+         */
+        this.props = { color: "red" };
+    
+        expectLiteral(this);
+    }
+    
+    /**
+     * @type {MyComponentProps}
+     */
+    module.exports = {
+    ~~~~~~~~~~~~~~~~~~
+        color: "red"
+    ~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    
+    expectLiteral({ props: module.exports });
+    

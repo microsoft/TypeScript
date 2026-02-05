@@ -24,6 +24,7 @@ let x = mergeStyleSets(
 )
 
 //// [mappedTypeMultiInference.js]
+"use strict";
 // Expected:
 //   let x: {
 //       a: Style;

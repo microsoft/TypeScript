@@ -16,6 +16,7 @@ function foo(greeting: string, n = 10, x?: string, ...restParams: string[])
 }
 
 //// [sourceMapValidationFunctions.js]
+"use strict";
 var greetings = 0;
 function greet(greeting) {
     greetings++;

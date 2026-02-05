@@ -1,8 +1,8 @@
 --- old.noErrorsInCallback.js
 +++ new.noErrorsInCallback.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [noErrorsInCallback.js]
+ "use strict";
  class Bar {
 +    foo;
      constructor(foo) {

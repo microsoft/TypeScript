@@ -1,0 +1,16 @@
+--- old.withStatements.errors.txt
++++ new.withStatements.errors.txt
+@@= skipped -0, +0 lines =@@
+-withStatements.ts(2,1): error TS1101: 'with' statements are not allowed in strict mode.
+ withStatements.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+
+
+-==== withStatements.ts (2 errors) ====
++==== withStatements.ts (1 errors) ====
+     var x = 12;
+     with (x) {
+-    ~~~~
+-!!! error TS1101: 'with' statements are not allowed in strict mode.
+     ~~~~~~~~
+ !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+         name = 'twelve'

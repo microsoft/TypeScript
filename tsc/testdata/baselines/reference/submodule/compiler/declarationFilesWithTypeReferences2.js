@@ -11,6 +11,7 @@ function foo(): Error2 {
 }
 
 //// [app.js]
+"use strict";
 function foo() {
     return undefined;
 }

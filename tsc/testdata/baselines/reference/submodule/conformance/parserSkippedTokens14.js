@@ -8,4 +8,5 @@
 
 
 //// [parserSkippedTokens14.js]
+"use strict";
 ;

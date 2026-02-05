@@ -1,6 +1,6 @@
 --- old.decoratorOnClassMethod19(target=es2015).js
 +++ new.decoratorOnClassMethod19(target=es2015).js
-@@= skipped -30, +30 lines =@@
+@@= skipped -31, +31 lines =@@
  var __param = (this && this.__param) || function (paramIndex, decorator) {
      return function (target, key) { decorator(target, key, paramIndex); }
  };

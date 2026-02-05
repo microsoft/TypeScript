@@ -8,6 +8,7 @@
 }
 
 //// [functionsWithModifiersInBlocks1.js]
+"use strict";
 {
     export function f() { }
 }

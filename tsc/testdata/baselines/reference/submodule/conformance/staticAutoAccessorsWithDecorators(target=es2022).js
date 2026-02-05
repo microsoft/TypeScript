@@ -15,6 +15,7 @@ class A {
 
 
 //// [staticAutoAccessorsWithDecorators.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/53752
 class A {
     // uses class reference

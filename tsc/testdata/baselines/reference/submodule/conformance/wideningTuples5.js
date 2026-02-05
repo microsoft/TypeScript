@@ -4,4 +4,5 @@
 var [a, b] = [undefined, null];
 
 //// [wideningTuples5.js]
+"use strict";
 var [a, b] = [undefined, null];

@@ -37,7 +37,7 @@ class C {
 	static async m6(): MyPromise<void> { }
 }
 
-module M {
+namespace M {
 	export async function f1() { }
 }
 
@@ -49,6 +49,7 @@ async function f14() {
 }
 
 //// [asyncAwait_es6.js]
+"use strict";
 async function f0() { }
 async function f1() { }
 async function f3() { }

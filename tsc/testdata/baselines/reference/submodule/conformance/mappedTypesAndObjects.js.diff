@@ -1,6 +1,6 @@
 --- old.mappedTypesAndObjects.js
 +++ new.mappedTypesAndObjects.js
-@@= skipped -61, +61 lines =@@
+@@= skipped -62, +62 lines =@@
  ;
  // Repro from #13747
  class Form {

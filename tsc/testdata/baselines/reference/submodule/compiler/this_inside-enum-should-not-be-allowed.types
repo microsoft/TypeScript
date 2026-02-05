@@ -9,7 +9,7 @@ enum TopLevelEnum {
 >this : any
 }
 
-module ModuleEnum {
+namespace ModuleEnum {
 >ModuleEnum : typeof ModuleEnum
 
     enum EnumInModule {

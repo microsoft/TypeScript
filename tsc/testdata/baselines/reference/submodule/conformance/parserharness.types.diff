@@ -1,43 +1,240 @@
 --- old.parserharness.types
 +++ new.parserharness.types
-@@= skipped -279, +279 lines =@@
-             var bugs = content.match(/\bbug (\d+)/i);
- >bugs : RegExpMatchArray
- >content.match(/\bbug (\d+)/i) : RegExpMatchArray
-->content.match : (regexp: string | RegExp) => RegExpMatchArray | null
-+>content.match : (regexp: string | RegExp) => RegExpMatchArray
- >content : string
-->match : (regexp: string | RegExp) => RegExpMatchArray | null
-+>match : (regexp: string | RegExp) => RegExpMatchArray
- >/\bbug (\d+)/i : RegExp
+@@= skipped -66, +66 lines =@@
+     var components = fullPath.split("/");
+ >components : string[]
+ >fullPath.split("/") : string[]
+->fullPath.split : (separator: string | RegExp, limit?: number) => string[]
++>fullPath.split : (separator: string | RegExp, limit?: number | undefined) => string[]
+ >fullPath : string
+->split : (separator: string | RegExp, limit?: number) => string[]
++>split : (separator: string | RegExp, limit?: number | undefined) => string[]
+ >"/" : "/"
 
-             if (bugs) {
-@@= skipped -1974, +1974 lines =@@
- >[] : undefined[]
+     var path: string[] = components.slice(0, components.length - 1);
+ >path : string[]
+ >components.slice(0, components.length - 1) : string[]
+->components.slice : (start?: number, end?: number) => string[]
++>components.slice : (start?: number | undefined, end?: number | undefined) => string[]
+ >components : string[]
+->slice : (start?: number, end?: number) => string[]
++>slice : (start?: number | undefined, end?: number | undefined) => string[]
+ >0 : 0
+ >components.length - 1 : number
+ >components.length : number
+@@= skipped -21, +21 lines =@@
+     return path.join("/") + "/";
+ >path.join("/") + "/" : string
+ >path.join("/") : string
+->path.join : (separator?: string) => string
++>path.join : (separator?: string | undefined) => string
+ >path : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"/" : "/"
+ >"/" : "/"
+ }
+@@= skipped -169, +169 lines =@@
+             if (bugIds.indexOf(id) < 0) {
+ >bugIds.indexOf(id) < 0 : boolean
+ >bugIds.indexOf(id) : number
+->bugIds.indexOf : (searchElement: string, fromIndex?: number) => number
++>bugIds.indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+ >bugIds : string[]
+->indexOf : (searchElement: string, fromIndex?: number) => number
++>indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+ >id : string
+ >0 : 0
+
+@@= skipped -47, +47 lines =@@
+         }
+
+         export function is(result: boolean, msg?: string) {
+->is : (result: boolean, msg?: string) => void
++>is : (result: boolean, msg?: string | undefined) => void
+ >result : boolean
+ >msg : string | undefined
+
+@@= skipped -469, +469 lines =@@
+         var lines = content.split('\r\n');
+ >lines : string[]
+ >content.split('\r\n') : string[]
+->content.split : (separator: string | RegExp, limit?: number) => string[]
++>content.split : (separator: string | RegExp, limit?: number | undefined) => string[]
+ >content : string
+->split : (separator: string | RegExp, limit?: number) => string[]
++>split : (separator: string | RegExp, limit?: number | undefined) => string[]
+ >'\r\n' : "\r\n"
+
+         if (lines.length === 1) {
+@@= skipped -16, +16 lines =@@
+ >lines = content.split('\n') : string[]
+ >lines : string[]
+ >content.split('\n') : string[]
+->content.split : (separator: string | RegExp, limit?: number) => string[]
++>content.split : (separator: string | RegExp, limit?: number | undefined) => string[]
+ >content : string
+->split : (separator: string | RegExp, limit?: number) => string[]
++>split : (separator: string | RegExp, limit?: number | undefined) => string[]
+ >'\n' : "\n"
+         }
+         return lines;
+@@= skipped -17, +17 lines =@@
+         if (path.indexOf('tests') < 0) {
+ >path.indexOf('tests') < 0 : boolean
+ >path.indexOf('tests') : number
+->path.indexOf : (searchString: string, position?: number) => number
++>path.indexOf : (searchString: string, position?: number | undefined) => number
+ >path : string
+->indexOf : (searchString: string, position?: number) => number
++>indexOf : (searchString: string, position?: number | undefined) => number
+ >'tests' : "tests"
+ >0 : 0
+
+@@= skipped -51, +51 lines =@@
+     // Logger
+     export interface ILogger {
+         start: (fileName?: string, priority?: number) => void;
+->start : (fileName?: string, priority?: number) => void
++>start : (fileName?: string | undefined, priority?: number | undefined) => void
+ >fileName : string | undefined
+ >priority : number | undefined
+
+         end: (fileName?: string) => void;
+->end : (fileName?: string) => void
++>end : (fileName?: string | undefined) => void
+ >fileName : string | undefined
+
+         scenarioStart: (scenario: IScenarioMetadata) => void;
+@@= skipped -13, +13 lines =@@
+ >scenario : IScenarioMetadata
+
+         scenarioEnd: (scenario: IScenarioMetadata, error?: Error) => void;
+->scenarioEnd : (scenario: IScenarioMetadata, error?: Error) => void
++>scenarioEnd : (scenario: IScenarioMetadata, error?: Error | undefined) => void
+ >scenario : IScenarioMetadata
+ >error : Error | undefined
+
+@@= skipped -42, +42 lines =@@
+ >Logger : Logger
+
+         public start(fileName?: string, priority?: number) { }
+->start : (fileName?: string, priority?: number) => void
++>start : (fileName?: string | undefined, priority?: number | undefined) => void
+ >fileName : string | undefined
+ >priority : number | undefined
+
+         public end(fileName?: string) { }
+->end : (fileName?: string) => void
++>end : (fileName?: string | undefined) => void
+ >fileName : string | undefined
+
+         public scenarioStart(scenario: IScenarioMetadata) { }
+@@= skipped -13, +13 lines =@@
+ >scenario : IScenarioMetadata
+
+         public scenarioEnd(scenario: IScenarioMetadata, error?: Error) { }
+->scenarioEnd : (scenario: IScenarioMetadata, error?: Error) => void
++>scenarioEnd : (scenario: IScenarioMetadata, error?: Error | undefined) => void
+ >scenario : IScenarioMetadata
+ >error : Error | undefined
+
+@@= skipped -151, +151 lines =@@
+          *  on whether the function was asynchronous or not.
+          */
+         public call(fn: (done?: IDone) => void , done: IDone) {
+->call : (fn: (done?: IDone) => void, done: IDone) => boolean
+->fn : (done?: IDone) => void
++>call : (fn: (done?: IDone | undefined) => void, done: IDone) => boolean
++>fn : (done?: IDone | undefined) => void
+ >done : IDone | undefined
+ >done : IDone
+
+@@= skipped -13, +13 lines =@@
+                 if (fn.length === 0) {
+ >fn.length === 0 : boolean
+ >fn.length : number
+->fn : (done?: IDone) => void
++>fn : (done?: IDone | undefined) => void
+ >length : number
+ >0 : 0
+
+                     // No async.
+                     fn();
+ >fn() : void
+->fn : (done?: IDone) => void
++>fn : (done?: IDone | undefined) => void
+
+                     done();
+ >done() : void
+@@= skipped -28, +28 lines =@@
+
+                     fn(function () {
+ >fn(function () {                        isAsync = false; // If we execute synchronously, this will get called before the return below.                        Runnable.popGlobalErrorHandler();                        done();                    }) : void
+->fn : (done?: IDone) => void
++>fn : (done?: IDone | undefined) => void
+ >function () {                        isAsync = false; // If we execute synchronously, this will get called before the return below.                        Runnable.popGlobalErrorHandler();                        done();                    } : () => void
+
+                         isAsync = false; // If we execute synchronously, this will get called before the return below.
+@@= skipped -47, +47 lines =@@
+
+             return this.call(this.block, done);
+ >this.call(this.block, done) : boolean
+->this.call : (fn: (done?: IDone) => void, done: IDone) => boolean
++>this.call : (fn: (done?: IDone | undefined) => void, done: IDone) => boolean
+ >this : this
+->call : (fn: (done?: IDone) => void, done: IDone) => boolean
++>call : (fn: (done?: IDone | undefined) => void, done: IDone) => boolean
+ >this.block : any
+ >this : this
+ >block : any
+@@= skipped -16, +16 lines =@@
+
+             return this.call(<any>((done) => this.children[index].run(done)), done);
+ >this.call(<any>((done) => this.children[index].run(done)), done) : boolean
+->this.call : (fn: (done?: IDone) => void, done: IDone) => boolean
++>this.call : (fn: (done?: IDone | undefined) => void, done: IDone) => boolean
+ >this : this
+->call : (fn: (done?: IDone) => void, done: IDone) => boolean
++>call : (fn: (done?: IDone | undefined) => void, done: IDone) => boolean
+ ><any>((done) => this.children[index].run(done)) : any
+ >((done) => this.children[index].run(done)) : (done: any) => void
+ >(done) => this.children[index].run(done) : (done: any) => void
+@@= skipped -1013, +1013 lines =@@
+ >"" : ""
+
+             public bench(subBench?: () => void ) { }
+->bench : (subBench?: () => void) => void
++>bench : (subBench?: (() => void) | undefined) => void
+ >subBench : (() => void) | undefined
+
+             public before() { }
+@@= skipped -61, +61 lines =@@
+ >[] : never[]
 
          var timeFunction: (
 ->timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
-+>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
++>timeFunction : (benchmark: Benchmark, description?: string | undefined, name?: string | undefined, f?: ((bench?: (() => void) | undefined) => void) | undefined) => void
 
              benchmark: Benchmark,
  >benchmark : Benchmark
 @@= skipped -12, +12 lines =@@
- >name : string
+ >name : string | undefined
 
              f?: (bench?: { (): void; }) => void
-->f : (bench?: { (): void; }) => void
-+>f : (bench?: () => void) => void
- >bench : () => void
+->f : ((bench?: { (): void; }) => void) | undefined
++>f : ((bench?: (() => void) | undefined) => void) | undefined
+ >bench : (() => void) | undefined
 
          ) => void;
 
          timeFunction = function (
-->timeFunction = function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
+->timeFunction = function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: ((bench?: { (): void; }) => void) | undefined) => void
 ->timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
-->function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
-+>timeFunction = function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
-+>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
-+>function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
+->function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: ((bench?: { (): void; }) => void) | undefined) => void
++>timeFunction = function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: ((bench?: (() => void) | undefined) => void) | undefined) => void
++>timeFunction : (benchmark: Benchmark, description?: string | undefined, name?: string | undefined, f?: ((bench?: (() => void) | undefined) => void) | undefined) => void
++>function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: ((bench?: (() => void) | undefined) => void) | undefined) => void
 
              benchmark: Benchmark,
  >benchmark : Benchmark
@@ -45,27 +242,32 @@
  >'' : ""
 
              f = benchmark.bench
-->f : (bench?: { (): void; }) => void
-+>f : (bench?: () => void) => void
- >benchmark.bench : (subBench?: () => void) => void
+->f : ((bench?: { (): void; }) => void) | undefined
+->benchmark.bench : (subBench?: () => void) => void
++>f : ((bench?: (() => void) | undefined) => void) | undefined
++>benchmark.bench : (subBench?: (() => void) | undefined) => void
  >benchmark : Benchmark
- >bench : (subBench?: () => void) => void
+->bench : (subBench?: () => void) => void
++>bench : (subBench?: (() => void) | undefined) => void
+
+         ): void {
+
 @@= skipped -26, +26 lines =@@
 
                  timeFunction(benchmark, description, name, f);
  >timeFunction(benchmark, description, name, f) : void
 ->timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
-+>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
++>timeFunction : (benchmark: Benchmark, description?: string | undefined, name?: string | undefined, f?: ((bench?: (() => void) | undefined) => void) | undefined) => void
  >benchmark : Benchmark
  >description : string
  >name : any
 @@= skipped -10, +10 lines =@@
              f.call(benchmark, subBenchmark);
- >f.call(benchmark, subBenchmark) : any
- >f.call : (this: Function, thisArg: any, ...argArray: any[]) => any
+ >f.call(benchmark, subBenchmark) : void
+ >f.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
 ->f : (bench?: { (): void; }) => void
-+>f : (bench?: () => void) => void
- >call : (this: Function, thisArg: any, ...argArray: any[]) => any
++>f : (bench?: (() => void) | undefined) => void
+ >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
  >benchmark : Benchmark
  >subBenchmark : (name: any, f: any) => void
 @@= skipped -74, +74 lines =@@
@@ -73,16 +275,43 @@
                      timeFunction(b);
  >timeFunction(b) : void
 ->timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
-+>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
++>timeFunction : (benchmark: Benchmark, description?: string | undefined, name?: string | undefined, f?: ((bench?: (() => void) | undefined) => void) | undefined) => void
  >b : Benchmark
 
                      b.afterEach();
-@@= skipped -693, +693 lines =@@
+@@= skipped -248, +248 lines =@@
+
+             /** create file gets the whole path to create, so this works as expected with the --out parameter */
+             public createFile(s: string, useUTF8?: boolean): ITextWriter {
+->createFile : (s: string, useUTF8?: boolean) => ITextWriter
++>createFile : (s: string, useUTF8?: boolean | undefined) => ITextWriter
+ >s : string
+ >useUTF8 : boolean | undefined
+
+@@= skipped -212, +212 lines =@@
+         }
+
+         export function makeDefaultCompilerForTest(c?: TypeScript.TypeScriptCompiler) {
+->makeDefaultCompilerForTest : (c?: TypeScript.TypeScriptCompiler) => any
++>makeDefaultCompilerForTest : (c?: any) => any
+ >c : any
+ >TypeScript : any
+
+@@= skipped -127, +127 lines =@@
+ >true : true
+
+         export function compile(code?: string, filename?: string) {
+->compile : (code?: string, filename?: string) => void
++>compile : (code?: string | undefined, filename?: string | undefined) => void
+ >code : string | undefined
+ >filename : string | undefined
+
+@@= skipped -106, +106 lines =@@
 
                  compileString(testCode, 'test.ts', function (compilerResult) {
  >compileString(testCode, 'test.ts', function (compilerResult) {                    errors = compilerResult.errors;                }) : void
 ->compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
-+>compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
++>compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
  >testCode : any
  >'test.ts' : "test.ts"
  >function (compilerResult) {                    errors = compilerResult.errors;                } : (compilerResult: CompilerResult) => void
@@ -91,7 +320,7 @@
                  compileString(code, 'test.ts', function (compilerResult) {
  >compileString(code, 'test.ts', function (compilerResult) {                    errors = compilerResult.errors;                }) : void
 ->compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
-+>compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
++>compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
  >code : string
  >'test.ts' : "test.ts"
  >function (compilerResult) {                    errors = compilerResult.errors;                } : (compilerResult: CompilerResult) => void
@@ -100,97 +329,283 @@
            */
          export function generateDeclFile(code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: Harness.Compiler.CompilationContext, references?: TypeScript.IFileReference[]): string {
 ->generateDeclFile : (code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: Harness.Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => string
-+>generateDeclFile : (code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: CompilationContext, references?: TypeScript.IFileReference[]) => string
++>generateDeclFile : (code: string, verifyNoDeclFile: boolean, unitName?: string | undefined, compilationContext?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => string
  >code : string
  >verifyNoDeclFile : boolean
- >unitName : string
-@@= skipped -375, +375 lines =@@
-                         var match = errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/);
- >match : RegExpMatchArray
- >errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/) : RegExpMatchArray
-->errorLines[i].match : (regexp: string | RegExp) => RegExpMatchArray | null
-+>errorLines[i].match : (regexp: string | RegExp) => RegExpMatchArray
- >errorLines[i] : string
- >errorLines : string[]
- >i : number
-->match : (regexp: string | RegExp) => RegExpMatchArray | null
-+>match : (regexp: string | RegExp) => RegExpMatchArray
- >/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/ : RegExp
+ >unitName : string | undefined
+@@= skipped -56, +56 lines =@@
 
-                         if (match) {
-@@= skipped -424, +424 lines =@@
- >filename : string
- >path.match(/[^\/]*$/)[0] : string
- >path.match(/[^\/]*$/) : RegExpMatchArray
-->path.match : (regexp: string | RegExp) => RegExpMatchArray | null
-+>path.match : (regexp: string | RegExp) => RegExpMatchArray
- >path : string
-->match : (regexp: string | RegExp) => RegExpMatchArray | null
-+>match : (regexp: string | RegExp) => RegExpMatchArray
- >/[^\/]*$/ : RegExp
+                 addUnit(code, unitName, false, false, references);
+ >addUnit(code, unitName, false, false, references) : TypeScript.Script
+->addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
++>addUnit : (code: string, unitName?: string | undefined, isResident?: boolean | undefined, isDeclareFile?: boolean | undefined, references?: TypeScript.IFileReference[] | undefined) => TypeScript.Script
+ >code : string
+ >unitName : string | undefined
+ >false : false
+@@= skipped -92, +92 lines =@@
+                     if (fn.indexOf('.d.ts') >= 0) {
+ >fn.indexOf('.d.ts') >= 0 : boolean
+ >fn.indexOf('.d.ts') : number
+->fn.indexOf : (searchString: string, position?: number) => number
++>fn.indexOf : (searchString: string, position?: number | undefined) => number
+ >fn : string
+->indexOf : (searchString: string, position?: number) => number
++>indexOf : (searchString: string, position?: number | undefined) => number
+ >'.d.ts' : ".d.ts"
  >0 : 0
 
-@@= skipped -122, +122 lines =@@
+@@= skipped -25, +25 lines =@@
+ >results = writer.lines.join('\n') : string
+ >results : string
+ >writer.lines.join('\n') : string
+->writer.lines.join : (separator?: string) => string
++>writer.lines.join : (separator?: string | undefined) => string
+ >writer.lines : string[]
+ >writer : WriterAggregator
+ >lines : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >'\n' : "\n"
+
+                         if (verifyNoDeclFile && results != "") {
+@@= skipped -88, +88 lines =@@
+
+                 updateUnit('', uName);
+ >updateUnit('', uName) : void
+->updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
++>updateUnit : (code: string, unitName: string, setRecovery?: boolean | undefined) => void
+ >'' : ""
+ >uName : string
+             }
+@@= skipped -57, +57 lines =@@
+ >this : this
+ >code : string
+ >lines.join("\n") : string
+->lines.join : (separator?: string) => string
++>lines.join : (separator?: string | undefined) => string
+ >lines : any[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"\n" : "\n"
+
+                 this.errors = [];
+@@= skipped -220, +220 lines =@@
+ >compiler = makeDefaultCompilerForTest() : any
+ >compiler : TypeScript.TypeScriptCompiler
+ >makeDefaultCompilerForTest() : any
+->makeDefaultCompilerForTest : (c?: TypeScript.TypeScriptCompiler) => any
++>makeDefaultCompilerForTest : (c?: any) => any
+
+             if (usePull) {
+ >usePull : boolean
+@@= skipped -74, +74 lines =@@
+
+                     updateUnit('', fname);
+ >updateUnit('', fname) : void
+->updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
++>updateUnit : (code: string, unitName: string, setRecovery?: boolean | undefined) => void
+ >'' : ""
+ >fname : any
+                     }
+@@= skipped -30, +30 lines =@@
+         }
+
+         export function addUnit(code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) {
+->addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
++>addUnit : (code: string, unitName?: string | undefined, isResident?: boolean | undefined, isDeclareFile?: boolean | undefined, references?: TypeScript.IFileReference[] | undefined) => TypeScript.Script
+ >code : string
+ >unitName : string | undefined
+ >isResident : boolean | undefined
+@@= skipped -50, +50 lines =@@
+
+                     updateUnit(code, uName);
+ >updateUnit(code, uName) : void
+->updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
++>updateUnit : (code: string, unitName: string, setRecovery?: boolean | undefined) => void
+ >code : string
+ >uName : string
+
+@@= skipped -49, +49 lines =@@
+         }
+
+         export function updateUnit(code: string, unitName: string, setRecovery?: boolean) {
+->updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
++>updateUnit : (code: string, unitName: string, setRecovery?: boolean | undefined) => void
+ >code : string
+ >unitName : string
+ >setRecovery : boolean | undefined
+@@= skipped -36, +36 lines =@@
+         }
+
+         export function compileFile(path: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
+->compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
++>compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: ((settings?: any) => void) | undefined, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+ >path : string
+ >callback : (res: CompilerResult) => void
+ >res : CompilerResult
+->settingsCallback : ((settings?: TypeScript.CompilationSettings) => void) | undefined
++>settingsCallback : ((settings?: any) => void) | undefined
+ >settings : any
+ >TypeScript : any
+ >context : CompilationContext | undefined
+@@= skipped -36, +36 lines =@@
+
+             compileUnit(code, filename, callback, settingsCallback, context, references);
+ >compileUnit(code, filename, callback, settingsCallback, context, references) : void
+->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
++>compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: ((settings?: any) => void) | undefined, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+ >code : any
+ >filename : string
+ >callback : (res: CompilerResult) => void
+->settingsCallback : ((settings?: TypeScript.CompilationSettings) => void) | undefined
++>settingsCallback : ((settings?: any) => void) | undefined
+ >context : CompilationContext | undefined
+ >references : TypeScript.IFileReference[] | undefined
+         }
+
+         export function compileUnit(code: string, filename: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
+->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
++>compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: ((settings?: any) => void) | undefined, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+ >code : string
+ >filename : string
+ >callback : (res: CompilerResult) => void
+ >res : CompilerResult
+->settingsCallback : ((settings?: TypeScript.CompilationSettings) => void) | undefined
++>settingsCallback : ((settings?: any) => void) | undefined
+ >settings : any
+ >TypeScript : any
+ >context : CompilationContext | undefined
+@@= skipped -83, +83 lines =@@
+ >moduleGenTarget : any
+
+             if (settingsCallback) {
+->settingsCallback : ((settings?: TypeScript.CompilationSettings) => void) | undefined
++>settingsCallback : ((settings?: any) => void) | undefined
+
+                 settingsCallback(compiler.settings);
+ >settingsCallback(compiler.settings) : void
+->settingsCallback : (settings?: TypeScript.CompilationSettings) => void
++>settingsCallback : (settings?: any) => void
+ >compiler.settings : any
+ >compiler : TypeScript.TypeScriptCompiler
+ >settings : any
+@@= skipped -25, +25 lines =@@
              try {
                  compileString(code, filename, callback, context, references);
  >compileString(code, filename, callback, context, references) : void
 ->compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
-+>compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
++>compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
  >code : string
  >filename : string
  >callback : (res: CompilerResult) => void
-@@= skipped -38, +38 lines =@@
+@@= skipped -11, +11 lines =@@
+                 // If settingsCallback exists, assume that it modified the global compiler instance's settings in some way.
+                 // So that a test doesn't have side effects for tests run after it, restore the compiler settings to their previous state.
+                 if (settingsCallback) {
+->settingsCallback : ((settings?: TypeScript.CompilationSettings) => void) | undefined
++>settingsCallback : ((settings?: any) => void) | undefined
+
+                     compiler.settings = oldCompilerSettings;
+ >compiler.settings = oldCompilerSettings : any
+@@= skipped -27, +27 lines =@@
          }
 
          export function compileUnits(units: TestCaseParser.TestUnitData[], callback: (res: Compiler.CompilerResult) => void , settingsCallback?: () => void ) {
 ->compileUnits : (units: TestCaseParser.TestUnitData[], callback: (res: Compiler.CompilerResult) => void, settingsCallback?: () => void) => void
-+>compileUnits : (units: TestCaseParser.TestUnitData[], callback: (res: CompilerResult) => void, settingsCallback?: () => void) => void
++>compileUnits : (units: TestCaseParser.TestUnitData[], callback: (res: CompilerResult) => void, settingsCallback?: (() => void) | undefined) => void
  >units : TestCaseParser.TestUnitData[]
  >TestCaseParser : any
 ->callback : (res: Compiler.CompilerResult) => void
 +>callback : (res: CompilerResult) => void
  >res : CompilerResult
  >Compiler : any
- >settingsCallback : () => void
-@@= skipped -22, +22 lines =@@
- >unitName : string
- >switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/)[0] : string
- >switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/) : RegExpMatchArray
-->switchToForwardSlashes(lastUnit.name).match : (regexp: string | RegExp) => RegExpMatchArray | null
-+>switchToForwardSlashes(lastUnit.name).match : (regexp: string | RegExp) => RegExpMatchArray
- >switchToForwardSlashes(lastUnit.name) : string
- >switchToForwardSlashes : (path: string) => string
- >lastUnit.name : string
- >lastUnit : TestCaseParser.TestUnitData
- >name : string
-->match : (regexp: string | RegExp) => RegExpMatchArray | null
-+>match : (regexp: string | RegExp) => RegExpMatchArray
- >/[^\/]*$/ : RegExp
+ >settingsCallback : (() => void) | undefined
+@@= skipped -35, +35 lines =@@
+             var dependencies = units.slice(0, units.length - 1);
+ >dependencies : TestCaseParser.TestUnitData[]
+ >units.slice(0, units.length - 1) : TestCaseParser.TestUnitData[]
+->units.slice : (start?: number, end?: number) => TestCaseParser.TestUnitData[]
++>units.slice : (start?: number | undefined, end?: number | undefined) => TestCaseParser.TestUnitData[]
+ >units : TestCaseParser.TestUnitData[]
+->slice : (start?: number, end?: number) => TestCaseParser.TestUnitData[]
++>slice : (start?: number | undefined, end?: number | undefined) => TestCaseParser.TestUnitData[]
  >0 : 0
+ >units.length - 1 : number
+ >units.length : number
+@@= skipped -23, +23 lines =@@
 
-@@= skipped -41, +41 lines =@@
+             compileUnit(lastUnit.content, unitName, callback, settingsCallback, compilationContext, lastUnit.references);
+ >compileUnit(lastUnit.content, unitName, callback, settingsCallback, compilationContext, lastUnit.references) : void
+->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
++>compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: ((settings?: any) => void) | undefined, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+ >lastUnit.content : string
  >lastUnit : TestCaseParser.TestUnitData
  >content : string
  >unitName : string
 ->callback : (res: Compiler.CompilerResult) => void
 +>callback : (res: CompilerResult) => void
- >settingsCallback : () => void
+ >settingsCallback : (() => void) | undefined
  >compilationContext : CompilationContext
  >lastUnit.references : TypeScript.IFileReference[]
-@@= skipped -36, +36 lines =@@
+@@= skipped -26, +26 lines =@@
+         }
+
+         export function emit(ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) {
+->emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
++>emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean | undefined) => void
+ >ioHost : TypeScript.EmitterIOHost
+ >TypeScript : any
+ >usePullEmitter : boolean | undefined
+@@= skipped -15, +15 lines =@@
          }
 
          export function compileString(code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
 ->compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
-+>compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
++>compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
  >code : string
  >unitName : string
 ->callback : (res: Compiler.CompilerResult) => void
 +>callback : (res: CompilerResult) => void
  >res : CompilerResult
  >Compiler : any
- >context : CompilationContext
-@@= skipped -127, +127 lines =@@
+ >context : CompilationContext | undefined
+@@= skipped -58, +58 lines =@@
+ >scripts : TypeScript.Script[]
+ >push : (...items: TypeScript.Script[]) => number
+ >addUnit(code, uName, false, isDeclareFile, references) : TypeScript.Script
+->addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
++>addUnit : (code: string, unitName?: string | undefined, isResident?: boolean | undefined, isDeclareFile?: boolean | undefined, references?: TypeScript.IFileReference[] | undefined) => TypeScript.Script
+ >code : string
+ >uName : string
+ >false : false
+@@= skipped -9, +9 lines =@@
+
+             compile(code, uName);
+ >compile(code, uName) : void
+->compile : (code?: string, filename?: string) => void
++>compile : (code?: string | undefined, filename?: string | undefined) => void
+ >code : string
+ >uName : string
+
+@@= skipped -22, +22 lines =@@
+
+                 emit(stdout, true);
+ >emit(stdout, true) : void
+->emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
++>emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean | undefined) => void
+ >stdout : EmitterIOHost
+ >true : true
+             }
+@@= skipped -14, +14 lines =@@
+
+                 emit(stdout, false);
+ >emit(stdout, false) : void
+->emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
++>emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean | undefined) => void
+ >stdout : EmitterIOHost
+ >false : false
+
+@@= skipped -24, +24 lines =@@
 
              callback(new CompilerResult(stdout.toArray(), errors, scripts));
  >callback(new CompilerResult(stdout.toArray(), errors, scripts)) : void
@@ -199,39 +614,176 @@
  >new CompilerResult(stdout.toArray(), errors, scripts) : CompilerResult
  >CompilerResult : typeof CompilerResult
  >stdout.toArray() : { filename: string; file: WriterAggregator; }[]
-@@= skipped -295, +295 lines =@@
-                     var isRef = line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/);
- >isRef : RegExpMatchArray
- >line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/) : RegExpMatchArray
-->line.match : (regexp: string | RegExp) => RegExpMatchArray | null
-+>line.match : (regexp: string | RegExp) => RegExpMatchArray
- >line : string
-->match : (regexp: string | RegExp) => RegExpMatchArray | null
-+>match : (regexp: string | RegExp) => RegExpMatchArray
- >/reference\spath='(\w*_?\w*\.?d?\.ts)'/ : RegExp
+@@= skipped -50, +50 lines =@@
 
-                     if (isRef) {
-@@= skipped -1586, +1586 lines =@@
+                         addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name));
+ >addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name)) : TypeScript.Script
+->addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
++>addUnit : (code: string, unitName?: string | undefined, isResident?: boolean | undefined, isDeclareFile?: boolean | undefined, references?: TypeScript.IFileReference[] | undefined) => TypeScript.Script
+ >dep.content : string
+ >dep : TestCaseParser.TestUnitData
+ >content : string
+@@= skipped -43, +43 lines =@@
+
+                         updateUnit('', file);
+ >updateUnit('', file) : void
+->updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
++>updateUnit : (code: string, unitName: string, setRecovery?: boolean | undefined) => void
+ >'' : ""
+ >file : any
+
+@@= skipped -263, +263 lines =@@
+                     var fileNameIndex = fileMetadataNames.indexOf(testMetaData[1].toLowerCase());
+ >fileNameIndex : number
+ >fileMetadataNames.indexOf(testMetaData[1].toLowerCase()) : number
+->fileMetadataNames.indexOf : (searchElement: string, fromIndex?: number) => number
++>fileMetadataNames.indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+ >fileMetadataNames : string[]
+->indexOf : (searchElement: string, fromIndex?: number) => number
++>indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+ >testMetaData[1].toLowerCase() : any
+ >testMetaData[1].toLowerCase : any
+ >testMetaData[1] : any
+@@= skipped -28, +28 lines =@@
+ >1 : 1
+ >'". Available file metadata names are: ' : "\". Available file metadata names are: "
+ >fileMetadataNames.join(', ') : string
+->fileMetadataNames.join : (separator?: string) => string
++>fileMetadataNames.join : (separator?: string | undefined) => string
+ >fileMetadataNames : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >', ' : ", "
+
+                     } else if (fileNameIndex == 0) {
+@@= skipped -251, +251 lines =@@
+             var prefix = this.content.substring(0, minChar);
+ >prefix : string
+ >this.content.substring(0, minChar) : string
+->this.content.substring : (start: number, end?: number) => string
++>this.content.substring : (start: number, end?: number | undefined) => string
+ >this.content : string
+ >this : this
+ >content : string
+->substring : (start: number, end?: number) => string
++>substring : (start: number, end?: number | undefined) => string
+ >0 : 0
+ >minChar : number
+
+@@= skipped -15, +15 lines =@@
+             var suffix = this.content.substring(limChar);
+ >suffix : string
+ >this.content.substring(limChar) : string
+->this.content.substring : (start: number, end?: number) => string
++>this.content.substring : (start: number, end?: number | undefined) => string
+ >this.content : string
+ >this : this
+ >content : string
+->substring : (start: number, end?: number) => string
++>substring : (start: number, end?: number | undefined) => string
+ >limChar : number
+
+             this.content = prefix + middle + suffix;
+@@= skipped -68, +68 lines =@@
+
+                 this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length);
+ >this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+->this.editRanges.splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
++>this.editRanges.splice : { (start: number, deleteCount?: number | undefined): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
+ >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+ >this : this
+ >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+->splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
++>splice : { (start: number, deleteCount?: number | undefined): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
+ >0 : 0
+ >this.maxScriptVersions - this.editRanges.length : number
+ >this.maxScriptVersions : number
+@@= skipped -82, +82 lines =@@
+             var entries = this.editRanges.slice(initialEditRangeIndex);
+ >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+ >this.editRanges.slice(initialEditRangeIndex) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+->this.editRanges.slice : (start?: number, end?: number) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
++>this.editRanges.slice : (start?: number | undefined, end?: number | undefined) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
+ >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+ >this : this
+ >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
+->slice : (start?: number, end?: number) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
++>slice : (start?: number | undefined, end?: number | undefined) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
+ >initialEditRangeIndex : number
+
+             var minDistFromStart = entries.map(x => x.editRange.minChar).reduce((prev, current) => Math.min(prev, current));
+@@= skipped -376, +376 lines =@@
+
+             return this.scripts[scriptIndex].content.substring(start, end);
+ >this.scripts[scriptIndex].content.substring(start, end) : string
+->this.scripts[scriptIndex].content.substring : (start: number, end?: number) => string
++>this.scripts[scriptIndex].content.substring : (start: number, end?: number | undefined) => string
+ >this.scripts[scriptIndex].content : string
+ >this.scripts[scriptIndex] : ScriptInfo
+ >this.scripts : ScriptInfo[]
+@@= skipped -8, +8 lines =@@
+ >scripts : ScriptInfo[]
+ >scriptIndex : number
+ >content : string
+->substring : (start: number, end?: number) => string
++>substring : (start: number, end?: number | undefined) => string
+ >start : number
+ >end : number
+         }
+@@= skipped -440, +440 lines =@@
+                 var prefix = result.substring(0, edit.minChar);
+ >prefix : string
+ >result.substring(0, edit.minChar) : string
+->result.substring : (start: number, end?: number) => string
++>result.substring : (start: number, end?: number | undefined) => string
+ >result : string
+->substring : (start: number, end?: number) => string
++>substring : (start: number, end?: number | undefined) => string
+ >0 : 0
+ >edit.minChar : any
+ >edit : Services.TextEdit
+@@= skipped -17, +17 lines =@@
+                 var suffix = result.substring(edit.limChar);
+ >suffix : string
+ >result.substring(edit.limChar) : string
+->result.substring : (start: number, end?: number) => string
++>result.substring : (start: number, end?: number | undefined) => string
+ >result : string
+->substring : (start: number, end?: number) => string
++>substring : (start: number, end?: number | undefined) => string
+ >edit.limChar : any
+ >edit : Services.TextEdit
+ >limChar : any
+@@= skipped -240, +240 lines =@@
 
              return JSON.stringify({ usePullLanguageService: usePull });
  >JSON.stringify({ usePullLanguageService: usePull }) : string
 ->JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
-+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
++>JSON.stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
  >JSON : JSON
 ->stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
-+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
++>stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
  >{ usePullLanguageService: usePull } : { usePullLanguageService: boolean; }
  >usePullLanguageService : boolean
  >usePull : boolean
-@@= skipped -147, +147 lines =@@
- >path : string
- >path.match(/[^\/]*$/)[0] : string
- >path.match(/[^\/]*$/) : RegExpMatchArray
-->path.match : (regexp: string | RegExp) => RegExpMatchArray | null
-+>path.match : (regexp: string | RegExp) => RegExpMatchArray
- >path : string
-->match : (regexp: string | RegExp) => RegExpMatchArray | null
-+>match : (regexp: string | RegExp) => RegExpMatchArray
- >/[^\/]*$/ : RegExp
- >0 : 0
- >callback : (error: Error, result: any) => void
+@@= skipped -261, +261 lines =@@
+
+             Compiler.compileString(code, unitName, function (res) {
+ >Compiler.compileString(code, unitName, function (res) {                runJSString(res.code, callback);            }) : void
+->Compiler.compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => void
++>Compiler.compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+ >Compiler : typeof Compiler
+->compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => void
++>compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+ >code : string
+ >unitName : string
+ >function (res) {                runJSString(res.code, callback);            } : (res: Compiler.CompilerResult) => void
+@@= skipped -544, +544 lines =@@
+         }
+
+         export function runBaseline(
+->runBaseline : (descriptionForDescribe: string, relativeFilename: string, generateContent: () => string, runImmediately?: boolean | undefined, opts?: BaselineOptions) => void
++>runBaseline : (descriptionForDescribe: string, relativeFilename: string, generateContent: () => string, runImmediately?: boolean | undefined, opts?: BaselineOptions | undefined) => void
+
+             descriptionForDescribe: string,
+ >descriptionForDescribe : string

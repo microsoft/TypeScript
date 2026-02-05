@@ -4,4 +4,5 @@
 () => 0;
 
 //// [arrowFunctionInExpressionStatement1.js]
+"use strict";
 () => 0;

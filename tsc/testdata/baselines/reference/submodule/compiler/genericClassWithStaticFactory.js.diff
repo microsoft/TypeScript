@@ -1,6 +1,6 @@
 --- old.genericClassWithStaticFactory.js
 +++ new.genericClassWithStaticFactory.js
-@@= skipped -146, +146 lines =@@
+@@= skipped -147, +147 lines =@@
  var Editor;
  (function (Editor) {
      class List {

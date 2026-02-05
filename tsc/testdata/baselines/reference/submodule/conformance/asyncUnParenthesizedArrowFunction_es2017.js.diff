@@ -1,9 +1,9 @@
 --- old.asyncUnParenthesizedArrowFunction_es2017.js
 +++ new.asyncUnParenthesizedArrowFunction_es2017.js
-@@= skipped -5, +5 lines =@@
- const x1 = async (i) => await someOtherFunction(i);
+@@= skipped -6, +6 lines =@@
 
  //// [asyncUnParenthesizedArrowFunction_es2017.js]
+ "use strict";
 -const x = async (i) => await someOtherFunction(i);
 +const x = async i => await someOtherFunction(i);
  const x1 = async (i) => await someOtherFunction(i);

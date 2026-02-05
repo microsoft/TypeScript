@@ -1,6 +1,6 @@
 --- old.staticMemberAccessOffDerivedType1.js
 +++ new.staticMemberAccessOffDerivedType1.js
-@@= skipped -17, +17 lines =@@
+@@= skipped -18, +18 lines =@@
      }
  }
  class P extends SomeBase {

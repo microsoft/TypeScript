@@ -18,6 +18,7 @@ class Test2 {
 }
 
 //// [accessorsEmit.js]
+"use strict";
 class Result {
 }
 class Test {

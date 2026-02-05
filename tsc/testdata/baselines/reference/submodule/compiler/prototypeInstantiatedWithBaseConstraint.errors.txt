@@ -1,0 +1,11 @@
+prototypeInstantiatedWithBaseConstraint.ts(2,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== prototypeInstantiatedWithBaseConstraint.ts (1 errors) ====
+    class C<T> {
+        x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    C.prototype.x.boo; // No error, prototype is instantiated to any

@@ -9,5 +9,5 @@
 +    "3";
 +    ["4"];
  }
- let z;
  z[1].toExponential();
+ z[2].toExponential();

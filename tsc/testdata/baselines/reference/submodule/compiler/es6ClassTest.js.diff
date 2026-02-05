@@ -1,8 +1,8 @@
 --- old.es6ClassTest.js
 +++ new.es6ClassTest.js
-@@= skipped -87, +87 lines =@@
-
+@@= skipped -88, +88 lines =@@
  //// [es6ClassTest.js]
+ "use strict";
  class Bar {
 +    goo;
      prop1(x) {

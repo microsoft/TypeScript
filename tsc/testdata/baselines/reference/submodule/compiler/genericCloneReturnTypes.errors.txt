@@ -1,12 +1,17 @@
+genericCloneReturnTypes.ts(4,12): error TS2564: Property 't' has no initializer and is not definitely assigned in the constructor.
+genericCloneReturnTypes.ts(22,10): error TS2454: Variable 'b' is used before being assigned.
 genericCloneReturnTypes.ts(25,1): error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<number>'.
   Type 'string' is not assignable to type 'number'.
+genericCloneReturnTypes.ts(25,5): error TS2454: Variable 'b3' is used before being assigned.
 
 
-==== genericCloneReturnTypes.ts (1 errors) ====
+==== genericCloneReturnTypes.ts (4 errors) ====
     class Bar<T> {
     
         public size: number;
         public t: T;
+               ~
+!!! error TS2564: Property 't' has no initializer and is not definitely assigned in the constructor.
     
         constructor(x: number) {
     
@@ -25,9 +30,13 @@ genericCloneReturnTypes.ts(25,1): error TS2322: Type 'Bar<string>' is not assign
     var b: Bar<number>;
     
     var b2 = b.clone();
+             ~
+!!! error TS2454: Variable 'b' is used before being assigned.
     var b3: Bar<string>;
     b = b2;
     b = b3;
     ~
 !!! error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<number>'.
 !!! error TS2322:   Type 'string' is not assignable to type 'number'.
+        ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.

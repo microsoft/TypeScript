@@ -1,0 +1,39 @@
+lib.js(14,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+main.js(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+
+==== main.js (1 errors) ====
+    const { SomeClass, SomeClass: Another } = require('./lib');
+    
+    module.exports = {
+    ~~~~~~~~~~~~~~~~~~
+        SomeClass,
+    ~~~~~~~~~~~~~~
+        Another
+    ~~~~~~~~~~~
+    }
+    ~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+==== lib.js (1 errors) ====
+    /**
+     * @param {string} a
+     */
+    function bar(a) {
+        return a + a;
+    }
+    
+    class SomeClass {
+        a() {
+            return 1;
+        }
+    }
+    
+    module.exports = {
+    ~~~~~~~~~~~~~~~~~~
+        bar,
+    ~~~~~~~~
+        SomeClass
+    ~~~~~~~~~~~~~
+    }
+    ~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.

@@ -16,7 +16,9 @@ class C {
 
 
 //// [typeFromPrivatePropertyAssignmentJs.js]
+"use strict";
 //// [a.js]
+"use strict";
 class C {
     /** @type {{ foo?: string } | undefined } */
     #a;

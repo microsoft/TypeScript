@@ -8,3 +8,4 @@ declare module "foo" {
 }
 
 //// [incompatibleExports2.js]
+"use strict";

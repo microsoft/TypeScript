@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/commentEmittingInPreserveJsx1.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : Symbol(React, Decl(file.tsx, 0, 0))
 

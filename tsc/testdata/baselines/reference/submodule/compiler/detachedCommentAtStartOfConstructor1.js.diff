@@ -1,8 +1,8 @@
 --- old.detachedCommentAtStartOfConstructor1.js
 +++ new.detachedCommentAtStartOfConstructor1.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [detachedCommentAtStartOfConstructor1.js]
+ "use strict";
  class TestFile {
 +    message;
 +    name;

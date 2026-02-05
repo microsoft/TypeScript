@@ -11,6 +11,7 @@ class C {
 }
 
 //// [symbolProperty7.js]
+"use strict";
 class C {
     [Symbol()] = 0;
     [Symbol()];

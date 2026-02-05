@@ -1,8 +1,8 @@
 --- old.constructorArgsErrors2.js
 +++ new.constructorArgsErrors2.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
  //// [constructorArgsErrors2.js]
+ "use strict";
  class foo {
 +    a;
      constructor(a) {

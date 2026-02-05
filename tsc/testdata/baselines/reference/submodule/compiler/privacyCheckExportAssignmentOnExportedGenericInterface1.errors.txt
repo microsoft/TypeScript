@@ -1,0 +1,14 @@
+privacyCheckExportAssignmentOnExportedGenericInterface1.ts(8,10): error TS2454: Variable 'Foo' is used before being assigned.
+
+
+==== privacyCheckExportAssignmentOnExportedGenericInterface1.ts (1 errors) ====
+    namespace Foo {
+        export interface A<T> {
+        }
+    }
+    interface Foo<T> {
+    }
+    var Foo: new () => Foo.A<Foo<string>>;
+    export = Foo;
+             ~~~
+!!! error TS2454: Variable 'Foo' is used before being assigned.

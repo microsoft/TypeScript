@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/classes/members/constructorFunctionTypes/constructorHasPrototypeProperty.ts] ////
 
 === constructorHasPrototypeProperty.ts ===
-module NonGeneric {
+namespace NonGeneric {
 >NonGeneric : typeof NonGeneric
 
     class C {
@@ -42,7 +42,7 @@ module NonGeneric {
 >bar : string
 }
 
-module Generic {
+namespace Generic {
 >Generic : typeof Generic
 
     class C<T,U> {

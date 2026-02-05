@@ -1,0 +1,56 @@
+--- old.sourceMapValidationDestructuringForOfArrayBindingPattern2(target=es2015).types
++++ new.sourceMapValidationDestructuringForOfArrayBindingPattern2(target=es2015).types
+@@= skipped -350, +350 lines =@@
+ for ([numberA3, ...robotAInfo] of robots) {
+ >[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
+ >numberA3 : number
+->...robotAInfo : string | number
++>...robotAInfo : any
+ >robotAInfo : (string | number)[]
+ >robots : Robot[]
+
+@@= skipped -14, +14 lines =@@
+ for ([numberA3, ...robotAInfo] of getRobots()) {
+ >[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
+ >numberA3 : number
+->...robotAInfo : string | number
++>...robotAInfo : any
+ >robotAInfo : (string | number)[]
+ >getRobots() : Robot[]
+ >getRobots : () => Robot[]
+@@= skipped -15, +15 lines =@@
+ for ([numberA3, ...robotAInfo] of [robotA, robotB]) {
+ >[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
+ >numberA3 : number
+->...robotAInfo : string | number
++>...robotAInfo : any
+ >robotAInfo : (string | number)[]
+ >[robotA, robotB] : Robot[]
+ >robotA : Robot
+@@= skipped -15, +15 lines =@@
+ }
+ for ([...multiRobotAInfo] of multiRobots) {
+ >[...multiRobotAInfo] : (string | [string, string])[]
+->...multiRobotAInfo : string | [string, string]
++>...multiRobotAInfo : any
+ >multiRobotAInfo : (string | [string, string])[]
+ >multiRobots : MultiSkilledRobot[]
+
+@@= skipped -13, +13 lines =@@
+ }
+ for ([...multiRobotAInfo] of getMultiRobots()) {
+ >[...multiRobotAInfo] : (string | [string, string])[]
+->...multiRobotAInfo : string | [string, string]
++>...multiRobotAInfo : any
+ >multiRobotAInfo : (string | [string, string])[]
+ >getMultiRobots() : MultiSkilledRobot[]
+ >getMultiRobots : () => MultiSkilledRobot[]
+@@= skipped -14, +14 lines =@@
+ }
+ for ([...multiRobotAInfo] of [multiRobotA, multiRobotB]) {
+ >[...multiRobotAInfo] : (string | [string, string])[]
+->...multiRobotAInfo : string | [string, string]
++>...multiRobotAInfo : any
+ >multiRobotAInfo : (string | [string, string])[]
+ >[multiRobotA, multiRobotB] : MultiSkilledRobot[]
+ >multiRobotA : MultiSkilledRobot

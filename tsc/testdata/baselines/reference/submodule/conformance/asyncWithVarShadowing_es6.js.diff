@@ -1,9 +1,9 @@
 --- old.asyncWithVarShadowing_es6.js
 +++ new.asyncWithVarShadowing_es6.js
-@@= skipped -224, +224 lines =@@
-
+@@= skipped -225, +225 lines =@@
 
  //// [asyncWithVarShadowing_es6.js]
+ "use strict";
 -function fn1(x) {
 -    return __awaiter(this, void 0, void 0, function* () {
 -        var x;

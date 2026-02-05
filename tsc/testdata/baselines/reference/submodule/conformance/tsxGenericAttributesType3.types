@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxGenericAttributesType3.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : typeof React
 
@@ -33,9 +35,9 @@ class B<U> extends React.Component<U, {}> {
         return <B1 {...this.props} x="hi" />;
 ><B1 {...this.props} x="hi" /> : JSX.Element
 >B1 : typeof B1
->this.props : U & { children?: React.ReactNode; }
+>this.props : U & { children?: React.ReactNode | undefined; }
 >this : this
->props : U & { children?: React.ReactNode; }
+>props : U & { children?: React.ReactNode | undefined; }
 >x : string
     }
 }

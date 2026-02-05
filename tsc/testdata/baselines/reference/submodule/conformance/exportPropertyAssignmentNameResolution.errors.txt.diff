@@ -2,12 +2,13 @@
 +++ new.exportPropertyAssignmentNameResolution.errors.txt
 @@= skipped -0, +0 lines =@@
 -bug24492.js(2,5): error TS2304: Cannot find name 'D'.
--
--
--==== bug24492.js (1 errors) ====
--    module.exports.D = class { }
--    new D()
--        ~
++bug24492.js(2,5): error TS2454: Variable 'D' is used before being assigned.
+
+
+ ==== bug24492.js (1 errors) ====
+     module.exports.D = class { }
+     new D()
+         ~
 -!!! error TS2304: Cannot find name 'D'.
--    
-+<no content>
++!!! error TS2454: Variable 'D' is used before being assigned.
+     

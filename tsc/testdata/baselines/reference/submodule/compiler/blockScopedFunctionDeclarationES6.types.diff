@@ -1,0 +1,10 @@
+--- old.blockScopedFunctionDeclarationES6.types
++++ new.blockScopedFunctionDeclarationES6.types
+@@= skipped -11, +11 lines =@@
+ >foo : () => void
+ }
+ foo();
+->foo() : any
+->foo : any
++>foo() : void
++>foo : () => void

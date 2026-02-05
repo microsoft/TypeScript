@@ -1,0 +1,19 @@
+genericInheritedDefaultConstructors.ts(7,14): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+genericInheritedDefaultConstructors.ts(8,27): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+
+
+==== genericInheritedDefaultConstructors.ts (2 errors) ====
+    // repro from #8166
+    interface Constructor<T> {
+        new(...args: any[]): T;
+        prototype: T;
+    }
+    
+    class A<U> { a: U; }
+                 ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+    class B<V> extends A<V> { b: V; }
+                              ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+    var c:Constructor<B<boolean>> = B; // shouldn't error here
+    

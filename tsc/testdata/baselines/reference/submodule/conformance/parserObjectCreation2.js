@@ -4,4 +4,5 @@
 new new Foo()()
 
 //// [parserObjectCreation2.js]
+"use strict";
 new new Foo()();

@@ -1,6 +1,6 @@
 --- old.tsxTypeErrors.js
 +++ new.tsxTypeErrors.js
-@@= skipped -46, +46 lines =@@
+@@= skipped -47, +47 lines =@@
  var e1 = <imag src="bar.jpg"/>;
  // A custom type
  class MyClass {

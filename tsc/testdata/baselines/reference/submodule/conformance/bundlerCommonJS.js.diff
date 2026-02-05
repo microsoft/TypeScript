@@ -1,0 +1,8 @@
+--- old.bundlerCommonJS.js
++++ new.bundlerCommonJS.js
+@@= skipped -41, +41 lines =@@
+ const pkg_1 = require("pkg");
+ pkg_1.x;
+ //// [real-imports.mjs]
+-"use strict";
+ export {};

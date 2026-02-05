@@ -4,4 +4,5 @@
 Date.UTC(2017);
 
 //// [es2017DateAPIs.js]
+"use strict";
 Date.UTC(2017);

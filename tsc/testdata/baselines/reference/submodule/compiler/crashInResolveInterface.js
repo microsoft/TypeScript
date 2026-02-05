@@ -19,7 +19,9 @@ interface C {
 
 
 //// [file1.js]
+"use strict";
 var q1;
 var x = q1.each(x => c.log(x));
 //// [file2.js]
+"use strict";
 ///<reference path='file1.ts'/>

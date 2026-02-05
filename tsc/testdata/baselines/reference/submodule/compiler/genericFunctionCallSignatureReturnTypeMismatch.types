@@ -3,11 +3,11 @@
 === genericFunctionCallSignatureReturnTypeMismatch.ts ===
 interface Array<T> {}
 
-var f : { <T>(x:T): T; }
+declare var f : { <T>(x:T): T; }
 >f : <T>(x: T) => T
 >x : T
 
-var g : { <S>() : S[]; };
+declare var g : { <S>() : S[]; };
 >g : <S>() => S[]
 
 f = g;

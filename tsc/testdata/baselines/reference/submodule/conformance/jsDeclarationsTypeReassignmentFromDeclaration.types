@@ -15,7 +15,7 @@ export = items;
 /** @type {typeof import("/some-mod")} */
 const items = [];
 >items : Item[]
->[] : undefined[]
+>[] : never[]
 
 module.exports = items;
 >module.exports = items : Item[]

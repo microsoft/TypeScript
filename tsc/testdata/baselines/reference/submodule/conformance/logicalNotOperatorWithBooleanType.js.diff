@@ -1,7 +1,7 @@
 --- old.logicalNotOperatorWithBooleanType.js
 +++ new.logicalNotOperatorWithBooleanType.js
-@@= skipped -44, +44 lines =@@
- var BOOLEAN;
+@@= skipped -43, +43 lines =@@
+ "use strict";
  function foo() { return true; }
  class A {
 +    a;

@@ -4,9 +4,9 @@
   * @param {number} [b]
   */
  export const foo = function (a, b) { }
-->foo : { (a: string): void; (a: number, b?: number): void; }
-->function (a, b) { } : { (a: string): void; (a: number, b?: number): void; }
-+>foo : (a: string | number, b?: number) => void
-+>function (a, b) { } : (a: string | number, b?: number) => void
+->foo : { (a: string): void; (a: number, b?: number | undefined): void; }
+->function (a, b) { } : { (a: string): void; (a: number, b?: number | undefined): void; }
++>foo : (a: string | number, b?: number | undefined) => void
++>function (a, b) { } : (a: string | number, b?: number | undefined) => void
  >a : string | number
- >b : number
+ >b : number | undefined

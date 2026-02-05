@@ -1,8 +1,8 @@
 --- old.overloadOnGenericClassAndNonGenericClass.js
 +++ new.overloadOnGenericClassAndNonGenericClass.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [overloadOnGenericClassAndNonGenericClass.js]
+ "use strict";
  class A {
 +    a;
  }

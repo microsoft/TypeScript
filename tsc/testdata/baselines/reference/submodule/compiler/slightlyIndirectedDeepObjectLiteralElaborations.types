@@ -19,7 +19,7 @@ interface Foo {
 }
 
 let q: Foo["a"] | undefined;
->q : { b: { c: { d: string; }; }; }
+>q : { b: { c: { d: string; }; }; } | undefined
 
 const x: Foo = (void 0, {
 >x : Foo
@@ -32,7 +32,7 @@ const x: Foo = (void 0, {
     a: q = {
 >a : { b: { c: { d: number; }; }; }
 >q = {        b: ({            c: {                d: 42            }        })    } : { b: { c: { d: number; }; }; }
->q : { b: { c: { d: string; }; }; }
+>q : { b: { c: { d: string; }; }; } | undefined
 >{        b: ({            c: {                d: 42            }        })    } : { b: { c: { d: number; }; }; }
 
         b: ({

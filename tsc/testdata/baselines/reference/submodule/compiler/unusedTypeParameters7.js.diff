@@ -1,9 +1,10 @@
 --- old.unusedTypeParameters7.js
 +++ new.unusedTypeParameters7.js
-@@= skipped -7, +7 lines =@@
-
+@@= skipped -8, +8 lines =@@
  //// [a.js]
+ "use strict";
  class C {
 +    a;
  }
  //// [b.js]
+ "use strict";

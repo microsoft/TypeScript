@@ -19,7 +19,6 @@ function foo() {
 export const asdf = 123;
 
 //// [unusedLocalsAndObjectSpread2.js]
-"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -31,12 +30,10 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.asdf = void 0;
 const { children, // here!
 active: _a } = props, // here!
 rest = __rest(props, ["children", "active"]);
 function foo() {
     const { children, active: _a } = props, rest = __rest(props, ["children", "active"]);
 }
-exports.asdf = 123;
+export const asdf = 123;

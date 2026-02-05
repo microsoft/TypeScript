@@ -1,15 +1,17 @@
 //// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution9.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : typeof React
 
 interface OptionProp {
     x?: 2
->x : 2
+>x : 2 | undefined
 
     y?: boolean
->y : boolean
+>y : boolean | undefined
 }
 
 class Opt extends React.Component<OptionProp, {}> {

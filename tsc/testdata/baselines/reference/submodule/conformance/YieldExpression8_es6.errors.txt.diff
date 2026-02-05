@@ -1,0 +1,15 @@
+--- old.YieldExpression8_es6.errors.txt
++++ new.YieldExpression8_es6.errors.txt
+@@= skipped -0, +0 lines =@@
+-YieldExpression8_es6.ts(1,1): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+ YieldExpression8_es6.ts(1,1): error TS2304: Cannot find name 'yield'.
+
+
+-==== YieldExpression8_es6.ts (2 errors) ====
++==== YieldExpression8_es6.ts (1 errors) ====
+     yield(foo);
+-    ~~~~~
+-!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+     ~~~~~
+ !!! error TS2304: Cannot find name 'yield'.
+     function* foo() {

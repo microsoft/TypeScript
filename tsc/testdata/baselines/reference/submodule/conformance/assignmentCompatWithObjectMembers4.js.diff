@@ -1,6 +1,6 @@
 --- old.assignmentCompatWithObjectMembers4.js
 +++ new.assignmentCompatWithObjectMembers4.js
-@@= skipped -97, +97 lines =@@
+@@= skipped -98, +98 lines =@@
  var OnlyDerived;
  (function (OnlyDerived) {
      class Base {
@@ -18,9 +18,9 @@
      class T {
 +        foo;
      }
-     var s;
-     var t;
-@@= skipped -40, +45 lines =@@
+     var a2 = { foo: new Derived() };
+     var b2 = { foo: new Derived2() };
+@@= skipped -34, +39 lines =@@
  var WithBase;
  (function (WithBase) {
      class Base {
@@ -38,5 +38,5 @@
      class T {
 +        foo;
      }
-     var s;
-     var t;
+     var a2 = { foo: new Base() };
+     var b2 = { foo: new Derived2() };

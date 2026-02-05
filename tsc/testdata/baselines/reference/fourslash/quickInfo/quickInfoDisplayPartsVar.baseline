@@ -25,7 +25,7 @@
 // | 
 // | ----------------------------------------------------------------------
 // }
-// module m {
+// namespace m {
 //     var c = 10;
 //         ^
 // | ----------------------------------------------------------------------
@@ -197,7 +197,7 @@
   },
   {
     "marker": {
-      "Position": 65,
+      "Position": 68,
       "LSPosition": {
         "line": 5,
         "character": 8
@@ -224,7 +224,7 @@
   },
   {
     "marker": {
-      "Position": 88,
+      "Position": 91,
       "LSPosition": {
         "line": 6,
         "character": 15
@@ -251,7 +251,7 @@
   },
   {
     "marker": {
-      "Position": 102,
+      "Position": 105,
       "LSPosition": {
         "line": 8,
         "character": 4
@@ -278,7 +278,7 @@
   },
   {
     "marker": {
-      "Position": 123,
+      "Position": 126,
       "LSPosition": {
         "line": 9,
         "character": 4
@@ -305,7 +305,7 @@
   },
   {
     "marker": {
-      "Position": 127,
+      "Position": 130,
       "LSPosition": {
         "line": 9,
         "character": 8
@@ -332,7 +332,7 @@
   },
   {
     "marker": {
-      "Position": 130,
+      "Position": 133,
       "LSPosition": {
         "line": 10,
         "character": 0
@@ -359,7 +359,7 @@
   },
   {
     "marker": {
-      "Position": 139,
+      "Position": 142,
       "LSPosition": {
         "line": 11,
         "character": 4
@@ -386,7 +386,7 @@
   },
   {
     "marker": {
-      "Position": 193,
+      "Position": 196,
       "LSPosition": {
         "line": 12,
         "character": 4
@@ -413,7 +413,7 @@
   },
   {
     "marker": {
-      "Position": 197,
+      "Position": 200,
       "LSPosition": {
         "line": 12,
         "character": 8
@@ -440,7 +440,7 @@
   },
   {
     "marker": {
-      "Position": 200,
+      "Position": 203,
       "LSPosition": {
         "line": 13,
         "character": 0
@@ -467,7 +467,7 @@
   },
   {
     "marker": {
-      "Position": 207,
+      "Position": 210,
       "LSPosition": {
         "line": 14,
         "character": 0

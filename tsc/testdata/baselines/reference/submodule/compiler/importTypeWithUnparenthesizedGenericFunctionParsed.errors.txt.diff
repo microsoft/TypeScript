@@ -1,0 +1,12 @@
+--- old.importTypeWithUnparenthesizedGenericFunctionParsed.errors.txt
++++ new.importTypeWithUnparenthesizedGenericFunctionParsed.errors.txt
+@@= skipped -0, +0 lines =@@
+-importTypeWithUnparenthesizedGenericFunctionParsed.ts(1,36): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++importTypeWithUnparenthesizedGenericFunctionParsed.ts(1,36): error TS2307: Cannot find module 'module' or its corresponding type declarations.
+
+
+ ==== importTypeWithUnparenthesizedGenericFunctionParsed.ts (1 errors) ====
+     export declare const fail1: import("module").Modifier<<T>(x: T) => T>; // shouldn't be a parse error
+                                        ~~~~~~~~
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2307: Cannot find module 'module' or its corresponding type declarations.

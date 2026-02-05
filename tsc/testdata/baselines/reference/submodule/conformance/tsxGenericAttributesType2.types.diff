@@ -1,0 +1,17 @@
+--- old.tsxGenericAttributesType2.types
++++ new.tsxGenericAttributesType2.types
+@@= skipped -14, +14 lines =@@
+ >React : any
+
+     return (props) => <Component {...props} y={"blah"} ></Component>
+->(props) => <Component {...props} y={"blah"} ></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
+->props : T & { children?: React.ReactNode; }
++>(props) => <Component {...props} y={"blah"} ></Component> : (props: T & { children?: React.ReactNode | undefined; }) => JSX.Element
++>props : T & { children?: React.ReactNode | undefined; }
+ ><Component {...props} y={"blah"} ></Component> : JSX.Element
+ >Component : React.StatelessComponent<T>
+->props : T & { children?: React.ReactNode; }
++>props : T & { children?: React.ReactNode | undefined; }
+ >y : string
+ >"blah" : "blah"
+ >Component : React.StatelessComponent<T>

@@ -1,6 +1,20 @@
 --- old.thisPropertyAssignmentCircular.types
 +++ new.thisPropertyAssignmentCircular.types
-@@= skipped -38, +38 lines =@@
+@@= skipped -20, +20 lines =@@
+ >this : this
+ >foo : string
+ >this.foo.slice() : string
+->this.foo.slice : (start?: number, end?: number) => string
++>this.foo.slice : (start?: number | undefined, end?: number | undefined) => string
+ >this.foo : string
+ >this : this
+ >foo : string
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+     }
+     m() {
+ >m : () => void
+@@= skipped -18, +18 lines =@@
 
  /** @class */
  function C() {

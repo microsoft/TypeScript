@@ -1,0 +1,10 @@
+--- old.deleteOperatorWithAnyOtherType(alwaysstrict=true).js
++++ new.deleteOperatorWithAnyOtherType(alwaysstrict=true).js
+@@= skipped -72, +72 lines =@@
+     return a;
+ }
+ class A {
++    a;
+     static foo() {
+         var a;
+         return a;

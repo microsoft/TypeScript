@@ -43,6 +43,7 @@ class C8 extends C7 implements i2{
 
 
 //// [interfaceImplementation8.js]
+"use strict";
 class C1 {
     name;
 }

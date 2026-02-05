@@ -1,8 +1,8 @@
 --- old.unusedPrivateVariableInClass5.js
 +++ new.unusedPrivateVariableInClass5.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [unusedPrivateVariableInClass5.js]
+ "use strict";
  class greeter {
 +    x;
 +    y;

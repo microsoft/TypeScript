@@ -12,6 +12,7 @@ function map<U>() {
 
 
 //// [genericArray0.js]
+"use strict";
 var x;
 var y = x;
 function map() {

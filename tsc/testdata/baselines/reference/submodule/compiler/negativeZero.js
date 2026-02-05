@@ -5,4 +5,5 @@ var x = -0
 
 
 //// [negativeZero.js]
+"use strict";
 var x = -0;

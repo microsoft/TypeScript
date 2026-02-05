@@ -11,10 +11,9 @@ class Model<D> {
 
 
 //// [mappedTypePartialNonHomomorphicBaseConstraint.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 class Model {
     getErrors() {
         return { base: ["some base error"] };
     }
 }
+export {};

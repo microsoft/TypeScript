@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-accessors-nonStatic(target=es2015).js
 +++ new.esDecorators-classDeclaration-accessors-nonStatic(target=es2015).js
-@@= skipped -16, +16 lines =@@
-
+@@= skipped -17, +17 lines =@@
  //// [esDecorators-classDeclaration-accessors-nonStatic.js]
+ "use strict";
  const method3 = "method3";
 -let C = (() => {
 -    var _a;

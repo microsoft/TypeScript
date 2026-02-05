@@ -5,10 +5,10 @@ declare namespace JSX {
     interface Element { }
     interface IntrinsicElements {
         div: {
->div : { text?: string; }
+>div : { text?: string | undefined; }
 
             text?: string;
->text : string
+>text : string | undefined
         }
     }
 }

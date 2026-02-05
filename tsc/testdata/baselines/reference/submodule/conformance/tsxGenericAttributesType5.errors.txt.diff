@@ -1,0 +1,11 @@
+--- old.tsxGenericAttributesType5.errors.txt
++++ new.tsxGenericAttributesType5.errors.txt
+@@= skipped -19, +19 lines =@@
+ !!! error TS2416: Property 'props' in type 'B<U>' is not assignable to the same property in base type 'Component<U, {}>'.
+ !!! error TS2416:   Type 'U' is not assignable to type 'U & { children?: ReactNode | undefined; }'.
+ !!! error TS2416:     Type 'U' is not assignable to type '{ children?: ReactNode | undefined; }'.
+-!!! related TS2208 file.tsx:10:9: This type parameter might need an `extends { children?: React.ReactNode; }` constraint.
++!!! related TS2208 file.tsx:10:9: This type parameter might need an `extends { children?: ReactNode | undefined; }` constraint.
+         ~~~~~
+ !!! error TS2564: Property 'props' has no initializer and is not definitely assigned in the constructor.
+         render() {

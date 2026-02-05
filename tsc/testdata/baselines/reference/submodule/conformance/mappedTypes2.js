@@ -96,6 +96,7 @@ function f6(shape: DeepReadonly<Shape>) {
 }
 
 //// [mappedTypes2.js]
+"use strict";
 function verifyLibTypes() {
     var x1;
     var x1;

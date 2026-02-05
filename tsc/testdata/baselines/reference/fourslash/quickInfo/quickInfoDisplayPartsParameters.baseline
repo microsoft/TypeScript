@@ -5,7 +5,7 @@
 //          ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | function foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
+// | function foo(param: string, optionalParam?: string | undefined, paramWithInitializer?: string, ...restParam: string[]): void
 // | ```
 // | 
 // | 
@@ -21,7 +21,7 @@
 //                             ^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (parameter) optionalParam: string
+// | (parameter) optionalParam: string | undefined
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -51,7 +51,7 @@
 //     ^^^^^^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (parameter) optionalParam: string
+// | (parameter) optionalParam: string | undefined
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -86,7 +86,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n\n\n*@return* — *crunch* "
+        "value": "```tsx\nfunction foo(param: string, optionalParam?: string | undefined, paramWithInitializer?: string, ...restParam: string[]): void\n```\n\n\n*@return* — *crunch* "
       },
       "range": {
         "start": {
@@ -140,7 +140,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) optionalParam: string\n```\n"
+        "value": "```tsx\n(parameter) optionalParam: string | undefined\n```\n"
       },
       "range": {
         "start": {
@@ -248,7 +248,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) optionalParam: string\n```\n"
+        "value": "```tsx\n(parameter) optionalParam: string | undefined\n```\n"
       },
       "range": {
         "start": {

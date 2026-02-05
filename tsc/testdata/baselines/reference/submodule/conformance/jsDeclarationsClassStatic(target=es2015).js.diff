@@ -1,0 +1,40 @@
+--- old.jsDeclarationsClassStatic(target=es2015).js
++++ new.jsDeclarationsClassStatic(target=es2015).js
+@@= skipped -48, +48 lines =@@
+
+
+ //// [source.d.ts]
+-export = Handler;
+-declare class Handler {
+-    static get OPTIONS(): number;
+-    process(): void;
+-}
+ declare namespace Handler {
+-    export { statische, Strings, HandlerOptions };
+-}
+-declare function statische(): void;
+-declare namespace Strings {
+-    let a: string;
+-    let b: string;
+-}
+-type HandlerOptions = {
+-    /**
+-     * Should be able to export a type alias at the same time.
+-     */
+-    name: string;
+-};
++    var statische: () => void;
++}
++export = Handler;
++export declare var Strings: {
++    a: string;
++    b: string;
++};
++export type HandlerOptions = {
++    name: String;
++};
++/**
++ * @typedef {Object} HandlerOptions
++ * @property {String} name
++ * Should be able to export a type alias at the same time.
++ */

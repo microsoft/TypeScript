@@ -5,12 +5,13 @@ classAbstractInstantiations2.ts(17,5): error TS2511: Cannot create an instance o
 classAbstractInstantiations2.ts(21,1): error TS2511: Cannot create an instance of an abstract class.
 classAbstractInstantiations2.ts(23,15): error TS2449: Class 'C' used before its declaration.
 classAbstractInstantiations2.ts(26,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member bar from class 'B'.
+classAbstractInstantiations2.ts(42,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 classAbstractInstantiations2.ts(46,5): error TS2391: Function implementation is missing or not immediately following the declaration.
 classAbstractInstantiations2.ts(46,5): error TS2512: Overload signatures must all be abstract or non-abstract.
 classAbstractInstantiations2.ts(50,5): error TS1244: Abstract methods can only appear within an abstract class.
 
 
-==== classAbstractInstantiations2.ts (9 errors) ====
+==== classAbstractInstantiations2.ts (10 errors) ====
     class A {
         // ...
     }
@@ -67,6 +68,8 @@ classAbstractInstantiations2.ts(50,5): error TS1244: Abstract methods can only a
         abstract qux(x : number) : string;
         abstract qux() : number;
         y : number;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
         abstract quz(x : number, y : string) : boolean; // error -- declarations must be adjacent
     
         abstract nom(): boolean;

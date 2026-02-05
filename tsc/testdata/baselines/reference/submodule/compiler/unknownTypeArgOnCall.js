@@ -11,6 +11,7 @@ var r = f.clone<Uhhhh>()
 
 
 //// [unknownTypeArgOnCall.js]
+"use strict";
 class Foo {
     clone() {
         return null;

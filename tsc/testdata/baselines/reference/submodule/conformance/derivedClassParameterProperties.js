@@ -97,6 +97,7 @@ class Derived10<T> extends Base2<T> {
 }
 
 //// [derivedClassParameterProperties.js]
+"use strict";
 // ordering of super calls in derived constructors matters depending on other class contents
 class Base {
     x;

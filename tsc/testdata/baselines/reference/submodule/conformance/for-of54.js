@@ -6,6 +6,7 @@ for (let v of []) {
 }
 
 //// [for-of54.js]
+"use strict";
 for (let v of []) {
     var v = 0;
 }

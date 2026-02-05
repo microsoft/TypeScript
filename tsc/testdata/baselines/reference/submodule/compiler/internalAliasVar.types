@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasVar.ts] ////
 
 === internalAliasVar.ts ===
-module a {
+namespace a {
 >a : typeof a
 
     export var x = 10;
@@ -9,7 +9,7 @@ module a {
 >10 : 10
 }
 
-module c {
+namespace c {
 >c : typeof c
 
     import b = a.x;

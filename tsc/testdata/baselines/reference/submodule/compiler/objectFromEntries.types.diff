@@ -5,7 +5,7 @@
  >fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
  >new URLSearchParams() : URLSearchParams
 ->URLSearchParams : { new (init?: string[][] | Record<string, string> | string | URLSearchParams): URLSearchParams; prototype: URLSearchParams; }
-+>URLSearchParams : { new (init?: string | string[][] | Record<string, string> | URLSearchParams): URLSearchParams; prototype: URLSearchParams; }
++>URLSearchParams : { new (init?: string | string[][] | Record<string, string> | URLSearchParams | undefined): URLSearchParams; prototype: URLSearchParams; }
 
  const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));
  >o3 : { [k: string]: string; }
@@ -14,10 +14,10 @@
  >frozenArray : readonly (string | number)[][]
  >Object.freeze([['a', 1], ['b', 2], ['c', 3]]) : readonly (string | number)[][]
 ->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
-+>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
++>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
  >Object : ObjectConstructor
 ->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
-+>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
++>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
  >[['a', 1], ['b', 2], ['c', 3]] : (string | number)[][]
  >['a', 1] : (string | number)[]
  >'a' : "a"
@@ -26,10 +26,10 @@
  >frozenArray2 : readonly [string, number][]
  >Object.freeze([['a', 1], ['b', 2], ['c', 3]]) : readonly [string, number][]
 ->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
-+>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
++>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
  >Object : ObjectConstructor
 ->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
-+>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
++>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
  >[['a', 1], ['b', 2], ['c', 3]] : [string, number][]
  >['a', 1] : [string, number]
  >'a' : "a"

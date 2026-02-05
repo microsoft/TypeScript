@@ -32,6 +32,7 @@ interface Stuff {
   }
 
 //// [errorOnUnionVsObjectShouldDeeplyDisambiguate.js]
+"use strict";
 function foo() {
     return {
         a() { return [123]; },

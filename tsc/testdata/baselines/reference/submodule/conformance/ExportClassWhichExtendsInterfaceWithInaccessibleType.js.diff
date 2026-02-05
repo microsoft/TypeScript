@@ -1,6 +1,6 @@
 --- old.ExportClassWhichExtendsInterfaceWithInaccessibleType.js
 +++ new.ExportClassWhichExtendsInterfaceWithInaccessibleType.js
-@@= skipped -24, +24 lines =@@
+@@= skipped -25, +25 lines =@@
  var A;
  (function (A) {
      class Point2d {

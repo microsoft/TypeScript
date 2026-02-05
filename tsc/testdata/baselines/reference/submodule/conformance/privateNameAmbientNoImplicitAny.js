@@ -9,6 +9,7 @@ class B {
 }
 
 //// [privateNameAmbientNoImplicitAny.js]
+"use strict";
 class B {
     #prop;
 }

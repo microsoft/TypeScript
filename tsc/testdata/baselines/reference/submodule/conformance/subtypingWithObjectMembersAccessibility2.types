@@ -18,7 +18,7 @@ class Derived extends Base {
 >bar : string
 }
 
-module ExplicitPublic {
+namespace ExplicitPublic {
 >ExplicitPublic : typeof ExplicitPublic
 
     class A {
@@ -67,7 +67,7 @@ module ExplicitPublic {
     }
 }
 
-module ImplicitPublic {
+namespace ImplicitPublic {
 >ImplicitPublic : typeof ImplicitPublic
 
     class A {

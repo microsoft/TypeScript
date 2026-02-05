@@ -48,7 +48,7 @@ this **= value;
 >value : any
 
 // identifiers: module, class, enum, function
-module M { export var a; }
+namespace M { export var a; }
 >M : typeof M
 >a : any
 

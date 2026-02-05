@@ -1,8 +1,8 @@
 --- old.constructorInvocationWithTooFewTypeArgs.js
 +++ new.constructorInvocationWithTooFewTypeArgs.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [constructorInvocationWithTooFewTypeArgs.js]
+ "use strict";
  class D {
 +    x;
 +    y;

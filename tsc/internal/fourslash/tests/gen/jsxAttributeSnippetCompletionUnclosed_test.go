@@ -14,7 +14,8 @@ func TestJsxAttributeSnippetCompletionUnclosed(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `//@Filename: file.tsx
+	const content = `// @strict: false
+//@Filename: file.tsx
 interface NestedInterface {
     Foo: NestedInterface;
     (props: {className?: string}): any;

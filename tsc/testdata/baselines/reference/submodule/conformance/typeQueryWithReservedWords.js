@@ -18,6 +18,7 @@ interface IScope {
 
 
 //// [typeQueryWithReservedWords.js]
+"use strict";
 class Controller {
     create() {
     }

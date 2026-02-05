@@ -7,7 +7,7 @@ class C {
     static foo() { }
 }
 enum E { a, b, c }
-module M { export var a }
+namespace M { export var a }
 
 var a: any;
 var b: boolean;
@@ -42,6 +42,7 @@ var r19 = a + { a: '' };
 var r20 = a + ((a: string) => { return a });
 
 //// [additionOperatorWithAnyAndEveryType.js]
+"use strict";
 function foo() { }
 class C {
     a;

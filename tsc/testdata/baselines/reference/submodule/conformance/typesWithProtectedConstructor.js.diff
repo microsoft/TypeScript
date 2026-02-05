@@ -1,6 +1,6 @@
 --- old.typesWithProtectedConstructor.js
 +++ new.typesWithProtectedConstructor.js
-@@= skipped -32, +32 lines =@@
+@@= skipped -33, +33 lines =@@
  declare class C {
      protected constructor();
  }

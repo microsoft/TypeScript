@@ -4,5 +4,5 @@
 yield * [];
 >yield * [] : number
 >yield : any
->[] : undefined[]
+>[] : never[]
 

@@ -1,6 +1,6 @@
 --- old.typeGuardsOnClassProperty.js
 +++ new.typeGuardsOnClassProperty.js
-@@= skipped -35, +35 lines =@@
+@@= skipped -36, +36 lines =@@
  // Note that the class's property must be copied to a local variable for
  // the type guard to have an effect
  class D {

@@ -1,6 +1,6 @@
 --- old.enumConstantMemberWithTemplateLiterals.js
 +++ new.enumConstantMemberWithTemplateLiterals.js
-@@= skipped -74, +74 lines =@@
+@@= skipped -75, +75 lines =@@
      T5["b"] = "12";
      T5["c"] = "123";
      T5[T5["d"] = 1] = "d";

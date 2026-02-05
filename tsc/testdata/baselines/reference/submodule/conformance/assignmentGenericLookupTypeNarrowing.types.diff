@@ -5,16 +5,16 @@
 
  declare function foo<T>(x: T): null | T;
 ->foo : <T>(x: T) => null | T
-+>foo : <T>(x: T) => T
++>foo : <T>(x: T) => T | null
  >x : T
 
  function bar<K extends "foo">(key: K) {
 @@= skipped -10, +10 lines =@@
    const element = foo(mappedObject[key]);
- >element : { foo: { x: string; }; }[K]
- >foo(mappedObject[key]) : { foo: { x: string; }; }[K]
+ >element : { foo: { x: string; } | null; }[K] | null
+ >foo(mappedObject[key]) : { foo: { x: string; } | null; }[K] | null
 ->foo : <T>(x: T) => null | T
-+>foo : <T>(x: T) => T
- >mappedObject[key] : { foo: { x: string; }; }[K]
- >mappedObject : { foo: { x: string; }; }
++>foo : <T>(x: T) => T | null
+ >mappedObject[key] : { foo: { x: string; } | null; }[K]
+ >mappedObject : { foo: { x: string; } | null; }
  >key : K

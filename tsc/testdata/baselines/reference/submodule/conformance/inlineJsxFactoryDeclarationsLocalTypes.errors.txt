@@ -1,6 +1,8 @@
 component.tsx(4,136): error TS2609: JSX spread child must be an array type.
 component.tsx(4,140): error TS2532: Object is possibly 'undefined'.
+component.tsx(12,13): error TS2609: JSX spread child must be an array type.
 index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
+index.tsx(13,82): error TS2609: JSX spread child must be an array type.
 index.tsx(21,22): error TS2786: 'MySFC' cannot be used as a JSX component.
   Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
 index.tsx(21,40): error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
@@ -53,7 +55,7 @@ index.tsx(24,48): error TS2741: Property '__domBrand' is missing in type 'import
         }
     }
     export function predom(): predom.JSX.Element;
-==== component.tsx (2 errors) ====
+==== component.tsx (3 errors) ====
     /** @jsx predom */
     import { predom } from "./renderer2"
     
@@ -70,6 +72,8 @@ index.tsx(24,48): error TS2741: Property '__domBrand' is missing in type 'import
             return <p>
                 {this.props.x} + {this.props.y} = {this.props.x + this.props.y}
                 {...this.props.children}
+                ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2609: JSX spread child must be an array type.
             </p>;
         }
     }
@@ -77,7 +81,7 @@ index.tsx(24,48): error TS2741: Property '__domBrand' is missing in type 'import
     
     export default <h></h>
     
-==== index.tsx (8 errors) ====
+==== index.tsx (9 errors) ====
     /** @jsx dom */
     import { dom } from "./renderer"
     import prerendered, {MySFC, MyClass, tree} from "./component";
@@ -94,6 +98,8 @@ index.tsx(24,48): error TS2741: Property '__domBrand' is missing in type 'import
         constructor(public props: {x: number, y: number, children?: dom.JSX.Element[]}) {}
         render() {
             return <p>{this.props.x} + {this.props.y} = {this.props.x + this.props.y}{...this.props.children}</p>;
+                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2609: JSX spread child must be an array type.
         }
     }
     

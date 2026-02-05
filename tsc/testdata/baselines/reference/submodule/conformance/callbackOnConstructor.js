@@ -17,10 +17,7 @@ var ooscope2 = s => s.length > 0
 
 
 //// [callbackOnConstructor.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Preferences = void 0;
-class Preferences {
+export class Preferences {
     assignability = "no";
     /**
      * @callback ValueGetter_2
@@ -29,7 +26,6 @@ class Preferences {
      */
     constructor() { }
 }
-exports.Preferences = Preferences;
 /** @type {ValueGetter_2} */
 var ooscope2 = s => s.length > 0;
 

@@ -1,0 +1,87 @@
+--- old.assignmentCompatWithCallSignaturesWithRestParameters.errors.txt
++++ new.assignmentCompatWithCallSignaturesWithRestParameters.errors.txt
+@@= skipped -0, +0 lines =@@
+ assignmentCompatWithCallSignaturesWithRestParameters.ts(13,5): error TS2322: Type '(...args: string[]) => number' is not assignable to type '(...args: number[]) => number'.
+   Types of parameters 'args' and 'args' are incompatible.
+     Type 'number' is not assignable to type 'string'.
+-assignmentCompatWithCallSignaturesWithRestParameters.ts(17,5): error TS2322: Type '(x?: string) => number' is not assignable to type '(...args: number[]) => number'.
++assignmentCompatWithCallSignaturesWithRestParameters.ts(17,5): error TS2322: Type '(x?: string | undefined) => number' is not assignable to type '(...args: number[]) => number'.
+   Types of parameters 'x' and 'args' are incompatible.
+     Type 'number' is not assignable to type 'string'.
+ assignmentCompatWithCallSignaturesWithRestParameters.ts(26,5): error TS2322: Type '(x: number, ...args: string[]) => number' is not assignable to type '(x: number, ...z: number[]) => number'.
+@@= skipped -10, +10 lines =@@
+   Types of parameters 'y' and 'y' are incompatible.
+     Type 'string | undefined' is not assignable to type 'string'.
+       Type 'undefined' is not assignable to type 'string'.
+-assignmentCompatWithCallSignaturesWithRestParameters.ts(35,5): error TS2322: Type '(x: number, y?: number, z?: number) => number' is not assignable to type '(x: number, y?: string | undefined, ...z: number[]) => number'.
++assignmentCompatWithCallSignaturesWithRestParameters.ts(35,5): error TS2322: Type '(x: number, y?: number | undefined, z?: number | undefined) => number' is not assignable to type '(x: number, y?: string | undefined, ...z: number[]) => number'.
+   Types of parameters 'y' and 'y' are incompatible.
+     Type 'string | undefined' is not assignable to type 'number | undefined'.
+       Type 'string' is not assignable to type 'number'.
+@@= skipped -8, +8 lines =@@
+   Types of parameters 'z' and 'y' are incompatible.
+     Type 'string | undefined' is not assignable to type 'number'.
+       Type 'undefined' is not assignable to type 'number'.
+-assignmentCompatWithCallSignaturesWithRestParameters.ts(37,5): error TS2322: Type '(x: string, y?: string, z?: string) => number' is not assignable to type '(x: number, y?: string | undefined, ...z: number[]) => number'.
++assignmentCompatWithCallSignaturesWithRestParameters.ts(37,5): error TS2322: Type '(x: string, y?: string | undefined, z?: string | undefined) => number' is not assignable to type '(x: number, y?: string | undefined, ...z: number[]) => number'.
+   Types of parameters 'x' and 'x' are incompatible.
+     Type 'number' is not assignable to type 'string'.
+-assignmentCompatWithCallSignaturesWithRestParameters.ts(41,5): error TS2322: Type '(x?: number, y?: number) => number' is not assignable to type '(x?: number | undefined, y?: string | undefined, ...z: number[]) => number'.
++assignmentCompatWithCallSignaturesWithRestParameters.ts(41,5): error TS2322: Type '(x?: number | undefined, y?: number | undefined) => number' is not assignable to type '(x?: number | undefined, y?: string | undefined, ...z: number[]) => number'.
+   Types of parameters 'y' and 'y' are incompatible.
+     Type 'string | undefined' is not assignable to type 'number | undefined'.
+       Type 'string' is not assignable to type 'number'.
+@@= skipped -11, +11 lines =@@
+   Types of parameters 'x' and 'x' are incompatible.
+     Type 'number | undefined' is not assignable to type 'number'.
+       Type 'undefined' is not assignable to type 'number'.
+-assignmentCompatWithCallSignaturesWithRestParameters.ts(43,5): error TS2322: Type '(x: number, y?: number) => number' is not assignable to type '(x?: number | undefined, y?: string | undefined, ...z: number[]) => number'.
++assignmentCompatWithCallSignaturesWithRestParameters.ts(43,5): error TS2322: Type '(x: number, y?: number | undefined) => number' is not assignable to type '(x?: number | undefined, y?: string | undefined, ...z: number[]) => number'.
+   Types of parameters 'x' and 'x' are incompatible.
+     Type 'number | undefined' is not assignable to type 'number'.
+       Type 'undefined' is not assignable to type 'number'.
+@@= skipped -33, +33 lines =@@
+         a = (x: number) => 1; // ok, rest param corresponds to infinite number of params
+         a = (x?: string) => 1; // error, incompatible type
+         ~
+-!!! error TS2322: Type '(x?: string) => number' is not assignable to type '(...args: number[]) => number'.
++!!! error TS2322: Type '(x?: string | undefined) => number' is not assignable to type '(...args: number[]) => number'.
+ !!! error TS2322:   Types of parameters 'x' and 'args' are incompatible.
+ !!! error TS2322:     Type 'number' is not assignable to type 'string'.
+     
+@@= skipped -31, +31 lines =@@
+ !!! error TS2322:       Type 'undefined' is not assignable to type 'string'.
+         a3 = (x: number, y?: number, z?: number) => 1;  // error
+         ~~
+-!!! error TS2322: Type '(x: number, y?: number, z?: number) => number' is not assignable to type '(x: number, y?: string | undefined, ...z: number[]) => number'.
++!!! error TS2322: Type '(x: number, y?: number | undefined, z?: number | undefined) => number' is not assignable to type '(x: number, y?: string | undefined, ...z: number[]) => number'.
+ !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
+ !!! error TS2322:     Type 'string | undefined' is not assignable to type 'number | undefined'.
+ !!! error TS2322:       Type 'string' is not assignable to type 'number'.
+@@= skipped -12, +12 lines =@@
+ !!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
+         a3 = (x: string, y?: string, z?: string) => 1;  // error
+         ~~
+-!!! error TS2322: Type '(x: string, y?: string, z?: string) => number' is not assignable to type '(x: number, y?: string | undefined, ...z: number[]) => number'.
++!!! error TS2322: Type '(x: string, y?: string | undefined, z?: string | undefined) => number' is not assignable to type '(x: number, y?: string | undefined, ...z: number[]) => number'.
+ !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+ !!! error TS2322:     Type 'number' is not assignable to type 'string'.
+     
+@@= skipped -8, +8 lines =@@
+         a4 = () => 1; // ok, fewer required params
+         a4 = (x?: number, y?: number) => 1; // error, type mismatch
+         ~~
+-!!! error TS2322: Type '(x?: number, y?: number) => number' is not assignable to type '(x?: number | undefined, y?: string | undefined, ...z: number[]) => number'.
++!!! error TS2322: Type '(x?: number | undefined, y?: number | undefined) => number' is not assignable to type '(x?: number | undefined, y?: string | undefined, ...z: number[]) => number'.
+ !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
+ !!! error TS2322:     Type 'string | undefined' is not assignable to type 'number | undefined'.
+ !!! error TS2322:       Type 'string' is not assignable to type 'number'.
+@@= skipped -12, +12 lines =@@
+ !!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
+         a4 = (x: number, y?: number) => 1;  // error, second param has type mismatch
+         ~~
+-!!! error TS2322: Type '(x: number, y?: number) => number' is not assignable to type '(x?: number | undefined, y?: string | undefined, ...z: number[]) => number'.
++!!! error TS2322: Type '(x: number, y?: number | undefined) => number' is not assignable to type '(x?: number | undefined, y?: string | undefined, ...z: number[]) => number'.
+ !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+ !!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+ !!! error TS2322:       Type 'undefined' is not assignable to type 'number'.

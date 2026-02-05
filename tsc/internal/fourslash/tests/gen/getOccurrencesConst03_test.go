@@ -12,7 +12,7 @@ func TestGetOccurrencesConst03(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module m {
+	const content = `namespace m {
     export /*1*/const x;
     export [|const|] enum E {
     }

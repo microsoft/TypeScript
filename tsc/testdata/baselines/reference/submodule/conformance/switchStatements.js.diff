@@ -1,6 +1,6 @@
 --- old.switchStatements.js
 +++ new.switchStatements.js
-@@= skipped -87, +87 lines =@@
+@@= skipped -88, +88 lines =@@
  }
  // basic assignable check, rest covered in tests for 'assignment compatibility'
  class C {

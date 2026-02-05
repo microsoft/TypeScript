@@ -7,3 +7,4 @@ declare class C {
 
 
 //// [circularGetAccessor.js]
+"use strict";

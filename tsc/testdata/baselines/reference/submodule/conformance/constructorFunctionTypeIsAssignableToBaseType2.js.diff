@@ -1,7 +1,7 @@
 --- old.constructorFunctionTypeIsAssignableToBaseType2.js
 +++ new.constructorFunctionTypeIsAssignableToBaseType2.js
-@@= skipped -36, +36 lines =@@
- //// [constructorFunctionTypeIsAssignableToBaseType2.js]
+@@= skipped -37, +37 lines =@@
+ "use strict";
  // the constructor function itself does not need to be a subtype of the base type constructor function
  class Base {
 +    static foo;

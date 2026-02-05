@@ -1,8 +1,8 @@
 --- old.quotedPropertyName1.js
 +++ new.quotedPropertyName1.js
-@@= skipped -6, +6 lines =@@
-
+@@= skipped -7, +7 lines =@@
  //// [quotedPropertyName1.js]
+ "use strict";
  class Test1 {
 -    constructor() {
 -        this["prop1"] = 0;

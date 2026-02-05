@@ -11,6 +11,7 @@ while (true) {
 }
 
 //// [breakTarget5.js]
+"use strict";
 target: while (true) {
     function f() {
         while (true) {

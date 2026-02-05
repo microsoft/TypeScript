@@ -1,0 +1,29 @@
+--- old.es5-asyncFunctionElementAccess(target=es2015).js
++++ new.es5-asyncFunctionElementAccess(target=es2015).js
+@@= skipped -17, +17 lines =@@
+
+ //// [es5-asyncFunctionElementAccess.js]
+ "use strict";
+-function elementAccess0() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        z = yield x[y];
+-    });
+-}
+-function elementAccess1() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        z = (yield x)[y];
+-    });
+-}
+-function elementAccess2() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        z = x[yield y];
+-    });
++async function elementAccess0() {
++    z = await x[y];
++}
++async function elementAccess1() {
++    z = (await x)[y];
++}
++async function elementAccess2() {
++    z = x[await y];
+ }

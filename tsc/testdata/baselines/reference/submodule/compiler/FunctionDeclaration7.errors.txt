@@ -1,9 +1,12 @@
 FunctionDeclaration7.ts(2,13): error TS2391: Function implementation is missing or not immediately following the declaration.
+FunctionDeclaration7.ts(2,13): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
 
 
-==== FunctionDeclaration7.ts (1 errors) ====
-    module M {
+==== FunctionDeclaration7.ts (2 errors) ====
+    namespace M {
        function foo();
                 ~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
+                ~~~
+!!! error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
     }

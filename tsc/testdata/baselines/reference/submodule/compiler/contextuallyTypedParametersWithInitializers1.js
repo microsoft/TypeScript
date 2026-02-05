@@ -87,9 +87,6 @@ const fz2: Function = (debug = true) => false;
 
 
 //// [contextuallyTypedParametersWithInitializers1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.executeSomething = executeSomething;
 const f10 = function ({ foo = 42 }) { return foo; };
 const f11 = id1(function ({ foo = 42 }) { return foo; });
 const f12 = id2(function ({ foo = 42 }) { return foo; });
@@ -131,7 +128,7 @@ const memoizedAdd = memoize(add);
 const add2 = (x, y = 0) => x + y;
 const memoizedAdd2 = memoize(add2);
 const memoizedAdd3 = memoize((x, y = 0) => x + y);
-function executeSomething() {
+export function executeSomething() {
     return execute((root, debug = true) => {
         if (debug) {
             root.innerHTML = '';

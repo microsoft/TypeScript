@@ -13,7 +13,7 @@ recursiveFunctionTypes.ts(34,4): error TS2345: Argument of type 'string' is not 
 recursiveFunctionTypes.ts(42,8): error TS2554: Expected 0-1 arguments, but got 2.
 recursiveFunctionTypes.ts(43,4): error TS2769: No overload matches this call.
   The last overload gave the following error.
-    Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
+    Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7 | undefined): typeof f7; }'.
 
 
 ==== recursiveFunctionTypes.ts (13 errors) ====
@@ -90,6 +90,6 @@ recursiveFunctionTypes.ts(43,4): error TS2769: No overload matches this call.
        ~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
-!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
+!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7 | undefined): typeof f7; }'.
 !!! related TS2771 recursiveFunctionTypes.ts:40:18: The last overload is declared here.
     f7(); // ok

@@ -71,7 +71,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime classic */
 const React = __importStar(require("react"));
 const HelloWorld = () => React.createElement("h1", null, "Hello world");
@@ -84,7 +84,7 @@ exports.selfClosing = React.createElement("img", { src: "./image.png" });
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
 const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime automatic */
 const HelloWorld = () => jsx_dev_runtime_1.jsxDEV("h1", { children: "Hello world" });
 exports.HelloWorld = HelloWorld;
@@ -95,7 +95,7 @@ exports.selfClosing = jsx_dev_runtime_1.jsxDEV("img", { src: "./image.png" });
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
 const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime classic */
 /* @jsxRuntime automatic */
 const HelloWorld = () => jsx_dev_runtime_1.jsxDEV("h1", { children: "Hello world" });
@@ -139,7 +139,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime automatic */
 /* @jsxRuntime classic */
 const React = __importStar(require("react"));

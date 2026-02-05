@@ -5,7 +5,7 @@ const enum E {
     A
 }
 
-module E {
+namespace E {
     var x = 1;
 }
 
@@ -47,6 +47,7 @@ const enum NaNOrInfinity {
 }
 
 //// [constEnumErrors.js]
+"use strict";
 var E;
 (function (E) {
     var x = 1;

@@ -39,6 +39,7 @@ static set Bar(bar:string) {barback = bar;} // not ok
 
 
 //// [staticVisibility.js]
+"use strict";
 class C1 {
     p;
     static s;

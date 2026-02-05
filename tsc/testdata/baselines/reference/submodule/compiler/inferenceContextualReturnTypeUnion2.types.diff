@@ -1,0 +1,33 @@
+--- old.inferenceContextualReturnTypeUnion2.types
++++ new.inferenceContextualReturnTypeUnion2.types
+@@= skipped -34, +34 lines =@@
+ ) => Promise<T>;
+
+ declare function findByLabelText<T extends HTMLElement = HTMLElement>(
+->findByLabelText : <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => ReturnType<FindByText<T>>
++>findByLabelText : <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => Promise<T>
+
+   ...args: Parameters<FindByText<T>>
+ >args : [container: HTMLElement, text: string]
+@@= skipped -8, +8 lines =@@
+ ): ReturnType<FindByText<T>>;
+
+ const queries = {
+->queries : { findByLabelText: <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => ReturnType<FindByText<T>>; }
+->{  findByLabelText,} : { findByLabelText: <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => ReturnType<FindByText<T>>; }
++>queries : { findByLabelText: <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => Promise<T>; }
++>{  findByLabelText,} : { findByLabelText: <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => Promise<T>; }
+
+   findByLabelText,
+->findByLabelText : <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => ReturnType<FindByText<T>>
++>findByLabelText : <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => Promise<T>
+
+ };
+
+ type MapQueries<Q extends Queries = typeof queries> = {
+ >MapQueries : MapQueries<Q>
+->queries : { findByLabelText: <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => ReturnType<FindByText<T>>; }
++>queries : { findByLabelText: <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => Promise<T>; }
+
+   [P in keyof Q]: Q[P];
+ };

@@ -13,6 +13,7 @@ d2.foo();
 
 
 //// [optionalConstructorArgInSuper.js]
+"use strict";
 class Base {
     constructor(opt) { }
     foo(other) { }

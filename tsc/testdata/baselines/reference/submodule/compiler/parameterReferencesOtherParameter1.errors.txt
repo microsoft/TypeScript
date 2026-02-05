@@ -1,0 +1,15 @@
+parameterReferencesOtherParameter1.ts(2,12): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+
+
+==== parameterReferencesOtherParameter1.ts (1 errors) ====
+    class Model {
+        public name: string;
+               ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class UI {
+        constructor(model: Model, foo:string = model.name)
+        {
+        }
+    }

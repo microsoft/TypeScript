@@ -38,8 +38,8 @@ interface NotString {
 }
 
 var x = '';
-var a: String;
-var b: NotString;
+declare var a: String;
+declare var b: NotString;
 
 a = x;
 a = b;
@@ -53,9 +53,8 @@ x = b; // expected error
 
 
 //// [assignFromStringInterface2.js]
+"use strict";
 var x = '';
-var a;
-var b;
 a = x;
 a = b;
 b = a;

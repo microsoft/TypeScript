@@ -12,6 +12,7 @@ f({}, 10, 10);
 f `abcdef${ 1234 }${ 5678 }ghijkl`;
 
 //// [templateStringsArrayTypeRedefinedInES6Mode.js]
+"use strict";
 class TemplateStringsArray {
 }
 function f(x, y, z) {

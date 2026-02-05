@@ -34,6 +34,7 @@ class C2 {
 
 
 //// [privateClassPropertyAccessibleWithinClass.js]
+"use strict";
 // no errors
 class C {
     x;

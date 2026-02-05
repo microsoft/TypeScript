@@ -20,16 +20,13 @@ export const works2 = fn<MakeItWork>(x => x);
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.works2 = exports.works1 = exports.fail2 = exports.fail1 = void 0;
-const module_1 = require("module");
-exports.fail1 = (0, module_1.fn)((x) => x);
-exports.fail2 = (0, module_1.fn)(function (x) {
+import { fn } from "module";
+export const fail1 = fn((x) => x);
+export const fail2 = fn(function (x) {
     return x;
 });
-exports.works1 = (0, module_1.fn)((x) => x);
-exports.works2 = (0, module_1.fn)(x => x);
+export const works1 = fn((x) => x);
+export const works2 = fn(x => x);
 
 
 //// [index.d.ts]

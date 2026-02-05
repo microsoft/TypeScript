@@ -8,6 +8,7 @@ var c = new C(() => { return asdf; } ) // should error
 
 
 //// [arrowFunctionInConstructorArgument1.js]
+"use strict";
 class C {
     constructor(x) { }
 }

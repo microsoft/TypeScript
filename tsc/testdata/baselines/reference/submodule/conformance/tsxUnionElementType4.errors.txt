@@ -1,11 +1,11 @@
-file.tsx(32,17): error TS2322: Type 'true' is not assignable to type 'never'.
-file.tsx(33,21): error TS2322: Type '{ x: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
-  Property 'x' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
-file.tsx(34,22): error TS2322: Type '{ prop: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
-  Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
+file.tsx(34,17): error TS2322: Type 'boolean' is not assignable to type 'number'.
+file.tsx(36,22): error TS2322: Type '{ prop: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode | undefined; }'.
+  Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode | undefined; }'.
 
 
-==== file.tsx (3 errors) ====
+==== file.tsx (2 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react');
     
     class RC1 extends React.Component<{x : number}, {}> {
@@ -39,14 +39,11 @@ file.tsx(34,22): error TS2322: Type '{ prop: true; }' is not assignable to type 
     // Error
     let a = <RCComp x />;
                     ~
-!!! error TS2322: Type 'true' is not assignable to type 'never'.
-!!! related TS6500 file.tsx:3:36: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1 | RC2> & { x: number; } & { children?: ReactNode; } & { x: string; } & { children?: ReactNode; }'
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
+!!! related TS6500 file.tsx:5:36: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1> & { x: number; } & { children?: ReactNode | undefined; }'
     let b = <PartRCComp x={10} />
-                        ~
-!!! error TS2322: Type '{ x: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
-!!! error TS2322:   Property 'x' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
     let c = <EmptyRCComp prop />;
                          ~~~~
-!!! error TS2322: Type '{ prop: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
-!!! error TS2322:   Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
+!!! error TS2322: Type '{ prop: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode | undefined; }'.
+!!! error TS2322:   Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode | undefined; }'.
     

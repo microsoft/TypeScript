@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/privacyGloVar.ts] ////
 
 //// [privacyGloVar.ts]
-module m1 {
+namespace m1 {
     export class C1_public {
         private f1() {
         }
@@ -83,6 +83,7 @@ var glo_v22_public: glo_C1_public = new glo_C1_public();
 
 
 //// [privacyGloVar.js]
+"use strict";
 var m1;
 (function (m1) {
     class C1_public {

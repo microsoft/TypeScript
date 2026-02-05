@@ -1,0 +1,22 @@
+--- old.derivedClassTransitivity2.types
++++ new.derivedClassTransitivity2.types
+@@= skipped -25, +25 lines =@@
+ >D : D
+
+     foo(x: number, y?: string) { } // ok to add optional parameters
+->foo : (x: number, y?: string) => void
++>foo : (x: number, y?: string | undefined) => void
+ >x : number
+ >y : string | undefined
+ }
+@@= skipped -31, +31 lines =@@
+ var r2 = e.foo(1, '');
+ >r2 : void
+ >e.foo(1, '') : void
+->e.foo : (x: number, y?: string) => void
++>e.foo : (x: number, y?: string | undefined) => void
+ >e : E
+->foo : (x: number, y?: string) => void
++>foo : (x: number, y?: string | undefined) => void
+ >1 : 1
+ >'' : ""

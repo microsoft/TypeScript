@@ -35,6 +35,7 @@ foo2(a2); // should error
 
 
 //// [typeIdentityConsidersBrands.js]
+"use strict";
 class X {
     name;
 }

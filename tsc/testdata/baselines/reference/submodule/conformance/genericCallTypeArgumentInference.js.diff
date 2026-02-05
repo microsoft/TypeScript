@@ -1,6 +1,6 @@
 --- old.genericCallTypeArgumentInference.js
 +++ new.genericCallTypeArgumentInference.js
-@@= skipped -108, +108 lines =@@
+@@= skipped -109, +109 lines =@@
  var r2 = foo2('', 1); // number
  var r3 = foo2b(1); // {}
  class C {

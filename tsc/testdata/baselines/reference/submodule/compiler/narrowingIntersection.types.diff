@@ -1,0 +1,17 @@
+--- old.narrowingIntersection.types
++++ new.narrowingIntersection.types
+@@= skipped -28, +28 lines =@@
+
+         throw result.err;
+ >result.err : FooAndBaz
+->result : { readonly value?: never; readonly err: FooAndBaz; }
++>result : { readonly value?: undefined; readonly err: FooAndBaz; }
+ >err : FooAndBaz
+     }
+     // Error, should OK
+     return result.value;
+ >result.value : string
+->result : { readonly value: string; readonly err?: never; }
++>result : { readonly value: string; readonly err?: undefined; }
+ >value : string
+ }

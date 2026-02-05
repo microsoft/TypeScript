@@ -35,6 +35,7 @@ const state: State = {
 const newState: State = set(state, ["a", 'b'], 'why'); // shouldn't be an error
 
 //// [twiceNestedKeyofIndexInference.js]
+"use strict";
 const state = {
     a: {
         b: "",

@@ -52,6 +52,7 @@ const regexes: RegExp[] = [
 
 
 //// [regularExpressionScanning.js]
+"use strict";
 const regexes = [
     // Flags
     /foo/visualstudiocode,

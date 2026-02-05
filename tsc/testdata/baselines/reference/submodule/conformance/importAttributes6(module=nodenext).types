@@ -32,7 +32,7 @@ import * as thing6 from "./mod.mjs" with { type: "json", field: 0..toString() };
 >type : any
 >field : any
 >0..toString() : string
->0..toString : (radix?: number) => string
+>0..toString : (radix?: number | undefined) => string
 >0. : 0
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 

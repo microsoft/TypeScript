@@ -1,7 +1,7 @@
 --- old.constructSignatureWithAccessibilityModifiersOnParameters.js
 +++ new.constructSignatureWithAccessibilityModifiersOnParameters.js
-@@= skipped -33, +33 lines =@@
- //// [constructSignatureWithAccessibilityModifiersOnParameters.js]
+@@= skipped -34, +34 lines =@@
+ "use strict";
  // Parameter properties are only valid in constructor definitions, not even in other forms of construct signatures
  class C {
 +    x;

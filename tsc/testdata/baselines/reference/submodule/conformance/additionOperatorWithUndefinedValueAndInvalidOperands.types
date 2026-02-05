@@ -7,16 +7,16 @@ function foo(): void { return undefined }
 >foo : () => void
 >undefined : undefined
 
-var a: boolean;
+declare var a: boolean;
 >a : boolean
 
-var b: Object;
+declare var b: Object;
 >b : Object
 
-var c: void;
+declare var c: void;
 >c : void
 
-var d: Number;
+declare var d: Number;
 >d : Number
 
 // undefined + boolean/Object

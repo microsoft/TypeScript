@@ -1,9 +1,9 @@
 --- old.parser512097.js
 +++ new.parser512097.js
-@@= skipped -6, +6 lines =@@
- }
+@@= skipped -7, +7 lines =@@
 
  //// [parser512097.js]
+ "use strict";
 -var tt = { aa };
 +var tt = { aa, };
  if (true) {

@@ -13,8 +13,8 @@
      }
  }
  function foo2(x: number | string) {
-->foo2 : (x: number | string) => number
-+>foo2 : (x: string | number) => number
+->foo2 : (x: number | string) => number | undefined
++>foo2 : (x: string | number) => number | undefined
  >x : string | number
 
      if (typeof x === "string") {
@@ -22,8 +22,8 @@
  >f : () => number
  }
  function foo3(x: number | string) {
-->foo3 : (x: number | string) => number
-+>foo3 : (x: string | number) => number
+->foo3 : (x: number | string) => number | undefined
++>foo3 : (x: string | number) => number | undefined
  >x : string | number
 
      if (typeof x === "string") {

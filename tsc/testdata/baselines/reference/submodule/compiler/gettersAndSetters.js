@@ -53,6 +53,7 @@ if (typeof x === "string") {
 
 
 //// [gettersAndSetters.js]
+"use strict";
 // classes
 class C {
     fooBack = "";

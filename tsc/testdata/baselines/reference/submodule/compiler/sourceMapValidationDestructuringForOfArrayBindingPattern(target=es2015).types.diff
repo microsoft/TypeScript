@@ -1,0 +1,356 @@
+--- old.sourceMapValidationDestructuringForOfArrayBindingPattern(target=es2015).types
++++ new.sourceMapValidationDestructuringForOfArrayBindingPattern(target=es2015).types
+@@= skipped -70, +70 lines =@@
+ }
+
+ for (let [, nameA] of robots) {
+->nameA : string
++>nameA : any
+ >robots : Robot[]
+
+     console.log(nameA);
+@@= skipped -8, +8 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA : string
++>nameA : any
+ }
+ for (let [, nameA] of getRobots()) {
+->nameA : string
++>nameA : any
+ >getRobots() : Robot[]
+ >getRobots : () => Robot[]
+
+@@= skipped -12, +12 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA : string
++>nameA : any
+ }
+ for (let [, nameA] of [robotA, robotB]) {
+->nameA : string
++>nameA : any
+ >[robotA, robotB] : Robot[]
+ >robotA : Robot
+ >robotB : Robot
+@@= skipped -13, +13 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA : string
++>nameA : any
+ }
+ for (let [, [primarySkillA, secondarySkillA]] of multiRobots) {
+->primarySkillA : string
+->secondarySkillA : string
++>primarySkillA : any
++>secondarySkillA : any
+ >multiRobots : MultiSkilledRobot[]
+
+     console.log(primarySkillA);
+@@= skipped -12, +12 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->primarySkillA : string
++>primarySkillA : any
+ }
+ for (let [, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
+->primarySkillA : string
+->secondarySkillA : string
++>primarySkillA : any
++>secondarySkillA : any
+ >getMultiRobots() : MultiSkilledRobot[]
+ >getMultiRobots : () => MultiSkilledRobot[]
+
+@@= skipped -13, +13 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->primarySkillA : string
++>primarySkillA : any
+ }
+ for (let [, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
+->primarySkillA : string
+->secondarySkillA : string
++>primarySkillA : any
++>secondarySkillA : any
+ >[multiRobotA, multiRobotB] : MultiSkilledRobot[]
+ >multiRobotA : MultiSkilledRobot
+ >multiRobotB : MultiSkilledRobot
+@@= skipped -14, +14 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->primarySkillA : string
++>primarySkillA : any
+ }
+
+ for (let [numberB] of robots) {
+->numberB : number
++>numberB : any
+ >robots : Robot[]
+
+     console.log(numberB);
+@@= skipped -12, +12 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->numberB : number
++>numberB : any
+ }
+ for (let [numberB] of getRobots()) {
+->numberB : number
++>numberB : any
+ >getRobots() : Robot[]
+ >getRobots : () => Robot[]
+
+@@= skipped -12, +12 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->numberB : number
++>numberB : any
+ }
+ for (let [numberB] of [robotA, robotB]) {
+->numberB : number
++>numberB : any
+ >[robotA, robotB] : Robot[]
+ >robotA : Robot
+ >robotB : Robot
+@@= skipped -13, +13 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->numberB : number
++>numberB : any
+ }
+ for (let [nameB] of multiRobots) {
+->nameB : string
++>nameB : any
+ >multiRobots : MultiSkilledRobot[]
+
+     console.log(nameB);
+@@= skipped -11, +11 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameB : string
++>nameB : any
+ }
+ for (let [nameB] of getMultiRobots()) {
+->nameB : string
++>nameB : any
+ >getMultiRobots() : MultiSkilledRobot[]
+ >getMultiRobots : () => MultiSkilledRobot[]
+
+@@= skipped -12, +12 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameB : string
++>nameB : any
+ }
+ for (let [nameB] of [multiRobotA, multiRobotB]) {
+->nameB : string
++>nameB : any
+ >[multiRobotA, multiRobotB] : MultiSkilledRobot[]
+ >multiRobotA : MultiSkilledRobot
+ >multiRobotB : MultiSkilledRobot
+@@= skipped -13, +13 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameB : string
++>nameB : any
+ }
+
+ for (let [numberA2, nameA2, skillA2] of robots) {
+->numberA2 : number
+->nameA2 : string
+->skillA2 : string
++>numberA2 : any
++>nameA2 : any
++>skillA2 : any
+ >robots : Robot[]
+
+     console.log(nameA2);
+@@= skipped -14, +14 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA2 : string
++>nameA2 : any
+ }
+ for (let [numberA2, nameA2, skillA2] of getRobots()) {
+->numberA2 : number
+->nameA2 : string
+->skillA2 : string
++>numberA2 : any
++>nameA2 : any
++>skillA2 : any
+ >getRobots() : Robot[]
+ >getRobots : () => Robot[]
+
+@@= skipped -14, +14 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA2 : string
++>nameA2 : any
+ }
+ for (let [numberA2, nameA2, skillA2] of [robotA, robotB]) {
+->numberA2 : number
+->nameA2 : string
+->skillA2 : string
++>numberA2 : any
++>nameA2 : any
++>skillA2 : any
+ >[robotA, robotB] : Robot[]
+ >robotA : Robot
+ >robotB : Robot
+@@= skipped -15, +15 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA2 : string
++>nameA2 : any
+ }
+ for (let [nameMA, [primarySkillA, secondarySkillA]] of multiRobots) {
+->nameMA : string
+->primarySkillA : string
+->secondarySkillA : string
++>nameMA : any
++>primarySkillA : any
++>secondarySkillA : any
+ >multiRobots : MultiSkilledRobot[]
+
+     console.log(nameMA);
+@@= skipped -13, +13 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameMA : string
++>nameMA : any
+ }
+ for (let [nameMA, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
+->nameMA : string
+->primarySkillA : string
+->secondarySkillA : string
++>nameMA : any
++>primarySkillA : any
++>secondarySkillA : any
+ >getMultiRobots() : MultiSkilledRobot[]
+ >getMultiRobots : () => MultiSkilledRobot[]
+
+@@= skipped -14, +14 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameMA : string
++>nameMA : any
+ }
+ for (let [nameMA, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
+->nameMA : string
+->primarySkillA : string
+->secondarySkillA : string
++>nameMA : any
++>primarySkillA : any
++>secondarySkillA : any
+ >[multiRobotA, multiRobotB] : MultiSkilledRobot[]
+ >multiRobotA : MultiSkilledRobot
+ >multiRobotB : MultiSkilledRobot
+@@= skipped -15, +15 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameMA : string
++>nameMA : any
+ }
+
+ for (let [numberA3, ...robotAInfo] of robots) {
+->numberA3 : number
+->robotAInfo : [string, string]
++>numberA3 : any
++>robotAInfo : any
+ >robots : Robot[]
+
+     console.log(numberA3);
+@@= skipped -13, +13 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->numberA3 : number
++>numberA3 : any
+ }
+ for (let [numberA3, ...robotAInfo] of getRobots()) {
+->numberA3 : number
+->robotAInfo : [string, string]
++>numberA3 : any
++>robotAInfo : any
+ >getRobots() : Robot[]
+ >getRobots : () => Robot[]
+
+@@= skipped -13, +13 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->numberA3 : number
++>numberA3 : any
+ }
+ for (let [numberA3, ...robotAInfo] of [robotA, robotB]) {
+->numberA3 : number
+->robotAInfo : [string, string]
++>numberA3 : any
++>robotAInfo : any
+ >[robotA, robotB] : Robot[]
+ >robotA : Robot
+ >robotB : Robot
+@@= skipped -14, +14 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->numberA3 : number
++>numberA3 : any
+ }
+ for (let [...multiRobotAInfo] of multiRobots) {
+->multiRobotAInfo : [string, [string, string]]
++>multiRobotAInfo : any
+ >multiRobots : MultiSkilledRobot[]
+
+     console.log(multiRobotAInfo);
+@@= skipped -11, +11 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->multiRobotAInfo : [string, [string, string]]
++>multiRobotAInfo : any
+ }
+ for (let [...multiRobotAInfo] of getMultiRobots()) {
+->multiRobotAInfo : [string, [string, string]]
++>multiRobotAInfo : any
+ >getMultiRobots() : MultiSkilledRobot[]
+ >getMultiRobots : () => MultiSkilledRobot[]
+
+@@= skipped -12, +12 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->multiRobotAInfo : [string, [string, string]]
++>multiRobotAInfo : any
+ }
+ for (let [...multiRobotAInfo] of [multiRobotA, multiRobotB]) {
+->multiRobotAInfo : [string, [string, string]]
++>multiRobotAInfo : any
+ >[multiRobotA, multiRobotB] : MultiSkilledRobot[]
+ >multiRobotA : MultiSkilledRobot
+ >multiRobotB : MultiSkilledRobot
+@@= skipped -13, +13 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->multiRobotAInfo : [string, [string, string]]
++>multiRobotAInfo : any
+ }

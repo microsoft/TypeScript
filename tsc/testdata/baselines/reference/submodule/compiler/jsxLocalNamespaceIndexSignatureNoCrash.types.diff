@@ -1,6 +1,18 @@
 --- old.jsxLocalNamespaceIndexSignatureNoCrash.types
 +++ new.jsxLocalNamespaceIndexSignatureNoCrash.types
-@@= skipped -31, +31 lines =@@
+@@= skipped -8, +8 lines =@@
+
+         return document.createElement('p');
+ >document.createElement('p') : HTMLParagraphElement
+->document.createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
++>document.createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions | undefined): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions | undefined): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions | undefined): HTMLElement; }
+ >document : Document
+->createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
++>createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions | undefined): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions | undefined): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions | undefined): HTMLElement; }
+ >'p' : "p"
+     }
+ }
+@@= skipped -23, +23 lines =@@
  >A : () => any
 
      return (<p>Hello</p>);

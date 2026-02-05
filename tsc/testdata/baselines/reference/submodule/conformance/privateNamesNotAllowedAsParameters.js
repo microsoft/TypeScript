@@ -7,6 +7,7 @@ class A {
 
 
 //// [privateNamesNotAllowedAsParameters.js]
+"use strict";
 class A {
     setFoo(#foo) { }
 }

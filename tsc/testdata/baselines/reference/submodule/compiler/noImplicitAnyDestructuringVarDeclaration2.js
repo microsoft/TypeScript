@@ -15,6 +15,7 @@ let {x4} = { x4: <any>undefined }, {y4} = { y4: <any>null }; // no error
 
 
 //// [noImplicitAnyDestructuringVarDeclaration2.js]
+"use strict";
 let [a, b, c] = [1, 2, 3]; // no error
 let [a1 = 10, b1 = 10, c1 = 10] = [1, 2, 3]; // no error
 let [a2 = undefined, b2 = undefined, c2 = undefined] = [1, 2, 3]; // no error

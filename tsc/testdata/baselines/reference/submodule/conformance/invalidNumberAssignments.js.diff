@@ -1,6 +1,6 @@
 --- old.invalidNumberAssignments.js
 +++ new.invalidNumberAssignments.js
-@@= skipped -31, +31 lines =@@
+@@= skipped -32, +32 lines =@@
  var c = x;
  var d = x;
  class C {

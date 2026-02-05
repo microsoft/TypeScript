@@ -44,7 +44,7 @@ async function C() {
 >1 : 1
     }
     catch (e) {
->e : any
+>e : unknown
 
         return 'error';
 >'error' : "error"
@@ -64,7 +64,7 @@ async function D() {
 >1 : 1
     }
     catch (e) {
->e : any
+>e : unknown
     }
 }
 
@@ -81,7 +81,7 @@ async function E() {
 >1 : 1
     }
     catch (e) {
->e : any
+>e : unknown
 
         throw Error();
 >Error() : Error
@@ -102,7 +102,7 @@ async function F() {
 >1 : 1
     }
     catch (e) {
->e : any
+>e : unknown
 
         return Promise.reject(Error());
 >Promise.reject(Error()) : Promise<never>
@@ -127,7 +127,7 @@ async function G() {
 >a : boolean
     }
     catch (e) {
->e : any
+>e : unknown
 
         return;
     }
@@ -146,7 +146,7 @@ async function H() {
 >a : boolean
     }
     catch (e) {
->e : any
+>e : unknown
 
         throw Error();
 >Error() : Error
@@ -167,7 +167,7 @@ async function I() {
 >a : boolean
     }
     catch (e) {
->e : any
+>e : unknown
 
         return Promise.reject(Error());
 >Promise.reject(Error()) : Promise<never>

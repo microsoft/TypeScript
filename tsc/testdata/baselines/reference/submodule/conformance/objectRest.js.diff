@@ -1,6 +1,6 @@
 --- old.objectRest.js
 +++ new.objectRest.js
-@@= skipped -78, +78 lines =@@
+@@= skipped -77, +77 lines =@@
  var _j = { x: 1, y: 2 }, { x } = _j, fresh = __rest(_j, ["x"]);
  (_b = { x: 1, y: 2 }, { x } = _b, fresh = __rest(_b, ["x"]));
  class Removable {

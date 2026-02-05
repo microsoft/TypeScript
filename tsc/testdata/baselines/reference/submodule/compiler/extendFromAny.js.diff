@@ -1,8 +1,8 @@
 --- old.extendFromAny.js
 +++ new.extendFromAny.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [extendFromAny.js]
+ "use strict";
  class C extends Base {
 -    constructor() {
 -        super(...arguments);

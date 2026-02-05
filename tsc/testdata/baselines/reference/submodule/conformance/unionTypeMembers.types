@@ -73,16 +73,16 @@ interface I2<T> {
 
 // a union type U has those members that are present in every one of its constituent types, 
 // with types that are unions of the respective members in the constituent types
-var x : I1<number> | I2<number>;
+declare var x : I1<number> | I2<number>;
 >x : I1<number> | I2<number>
 
-var str: string;
+declare var str: string;
 >str : string
 
-var num: number;
+declare var num: number;
 >num : number
 
-var strOrNum: string | number;
+declare var strOrNum: string | number;
 >strOrNum : string | number
 
 // If each type in U has a property P, U has a property P of a union type of the types of P from each type in U.

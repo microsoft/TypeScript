@@ -19,6 +19,7 @@ class Foo{
 
 
 //// [contextualTypeAppliedToVarArgs.js]
+"use strict";
 function delegate(instance, method, data) {
     return function () { };
 }

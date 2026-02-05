@@ -1,8 +1,8 @@
 --- old.arrayLiteralTypeInference.js
 +++ new.arrayLiteralTypeInference.js
-@@= skipped -54, +54 lines =@@
-
+@@= skipped -55, +55 lines =@@
  //// [arrayLiteralTypeInference.js]
+ "use strict";
  class Action {
 +    id;
  }

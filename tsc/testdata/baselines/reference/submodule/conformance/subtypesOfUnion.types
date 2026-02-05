@@ -20,7 +20,7 @@ class A2<T> { foo: T; }
 function f() { }
 >f : typeof f
 
-module f { export var bar = 1; }
+namespace f { export var bar = 1; }
 >f : typeof f
 >bar : number
 >1 : 1
@@ -29,7 +29,7 @@ class c { baz: string }
 >c : c
 >baz : string
 
-module c { export var bar = 1; }
+namespace c { export var bar = 1; }
 >c : typeof c
 >bar : number
 >1 : 1

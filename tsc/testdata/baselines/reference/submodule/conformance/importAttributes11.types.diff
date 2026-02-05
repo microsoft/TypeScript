@@ -1,0 +1,12 @@
+--- old.importAttributes11.types
++++ new.importAttributes11.types
+@@= skipped -20, +20 lines =@@
+
+ 	from "./a.json"
+ 	with {type: "json"}
+->type : error
++>{type: "json"} : { type: string; }
++>type : string
++>"json" : "json"
++
++> : any

@@ -1,0 +1,16 @@
+asiPreventsParsingAsAmbientExternalModule01.ts(4,1): error TS2454: Variable 'declare' is used before being assigned.
+asiPreventsParsingAsAmbientExternalModule01.ts(5,1): error TS2454: Variable 'module' is used before being assigned.
+
+
+==== asiPreventsParsingAsAmbientExternalModule01.ts (2 errors) ====
+    var declare: number;
+    var module: string;
+    
+    declare                // this is the identifier 'declare'
+    ~~~~~~~
+!!! error TS2454: Variable 'declare' is used before being assigned.
+    module                 // this is the identifier 'module'
+    ~~~~~~
+!!! error TS2454: Variable 'module' is used before being assigned.
+    "my external module"   // this is just a string
+    { }                    // this is a block body

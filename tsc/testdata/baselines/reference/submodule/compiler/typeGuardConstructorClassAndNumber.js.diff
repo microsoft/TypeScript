@@ -1,10 +1,10 @@
 --- old.typeGuardConstructorClassAndNumber.js
 +++ new.typeGuardConstructorClassAndNumber.js
-@@= skipped -134, +134 lines =@@
- //// [typeGuardConstructorClassAndNumber.js]
+@@= skipped -135, +135 lines =@@
+ "use strict";
  // Typical case
  class C1 {
 +    property1;
  }
- let var1;
  if (var1.constructor == C1) {
+     var1; // C1

@@ -52,9 +52,9 @@ class E extends D {
     }
 }
 
-var c: C;
-var d: D;
-var e: E;
+declare var c: C;
+declare var d: D;
+declare var e: E;
 
 c = d;
 c = e;
@@ -62,6 +62,7 @@ var r = c.foo(); // e.foo would return string
 
 
 //// [derivedClassWithAny.js]
+"use strict";
 class C {
     x;
     get X() { return 1; }
@@ -107,9 +108,6 @@ class E extends D {
         return '';
     }
 }
-var c;
-var d;
-var e;
 c = d;
 c = e;
 var r = c.foo(); // e.foo would return string

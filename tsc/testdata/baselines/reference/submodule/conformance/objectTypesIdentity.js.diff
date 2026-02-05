@@ -1,7 +1,7 @@
 --- old.objectTypesIdentity.js
 +++ new.objectTypesIdentity.js
-@@= skipped -92, +92 lines =@@
- //// [objectTypesIdentity.js]
+@@= skipped -93, +93 lines =@@
+ "use strict";
  // object types are identical structurally
  class A {
 +    foo;

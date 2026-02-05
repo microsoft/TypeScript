@@ -37,6 +37,7 @@ class Baad extends Good {
 
 
 //// [inheritance.js]
+"use strict";
 class B1 {
     x;
 }

@@ -1,6 +1,6 @@
 --- old.partiallyDiscriminantedUnions.js
 +++ new.partiallyDiscriminantedUnions.js
-@@= skipped -57, +57 lines =@@
+@@= skipped -58, +58 lines =@@
  }
  // Repro from #11185
  class Square {

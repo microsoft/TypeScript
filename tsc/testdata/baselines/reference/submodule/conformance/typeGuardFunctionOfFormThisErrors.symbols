@@ -92,19 +92,19 @@ function invalidGuard(c: any): this is number {
     return false;
 }
 
-let c: number | number[];
->c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 3))
+declare var c: number | number[];
+>c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 11))
 
 if (invalidGuard(c)) {
 >invalidGuard : Symbol(invalidGuard, Decl(typeGuardFunctionOfFormThisErrors.ts, 26, 26))
->c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 3))
+>c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 11))
 
     c;
->c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 3))
+>c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 11))
 }
 else {
     c;
->c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 3))
+>c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 11))
 }
 
 let holder = {invalidGuard};
@@ -115,17 +115,17 @@ if (holder.invalidGuard(c)) {
 >holder.invalidGuard : Symbol(invalidGuard, Decl(typeGuardFunctionOfFormThisErrors.ts, 40, 14))
 >holder : Symbol(holder, Decl(typeGuardFunctionOfFormThisErrors.ts, 40, 3))
 >invalidGuard : Symbol(invalidGuard, Decl(typeGuardFunctionOfFormThisErrors.ts, 40, 14))
->c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 3))
+>c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 11))
 
     c;
->c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 3))
+>c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 11))
 
     holder;
 >holder : Symbol(holder, Decl(typeGuardFunctionOfFormThisErrors.ts, 40, 3))
 }
 else {
     c;
->c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 3))
+>c : Symbol(c, Decl(typeGuardFunctionOfFormThisErrors.ts, 32, 11))
 
     holder;
 >holder : Symbol(holder, Decl(typeGuardFunctionOfFormThisErrors.ts, 40, 3))

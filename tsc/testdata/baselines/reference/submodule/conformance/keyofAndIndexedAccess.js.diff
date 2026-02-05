@@ -1,8 +1,8 @@
 --- old.keyofAndIndexedAccess.js
 +++ new.keyofAndIndexedAccess.js
-@@= skipped -661, +661 lines =@@
-
+@@= skipped -662, +662 lines =@@
  //// [keyofAndIndexedAccess.js]
+ "use strict";
  class Shape {
 +    name;
 +    width;

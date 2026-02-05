@@ -1,0 +1,11 @@
+--- old.protectedClassPropertyAccessibleWithinSubclass(target=es2015).js
++++ new.protectedClassPropertyAccessibleWithinSubclass(target=es2015).js
+@@= skipped -24, +24 lines =@@
+ "use strict";
+ // no errors
+ class B {
++    x;
++    static x;
+ }
+ class C extends B {
+     get y() { return this.x; }

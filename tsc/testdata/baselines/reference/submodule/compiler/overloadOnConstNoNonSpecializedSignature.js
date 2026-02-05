@@ -8,6 +8,7 @@ class C {
 
 
 //// [overloadOnConstNoNonSpecializedSignature.js]
+"use strict";
 class C {
     x1(a) { }
 }

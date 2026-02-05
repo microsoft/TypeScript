@@ -150,10 +150,10 @@ declare var console: any;
 
 out().then(() => {
 >out().then(() => {    console.log("Yea!");}) : Promise<void>
->out().then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>out().then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: ((value: unknown) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >out() : Promise<unknown>
 >out : () => Promise<unknown>
->then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: ((value: unknown) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => {    console.log("Yea!");} : () => void
 
     console.log("Yea!");
@@ -204,9 +204,9 @@ var str = "Hello world";
 
 str.includes("hello", 0);
 >str.includes("hello", 0) : boolean
->str.includes : (searchString: string, position?: number) => boolean
+>str.includes : (searchString: string, position?: number | undefined) => boolean
 >str : string
->includes : (searchString: string, position?: number) => boolean
+>includes : (searchString: string, position?: number | undefined) => boolean
 >"hello" : "hello"
 >0 : 0
 

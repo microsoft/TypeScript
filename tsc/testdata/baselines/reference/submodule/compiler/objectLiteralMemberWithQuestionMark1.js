@@ -4,4 +4,5 @@
 var v = { foo?() { } }
 
 //// [objectLiteralMemberWithQuestionMark1.js]
+"use strict";
 var v = { foo() { } };

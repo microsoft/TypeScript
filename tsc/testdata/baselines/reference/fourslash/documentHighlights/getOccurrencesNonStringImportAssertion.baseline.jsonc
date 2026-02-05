@@ -1,4 +1,4 @@
 // === documentHighlights ===
 // === /getOccurrencesNonStringImportAssertion.ts ===
-// import * as react from "react" assert { cache: /*HIGHLIGHTS*/0 };
+// import * as react from "react" with { cache: /*HIGHLIGHTS*/0 };
 // react.Children;

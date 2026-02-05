@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/FunctionAndModuleWithSameNameAndCommonRoot.ts] ////
 
 === function.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     export function Point() {
@@ -17,10 +17,10 @@ module A {
 }
 
 === module.ts ===
-module A {
+namespace A {
 >A : typeof A
 
-    export module Point {
+    export namespace Point {
 >Point : typeof Point
 
         export var Origin = { x: 0, y: 0 };
@@ -67,7 +67,7 @@ var cl = A.Point.Origin; // not expected to be an error.
 
 
 === simple.ts ===
-module B {
+namespace B {
 >B : typeof B
 
     export function Point() {
@@ -81,7 +81,7 @@ module B {
 >0 : 0
     }
 
-    export module Point {
+    export namespace Point {
 >Point : typeof Point
 
         export var Origin = { x: 0, y: 0 };

@@ -1,6 +1,6 @@
 --- old.moduleAliasInterface.js
 +++ new.moduleAliasInterface.js
-@@= skipped -66, +66 lines =@@
+@@= skipped -67, +67 lines =@@
  // _modes. // produces an internal error - please implement in derived class
  var editor;
  (function (editor) {

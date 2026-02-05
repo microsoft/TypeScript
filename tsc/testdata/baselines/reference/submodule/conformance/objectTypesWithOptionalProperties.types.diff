@@ -1,0 +1,11 @@
+--- old.objectTypesWithOptionalProperties.types
++++ new.objectTypesWithOptionalProperties.types
+@@= skipped -3, +3 lines =@@
+ // Basic uses of optional properties
+
+ var a: {
+->a : { x?: number; }
++>a : { x?: number | undefined; }
+
+     x?: number; // ok
+ >x : number | undefined

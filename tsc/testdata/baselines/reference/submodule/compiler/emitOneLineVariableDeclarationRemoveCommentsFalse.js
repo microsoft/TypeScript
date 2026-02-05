@@ -11,6 +11,7 @@ let g: any = /* comment2 */ d(e);
 
 
 //// [emitOneLineVariableDeclarationRemoveCommentsFalse.js]
+"use strict";
 let a = /*[[${something}]]*/ {};
 let b = {};
 let c = { hoge: true };

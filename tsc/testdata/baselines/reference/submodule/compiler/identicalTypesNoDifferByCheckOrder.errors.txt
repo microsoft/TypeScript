@@ -1,0 +1,71 @@
+identicalTypesNoDifferByCheckOrder.ts(32,30): error TS2322: Type 'FunctionComponent2<SomePropsCloneX>' is not assignable to type 'FunctionComponent2<SomeProps>'.
+  Types of parameters 'props' and 'props' are incompatible.
+    Type 'SomeProps & { children?: unknown; }' is not assignable to type 'Required<Pick<SomePropsClone, "x">> & Omit<SomePropsClone, "x"> & { children?: unknown; }'.
+      Type 'SomeProps & { children?: unknown; }' is not assignable to type 'Required<Pick<SomePropsClone, "x">>'.
+        Types of property 'x' are incompatible.
+          Type 'string | undefined' is not assignable to type 'string'.
+            Type 'undefined' is not assignable to type 'string'.
+identicalTypesNoDifferByCheckOrder.ts(36,30): error TS2322: Type 'FunctionComponent1<SomePropsX>' is not assignable to type 'FunctionComponent1<SomeProps>'.
+  Types of parameters 'props' and 'props' are incompatible.
+    Type 'SomeProps & { children?: unknown; }' is not assignable to type 'Required<Pick<SomeProps, "x">> & Omit<SomeProps, "x"> & { children?: unknown; }'.
+      Type 'SomeProps & { children?: unknown; }' is not assignable to type 'Required<Pick<SomeProps, "x">>'.
+        Types of property 'x' are incompatible.
+          Type 'string | undefined' is not assignable to type 'string'.
+            Type 'undefined' is not assignable to type 'string'.
+
+
+==== identicalTypesNoDifferByCheckOrder.ts (2 errors) ====
+    interface SomeProps {
+        x?: string;
+        y?: number;
+        renderAs?: FunctionComponent1<SomeProps>
+    }
+    
+    type SomePropsX = Required<Pick<SomeProps, "x">> & Omit<SomeProps, "x">;
+    
+    interface SomePropsClone {
+        x?: string;
+        y?: number;
+        renderAs?: FunctionComponent2<SomeProps>
+    }
+    
+    type SomePropsCloneX = Required<Pick<SomePropsClone, "x">> & Omit<SomePropsClone, "x">;
+    
+    type Validator<T> = {(): boolean, opt?: T};
+    type WeakValidationMap<T> = {[K in keyof T]?: null extends T[K] ? Validator<T[K] | null | undefined> : Validator<T[K]>};
+    
+    interface FunctionComponent1<P> {
+        (props: P & { children?: unknown }): void;
+        propTypes?: WeakValidationMap<P>;
+    }
+    
+    interface FunctionComponent2<P> {
+        (props: P & { children?: unknown }): void;
+        propTypes?: WeakValidationMap<P>;
+    }
+    
+    function needsComponentOfSomeProps3(...x: SomePropsClone[]): void {}
+    const comp3: FunctionComponent2<SomePropsCloneX> = null as any;
+    needsComponentOfSomeProps3({ renderAs: comp3 });
+                                 ~~~~~~~~
+!!! error TS2322: Type 'FunctionComponent2<SomePropsCloneX>' is not assignable to type 'FunctionComponent2<SomeProps>'.
+!!! error TS2322:   Types of parameters 'props' and 'props' are incompatible.
+!!! error TS2322:     Type 'SomeProps & { children?: unknown; }' is not assignable to type 'Required<Pick<SomePropsClone, "x">> & Omit<SomePropsClone, "x"> & { children?: unknown; }'.
+!!! error TS2322:       Type 'SomeProps & { children?: unknown; }' is not assignable to type 'Required<Pick<SomePropsClone, "x">>'.
+!!! error TS2322:         Types of property 'x' are incompatible.
+!!! error TS2322:           Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:             Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 identicalTypesNoDifferByCheckOrder.ts:12:5: The expected type comes from property 'renderAs' which is declared here on type 'SomePropsClone'
+    
+    function needsComponentOfSomeProps2(...x: SomeProps[]): void {}
+    const comp2: FunctionComponent1<SomePropsX> = null as any;
+    needsComponentOfSomeProps2({ renderAs: comp2 });
+                                 ~~~~~~~~
+!!! error TS2322: Type 'FunctionComponent1<SomePropsX>' is not assignable to type 'FunctionComponent1<SomeProps>'.
+!!! error TS2322:   Types of parameters 'props' and 'props' are incompatible.
+!!! error TS2322:     Type 'SomeProps & { children?: unknown; }' is not assignable to type 'Required<Pick<SomeProps, "x">> & Omit<SomeProps, "x"> & { children?: unknown; }'.
+!!! error TS2322:       Type 'SomeProps & { children?: unknown; }' is not assignable to type 'Required<Pick<SomeProps, "x">>'.
+!!! error TS2322:         Types of property 'x' are incompatible.
+!!! error TS2322:           Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:             Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 identicalTypesNoDifferByCheckOrder.ts:4:5: The expected type comes from property 'renderAs' which is declared here on type 'SomeProps'

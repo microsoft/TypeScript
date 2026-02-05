@@ -1,10 +1,10 @@
 --- old.jsxCheckJsxNoTypeArgumentsAllowed.js
 +++ new.jsxCheckJsxNoTypeArgumentsAllowed.js
-@@= skipped -55, +55 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- const component_1 = require("./component");
- const React = __importStar(require("react"));
--let x = <component_1.MyComp />, <component_1.Prop> a={10} b="hi" />; // error, no type arguments in js
+@@= skipped -22, +22 lines =@@
+ /// <reference path="/.lib/react.d.ts" />
+ import { MyComp, Prop } from "./component";
+ import * as React from "react";
+-let x = <MyComp />, <Prop> a={10} b="hi" />; // error, no type arguments in js
 -</>;
-+let x = (<component_1.MyComp />, <Prop> a={10} b="hi" />; // error, no type arguments in js
++let x = (<MyComp />, <Prop> a={10} b="hi" />; // error, no type arguments in js
 +</>);

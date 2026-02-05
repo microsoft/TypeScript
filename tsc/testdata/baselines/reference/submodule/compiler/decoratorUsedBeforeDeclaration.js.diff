@@ -1,6 +1,6 @@
 --- old.decoratorUsedBeforeDeclaration.js
 +++ new.decoratorUsedBeforeDeclaration.js
-@@= skipped -85, +85 lines =@@
+@@= skipped -86, +86 lines =@@
      return function (target, key) { decorator(target, key, paramIndex); }
  };
  let Greeter = class Greeter {

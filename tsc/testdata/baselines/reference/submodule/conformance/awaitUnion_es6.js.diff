@@ -1,9 +1,9 @@
 --- old.awaitUnion_es6.js
 +++ new.awaitUnion_es6.js
-@@= skipped -14, +14 lines =@@
- }
+@@= skipped -15, +15 lines =@@
 
  //// [awaitUnion_es6.js]
+ "use strict";
 -function f() {
 -    return __awaiter(this, void 0, void 0, function* () {
 -        let await_a = yield a;

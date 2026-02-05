@@ -1,6 +1,6 @@
 --- old.declFileEnums.js
 +++ new.declFileEnums.js
-@@= skipped -52, +52 lines =@@
+@@= skipped -53, +53 lines =@@
  var e3;
  (function (e3) {
      e3[e3["a"] = 10] = "a";

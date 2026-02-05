@@ -61,18 +61,18 @@ var e = undefined;
 >undefined : undefined
 
 x = e;
->x = e : any
+>x = e : undefined
 >x : any
->e : any
+>e : undefined
 
 var e2: typeof undefined;
->e2 : any
+>e2 : undefined
 >undefined : undefined
 
 x = e2;
->x = e2 : any
+>x = e2 : undefined
 >x : any
->e2 : any
+>e2 : undefined
 
 enum E {
 >E : E

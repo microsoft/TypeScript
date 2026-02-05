@@ -1,9 +1,9 @@
 --- old.symbolProperty6.js
 +++ new.symbolProperty6.js
-@@= skipped -10, +10 lines =@@
- }
+@@= skipped -11, +11 lines =@@
 
  //// [symbolProperty6.js]
+ "use strict";
 -var _a;
  class C {
 -    constructor() {

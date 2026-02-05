@@ -1,7 +1,7 @@
 --- old.genericCallWithObjectTypeArgsAndConstraints4.js
 +++ new.genericCallWithObjectTypeArgsAndConstraints4.js
-@@= skipped -37, +37 lines =@@
- //// [genericCallWithObjectTypeArgsAndConstraints4.js]
+@@= skipped -38, +38 lines =@@
+ "use strict";
  // Generic call with constraints infering type parameter from object member properties
  class C {
 +    x;

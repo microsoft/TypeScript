@@ -21,6 +21,7 @@ function f2() {
 
 
 //// [bestChoiceType.js]
+"use strict";
 // Repro from #10041
 (''.match(/ /) || []).map(s => s.toLowerCase());
 // Similar cases

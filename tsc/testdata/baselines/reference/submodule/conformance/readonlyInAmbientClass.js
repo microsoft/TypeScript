@@ -7,3 +7,4 @@ declare class C{
 }
 
 //// [readonlyInAmbientClass.js]
+"use strict";

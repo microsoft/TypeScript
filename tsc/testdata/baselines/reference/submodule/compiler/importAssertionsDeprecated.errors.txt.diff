@@ -1,0 +1,33 @@
+--- old.importAssertionsDeprecated.errors.txt
++++ new.importAssertionsDeprecated.errors.txt
+@@= skipped -0, +0 lines =@@
+-/a.ts(1,35): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-/b.ts(1,37): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-/c.ts(1,51): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-
+-
+-==== /a.ts (1 errors) ====
+-    import json from "./package.json" assert { type: "json" };
+-                                      ~~~~~~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-    
+-==== /b.ts (1 errors) ====
+-    import * as data from "./data.json" assert { type: "json" };
+-                                        ~~~~~~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-    
+-==== /c.ts (1 errors) ====
+-    export { default as config } from "./config.json" assert { type: "json" };
+-                                                      ~~~~~~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-    
+-==== /package.json (0 errors) ====
+-    {}
+-    
+-==== /data.json (0 errors) ====
+-    {}
+-    
+-==== /config.json (0 errors) ====
+-    {}
+-    
++<no content>

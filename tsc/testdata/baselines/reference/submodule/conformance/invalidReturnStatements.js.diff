@@ -1,6 +1,6 @@
 --- old.invalidReturnStatements.js
 +++ new.invalidReturnStatements.js
-@@= skipped -29, +29 lines =@@
+@@= skipped -30, +30 lines =@@
  function fn4() { }
  function fn7() { } // should be valid: any includes void
  class C {

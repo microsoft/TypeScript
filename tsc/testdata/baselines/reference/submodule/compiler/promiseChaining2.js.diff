@@ -1,7 +1,7 @@
 --- old.promiseChaining2.js
 +++ new.promiseChaining2.js
-@@= skipped -14, +14 lines =@@
- //// [promiseChaining2.js]
+@@= skipped -15, +15 lines =@@
+ "use strict";
  // same example but with constraints on each type parameter
  class Chain2 {
 +    value;

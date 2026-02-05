@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/statements/switchStatements/switchStatements.ts] ////
 
 === switchStatements.ts ===
-module M {
+namespace M {
 >M : typeof M
 
     export function fn(x: number) {
@@ -45,7 +45,7 @@ switch (x) {
 >/[a-z]/ : RegExp
 
     case[]:
->[] : undefined[]
+>[] : never[]
 
     case {}:
 >{} : {}
@@ -146,7 +146,7 @@ switch (/[a-z]/) { }
 >/[a-z]/ : RegExp
 
 switch ([]) { }
->[] : undefined[]
+>[] : never[]
 
 switch ({}) { }
 >{} : {}

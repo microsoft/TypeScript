@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts] ////
 
 //// [internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts]
-export module a {
-    export module b {
+export namespace a {
+    export namespace b {
         export class c {
         }
     }
 }
 
-export module c {
+export namespace c {
     import b = a.b;
     export var x: b.c = new b.c();
 }

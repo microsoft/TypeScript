@@ -9,6 +9,7 @@ class C<T> {
 }
 
 //// [inOperatorWithGeneric.js]
+"use strict";
 class C {
     foo(x) {
         for (var p in x) {

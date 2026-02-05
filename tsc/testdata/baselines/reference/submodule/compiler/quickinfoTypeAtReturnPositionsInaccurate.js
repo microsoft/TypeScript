@@ -105,9 +105,6 @@ export function listFiles<T extends BuilderProgram>(program: Program | T) {
 }
 
 //// [quickinfoTypeAtReturnPositionsInaccurate.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.listFiles = listFiles;
 class NumClass {
     value;
     get() {
@@ -171,6 +168,6 @@ class ComplexStore {
         return item; // type is never
     }
 }
-function listFiles(program) {
+export function listFiles(program) {
     const x = isBuilderProgram(program) ? program.getProgram() : program;
 }

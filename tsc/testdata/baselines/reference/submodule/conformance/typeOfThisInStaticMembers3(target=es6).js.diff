@@ -1,9 +1,9 @@
 --- old.typeOfThisInStaticMembers3(target=es6).js
 +++ new.typeOfThisInStaticMembers3(target=es6).js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
 
  //// [typeOfThisInStaticMembers3.js]
+ "use strict";
 -var _a, _b, _c;
  class C {
 -}

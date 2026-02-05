@@ -11,6 +11,7 @@ Foo(() =>
 
 
 //// [lambdaASIEmit.js]
+"use strict";
 function Foo(x) {
 }
 Foo(() => 

@@ -1,6 +1,6 @@
 --- old.ExportModuleWithAccessibleTypesOnItsExportedMembers.js
 +++ new.ExportModuleWithAccessibleTypesOnItsExportedMembers.js
-@@= skipped -25, +25 lines =@@
+@@= skipped -26, +26 lines =@@
  var A;
  (function (A) {
      class Point {

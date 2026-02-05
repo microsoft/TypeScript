@@ -18,6 +18,7 @@ class Derived2 extends Base2 {
 }
 
 //// [derivedClassOverridesPrivates.js]
+"use strict";
 class Base {
     x;
 }

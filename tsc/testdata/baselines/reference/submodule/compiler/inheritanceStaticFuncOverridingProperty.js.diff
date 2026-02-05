@@ -1,8 +1,8 @@
 --- old.inheritanceStaticFuncOverridingProperty.js
 +++ new.inheritanceStaticFuncOverridingProperty.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [inheritanceStaticFuncOverridingProperty.js]
+ "use strict";
  class a {
 +    static x;
  }

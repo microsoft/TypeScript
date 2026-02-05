@@ -1,9 +1,9 @@
 --- old.manyCompilerErrorsInTheTwoFiles.js
 +++ new.manyCompilerErrorsInTheTwoFiles.js
-@@= skipped -12, +12 lines =@@
- limit
+@@= skipped -13, +13 lines =@@
 
  //// [a.js]
+ "use strict";
 -const a = !;
 -!;
 -const b = !;

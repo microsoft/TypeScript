@@ -5,5 +5,6 @@ var s: string;
 var f: () => number = () => yield s;
 
 //// [generatorTypeCheck32.js]
+"use strict";
 var s;
 var f = () => yield s;

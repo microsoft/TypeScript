@@ -1,7 +1,7 @@
 --- old.esDecorators-decoratorExpression.3(experimentaldecorators=true).js
 +++ new.esDecorators-decoratorExpression.3(experimentaldecorators=true).js
-@@= skipped -12, +12 lines =@@
- //// [esDecorators-decoratorExpression.3.js]
+@@= skipped -13, +13 lines =@@
+ "use strict";
  // existing errors
  {
 -    class C {

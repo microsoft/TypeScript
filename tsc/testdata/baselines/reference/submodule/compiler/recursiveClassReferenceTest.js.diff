@@ -1,6 +1,6 @@
 --- old.recursiveClassReferenceTest.js
 +++ new.recursiveClassReferenceTest.js
-@@= skipped -108, +108 lines =@@
+@@= skipped -109, +109 lines =@@
  // Scenario 2: Test recursive function call with cast and "this" parameter
  var Sample;
  (function (Sample) {

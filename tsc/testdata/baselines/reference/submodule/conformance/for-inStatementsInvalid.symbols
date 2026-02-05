@@ -15,7 +15,7 @@ for (aBoolean in {}) { }
 
 var aRegExp: RegExp;
 >aRegExp : Symbol(aRegExp, Decl(for-inStatementsInvalid.ts, 6, 3))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 for (aRegExp in {}) { }
 >aRegExp : Symbol(aRegExp, Decl(for-inStatementsInvalid.ts, 6, 3))
@@ -30,42 +30,42 @@ for (var x in fn()) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 12, 8), Decl(for-inStatementsInvalid.ts, 16, 8), Decl(for-inStatementsInvalid.ts, 17, 8), Decl(for-inStatementsInvalid.ts, 18, 8), Decl(for-inStatementsInvalid.ts, 19, 8) ... and 5 more)
 >fn : Symbol(fn, Decl(for-inStatementsInvalid.ts, 9, 32))
 
-var c : string, d:string, e;
->c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 3))
->d : Symbol(d, Decl(for-inStatementsInvalid.ts, 14, 15))
->e : Symbol(e, Decl(for-inStatementsInvalid.ts, 14, 25))
+declare var c : string, d:string, e: any;
+>c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 11))
+>d : Symbol(d, Decl(for-inStatementsInvalid.ts, 14, 23))
+>e : Symbol(e, Decl(for-inStatementsInvalid.ts, 14, 33))
 
 for (var x in c || d) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 12, 8), Decl(for-inStatementsInvalid.ts, 16, 8), Decl(for-inStatementsInvalid.ts, 17, 8), Decl(for-inStatementsInvalid.ts, 18, 8), Decl(for-inStatementsInvalid.ts, 19, 8) ... and 5 more)
->c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 3))
->d : Symbol(d, Decl(for-inStatementsInvalid.ts, 14, 15))
+>c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 11))
+>d : Symbol(d, Decl(for-inStatementsInvalid.ts, 14, 23))
 
 for (var x in e ? c : d) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 12, 8), Decl(for-inStatementsInvalid.ts, 16, 8), Decl(for-inStatementsInvalid.ts, 17, 8), Decl(for-inStatementsInvalid.ts, 18, 8), Decl(for-inStatementsInvalid.ts, 19, 8) ... and 5 more)
->e : Symbol(e, Decl(for-inStatementsInvalid.ts, 14, 25))
->c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 3))
->d : Symbol(d, Decl(for-inStatementsInvalid.ts, 14, 15))
+>e : Symbol(e, Decl(for-inStatementsInvalid.ts, 14, 33))
+>c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 11))
+>d : Symbol(d, Decl(for-inStatementsInvalid.ts, 14, 23))
 
 for (var x in 42 ? c : d) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 12, 8), Decl(for-inStatementsInvalid.ts, 16, 8), Decl(for-inStatementsInvalid.ts, 17, 8), Decl(for-inStatementsInvalid.ts, 18, 8), Decl(for-inStatementsInvalid.ts, 19, 8) ... and 5 more)
->c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 3))
->d : Symbol(d, Decl(for-inStatementsInvalid.ts, 14, 15))
+>c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 11))
+>d : Symbol(d, Decl(for-inStatementsInvalid.ts, 14, 23))
 
 for (var x in '' ? c : d) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 12, 8), Decl(for-inStatementsInvalid.ts, 16, 8), Decl(for-inStatementsInvalid.ts, 17, 8), Decl(for-inStatementsInvalid.ts, 18, 8), Decl(for-inStatementsInvalid.ts, 19, 8) ... and 5 more)
->c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 3))
->d : Symbol(d, Decl(for-inStatementsInvalid.ts, 14, 15))
+>c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 11))
+>d : Symbol(d, Decl(for-inStatementsInvalid.ts, 14, 23))
 
 for (var x in 42 ? d[x] : c[x]) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 12, 8), Decl(for-inStatementsInvalid.ts, 16, 8), Decl(for-inStatementsInvalid.ts, 17, 8), Decl(for-inStatementsInvalid.ts, 18, 8), Decl(for-inStatementsInvalid.ts, 19, 8) ... and 5 more)
->d : Symbol(d, Decl(for-inStatementsInvalid.ts, 14, 15))
+>d : Symbol(d, Decl(for-inStatementsInvalid.ts, 14, 23))
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 12, 8), Decl(for-inStatementsInvalid.ts, 16, 8), Decl(for-inStatementsInvalid.ts, 17, 8), Decl(for-inStatementsInvalid.ts, 18, 8), Decl(for-inStatementsInvalid.ts, 19, 8) ... and 5 more)
->c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 3))
+>c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 11))
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 12, 8), Decl(for-inStatementsInvalid.ts, 16, 8), Decl(for-inStatementsInvalid.ts, 17, 8), Decl(for-inStatementsInvalid.ts, 18, 8), Decl(for-inStatementsInvalid.ts, 19, 8) ... and 5 more)
 
 for (var x in c[23]) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 12, 8), Decl(for-inStatementsInvalid.ts, 16, 8), Decl(for-inStatementsInvalid.ts, 17, 8), Decl(for-inStatementsInvalid.ts, 18, 8), Decl(for-inStatementsInvalid.ts, 19, 8) ... and 5 more)
->c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 3))
+>c : Symbol(c, Decl(for-inStatementsInvalid.ts, 14, 11))
 
 for (var x in (<T>(x: T) => x)) { }
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 12, 8), Decl(for-inStatementsInvalid.ts, 16, 8), Decl(for-inStatementsInvalid.ts, 17, 8), Decl(for-inStatementsInvalid.ts, 18, 8), Decl(for-inStatementsInvalid.ts, 19, 8) ... and 5 more)
@@ -177,11 +177,11 @@ interface I {
     [idx: number]: number;
 >idx : Symbol(idx, Decl(for-inStatementsInvalid.ts, 57, 5))
 }
-var i: I;
->i : Symbol(i, Decl(for-inStatementsInvalid.ts, 59, 3))
+declare var i: I;
+>i : Symbol(i, Decl(for-inStatementsInvalid.ts, 59, 11))
 >I : Symbol(I, Decl(for-inStatementsInvalid.ts, 53, 1))
 
 for (var x in i[42]) { } 
 >x : Symbol(x, Decl(for-inStatementsInvalid.ts, 12, 8), Decl(for-inStatementsInvalid.ts, 16, 8), Decl(for-inStatementsInvalid.ts, 17, 8), Decl(for-inStatementsInvalid.ts, 18, 8), Decl(for-inStatementsInvalid.ts, 19, 8) ... and 5 more)
->i : Symbol(i, Decl(for-inStatementsInvalid.ts, 59, 3))
+>i : Symbol(i, Decl(for-inStatementsInvalid.ts, 59, 11))
 

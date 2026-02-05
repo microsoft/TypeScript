@@ -16,12 +16,12 @@ class EventAggregator
 >T : Symbol(T, Decl(overloadErrorMatchesImplementationElaboaration.ts, 3, 12))
 }
 
-var ea: EventAggregator;
->ea : Symbol(ea, Decl(overloadErrorMatchesImplementationElaboaration.ts, 6, 3))
+declare var ea: EventAggregator;
+>ea : Symbol(ea, Decl(overloadErrorMatchesImplementationElaboaration.ts, 6, 11))
 >EventAggregator : Symbol(EventAggregator, Decl(overloadErrorMatchesImplementationElaboaration.ts, 0, 0))
 
 ea.publish([1,2,3]);
 >ea.publish : Symbol(EventAggregator.publish, Decl(overloadErrorMatchesImplementationElaboaration.ts, 1, 1), Decl(overloadErrorMatchesImplementationElaboaration.ts, 2, 45))
->ea : Symbol(ea, Decl(overloadErrorMatchesImplementationElaboaration.ts, 6, 3))
+>ea : Symbol(ea, Decl(overloadErrorMatchesImplementationElaboaration.ts, 6, 11))
 >publish : Symbol(EventAggregator.publish, Decl(overloadErrorMatchesImplementationElaboaration.ts, 1, 1), Decl(overloadErrorMatchesImplementationElaboaration.ts, 2, 45))
 

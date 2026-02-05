@@ -3,7 +3,7 @@
 === promisesWithConstraints.ts ===
 interface Promise<T> {
     then<U>(cb: (x: T) => Promise<U>): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(cb: (x: T) => Promise<U>): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined): Promise<TResult1 | TResult2>; <U>(cb: (x: T) => Promise<U>): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 }
@@ -18,17 +18,17 @@ interface CPromise<T extends { x: any; }> {
 >x : T
 }
 
-interface Foo { x; }
+interface Foo { x: any; }
 >x : any
 
-interface Bar { x; y; }
+interface Bar { x: any; y: any; }
 >x : any
 >y : any
 
 var a: Promise<Foo>;
 >a : Promise<Foo>
 
-var b: Promise<Bar>;
+declare var b: Promise<Bar>;
 >b : Promise<Bar>
 
 a = b; // ok
@@ -44,7 +44,7 @@ b = a; // ok
 var a2: CPromise<Foo>;
 >a2 : CPromise<Foo>
 
-var b2: CPromise<Bar>;
+declare var b2: CPromise<Bar>;
 >b2 : CPromise<Bar>
 
 a2 = b2; // ok

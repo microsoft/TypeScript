@@ -1,6 +1,6 @@
 --- old.m7Bugs.js
 +++ new.m7Bugs.js
-@@= skipped -31, +31 lines =@@
+@@= skipped -32, +32 lines =@@
  var s = ({});
  var x = {};
  class C1 {

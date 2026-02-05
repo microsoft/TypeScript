@@ -26,6 +26,7 @@ class B2 {
 
 
 //// [privateNameMethodAccess.js]
+"use strict";
 class A2 {
     #method() { return ""; }
     constructor() {

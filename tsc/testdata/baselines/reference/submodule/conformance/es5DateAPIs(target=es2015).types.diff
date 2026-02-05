@@ -1,0 +1,12 @@
+--- old.es5DateAPIs(target=es2015).types
++++ new.es5DateAPIs(target=es2015).types
+@@= skipped -2, +2 lines =@@
+ === es5DateAPIs.ts ===
+ Date.UTC(2017); // should error
+ >Date.UTC(2017) : number
+->Date.UTC : (year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number) => number
++>Date.UTC : (year: number, monthIndex: number, date?: number | undefined, hours?: number | undefined, minutes?: number | undefined, seconds?: number | undefined, ms?: number | undefined) => number
+ >Date : DateConstructor
+->UTC : (year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number) => number
++>UTC : (year: number, monthIndex: number, date?: number | undefined, hours?: number | undefined, minutes?: number | undefined, seconds?: number | undefined, ms?: number | undefined) => number
+ >2017 : 2017

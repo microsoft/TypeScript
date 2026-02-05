@@ -1,6 +1,6 @@
 --- old.enumMergingErrors.js
 +++ new.enumMergingErrors.js
-@@= skipped -63, +63 lines =@@
+@@= skipped -64, +64 lines =@@
  (function (M) {
      let E1;
      (function (E1) {

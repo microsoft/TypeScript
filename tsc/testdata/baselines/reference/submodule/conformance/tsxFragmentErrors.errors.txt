@@ -5,7 +5,7 @@ file.tsx(11,17): error TS1005: '</' expected.
 
 
 ==== file.tsx (4 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     		[s: string]: any;

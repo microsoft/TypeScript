@@ -16,6 +16,7 @@ function func(x: I) {
 
 
 //// [privateNamesInterfaceExtendingClass.js]
+"use strict";
 class C {
     #prop;
     func(x) {

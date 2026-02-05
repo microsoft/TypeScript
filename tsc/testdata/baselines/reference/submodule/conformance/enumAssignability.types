@@ -52,7 +52,7 @@ x = f; // ok
 >x : number
 >f : F
 
-module Others {
+namespace Others {
 >Others : typeof Others
 
     var a: any = e; // ok

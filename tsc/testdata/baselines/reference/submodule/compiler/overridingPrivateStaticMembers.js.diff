@@ -1,8 +1,8 @@
 --- old.overridingPrivateStaticMembers.js
 +++ new.overridingPrivateStaticMembers.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [overridingPrivateStaticMembers.js]
+ "use strict";
  class Base2 {
 +    static y;
  }

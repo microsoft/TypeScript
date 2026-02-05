@@ -1,6 +1,6 @@
 --- old.genericConstraint2.js
 +++ new.genericConstraint2.js
-@@= skipped -31, +31 lines =@@
+@@= skipped -32, +32 lines =@@
      return x.comparer(y);
  }
  class ComparableString {

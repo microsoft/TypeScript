@@ -322,7 +322,7 @@ function f12(x: Tag) {
     }
     else {
         x;
->x : Tag
+>x : 0
     }
 }
 
@@ -354,8 +354,8 @@ function f14(x: 0 | 1 | 2, y: string) {
 >y : string
 
     var a = x && y;
->a : string
->x && y : string
+>a : string | 0
+>x && y : string | 0
 >x : 0 | 1 | 2
 >y : string
 
@@ -391,8 +391,8 @@ function f15(x: 0 | false, y: 1 | "one") {
 >y : "one" | 1
 
     var d = y || x;
->d : "one" | 0 | 1 | false
->y || x : "one" | 0 | 1 | false
+>d : "one" | 1
+>y || x : "one" | 1
 >y : "one" | 1
 >x : 0 | false
 
@@ -403,7 +403,7 @@ function f15(x: 0 | false, y: 1 | "one") {
 
     var f = !y;
 >f : boolean
->!y : boolean
+>!y : false
 >y : "one" | 1
 }
 

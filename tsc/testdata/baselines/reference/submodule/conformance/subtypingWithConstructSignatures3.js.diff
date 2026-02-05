@@ -1,6 +1,6 @@
 --- old.subtypingWithConstructSignatures3.js
 +++ new.subtypingWithConstructSignatures3.js
-@@= skipped -127, +127 lines =@@
+@@= skipped -128, +128 lines =@@
  var Errors;
  (function (Errors) {
      class Base {

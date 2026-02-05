@@ -182,6 +182,7 @@ const o2: { foo: any; bar: any } = getProps(myAny, ['foo', 'bar']);
 
 
 //// [isomorphicMappedTypeInference.js]
+"use strict";
 function box(x) {
     return { value: x };
 }

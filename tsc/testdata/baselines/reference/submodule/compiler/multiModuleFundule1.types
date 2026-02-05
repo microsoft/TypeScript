@@ -5,14 +5,14 @@ function C(x: number) { }
 >C : typeof C
 >x : number
 
-module C {
+namespace C {
 >C : typeof C
 
     export var x = 1;
 >x : number
 >1 : 1
 }
-module C {
+namespace C {
 >C : typeof C
 
     export function foo() { }

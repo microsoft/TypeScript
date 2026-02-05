@@ -11,6 +11,7 @@ interface I extends C {
 }
 
 //// [recursiveInheritance3.js]
+"use strict";
 class C {
     foo(x) { return x; }
     x = 1;

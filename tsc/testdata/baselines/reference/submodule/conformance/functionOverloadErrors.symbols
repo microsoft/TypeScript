@@ -27,7 +27,7 @@ function fn2b(n: number[]);
 function fn2b(n: Array<number>);
 >fn2b : Symbol(fn2b, Decl(functionOverloadErrors.ts, 9, 1), Decl(functionOverloadErrors.ts, 10, 27), Decl(functionOverloadErrors.ts, 11, 32))
 >n : Symbol(n, Decl(functionOverloadErrors.ts, 11, 14))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 function fn2b() {
 >fn2b : Symbol(fn2b, Decl(functionOverloadErrors.ts, 9, 1), Decl(functionOverloadErrors.ts, 10, 27), Decl(functionOverloadErrors.ts, 11, 32))
@@ -113,7 +113,7 @@ function fn10<T extends Window>();
 function fn10<S extends Date>();
 >fn10 : Symbol(fn10, Decl(functionOverloadErrors.ts, 40, 18), Decl(functionOverloadErrors.ts, 43, 34), Decl(functionOverloadErrors.ts, 44, 32))
 >S : Symbol(S, Decl(functionOverloadErrors.ts, 44, 14))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 function fn10() { }
 >fn10 : Symbol(fn10, Decl(functionOverloadErrors.ts, 40, 18), Decl(functionOverloadErrors.ts, 43, 34), Decl(functionOverloadErrors.ts, 44, 32))
@@ -185,18 +185,18 @@ class cls {
 }
 
 //Function overloads with differing export
-module M {
+namespace M {
 >M : Symbol(M, Decl(functionOverloadErrors.ts, 70, 1))
 
     export function fn1();
->fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 10))
+>fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 13))
 
     function fn1(n: string);
->fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 10), Decl(functionOverloadErrors.ts, 74, 26), Decl(functionOverloadErrors.ts, 75, 28))
+>fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 13), Decl(functionOverloadErrors.ts, 74, 26), Decl(functionOverloadErrors.ts, 75, 28))
 >n : Symbol(n, Decl(functionOverloadErrors.ts, 75, 17))
 
     function fn1() { } 
->fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 10), Decl(functionOverloadErrors.ts, 74, 26), Decl(functionOverloadErrors.ts, 75, 28))
+>fn1 : Symbol(fn1, Decl(functionOverloadErrors.ts, 73, 13), Decl(functionOverloadErrors.ts, 74, 26), Decl(functionOverloadErrors.ts, 75, 28))
 
     function fn2(n: string);
 >fn2 : Symbol(fn2, Decl(functionOverloadErrors.ts, 76, 22), Decl(functionOverloadErrors.ts, 78, 28), Decl(functionOverloadErrors.ts, 79, 26))

@@ -92,7 +92,7 @@ try {
 >0 : 0
 }
 catch (e) {
->e : any
+>e : unknown
 
     let l11 = 0;
 >l11 : number
@@ -176,7 +176,7 @@ var F3 = function () {
 };
 
 // modules
-module m {
+namespace m {
 >m : typeof m
 
     let l22 = 0;
@@ -279,7 +279,7 @@ function f3() {
     }
 }
 
-module m3 {
+namespace m3 {
 >m3 : typeof m3
 
     label: let l34 = 0;

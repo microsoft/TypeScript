@@ -35,11 +35,11 @@ x = E.A;
 >E : typeof E
 >A : E
 
-class C { foo: string }
+class C { foo!: string }
 >C : C
 >foo : string
 
-var a: C;
+declare var a: C;
 >a : C
 
 x = a;
@@ -50,7 +50,7 @@ x = a;
 interface I { foo: string }
 >foo : string
 
-var b: I;
+declare var b: I;
 >b : I
 
 x = b;
@@ -64,7 +64,7 @@ x = { f() {} }
 >{ f() {} } : { f(): void; }
 >f : () => void
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : typeof M
 >x : number
 >1 : 1

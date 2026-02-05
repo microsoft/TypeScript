@@ -15,6 +15,7 @@ func TestAutoImportProvider_importsMap3(t *testing.T) {
 {
   "compilerOptions": {
     "module": "nodenext",
+    "lib": ["es5"],
     "rootDir": "src",
     "outDir": "dist"
   }

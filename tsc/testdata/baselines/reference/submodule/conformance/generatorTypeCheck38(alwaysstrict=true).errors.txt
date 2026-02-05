@@ -1,0 +1,14 @@
+generatorTypeCheck38.ts(1,5): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+generatorTypeCheck38.ts(4,19): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+
+
+==== generatorTypeCheck38.ts (2 errors) ====
+    var yield;
+        ~~~~~
+!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+    function* g() {
+        yield 0;
+        var v: typeof yield;
+                      ~~~~~
+!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+    }

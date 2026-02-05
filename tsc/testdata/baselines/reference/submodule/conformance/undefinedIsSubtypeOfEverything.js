@@ -82,7 +82,7 @@ class D11 extends Base {
 }
 
 function f() { }
-module f {
+namespace f {
     export var bar = 1;
 }
 class D12 extends Base {
@@ -91,7 +91,7 @@ class D12 extends Base {
 
 
 class c { baz: string }
-module c {
+namespace c {
     export var bar = 1;
 }
 class D13 extends Base {
@@ -124,6 +124,7 @@ class D17 extends Base {
 
 
 //// [undefinedIsSubtypeOfEverything.js]
+"use strict";
 // undefined is a subtype of every other types, no errors expected below
 class Base {
     foo;

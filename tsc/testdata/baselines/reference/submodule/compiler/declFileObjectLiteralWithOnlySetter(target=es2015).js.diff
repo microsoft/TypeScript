@@ -1,0 +1,11 @@
+--- old.declFileObjectLiteralWithOnlySetter(target=es2015).js
++++ new.declFileObjectLiteralWithOnlySetter(target=es2015).js
+@@= skipped -27, +27 lines =@@
+     b: number;
+     x: number;
+ };
+-declare var /*3*/ point: {
++declare var point: {
+     b: number;
+     x: number;
+ };

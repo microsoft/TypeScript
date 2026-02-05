@@ -1,8 +1,8 @@
 --- old.indexedAccessPrivateMemberOfGenericConstraint.js
 +++ new.indexedAccessPrivateMemberOfGenericConstraint.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [indexedAccessPrivateMemberOfGenericConstraint.js]
+ "use strict";
  class A {
 +    a;
  }

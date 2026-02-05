@@ -116,6 +116,7 @@ function D7() {
 
 
 //// [argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js]
+"use strict";
 function A() {
     return class T {
         a = arguments;

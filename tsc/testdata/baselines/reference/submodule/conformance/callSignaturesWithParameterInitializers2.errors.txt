@@ -25,7 +25,7 @@ callSignaturesWithParameterInitializers2.ts(21,5): error TS2300: Duplicate ident
         foo(x = 1) { }
     }
     
-    var c: C;
+    declare var c: C;
     c.foo();
     c.foo(1);
     

@@ -1,0 +1,10 @@
+--- old.declFileTypeAnnotationParenType(target=es2015).js
++++ new.declFileTypeAnnotationParenType(target=es2015).js
+@@= skipped -13, +13 lines =@@
+ //// [declFileTypeAnnotationParenType.js]
+ "use strict";
+ class c {
++    p;
+ }
+ var x = [() => new c()];
+ var y = [() => new c()];

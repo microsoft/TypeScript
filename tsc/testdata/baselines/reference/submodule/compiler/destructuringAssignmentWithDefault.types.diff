@@ -105,20 +105,3 @@
  >options : [string, number] | undefined
 
      let [str, num] = options || [];
- >str : string | undefined
- >num : number | undefined
-->options || [] : [string, number] | []
-+>options || [] : [] | [string, number]
- >options : [string, number] | undefined
- >[] : []
-
-     [str, num] = options || [];
-->[str, num] = options || [] : [string, number] | []
-+>[str, num] = options || [] : [] | [string, number]
- >[str, num] : [string | undefined, number | undefined]
- >str : string | undefined
- >num : number | undefined
-->options || [] : [string, number] | []
-+>options || [] : [] | [string, number]
- >options : [string, number] | undefined
- >[] : []

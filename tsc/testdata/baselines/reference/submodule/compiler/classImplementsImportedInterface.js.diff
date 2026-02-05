@@ -1,7 +1,7 @@
 --- old.classImplementsImportedInterface.js
 +++ new.classImplementsImportedInterface.js
-@@= skipped -16, +16 lines =@@
- //// [classImplementsImportedInterface.js]
+@@= skipped -17, +17 lines =@@
+ "use strict";
  var M2;
  (function (M2) {
 +    var T = M1.I;

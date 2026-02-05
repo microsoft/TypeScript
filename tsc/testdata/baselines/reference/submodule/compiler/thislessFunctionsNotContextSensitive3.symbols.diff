@@ -1,0 +1,14 @@
+--- old.thislessFunctionsNotContextSensitive3.symbols
++++ new.thislessFunctionsNotContextSensitive3.symbols
+@@= skipped -189, +189 lines =@@
+ >editor : Symbol(editor, Decl(thislessFunctionsNotContextSensitive3.ts, 26, 21))
+
+         ...this.options.suggestion,
+->this.options.suggestion : Symbol(suggestion, Decl(thislessFunctionsNotContextSensitive3.ts, 52, 12))
+ >this.options : Symbol(options, Decl(thislessFunctionsNotContextSensitive3.ts, 25, 34))
+ >this : Symbol(this, Decl(thislessFunctionsNotContextSensitive3.ts, 25, 27))
+ >options : Symbol(options, Decl(thislessFunctionsNotContextSensitive3.ts, 25, 34))
+->suggestion : Symbol(suggestion, Decl(thislessFunctionsNotContextSensitive3.ts, 52, 12))
+
+       }),
+     ];

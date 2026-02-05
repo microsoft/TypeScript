@@ -3,10 +3,12 @@ file.tsx(19,2): error TS2322: Type '{ x: number; }' is not assignable to type 'A
     Type 'number' is not assignable to type 'string'.
 file.tsx(23,2): error TS2741: Property 'x' is missing in type '{ y: number; }' but required in type 'Attribs1'.
 file.tsx(31,8): error TS2322: Type 'number' is not assignable to type 'string'.
+file.tsx(31,8): error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+file.tsx(39,8): error TS2783: 'x' is specified more than once, so this usage will be overwritten.
 
 
-==== file.tsx (3 errors) ====
-    declare module JSX {
+==== file.tsx (5 errors) ====
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     		test1: Attribs1;
@@ -47,6 +49,9 @@ file.tsx(31,8): error TS2322: Type 'number' is not assignable to type 'string'.
            ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
 !!! related TS6500 file.tsx:8:2: The expected type comes from property 'x' which is declared here on type 'Attribs1'
+           ~~~~~~
+!!! error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 file.tsx:31:15: This spread always overwrites this property.
     
     // Ok
     var obj6 = { x: 'ok', y: 32, extra: 100 };
@@ -55,4 +60,7 @@ file.tsx(31,8): error TS2322: Type 'number' is not assignable to type 'string'.
     // OK (spread override)
     var obj7 = { x: 'foo' };
     <test1 x={32} {...obj7} />
+           ~~~~~~
+!!! error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 file.tsx:39:15: This spread always overwrites this property.
     

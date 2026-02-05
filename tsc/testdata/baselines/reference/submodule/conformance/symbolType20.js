@@ -4,3 +4,4 @@
 interface symbol { }
 
 //// [symbolType20.js]
+"use strict";

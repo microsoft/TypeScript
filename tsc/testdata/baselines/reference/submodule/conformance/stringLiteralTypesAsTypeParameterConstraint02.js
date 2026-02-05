@@ -9,6 +9,7 @@ let f = foo((y: "foo" | "bar") => y === "foo" ? y : "foo");
 let fResult = f("foo");
 
 //// [stringLiteralTypesAsTypeParameterConstraint02.js]
+"use strict";
 function foo(f) {
     return f;
 }

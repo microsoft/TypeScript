@@ -11,6 +11,7 @@ var o2: {} = c;
 
 
 //// [classAppearsToHaveMembersOfObject.js]
+"use strict";
 class C {
     foo;
 }

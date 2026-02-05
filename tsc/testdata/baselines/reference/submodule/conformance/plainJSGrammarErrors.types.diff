@@ -9,12 +9,3 @@
 
      export { staticParam }
  >staticParam : any
-@@= skipped -291, +291 lines =@@
- >b : any
-
- switch (b) {
-->b : undefined
-+>b : any
-
-     case false:
- >false : false

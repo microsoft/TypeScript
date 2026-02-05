@@ -8,6 +8,7 @@
 
 
 //// [parser.numericSeparators.hex.js]
+"use strict";
 17;
 1;
 285212689;

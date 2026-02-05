@@ -9,6 +9,7 @@ class C65 {
 }
 
 //// [functionAndPropertyNameConflict.js]
+"use strict";
 class C65 {
     aaaaa() { }
     get aaaaa() {

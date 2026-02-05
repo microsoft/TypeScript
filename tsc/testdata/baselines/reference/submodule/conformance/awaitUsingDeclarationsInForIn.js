@@ -8,6 +8,7 @@ async function main() {
 
 
 //// [awaitUsingDeclarationsInForIn.js]
+"use strict";
 async function main() {
     for (await using x in {}) {
     }

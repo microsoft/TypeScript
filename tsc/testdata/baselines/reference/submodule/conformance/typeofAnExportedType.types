@@ -61,7 +61,7 @@ export var r5: typeof i2;
 >r5 : I
 >i2 : I
 
-export module M {
+export namespace M {
 >M : typeof M
 
     export var foo = '';
@@ -122,7 +122,7 @@ export var r12: typeof r12;
 export function foo() { }
 >foo : typeof foo
 
-export module foo {
+export namespace foo {
 >foo : typeof foo
 
     export var y = 1;

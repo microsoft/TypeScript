@@ -13,7 +13,7 @@ class C {
     protected static foo() { }
 }
 
-var c: C;
+declare var c: C;
 // all errors
 c.x;
 c.y;
@@ -26,6 +26,7 @@ C.b = 1;
 C.foo();
 
 //// [classPropertyAsProtected.js]
+"use strict";
 class C {
     x;
     get y() { return null; }
@@ -36,7 +37,6 @@ class C {
     static set b(x) { }
     static foo() { }
 }
-var c;
 // all errors
 c.x;
 c.y;

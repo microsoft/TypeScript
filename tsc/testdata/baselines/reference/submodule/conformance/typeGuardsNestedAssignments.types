@@ -4,8 +4,9 @@
 class Foo {
 >Foo : Foo
 
-    x: string;
+    x: string = "";
 >x : string
+>"" : ""
 }
 
 declare function getFooOrNull(): Foo | null;

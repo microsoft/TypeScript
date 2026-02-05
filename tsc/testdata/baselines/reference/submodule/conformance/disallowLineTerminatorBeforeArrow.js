@@ -56,7 +56,7 @@ foo(()
 foo(()
     => { return false; });
 
-module m {
+namespace m {
     class City {
         constructor(x: number, thing = ()
             => 100) {
@@ -77,6 +77,7 @@ module m {
 
 
 //// [disallowLineTerminatorBeforeArrow.js]
+"use strict";
 var f1 = () => { };
 var f2 = (x, y) => { };
 var f3 = (x, y, ...rest) => { };

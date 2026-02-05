@@ -1,6 +1,6 @@
 --- old.typeGuardFunctionOfFormThis.js
 +++ new.typeGuardFunctionOfFormThis.js
-@@= skipped -193, +193 lines =@@
+@@= skipped -194, +194 lines =@@
      holder2.a;
  }
  class ArrowGuard {

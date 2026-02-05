@@ -6,6 +6,7 @@ class B extends A { }
 
 
 //// [noEmitHelpers.js]
+"use strict";
 class A {
 }
 class B extends A {

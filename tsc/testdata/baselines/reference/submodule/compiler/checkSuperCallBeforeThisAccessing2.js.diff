@@ -1,6 +1,6 @@
 --- old.checkSuperCallBeforeThisAccessing2.js
 +++ new.checkSuperCallBeforeThisAccessing2.js
-@@= skipped -15, +15 lines =@@
+@@= skipped -16, +16 lines =@@
  class Based {
  }
  class Derived extends Based {

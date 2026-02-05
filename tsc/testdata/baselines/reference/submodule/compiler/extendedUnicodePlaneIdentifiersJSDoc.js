@@ -11,6 +11,7 @@ function foo(𝑚, 𝑀) {
 }
 
 //// [file.js]
+"use strict";
 /**
  * Adds
  * @param {number} 𝑚

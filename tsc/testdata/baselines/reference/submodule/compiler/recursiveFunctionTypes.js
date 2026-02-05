@@ -47,6 +47,7 @@ f7(""); // ok (function takes an any param)
 f7(); // ok
 
 //// [recursiveFunctionTypes.js]
+"use strict";
 function fn() { return 1; }
 var x = fn; // error
 var y = fn; // ok

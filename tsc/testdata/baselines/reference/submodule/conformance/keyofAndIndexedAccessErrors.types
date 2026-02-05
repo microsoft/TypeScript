@@ -28,19 +28,19 @@ type T01 = keyof Object;
 >T01 : keyof Object
 
 type T02 = keyof keyof Object;
->T02 : number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"
+>T02 : number | "anchor" | "big" | "blink" | "bold" | "charAt" | "charCodeAt" | "codePointAt" | "concat" | "endsWith" | "fixed" | "fontcolor" | "fontsize" | "includes" | "indexOf" | "italics" | "lastIndexOf" | "length" | "link" | "localeCompare" | "match" | "normalize" | "repeat" | "replace" | "search" | "slice" | "small" | "split" | "startsWith" | "strike" | "sub" | "substr" | "substring" | "sup" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf" | unique symbol
 
 type T03 = keyof keyof keyof Object;
 >T03 : "toString" | "valueOf"
 
 type T04 = keyof keyof keyof keyof Object;
->T04 : number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"
+>T04 : number | "anchor" | "big" | "blink" | "bold" | "charAt" | "charCodeAt" | "codePointAt" | "concat" | "endsWith" | "fixed" | "fontcolor" | "fontsize" | "includes" | "indexOf" | "italics" | "lastIndexOf" | "length" | "link" | "localeCompare" | "match" | "normalize" | "repeat" | "replace" | "search" | "slice" | "small" | "split" | "startsWith" | "strike" | "sub" | "substr" | "substring" | "sup" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf" | unique symbol
 
 type T05 = keyof keyof keyof keyof keyof Object;
 >T05 : "toString" | "valueOf"
 
 type T06 = keyof keyof keyof keyof keyof keyof Object;
->T06 : number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"
+>T06 : number | "anchor" | "big" | "blink" | "bold" | "charAt" | "charCodeAt" | "codePointAt" | "concat" | "endsWith" | "fixed" | "fontcolor" | "fontsize" | "includes" | "indexOf" | "italics" | "lastIndexOf" | "length" | "link" | "localeCompare" | "match" | "normalize" | "repeat" | "replace" | "search" | "slice" | "small" | "split" | "startsWith" | "strike" | "sub" | "substr" | "substring" | "sup" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf" | unique symbol
 
 type T10 = Shape["name"];
 >T10 : string
@@ -425,13 +425,13 @@ type UndefinedKeys<T extends Record<string, any>> = {
 type MyType = {a: string, b: string | undefined}
 >MyType : MyType
 >a : string
->b : string
+>b : string | undefined
 
 type Result1 = UndefinedKeys<MyType>;
 >Result1 : UndefinedKeys<MyType>
 
 const a1: Result1['a'] = 'a';  // Error
->a1 : "a"
+>a1 : never
 >'a' : "a"
 
 const b1: Result1['b'] = 'b';

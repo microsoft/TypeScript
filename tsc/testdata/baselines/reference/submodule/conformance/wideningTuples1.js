@@ -7,5 +7,6 @@ var y = foo([undefined]);
 y = [""];
 
 //// [wideningTuples1.js]
+"use strict";
 var y = foo([undefined]);
 y = [""];

@@ -11,6 +11,7 @@ class D extends C {
 }
 
 //// [scopeCheckExtendedClassInsidePublicMethod2.js]
+"use strict";
 class C {
     v;
     p;

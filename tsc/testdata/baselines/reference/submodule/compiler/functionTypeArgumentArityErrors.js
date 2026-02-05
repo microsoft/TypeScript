@@ -30,6 +30,7 @@ f5<number, number, number>();
 
 
 //// [functionTypeArgumentArityErrors.js]
+"use strict";
 f1();
 f1();
 f2();

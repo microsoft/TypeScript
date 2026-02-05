@@ -1,8 +1,8 @@
 --- old.arrayLiteralContextualType.js
 +++ new.arrayLiteralContextualType.js
-@@= skipped -32, +32 lines =@@
-
+@@= skipped -33, +33 lines =@@
  //// [arrayLiteralContextualType.js]
+ "use strict";
  class Giraffe {
 -    constructor() {
 -        this.name = "Giraffe";

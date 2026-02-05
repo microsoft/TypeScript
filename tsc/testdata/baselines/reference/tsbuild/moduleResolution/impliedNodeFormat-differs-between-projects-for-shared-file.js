@@ -53,8 +53,8 @@ Found 'package.json' at '/home/src/workspaces/project/node_modules/@types/pg/pac
 File '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', result '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts'.
 ======== Type reference directive 'pg' was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', primary: true. ========
-../../tslibs/TS/Lib/lib.d.ts
-   Default library for target 'ES5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+   Default library for target 'ES2024'
 a/src/index.ts
    Matched by default include pattern '**/*'
 node_modules/@types/pg/index.d.ts
@@ -91,8 +91,8 @@ Found 'package.json' at '/home/src/workspaces/project/node_modules/@types/pg/pac
 File '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', result '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts'.
 ======== Type reference directive 'pg' was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', primary: true. ========
-../../tslibs/TS/Lib/lib.es2022.full.d.ts
-   Default library for target 'ES2022'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+   Default library for target 'ES2024'
 node_modules/@types/pg/index.d.ts
    Imported via "pg" from file 'b/src/index.ts'
    Entry point for implicit type library 'pg'
@@ -100,30 +100,7 @@ node_modules/@types/pg/index.d.ts
 b/src/index.ts
    Matched by default include pattern '**/*'
    File is ECMAScript module because 'b/package.json' has field "type" with value "module"
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-interface SymbolConstructor {
-    (desc?: string | number): symbol;
-    for(name: string): symbol;
-    readonly toStringTag: symbol;
-}
-declare var Symbol: SymbolConstructor;
-interface Symbol {
-    readonly [Symbol.toStringTag]: string;
-}
-declare const console: { log(msg: any): void; };
-//// [/home/src/tslibs/TS/Lib/lib.es2022.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -186,14 +163,14 @@ pg.foo();
 
 a/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/project/a/src/index.ts
 *refresh*    /home/src/workspaces/project/node_modules/@types/pg/index.d.ts
 Signatures::
 
 b/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/project/node_modules/@types/pg/index.d.ts
 *refresh*    /home/src/workspaces/project/b/src/index.ts
 Signatures::

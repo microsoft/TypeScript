@@ -4,4 +4,5 @@
 function foo5<T extends hm>(test: T) { }
 
 //// [constraintErrors1.js]
+"use strict";
 function foo5(test) { }

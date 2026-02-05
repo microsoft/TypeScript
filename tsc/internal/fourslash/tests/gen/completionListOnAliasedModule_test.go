@@ -12,8 +12,8 @@ func TestCompletionListOnAliasedModule(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
-    export module N {
+	const content = `namespace M {
+    export namespace N {
         export function foo() { }
         function bar() { }
     }

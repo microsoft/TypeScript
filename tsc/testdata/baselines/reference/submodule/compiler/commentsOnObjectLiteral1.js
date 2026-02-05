@@ -10,6 +10,7 @@ var Person = makeClass(
 );
 
 //// [commentsOnObjectLiteral1.js]
+"use strict";
 var Person = makeClass(
 /**
   @scope Person

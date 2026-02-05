@@ -1,13 +1,25 @@
+subtypesOfTypeParameter.ts(4,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 subtypesOfTypeParameter.ts(8,5): error TS2416: Property 'foo' in type 'D1<T, U>' is not assignable to the same property in base type 'C3<T>'.
   Type 'U' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+subtypesOfTypeParameter.ts(8,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+subtypesOfTypeParameter.ts(17,12): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+subtypesOfTypeParameter.ts(18,15): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+subtypesOfTypeParameter.ts(24,11): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+subtypesOfTypeParameter.ts(63,21): error TS2454: Variable 'i1' is used before being assigned.
+subtypesOfTypeParameter.ts(67,22): error TS2454: Variable 'c1' is used before being assigned.
+subtypesOfTypeParameter.ts(72,22): error TS2454: Variable 'c2' is used before being assigned.
+subtypesOfTypeParameter.ts(83,22): error TS2454: Variable 'af' is used before being assigned.
+subtypesOfTypeParameter.ts(87,22): error TS2454: Variable 'ac' is used before being assigned.
 
 
-==== subtypesOfTypeParameter.ts (1 errors) ====
+==== subtypesOfTypeParameter.ts (11 errors) ====
     // checking whether other types are subtypes of type parameters
     
     class C3<T> {
         foo: T;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     
     class D1<T, U> extends C3<T> {
@@ -17,6 +29,8 @@ subtypesOfTypeParameter.ts(8,5): error TS2416: Property 'foo' in type 'D1<T, U>'
 !!! error TS2416:   Type 'U' is not assignable to type 'T'.
 !!! error TS2416:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 !!! related TS2208 subtypesOfTypeParameter.ts:7:13: This type parameter might need an `extends T` constraint.
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     
     function f1<T, U>(x: T, y: U) {
@@ -26,14 +40,20 @@ subtypesOfTypeParameter.ts(8,5): error TS2416: Property 'foo' in type 'D1<T, U>'
     
     interface I1 { foo: number; }
     class C1 { foo: number; }
+               ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     class C2<T> { foo: T; }
+                  ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     enum E { A }
     function f() { }
-    module f {
+    namespace f {
         export var bar = 1;
     }
     class c { baz: string }
-    module c {
+              ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+    namespace c {
         export var bar = 1;
     }
     
@@ -72,15 +92,21 @@ subtypesOfTypeParameter.ts(8,5): error TS2416: Property 'foo' in type 'D1<T, U>'
     
         var i1: I1;
         var r9 = true ? i1 : x;
+                        ~~
+!!! error TS2454: Variable 'i1' is used before being assigned.
         var r9 = true ? x : i1;
     
         var c1: C1;
         var r10 = true ? c1 : x;
+                         ~~
+!!! error TS2454: Variable 'c1' is used before being assigned.
         var r10 = true ? x : c1;
     
     
         var c2: C2<number>;
         var r12 = true ? c2 : x;
+                         ~~
+!!! error TS2454: Variable 'c2' is used before being assigned.
         var r12 = true ? x : c2;
     
     
@@ -92,10 +118,14 @@ subtypesOfTypeParameter.ts(8,5): error TS2416: Property 'foo' in type 'D1<T, U>'
     
         var af: typeof f;
         var r15 = true ? af : x;
+                         ~~
+!!! error TS2454: Variable 'af' is used before being assigned.
         var r15 = true ? x : af;
     
         var ac: typeof c;
         var r16 = true ? ac : x;
+                         ~~
+!!! error TS2454: Variable 'ac' is used before being assigned.
         var r16 = true ? x : ac;
     
         function f17<T>(a: T) {

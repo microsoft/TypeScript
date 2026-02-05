@@ -50,6 +50,7 @@ class C4 {
 
 
 //// [declarationFiles.js]
+"use strict";
 class C1 {
     x;
     f(x) { return undefined; }

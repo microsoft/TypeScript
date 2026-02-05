@@ -12,10 +12,10 @@ interface Derived extends Base { bar: string; }
 interface Derived2 extends Derived { baz: string; }
 >baz : string
 
-var a: A;
+declare var a: A;
 >a : A
 
-var b1: { [x: string]: string; }
+declare var b1: { [x: string]: string; };
 >b1 : { [x: string]: string; }
 >x : string
 
@@ -29,7 +29,7 @@ b1 = a; // error
 >b1 : { [x: string]: string; }
 >a : A
 
-module Generics {
+namespace Generics {
 >Generics : typeof Generics
 
     class A<T extends Derived> {
@@ -42,10 +42,10 @@ module Generics {
     function foo<T extends Derived>() {
 >foo : <T extends Derived>() => void
 
-        var a: A<T>;
+        var a!: A<T>;
 >a : A<T>
 
-        var b: { [x: string]: string; }
+        var b!: { [x: string]: string; };
 >b : { [x: string]: string; }
 >x : string
 

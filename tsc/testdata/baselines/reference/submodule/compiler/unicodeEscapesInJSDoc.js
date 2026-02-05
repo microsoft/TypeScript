@@ -19,6 +19,7 @@ function bar(a, aa) {
 
 
 //// [file.js]
+"use strict";
 /**
  * @param {number} \u0061
  * @param {number} a\u0061

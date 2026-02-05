@@ -25,15 +25,11 @@ const b: string = a;
 
 
 //// [inferTypes2.js]
-"use strict";
 // Repros from #22755
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = bar;
-exports.bar2 = bar2;
-function bar(obj) {
+export function bar(obj) {
     return foo(obj);
 }
-function bar2(obj) {
+export function bar2(obj) {
     return foo2(obj);
 }
 const a = null;

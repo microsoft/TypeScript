@@ -40,6 +40,7 @@ var resultIsAny11 = (!BOOLEAN, x.doSomeThing());
 
 
 //// [commaOperatorWithSecondOperandAnyType.js]
+"use strict";
 var ANY;
 var BOOLEAN;
 var NUMBER;

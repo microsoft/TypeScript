@@ -1,6 +1,6 @@
 --- old.tsxStatelessFunctionComponents1.js
 +++ new.tsxStatelessFunctionComponents1.js
-@@= skipped -91, +91 lines =@@
+@@= skipped -95, +95 lines =@@
  let i = <EmptyPropSFC prop1/>;
  let i1 = <EmptyPropSFC ref={x => x.greeting.substr(10)}/>;
  let o = {

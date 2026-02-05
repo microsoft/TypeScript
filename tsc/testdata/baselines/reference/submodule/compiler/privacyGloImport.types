@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/privacyGloImport.ts] ////
 
 === privacyGloImport.ts ===
-module m1 {
+namespace m1 {
 >m1 : typeof m1
 
-    export module m1_M1_public {
+    export namespace m1_M1_public {
 >m1_M1_public : typeof m1_M1_public
 
         export class c1 {
@@ -25,7 +25,7 @@ module m1 {
 >v2 : c1
     }
 
-    module m1_M2_private {
+    namespace m1_M2_private {
 >m1_M2_private : typeof m1_M2_private
 
         export class c1 {
@@ -207,7 +207,7 @@ module m1 {
     //export import m1_im4_public = require("m1_M4_private");
 }
 
-module glo_M1_public {
+namespace glo_M1_public {
 >glo_M1_public : typeof glo_M1_public
 
     export class c1 {
@@ -302,13 +302,13 @@ declare module "use_glo_M1_public" {
 >use_glo_M2_public_v3_private : () => use_glo_M2_public.c1
 >use_glo_M2_public : any
 
-    module m2 {
+    namespace m2 {
         //import errorImport = require("glo_M2_public");
         import nonerrorImport = glo_M1_public;
 >nonerrorImport : typeof nonerrorImport
 >glo_M1_public : typeof nonerrorImport
 
-        module m5 {
+        namespace m5 {
             //import m5_errorImport = require("glo_M2_public");
             import m5_nonerrorImport = glo_M1_public;
 >m5_nonerrorImport : typeof m5_nonerrorImport
@@ -320,12 +320,12 @@ declare module "use_glo_M1_public" {
 declare module "anotherParseError" {
 >"anotherParseError" : typeof import("anotherParseError")
 
-    module m2 {
+    namespace m2 {
         //declare module "abc" {
         //}
     }
 
-    module m2 {
+    namespace m2 {
         //module "abc2" {
         //}
     }
@@ -333,11 +333,11 @@ declare module "anotherParseError" {
     //}
 }
 
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 
     //import m3 = require("use_glo_M1_public");
-    module m4 {
+    namespace m4 {
 >m4 : typeof m4
 
         var a = 10;

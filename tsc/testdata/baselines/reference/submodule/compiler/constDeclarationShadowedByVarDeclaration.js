@@ -25,6 +25,7 @@ var y = 0;
 }
 
 //// [constDeclarationShadowedByVarDeclaration.js]
+"use strict";
 // Error as declaration of var would cause a write to the const value
 var x = 0;
 {

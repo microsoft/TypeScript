@@ -31,9 +31,6 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/first.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Key = void 0;
-exports.Key = Symbol();
+export const Key = Symbol();
 
 

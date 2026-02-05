@@ -12,10 +12,10 @@
  		 */
  		this.foo = arguments;
  >this.foo = arguments : IArguments
-->this.foo : any
+->this.foo : object | undefined
 +>this.foo : object
  >this : this
-->foo : any
+->foo : object | undefined
 +>foo : object
  >arguments : IArguments
  	}

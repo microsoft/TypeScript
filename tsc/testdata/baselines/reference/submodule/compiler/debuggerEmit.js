@@ -5,5 +5,6 @@ var x = function () { debugger; }
 x();
 
 //// [debuggerEmit.js]
+"use strict";
 var x = function () { debugger; };
 x();

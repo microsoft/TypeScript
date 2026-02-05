@@ -1,6 +1,6 @@
 --- old.autoAccessorExperimentalDecorators(target=es2022).js
 +++ new.autoAccessorExperimentalDecorators(target=es2022).js
-@@= skipped -27, +27 lines =@@
+@@= skipped -28, +28 lines =@@
      return c > 3 && r && Object.defineProperty(target, key, r), r;
  };
  class C1 {

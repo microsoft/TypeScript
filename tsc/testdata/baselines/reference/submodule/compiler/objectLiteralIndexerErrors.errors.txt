@@ -11,8 +11,8 @@ objectLiteralIndexerErrors.ts(14,14): error TS2741: Property 'y' is missing in t
         y: string;
     }
     
-    var a: A;
-    var b: B;
+    declare var a: A;
+    declare var b: B;
     var c: any;
     
     var o1: { [s: string]: A;[n: number]: B; } = { x: b, 0: a }; // both indexers are A

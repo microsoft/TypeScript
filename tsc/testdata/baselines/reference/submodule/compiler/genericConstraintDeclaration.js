@@ -11,6 +11,7 @@ class List<T extends {}>{
 
 
 //// [genericConstraintDeclaration.js]
+"use strict";
 class List {
     static empty() { return null; }
 }

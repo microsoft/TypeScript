@@ -1,6 +1,6 @@
 --- old.objectTypesWithOptionalProperties2.js
 +++ new.objectTypesWithOptionalProperties2.js
-@@= skipped -32, +32 lines =@@
+@@= skipped -33, +33 lines =@@
  var a;
  class C {
      x() { }

@@ -2,8 +2,8 @@
 
 === for-of54.ts ===
 for (let v of []) {
->v : any
->[] : undefined[]
+>v : never
+>[] : never[]
 
     var v = 0;
 >v : number

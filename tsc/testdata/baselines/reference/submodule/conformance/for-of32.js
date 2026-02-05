@@ -4,4 +4,5 @@
 for (var v of v) { }
 
 //// [for-of32.js]
+"use strict";
 for (var v of v) { }

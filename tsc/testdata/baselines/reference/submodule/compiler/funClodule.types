@@ -4,7 +4,7 @@
 declare function foo();
 >foo : typeof foo
 
-declare module foo {
+declare namespace foo {
 >foo : typeof foo
 
     export function x(): any;
@@ -17,7 +17,7 @@ declare class foo { } // Should error
 declare class foo2 { }
 >foo2 : foo2
 
-declare module foo2 {
+declare namespace foo2 {
 >foo2 : typeof foo2
 
     export function x(): any;
@@ -30,7 +30,7 @@ declare function foo2(); // Should error
 function foo3() { }
 >foo3 : typeof foo3
 
-module foo3 {
+namespace foo3 {
 >foo3 : typeof foo3
 
      export function x(): any { }

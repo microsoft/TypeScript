@@ -15,7 +15,7 @@ func TestAutoImportProvider8(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
-{ "compilerOptions": { "module": "commonjs" } }
+{ "compilerOptions": { "lib": ["es5"], "module": "commonjs" } }
 // @Filename: /home/src/workspaces/project/package.json
 { "dependencies": { "mylib": "file:packages/mylib" } }
 // @Filename: /home/src/workspaces/project/packages/mylib/package.json
@@ -38,9 +38,9 @@ const b = new MyClass2/*2*/();`
 	defer done()
 	f.MarkTestAsStradaServer()
 	f.GoToMarker(t, "1")
-	opts1142 := f.GetOptions()
-	opts1142.FormatCodeSettings.NewLineCharacter = "\n"
-	f.Configure(t, opts1142)
+	opts1158 := f.GetOptions()
+	opts1158.FormatCodeSettings.NewLineCharacter = "\n"
+	f.Configure(t, opts1158)
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{

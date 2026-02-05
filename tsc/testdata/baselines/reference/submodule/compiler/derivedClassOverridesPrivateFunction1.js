@@ -18,6 +18,7 @@ class DerivedClass extends BaseClass {
 new DerivedClass();
 
 //// [derivedClassOverridesPrivateFunction1.js]
+"use strict";
 class BaseClass {
     constructor() {
         this._init();

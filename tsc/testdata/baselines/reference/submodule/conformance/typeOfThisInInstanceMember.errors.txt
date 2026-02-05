@@ -22,7 +22,7 @@ typeOfThisInInstanceMember.ts(10,11): error TS2339: Property 'z' does not exist 
         }
     }
     
-    var c: C;
+    declare var c: C;
     // all ok
     var r = c.x;
     var ra = c.x.x.x;

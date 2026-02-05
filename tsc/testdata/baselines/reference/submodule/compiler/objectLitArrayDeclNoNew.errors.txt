@@ -5,7 +5,7 @@ objectLitArrayDeclNoNew.ts(27,1): error TS1128: Declaration or statement expecte
 ==== objectLitArrayDeclNoNew.ts (2 errors) ====
     declare var console;
     "use strict";
-    module Test {
+    namespace Test {
         export interface IState {
         }
     

@@ -11,6 +11,7 @@ async function f() {
 
 
 //// [castOfAwait.js]
+"use strict";
 async function f() {
     await 0;
     typeof await 0;

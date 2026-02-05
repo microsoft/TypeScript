@@ -12,6 +12,7 @@ class C {
 
 
 //// [implicitAnyDeclareMemberWithoutType2.js]
+"use strict";
 // this should be an error
 class C {
     x = null; // error at "x"

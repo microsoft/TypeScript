@@ -1,0 +1,16 @@
+emitArrowFunctionWhenUsingArguments17.ts(2,11): error TS1100: Invalid use of 'arguments' in strict mode.
+emitArrowFunctionWhenUsingArguments17.ts(6,9): error TS1100: Invalid use of 'arguments' in strict mode.
+
+
+==== emitArrowFunctionWhenUsingArguments17.ts (2 errors) ====
+    function f() {
+        var { arguments } = { arguments: "hello" };
+              ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        if (Math.random()) {
+            return () => arguments[0];
+        }
+        var arguments = "world";
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }

@@ -9,6 +9,7 @@ async function func(): Promise<void> {
 }
 
 //// [asyncUseStrict_es6.js]
+"use strict";
 async function func() {
     "use strict";
     var b = await p || a;

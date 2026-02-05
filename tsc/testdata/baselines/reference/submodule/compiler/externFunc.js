@@ -7,4 +7,5 @@ parseInt("2");
 
 
 //// [externFunc.js]
+"use strict";
 parseInt("2");

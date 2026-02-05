@@ -1,8 +1,8 @@
 --- old.getAndSetNotIdenticalType3.js
 +++ new.getAndSetNotIdenticalType3.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [getAndSetNotIdenticalType3.js]
+ "use strict";
  class A {
 +    foo;
  }

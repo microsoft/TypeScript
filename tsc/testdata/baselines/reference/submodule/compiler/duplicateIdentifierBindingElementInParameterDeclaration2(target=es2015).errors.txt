@@ -1,0 +1,147 @@
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(2,13): error TS2300: Duplicate identifier 'a'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(2,13): error TS7006: Parameter 'a' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(2,17): error TS2300: Duplicate identifier 'a'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(2,17): error TS7031: Binding element 'a' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(2,21): error TS2300: Duplicate identifier 'b'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(2,21): error TS7031: Binding element 'b' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(2,27): error TS2300: Duplicate identifier 'b'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(2,27): error TS7031: Binding element 'b' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(3,14): error TS2300: Duplicate identifier 'a'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(3,14): error TS7031: Binding element 'a' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(3,17): error TS2300: Duplicate identifier 'a'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(3,17): error TS7031: Binding element 'a' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(4,14): error TS2300: Duplicate identifier 'b'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(4,14): error TS7031: Binding element 'b' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(4,19): error TS2300: Duplicate identifier 'b'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(4,19): error TS7031: Binding element 'b' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(5,14): error TS2300: Duplicate identifier 'c'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(5,14): error TS7031: Binding element 'c' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(5,18): error TS2300: Duplicate identifier 'c'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(5,18): error TS7031: Binding element 'c' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(5,24): error TS2300: Duplicate identifier 'c'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(5,24): error TS7031: Binding element 'c' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(6,14): error TS2300: Duplicate identifier 'd'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(6,14): error TS7031: Binding element 'd' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(6,21): error TS2300: Duplicate identifier 'd'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(6,21): error TS7031: Binding element 'd' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(7,14): error TS2300: Duplicate identifier 'e'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(7,14): error TS7031: Binding element 'e' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(7,21): error TS2300: Duplicate identifier 'e'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(7,21): error TS7031: Binding element 'e' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(7,27): error TS2300: Duplicate identifier 'e'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(7,27): error TS7031: Binding element 'e' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(7,32): error TS7031: Binding element 'd' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(7,35): error TS2300: Duplicate identifier 'e'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(7,35): error TS7031: Binding element 'e' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(7,40): error TS2300: Duplicate identifier 'e'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(7,40): error TS7031: Binding element 'e' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(7,46): error TS7019: Rest parameter 'e' implicitly has an 'any[]' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(7,49): error TS2300: Duplicate identifier 'e'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(8,14): error TS2300: Duplicate identifier 'f'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(8,14): error TS7031: Binding element 'f' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(8,20): error TS2300: Duplicate identifier 'f'.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(8,20): error TS7031: Binding element 'f' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(9,13): error TS7006: Parameter 'a' implicitly has an 'any' type.
+duplicateIdentifierBindingElementInParameterDeclaration2.ts(9,24): error TS7006: Parameter 'a' implicitly has an 'any' type.
+
+
+==== duplicateIdentifierBindingElementInParameterDeclaration2.ts (45 errors) ====
+    "use strict"
+    function f0(a, [a, [b]], {b}) { }
+                ~
+!!! error TS2300: Duplicate identifier 'a'.
+                ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
+                    ~
+!!! error TS2300: Duplicate identifier 'a'.
+                    ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                        ~
+!!! error TS2300: Duplicate identifier 'b'.
+                        ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+                              ~
+!!! error TS2300: Duplicate identifier 'b'.
+                              ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+    function f1([a, a]) { }
+                 ~
+!!! error TS2300: Duplicate identifier 'a'.
+                 ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                    ~
+!!! error TS2300: Duplicate identifier 'a'.
+                    ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+    function f2({b}, {b}) { }
+                 ~
+!!! error TS2300: Duplicate identifier 'b'.
+                 ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+                      ~
+!!! error TS2300: Duplicate identifier 'b'.
+                      ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+    function f3([c, [c], [[c]]]) { }
+                 ~
+!!! error TS2300: Duplicate identifier 'c'.
+                 ~
+!!! error TS7031: Binding element 'c' implicitly has an 'any' type.
+                     ~
+!!! error TS2300: Duplicate identifier 'c'.
+                     ~
+!!! error TS7031: Binding element 'c' implicitly has an 'any' type.
+                           ~
+!!! error TS2300: Duplicate identifier 'c'.
+                           ~
+!!! error TS7031: Binding element 'c' implicitly has an 'any' type.
+    function f4({d, d: {d}}) { }
+                 ~
+!!! error TS2300: Duplicate identifier 'd'.
+                 ~
+!!! error TS7031: Binding element 'd' implicitly has an 'any' type.
+                        ~
+!!! error TS2300: Duplicate identifier 'd'.
+                        ~
+!!! error TS7031: Binding element 'd' implicitly has an 'any' type.
+    function f5({e, e: {e}}, {e}, [d, e, [[e]]], ...e) { }
+                 ~
+!!! error TS2300: Duplicate identifier 'e'.
+                 ~
+!!! error TS7031: Binding element 'e' implicitly has an 'any' type.
+                        ~
+!!! error TS2300: Duplicate identifier 'e'.
+                        ~
+!!! error TS7031: Binding element 'e' implicitly has an 'any' type.
+                              ~
+!!! error TS2300: Duplicate identifier 'e'.
+                              ~
+!!! error TS7031: Binding element 'e' implicitly has an 'any' type.
+                                   ~
+!!! error TS7031: Binding element 'd' implicitly has an 'any' type.
+                                      ~
+!!! error TS2300: Duplicate identifier 'e'.
+                                      ~
+!!! error TS7031: Binding element 'e' implicitly has an 'any' type.
+                                           ~
+!!! error TS2300: Duplicate identifier 'e'.
+                                           ~
+!!! error TS7031: Binding element 'e' implicitly has an 'any' type.
+                                                 ~~~~
+!!! error TS7019: Rest parameter 'e' implicitly has an 'any[]' type.
+                                                    ~
+!!! error TS2300: Duplicate identifier 'e'.
+    function f6([f, ...f]) { }
+                 ~
+!!! error TS2300: Duplicate identifier 'f'.
+                 ~
+!!! error TS7031: Binding element 'f' implicitly has an 'any' type.
+                       ~
+!!! error TS2300: Duplicate identifier 'f'.
+                       ~
+!!! error TS7031: Binding element 'f' implicitly has an 'any' type.
+    function f7(a, func = (a) => { return 1 }){ }  // not error
+                ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
+                           ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.

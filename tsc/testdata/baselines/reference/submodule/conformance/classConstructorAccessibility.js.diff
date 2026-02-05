@@ -1,8 +1,8 @@
 --- old.classConstructorAccessibility.js
 +++ new.classConstructorAccessibility.js
-@@= skipped -37, +37 lines =@@
-
+@@= skipped -38, +38 lines =@@
  //// [classConstructorAccessibility.js]
+ "use strict";
  class C {
 +    x;
      constructor(x) {

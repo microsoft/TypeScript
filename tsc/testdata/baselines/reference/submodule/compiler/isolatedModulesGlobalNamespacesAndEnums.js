@@ -34,6 +34,7 @@ declare enum Enum {
 }
 
 //// [script-namespaces.js]
+"use strict";
 var Instantiated;
 (function (Instantiated) {
     Instantiated.x = 1;
@@ -47,6 +48,7 @@ var Instantiated;
     Instantiated.x = 1;
 })(Instantiated || (exports.Instantiated = Instantiated = {}));
 //// [enum1.js]
+"use strict";
 var Enum;
 (function (Enum) {
     Enum[Enum["A"] = 0] = "A";
@@ -55,6 +57,7 @@ var Enum;
 })(Enum || (Enum = {}));
 const d = 'd';
 //// [enum2.js]
+"use strict";
 var Enum;
 (function (Enum) {
     Enum["D"] = d;

@@ -1,7 +1,7 @@
 --- old.controlFlowInstanceofWithSymbolHasInstance.types
 +++ new.controlFlowInstanceofWithSymbolHasInstance.types
-@@= skipped -139, +139 lines =@@
- >a : string
+@@= skipped -140, +140 lines =@@
+ >"" : ""
 
      static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
 ->[Symbol.hasInstance] : <T>(this: T, value: unknown) => value is (T extends (abstract new (...args: any) => infer U) ? U : never)

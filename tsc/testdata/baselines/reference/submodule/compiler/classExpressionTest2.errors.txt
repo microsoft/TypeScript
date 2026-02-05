@@ -1,0 +1,21 @@
+classExpressionTest2.ts(6,22): error TS2454: Variable 't' is used before being assigned.
+classExpressionTest2.ts(6,25): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== classExpressionTest2.ts (2 errors) ====
+    function M() {
+        var m = class C<X> {
+            f<T>() {
+                var t: T;
+                var x: X;
+                return { t, x };
+                         ~
+!!! error TS2454: Variable 't' is used before being assigned.
+                            ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+            }
+        }
+    
+        var v = new m<number>();
+        return v.f<string>();
+    }

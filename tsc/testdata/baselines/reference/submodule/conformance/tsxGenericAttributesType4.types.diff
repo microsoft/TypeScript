@@ -1,0 +1,14 @@
+--- old.tsxGenericAttributesType4.types
++++ new.tsxGenericAttributesType4.types
+@@= skipped -33, +33 lines =@@
+         return <B1 {...this.props} x="hi" />;
+ ><B1 {...this.props} x="hi" /> : JSX.Element
+ >B1 : typeof B1
+->this.props : U & { children?: React.ReactNode; }
++>this.props : U & { children?: React.ReactNode | undefined; }
+ >this : this
+->props : U & { children?: React.ReactNode; }
++>props : U & { children?: React.ReactNode | undefined; }
+ >x : string
+     }
+ }

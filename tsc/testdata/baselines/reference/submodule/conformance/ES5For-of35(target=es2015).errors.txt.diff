@@ -1,0 +1,12 @@
+--- old.ES5For-of35(target=es2015).errors.txt
++++ new.ES5For-of35(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+ ES5For-of35.ts(1,13): error TS2339: Property 'x' does not exist on type 'Number'.
+ ES5For-of35.ts(1,23): error TS2339: Property 'y' does not exist on type 'Number'.
+
+
+-!!! error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+ ==== ES5For-of35.ts (2 errors) ====
+     for (const {x: a = 0, y: b = 1} of [2, 3]) {
+                 ~

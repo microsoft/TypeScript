@@ -4,7 +4,7 @@
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 // string named numeric properties work correctly, errors below unless otherwise noted
 
-module JustStrings {
+namespace JustStrings {
 >JustStrings : typeof JustStrings
 
     class S { '1': string; }
@@ -15,10 +15,10 @@ module JustStrings {
 >T : T
 >'1.' : string
 
-    var s: S;
+    declare var s: S;
 >s : S
 
-    var t: T;
+    declare var t: T;
 >t : T
 
     interface S2 { '1': string; bar?: string }
@@ -29,18 +29,18 @@ module JustStrings {
 >'1.0' : string
 >baz : string
 
-    var s2: S2;
+    declare var s2: S2;
 >s2 : S2
 
-    var t2: T2;
+    declare var t2: T2;
 >t2 : T2
 
-    var a: { '1.': string; bar?: string }
+    declare var a: { '1.': string; bar?: string };
 >a : { '1.': string; bar?: string; }
 >'1.' : string
 >bar : string
 
-    var b: { '1.0': string; baz?: string }
+    declare var b: { '1.0': string; baz?: string };
 >b : { '1.0': string; baz?: string; }
 >'1.0' : string
 >baz : string
@@ -153,7 +153,7 @@ module JustStrings {
 >t : T
 }
 
-module NumbersAndStrings {
+namespace NumbersAndStrings {
 >NumbersAndStrings : typeof NumbersAndStrings
 
     class S { '1': string; }
@@ -164,10 +164,10 @@ module NumbersAndStrings {
 >T : T
 >1 : string
 
-    var s: S;
+    declare var s: S;
 >s : S
 
-    var t: T;
+    declare var t: T;
 >t : T
 
     interface S2 { '1': string; bar?: string }
@@ -178,18 +178,18 @@ module NumbersAndStrings {
 >1.0 : string
 >baz : string
 
-    var s2: S2;
+    declare var s2: S2;
 >s2 : S2
 
-    var t2: T2;
+    declare var t2: T2;
 >t2 : T2
 
-    var a: { '1.': string; bar?: string }
+    declare var a: { '1.': string; bar?: string };
 >a : { '1.': string; bar?: string; }
 >'1.' : string
 >bar : string
 
-    var b: { 1.0: string; baz?: string }
+    declare var b: { 1.0: string; baz?: string };
 >b : { 1: string; baz?: string; }
 >1.0 : string
 >baz : string

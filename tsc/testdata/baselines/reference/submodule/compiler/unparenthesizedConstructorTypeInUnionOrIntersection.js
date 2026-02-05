@@ -29,3 +29,4 @@ type OK2 = string | (new ()=> string | number);
 
 
 //// [unparenthesizedConstructorTypeInUnionOrIntersection.js]
+"use strict";

@@ -1,0 +1,24 @@
+--- old.ES5For-of37(target=es2015).errors.txt
++++ new.ES5For-of37(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-
+-
+-!!! error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-==== ES5For-of37.ts (0 errors) ====
+-    // https://github.com/microsoft/TypeScript/issues/30083
+-    
+-    for (const i of [0, 1, 2, 3, 4]) {
+-        try {
+-            // Ensure catch binding for the following loop is reset per iteration:
+-            for (const j of [1, 2, 3]) {
+-                if (i === 2) {
+-                    throw new Error('ERR');
+-                }
+-            }
+-            console.log(i);
+-        } catch (err) {
+-            console.log('E %s %s', i, err);
+-        }
+-    }
++<no content>

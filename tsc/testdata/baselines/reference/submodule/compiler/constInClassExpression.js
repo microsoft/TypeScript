@@ -7,6 +7,7 @@ let C = class {
 
 
 //// [constInClassExpression.js]
+"use strict";
 let C = class {
     a = 4;
 };

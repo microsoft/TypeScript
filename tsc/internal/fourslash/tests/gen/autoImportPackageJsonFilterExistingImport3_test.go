@@ -11,7 +11,8 @@ func TestAutoImportPackageJsonFilterExistingImport3(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @module: preserve
+	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
+{ "compilerOptions": { "lib": ["es5"], "module": "preserve", "types": ["*"] } }
 // @Filename: /home/src/workspaces/project/node_modules/@types/node/index.d.ts
 declare module "node:fs" {
     export function readFile(): void;

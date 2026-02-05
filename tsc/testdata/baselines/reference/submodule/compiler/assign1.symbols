@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/assign1.ts] ////
 
 === assign1.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(assign1.ts, 0, 0))
 
     interface I {
->I : Symbol(I, Decl(assign1.ts, 0, 10))
+>I : Symbol(I, Decl(assign1.ts, 0, 13))
 
         salt:number;
 >salt : Symbol(I.salt, Decl(assign1.ts, 1, 17))
@@ -16,7 +16,7 @@ module M {
 
     var x:I={salt:2,pepper:0};
 >x : Symbol(x, Decl(assign1.ts, 6, 7))
->I : Symbol(I, Decl(assign1.ts, 0, 10))
+>I : Symbol(I, Decl(assign1.ts, 0, 13))
 >salt : Symbol(salt, Decl(assign1.ts, 6, 13))
 >pepper : Symbol(pepper, Decl(assign1.ts, 6, 20))
 }

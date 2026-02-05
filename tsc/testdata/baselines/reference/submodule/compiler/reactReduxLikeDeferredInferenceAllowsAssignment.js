@@ -150,8 +150,6 @@ export {};
 
 
 //// [reactReduxLikeDeferredInferenceAllowsAssignment.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const simpleAction = (payload) => ({
     type: "SIMPLE_ACTION",
     payload
@@ -163,3 +161,4 @@ class TestComponent extends Component {
 }
 const mapDispatchToProps = { simpleAction, thunkAction };
 const Test1 = connect(null, mapDispatchToProps)(TestComponent);
+export {};

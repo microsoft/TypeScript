@@ -26,6 +26,7 @@ thing.doSomething((x, y) => y.name.toExponential(0));
 
 
 //// [lambdaParamTypes.js]
+"use strict";
 var thing = create([{ name: "bob", id: 24 }, { name: "doug", id: 32 }]);
 // Below should all be OK
 thing.doSomething((x, y) => x.name.charAt(0)); // x.name should be string, so should be OK

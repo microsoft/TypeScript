@@ -1,8 +1,8 @@
 --- old.overloadOnConstConstraintChecks3.js
 +++ new.overloadOnConstConstraintChecks3.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [overloadOnConstConstraintChecks3.js]
+ "use strict";
  class A {
 -    constructor() {
 -        this.x = 1;

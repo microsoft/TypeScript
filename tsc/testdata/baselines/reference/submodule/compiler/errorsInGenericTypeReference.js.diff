@@ -1,6 +1,6 @@
 --- old.errorsInGenericTypeReference.js
 +++ new.errorsInGenericTypeReference.js
-@@= skipped -90, +90 lines =@@
+@@= skipped -91, +91 lines =@@
      testMethod1() { return null; } // error: could not find symbol V
      static testMethod2() { return null; } // error: could not find symbol V
      set a(value) { } // error: could not find symbol V

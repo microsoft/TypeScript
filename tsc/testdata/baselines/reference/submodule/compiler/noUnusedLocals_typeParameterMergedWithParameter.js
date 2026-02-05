@@ -15,6 +15,7 @@ function useBoth<T>(T: T) {
 
 
 //// [noUnusedLocals_typeParameterMergedWithParameter.js]
+"use strict";
 function useNone(T) { }
 function useParam(T) {
     return T;

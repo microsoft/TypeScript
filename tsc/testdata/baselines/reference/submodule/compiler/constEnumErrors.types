@@ -8,7 +8,7 @@ const enum E {
 >A : E.A
 }
 
-module E {
+namespace E {
 >E : typeof E
 
     var x = 1;

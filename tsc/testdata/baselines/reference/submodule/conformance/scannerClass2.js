@@ -8,14 +8,10 @@
     }
 
 //// [scannerClass2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoggerAdapter = void 0;
-class LoggerAdapter {
+export class LoggerAdapter {
     logger;
     constructor(logger) {
         this.logger = logger;
         this._information = this.logger.information();
     }
 }
-exports.LoggerAdapter = LoggerAdapter;

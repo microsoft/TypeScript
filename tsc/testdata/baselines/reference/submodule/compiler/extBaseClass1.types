@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/extBaseClass1.ts] ////
 
 === extBaseClass1.ts ===
-module M {
+namespace M {
 >M : typeof M
 
     export class B {
@@ -18,7 +18,7 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
     export class C2 extends B {
@@ -27,7 +27,7 @@ module M {
     }
 }
 
-module N {
+namespace N {
 >N : typeof N
 
     export class C3 extends M.B {

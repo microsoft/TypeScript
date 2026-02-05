@@ -1,6 +1,6 @@
 --- old.objectTypesWithOptionalProperties.js
 +++ new.objectTypesWithOptionalProperties.js
-@@= skipped -30, +30 lines =@@
+@@= skipped -31, +31 lines =@@
  // Basic uses of optional properties
  var a;
  class C {

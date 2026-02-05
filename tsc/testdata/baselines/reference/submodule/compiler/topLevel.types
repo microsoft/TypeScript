@@ -77,7 +77,7 @@ result+=(new Point(3,4).move(2,2));
 >2 : 2
 >2 : 2
 
-module M {
+namespace M {
 >M : typeof M
 
     export var origin=new Point(0,0);

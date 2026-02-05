@@ -5,12 +5,12 @@
 interface A {
   (this: void, b?: number): void;
 >this : void
->b : number
+>b : number | undefined
 }
 interface B {
   (this: number, b?: number): void;
 >this : number
->b : number
+>b : number | undefined
 }
 interface C {
   (i: number): void;

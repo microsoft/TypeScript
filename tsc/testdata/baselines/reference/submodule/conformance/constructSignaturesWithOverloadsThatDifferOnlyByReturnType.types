@@ -15,7 +15,7 @@ class C2<T> {
 
     constructor(x: T, y?: string) { }
 >x : T
->y : string
+>y : string | undefined
 }
 
 interface I {

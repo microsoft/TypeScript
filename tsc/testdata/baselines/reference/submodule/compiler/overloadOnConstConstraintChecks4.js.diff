@@ -1,6 +1,6 @@
 --- old.overloadOnConstConstraintChecks4.js
 +++ new.overloadOnConstConstraintChecks4.js
-@@= skipped -18, +18 lines =@@
+@@= skipped -19, +19 lines =@@
  class Z {
  }
  class A extends Z {

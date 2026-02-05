@@ -27,6 +27,7 @@ const O = {
 };
 
 //// [invalidNewTarget.es6.js]
+"use strict";
 const a = new.target;
 const b = () => new.target;
 class C {

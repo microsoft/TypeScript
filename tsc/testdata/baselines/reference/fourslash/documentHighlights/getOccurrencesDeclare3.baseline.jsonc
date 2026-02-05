@@ -3,7 +3,7 @@
 // /*HIGHLIGHTS*/[|declare|] var x;
 // export [|declare|] var y, z;
 // 
-// module m {
+// namespace m {
 //     export class C1 {
 // --- (line: 6) skipped ---
 
@@ -12,7 +12,7 @@
 // }
 // 
 // [|declare|] export var v1, v2;
-// [|declare|] module dm { }
+// [|declare|] namespace dm { }
 // export class EC { }
 
 
@@ -22,7 +22,7 @@
 // [|declare|] var x;
 // export /*HIGHLIGHTS*/[|declare|] var y, z;
 // 
-// module m {
+// namespace m {
 //     export class C1 {
 // --- (line: 6) skipped ---
 
@@ -31,7 +31,7 @@
 // }
 // 
 // [|declare|] export var v1, v2;
-// [|declare|] module dm { }
+// [|declare|] namespace dm { }
 // export class EC { }
 
 
@@ -41,7 +41,7 @@
 // [|declare|] var x;
 // export [|declare|] var y, z;
 // 
-// module m {
+// namespace m {
 //     export class C1 {
 // --- (line: 6) skipped ---
 
@@ -50,7 +50,7 @@
 // }
 // 
 // /*HIGHLIGHTS*/[|declare|] export var v1, v2;
-// [|declare|] module dm { }
+// [|declare|] namespace dm { }
 // export class EC { }
 
 
@@ -60,7 +60,7 @@
 // [|declare|] var x;
 // export [|declare|] var y, z;
 // 
-// module m {
+// namespace m {
 //     export class C1 {
 // --- (line: 6) skipped ---
 
@@ -69,5 +69,5 @@
 // }
 // 
 // [|declare|] export var v1, v2;
-// /*HIGHLIGHTS*/[|declare|] module dm { }
+// /*HIGHLIGHTS*/[|declare|] namespace dm { }
 // export class EC { }

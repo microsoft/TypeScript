@@ -1,0 +1,16 @@
+--- old.recursiveGenericMethodCall.types
++++ new.recursiveGenericMethodCall.types
+@@= skipped -3, +3 lines =@@
+ interface Generator<T> { (): T; }
+
+ function Generate<T>(func: Generator<T>): T {
+->Generate : <T>(func: Generator<T>) => T
++>Generate : <T>(func: Generator<T, any, any>) => T
+ >func : Generator<T, any, any>
+
+     return Generate(func);
+ >Generate(func) : T
+->Generate : <T>(func: Generator<T>) => T
++>Generate : <T>(func: Generator<T, any, any>) => T
+ >func : Generator<T, any, any>
+ }

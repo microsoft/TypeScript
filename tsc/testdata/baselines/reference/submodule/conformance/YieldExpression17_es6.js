@@ -4,4 +4,5 @@
 var v = { get foo() { yield foo; } }
 
 //// [YieldExpression17_es6.js]
+"use strict";
 var v = { get foo() { yield foo; } };

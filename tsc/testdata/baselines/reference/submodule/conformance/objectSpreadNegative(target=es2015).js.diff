@@ -1,0 +1,27 @@
+--- old.objectSpreadNegative(target=es2015).js
++++ new.objectSpreadNegative(target=es2015).js
+@@= skipped -81, +81 lines =@@
+ let o = { a: 1, b: 'no' };
+ /// private propagates
+ class PrivateOptionalX {
++    x;
+ }
+ class PublicX {
+-    constructor() {
+-        this.x = 42;
+-    }
++    x = 42;
+ }
+ let o2 = Object.assign(Object.assign({}, publicX), privateOptionalX);
+ let sn = o2.x; // error, x is private
+@@= skipped -45, +44 lines =@@
+ setterOnly.b = 12; // error, 'b' does not exist
+ // methods are skipped because they aren't enumerable
+ class C {
+-    constructor() {
+-        this.p = 1;
+-    }
++    p = 1;
+     m() { }
+ }
+ let c = new C();

@@ -1,0 +1,17 @@
+--- old.prototypePropertyAssignmentMergeAcrossFiles.errors.txt
++++ new.prototypePropertyAssignmentMergeAcrossFiles.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++prototypePropertyAssignmentMergeAcrossFiles.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++
++
++==== prototypePropertyAssignmentMergeAcrossFiles.js (1 errors) ====
++    function C() {
++        this.a = 1
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++    }
++    
++==== other.js (0 errors) ====
++    C.prototype.foo = function() { return this.a }
++    

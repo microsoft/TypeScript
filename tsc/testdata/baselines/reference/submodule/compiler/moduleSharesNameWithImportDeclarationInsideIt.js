@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt.ts] ////
 
 //// [moduleSharesNameWithImportDeclarationInsideIt.ts]
-module Z.M {
+namespace Z.M {
     export function bar() {
         return "";
     }
 }
-module A.M {
+namespace A.M {
     import M = Z.M;
     export function bar() {
     }
@@ -14,6 +14,7 @@ module A.M {
 }
 
 //// [moduleSharesNameWithImportDeclarationInsideIt.js]
+"use strict";
 var Z;
 (function (Z) {
     let M;

@@ -4,4 +4,5 @@
 model.rotate(0, rotateY * Math.PI / 180, rotateZ * Math.PI / 180);
 
 //// [parserRegularExpressionDivideAmbiguity5.js]
+"use strict";
 model.rotate(0, rotateY * Math.PI / 180, rotateZ * Math.PI / 180);

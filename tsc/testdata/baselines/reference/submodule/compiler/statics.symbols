@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/statics.ts] ////
 
 === statics.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(statics.ts, 0, 0))
 
     export class C {
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 
         x: number;
 >x : Symbol(C.x, Decl(statics.ts, 1, 20))
@@ -17,40 +17,40 @@ module M {
 
             this.x = C.y+this.c1+this.c2+c3;
 >this.x : Symbol(C.x, Decl(statics.ts, 1, 20))
->this : Symbol(C, Decl(statics.ts, 0, 10))
+>this : Symbol(C, Decl(statics.ts, 0, 13))
 >x : Symbol(C.x, Decl(statics.ts, 1, 20))
 >C.y : Symbol(C.y, Decl(statics.ts, 9, 21))
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 >y : Symbol(C.y, Decl(statics.ts, 9, 21))
 >this.c1 : Symbol(C.c1, Decl(statics.ts, 3, 20))
->this : Symbol(C, Decl(statics.ts, 0, 10))
+>this : Symbol(C, Decl(statics.ts, 0, 13))
 >c1 : Symbol(C.c1, Decl(statics.ts, 3, 20))
 >this.c2 : Symbol(C.c2, Decl(statics.ts, 3, 38))
->this : Symbol(C, Decl(statics.ts, 0, 10))
+>this : Symbol(C, Decl(statics.ts, 0, 13))
 >c2 : Symbol(C.c2, Decl(statics.ts, 3, 38))
 >c3 : Symbol(c3, Decl(statics.ts, 3, 57))
 
             this.g = (v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub);
->this : Symbol(C, Decl(statics.ts, 0, 10))
+>this : Symbol(C, Decl(statics.ts, 0, 13))
 >v : Symbol(v, Decl(statics.ts, 5, 22))
 >C.f : Symbol(C.f, Decl(statics.ts, 10, 24))
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 >f : Symbol(C.f, Decl(statics.ts, 10, 24))
 >this.x : Symbol(C.x, Decl(statics.ts, 1, 20))
->this : Symbol(C, Decl(statics.ts, 0, 10))
+>this : Symbol(C, Decl(statics.ts, 0, 13))
 >x : Symbol(C.x, Decl(statics.ts, 1, 20))
 >C.y : Symbol(C.y, Decl(statics.ts, 9, 21))
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 >y : Symbol(C.y, Decl(statics.ts, 9, 21))
 >v : Symbol(v, Decl(statics.ts, 5, 22))
 >this.c1 : Symbol(C.c1, Decl(statics.ts, 3, 20))
->this : Symbol(C, Decl(statics.ts, 0, 10))
+>this : Symbol(C, Decl(statics.ts, 0, 13))
 >c1 : Symbol(C.c1, Decl(statics.ts, 3, 20))
 >this.c2 : Symbol(C.c2, Decl(statics.ts, 3, 38))
->this : Symbol(C, Decl(statics.ts, 0, 10))
+>this : Symbol(C, Decl(statics.ts, 0, 13))
 >c2 : Symbol(C.c2, Decl(statics.ts, 3, 38))
 >C.pub : Symbol(C.pub, Decl(statics.ts, 8, 22))
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 >pub : Symbol(C.pub, Decl(statics.ts, 8, 22))
         }
 
@@ -63,7 +63,7 @@ module M {
         static y=C.priv;
 >y : Symbol(C.y, Decl(statics.ts, 9, 21))
 >C.priv : Symbol(C.priv, Decl(statics.ts, 6, 9))
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 >priv : Symbol(C.priv, Decl(statics.ts, 6, 9))
 
         static f(n:number) {
@@ -73,13 +73,13 @@ module M {
             return "wow: "+(n+C.y+C.pub+C.priv);
 >n : Symbol(n, Decl(statics.ts, 11, 17))
 >C.y : Symbol(C.y, Decl(statics.ts, 9, 21))
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 >y : Symbol(C.y, Decl(statics.ts, 9, 21))
 >C.pub : Symbol(C.pub, Decl(statics.ts, 8, 22))
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 >pub : Symbol(C.pub, Decl(statics.ts, 8, 22))
 >C.priv : Symbol(C.priv, Decl(statics.ts, 6, 9))
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 >priv : Symbol(C.priv, Decl(statics.ts, 6, 9))
 
         }        
@@ -87,7 +87,7 @@ module M {
     var c=C.y;
 >c : Symbol(c, Decl(statics.ts, 16, 7))
 >C.y : Symbol(C.y, Decl(statics.ts, 9, 21))
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 >y : Symbol(C.y, Decl(statics.ts, 9, 21))
 
     export function f() {
@@ -103,20 +103,20 @@ module M {
         result+=(new C(0,1,2).x);
 >result : Symbol(result, Decl(statics.ts, 18, 11))
 >new C(0,1,2).x : Symbol(C.x, Decl(statics.ts, 1, 20))
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 >x : Symbol(C.x, Decl(statics.ts, 1, 20))
 
         result+=(C.f(10));
 >result : Symbol(result, Decl(statics.ts, 18, 11))
 >C.f : Symbol(C.f, Decl(statics.ts, 10, 24))
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 >f : Symbol(C.f, Decl(statics.ts, 10, 24))
 
         result+=(new C(5,10,20).g(C.y));
 >result : Symbol(result, Decl(statics.ts, 18, 11))
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 >C.y : Symbol(C.y, Decl(statics.ts, 9, 21))
->C : Symbol(C, Decl(statics.ts, 0, 10))
+>C : Symbol(C, Decl(statics.ts, 0, 13))
 >y : Symbol(C.y, Decl(statics.ts, 9, 21))
 
         return result;

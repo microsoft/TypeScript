@@ -9,6 +9,6 @@ var v = {
 >[0 in []] : boolean
 >0 in [] : boolean
 >0 : 0
->[] : undefined[]
+>[] : never[]
 >true : true
 }

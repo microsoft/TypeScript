@@ -6,6 +6,7 @@ enum number { }
 enum any { }
 
 //// [enumWithPrimitiveName.js]
+"use strict";
 var string;
 (function (string) {
 })(string || (string = {}));

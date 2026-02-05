@@ -1,7 +1,7 @@
 --- old.genericCallWithObjectTypeArgsAndConstraints3.js
 +++ new.genericCallWithObjectTypeArgsAndConstraints3.js
-@@= skipped -41, +41 lines =@@
- //// [genericCallWithObjectTypeArgsAndConstraints3.js]
+@@= skipped -42, +42 lines =@@
+ "use strict";
  // Generic call with constraints infering type parameter from object member properties
  class Base {
 +    x;

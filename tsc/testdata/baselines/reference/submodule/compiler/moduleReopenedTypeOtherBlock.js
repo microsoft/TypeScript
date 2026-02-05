@@ -1,16 +1,17 @@
 //// [tests/cases/compiler/moduleReopenedTypeOtherBlock.ts] ////
 
 //// [moduleReopenedTypeOtherBlock.ts]
-module M {
+namespace M {
     export class C1 { }
     export interface I { n: number; }
 }
-module M {
+namespace M {
     export class C2 { f(): I { return null; } }
 }
 
 
 //// [moduleReopenedTypeOtherBlock.js]
+"use strict";
 var M;
 (function (M) {
     class C1 {

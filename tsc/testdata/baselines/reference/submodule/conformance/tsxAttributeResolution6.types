@@ -1,13 +1,13 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution6.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: { n?: boolean; s?: string};
->test1 : { n?: boolean; s?: string; }
->n : boolean
->s : string
+>test1 : { n?: boolean | undefined; s?: string | undefined; }
+>n : boolean | undefined
+>s : string | undefined
 
 		test2: { n: boolean; };
 >test2 : { n: boolean; }

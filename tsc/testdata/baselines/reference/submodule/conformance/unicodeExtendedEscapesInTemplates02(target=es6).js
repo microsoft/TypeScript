@@ -5,4 +5,5 @@ var x = `\u{00}`;
 
 
 //// [unicodeExtendedEscapesInTemplates02.js]
+"use strict";
 var x = `\u{00}`;

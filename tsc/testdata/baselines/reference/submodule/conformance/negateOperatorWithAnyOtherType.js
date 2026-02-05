@@ -14,13 +14,13 @@ function foo(): any {
     return a;
 }
 class A {
-    public a: any;
+    public a!: any;
     static foo(): any {
         var a;
         return a;
     }
 }
-module M {
+namespace M {
     export var n: any;
 }
 var objA = new A();
@@ -56,6 +56,7 @@ var ResultIsNumber15 = -(ANY - ANY1);
 -M.n;
 
 //// [negateOperatorWithAnyOtherType.js]
+"use strict";
 // - operator on any type
 var ANY;
 var ANY1;

@@ -1,7 +1,0 @@
-===================================================================
-JsFile: sourceMap-NewLine1.js
-mapUrl: sourceMap-NewLine1.js.map
-sourceRoot: 
-sources: sourceMap-NewLine1.ts
-===================================================================
->>>//# sourceMappingURL=sourceMap-NewLine1.js.map

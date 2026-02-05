@@ -6,5 +6,6 @@ for (using {} of []) {
 
 
 //// [usingDeclarationsInForOf.3.js]
+"use strict";
 for (using {} of []) {
 }

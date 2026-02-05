@@ -69,6 +69,7 @@ class Thing3 extends Thing2 {
 
 
 //// [mixinClassesAnnotated.js]
+"use strict";
 class Base {
     x;
     y;

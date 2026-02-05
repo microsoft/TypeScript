@@ -27,8 +27,10 @@ class C<U extends T, T extends A> {
     f() {
 >f : () => string
 
-        var x: U;
+        var x: U = {} as any;
 >x : U
+>{} as any : any
+>{} : {}
 
         var a = x['foo'](); // should be string
 >a : string
@@ -65,7 +67,7 @@ interface I<U extends T, T extends A> {
     foo: U;
 >foo : U
 }
-var i: I<B, A>;
+declare var i: I<B, A>;
 >i : I<B, A>
 
 var r2 = i.foo.notHere();
@@ -86,7 +88,7 @@ var r2b = i.foo['foo']();
 >foo : B
 >'foo' : "foo"
 
-var a: {
+declare var a: {
 >a : <U extends T, T extends A>() => U
 
     <U extends T, T extends A>(): U;

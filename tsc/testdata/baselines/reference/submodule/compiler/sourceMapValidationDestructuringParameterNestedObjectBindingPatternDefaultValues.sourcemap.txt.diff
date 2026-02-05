@@ -1,6 +1,6 @@
 --- old.sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.sourcemap.txt
 +++ new.sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.sourcemap.txt
-@@= skipped -117, +117 lines =@@
+@@= skipped -118, +118 lines =@@
  28>                                                                                                                                  ^^
  29>                                                                                                                                    ^^^^^^^^^^^
  30>                                                                                                                                               ^^
@@ -23,19 +23,19 @@
 +32>                                                                                                                                                   : Robot = 
 +33>                                                                                                                                                      robotA
 +34>                                                                                                                                                            ) 
- 1->Emitted(2, 1) Source(13, 1) + SourceIndex(0)
- 2 >Emitted(2, 10) Source(13, 10) + SourceIndex(0)
- 3 >Emitted(2, 14) Source(13, 14) + SourceIndex(0)
+ 1->Emitted(3, 1) Source(13, 1) + SourceIndex(0)
+ 2 >Emitted(3, 10) Source(13, 10) + SourceIndex(0)
+ 3 >Emitted(3, 14) Source(13, 14) + SourceIndex(0)
 @@= skipped -32, +34 lines =@@
- 28>Emitted(2, 133) Source(18, 48) + SourceIndex(0)
- 29>Emitted(2, 144) Source(18, 59) + SourceIndex(0)
- 30>Emitted(2, 146) Source(18, 61) + SourceIndex(0)
--31>Emitted(2, 151) Source(19, 16) + SourceIndex(0)
--32>Emitted(2, 157) Source(19, 22) + SourceIndex(0)
-+31>Emitted(2, 148) Source(19, 6) + SourceIndex(0)
-+32>Emitted(2, 151) Source(19, 16) + SourceIndex(0)
-+33>Emitted(2, 157) Source(19, 22) + SourceIndex(0)
-+34>Emitted(2, 159) Source(19, 24) + SourceIndex(0)
+ 28>Emitted(3, 133) Source(18, 48) + SourceIndex(0)
+ 29>Emitted(3, 144) Source(18, 59) + SourceIndex(0)
+ 30>Emitted(3, 146) Source(18, 61) + SourceIndex(0)
+-31>Emitted(3, 151) Source(19, 16) + SourceIndex(0)
+-32>Emitted(3, 157) Source(19, 22) + SourceIndex(0)
++31>Emitted(3, 148) Source(19, 6) + SourceIndex(0)
++32>Emitted(3, 151) Source(19, 16) + SourceIndex(0)
++33>Emitted(3, 157) Source(19, 22) + SourceIndex(0)
++34>Emitted(3, 159) Source(19, 24) + SourceIndex(0)
  ---
  >>>    console.log(primaryA);
  1 >^^^^
@@ -54,11 +54,11 @@
  1 >
 -  >
 -2 >}
--1 >Emitted(4, 1) Source(21, 1) + SourceIndex(0)
+-1 >Emitted(5, 1) Source(21, 1) + SourceIndex(0)
 +2 >
 +  >}
-+1 >Emitted(4, 1) Source(20, 27) + SourceIndex(0)
- 2 >Emitted(4, 2) Source(21, 2) + SourceIndex(0)
++1 >Emitted(5, 1) Source(20, 27) + SourceIndex(0)
+ 2 >Emitted(5, 2) Source(21, 2) + SourceIndex(0)
  ---
  >>>function foo2({ name: nameC = "name", skills: { primary: primaryB = "primary", secondary: secondaryB = "secondary" } = { primary: "SomeSkill", secondary: "someSkill" } } = robotA) {
 @@= skipped -42, +42 lines =@@
@@ -84,19 +84,19 @@
 +38>                                                                                                                                                                         : Robot = 
 +39>                                                                                                                                                                            robotA
 +40>                                                                                                                                                                                  ) 
- 1->Emitted(5, 1) Source(22, 1) + SourceIndex(0)
- 2 >Emitted(5, 10) Source(22, 10) + SourceIndex(0)
- 3 >Emitted(5, 14) Source(22, 14) + SourceIndex(0)
+ 1->Emitted(6, 1) Source(22, 1) + SourceIndex(0)
+ 2 >Emitted(6, 10) Source(22, 10) + SourceIndex(0)
+ 3 >Emitted(6, 14) Source(22, 14) + SourceIndex(0)
 @@= skipped -38, +40 lines =@@
- 34>Emitted(5, 155) Source(28, 48) + SourceIndex(0)
- 35>Emitted(5, 166) Source(28, 59) + SourceIndex(0)
- 36>Emitted(5, 168) Source(28, 61) + SourceIndex(0)
--37>Emitted(5, 173) Source(29, 16) + SourceIndex(0)
--38>Emitted(5, 179) Source(29, 22) + SourceIndex(0)
-+37>Emitted(5, 170) Source(29, 6) + SourceIndex(0)
-+38>Emitted(5, 173) Source(29, 16) + SourceIndex(0)
-+39>Emitted(5, 179) Source(29, 22) + SourceIndex(0)
-+40>Emitted(5, 181) Source(29, 24) + SourceIndex(0)
+ 34>Emitted(6, 155) Source(28, 48) + SourceIndex(0)
+ 35>Emitted(6, 166) Source(28, 59) + SourceIndex(0)
+ 36>Emitted(6, 168) Source(28, 61) + SourceIndex(0)
+-37>Emitted(6, 173) Source(29, 16) + SourceIndex(0)
+-38>Emitted(6, 179) Source(29, 22) + SourceIndex(0)
++37>Emitted(6, 170) Source(29, 6) + SourceIndex(0)
++38>Emitted(6, 173) Source(29, 16) + SourceIndex(0)
++39>Emitted(6, 179) Source(29, 22) + SourceIndex(0)
++40>Emitted(6, 181) Source(29, 24) + SourceIndex(0)
  ---
  >>>    console.log(secondaryB);
  1 >^^^^
@@ -115,11 +115,11 @@
  1 >
 -  >
 -2 >}
--1 >Emitted(7, 1) Source(31, 1) + SourceIndex(0)
+-1 >Emitted(8, 1) Source(31, 1) + SourceIndex(0)
 +2 >
 +  >}
-+1 >Emitted(7, 1) Source(30, 29) + SourceIndex(0)
- 2 >Emitted(7, 2) Source(31, 2) + SourceIndex(0)
++1 >Emitted(8, 1) Source(30, 29) + SourceIndex(0)
+ 2 >Emitted(8, 2) Source(31, 2) + SourceIndex(0)
  ---
  >>>function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" } } = robotA) {
 @@= skipped -22, +22 lines =@@
@@ -145,19 +145,19 @@
 +18>                                                                           : Robot = 
 +19>                                                                              robotA
 +20>                                                                                    ) 
- 1->Emitted(8, 1) Source(32, 1) + SourceIndex(0)
- 2 >Emitted(8, 10) Source(32, 10) + SourceIndex(0)
- 3 >Emitted(8, 14) Source(32, 14) + SourceIndex(0)
+ 1->Emitted(9, 1) Source(32, 1) + SourceIndex(0)
+ 2 >Emitted(9, 10) Source(32, 10) + SourceIndex(0)
+ 3 >Emitted(9, 14) Source(32, 14) + SourceIndex(0)
 @@= skipped -18, +20 lines =@@
- 14>Emitted(8, 61) Source(32, 61) + SourceIndex(0)
- 15>Emitted(8, 72) Source(32, 72) + SourceIndex(0)
- 16>Emitted(8, 74) Source(32, 74) + SourceIndex(0)
--17>Emitted(8, 79) Source(32, 87) + SourceIndex(0)
--18>Emitted(8, 85) Source(32, 93) + SourceIndex(0)
-+17>Emitted(8, 76) Source(32, 77) + SourceIndex(0)
-+18>Emitted(8, 79) Source(32, 87) + SourceIndex(0)
-+19>Emitted(8, 85) Source(32, 93) + SourceIndex(0)
-+20>Emitted(8, 87) Source(32, 95) + SourceIndex(0)
+ 14>Emitted(9, 61) Source(32, 61) + SourceIndex(0)
+ 15>Emitted(9, 72) Source(32, 72) + SourceIndex(0)
+ 16>Emitted(9, 74) Source(32, 74) + SourceIndex(0)
+-17>Emitted(9, 79) Source(32, 87) + SourceIndex(0)
+-18>Emitted(9, 85) Source(32, 93) + SourceIndex(0)
++17>Emitted(9, 76) Source(32, 77) + SourceIndex(0)
++18>Emitted(9, 79) Source(32, 87) + SourceIndex(0)
++19>Emitted(9, 85) Source(32, 93) + SourceIndex(0)
++20>Emitted(9, 87) Source(32, 95) + SourceIndex(0)
  ---
  >>>    console.log(skills.primary);
  1 >^^^^
@@ -176,10 +176,10 @@
  1 >
 -  >
 -2 >}
--1 >Emitted(10, 1) Source(34, 1) + SourceIndex(0)
+-1 >Emitted(11, 1) Source(34, 1) + SourceIndex(0)
 +2 >
 +  >}
-+1 >Emitted(10, 1) Source(33, 33) + SourceIndex(0)
- 2 >Emitted(10, 2) Source(34, 2) + SourceIndex(0)
++1 >Emitted(11, 1) Source(33, 33) + SourceIndex(0)
+ 2 >Emitted(11, 2) Source(34, 2) + SourceIndex(0)
  ---
  >>>foo1(robotA);

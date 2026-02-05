@@ -1,0 +1,15 @@
+--- old.restParamsWithNonRestParams.types
++++ new.restParamsWithNonRestParams.types
+@@= skipped -18, +18 lines =@@
+ >foo2 : (a: string, ...b: number[]) => void
+
+ function foo3(a?:string, ...b:number[]){}
+->foo3 : (a?: string, ...b: number[]) => void
++>foo3 : (a?: string | undefined, ...b: number[]) => void
+ >a : string | undefined
+ >b : number[]
+
+ foo3(); // error but shouldn't be
+ >foo3() : void
+->foo3 : (a?: string, ...b: number[]) => void
++>foo3 : (a?: string | undefined, ...b: number[]) => void

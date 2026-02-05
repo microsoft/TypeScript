@@ -1,14 +1,17 @@
 --- old.genericCallWithObjectTypeArgsAndConstraints5.errors.txt
 +++ new.genericCallWithObjectTypeArgsAndConstraints5.errors.txt
 @@= skipped -0, +0 lines =@@
+ genericCallWithObjectTypeArgsAndConstraints5.ts(4,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+ genericCallWithObjectTypeArgsAndConstraints5.ts(8,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+ genericCallWithObjectTypeArgsAndConstraints5.ts(9,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 -genericCallWithObjectTypeArgsAndConstraints5.ts(18,17): error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
 -  Property 'y' is missing in type 'C' but required in type 'D'.
 +genericCallWithObjectTypeArgsAndConstraints5.ts(18,17): error TS2741: Property 'y' is missing in type 'C' but required in type 'D'.
  genericCallWithObjectTypeArgsAndConstraints5.ts(19,23): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
    Type 'void' is not assignable to type 'number'.
  genericCallWithObjectTypeArgsAndConstraints5.ts(22,24): error TS2345: Argument of type 'C' is not assignable to parameter of type 'T'.
-@@= skipped -25, +24 lines =@@
-     var d: D;
+@@= skipped -34, +33 lines =@@
+     declare var d: D;
      var r2 = foo(d, c); // the constraints are self-referencing, no downstream error
                      ~
 -!!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.

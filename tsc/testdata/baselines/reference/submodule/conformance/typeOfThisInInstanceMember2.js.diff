@@ -1,8 +1,8 @@
 --- old.typeOfThisInInstanceMember2.js
 +++ new.typeOfThisInInstanceMember2.js
-@@= skipped -38, +38 lines =@@
-
+@@= skipped -39, +39 lines =@@
  //// [typeOfThisInInstanceMember2.js]
+ "use strict";
  class C {
 +    x = this;
      foo() {

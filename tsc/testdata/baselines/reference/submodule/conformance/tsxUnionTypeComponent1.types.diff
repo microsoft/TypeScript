@@ -1,0 +1,14 @@
+--- old.tsxUnionTypeComponent1.types
++++ new.tsxUnionTypeComponent1.types
+@@= skipped -23, +23 lines =@@
+
+         const { AnyComponent } = this.props;
+ >AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
+->this.props : ComponentProps & { children?: React.ReactNode; }
++>this.props : ComponentProps & { children?: React.ReactNode | undefined; }
+ >this : this
+->props : ComponentProps & { children?: React.ReactNode; }
++>props : ComponentProps & { children?: React.ReactNode | undefined; }
+
+         return (<AnyComponent />);
+ >(<AnyComponent />) : JSX.Element

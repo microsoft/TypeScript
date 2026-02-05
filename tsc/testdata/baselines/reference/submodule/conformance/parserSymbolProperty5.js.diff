@@ -1,8 +1,8 @@
 --- old.parserSymbolProperty5.js
 +++ new.parserSymbolProperty5.js
-@@= skipped -6, +6 lines =@@
-
+@@= skipped -7, +7 lines =@@
  //// [parserSymbolProperty5.js]
+ "use strict";
  class C {
 +    [Symbol.toPrimitive];
  }

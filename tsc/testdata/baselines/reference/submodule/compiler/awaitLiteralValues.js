@@ -27,6 +27,7 @@ function awaitUndefined() {
 
 
 //// [awaitLiteralValues.js]
+"use strict";
 function awaitString() {
     await 'literal';
 }

@@ -15,7 +15,5 @@ optionalBindingParameters2.ts(7,23): error TS2322: Type 'string' is not assignab
     foo({ x: false, y: 0, z: "" });
           ~
 !!! error TS2322: Type 'boolean' is not assignable to type 'string'.
-!!! related TS6500 optionalBindingParameters2.ts:1:30: The expected type comes from property 'x' which is declared here on type '{ x: string; y: number; z: boolean; }'
                           ~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
-!!! related TS6500 optionalBindingParameters2.ts:1:52: The expected type comes from property 'z' which is declared here on type '{ x: string; y: number; z: boolean; }'

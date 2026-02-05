@@ -8,6 +8,7 @@ foo.default = foo;
 module.exports = foo;
 
 //// [index.js]
+"use strict";
 function foo() { }
 foo.foo = foo;
 foo.default = foo;

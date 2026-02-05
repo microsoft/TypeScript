@@ -5,15 +5,15 @@ interface I {
     toString(): void;
 }
 
-var i: I;
-var o: Object;
+declare var i: I;
+declare var o: Object;
 o = i; // error
 i = o; // ok
 
 class C {
     toString(): void { }
 }
-var c: C;
+declare var c: C;
 o = c; // error
 c = o; // ok
 
@@ -24,14 +24,12 @@ o = a; // error
 a = o; // ok
 
 //// [objectTypeHidingMembersOfObjectAssignmentCompat.js]
-var i;
-var o;
+"use strict";
 o = i; // error
 i = o; // ok
 class C {
     toString() { }
 }
-var c;
 o = c; // error
 c = o; // ok
 var a = {

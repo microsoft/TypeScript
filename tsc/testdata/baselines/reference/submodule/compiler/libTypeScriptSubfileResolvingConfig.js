@@ -14,6 +14,7 @@ window.localStorage
 
 
 //// [index.js]
+"use strict";
 /// <reference lib="dom.iterable" />
 const a = { abc: "Hello" };
 // This should fail because libdom has been replaced

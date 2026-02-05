@@ -4,4 +4,5 @@
 var x = `abc${ [1,2,3] }def`;
 
 //// [templateStringWithEmbeddedArrayES6.js]
+"use strict";
 var x = `abc${[1, 2, 3]}def`;

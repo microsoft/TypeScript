@@ -1,0 +1,28 @@
+--- old.sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.types
++++ new.sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.types
+@@= skipped -12, +12 lines =@@
+ >name : string
+
+     skills: {
+->skills : { primary?: string; secondary?: string; }
++>skills : { primary?: string | undefined; secondary?: string | undefined; }
+
+         primary?: string;
+ >primary : string | undefined
+@@= skipped -95, +95 lines =@@
+ }
+ function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = robotA) {
+ >foo3 : ({ skills }?: Robot) => void
+->skills : { primary?: string; secondary?: string; }
++>skills : { primary?: string | undefined; secondary?: string | undefined; }
+ >{ primary: "SomeSkill", secondary: "someSkill" } : { primary: string; secondary: string; }
+ >primary : string
+ >"SomeSkill" : "SomeSkill"
+@@= skipped -14, +14 lines =@@
+ >console : { log(msg: string): void; }
+ >log : (msg: string) => void
+ >skills.primary : string | undefined
+->skills : { primary?: string; secondary?: string; }
++>skills : { primary?: string | undefined; secondary?: string | undefined; }
+ >primary : string | undefined
+ }

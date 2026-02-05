@@ -14,3 +14,4 @@ interface InterfaceWithSomeTypars<C, C> { // should error
 }
 
 //// [extendedInterfacesWithDuplicateTypeParameters.js]
+"use strict";

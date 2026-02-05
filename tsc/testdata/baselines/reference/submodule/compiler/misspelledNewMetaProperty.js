@@ -4,4 +4,5 @@
 function foo(){new.targ}
 
 //// [misspelledNewMetaProperty.js]
+"use strict";
 function foo() { new.targ; }

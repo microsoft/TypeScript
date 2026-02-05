@@ -25,6 +25,7 @@ class B<T> {
 }
 
 //// [emitClassDeclarationWithTypeArgumentAndOverloadInES6.js]
+"use strict";
 class B {
     x;
     B;

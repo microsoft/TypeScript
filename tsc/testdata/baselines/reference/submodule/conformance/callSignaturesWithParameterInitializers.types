@@ -60,7 +60,7 @@ class C {
 >1 : 1
 }
 
-var c: C;
+declare var c: C;
 >c : C
 
 c.foo();
@@ -89,7 +89,7 @@ interface I {
 >1 : 1
 }
 
-var i: I;
+declare var i: I;
 >i : I
 
 i();
@@ -117,7 +117,7 @@ i.foo(1, 2);
 >2 : 2
 
 // these are errors
-var a: {
+declare var a: {
 >a : { (x?: number): any; foo(x?: number): any; }
 
     (x = 1);

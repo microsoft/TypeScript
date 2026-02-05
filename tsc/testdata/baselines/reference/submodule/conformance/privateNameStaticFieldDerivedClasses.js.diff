@@ -1,9 +1,9 @@
 --- old.privateNameStaticFieldDerivedClasses.js
 +++ new.privateNameStaticFieldDerivedClasses.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
 
  //// [privateNameStaticFieldDerivedClasses.js]
+ "use strict";
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
 -    if (kind === "m") throw new TypeError("Private method is not writable");
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");

@@ -46,6 +46,7 @@ class C extends Base {
 
 
 //// [esDecorators-classExpression-classSuper.3.js]
+"use strict";
 const x = "x";
 (
 @dec

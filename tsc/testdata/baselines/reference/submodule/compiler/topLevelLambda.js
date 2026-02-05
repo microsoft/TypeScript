@@ -1,12 +1,13 @@
 //// [tests/cases/compiler/topLevelLambda.ts] ////
 
 //// [topLevelLambda.ts]
-module M {
+namespace M {
 	var f = () => {this.window;}
 }
 
 
 //// [topLevelLambda.js]
+"use strict";
 var M;
 (function (M) {
     var f = () => { this.window; };

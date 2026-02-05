@@ -1,0 +1,10 @@
+--- old.decoratorMetadataWithTypeOnlyImport(target=es2015).js
++++ new.decoratorMetadataWithTypeOnlyImport(target=es2015).js
+@@= skipped -37, +37 lines =@@
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ let MyComponent = class MyComponent {
++    Service;
+     constructor(Service) {
+         this.Service = Service;
+     }

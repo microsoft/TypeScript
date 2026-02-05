@@ -9,3 +9,4 @@ declare module "m1" {
 }
 
 //// [multipleExportAssignmentsInAmbientDeclaration.js]
+"use strict";

@@ -8,3 +8,4 @@ interface Query<T> {
 }
 
 //// [undefinedTypeArgument2.js]
+"use strict";

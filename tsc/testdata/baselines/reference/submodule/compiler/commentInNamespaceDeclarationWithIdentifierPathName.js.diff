@@ -1,7 +1,7 @@
 --- old.commentInNamespaceDeclarationWithIdentifierPathName.js
 +++ new.commentInNamespaceDeclarationWithIdentifierPathName.js
-@@= skipped -10, +10 lines =@@
- //// [commentInNamespaceDeclarationWithIdentifierPathName.js]
+@@= skipped -11, +11 lines =@@
+ "use strict";
  var hello;
  (function (hello) {
 -    var hi;

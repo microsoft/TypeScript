@@ -9,6 +9,7 @@ function foo<T, U>(t: T, u: U) {
 }
 
 //// [typeParameterAssignability.js]
+"use strict";
 // type parameters are not assignable to one another unless directly or indirectly constrained to one another
 function foo(t, u) {
     t = u; // error

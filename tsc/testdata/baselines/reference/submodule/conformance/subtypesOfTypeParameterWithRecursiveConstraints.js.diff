@@ -1,7 +1,7 @@
 --- old.subtypesOfTypeParameterWithRecursiveConstraints.js
 +++ new.subtypesOfTypeParameterWithRecursiveConstraints.js
-@@= skipped -161, +161 lines =@@
- //// [subtypesOfTypeParameterWithRecursiveConstraints.js]
+@@= skipped -162, +162 lines =@@
+ "use strict";
  // checking whether other types are subtypes of type parameters with constraints
  class Foo {
 +    foo;

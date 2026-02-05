@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/listFailure.ts] ////
 
 //// [listFailure.ts]
-module Editor {
+namespace Editor {
 
     export class Buffer {
     	lines: List<Line> = ListMakeHead<Line>();
@@ -44,6 +44,7 @@ module Editor {
 }
 
 //// [listFailure.js]
+"use strict";
 var Editor;
 (function (Editor) {
     class Buffer {

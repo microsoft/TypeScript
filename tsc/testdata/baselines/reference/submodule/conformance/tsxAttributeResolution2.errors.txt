@@ -1,8 +1,9 @@
+file.tsx(13,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
 file.tsx(17,21): error TS2339: Property 'leng' does not exist on type 'string'.
 
 
-==== file.tsx (1 errors) ====
-    declare module JSX {
+==== file.tsx (2 errors) ====
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     		test1: Attribs1;
@@ -15,6 +16,8 @@ file.tsx(17,21): error TS2339: Property 'leng' does not exist on type 'string'.
     // OK
     <test1 c1={(x) => x.length} />; // OK
     <test1 data-c1={(x) => x.leng} />; // OK
+                     ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
     
     
     // Errors

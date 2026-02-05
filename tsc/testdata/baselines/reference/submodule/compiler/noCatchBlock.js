@@ -8,6 +8,7 @@ try {
 }
 
 //// [noCatchBlock.js]
+"use strict";
 try {
     // ...
 }

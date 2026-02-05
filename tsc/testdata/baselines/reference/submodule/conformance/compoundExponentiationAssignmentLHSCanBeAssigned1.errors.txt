@@ -9,11 +9,11 @@ compoundExponentiationAssignmentLHSCanBeAssigned1.ts(26,8): error TS18050: The v
 ==== compoundExponentiationAssignmentLHSCanBeAssigned1.ts (6 errors) ====
     enum E { a, b, c }
     
-    var a: any;
-    var b: number;
-    var c: E;
+    declare var a: any;
+    declare var b: number;
+    declare var c: E;
     
-    var x1: any;
+    declare var x1: any;
     x1 **= a;
     x1 **= b;
     x1 **= c;
@@ -24,7 +24,7 @@ compoundExponentiationAssignmentLHSCanBeAssigned1.ts(26,8): error TS18050: The v
            ~~~~~~~~~
 !!! error TS18050: The value 'undefined' cannot be used here.
     
-    var x2: number;
+    declare var x2: number;
     x2 **= a;
     x2 **= b;
     x2 **= c;
@@ -35,7 +35,7 @@ compoundExponentiationAssignmentLHSCanBeAssigned1.ts(26,8): error TS18050: The v
            ~~~~~~~~~
 !!! error TS18050: The value 'undefined' cannot be used here.
     
-    var x3: E;
+    declare var x3: E;
     x3 **= a;
     x3 **= b;
     x3 **= c;

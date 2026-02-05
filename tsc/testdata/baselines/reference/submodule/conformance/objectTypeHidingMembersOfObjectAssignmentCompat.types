@@ -6,10 +6,10 @@ interface I {
 >toString : () => void
 }
 
-var i: I;
+declare var i: I;
 >i : I
 
-var o: Object;
+declare var o: Object;
 >o : Object
 
 o = i; // error
@@ -28,7 +28,7 @@ class C {
     toString(): void { }
 >toString : () => void
 }
-var c: C;
+declare var c: C;
 >c : C
 
 o = c; // error

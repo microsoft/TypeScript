@@ -1,6 +1,6 @@
 --- old.sourcemapValidationDuplicateNames.sourcemap.txt
 +++ new.sourcemapValidationDuplicateNames.sourcemap.txt
-@@= skipped -11, +11 lines =@@
+@@= skipped -12, +12 lines =@@
  1 >
  2 >^^^^
  3 >    ^^
@@ -8,7 +8,7 @@
 -5 >       ^^^^^^^^^^->
 +4 >      ^^^^^^^^^^^->
  1 >
- 2 >module 
+ 2 >namespace 
 -3 >    m1
 -4 >       {
 -  >          var x = 10;
@@ -20,11 +20,11 @@
 +  >        export class c {
 +  >        }
 +  >    }
- 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
- 2 >Emitted(1, 5) Source(1, 8) + SourceIndex(0)
--3 >Emitted(1, 7) Source(1, 10) + SourceIndex(0)
--4 >Emitted(1, 8) Source(5, 2) + SourceIndex(0)
-+3 >Emitted(1, 7) Source(5, 2) + SourceIndex(0)
+ 1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+ 2 >Emitted(2, 5) Source(1, 11) + SourceIndex(0)
+-3 >Emitted(2, 7) Source(1, 13) + SourceIndex(0)
+-4 >Emitted(2, 8) Source(5, 2) + SourceIndex(0)
++3 >Emitted(2, 7) Source(5, 2) + SourceIndex(0)
  ---
  >>>(function (m1) {
  1->
@@ -34,13 +34,13 @@
 +4 >             ^^
 +5 >               ^->
  1->
- 2 >module 
+ 2 >namespace 
  3 >           m1
 +4 >              
- 1->Emitted(2, 1) Source(1, 1) + SourceIndex(0)
- 2 >Emitted(2, 12) Source(1, 8) + SourceIndex(0)
- 3 >Emitted(2, 14) Source(1, 10) + SourceIndex(0)
-+4 >Emitted(2, 16) Source(1, 11) + SourceIndex(0)
+ 1->Emitted(3, 1) Source(1, 1) + SourceIndex(0)
+ 2 >Emitted(3, 12) Source(1, 11) + SourceIndex(0)
+ 3 >Emitted(3, 14) Source(1, 13) + SourceIndex(0)
++4 >Emitted(3, 16) Source(1, 14) + SourceIndex(0)
  ---
  >>>    var x = 10;
  1->^^^^
@@ -75,14 +75,14 @@
    >            }
 -4 >            
 +5 >            
- 1->Emitted(6, 5) Source(3, 18) + SourceIndex(0)
--2 >Emitted(6, 9) Source(3, 19) + SourceIndex(0)
--3 >Emitted(6, 13) Source(4, 6) + SourceIndex(0)
--4 >Emitted(6, 14) Source(4, 6) + SourceIndex(0)
-+2 >Emitted(6, 8) Source(3, 18) + SourceIndex(0)
-+3 >Emitted(6, 9) Source(3, 19) + SourceIndex(0)
-+4 >Emitted(6, 13) Source(4, 6) + SourceIndex(0)
-+5 >Emitted(6, 14) Source(4, 6) + SourceIndex(0)
+ 1->Emitted(7, 5) Source(3, 18) + SourceIndex(0)
+-2 >Emitted(7, 9) Source(3, 19) + SourceIndex(0)
+-3 >Emitted(7, 13) Source(4, 6) + SourceIndex(0)
+-4 >Emitted(7, 14) Source(4, 6) + SourceIndex(0)
++2 >Emitted(7, 8) Source(3, 18) + SourceIndex(0)
++3 >Emitted(7, 9) Source(3, 19) + SourceIndex(0)
++4 >Emitted(7, 13) Source(4, 6) + SourceIndex(0)
++5 >Emitted(7, 14) Source(4, 6) + SourceIndex(0)
  ---
  >>>})(m1 || (m1 = {}));
  1->
@@ -101,11 +101,11 @@
    >                export class c {
    >                }
    >            }
--1->Emitted(7, 1) Source(5, 1) + SourceIndex(0)
-+1->Emitted(7, 1) Source(4, 6) + SourceIndex(0)
- 2 >Emitted(7, 2) Source(5, 2) + SourceIndex(0)
- 3 >Emitted(7, 4) Source(1, 8) + SourceIndex(0)
- 4 >Emitted(7, 6) Source(1, 10) + SourceIndex(0)
+-1->Emitted(8, 1) Source(5, 1) + SourceIndex(0)
++1->Emitted(8, 1) Source(4, 6) + SourceIndex(0)
+ 2 >Emitted(8, 2) Source(5, 2) + SourceIndex(0)
+ 3 >Emitted(8, 4) Source(1, 11) + SourceIndex(0)
+ 4 >Emitted(8, 6) Source(1, 13) + SourceIndex(0)
 @@= skipped -12, +12 lines =@@
  1 >
  2 >^^^^^^^^^^^
@@ -115,13 +115,13 @@
 +5 >               ^^^^^^^^^->
  1 >
    >
- 2 >module 
+ 2 >namespace 
  3 >           m1
 +4 >              
- 1 >Emitted(8, 1) Source(6, 1) + SourceIndex(0)
- 2 >Emitted(8, 12) Source(6, 8) + SourceIndex(0)
- 3 >Emitted(8, 14) Source(6, 10) + SourceIndex(0)
-+4 >Emitted(8, 16) Source(6, 11) + SourceIndex(0)
+ 1 >Emitted(9, 1) Source(6, 1) + SourceIndex(0)
+ 2 >Emitted(9, 12) Source(6, 11) + SourceIndex(0)
+ 3 >Emitted(9, 14) Source(6, 13) + SourceIndex(0)
++4 >Emitted(9, 16) Source(6, 14) + SourceIndex(0)
  ---
  >>>    var b = new m1.c();
  1->^^^^
@@ -149,8 +149,8 @@
  7 >             {
    >                var b = new m1.c();
    >            }
--1 >Emitted(10, 1) Source(8, 1) + SourceIndex(0)
-+1 >Emitted(10, 1) Source(7, 24) + SourceIndex(0)
- 2 >Emitted(10, 2) Source(8, 2) + SourceIndex(0)
- 3 >Emitted(10, 4) Source(6, 8) + SourceIndex(0)
- 4 >Emitted(10, 6) Source(6, 10) + SourceIndex(0)
+-1 >Emitted(11, 1) Source(8, 1) + SourceIndex(0)
++1 >Emitted(11, 1) Source(7, 24) + SourceIndex(0)
+ 2 >Emitted(11, 2) Source(8, 2) + SourceIndex(0)
+ 3 >Emitted(11, 4) Source(6, 11) + SourceIndex(0)
+ 4 >Emitted(11, 6) Source(6, 13) + SourceIndex(0)

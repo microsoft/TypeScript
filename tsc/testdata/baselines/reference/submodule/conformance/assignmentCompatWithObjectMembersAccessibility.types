@@ -3,7 +3,7 @@
 === assignmentCompatWithObjectMembersAccessibility.ts ===
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 
-module TargetIsPublic {
+namespace TargetIsPublic {
 >TargetIsPublic : typeof TargetIsPublic
 
     // targets
@@ -19,14 +19,14 @@ module TargetIsPublic {
 >foo : string
     }
 
-    var a: { foo: string; }
+    declare var a: { foo: string; };
 >a : { foo: string; }
 >foo : string
 
-    var b: Base;
+    declare var b: Base;
 >b : Base
 
-    var i: I;
+    declare var i: I;
 >i : I
 
     // sources
@@ -43,10 +43,10 @@ module TargetIsPublic {
         private foo: string;
 >foo : string
     }
-    var d: D;
+    declare var d: D;
 >d : D
 
-    var e: E;
+    declare var e: E;
 >e : E
 
     a = b;
@@ -156,7 +156,7 @@ module TargetIsPublic {
 
 }
 
-module TargetIsPublic {
+namespace TargetIsPublic {
 >TargetIsPublic : typeof TargetIsPublic
 
     // targets
@@ -170,14 +170,14 @@ module TargetIsPublic {
     interface I extends Base {
     }
 
-    var a: { foo: string; }
+    declare var a: { foo: string; };
 >a : { foo: string; }
 >foo : string
 
-    var b: Base;
+    declare var b: Base;
 >b : Base
 
-    var i: I;
+    declare var i: I;
 >i : I
 
     // sources
@@ -195,10 +195,10 @@ module TargetIsPublic {
 >foo : string
     }
 
-    var d: D;
+    declare var d: D;
 >d : D
 
-    var e: E;
+    declare var e: E;
 >e : E
 
     a = b; // error

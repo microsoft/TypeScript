@@ -110,6 +110,7 @@ var r11 = i.foo8(); // Base
 
 
 //// [genericCallWithConstraintsTypeArgumentInference.js]
+"use strict";
 // Basic type inference with generic calls and constraints, no errors expected
 class Base {
     foo;

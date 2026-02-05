@@ -2,7 +2,7 @@
 
 === classAbstractClinterfaceAssignability.ts ===
 interface I {
->I : Symbol(I, Decl(classAbstractClinterfaceAssignability.ts, 0, 0), Decl(classAbstractClinterfaceAssignability.ts, 11, 3))
+>I : Symbol(I, Decl(classAbstractClinterfaceAssignability.ts, 0, 0), Decl(classAbstractClinterfaceAssignability.ts, 11, 11))
 
     x: number;
 >x : Symbol(I.x, Decl(classAbstractClinterfaceAssignability.ts, 0, 13))
@@ -12,22 +12,22 @@ interface IConstructor {
 >IConstructor : Symbol(IConstructor, Decl(classAbstractClinterfaceAssignability.ts, 2, 1))
 
     new (): I;
->I : Symbol(I, Decl(classAbstractClinterfaceAssignability.ts, 0, 0), Decl(classAbstractClinterfaceAssignability.ts, 11, 3))
+>I : Symbol(I, Decl(classAbstractClinterfaceAssignability.ts, 0, 0), Decl(classAbstractClinterfaceAssignability.ts, 11, 11))
     
     y: number;
 >y : Symbol(IConstructor.y, Decl(classAbstractClinterfaceAssignability.ts, 5, 14))
 
     prototype: I;
 >prototype : Symbol(IConstructor.prototype, Decl(classAbstractClinterfaceAssignability.ts, 7, 14))
->I : Symbol(I, Decl(classAbstractClinterfaceAssignability.ts, 0, 0), Decl(classAbstractClinterfaceAssignability.ts, 11, 3))
+>I : Symbol(I, Decl(classAbstractClinterfaceAssignability.ts, 0, 0), Decl(classAbstractClinterfaceAssignability.ts, 11, 11))
 }
 
-var I: IConstructor;
->I : Symbol(I, Decl(classAbstractClinterfaceAssignability.ts, 0, 0), Decl(classAbstractClinterfaceAssignability.ts, 11, 3))
+declare var I: IConstructor;
+>I : Symbol(I, Decl(classAbstractClinterfaceAssignability.ts, 0, 0), Decl(classAbstractClinterfaceAssignability.ts, 11, 11))
 >IConstructor : Symbol(IConstructor, Decl(classAbstractClinterfaceAssignability.ts, 2, 1))
 
 abstract class A {
->A : Symbol(A, Decl(classAbstractClinterfaceAssignability.ts, 11, 20))
+>A : Symbol(A, Decl(classAbstractClinterfaceAssignability.ts, 11, 28))
 
     x: number;
 >x : Symbol(A.x, Decl(classAbstractClinterfaceAssignability.ts, 13, 18))
@@ -36,19 +36,19 @@ abstract class A {
 >y : Symbol(A.y, Decl(classAbstractClinterfaceAssignability.ts, 14, 14))
 }
 
-var AA: typeof A;
->AA : Symbol(AA, Decl(classAbstractClinterfaceAssignability.ts, 18, 3))
->A : Symbol(A, Decl(classAbstractClinterfaceAssignability.ts, 11, 20))
+declare var AA: typeof A;
+>AA : Symbol(AA, Decl(classAbstractClinterfaceAssignability.ts, 18, 11))
+>A : Symbol(A, Decl(classAbstractClinterfaceAssignability.ts, 11, 28))
 
 AA = I;
->AA : Symbol(AA, Decl(classAbstractClinterfaceAssignability.ts, 18, 3))
->I : Symbol(I, Decl(classAbstractClinterfaceAssignability.ts, 0, 0), Decl(classAbstractClinterfaceAssignability.ts, 11, 3))
+>AA : Symbol(AA, Decl(classAbstractClinterfaceAssignability.ts, 18, 11))
+>I : Symbol(I, Decl(classAbstractClinterfaceAssignability.ts, 0, 0), Decl(classAbstractClinterfaceAssignability.ts, 11, 11))
 
-var AAA: typeof I;
->AAA : Symbol(AAA, Decl(classAbstractClinterfaceAssignability.ts, 21, 3))
->I : Symbol(I, Decl(classAbstractClinterfaceAssignability.ts, 0, 0), Decl(classAbstractClinterfaceAssignability.ts, 11, 3))
+declare var AAA: typeof I;
+>AAA : Symbol(AAA, Decl(classAbstractClinterfaceAssignability.ts, 21, 11))
+>I : Symbol(I, Decl(classAbstractClinterfaceAssignability.ts, 0, 0), Decl(classAbstractClinterfaceAssignability.ts, 11, 11))
 
 AAA = A;
->AAA : Symbol(AAA, Decl(classAbstractClinterfaceAssignability.ts, 21, 3))
->A : Symbol(A, Decl(classAbstractClinterfaceAssignability.ts, 11, 20))
+>AAA : Symbol(AAA, Decl(classAbstractClinterfaceAssignability.ts, 21, 11))
+>A : Symbol(A, Decl(classAbstractClinterfaceAssignability.ts, 11, 28))
 

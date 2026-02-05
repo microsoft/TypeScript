@@ -1,9 +1,9 @@
 --- old.errorSuperCalls.js
 +++ new.errorSuperCalls.js
-@@= skipped -76, +76 lines =@@
-
+@@= skipped -77, +77 lines =@@
 
  //// [errorSuperCalls.js]
+ "use strict";
 -var _a;
  //super call in class constructor with no base type
  class NoBase {

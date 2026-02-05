@@ -11,7 +11,8 @@ func TestDerivedTypeIndexerWithGenericConstraints(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `class CollectionItem {
+	const content = `// @strict: false
+class CollectionItem {
     x: number;
 }
 class Entity extends CollectionItem {

@@ -122,7 +122,7 @@ namespace Test6 {
     }
 }
 
-module Test7 {
+namespace Test7 {
 >Test7 : Symbol(Test7, Decl(typeofThis.ts, 47, 1))
 
     export let f = () => {

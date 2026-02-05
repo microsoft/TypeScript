@@ -11,7 +11,8 @@ func TestGenericRespecialization1(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `class Food {
+	const content = `// @strict: false
+class Food {
     private amount: number;
     constructor(public name: string) {
         this.amount = 100;

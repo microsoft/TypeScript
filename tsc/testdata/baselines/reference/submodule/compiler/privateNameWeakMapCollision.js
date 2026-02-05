@@ -11,6 +11,7 @@ function test() {
 
 
 //// [privateNameWeakMapCollision.js]
+"use strict";
 function test() {
     let WeakMap;
     let WeakSet;

@@ -1,6 +1,6 @@
 --- old.genericsWithoutTypeParameters1.js
 +++ new.genericsWithoutTypeParameters1.js
-@@= skipped -47, +47 lines =@@
+@@= skipped -48, +48 lines =@@
  var x = { a: new C() };
  var x2 = { a: { bar() { return 1; } } };
  class D {

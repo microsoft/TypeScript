@@ -1,14 +1,14 @@
 --- old.conflictingTypeParameterSymbolTransfer.js
 +++ new.conflictingTypeParameterSymbolTransfer.js
-@@= skipped -44, +44 lines =@@
+@@= skipped -41, +41 lines =@@
  class Base {
  }
- class C2 extends Base {
+ export class C2 extends Base {
 +    T;
      constructor(T) {
          super();
          // Should not error
-@@= skipped -13, +14 lines =@@
+@@= skipped -12, +13 lines =@@
  class Leg {
  }
  class Foo extends Leg {

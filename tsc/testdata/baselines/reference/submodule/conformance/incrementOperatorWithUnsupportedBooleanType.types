@@ -2,7 +2,7 @@
 
 === incrementOperatorWithUnsupportedBooleanType.ts ===
 // ++ operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 >BOOLEAN : boolean
 
 function foo(): boolean { return true; }
@@ -12,14 +12,14 @@ function foo(): boolean { return true; }
 class A {
 >A : A
 
-    public a: boolean;
+    public a!: boolean;
 >a : boolean
 
     static foo() { return true; }
 >foo : () => boolean
 >true : true
 }
-module M {
+namespace M {
 >M : typeof M
 
     export var n: boolean;

@@ -9,14 +9,14 @@ export class bluebird<T> {
 }
 
 export async function runSampleWorks<A, B, C, D, E>(
->runSampleWorks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T>
+>runSampleWorks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B> | undefined, c?: bluebird<C> | undefined, d?: bluebird<D> | undefined, e?: bluebird<E> | undefined) => Promise<<T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T>
 
     a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
 >a : bluebird<A>
->b : bluebird<B>
->c : bluebird<C>
->d : bluebird<D>
->e : bluebird<E>
+>b : bluebird<B> | undefined
+>c : bluebird<C> | undefined
+>d : bluebird<D> | undefined
+>e : bluebird<E> | undefined
 
     let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
 >result : any
@@ -28,57 +28,57 @@ export async function runSampleWorks<A, B, C, D, E>(
 >bluebird : typeof bluebird
 >all : bluebird<any>[]
 >[a, b, c, d, e].filter(el => !!el) : bluebird<A>[]
->[a, b, c, d, e].filter : { <S extends bluebird<A>>(predicate: (value: bluebird<A>, index: number, array: bluebird<A>[]) => value is S, thisArg?: any): S[]; (predicate: (value: bluebird<A>, index: number, array: bluebird<A>[]) => unknown, thisArg?: any): bluebird<A>[]; }
->[a, b, c, d, e] : bluebird<A>[]
+>[a, b, c, d, e].filter : { <S extends bluebird<A> | undefined>(predicate: (value: bluebird<A> | undefined, index: number, array: (bluebird<A> | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: bluebird<A> | undefined, index: number, array: (bluebird<A> | undefined)[]) => unknown, thisArg?: any): (bluebird<A> | undefined)[]; }
+>[a, b, c, d, e] : (bluebird<A> | undefined)[]
 >a : bluebird<A>
->b : bluebird<B>
->c : bluebird<C>
->d : bluebird<D>
->e : bluebird<E>
->filter : { <S extends bluebird<A>>(predicate: (value: bluebird<A>, index: number, array: bluebird<A>[]) => value is S, thisArg?: any): S[]; (predicate: (value: bluebird<A>, index: number, array: bluebird<A>[]) => unknown, thisArg?: any): bluebird<A>[]; }
->el => !!el : (el: bluebird<A>) => boolean
->el : bluebird<A>
+>b : bluebird<B> | undefined
+>c : bluebird<C> | undefined
+>d : bluebird<D> | undefined
+>e : bluebird<E> | undefined
+>filter : { <S extends bluebird<A> | undefined>(predicate: (value: bluebird<A> | undefined, index: number, array: (bluebird<A> | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: bluebird<A> | undefined, index: number, array: (bluebird<A> | undefined)[]) => unknown, thisArg?: any): (bluebird<A> | undefined)[]; }
+>el => !!el : (el: bluebird<A> | undefined) => el is bluebird<A>
+>el : bluebird<A> | undefined
 >!!el : boolean
 >!el : boolean
->el : bluebird<A>
+>el : bluebird<A> | undefined
 
     let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
-><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
->f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
+>func : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
+><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
+>f : (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T
 >a : A
->b : B
->c : C
->d : D
->e : E
+>b : B | undefined
+>c : C | undefined
+>d : D | undefined
+>e : E | undefined
 
         f.apply(this, result);
->f.apply(this, result) : any
->f.apply : (this: Function, thisArg: any, argArray?: any) => any
->f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
->apply : (this: Function, thisArg: any, argArray?: any) => any
+>f.apply(this, result) : T
+>f.apply : { <T_1, R>(this: (this: T_1) => R, thisArg: T_1): R; <T_1, A_1 extends any[], R>(this: (this: T_1, ...args: A_1) => R, thisArg: T_1, args: A_1): R; }
+>f : (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T
+>apply : { <T_1, R>(this: (this: T_1) => R, thisArg: T_1): R; <T_1, A_1 extends any[], R>(this: (this: T_1, ...args: A_1) => R, thisArg: T_1, args: A_1): R; }
 >this : any
 >result : any
 
     let rfunc: typeof func & {} = func as any; // <- This is the only difference
->rfunc : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+>rfunc : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
+>func : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
 >func as any : any
->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+>func : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
 
     return rfunc
->rfunc : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+>rfunc : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
 }
 
 export async function runSampleBreaks<A, B, C, D, E>(
->runSampleBreaks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T>
+>runSampleBreaks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B> | undefined, c?: bluebird<C> | undefined, d?: bluebird<D> | undefined, e?: bluebird<E> | undefined) => Promise<<T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T>
 
     a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
 >a : bluebird<A>
->b : bluebird<B>
->c : bluebird<C>
->d : bluebird<D>
->e : bluebird<E>
+>b : bluebird<B> | undefined
+>c : bluebird<C> | undefined
+>d : bluebird<D> | undefined
+>e : bluebird<E> | undefined
 
     let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
 >result : any
@@ -90,44 +90,44 @@ export async function runSampleBreaks<A, B, C, D, E>(
 >bluebird : typeof bluebird
 >all : bluebird<any>[]
 >[a, b, c, d, e].filter(el => !!el) : bluebird<A>[]
->[a, b, c, d, e].filter : { <S extends bluebird<A>>(predicate: (value: bluebird<A>, index: number, array: bluebird<A>[]) => value is S, thisArg?: any): S[]; (predicate: (value: bluebird<A>, index: number, array: bluebird<A>[]) => unknown, thisArg?: any): bluebird<A>[]; }
->[a, b, c, d, e] : bluebird<A>[]
+>[a, b, c, d, e].filter : { <S extends bluebird<A> | undefined>(predicate: (value: bluebird<A> | undefined, index: number, array: (bluebird<A> | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: bluebird<A> | undefined, index: number, array: (bluebird<A> | undefined)[]) => unknown, thisArg?: any): (bluebird<A> | undefined)[]; }
+>[a, b, c, d, e] : (bluebird<A> | undefined)[]
 >a : bluebird<A>
->b : bluebird<B>
->c : bluebird<C>
->d : bluebird<D>
->e : bluebird<E>
->filter : { <S extends bluebird<A>>(predicate: (value: bluebird<A>, index: number, array: bluebird<A>[]) => value is S, thisArg?: any): S[]; (predicate: (value: bluebird<A>, index: number, array: bluebird<A>[]) => unknown, thisArg?: any): bluebird<A>[]; }
->el => !!el : (el: bluebird<A>) => boolean
->el : bluebird<A>
+>b : bluebird<B> | undefined
+>c : bluebird<C> | undefined
+>d : bluebird<D> | undefined
+>e : bluebird<E> | undefined
+>filter : { <S extends bluebird<A> | undefined>(predicate: (value: bluebird<A> | undefined, index: number, array: (bluebird<A> | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: bluebird<A> | undefined, index: number, array: (bluebird<A> | undefined)[]) => unknown, thisArg?: any): (bluebird<A> | undefined)[]; }
+>el => !!el : (el: bluebird<A> | undefined) => el is bluebird<A>
+>el : bluebird<A> | undefined
 >!!el : boolean
 >!el : boolean
->el : bluebird<A>
+>el : bluebird<A> | undefined
 
     let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
-><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
->f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
+>func : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
+><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
+>f : (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T
 >a : A
->b : B
->c : C
->d : D
->e : E
+>b : B | undefined
+>c : C | undefined
+>d : D | undefined
+>e : E | undefined
 
         f.apply(this, result);
->f.apply(this, result) : any
->f.apply : (this: Function, thisArg: any, argArray?: any) => any
->f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
->apply : (this: Function, thisArg: any, argArray?: any) => any
+>f.apply(this, result) : T
+>f.apply : { <T_1, R>(this: (this: T_1) => R, thisArg: T_1): R; <T_1, A_1 extends any[], R>(this: (this: T_1, ...args: A_1) => R, thisArg: T_1, args: A_1): R; }
+>f : (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T
+>apply : { <T_1, R>(this: (this: T_1) => R, thisArg: T_1): R; <T_1, A_1 extends any[], R>(this: (this: T_1, ...args: A_1) => R, thisArg: T_1, args: A_1): R; }
 >this : any
 >result : any
 
     let rfunc: typeof func = func as any; // <- This is the only difference
->rfunc : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+>rfunc : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
+>func : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
 >func as any : any
->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+>func : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
 
     return rfunc
->rfunc : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+>rfunc : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
 }

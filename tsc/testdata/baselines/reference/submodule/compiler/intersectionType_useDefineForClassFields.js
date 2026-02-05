@@ -13,6 +13,7 @@ class Baz extends bar({ x: 1 }) {
 }
 
 //// [intersectionType_useDefineForClassFields.js]
+"use strict";
 function bar(_p) {
     return null;
 }

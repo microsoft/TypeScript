@@ -6,7 +6,7 @@
 
 
 
-declare module Sample.Thing {
+declare namespace Sample.Thing {
 
 	export interface IWidget {
 		getDomNode(): any;
@@ -50,7 +50,7 @@ declare module Sample.Thing {
 	}	
 }
 
-module Sample.Actions.Thing.Find {
+namespace Sample.Actions.Thing.Find {
 >Sample : typeof Sample
 >Actions : typeof Actions
 >Thing : typeof Thing
@@ -78,7 +78,7 @@ module Sample.Actions.Thing.Find {
 	}
 }
 
-module Sample.Thing.Widgets {
+namespace Sample.Thing.Widgets {
 >Sample : typeof Sample
 >Thing : typeof Thing
 >Widgets : typeof Widgets
@@ -149,7 +149,7 @@ interface Window {
 declare var self: Window;
 >self : Window
 
-module Sample.Thing.Languages.PlainText {
+namespace Sample.Thing.Languages.PlainText {
 >Sample : typeof Sample
 >Thing : typeof Thing
 >Languages : typeof Languages

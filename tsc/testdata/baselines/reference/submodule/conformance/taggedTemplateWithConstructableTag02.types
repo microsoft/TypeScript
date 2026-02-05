@@ -7,7 +7,7 @@ interface I {
 
     new (): number;
 }
-var tag: I;
+declare var tag: I;
 >tag : I
 
 tag `Hello world!`;

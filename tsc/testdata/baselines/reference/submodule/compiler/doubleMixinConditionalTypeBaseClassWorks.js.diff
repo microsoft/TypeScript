@@ -1,8 +1,8 @@
 --- old.doubleMixinConditionalTypeBaseClassWorks.js
 +++ new.doubleMixinConditionalTypeBaseClassWorks.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [doubleMixinConditionalTypeBaseClassWorks.js]
+ "use strict";
  const Mixin1 = (Base) => class extends Base {
 +    _fooPrivate;
  };

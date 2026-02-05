@@ -3,7 +3,7 @@ nonPrimitiveAccessProperty.ts(5,7): error TS2339: Property 'destructuring' does 
 
 
 ==== nonPrimitiveAccessProperty.ts (2 errors) ====
-    var a: object;
+    var a: object = {};
     a.toString();
     a.nonExist(); // error
       ~~~~~~~~

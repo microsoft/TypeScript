@@ -14,6 +14,7 @@ i(a); // OK
 
 
 //// [inferTypeArgumentsInSignatureWithRestParameters.js]
+"use strict";
 function f(array, ...args) { }
 function g(array, ...args) { }
 function h(nonarray, ...args) { }

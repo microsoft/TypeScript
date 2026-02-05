@@ -52,6 +52,7 @@ function foo (v: number) {
 
 
 //// [classStaticBlock8.js]
+"use strict";
 function foo(v) {
     label: while (v) {
         class C {

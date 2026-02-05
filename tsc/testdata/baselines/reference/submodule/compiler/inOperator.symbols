@@ -14,13 +14,13 @@ if (3 in a) {}
 var b = '' in 0;
 >b : Symbol(b, Decl(inOperator.ts, 6, 3))
 
-var c: any;
->c : Symbol(c, Decl(inOperator.ts, 8, 3))
+declare var c: any;
+>c : Symbol(c, Decl(inOperator.ts, 8, 11))
 
-var y: number;
->y : Symbol(y, Decl(inOperator.ts, 9, 3))
+declare var y: number;
+>y : Symbol(y, Decl(inOperator.ts, 9, 11))
 
 if (y in c) { }
->y : Symbol(y, Decl(inOperator.ts, 9, 3))
->c : Symbol(c, Decl(inOperator.ts, 8, 3))
+>y : Symbol(y, Decl(inOperator.ts, 9, 11))
+>c : Symbol(c, Decl(inOperator.ts, 8, 11))
 

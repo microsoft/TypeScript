@@ -20,6 +20,7 @@ tempTag1 `${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y =>
 
 
 //// [taggedTemplateContextualTyping1.js]
+"use strict";
 function tempTag1(...rest) {
     return undefined;
 }

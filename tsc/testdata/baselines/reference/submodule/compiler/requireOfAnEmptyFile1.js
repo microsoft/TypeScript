@@ -7,6 +7,7 @@ import fs = require('./requireOfAnEmptyFile1_b');
 
 
 //// [requireOfAnEmptyFile1_b.js]
+"use strict";
 //// [requireOfAnEmptyFile1_a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

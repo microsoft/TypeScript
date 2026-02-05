@@ -12,3 +12,4 @@ declare namespace N {
 
 
 //// [exportDeclarationsInAmbientNamespaces2.js]
+"use strict";

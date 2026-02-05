@@ -11,6 +11,10 @@ var x: I<{s: string}>
 >x : I<{ s: string; }>
 >s : string
 
+declare var x: I<{s: string}>
+>x : I<{ s: string; }>
+>s : string
+
 x.f({s: 1})
 >x.f({s: 1}) : void
 >x.f : <T extends { s: string; }>(x: T) => void

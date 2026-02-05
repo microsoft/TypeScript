@@ -7,10 +7,7 @@ export class Game {
 }
 
 //// [parser0_004152.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Game = void 0;
-class Game {
+export class Game {
     position = new DisplayPosition([]);
     3;
     3;
@@ -30,4 +27,3 @@ class Game {
     ;
     prevConfig;
 }
-exports.Game = Game;

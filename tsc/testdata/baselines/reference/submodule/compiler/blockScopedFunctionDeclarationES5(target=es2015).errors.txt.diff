@@ -1,0 +1,15 @@
+--- old.blockScopedFunctionDeclarationES5(target=es2015).errors.txt
++++ new.blockScopedFunctionDeclarationES5(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-blockScopedFunctionDeclarationES5.ts(5,1): error TS2304: Cannot find name 'foo'.
+-
+-
+-==== blockScopedFunctionDeclarationES5.ts (1 errors) ====
+-    if (true) {
+-        function foo() { }
+-        foo();
+-    }
+-    foo();
+-    ~~~
+-!!! error TS2304: Cannot find name 'foo'.
++<no content>

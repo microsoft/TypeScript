@@ -1,7 +1,7 @@
 --- old.iterableArrayPattern9.js
 +++ new.iterableArrayPattern9.js
-@@= skipped -19, +19 lines =@@
- //// [iterableArrayPattern9.js]
+@@= skipped -20, +20 lines =@@
+ "use strict";
  function fun([a, b] = new FooIterator) { }
  class Bar {
 +    x;

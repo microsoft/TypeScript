@@ -74,6 +74,7 @@ interface testInterface2 {
 
 
 //// [errorsInGenericTypeReference.js]
+"use strict";
 class Foo {
 }
 // in call type arguments

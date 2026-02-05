@@ -12,3 +12,4 @@ namespace Validation {
 }
 
 //// [unusedInterfaceinNamespace2.js]
+"use strict";

@@ -1,0 +1,15 @@
+asiPreventsParsingAsNamespace01.ts(4,1): error TS2454: Variable 'namespace' is used before being assigned.
+asiPreventsParsingAsNamespace01.ts(5,1): error TS2454: Variable 'n' is used before being assigned.
+
+
+==== asiPreventsParsingAsNamespace01.ts (2 errors) ====
+    var namespace: number;
+    var n: string;
+    
+    namespace    // this is the identifier 'namespace'
+    ~~~~~~~~~
+!!! error TS2454: Variable 'namespace' is used before being assigned.
+    n            // this is the identifier 'n'
+    ~
+!!! error TS2454: Variable 'n' is used before being assigned.
+    { }          // this is a block body

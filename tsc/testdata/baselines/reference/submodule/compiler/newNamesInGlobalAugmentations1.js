@@ -3,7 +3,7 @@
 //// [f1.d.ts]
 export {};
 
-declare module M.M1 {
+declare namespace M.M1 {
     export let x: number;
 }
 declare global {
@@ -21,6 +21,7 @@ new Cls().x
 let c = a + b + X;
 
 //// [main.js]
+"use strict";
 Symbol.observable;
 new Cls().x;
 let c = a + b + X;

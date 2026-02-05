@@ -35,12 +35,12 @@ interfaceInheritance.ts(38,1): error TS2322: Type 'I4' is not assignable to type
           ~~
 !!! error TS2420: Class 'C1' incorrectly implements interface 'I2'.
 !!! error TS2420:   Type 'C1' is missing the following properties from type 'I2': i1P1, i1P2
-        public i2P1: string;
+        public i2P1!: string;
     }
     
-    var i2: I2;
+    declare var i2: I2;
     var i1: I1;
-    var i3: I3;
+    declare var i3: I3;
     i1 = i2;
     i2 = i3; // should be an error - i3 does not implement the members of i1
     ~~
@@ -48,8 +48,8 @@ interfaceInheritance.ts(38,1): error TS2322: Type 'I4' is not assignable to type
     
     var c1: C1;
     
-    var i4: I4;
-    var i5: I5;
+    declare var i4: I4;
+    declare var i5: I5;
     
     i4 = i5; // should be an error
     ~~

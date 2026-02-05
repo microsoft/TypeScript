@@ -1,8 +1,8 @@
 --- old.quickinfoTypeAtReturnPositionsInaccurate.js
 +++ new.quickinfoTypeAtReturnPositionsInaccurate.js
-@@= skipped -108, +108 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.listFiles = listFiles;
+@@= skipped -105, +105 lines =@@
+
+ //// [quickinfoTypeAtReturnPositionsInaccurate.js]
  class NumClass {
 +    value;
      get() {

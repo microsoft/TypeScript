@@ -1,0 +1,21 @@
+--- old.destructuringArrayBindingPatternAndAssignment4(target=es2015).errors.txt
++++ new.destructuringArrayBindingPatternAndAssignment4(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-destructuringArrayBindingPatternAndAssignment4.ts(5,7): error TS2488: Type 'number[] | null' must have a '[Symbol.iterator]()' method that returns an iterator.
+-
+-
+-!!! error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
++destructuringArrayBindingPatternAndAssignment4.ts(5,7): error TS2488: Type 'null' must have a '[Symbol.iterator]()' method that returns an iterator.
++
++
+ ==== destructuringArrayBindingPatternAndAssignment4.ts (1 errors) ====
+     // #35497
+     
+@@= skipped -9, +7 lines =@@
+     declare const data: number[] | null;
+     const [value] = data; // Error
+           ~~~~~~~
+-!!! error TS2488: Type 'number[] | null' must have a '[Symbol.iterator]()' method that returns an iterator.
++!!! error TS2488: Type 'null' must have a '[Symbol.iterator]()' method that returns an iterator.
+     

@@ -14,6 +14,7 @@ const r = impl(o, "x");
 r[0][r[1]] = o[r[1]];
 
 //// [indexedAccessCanBeHighOrder.js]
+"use strict";
 function impl(a, b) {
     const item = get(a, b);
     return find(item);

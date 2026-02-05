@@ -1,7 +1,7 @@
 --- old.objectTypeWithNumericProperty.js
 +++ new.objectTypeWithNumericProperty.js
-@@= skipped -47, +47 lines =@@
- //// [objectTypeWithNumericProperty.js]
+@@= skipped -48, +48 lines =@@
+ "use strict";
  // no errors here
  class C {
 +    1;

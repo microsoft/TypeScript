@@ -1,6 +1,6 @@
 --- old.stringIndexerConstrainsPropertyDeclarations.js
 +++ new.stringIndexerConstrainsPropertyDeclarations.js
-@@= skipped -102, +102 lines =@@
+@@= skipped -103, +103 lines =@@
  // String indexer types constrain the types of named properties in their containing type
  class C {
      constructor() { } // ok

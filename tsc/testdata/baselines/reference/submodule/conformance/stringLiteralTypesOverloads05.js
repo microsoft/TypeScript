@@ -14,6 +14,7 @@ function doThing(x: string, y?: string): Moose {
 }
 
 //// [stringLiteralTypesOverloads05.js]
+"use strict";
 ;
 function doThing(x, y) {
     return undefined;

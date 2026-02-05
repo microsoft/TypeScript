@@ -23,6 +23,7 @@ class I { }
 
 
 //// [file1.js]
+"use strict";
 class A {
 }
 class B {
@@ -42,6 +43,7 @@ class H {
 class I {
 }
 //// [file2.js]
+"use strict";
 class A {
 }
 class B {

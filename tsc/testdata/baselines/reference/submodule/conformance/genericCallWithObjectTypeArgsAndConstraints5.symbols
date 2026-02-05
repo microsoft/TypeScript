@@ -36,19 +36,19 @@ function foo<T, U extends T>(t: T, t2: U) {
 >t2 : Symbol(t2, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 11, 34))
 }
 
-var c: C;
->c : Symbol(c, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 15, 3))
+declare var c: C;
+>c : Symbol(c, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 15, 11))
 >C : Symbol(C, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 0, 0))
 
-var d: D;
->d : Symbol(d, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 16, 3))
+declare var d: D;
+>d : Symbol(d, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 16, 11))
 >D : Symbol(D, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 4, 1))
 
 var r2 = foo(d, c); // the constraints are self-referencing, no downstream error
 >r2 : Symbol(r2, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 17, 3))
 >foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 9, 1))
->d : Symbol(d, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 16, 3))
->c : Symbol(c, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 15, 3))
+>d : Symbol(d, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 16, 11))
+>c : Symbol(c, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 15, 11))
 
 var r9 = foo(() => 1, () => { }); // the constraints are self-referencing, no downstream error
 >r9 : Symbol(r9, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 18, 3))
@@ -65,7 +65,7 @@ function other<T, U extends T>() {
 >foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 9, 1))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 20, 15))
 >U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 20, 17))
->c : Symbol(c, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 15, 3))
->d : Symbol(d, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 16, 3))
+>c : Symbol(c, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 15, 11))
+>d : Symbol(d, Decl(genericCallWithObjectTypeArgsAndConstraints5.ts, 16, 11))
 }
 

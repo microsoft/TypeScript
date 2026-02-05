@@ -1,6 +1,6 @@
 --- old.ModuleWithExportedAndNonExportedImportAlias.js
 +++ new.ModuleWithExportedAndNonExportedImportAlias.js
-@@= skipped -44, +44 lines =@@
+@@= skipped -45, +45 lines =@@
  var B;
  (function (B) {
      class Line {

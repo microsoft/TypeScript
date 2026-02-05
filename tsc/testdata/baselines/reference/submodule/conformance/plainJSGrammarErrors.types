@@ -269,16 +269,16 @@ const { e: erp, m: erm, ...noInitialiser = true } = doom
 var;
 var x = 1 || 2 ?? 3
 >x : number
->1 || 2 ?? 3 : 1 | 2 | 3
->1 || 2 : 1 | 2
+>1 || 2 ?? 3 : 1
+>1 || 2 : 1
 >1 : 1
 >2 : 2
 >3 : 3
 
 var x = 2 ?? 3 || 4
 >x : number
->2 ?? 3 || 4 : 2 | 3 | 4
->2 ?? 3 : 2 | 3
+>2 ?? 3 || 4 : 2
+>2 ?? 3 : 2
 >2 : 2
 >3 : 3
 >4 : 4
@@ -333,7 +333,7 @@ const o = {
 >1 : 1
 
     m?() { return 12 },
->m : () => number
+>m : (() => number) | undefined
 >12 : 12
 
     definitely!,
@@ -472,7 +472,7 @@ var b
 >b : any
 
 switch (b) {
->b : any
+>b : undefined
 
     case false:
 >false : false
@@ -505,7 +505,7 @@ try {
 >2 : 2
 }
 catch (e) {
->e : any
+>e : unknown
 
     const e = 1
 >e : 1
@@ -523,7 +523,7 @@ try {
 >20 : 20
 }
 catch (e = 0) {
->e : any
+>e : unknown
 >0 : 0
 }
 label: for (const x in [1,2,3]) {

@@ -1,0 +1,163 @@
+callWithSpread.ts(14,14): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(15,14): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(17,1): error TS2454: Variable 'obj' is used before being assigned.
+callWithSpread.ts(18,1): error TS2454: Variable 'obj' is used before being assigned.
+callWithSpread.ts(18,18): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(19,1): error TS2454: Variable 'obj' is used before being assigned.
+callWithSpread.ts(19,18): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(21,1): error TS2454: Variable 'obj' is used before being assigned.
+callWithSpread.ts(21,18): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(22,1): error TS2454: Variable 'obj' is used before being assigned.
+callWithSpread.ts(22,18): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(22,34): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(23,1): error TS2454: Variable 'obj' is used before being assigned.
+callWithSpread.ts(23,18): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(23,34): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(25,2): error TS2454: Variable 'obj' is used before being assigned.
+callWithSpread.ts(26,2): error TS2454: Variable 'obj' is used before being assigned.
+callWithSpread.ts(26,20): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(27,2): error TS2454: Variable 'obj' is used before being assigned.
+callWithSpread.ts(27,20): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(29,3): error TS2454: Variable 'obj' is used before being assigned.
+callWithSpread.ts(29,21): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(30,3): error TS2454: Variable 'obj' is used before being assigned.
+callWithSpread.ts(30,21): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(30,38): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(31,3): error TS2454: Variable 'obj' is used before being assigned.
+callWithSpread.ts(31,21): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(31,38): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(33,1): error TS2454: Variable 'xa' is used before being assigned.
+callWithSpread.ts(34,1): error TS2454: Variable 'xa' is used before being assigned.
+callWithSpread.ts(34,20): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(35,1): error TS2454: Variable 'xa' is used before being assigned.
+callWithSpread.ts(35,20): error TS2454: Variable 'a' is used before being assigned.
+callWithSpread.ts(37,12): error TS2454: Variable 'xa' is used before being assigned.
+
+
+==== callWithSpread.ts (34 errors) ====
+    interface X {
+        foo(x: number, y: number, ...z: string[]): X;
+    }
+    
+    function foo(x: number, y: number, ...z: string[]) {
+    }
+    
+    var a: string[];
+    var z: number[];
+    var obj: X;
+    var xa: X[];
+    
+    foo(1, 2, "abc");
+    foo(1, 2, ...a);
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    foo(1, 2, ...a, "abc");
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    obj.foo(1, 2, "abc");
+    ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+    obj.foo(1, 2, ...a);
+    ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+                     ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    obj.foo(1, 2, ...a, "abc");
+    ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+                     ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    obj.foo(1, 2, ...a).foo(1, 2, "abc");
+    ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+                     ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    obj.foo(1, 2, ...a).foo(1, 2, ...a);
+    ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+                     ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                                     ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
+    ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+                     ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                                     ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    (obj.foo)(1, 2, "abc");
+     ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+    (obj.foo)(1, 2, ...a);
+     ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+                       ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    (obj.foo)(1, 2, ...a, "abc");
+     ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+                       ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    ((obj.foo)(1, 2, ...a).foo)(1, 2, "abc");
+      ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+                        ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    ((obj.foo)(1, 2, ...a).foo)(1, 2, ...a);
+      ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+                        ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                                         ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    ((obj.foo)(1, 2, ...a).foo)(1, 2, ...a, "abc");
+      ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+                        ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                                         ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    xa[1].foo(1, 2, "abc");
+    ~~
+!!! error TS2454: Variable 'xa' is used before being assigned.
+    xa[1].foo(1, 2, ...a);
+    ~~
+!!! error TS2454: Variable 'xa' is used before being assigned.
+                       ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    xa[1].foo(1, 2, ...a, "abc");
+    ~~
+!!! error TS2454: Variable 'xa' is used before being assigned.
+                       ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    (<Function>xa[1].foo)(...[1, 2, "abc"]);
+               ~~
+!!! error TS2454: Variable 'xa' is used before being assigned.
+    
+    class C {
+        constructor(x: number, y: number, ...z: string[]) {
+            this.foo(x, y);
+            this.foo(x, y, ...z);
+        }
+        foo(x: number, y: number, ...z: string[]) {
+        }
+    }
+    
+    class D extends C {
+        constructor() {
+            super(1, 2);
+            super(1, 2, ...a);
+        }
+        foo() {
+            super.foo(1, 2);
+            super.foo(1, 2, ...a);
+        }
+    }
+    

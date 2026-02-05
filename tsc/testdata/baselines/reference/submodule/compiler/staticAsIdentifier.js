@@ -36,6 +36,7 @@ class C7 extends C6 {
 
 
 //// [staticAsIdentifier.js]
+"use strict";
 class C1 {
     static static;
 }

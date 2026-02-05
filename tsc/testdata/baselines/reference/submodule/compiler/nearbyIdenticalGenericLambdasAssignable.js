@@ -31,6 +31,7 @@ accL(fA); accL(fB); accL(fC);
 //             ~~ previously an error
 
 //// [nearbyIdenticalGenericLambdasAssignable.js]
+"use strict";
 const fB = () => {
     return { v: '' };
 };

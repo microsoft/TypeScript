@@ -67,7 +67,7 @@
 +    new (...args: any[]): {
 +        tags(): void;
 +        foo(): void;
-+        name?: string;
++        name?: string | undefined;
 +        property: string;
 +    };
 +    getTags(): void;
@@ -76,7 +76,7 @@
 +    new (...args: any[]): {
 +        tags(): void;
 +        foo(): void;
-+        name?: string;
++        name?: string | undefined;
 +        property: string;
 +    };
 +    getTags(): void;

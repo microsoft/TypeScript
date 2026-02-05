@@ -14,12 +14,13 @@ class C implements A {
 
 class C2 extends A {}
 
-var c: C;
-var c2: C2;
+declare var c: C;
+declare var c2: C2;
 c = c2;
 c2 = c;
 
 //// [classImplementsClass5.js]
+"use strict";
 class A {
     x = 1;
     foo() { return 1; }
@@ -32,7 +33,5 @@ class C {
 }
 class C2 extends A {
 }
-var c;
-var c2;
 c = c2;
 c2 = c;

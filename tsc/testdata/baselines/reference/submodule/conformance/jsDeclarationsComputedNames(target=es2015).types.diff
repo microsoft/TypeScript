@@ -1,0 +1,10 @@
+--- old.jsDeclarationsComputedNames(target=es2015).types
++++ new.jsDeclarationsComputedNames(target=es2015).types
+@@= skipped -13, +13 lines =@@
+ module.exports = {
+ >module.exports = {    [TopLevelSym](x = 12) {        return x;    },    items: {        [InnerSym]: (arg = {x: 12}) => arg.x    }} : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
+ >module.exports : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
+->module : { exports: { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }; }
++>module : { "export=": { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }; }
+ >exports : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
+ >{    [TopLevelSym](x = 12) {        return x;    },    items: {        [InnerSym]: (arg = {x: 12}) => arg.x    }} : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }

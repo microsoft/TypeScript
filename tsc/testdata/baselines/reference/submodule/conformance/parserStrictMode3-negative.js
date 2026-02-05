@@ -4,4 +4,5 @@
 eval = 1;
 
 //// [parserStrictMode3-negative.js]
+"use strict";
 eval = 1;

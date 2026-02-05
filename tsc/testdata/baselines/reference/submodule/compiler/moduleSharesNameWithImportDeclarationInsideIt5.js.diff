@@ -1,6 +1,6 @@
 --- old.moduleSharesNameWithImportDeclarationInsideIt5.js
 +++ new.moduleSharesNameWithImportDeclarationInsideIt5.js
-@@= skipped -30, +30 lines =@@
+@@= skipped -31, +31 lines =@@
  })(Z || (Z = {}));
  var A;
  (function (A) {

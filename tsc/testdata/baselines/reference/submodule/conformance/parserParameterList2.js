@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserParameterList2.js]
+"use strict";
 class C {
     F(A = 0) { }
 }

@@ -1,7 +1,8 @@
 stringLiteralTypesOverloads05.ts(6,10): error TS2394: This overload signature is not compatible with its implementation signature.
+stringLiteralTypesOverloads05.ts(10,5): error TS2322: Type 'undefined' is not assignable to type 'Moose'.
 
 
-==== stringLiteralTypesOverloads05.ts (1 errors) ====
+==== stringLiteralTypesOverloads05.ts (2 errors) ====
     interface Animal { animal: {} };
     interface Dog extends Animal { dog: {} }
     interface Cat extends Animal { cat: {} }
@@ -15,4 +16,6 @@ stringLiteralTypesOverloads05.ts(6,10): error TS2394: This overload signature is
     function doThing(x: string): Animal;
     function doThing(x: string, y?: string): Moose {
         return undefined;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Moose'.
     }

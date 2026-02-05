@@ -17,12 +17,12 @@ function * foo2() {
 >3 : 3
 
     yield */*comment4*/ [4];
->yield */*comment4*/ [4] : any
+>yield */*comment4*/ [4] : undefined
 >[4] : number[]
 >4 : 4
 
     yield /*comment5*/* [5];
->yield /*comment5*/* [5] : any
+>yield /*comment5*/* [5] : undefined
 >[5] : number[]
 >5 : 5
 }

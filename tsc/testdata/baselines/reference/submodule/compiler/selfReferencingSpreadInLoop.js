@@ -8,6 +8,7 @@ for (const subcomponent of [1, 2, 3]) {
 
 
 //// [selfReferencingSpreadInLoop.js]
+"use strict";
 let additional = [];
 for (const subcomponent of [1, 2, 3]) {
     additional = [...additional, subcomponent];

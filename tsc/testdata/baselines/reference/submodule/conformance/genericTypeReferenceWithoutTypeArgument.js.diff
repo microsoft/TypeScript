@@ -1,6 +1,6 @@
 --- old.genericTypeReferenceWithoutTypeArgument.js
 +++ new.genericTypeReferenceWithoutTypeArgument.js
-@@= skipped -42, +42 lines =@@
+@@= skipped -43, +43 lines =@@
  // it is an error to use a generic type without type arguments
  // all of these are errors 
  class C {

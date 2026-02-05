@@ -15,7 +15,7 @@ class C2 extends { foo: string; } { } // error
 >foo : any
 >string : any
 
-var x: { foo: string; }
+declare var x: { foo: string; }
 >x : { foo: string; }
 >foo : string
 
@@ -23,7 +23,7 @@ class C3 extends x { } // error
 >C3 : C3
 >x : { foo: string; }
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : typeof M
 >x : number
 >1 : 1
@@ -41,5 +41,5 @@ class C5 extends foo { } // error
 
 class C6 extends []{ } // error
 >C6 : C6
->[] : undefined[]
+>[] : never[]
 

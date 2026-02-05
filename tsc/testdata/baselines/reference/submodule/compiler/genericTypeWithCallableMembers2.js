@@ -10,6 +10,7 @@ function foo2<T extends { new (): string; }>(f: T) {
 }
 
 //// [genericTypeWithCallableMembers2.js]
+"use strict";
 function foo1(f) {
     return f(); // should return 'string', once returned 'any'
 }

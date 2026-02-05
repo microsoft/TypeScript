@@ -4,4 +4,5 @@
 f: number;
 
 //// [undeclaredVarEmit.js]
+"use strict";
 f: number;

@@ -1,9 +1,9 @@
 //// [tests/cases/compiler/interMixingModulesInterfaces3.ts] ////
 
 //// [interMixingModulesInterfaces3.ts]
-module A {
+namespace A {
 
-    module B {
+    namespace B {
         export function createB(): B {
             return null;
         }
@@ -18,6 +18,7 @@ module A {
 var x: A.B = null;
 
 //// [interMixingModulesInterfaces3.js]
+"use strict";
 var A;
 (function (A) {
     let B;

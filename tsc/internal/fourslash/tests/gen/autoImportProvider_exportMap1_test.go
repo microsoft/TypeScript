@@ -17,6 +17,7 @@ func TestAutoImportProvider_exportMap1(t *testing.T) {
 	const content = `// @Filename: /home/src/workspaces/project/tsconfig.json
 {
   "compilerOptions": {
+    "lib": ["es5"],
     "module": "nodenext"
   }
 }

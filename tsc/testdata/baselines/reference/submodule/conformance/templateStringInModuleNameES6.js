@@ -8,6 +8,7 @@ declare module `M${2}` {
 }
 
 //// [templateStringInModuleNameES6.js]
+"use strict";
 declare;
 module `M1`;
 {

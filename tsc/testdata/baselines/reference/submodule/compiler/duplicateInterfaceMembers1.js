@@ -8,3 +8,4 @@ interface Bar {
 
 
 //// [duplicateInterfaceMembers1.js]
+"use strict";

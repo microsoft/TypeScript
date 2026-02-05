@@ -9,6 +9,7 @@ Foo.prototype.bar = undefined; // Should be OK
 
 
 //// [typeOfPrototype.js]
+"use strict";
 class Foo {
     bar = 3;
     static bar = '';

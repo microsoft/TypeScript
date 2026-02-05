@@ -20,13 +20,10 @@ export const a4 = null as { x : number } & InvalidKeys2<"a">;
 
 
 //// [parenthesisDoesNotBlockAliasSymbolCreation.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a4 = exports.a3 = exports.a2 = exports.a = void 0;
-exports.a = null;
-exports.a2 = null;
-exports.a3 = null;
-exports.a4 = null;
+export const a = null;
+export const a2 = null;
+export const a3 = null;
+export const a4 = null;
 
 
 //// [parenthesisDoesNotBlockAliasSymbolCreation.d.ts]

@@ -1,6 +1,6 @@
 --- old.classExtendingNull.js
 +++ new.classExtendingNull.js
-@@= skipped -11, +11 lines =@@
+@@= skipped -12, +12 lines =@@
  class C2 extends (null) {
  }
  class C3 extends null {

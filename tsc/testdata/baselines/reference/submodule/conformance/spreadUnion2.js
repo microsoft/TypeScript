@@ -23,6 +23,7 @@ var o5 = { ...nullUnion, ...nullUnion };
 
 
 //// [spreadUnion2.js]
+"use strict";
 var o1;
 var o1 = Object.assign({}, undefinedUnion);
 var o2;

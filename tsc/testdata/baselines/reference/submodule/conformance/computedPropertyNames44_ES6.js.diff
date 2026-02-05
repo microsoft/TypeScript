@@ -1,8 +1,8 @@
 --- old.computedPropertyNames44_ES6.js
 +++ new.computedPropertyNames44_ES6.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
  //// [computedPropertyNames44_ES6.js]
+ "use strict";
  class Foo {
 +    x;
  }

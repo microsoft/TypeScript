@@ -24,6 +24,7 @@ func _() {
 	_ = x[ScriptTargetESNext-99]
 	_ = x[ScriptTargetJSON-100]
 	_ = x[ScriptTargetLatest-99]
+	_ = x[ScriptTargetLatestStandard-11]
 }
 
 const (

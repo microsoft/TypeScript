@@ -9,7 +9,9 @@ declare var x: number;
 x = 2;
 
 //// [commentOnAmbientVariable2_1.js]
+"use strict";
 var y = 1;
 //// [commentOnAmbientVariable2_2.js]
+"use strict";
 /// <reference path='commentOnAmbientVariable2_1.ts'/>
 x = 2;

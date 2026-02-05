@@ -52,13 +52,10 @@ function invalidPrologue(a = 10, b = 20) {
 
 
 //// [functionWithUseStrictAndSimpleParameterList.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
 function a(a = 10) {
     "use strict";
 }
-exports.foo = 10;
+export var foo = 10;
 function b(a = 10) {
 }
 function container() {

@@ -23,6 +23,7 @@ export = MainModule;
 
 
 //// [missingImportAfterModuleImport_0.js]
+"use strict";
 //// [missingImportAfterModuleImport_1.js]
 "use strict";
 class MainModule {

@@ -1,0 +1,13 @@
+genericWithCallSignatureReturningSpecialization.ts(6,1): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== genericWithCallSignatureReturningSpecialization.ts (1 errors) ====
+    interface B<T> {
+        f(): B<number>;
+        (value: T): void;
+    }
+    var x: B<boolean>;
+    x(true); // was error
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    

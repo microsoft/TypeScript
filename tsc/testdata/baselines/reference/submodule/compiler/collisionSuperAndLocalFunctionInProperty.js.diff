@@ -1,6 +1,6 @@
 --- old.collisionSuperAndLocalFunctionInProperty.js
 +++ new.collisionSuperAndLocalFunctionInProperty.js
-@@= skipped -23, +23 lines =@@
+@@= skipped -24, +24 lines =@@
  function _super() {
  }
  class Foo {

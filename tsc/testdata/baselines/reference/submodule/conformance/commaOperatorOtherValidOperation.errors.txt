@@ -1,0 +1,36 @@
+commaOperatorOtherValidOperation.ts(18,5): error TS2454: Variable 'x' is used before being assigned.
+commaOperatorOtherValidOperation.ts(18,8): error TS2454: Variable 'y' is used before being assigned.
+commaOperatorOtherValidOperation.ts(19,23): error TS2454: Variable 'y' is used before being assigned.
+commaOperatorOtherValidOperation.ts(19,26): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== commaOperatorOtherValidOperation.ts (4 errors) ====
+    //Comma operator in for loop
+    for (var i = 0, j = 10; i < j; i++, j--)
+    {
+    }
+    
+    //Comma operator in function arguments and return
+    function foo(x: number, y: string)
+    {
+        return x, y;
+    }
+    var resultIsString = foo(1, "123");
+    
+    //TypeParameters
+    function foo1<T1, T2>()
+    {
+        var x: T1;
+        var y: T2;
+        x, y;
+        ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+           ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+        var resultIsT1 = (y, x);
+                          ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+                             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    }
+    

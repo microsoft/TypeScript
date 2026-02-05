@@ -14,7 +14,7 @@
  inheritance1.ts(53,1): error TS2741: Property 'state' is missing in type 'Locations' but required in type 'Control'.
  inheritance1.ts(55,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'Locations'.
 @@= skipped -66, +68 lines =@@
-     var i: ImageBase;
+     declare var i: ImageBase;
      sc = i;
      ~~
 -!!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
@@ -24,7 +24,7 @@
      c = i;
      i = sc;
 @@= skipped -9, +10 lines =@@
-     var i1: Image1;
+     declare var i1: Image1;
      sc = i1;
      ~~
 -!!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.

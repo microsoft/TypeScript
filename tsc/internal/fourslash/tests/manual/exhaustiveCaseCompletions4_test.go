@@ -14,7 +14,8 @@ import (
 func TestExhaustiveCaseCompletions4(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @newline: LF
+	const content = `// @lib: es5
+// @newline: LF
 enum E {
     A = 0,
     B = "B",

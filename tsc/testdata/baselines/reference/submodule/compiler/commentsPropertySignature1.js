@@ -8,6 +8,7 @@ var a = {
 
 
 //// [commentsPropertySignature1.js]
+"use strict";
 var a = {
     /** own x*/
     x: 0

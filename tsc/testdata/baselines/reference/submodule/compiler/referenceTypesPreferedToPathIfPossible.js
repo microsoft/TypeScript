@@ -20,4 +20,4 @@ exports.thing = thing;
 
 
 //// [usage.d.ts]
-export declare const thing: () => import("url").Url;
+export declare const thing: () => any;

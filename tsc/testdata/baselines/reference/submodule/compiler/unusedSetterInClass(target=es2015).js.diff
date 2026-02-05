@@ -1,0 +1,10 @@
+--- old.unusedSetterInClass(target=es2015).js
++++ new.unusedSetterInClass(target=es2015).js
+@@= skipped -11, +11 lines =@@
+ //// [unusedSetterInClass.js]
+ "use strict";
+ class Employee {
++    _fullName;
+     set fullName(newName) {
+         this._fullName = newName;
+     }

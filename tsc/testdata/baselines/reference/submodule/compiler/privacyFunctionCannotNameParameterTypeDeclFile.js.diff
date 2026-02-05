@@ -1,6 +1,6 @@
 --- old.privacyFunctionCannotNameParameterTypeDeclFile.js
 +++ new.privacyFunctionCannotNameParameterTypeDeclFile.js
-@@= skipped -160, +160 lines =@@
+@@= skipped -161, +161 lines =@@
  exports.SpecializedWidget = exports.Widget1 = void 0;
  exports.createWidget1 = createWidget1;
  class Widget1 {

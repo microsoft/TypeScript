@@ -43,6 +43,7 @@ class D extends A {
 
 
 //// [esDecorators-classDeclaration-classSuper.7.js]
+"use strict";
 class A {
 }
 class B extends A {

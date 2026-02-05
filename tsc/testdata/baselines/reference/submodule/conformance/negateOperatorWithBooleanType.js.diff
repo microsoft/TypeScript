@@ -1,7 +1,7 @@
 --- old.negateOperatorWithBooleanType.js
 +++ new.negateOperatorWithBooleanType.js
-@@= skipped -41, +41 lines =@@
- var BOOLEAN;
+@@= skipped -40, +40 lines =@@
+ "use strict";
  function foo() { return true; }
  class A {
 +    a;

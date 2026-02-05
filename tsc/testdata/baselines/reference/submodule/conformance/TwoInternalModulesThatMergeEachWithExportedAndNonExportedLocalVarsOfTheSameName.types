@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedAndNonExportedLocalVarsOfTheSameName.ts] ////
 
 === part1.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     export interface Point {
@@ -12,7 +12,7 @@ module A {
 >y : number
     }
 
-    export module Utils {
+    export namespace Utils {
 >Utils : typeof Utils
 
         export function mirror<T extends Point>(p: T) {
@@ -41,7 +41,7 @@ module A {
 }
 
 === part2.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     // not a collision, since we don't export
@@ -49,7 +49,7 @@ module A {
 >Origin : string
 >"0,0" : "0,0"
 
-    export module Utils {
+    export namespace Utils {
 >Utils : typeof Utils
 
         export class Plane {

@@ -1,8 +1,8 @@
 --- old.circularConstructorWithReturn.js
 +++ new.circularConstructorWithReturn.js
-@@= skipped -27, +27 lines =@@
- exports.applyModelsAndClientExtensions = applyModelsAndClientExtensions;
- function getPrismaClient(options) {
+@@= skipped -23, +23 lines =@@
+ //// [circularConstructorWithReturn.js]
+ export function getPrismaClient(options) {
      class PrismaClient {
 +        self;
          constructor(options) {

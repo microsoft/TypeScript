@@ -1,16 +1,27 @@
 interfaceDeclaration3.ts(7,16): error TS2416: Property 'item' in type 'C1' is not assignable to the same property in base type 'I1'.
   Type 'number' is not assignable to type 'string'.
+interfaceDeclaration3.ts(7,16): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
+interfaceDeclaration3.ts(10,16): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
+interfaceDeclaration3.ts(13,16): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
+interfaceDeclaration3.ts(17,16): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
+interfaceDeclaration3.ts(21,16): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
 interfaceDeclaration3.ts(32,16): error TS2416: Property 'item' in type 'C1' is not assignable to the same property in base type 'I1'.
   Type 'number' is not assignable to type 'string'.
+interfaceDeclaration3.ts(32,16): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
+interfaceDeclaration3.ts(35,16): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
+interfaceDeclaration3.ts(38,16): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
+interfaceDeclaration3.ts(43,12): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
+interfaceDeclaration3.ts(47,12): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
+interfaceDeclaration3.ts(51,12): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
 interfaceDeclaration3.ts(54,11): error TS2430: Interface 'I2' incorrectly extends interface 'I1'.
   Types of property 'item' are incompatible.
     Type 'string' is not assignable to type 'number'.
 
 
-==== interfaceDeclaration3.ts (3 errors) ====
+==== interfaceDeclaration3.ts (14 errors) ====
     interface I1 { item:number; }
     
-    module M1 {
+    namespace M1 {
         interface I1 { item:string; }  
         interface I2 { item:number; }   
         class C1 implements I1 {
@@ -18,27 +29,37 @@ interfaceDeclaration3.ts(54,11): error TS2430: Interface 'I2' incorrectly extend
                    ~~~~
 !!! error TS2416: Property 'item' in type 'C1' is not assignable to the same property in base type 'I1'.
 !!! error TS2416:   Type 'number' is not assignable to type 'string'.
+                   ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
         }
         class C2 implements I1 {
             public item:string;
+                   ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
         }
         class C3 implements I2 {
             public item:number;
+                   ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
         }
         
         class C4 implements M2.I1 { 
             public item:string;
+                   ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
         }
     
         class C5 implements M2.M3.I1 {
             public item:string;
+                   ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
         }
     }
     
-    export module M2 {
+    export namespace M2 {
         export interface I1 { item:string; }
         export interface I2 { item:string; }
-        export module M3 {
+        export namespace M3 {
             export interface I1 { item:string; }
         }
         class C1 implements I1 {
@@ -46,25 +67,37 @@ interfaceDeclaration3.ts(54,11): error TS2430: Interface 'I2' incorrectly extend
                    ~~~~
 !!! error TS2416: Property 'item' in type 'C1' is not assignable to the same property in base type 'I1'.
 !!! error TS2416:   Type 'number' is not assignable to type 'string'.
+                   ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
         }
         class C2 implements I1 {
             public item:string;    
+                   ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
         }
         class C3 implements I2 {
             public item:string;    
+                   ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
         }
     }
     
     class C1 implements I1 {
         public item:number;
+               ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C2 implements M2.I1 { 
         public item:string;
+               ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C3 implements M2.M3.I1 {
         public item:string;
+               ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
     }
     
     interface I2 extends I1 { item:string; }

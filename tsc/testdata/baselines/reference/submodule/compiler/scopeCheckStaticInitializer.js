@@ -18,6 +18,7 @@ class After {
 
 
 //// [scopeCheckStaticInitializer.js]
+"use strict";
 class X {
     static illegalBeforeProperty = X.data;
     static okBeforeMethod = X.method;

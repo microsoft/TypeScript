@@ -18,6 +18,7 @@ class X extends L<X> {
 
 
 //// [mutuallyRecursiveInference.js]
+"use strict";
 class T {
     a;
     b;

@@ -52,10 +52,9 @@ type Conv<T, U = T> =
 
 
 //// [infiniteConstraints.js]
-"use strict";
 // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
-Object.defineProperty(exports, "__esModule", { value: true });
 const out = myBug({ obj1: { a: "test" } });
 const noError = ensureNoDuplicates({ main: value("test"), alternate: value("test2") });
 const shouldBeNoError = ensureNoDuplicates({ main: value("test") });
 const shouldBeError = ensureNoDuplicates({ main: value("dup"), alternate: value("dup") });
+export {};

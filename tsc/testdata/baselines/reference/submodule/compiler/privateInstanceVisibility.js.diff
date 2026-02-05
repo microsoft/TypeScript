@@ -1,6 +1,6 @@
 --- old.privateInstanceVisibility.js
 +++ new.privateInstanceVisibility.js
-@@= skipped -43, +43 lines =@@
+@@= skipped -44, +44 lines =@@
  var Test;
  (function (Test) {
      class Example {

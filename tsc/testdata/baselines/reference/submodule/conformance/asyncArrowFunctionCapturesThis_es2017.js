@@ -9,6 +9,7 @@ class C {
 
 
 //// [asyncArrowFunctionCapturesThis_es2017.js]
+"use strict";
 class C {
     method() {
         var fn = async () => await this;

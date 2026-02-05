@@ -11,6 +11,7 @@ class Derived extends Base {
 }
 
 //// [privateStaticMemberAccessibility.js]
+"use strict";
 class Base {
     static foo;
 }

@@ -8,6 +8,7 @@ var obj = {
 obj[Symbol.for];
 
 //// [symbolProperty53.js]
+"use strict";
 var obj = {
     [Symbol.for]: 0
 };

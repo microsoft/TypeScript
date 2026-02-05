@@ -18,6 +18,7 @@ class D extends C {
 
 
 //// [accessorsOverrideProperty6.js]
+"use strict";
 class A {
     p = 'yep';
 }

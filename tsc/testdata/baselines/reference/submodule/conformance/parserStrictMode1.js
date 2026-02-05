@@ -7,6 +7,7 @@ foo1();
 static();
 
 //// [parserStrictMode1.js]
+"use strict";
 foo1();
 foo1();
 foo1();

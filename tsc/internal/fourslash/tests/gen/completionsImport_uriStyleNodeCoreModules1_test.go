@@ -14,7 +14,8 @@ func TestCompletionsImport_uriStyleNodeCoreModules1(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @module: commonjs
+	const content = `// @lib: es5
+// @module: commonjs
 // @Filename: /node_modules/@types/node/index.d.ts
 declare module "fs" { function writeFile(): void }
 declare module "fs/promises" { function writeFile(): Promise<void> }

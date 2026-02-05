@@ -13,7 +13,9 @@ func TestQuickInfoMeaning(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @Filename: foo.d.ts
+	const content = `// @lib: es5
+// @module: commonjs
+// @Filename: foo.d.ts
 declare const [|/*foo_value_declaration*/foo: number|];
 [|declare module "foo_module" {
     interface /*foo_type_declaration*/I { x: number; y: number }

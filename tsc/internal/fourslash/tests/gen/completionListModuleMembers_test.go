@@ -12,16 +12,16 @@ func TestCompletionListModuleMembers(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = ` module Module {
+	const content = ` namespace Module {
      var innerVariable = 1;
      function innerFunction() { }
      class innerClass { }
-     module innerModule { }
+     namespace innerModule { }
      interface innerInterface {}
      export var exportedVariable = 1;
      export function exportedFunction() { }
      export class exportedClass { }
-     export module exportedModule { export var exportedInnerModuleVariable = 1; }
+     export namespace exportedModule { export var exportedInnerModuleVariable = 1; }
      export interface exportedInterface {}
  }
 

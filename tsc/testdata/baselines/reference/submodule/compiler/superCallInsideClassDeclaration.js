@@ -19,6 +19,7 @@ class B extends A {
 }
 
 //// [superCallInsideClassDeclaration.js]
+"use strict";
 class A {
 }
 class C {

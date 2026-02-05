@@ -1,7 +1,7 @@
 --- old.class2.js
 +++ new.class2.js
-@@= skipped -5, +5 lines =@@
- //// [class2.js]
+@@= skipped -6, +6 lines =@@
+ "use strict";
  class foo {
      constructor() { }
 +    static f = 3;

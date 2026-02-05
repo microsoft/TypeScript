@@ -1,0 +1,12 @@
+genericFunctions2.ts(4,19): error TS2454: Variable 'myItems' is used before being assigned.
+
+
+==== genericFunctions2.ts (1 errors) ====
+    declare function map <T, U > (items: T[], f: (x: T) => U): U[];
+    
+    var myItems: string[];
+    var lengths = map(myItems, x => x.length);
+                      ~~~~~~~
+!!! error TS2454: Variable 'myItems' is used before being assigned.
+    
+    

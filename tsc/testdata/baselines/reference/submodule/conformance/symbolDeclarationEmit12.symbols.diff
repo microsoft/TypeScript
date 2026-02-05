@@ -1,7 +1,7 @@
 --- old.symbolDeclarationEmit12.symbols
 +++ new.symbolDeclarationEmit12.symbols
 @@= skipped -17, +17 lines =@@
- >I : Symbol(I, Decl(symbolDeclarationEmit12.ts, 0, 10))
+ >I : Symbol(I, Decl(symbolDeclarationEmit12.ts, 0, 13))
 
          [Symbol.toPrimitive](x: I) { }
 ->[Symbol.toPrimitive] : Symbol(C[Symbol.toPrimitive], Decl(symbolDeclarationEmit12.ts, 3, 29), Decl(symbolDeclarationEmit12.ts, 7, 9), Decl(symbolDeclarationEmit12.ts, 8, 56))

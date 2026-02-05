@@ -1,8 +1,8 @@
 --- old.classHeritageWithTrailingSeparator.js
 +++ new.classHeritageWithTrailingSeparator.js
-@@= skipped -6, +6 lines =@@
-
+@@= skipped -7, +7 lines =@@
  //// [classHeritageWithTrailingSeparator.js]
+ "use strict";
  class C {
 +    foo;
  }

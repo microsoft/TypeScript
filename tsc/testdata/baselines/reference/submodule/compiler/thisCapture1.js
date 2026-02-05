@@ -12,6 +12,7 @@ class X {
 }
 
 //// [thisCapture1.js]
+"use strict";
 class X {
     y = 0;
     getSettings(keys) {

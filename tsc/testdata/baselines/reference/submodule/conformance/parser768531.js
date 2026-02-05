@@ -5,6 +5,7 @@
 /x/
 
 //// [parser768531.js]
+"use strict";
 {
     a: 3;
 }

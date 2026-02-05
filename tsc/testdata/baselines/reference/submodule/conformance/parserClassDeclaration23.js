@@ -5,5 +5,6 @@ class C\u0032 {
 }
 
 //// [parserClassDeclaration23.js]
+"use strict";
 class C\u0032 {
 }

@@ -1,6 +1,6 @@
 --- old.nameCollision.js
 +++ new.nameCollision.js
-@@= skipped -63, +63 lines =@@
+@@= skipped -64, +64 lines =@@
      // re-opened module with colliding name
      // this should add an underscore.
      class B {

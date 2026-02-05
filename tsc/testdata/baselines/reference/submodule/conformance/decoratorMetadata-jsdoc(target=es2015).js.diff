@@ -1,0 +1,12 @@
+--- old.decoratorMetadata-jsdoc(target=es2015).js
++++ new.decoratorMetadata-jsdoc(target=es2015).js
+@@= skipped -23, +23 lines =@@
+     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+ };
+ class X {
++    a;
++    b;
++    c;
+ }
+ __decorate([
+     decorator(),

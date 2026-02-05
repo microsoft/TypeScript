@@ -88,7 +88,7 @@ interface App {
 interface InjectionKey<T> extends Symbol {}
 >InjectionKey : Symbol(InjectionKey, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 24, 1))
 >T : Symbol(T, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 26, 23))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 interface Ref<T> {
 >Ref : Symbol(Ref, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts, 26, 43))

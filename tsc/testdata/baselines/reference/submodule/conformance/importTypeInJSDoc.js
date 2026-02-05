@@ -27,6 +27,7 @@ const r = /** @type {typeof import("./externs").Bar} */(r => r);
 
 
 //// [index.js]
+"use strict";
 /**
  * @typedef {import("./externs")} Foo
  */

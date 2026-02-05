@@ -34,13 +34,13 @@ unionTypeConstructSignatures.ts(73,1): error TS2511: Cannot create an instance o
 
 
 ==== unionTypeConstructSignatures.ts (28 errors) ====
-    var numOrDate: number | Date;
-    var strOrBoolean: string | boolean;
-    var strOrNum: string | number;
+    declare var numOrDate: number | Date;
+    declare var strOrBoolean: string | boolean;
+    declare var strOrNum: string | number;
     
     // If each type in U has construct signatures and the sets of construct signatures are identical ignoring return types,
     // U has the same set of construct signatures, but with return types that are unions of the return types of the respective construct signatures from each type in U.
-    var unionOfDifferentReturnType: { new (a: number): number; } | { new (a: number): Date; };
+    declare var unionOfDifferentReturnType: { new (a: number): number; } | { new (a: number): Date; };
     numOrDate = new unionOfDifferentReturnType(10);
     strOrBoolean = new unionOfDifferentReturnType("hello"); // error
     ~~~~~~~~~~~~
@@ -53,9 +53,9 @@ unionTypeConstructSignatures.ts(73,1): error TS2511: Cannot create an instance o
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
-!!! related TS2771 unionTypeConstructSignatures.ts:12:61: The last overload is declared here.
+!!! related TS2771 unionTypeConstructSignatures.ts:12:69: The last overload is declared here.
     
-    var unionOfDifferentReturnType1: { new (a: number): number; new (a: string): string; } | { new (a: number): Date; new (a: string): boolean; };
+    declare var unionOfDifferentReturnType1: { new (a: number): number; new (a: string): string; } | { new (a: number): Date; new (a: string): boolean; };
     numOrDate = new unionOfDifferentReturnType1(10);
     strOrBoolean = new unionOfDifferentReturnType1("hello");
     new unionOfDifferentReturnType1(true); // error in type of parameter
@@ -63,13 +63,13 @@ unionTypeConstructSignatures.ts(73,1): error TS2511: Cannot create an instance o
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
-!!! related TS2771 unionTypeConstructSignatures.ts:12:61: The last overload is declared here.
+!!! related TS2771 unionTypeConstructSignatures.ts:12:69: The last overload is declared here.
     new unionOfDifferentReturnType1(); // error missing parameter
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 unionTypeConstructSignatures.ts:12:41: An argument for 'a' was not provided.
+!!! related TS6210 unionTypeConstructSignatures.ts:12:49: An argument for 'a' was not provided.
     
-    var unionOfDifferentParameterTypes: { new (a: number): number; } | { new (a: string): Date; };
+    declare var unionOfDifferentParameterTypes: { new (a: number): number; } | { new (a: string): Date; };
     new unionOfDifferentParameterTypes(10);// error - no call signatures
                                        ~~
 !!! error TS2345: Argument of type '10' is not assignable to parameter of type 'never'.
@@ -79,30 +79,30 @@ unionTypeConstructSignatures.ts(73,1): error TS2511: Cannot create an instance o
     new unionOfDifferentParameterTypes();// error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 unionTypeConstructSignatures.ts:18:44: An argument for 'a' was not provided.
+!!! related TS6210 unionTypeConstructSignatures.ts:18:52: An argument for 'a' was not provided.
     
-    var unionOfDifferentNumberOfSignatures: { new (a: number): number; } | { new (a: number): Date; new (a: string): boolean; };
+    declare var unionOfDifferentNumberOfSignatures: { new (a: number): number; } | { new (a: number): Date; new (a: string): boolean; };
     new unionOfDifferentNumberOfSignatures(); // error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 unionTypeConstructSignatures.ts:23:48: An argument for 'a' was not provided.
+!!! related TS6210 unionTypeConstructSignatures.ts:23:56: An argument for 'a' was not provided.
     new unionOfDifferentNumberOfSignatures(10); // error - no call signatures
     new unionOfDifferentNumberOfSignatures("hello"); // error - no call signatures
                                            ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
-    var unionWithDifferentParameterCount: { new (a: string): string; } | { new (a: string, b: number): number; };
+    declare var unionWithDifferentParameterCount: { new (a: string): string; } | { new (a: string, b: number): number; };
     new unionWithDifferentParameterCount();// needs more args
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 0.
-!!! related TS6210 unionTypeConstructSignatures.ts:28:77: An argument for 'a' was not provided.
+!!! related TS6210 unionTypeConstructSignatures.ts:28:85: An argument for 'a' was not provided.
     new unionWithDifferentParameterCount("hello");// needs more args
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6210 unionTypeConstructSignatures.ts:28:88: An argument for 'b' was not provided.
+!!! related TS6210 unionTypeConstructSignatures.ts:28:96: An argument for 'b' was not provided.
     new unionWithDifferentParameterCount("hello", 10);// ok
     
-    var unionWithOptionalParameter1: { new (a: string, b?: number): string; } | { new (a: string, b?: number): number; };
+    declare var unionWithOptionalParameter1: { new (a: string, b?: number): string; } | { new (a: string, b?: number): number; };
     strOrNum = new unionWithOptionalParameter1('hello');
     strOrNum = new unionWithOptionalParameter1('hello', 10);
     strOrNum = new unionWithOptionalParameter1('hello', "hello"); // error in parameter type
@@ -111,13 +111,13 @@ unionTypeConstructSignatures.ts(73,1): error TS2511: Cannot create an instance o
     strOrNum = new unionWithOptionalParameter1(); // error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
-!!! related TS6210 unionTypeConstructSignatures.ts:33:41: An argument for 'a' was not provided.
+!!! related TS6210 unionTypeConstructSignatures.ts:33:49: An argument for 'a' was not provided.
     
-    var unionWithOptionalParameter2: { new (a: string, b?: number): string; } | { new (a: string, b: number): number };
+    declare var unionWithOptionalParameter2: { new (a: string, b?: number): string; } | { new (a: string, b: number): number };
     strOrNum = new unionWithOptionalParameter2('hello'); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6210 unionTypeConstructSignatures.ts:39:95: An argument for 'b' was not provided.
+!!! related TS6210 unionTypeConstructSignatures.ts:39:103: An argument for 'b' was not provided.
     strOrNum = new unionWithOptionalParameter2('hello', 10); // error no call signature
     strOrNum = new unionWithOptionalParameter2('hello', "hello"); // error no call signature
                                                         ~~~~~~~
@@ -125,9 +125,9 @@ unionTypeConstructSignatures.ts(73,1): error TS2511: Cannot create an instance o
     strOrNum = new unionWithOptionalParameter2(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 0.
-!!! related TS6210 unionTypeConstructSignatures.ts:39:84: An argument for 'a' was not provided.
+!!! related TS6210 unionTypeConstructSignatures.ts:39:92: An argument for 'a' was not provided.
     
-    var unionWithOptionalParameter3: { new (a: string, b?: number): string; } | { new (a: string): number; };
+    declare var unionWithOptionalParameter3: { new (a: string, b?: number): string; } | { new (a: string): number; };
     strOrNum = new unionWithOptionalParameter3('hello'); // error no call signature
     strOrNum = new unionWithOptionalParameter3('hello', 10); // ok
     strOrNum = new unionWithOptionalParameter3('hello', "hello"); // wrong type
@@ -136,9 +136,9 @@ unionTypeConstructSignatures.ts(73,1): error TS2511: Cannot create an instance o
     strOrNum = new unionWithOptionalParameter3(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
-!!! related TS6210 unionTypeConstructSignatures.ts:45:41: An argument for 'a' was not provided.
+!!! related TS6210 unionTypeConstructSignatures.ts:45:49: An argument for 'a' was not provided.
     
-    var unionWithRestParameter1: { new (a: string, ...b: number[]): string; } | { new (a: string, ...b: number[]): number };
+    declare var unionWithRestParameter1: { new (a: string, ...b: number[]): string; } | { new (a: string, ...b: number[]): number };
     strOrNum = new unionWithRestParameter1('hello');
     strOrNum = new unionWithRestParameter1('hello', 10);
     strOrNum = new unionWithRestParameter1('hello', 10, 11);
@@ -148,13 +148,13 @@ unionTypeConstructSignatures.ts(73,1): error TS2511: Cannot create an instance o
     strOrNum = new unionWithRestParameter1(); // error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2555: Expected at least 1 arguments, but got 0.
-!!! related TS6210 unionTypeConstructSignatures.ts:51:37: An argument for 'a' was not provided.
+!!! related TS6210 unionTypeConstructSignatures.ts:51:45: An argument for 'a' was not provided.
     
-    var unionWithRestParameter2: { new (a: string, ...b: number[]): string; } | { new (a: string, b: number): number };
+    declare var unionWithRestParameter2: { new (a: string, ...b: number[]): string; } | { new (a: string, b: number): number };
     strOrNum = new unionWithRestParameter2('hello'); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6210 unionTypeConstructSignatures.ts:58:95: An argument for 'b' was not provided.
+!!! related TS6210 unionTypeConstructSignatures.ts:58:103: An argument for 'b' was not provided.
     strOrNum = new unionWithRestParameter2('hello', 10); // error no call signature
     strOrNum = new unionWithRestParameter2('hello', 10, 11); // error no call signature
                                                         ~~
@@ -165,9 +165,9 @@ unionTypeConstructSignatures.ts(73,1): error TS2511: Cannot create an instance o
     strOrNum = new unionWithRestParameter2(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 0.
-!!! related TS6210 unionTypeConstructSignatures.ts:58:84: An argument for 'a' was not provided.
+!!! related TS6210 unionTypeConstructSignatures.ts:58:92: An argument for 'a' was not provided.
     
-    var unionWithRestParameter3: { new (a: string, ...b: number[]): string; } | { new (a: string): number };
+    declare var unionWithRestParameter3: { new (a: string, ...b: number[]): string; } | { new (a: string): number };
     strOrNum = new unionWithRestParameter3('hello'); // error no call signature
     strOrNum = new unionWithRestParameter3('hello', 10); // ok
     strOrNum = new unionWithRestParameter3('hello', 10, 11); // ok
@@ -177,9 +177,9 @@ unionTypeConstructSignatures.ts(73,1): error TS2511: Cannot create an instance o
     strOrNum = new unionWithRestParameter3(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2555: Expected at least 1 arguments, but got 0.
-!!! related TS6210 unionTypeConstructSignatures.ts:65:37: An argument for 'a' was not provided.
+!!! related TS6210 unionTypeConstructSignatures.ts:65:45: An argument for 'a' was not provided.
     
-    var unionWithAbstractSignature: (abstract new (a: string) => string) | (new (a: string) => string);
+    declare var unionWithAbstractSignature: (abstract new (a: string) => string) | (new (a: string) => string);
     new unionWithAbstractSignature('hello');
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2511: Cannot create an instance of an abstract class.

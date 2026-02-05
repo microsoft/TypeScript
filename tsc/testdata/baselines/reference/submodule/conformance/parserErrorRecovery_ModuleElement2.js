@@ -11,6 +11,7 @@ function foo() {
 )
 
 //// [parserErrorRecovery_ModuleElement2.js]
+"use strict";
 function foo() {
 }
 function foo() {

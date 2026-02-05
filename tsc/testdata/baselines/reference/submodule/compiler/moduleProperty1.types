@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleProperty1.ts] ////
 
 === moduleProperty1.ts ===
-module M {
+namespace M {
 >M : typeof M
 
     var x=10;  // variable local to this module body
@@ -17,7 +17,7 @@ module M {
 >y : number
 }
 
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 
     var x = 10;  // variable local to this module body

@@ -1,7 +1,7 @@
 --- old.throwStatements.js
 +++ new.throwStatements.js
-@@= skipped -89, +89 lines =@@
- //// [throwStatements.js]
+@@= skipped -90, +90 lines =@@
+ "use strict";
  // all legal
  class C {
 +    id;

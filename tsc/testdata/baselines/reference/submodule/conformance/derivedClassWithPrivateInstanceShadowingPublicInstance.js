@@ -35,6 +35,7 @@ var r6 = Derived.a; // error
 Derived.a = 2; // error
 
 //// [derivedClassWithPrivateInstanceShadowingPublicInstance.js]
+"use strict";
 class Base {
     x;
     fn() {

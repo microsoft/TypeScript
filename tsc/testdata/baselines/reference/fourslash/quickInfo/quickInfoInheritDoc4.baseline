@@ -10,7 +10,7 @@
 //            ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (method) B.value(): any
+// | (method) B.value(): undefined
 // | ```
 // | 
 // | 
@@ -33,7 +33,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(method) B.value(): any\n```\n\n\n*@inheritdoc*"
+        "value": "```tsx\n(method) B.value(): undefined\n```\n\n\n*@inheritdoc*"
       },
       "range": {
         "start": {

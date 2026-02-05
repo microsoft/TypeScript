@@ -46,6 +46,7 @@ obj2["Infinity"];   // any
 
 
 //// [binaryIntegerLiteralES6.js]
+"use strict";
 var bin1 = 0b11010;
 var bin2 = 0B11010;
 var bin3 = 0B11111111111111111111111111111111111111111111111101001010100000010111110001111111111;

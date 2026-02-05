@@ -1,21 +1,29 @@
 --- old.prototypePropertyAssignmentMergeAcrossFiles2.errors.txt
 +++ new.prototypePropertyAssignmentMergeAcrossFiles2.errors.txt
 @@= skipped -0, +0 lines =@@
+-other.js(4,5): error TS2322: Type 'undefined' is not assignable to type 'One'.
 -other.js(5,5): error TS2339: Property 'wat' does not exist on type 'One'.
+-other.js(9,5): error TS2322: Type 'undefined' is not assignable to type 'Two'.
 -other.js(10,5): error TS2339: Property 'wat' does not exist on type 'Two'.
 +other.js(2,11): error TS2503: Cannot find namespace 'Ns'.
 +other.js(7,11): error TS2503: Cannot find namespace 'Ns'.
 
 
  ==== prototypePropertyAssignmentMergeAcrossFiles2.js (0 errors) ====
-@@= skipped -15, +15 lines =@@
- ==== other.js (2 errors) ====
+@@= skipped -14, +12 lines =@@
+     Ns.Two.prototype = {
+     }
+     
+-==== other.js (4 errors) ====
++==== other.js (2 errors) ====
      /**
       * @type {Ns.One}
 +              ~~
 +!!! error TS2503: Cannot find namespace 'Ns'.
       */
-     var one;
+     var one = undefined;
+-        ~~~
+-!!! error TS2322: Type 'undefined' is not assignable to type 'One'.
      one.wat;
 -        ~~~
 -!!! error TS2339: Property 'wat' does not exist on type 'One'.
@@ -24,7 +32,9 @@
 +              ~~
 +!!! error TS2503: Cannot find namespace 'Ns'.
       */
-     var two;
+     var two = undefined;
+-        ~~~
+-!!! error TS2322: Type 'undefined' is not assignable to type 'Two'.
      two.wat;
 -        ~~~
 -!!! error TS2339: Property 'wat' does not exist on type 'Two'.

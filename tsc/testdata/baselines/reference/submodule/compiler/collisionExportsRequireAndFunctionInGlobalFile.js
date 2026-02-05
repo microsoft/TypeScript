@@ -7,7 +7,7 @@ function exports() {
 function require() {
     return "require";
 }
-module m3 {
+namespace m3 {
     function exports() {
         return 1;
     }
@@ -15,7 +15,7 @@ module m3 {
         return "require";
     }
 }
-module m4 {
+namespace m4 {
     export function exports() {
         return 1;
     }
@@ -25,6 +25,7 @@ module m4 {
 }
 
 //// [collisionExportsRequireAndFunctionInGlobalFile.js]
+"use strict";
 function exports() {
     return 1;
 }

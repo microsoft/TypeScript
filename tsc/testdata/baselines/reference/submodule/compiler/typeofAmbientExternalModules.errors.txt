@@ -1,3 +1,5 @@
+typeofAmbientExternalModules_0.ts(1,18): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+typeofAmbientExternalModules_1.ts(1,11): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
 typeofAmbientExternalModules_2.ts(7,1): error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("typeofAmbientExternalModules_0")'.
 typeofAmbientExternalModules_2.ts(9,1): error TS2741: Property 'prototype' is missing in type 'typeof import("typeofAmbientExternalModules_0")' but required in type 'typeof D'.
 
@@ -17,10 +19,14 @@ typeofAmbientExternalModules_2.ts(9,1): error TS2741: Property 'prototype' is mi
     y2 = ext;
     ~~
 !!! error TS2741: Property 'prototype' is missing in type 'typeof import("typeofAmbientExternalModules_0")' but required in type 'typeof D'.
-==== typeofAmbientExternalModules_0.ts (0 errors) ====
+==== typeofAmbientExternalModules_0.ts (1 errors) ====
     export class C { foo: string; }
+                     ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     
-==== typeofAmbientExternalModules_1.ts (0 errors) ====
+==== typeofAmbientExternalModules_1.ts (1 errors) ====
     class D { bar: string; }
+              ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
     export = D;
     

@@ -1,0 +1,131 @@
+additionOperatorWithStringAndEveryType.ts(15,10): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(16,10): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(16,14): error TS2454: Variable 'b' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(17,10): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(17,14): error TS2454: Variable 'c' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(18,10): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(18,14): error TS2454: Variable 'd' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(19,10): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(19,14): error TS2454: Variable 'e' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(20,10): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(21,10): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(21,14): error TS2454: Variable 'g' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(24,14): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(25,10): error TS2454: Variable 'b' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(25,14): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(26,11): error TS2454: Variable 'c' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(26,15): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(27,11): error TS2454: Variable 'd' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(27,15): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(28,11): error TS2454: Variable 'e' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(28,15): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(29,15): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(30,11): error TS2454: Variable 'g' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(30,15): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(33,11): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(34,11): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(35,11): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(36,11): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(37,11): error TS2454: Variable 'x' is used before being assigned.
+additionOperatorWithStringAndEveryType.ts(38,11): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== additionOperatorWithStringAndEveryType.ts (30 errors) ====
+    enum E { a, b, c }
+    
+    var a: any;
+    var b: boolean;
+    var c: number;
+    var d: string;
+    var e: Object;
+    var f: void;
+    var g: E;
+    
+    var x: string;
+    
+    // string could plus every type, and the result is always string
+    // string as left operand
+    var r1 = x + a;
+             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var r2 = x + b;
+             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var r3 = x + c;
+             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r4 = x + d;
+             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'd' is used before being assigned.
+    var r5 = x + e;
+             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'e' is used before being assigned.
+    var r6 = x + f;
+             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var r7 = x + g;
+             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'g' is used before being assigned.
+    
+    // string as right operand
+    var r8 = a + x;
+                 ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var r9 = b + x;
+             ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var r10 = c + x;
+              ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var r11 = d + x;
+              ~
+!!! error TS2454: Variable 'd' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var r12 = e + x;
+              ~
+!!! error TS2454: Variable 'e' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var r13 = f + x;
+                  ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var r14 = g + x;
+              ~
+!!! error TS2454: Variable 'g' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
+    // other cases
+    var r15 = x + E;
+              ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var r16 = x + E.a;
+              ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var r17 = x + '';
+              ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var r18 = x + 0;
+              ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var r19 = x + { a: '' };
+              ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var r20 = x + [];
+              ~
+!!! error TS2454: Variable 'x' is used before being assigned.

@@ -1,8 +1,8 @@
 --- old.autoAccessor10.js
 +++ new.autoAccessor10.js
-@@= skipped -31, +31 lines =@@
-
+@@= skipped -32, +32 lines =@@
  //// [autoAccessor10.js]
+ "use strict";
  class C1 {
 -    #a0_accessor_storage = 1;
 -    get a0() { return this.#a0_accessor_storage; }

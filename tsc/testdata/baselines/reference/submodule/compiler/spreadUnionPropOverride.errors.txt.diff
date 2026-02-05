@@ -1,0 +1,24 @@
+--- old.spreadUnionPropOverride.errors.txt
++++ new.spreadUnionPropOverride.errors.txt
+@@= skipped -0, +0 lines =@@
++spreadUnionPropOverride.ts(16,5): error TS2783: 'id' is specified more than once, so this usage will be overwritten.
+ spreadUnionPropOverride.ts(30,5): error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+ spreadUnionPropOverride.ts(46,5): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
+ spreadUnionPropOverride.ts(63,5): error TS2783: 'name' is specified more than once, so this usage will be overwritten.
+
+
+-==== spreadUnionPropOverride.ts (3 errors) ====
++==== spreadUnionPropOverride.ts (4 errors) ====
+     // Repro from #62655
+     type Thing = {
+         id: string;
+@@= skipped -19, +20 lines =@@
+     
+     fun({
+         id: 'foo',
++        ~~~~~~~~~
++!!! error TS2783: 'id' is specified more than once, so this usage will be overwritten.
++!!! related TS2785 spreadUnionPropOverride.ts:17:5: This spread always overwrites this property.
+         ...find('foo') ?? {
+             label: 'Foo',
+         },

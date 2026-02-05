@@ -1,27 +1,101 @@
+jsxEsprimaFbTestSuite.tsx(2,13): error TS7005: Variable '日本語' implicitly has an 'any' type.
+jsxEsprimaFbTestSuite.tsx(3,13): error TS7005: Variable 'AbC_def' implicitly has an 'any' type.
+jsxEsprimaFbTestSuite.tsx(4,13): error TS7005: Variable 'LeftRight' implicitly has an 'any' type.
+jsxEsprimaFbTestSuite.tsx(5,13): error TS7005: Variable 'x' implicitly has an 'any' type.
+jsxEsprimaFbTestSuite.tsx(6,13): error TS7005: Variable 'a' implicitly has an 'any' type.
+jsxEsprimaFbTestSuite.tsx(7,13): error TS7005: Variable 'props' implicitly has an 'any' type.
+jsxEsprimaFbTestSuite.tsx(8,13): error TS7005: Variable 'value' implicitly has an 'any' type.
+jsxEsprimaFbTestSuite.tsx(10,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(12,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(14,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(14,25): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(14,28): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(14,33): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(14,37): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(16,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(18,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(19,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(30,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(30,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(30,19): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(32,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(32,6): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(34,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(34,29): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(36,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(36,19): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(38,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(38,6): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(38,36): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(40,17): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(40,29): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 jsxEsprimaFbTestSuite.tsx(40,41): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+jsxEsprimaFbTestSuite.tsx(40,51): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(46,2): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(48,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(50,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(52,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(52,48): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(54,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxEsprimaFbTestSuite.tsx(54,8): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
-==== jsxEsprimaFbTestSuite.tsx (1 errors) ====
+==== jsxEsprimaFbTestSuite.tsx (40 errors) ====
     declare var React: any;
     declare var 日本語;
+                ~~~
+!!! error TS7005: Variable '日本語' implicitly has an 'any' type.
     declare var AbC_def;
+                ~~~~~~~
+!!! error TS7005: Variable 'AbC_def' implicitly has an 'any' type.
     declare var LeftRight;
+                ~~~~~~~~~
+!!! error TS7005: Variable 'LeftRight' implicitly has an 'any' type.
     declare var x;
+                ~
+!!! error TS7005: Variable 'x' implicitly has an 'any' type.
     declare var a;
+                ~
+!!! error TS7005: Variable 'a' implicitly has an 'any' type.
     declare var props;
+                ~~~~~
+!!! error TS7005: Variable 'props' implicitly has an 'any' type.
     declare var value;
+                ~~~~~
+!!! error TS7005: Variable 'value' implicitly has an 'any' type.
     
     <a />;
+    ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <n:a n:v />;
+    ~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <a n:foo="bar"> {value} <b><c /></b></a>;
+    ~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                            ~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                               ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                    ~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                        ~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <a b="&notanentity;" />;
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     <a
+    ~~
     />;
+    ~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <日本語></日本語>;
     
@@ -32,30 +106,74 @@ jsxEsprimaFbTestSuite.tsx(40,41): error TS1382: Unexpected token. Did you mean `
     </AbC_def>;
     
     <a b={x ? <c /> : <d />} />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+              ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                      ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <a>{}</a>;
+    ~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+         ~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <a>{/* this is a comment */}</a>;
+    ~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                ~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <div>@test content</div>;
+    ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                      ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <div><br />7x invalid-js-identifier</div>;
+    ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+         ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                       ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />;
+                    ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                ~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                                             ~
 !!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+                                                      ~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <a.b></a.b>;
     
     <a.b.c></a.b.c>;
     
     (<div />) < x;
+     ~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <div {...props} />;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <div {...props} post="attribute" />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <div pre="leading" pre2="attribute" {...props}></div>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                                   ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
     <a>    </a>;
+    ~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+           ~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     

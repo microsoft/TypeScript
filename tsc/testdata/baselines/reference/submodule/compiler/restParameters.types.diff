@@ -1,0 +1,31 @@
+--- old.restParameters.types
++++ new.restParameters.types
+@@= skipped -1, +1 lines =@@
+
+ === restParameters.ts ===
+ function f18(a?:string, ...b:number[]){}
+->f18 : (a?: string, ...b: number[]) => void
++>f18 : (a?: string | undefined, ...b: number[]) => void
+ >a : string | undefined
+ >b : number[]
+  
+ function f19(a?:string, b?:number, ...c:number[]){}
+->f19 : (a?: string, b?: number, ...c: number[]) => void
++>f19 : (a?: string | undefined, b?: number | undefined, ...c: number[]) => void
+ >a : string | undefined
+ >b : number | undefined
+ >c : number[]
+  
+ function f20(a:string, b?:string, ...c:number[]){}
+->f20 : (a: string, b?: string, ...c: number[]) => void
++>f20 : (a: string, b?: string | undefined, ...c: number[]) => void
+ >a : string
+ >b : string | undefined
+ >c : number[]
+  
+ function f21(a:string, b?:string, c?:number, ...d:number[]){}
+->f21 : (a: string, b?: string, c?: number, ...d: number[]) => void
++>f21 : (a: string, b?: string | undefined, c?: number | undefined, ...d: number[]) => void
+ >a : string
+ >b : string | undefined
+ >c : number | undefined

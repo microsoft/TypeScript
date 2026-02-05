@@ -6,6 +6,7 @@ class C {
 }
 
 //// [symbolDeclarationEmit2.js]
+"use strict";
 class C {
     [Symbol.toPrimitive] = "";
 }

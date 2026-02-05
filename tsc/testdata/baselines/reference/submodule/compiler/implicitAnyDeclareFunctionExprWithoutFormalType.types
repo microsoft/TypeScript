@@ -20,28 +20,28 @@ var lamda3 = function myLambda3(myParam) { }
 >myParam : any
 
 var lamda4 = () => { return null };
->lamda4 : () => any
->() => { return null } : () => any
+>lamda4 : () => null
+>() => { return null } : () => null
 
 // these should be error for implicit any return type
 var lambda5 = function temp() { return null; }
->lambda5 : () => any
->function temp() { return null; } : () => any
->temp : () => any
+>lambda5 : () => null
+>function temp() { return null; } : () => null
+>temp : () => null
 
 var lambda6 = () => { return null; }
->lambda6 : () => any
->() => { return null; } : () => any
+>lambda6 : () => null
+>() => { return null; } : () => null
 
 var lambda7 = function temp() { return undefined; }
->lambda7 : () => any
->function temp() { return undefined; } : () => any
->temp : () => any
+>lambda7 : () => undefined
+>function temp() { return undefined; } : () => undefined
+>temp : () => undefined
 >undefined : undefined
 
 var lambda8 = () => { return undefined; }
->lambda8 : () => any
->() => { return undefined; } : () => any
+>lambda8 : () => undefined
+>() => { return undefined; } : () => undefined
 >undefined : undefined
 
 // this shouldn't be an error

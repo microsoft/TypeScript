@@ -31,6 +31,7 @@ class J implements I {
 
 
 //// [useBeforeDeclaration_superClass.js]
+"use strict";
 class C {
     x = 0;
 }

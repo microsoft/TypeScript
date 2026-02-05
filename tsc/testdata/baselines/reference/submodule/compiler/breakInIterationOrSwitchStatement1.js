@@ -6,6 +6,7 @@ while (true) {
 }
 
 //// [breakInIterationOrSwitchStatement1.js]
+"use strict";
 while (true) {
     break;
 }

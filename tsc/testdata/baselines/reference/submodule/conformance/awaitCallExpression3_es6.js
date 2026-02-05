@@ -16,6 +16,7 @@ async function func(): Promise<void> {
 }
 
 //// [awaitCallExpression3_es6.js]
+"use strict";
 async function func() {
     before();
     var b = fn(a, await p, a);

@@ -16,7 +16,7 @@ f = 1; // ok
 var x: number = e; // ok
 x = f; // ok
 
-module Others {
+namespace Others {
     var a: any = e; // ok
 
     class C {
@@ -57,6 +57,7 @@ module Others {
 }
 
 //// [enumAssignability.js]
+"use strict";
 // enums assignable to number, any, Object, errors unless otherwise noted
 var E;
 (function (E) {

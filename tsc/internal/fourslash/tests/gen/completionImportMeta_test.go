@@ -12,7 +12,8 @@ func TestCompletionImportMeta(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @Filename: a.ts
+	const content = `// @lib: es5
+// @Filename: a.ts
 import./*1*/
 // @Filename: b.ts
 import.meta./*2*/

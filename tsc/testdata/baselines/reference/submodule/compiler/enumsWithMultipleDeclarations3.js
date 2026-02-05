@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/enumsWithMultipleDeclarations3.ts] ////
 
 //// [enumsWithMultipleDeclarations3.ts]
-module E {
+namespace E {
 }
 
 enum E {
@@ -9,6 +9,7 @@ enum E {
 }
 
 //// [enumsWithMultipleDeclarations3.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";

@@ -12,6 +12,7 @@ new D(7); // ok
 
 
 //// [literalTypesWidenInParameterPosition.js]
+"use strict";
 class D {
     widen;
     noWiden = 1;

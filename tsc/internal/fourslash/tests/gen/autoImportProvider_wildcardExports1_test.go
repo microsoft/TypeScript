@@ -49,7 +49,8 @@ export const d1: number;
 // @Filename: /home/src/workspaces/project/tsconfig.json
 {
     "compilerOptions": {
-        "module": "nodenext"
+        "module": "nodenext",
+        "lib": ["es5"]
     }
 }
 // @Filename: /home/src/workspaces/project/main.ts

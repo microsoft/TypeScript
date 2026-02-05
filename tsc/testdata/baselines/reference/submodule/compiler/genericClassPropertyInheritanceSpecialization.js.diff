@@ -1,7 +1,7 @@
 --- old.genericClassPropertyInheritanceSpecialization.js
 +++ new.genericClassPropertyInheritanceSpecialization.js
-@@= skipped -79, +79 lines =@@
- //// [genericClassPropertyInheritanceSpecialization.js]
+@@= skipped -80, +80 lines =@@
+ "use strict";
  var Portal;
  (function (Portal) {
 -    var Controls;

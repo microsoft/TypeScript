@@ -13,3 +13,4 @@ interface B<T> extends A<T> // error
 
 
 //// [infiniteExpandingTypeThroughInheritanceInstantiation.js]
+"use strict";

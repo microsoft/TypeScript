@@ -1,0 +1,15 @@
+--- old.jsDeclarationsExportAssignedConstructorFunctionWithSub(target=es2015).js
++++ new.jsDeclarationsExportAssignedConstructorFunctionWithSub(target=es2015).js
+@@= skipped -24, +24 lines =@@
+     this.instance = new module.exports(10);
+ };
+ module.exports.Sub.prototype = {};
++
++
++//// [jsDeclarationsExportAssignedConstructorFunctionWithSub.d.ts]
++/**
++ * @param {number} p
++ */
++declare const _default: (p: number) => void;
++export = _default;
++export declare var Sub: () => void;

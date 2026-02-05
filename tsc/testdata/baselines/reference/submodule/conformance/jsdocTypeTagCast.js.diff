@@ -1,8 +1,8 @@
 --- old.jsdocTypeTagCast.js
 +++ new.jsdocTypeTagCast.js
-@@= skipped -82, +82 lines =@@
- var W;
+@@= skipped -84, +84 lines =@@
  //// [b.js]
+ "use strict";
  // @ts-check
 -var W = /** @type {string} */ ( /** @type {*} */(4));
 -var W = /** @type {string} */ (4); // Error

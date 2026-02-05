@@ -1,0 +1,25 @@
+--- old.tsxAttributeResolution12.types
++++ new.tsxAttributeResolution12.types
+@@= skipped -23, +23 lines =@@
+ >context : any
+
+ 	setState(f: (prevState: S, props: P) => S, callback?: () => any): void;
+->setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
++>setState : { (f: (prevState: S, props: P) => S, callback?: (() => any) | undefined): void; (state: S, callback?: (() => any) | undefined): void; }
+ >f : (prevState: S, props: P) => S
+ >prevState : S
+ >props : P
+ >callback : (() => any) | undefined
+
+ 	setState(state: S, callback?: () => any): void;
+->setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
++>setState : { (f: (prevState: S, props: P) => S, callback?: (() => any) | undefined): void; (state: S, callback?: (() => any) | undefined): void; }
+ >state : S
+ >callback : (() => any) | undefined
+
+ 	forceUpdate(callBack?: () => any): void;
+->forceUpdate : (callBack?: () => any) => void
++>forceUpdate : (callBack?: (() => any) | undefined) => void
+ >callBack : (() => any) | undefined
+
+ 	render(): JSX.Element;

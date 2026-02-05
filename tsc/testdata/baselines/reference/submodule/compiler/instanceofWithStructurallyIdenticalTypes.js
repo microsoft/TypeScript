@@ -73,6 +73,7 @@ function goo(x: A) {
 
 
 //// [instanceofWithStructurallyIdenticalTypes.js]
+"use strict";
 // Repro from #7271
 class C1 {
     item;

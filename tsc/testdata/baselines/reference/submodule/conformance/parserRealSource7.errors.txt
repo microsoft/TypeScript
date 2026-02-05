@@ -28,6 +28,7 @@ parserRealSource7.ts(84,18): error TS2304: Cannot find name 'IHashTable'.
 parserRealSource7.ts(85,20): error TS2304: Cannot find name 'TypeCollectionContext'.
 parserRealSource7.ts(88,67): error TS2304: Cannot find name 'ScopeChain'.
 parserRealSource7.ts(98,41): error TS2304: Cannot find name 'AST'.
+parserRealSource7.ts(99,13): error TS2322: Type 'null' is not assignable to type 'Symbol'.
 parserRealSource7.ts(101,18): error TS2304: Cannot find name 'NodeType'.
 parserRealSource7.ts(102,30): error TS2304: Cannot find name 'Identifier'.
 parserRealSource7.ts(103,33): error TS2304: Cannot find name 'isQuoted'.
@@ -303,13 +304,13 @@ parserRealSource7.ts(827,34): error TS2304: Cannot find name 'NodeType'.
 parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionScope'.
 
 
-==== parserRealSource7.ts (303 errors) ====
+==== parserRealSource7.ts (304 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
     
-    module TypeScript {
+    namespace TypeScript {
         export class Continuation {
             public exceptionBlock = -1;
             constructor (public normalBlock: number) { }
@@ -468,6 +469,8 @@ parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionS
                                             ~~~
 !!! error TS2304: Cannot find name 'AST'.
             var symbol: Symbol = null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Symbol'.
             switch (alias.nodeType) {
                 case NodeType.Name:
                      ~~~~~~~~

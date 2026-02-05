@@ -14,6 +14,7 @@ class Foo {
 }
 
 //// [parser509667.js]
+"use strict";
 class Foo {
     f1() {
         if (this.

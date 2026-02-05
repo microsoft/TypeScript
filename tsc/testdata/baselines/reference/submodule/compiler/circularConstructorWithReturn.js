@@ -22,11 +22,7 @@ export function applyModelsAndClientExtensions(client: Client) {
 
 
 //// [circularConstructorWithReturn.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPrismaClient = getPrismaClient;
-exports.applyModelsAndClientExtensions = applyModelsAndClientExtensions;
-function getPrismaClient(options) {
+export function getPrismaClient(options) {
     class PrismaClient {
         self;
         constructor(options) {
@@ -35,6 +31,6 @@ function getPrismaClient(options) {
     }
     return PrismaClient;
 }
-function applyModelsAndClientExtensions(client) {
+export function applyModelsAndClientExtensions(client) {
     return client;
 }

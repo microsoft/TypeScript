@@ -19,10 +19,10 @@ declare function stringMapToArray<T>(object: StringMap<T>): T[];
 >stringMapToArray : <T>(object: StringMap<T>) => T[]
 >object : StringMap<T>
 
-var numberMap: NumberMap<Function>;
+declare var numberMap: NumberMap<Function>;
 >numberMap : NumberMap<Function>
 
-var stringMap: StringMap<Function>;
+declare var stringMap: StringMap<Function>;
 >stringMap : StringMap<Function>
 
 var v1: Function[];

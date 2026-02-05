@@ -6,11 +6,11 @@ client.ts(1,15): error TS2307: Cannot find module 'server' or its corresponding 
     }
     export interface i {
     }
-    export module m {
+    export namespace m {
         export var x = 10;
     }
     export var x = 10;
-    export module uninstantiated {
+    export namespace uninstantiated {
     }
     
 ==== client.ts (1 errors) ====

@@ -1,0 +1,17 @@
+a.ts(4,17): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== a.ts (1 errors) ====
+    import * as Bar from './foo';
+    Bar.fn();
+    let x: Bar.Thing;
+    let y: number = x.n;
+                    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
+==== foo.d.ts (0 errors) ====
+    export var x: number;
+    export function fn(): void;
+    export interface Thing { n: typeof x }
+    export as namespace Foo;
+    

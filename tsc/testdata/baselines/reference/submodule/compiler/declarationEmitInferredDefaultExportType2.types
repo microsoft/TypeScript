@@ -3,11 +3,11 @@
 === declarationEmitInferredDefaultExportType2.ts ===
 // test.ts
 export = {
->{  foo: [],  bar: undefined,  baz: null} : { foo: undefined[]; bar: undefined; baz: null; }
+>{  foo: [],  bar: undefined,  baz: null} : { foo: never[]; bar: undefined; baz: null; }
 
   foo: [],
->foo : undefined[]
->[] : undefined[]
+>foo : never[]
+>[] : never[]
 
   bar: undefined,
 >bar : undefined

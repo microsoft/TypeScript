@@ -1,17 +1,18 @@
 //// [tests/cases/compiler/internalAliasVar.ts] ////
 
 //// [internalAliasVar.ts]
-module a {
+namespace a {
     export var x = 10;
 }
 
-module c {
+namespace c {
     import b = a.x;
     export var bVal = b;
 }
 
 
 //// [internalAliasVar.js]
+"use strict";
 var a;
 (function (a) {
     a.x = 10;

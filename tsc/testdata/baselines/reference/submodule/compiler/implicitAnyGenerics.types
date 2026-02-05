@@ -36,8 +36,8 @@ class D<T> {
 }
 
 var d = new D(null);
->d : D<any>
->new D(null) : D<any>
+>d : D<null>
+>new D(null) : D<null>
 >D : typeof D
 
 var d2 = new D(1);
@@ -61,7 +61,7 @@ var d4 = new D(<any>1);
 
 var d5: D<any> = new D(null);
 >d5 : D<any>
->new D(null) : D<any>
+>new D(null) : D<null>
 >D : typeof D
 
 function foo<T>(): T { return null; };

@@ -8,6 +8,7 @@ var baz:number; var x = foo(baz);
 
 
 //// [functionOverloads32.js]
+"use strict";
 function foo(bar) { return bar; }
 var baz;
 var x = foo(baz);

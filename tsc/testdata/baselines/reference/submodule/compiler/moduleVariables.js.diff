@@ -1,6 +1,6 @@
 --- old.moduleVariables.js
 +++ new.moduleVariables.js
-@@= skipped -26, +26 lines =@@
+@@= skipped -27, +27 lines =@@
      console.log(M.x); // 2
  })(M || (M = {}));
  (function (M) {

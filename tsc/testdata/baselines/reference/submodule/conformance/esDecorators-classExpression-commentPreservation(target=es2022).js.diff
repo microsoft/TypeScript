@@ -1,8 +1,8 @@
 --- old.esDecorators-classExpression-commentPreservation(target=es2022).js
 +++ new.esDecorators-classExpression-commentPreservation(target=es2022).js
-@@= skipped -85, +85 lines =@@
-
+@@= skipped -86, +86 lines =@@
  //// [esDecorators-classExpression-commentPreservation.js]
+ "use strict";
  /*1*/
 -((() => {
 -    var _C_method_get, _C_x_get, _C_x_set, _C_y, _C_z_accessor_storage, _C_z_get, _C_z_set;

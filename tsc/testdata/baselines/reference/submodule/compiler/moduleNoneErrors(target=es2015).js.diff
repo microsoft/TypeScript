@@ -1,0 +1,14 @@
+--- old.moduleNoneErrors(target=es2015).js
++++ new.moduleNoneErrors(target=es2015).js
+@@= skipped -6, +6 lines =@@
+
+
+ //// [a.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-exports.Foo = void 0;
+-class Foo {
++export class Foo {
++    foo;
+ }
+-exports.Foo = Foo;

@@ -1,0 +1,25 @@
+classWithStaticMembers.ts(14,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+
+
+==== classWithStaticMembers.ts (1 errors) ====
+    class C {
+        static fn() { return this; }
+        static get x() { return 1; }
+        static set x(v) { }
+        constructor(public a: number, private b: number) { }
+        static foo: string; 
+    }
+    
+    var r = C.fn();
+    var r2 = r.x;
+    var r3 = r.foo;
+    
+    class D extends C {
+        bar: string;
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var r = D.fn();
+    var r2 = r.x;
+    var r3 = r.foo;

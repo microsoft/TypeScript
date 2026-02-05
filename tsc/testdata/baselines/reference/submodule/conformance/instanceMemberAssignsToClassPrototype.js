@@ -15,6 +15,7 @@ class C {
 }
 
 //// [instanceMemberAssignsToClassPrototype.js]
+"use strict";
 class C {
     foo() {
         C.prototype.foo = () => { };

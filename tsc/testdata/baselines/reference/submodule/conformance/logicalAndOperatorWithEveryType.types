@@ -13,25 +13,25 @@ enum E { a, b, c }
 var a1: any;
 >a1 : any
 
-var a2: boolean;
+declare var a2: boolean;
 >a2 : boolean
 
-var a3: number
+declare var a3: number;
 >a3 : number
 
-var a4: string;
+declare var a4: string;
 >a4 : string
 
-var a5: void;
+declare var a5: void;
 >a5 : void
 
-var a6: E;
+declare var a6: E;
 >a6 : E
 
-var a7: {};
+declare var a7: {};
 >a7 : {}
 
-var a8: string[];
+declare var a8: string[];
 >a8 : string[]
 
 var ra1 = a1 && a1;

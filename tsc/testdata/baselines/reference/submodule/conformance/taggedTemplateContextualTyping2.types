@@ -68,7 +68,7 @@ tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<strin
 >"hello" : "hello"
 
 tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }`;
->tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }` : string
+>tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }` : never
 >tempTag2 : { (templateStrs: TemplateStringsArray, f: FuncType1, x: number): number; (templateStrs: TemplateStringsArray, f: FuncType2, h: FuncType2, x: string): string; }
 >`${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }` : string
 >x => { x<number, string>(undefined); return x; } : (x: <S, T>(p: T) => T) => <S, T>(p: T) => T

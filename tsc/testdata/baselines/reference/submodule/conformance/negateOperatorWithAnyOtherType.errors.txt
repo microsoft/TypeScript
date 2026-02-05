@@ -1,9 +1,10 @@
+negateOperatorWithAnyOtherType.ts(30,24): error TS2454: Variable 'obj' is used before being assigned.
 negateOperatorWithAnyOtherType.ts(34,24): error TS18050: The value 'undefined' cannot be used here.
 negateOperatorWithAnyOtherType.ts(35,23): error TS18050: The value 'null' cannot be used here.
 negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== negateOperatorWithAnyOtherType.ts (3 errors) ====
+==== negateOperatorWithAnyOtherType.ts (4 errors) ====
     // - operator on any type
     
     var ANY: any;
@@ -17,13 +18,13 @@ negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operat
         return a;
     }
     class A {
-        public a: any;
+        public a!: any;
         static foo(): any {
             var a;
             return a;
         }
     }
-    module M {
+    namespace M {
         export var n: any;
     }
     var objA = new A();
@@ -34,6 +35,8 @@ negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operat
     var ResultIsNumber3 = -A;
     var ResultIsNumber4 = -M;
     var ResultIsNumber5 = -obj;
+                           ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
     var ResultIsNumber6 = -obj1;
     
     // any type literal

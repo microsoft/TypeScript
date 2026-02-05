@@ -1,0 +1,257 @@
+--- old.sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues(target=es2015).types
++++ new.sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues(target=es2015).types
+@@= skipped -20, +20 lines =@@
+ >name : string
+
+     skills: {
+->skills : { primary?: string; secondary?: string; }
++>skills : { primary?: string | undefined; secondary?: string | undefined; }
+
+         primary?: string;
+ >primary : string | undefined
+@@= skipped -65, +65 lines =@@
+
+ for (let {name: nameA = "noName" } of robots) {
+ >name : any
+->nameA : string
++>nameA : any
+ >"noName" : "noName"
+ >robots : Robot[]
+
+@@= skipped -9, +9 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA : string
++>nameA : any
+ }
+ for (let {name: nameA = "noName" } of getRobots()) {
+ >name : any
+->nameA : string
++>nameA : any
+ >"noName" : "noName"
+ >getRobots() : Robot[]
+ >getRobots : () => Robot[]
+@@= skipped -14, +14 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA : string
++>nameA : any
+ }
+ for (let {name: nameA = "noName" } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+ >name : any
+->nameA : string
++>nameA : any
+ >"noName" : "noName"
+ >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
+ >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
+@@= skipped -23, +23 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA : string
++>nameA : any
+ }
+ for (let { skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
+ >skills : any
+ >primary : any
+->primaryA : string
++>primaryA : any
+ >"primary" : "primary"
+ >secondary : any
+->secondaryA : string
++>secondaryA : any
+ >"secondary" : "secondary"
+
+     { primary: "nosKill", secondary: "noSkill" } } of multiRobots) {
+@@= skipped -24, +24 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->primaryA : string
++>primaryA : any
+ }
+ for (let { skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
+ >skills : any
+ >primary : any
+->primaryA : string
++>primaryA : any
+ >"primary" : "primary"
+ >secondary : any
+->secondaryA : string
++>secondaryA : any
+ >"secondary" : "secondary"
+
+     { primary: "nosKill", secondary: "noSkill" } } of getMultiRobots()) {
+@@= skipped -25, +25 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->primaryA : string
++>primaryA : any
+ }
+ for (let { skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
+ >skills : any
+ >primary : any
+->primaryA : string
++>primaryA : any
+ >"primary" : "primary"
+ >secondary : any
+->secondaryA : string
++>secondaryA : any
+ >"secondary" : "secondary"
+
+     { primary: "nosKill", secondary: "noSkill" } } of
+@@= skipped -47, +47 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->primaryA : string
++>primaryA : any
+ }
+
+ for (let {name: nameA = "noName", skill: skillA = "noSkill" } of robots) {
+ >name : any
+->nameA : string
++>nameA : any
+ >"noName" : "noName"
+ >skill : any
+->skillA : string
++>skillA : any
+ >"noSkill" : "noSkill"
+ >robots : Robot[]
+
+@@= skipped -17, +17 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA : string
++>nameA : any
+ }
+ for (let {name: nameA = "noName", skill: skillA = "noSkill"  } of getRobots()) {
+ >name : any
+->nameA : string
++>nameA : any
+ >"noName" : "noName"
+ >skill : any
+->skillA : string
++>skillA : any
+ >"noSkill" : "noSkill"
+ >getRobots() : Robot[]
+ >getRobots : () => Robot[]
+@@= skipped -17, +17 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA : string
++>nameA : any
+ }
+ for (let {name: nameA = "noName", skill: skillA = "noSkill"  } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+ >name : any
+->nameA : string
++>nameA : any
+ >"noName" : "noName"
+ >skill : any
+->skillA : string
++>skillA : any
+ >"noSkill" : "noSkill"
+ >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
+ >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
+@@= skipped -26, +26 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA : string
++>nameA : any
+ }
+ for (let {
+     name: nameA = "noName",
+ >name : any
+->nameA : string
++>nameA : any
+ >"noName" : "noName"
+
+     skills: {
+@@= skipped -13, +13 lines =@@
+
+         primary: primaryA = "primary",
+ >primary : any
+->primaryA : string
++>primaryA : any
+ >"primary" : "primary"
+
+         secondary: secondaryA = "secondary"
+ >secondary : any
+->secondaryA : string
++>secondaryA : any
+ >"secondary" : "secondary"
+
+     } = { primary: "noSkill", secondary: "noSkill" }
+@@= skipped -23, +23 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA : string
++>nameA : any
+ }
+ for (let {
+     name: nameA = "noName",
+ >name : any
+->nameA : string
++>nameA : any
+ >"noName" : "noName"
+
+     skills: {
+@@= skipped -13, +13 lines =@@
+
+         primary: primaryA = "primary",
+ >primary : any
+->primaryA : string
++>primaryA : any
+ >"primary" : "primary"
+
+         secondary: secondaryA = "secondary"
+ >secondary : any
+->secondaryA : string
++>secondaryA : any
+ >"secondary" : "secondary"
+
+     } = { primary: "noSkill", secondary: "noSkill" }
+@@= skipped -24, +24 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA : string
++>nameA : any
+ }
+ for (let {
+     name: nameA = "noName",
+ >name : any
+->nameA : string
++>nameA : any
+ >"noName" : "noName"
+
+     skills: {
+@@= skipped -13, +13 lines =@@
+
+         primary: primaryA = "primary",
+ >primary : any
+->primaryA : string
++>primaryA : any
+ >"primary" : "primary"
+
+         secondary: secondaryA = "secondary"
+ >secondary : any
+->secondaryA : string
++>secondaryA : any
+ >"secondary" : "secondary"
+
+     } = { primary: "noSkill", secondary: "noSkill" }
+@@= skipped -44, +44 lines =@@
+ >console.log : (msg: any) => void
+ >console : { log(msg: any): void; }
+ >log : (msg: any) => void
+->nameA : string
++>nameA : any
+ }

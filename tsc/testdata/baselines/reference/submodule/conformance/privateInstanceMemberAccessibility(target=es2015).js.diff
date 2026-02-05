@@ -1,0 +1,21 @@
+--- old.privateInstanceMemberAccessibility(target=es2015).js
++++ new.privateInstanceMemberAccessibility(target=es2015).js
+@@= skipped -17, +17 lines =@@
+ //// [privateInstanceMemberAccessibility.js]
+ "use strict";
+ class Base {
++    foo;
+ }
+ class Derived extends Base {
+-    constructor() {
+-        super(...arguments);
+-        this.x = super.foo; // error
+-    }
++    x = super.foo; // error
+     y() {
+         return super.foo; // error
+     }
++    z; // error
++    a;
++    foo; // error
+ }

@@ -1,11 +1,14 @@
+methodChainError.ts(2,5): error TS2564: Property 'notMethod' has no initializer and is not definitely assigned in the constructor.
 methodChainError.ts(10,6): error TS2554: Expected 1 arguments, but got 0.
 methodChainError.ts(16,6): error TS2349: This expression is not callable.
   Type 'String' has no call signatures.
 
 
-==== methodChainError.ts (2 errors) ====
+==== methodChainError.ts (3 errors) ====
     class Builder {
         notMethod: string
+        ~~~~~~~~~
+!!! error TS2564: Property 'notMethod' has no initializer and is not definitely assigned in the constructor.
         method(param: string): Builder {
             return this;
         }

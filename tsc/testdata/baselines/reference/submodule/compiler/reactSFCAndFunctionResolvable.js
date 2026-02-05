@@ -29,7 +29,7 @@ const RandomComponent: React.SFC = () => {
 
 //// [reactSFCAndFunctionResolvable.js]
 "use strict";
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);

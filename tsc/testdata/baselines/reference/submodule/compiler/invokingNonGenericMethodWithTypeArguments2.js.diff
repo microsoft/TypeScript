@@ -1,8 +1,8 @@
 --- old.invokingNonGenericMethodWithTypeArguments2.js
 +++ new.invokingNonGenericMethodWithTypeArguments2.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [invokingNonGenericMethodWithTypeArguments2.js]
+ "use strict";
  class Foo {
 +    foo;
      constructor() {

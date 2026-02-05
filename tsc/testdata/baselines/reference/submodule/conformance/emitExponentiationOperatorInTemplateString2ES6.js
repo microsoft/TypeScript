@@ -29,6 +29,7 @@ var s;
 `hello ${typeof (t1 ** t2 ** t1) } hello world ${typeof (t1 ** t2 ** t1) }`;
 
 //// [emitExponentiationOperatorInTemplateString2ES6.js]
+"use strict";
 var t1 = 10;
 var t2 = 10;
 var s;

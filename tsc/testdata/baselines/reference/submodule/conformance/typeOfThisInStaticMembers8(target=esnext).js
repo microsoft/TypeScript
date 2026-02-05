@@ -21,6 +21,7 @@ class C {
 
 
 //// [typeOfThisInStaticMembers8.js]
+"use strict";
 class C {
     static f = 1;
     static arrowFunctionBoundary = () => this.f + 1;

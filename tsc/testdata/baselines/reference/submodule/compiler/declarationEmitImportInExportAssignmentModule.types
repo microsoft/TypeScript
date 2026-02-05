@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/declarationEmitImportInExportAssignmentModule.ts] ////
 
 === declarationEmitImportInExportAssignmentModule.ts ===
-module m {
+namespace m {
 >m : typeof m
 
-    export module c {
+    export namespace c {
 >c : typeof import("declarationEmitImportInExportAssignmentModule").c
 
         export class c {

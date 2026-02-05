@@ -12,6 +12,7 @@ console.log(new C().foo());
 
 
 //// [privateNameReadonly.js]
+"use strict";
 const C = class {
     #bar() { }
     foo() {

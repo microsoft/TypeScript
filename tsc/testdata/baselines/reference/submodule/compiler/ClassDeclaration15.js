@@ -7,6 +7,7 @@ class C {
 }
 
 //// [ClassDeclaration15.js]
+"use strict";
 class C {
     constructor() { }
 }

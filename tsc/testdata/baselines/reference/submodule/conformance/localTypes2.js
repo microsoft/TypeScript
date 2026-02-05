@@ -44,6 +44,7 @@ function f3() {
 
 
 //// [localTypes2.js]
+"use strict";
 function f1() {
     function f() {
         class C {

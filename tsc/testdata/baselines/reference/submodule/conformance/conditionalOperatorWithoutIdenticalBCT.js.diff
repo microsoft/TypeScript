@@ -1,7 +1,7 @@
 --- old.conditionalOperatorWithoutIdenticalBCT.js
 +++ new.conditionalOperatorWithoutIdenticalBCT.js
-@@= skipped -27, +27 lines =@@
- //// [conditionalOperatorWithoutIdenticalBCT.js]
+@@= skipped -28, +28 lines =@@
+ "use strict";
  //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
  class X {
 +    propertyX;
@@ -17,4 +17,4 @@
 +    propertyB;
  }
  ;
- var x;
+ // No errors anymore, uses union types

@@ -5,8 +5,8 @@ var x: string|number;
 >x : string | number
 
 var r1 = typeof x === "string" && typeof x === "string" ? x.substr : x.toFixed;
->r1 : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
->typeof x === "string" && typeof x === "string" ? x.substr : x.toFixed : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
+>r1 : any
+>typeof x === "string" && typeof x === "string" ? x.substr : x.toFixed : any
 >typeof x === "string" && typeof x === "string" : boolean
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
@@ -16,16 +16,16 @@ var r1 = typeof x === "string" && typeof x === "string" ? x.substr : x.toFixed;
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string
 >"string" : "string"
->x.substr : (from: number, length?: number) => string
+>x.substr : (from: number, length?: number | undefined) => string
 >x : string
->substr : (from: number, length?: number) => string
->x.toFixed : (fractionDigits?: number) => string
->x : number
->toFixed : (fractionDigits?: number) => string
+>substr : (from: number, length?: number | undefined) => string
+>x.toFixed : any
+>x : string | number
+>toFixed : any
 
 var r2 = !(typeof x === "string" && typeof x === "string") ? x.toFixed : x.substr;
->r2 : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
->!(typeof x === "string" && typeof x === "string") ? x.toFixed : x.substr : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
+>r2 : any
+>!(typeof x === "string" && typeof x === "string") ? x.toFixed : x.substr : any
 >!(typeof x === "string" && typeof x === "string") : boolean
 >(typeof x === "string" && typeof x === "string") : boolean
 >typeof x === "string" && typeof x === "string" : boolean
@@ -37,16 +37,16 @@ var r2 = !(typeof x === "string" && typeof x === "string") ? x.toFixed : x.subst
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string
 >"string" : "string"
->x.toFixed : (fractionDigits?: number) => string
->x : number
->toFixed : (fractionDigits?: number) => string
->x.substr : (from: number, length?: number) => string
+>x.toFixed : any
+>x : string | number
+>toFixed : any
+>x.substr : (from: number, length?: number | undefined) => string
 >x : string
->substr : (from: number, length?: number) => string
+>substr : (from: number, length?: number | undefined) => string
 
 var r3 = typeof x === "string" || typeof x === "string" ? x.substr : x.toFixed;
->r3 : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
->typeof x === "string" || typeof x === "string" ? x.substr : x.toFixed : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
+>r3 : any
+>typeof x === "string" || typeof x === "string" ? x.substr : x.toFixed : any
 >typeof x === "string" || typeof x === "string" : boolean
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
@@ -54,18 +54,18 @@ var r3 = typeof x === "string" || typeof x === "string" ? x.substr : x.toFixed;
 >"string" : "string"
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : number
+>x : string | number
 >"string" : "string"
->x.substr : (from: number, length?: number) => string
+>x.substr : (from: number, length?: number | undefined) => string
 >x : string
->substr : (from: number, length?: number) => string
->x.toFixed : (fractionDigits?: number) => string
->x : number
->toFixed : (fractionDigits?: number) => string
+>substr : (from: number, length?: number | undefined) => string
+>x.toFixed : any
+>x : string | number
+>toFixed : any
 
 var r4 = !(typeof x === "string" || typeof x === "string") ? x.toFixed : x.substr;
->r4 : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
->!(typeof x === "string" || typeof x === "string") ? x.toFixed : x.substr : ((from: number, length?: number) => string) | ((fractionDigits?: number) => string)
+>r4 : any
+>!(typeof x === "string" || typeof x === "string") ? x.toFixed : x.substr : any
 >!(typeof x === "string" || typeof x === "string") : boolean
 >(typeof x === "string" || typeof x === "string") : boolean
 >typeof x === "string" || typeof x === "string" : boolean
@@ -75,12 +75,12 @@ var r4 = !(typeof x === "string" || typeof x === "string") ? x.toFixed : x.subst
 >"string" : "string"
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->x : number
+>x : string | number
 >"string" : "string"
->x.toFixed : (fractionDigits?: number) => string
->x : number
->toFixed : (fractionDigits?: number) => string
->x.substr : (from: number, length?: number) => string
+>x.toFixed : any
+>x : string | number
+>toFixed : any
+>x.substr : (from: number, length?: number | undefined) => string
 >x : string
->substr : (from: number, length?: number) => string
+>substr : (from: number, length?: number | undefined) => string
 

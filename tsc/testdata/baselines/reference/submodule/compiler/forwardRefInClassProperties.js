@@ -18,6 +18,7 @@ class Test
 
 
 //// [forwardRefInClassProperties.js]
+"use strict";
 class Test {
     _b = this._a; // undefined, no error/warning
     _a = 3;

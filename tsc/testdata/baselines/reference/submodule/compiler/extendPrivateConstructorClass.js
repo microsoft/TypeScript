@@ -12,5 +12,6 @@ class C extends abc.XYZ {
 
 
 //// [extendPrivateConstructorClass.js]
+"use strict";
 class C extends abc.XYZ {
 }

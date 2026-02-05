@@ -1,0 +1,23 @@
+--- old.jsDeclarationsTypedefAndLatebound.errors.txt
++++ new.jsDeclarationsTypedefAndLatebound.errors.txt
+@@= skipped -0, +0 lines =@@
++LazySet.js(13,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+ index.js(4,7): error TS2322: Type 'undefined' is not assignable to type 'LazySet'.
+
+
+@@= skipped -10, +11 lines =@@
+     stringSet.addAll(stringSet);
+     
+     
+-==== LazySet.js (0 errors) ====
++==== LazySet.js (1 errors) ====
+     // Comment out this JSDoc, and note that the errors index.js go away.
+     /**
+      * @typedef {Object} SomeObject
+@@= skipped -14, +14 lines =@@
+     }
+     
+     module.exports = LazySet;
++    ~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+     

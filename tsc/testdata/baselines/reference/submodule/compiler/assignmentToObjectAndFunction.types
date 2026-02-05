@@ -27,7 +27,7 @@ var errFun: Function = {}; // Error for no call signature
 function foo() { }
 >foo : typeof foo
 
-module foo {
+namespace foo {
 >foo : typeof foo
 
     export var boom = 0;
@@ -42,7 +42,7 @@ var goodFundule: Function = foo; // ok
 function bar() { }
 >bar : typeof bar
 
-module bar {
+namespace bar {
 >bar : typeof bar
 
     export function apply(thisArg: string, argArray?: string) { }
@@ -58,7 +58,7 @@ var goodFundule2: Function = bar; // ok
 function bad() { }
 >bad : typeof bad
 
-module bad {
+namespace bad {
 >bad : typeof bad
 
     export var apply = 0;

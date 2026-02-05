@@ -1,0 +1,19 @@
+--- old.genericRestArgs.types
++++ new.genericRestArgs.types
+@@= skipped -34, +34 lines =@@
+ >"" : ""
+
+ function makeArrayGOpt<T>(item1?: T, item2?: T, item3?: T) {
+->makeArrayGOpt : <T>(item1?: T, item2?: T, item3?: T) => (T | undefined)[]
++>makeArrayGOpt : <T>(item1?: T | undefined, item2?: T | undefined, item3?: T | undefined) => (T | undefined)[]
+ >item1 : T | undefined
+ >item2 : T | undefined
+ >item3 : T | undefined
+@@= skipped -14, +14 lines =@@
+ var a2Ga = makeArrayGOpt(1, ""); 
+ >a2Ga : (number | undefined)[]
+ >makeArrayGOpt(1, "") : (number | undefined)[]
+->makeArrayGOpt : <T>(item1?: T, item2?: T, item3?: T) => (T | undefined)[]
++>makeArrayGOpt : <T>(item1?: T | undefined, item2?: T | undefined, item3?: T | undefined) => (T | undefined)[]
+ >1 : 1
+ >"" : ""

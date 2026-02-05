@@ -19,6 +19,7 @@ f(v); // should not error
 
 
 //// [infinitelyExpandingTypes2.js]
+"use strict";
 function f(p) {
     console.log(p);
 }

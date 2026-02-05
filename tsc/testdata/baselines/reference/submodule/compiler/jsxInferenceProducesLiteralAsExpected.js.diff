@@ -1,7 +1,7 @@
 --- old.jsxInferenceProducesLiteralAsExpected.js
 +++ new.jsxInferenceProducesLiteralAsExpected.js
-@@= skipped -22, +22 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -24, +24 lines =@@
+ /// <reference path="/.lib/react.d.ts" />
  const React = require("react");
  class TestObject {
 -    constructor() {

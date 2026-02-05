@@ -1,0 +1,16 @@
+--- old.spreadUnion4.types
++++ new.spreadUnion4.types
+@@= skipped -5, +5 lines =@@
+ >x : () => void
+
+ declare const b: { x?: () => void }
+->b : { x?: () => void; }
++>b : { x?: (() => void) | undefined; }
+ >x : (() => void) | undefined
+
+ const c = { ...a, ...b };
+ >c : { x: () => void; }
+ >{ ...a, ...b } : { x: () => void; }
+ >a : { x: () => void; }
+->b : { x?: () => void; }
++>b : { x?: (() => void) | undefined; }

@@ -14,7 +14,7 @@ file.tsx(11,19): error TS1161: Unterminated regular expression literal.
 
 
 ==== file.tsx (13 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     		test1: { "data-foo"?: string };

@@ -18,8 +18,8 @@ const array = [...matches];
 >matches : RegExpStringIterator<RegExpMatchArray>
 
 const { index, input } = array[0];
->index : number
->input : string
+>index : number | undefined
+>input : string | undefined
 >array[0] : RegExpMatchArray
 >array : RegExpMatchArray[]
 >0 : 0

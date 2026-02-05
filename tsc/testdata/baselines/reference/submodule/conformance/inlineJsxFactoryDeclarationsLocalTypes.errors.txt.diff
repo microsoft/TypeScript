@@ -1,8 +1,8 @@
 --- old.inlineJsxFactoryDeclarationsLocalTypes.errors.txt
 +++ new.inlineJsxFactoryDeclarationsLocalTypes.errors.txt
-@@= skipped -1, +1 lines =@@
- component.tsx(4,140): error TS2532: Object is possibly 'undefined'.
+@@= skipped -3, +3 lines =@@
  index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
+ index.tsx(13,82): error TS2609: JSX spread child must be an array type.
  index.tsx(21,22): error TS2786: 'MySFC' cannot be used as a JSX component.
 -  Its return type 'import("renderer2").predom.JSX.Element' is not a valid JSX element.
 -    Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
@@ -20,7 +20,7 @@
  index.tsx(24,42): error TS2741: Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
  index.tsx(24,48): error TS2741: Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
 
-@@= skipped -105, +102 lines =@@
+@@= skipped -109, +106 lines =@@
      const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
                           ~~~~~
  !!! error TS2786: 'MySFC' cannot be used as a JSX component.

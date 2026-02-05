@@ -47,10 +47,13 @@
 ->this : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0), Decl(thisTypeOfConstructorFunctions.js, 11, 1))
 ->y : Symbol(Cp.y, Decl(thisTypeOfConstructorFunctions.js, 7, 19))
 ->this : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0), Decl(thisTypeOfConstructorFunctions.js, 11, 1))
++>this : Symbol(__object, Decl(thisTypeOfConstructorFunctions.js, 13, 14))
++>this : Symbol(__object, Decl(thisTypeOfConstructorFunctions.js, 13, 14))
++>this : Symbol(__object, Decl(thisTypeOfConstructorFunctions.js, 13, 14))
      }
  }
 
-@@= skipped -20, +13 lines =@@
+@@= skipped -20, +16 lines =@@
  >t : Symbol(t, Decl(thisTypeOfConstructorFunctions.js, 25, 13))
 
      this.y = t

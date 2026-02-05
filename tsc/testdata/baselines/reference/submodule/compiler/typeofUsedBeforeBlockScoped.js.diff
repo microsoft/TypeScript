@@ -1,8 +1,8 @@
 --- old.typeofUsedBeforeBlockScoped.js
 +++ new.typeofUsedBeforeBlockScoped.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [typeofUsedBeforeBlockScoped.js]
+ "use strict";
  class C {
 +    static s = 2;
  }

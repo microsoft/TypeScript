@@ -1,0 +1,59 @@
+objectTypePropertyAccess.ts(3,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+objectTypePropertyAccess.ts(7,10): error TS2454: Variable 'c' is used before being assigned.
+objectTypePropertyAccess.ts(8,10): error TS2454: Variable 'c' is used before being assigned.
+objectTypePropertyAccess.ts(9,10): error TS2454: Variable 'c' is used before being assigned.
+objectTypePropertyAccess.ts(10,10): error TS2454: Variable 'c' is used before being assigned.
+objectTypePropertyAccess.ts(16,10): error TS2454: Variable 'i' is used before being assigned.
+objectTypePropertyAccess.ts(17,10): error TS2454: Variable 'i' is used before being assigned.
+objectTypePropertyAccess.ts(18,10): error TS2454: Variable 'i' is used before being assigned.
+objectTypePropertyAccess.ts(19,10): error TS2454: Variable 'i' is used before being assigned.
+
+
+==== objectTypePropertyAccess.ts (9 errors) ====
+    // Index notation should resolve to the type of a declared property with that same name
+    class C {
+        foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var c: C;
+    var r1 = c.toString();
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r2 = c['toString']();
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r3 = c.foo;
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r4 = c['foo'];
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    
+    interface I {
+        bar: string;
+    }
+    var i: I;
+    var r4 = i.toString();
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    var r5 = i['toString']();
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    var r6 = i.bar;
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    var r7 = i['bar'];
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    
+    var a = {
+        foo: ''
+    }
+    
+    var r8 = a.toString();
+    var r9 = a['toString']();
+    var r10 = a.foo;
+    var r11 = a['foo'];
+    

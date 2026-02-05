@@ -28,7 +28,7 @@ function doThing(x: string): Animal;
 function doThing(x: string, y?: string): Moose {
 >doThing : { (x: "dog"): Dog; (x: "cat"): Cat; (x: string): Animal; }
 >x : string
->y : string
+>y : string | undefined
 
     return undefined;
 >undefined : undefined

@@ -44,6 +44,7 @@ declare const console: { log(msg: any): void; };
 declare const b = 10;
 
 //// [/home/src/workspaces/project/b.js] *new* 
+"use strict";
 const b = 10;
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 

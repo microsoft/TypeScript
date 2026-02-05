@@ -13,6 +13,7 @@ const byNonKey = Object.groupBy(employees, x => x);
 
 
 //// [objectGroupBy.js]
+"use strict";
 const basic = Object.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
 const chars = Object.groupBy('a string', c => c);
 const employees = new Set();

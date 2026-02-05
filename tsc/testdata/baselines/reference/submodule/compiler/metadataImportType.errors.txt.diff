@@ -1,0 +1,17 @@
+--- old.metadataImportType.errors.txt
++++ new.metadataImportType.errors.txt
+@@= skipped -0, +0 lines =@@
+-metadataImportType.ts(2,6): error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add 'jest' or 'mocha' to the types field in your tsconfig.
++metadataImportType.ts(2,6): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+ metadataImportType.ts(3,15): error TS2307: Cannot find module './b' or its corresponding type declarations.
+
+
+@@= skipped -5, +5 lines =@@
+     export class A {
+         @test
+          ~~~~
+-!!! error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add 'jest' or 'mocha' to the types field in your tsconfig.
++!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+         b: import('./b').B
+                   ~~~~~
+ !!! error TS2307: Cannot find module './b' or its corresponding type declarations.

@@ -15,6 +15,7 @@ var a: A;
 a[""]; // Should be {}
 
 //// [hidingIndexSignatures.js]
+"use strict";
 var b;
 b[""]; // Should be number
 var a;

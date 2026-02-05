@@ -9,6 +9,7 @@ class C {
 }
 
 //// [scopeCheckInsidePublicMethod1.js]
+"use strict";
 class C {
     static s;
     a() {

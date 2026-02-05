@@ -32,6 +32,7 @@ Promise.resolve().catch(e => null);
 Promise.resolve().then(v => null);
 
 //// [implicitAnyGenericTypeInference.js]
+"use strict";
 var c;
 c = { compareTo: (x, y) => { return y; } };
 var r = c.compareTo(1, '');

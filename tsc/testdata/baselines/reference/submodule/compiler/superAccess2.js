@@ -27,6 +27,7 @@ class Q extends P {
 }
 
 //// [superAccess2.js]
+"use strict";
 class P {
     x() { }
     static y() { }

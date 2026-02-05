@@ -1,0 +1,37 @@
+interfaceExtendingClass.ts(2,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+interfaceExtendingClass.ts(14,10): error TS2454: Variable 'i' is used before being assigned.
+interfaceExtendingClass.ts(15,10): error TS2454: Variable 'i' is used before being assigned.
+interfaceExtendingClass.ts(16,10): error TS2454: Variable 'i' is used before being assigned.
+interfaceExtendingClass.ts(18,14): error TS2454: Variable 'i' is used before being assigned.
+
+
+==== interfaceExtendingClass.ts (5 errors) ====
+    class Foo {
+        x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+        y() { }
+        get Z() {
+            return 1;
+        }
+        [x: string]: Object;
+    }
+    
+    interface I extends Foo {
+    }
+    
+    var i: I;
+    var r1 = i.x;
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    var r2 = i.y();
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    var r3 = i.Z;
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    
+    var f: Foo = i;
+                 ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    i = f;

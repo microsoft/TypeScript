@@ -1,6 +1,6 @@
 --- old.autoAccessor11.js
 +++ new.autoAccessor11.js
-@@= skipped -24, +24 lines =@@
+@@= skipped -25, +25 lines =@@
      b;
      static accessor;
      c;

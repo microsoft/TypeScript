@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxEmit1.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -43,6 +43,7 @@ var whitespace3 = <div>
 
 
 //// [file.jsx]
+"use strict";
 var p;
 var selfClosed1 = <div />;
 var selfClosed2 = <div x="1"/>;

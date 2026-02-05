@@ -6,7 +6,7 @@
 
 
 
-declare module Sample.Thing {
+declare namespace Sample.Thing {
 
 	export interface IWidget {
 		getDomNode(): any;
@@ -32,7 +32,7 @@ declare module Sample.Thing {
 	}	
 }
 
-module Sample.Actions.Thing.Find {
+namespace Sample.Actions.Thing.Find {
 	export class StartFindAction implements Sample.Thing.IAction {
 		
 		public getId() { return "yo"; }
@@ -44,7 +44,7 @@ module Sample.Actions.Thing.Find {
 	}
 }
 
-module Sample.Thing.Widgets {
+namespace Sample.Thing.Widgets {
 	export class FindWidget implements Sample.Thing.IWidget {
 
 		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
@@ -76,7 +76,7 @@ interface Window {
 }
 declare var self: Window;
 
-module Sample.Thing.Languages.PlainText {
+namespace Sample.Thing.Languages.PlainText {
 	
 	export class State implements IState {		
         constructor(private mode: IMode) { }
@@ -105,6 +105,7 @@ module Sample.Thing.Languages.PlainText {
 
 
 //// [recursiveClassReferenceTest.js]
+"use strict";
 // Scenario 1: Test reqursive function call with "this" parameter
 // Scenario 2: Test recursive function call with cast and "this" parameter
 var Sample;

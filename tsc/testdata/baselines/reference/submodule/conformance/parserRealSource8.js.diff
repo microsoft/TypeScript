@@ -1,6 +1,6 @@
 --- old.parserRealSource8.js
 +++ new.parserRealSource8.js
-@@= skipped -474, +474 lines =@@
+@@= skipped -475, +475 lines =@@
  var TypeScript;
  (function (TypeScript) {
      class AssignScopeContext {

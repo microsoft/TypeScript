@@ -9,5 +9,6 @@ b > 1;
 
 
 //// [comparisonOperatorWithIntersectionType.js]
+"use strict";
 a > 1;
 b > 1;

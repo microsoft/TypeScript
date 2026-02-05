@@ -1,6 +1,6 @@
 --- old.staticPropertyNotInClassType.js
 +++ new.staticPropertyNotInClassType.js
-@@= skipped -44, +44 lines =@@
+@@= skipped -45, +45 lines =@@
  var NonGeneric;
  (function (NonGeneric) {
      class C {

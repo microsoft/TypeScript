@@ -9,6 +9,7 @@ navigator.storage.getDirectory().then(async directory => {
 
 
 //// [modularizeLibrary_Dom.asynciterable.js]
+"use strict";
 navigator.storage.getDirectory().then(async directory => {
     for await (const [key, handle] of directory) {
         handle.kind;

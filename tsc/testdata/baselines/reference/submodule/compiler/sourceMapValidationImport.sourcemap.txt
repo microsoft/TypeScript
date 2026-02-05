@@ -17,13 +17,13 @@ sourceFile:sourceMapValidationImport.ts
 3 >    ^
 4 >     ^^^^^^^^^^^->
 1 >
-2 >export module 
+2 >export namespace 
 3 >    m {
   >        export class c {
   >        }
   >    }
 1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(4, 5) Source(1, 15) + SourceIndex(0)
+2 >Emitted(4, 5) Source(1, 18) + SourceIndex(0)
 3 >Emitted(4, 6) Source(4, 2) + SourceIndex(0)
 ---
 >>>(function (m) {
@@ -32,13 +32,13 @@ sourceFile:sourceMapValidationImport.ts
 3 >           ^
 4 >            ^^
 1->
-2 >export module 
+2 >export namespace 
 3 >           m
 4 >             
 1->Emitted(5, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(5, 12) Source(1, 15) + SourceIndex(0)
-3 >Emitted(5, 13) Source(1, 16) + SourceIndex(0)
-4 >Emitted(5, 15) Source(1, 17) + SourceIndex(0)
+2 >Emitted(5, 12) Source(1, 18) + SourceIndex(0)
+3 >Emitted(5, 13) Source(1, 19) + SourceIndex(0)
+4 >Emitted(5, 15) Source(1, 20) + SourceIndex(0)
 ---
 >>>    class c {
 1 >^^^^
@@ -103,12 +103,12 @@ sourceFile:sourceMapValidationImport.ts
   >                      }
 1->Emitted(9, 1) Source(3, 6) + SourceIndex(0)
 2 >Emitted(9, 2) Source(4, 2) + SourceIndex(0)
-3 >Emitted(9, 4) Source(1, 15) + SourceIndex(0)
-4 >Emitted(9, 5) Source(1, 16) + SourceIndex(0)
-5 >Emitted(9, 18) Source(1, 15) + SourceIndex(0)
-6 >Emitted(9, 19) Source(1, 16) + SourceIndex(0)
-7 >Emitted(9, 22) Source(1, 15) + SourceIndex(0)
-8 >Emitted(9, 23) Source(1, 16) + SourceIndex(0)
+3 >Emitted(9, 4) Source(1, 18) + SourceIndex(0)
+4 >Emitted(9, 5) Source(1, 19) + SourceIndex(0)
+5 >Emitted(9, 18) Source(1, 18) + SourceIndex(0)
+6 >Emitted(9, 19) Source(1, 19) + SourceIndex(0)
+7 >Emitted(9, 22) Source(1, 18) + SourceIndex(0)
+8 >Emitted(9, 23) Source(1, 19) + SourceIndex(0)
 9 >Emitted(9, 31) Source(4, 2) + SourceIndex(0)
 ---
 >>>var a = m.c;

@@ -22,13 +22,13 @@ interface I2<T> {
     new (x: T): T;
 >x : T
 }
-var i: I;
+declare var i: I;
 >i : I
 
-var i2: I2<string>;
+declare var i2: I2<string>;
 >i2 : I2<string>
 
-var a: {
+declare var a: {
 >a : new <T>(x: T) => T
 
     new <T>(x: T): T;
@@ -113,15 +113,15 @@ function foo3<T, U>(x: T, cb: new(a: T) => U, y: U) {
 }
 
 var r7 = foo3(null, i, ''); // any
->r7 : any
->foo3(null, i, '') : any
+>r7 : string | null
+>foo3(null, i, '') : "" | null
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
 >i : I
 >'' : ""
 
 var r7b = foo3(null, a, ''); // any
->r7b : any
->foo3(null, a, '') : any
+>r7b : string | null
+>foo3(null, a, '') : "" | null
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
 >a : new <T>(x: T) => T
 >'' : ""

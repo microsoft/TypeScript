@@ -1,15 +1,21 @@
+indexedAccessPrivateMemberOfGenericConstraint.ts(2,11): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+indexedAccessPrivateMemberOfGenericConstraint.ts(6,11): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 indexedAccessPrivateMemberOfGenericConstraint.ts(9,24): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
 indexedAccessPrivateMemberOfGenericConstraint.ts(9,32): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
 indexedAccessPrivateMemberOfGenericConstraint.ts(10,27): error TS4105: Private or protected member 'a' cannot be accessed on a type parameter.
 
 
-==== indexedAccessPrivateMemberOfGenericConstraint.ts (3 errors) ====
+==== indexedAccessPrivateMemberOfGenericConstraint.ts (5 errors) ====
     class A {
       private a: number;
+              ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     }
     
     class B {
       private a: string;
+              ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     }
     
     type X<T extends A> = [T["a"], (T | B)["a"]];

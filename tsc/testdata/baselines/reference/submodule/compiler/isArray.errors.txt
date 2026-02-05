@@ -1,0 +1,23 @@
+isArray.ts(4,19): error TS2454: Variable 'maybeArray' is used before being assigned.
+isArray.ts(8,5): error TS2454: Variable 'maybeArray' is used before being assigned.
+isArray.ts(8,16): error TS2339: Property 'toFixed' does not exist on type 'number | number[]'.
+  Property 'toFixed' does not exist on type 'number[]'.
+
+
+==== isArray.ts (3 errors) ====
+    var maybeArray: number | number[];
+    
+    
+    if (Array.isArray(maybeArray)) {
+                      ~~~~~~~~~~
+!!! error TS2454: Variable 'maybeArray' is used before being assigned.
+        maybeArray.length; // OK
+    }
+    else {
+        maybeArray.toFixed(); // OK
+        ~~~~~~~~~~
+!!! error TS2454: Variable 'maybeArray' is used before being assigned.
+                   ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type 'number | number[]'.
+!!! error TS2339:   Property 'toFixed' does not exist on type 'number[]'.
+    }

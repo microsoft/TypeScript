@@ -5,5 +5,6 @@ var x: Undefined;
 var y = undefined;
 
 //// [directReferenceToUndefined.js]
+"use strict";
 var x;
 var y = undefined;

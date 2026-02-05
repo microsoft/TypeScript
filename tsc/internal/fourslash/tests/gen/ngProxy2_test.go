@@ -14,6 +14,7 @@ func TestNgProxy2(t *testing.T) {
 	const content = `// @Filename: tsconfig.json
 {
     "compilerOptions": {
+        "lib": ["es5"],
         "plugins": [
             { "name": "invalidmodulename" }
         ]

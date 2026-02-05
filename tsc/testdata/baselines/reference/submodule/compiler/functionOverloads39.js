@@ -8,5 +8,6 @@ var x = foo([{a:true}]);
 
 
 //// [functionOverloads39.js]
+"use strict";
 function foo(bar) { return bar; }
 var x = foo([{ a: true }]);

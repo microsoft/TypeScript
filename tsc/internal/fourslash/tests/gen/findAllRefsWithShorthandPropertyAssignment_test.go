@@ -11,7 +11,8 @@ func TestFindAllRefsWithShorthandPropertyAssignment(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `var /*0*/name = "Foo";
+	const content = `// @lib: es5
+var /*0*/name = "Foo";
 
 var obj = { /*1*/name };
 var obj1 = { /*2*/name: /*3*/name };

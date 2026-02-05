@@ -15,6 +15,7 @@ class C {
 }
 
 //// [numericIndexerConstraint3.js]
+"use strict";
 class A {
     foo;
 }

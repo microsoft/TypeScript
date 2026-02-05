@@ -5,7 +5,7 @@ interface I {
     (): void;
 }
  
-var i: I;
+declare var i: I;
 >i : I
 
 var o: Object;
@@ -21,7 +21,7 @@ i = o;
 >i : I
 >o : Object
  
-var a: {
+declare var a: {
 >a : () => void
 
     (): void

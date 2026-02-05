@@ -1,9 +1,9 @@
 --- old.decoratorOnClassConstructorParameter5.js
 +++ new.decoratorOnClassConstructorParameter5.js
-@@= skipped -12, +12 lines =@@
- }
+@@= skipped -13, +13 lines =@@
 
  //// [decoratorOnClassConstructorParameter5.js]
+ "use strict";
 -var BulkEditPreviewProvider_1;
 -let BulkEditPreviewProvider = BulkEditPreviewProvider_1 = class BulkEditPreviewProvider {
 +let BulkEditPreviewProvider = class BulkEditPreviewProvider {

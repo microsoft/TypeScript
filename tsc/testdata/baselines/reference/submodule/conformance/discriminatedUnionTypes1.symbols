@@ -65,7 +65,7 @@ function area1(s: Shape) {
 
         return Math.PI * s.radius * s.radius;
 >Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >s.radius : Symbol(Circle.radius, Decl(discriminatedUnionTypes1.ts, 12, 19))
 >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 18, 15))
@@ -120,7 +120,7 @@ function area2(s: Shape) {
 
         case "circle": return Math.PI * s.radius * s.radius;
 >Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >s.radius : Symbol(Circle.radius, Decl(discriminatedUnionTypes1.ts, 12, 19))
 >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 33, 15))
@@ -168,7 +168,7 @@ function area3(s: Shape) {
 
         case "circle": return Math.PI * s.radius * s.radius;
 >Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >s.radius : Symbol(Circle.radius, Decl(discriminatedUnionTypes1.ts, 12, 19))
 >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 45, 15))
@@ -211,7 +211,7 @@ function area4(s: Shape) {
 
         case "circle": return Math.PI * s.radius * s.radius;
 >Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >s.radius : Symbol(Circle.radius, Decl(discriminatedUnionTypes1.ts, 12, 19))
 >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 54, 15))

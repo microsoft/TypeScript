@@ -1,6 +1,6 @@
 --- old.jsFileMethodOverloads2.js
 +++ new.jsFileMethodOverloads2.js
-@@= skipped -98, +98 lines =@@
+@@= skipped -99, +99 lines =@@
       * @param {T} value
       */
      constructor(value: T);

@@ -1,16 +1,18 @@
 duplicateIdentifierEnum_A.ts(1,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 duplicateIdentifierEnum_A.ts(4,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+duplicateIdentifierEnum_A.ts(5,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 duplicateIdentifierEnum_A.ts(8,11): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 duplicateIdentifierEnum_A.ts(11,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 duplicateIdentifierEnum_A.ts(15,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 duplicateIdentifierEnum_A.ts(18,10): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 duplicateIdentifierEnum_A.ts(22,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 duplicateIdentifierEnum_A.ts(25,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+duplicateIdentifierEnum_A.ts(26,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 duplicateIdentifierEnum_B.ts(1,10): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 duplicateIdentifierEnum_B.ts(4,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 
 
-==== duplicateIdentifierEnum_A.ts (8 errors) ====
+==== duplicateIdentifierEnum_A.ts (10 errors) ====
     enum A {
          ~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
@@ -20,6 +22,8 @@ duplicateIdentifierEnum_B.ts(4,6): error TS2567: Enum declarations can only merg
           ~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
         foo: number;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     
     interface B {
@@ -55,6 +59,8 @@ duplicateIdentifierEnum_B.ts(4,6): error TS2567: Enum declarations can only merg
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 !!! related TS6203 duplicateIdentifierEnum_B.ts:4:6: 'E' was also declared here.
         foo: number;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     // also make sure the error appears when trying to merge an enum in a separate file.
 ==== duplicateIdentifierEnum_B.ts (2 errors) ====

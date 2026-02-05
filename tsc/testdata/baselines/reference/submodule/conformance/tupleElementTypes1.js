@@ -4,4 +4,5 @@
 var [a, b]: [number, any] = [undefined, undefined];
 
 //// [tupleElementTypes1.js]
+"use strict";
 var [a, b] = [undefined, undefined];

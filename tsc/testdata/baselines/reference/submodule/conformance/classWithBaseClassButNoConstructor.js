@@ -43,6 +43,7 @@ var d5 = new D(); // error
 var d6 = new D(1); // ok
 
 //// [classWithBaseClassButNoConstructor.js]
+"use strict";
 class Base {
     constructor(x) { }
 }

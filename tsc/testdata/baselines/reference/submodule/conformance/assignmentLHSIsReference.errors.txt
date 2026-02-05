@@ -1,0 +1,39 @@
+assignmentLHSIsReference.ts(13,1): error TS2454: Variable 'x3' is used before being assigned.
+assignmentLHSIsReference.ts(14,1): error TS2454: Variable 'x3' is used before being assigned.
+assignmentLHSIsReference.ts(23,2): error TS2454: Variable 'x3' is used before being assigned.
+assignmentLHSIsReference.ts(24,2): error TS2454: Variable 'x3' is used before being assigned.
+
+
+==== assignmentLHSIsReference.ts (4 errors) ====
+    var value: any;
+    
+    // identifiers: variable and parameter
+    var x1: number;
+    x1 = value;
+    
+    function fn1(x2: number) {
+        x2 = value;
+    }
+    
+    // property accesses
+    var x3: { a: string  };
+    x3.a = value;
+    ~~
+!!! error TS2454: Variable 'x3' is used before being assigned.
+    x3['a'] = value;
+    ~~
+!!! error TS2454: Variable 'x3' is used before being assigned.
+    
+    // parentheses, the contained expression is reference
+    (x1) = value;
+    
+    function fn2(x4: number) {
+        (x4) = value;
+    }
+    
+    (x3.a) = value;
+     ~~
+!!! error TS2454: Variable 'x3' is used before being assigned.
+    (x3['a']) = value;
+     ~~
+!!! error TS2454: Variable 'x3' is used before being assigned.

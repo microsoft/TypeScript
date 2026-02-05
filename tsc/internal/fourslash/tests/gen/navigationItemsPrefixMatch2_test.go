@@ -13,7 +13,8 @@ func TestNavigationItemsPrefixMatch2(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module Shapes {
+	const content = `// @lib: es5
+namespace Shapes {
     export class Point {
         [|private originality = 0.0;|]
         [|private distanceFromOrig = 0.0;|]

@@ -1,0 +1,11 @@
+--- old.tsxGenericAttributesType7.errors.txt
++++ new.tsxGenericAttributesType7.errors.txt
+@@= skipped -12, +12 lines =@@
+                 ~~~~~~~~~
+ !!! error TS2322: Type 'U' is not assignable to type 'IntrinsicAttributes & U'.
+ !!! error TS2322:   Type 'U' is not assignable to type 'IntrinsicAttributes'.
+-!!! related TS2208 file.tsx:6:29: This type parameter might need an `extends JSX.IntrinsicAttributes` constraint.
++!!! related TS2208 file.tsx:6:29: This type parameter might need an `extends IntrinsicAttributes` constraint.
+     }
+     
+     const decorator1 = function <U extends {x: string}>(props: U) {

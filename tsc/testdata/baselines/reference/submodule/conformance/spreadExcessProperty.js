@@ -7,5 +7,6 @@ const a1: A = { ...extra1 }; // spread should not give excess property errors
 
 
 //// [spreadExcessProperty.js]
+"use strict";
 const extra1 = { a: "a", b: "b", extra: "extra" };
 const a1 = Object.assign({}, extra1); // spread should not give excess property errors

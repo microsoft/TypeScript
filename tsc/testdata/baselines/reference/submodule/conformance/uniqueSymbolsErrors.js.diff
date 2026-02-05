@@ -1,6 +1,6 @@
 --- old.uniqueSymbolsErrors.js
 +++ new.uniqueSymbolsErrors.js
-@@= skipped -92, +92 lines =@@
+@@= skipped -93, +93 lines =@@
  // classes
  class InvalidClass {
      constructor(invalidConstructorArgType) { }

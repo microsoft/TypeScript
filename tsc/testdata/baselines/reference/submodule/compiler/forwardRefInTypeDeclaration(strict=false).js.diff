@@ -1,6 +1,6 @@
 --- old.forwardRefInTypeDeclaration(strict=false).js
 +++ new.forwardRefInTypeDeclaration(strict=false).js
-@@= skipped -35, +35 lines =@@
+@@= skipped -36, +36 lines =@@
  const s4 = "x";
  const s5 = "x";
  class Cls2 {

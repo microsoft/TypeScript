@@ -5,7 +5,7 @@ var v;
 >v : any
 
 try { } catch (e) {
->e : any
+>e : unknown
 
     function v() { }
 >v : () => void
@@ -15,14 +15,14 @@ function w() { }
 >w : () => void
 
 try { } catch (e) {
->e : any
+>e : unknown
 
     var w;
 >w : any
 }
 
 try { } catch (e) {
->e : any
+>e : unknown
 
     var x;
 >x : any

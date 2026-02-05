@@ -7,6 +7,7 @@ class Greeter {
 }
 
 //// [sourceMapValidationClassWithDefaultConstructor.js]
+"use strict";
 class Greeter {
     a = 10;
     nameA = "Ten";

@@ -10,6 +10,7 @@ function f() {
 }
 
 //// [jsdocCastCommentEmit.js]
+"use strict";
 // allowJs: true
 // checkJs: true
 // outDir: out/

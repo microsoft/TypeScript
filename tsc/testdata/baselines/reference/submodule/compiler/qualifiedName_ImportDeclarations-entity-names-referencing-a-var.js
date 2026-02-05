@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts] ////
 
 //// [qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts]
-module Alpha {
+namespace Alpha {
     export var x = 100;
 }
 
-module Beta {
+namespace Beta {
     import p = Alpha.x;
 }
 
@@ -13,6 +13,7 @@ module Beta {
 var x = Alpha.x
 
 //// [qualifiedName_ImportDeclarations-entity-names-referencing-a-var.js]
+"use strict";
 var Alpha;
 (function (Alpha) {
     Alpha.x = 100;

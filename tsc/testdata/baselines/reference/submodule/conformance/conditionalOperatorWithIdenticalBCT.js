@@ -50,6 +50,7 @@ var result11: any = true ? 1 : 'string';
 
 
 //// [conditionalOperatorWithIdenticalBCT.js]
+"use strict";
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have identical best common type
 class X {
     propertyX;

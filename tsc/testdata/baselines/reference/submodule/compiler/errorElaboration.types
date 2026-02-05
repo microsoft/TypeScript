@@ -18,7 +18,7 @@ declare function foo(x: () => Container<Ref<number>>): void;
 >foo : (x: () => Container<Ref<number>>) => void
 >x : () => Container<Ref<number>>
 
-let a: () => Container<Ref<string>>;
+declare let a: () => Container<Ref<string>>;
 >a : () => Container<Ref<string>>
 
 foo(a);

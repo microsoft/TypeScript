@@ -13,6 +13,7 @@ class C {
 
 
 //// [privateNameHashCharName.js]
+"use strict";
 #;
 class C {
     #;

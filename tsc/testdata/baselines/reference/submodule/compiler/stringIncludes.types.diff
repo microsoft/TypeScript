@@ -1,0 +1,24 @@
+--- old.stringIncludes.types
++++ new.stringIncludes.types
+@@= skipped -7, +7 lines =@@
+ >includes = "abcde".includes("cd") : boolean
+ >includes : boolean
+ >"abcde".includes("cd") : boolean
+->"abcde".includes : (searchString: string, position?: number) => boolean
++>"abcde".includes : (searchString: string, position?: number | undefined) => boolean
+ >"abcde" : "abcde"
+->includes : (searchString: string, position?: number) => boolean
++>includes : (searchString: string, position?: number | undefined) => boolean
+ >"cd" : "cd"
+
+ includes = "abcde".includes("cd", 2);
+ >includes = "abcde".includes("cd", 2) : boolean
+ >includes : boolean
+ >"abcde".includes("cd", 2) : boolean
+->"abcde".includes : (searchString: string, position?: number) => boolean
++>"abcde".includes : (searchString: string, position?: number | undefined) => boolean
+ >"abcde" : "abcde"
+->includes : (searchString: string, position?: number) => boolean
++>includes : (searchString: string, position?: number | undefined) => boolean
+ >"cd" : "cd"
+ >2 : 2

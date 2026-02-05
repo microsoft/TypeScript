@@ -6,21 +6,21 @@
 // 
 // <|declare module [|{| name: "foo", kind: Namespace |}"foo"|];|>
 // 
-// <|module [|{| name: A.B.C, kind: Namespace |}A.B.C|] {
+// <|namespace [|{| name: A.B.C, kind: Namespace |}A.B.C|] {
 //     export var <|[|{| name: x, kind: Variable |}x|]|>;
 // }|>
 // 
-// <|module [|{| name: A.B, kind: Namespace |}A.B|] {
+// <|namespace [|{| name: A.B, kind: Namespace |}A.B|] {
 //     export var <|[|{| name: y, kind: Variable |}y|]|>;
 // }|>
 // 
-// <|module [|{| name: A, kind: Namespace |}A|] {
+// <|namespace [|{| name: A, kind: Namespace |}A|] {
 //     export var <|[|{| name: z, kind: Variable |}z|]|>;
 // }|>
 // 
-// module A {
-//     <|module [|{| name: B, kind: Namespace |}B|] {
-//         <|module [|{| name: C, kind: Namespace |}C|] {
+// namespace A {
+//     <|namespace [|{| name: B, kind: Namespace |}B|] {
+//         <|namespace [|{| name: C, kind: Namespace |}C|] {
 //             declare var <|[|{| name: x, kind: Variable |}x|]|>;
 //         }|>
 //     }|>

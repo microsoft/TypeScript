@@ -8,11 +8,12 @@ class C {
     private static bar: string;
 }
 
-module C {
+namespace C {
     export var y = C.bar; // error
 }
 
 //// [privateStaticNotAccessibleInClodule.js]
+"use strict";
 // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
 class C {
     foo;

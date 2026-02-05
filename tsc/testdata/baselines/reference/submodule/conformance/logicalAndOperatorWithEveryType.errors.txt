@@ -37,13 +37,13 @@ logicalAndOperatorWithEveryType.ts(123,12): error TS2873: This kind of expressio
     enum E { a, b, c }
     
     var a1: any;
-    var a2: boolean;
-    var a3: number
-    var a4: string;
-    var a5: void;
-    var a6: E;
-    var a7: {};
-    var a8: string[];
+    declare var a2: boolean;
+    declare var a3: number;
+    declare var a4: string;
+    declare var a5: void;
+    declare var a6: E;
+    declare var a7: {};
+    declare var a8: string[];
     
     var ra1 = a1 && a1;
     var ra2 = a2 && a1;

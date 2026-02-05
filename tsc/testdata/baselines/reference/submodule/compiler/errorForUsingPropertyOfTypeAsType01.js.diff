@@ -1,6 +1,6 @@
 --- old.errorForUsingPropertyOfTypeAsType01.js
 +++ new.errorForUsingPropertyOfTypeAsType01.js
-@@= skipped -54, +54 lines =@@
+@@= skipped -55, +55 lines =@@
  var Test2;
  (function (Test2) {
      class Foo {

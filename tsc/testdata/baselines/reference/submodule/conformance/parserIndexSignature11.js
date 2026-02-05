@@ -8,3 +8,4 @@ interface I {
 }
 
 //// [parserIndexSignature11.js]
+"use strict";

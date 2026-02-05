@@ -1,8 +1,8 @@
 --- old.privateProtectedMembersAreNotAccessibleDestructuring.js
 +++ new.privateProtectedMembersAreNotAccessibleDestructuring.js
-@@= skipped -27, +27 lines =@@
-
+@@= skipped -28, +28 lines =@@
  //// [privateProtectedMembersAreNotAccessibleDestructuring.js]
+ "use strict";
  class K {
 +    priv;
 +    prot;

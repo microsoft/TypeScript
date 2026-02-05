@@ -13,26 +13,26 @@ class C {
     public c: string;
 }
 
-var a1: { fn(): Base };
-var b1: { new (): Base };
+declare var a1: { fn(): Base };
+declare var b1: { new (): Base };
 
-var a2: { new (a: number, b: string): Base };
-var b2: { new (a: string): Base };
+declare var a2: { new (a: number, b: string): Base };
+declare var b2: { new (a: string): Base };
 
-var a3: { new (a: Base, b: string): Base };
-var b3: { new (a: Derived, b: Base): Base };
+declare var a3: { new (a: Base, b: string): Base };
+declare var b3: { new (a: Derived, b: Base): Base };
 
-var a4: { new (): Base };
-var b4: { new (): C };
+declare var a4: { new (): Base };
+declare var b4: { new (): C };
 
-var a5: { new (a?: Base): Base };
-var b5: { new (a?: C): Base };
+declare var a5: { new (a?: Base): Base };
+declare var b5: { new (a?: C): Base };
 
-var a6: { new (...a: Base[]): Base };
-var b6: { new (...a: C[]): Base };
+declare var a6: { new (...a: Base[]): Base };
+declare var b6: { new (...a: C[]): Base };
 
-var a7: { new <T>(t: T): T };
-var b7: { new <T>(t: T[]): T };
+declare var a7: { new <T>(t: T): T };
+declare var b7: { new <T>(t: T[]): T };
 
 // operator <
 var r1a1 = a1 < b1;
@@ -171,6 +171,7 @@ var r8b6 = b6 !== a6;
 var r8b7 = b7 !== a7;
 
 //// [comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.js]
+"use strict";
 class Base {
     a;
 }
@@ -180,20 +181,6 @@ class Derived extends Base {
 class C {
     c;
 }
-var a1;
-var b1;
-var a2;
-var b2;
-var a3;
-var b3;
-var a4;
-var b4;
-var a5;
-var b5;
-var a6;
-var b6;
-var a7;
-var b7;
 // operator <
 var r1a1 = a1 < b1;
 var r1a2 = a2 < b2;

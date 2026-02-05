@@ -35,7 +35,7 @@ type ChangeOptions = ConfigurableStartEnd & InsertOptions;
 
 function del(options: ConfigurableStartEnd = {},
              error: { error?: number } = {}) {
-    let changes: ChangeOptions[];
+    let changes: ChangeOptions[] = [];
     changes.push(options);
     changes.push(error);
 }
@@ -67,6 +67,7 @@ let weak: Weak & Spoiler = propertiesWrong
 
 
 //// [weakType.js]
+"use strict";
 function getDefaultSettings() {
     return { timeout: 1000 };
 }
@@ -79,7 +80,7 @@ doSomething(12);
 doSomething('completely wrong');
 doSomething(false);
 function del(options = {}, error = {}) {
-    let changes;
+    let changes = [];
     changes.push(options);
     changes.push(error);
 }

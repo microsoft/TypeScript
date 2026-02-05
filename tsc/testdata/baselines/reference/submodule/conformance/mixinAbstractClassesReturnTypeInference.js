@@ -25,6 +25,7 @@ class DerivedFromAbstract2 extends Mixin2(AbstractBase) {
 
 
 //// [mixinAbstractClassesReturnTypeInference.js]
+"use strict";
 class AbstractBase {
 }
 function Mixin2(baseClass) {

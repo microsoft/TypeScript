@@ -11,7 +11,7 @@ func TestRecursiveInternalModuleImport(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
+	const content = `namespace M {
     import A = B;
     import /**/B = A;
 }

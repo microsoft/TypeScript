@@ -4,4 +4,5 @@
 var foo:(a:number)=>number = function(a){return a};
 
 //// [contextualTyping13.js]
+"use strict";
 var foo = function (a) { return a; };

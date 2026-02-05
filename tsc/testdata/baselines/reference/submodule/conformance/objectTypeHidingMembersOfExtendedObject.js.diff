@@ -1,8 +1,8 @@
 --- old.objectTypeHidingMembersOfExtendedObject.js
 +++ new.objectTypeHidingMembersOfExtendedObject.js
-@@= skipped -57, +57 lines =@@
-
+@@= skipped -58, +58 lines =@@
  //// [objectTypeHidingMembersOfExtendedObject.js]
+ "use strict";
  class A {
 +    foo;
  }
@@ -13,5 +13,5 @@
      valueOf() { }
 +    data;
  }
- var c;
  var r1 = c.valueOf();
+ var r1b = c.data;

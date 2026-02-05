@@ -17,7 +17,7 @@ func TestTsxCompletion13(t *testing.T) {
 	const content = `//@Filename: file.tsx
 // @jsx: preserve
 // @skipLibCheck: true
-declare module JSX {
+declare namespace JSX {
     interface Element { }
     interface IntrinsicElements {
     }

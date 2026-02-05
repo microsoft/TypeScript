@@ -1,8 +1,8 @@
 --- old.comparabilityTypeParametersRelatedByUnion.js
 +++ new.comparabilityTypeParametersRelatedByUnion.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [comparabilityTypeParametersRelatedByUnion.js]
+ "use strict";
  class C {
 +    x;
      constructor(x) {

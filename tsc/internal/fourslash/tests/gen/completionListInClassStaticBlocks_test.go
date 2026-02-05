@@ -14,7 +14,8 @@ func TestCompletionListInClassStaticBlocks(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @target: esnext
+	const content = `// @lib: es5
+// @target: esnext
 class Foo {
     static #a = 1;
     static a() {

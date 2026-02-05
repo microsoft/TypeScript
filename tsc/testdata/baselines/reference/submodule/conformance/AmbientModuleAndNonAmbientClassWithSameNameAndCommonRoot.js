@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/AmbientModuleAndNonAmbientClassWithSameNameAndCommonRoot.ts] ////
 
 //// [module.d.ts]
-declare module A {
-    export module Point {
+declare namespace A {
+    export namespace Point {
         export var Origin: {
             x: number;
             y: number;
@@ -11,7 +11,7 @@ declare module A {
 }
 
 //// [classPoint.ts]
-module A {
+namespace A {
     export class Point {
         constructor(public x: number, public y: number) { }
     }
@@ -23,6 +23,7 @@ var p = A.Point.Origin;
 var p = new A.Point(0, 0); // unexpected error here, bug 840000
 
 //// [classPoint.js]
+"use strict";
 var A;
 (function (A) {
     class Point {
@@ -36,6 +37,7 @@ var A;
     A.Point = Point;
 })(A || (A = {}));
 //// [test.js]
+"use strict";
 var p;
 var p = A.Point.Origin;
 var p = new A.Point(0, 0); // unexpected error here, bug 840000

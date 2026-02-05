@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/classTypeParametersInStatics.ts] ////
 
 //// [classTypeParametersInStatics.ts]
-module Editor {
+namespace Editor {
 
 
     export class List<T> {
@@ -36,6 +36,7 @@ module Editor {
 }
 
 //// [classTypeParametersInStatics.js]
+"use strict";
 var Editor;
 (function (Editor) {
     class List {

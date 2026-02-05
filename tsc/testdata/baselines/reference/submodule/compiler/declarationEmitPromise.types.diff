@@ -5,16 +5,86 @@
 
  export async function runSampleWorks<A, B, C, D, E>(
 ->runSampleWorks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<(<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T)>
-+>runSampleWorks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T>
++>runSampleWorks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B> | undefined, c?: bluebird<C> | undefined, d?: bluebird<D> | undefined, e?: bluebird<E> | undefined) => Promise<<T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T>
 
      a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
  >a : bluebird<A>
-@@= skipped -62, +62 lines =@@
+@@= skipped -34, +34 lines =@@
+ >el : bluebird<A> | undefined
+
+     let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
+->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+-><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+->f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
++>func : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
++><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
++>f : (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T
+ >a : A
+ >b : B | undefined
+ >c : C | undefined
+@@= skipped -12, +12 lines =@@
+         f.apply(this, result);
+ >f.apply(this, result) : T
+ >f.apply : { <T_1, R>(this: (this: T_1) => R, thisArg: T_1): R; <T_1, A_1 extends any[], R>(this: (this: T_1, ...args: A_1) => R, thisArg: T_1, args: A_1): R; }
+->f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
++>f : (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T
+ >apply : { <T_1, R>(this: (this: T_1) => R, thisArg: T_1): R; <T_1, A_1 extends any[], R>(this: (this: T_1, ...args: A_1) => R, thisArg: T_1, args: A_1): R; }
+ >this : any
+ >result : any
+
+     let rfunc: typeof func & {} = func as any; // <- This is the only difference
+->rfunc : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
++>rfunc : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
++>func : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
+ >func as any : any
+->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
++>func : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
+
+     return rfunc
+->rfunc : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
++>rfunc : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
  }
 
  export async function runSampleBreaks<A, B, C, D, E>(
 ->runSampleBreaks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<(<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T)>
-+>runSampleBreaks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T>
++>runSampleBreaks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B> | undefined, c?: bluebird<C> | undefined, d?: bluebird<D> | undefined, e?: bluebird<E> | undefined) => Promise<<T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T>
 
      a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
  >a : bluebird<A>
+@@= skipped -50, +50 lines =@@
+ >el : bluebird<A> | undefined
+
+     let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
+->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+-><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+->f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
++>func : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
++><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
++>f : (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T
+ >a : A
+ >b : B | undefined
+ >c : C | undefined
+@@= skipped -12, +12 lines =@@
+         f.apply(this, result);
+ >f.apply(this, result) : T
+ >f.apply : { <T_1, R>(this: (this: T_1) => R, thisArg: T_1): R; <T_1, A_1 extends any[], R>(this: (this: T_1, ...args: A_1) => R, thisArg: T_1, args: A_1): R; }
+->f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
++>f : (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T
+ >apply : { <T_1, R>(this: (this: T_1) => R, thisArg: T_1): R; <T_1, A_1 extends any[], R>(this: (this: T_1, ...args: A_1) => R, thisArg: T_1, args: A_1): R; }
+ >this : any
+ >result : any
+
+     let rfunc: typeof func = func as any; // <- This is the only difference
+->rfunc : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
++>rfunc : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
++>func : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
+ >func as any : any
+->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
++>func : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
+
+     return rfunc
+->rfunc : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
++>rfunc : <T>(f: (a: A, b?: B | undefined, c?: C | undefined, d?: D | undefined, e?: E | undefined) => T) => T
+ }

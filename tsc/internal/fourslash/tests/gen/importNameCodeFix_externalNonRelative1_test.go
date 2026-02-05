@@ -16,6 +16,7 @@ func TestImportNameCodeFix_externalNonRelative1(t *testing.T) {
 {
   "compilerOptions": {
     "module": "commonjs",
+    "lib": ["es5"],
     "paths": {
       "pkg-1/*": ["./packages/pkg-1/src/*"],
       "pkg-2/*": ["./packages/pkg-2/src/*"]
@@ -38,7 +39,7 @@ Pkg2/*external*/
 // @Filename: /home/src/workspaces/project/packages/pkg-2/tsconfig.json
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": { "outDir": "dist", "rootDir": "src", "composite": true }
+  "compilerOptions": { "outDir": "dist", "rootDir": "src", "composite": true, "lib": ["es5"] }
 }
 // @Filename: /home/src/workspaces/project/packages/pkg-2/src/index.ts
 import "./utils";
@@ -50,9 +51,9 @@ Pkg2/*internal*/
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.MarkTestAsStradaServer()
-	opts1493 := f.GetOptions()
-	opts1493.FormatCodeSettings.NewLineCharacter = "\n"
-	f.Configure(t, opts1493)
+	opts1534 := f.GetOptions()
+	opts1534.FormatCodeSettings.NewLineCharacter = "\n"
+	f.Configure(t, opts1534)
 	f.GoToMarker(t, "external")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { Pkg2 } from "pkg-2/utils";

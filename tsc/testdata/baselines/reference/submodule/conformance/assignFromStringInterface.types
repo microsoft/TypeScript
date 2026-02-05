@@ -5,7 +5,7 @@ var x = '';
 >x : string
 >'' : ""
 
-var a: String;
+declare var a: String;
 >a : String
 
 x = a;

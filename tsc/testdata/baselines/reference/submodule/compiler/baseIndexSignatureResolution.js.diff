@@ -1,8 +1,8 @@
 --- old.baseIndexSignatureResolution.js
 +++ new.baseIndexSignatureResolution.js
-@@= skipped -27, +27 lines =@@
-
+@@= skipped -28, +28 lines =@@
  //// [baseIndexSignatureResolution.js]
+ "use strict";
  class Base {
 +    a;
  }

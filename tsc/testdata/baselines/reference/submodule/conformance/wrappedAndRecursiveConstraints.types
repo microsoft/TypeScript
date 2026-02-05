@@ -23,8 +23,10 @@ interface Foo extends Date {
 >foo : string
 }
 
-var y: Foo = null;
+var y: Foo = {} as Foo;
 >y : Foo
+>{} as Foo : Foo
+>{} : {}
 
 var c = new C(y);
 >c : C<Foo>

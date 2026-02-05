@@ -23,6 +23,7 @@ class c extends Foo {
 }
 
 //// [collisionSuperAndLocalVarInConstructor.js]
+"use strict";
 var _super = 10; // No Error
 class Foo {
     constructor() {

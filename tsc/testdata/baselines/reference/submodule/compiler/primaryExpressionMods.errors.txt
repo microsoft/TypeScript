@@ -3,7 +3,7 @@ primaryExpressionMods.ts(11,8): error TS2833: Cannot find namespace 'm'. Did you
 
 
 ==== primaryExpressionMods.ts (2 errors) ====
-    module M
+    namespace M
     {
         export interface P { x: number; y: number; }
         export var a = 1;
@@ -18,5 +18,5 @@ primaryExpressionMods.ts(11,8): error TS2833: Cannot find namespace 'm'. Did you
     var q: m.P;             // Error
            ~
 !!! error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
-!!! related TS2728 primaryExpressionMods.ts:1:8: 'M' is declared here.
+!!! related TS2728 primaryExpressionMods.ts:1:11: 'M' is declared here.
     

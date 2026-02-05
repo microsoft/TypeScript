@@ -9,5 +9,6 @@ var arr: string[] = [];
 var x: number = arr.foo();
 
 //// [extendGenericArray.js]
+"use strict";
 var arr = [];
 var x = arr.foo();

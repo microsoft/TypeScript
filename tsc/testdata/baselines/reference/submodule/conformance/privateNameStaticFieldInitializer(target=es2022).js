@@ -8,6 +8,7 @@ class A {
 
 
 //// [privateNameStaticFieldInitializer.js]
+"use strict";
 class A {
     static #field = 10;
     static #uninitialized;

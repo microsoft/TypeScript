@@ -1,6 +1,6 @@
 --- old.parserRealSource9.js
 +++ new.parserRealSource9.js
-@@= skipped -217, +217 lines =@@
+@@= skipped -218, +218 lines =@@
  var TypeScript;
  (function (TypeScript) {
      class Binder {

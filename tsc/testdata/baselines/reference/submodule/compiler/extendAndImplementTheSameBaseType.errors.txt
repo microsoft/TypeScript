@@ -1,0 +1,19 @@
+extendAndImplementTheSameBaseType.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+
+
+==== extendAndImplementTheSameBaseType.ts (1 errors) ====
+    class C {
+        foo: number
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+        bar() {}
+    }
+    class D extends C implements C {
+        baz() { }
+    }
+    
+    var c: C;
+    var d: D = new D();
+    d.bar();
+    d.baz();
+    d.foo;

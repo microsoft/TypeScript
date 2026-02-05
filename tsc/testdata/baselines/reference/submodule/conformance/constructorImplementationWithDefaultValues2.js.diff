@@ -1,8 +1,8 @@
 --- old.constructorImplementationWithDefaultValues2.js
 +++ new.constructorImplementationWithDefaultValues2.js
-@@= skipped -23, +23 lines =@@
-
+@@= skipped -24, +24 lines =@@
  //// [constructorImplementationWithDefaultValues2.js]
+ "use strict";
  class C {
 +    x;
      constructor(x = 1) {

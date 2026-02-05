@@ -136,6 +136,7 @@ function* g311() { // Generator<undefined, void, string>
 
 
 //// [generatorReturnTypeInference.js]
+"use strict";
 function* g000() {
 }
 // 'yield' iteration type inference

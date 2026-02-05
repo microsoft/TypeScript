@@ -3,7 +3,7 @@ selfRef.ts(12,18): error TS2304: Cannot find name 'name'.
 
 
 ==== selfRef.ts (2 errors) ====
-    module M
+    namespace M
     {
         export class Test
         {

@@ -25,6 +25,7 @@ var validCommentedFancy: string = 'nope';
 
 
 //// [ts-ignore.js]
+"use strict";
 // @ts-ignore with additional commenting
 var invalidCommentedFancy = 'nope';
 // @ts-ignore with additional commenting

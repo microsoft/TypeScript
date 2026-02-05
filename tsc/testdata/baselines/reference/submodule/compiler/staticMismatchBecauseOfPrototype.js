@@ -14,6 +14,7 @@ class B extends A {
 }
 
 //// [staticMismatchBecauseOfPrototype.js]
+"use strict";
 class B extends A {
     n = "";
 }

@@ -1,8 +1,8 @@
 --- old.instanceofOnInstantiationExpression.js
 +++ new.instanceofOnInstantiationExpression.js
-@@= skipped -20, +20 lines =@@
-
+@@= skipped -21, +21 lines =@@
  //// [instanceofOnInstantiationExpression.js]
+ "use strict";
  maybeBox instanceof Box; // OK
 -maybeBox instanceof (Box); // error
 +maybeBox instanceof Box; // error

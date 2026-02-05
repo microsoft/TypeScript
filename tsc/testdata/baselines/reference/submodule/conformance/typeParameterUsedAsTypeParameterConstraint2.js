@@ -59,6 +59,7 @@ var f4 = <U extends T, T>(x: T, y: U) => {
 }
 
 //// [typeParameterUsedAsTypeParameterConstraint2.js]
+"use strict";
 // Type parameters are in scope in their own and other type parameter lists
 // Nested local functions
 function foo(x, y) {

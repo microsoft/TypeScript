@@ -3,7 +3,7 @@
 //// [objectLitArrayDeclNoNew.ts]
 declare var console;
 "use strict";
-module Test {
+namespace Test {
     export interface IState {
     }
 
@@ -30,6 +30,7 @@ module Test {
 }
 
 //// [objectLitArrayDeclNoNew.js]
+"use strict";
 "use strict";
 var Test;
 (function (Test) {

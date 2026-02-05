@@ -10,6 +10,7 @@ class B extends A {
 
 
 //// [propertyOverridesMethod.js]
+"use strict";
 class A {
     m() { }
 }

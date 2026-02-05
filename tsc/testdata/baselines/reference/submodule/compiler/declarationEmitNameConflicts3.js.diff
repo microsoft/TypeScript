@@ -1,6 +1,6 @@
 --- old.declarationEmitNameConflicts3.js
 +++ new.declarationEmitNameConflicts3.js
-@@= skipped -47, +47 lines =@@
+@@= skipped -48, +48 lines =@@
      })(E = M.E || (M.E = {}));
  })(M || (M = {}));
  (function (M) {

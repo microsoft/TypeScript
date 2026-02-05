@@ -1,8 +1,10 @@
+switchStatements.ts(30,11): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+switchStatements.ts(31,21): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
 switchStatements.ts(35,20): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type 'C'.
 
 
-==== switchStatements.ts (1 errors) ====
-    module M {
+==== switchStatements.ts (3 errors) ====
+    namespace M {
         export function fn(x: number) {
             return '';
         }
@@ -32,7 +34,11 @@ switchStatements.ts(35,20): error TS2353: Object literal may only specify known 
     
     // basic assignable check, rest covered in tests for 'assignment compatibility'
     class C { id: number; }
+              ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
     class D extends C { name: string }
+                        ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
     
     switch (new C()) {
         case new D():

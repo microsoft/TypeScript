@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleAndInterfaceSharingName4.ts] ////
 
 === moduleAndInterfaceSharingName4.ts ===
-declare module D3 {
+declare namespace D3 {
 >D3 : typeof D3
 
     var x: D3.Color.Color;
@@ -9,7 +9,7 @@ declare module D3 {
 >D3 : any
 >Color : any
 
-    module Color {
+    namespace Color {
         export interface Color {
             darker: Color;
 >darker : Color

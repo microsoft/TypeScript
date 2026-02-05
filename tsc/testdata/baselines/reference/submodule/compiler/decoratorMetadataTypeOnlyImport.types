@@ -19,6 +19,6 @@ class Foo {
 
   @Decorator myList?: MyList;
 >Decorator : any
->myList : List<number>
+>myList : any
 }
 

@@ -1,6 +1,6 @@
 --- old.for-inStatements.js
 +++ new.for-inStatements.js
-@@= skipped -131, +131 lines =@@
+@@= skipped -132, +132 lines =@@
  var M;
  (function (M) {
      class X {

@@ -64,6 +64,7 @@ interface I3 {
 }
 
 //// [overloadsWithComputedNames.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/52329
 class Person {
     ["A"](a) {

@@ -2,7 +2,7 @@ assignToFn.ts(8,5): error TS2322: Type 'string' is not assignable to type '(n: n
 
 
 ==== assignToFn.ts (1 errors) ====
-    module M {
+    namespace M {
         interface I {
     	f(n:number):boolean;
         }

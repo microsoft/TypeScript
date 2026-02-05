@@ -1,7 +1,7 @@
 --- old.objectTypesIdentityWithPrivates2.js
 +++ new.objectTypesIdentityWithPrivates2.js
-@@= skipped -42, +42 lines =@@
- //// [objectTypesIdentityWithPrivates2.js]
+@@= skipped -43, +43 lines =@@
+ "use strict";
  // object types are identical structurally
  class C {
 +    foo;

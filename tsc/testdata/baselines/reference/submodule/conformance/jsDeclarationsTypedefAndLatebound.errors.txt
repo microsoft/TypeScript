@@ -1,0 +1,31 @@
+LazySet.js(13,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+index.js(4,7): error TS2322: Type 'undefined' is not assignable to type 'LazySet'.
+
+
+==== index.js (1 errors) ====
+    const LazySet = require("./LazySet");
+    
+    /** @type {LazySet} */
+    const stringSet = undefined;
+          ~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'LazySet'.
+    stringSet.addAll(stringSet);
+    
+    
+==== LazySet.js (1 errors) ====
+    // Comment out this JSDoc, and note that the errors index.js go away.
+    /**
+     * @typedef {Object} SomeObject
+     */
+    class LazySet {
+        /**
+         * @param {LazySet} iterable
+         */
+        addAll(iterable) {}
+        [Symbol.iterator]() {}
+    }
+    
+    module.exports = LazySet;
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    

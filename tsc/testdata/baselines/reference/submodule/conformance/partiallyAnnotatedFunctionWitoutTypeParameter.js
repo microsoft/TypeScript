@@ -9,5 +9,6 @@ simple((a, b: number) => {})
 
 
 //// [partiallyAnnotatedFunctionWitoutTypeParameter.js]
+"use strict";
 simple((a, b) => { });
 simple((a, b) => { });

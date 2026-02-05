@@ -6,6 +6,7 @@ foo: for (;;) {
 }
 
 //// [continueStatementInternalComments.js]
+"use strict";
 foo: for (;;) {
     /*1*/ continue /*2*/ foo /*3*/;
 }

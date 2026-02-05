@@ -8,6 +8,7 @@ class A {
 }
 
 //// [unusedTypeParameterInMethod5.js]
+"use strict";
 class A {
     f1 = function () {
     };

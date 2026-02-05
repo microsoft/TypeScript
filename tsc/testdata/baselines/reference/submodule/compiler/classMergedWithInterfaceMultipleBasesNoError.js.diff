@@ -1,9 +1,9 @@
 --- old.classMergedWithInterfaceMultipleBasesNoError.js
 +++ new.classMergedWithInterfaceMultipleBasesNoError.js
-@@= skipped -17, +17 lines =@@
+@@= skipped -15, +15 lines =@@
  class Foo {
  }
- class default_1 extends Foo {
+ export default class extends Foo {
 -    constructor() {
 -        super(...arguments);
 -        this.observer = this.handleIntersection;
@@ -12,4 +12,3 @@
 +    observer = this.handleIntersection;
 +    handleIntersection = () => { };
  }
- exports.default = default_1;

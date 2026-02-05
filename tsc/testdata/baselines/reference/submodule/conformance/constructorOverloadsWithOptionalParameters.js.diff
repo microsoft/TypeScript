@@ -1,8 +1,8 @@
 --- old.constructorOverloadsWithOptionalParameters.js
 +++ new.constructorOverloadsWithOptionalParameters.js
-@@= skipped -16, +16 lines =@@
-
+@@= skipped -17, +17 lines =@@
  //// [constructorOverloadsWithOptionalParameters.js]
+ "use strict";
  class C {
 +    foo;
      constructor() {

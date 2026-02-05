@@ -17,29 +17,29 @@ class Derived2 extends Derived { baz: string; }
 >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembersOptionality.ts, 2, 27))
 >baz : Symbol(Derived2.baz, Decl(assignmentCompatWithObjectMembersOptionality.ts, 4, 32))
 
-module TargetHasOptional {
+namespace TargetHasOptional {
 >TargetHasOptional : Symbol(TargetHasOptional, Decl(assignmentCompatWithObjectMembersOptionality.ts, 4, 47))
 
     // targets
     interface C {
->C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality.ts, 6, 26))
+>C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality.ts, 6, 29))
 
         opt?: Base
 >opt : Symbol(C.opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 8, 17))
 >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersOptionality.ts, 0, 0))
     }
-    var c: C;
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 7))
->C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality.ts, 6, 26))
+    declare var c: C;
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 15))
+>C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality.ts, 6, 29))
 
-    var a: { opt?: Base; }
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 7))
->opt : Symbol(opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 12))
+    declare var a: { opt?: Base; };
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 15))
+>opt : Symbol(opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 20))
 >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersOptionality.ts, 0, 0))
 
     var b: typeof a = { opt: new Base() }
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersOptionality.ts, 14, 7))
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 15))
 >opt : Symbol(opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 14, 23))
 >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersOptionality.ts, 0, 0))
 
@@ -65,90 +65,90 @@ module TargetHasOptional {
 >opt : Symbol(F.opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 23, 17))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembersOptionality.ts, 2, 27))
     }
-    var d: D;
->d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 26, 7))
+    declare var d: D;
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 26, 15))
 >D : Symbol(D, Decl(assignmentCompatWithObjectMembersOptionality.ts, 14, 41))
 
-    var e: E;
->e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 27, 7))
+    declare var e: E;
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 27, 15))
 >E : Symbol(E, Decl(assignmentCompatWithObjectMembersOptionality.ts, 19, 5))
 
-    var f: F;
->f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 28, 7))
+    declare var f: F;
+>f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 28, 15))
 >F : Symbol(F, Decl(assignmentCompatWithObjectMembersOptionality.ts, 22, 5))
 
     // all ok
     c = d;
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 7))
->d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 26, 7))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 15))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 26, 15))
 
     c = e;
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 7))
->e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 27, 7))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 15))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 27, 15))
 
     c = f;
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 7))
->f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 28, 7))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 15))
+>f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 28, 15))
 
     c = a;
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 7))
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 7))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 15))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 15))
 
     a = d;
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 7))
->d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 26, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 15))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 26, 15))
 
     a = e;
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 7))
->e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 27, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 15))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 27, 15))
 
     a = f;
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 7))
->f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 28, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 15))
+>f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 28, 15))
 
     a = c;
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 7))
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 15))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 15))
 
     b = d;
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersOptionality.ts, 14, 7))
->d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 26, 7))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 26, 15))
 
     b = e;
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersOptionality.ts, 14, 7))
->e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 27, 7))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 27, 15))
 
     b = f;
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersOptionality.ts, 14, 7))
->f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 28, 7))
+>f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 28, 15))
 
     b = a;
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersOptionality.ts, 14, 7))
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 13, 15))
 
     b = c;
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersOptionality.ts, 14, 7))
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 7))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 11, 15))
 }
 
-module SourceHasOptional {
+namespace SourceHasOptional {
 >SourceHasOptional : Symbol(SourceHasOptional, Decl(assignmentCompatWithObjectMembersOptionality.ts, 46, 1))
 
     // targets
     interface C {
->C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality.ts, 48, 26))
+>C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality.ts, 48, 29))
 
         opt: Base
 >opt : Symbol(C.opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 50, 17))
 >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersOptionality.ts, 0, 0))
     }
-    var c: C;
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 7))
->C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality.ts, 48, 26))
+    declare var c: C;
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 15))
+>C : Symbol(C, Decl(assignmentCompatWithObjectMembersOptionality.ts, 48, 29))
 
-    var a: { opt: Base; }
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 7))
->opt : Symbol(opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 12))
+    declare var a: { opt: Base; };
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 15))
+>opt : Symbol(opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 20))
 >Base : Symbol(Base, Decl(assignmentCompatWithObjectMembersOptionality.ts, 0, 0))
 
     var b = { opt: new Base() }
@@ -178,67 +178,67 @@ module SourceHasOptional {
 >opt : Symbol(F.opt, Decl(assignmentCompatWithObjectMembersOptionality.ts, 65, 17))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithObjectMembersOptionality.ts, 2, 27))
     }
-    var d: D;
->d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 68, 7))
+    declare var d: D;
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 68, 15))
 >D : Symbol(D, Decl(assignmentCompatWithObjectMembersOptionality.ts, 56, 31))
 
-    var e: E;
->e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 69, 7))
+    declare var e: E;
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 69, 15))
 >E : Symbol(E, Decl(assignmentCompatWithObjectMembersOptionality.ts, 61, 5))
 
-    var f: F;
->f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 70, 7))
+    declare var f: F;
+>f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 70, 15))
 >F : Symbol(F, Decl(assignmentCompatWithObjectMembersOptionality.ts, 64, 5))
 
     c = d; // error
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 7))
->d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 68, 7))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 15))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 68, 15))
 
     c = e; // error
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 7))
->e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 69, 7))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 15))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 69, 15))
 
     c = f; // ok
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 7))
->f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 70, 7))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 15))
+>f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 70, 15))
 
     c = a; // ok
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 7))
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 7))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 15))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 15))
 
     a = d; // error
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 7))
->d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 68, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 15))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 68, 15))
 
     a = e; // error
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 7))
->e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 69, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 15))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 69, 15))
 
     a = f; // ok
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 7))
->f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 70, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 15))
+>f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 70, 15))
 
     a = c; // ok
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 7))
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 15))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 15))
 
     b = d; // error
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersOptionality.ts, 56, 7))
->d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 68, 7))
+>d : Symbol(d, Decl(assignmentCompatWithObjectMembersOptionality.ts, 68, 15))
 
     b = e; // error
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersOptionality.ts, 56, 7))
->e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 69, 7))
+>e : Symbol(e, Decl(assignmentCompatWithObjectMembersOptionality.ts, 69, 15))
 
     b = f; // ok
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersOptionality.ts, 56, 7))
->f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 70, 7))
+>f : Symbol(f, Decl(assignmentCompatWithObjectMembersOptionality.ts, 70, 15))
 
     b = a; // ok
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersOptionality.ts, 56, 7))
->a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 7))
+>a : Symbol(a, Decl(assignmentCompatWithObjectMembersOptionality.ts, 55, 15))
 
     b = c; // ok
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersOptionality.ts, 56, 7))
->c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 7))
+>c : Symbol(c, Decl(assignmentCompatWithObjectMembersOptionality.ts, 53, 15))
 }

@@ -1,6 +1,6 @@
 --- old.nullIsSubtypeOfEverythingButUndefined.js
 +++ new.nullIsSubtypeOfEverythingButUndefined.js
-@@= skipped -119, +119 lines =@@
+@@= skipped -120, +120 lines =@@
  var r9 = true ? i1 : null;
  var r9 = true ? null : i1;
  class C1 {

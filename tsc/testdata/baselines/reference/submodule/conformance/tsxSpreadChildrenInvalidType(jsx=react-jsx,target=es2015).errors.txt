@@ -1,9 +1,15 @@
+tsxSpreadChildrenInvalidType.tsx(17,12): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 tsxSpreadChildrenInvalidType.tsx(17,12): error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+tsxSpreadChildrenInvalidType.tsx(17,50): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+tsxSpreadChildrenInvalidType.tsx(20,12): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be an array type.
+tsxSpreadChildrenInvalidType.tsx(22,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+tsxSpreadChildrenInvalidType.tsx(26,12): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+tsxSpreadChildrenInvalidType.tsx(28,5): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
-==== tsxSpreadChildrenInvalidType.tsx (2 errors) ====
-    declare module JSX {
+==== tsxSpreadChildrenInvalidType.tsx (8 errors) ====
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     		[s: string]: any;
@@ -20,22 +26,34 @@ tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be a
     }
     function Todo(prop: { key: number, todo: string }) {
         return <div>{prop.key.toString() + prop.todo}</div>;
+               ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2875: This JSX tag requires the module path 'react/jsx-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+                                                     ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     }
     function TodoList({ todos }: TodoListProps) {
         return <div>
+               ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
             {...<Todo key={todos[0].id} todo={todos[0].todo} />}
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2609: JSX spread child must be an array type.
         </div>;
+        ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     }
     function TodoListNoError({ todos }: TodoListProps) {
         // any is not checked
         return <div>
+               ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
             {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
         </div>;
+        ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     }
-    let x: TodoListProps;
+    declare let x: TodoListProps;
         <TodoList {...x}/>
     

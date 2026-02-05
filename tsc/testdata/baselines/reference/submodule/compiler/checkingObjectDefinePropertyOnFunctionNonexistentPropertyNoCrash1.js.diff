@@ -1,6 +1,6 @@
 --- old.checkingObjectDefinePropertyOnFunctionNonexistentPropertyNoCrash1.js
 +++ new.checkingObjectDefinePropertyOnFunctionNonexistentPropertyNoCrash1.js
-@@= skipped -25, +25 lines =@@
+@@= skipped -22, +22 lines =@@
 
 
  //// [index.d.ts]

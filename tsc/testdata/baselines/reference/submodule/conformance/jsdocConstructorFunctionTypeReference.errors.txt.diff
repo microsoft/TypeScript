@@ -2,12 +2,15 @@
 +++ new.jsdocConstructorFunctionTypeReference.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
++jsdocConstructorFunctionTypeReference.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +jsdocConstructorFunctionTypeReference.js(8,12): error TS2749: 'Validator' refers to a value, but is being used as a type here. Did you mean 'typeof Validator'?
 +
 +
-+==== jsdocConstructorFunctionTypeReference.js (1 errors) ====
++==== jsdocConstructorFunctionTypeReference.js (2 errors) ====
 +    var Validator = function VFunc() {
 +        this.flags = "gim"
++        ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +    };
 +    
 +    Validator.prototype.num = 12

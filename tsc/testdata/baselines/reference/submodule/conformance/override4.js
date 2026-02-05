@@ -27,6 +27,7 @@ class DD extends B {
 }
 
 //// [override4.js]
+"use strict";
 class B {
     p1 = 1;
     p2 = 1;

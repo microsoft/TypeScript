@@ -1,7 +1,7 @@
 --- old.classMemberInitializerScoping2(target=esnext,usedefineforclassfields=false).js
 +++ new.classMemberInitializerScoping2(target=esnext,usedefineforclassfields=false).js
-@@= skipped -10, +10 lines =@@
- //// [classMemberInitializerScoping2.js]
+@@= skipped -11, +11 lines =@@
+ "use strict";
  const x = 1;
  class C {
 -    constructor(x) {

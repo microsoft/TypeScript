@@ -10,5 +10,6 @@ interface unknown {}
 interface never {}
 
 //// [interfacesWithPredefinedTypesAsNames.js]
+"use strict";
 interface;
 void {};

@@ -12,7 +12,8 @@ func TestDocumentHighlightsTypeParameterInHeritageClause01(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface I<[|T|]> extends I<[|T|]>, [|T|] {
+	const content = `// @lib: es5
+interface I<[|T|]> extends I<[|T|]>, [|T|] {
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()

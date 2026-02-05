@@ -16,8 +16,6 @@ function f({ a, b }, { c, d }, { e }) {
 
 
 //// [unusedDestructuring.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const { a, b } = o;
 const { c, d } = o;
 d;
@@ -27,3 +25,4 @@ const { h } = o, { i } = o;
 function f({ a, b }, { c, d }, { e }) {
     d;
 }
+export {};

@@ -13,3 +13,4 @@ declare class Point
 
 
 //// [es6ClassTest4.js]
+"use strict";

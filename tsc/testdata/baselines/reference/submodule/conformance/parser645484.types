@@ -5,5 +5,5 @@ var c : {
 >c : { "new"?(): any; }
 
     new?(): any;
->new : () => any
+>new : (() => any) | undefined
 }

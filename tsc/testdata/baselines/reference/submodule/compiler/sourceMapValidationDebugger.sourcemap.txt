@@ -8,13 +8,14 @@ sources: sourceMapValidationDebugger.ts
 emittedFile:sourceMapValidationDebugger.js
 sourceFile:sourceMapValidationDebugger.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>debugger;
 1 >
 2 >^^^^^^^^^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >debugger;
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 10) Source(1, 10) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDebugger.js.map

@@ -1,0 +1,21 @@
+--- old.derivedClassTransitivity4.types
++++ new.derivedClassTransitivity4.types
+@@= skipped -23, +23 lines =@@
+ >D : D
+
+     public foo(x?: string) { } // ok to add optional parameters
+->foo : (x?: string) => void
++>foo : (x?: string | undefined) => void
+ >x : string | undefined
+ }
+
+@@= skipped -29, +29 lines =@@
+ var r2 = e.foo('');
+ >r2 : void
+ >e.foo('') : void
+->e.foo : (x?: string) => void
++>e.foo : (x?: string | undefined) => void
+ >e : E
+->foo : (x?: string) => void
++>foo : (x?: string | undefined) => void
+ >'' : ""

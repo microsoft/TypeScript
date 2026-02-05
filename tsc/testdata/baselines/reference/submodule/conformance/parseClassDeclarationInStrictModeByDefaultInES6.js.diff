@@ -1,8 +1,8 @@
 --- old.parseClassDeclarationInStrictModeByDefaultInES6.js
 +++ new.parseClassDeclarationInStrictModeByDefaultInES6.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [parseClassDeclarationInStrictModeByDefaultInES6.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.interface = 10;

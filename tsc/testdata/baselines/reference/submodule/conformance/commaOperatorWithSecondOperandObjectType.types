@@ -102,10 +102,10 @@ true, {}
 >{} : {}
 
 !BOOLEAN, []
->!BOOLEAN, [] : undefined[]
+>!BOOLEAN, [] : never[]
 >!BOOLEAN : boolean
 >BOOLEAN : boolean
->[] : undefined[]
+>[] : never[]
 
 "string", new Date()
 >"string", new Date() : Date

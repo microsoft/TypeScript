@@ -1,0 +1,32 @@
+--- old.arrayLiteralSpreadES5iterable(target=es2015).errors.txt
++++ new.arrayLiteralSpreadES5iterable(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-
+-
+-!!! error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-==== arrayLiteralSpreadES5iterable.ts (0 errors) ====
+-    function f0() {
+-        var a = [1, 2, 3];
+-        var a1 = [...a];
+-        var a2 = [1, ...a];
+-        var a3 = [1, 2, ...a];
+-        var a4 = [...a, 1];
+-        var a5 = [...a, 1, 2];
+-        var a6 = [1, 2, ...a, 1, 2];
+-        var a7 = [1, ...a, 2, ...a];
+-        var a8 = [...a, ...a, ...a];
+-    }
+-    
+-    function f1() {
+-        var a = [1, 2, 3];
+-        var b = ["hello", ...a, true];
+-        var b: (string | number | boolean)[];
+-    }
+-    
+-    function f2() {
+-        var a = [...[...[...[...[...[]]]]]];
+-        var b = [...[...[...[...[...[5]]]]]];
+-    }
+-    
++<no content>

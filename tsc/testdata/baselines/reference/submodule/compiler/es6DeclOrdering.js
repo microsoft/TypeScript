@@ -19,6 +19,7 @@ class Bar {
 
 
 //// [es6DeclOrdering.js]
+"use strict";
 class Bar {
     //public bar() { }
     foo() {

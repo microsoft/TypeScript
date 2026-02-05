@@ -1,8 +1,8 @@
 --- old.overloadResolutionConstructors.js
 +++ new.overloadResolutionConstructors.js
-@@= skipped -105, +105 lines =@@
-
+@@= skipped -106, +106 lines =@@
  //// [overloadResolutionConstructors.js]
+ "use strict";
  class SomeBase {
 +    n;
 +    s;
@@ -16,5 +16,5 @@
  class SomeDerived3 extends SomeBase {
 +    m;
  }
- var fn1;
  // Ambiguous call picks the first overload in declaration order
+ var s = new fn1(undefined);

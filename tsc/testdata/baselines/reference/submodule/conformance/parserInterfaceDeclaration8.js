@@ -5,3 +5,4 @@ interface string {
 }
 
 //// [parserInterfaceDeclaration8.js]
+"use strict";

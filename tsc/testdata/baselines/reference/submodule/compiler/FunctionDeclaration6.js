@@ -7,6 +7,7 @@
 }
 
 //// [FunctionDeclaration6.js]
+"use strict";
 {
     function bar() { }
 }

@@ -9,7 +9,7 @@ es6ModuleInternalNamedImports2.ts(31,5): error TS1194: Export declarations are n
 
 
 ==== es6ModuleInternalNamedImports2.ts (8 errors) ====
-    export module M {
+    export namespace M {
         // variable
         export var M_V = 0;
         // interface
@@ -17,9 +17,9 @@ es6ModuleInternalNamedImports2.ts(31,5): error TS1194: Export declarations are n
         //calss
         export class M_C { }
         // instantiated module
-        export module M_M { var x; }
+        export namespace M_M { var x; }
         // uninstantiated module
-        export module M_MU { }
+        export namespace M_MU { }
         // function
         export function M_F() { }
         // enum
@@ -30,7 +30,7 @@ es6ModuleInternalNamedImports2.ts(31,5): error TS1194: Export declarations are n
         export import M_A = M_M;
     }
     
-    export module M {
+    export namespace M {
         // Reexports
         export {M_V as v};
         ~~~~~~~~~~~~~~~~~~

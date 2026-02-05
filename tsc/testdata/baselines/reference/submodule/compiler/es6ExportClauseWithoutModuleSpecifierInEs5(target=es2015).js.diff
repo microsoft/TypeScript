@@ -1,0 +1,19 @@
+--- old.es6ExportClauseWithoutModuleSpecifierInEs5(target=es2015).js
++++ new.es6ExportClauseWithoutModuleSpecifierInEs5(target=es2015).js
+@@= skipped -34, +34 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.x = exports.instantiatedModule = exports.c2 = exports.c = void 0;
+-var server_1 = require("./server");
++const server_1 = require("./server");
+ Object.defineProperty(exports, "c", { enumerable: true, get: function () { return server_1.c; } });
+-var server_2 = require("./server");
++const server_2 = require("./server");
+ Object.defineProperty(exports, "c2", { enumerable: true, get: function () { return server_2.c; } });
+-var server_3 = require("./server");
++const server_3 = require("./server");
+ Object.defineProperty(exports, "instantiatedModule", { enumerable: true, get: function () { return server_3.m; } });
+-var server_4 = require("./server");
++const server_4 = require("./server");
+ Object.defineProperty(exports, "x", { enumerable: true, get: function () { return server_4.x; } });
+

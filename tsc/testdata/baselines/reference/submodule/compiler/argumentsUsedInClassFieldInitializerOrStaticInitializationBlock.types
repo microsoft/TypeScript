@@ -150,9 +150,9 @@ function D2() {
     }
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => void
->Symbol.iterator : any
->Symbol : any
->iterator : any
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
 
       arguments;  // ok
 >arguments : IArguments

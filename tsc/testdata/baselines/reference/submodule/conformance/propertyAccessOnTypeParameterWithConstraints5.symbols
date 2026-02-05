@@ -29,7 +29,7 @@ class C<U extends T, T extends A> {
     f() {
 >f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 10, 35))
 
-        var x: U;
+        var x: U = {} as any;
 >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 12, 11))
 >U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 10, 8))
 
@@ -66,8 +66,8 @@ interface I<U extends T, T extends A> {
 >foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 39))
 >U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 12))
 }
-var i: I<B, A>;
->i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 23, 3))
+declare var i: I<B, A>;
+>i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 23, 11))
 >I : Symbol(I, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 18, 28))
 >B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 2, 1))
 >A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 0))
@@ -75,18 +75,18 @@ var i: I<B, A>;
 var r2 = i.foo.notHere();
 >r2 : Symbol(r2, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 24, 3))
 >i.foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 39))
->i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 23, 3))
+>i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 23, 11))
 >foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 39))
 
 var r2b = i.foo['foo']();
 >r2b : Symbol(r2b, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 25, 3))
 >i.foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 39))
->i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 23, 3))
+>i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 23, 11))
 >foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 39))
 >'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 9))
 
-var a: {
->a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 27, 3))
+declare var a: {
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 27, 11))
 
     <U extends T, T extends A>(): U;
 >U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 28, 5))
@@ -98,11 +98,11 @@ var a: {
 // BUG 794164
 var r3: string = a().notHere();
 >r3 : Symbol(r3, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 31, 3))
->a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 27, 3))
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 27, 11))
 
 var r3b: string = a()['foo']();
 >r3b : Symbol(r3b, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 32, 3))
->a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 27, 3))
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 27, 11))
 >'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 9))
 
 var b = {

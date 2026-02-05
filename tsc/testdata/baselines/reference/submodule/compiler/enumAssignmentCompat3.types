@@ -122,7 +122,7 @@ namespace Merged2 {
 >b : E.b
 >c : E.c
     }
-    export module E {
+    export namespace E {
 >E : typeof E
 
         export let d = 5;
@@ -131,43 +131,43 @@ namespace Merged2 {
     }
 }
 
-var abc: First.E;
+declare var abc: First.E;
 >abc : First.E
 >First : any
 
-var secondAbc: Abc.E;
+declare var secondAbc: Abc.E;
 >secondAbc : Abc.E
 >Abc : any
 
-var secondAbcd: Abcd.E;
+declare var secondAbcd: Abcd.E;
 >secondAbcd : Abcd.E
 >Abcd : any
 
-var secondAb: Ab.E;
+declare var secondAb: Ab.E;
 >secondAb : Ab.E
 >Ab : any
 
-var secondCd: Cd.E;
+declare var secondCd: Cd.E;
 >secondCd : Cd.E
 >Cd : any
 
-var nope: Abc.Nope;
+declare var nope: Abc.Nope;
 >nope : Abc.Nope
 >Abc : any
 
-var k: Const.E;
+declare var k: Const.E;
 >k : Const.E
 >Const : any
 
-var decl: Decl.E;
+declare var decl: Decl.E;
 >decl : Decl.E
 >Decl : any
 
-var merged: Merged.E;
+declare var merged: Merged.E;
 >merged : Merged.E
 >Merged : any
 
-var merged2: Merged2.E;
+declare var merged2: Merged2.E;
 >merged2 : Merged2.E
 >Merged2 : any
 

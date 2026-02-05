@@ -6,13 +6,13 @@ class c5 { public foo() { } }
 >c5 : c5
 >foo : () => void
 
-module c5 { } // should be ok
+namespace c5 { } // should be ok
 
 class c5a { public foo() { } }
 >c5a : c5a
 >foo : () => void
 
-module c5a { var y = 2; } // should be ok
+namespace c5a { var y = 2; } // should be ok
 >c5a : typeof c5a
 >y : number
 >2 : 2
@@ -21,7 +21,7 @@ class c5b { public foo() { } }
 >c5b : c5b
 >foo : () => void
 
-module c5b { export var y = 2; } // should be ok
+namespace c5b { export var y = 2; } // should be ok
 >c5b : typeof c5b
 >y : number
 >2 : 2

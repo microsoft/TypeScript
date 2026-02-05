@@ -2,11 +2,14 @@
 +++ new.jsdocTypeReferenceExports.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
++bug27342.js(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +bug27342.js(3,11): error TS2709: Cannot use namespace 'exports' as a type.
 +
 +
-+==== bug27342.js (1 errors) ====
++==== bug27342.js (2 errors) ====
 +    module.exports = {}
++    ~~~~~~~~~~~~~~~~~~~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +    /**
 +     * @type {exports}
 +              ~~~~~~~

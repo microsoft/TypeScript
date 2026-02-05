@@ -18,6 +18,7 @@ class C {
 
 
 //// [classStaticBlock4.js]
+"use strict";
 class C {
     static s1 = 1;
     static {

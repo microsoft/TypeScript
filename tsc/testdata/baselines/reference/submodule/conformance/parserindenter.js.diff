@@ -1,6 +1,6 @@
 --- old.parserindenter.js
 +++ new.parserindenter.js
-@@= skipped -761, +761 lines =@@
+@@= skipped -762, +762 lines =@@
  var Formatting;
  (function (Formatting) {
      class Indenter {

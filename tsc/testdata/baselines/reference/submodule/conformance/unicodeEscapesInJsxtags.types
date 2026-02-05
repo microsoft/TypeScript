@@ -1,6 +1,7 @@
 //// [tests/cases/conformance/jsx/unicodeEscapesInJsxtags.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
 import * as React from "react";
 >React : typeof React
 
@@ -30,10 +31,10 @@ const Compa = (x: {x: number}) => <div>{"" + x}</div>;
 >div : any
 
 const x = { video: () => null }
->x : { video: () => any; }
->{ video: () => null } : { video: () => any; }
->video : () => any
->() => null : () => any
+>x : { video: () => null; }
+>{ video: () => null } : { video: () => null; }
+>video : () => null
+>() => null : () => null
 
 // unicode escape sequence is not allowed in tag name or JSX attribute name.
 // tag name:
@@ -60,9 +61,9 @@ const x = { video: () => null }
 
 ; <x.\u0076ideo />
 ><x.\u0076ideo /> : JSX.Element
->x.\u0076ideo : () => any
->x : { video: () => any; }
->\u0076ideo : () => any
+>x.\u0076ideo : () => null
+>x : { video: () => null; }
+>\u0076ideo : () => null
 
 ; <\u{0061}></a>
 ><\u{0061}></a> : JSX.Element

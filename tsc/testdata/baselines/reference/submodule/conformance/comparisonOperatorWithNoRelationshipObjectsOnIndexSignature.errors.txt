@@ -1,3 +1,6 @@
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(2,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(6,12): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(10,12): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(26,12): error TS2365: Operator '<' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(27,12): error TS2365: Operator '<' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(28,12): error TS2365: Operator '<' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.
@@ -48,30 +51,36 @@ comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(109,12): error TS
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(110,12): error TS2367: This comparison appears to be unintentional because the types '{ [index: number]: C; }' and '{ [index: number]: Base; }' have no overlap.
 
 
-==== comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts (48 errors) ====
+==== comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts (51 errors) ====
     class Base {
         public a: string;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Derived extends Base {
         public b: string;
+               ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C {
         public c: string;
+               ~
+!!! error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
     }
     
-    var a1: { [a: string]: string };
-    var b1: { [b: string]: number };
+    declare var a1: { [a: string]: string };
+    declare var b1: { [b: string]: number };
     
-    var a2: { [index: string]: Base };
-    var b2: { [index: string]: C };
+    declare var a2: { [index: string]: Base };
+    declare var b2: { [index: string]: C };
     
-    var a3: { [index: number]: Base };
-    var b3: { [index: number]: C };
+    declare var a3: { [index: number]: Base };
+    declare var b3: { [index: number]: C };
     
-    var a4: { [index: number]: Derived };
-    var b4: { [index: string]: Base };
+    declare var a4: { [index: number]: Derived };
+    declare var b4: { [index: string]: Base };
     
     // operator <
     var r1a1 = a1 < b1;

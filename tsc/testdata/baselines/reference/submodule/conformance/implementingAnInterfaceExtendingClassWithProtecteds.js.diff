@@ -1,8 +1,8 @@
 --- old.implementingAnInterfaceExtendingClassWithProtecteds.js
 +++ new.implementingAnInterfaceExtendingClassWithProtecteds.js
-@@= skipped -44, +44 lines =@@
-
+@@= skipped -45, +45 lines =@@
  //// [implementingAnInterfaceExtendingClassWithProtecteds.js]
+ "use strict";
  class Foo {
 +    x;
  }

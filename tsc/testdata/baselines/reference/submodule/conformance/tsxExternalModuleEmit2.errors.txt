@@ -1,0 +1,23 @@
+app.tsx(2,13): error TS7005: Variable 'Foo' implicitly has an 'any' type.
+app.tsx(2,18): error TS7005: Variable 'React' implicitly has an 'any' type.
+
+
+==== modules.d.ts (0 errors) ====
+    declare module 'mod' {
+      var y: any;
+      export default y;
+    }
+    
+==== app.tsx (2 errors) ====
+    import Main from 'mod';
+    declare var Foo, React;
+                ~~~
+!!! error TS7005: Variable 'Foo' implicitly has an 'any' type.
+                     ~~~~~
+!!! error TS7005: Variable 'React' implicitly has an 'any' type.
+    // Should see mod_1['default'] in emit here
+    <Foo handler={Main}></Foo>;
+    // Should see mod_1['default'] in emit here
+    <Foo {...Main}></Foo>;
+    
+    

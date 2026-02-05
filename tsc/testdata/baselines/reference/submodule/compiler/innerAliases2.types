@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/innerAliases2.ts] ////
 
 === innerAliases2.ts ===
-module _provider {
+namespace _provider {
 >_provider : typeof _provider
 
                 export class UsefulClass {
@@ -13,7 +13,7 @@ module _provider {
                 }
 }
 
-module consumer {
+namespace consumer {
 >consumer : typeof consumer
 
                 import provider = _provider;

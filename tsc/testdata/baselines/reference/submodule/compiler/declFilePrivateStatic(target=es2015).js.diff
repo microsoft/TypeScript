@@ -1,0 +1,20 @@
+--- old.declFilePrivateStatic(target=es2015).js
++++ new.declFilePrivateStatic(target=es2015).js
+@@= skipped -17, +17 lines =@@
+ //// [declFilePrivateStatic.js]
+ "use strict";
+ class C {
++    static x = 1;
++    static y = 1;
+     static a() { }
+     static b() { }
+     static get c() { return 1; }
+@@= skipped -7, +9 lines =@@
+     static set e(v) { }
+     static set f(v) { }
+ }
+-C.x = 1;
+-C.y = 1;
+
+
+ //// [declFilePrivateStatic.d.ts]

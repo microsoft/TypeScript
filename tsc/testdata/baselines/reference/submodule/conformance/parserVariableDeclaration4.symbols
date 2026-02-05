@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration4.ts] ////
 
 === parserVariableDeclaration4.ts ===
-declare module M {
+declare namespace M {
 >M : Symbol(M, Decl(parserVariableDeclaration4.ts, 0, 0))
 
    declare var v;

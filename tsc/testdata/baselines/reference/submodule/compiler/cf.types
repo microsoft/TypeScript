@@ -118,7 +118,7 @@ function f() {
         }
     }
     catch (e) {
->e : any
+>e : unknown
 
         x++;
 >x++ : number
@@ -144,7 +144,7 @@ function f() {
 >k : number
 
         z;
->z : any
+>z : undefined
 
         break;
     }

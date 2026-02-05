@@ -1,7 +1,8 @@
-0.tsx(6,21): error TS2698: Spread types may only be created from object types.
+0.tsx(7,21): error TS2698: Spread types may only be created from object types.
 
 
 ==== 0.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
     ///<reference path="declaration.d.ts" />
     import * as cx from 'classnames';
     import * as React from "react";

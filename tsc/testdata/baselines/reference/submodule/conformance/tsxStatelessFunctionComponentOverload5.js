@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload5.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react')
 
 export interface ClickableProps {
@@ -60,6 +62,7 @@ const b8 = <MainButton data-format />;  // incorrect type for specified hyphanat
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MainButton = MainButton;
 const React = require("react");

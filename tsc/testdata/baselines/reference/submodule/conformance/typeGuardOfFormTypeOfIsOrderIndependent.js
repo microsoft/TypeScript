@@ -37,6 +37,7 @@ else {
 
 
 //// [typeGuardOfFormTypeOfIsOrderIndependent.js]
+"use strict";
 var strOrNum;
 var strOrBool;
 var strOrFunc;

@@ -1,6 +1,6 @@
 // === goToImplementation ===
 // === /goToImplementationNamespace_04.ts ===
-// module Foo {
+// namespace Foo {
 //     export interface Bar {
 //         hello(): void;
 //     }

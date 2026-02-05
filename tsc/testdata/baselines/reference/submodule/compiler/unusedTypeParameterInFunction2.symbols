@@ -6,7 +6,7 @@ function f1<X, Y>() {
 >X : Symbol(X, Decl(unusedTypeParameterInFunction2.ts, 0, 12))
 >Y : Symbol(Y, Decl(unusedTypeParameterInFunction2.ts, 0, 14))
 
-    var a: X;
+    var a!: X;
 >a : Symbol(a, Decl(unusedTypeParameterInFunction2.ts, 1, 7))
 >X : Symbol(X, Decl(unusedTypeParameterInFunction2.ts, 0, 12))
 

@@ -130,9 +130,7 @@ inferMappedReadonly({
 
 
 //// [reverseMappedPartiallyInferableTypes.js]
-"use strict";
 // Repro from #30505
-Object.defineProperty(exports, "__esModule", { value: true });
 const r = extend({
     props: {
         notResolved: {
@@ -185,3 +183,4 @@ inferMapped2({
 inferMappedReadonly({
     key: [3, arg => arg.key > 5]
 });
+export {};

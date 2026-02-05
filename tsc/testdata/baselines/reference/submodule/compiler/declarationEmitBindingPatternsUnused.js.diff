@@ -1,6 +1,6 @@
 --- old.declarationEmitBindingPatternsUnused.js
 +++ new.declarationEmitBindingPatternsUnused.js
-@@= skipped -226, +226 lines =@@
+@@= skipped -227, +227 lines =@@
      function: string;
  }): typeof alias;
  declare function referencedInInferredType({ name: alias }: Named): {

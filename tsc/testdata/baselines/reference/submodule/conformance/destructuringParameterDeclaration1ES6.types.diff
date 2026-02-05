@@ -27,3 +27,11 @@
  >{ b: 1 } : { b: number; }
  >b : number
  >1 : 1
+@@= skipped -119, +119 lines =@@
+ >x : number
+
+ function e3({x}: { x?: number }) { }  // x is an optional with type number
+->e3 : ({ x }: { x?: number; }) => void
++>e3 : ({ x }: { x?: number | undefined; }) => void
+ >x : number | undefined
+ >x : number | undefined

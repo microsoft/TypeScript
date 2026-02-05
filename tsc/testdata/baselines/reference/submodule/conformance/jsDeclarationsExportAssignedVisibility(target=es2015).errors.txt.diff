@@ -1,0 +1,32 @@
+--- old.jsDeclarationsExportAssignedVisibility(target=es2015).errors.txt
++++ new.jsDeclarationsExportAssignedVisibility(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++index.js(9,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++obj.js(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++
++
++==== index.js (1 errors) ====
++    const Obj = require("./obj");
++    
++    class Container {
++        constructor() {
++            this.usage = new Obj();
++        }
++    }
++    
++    module.exports = Container;
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
++==== obj.js (1 errors) ====
++    module.exports = class Obj {
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++        constructor() {
++    ~~~~~~~~~~~~~~~~~~~
++            this.x = 12;
++    ~~~~~~~~~~~~~~~~~~~~
++        }
++    ~~~~~
++    }
++    ~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.

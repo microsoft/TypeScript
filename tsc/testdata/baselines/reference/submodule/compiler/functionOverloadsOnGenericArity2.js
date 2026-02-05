@@ -8,3 +8,4 @@ interface I {
 }
 
 //// [functionOverloadsOnGenericArity2.js]
+"use strict";

@@ -1,11 +1,15 @@
+derivedClassWithAny.ts(2,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+derivedClassWithAny.ts(37,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 derivedClassWithAny.ts(57,1): error TS2322: Type 'E' is not assignable to type 'C'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
 
 
-==== derivedClassWithAny.ts (1 errors) ====
+==== derivedClassWithAny.ts (3 errors) ====
     class C {
         x: number;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         get X(): number { return 1; }
         foo(): number {
             return 1;
@@ -41,6 +45,8 @@ derivedClassWithAny.ts(57,1): error TS2322: Type 'E' is not assignable to type '
     // if D is a valid class definition than E is now not safe tranisitively through C
     class E extends D {
         x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         get X(): string{ return ''; }
         foo(): string {
             return '';
@@ -55,9 +61,9 @@ derivedClassWithAny.ts(57,1): error TS2322: Type 'E' is not assignable to type '
         }
     }
     
-    var c: C;
-    var d: D;
-    var e: E;
+    declare var c: C;
+    declare var d: D;
+    declare var e: E;
     
     c = d;
     c = e;

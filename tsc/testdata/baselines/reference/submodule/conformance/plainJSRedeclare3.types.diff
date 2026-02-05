@@ -1,0 +1,11 @@
+--- old.plainJSRedeclare3.types
++++ new.plainJSRedeclare3.types
+@@= skipped -12, +12 lines =@@
+
+ orbitol.toExponential()
+ >orbitol.toExponential() : string
+->orbitol.toExponential : (fractionDigits?: number) => string
++>orbitol.toExponential : (fractionDigits?: number | undefined) => string
+ >orbitol : 1
+->toExponential : (fractionDigits?: number) => string
++>toExponential : (fractionDigits?: number | undefined) => string

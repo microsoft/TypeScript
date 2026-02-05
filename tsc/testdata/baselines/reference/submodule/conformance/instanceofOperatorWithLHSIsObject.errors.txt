@@ -1,0 +1,33 @@
+instanceofOperatorWithLHSIsObject.ts(11,10): error TS2454: Variable 'a' is used before being assigned.
+instanceofOperatorWithLHSIsObject.ts(12,10): error TS2454: Variable 'b' is used before being assigned.
+instanceofOperatorWithLHSIsObject.ts(12,23): error TS2454: Variable 'x2' is used before being assigned.
+instanceofOperatorWithLHSIsObject.ts(13,10): error TS2454: Variable 'c' is used before being assigned.
+instanceofOperatorWithLHSIsObject.ts(14,10): error TS2454: Variable 'd' is used before being assigned.
+
+
+==== instanceofOperatorWithLHSIsObject.ts (5 errors) ====
+    class C { }
+    
+    var x1: any;
+    var x2: Function;
+    
+    var a: {};
+    var b: Object;
+    var c: C;
+    var d: string | C;
+    
+    var r1 = a instanceof x1;
+             ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var r2 = b instanceof x2;
+             ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                          ~~
+!!! error TS2454: Variable 'x2' is used before being assigned.
+    var r3 = c instanceof x1;
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r4 = d instanceof x1;
+             ~
+!!! error TS2454: Variable 'd' is used before being assigned.
+    

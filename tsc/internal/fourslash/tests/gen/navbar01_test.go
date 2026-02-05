@@ -11,7 +11,8 @@ func TestNavbar01(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// Interface
+	const content = `// @lib: es5
+// Interface
 interface IPoint {
     getDist(): number;
     new(): IPoint;
@@ -21,7 +22,7 @@ interface IPoint {
 }
 
 /// Module
-module Shapes {
+namespace Shapes {
     // Class
     export class Point implements IPoint {
         constructor (public x: number, public y: number) { }

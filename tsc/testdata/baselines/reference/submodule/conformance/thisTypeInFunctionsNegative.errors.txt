@@ -261,7 +261,7 @@ thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot h
     
     // lambdas have this: void for assignability purposes (and this unbound (free) for body checking)
     let d = new D();
-    let explicitXProperty: (this: { x: number }, m: number) => number;
+    declare let explicitXProperty: (this: { x: number }, m: number) => number;
     
     // from differing object types
     c.explicitC = function(this: D, m: number) { return this.x + m };
@@ -274,7 +274,7 @@ thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot h
 !!! error TS2322: Type '(this: { x: number; }, m: number) => number' is not assignable to type '(this: { n: number; }, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
 !!! error TS2322:     Property 'x' is missing in type '{ n: number; }' but required in type '{ x: number; }'.
-!!! related TS2728 thisTypeInFunctionsNegative.ts:104:33: 'x' is declared here.
+!!! related TS2728 thisTypeInFunctionsNegative.ts:104:41: 'x' is declared here.
     
     c.explicitC = d.explicitD;
     ~~~~~~~~~~~

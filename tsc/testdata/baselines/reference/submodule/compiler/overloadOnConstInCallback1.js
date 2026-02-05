@@ -12,6 +12,7 @@ class C {
 }
 
 //// [overloadOnConstInCallback1.js]
+"use strict";
 class C {
     x1(a, callback) {
         callback('hi');

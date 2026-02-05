@@ -1,0 +1,42 @@
+--- old.asyncFunctionDeclaration16_es5(target=es2015).errors.txt
++++ new.asyncFunctionDeclaration16_es5(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+ /a.js(21,14): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
+-/a.js(27,12): error TS1065: The return type of an async function or method must be the global Promise<T> type.
+-/a.js(45,12): error TS1065: The return type of an async function or method must be the global Promise<T> type.
++/a.js(28,7): error TS2322: Type '(str: string) => Promise<string>' is not assignable to type 'T1'.
++  Type 'Promise<string>' is not assignable to type 'string'.
+
+
+ ==== /types.d.ts (0 errors) ====
+     declare class Thenable { then(): void; }
+     
+-==== /a.js (3 errors) ====
++==== /a.js (2 errors) ====
+     /**
+      * @callback T1
+      * @param {string} str
+@@= skipped -35, +35 lines =@@
+     }
+     
+     /** @type {T1} */
+-               ~~
+-!!! error TS1065: The return type of an async function or method must be the global Promise<T> type.
+-!!! related TS1064 /a.js:4:14: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
+     const f2 = async str => {
++          ~~
++!!! error TS2322: Type '(str: string) => Promise<string>' is not assignable to type 'T1'.
++!!! error TS2322:   Type 'Promise<string>' is not assignable to type 'string'.
+         return str;
+     }
+     
+@@= skipped -21, +21 lines =@@
+     }
+     
+     /** @type {T3} */
+-               ~~
+-!!! error TS1065: The return type of an async function or method must be the global Promise<T> type.
+-!!! related TS1064 /a.js:16:14: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<void>'?
+     const f5 = async str => {
+         return str;
+     }

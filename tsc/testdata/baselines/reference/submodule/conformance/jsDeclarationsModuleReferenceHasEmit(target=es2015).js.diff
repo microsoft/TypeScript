@@ -1,0 +1,22 @@
+--- old.jsDeclarationsModuleReferenceHasEmit(target=es2015).js
++++ new.jsDeclarationsModuleReferenceHasEmit(target=es2015).js
+@@= skipped -30, +30 lines =@@
+
+ //// [index.d.ts]
+ /**
+- * Target element
+- * @type {module:A}
+- */
+-export let el: any;
+-export default A;
+-/**
+  * @module A
+  */
+ declare class A {
+ }
++/**
++ * Target element
++ * @type {module:A}
++ */
++export declare let el: module;
++export default A;

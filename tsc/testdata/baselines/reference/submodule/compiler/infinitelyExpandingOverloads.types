@@ -7,11 +7,11 @@ interface KnockoutSubscription2<T> {
 }
 interface KnockoutObservableBase2<T> {
     subscribe(callback: (newValue: T) => void, target?: any, topic?: string): KnockoutSubscription2<T>;
->subscribe : (callback: (newValue: T) => void, target?: any, topic?: string) => KnockoutSubscription2<T>
+>subscribe : (callback: (newValue: T) => void, target?: any, topic?: string | undefined) => KnockoutSubscription2<T>
 >callback : (newValue: T) => void
 >newValue : T
 >target : any
->topic : string
+>topic : string | undefined
 }
 interface ValidationPlacement2<TValue> {
     initialize(validatable: Validatable2<TValue>): void;

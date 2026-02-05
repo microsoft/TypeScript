@@ -1,6 +1,6 @@
 --- old.asyncQualifiedReturnType_es6.js
 +++ new.asyncQualifiedReturnType_es6.js
-@@= skipped -15, +15 lines =@@
+@@= skipped -16, +16 lines =@@
      }
      X.MyPromise = MyPromise;
  })(X || (X = {}));

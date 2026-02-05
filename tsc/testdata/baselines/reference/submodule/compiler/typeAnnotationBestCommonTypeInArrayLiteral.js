@@ -25,6 +25,7 @@ var menuData: IMenuItem[] = [
 
 
 //// [typeAnnotationBestCommonTypeInArrayLiteral.js]
+"use strict";
 var menuData = [
     {
         "id": "ourLogo",

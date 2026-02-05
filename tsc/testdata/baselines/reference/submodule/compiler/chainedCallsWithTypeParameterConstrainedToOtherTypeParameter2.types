@@ -12,10 +12,10 @@ class Chain<T> {
 >cb : (x: T) => S
 >x : T
 
-        var t: T;
+        var t!: T;
 >t : T
 
-        var s: S;
+        var s!: S;
 >s : S
 
         // Ok to go down the chain, but error to climb up the chain
@@ -119,13 +119,13 @@ class Chain2<T extends I> {
 >cb : (x: T) => S
 >x : T
 
-        var i: I;
+        var i!: I;
 >i : I
 
-        var t: T;
+        var t!: T;
 >t : T
 
-        var s: S;
+        var s!: S;
 >s : S
 
         // Ok to go down the chain, check the constraint at the end.

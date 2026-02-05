@@ -1,0 +1,10 @@
+--- old.commonJsExportTypeDeclarationError(target=es2015).types
++++ new.commonJsExportTypeDeclarationError(target=es2015).types
+@@= skipped -3, +3 lines =@@
+ module.exports = {
+ >module.exports = {   message: ""} : { message: string; }
+ >module.exports : { message: string; }
+->module : { exports: { message: string; }; }
++>module : { "export=": { message: string; }; }
+ >exports : { message: string; }
+ >{   message: ""} : { message: string; }

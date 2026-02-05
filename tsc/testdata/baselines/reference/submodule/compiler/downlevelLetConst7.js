@@ -4,4 +4,5 @@
 let a
 
 //// [downlevelLetConst7.js]
+"use strict";
 let a;

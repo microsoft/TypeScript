@@ -11,7 +11,7 @@ class K {
 >bar : string
 }
 
-var k1: K;
+declare var k1: K;
 >k1 : K
 
 k1.foo;
@@ -24,7 +24,7 @@ k1.bar;
 >k1 : K
 >bar : any
 
-var k2: typeof K;
+declare var k2: typeof K;
 >k2 : typeof K
 >K : typeof K
 

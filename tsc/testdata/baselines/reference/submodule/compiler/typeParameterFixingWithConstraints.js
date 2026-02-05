@@ -13,5 +13,6 @@ var foo: IFoo;
 foo.foo({ bar: null }, bar => null, bar => null);
 
 //// [typeParameterFixingWithConstraints.js]
+"use strict";
 var foo;
 foo.foo({ bar: null }, bar => null, bar => null);

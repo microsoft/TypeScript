@@ -36,3 +36,4 @@ declare class MyArray<T> implements Array<T> {
 
 
 //// [implementArrayInterface.js]
+"use strict";

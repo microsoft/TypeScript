@@ -9,7 +9,7 @@ interface I<T> {
 >f1 : <T>() => T
 
    f2?<T>(): T;
->f2 : <T>() => T
+>f2 : (<T>() => T) | undefined
 
    <T>(): void;
    new <T>(): void;

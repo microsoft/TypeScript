@@ -1,9 +1,9 @@
 --- old.privateNameLateSuper.js
 +++ new.privateNameLateSuper.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
 
  //// [privateNameLateSuper.js]
+ "use strict";
 -var _A_x;
  class B {
  }

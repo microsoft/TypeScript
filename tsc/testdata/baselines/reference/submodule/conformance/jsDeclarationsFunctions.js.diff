@@ -78,7 +78,7 @@
      x: string;
  }, b: {
 -    y: typeof import(".").b;
--}): void;
+-}): void | "";
 +    y: typeof b;
 +}): any;
 +export { g };
@@ -90,7 +90,7 @@
      x: string;
  }, b: {
 -    y: typeof import(".").b;
--}): void;
+-}): void | "";
 -export { hh as h, i as ii, j as jj };
 +    y: typeof b;
 +}): any;

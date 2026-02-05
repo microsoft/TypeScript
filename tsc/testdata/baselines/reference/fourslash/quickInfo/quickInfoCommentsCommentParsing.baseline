@@ -254,7 +254,7 @@
 //                                         ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (parameter) c: number
+// | (parameter) c: number | undefined
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -277,7 +277,7 @@
 // ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | function multiply(a: number, b: number, c?: number, d?: any, e?: any): void
+// | function multiply(a: number, b: number, c?: number | undefined, d?: any, e?: any): void
 // | ```
 // | This is multiplication function
 // | 
@@ -372,7 +372,7 @@
 //                                         ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (parameter) c: () => string
+// | (parameter) c: (() => string) | undefined
 // | ```
 // | this is optional param c
 // | 
@@ -380,7 +380,7 @@
 //                                                           ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (parameter) d: () => string
+// | (parameter) d: (() => string) | undefined
 // | ```
 // | this is optional param d
 // | 
@@ -388,7 +388,7 @@
 //                                                                             ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (parameter) e: () => string
+// | (parameter) e: (() => string) | undefined
 // | ```
 // | this is optional param e
 // | 
@@ -396,7 +396,7 @@
 //                                                                                               ^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (parameter) f: () => string
+// | (parameter) f: (() => string) | undefined
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -405,7 +405,7 @@
 // ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void
+// | function subtract(a: number, b: number, c?: (() => string) | undefined, d?: (() => string) | undefined, e?: (() => string) | undefined, f?: (() => string) | undefined): void
 // | ```
 // | This is subtract function
 // | 
@@ -1227,7 +1227,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) c: number\n```\n"
+        "value": "```tsx\n(parameter) c: number | undefined\n```\n"
       },
       "range": {
         "start": {
@@ -1308,7 +1308,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction multiply(a: number, b: number, c?: number, d?: any, e?: any): void\n```\nThis is multiplication function\n\n*@param* ``\n\n*@param* `a` — first number\n\n\n*@param* `b`\n\n*@param* `c`\n\n*@param* `d`\n\n*@anotherTag*\n\n*@param* `e` — LastParam \n\n*@anotherTag*"
+        "value": "```tsx\nfunction multiply(a: number, b: number, c?: number | undefined, d?: any, e?: any): void\n```\nThis is multiplication function\n\n*@param* ``\n\n*@param* `a` — first number\n\n\n*@param* `b`\n\n*@param* `c`\n\n*@param* `d`\n\n*@anotherTag*\n\n*@param* `e` — LastParam \n\n*@anotherTag*"
       },
       "range": {
         "start": {
@@ -1497,7 +1497,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) c: () => string\n```\nthis is optional param c\n"
+        "value": "```tsx\n(parameter) c: (() => string) | undefined\n```\nthis is optional param c\n"
       },
       "range": {
         "start": {
@@ -1524,7 +1524,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) d: () => string\n```\nthis is optional param d\n"
+        "value": "```tsx\n(parameter) d: (() => string) | undefined\n```\nthis is optional param d\n"
       },
       "range": {
         "start": {
@@ -1551,7 +1551,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) e: () => string\n```\nthis is optional param e\n"
+        "value": "```tsx\n(parameter) e: (() => string) | undefined\n```\nthis is optional param e\n"
       },
       "range": {
         "start": {
@@ -1578,7 +1578,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(parameter) f: () => string\n```\n"
+        "value": "```tsx\n(parameter) f: (() => string) | undefined\n```\n"
       },
       "range": {
         "start": {
@@ -1605,7 +1605,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void\n```\nThis is subtract function\n\n*@param* ``\n\n*@param* `b` — this is about b\n\n\n*@param* `c` — this is optional param c\n\n\n*@param* `d` — this is optional param d\n\n\n*@param* `e` — this is optional param e\n\n\n*@param* `` — { () => string; } } f this is optional param f\n"
+        "value": "```tsx\nfunction subtract(a: number, b: number, c?: (() => string) | undefined, d?: (() => string) | undefined, e?: (() => string) | undefined, f?: (() => string) | undefined): void\n```\nThis is subtract function\n\n*@param* ``\n\n*@param* `b` — this is about b\n\n\n*@param* `c` — this is optional param c\n\n\n*@param* `d` — this is optional param d\n\n\n*@param* `e` — this is optional param e\n\n\n*@param* `` — { () => string; } } f this is optional param f\n"
       },
       "range": {
         "start": {

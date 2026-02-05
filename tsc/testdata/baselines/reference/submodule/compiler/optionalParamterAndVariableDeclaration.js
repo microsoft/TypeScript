@@ -9,6 +9,7 @@ class C {
 
 
 //// [optionalParamterAndVariableDeclaration.js]
+"use strict";
 class C {
     constructor(options) {
         var options = (options || 0);

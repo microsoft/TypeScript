@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/sourceMapValidationClasses.ts] ////
 
 //// [sourceMapValidationClasses.ts]
-module Foo.Bar {
+namespace Foo.Bar {
     "use strict";
 
     class Greeter {
@@ -39,6 +39,7 @@ module Foo.Bar {
 }
 
 //// [sourceMapValidationClasses.js]
+"use strict";
 var Foo;
 (function (Foo) {
     let Bar;

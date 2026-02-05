@@ -3,7 +3,7 @@
 // declare var x;
 // /*HIGHLIGHTS*/[|export|] declare var y, z;
 // 
-// module m {
+// namespace m {
 //     export class C1 {
 // --- (line: 6) skipped ---
 
@@ -12,7 +12,7 @@
 // }
 // 
 // declare [|export|] var v1, v2;
-// declare module dm { }
+// declare namespace dm { }
 // [|export|] class EC { }
 
 
@@ -22,7 +22,7 @@
 // declare var x;
 // [|export|] declare var y, z;
 // 
-// module m {
+// namespace m {
 //     export class C1 {
 // --- (line: 6) skipped ---
 
@@ -31,7 +31,7 @@
 // }
 // 
 // declare /*HIGHLIGHTS*/[|export|] var v1, v2;
-// declare module dm { }
+// declare namespace dm { }
 // [|export|] class EC { }
 
 
@@ -41,7 +41,7 @@
 // declare var x;
 // [|export|] declare var y, z;
 // 
-// module m {
+// namespace m {
 //     export class C1 {
 // --- (line: 6) skipped ---
 
@@ -50,5 +50,5 @@
 // }
 // 
 // declare [|export|] var v1, v2;
-// declare module dm { }
+// declare namespace dm { }
 // /*HIGHLIGHTS*/[|export|] class EC { }

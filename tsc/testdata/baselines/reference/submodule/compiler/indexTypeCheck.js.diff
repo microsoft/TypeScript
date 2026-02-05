@@ -1,7 +1,7 @@
 --- old.indexTypeCheck.js
 +++ new.indexTypeCheck.js
-@@= skipped -78, +78 lines =@@
- var x;
+@@= skipped -76, +76 lines =@@
+ yellow[blue]; // error
  x[0];
  class Benchmark {
 -    constructor() {

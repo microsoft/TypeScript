@@ -1,0 +1,9 @@
+--- old.objectLiteralErrors(target=es2015).js
++++ new.objectLiteralErrors(target=es2015).js
+@@= skipped -101, +101 lines =@@
+ var h1 = {
+     x = 1,
+     y = 2,
+-    : 3
++    #z: 3
+ };

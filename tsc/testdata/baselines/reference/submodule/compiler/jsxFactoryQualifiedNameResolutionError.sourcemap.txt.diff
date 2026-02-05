@@ -8,7 +8,7 @@
 -3 >      ^^^^^^^^^^^^
 -4 >                  ^^^^^^^^^^->
 +2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >declare module JSX {
+ 1 >declare namespace JSX {
    >    interface IntrinsicElements {
    >        [s: string]: any;
 @@= skipped -10, +8 lines =@@

@@ -1,8 +1,8 @@
 --- old.generics3.js
 +++ new.generics3.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [generics3.js]
+ "use strict";
  class C {
 +    x;
  }

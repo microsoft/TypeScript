@@ -1,6 +1,6 @@
 --- old.unionSubtypeIfEveryConstituentTypeIsSubtype.js
 +++ new.unionSubtypeIfEveryConstituentTypeIsSubtype.js
-@@= skipped -151, +151 lines =@@
+@@= skipped -152, +152 lines =@@
      e[e["e2"] = 1] = "e2";
  })(e || (e = {}));
  class A {

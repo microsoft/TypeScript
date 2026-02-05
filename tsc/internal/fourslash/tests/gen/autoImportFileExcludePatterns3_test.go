@@ -15,7 +15,8 @@ func TestAutoImportFileExcludePatterns3(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @module: commonjs
+	const content = `// @lib: es5
+// @module: commonjs
 // @Filename: /ambient1.d.ts
 declare module "foo" {
    export const x = 1;

@@ -1,8 +1,8 @@
 --- old.declarationEmitReadonly.js
 +++ new.declarationEmitReadonly.js
-@@= skipped -6, +6 lines =@@
-
+@@= skipped -7, +7 lines =@@
  //// [declarationEmitReadonly.js]
+ "use strict";
  class C {
 +    x;
      constructor(x) {

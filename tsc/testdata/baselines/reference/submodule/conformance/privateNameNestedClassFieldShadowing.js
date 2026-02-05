@@ -18,6 +18,7 @@ class Base {
 
 
 //// [privateNameNestedClassFieldShadowing.js]
+"use strict";
 class Base {
     #x;
     constructor() {

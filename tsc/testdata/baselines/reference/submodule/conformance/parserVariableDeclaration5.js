@@ -4,4 +4,5 @@
 var a,
 
 //// [parserVariableDeclaration5.js]
+"use strict";
 var a;

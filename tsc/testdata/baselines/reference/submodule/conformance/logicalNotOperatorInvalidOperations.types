@@ -2,7 +2,7 @@
 
 === logicalNotOperatorInvalidOperations.ts ===
 // Unary operator !
-var b: number;
+declare var b: number;
 >b : number
 
 // operand before !

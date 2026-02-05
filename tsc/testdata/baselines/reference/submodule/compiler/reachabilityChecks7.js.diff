@@ -1,9 +1,9 @@
 --- old.reachabilityChecks7.js
 +++ new.reachabilityChecks7.js
-@@= skipped -31, +31 lines =@@
- let x1 = () => { use("Test"); }
+@@= skipped -32, +32 lines =@@
 
  //// [reachabilityChecks7.js]
+ "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
 -    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 -    return new (P || (P = Promise))(function (resolve, reject) {

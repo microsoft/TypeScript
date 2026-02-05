@@ -8,7 +8,7 @@ import {Row2, C} from '.'
 const x: ((rowData: Row2<string>) => unknown) = (rowData: Row2<any>) => (null)
 >x : (rowData: Row2<string>) => unknown
 >rowData : Row2<string>
->(rowData: Row2<any>) => (null) : (rowData: Row2<any>) => any
+>(rowData: Row2<any>) => (null) : (rowData: Row2<any>) => null
 >rowData : Row2<any>
 >(null) : null
 

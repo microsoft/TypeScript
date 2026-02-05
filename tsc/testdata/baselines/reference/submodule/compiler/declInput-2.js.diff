@@ -1,6 +1,6 @@
 --- old.declInput-2.js
 +++ new.declInput-2.js
-@@= skipped -31, +31 lines =@@
+@@= skipped -32, +32 lines =@@
      }
      M.E = E;
      class D {

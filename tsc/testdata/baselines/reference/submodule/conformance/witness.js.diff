@@ -1,6 +1,6 @@
 --- old.witness.js
 +++ new.witness.js
-@@= skipped -145, +145 lines =@@
+@@= skipped -146, +146 lines =@@
      var pInit;
  }
  class InitClass {

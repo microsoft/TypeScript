@@ -1,6 +1,6 @@
 --- old.objectRestSpread.js
 +++ new.objectRestSpread.js
-@@= skipped -35, +35 lines =@@
+@@= skipped -36, +36 lines =@@
          }
      return t;
  };

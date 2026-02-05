@@ -1,0 +1,47 @@
+--- old.genericChainedCalls.types
++++ new.genericChainedCalls.types
+@@= skipped -23, +23 lines =@@
+ >num => num.toString() : (num: number) => string
+ >num : number
+ >num.toString() : string
+->num.toString : (radix?: number) => string
++>num.toString : (radix?: number | undefined) => string
+ >num : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+            .func(str => str.length) // error, number doesn't have a length
+ >func : <U>(callback: (value: number) => U) => I1<number>
+@@= skipped -17, +17 lines =@@
+ >num => num.toString() : (num: number) => string
+ >num : number
+ >num.toString() : string
+->num.toString : (radix?: number) => string
++>num.toString : (radix?: number | undefined) => string
+ >num : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+  
+ var s1 = v1.func(num => num.toString()) 
+ >s1 : I1<number>
+@@= skipped -13, +13 lines =@@
+ >num => num.toString() : (num: number) => string
+ >num : number
+ >num.toString() : string
+->num.toString : (radix?: number) => string
++>num.toString : (radix?: number | undefined) => string
+ >num : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+ var s2 = s1.func(str => str.length) // should also error
+ >s2 : I1<number>
+@@= skipped -25, +25 lines =@@
+ >num => num.toString() : (num: number) => string
+ >num : number
+ >num.toString() : string
+->num.toString : (radix?: number) => string
++>num.toString : (radix?: number | undefined) => string
+ >num : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string

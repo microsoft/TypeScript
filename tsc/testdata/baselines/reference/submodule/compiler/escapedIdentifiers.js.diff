@@ -1,17 +1,6 @@
 --- old.escapedIdentifiers.js
 +++ new.escapedIdentifiers.js
-@@= skipped -142, +142 lines =@@
- var moduleType1;
- (function (moduleType1) {
- })(moduleType1 || (moduleType1 = {}));
--var moduleType\u0032;
-+var moduleType2;
- (function (moduleType\u0032) {
--})(moduleType\u0032 || (moduleType\u0032 = {}));
-+})(moduleType2 || (moduleType2 = {}));
- moduleType1.baz1 = 3;
- moduleType\u0031.baz1 = 3;
- moduleType2.baz2 = 3;
+@@= skipped -149, +149 lines =@@
  moduleType\u0032.baz2 = 3;
  // classes
  class classType1 {
@@ -22,7 +11,7 @@
  }
  var classType1Object1 = new classType1();
  classType1Object1.foo1 = 2;
-@@= skipped -39, +41 lines =@@
+@@= skipped -30, +32 lines =@@
  }
  // constructors
  class constructorTestClass {

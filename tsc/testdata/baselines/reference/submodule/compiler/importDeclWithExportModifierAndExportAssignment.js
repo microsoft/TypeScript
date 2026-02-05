@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/importDeclWithExportModifierAndExportAssignment.ts] ////
 
 //// [importDeclWithExportModifierAndExportAssignment.ts]
-module x {
+namespace x {
     interface c {
     }
 }

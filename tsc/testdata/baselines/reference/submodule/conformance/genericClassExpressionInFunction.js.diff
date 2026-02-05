@@ -1,8 +1,8 @@
 --- old.genericClassExpressionInFunction.js
 +++ new.genericClassExpressionInFunction.js
-@@= skipped -34, +34 lines =@@
-
+@@= skipped -35, +35 lines =@@
  //// [genericClassExpressionInFunction.js]
+ "use strict";
  class A {
 +    genericVar;
  }

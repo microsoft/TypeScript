@@ -67,6 +67,7 @@ Intl.NumberFormat.supportedLocalesOf(readonlyLocales);
 
 
 //// [localesObjectArgument.js]
+"use strict";
 const enUS = new Intl.Locale("en-US");
 const deDE = new Intl.Locale("de-DE");
 const jaJP = new Intl.Locale("ja-JP");

@@ -42,11 +42,11 @@ class C1 implements I1,I2 {
     private iAny:any;
 >iAny : Symbol(C1.iAny, Decl(interfaceImplementation1.ts, 13, 38))
 
-    private iNum:number;
+    private iNum!:number;
 >iNum : Symbol(C1.iNum, Decl(interfaceImplementation1.ts, 14, 21))
 
-    private iObj:{ };
->iObj : Symbol(C1.iObj, Decl(interfaceImplementation1.ts, 15, 24))
+    private iObj!:{ };
+>iObj : Symbol(C1.iObj, Decl(interfaceImplementation1.ts, 15, 25))
 }
 
 interface I3 {
@@ -91,13 +91,13 @@ new a();
 new b();
 */
 
-var c:I4;
->c : Symbol(c, Decl(interfaceImplementation1.ts, 42, 3))
+declare var c:I4;
+>c : Symbol(c, Decl(interfaceImplementation1.ts, 42, 11))
 >I4 : Symbol(I4, Decl(interfaceImplementation1.ts, 21, 1))
 
 c[5];
->c : Symbol(c, Decl(interfaceImplementation1.ts, 42, 3))
+>c : Symbol(c, Decl(interfaceImplementation1.ts, 42, 11))
 
 c["foo"];
->c : Symbol(c, Decl(interfaceImplementation1.ts, 42, 3))
+>c : Symbol(c, Decl(interfaceImplementation1.ts, 42, 11))
 

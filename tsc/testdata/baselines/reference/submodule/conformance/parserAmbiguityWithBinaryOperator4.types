@@ -11,8 +11,8 @@ function g() {
 
     if (a<b, b>(c + 1)) { }
 >a<b, b>(c + 1) : any
->a : any
+>a : undefined
 >c + 1 : any
->c : any
+>c : undefined
 >1 : 1
 }

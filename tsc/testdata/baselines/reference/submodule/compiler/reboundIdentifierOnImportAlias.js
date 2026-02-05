@@ -1,15 +1,16 @@
 //// [tests/cases/compiler/reboundIdentifierOnImportAlias.ts] ////
 
 //// [reboundIdentifierOnImportAlias.ts]
-module Foo {
+namespace Foo {
     export var x = "hello";
 }
-module Bar {
+namespace Bar {
     var Foo = 1;
     import F = Foo;
 }
 
 //// [reboundIdentifierOnImportAlias.js]
+"use strict";
 var Foo;
 (function (Foo) {
     Foo.x = "hello";

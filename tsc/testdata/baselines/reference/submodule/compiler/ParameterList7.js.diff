@@ -1,8 +1,8 @@
 --- old.ParameterList7.js
 +++ new.ParameterList7.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
  //// [ParameterList7.js]
+ "use strict";
  class C1 {
 +    p3;
      constructor(p3) {

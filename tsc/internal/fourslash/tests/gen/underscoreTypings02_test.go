@@ -11,7 +11,8 @@ func TestUnderscoreTypings02(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @module: CommonJS
+	const content = `// @strict: false
+// @module: CommonJS
 interface Dictionary<T> {
     [x: string]: T;
 }

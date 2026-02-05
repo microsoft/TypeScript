@@ -57,6 +57,7 @@ var a10: X10<number>;
 
 
 //// [missingTypeArguments1.js]
+"use strict";
 class Y {
 }
 class X {

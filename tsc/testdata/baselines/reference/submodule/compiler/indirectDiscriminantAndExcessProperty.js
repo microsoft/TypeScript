@@ -29,8 +29,6 @@ thing({
 
 
 //// [indirectDiscriminantAndExcessProperty.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 let foo1 = "foo";
 thing({
     type: foo1,
@@ -48,3 +46,4 @@ thing({
     xyz: 123,
     extra: 123,
 });
+export {};

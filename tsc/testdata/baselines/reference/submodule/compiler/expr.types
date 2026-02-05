@@ -16,7 +16,7 @@ enum E {
 function f() {
 >f : () => void
 
-    var a: any;
+    var a!: any;
 >a : any
 
     var n=3;
@@ -31,10 +31,10 @@ function f() {
 >b : boolean
 >false : false
 
-    var i:I;
+    var i!: I;
 >i : I
 
-    var e:E;
+    var e!: E;
 >e : E
 
     n&&a;
@@ -43,17 +43,17 @@ function f() {
 >a : any
 
     n&&s;
->n&&s : string
+>n&&s : string | 0
 >n : number
 >s : string
 
     n&&b;
->n&&b : false
+>n&&b : 0 | false
 >n : number
 >b : false
 
     n&&i;
->n&&i : I
+>n&&i : 0 | I
 >n : number
 >i : I
 
@@ -63,7 +63,7 @@ function f() {
 >n : number
 
     n&&e;
->n&&e : E
+>n&&e : 0 | E
 >n : number
 >e : E
 
@@ -73,17 +73,17 @@ function f() {
 >a : any
 
     s&&n;
->s&&n : number
+>s&&n : number | ""
 >s : string
 >n : number
 
     s&&b;
->s&&b : false
+>s&&b : "" | false
 >s : string
 >b : false
 
     s&&i;
->s&&i : I
+>s&&i : "" | I
 >s : string
 >i : I
 
@@ -93,27 +93,27 @@ function f() {
 >s : string
 
     s&&e;
->s&&e : E
+>s&&e : "" | E
 >s : string
 >e : E
 
     a&&n;
->a&&n : number
+>a&&n : any
 >a : any
 >n : number
 
     a&&s;
->a&&s : string
+>a&&s : any
 >a : any
 >s : string
 
     a&&b;
->a&&b : false
+>a&&b : any
 >a : any
 >b : false
 
     a&&i;
->a&&i : I
+>a&&i : any
 >a : any
 >i : I
 
@@ -123,7 +123,7 @@ function f() {
 >a : any
 
     a&&e;
->a&&e : E
+>a&&e : any
 >a : any
 >e : E
 
@@ -163,12 +163,12 @@ function f() {
 >n : number
 
     e&&s;
->e&&s : string
+>e&&s : string | E.Red
 >e : E
 >s : string
 
     e&&b;
->e&&b : false
+>e&&b : false | E.Red
 >e : E
 >b : false
 
@@ -178,7 +178,7 @@ function f() {
 >a : any
 
     e&&i;
->e&&i : I
+>e&&i : E.Red | I
 >e : E
 >i : I
 
@@ -293,14 +293,14 @@ function f() {
 >b : false
 
     i||a;
->i||a : any
+>i||a : I
 >i : I
 >a : any
 
     i||i;
 >i||i : I
 >i : I
->i : I
+>i : never
 
     i||e;
 >i||e : I
@@ -335,7 +335,7 @@ function f() {
     e||e;
 >e||e : E
 >e : E
->e : E
+>e : E.Red
 
     n==a;
 >n==a : boolean
@@ -528,7 +528,7 @@ function f() {
 >b : false
 
     !i;
->!i : boolean
+>!i : false
 >i : I
 
     !s;

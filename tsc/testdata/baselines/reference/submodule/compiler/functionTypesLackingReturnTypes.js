@@ -15,6 +15,7 @@ var h: { () }
 var i: { new () }
 
 //// [functionTypesLackingReturnTypes.js]
+"use strict";
 // Error (no '=>')
 function f(x) {
 }

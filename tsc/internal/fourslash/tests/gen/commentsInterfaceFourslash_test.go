@@ -13,7 +13,8 @@ func TestCommentsInterfaceFourslash(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `/** this is interface 1*/
+	const content = `// @lib: es5
+/** this is interface 1*/
 interface i/*1*/1 {
 }
 var i1/*2*/_i: i1;

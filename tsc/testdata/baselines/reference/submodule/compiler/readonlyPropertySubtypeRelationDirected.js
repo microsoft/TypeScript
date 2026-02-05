@@ -80,8 +80,6 @@ function doSomething(condition: boolean) {
 }
 
 //// [one.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // When the non-readonly type is declared first, the unioned type of `three` in `doSomething` is never treated as readonly
 const two = { a: 'two' };
 const one = { a: 'one' };
@@ -95,9 +93,8 @@ function doSomething(condition) {
     three.a = 'foo2';
     return three;
 }
+export {};
 //// [two.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // When the non-readonly type is declared first, the unioned type of `three` in `doSomething` is never treated as readonly
 const two = { a: 'two' };
 const one = { a: 'one' };
@@ -111,9 +108,8 @@ function doSomething(condition) {
     three.a = 'foo2';
     return three;
 }
+export {};
 //// [three.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // When the readonly type is declared first, the unioned type of `three` in `doSomething` is always treated as readonly by the compiler
 const one = { a: 'one' };
 const two = { a: 'two' };
@@ -127,9 +123,8 @@ function doSomething(condition) {
     three.a = 'foo2';
     return three;
 }
+export {};
 //// [four.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // When the readonly type is declared first, the unioned type of `three` in `doSomething` is always treated as readonly by the compiler
 const one = { a: 'one' };
 const two = { a: 'two' };
@@ -143,3 +138,4 @@ function doSomething(condition) {
     three.a = 'foo2';
     return three;
 }
+export {};

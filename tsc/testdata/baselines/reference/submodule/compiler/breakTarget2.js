@@ -7,6 +7,7 @@ while (true) {
 }
 
 //// [breakTarget2.js]
+"use strict";
 target: while (true) {
     break target;
 }

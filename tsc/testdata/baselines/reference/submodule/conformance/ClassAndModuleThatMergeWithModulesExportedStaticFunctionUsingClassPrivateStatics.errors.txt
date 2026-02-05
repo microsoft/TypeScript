@@ -1,15 +1,21 @@
+ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts(2,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts(3,5): error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
 ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts(11,24): error TS2341: Property 'sfn' is private and only accessible within class 'clodule<T>'.
 
 
-==== ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts (1 errors) ====
+==== ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts (3 errors) ====
     class clodule<T> {
         id: string;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         value: T;
+        ~~~~~
+!!! error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
     
         private static sfn(id: string) { return 42; }
     }
     
-    module clodule {
+    namespace clodule {
         // error: duplicate identifier expected
         export function fn<T>(x: T, y: T): number {
             return clodule.sfn('a');

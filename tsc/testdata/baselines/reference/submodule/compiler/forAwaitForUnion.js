@@ -8,6 +8,7 @@ async function f<T>(source: Iterable<T> | AsyncIterable<T>) {
 
 
 //// [forAwaitForUnion.js]
+"use strict";
 async function f(source) {
     for await (const x of source) {
     }

@@ -1,12 +1,22 @@
+thisTypeOfConstructorFunctions.js(8,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+thisTypeOfConstructorFunctions.js(8,16): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+thisTypeOfConstructorFunctions.js(9,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 thisTypeOfConstructorFunctions.js(10,18): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+thisTypeOfConstructorFunctions.js(11,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+thisTypeOfConstructorFunctions.js(11,21): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 thisTypeOfConstructorFunctions.js(15,18): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+thisTypeOfConstructorFunctions.js(17,14): error TS2339: Property 'z' does not exist on type '{ m4(): any; }'.
+thisTypeOfConstructorFunctions.js(17,23): error TS2339: Property 'y' does not exist on type '{ m4(): any; }'.
+thisTypeOfConstructorFunctions.js(27,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 thisTypeOfConstructorFunctions.js(29,14): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+thisTypeOfConstructorFunctions.js(34,10): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+thisTypeOfConstructorFunctions.js(35,11): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 thisTypeOfConstructorFunctions.js(38,12): error TS2749: 'Cpp' refers to a value, but is being used as a type here. Did you mean 'typeof Cpp'?
 thisTypeOfConstructorFunctions.js(41,12): error TS2749: 'Cp' refers to a value, but is being used as a type here. Did you mean 'typeof Cp'?
 thisTypeOfConstructorFunctions.js(43,12): error TS2749: 'Cp' refers to a value, but is being used as a type here. Did you mean 'typeof Cp'?
 
 
-==== thisTypeOfConstructorFunctions.js (6 errors) ====
+==== thisTypeOfConstructorFunctions.js (16 errors) ====
     /**
      * @class
      * @template T
@@ -15,11 +25,21 @@ thisTypeOfConstructorFunctions.js(43,12): error TS2749: 'Cp' refers to a value, 
     function Cp(t) {
         /** @type {this} */
         this.dit = this
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+                   ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
         this.y = t
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
         /** @return {this} */
                      ~~~~
 !!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
         this.m3 = () => this
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+                        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     
     Cp.prototype = {
@@ -28,6 +48,10 @@ thisTypeOfConstructorFunctions.js(43,12): error TS2749: 'Cp' refers to a value, 
 !!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
         m4() {
             this.z = this.y; return this
+                 ~
+!!! error TS2339: Property 'z' does not exist on type '{ m4(): any; }'.
+                          ~
+!!! error TS2339: Property 'y' does not exist on type '{ m4(): any; }'.
         }
     }
     
@@ -38,6 +62,8 @@ thisTypeOfConstructorFunctions.js(43,12): error TS2749: 'Cp' refers to a value, 
      */
     function Cpp(t) {
         this.y = t
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     /** @return {this} */
                  ~~~~
@@ -47,7 +73,11 @@ thisTypeOfConstructorFunctions.js(43,12): error TS2749: 'Cp' refers to a value, 
     }
     
     var cp = new Cp(1)
+             ~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
     var cpp = new Cpp(2)
+              ~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
     cp.dit
     
     /** @type {Cpp<number>} */

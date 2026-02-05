@@ -1,6 +1,6 @@
 --- old.parserRealSource14.js
 +++ new.parserRealSource14.js
-@@= skipped -599, +599 lines =@@
+@@= skipped -600, +600 lines =@@
      // This is helpful as our tree don't have parents.
      //
      class AstPath {

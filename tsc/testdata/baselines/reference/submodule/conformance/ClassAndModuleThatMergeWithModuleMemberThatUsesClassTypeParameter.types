@@ -13,7 +13,7 @@ class clodule1<T>{
 >value : T
 }
 
-module clodule1 {
+namespace clodule1 {
 >clodule1 : typeof clodule1
 
     function f(x: T) { }
@@ -31,7 +31,7 @@ class clodule2<T>{
 >value : T
 }
 
-module clodule2 {
+namespace clodule2 {
 >clodule2 : typeof clodule2
 
     var x: T;
@@ -58,7 +58,7 @@ class clodule3<T>{
 >value : T
 }
 
-module clodule3 {
+namespace clodule3 {
 >clodule3 : typeof clodule3
 
     export var y = { id: T };
@@ -78,7 +78,7 @@ class clodule4<T>{
 >value : T
 }
 
-module clodule4 {
+namespace clodule4 {
 >clodule4 : typeof clodule4
 
     class D {

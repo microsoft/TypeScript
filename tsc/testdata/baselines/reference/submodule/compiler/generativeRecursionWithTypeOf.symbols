@@ -14,11 +14,11 @@ class C<T> {
 >T : Symbol(T, Decl(generativeRecursionWithTypeOf.ts, 0, 8))
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(generativeRecursionWithTypeOf.ts, 3, 1))
 
     export function f(x: typeof C) {   
->f : Symbol(f, Decl(generativeRecursionWithTypeOf.ts, 5, 10))
+>f : Symbol(f, Decl(generativeRecursionWithTypeOf.ts, 5, 13))
 >x : Symbol(x, Decl(generativeRecursionWithTypeOf.ts, 6, 22))
 >C : Symbol(C, Decl(generativeRecursionWithTypeOf.ts, 0, 0))
 

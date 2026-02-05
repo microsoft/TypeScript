@@ -13,6 +13,7 @@ class SymbolIterator {
 var array = [...new SymbolIterator];
 
 //// [iteratorSpreadInArray8.js]
+"use strict";
 class SymbolIterator {
     next() {
         return {

@@ -12,6 +12,7 @@ var [x18, y18, ...a12] = [1, "hello", true];
 var [x19, y19, z19, ...a13] = [1, "hello", true];
 
 //// [declarationEmitDestructuringArrayPattern4.js]
+"use strict";
 var [...a5] = [1, 2, 3];
 var [x14, ...a6] = [1, 2, 3];
 var [x15, y15, ...a7] = [1, 2, 3];

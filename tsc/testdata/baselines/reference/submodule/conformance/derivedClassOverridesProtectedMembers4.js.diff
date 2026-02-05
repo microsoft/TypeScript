@@ -1,6 +1,6 @@
 --- old.derivedClassOverridesProtectedMembers4.js
 +++ new.derivedClassOverridesProtectedMembers4.js
-@@= skipped -19, +19 lines =@@
+@@= skipped -20, +20 lines =@@
  var x;
  var y;
  class Base {

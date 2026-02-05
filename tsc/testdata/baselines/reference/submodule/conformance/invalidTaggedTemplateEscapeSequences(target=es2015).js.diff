@@ -1,9 +1,9 @@
 --- old.invalidTaggedTemplateEscapeSequences(target=es2015).js
 +++ new.invalidTaggedTemplateEscapeSequences(target=es2015).js
-@@= skipped -27, +27 lines =@@
-
+@@= skipped -28, +28 lines =@@
 
  //// [invalidTaggedTemplateEscapeSequences.js]
+ "use strict";
 -var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
 -    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
 -    return cooked;

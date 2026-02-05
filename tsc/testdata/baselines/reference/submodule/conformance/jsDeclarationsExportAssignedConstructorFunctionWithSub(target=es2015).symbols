@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub.ts] ////
+
+=== jsDeclarationsExportAssignedConstructorFunctionWithSub.js ===
+/**
+ * @param {number} p
+ */
+module.exports = function (p) {
+>module.exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
+>module : Symbol("jsDeclarationsExportAssignedConstructorFunctionWithSub", Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
+>exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
+>p : Symbol(p, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 27))
+
+    this.t = 12 + p;
+>this : Symbol(module.exports)
+>p : Symbol(p, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 27))
+}
+module.exports.Sub = function() {
+>module.exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
+>module : Symbol("jsDeclarationsExportAssignedConstructorFunctionWithSub", Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
+>exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
+
+    this.instance = new module.exports(10);
+>this : Symbol((Anonymous function), Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 16))
+>module.exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
+>module : Symbol("jsDeclarationsExportAssignedConstructorFunctionWithSub", Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
+>exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
+}
+module.exports.Sub.prototype = { }
+>module.exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
+>module : Symbol("jsDeclarationsExportAssignedConstructorFunctionWithSub", Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
+>exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
+

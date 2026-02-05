@@ -1,6 +1,6 @@
 ======== Resolving module 'fake:thing' from '/a/b/main.ts'. ========
 Explicitly specified module resolution kind: 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 'paths' option is specified, looking for a pattern to match module name 'fake:thing'.
 Module name 'fake:thing', matched pattern 'fake:thing'.
 Trying substitution './node_modules/fake/thing', candidate module location: './node_modules/fake/thing'.

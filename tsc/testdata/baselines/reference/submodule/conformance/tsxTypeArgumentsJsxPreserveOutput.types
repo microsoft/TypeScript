@@ -1,18 +1,20 @@
 //// [tests/cases/conformance/jsx/tsxTypeArgumentsJsxPreserveOutput.tsx] ////
 
 === foo.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : typeof React
 
 type TypeProps = { foo?: boolean; };
 >TypeProps : TypeProps
->foo : boolean
+>foo : boolean | undefined
 
 interface InterfaceProps { foo?: boolean; }
->foo : boolean
+>foo : boolean | undefined
 
 function Foo<T>() {
->Foo : <T>() => any
+>Foo : <T>() => null
 
     return null;
 }
@@ -23,94 +25,94 @@ function Foo<T>() {
     {/* JsxSelfClosingElement */}
     <Foo<unknown> />
 ><Foo<unknown> /> : JSX.Element
->Foo : <T>() => any
+>Foo : <T>() => null
 
     <Foo<string> />
 ><Foo<string> /> : JSX.Element
->Foo : <T>() => any
+>Foo : <T>() => null
 
     <Foo<boolean> />
 ><Foo<boolean> /> : JSX.Element
->Foo : <T>() => any
+>Foo : <T>() => null
 
     <Foo<object> />
 ><Foo<object> /> : JSX.Element
->Foo : <T>() => any
+>Foo : <T>() => null
 
     <Foo<null> />
 ><Foo<null> /> : JSX.Element
->Foo : <T>() => any
+>Foo : <T>() => null
 
     <Foo<any> />
 ><Foo<any> /> : JSX.Element
->Foo : <T>() => any
+>Foo : <T>() => null
 
     <Foo<never> />
 ><Foo<never> /> : JSX.Element
->Foo : <T>() => any
+>Foo : <T>() => null
 
     <Foo<undefined> />
 ><Foo<undefined> /> : JSX.Element
->Foo : <T>() => any
+>Foo : <T>() => null
 
     <Foo<TypeProps> />
 ><Foo<TypeProps> /> : JSX.Element
->Foo : <T>() => any
+>Foo : <T>() => null
 
     <Foo<InterfaceProps> />
 ><Foo<InterfaceProps> /> : JSX.Element
->Foo : <T>() => any
+>Foo : <T>() => null
 
     {/* JsxOpeningElement */}
     <Foo<unknown>></Foo>
 ><Foo<unknown>></Foo> : JSX.Element
->Foo : <T>() => any
->Foo : <T>() => any
+>Foo : <T>() => null
+>Foo : <T>() => null
 
     <Foo<string>></Foo>
 ><Foo<string>></Foo> : JSX.Element
->Foo : <T>() => any
->Foo : <T>() => any
+>Foo : <T>() => null
+>Foo : <T>() => null
 
     <Foo<boolean>></Foo>
 ><Foo<boolean>></Foo> : JSX.Element
->Foo : <T>() => any
->Foo : <T>() => any
+>Foo : <T>() => null
+>Foo : <T>() => null
 
     <Foo<object>></Foo>
 ><Foo<object>></Foo> : JSX.Element
->Foo : <T>() => any
->Foo : <T>() => any
+>Foo : <T>() => null
+>Foo : <T>() => null
 
     <Foo<null>></Foo>
 ><Foo<null>></Foo> : JSX.Element
->Foo : <T>() => any
->Foo : <T>() => any
+>Foo : <T>() => null
+>Foo : <T>() => null
 
     <Foo<any>></Foo>
 ><Foo<any>></Foo> : JSX.Element
->Foo : <T>() => any
->Foo : <T>() => any
+>Foo : <T>() => null
+>Foo : <T>() => null
 
     <Foo<never>></Foo>
 ><Foo<never>></Foo> : JSX.Element
->Foo : <T>() => any
->Foo : <T>() => any
+>Foo : <T>() => null
+>Foo : <T>() => null
 
     <Foo<undefined>></Foo>
 ><Foo<undefined>></Foo> : JSX.Element
->Foo : <T>() => any
->Foo : <T>() => any
+>Foo : <T>() => null
+>Foo : <T>() => null
 
     <Foo<TypeProps>></Foo>
 ><Foo<TypeProps>></Foo> : JSX.Element
->Foo : <T>() => any
->Foo : <T>() => any
+>Foo : <T>() => null
+>Foo : <T>() => null
 
     <Foo<InterfaceProps>></Foo>
 ><Foo<InterfaceProps>></Foo> : JSX.Element
->Foo : <T>() => any
->Foo : <T>() => any
+>Foo : <T>() => null
+>Foo : <T>() => null
 
 </>
 

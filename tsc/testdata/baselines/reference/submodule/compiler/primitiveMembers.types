@@ -30,7 +30,7 @@ var n = 0;
 >n : number
 >0 : 0
 
-var N: Number;
+declare var N: Number;
 >N : Number
 
 n = N;  // should not work, as 'number' has a different brand

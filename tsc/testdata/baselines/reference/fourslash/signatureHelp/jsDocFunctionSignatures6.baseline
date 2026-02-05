@@ -10,26 +10,26 @@
 // f1('foo', 'bar', 'baz', 'qux');
 //    ^
 // | ----------------------------------------------------------------------
-// | f1(**p1: string**, p2: string, p3?: string, p4?: string): void
+// | f1(**p1: string**, p2: string | null, p3?: string | undefined, p4?: string | undefined): void
 // | - `p1: string`: - A string param
 
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | f1(p1: string, **p2: string**, p3?: string, p4?: string): void
-// | - `p2: string`: - An optional param
+// | f1(p1: string, **p2: string | null**, p3?: string | undefined, p4?: string | undefined): void
+// | - `p2: string | null`: - An optional param
 
 // | ----------------------------------------------------------------------
 //                  ^
 // | ----------------------------------------------------------------------
-// | f1(p1: string, p2: string, **p3?: string**, p4?: string): void
-// | - `p3?: string`: - Another optional param
+// | f1(p1: string, p2: string | null, **p3?: string | undefined**, p4?: string | undefined): void
+// | - `p3?: string | undefined`: - Another optional param
 
 // | ----------------------------------------------------------------------
 //                         ^
 // | ----------------------------------------------------------------------
-// | f1(p1: string, p2: string, p3?: string, **p4?: string**): void
-// | - `p4?: string`: - An optional param with a default value
+// | f1(p1: string, p2: string | null, p3?: string | undefined, **p4?: string | undefined**): void
+// | - `p4?: string | undefined`: - An optional param with a default value
 
 // | ----------------------------------------------------------------------
 [
@@ -46,7 +46,7 @@
     "item": {
       "signatures": [
         {
-          "label": "f1(p1: string, p2: string, p3?: string, p4?: string): void",
+          "label": "f1(p1: string, p2: string | null, p3?: string | undefined, p4?: string | undefined): void",
           "parameters": [
             {
               "label": "p1: string",
@@ -56,21 +56,21 @@
               }
             },
             {
-              "label": "p2: string",
+              "label": "p2: string | null",
               "documentation": {
                 "kind": "markdown",
                 "value": "- An optional param\n"
               }
             },
             {
-              "label": "p3?: string",
+              "label": "p3?: string | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "- Another optional param\n"
               }
             },
             {
-              "label": "p4?: string",
+              "label": "p4?: string | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "- An optional param with a default value\n"
@@ -96,7 +96,7 @@
     "item": {
       "signatures": [
         {
-          "label": "f1(p1: string, p2: string, p3?: string, p4?: string): void",
+          "label": "f1(p1: string, p2: string | null, p3?: string | undefined, p4?: string | undefined): void",
           "parameters": [
             {
               "label": "p1: string",
@@ -106,21 +106,21 @@
               }
             },
             {
-              "label": "p2: string",
+              "label": "p2: string | null",
               "documentation": {
                 "kind": "markdown",
                 "value": "- An optional param\n"
               }
             },
             {
-              "label": "p3?: string",
+              "label": "p3?: string | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "- Another optional param\n"
               }
             },
             {
-              "label": "p4?: string",
+              "label": "p4?: string | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "- An optional param with a default value\n"
@@ -146,7 +146,7 @@
     "item": {
       "signatures": [
         {
-          "label": "f1(p1: string, p2: string, p3?: string, p4?: string): void",
+          "label": "f1(p1: string, p2: string | null, p3?: string | undefined, p4?: string | undefined): void",
           "parameters": [
             {
               "label": "p1: string",
@@ -156,21 +156,21 @@
               }
             },
             {
-              "label": "p2: string",
+              "label": "p2: string | null",
               "documentation": {
                 "kind": "markdown",
                 "value": "- An optional param\n"
               }
             },
             {
-              "label": "p3?: string",
+              "label": "p3?: string | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "- Another optional param\n"
               }
             },
             {
-              "label": "p4?: string",
+              "label": "p4?: string | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "- An optional param with a default value\n"
@@ -196,7 +196,7 @@
     "item": {
       "signatures": [
         {
-          "label": "f1(p1: string, p2: string, p3?: string, p4?: string): void",
+          "label": "f1(p1: string, p2: string | null, p3?: string | undefined, p4?: string | undefined): void",
           "parameters": [
             {
               "label": "p1: string",
@@ -206,21 +206,21 @@
               }
             },
             {
-              "label": "p2: string",
+              "label": "p2: string | null",
               "documentation": {
                 "kind": "markdown",
                 "value": "- An optional param\n"
               }
             },
             {
-              "label": "p3?: string",
+              "label": "p3?: string | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "- Another optional param\n"
               }
             },
             {
-              "label": "p4?: string",
+              "label": "p4?: string | undefined",
               "documentation": {
                 "kind": "markdown",
                 "value": "- An optional param with a default value\n"

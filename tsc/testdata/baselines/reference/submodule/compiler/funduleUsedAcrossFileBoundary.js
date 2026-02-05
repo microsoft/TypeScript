@@ -2,7 +2,7 @@
 
 //// [funduleUsedAcrossFileBoundary_file1.ts]
 declare function Q<T>(value: T): string;
-declare module Q {
+declare namespace Q {
     interface Promise<T> {
         foo: string;
     }
@@ -15,7 +15,9 @@ function promiseWithCancellation<T>(promise: Q.Promise<T>) {
 }
 
 //// [funduleUsedAcrossFileBoundary_file1.js]
+"use strict";
 //// [funduleUsedAcrossFileBoundary_file2.js]
+"use strict";
 function promiseWithCancellation(promise) {
     var deferred = Q.defer(); // used to be an error
 }

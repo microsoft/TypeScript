@@ -9,6 +9,7 @@ foo();
 
 
 //// [functionCall8.js]
+"use strict";
 function foo(a) { }
 foo('foo');
 foo('foo', 'bar');

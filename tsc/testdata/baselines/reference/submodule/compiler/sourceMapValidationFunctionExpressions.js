@@ -10,6 +10,7 @@ greet("Hello");
 var incrGreetings = () => greetings++;
 
 //// [sourceMapValidationFunctionExpressions.js]
+"use strict";
 var greetings = 0;
 var greet = (greeting) => {
     greetings++;

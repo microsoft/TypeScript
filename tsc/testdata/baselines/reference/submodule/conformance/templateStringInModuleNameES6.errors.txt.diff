@@ -1,0 +1,31 @@
+--- old.templateStringInModuleNameES6.errors.txt
++++ new.templateStringInModuleNameES6.errors.txt
+@@= skipped -0, +0 lines =@@
+ templateStringInModuleNameES6.ts(1,1): error TS2304: Cannot find name 'declare'.
+-templateStringInModuleNameES6.ts(1,9): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++templateStringInModuleNameES6.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ templateStringInModuleNameES6.ts(1,16): error TS1443: Module declaration names may only use ' or " quoted strings.
+ templateStringInModuleNameES6.ts(4,1): error TS2304: Cannot find name 'declare'.
+-templateStringInModuleNameES6.ts(4,9): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++templateStringInModuleNameES6.ts(4,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ templateStringInModuleNameES6.ts(4,16): error TS1443: Module declaration names may only use ' or " quoted strings.
+
+
+@@= skipped -10, +10 lines =@@
+     ~~~~~~~
+ !!! error TS2304: Cannot find name 'declare'.
+             ~~~~~~
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                    ~~~~
+ !!! error TS1443: Module declaration names may only use ' or " quoted strings.
+     }
+@@= skipped -9, +9 lines =@@
+     ~~~~~~~
+ !!! error TS2304: Cannot find name 'declare'.
+             ~~~~~~
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                    ~~~~~~~
+ !!! error TS1443: Module declaration names may only use ' or " quoted strings.
+     }

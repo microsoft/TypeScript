@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/checkJsxChildrenProperty13.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : typeof React
 

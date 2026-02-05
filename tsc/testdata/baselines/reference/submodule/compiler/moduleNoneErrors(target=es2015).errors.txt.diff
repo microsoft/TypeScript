@@ -1,0 +1,11 @@
+--- old.moduleNoneErrors(target=es2015).errors.txt
++++ new.moduleNoneErrors(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5107: Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+ a.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+
+
+-!!! error TS5107: Option 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+ ==== a.ts (1 errors) ====
+     export class Foo {
+         foo: string;

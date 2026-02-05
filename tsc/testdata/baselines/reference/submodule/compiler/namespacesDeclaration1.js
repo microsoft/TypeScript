@@ -1,15 +1,16 @@
 //// [tests/cases/compiler/namespacesDeclaration1.ts] ////
 
 //// [namespacesDeclaration1.ts]
-module M {
+namespace M {
    export namespace N {
-      export module M2 {
+      export namespace M2 {
          export interface I {}
       }
    }
 }
 
 //// [namespacesDeclaration1.js]
+"use strict";
 
 
 //// [namespacesDeclaration1.d.ts]

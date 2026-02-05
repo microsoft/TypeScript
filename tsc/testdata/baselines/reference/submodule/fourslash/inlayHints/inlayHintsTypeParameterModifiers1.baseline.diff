@@ -1,0 +1,22 @@
+--- old.inlayHintsTypeParameterModifiers1.baseline
++++ new.inlayHintsTypeParameterModifiers1.baseline
+@@= skipped -12, +12 lines =@@
+       "value": "const"
+     },
+     {
+-      "value": " "
+-    },
+-    {
+       "value": "T",
+       "location": {},
+     },
+@@= skipped -13, +10 lines =@@
+       "value": "("
+     },
+     {
+-      "value": "a"
++      "value": "a",
++      "location": {},
+     },
+     {
+       "value": ": "

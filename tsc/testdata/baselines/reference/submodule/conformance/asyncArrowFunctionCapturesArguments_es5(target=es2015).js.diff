@@ -1,0 +1,13 @@
+--- old.asyncArrowFunctionCapturesArguments_es5(target=es2015).js
++++ new.asyncArrowFunctionCapturesArguments_es5(target=es2015).js
+@@= skipped -13, +13 lines =@@
+ class C {
+     method() {
+         function other() { }
+-        var fn = () => {
+-            var arguments_1 = arguments;
+-            return __awaiter(this, void 0, void 0, function* () { return yield other.apply(this, arguments_1); });
+-        };
++        var fn = async () => await other.apply(this, arguments);
+     }
+ }

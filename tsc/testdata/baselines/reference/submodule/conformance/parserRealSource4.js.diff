@@ -1,6 +1,6 @@
 --- old.parserRealSource4.js
 +++ new.parserRealSource4.js
-@@= skipped -303, +303 lines =@@
+@@= skipped -304, +304 lines =@@
  var TypeScript;
  (function (TypeScript) {
      class BlockIntrinsics {

@@ -6,5 +6,6 @@ function foo(x:any) {}
 foo(()=>this.window);
 
 //// [topLevelLambda2.js]
+"use strict";
 function foo(x) { }
 foo(() => this.window);

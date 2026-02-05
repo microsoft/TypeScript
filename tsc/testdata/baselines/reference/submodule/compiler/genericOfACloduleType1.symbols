@@ -9,25 +9,25 @@ class G<T>{ bar(x: T) { return x; } }
 >T : Symbol(T, Decl(genericOfACloduleType1.ts, 0, 8))
 >x : Symbol(x, Decl(genericOfACloduleType1.ts, 0, 16))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(genericOfACloduleType1.ts, 0, 37))
 
     export class C { foo() { } }
->C : Symbol(C, Decl(genericOfACloduleType1.ts, 1, 10), Decl(genericOfACloduleType1.ts, 2, 32))
+>C : Symbol(C, Decl(genericOfACloduleType1.ts, 1, 13), Decl(genericOfACloduleType1.ts, 2, 32))
 >foo : Symbol(C.foo, Decl(genericOfACloduleType1.ts, 2, 20))
 
-    export module C {
->C : Symbol(C, Decl(genericOfACloduleType1.ts, 1, 10), Decl(genericOfACloduleType1.ts, 2, 32))
+    export namespace C {
+>C : Symbol(C, Decl(genericOfACloduleType1.ts, 1, 13), Decl(genericOfACloduleType1.ts, 2, 32))
 
         export class X {
->X : Symbol(X, Decl(genericOfACloduleType1.ts, 3, 21))
+>X : Symbol(X, Decl(genericOfACloduleType1.ts, 3, 24))
         }
     }
  
     var g1 = new G<C>();
 >g1 : Symbol(g1, Decl(genericOfACloduleType1.ts, 8, 7))
 >G : Symbol(G, Decl(genericOfACloduleType1.ts, 0, 0))
->C : Symbol(C, Decl(genericOfACloduleType1.ts, 1, 10), Decl(genericOfACloduleType1.ts, 2, 32))
+>C : Symbol(C, Decl(genericOfACloduleType1.ts, 1, 13), Decl(genericOfACloduleType1.ts, 2, 32))
 
     g1.bar(null).foo();
 >g1.bar(null).foo : Symbol(C.foo, Decl(genericOfACloduleType1.ts, 2, 20))
@@ -40,5 +40,5 @@ var g2 = new G<M.C>() // was: error Type reference cannot refer to container 'M.
 >g2 : Symbol(g2, Decl(genericOfACloduleType1.ts, 11, 3))
 >G : Symbol(G, Decl(genericOfACloduleType1.ts, 0, 0))
 >M : Symbol(M, Decl(genericOfACloduleType1.ts, 0, 37))
->C : Symbol(M.C, Decl(genericOfACloduleType1.ts, 1, 10), Decl(genericOfACloduleType1.ts, 2, 32))
+>C : Symbol(M.C, Decl(genericOfACloduleType1.ts, 1, 13), Decl(genericOfACloduleType1.ts, 2, 32))
 

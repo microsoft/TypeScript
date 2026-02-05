@@ -12,6 +12,7 @@ class Foo2 extends Foo {
 }
 
 //// [collisionSuperAndParameter1.js]
+"use strict";
 class Foo {
 }
 class Foo2 extends Foo {

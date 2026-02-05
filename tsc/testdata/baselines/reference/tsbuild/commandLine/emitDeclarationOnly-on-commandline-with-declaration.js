@@ -48,7 +48,7 @@ Output::
 
 Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -156,7 +156,7 @@ export declare const g = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -165,7 +165,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -205,7 +205,7 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -255,7 +255,7 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -264,7 +264,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -317,7 +317,7 @@ export declare const aaa = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -326,7 +326,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -362,69 +362,48 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
 //// [/home/src/workspaces/solution/project1/src/a.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/solution/project1/src/a.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.aaa = exports.a = void 0;
-exports.a = 10;
+export const a = 10;
 const aLocal = 10;
 const aa = 10;
-exports.aaa = 10;
+export const aaa = 10;
 
 //// [/home/src/workspaces/solution/project1/src/b.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/solution/project1/src/b.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-exports.b = 10;
+export const b = 10;
 const bLocal = 10;
 
 //// [/home/src/workspaces/solution/project1/src/c.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/solution/project1/src/c.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-const a_1 = require("./a");
-exports.c = a_1.a;
+import { a } from "./a";
+export const c = a;
 
 //// [/home/src/workspaces/solution/project1/src/d.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/solution/project1/src/d.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.d = void 0;
-const b_1 = require("./b");
-exports.d = b_1.b;
+import { b } from "./b";
+export const d = b;
 
 //// [/home/src/workspaces/solution/project1/src/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/home/src/workspaces/solution/project1/src/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 //// [/home/src/workspaces/solution/project2/src/e.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/solution/project2/src/e.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.e = void 0;
-exports.e = 10;
+export const e = 10;
 
 //// [/home/src/workspaces/solution/project2/src/f.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/solution/project2/src/f.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
-const a_1 = require("../../project1/src/a");
-exports.f = a_1.a;
+import { a } from "../../project1/src/a";
+export const f = a;
 
 //// [/home/src/workspaces/solution/project2/src/g.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/solution/project2/src/g.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.g = void 0;
-const b_1 = require("../../project1/src/b");
-exports.g = b_1.b;
+import { b } from "../../project1/src/b";
+export const g = b;
 
 //// [/home/src/workspaces/solution/project2/src/tsconfig.tsbuildinfo] *rewrite with same content*
 //// [/home/src/workspaces/solution/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -433,7 +412,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -473,7 +452,7 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -513,10 +492,7 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 //// [/home/src/workspaces/solution/project1/src/a.js] *rewrite with same content*
 //// [/home/src/workspaces/solution/project1/src/b.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/solution/project1/src/b.js] *modified* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.b = void 0;
-exports.b = 10;
+export const b = 10;
 const bLocal = 10;
 const alocal = 10;
 
@@ -537,7 +513,7 @@ const alocal = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -546,7 +522,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -596,7 +572,7 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -605,7 +581,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -658,7 +634,7 @@ export declare const aaaaa = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -667,7 +643,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -711,15 +687,12 @@ export declare const aaaaa = 10;
 export declare const a2 = 10;
 
 //// [/home/src/workspaces/solution/project1/src/b.js] *modified* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a2 = exports.aaaaa = exports.b = void 0;
-exports.b = 10;
+export const b = 10;
 const bLocal = 10;
 const alocal = 10;
 const aaaa = 10;
-exports.aaaaa = 10;
-exports.a2 = 10;
+export const aaaaa = 10;
+export const a2 = 10;
 
 //// [/home/src/workspaces/solution/project1/src/c.d.ts] *rewrite with same content*
 //// [/home/src/workspaces/solution/project1/src/c.js] *rewrite with same content*
@@ -738,7 +711,7 @@ exports.a2 = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -747,7 +720,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts

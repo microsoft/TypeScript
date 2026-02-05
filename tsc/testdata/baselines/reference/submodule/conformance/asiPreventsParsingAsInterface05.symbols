@@ -3,7 +3,7 @@
 === asiPreventsParsingAsInterface05.ts ===
 "use strict"
 
-var interface: number;
+var interface: number = 123;
 >interface : Symbol(interface, Decl(asiPreventsParsingAsInterface05.ts, 2, 3))
 
 // 'interface' is a strict mode reserved word, and so it would be permissible

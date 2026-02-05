@@ -1,0 +1,12 @@
+/a.js(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+
+==== /a.js (1 errors) ====
+    const alias = {};
+    module.exports = alias;
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    
+==== /b.js (0 errors) ====
+    import a from "./a";
+    

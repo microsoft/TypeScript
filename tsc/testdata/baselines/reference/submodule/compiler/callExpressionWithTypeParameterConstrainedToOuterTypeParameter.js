@@ -8,5 +8,6 @@ var i: I<string>;
 var y = i(""); // y should be string
 
 //// [callExpressionWithTypeParameterConstrainedToOuterTypeParameter.js]
+"use strict";
 var i;
 var y = i(""); // y should be string

@@ -24,3 +24,4 @@ interface i3 {
 }
 
 //// [collisionRestParameterInterfaceMembers.js]
+"use strict";

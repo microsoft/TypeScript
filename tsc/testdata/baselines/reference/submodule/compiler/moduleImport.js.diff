@@ -1,7 +1,7 @@
 --- old.moduleImport.js
 +++ new.moduleImport.js
-@@= skipped -17, +17 lines =@@
- //// [moduleImport.js]
+@@= skipped -18, +18 lines =@@
+ "use strict";
  var A;
  (function (A) {
 -    var B;

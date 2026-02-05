@@ -1,0 +1,30 @@
+typeArgInference.ts(7,10): error TS2454: Variable 'x' is used before being assigned.
+typeArgInference.ts(9,10): error TS2454: Variable 'x' is used before being assigned.
+typeArgInference.ts(11,10): error TS2454: Variable 'x' is used before being assigned.
+typeArgInference.ts(13,10): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== typeArgInference.ts (4 errors) ====
+    interface I {
+        f<T, U>(a1: { a: T; b: U }[], a2: { a: T; b: U }[]): { c: T; d: U };
+        g<T, U>(...arg: { a: T; b: U }[][]): { c: T; d: U };
+    }
+    var o = { a: 3, b: "test" };
+    var x: I;
+    var t1 = x.f([o], [o]);
+             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var t1: { c: number; d: string }; 
+    var t2 = x.f<number, string>([o], [o]);
+             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var t2: { c: number; d: string }; 
+    var t3 = x.g([o], [o]);
+             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var t3: { c: number; d: string };
+    var t4 = x.g<number, string>([o], [o]);
+             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var t4: { c: number; d: string };
+    

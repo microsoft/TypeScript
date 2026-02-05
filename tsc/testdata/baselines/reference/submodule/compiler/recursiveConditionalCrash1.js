@@ -6,3 +6,4 @@ type C2<T> = [T extends string ? [C2<T>] : never][0];
 
 
 //// [recursiveConditionalCrash1.js]
+"use strict";

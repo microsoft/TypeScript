@@ -1,8 +1,8 @@
 --- old.thisExpressionOfGenericObject.js
 +++ new.thisExpressionOfGenericObject.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [thisExpressionOfGenericObject.js]
+ "use strict";
  class MyClass1 {
 +    obj;
      constructor() {

@@ -6,6 +6,7 @@ interface I {
 }
 
 //// [symbolDeclarationEmit6.js]
+"use strict";
 
 
 //// [symbolDeclarationEmit6.d.ts]

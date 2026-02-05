@@ -11,7 +11,7 @@ interface Container<T> {
     m2: T;
 }
 declare function foo(x: () => Container<Ref<number>>): void;
-let a: () => Container<Ref<string>>;
+declare let a: () => Container<Ref<string>>;
 foo(a);
 
 // Repro for #25498
@@ -27,8 +27,8 @@ const x = ({ [foo.bar]: c }) => undefined;
 
 
 //// [errorElaboration.js]
+"use strict";
 // Repro for #5712
-let a;
 foo(a);
 // Repro for #25498
 function test() {

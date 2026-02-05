@@ -1,0 +1,11 @@
+--- old.paramTagTypeResolution2.types
++++ new.paramTagTypeResolution2.types
+@@= skipped -21, +21 lines =@@
+ >x : (param: number) => void
+ >param : number
+ >param.toFixed() : string
+->param.toFixed : (fractionDigits?: number) => string
++>param.toFixed : (fractionDigits?: number | undefined) => string
+ >param : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string

@@ -31,6 +31,7 @@ class B extends A {
 }
 
 //// [superPropertyAccess_ES6.js]
+"use strict";
 class MyBase {
     getValue() { return 1; }
     get value() { return 1; }

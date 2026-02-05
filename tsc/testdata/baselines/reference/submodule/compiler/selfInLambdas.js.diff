@@ -1,6 +1,6 @@
 --- old.selfInLambdas.js
 +++ new.selfInLambdas.js
-@@= skipped -58, +58 lines =@@
+@@= skipped -59, +59 lines =@@
      }
  };
  class X {

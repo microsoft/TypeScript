@@ -8,6 +8,7 @@ class C {
 }
 
 //// [noImplicitReturnInConstructors.js]
+"use strict";
 class C {
     constructor() {
         return;

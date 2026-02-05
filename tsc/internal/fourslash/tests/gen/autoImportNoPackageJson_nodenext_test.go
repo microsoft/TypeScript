@@ -11,7 +11,8 @@ func TestAutoImportNoPackageJson_nodenext(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @module: node18
+	const content = `// @lib: es5
+// @module: node18
 // @Filename: /node_modules/lit/index.d.cts
 export declare function customElement(name: string): any;
 // @Filename: /a.ts

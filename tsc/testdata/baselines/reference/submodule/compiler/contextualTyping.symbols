@@ -43,8 +43,8 @@ class C1T5 {
     }
 }
 
-// CONTEXT: Module property declaration
-module C2T5 {
+// CONTEXT: Namespace property declaration
+namespace C2T5 {
 >C2T5 : Symbol(C2T5, Decl(contextualTyping.ts, 17, 1))
 
     export var foo: (i: number, s: string) => number = function(i) {
@@ -185,8 +185,8 @@ class C4T5 {
     }
 }
 
-// CONTEXT: Module property assignment
-module C5T5 {
+// CONTEXT: Namespace property assignment
+namespace C5T5 {
 >C5T5 : Symbol(C5T5, Decl(contextualTyping.ts, 62, 1))
 
     export var foo: (i: number, s: string) => string;
@@ -218,7 +218,7 @@ c6t5 = <(n: number) => IFoo>function(n) { return <IFoo>({}) };
 >IFoo : Symbol(IFoo, Decl(contextualTyping.ts, 0, 0))
 
 // CONTEXT: Array index assignment
-var c7t2: IFoo[];
+var c7t2: IFoo[] = [];
 >c7t2 : Symbol(c7t2, Decl(contextualTyping.ts, 77, 3))
 >IFoo : Symbol(IFoo, Decl(contextualTyping.ts, 0, 0))
 

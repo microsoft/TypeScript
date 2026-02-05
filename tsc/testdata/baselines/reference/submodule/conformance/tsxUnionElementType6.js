@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxUnionElementType6.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 function EmptySFC1() {
@@ -27,6 +29,7 @@ let d = <SFC2AndEmptyComp data-prop />;
 
 //// [file.js]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 function EmptySFC1() {

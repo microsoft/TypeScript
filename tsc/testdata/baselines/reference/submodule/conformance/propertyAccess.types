@@ -4,14 +4,14 @@
 class A {
 >A : A
 
-    a: number;
+    a!: number;
 >a : number
 }
 class B extends A {
 >B : B
 >A : A
 
-    b: number;
+    b!: number;
 >b : number
 }
 enum Compass {
@@ -46,7 +46,7 @@ var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East
 >Compass : typeof Compass
 >East : Compass.East
 
-var bothIndex:
+declare var bothIndex:
 >bothIndex : { [n: string]: A; [m: number]: B; }
     {
         [n: string]: A;
@@ -96,10 +96,10 @@ var anyVar: any = {};
 >anyVar : any
 >{} : {}
 
-var stringOrNumber: string | number;
+declare var stringOrNumber: string | number;
 >stringOrNumber : string | number
 
-var someObject: { name: string };
+declare var someObject: { name: string };
 >someObject : { name: string; }
 >name : string
 

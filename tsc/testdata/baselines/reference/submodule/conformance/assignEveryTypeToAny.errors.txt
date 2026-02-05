@@ -1,0 +1,70 @@
+assignEveryTypeToAny.ts(39,5): error TS2454: Variable 'g' is used before being assigned.
+assignEveryTypeToAny.ts(42,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+assignEveryTypeToAny.ts(46,5): error TS2454: Variable 'h' is used before being assigned.
+assignEveryTypeToAny.ts(49,5): error TS2454: Variable 'i' is used before being assigned.
+
+
+==== assignEveryTypeToAny.ts (4 errors) ====
+    // all of these are valid
+    
+    var x: any;
+    
+    x = 1;
+    var a = 2;
+    x = a;
+    
+    x = true;
+    var b = true;
+    x = b;
+    
+    x = "";
+    var c = "";
+    x = c;
+    
+    var d: void;
+    x = d;
+    
+    var e = undefined;
+    x = e;
+    
+    var e2: typeof undefined;
+    x = e2;
+    
+    enum E {
+        A
+    }
+    
+    x = E.A;
+    var f = E.A;
+    x = f;
+    
+    interface I {
+        foo: string;
+    }
+    
+    var g: I;
+    x = g;
+        ~
+!!! error TS2454: Variable 'g' is used before being assigned.
+    
+    class C {
+        bar: string;
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var h: C;
+    x = h;
+        ~
+!!! error TS2454: Variable 'h' is used before being assigned.
+    
+    var i: { (): string };
+    x = i;
+        ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    x = { f() { return 1; } }
+    x = { f<T>(x: T) { return x; } }
+    
+    function j<T>(a: T) {
+        x = a;
+    }

@@ -34,7 +34,7 @@ var r3 = a(1, 2);
 >1 : 1
 >2 : 2
 
-module G {
+namespace G {
 >G : typeof G
 
     interface A<T> {

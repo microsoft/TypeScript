@@ -6,11 +6,11 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource1.ts, 0, 0))
 
-    export module CompilerDiagnostics {
->CompilerDiagnostics : Symbol(CompilerDiagnostics, Decl(parserRealSource1.ts, 5, 19))
+    export namespace CompilerDiagnostics {
+>CompilerDiagnostics : Symbol(CompilerDiagnostics, Decl(parserRealSource1.ts, 5, 22))
 
         export var debug = false;
 >debug : Symbol(debug, Decl(parserRealSource1.ts, 7, 18))
@@ -290,7 +290,7 @@ module TypeScript {
 
         var start = +new Date();
 >start : Symbol(start, Decl(parserRealSource1.ts, 97, 11))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         var result = func();
 >result : Symbol(result, Decl(parserRealSource1.ts, 98, 11))
@@ -298,7 +298,7 @@ module TypeScript {
 
         var end = +new Date();
 >end : Symbol(end, Decl(parserRealSource1.ts, 99, 11))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         logger.log(funcDescription + " completed in " + (end - start) + " msec");
 >logger.log : Symbol(ILogger.log, Decl(parserRealSource1.ts, 43, 25))

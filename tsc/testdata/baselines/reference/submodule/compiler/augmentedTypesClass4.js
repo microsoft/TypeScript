@@ -7,6 +7,7 @@ class c3 { public bar() { } } // error
 
 
 //// [augmentedTypesClass4.js]
+"use strict";
 //// class then class
 class c3 {
     foo() { }

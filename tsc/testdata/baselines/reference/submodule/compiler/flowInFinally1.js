@@ -17,6 +17,7 @@ try {
 }
 
 //// [flowInFinally1.js]
+"use strict";
 class A {
     constructor() { }
     method() { }

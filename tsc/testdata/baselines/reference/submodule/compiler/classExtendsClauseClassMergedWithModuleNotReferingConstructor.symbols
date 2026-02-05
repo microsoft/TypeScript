@@ -7,14 +7,14 @@ class A {
     a: number;
 >a : Symbol(A.a, Decl(classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts, 0, 9))
 }
-module A {
+namespace A {
 >A : Symbol(A, Decl(classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts, 0, 0), Decl(classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts, 2, 1))
 
     export var v: string;
 >v : Symbol(v, Decl(classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts, 4, 14))
 }
 
-module Foo {
+namespace Foo {
 >Foo : Symbol(Foo, Decl(classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts, 5, 1))
 
     var A = 1;

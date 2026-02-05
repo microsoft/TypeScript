@@ -48,6 +48,7 @@ var a4: (x?: number, y?: string, ...z: number[]) => number;
     a4 = (x: number, ...args: string[]) => 1;  // error, rest params have type mismatch
 
 //// [assignmentCompatWithCallSignaturesWithRestParameters.js]
+"use strict";
 // call signatures in derived types must have the same or fewer optional parameters as the target for assignment
 var a; // ok, same number of required params
 a = () => 1; // ok, same number of required params

@@ -3,26 +3,26 @@
 === arrayconcat.ts ===
 interface IOptions {
     name?: string;
->name : string
+>name : string | undefined
 
     flag?: boolean;
->flag : boolean
+>flag : boolean | undefined
 
     short?: string;
->short : string
+>short : string | undefined
 
     usage?: string;
->usage : string
+>usage : string | undefined
 
     set?: (s: string) => void;
->set : (s: string) => void
+>set : ((s: string) => void) | undefined
 >s : string
 
     type?: string;
->type : string
+>type : string | undefined
 
     experimental?: boolean;
->experimental : boolean
+>experimental : boolean | undefined
 }
 
 class parser {
@@ -40,11 +40,11 @@ class parser {
 >this : this
 >options : IOptions[]
 >this.options.sort(function(a, b) {            var aName = a.name.toLowerCase();            var bName = b.name.toLowerCase();            if (aName > bName) {                return 1;            } else if (aName < bName) {                return -1;            } else {                return 0;            }        }) : IOptions[]
->this.options.sort : (compareFn?: (a: IOptions, b: IOptions) => number) => IOptions[]
+>this.options.sort : (compareFn?: ((a: IOptions, b: IOptions) => number) | undefined) => IOptions[]
 >this.options : IOptions[]
 >this : this
 >options : IOptions[]
->sort : (compareFn?: (a: IOptions, b: IOptions) => number) => IOptions[]
+>sort : (compareFn?: ((a: IOptions, b: IOptions) => number) | undefined) => IOptions[]
 >function(a, b) {            var aName = a.name.toLowerCase();            var bName = b.name.toLowerCase();            if (aName > bName) {                return 1;            } else if (aName < bName) {                return -1;            } else {                return 0;            }        } : (a: IOptions, b: IOptions) => -1 | 0 | 1
 >a : IOptions
 >b : IOptions
@@ -53,18 +53,18 @@ class parser {
 >aName : string
 >a.name.toLowerCase() : string
 >a.name.toLowerCase : () => string
->a.name : string
+>a.name : string | undefined
 >a : IOptions
->name : string
+>name : string | undefined
 >toLowerCase : () => string
 
             var bName = b.name.toLowerCase();
 >bName : string
 >b.name.toLowerCase() : string
 >b.name.toLowerCase : () => string
->b.name : string
+>b.name : string | undefined
 >b : IOptions
->name : string
+>name : string | undefined
 >toLowerCase : () => string
 
             if (aName > bName) {

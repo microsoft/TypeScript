@@ -1,0 +1,18 @@
+importUsedInExtendsList1_1.ts(5,17): error TS2454: Variable 's' is used before being assigned.
+importUsedInExtendsList1_require.ts(1,22): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+
+
+==== importUsedInExtendsList1_1.ts (1 errors) ====
+    ///<reference path='importUsedInExtendsList1_require.ts'/>
+    import foo = require('./importUsedInExtendsList1_require');
+    class Sub extends foo.Super { }
+    var s: Sub;
+    var r: string = s.foo;
+                    ~
+!!! error TS2454: Variable 's' is used before being assigned.
+    
+==== importUsedInExtendsList1_require.ts (1 errors) ====
+    export class Super { foo: string; }
+                         ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    

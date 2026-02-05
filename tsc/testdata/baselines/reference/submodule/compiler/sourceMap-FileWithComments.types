@@ -8,7 +8,7 @@ interface IPoint {
 }
 
 // Module
-module Shapes {
+namespace Shapes {
 >Shapes : typeof Shapes
 
     // Class

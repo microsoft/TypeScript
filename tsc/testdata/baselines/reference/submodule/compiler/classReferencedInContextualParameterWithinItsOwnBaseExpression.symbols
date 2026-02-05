@@ -96,7 +96,7 @@ export class A extends Class<A>("A")(
 >pretty : Symbol(pretty, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 33, 3))
 >a : Symbol(a, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 34, 13))
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(classReferencedInContextualParameterWithinItsOwnBaseExpression.ts, 34, 13))
 

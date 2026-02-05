@@ -1,0 +1,12 @@
+--- old.sourceMapValidationVarInDownLevelGenerator(target=es2015).errors.txt
++++ new.sourceMapValidationVarInDownLevelGenerator(target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-
+-
+-!!! error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+-==== sourceMapValidationVarInDownLevelGenerator.ts (0 errors) ====
+-    function * f() {
+-        var x = 1, y;
+-    }
++<no content>

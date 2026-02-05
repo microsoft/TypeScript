@@ -8,6 +8,7 @@ function f({} = a, [] = a, { p: {} = a} = a) {
 }
 
 //// [declarationEmitBindingPatterns.js]
+"use strict";
 const k = ({ x: z = 'y' }) => { };
 var a;
 function f({} = a, [] = a, { p: {} = a } = a) {

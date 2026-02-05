@@ -49,6 +49,7 @@ class Other extends Doing {
 
 
 //// [superCallInStaticMethod.js]
+"use strict";
 class Doing {
     static staticMethod() {
     }

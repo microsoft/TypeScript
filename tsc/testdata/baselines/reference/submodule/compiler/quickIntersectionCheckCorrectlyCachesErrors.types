@@ -3,8 +3,8 @@
 === quickIntersectionCheckCorrectlyCachesErrors.tsx ===
 interface F<P> {
     (props: P & { children?: boolean }): void;
->props : P & { children?: boolean; }
->children : boolean
+>props : P & { children?: boolean | undefined; }
+>children : boolean | undefined
 
     propTypes: { [K in keyof P]: null extends P ? K : K };
 >propTypes : { [K in keyof P]: null extends P ? K : K; }

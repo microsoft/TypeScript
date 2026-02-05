@@ -1,8 +1,8 @@
 --- old.propertiesAndIndexersForNumericNames.js
 +++ new.propertiesAndIndexersForNumericNames.js
-@@= skipped -45, +45 lines =@@
-
+@@= skipped -46, +46 lines =@@
  //// [propertiesAndIndexersForNumericNames.js]
+ "use strict";
  class C {
 -    constructor() {
 -        // These all have numeric names; they should error

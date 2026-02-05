@@ -10,6 +10,7 @@ declare var a;
 
 
 //// [forStatementInnerComments.js]
+"use strict";
 /*0*/ for /*1*/ ( /*2*/var /*3*/ x /*4*/ in /*5*/ a /*6*/) /*7*/ { }
 /*0*/ for /*1*/ ( /*2*/var /*3*/ y /*4*/ of /*5*/ a /*6*/) /*7*/ { }
 /*0*/ for /*1*/ ( /*2*/x /*3*/ in /*4*/ a /*5*/) /*6*/ { }

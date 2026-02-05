@@ -17,7 +17,7 @@ class B extends A {
   try {
   }
   catch (e) {
->e : any
+>e : unknown
 
    super.m();
 >super.m() : void

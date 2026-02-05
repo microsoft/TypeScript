@@ -1,0 +1,20 @@
+--- old.esnextSharedMemory.types
++++ new.esnextSharedMemory.types
+@@= skipped -2, +2 lines =@@
+ === esnextSharedMemory.ts ===
+ Atomics.pause();
+ >Atomics.pause() : void
+->Atomics.pause : (n?: number) => void
++>Atomics.pause : (n?: number | undefined) => void
+ >Atomics : Atomics
+->pause : (n?: number) => void
++>pause : (n?: number | undefined) => void
+
+ Atomics.pause(1);
+ >Atomics.pause(1) : void
+->Atomics.pause : (n?: number) => void
++>Atomics.pause : (n?: number | undefined) => void
+ >Atomics : Atomics
+->pause : (n?: number) => void
++>pause : (n?: number | undefined) => void
+ >1 : 1

@@ -3,7 +3,7 @@
 === optionalPropertiesInClasses.ts ===
 interface ifoo {
 	x?:number;
->x : number
+>x : number | undefined
 
 	y:number;
 >y : number

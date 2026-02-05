@@ -1,6 +1,6 @@
 --- old.negateOperatorWithAnyOtherType.js
 +++ new.negateOperatorWithAnyOtherType.js
-@@= skipped -66, +66 lines =@@
+@@= skipped -67, +67 lines =@@
      return a;
  }
  class A {

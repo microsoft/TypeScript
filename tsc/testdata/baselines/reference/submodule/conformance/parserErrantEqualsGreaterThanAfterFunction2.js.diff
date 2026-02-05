@@ -1,8 +1,8 @@
 --- old.parserErrantEqualsGreaterThanAfterFunction2.js
 +++ new.parserErrantEqualsGreaterThanAfterFunction2.js
-@@= skipped -3, +3 lines =@@
- function f(p: A) => p;
+@@= skipped -4, +4 lines =@@
 
  //// [parserErrantEqualsGreaterThanAfterFunction2.js]
+ "use strict";
 +function f(p) { }
  p;

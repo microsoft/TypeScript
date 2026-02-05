@@ -85,6 +85,7 @@ class C {
 
 
 //// [esDecorators-classExpression-commentPreservation.js]
+"use strict";
 /*1*/
 (
 /*2*/

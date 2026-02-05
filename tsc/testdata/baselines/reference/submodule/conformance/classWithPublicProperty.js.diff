@@ -1,8 +1,8 @@
 --- old.classWithPublicProperty.js
 +++ new.classWithPublicProperty.js
-@@= skipped -24, +24 lines =@@
-
+@@= skipped -25, +25 lines =@@
  //// [classWithPublicProperty.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.a = '';

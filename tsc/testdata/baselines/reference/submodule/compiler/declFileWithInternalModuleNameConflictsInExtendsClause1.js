@@ -1,18 +1,19 @@
 //// [tests/cases/compiler/declFileWithInternalModuleNameConflictsInExtendsClause1.ts] ////
 
 //// [declFileWithInternalModuleNameConflictsInExtendsClause1.ts]
-module X.A.C {
+namespace X.A.C {
     export interface Z {
     }
 }
-module X.A.B.C {
-    module A {
+namespace X.A.B.C {
+    namespace A {
     }
     export class W implements X.A.C.Z { // This needs to be referred as X.A.C.Z as A has conflict
     }
 }
 
 //// [declFileWithInternalModuleNameConflictsInExtendsClause1.js]
+"use strict";
 var X;
 (function (X) {
     let A;

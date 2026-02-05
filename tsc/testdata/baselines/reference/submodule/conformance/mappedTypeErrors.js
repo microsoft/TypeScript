@@ -110,6 +110,9 @@ setState(foo, { c: true });  // Error
 
 class C<T> {
     state: T;
+    constructor(initialState: T) {
+        this.state = initialState;
+    }
     setState<K extends keyof T>(props: Pick<T, K>) {
         for (let k in props) {
             this.state[k] = props[k];
@@ -117,7 +120,7 @@ class C<T> {
     }
 }
 
-let c = new C<Foo>();
+let c = new C<Foo>({ a: "hello", b: 42 });
 c.setState({ a: "test", b: 43 });
 c.setState({ a: "hi" });
 c.setState({ b: undefined });
@@ -157,6 +160,7 @@ function test2<T, K extends keyof T>(obj: Record<K, number>) {
 
 
 //// [mappedTypeErrors.js]
+"use strict";
 function f1(x) {
     let y; // Error
 }
@@ -210,13 +214,16 @@ setState(foo, { a: undefined }); // Error
 setState(foo, { c: true }); // Error
 class C {
     state;
+    constructor(initialState) {
+        this.state = initialState;
+    }
     setState(props) {
         for (let k in props) {
             this.state[k] = props[k];
         }
     }
 }
-let c = new C();
+let c = new C({ a: "hello", b: 42 });
 c.setState({ a: "test", b: 43 });
 c.setState({ a: "hi" });
 c.setState({ b: undefined });
@@ -291,6 +298,7 @@ declare function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>): void
 declare let foo: Foo;
 declare class C<T> {
     state: T;
+    constructor(initialState: T);
     setState<K extends keyof T>(props: Pick<T, K>): void;
 }
 declare let c: C<Foo>;

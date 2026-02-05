@@ -4,5 +4,6 @@
 debugger;
 
 //// [sourceMapValidationDebugger.js]
+"use strict";
 debugger;
 //# sourceMappingURL=sourceMapValidationDebugger.js.map

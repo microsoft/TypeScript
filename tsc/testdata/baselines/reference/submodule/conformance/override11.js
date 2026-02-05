@@ -13,6 +13,7 @@ class Sub extends Base {
 
 
 //// [override11.js]
+"use strict";
 class Base {
     foo = 1;
 }

@@ -33,6 +33,7 @@ interface I4 {
 
 
 //// [circularTypeAliasForUnionWithInterface.js]
+"use strict";
 var v0;
 var v1;
 var v2;

@@ -28,6 +28,7 @@ async function sample2(x?: number) {
 
 
 //// [asyncFunctionsAndStrictNullChecks.js]
+"use strict";
 async function sample(promise) {
     var number = await promise;
 }

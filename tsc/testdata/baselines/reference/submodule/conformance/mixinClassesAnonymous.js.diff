@@ -1,8 +1,8 @@
 --- old.mixinClassesAnonymous.js
 +++ new.mixinClassesAnonymous.js
-@@= skipped -68, +68 lines =@@
-
+@@= skipped -69, +69 lines =@@
  //// [mixinClassesAnonymous.js]
+ "use strict";
  class Base {
 +    x;
 +    y;

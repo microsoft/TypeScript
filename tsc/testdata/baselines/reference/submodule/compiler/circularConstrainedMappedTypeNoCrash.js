@@ -6,3 +6,4 @@ type Loop<T, U extends Loop<T, U>> = {
 };
 
 //// [circularConstrainedMappedTypeNoCrash.js]
+"use strict";

@@ -17,6 +17,7 @@ foo.then((x) => {
 
 
 //// [propagationOfPromiseInitialization.js]
+"use strict";
 var foo;
 foo.then((x) => {
     // x is inferred to be a number

@@ -15,6 +15,7 @@ s >= 0;
 (s || 0) >= s;
 
 //// [symbolType8.js]
+"use strict";
 var s = Symbol.for("compare");
 s < s;
 s < 0;

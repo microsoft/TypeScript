@@ -5,7 +5,7 @@ type Params = {
 >Params : Params
 
   value?: string | number
->value : string | number
+>value : string | number | undefined
 }
 
 function example(parameters: Params) {

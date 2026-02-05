@@ -44,6 +44,7 @@ let shim: typeof import("foo2") = {
 
 
 //// [importTypeAmbient.js]
+"use strict";
 const x = { x: 0, y: 0 };
 let y = { a: "", b: 0 };
 class Bar2 {

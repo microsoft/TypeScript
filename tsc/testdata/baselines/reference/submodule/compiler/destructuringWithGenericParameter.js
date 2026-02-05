@@ -17,6 +17,7 @@ genericFunction(genericObject, ({greeting}) => {
 
 
 //// [destructuringWithGenericParameter.js]
+"use strict";
 class GenericClass {
     payload;
 }

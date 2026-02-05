@@ -4,4 +4,5 @@
 [{},]
 
 //// [emptyExpr.js]
+"use strict";
 [{},];

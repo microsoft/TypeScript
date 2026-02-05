@@ -1,0 +1,23 @@
+--- old.generatorTransformFinalLabel(target=es2015).js
++++ new.generatorTransformFinalLabel(target=es2015).js
+@@= skipped -11, +11 lines =@@
+
+ //// [generatorTransformFinalLabel.js]
+ "use strict";
+-function test(skip) {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        if (!skip) {
+-            yield 1;
+-        }
+-        else {
+-            throw Error('test');
+-        }
+-    });
++async function test(skip) {
++    if (!skip) {
++        await 1;
++    }
++    else {
++        throw Error('test');
++    }
+ }

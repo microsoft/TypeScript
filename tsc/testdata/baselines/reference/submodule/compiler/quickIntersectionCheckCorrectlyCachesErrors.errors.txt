@@ -1,7 +1,12 @@
+quickIntersectionCheckCorrectlyCachesErrors.tsx(9,15): error TS2345: Argument of type 'F<CP>' is not assignable to parameter of type 'F<unknown>'.
+  Types of parameters 'props' and 'props' are incompatible.
+    Type '{ children?: boolean | undefined; }' is not assignable to type 'CP & { children?: boolean | undefined; }'.
+      Type '{ children?: boolean | undefined; }' is not assignable to type 'CP'.
+        'CP' could be instantiated with an arbitrary type which could be unrelated to '{ children?: boolean | undefined; }'.
 quickIntersectionCheckCorrectlyCachesErrors.tsx(10,21): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
 
 
-==== quickIntersectionCheckCorrectlyCachesErrors.tsx (1 errors) ====
+==== quickIntersectionCheckCorrectlyCachesErrors.tsx (2 errors) ====
     interface F<P> {
         (props: P & { children?: boolean }): void;
         propTypes: { [K in keyof P]: null extends P ? K : K };
@@ -11,6 +16,12 @@ quickIntersectionCheckCorrectlyCachesErrors.tsx(10,21): error TS2874: This JSX t
         class WU {
             m() {
                 g(CC)
+                  ~~
+!!! error TS2345: Argument of type 'F<CP>' is not assignable to parameter of type 'F<unknown>'.
+!!! error TS2345:   Types of parameters 'props' and 'props' are incompatible.
+!!! error TS2345:     Type '{ children?: boolean | undefined; }' is not assignable to type 'CP & { children?: boolean | undefined; }'.
+!!! error TS2345:       Type '{ children?: boolean | undefined; }' is not assignable to type 'CP'.
+!!! error TS2345:         'CP' could be instantiated with an arbitrary type which could be unrelated to '{ children?: boolean | undefined; }'.
                 return <CC {...(null as unknown as CP)} />;
                         ~~
 !!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.

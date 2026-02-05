@@ -11,6 +11,7 @@ class Foo {
 
 
 //// [propertyOrdering2.js]
+"use strict";
 class Foo {
     x;
     constructor(x, y) {

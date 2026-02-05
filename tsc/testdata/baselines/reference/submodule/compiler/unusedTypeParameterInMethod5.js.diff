@@ -1,8 +1,8 @@
 --- old.unusedTypeParameterInMethod5.js
 +++ new.unusedTypeParameterInMethod5.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
  //// [unusedTypeParameterInMethod5.js]
+ "use strict";
  class A {
 -    constructor() {
 -        this.f1 = function () {

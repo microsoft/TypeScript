@@ -1,0 +1,11 @@
+--- old.callbackTag1.types
++++ new.callbackTag1.types
+@@= skipped -21, +21 lines =@@
+ /** @type {NoReturn} */
+ var noreturn = obj => void obj.title
+ >noreturn : NoReturn
+->obj => void obj.title : (obj: { e: number; m: number; title: string; }) => any
++>obj => void obj.title : (obj: { e: number; m: number; title: string; }) => undefined
+ >obj : { e: number; m: number; title: string; }
+ >void obj.title : undefined
+ >obj.title : string

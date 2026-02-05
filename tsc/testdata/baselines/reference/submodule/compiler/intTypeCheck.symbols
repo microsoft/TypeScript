@@ -220,8 +220,8 @@ var anyVar: any;
 //
 // Property signatures
 //
-var obj0: i1;
->obj0 : Symbol(obj0, Decl(intTypeCheck.ts, 91, 3))
+declare var obj0: i1;
+>obj0 : Symbol(obj0, Decl(intTypeCheck.ts, 91, 11))
 >i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
 
 var obj1: i1 = {
@@ -252,7 +252,7 @@ var obj2: i1 = new Object();
 var obj3: i1 = new obj0;
 >obj3 : Symbol(obj3, Decl(intTypeCheck.ts, 99, 3))
 >i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
->obj0 : Symbol(obj0, Decl(intTypeCheck.ts, 91, 3))
+>obj0 : Symbol(obj0, Decl(intTypeCheck.ts, 91, 11))
 
 var obj4: i1 = new Base;
 >obj4 : Symbol(obj4, Decl(intTypeCheck.ts, 100, 3))
@@ -286,8 +286,8 @@ var obj10: i1 = new {};
 //
 // Call signatures
 //
-var obj11: i2;
->obj11 : Symbol(obj11, Decl(intTypeCheck.ts, 110, 3))
+declare var obj11: i2;
+>obj11 : Symbol(obj11, Decl(intTypeCheck.ts, 110, 11))
 >i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
 
 var obj12: i2 = {};
@@ -302,7 +302,7 @@ var obj13: i2 = new Object();
 var obj14: i2 = new obj11;
 >obj14 : Symbol(obj14, Decl(intTypeCheck.ts, 113, 3))
 >i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
->obj11 : Symbol(obj11, Decl(intTypeCheck.ts, 110, 3))
+>obj11 : Symbol(obj11, Decl(intTypeCheck.ts, 110, 11))
 
 var obj15: i2 = new Base;
 >obj15 : Symbol(obj15, Decl(intTypeCheck.ts, 114, 3))
@@ -336,8 +336,8 @@ var obj21: i2 = new {};
 //
 // Construct Signatures
 //
-var obj22: i3;
->obj22 : Symbol(obj22, Decl(intTypeCheck.ts, 124, 3))
+declare var obj22: i3;
+>obj22 : Symbol(obj22, Decl(intTypeCheck.ts, 124, 11))
 >i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
 
 var obj23: i3 = {};
@@ -352,7 +352,7 @@ var obj24: i3 = new Object();
 var obj25: i3 = new obj22;
 >obj25 : Symbol(obj25, Decl(intTypeCheck.ts, 127, 3))
 >i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
->obj22 : Symbol(obj22, Decl(intTypeCheck.ts, 124, 3))
+>obj22 : Symbol(obj22, Decl(intTypeCheck.ts, 124, 11))
 
 var obj26: i3 = new Base;
 >obj26 : Symbol(obj26, Decl(intTypeCheck.ts, 128, 3))
@@ -386,8 +386,8 @@ var obj32: i3 = new {};
 //
 // Index Signatures
 //
-var obj33: i4;
->obj33 : Symbol(obj33, Decl(intTypeCheck.ts, 138, 3))
+declare var obj33: i4;
+>obj33 : Symbol(obj33, Decl(intTypeCheck.ts, 138, 11))
 >i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
 
 var obj34: i4 = {};
@@ -402,7 +402,7 @@ var obj35: i4 = new Object();
 var obj36: i4 = new obj33;
 >obj36 : Symbol(obj36, Decl(intTypeCheck.ts, 141, 3))
 >i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
->obj33 : Symbol(obj33, Decl(intTypeCheck.ts, 138, 3))
+>obj33 : Symbol(obj33, Decl(intTypeCheck.ts, 138, 11))
 
 var obj37: i4 = new Base;
 >obj37 : Symbol(obj37, Decl(intTypeCheck.ts, 142, 3))
@@ -436,8 +436,8 @@ var obj43: i4 = new {};
 //
 // Interface Derived I1
 //
-var obj44: i5;
->obj44 : Symbol(obj44, Decl(intTypeCheck.ts, 152, 3))
+declare var obj44: i5;
+>obj44 : Symbol(obj44, Decl(intTypeCheck.ts, 152, 11))
 >i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
 
 var obj45: i5 = {};
@@ -452,7 +452,7 @@ var obj46: i5 = new Object();
 var obj47: i5 = new obj44;
 >obj47 : Symbol(obj47, Decl(intTypeCheck.ts, 155, 3))
 >i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
->obj44 : Symbol(obj44, Decl(intTypeCheck.ts, 152, 3))
+>obj44 : Symbol(obj44, Decl(intTypeCheck.ts, 152, 11))
 
 var obj48: i5 = new Base;
 >obj48 : Symbol(obj48, Decl(intTypeCheck.ts, 156, 3))
@@ -486,8 +486,8 @@ var obj54: i5 = new {};
 //
 // Interface Derived I2
 //
-var obj55: i6;
->obj55 : Symbol(obj55, Decl(intTypeCheck.ts, 166, 3))
+declare var obj55: i6;
+>obj55 : Symbol(obj55, Decl(intTypeCheck.ts, 166, 11))
 >i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
 
 var obj56: i6 = {};
@@ -502,7 +502,7 @@ var obj57: i6 = new Object();
 var obj58: i6 = new obj55;
 >obj58 : Symbol(obj58, Decl(intTypeCheck.ts, 169, 3))
 >i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
->obj55 : Symbol(obj55, Decl(intTypeCheck.ts, 166, 3))
+>obj55 : Symbol(obj55, Decl(intTypeCheck.ts, 166, 11))
 
 var obj59: i6 = new Base;
 >obj59 : Symbol(obj59, Decl(intTypeCheck.ts, 170, 3))
@@ -536,8 +536,8 @@ var obj65: i6 = new {};
 //
 // Interface Derived I3
 //
-var obj66: i7;
->obj66 : Symbol(obj66, Decl(intTypeCheck.ts, 180, 3))
+declare var obj66: i7;
+>obj66 : Symbol(obj66, Decl(intTypeCheck.ts, 180, 11))
 >i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
 
 var obj67: i7 = {};
@@ -552,7 +552,7 @@ var obj68: i7 = new Object();
 var obj69: i7 = new obj66;
 >obj69 : Symbol(obj69, Decl(intTypeCheck.ts, 183, 3))
 >i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
->obj66 : Symbol(obj66, Decl(intTypeCheck.ts, 180, 3))
+>obj66 : Symbol(obj66, Decl(intTypeCheck.ts, 180, 11))
 
 var obj70: i7 = <i7>new Base;
 >obj70 : Symbol(obj70, Decl(intTypeCheck.ts, 184, 3))
@@ -587,8 +587,8 @@ var obj76: i7 = new {};
 //
 // Interface Derived I4
 //
-var obj77: i8;
->obj77 : Symbol(obj77, Decl(intTypeCheck.ts, 194, 3))
+declare var obj77: i8;
+>obj77 : Symbol(obj77, Decl(intTypeCheck.ts, 194, 11))
 >i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
 
 var obj78: i8 = {};
@@ -603,7 +603,7 @@ var obj79: i8 = new Object();
 var obj80: i8 = new obj77;
 >obj80 : Symbol(obj80, Decl(intTypeCheck.ts, 197, 3))
 >i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
->obj77 : Symbol(obj77, Decl(intTypeCheck.ts, 194, 3))
+>obj77 : Symbol(obj77, Decl(intTypeCheck.ts, 194, 11))
 
 var obj81: i8 = new Base;
 >obj81 : Symbol(obj81, Decl(intTypeCheck.ts, 198, 3))

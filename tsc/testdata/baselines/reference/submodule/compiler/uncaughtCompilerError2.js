@@ -7,6 +7,7 @@ function getObj() {
 
 
 //// [uncaughtCompilerError2.js]
+"use strict";
 function getObj() {
     ().toString();
 }

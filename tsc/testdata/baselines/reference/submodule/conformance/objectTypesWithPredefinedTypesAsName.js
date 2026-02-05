@@ -16,6 +16,7 @@ class string { }
 
 
 //// [objectTypesWithPredefinedTypesAsName.js]
+"use strict";
 // it is an error to use a predefined type as a type name
 class any {
 }

@@ -21,6 +21,7 @@ class Recursive3 {
 
 
 //// [recursiveFieldSetting.js]
+"use strict";
 // #32721
 class Recursive1 {
     parent;

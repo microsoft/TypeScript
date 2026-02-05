@@ -1,6 +1,6 @@
 --- old.jsDeclarationsTypedefPropertyAndExportAssignment.js
 +++ new.jsDeclarationsTypedefPropertyAndExportAssignment.js
-@@= skipped -101, +101 lines =@@
+@@= skipped -103, +103 lines =@@
 
 
  //// [module.d.ts]

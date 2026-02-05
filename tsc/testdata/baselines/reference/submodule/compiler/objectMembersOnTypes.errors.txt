@@ -1,0 +1,21 @@
+objectMembersOnTypes.ts(4,1): error TS2454: Variable 'x' is used before being assigned.
+objectMembersOnTypes.ts(6,1): error TS2454: Variable 'i' is used before being assigned.
+objectMembersOnTypes.ts(8,1): error TS2454: Variable 'c' is used before being assigned.
+
+
+==== objectMembersOnTypes.ts (3 errors) ====
+    interface I {}
+    class AAA implements I { }
+    var x: number;
+    x.toString();
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var i: I;
+    i.toString(); // used to be an error
+    ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    var c: AAA;
+    c.toString(); // used to be an error
+    ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    

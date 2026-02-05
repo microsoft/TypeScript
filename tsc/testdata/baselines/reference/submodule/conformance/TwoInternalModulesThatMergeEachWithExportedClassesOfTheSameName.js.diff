@@ -1,6 +1,6 @@
 --- old.TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.js
 +++ new.TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.js
-@@= skipped -37, +37 lines =@@
+@@= skipped -38, +38 lines =@@
  var A;
  (function (A) {
      class Point {

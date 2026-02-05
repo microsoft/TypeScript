@@ -4,4 +4,5 @@
 new Date<A
 
 //// [parserConstructorAmbiguity2.js]
+"use strict";
 new Date < A;

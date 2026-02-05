@@ -14,6 +14,7 @@
 
 
 //// [parenthesizedExpressionInternalComments.js]
+"use strict";
 /*1*/ ( /*2*/"foo" /*3*/) /*4*/;
 // open
 /*1*/ (

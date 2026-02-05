@@ -19,7 +19,7 @@
 ///<reference path='formatting.ts' />
 
 
-module Formatting {
+namespace Formatting {
     export class Indenter implements ILineIndenationResolver  {
 
         private indentationBag: IndentationBag;
@@ -744,6 +744,7 @@ module Formatting {
 
 
 //// [parserindenter.js]
+"use strict";
 //﻿
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 // 

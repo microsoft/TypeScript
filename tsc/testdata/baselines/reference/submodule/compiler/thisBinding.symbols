@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/thisBinding.ts] ////
 
 === thisBinding.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(thisBinding.ts, 0, 0))
 
     export interface I {
->I : Symbol(I, Decl(thisBinding.ts, 0, 10))
+>I : Symbol(I, Decl(thisBinding.ts, 0, 13))
 
 	z;
 >z : Symbol(I.z, Decl(thisBinding.ts, 1, 24))
@@ -20,7 +20,7 @@ module M {
 	f(x:I) {
 >f : Symbol(C.f, Decl(thisBinding.ts, 6, 12))
 >x : Symbol(x, Decl(thisBinding.ts, 7, 3))
->I : Symbol(I, Decl(thisBinding.ts, 0, 10))
+>I : Symbol(I, Decl(thisBinding.ts, 0, 13))
 
 	    x.e;  // e not found
 >x : Symbol(x, Decl(thisBinding.ts, 7, 3))
@@ -39,7 +39,7 @@ module M {
 >this : Symbol(C, Decl(thisBinding.ts, 3, 5))
 >f : Symbol(C.f, Decl(thisBinding.ts, 6, 12))
 >f : Symbol(f, Decl(thisBinding.ts, 12, 8))
->I : Symbol(I, Decl(thisBinding.ts, 0, 10))
+>I : Symbol(I, Decl(thisBinding.ts, 0, 13))
     }
     }
 }

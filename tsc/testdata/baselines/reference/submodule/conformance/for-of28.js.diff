@@ -1,8 +1,8 @@
 --- old.for-of28.js
 +++ new.for-of28.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [for-of28.js]
+ "use strict";
  class MyStringIterator {
 +    next;
      [Symbol.iterator]() {

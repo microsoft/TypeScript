@@ -1,0 +1,1142 @@
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(2,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(6,12): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(40,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(40,17): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(41,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(41,17): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(42,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(42,17): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(43,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(43,17): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(44,12): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(44,17): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(45,12): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(45,12): error TS2365: Operator '<' cannot be applied to types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base'.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(45,17): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(46,12): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(46,17): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(47,12): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(47,17): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(48,12): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(48,17): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(51,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(51,17): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(52,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(52,17): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(53,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(53,17): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(54,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(54,17): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(55,12): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(55,17): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(56,12): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(56,12): error TS2365: Operator '<' cannot be applied to types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base'.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(56,17): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(57,12): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(57,17): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(58,12): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(58,17): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(59,12): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(59,17): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(63,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(63,17): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(64,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(64,17): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(65,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(65,17): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(66,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(66,17): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(67,12): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(67,17): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(68,12): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(68,12): error TS2365: Operator '>' cannot be applied to types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base'.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(68,17): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(69,12): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(69,17): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(70,12): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(70,17): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(71,12): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(71,17): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(74,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(74,17): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(75,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(75,17): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(76,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(76,17): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(77,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(77,17): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(78,12): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(78,17): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(79,12): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(79,12): error TS2365: Operator '>' cannot be applied to types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base'.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(79,17): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(80,12): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(80,17): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(81,12): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(81,17): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(82,12): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(82,17): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(86,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(86,18): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(87,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(87,18): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(88,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(88,18): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(89,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(89,18): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(90,12): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(90,18): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(91,12): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(91,12): error TS2365: Operator '<=' cannot be applied to types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base'.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(91,18): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(92,12): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(92,18): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(93,12): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(93,18): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(94,12): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(94,18): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(97,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(97,18): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(98,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(98,18): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(99,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(99,18): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(100,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(100,18): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(101,12): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(101,18): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(102,12): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(102,12): error TS2365: Operator '<=' cannot be applied to types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base'.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(102,18): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(103,12): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(103,18): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(104,12): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(104,18): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(105,12): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(105,18): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(109,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(109,18): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(110,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(110,18): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(111,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(111,18): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(112,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(112,18): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(113,12): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(113,18): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(114,12): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(114,12): error TS2365: Operator '>=' cannot be applied to types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base'.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(114,18): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(115,12): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(115,18): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(116,12): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(116,18): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(117,12): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(117,18): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(120,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(120,18): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(121,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(121,18): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(122,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(122,18): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(123,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(123,18): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(124,12): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(124,18): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(125,12): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(125,12): error TS2365: Operator '>=' cannot be applied to types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base'.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(125,18): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(126,12): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(126,18): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(127,12): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(127,18): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(128,12): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(128,18): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(132,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(132,18): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(133,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(133,18): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(134,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(134,18): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(135,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(135,18): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(136,12): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(136,18): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(137,12): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(137,12): error TS2367: This comparison appears to be unintentional because the types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base' have no overlap.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(137,18): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(138,12): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(138,18): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(139,12): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(139,18): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(140,12): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(140,18): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(143,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(143,18): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(144,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(144,18): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(145,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(145,18): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(146,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(146,18): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(147,12): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(147,18): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(148,12): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(148,12): error TS2367: This comparison appears to be unintentional because the types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base' have no overlap.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(148,18): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(149,12): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(149,18): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(150,12): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(150,18): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(151,12): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(151,18): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(155,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(155,18): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(156,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(156,18): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(157,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(157,18): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(158,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(158,18): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(159,12): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(159,18): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(160,12): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(160,12): error TS2367: This comparison appears to be unintentional because the types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base' have no overlap.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(160,18): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(161,12): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(161,18): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(162,12): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(162,18): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(163,12): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(163,18): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(166,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(166,18): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(167,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(167,18): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(168,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(168,18): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(169,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(169,18): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(170,12): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(170,18): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(171,12): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(171,12): error TS2367: This comparison appears to be unintentional because the types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base' have no overlap.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(171,18): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(172,12): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(172,18): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(173,12): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(173,18): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(174,12): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(174,18): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(178,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(178,19): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(179,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(179,19): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(180,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(180,19): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(181,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(181,19): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(182,12): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(182,19): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(183,12): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(183,12): error TS2367: This comparison appears to be unintentional because the types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base' have no overlap.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(183,19): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(184,12): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(184,19): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(185,12): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(185,19): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(186,12): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(186,19): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(189,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(189,19): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(190,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(190,19): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(191,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(191,19): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(192,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(192,19): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(193,12): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(193,19): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(194,12): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(194,12): error TS2367: This comparison appears to be unintentional because the types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base' have no overlap.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(194,19): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(195,12): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(195,19): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(196,12): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(196,19): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(197,12): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(197,19): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(201,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(201,19): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(202,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(202,19): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(203,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(203,19): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(204,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(204,19): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(205,12): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(205,19): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(206,12): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(206,12): error TS2367: This comparison appears to be unintentional because the types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base' have no overlap.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(206,19): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(207,12): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(207,19): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(208,12): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(208,19): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(209,12): error TS2454: Variable 'a9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(209,19): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(212,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(212,19): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(213,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(213,19): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(214,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(214,19): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(215,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(215,19): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(216,12): error TS2454: Variable 'b5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(216,19): error TS2454: Variable 'a5' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(217,12): error TS2454: Variable 'b6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(217,12): error TS2367: This comparison appears to be unintentional because the types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base' have no overlap.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(217,19): error TS2454: Variable 'a6' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(218,12): error TS2454: Variable 'b7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(218,19): error TS2454: Variable 'a7' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(219,12): error TS2454: Variable 'b8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(219,19): error TS2454: Variable 'a8' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(220,12): error TS2454: Variable 'b9' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts(220,19): error TS2454: Variable 'a9' is used before being assigned.
+
+
+==== comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts (306 errors) ====
+    class Base {
+        public a: string;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class Derived extends Base {
+        public b: string;
+               ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var a1: { new (): Base };
+    var b1: { new (): Base };
+    
+    var a2: { new (a: number, b: string): Base };
+    var b2: { new (a: number, b: string): Base };
+    
+    var a3: { new (a: number, b: string): Base };
+    var b3: { new (a: number): Base };
+    
+    var a4: { new (a: number, b: string): Base };
+    var b4: { new (): Base };
+    
+    var a5: { new (a: Base): Base };
+    var b5: { new (a: Derived): Base };
+    
+    var a6: { new (a: Derived, b: Base): Base };
+    var b6: { new (a: Base, b: Derived): Base };
+    
+    var a7: { new (): Base };
+    var b7: { new (): Derived };
+    
+    var a8: { new (a?: Base): Base };
+    var b8: { new (a?: Derived): Base };
+    
+    var a9: { new (...a: Base[]): Base };
+    var b9: { new (...a: Derived[]): Base };
+    
+    //var a10: { <T, U extends T>(t: T, u: U): T[] };
+    //var b10: { <A, B extends A>(a: A, b: B): A[] };
+    
+    // operator <
+    var r1a1 = a1 < b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r1a2 = a2 < b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r1a3 = a3 < b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r1a4 = a4 < b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    var r1a5 = a5 < b5;
+               ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+    var r1a6 = a6 < b6;
+               ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base'.
+                    ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+    var r1a7 = a7 < b7;
+               ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+    var r1a8 = a8 < b8;
+               ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+    var r1a9 = a9 < b9;
+               ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+    //var r1a10 = a10 < b10;
+    
+    var r1b1 = b1 < a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r1b2 = b2 < a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r1b3 = b3 < a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r1b4 = b4 < a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    var r1b5 = b5 < a5;
+               ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+    var r1b6 = b6 < a6;
+               ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base'.
+                    ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+    var r1b7 = b7 < a7;
+               ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+    var r1b8 = b8 < a8;
+               ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+    var r1b9 = b9 < a9;
+               ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+    //var r1b10 = b10 < a10;
+    
+    // operator >
+    var r2a1 = a1 > b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r2a2 = a2 > b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r2a3 = a3 > b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r2a4 = a4 > b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    var r2a5 = a5 > b5;
+               ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+    var r2a6 = a6 > b6;
+               ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base'.
+                    ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+    var r2a7 = a7 > b7;
+               ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+    var r2a8 = a8 > b8;
+               ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+    var r2a9 = a9 > b9;
+               ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+    //var r2a10 = a10 > b10;
+    
+    var r2b1 = b1 > a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r2b2 = b2 > a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r2b3 = b3 > a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r2b4 = b4 > a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    var r2b5 = b5 > a5;
+               ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+    var r2b6 = b6 > a6;
+               ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base'.
+                    ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+    var r2b7 = b7 > a7;
+               ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+    var r2b8 = b8 > a8;
+               ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+    var r2b9 = b9 > a9;
+               ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+    //var r2b10 = b10 > a10;
+    
+    // operator <=
+    var r3a1 = a1 <= b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r3a2 = a2 <= b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r3a3 = a3 <= b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r3a4 = a4 <= b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    var r3a5 = a5 <= b5;
+               ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+    var r3a6 = a6 <= b6;
+               ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base'.
+                     ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+    var r3a7 = a7 <= b7;
+               ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+    var r3a8 = a8 <= b8;
+               ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+    var r3a9 = a9 <= b9;
+               ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+    //var r3a10 = a10 <= b10;
+    
+    var r3b1 = b1 <= a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r3b2 = b2 <= a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r3b3 = b3 <= a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r3b4 = b4 <= a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    var r3b5 = b5 <= a5;
+               ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+    var r3b6 = b6 <= a6;
+               ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base'.
+                     ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+    var r3b7 = b7 <= a7;
+               ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+    var r3b8 = b8 <= a8;
+               ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+    var r3b9 = b9 <= a9;
+               ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+    //var r3b10 = b10 <= a10;
+    
+    // operator >=
+    var r4a1 = a1 >= b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r4a2 = a2 >= b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r4a3 = a3 >= b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r4a4 = a4 >= b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    var r4a5 = a5 >= b5;
+               ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+    var r4a6 = a6 >= b6;
+               ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base'.
+                     ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+    var r4a7 = a7 >= b7;
+               ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+    var r4a8 = a8 >= b8;
+               ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+    var r4a9 = a9 >= b9;
+               ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+    //var r4a10 = a10 >= b10;
+    
+    var r4b1 = b1 >= a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r4b2 = b2 >= a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r4b3 = b3 >= a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r4b4 = b4 >= a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    var r4b5 = b5 >= a5;
+               ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+    var r4b6 = b6 >= a6;
+               ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base'.
+                     ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+    var r4b7 = b7 >= a7;
+               ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+    var r4b8 = b8 >= a8;
+               ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+    var r4b9 = b9 >= a9;
+               ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+    //var r4b10 = b10 >= a10;
+    
+    // operator ==
+    var r5a1 = a1 == b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r5a2 = a2 == b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r5a3 = a3 == b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r5a4 = a4 == b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    var r5a5 = a5 == b5;
+               ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+    var r5a6 = a6 == b6;
+               ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+               ~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base' have no overlap.
+                     ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+    var r5a7 = a7 == b7;
+               ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+    var r5a8 = a8 == b8;
+               ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+    var r5a9 = a9 == b9;
+               ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+    //var r5a10 = a10 == b10;
+    
+    var r5b1 = b1 == a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r5b2 = b2 == a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r5b3 = b3 == a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r5b4 = b4 == a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    var r5b5 = b5 == a5;
+               ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+    var r5b6 = b6 == a6;
+               ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+               ~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base' have no overlap.
+                     ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+    var r5b7 = b7 == a7;
+               ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+    var r5b8 = b8 == a8;
+               ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+    var r5b9 = b9 == a9;
+               ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+    //var r5b10 = b10 == a10;
+    
+    // operator !=
+    var r6a1 = a1 != b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r6a2 = a2 != b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r6a3 = a3 != b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r6a4 = a4 != b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    var r6a5 = a5 != b5;
+               ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+    var r6a6 = a6 != b6;
+               ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+               ~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base' have no overlap.
+                     ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+    var r6a7 = a7 != b7;
+               ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+    var r6a8 = a8 != b8;
+               ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+    var r6a9 = a9 != b9;
+               ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+    //var r6a10 = a10 != b10;
+    
+    var r6b1 = b1 != a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r6b2 = b2 != a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r6b3 = b3 != a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r6b4 = b4 != a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    var r6b5 = b5 != a5;
+               ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+    var r6b6 = b6 != a6;
+               ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+               ~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base' have no overlap.
+                     ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+    var r6b7 = b7 != a7;
+               ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+    var r6b8 = b8 != a8;
+               ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+    var r6b9 = b9 != a9;
+               ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+    //var r6b10 = b10 != a10;
+    
+    // operator ===
+    var r7a1 = a1 === b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r7a2 = a2 === b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r7a3 = a3 === b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r7a4 = a4 === b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    var r7a5 = a5 === b5;
+               ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+    var r7a6 = a6 === b6;
+               ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+               ~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base' have no overlap.
+                      ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+    var r7a7 = a7 === b7;
+               ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+    var r7a8 = a8 === b8;
+               ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+    var r7a9 = a9 === b9;
+               ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+    //var r7a10 = a10 === b10;
+    
+    var r7b1 = b1 === a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r7b2 = b2 === a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r7b3 = b3 === a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r7b4 = b4 === a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    var r7b5 = b5 === a5;
+               ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+    var r7b6 = b6 === a6;
+               ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+               ~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base' have no overlap.
+                      ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+    var r7b7 = b7 === a7;
+               ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+    var r7b8 = b8 === a8;
+               ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+    var r7b9 = b9 === a9;
+               ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+    //var r7b10 = b10 === a10;
+    
+    // operator !==
+    var r8a1 = a1 !== b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r8a2 = a2 !== b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r8a3 = a3 !== b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r8a4 = a4 !== b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    var r8a5 = a5 !== b5;
+               ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+    var r8a6 = a6 !== b6;
+               ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+               ~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: Derived) => Base' have no overlap.
+                      ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+    var r8a7 = a7 !== b7;
+               ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+    var r8a8 = a8 !== b8;
+               ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+    var r8a9 = a9 !== b9;
+               ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+    //var r8a10 = a10 !== b10;
+    
+    var r8b1 = b1 !== a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r8b2 = b2 !== a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r8b3 = b3 !== a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r8b4 = b4 !== a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    var r8b5 = b5 !== a5;
+               ~~
+!!! error TS2454: Variable 'b5' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a5' is used before being assigned.
+    var r8b6 = b6 !== a6;
+               ~~
+!!! error TS2454: Variable 'b6' is used before being assigned.
+               ~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'new (a: Base, b: Derived) => Base' and 'new (a: Derived, b: Base) => Base' have no overlap.
+                      ~~
+!!! error TS2454: Variable 'a6' is used before being assigned.
+    var r8b7 = b7 !== a7;
+               ~~
+!!! error TS2454: Variable 'b7' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a7' is used before being assigned.
+    var r8b8 = b8 !== a8;
+               ~~
+!!! error TS2454: Variable 'b8' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a8' is used before being assigned.
+    var r8b9 = b9 !== a9;
+               ~~
+!!! error TS2454: Variable 'b9' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a9' is used before being assigned.
+    //var r8b10 = b10 !== a10;

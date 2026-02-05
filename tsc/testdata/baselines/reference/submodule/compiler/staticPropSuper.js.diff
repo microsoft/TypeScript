@@ -1,6 +1,6 @@
 --- old.staticPropSuper.js
 +++ new.staticPropSuper.js
-@@= skipped -40, +40 lines =@@
+@@= skipped -41, +41 lines =@@
  class A {
  }
  class B extends A {

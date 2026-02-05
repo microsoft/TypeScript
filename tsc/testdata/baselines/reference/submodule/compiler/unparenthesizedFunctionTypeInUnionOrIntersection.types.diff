@@ -1,11 +1,20 @@
 --- old.unparenthesizedFunctionTypeInUnionOrIntersection.types
 +++ new.unparenthesizedFunctionTypeInUnionOrIntersection.types
-@@= skipped -39, +39 lines =@@
+@@= skipped -11, +11 lines =@@
+ >U3 : () => number
+
+ type U4 = | (foo?: number) => void;
+->U4 : (foo?: number) => void
++>U4 : (foo?: number | undefined) => void
+ >foo : number | undefined
+
+ type U5 = string | (number: number, foo?: string) => void | number;
+@@= skipped -28, +28 lines =@@
  >I3 : () => boolean
 
  type I4 = & () => boolean & null;
 ->I4 : () => boolean & null
-+>I4 : () => null
++>I4 : () => never
 
  type I5 = string & (any: any, any2: any) => any & any;
  >I5 : I5

@@ -1,8 +1,8 @@
 --- old.getAndSetNotIdenticalType2.js
 +++ new.getAndSetNotIdenticalType2.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [getAndSetNotIdenticalType2.js]
+ "use strict";
  class A {
 +    foo;
  }

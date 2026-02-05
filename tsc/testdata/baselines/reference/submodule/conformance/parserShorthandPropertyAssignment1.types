@@ -2,9 +2,9 @@
 
 === parserShorthandPropertyAssignment1.ts ===
 function foo(obj: { name?: string; id: number }) { }
->foo : (obj: { name?: string; id: number; }) => void
->obj : { name?: string; id: number; }
->name : string
+>foo : (obj: { name?: string | undefined; id: number; }) => void
+>obj : { name?: string | undefined; id: number; }
+>name : string | undefined
 >id : number
 
 var name:any, id: any;
@@ -13,7 +13,7 @@ var name:any, id: any;
 
 foo({ name?, id? });
 >foo({ name?, id? }) : void
->foo : (obj: { name?: string; id: number; }) => void
+>foo : (obj: { name?: string | undefined; id: number; }) => void
 >{ name?, id? } : { name: any; id: any; }
 >name : any
 >id : any

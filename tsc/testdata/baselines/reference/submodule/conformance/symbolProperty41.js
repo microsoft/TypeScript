@@ -15,6 +15,7 @@ c[Symbol.iterator]("hello");
 
 
 //// [symbolProperty41.js]
+"use strict";
 class C {
     [Symbol.iterator](x) {
         return undefined;

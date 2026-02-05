@@ -1,0 +1,10 @@
+--- old.declarationEmitClassPrivateConstructor2(target=es2015).js
++++ new.declarationEmitClassPrivateConstructor2(target=es2015).js
+@@= skipped -17, +17 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.ExportedClass2 = exports.ExportedClass1 = void 0;
+ class ExportedClass1 {
++    data;
+     constructor(data) {
+         this.data = data;
+     }

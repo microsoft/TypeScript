@@ -5,7 +5,7 @@
 interface NoParams {
     new <T>();
 }
-var noParams: NoParams;
+declare var noParams: NoParams;
 >noParams : NoParams
 
 new noParams();
@@ -25,7 +25,7 @@ interface noGenericParams {
     new <T>(n: string);
 >n : string
 }
-var noGenericParams: noGenericParams;
+declare var noGenericParams: noGenericParams;
 >noGenericParams : noGenericParams
 
 new noGenericParams('');
@@ -49,7 +49,7 @@ interface someGenerics1 {
 >n : T
 >m : number
 }
-var someGenerics1: someGenerics1;
+declare var someGenerics1: someGenerics1;
 >someGenerics1 : someGenerics1
 
 new someGenerics1(3, 4);
@@ -76,7 +76,7 @@ interface someGenerics2a {
 >n : (x: T) => void
 >x : T
 }
-var someGenerics2a: someGenerics2a;
+declare var someGenerics2a: someGenerics2a;
 >someGenerics2a : someGenerics2a
 
 new someGenerics2a((n: string) => n);
@@ -110,7 +110,7 @@ interface someGenerics2b {
 >x : T
 >y : U
 }
-var someGenerics2b: someGenerics2b;
+declare var someGenerics2b: someGenerics2b;
 >someGenerics2b : someGenerics2b
 
 new someGenerics2b((n: string, x: number) => n);
@@ -148,7 +148,7 @@ interface someGenerics3 {
     new <T>(producer: () => T);
 >producer : () => T
 }
-var someGenerics3: someGenerics3;
+declare var someGenerics3: someGenerics3;
 >someGenerics3 : someGenerics3
 
 new someGenerics3(() => '');
@@ -176,7 +176,7 @@ interface someGenerics4 {
 >f : (x: U) => void
 >x : U
 }
-var someGenerics4: someGenerics4;
+declare var someGenerics4: someGenerics4;
 >someGenerics4 : someGenerics4
 
 new someGenerics4(4, () => null);
@@ -211,7 +211,7 @@ interface someGenerics5 {
 >f : (x: U) => void
 >x : U
 }
-var someGenerics5: someGenerics5;
+declare var someGenerics5: someGenerics5;
 >someGenerics5 : someGenerics5
 
 new someGenerics5(4, () => null);
@@ -249,7 +249,7 @@ interface someGenerics6 {
 >c : (c: A) => A
 >c : A
 }
-var someGenerics6: someGenerics6;
+declare var someGenerics6: someGenerics6;
 >someGenerics6 : someGenerics6
 
 new someGenerics6(n => n, n => n, n => n);
@@ -314,7 +314,7 @@ interface someGenerics7 {
 >c : (c: C) => C
 >c : C
 }
-var someGenerics7: someGenerics7;
+declare var someGenerics7: someGenerics7;
 >someGenerics7 : someGenerics7
 
 new someGenerics7(n => n, n => n, n => n);
@@ -361,7 +361,7 @@ interface someGenerics8 {
     new <T>(n: T): T;
 >n : T
 }
-var someGenerics8: someGenerics8;
+declare var someGenerics8: someGenerics8;
 >someGenerics8 : someGenerics8
 
 var x = new someGenerics8(someGenerics7);
@@ -381,7 +381,7 @@ interface someGenerics9 {
 >b : T
 >c : T
 }
-var someGenerics9: someGenerics9;
+declare var someGenerics9: someGenerics9;
 >someGenerics9 : someGenerics9
 
 var a9a = new someGenerics9('', 0, []);
@@ -392,7 +392,7 @@ var a9a = new someGenerics9('', 0, []);
 >0 : 0
 >[] : undefined[]
 
-var a9a: {};
+declare var a9a: {};
 >a9a : string
 
 var a9b = new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
@@ -408,7 +408,7 @@ var a9b = new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, nu
 >b : string
 >'' : ""
 
-var a9b: { a?: number; b?: string; };
+declare var a9b: { a?: number; b?: string; };
 >a9b : { a?: number; b?: string; }
 >a : number
 >b : string
@@ -444,7 +444,7 @@ var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >y : string
 >'' : ""
 
-var a9e: {};
+declare var a9e: {};
 >a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { z?: undefined; x: number; y: string; }
 
 var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
@@ -463,7 +463,7 @@ var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }
 >y : string
 >'' : ""
 
-var a9f: A92;
+declare var a9f: A92;
 >a9f : A92
 
 // Generic call with multiple parameters of generic type passed arguments with a single best common type
@@ -481,12 +481,12 @@ var a9d = new someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 >x : number
 >6 : 6
 
-var a9d: { x: number; };
+declare var a9d: { x: number; };
 >a9d : { x: number; }
 >x : number
 
 // Generic call with multiple parameters of generic type where one argument is of type 'any'
-var anyVar: any;
+declare var anyVar: any;
 >anyVar : any
 
 var a = new someGenerics9(7, anyVar, 4);
@@ -497,7 +497,7 @@ var a = new someGenerics9(7, anyVar, 4);
 >anyVar : any
 >4 : 4
 
-var a: any;
+declare var a: any;
 >a : any
 
 // Generic call with multiple parameters of generic type where one argument is [] and the other is not 'any'
@@ -508,7 +508,7 @@ var arr = new someGenerics9([], null, undefined);
 >[] : undefined[]
 >undefined : undefined
 
-var arr: any[];
+declare var arr: any[];
 >arr : any[]
 
 

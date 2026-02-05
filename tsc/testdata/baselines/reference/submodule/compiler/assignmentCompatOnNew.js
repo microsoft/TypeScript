@@ -9,6 +9,7 @@ bar(Foo); // Error, but should be allowed
 
 
 //// [assignmentCompatOnNew.js]
+"use strict";
 class Foo {
 }
 ;

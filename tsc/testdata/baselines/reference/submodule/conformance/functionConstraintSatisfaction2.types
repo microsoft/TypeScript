@@ -38,7 +38,7 @@ class C {
 >foo : string
 }
 
-var b: { new (x: string): string };
+declare var b: { new (x: string): string };
 >b : new (x: string) => string
 >x : string
 
@@ -49,7 +49,7 @@ class C2<T> {
 >foo : T
 }
 
-var b2: { new <T>(x: T): T };
+declare var b2: { new <T>(x: T): T };
 >b2 : new <T>(x: T) => T
 >x : T
 
@@ -112,7 +112,7 @@ var r14 = foo2(b2);
 interface F2 extends Function { foo: string; }
 >foo : string
 
-var f2: F2;
+declare var f2: F2;
 >f2 : F2
 
 var r16 = foo2(f2);

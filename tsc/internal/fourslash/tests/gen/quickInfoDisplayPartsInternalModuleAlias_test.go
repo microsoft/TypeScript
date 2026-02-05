@@ -11,11 +11,11 @@ func TestQuickInfoDisplayPartsInternalModuleAlias(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module m.m1 {
+	const content = `namespace m.m1 {
     export class c {
     }
 }
-module m2 {
+namespace m2 {
     import /*1*/a1 = m;
     new /*2*/a1.m1.c();
     import /*3*/a2 = m.m1;

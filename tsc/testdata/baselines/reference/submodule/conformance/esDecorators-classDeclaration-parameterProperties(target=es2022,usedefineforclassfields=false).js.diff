@@ -1,9 +1,9 @@
 --- old.esDecorators-classDeclaration-parameterProperties(target=es2022,usedefineforclassfields=false).js
 +++ new.esDecorators-classDeclaration-parameterProperties(target=es2022,usedefineforclassfields=false).js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
 
  //// [esDecorators-classDeclaration-parameterProperties.js]
+ "use strict";
 -let C = (() => {
 -    let _instanceExtraInitializers = [];
 -    let _speak_decorators;

@@ -7,6 +7,7 @@ function foo([x, ...y] = [1, "string", true]) { }
 
 
 //// [declarationEmitDestructuring3.js]
+"use strict";
 function bar([x, z, ...w]) { }
 function foo([x, ...y] = [1, "string", true]) { }
 

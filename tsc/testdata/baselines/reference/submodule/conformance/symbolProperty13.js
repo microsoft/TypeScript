@@ -19,6 +19,7 @@ var i: I;
 bar(i);
 
 //// [symbolProperty13.js]
+"use strict";
 class C {
     [Symbol.iterator];
 }

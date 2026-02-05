@@ -1,6 +1,6 @@
 --- old.mergedInterfacesWithMultipleBases.js
 +++ new.mergedInterfacesWithMultipleBases.js
-@@= skipped -59, +59 lines =@@
+@@= skipped -60, +60 lines =@@
  // merged interfaces behave as if all extends clauses from each declaration are merged together
  // no errors expected
  class C {

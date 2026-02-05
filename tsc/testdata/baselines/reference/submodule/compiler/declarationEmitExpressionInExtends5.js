@@ -23,6 +23,7 @@ namespace Test
 
 
 //// [declarationEmitExpressionInExtends5.js]
+"use strict";
 var Test;
 (function (Test) {
     class SomeClass {

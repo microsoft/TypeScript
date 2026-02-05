@@ -21,10 +21,10 @@ function attr(map: any): Accessor;
 function attr(nameOrMap: any, value?: string): any {
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
 >nameOrMap : any
->value : string
+>value : string | undefined
 
     if (nameOrMap && typeof nameOrMap === "object") {
->nameOrMap && typeof nameOrMap === "object" : boolean
+>nameOrMap && typeof nameOrMap === "object" : any
 >nameOrMap : any
 >typeof nameOrMap === "object" : boolean
 >typeof nameOrMap : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
@@ -60,10 +60,10 @@ function attr2(map: any): Accessor;
 function attr2(nameOrMap: any, value?: string): string {
 >attr2 : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
 >nameOrMap : any
->value : string
+>value : string | undefined
 
     if (nameOrMap && typeof nameOrMap === "object") {
->nameOrMap && typeof nameOrMap === "object" : boolean
+>nameOrMap && typeof nameOrMap === "object" : any
 >nameOrMap : any
 >typeof nameOrMap === "object" : boolean
 >typeof nameOrMap : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"

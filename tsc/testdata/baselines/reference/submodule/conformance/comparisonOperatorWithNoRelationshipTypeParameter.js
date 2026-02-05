@@ -159,6 +159,7 @@ function foo<T, U>(t: T, u: U) {
 }
 
 //// [comparisonOperatorWithNoRelationshipTypeParameter.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

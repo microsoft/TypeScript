@@ -21,6 +21,7 @@ class C extends Base {
 
 
 //// [esDecorators-classExpression-classSuper.4.js]
+"use strict";
 const method = "method";
 (
 @dec

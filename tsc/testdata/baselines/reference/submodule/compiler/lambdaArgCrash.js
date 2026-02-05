@@ -37,6 +37,7 @@ class ItemSetEvent extends Event {
 
 
 //// [lambdaArgCrash.js]
+"use strict";
 class Event {
     _listeners = [];
     constructor() {

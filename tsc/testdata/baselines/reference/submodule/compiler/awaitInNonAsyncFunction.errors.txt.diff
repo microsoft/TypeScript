@@ -1,6 +1,6 @@
 --- old.awaitInNonAsyncFunction.errors.txt
 +++ new.awaitInNonAsyncFunction.errors.txt
-@@= skipped -44, +44 lines =@@
+@@= skipped -42, +42 lines =@@
        for await (const _ of []);
            ~~~~~
  !!! error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.

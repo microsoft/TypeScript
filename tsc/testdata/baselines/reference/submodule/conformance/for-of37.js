@@ -7,6 +7,7 @@ for (var v of map) {
 }
 
 //// [for-of37.js]
+"use strict";
 var map = new Map([["", true]]);
 for (var v of map) {
     v;

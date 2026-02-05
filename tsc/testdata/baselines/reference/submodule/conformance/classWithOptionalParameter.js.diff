@@ -1,7 +1,7 @@
 --- old.classWithOptionalParameter.js
 +++ new.classWithOptionalParameter.js
-@@= skipped -15, +15 lines =@@
- //// [classWithOptionalParameter.js]
+@@= skipped -16, +16 lines =@@
+ "use strict";
  // classes do not permit optional parameters, these are errors
  class C {
 +    x;

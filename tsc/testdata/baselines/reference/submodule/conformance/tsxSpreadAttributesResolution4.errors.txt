@@ -1,7 +1,9 @@
-file.tsx(32,45): error TS2532: Object is possibly 'undefined'.
+file.tsx(34,45): error TS2532: Object is possibly 'undefined'.
 
 
 ==== file.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react');
     
     interface PoisonedProp {

@@ -2,12 +2,13 @@ gettersAndSettersErrors.ts(2,16): error TS2300: Duplicate identifier 'Foo'.
 gettersAndSettersErrors.ts(3,16): error TS2300: Duplicate identifier 'Foo'.
 gettersAndSettersErrors.ts(5,12): error TS2300: Duplicate identifier 'Foo'.
 gettersAndSettersErrors.ts(6,16): error TS1054: A 'get' accessor cannot have parameters.
+gettersAndSettersErrors.ts(6,38): error TS2322: Type 'null' is not assignable to type 'string'.
 gettersAndSettersErrors.ts(7,16): error TS1095: A 'set' accessor cannot have a return type annotation.
 gettersAndSettersErrors.ts(11,17): error TS2808: A get accessor must be at least as accessible as the setter
 gettersAndSettersErrors.ts(12,16): error TS2808: A get accessor must be at least as accessible as the setter
 
 
-==== gettersAndSettersErrors.ts (7 errors) ====
+==== gettersAndSettersErrors.ts (8 errors) ====
     class C {
         public get Foo() { return "foo";} // ok
                    ~~~
@@ -22,6 +23,8 @@ gettersAndSettersErrors.ts(12,16): error TS2808: A get accessor must be at least
         public get Goo(v:string):string {return null;} // error - getters must not have a parameter
                    ~~~
 !!! error TS1054: A 'get' accessor cannot have parameters.
+                                         ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'string'.
         public set Goo(v:string):string {} // error - setters must not specify a return type
                    ~~~
 !!! error TS1095: A 'set' accessor cannot have a return type annotation.

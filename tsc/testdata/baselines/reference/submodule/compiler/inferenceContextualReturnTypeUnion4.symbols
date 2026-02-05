@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/inferenceContextualReturnTypeUnion4.ts] ////
+
+=== inferenceContextualReturnTypeUnion4.ts ===
+// https://github.com/microsoft/TypeScript/issues/57905
+
+export abstract class Storage {
+>Storage : Symbol(Storage, Decl(inferenceContextualReturnTypeUnion4.ts, 0, 0))
+
+    abstract get<T extends string>(): T | Promise<T>;
+>get : Symbol(Storage.get, Decl(inferenceContextualReturnTypeUnion4.ts, 2, 31))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion4.ts, 3, 17))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion4.ts, 3, 17))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion4.ts, 3, 17))
+}
+
+export abstract class SyncStorage extends Storage {
+>SyncStorage : Symbol(SyncStorage, Decl(inferenceContextualReturnTypeUnion4.ts, 4, 1))
+>Storage : Symbol(Storage, Decl(inferenceContextualReturnTypeUnion4.ts, 0, 0))
+
+    abstract override get<T extends string>(): T;
+>get : Symbol(SyncStorage.get, Decl(inferenceContextualReturnTypeUnion4.ts, 6, 51))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion4.ts, 7, 26))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion4.ts, 7, 26))
+}
+
+export abstract class ASyncStorage extends Storage {
+>ASyncStorage : Symbol(ASyncStorage, Decl(inferenceContextualReturnTypeUnion4.ts, 8, 1))
+>Storage : Symbol(Storage, Decl(inferenceContextualReturnTypeUnion4.ts, 0, 0))
+
+    abstract override get<T extends string>(): Promise<T>;
+>get : Symbol(ASyncStorage.get, Decl(inferenceContextualReturnTypeUnion4.ts, 10, 52))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion4.ts, 11, 26))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion4.ts, 11, 26))
+}
+

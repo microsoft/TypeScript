@@ -1,7 +1,7 @@
 --- old.genericConstraintOnExtendedBuiltinTypes2.js
 +++ new.genericConstraintOnExtendedBuiltinTypes2.js
-@@= skipped -29, +29 lines =@@
- //// [genericConstraintOnExtendedBuiltinTypes2.js]
+@@= skipped -30, +30 lines =@@
+ "use strict";
  var EndGate;
  (function (EndGate) {
 -    var Tweening;

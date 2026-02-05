@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/cloduleAcrossModuleDefinitions.ts] ////
 
 === cloduleAcrossModuleDefinitions.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     export class B {
@@ -15,10 +15,10 @@ module A {
     }
 }
 
-module A {
+namespace A {
 >A : typeof A
 
-    export module B {
+    export namespace B {
 >B : typeof B
 
         export var x = 1;

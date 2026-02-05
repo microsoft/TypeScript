@@ -3,7 +3,7 @@
 === importedModuleAddToGlobal.ts ===
 // Binding for an import statement in a typeref position is being added to the global scope
 // Shouldn't compile b.B is not defined in C
-module A {
+namespace A {
     import b = B;
 >b : typeof b
 >B : typeof b
@@ -13,7 +13,7 @@ module A {
 >C : typeof c
 }
 
-module B {
+namespace B {
 >B : typeof globalThis.B
 
     import a = A;
@@ -24,7 +24,7 @@ module B {
 >B : B
 }
 
-module C {
+namespace C {
 >C : typeof C
 
     import a = A;

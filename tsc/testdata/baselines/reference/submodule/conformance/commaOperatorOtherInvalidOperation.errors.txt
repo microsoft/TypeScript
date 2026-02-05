@@ -1,9 +1,11 @@
 commaOperatorOtherInvalidOperation.ts(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
 commaOperatorOtherInvalidOperation.ts(12,9): error TS2322: Type 'T2' is not assignable to type 'T1'.
   'T1' could be instantiated with an arbitrary type which could be unrelated to 'T2'.
+commaOperatorOtherInvalidOperation.ts(12,23): error TS2454: Variable 'x' is used before being assigned.
+commaOperatorOtherInvalidOperation.ts(12,26): error TS2454: Variable 'y' is used before being assigned.
 
 
-==== commaOperatorOtherInvalidOperation.ts (2 errors) ====
+==== commaOperatorOtherInvalidOperation.ts (4 errors) ====
     //Expect to have compiler errors
     //Comma operator in function arguments and return
     function foo(x: number, y: string) {
@@ -22,4 +24,8 @@ commaOperatorOtherInvalidOperation.ts(12,9): error TS2322: Type 'T2' is not assi
 !!! error TS2322: Type 'T2' is not assignable to type 'T1'.
 !!! error TS2322:   'T1' could be instantiated with an arbitrary type which could be unrelated to 'T2'.
 !!! related TS2208 commaOperatorOtherInvalidOperation.ts:9:19: This type parameter might need an `extends T1` constraint.
+                          ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                             ~
+!!! error TS2454: Variable 'y' is used before being assigned.
     }

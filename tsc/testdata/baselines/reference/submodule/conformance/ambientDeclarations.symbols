@@ -123,7 +123,7 @@ declare enum E3 {
     A
 >A : Symbol(E3.A, Decl(ambientDeclarations.ts, 51, 17))
 }
-declare module E3 {
+declare namespace E3 {
 >E3 : Symbol(E3, Decl(ambientDeclarations.ts, 48, 1), Decl(ambientDeclarations.ts, 53, 1))
 
     var B;
@@ -136,7 +136,7 @@ var x = E3.B;
 >B : Symbol(E3.B, Decl(ambientDeclarations.ts, 55, 7))
 
 // Ambient module
-declare module M1 {
+declare namespace M1 {
 >M1 : Symbol(M1, Decl(ambientDeclarations.ts, 57, 13))
 
     var x;

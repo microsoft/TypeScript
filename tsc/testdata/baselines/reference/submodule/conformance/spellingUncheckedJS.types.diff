@@ -73,7 +73,11 @@
  >object : { spaaace: number; }
  >fresh : any
  >12 : 12
-@@= skipped -24, +24 lines =@@
+
+ other.puuuce // OK, from another file
+->other.puuuce : error
++>other.puuuce : any
+ >other : { puuce: number; }
  >puuuce : any
 
  new Date().getGMTDate() // OK, from another file
@@ -96,7 +100,7 @@
  >() => console.log('ok') : () => void
  >console.log('ok') : void
  >console.log : (...data: any[]) => void
-@@= skipped -20, +20 lines =@@
+@@= skipped -44, +44 lines =@@
  >500 : 500
 
  AudioBuffin // etc

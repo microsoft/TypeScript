@@ -1,7 +1,7 @@
 --- old.genericWithCallSignatures1.js
 +++ new.genericWithCallSignatures1.js
-@@= skipped -21, +21 lines =@@
- //// [genericWithCallSignatures_1.js]
+@@= skipped -23, +23 lines =@@
+ "use strict";
  ///<reference path="genericWithCallSignatures_0.ts"/>
  class MyClass {
 +    callableThing;

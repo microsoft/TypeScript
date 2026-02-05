@@ -1,9 +1,9 @@
 --- old.typeOfThisInStaticMembers12(target=es2022).js
 +++ new.typeOfThisInStaticMembers12(target=es2022).js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
 
  //// [typeOfThisInStaticMembers12.js]
+ "use strict";
 -var _a, _b, _c;
  class C {
 -    static { this.c = "foo"; }

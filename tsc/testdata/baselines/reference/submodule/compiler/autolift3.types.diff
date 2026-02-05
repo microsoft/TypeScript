@@ -1,0 +1,14 @@
+--- old.autolift3.types
++++ new.autolift3.types
+@@= skipped -41, +41 lines =@@
+
+                         return fso.toString();
+ >fso.toString() : string
+->fso.toString : (radix?: number) => string
++>fso.toString : (radix?: number | undefined) => string
+ >fso : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+                     }
+                 }
+             })();

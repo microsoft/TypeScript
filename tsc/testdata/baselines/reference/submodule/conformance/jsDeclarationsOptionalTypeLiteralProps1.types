@@ -12,16 +12,16 @@
  * @returns {number}
  */
 function foo({ a, b, c }) {
->foo : ({ a, b, c }: { a: number; b?: number; c?: number; }) => number
+>foo : ({ a, b, c }: { a: number; b?: number | undefined; c?: number | undefined; }) => number
 >a : number
->b : number
->c : number
+>b : number | undefined
+>c : number | undefined
 
     return a + b + c;
 >a + b + c : number
 >a + b : number
 >a : number
->b : number
->c : number
+>b : number | undefined
+>c : number | undefined
 }
 

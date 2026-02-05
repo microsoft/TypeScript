@@ -20,6 +20,7 @@
 
 
 //// [jsdocTypeCast.js]
+"use strict";
 /**
  * @param {string} x
  */

@@ -16,6 +16,7 @@ var y: MyClass = new MyClass();
 y.myMethod(); // error
 
 //// [derivedTypeCallingBaseImplWithOptionalParams.js]
+"use strict";
 class MyClass {
     myMethod(myList) {
     }

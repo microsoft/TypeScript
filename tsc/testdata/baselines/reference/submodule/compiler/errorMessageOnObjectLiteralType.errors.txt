@@ -3,7 +3,7 @@ errorMessageOnObjectLiteralType.ts(6,8): error TS2551: Property 'getOwnPropertyN
 
 
 ==== errorMessageOnObjectLiteralType.ts (2 errors) ====
-    var x: {
+    declare var x: {
         a: string;
         b: number;
     };

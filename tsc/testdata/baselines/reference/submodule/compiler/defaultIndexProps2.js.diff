@@ -1,8 +1,8 @@
 --- old.defaultIndexProps2.js
 +++ new.defaultIndexProps2.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [defaultIndexProps2.js]
+ "use strict";
  class Foo {
 -    constructor() {
 -        this.v = "Yo";

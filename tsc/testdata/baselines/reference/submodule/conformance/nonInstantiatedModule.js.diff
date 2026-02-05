@@ -1,6 +1,6 @@
 --- old.nonInstantiatedModule.js
 +++ new.nonInstantiatedModule.js
-@@= skipped -75, +75 lines =@@
+@@= skipped -76, +76 lines =@@
  var M3;
  (function (M3) {
      class Utils {

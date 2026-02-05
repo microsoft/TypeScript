@@ -1,0 +1,11 @@
+--- old.genericFunctionsWithOptionalParameters3.types
++++ new.genericFunctionsWithOptionalParameters3.types
+@@= skipped -9, +9 lines =@@
+ }
+ interface Utils {
+     fold<T, S>(c?: Collection<T>, folder?: (s: S, t: T) => T, init?: S): T;
+->fold : <T, S>(c?: Collection<T>, folder?: (s: S, t: T) => T, init?: S) => T
++>fold : <T, S>(c?: Collection<T> | undefined, folder?: ((s: S, t: T) => T) | undefined, init?: S | undefined) => T
+ >c : Collection<T> | undefined
+ >folder : ((s: S, t: T) => T) | undefined
+ >s : S

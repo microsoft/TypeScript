@@ -21,7 +21,7 @@ interface NamedColors {
     "pale blue": _Color;
 >"pale blue" : _Color
 }
-module Color {
+namespace Color {
 >Color : typeof Color
 
     export var namedColors: NamedColors;

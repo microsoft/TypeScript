@@ -3,10 +3,10 @@
 === plusOperatorWithAnyOtherType.ts ===
 // + operator on any type
 
-var ANY: any;
+declare var ANY: any;
 >ANY : any
 
-var ANY1;
+declare var ANY1: any;
 >ANY1 : any
 
 var ANY2: any[] = ["", ""];
@@ -15,7 +15,7 @@ var ANY2: any[] = ["", ""];
 >"" : ""
 >"" : ""
 
-var obj: () => {}
+declare var obj: () => {}
 >obj : () => {}
 
 var obj1 = { x: (s: string) => { }, y: (s1) => { }};
@@ -31,8 +31,9 @@ var obj1 = { x: (s: string) => { }, y: (s1) => { }};
 function foo(): any {
 >foo : () => any
 
-    var a;
+    var a = undefined;
 >a : any
+>undefined : undefined
 
     return a;
 >a : any
@@ -40,24 +41,26 @@ function foo(): any {
 class A {
 >A : A
 
-    public a: any;
+    public a!: any;
 >a : any
 
     static foo() {
 >foo : () => any
 
-        var a;
+        var a: any = undefined;
 >a : any
+>undefined : undefined
 
         return a;
 >a : any
     }
 }
-module M {
+namespace M {
 >M : typeof M
 
-    export var n: any;
+    export var n: any = undefined;
 >n : any
+>undefined : undefined
 }
 var objA = new A();
 >objA : A

@@ -1,7 +1,7 @@
 --- old.commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=legacy).js
 +++ new.commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=legacy).js
-@@= skipped -24, +24 lines =@@
- //// [commentsOnJSXExpressionsArePreserved.js]
+@@= skipped -25, +25 lines =@@
+ "use strict";
  class Component {
      render() {
 -        return (0, _a.jsx)("div", { children: null /* preserved */ });

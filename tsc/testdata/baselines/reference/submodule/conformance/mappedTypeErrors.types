@@ -347,6 +347,16 @@ class C<T> {
     state: T;
 >state : T
 
+    constructor(initialState: T) {
+>initialState : T
+
+        this.state = initialState;
+>this.state = initialState : T
+>this.state : T
+>this : this
+>state : T
+>initialState : T
+    }
     setState<K extends keyof T>(props: Pick<T, K>) {
 >setState : <K extends keyof T>(props: Pick<T, K>) => void
 >props : Pick<T, K>
@@ -369,10 +379,15 @@ class C<T> {
     }
 }
 
-let c = new C<Foo>();
+let c = new C<Foo>({ a: "hello", b: 42 });
 >c : C<Foo>
->new C<Foo>() : C<Foo>
+>new C<Foo>({ a: "hello", b: 42 }) : C<Foo>
 >C : typeof C
+>{ a: "hello", b: 42 } : { a: string; b: number; }
+>a : string
+>"hello" : "hello"
+>b : number
+>42 : 42
 
 c.setState({ a: "test", b: 43 });
 >c.setState({ a: "test", b: 43 }) : void

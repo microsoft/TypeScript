@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declarationMapsWithoutDeclaration.ts] ////
 
 //// [declarationMapsWithoutDeclaration.ts]
-module m2 {
+namespace m2 {
     export interface connectModule {
         (res, req, next): void;
     }
@@ -12,7 +12,7 @@ module m2 {
 
 }
 
-var m2: {
+declare var m2: {
     (): m2.connectExport;
     test1: m2.connectModule;
     test2(): m2.connectModule;
@@ -22,5 +22,4 @@ export = m2;
 
 //// [declarationMapsWithoutDeclaration.js]
 "use strict";
-var m2;
 module.exports = m2;

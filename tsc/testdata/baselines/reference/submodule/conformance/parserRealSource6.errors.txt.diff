@@ -5,7 +5,7 @@
  parserRealSource6.ts(8,24): error TS2304: Cannot find name 'Script'.
  parserRealSource6.ts(10,41): error TS2304: Cannot find name 'ScopeChain'.
  parserRealSource6.ts(10,69): error TS2304: Cannot find name 'TypeChecker'.
-@@= skipped -11, +10 lines =@@
+@@= skipped -13, +12 lines =@@
  parserRealSource6.ts(27,48): error TS2304: Cannot find name 'SymbolScope'.
  parserRealSource6.ts(28,31): error TS2304: Cannot find name 'AST'.
  parserRealSource6.ts(30,35): error TS2304: Cannot find name 'ModuleDeclaration'.
@@ -23,12 +23,12 @@
  parserRealSource6.ts(142,22): error TS2304: Cannot find name 'NodeType'.
  parserRealSource6.ts(143,38): error TS2304: Cannot find name 'UnaryExpression'.
  parserRealSource6.ts(156,22): error TS2304: Cannot find name 'NodeType'.
-@@= skipped -16, +16 lines =@@
- parserRealSource6.ts(215,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
+@@= skipped -17, +17 lines =@@
+ parserRealSource6.ts(218,13): error TS2322: Type 'null' is not assignable to type 'EnclosingScopeContext'.
 
 
--==== parserRealSource6.ts (60 errors) ====
-+==== parserRealSource6.ts (59 errors) ====
+-==== parserRealSource6.ts (63 errors) ====
++==== parserRealSource6.ts (62 errors) ====
      // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
      // See LICENSE.txt in the project root for complete license information.
      
@@ -36,9 +36,9 @@
 -                        ~~~~~~~~~~~~~
 -!!! error TS6053: File 'typescript.ts' not found.
      
-     module TypeScript {
+     namespace TypeScript {
          export class TypeCollectionContext {
-@@= skipped -61, +59 lines =@@
+@@= skipped -65, +63 lines =@@
  !!! error TS2304: Cannot find name 'ModuleDeclaration'.
              public enclosingClassDecl: TypeDeclaration = null;
                                         ~~~~~~~~~~~~~~~

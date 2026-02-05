@@ -4,4 +4,5 @@
 `\t\n\v\f\r`;
 
 //// [templateStringWhitespaceEscapes1.js]
+"use strict";
 `\t\n\v\f\r`;

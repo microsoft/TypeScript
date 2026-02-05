@@ -1,8 +1,10 @@
+interfaceDeclaration4.ts(9,9): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
 interfaceDeclaration4.ts(18,11): error TS2430: Interface 'I3' incorrectly extends interface 'I1'.
   Types of property 'item' are incompatible.
     Type 'number' is not assignable to type 'string'.
 interfaceDeclaration4.ts(27,7): error TS2420: Class 'C2' incorrectly implements interface 'I4'.
   Property 'item' is missing in type 'C2' but required in type 'I4'.
+interfaceDeclaration4.ts(28,12): error TS2564: Property 'token' has no initializer and is not definitely assigned in the constructor.
 interfaceDeclaration4.ts(36,7): error TS2420: Class 'C3' incorrectly implements interface 'I1'.
   Property 'item' is missing in type 'C3' but required in type 'I1'.
 interfaceDeclaration4.ts(39,14): error TS1005: '{' expected.
@@ -10,16 +12,18 @@ interfaceDeclaration4.ts(39,15): error TS1434: Unexpected keyword or identifier.
 interfaceDeclaration4.ts(39,15): error TS2304: Cannot find name 'I1'.
 
 
-==== interfaceDeclaration4.ts (6 errors) ====
+==== interfaceDeclaration4.ts (8 errors) ====
     // Import this module when test harness supports external modules. Also remove the internal module below.
     // import Foo = require("interfaceDeclaration5")
-    module Foo {
+    namespace Foo {
         export interface I1 { item: string; }
         export class C1 { }
     }
     
     class C1 implements Foo.I1 {
     	public item:string;
+    	       ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
     }
     
     // Allowed
@@ -47,6 +51,8 @@ interfaceDeclaration4.ts(39,15): error TS2304: Cannot find name 'I1'.
 !!! error TS2420:   Property 'item' is missing in type 'C2' but required in type 'I4'.
 !!! related TS2728 interfaceDeclaration4.ts:4:27: 'item' is declared here.
         public token: string;
+               ~~~~~
+!!! error TS2564: Property 'token' has no initializer and is not definitely assigned in the constructor.
     }
     
     interface I5 extends Foo { }

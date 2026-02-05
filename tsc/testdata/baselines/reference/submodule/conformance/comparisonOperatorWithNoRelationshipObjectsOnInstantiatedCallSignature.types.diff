@@ -1,0 +1,196 @@
+--- old.comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.types
++++ new.comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.types
+@@= skipped -42, +42 lines =@@
+ >x : string
+
+ var a3: { fn<T>(x?: T): T };
+->a3 : { fn<T>(x?: T): T; }
+->fn : <T>(x?: T) => T
++>a3 : { fn<T>(x?: T | undefined): T; }
++>fn : <T>(x?: T | undefined) => T
+ >x : T | undefined
+
+ var b3: { fn(x?: string): number };
+->b3 : { fn(x?: string): number; }
+->fn : (x?: string) => number
++>b3 : { fn(x?: string | undefined): number; }
++>fn : (x?: string | undefined) => number
+ >x : string | undefined
+
+ var a4: { fn<T>(...x: T[]): T };
+@@= skipped -59, +59 lines =@@
+ var r1a3 = a3 < b3;
+ >r1a3 : boolean
+ >a3 < b3 : boolean
+->a3 : { fn<T>(x?: T): T; }
+->b3 : { fn(x?: string): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
++>b3 : { fn(x?: string | undefined): number; }
+
+ var r1a4 = a4 < b4;
+ >r1a4 : boolean
+@@= skipped -36, +36 lines =@@
+ var r1b3 = b3 < a3;
+ >r1b3 : boolean
+ >b3 < a3 : boolean
+->b3 : { fn(x?: string): number; }
+->a3 : { fn<T>(x?: T): T; }
++>b3 : { fn(x?: string | undefined): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
+
+ var r1b4 = b4 < a4;
+ >r1b4 : boolean
+@@= skipped -37, +37 lines =@@
+ var r2a3 = a3 > b3;
+ >r2a3 : boolean
+ >a3 > b3 : boolean
+->a3 : { fn<T>(x?: T): T; }
+->b3 : { fn(x?: string): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
++>b3 : { fn(x?: string | undefined): number; }
+
+ var r2a4 = a4 > b4;
+ >r2a4 : boolean
+@@= skipped -36, +36 lines =@@
+ var r2b3 = b3 > a3;
+ >r2b3 : boolean
+ >b3 > a3 : boolean
+->b3 : { fn(x?: string): number; }
+->a3 : { fn<T>(x?: T): T; }
++>b3 : { fn(x?: string | undefined): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
+
+ var r2b4 = b4 > a4;
+ >r2b4 : boolean
+@@= skipped -37, +37 lines =@@
+ var r3a3 = a3 <= b3;
+ >r3a3 : boolean
+ >a3 <= b3 : boolean
+->a3 : { fn<T>(x?: T): T; }
+->b3 : { fn(x?: string): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
++>b3 : { fn(x?: string | undefined): number; }
+
+ var r3a4 = a4 <= b4;
+ >r3a4 : boolean
+@@= skipped -36, +36 lines =@@
+ var r3b3 = b3 <= a3;
+ >r3b3 : boolean
+ >b3 <= a3 : boolean
+->b3 : { fn(x?: string): number; }
+->a3 : { fn<T>(x?: T): T; }
++>b3 : { fn(x?: string | undefined): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
+
+ var r3b4 = b4 <= a4;
+ >r3b4 : boolean
+@@= skipped -37, +37 lines =@@
+ var r4a3 = a3 >= b3;
+ >r4a3 : boolean
+ >a3 >= b3 : boolean
+->a3 : { fn<T>(x?: T): T; }
+->b3 : { fn(x?: string): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
++>b3 : { fn(x?: string | undefined): number; }
+
+ var r4a4 = a4 >= b4;
+ >r4a4 : boolean
+@@= skipped -36, +36 lines =@@
+ var r4b3 = b3 >= a3;
+ >r4b3 : boolean
+ >b3 >= a3 : boolean
+->b3 : { fn(x?: string): number; }
+->a3 : { fn<T>(x?: T): T; }
++>b3 : { fn(x?: string | undefined): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
+
+ var r4b4 = b4 >= a4;
+ >r4b4 : boolean
+@@= skipped -37, +37 lines =@@
+ var r5a3 = a3 == b3;
+ >r5a3 : boolean
+ >a3 == b3 : boolean
+->a3 : { fn<T>(x?: T): T; }
+->b3 : { fn(x?: string): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
++>b3 : { fn(x?: string | undefined): number; }
+
+ var r5a4 = a4 == b4;
+ >r5a4 : boolean
+@@= skipped -36, +36 lines =@@
+ var r5b3 = b3 == a3;
+ >r5b3 : boolean
+ >b3 == a3 : boolean
+->b3 : { fn(x?: string): number; }
+->a3 : { fn<T>(x?: T): T; }
++>b3 : { fn(x?: string | undefined): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
+
+ var r5b4 = b4 == a4;
+ >r5b4 : boolean
+@@= skipped -37, +37 lines =@@
+ var r6a3 = a3 != b3;
+ >r6a3 : boolean
+ >a3 != b3 : boolean
+->a3 : { fn<T>(x?: T): T; }
+->b3 : { fn(x?: string): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
++>b3 : { fn(x?: string | undefined): number; }
+
+ var r6a4 = a4 != b4;
+ >r6a4 : boolean
+@@= skipped -36, +36 lines =@@
+ var r6b3 = b3 != a3;
+ >r6b3 : boolean
+ >b3 != a3 : boolean
+->b3 : { fn(x?: string): number; }
+->a3 : { fn<T>(x?: T): T; }
++>b3 : { fn(x?: string | undefined): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
+
+ var r6b4 = b4 != a4;
+ >r6b4 : boolean
+@@= skipped -37, +37 lines =@@
+ var r7a3 = a3 === b3;
+ >r7a3 : boolean
+ >a3 === b3 : boolean
+->a3 : { fn<T>(x?: T): T; }
+->b3 : { fn(x?: string): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
++>b3 : { fn(x?: string | undefined): number; }
+
+ var r7a4 = a4 === b4;
+ >r7a4 : boolean
+@@= skipped -36, +36 lines =@@
+ var r7b3 = b3 === a3;
+ >r7b3 : boolean
+ >b3 === a3 : boolean
+->b3 : { fn(x?: string): number; }
+->a3 : { fn<T>(x?: T): T; }
++>b3 : { fn(x?: string | undefined): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
+
+ var r7b4 = b4 === a4;
+ >r7b4 : boolean
+@@= skipped -37, +37 lines =@@
+ var r8a3 = a3 !== b3;
+ >r8a3 : boolean
+ >a3 !== b3 : boolean
+->a3 : { fn<T>(x?: T): T; }
+->b3 : { fn(x?: string): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
++>b3 : { fn(x?: string | undefined): number; }
+
+ var r8a4 = a4 !== b4;
+ >r8a4 : boolean
+@@= skipped -36, +36 lines =@@
+ var r8b3 = b3 !== a3;
+ >r8b3 : boolean
+ >b3 !== a3 : boolean
+->b3 : { fn(x?: string): number; }
+->a3 : { fn<T>(x?: T): T; }
++>b3 : { fn(x?: string | undefined): number; }
++>a3 : { fn<T>(x?: T | undefined): T; }
+
+ var r8b4 = b4 !== a4;
+ >r8b4 : boolean

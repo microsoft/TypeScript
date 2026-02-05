@@ -1,8 +1,8 @@
 --- old.conflictMarkerTrivia1.js
 +++ new.conflictMarkerTrivia1.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [conflictMarkerTrivia1.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.v = 1;

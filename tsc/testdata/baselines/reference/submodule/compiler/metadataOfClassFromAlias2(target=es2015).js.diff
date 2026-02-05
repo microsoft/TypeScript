@@ -1,0 +1,18 @@
+--- old.metadataOfClassFromAlias2(target=es2015).js
++++ new.metadataOfClassFromAlias2(target=es2015).js
+@@= skipped -18, +18 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.SomeClass = void 0;
+ class SomeClass {
++    field;
+ }
+ exports.SomeClass = SomeClass;
+ //// [test.js]
+@@= skipped -19, +20 lines =@@
+     return (target) => { };
+ }
+ class ClassA {
++    array;
+ }
+ exports.ClassA = ClassA;
+ __decorate([

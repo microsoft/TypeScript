@@ -18,6 +18,7 @@ class C2 extends B {
 }
 
 //// [superPropertyInConstructorBeforeSuperCall.js]
+"use strict";
 class B {
     constructor(x) { }
     x() { return ""; }

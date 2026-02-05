@@ -1,8 +1,8 @@
 --- old.sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js
 +++ new.sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js
-@@= skipped -7, +7 lines =@@
-
+@@= skipped -8, +8 lines =@@
  //// [sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js]
+ "use strict";
  class Greeter {
 -    constructor() {
 -        this.a = 10;

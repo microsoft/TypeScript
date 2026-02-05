@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/typeAliasDoesntMakeModuleInstantiated.ts] ////
 
 //// [typeAliasDoesntMakeModuleInstantiated.ts]
-declare module m {
+declare namespace m {
     // type alias declaration here shouldnt make the module declaration instantiated
     type Selector = string| string[] |Function;
 
@@ -13,3 +13,4 @@ declare module m {
 declare var m: m.IStatic; // Should be ok to have var 'm' as module is non instantiated
 
 //// [typeAliasDoesntMakeModuleInstantiated.js]
+"use strict";

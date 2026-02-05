@@ -6,6 +6,7 @@ class C3 {
 }
 
 //// [classDeclarationCheckUsedBeforeDefinitionInItself.js]
+"use strict";
 class C3 {
     static intance = new C3(); // ok
 }

@@ -1,3 +1,5 @@
+abstractClassUnionInstantiation.ts(3,28): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+abstractClassUnionInstantiation.ts(4,28): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
 abstractClassUnionInstantiation.ts(14,1): error TS2511: Cannot create an instance of an abstract class.
 abstractClassUnionInstantiation.ts(15,1): error TS2511: Cannot create an instance of an abstract class.
 abstractClassUnionInstantiation.ts(18,46): error TS2511: Cannot create an instance of an abstract class.
@@ -5,11 +7,15 @@ abstractClassUnionInstantiation.ts(19,46): error TS2511: Cannot create an instan
 abstractClassUnionInstantiation.ts(21,35): error TS2511: Cannot create an instance of an abstract class.
 
 
-==== abstractClassUnionInstantiation.ts (5 errors) ====
+==== abstractClassUnionInstantiation.ts (7 errors) ====
     class ConcreteA {}
     class ConcreteB {}
     abstract class AbstractA { a: string; }
+                               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     abstract class AbstractB { b: string; }
+                               ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
     
     type Abstracts = typeof AbstractA | typeof AbstractB;
     type Concretes = typeof ConcreteA | typeof ConcreteB;

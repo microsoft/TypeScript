@@ -1,0 +1,30 @@
+--- old.commonTypeIntersection.types
++++ new.commonTypeIntersection.types
+@@= skipped -1, +1 lines =@@
+
+ === commonTypeIntersection.ts ===
+ declare let x1: { __typename?: 'TypeTwo' } & { a: boolean };
+->x1 : { __typename?: "TypeTwo"; } & { a: boolean; }
++>x1 : { __typename?: "TypeTwo" | undefined; } & { a: boolean; }
+ >__typename : "TypeTwo" | undefined
+ >a : boolean
+
+ let y1: { __typename?: 'TypeOne' } & { a: boolean} = x1;  // should error here
+->y1 : { __typename?: "TypeOne"; } & { a: boolean; }
++>y1 : { __typename?: "TypeOne" | undefined; } & { a: boolean; }
+ >__typename : "TypeOne" | undefined
+ >a : boolean
+->x1 : { __typename?: "TypeTwo"; } & { a: boolean; }
++>x1 : { __typename?: "TypeTwo" | undefined; } & { a: boolean; }
+
+ declare let x2: { __typename?: 'TypeTwo' } & string;
+->x2 : { __typename?: "TypeTwo"; } & string
++>x2 : { __typename?: "TypeTwo" | undefined; } & string
+ >__typename : "TypeTwo" | undefined
+
+ let y2: { __typename?: 'TypeOne' } & string = x2;  // should error here
+->y2 : { __typename?: "TypeOne"; } & string
++>y2 : { __typename?: "TypeOne" | undefined; } & string
+ >__typename : "TypeOne" | undefined
+->x2 : { __typename?: "TypeTwo"; } & string
++>x2 : { __typename?: "TypeTwo" | undefined; } & string

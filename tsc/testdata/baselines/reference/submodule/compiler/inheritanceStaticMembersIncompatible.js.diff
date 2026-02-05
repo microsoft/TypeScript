@@ -1,8 +1,8 @@
 --- old.inheritanceStaticMembersIncompatible.js
 +++ new.inheritanceStaticMembersIncompatible.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [inheritanceStaticMembersIncompatible.js]
+ "use strict";
  class a {
 +    static x;
  }

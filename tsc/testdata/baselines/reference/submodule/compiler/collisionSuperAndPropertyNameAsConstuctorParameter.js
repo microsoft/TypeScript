@@ -33,6 +33,7 @@ class b4 extends a {
 }
 
 //// [collisionSuperAndPropertyNameAsConstuctorParameter.js]
+"use strict";
 class a {
 }
 class b1 extends a {

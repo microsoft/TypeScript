@@ -1,0 +1,11 @@
+arrayBufferIsViewNarrowsType.ts(2,24): error TS2454: Variable 'obj' is used before being assigned.
+
+
+==== arrayBufferIsViewNarrowsType.ts (1 errors) ====
+    var obj: Object;
+    if (ArrayBuffer.isView(obj)) {
+                           ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+        // isView should be a guard that narrows type to ArrayBufferView.
+        var ab: ArrayBufferView = obj;
+    }

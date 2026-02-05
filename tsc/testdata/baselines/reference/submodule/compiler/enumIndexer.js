@@ -10,6 +10,7 @@ var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same ty
 
 
 //// [enumIndexer.js]
+"use strict";
 var MyEnumType;
 (function (MyEnumType) {
     MyEnumType[MyEnumType["foo"] = 0] = "foo";

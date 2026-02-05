@@ -1,0 +1,19 @@
+a.ts(4,1): error TS2454: Variable 'a' is used before being assigned.
+b.ts(4,1): error TS2454: Variable 'a' is used before being assigned.
+
+
+==== a.ts (1 errors) ====
+    export default interface A { value: number; }
+    
+    var a: A;
+    a.value.toExponential();
+    ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+==== b.ts (1 errors) ====
+    import A from './a';
+    
+    var a: A;
+    a.value.toExponential();
+    ~
+!!! error TS2454: Variable 'a' is used before being assigned.

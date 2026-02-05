@@ -7,6 +7,7 @@ function theWholeThing() {
 
 
 //// [seeTag3.js]
+"use strict";
 /** @see [The typescript web site](https://typescriptlang.org)  */
 function theWholeThing() {
 }

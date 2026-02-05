@@ -2,7 +2,7 @@
 
 //// [deleteOperatorWithBooleanType.ts]
 // delete  operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 
 function foo(): boolean { return true; }
 
@@ -10,7 +10,7 @@ class A {
     public a: boolean;
     static foo() { return false; }
 }
-module M {
+namespace M {
     export var n: boolean;
 }
 
@@ -41,8 +41,7 @@ delete objA.a;
 delete M.n;
 
 //// [deleteOperatorWithBooleanType.js]
-// delete  operator on boolean type
-var BOOLEAN;
+"use strict";
 function foo() { return true; }
 class A {
     a;

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/augmentExportEquals5.ts] ////
 
 //// [express.d.ts]
-declare module Express {
+declare namespace Express {
     export interface Request { }
     export interface Response { }
     export interface Application { }

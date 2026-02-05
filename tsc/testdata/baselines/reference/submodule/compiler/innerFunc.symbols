@@ -11,11 +11,11 @@ function salt() {
 >pepper : Symbol(pepper, Decl(innerFunc.ts, 0, 17))
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(innerFunc.ts, 3, 1))
 
     export function tungsten() {
->tungsten : Symbol(tungsten, Decl(innerFunc.ts, 5, 10))
+>tungsten : Symbol(tungsten, Decl(innerFunc.ts, 5, 13))
 
         function oxygen() { return 6; };
 >oxygen : Symbol(oxygen, Decl(innerFunc.ts, 6, 32))

@@ -20,7 +20,7 @@ exports.A = function () {
     this.x = 1;
 >this.x = 1 : 1
 >this.x : any
->this : any
+>this : typeof import("a-ext")
 >x : any
 >1 : 1
 

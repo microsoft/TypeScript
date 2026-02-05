@@ -11,7 +11,7 @@ func TestFormatImportDeclaration(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module Foo {/*1*/
+	const content = `namespace Foo {/*1*/
 }/*2*/
 
 import bar  =    Foo;/*3*/
@@ -21,7 +21,7 @@ import bar2=Foo;/*4*/`
 	defer done()
 	f.FormatDocument(t, "")
 	f.GoToMarker(t, "1")
-	f.VerifyCurrentLineContent(t, `module Foo {`)
+	f.VerifyCurrentLineContent(t, `namespace Foo {`)
 	f.GoToMarker(t, "2")
 	f.VerifyCurrentLineContent(t, `}`)
 	f.GoToMarker(t, "3")

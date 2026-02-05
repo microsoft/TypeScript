@@ -188,7 +188,7 @@ func readLibs() []lib {
 
 	var libs []lib
 	for _, libName := range libNames {
-		sources := []string{"header.d.ts", libName + ".d.ts"}
+		sources := []string{libName + ".d.ts"}
 		var target string
 		if path, ok := paths[libName]; ok {
 			target = path

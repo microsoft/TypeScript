@@ -1,6 +1,6 @@
 --- old.parsingClassRecoversWhenHittingUnexpectedSemicolon.js
 +++ new.parsingClassRecoversWhenHittingUnexpectedSemicolon.js
-@@= skipped -10, +10 lines =@@
+@@= skipped -11, +11 lines =@@
  class C {
      f() { }
      ;

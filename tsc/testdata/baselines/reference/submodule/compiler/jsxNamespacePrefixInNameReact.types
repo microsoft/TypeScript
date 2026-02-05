@@ -188,7 +188,7 @@ var endOfIdent1 = <a: attr={"value"} />;
 var endOfIdent2 = <a attr:={"value"} />;
 >endOfIdent2 : any
 ><a attr:={"value"} /> : any
->a : any
+>a : undefined
 >attr: : string
 >attr : any
 > : any

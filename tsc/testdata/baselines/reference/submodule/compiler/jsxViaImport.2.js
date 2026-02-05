@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/jsxViaImport.2.tsx] ////
 
 //// [component.d.ts]
-declare module JSX {
+declare namespace JSX {
   interface ElementAttributesProperty { props; }
 }
-declare module React {
+declare namespace React {
   class Component<T, U> { }
 }
 declare module "BaseComponent" {

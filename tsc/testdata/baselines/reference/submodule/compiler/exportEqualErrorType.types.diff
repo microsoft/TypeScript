@@ -3,7 +3,7 @@
 @@= skipped -31, +31 lines =@@
      }
  }
- var server: {
+ declare var server: {
 ->server : { (): server.connectExport; foo: Date; }
 +>server : { (): import("exportEqualErrorType_0").connectExport; foo: Date; }
 

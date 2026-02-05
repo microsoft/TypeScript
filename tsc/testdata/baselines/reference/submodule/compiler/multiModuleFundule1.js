@@ -3,10 +3,10 @@
 //// [multiModuleFundule1.ts]
 function C(x: number) { }
 
-module C {
+namespace C {
     export var x = 1;
 }
-module C {
+namespace C {
     export function foo() { }
 }
 
@@ -15,6 +15,7 @@ var r2 = new C(2); // using void returning function as constructor
 var r3 = C.foo();
 
 //// [multiModuleFundule1.js]
+"use strict";
 function C(x) { }
 (function (C) {
     C.x = 1;

@@ -17,7 +17,7 @@ class C {
 
     [[]]() { }
 >[[]] : () => void
->[] : undefined[]
+>[] : never[]
 
     static [{}]() { }
 >[{}] : () => void

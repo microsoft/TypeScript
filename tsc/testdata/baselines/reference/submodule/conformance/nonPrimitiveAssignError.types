@@ -11,8 +11,9 @@ var y = {foo: "bar"};
 >foo : string
 >"bar" : "bar"
 
-var a: object;
+var a: object = {};
 >a : object
+>{} : {}
 
 x = a;
 >x = a : object

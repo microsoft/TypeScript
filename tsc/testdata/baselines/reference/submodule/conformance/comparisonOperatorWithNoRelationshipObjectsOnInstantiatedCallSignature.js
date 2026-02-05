@@ -152,6 +152,7 @@ var r8b5 = b5 !== a5;
 var r8b6 = b6 !== a6;
 
 //// [comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.js]
+"use strict";
 class Base {
     a;
 }

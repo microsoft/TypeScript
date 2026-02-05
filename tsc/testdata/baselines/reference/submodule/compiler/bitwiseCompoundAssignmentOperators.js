@@ -35,6 +35,7 @@ f |= f;
 
 
 //// [bitwiseCompoundAssignmentOperators.js]
+"use strict";
 var a = true;
 var b = 1;
 a ^= a;

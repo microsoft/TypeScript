@@ -1,14 +1,13 @@
 --- old.functionConstraintSatisfaction2.js
 +++ new.functionConstraintSatisfaction2.js
-@@= skipped -49, +49 lines =@@
+@@= skipped -50, +50 lines =@@
  foo(1, () => { });
  function foo2(x) { return x; }
  class C {
 +    foo;
  }
- var b;
  class C2 {
 +    foo;
  }
- var b2;
  var r = foo2(new Function());
+ var r2 = foo2((x) => x);

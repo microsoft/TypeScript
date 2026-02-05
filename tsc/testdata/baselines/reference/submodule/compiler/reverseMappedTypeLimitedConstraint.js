@@ -18,6 +18,7 @@ const checked_ = checkType_<{x: number, y: string}>()({
 });
 
 //// [reverseMappedTypeLimitedConstraint.js]
+"use strict";
 foo_({ x: 1, y: 'foo' });
 // -----------------------------------------------------------------------------------------
 const checkType_ = () => (value) => value;

@@ -47,12 +47,12 @@ type ABC = C | AB;
 >C : Symbol(C, Decl(unionPropertyExistence.ts, 10, 1))
 >AB : Symbol(AB, Decl(unionPropertyExistence.ts, 15, 1))
 
-var ab: AB;
->ab : Symbol(ab, Decl(unionPropertyExistence.ts, 20, 3))
+declare var ab: AB;
+>ab : Symbol(ab, Decl(unionPropertyExistence.ts, 20, 11))
 >AB : Symbol(AB, Decl(unionPropertyExistence.ts, 15, 1))
 
-var abc: ABC;
->abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 3))
+declare var abc: ABC;
+>abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 11))
 >ABC : Symbol(ABC, Decl(unionPropertyExistence.ts, 17, 16))
 
 declare const x: "foo" | "bar";
@@ -77,27 +77,27 @@ bFoo.length;
 >bFoo : Symbol(bFoo, Decl(unionPropertyExistence.ts, 24, 13))
 
 ab.onlyInB;
->ab : Symbol(ab, Decl(unionPropertyExistence.ts, 20, 3))
+>ab : Symbol(ab, Decl(unionPropertyExistence.ts, 20, 11))
 
 ab.notInC; // Ok
 >ab.notInC : Symbol(notInC, Decl(unionPropertyExistence.ts, 2, 19), Decl(unionPropertyExistence.ts, 8, 20))
->ab : Symbol(ab, Decl(unionPropertyExistence.ts, 20, 3))
+>ab : Symbol(ab, Decl(unionPropertyExistence.ts, 20, 11))
 >notInC : Symbol(notInC, Decl(unionPropertyExistence.ts, 2, 19), Decl(unionPropertyExistence.ts, 8, 20))
 
 abc.notInC;
->abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 3))
+>abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 11))
 
 ab.notInB;
->ab : Symbol(ab, Decl(unionPropertyExistence.ts, 20, 3))
+>ab : Symbol(ab, Decl(unionPropertyExistence.ts, 20, 11))
 
 abc.notInB;
->abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 3))
+>abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 11))
 
 abc.inAll; // Ok
 >abc.inAll : Symbol(inAll, Decl(unionPropertyExistence.ts, 0, 13), Decl(unionPropertyExistence.ts, 6, 13), Decl(unionPropertyExistence.ts, 12, 13))
->abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 3))
+>abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 11))
 >inAll : Symbol(inAll, Decl(unionPropertyExistence.ts, 0, 13), Decl(unionPropertyExistence.ts, 6, 13), Decl(unionPropertyExistence.ts, 12, 13))
 
 abc.inNone;
->abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 3))
+>abc : Symbol(abc, Decl(unionPropertyExistence.ts, 21, 11))
 

@@ -1,8 +1,8 @@
 --- old.thisInObjectLiterals.js
 +++ new.thisInObjectLiterals.js
-@@= skipped -22, +22 lines =@@
-
+@@= skipped -23, +23 lines =@@
  //// [thisInObjectLiterals.js]
+ "use strict";
  class MyClass {
 +    t;
      fn() {

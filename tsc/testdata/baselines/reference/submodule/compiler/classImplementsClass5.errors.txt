@@ -23,8 +23,8 @@ classImplementsClass5.ts(17,1): error TS2322: Type 'C' is not assignable to type
     
     class C2 extends A {}
     
-    var c: C;
-    var c2: C2;
+    declare var c: C;
+    declare var c2: C2;
     c = c2;
     ~
 !!! error TS2322: Type 'C2' is not assignable to type 'C'.

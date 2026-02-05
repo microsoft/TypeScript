@@ -1,6 +1,6 @@
 --- old.sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.sourcemap.txt
 +++ new.sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.sourcemap.txt
-@@= skipped -11, +11 lines =@@
+@@= skipped -12, +12 lines =@@
  1 >
  2 >^^^^^^
  3 >      ^^^^^^^
@@ -9,14 +9,14 @@
  2 >class 
  3 >      Greeter
 @@= skipped -8, +7 lines =@@
- 2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
- 3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+ 2 >Emitted(2, 7) Source(1, 7) + SourceIndex(0)
+ 3 >Emitted(2, 14) Source(1, 14) + SourceIndex(0)
  ---
 ->>>    constructor() {
 -1->^^^^
 -2 >    ^^^^^^^^^^^^^^^^^->
 -1->
--1->Emitted(2, 5) Source(1, 1) + SourceIndex(0)
+-1->Emitted(3, 5) Source(1, 1) + SourceIndex(0)
 ----
 ->>>        this.a = 10;
 -1->^^^^^^^^
@@ -31,11 +31,11 @@
 -3 >               = 
 -4 >                 10
 -5 >                   ;
--1->Emitted(3, 9) Source(2, 12) + SourceIndex(0)
--2 >Emitted(3, 15) Source(2, 13) + SourceIndex(0)
--3 >Emitted(3, 18) Source(2, 16) + SourceIndex(0)
--4 >Emitted(3, 20) Source(2, 18) + SourceIndex(0)
--5 >Emitted(3, 21) Source(2, 19) + SourceIndex(0)
+-1->Emitted(4, 9) Source(2, 12) + SourceIndex(0)
+-2 >Emitted(4, 15) Source(2, 13) + SourceIndex(0)
+-3 >Emitted(4, 18) Source(2, 16) + SourceIndex(0)
+-4 >Emitted(4, 20) Source(2, 18) + SourceIndex(0)
+-5 >Emitted(4, 21) Source(2, 19) + SourceIndex(0)
 ----
 ->>>        this.returnA = () => this.a;
 -1->^^^^^^^^
@@ -59,16 +59,16 @@
 -8 >                                 .
 -9 >                                  a
 -10>                                   ;
--1->Emitted(4, 9) Source(3, 12) + SourceIndex(0)
--2 >Emitted(4, 21) Source(3, 19) + SourceIndex(0)
--3 >Emitted(4, 24) Source(3, 22) + SourceIndex(0)
--4 >Emitted(4, 27) Source(3, 25) + SourceIndex(0)
--5 >Emitted(4, 29) Source(3, 27) + SourceIndex(0)
--6 >Emitted(4, 30) Source(3, 28) + SourceIndex(0)
--7 >Emitted(4, 34) Source(3, 32) + SourceIndex(0)
--8 >Emitted(4, 35) Source(3, 33) + SourceIndex(0)
--9 >Emitted(4, 36) Source(3, 34) + SourceIndex(0)
--10>Emitted(4, 37) Source(3, 35) + SourceIndex(0)
+-1->Emitted(5, 9) Source(3, 12) + SourceIndex(0)
+-2 >Emitted(5, 21) Source(3, 19) + SourceIndex(0)
+-3 >Emitted(5, 24) Source(3, 22) + SourceIndex(0)
+-4 >Emitted(5, 27) Source(3, 25) + SourceIndex(0)
+-5 >Emitted(5, 29) Source(3, 27) + SourceIndex(0)
+-6 >Emitted(5, 30) Source(3, 28) + SourceIndex(0)
+-7 >Emitted(5, 34) Source(3, 32) + SourceIndex(0)
+-8 >Emitted(5, 35) Source(3, 33) + SourceIndex(0)
+-9 >Emitted(5, 36) Source(3, 34) + SourceIndex(0)
+-10>Emitted(5, 37) Source(3, 35) + SourceIndex(0)
 ----
 ->>>    }
 +>>>    a = 10;
@@ -77,8 +77,8 @@
 -1 >
 -  >
 -2 >    }
--1 >Emitted(5, 5) Source(4, 1) + SourceIndex(0)
--2 >Emitted(5, 6) Source(4, 2) + SourceIndex(0)
+-1 >Emitted(6, 5) Source(4, 1) + SourceIndex(0)
+-2 >Emitted(6, 6) Source(4, 2) + SourceIndex(0)
 +3 >     ^^^
 +4 >        ^^
 +5 >          ^
@@ -89,11 +89,11 @@
 +3 >      = 
 +4 >        10
 +5 >          ;
-+1 >Emitted(2, 5) Source(2, 12) + SourceIndex(0)
-+2 >Emitted(2, 6) Source(2, 13) + SourceIndex(0)
-+3 >Emitted(2, 9) Source(2, 16) + SourceIndex(0)
-+4 >Emitted(2, 11) Source(2, 18) + SourceIndex(0)
-+5 >Emitted(2, 12) Source(2, 19) + SourceIndex(0)
++1 >Emitted(3, 5) Source(2, 12) + SourceIndex(0)
++2 >Emitted(3, 6) Source(2, 13) + SourceIndex(0)
++3 >Emitted(3, 9) Source(2, 16) + SourceIndex(0)
++4 >Emitted(3, 11) Source(2, 18) + SourceIndex(0)
++5 >Emitted(3, 12) Source(2, 19) + SourceIndex(0)
 +---
 +>>>    returnA = () => this.a;
 +1->^^^^
@@ -117,23 +117,23 @@
 +8 >                        .
 +9 >                         a
 +10>                          ;
-+1->Emitted(3, 5) Source(3, 12) + SourceIndex(0)
-+2 >Emitted(3, 12) Source(3, 19) + SourceIndex(0)
-+3 >Emitted(3, 15) Source(3, 22) + SourceIndex(0)
-+4 >Emitted(3, 18) Source(3, 25) + SourceIndex(0)
-+5 >Emitted(3, 20) Source(3, 27) + SourceIndex(0)
-+6 >Emitted(3, 21) Source(3, 28) + SourceIndex(0)
-+7 >Emitted(3, 25) Source(3, 32) + SourceIndex(0)
-+8 >Emitted(3, 26) Source(3, 33) + SourceIndex(0)
-+9 >Emitted(3, 27) Source(3, 34) + SourceIndex(0)
-+10>Emitted(3, 28) Source(3, 35) + SourceIndex(0)
++1->Emitted(4, 5) Source(3, 12) + SourceIndex(0)
++2 >Emitted(4, 12) Source(3, 19) + SourceIndex(0)
++3 >Emitted(4, 15) Source(3, 22) + SourceIndex(0)
++4 >Emitted(4, 18) Source(3, 25) + SourceIndex(0)
++5 >Emitted(4, 20) Source(3, 27) + SourceIndex(0)
++6 >Emitted(4, 21) Source(3, 28) + SourceIndex(0)
++7 >Emitted(4, 25) Source(3, 32) + SourceIndex(0)
++8 >Emitted(4, 26) Source(3, 33) + SourceIndex(0)
++9 >Emitted(4, 27) Source(3, 34) + SourceIndex(0)
++10>Emitted(4, 28) Source(3, 35) + SourceIndex(0)
  ---
  >>>}
  1 >^
  2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
  1 >
--1 >Emitted(6, 2) Source(4, 2) + SourceIndex(0)
+-1 >Emitted(7, 2) Source(4, 2) + SourceIndex(0)
 +  >}
-+1 >Emitted(4, 2) Source(4, 2) + SourceIndex(0)
++1 >Emitted(5, 2) Source(4, 2) + SourceIndex(0)
  ---
  >>>//# sourceMappingURL=sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js.map

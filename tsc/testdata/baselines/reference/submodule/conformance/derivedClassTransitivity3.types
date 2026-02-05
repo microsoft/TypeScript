@@ -26,18 +26,18 @@ class E<T> extends D<T> {
 >D : D<T>
 
     foo(x: T, y?: number) { } // ok to add optional parameters
->foo : (x: T, y?: number) => void
+>foo : (x: T, y?: number | undefined) => void
 >x : T
->y : number
+>y : number | undefined
 }
 
-var c: C<string>;
+declare var c: C<string>;
 >c : C<string>
 
-var d: D<string>;
+declare var d: D<string>;
 >d : D<string>
 
-var e: E<string>;
+declare var e: E<string>;
 >e : E<string>
 
 c = e;
@@ -57,9 +57,9 @@ var r = c.foo('', '');
 var r2 = e.foo('', 1);
 >r2 : void
 >e.foo('', 1) : void
->e.foo : (x: string, y?: number) => void
+>e.foo : (x: string, y?: number | undefined) => void
 >e : E<string>
->foo : (x: string, y?: number) => void
+>foo : (x: string, y?: number | undefined) => void
 >'' : ""
 >1 : 1
 

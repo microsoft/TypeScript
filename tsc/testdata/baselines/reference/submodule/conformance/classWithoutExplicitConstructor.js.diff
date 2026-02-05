@@ -1,8 +1,8 @@
 --- old.classWithoutExplicitConstructor.js
 +++ new.classWithoutExplicitConstructor.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [classWithoutExplicitConstructor.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.x = 1;

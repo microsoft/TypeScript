@@ -1,6 +1,6 @@
 --- old.octalLiteralAndEscapeSequence.js
 +++ new.octalLiteralAndEscapeSequence.js
-@@= skipped -125, +125 lines =@@
+@@= skipped -126, +126 lines =@@
  5;
  0;
  5;

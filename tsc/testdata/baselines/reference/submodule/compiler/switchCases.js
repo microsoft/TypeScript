@@ -8,6 +8,7 @@ switch(0) {
 
 
 //// [switchCases.js]
+"use strict";
 switch (0) {
     case 1:
         break;

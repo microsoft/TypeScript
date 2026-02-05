@@ -1,6 +1,6 @@
 --- old.importCallExpressionNoModuleKindSpecified.js
 +++ new.importCallExpressionNoModuleKindSpecified.js
-@@= skipped -74, +74 lines =@@
+@@= skipped -75, +75 lines =@@
          return result;
      };
  })();

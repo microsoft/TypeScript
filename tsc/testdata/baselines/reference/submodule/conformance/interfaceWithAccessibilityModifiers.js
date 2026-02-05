@@ -9,3 +9,4 @@ interface Foo {
 }
 
 //// [interfaceWithAccessibilityModifiers.js]
+"use strict";

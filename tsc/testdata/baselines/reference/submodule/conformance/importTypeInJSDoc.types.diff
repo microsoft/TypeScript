@@ -1,7 +1,13 @@
 --- old.importTypeInJSDoc.types
 +++ new.importTypeInJSDoc.types
-@@= skipped -19, +19 lines =@@
- >y : number
+@@= skipped -14, +14 lines =@@
+ >field : string
+
+     static Bar: (x: string, y?: number) => void;
+->Bar : (x: string, y?: number) => void
++>Bar : (x: string, y?: number | undefined) => void
+ >x : string
+ >y : number | undefined
 
      constructor(x: MyClass.Bar);
 ->x : MyClass.Bar
@@ -9,3 +15,30 @@
  >MyClass : any
  }
  declare global {
+@@= skipped -34, +34 lines =@@
+ >a : import("externs")
+ >new Foo({doer: Foo.Bar}) : import("externs")
+ >Foo : typeof import("externs")
+->{doer: Foo.Bar} : { doer: (x: string, y?: number) => void; }
+->doer : (x: string, y?: number) => void
+->Foo.Bar : (x: string, y?: number) => void
++>{doer: Foo.Bar} : { doer: (x: string, y?: number | undefined) => void; }
++>doer : (x: string, y?: number | undefined) => void
++>Foo.Bar : (x: string, y?: number | undefined) => void
+ >Foo : typeof import("externs")
+->Bar : (x: string, y?: number) => void
++>Bar : (x: string, y?: number | undefined) => void
+
+ const q = /** @type {import("./externs").Bar} */({ doer: q => q });
+ >q : import("externs").Bar
+@@= skipped -16, +16 lines =@@
+ >q : string
+
+ const r = /** @type {typeof import("./externs").Bar} */(r => r);
+->r : (x: string, y?: number) => void
+->(r => r) : (x: string, y?: number) => void
++>r : (x: string, y?: number | undefined) => void
++>(r => r) : (x: string, y?: number | undefined) => void
+ >r => r : (r: string) => string
+ >r : string
+ >r : string

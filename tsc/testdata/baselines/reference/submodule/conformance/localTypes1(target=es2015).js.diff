@@ -1,0 +1,89 @@
+--- old.localTypes1(target=es2015).js
++++ new.localTypes1(target=es2015).js
+@@= skipped -151, +151 lines =@@
+         E[E["C"] = 2] = "C";
+     })(E || (E = {}));
+     class C {
++        x;
+     }
+     let a = [new C()];
+     a[0].x = E.B;
+@@= skipped -14, +15 lines =@@
+             E[E["C"] = 2] = "C";
+         })(E || (E = {}));
+         class C {
++            x;
+         }
+         let a = [new C()];
+         a[0].x = E.B;
+@@= skipped -17, +18 lines =@@
+         })(E || (E = {}));
+         if (b) {
+             class C {
++                x;
+             }
+             let a = [new C()];
+             a[0].x = E.B;
+@@= skipped -7, +8 lines =@@
+         }
+         else {
+             class A {
++                x;
+             }
+             let c = [new A()];
+             c[0].x = E.B;
+@@= skipped -16, +17 lines =@@
+             E[E["C"] = 2] = "C";
+         })(E || (E = {}));
+         class C {
++            x;
+         }
+         return new C();
+     };
+@@= skipped -11, +12 lines =@@
+             E[E["C"] = 2] = "C";
+         })(E || (E = {}));
+         class C {
++            x;
+         }
+         return new C();
+     };
+@@= skipped -13, +14 lines =@@
+             E[E["C"] = 2] = "C";
+         })(E || (E = {}));
+         class C {
++            x;
+         }
+     }
+     m() {
+@@= skipped -10, +11 lines =@@
+             E[E["C"] = 2] = "C";
+         })(E || (E = {}));
+         class C {
++            x;
+         }
+         return new C();
+     }
+@@= skipped -11, +12 lines =@@
+             E[E["C"] = 2] = "C";
+         })(E || (E = {}));
+         class C {
++            x;
+         }
+         return new C();
+     }
+ }
+ function f6() {
+     class A {
++        a;
+     }
+     function g() {
+         class B extends A {
++            b;
+         }
+         function h() {
+             class C extends B {
++                c;
+             }
+             var x = new C();
+             x.a = "a";

@@ -6,4 +6,5 @@ interface Foo<T> {
 }
 
 //// [instantiateTypeParameter.js]
+"use strict";
 var x;

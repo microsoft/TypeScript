@@ -86,7 +86,7 @@ class I extends Object {
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 	constructor() { super(); } // ERROR - no super call allowed
->super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 }
 
 class J extends G {

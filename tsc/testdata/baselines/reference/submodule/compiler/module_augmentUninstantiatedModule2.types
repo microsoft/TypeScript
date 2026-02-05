@@ -31,7 +31,7 @@ declare var ng: ng.IAngularStatic;
 >ng : import("node_modules/angular/index.d.ts").IAngularStatic
 >ng : any
 
-declare module ng {
+declare namespace ng {
    export interface IModule {
       name: string;
 >name : string

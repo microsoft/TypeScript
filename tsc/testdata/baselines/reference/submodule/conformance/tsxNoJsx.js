@@ -5,4 +5,5 @@
 
 
 //// [tsxNoJsx.jsx]
+"use strict";
 <nope />;

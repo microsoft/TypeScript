@@ -18,6 +18,7 @@ class Base {
 
 
 //// [privateNameNestedClassAccessorsShadowing.js]
+"use strict";
 class Base {
     get #x() { return 1; }
     ;

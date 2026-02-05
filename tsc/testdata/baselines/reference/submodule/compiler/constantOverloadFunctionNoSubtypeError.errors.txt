@@ -1,0 +1,20 @@
+constantOverloadFunctionNoSubtypeError.ts(12,5): error TS2322: Type 'null' is not assignable to type 'Base'.
+
+
+==== constantOverloadFunctionNoSubtypeError.ts (1 errors) ====
+    class Base { foo() { } }
+    class Derived1 extends Base { bar() { } }
+    class Derived2 extends Base { baz() { } }
+    class Derived3 extends Base { biz() { } }
+    
+    function foo(tagName: 'canvas'): Derived3;
+    function foo(tagName:  'div'): Derived2;
+    function foo(tagName: 'span'): Derived1;
+    function foo(tagName: number): Base;
+    function foo(tagName: any): Base {
+    
+        return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Base'.
+    }
+    

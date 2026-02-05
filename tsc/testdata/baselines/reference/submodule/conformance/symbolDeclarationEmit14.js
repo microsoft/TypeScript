@@ -7,6 +7,7 @@ class C {
 }
 
 //// [symbolDeclarationEmit14.js]
+"use strict";
 class C {
     get [Symbol.toPrimitive]() { return ""; }
     get [Symbol.toStringTag]() { return ""; }

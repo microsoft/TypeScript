@@ -1,6 +1,6 @@
 --- old.jsDeclarationsTypeAliases.js
 +++ new.jsDeclarationsTypeAliases.js
-@@= skipped -87, +87 lines =@@
+@@= skipped -88, +88 lines =@@
      return { x: "" + x };
  }
  class ExportedThing {

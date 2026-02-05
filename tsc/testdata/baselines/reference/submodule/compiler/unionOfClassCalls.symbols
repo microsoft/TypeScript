@@ -73,7 +73,7 @@ arr.reduce((acc: Array<string>, a: number | string, index: number) => {
 >arr : Symbol(arr, Decl(unionOfClassCalls.ts, 18, 5))
 >reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
 >acc : Symbol(acc, Decl(unionOfClassCalls.ts, 27, 12))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >a : Symbol(a, Decl(unionOfClassCalls.ts, 27, 31))
 >index : Symbol(index, Decl(unionOfClassCalls.ts, 27, 51))
 
@@ -170,7 +170,7 @@ declare class Foo {
 
     doThing(): Promise<this>
 >doThing : Symbol(Foo.doThing, Decl(unionOfClassCalls.ts, 60, 19))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 declare class Bar extends Foo {

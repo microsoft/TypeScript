@@ -2,13 +2,13 @@
 
 === arrayAugment.ts ===
 interface Array<T> {
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(arrayAugment.ts, 0, 0))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(arrayAugment.ts, 0, 16))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(arrayAugment.ts, 0, 16))
 
     split: (parts: number) => T[][];
 >split : Symbol(Array.split, Decl(arrayAugment.ts, 0, 20))
 >parts : Symbol(parts, Decl(arrayAugment.ts, 1, 12))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(arrayAugment.ts, 0, 16))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(arrayAugment.ts, 0, 16))
 }
 
 var x = [''];

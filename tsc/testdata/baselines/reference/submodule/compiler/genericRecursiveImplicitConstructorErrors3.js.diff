@@ -1,6 +1,6 @@
 --- old.genericRecursiveImplicitConstructorErrors3.js
 +++ new.genericRecursiveImplicitConstructorErrors3.js
-@@= skipped -42, +42 lines =@@
+@@= skipped -43, +43 lines =@@
  })(TypeScript || (TypeScript = {}));
  (function (TypeScript) {
      class PullSymbol {

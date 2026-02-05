@@ -1,8 +1,8 @@
 --- old.emitClassDeclarationWithPropertyAssignmentInES6.js
 +++ new.emitClassDeclarationWithPropertyAssignmentInES6.js
-@@= skipped -27, +27 lines =@@
-
+@@= skipped -28, +28 lines =@@
  //// [emitClassDeclarationWithPropertyAssignmentInES6.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.x = "Hello world";

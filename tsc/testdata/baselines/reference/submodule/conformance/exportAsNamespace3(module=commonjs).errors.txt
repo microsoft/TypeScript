@@ -1,21 +1,27 @@
 1.ts(2,1): error TS2448: Block-scoped variable 'ns' used before its declaration.
+1.ts(2,1): error TS2454: Variable 'ns' is used before being assigned.
 1.ts(3,1): error TS2448: Block-scoped variable 'ns' used before its declaration.
+1.ts(3,1): error TS2454: Variable 'ns' is used before being assigned.
 
 
 ==== 0.ts (0 errors) ====
     export const a = 1;
     export const b = 2;
     
-==== 1.ts (2 errors) ====
+==== 1.ts (4 errors) ====
     export * as ns from './0';
     ns.a;
     ~~
 !!! error TS2448: Block-scoped variable 'ns' used before its declaration.
 !!! related TS2728 1.ts:4:5: 'ns' is declared here.
+    ~~
+!!! error TS2454: Variable 'ns' is used before being assigned.
     ns.b;
     ~~
 !!! error TS2448: Block-scoped variable 'ns' used before its declaration.
 !!! related TS2728 1.ts:4:5: 'ns' is declared here.
+    ~~
+!!! error TS2454: Variable 'ns' is used before being assigned.
     let ns = {a: 1, b: 2}
     ns.a;
     ns.b;

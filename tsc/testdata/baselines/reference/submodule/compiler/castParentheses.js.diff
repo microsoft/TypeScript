@@ -1,8 +1,8 @@
 --- old.castParentheses.js
 +++ new.castParentheses.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
  //// [castParentheses.js]
+ "use strict";
  class a {
 +    static b;
  }

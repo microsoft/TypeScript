@@ -9,6 +9,7 @@ a = y;
 
 
 //// [assignObjectToNonPrimitive.js]
+"use strict";
 var x = {};
 var y = { foo: "bar" };
 var a;

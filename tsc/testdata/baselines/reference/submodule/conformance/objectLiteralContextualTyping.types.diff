@@ -1,0 +1,20 @@
+--- old.objectLiteralContextualTyping.types
++++ new.objectLiteralContextualTyping.types
+@@= skipped -70, +70 lines =@@
+ >w : number
+
+ declare function bar<T>(param: { x?: T }): T;
+->bar : <T>(param: { x?: T; }) => T
+->param : { x?: T; }
++>bar : <T>(param: { x?: T | undefined; }) => T
++>param : { x?: T | undefined; }
+ >x : T | undefined
+
+ var b = bar({});
+ >b : unknown
+ >bar({}) : unknown
+->bar : <T>(param: { x?: T; }) => T
++>bar : <T>(param: { x?: T | undefined; }) => T
+ >{} : {}
+
+ var b: {};

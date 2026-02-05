@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/collisionCodeGenModuleWithConstructorChildren.ts] ////
 
 === collisionCodeGenModuleWithConstructorChildren.ts ===
-module M {
+namespace M {
 >M : typeof M
 
     export var x = 3;
@@ -19,7 +19,7 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
     class d {
@@ -33,7 +33,7 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 
     class d2 {

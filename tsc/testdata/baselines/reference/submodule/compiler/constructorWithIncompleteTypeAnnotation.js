@@ -14,7 +14,7 @@ declare module "fs" {
 import fs = module("fs");
 
 
-module TypeScriptAllInOne {
+namespace TypeScriptAllInOne {
     export class Program {
         static Main(...args: string[]) {
             try {
@@ -282,6 +282,7 @@ TypeScriptAllInOne.Program.Main();
 
 
 //// [constructorWithIncompleteTypeAnnotation.js]
+"use strict";
 var fs = module;
 ("fs");
 var TypeScriptAllInOne;

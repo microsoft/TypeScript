@@ -14,6 +14,7 @@ function foo() {
 
 
 //// [contextualTypingArrayDestructuringWithDefaults.js]
+"use strict";
 let [c0 = { a: "a" }] = [];
 let [x1, c1 = { a: "a" }] = [1];
 let [c_ = { a: "a" }] = [];

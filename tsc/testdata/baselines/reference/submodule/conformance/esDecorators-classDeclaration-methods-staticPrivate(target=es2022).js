@@ -14,6 +14,7 @@ class D {
 
 
 //// [esDecorators-classDeclaration-methods-staticPrivate.js]
+"use strict";
 class C {
     @dec
     static #method1() { }

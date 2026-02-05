@@ -4,14 +4,14 @@ funClodule.ts(19,7): error TS2813: Class declaration cannot implement overload l
 
 ==== funClodule.ts (2 errors) ====
     declare function foo();
-    declare module foo {
+    declare namespace foo {
         export function x(): any;
     }
     declare class foo { } // Should error
     
     
     declare class foo2 { }
-    declare module foo2 {
+    declare namespace foo2 {
         export function x(): any;
     }
     declare function foo2(); // Should error
@@ -21,7 +21,7 @@ funClodule.ts(19,7): error TS2813: Class declaration cannot implement overload l
              ~~~~
 !!! error TS2814: Function with bodies can only merge with classes that are ambient.
 !!! related TS6506 funClodule.ts:19:7: Consider adding a 'declare' modifier to this class.
-    module foo3 {
+    namespace foo3 {
          export function x(): any { }
     }
     class foo3 { } // Should error

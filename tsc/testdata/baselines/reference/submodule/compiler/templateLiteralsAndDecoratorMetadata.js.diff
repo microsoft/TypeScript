@@ -1,13 +1,13 @@
 --- old.templateLiteralsAndDecoratorMetadata.js
 +++ new.templateLiteralsAndDecoratorMetadata.js
-@@= skipped -20, +20 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Greeter = void 0;
- class Greeter {
+@@= skipped -17, +17 lines =@@
+     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+ };
+ export class Greeter {
 -    constructor() {
 -        this.greeting = `employee`; //template literals on this line cause the issue
 -    }
 +    greeting = `employee`; //template literals on this line cause the issue
  }
- exports.Greeter = Greeter;
  __decorate([
+     format("Hello, %s"),

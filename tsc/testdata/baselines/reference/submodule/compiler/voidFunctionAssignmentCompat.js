@@ -22,6 +22,7 @@ var frv3: (v:any)=>number = (function() { return function () { return 0; } })() 
 
 
 //// [voidFunctionAssignmentCompat.js]
+"use strict";
 var fa = function () { return 3; };
 fa = function () { }; // should not work
 var fv = function () { };

@@ -17,6 +17,7 @@ test.fail2(arg => foo.reject(arg)); // Error: Supplied parameters do not match a
 
 
 //// [genericInterfaceTypeCall.js]
+"use strict";
 var foo;
 var test;
 test.fail(arg => foo.reject(arg));

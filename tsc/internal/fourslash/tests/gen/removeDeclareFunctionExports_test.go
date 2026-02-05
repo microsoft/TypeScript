@@ -11,7 +11,7 @@ func TestRemoveDeclareFunctionExports(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `declare module M {
+	const content = `declare namespace M {
     function RegExp2(pattern: string): RegExp2;
     export function RegExp2(pattern: string, flags: string): RegExp2;
 }`

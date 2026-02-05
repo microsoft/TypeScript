@@ -167,6 +167,7 @@ var r8b6 = b6 !== a6;
 //var r8b7 = b7 !== a7;
 
 //// [comparisonOperatorWithSubtypeObjectOnInstantiatedCallSignature.js]
+"use strict";
 class Base {
     a;
 }

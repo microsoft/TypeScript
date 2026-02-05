@@ -7,6 +7,7 @@ class C {
 }
 
 //// [asyncGetter_es6.js]
+"use strict";
 class C {
     async get foo() {
     }

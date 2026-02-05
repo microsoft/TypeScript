@@ -1,8 +1,8 @@
 --- old.emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.js
 +++ new.emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.js
-@@= skipped -16, +16 lines =@@
-
+@@= skipped -17, +17 lines =@@
  //// [emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.js]
+ "use strict";
  class A {
 -    constructor() {
 -        this.blub = 6;

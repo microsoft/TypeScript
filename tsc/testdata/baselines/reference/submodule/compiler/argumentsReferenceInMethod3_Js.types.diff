@@ -4,33 +4,31 @@
  	 */
  	m(foo = {}) {
  >m : (foo?: object) => void
-->foo : any
+->foo : object | undefined
 +>foo : object
  >{} : {}
 
  		/**
- 		 * @type object
+@@= skipped -8, +8 lines =@@
  		 */
  		this.x = foo;
-->this.x = foo : any
-->this.x : any
-+>this.x = foo : object
+ >this.x = foo : object
+->this.x : object | undefined
 +>this.x : object
  >this : this
-->x : any
-->foo : any
+->x : object | undefined
 +>x : object
-+>foo : object
+ >foo : object
 
  		/**
- 		 * @type object
+@@= skipped -10, +10 lines =@@
  		 */
  		this.y = super.arguments.bar;
  >this.y = super.arguments.bar : {}
-->this.y : any
+->this.y : object | undefined
 +>this.y : object
  >this : this
-->y : any
+->y : object | undefined
 +>y : object
  >super.arguments.bar : {}
  >super.arguments : { bar: {}; }

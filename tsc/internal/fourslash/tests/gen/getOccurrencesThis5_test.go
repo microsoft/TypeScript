@@ -35,7 +35,7 @@ function f() {
     }
 }
 
-module m {
+namespace m {
     function f() {
         this;
         this;

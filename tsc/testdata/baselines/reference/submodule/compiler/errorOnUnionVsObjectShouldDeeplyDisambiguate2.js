@@ -32,6 +32,7 @@ function foo(): Stuff | Date {
 }
 
 //// [errorOnUnionVsObjectShouldDeeplyDisambiguate2.js]
+"use strict";
 function foo() {
     return {
         a() { return [123]; },

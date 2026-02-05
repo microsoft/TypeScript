@@ -1,8 +1,8 @@
 --- old.infinitelyExpandingTypesNonGenericBase.js
 +++ new.infinitelyExpandingTypesNonGenericBase.js
-@@= skipped -27, +27 lines =@@
-
+@@= skipped -28, +28 lines =@@
  //// [infinitelyExpandingTypesNonGenericBase.js]
+ "use strict";
  class Functionality {
 +    property;
  }

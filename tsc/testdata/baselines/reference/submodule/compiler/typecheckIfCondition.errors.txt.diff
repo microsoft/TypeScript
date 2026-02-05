@@ -1,0 +1,22 @@
+--- old.typecheckIfCondition.errors.txt
++++ new.typecheckIfCondition.errors.txt
+@@= skipped -0, +0 lines =@@
+-typecheckIfCondition.ts(4,10): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+-typecheckIfCondition.ts(4,26): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++typecheckIfCondition.ts(4,10): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++typecheckIfCondition.ts(4,26): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+
+
+ ==== typecheckIfCondition.ts (2 errors) ====
+@@= skipped -7, +7 lines =@@
+     {
+         if (!module.exports) module.exports = "";
+              ~~~~~~
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                              ~~~~~~
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+         var x = null; // don't want to baseline output
+     }
+     

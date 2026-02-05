@@ -2,7 +2,7 @@
 
 === enumMergingErrors.ts ===
 // Enum with constant, computed, constant members split across 3 declarations with the same root module
-module M {
+namespace M {
 >M : typeof M
 
     export enum E1 { A = 0 }
@@ -19,7 +19,7 @@ module M {
 >A : E3.A
 >0 : 0
 }
-module M {
+namespace M {
 >M : typeof M
 
     export enum E1 { B = 'foo'.length }
@@ -40,7 +40,7 @@ module M {
 >E3 : E3
 >C : E3.A
 }
-module M {
+namespace M {
 >M : typeof M
 
     export enum E1 { C }
@@ -61,7 +61,7 @@ module M {
 }
 
 // Enum with no initializer in either declaration with constant members with the same root module
-module M1 {
+namespace M1 {
 >M1 : typeof M1
 
     export enum E1 { A = 0 }
@@ -69,14 +69,14 @@ module M1 {
 >A : E1.A
 >0 : 0
 }
-module M1 {
+namespace M1 {
 >M1 : typeof M1
 
     export enum E1 { B }
 >E1 : E1
 >B : E1.A
 }
-module M1 {
+namespace M1 {
 >M1 : typeof M1
 
     export enum E1 { C }
@@ -86,14 +86,14 @@ module M1 {
 
 
 // Enum with initializer in only one of three declarations with constant members with the same root module
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 
     export enum E1 { A }
 >E1 : E1
 >A : E1.A
 }
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 
     export enum E1 { B = 0 }
@@ -101,7 +101,7 @@ module M2 {
 >B : E1.A
 >0 : 0
 }
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 
     export enum E1 { C }

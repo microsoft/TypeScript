@@ -33,6 +33,7 @@ class DDD extends BB {
 }
 
 //// [override8.js]
+"use strict";
 class B {
     a;
 }

@@ -22,6 +22,7 @@ t.parent;
 
 
 //// [unionTypeWithRecursiveSubtypeReduction1.js]
+"use strict";
 class Module {
     members;
 }

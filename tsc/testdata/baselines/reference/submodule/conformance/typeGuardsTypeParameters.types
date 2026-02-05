@@ -6,8 +6,9 @@
 class C {
 >C : C
 
-    prop: string;
+    prop: string = "";
 >prop : string
+>"" : ""
 }
 
 function f1<T>(x: T) {

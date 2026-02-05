@@ -1,6 +1,6 @@
 --- old.numericStringNamedPropertyEquivalence.js
 +++ new.numericStringNamedPropertyEquivalence.js
-@@= skipped -28, +28 lines =@@
+@@= skipped -29, +29 lines =@@
  // Each of these types has an error in it. 
  // String named and numeric named properties conflict if they would be equivalent after ToNumber on the property name.
  class C {

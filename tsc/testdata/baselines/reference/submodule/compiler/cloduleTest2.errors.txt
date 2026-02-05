@@ -9,8 +9,8 @@ cloduleTest2.ts(36,10): error TS2554: Expected 1 arguments, but got 0.
 
 
 ==== cloduleTest2.ts (8 errors) ====
-    module T1 {
-        module m3d { export var y = 2; }
+    namespace T1 {
+        namespace m3d { export var y = 2; }
         declare class m3d { constructor(foo); foo(): void ; static bar(); }
         var r = new m3d(); // error
                 ~~~~~~~~~
@@ -18,17 +18,17 @@ cloduleTest2.ts(36,10): error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 cloduleTest2.ts:3:37: An argument for 'foo' was not provided.
     }
     
-    module T2 {
+    namespace T2 {
         declare class m3d { constructor(foo); foo(): void; static bar(); }
-        module m3d { export var y = 2; }
+        namespace m3d { export var y = 2; }
         var r = new m3d(); // error
                 ~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 cloduleTest2.ts:8:37: An argument for 'foo' was not provided.
     }
     
-    module T3 {
-        module m3d { export var y = 2; }
+    namespace T3 {
+        namespace m3d { export var y = 2; }
         declare class m3d { foo(): void; static bar(); }
         var r = new m3d();
         r.foo();
@@ -40,9 +40,9 @@ cloduleTest2.ts(36,10): error TS2554: Expected 1 arguments, but got 0.
 !!! error TS2339: Property 'y' does not exist on type 'm3d'.
     }
     
-    module T4 {
+    namespace T4 {
         declare class m3d { foo(): void; static bar(); }
-        module m3d { export var y = 2; }
+        namespace m3d { export var y = 2; }
         var r = new m3d();
         r.foo();
         r.bar(); // error
@@ -53,7 +53,7 @@ cloduleTest2.ts(36,10): error TS2554: Expected 1 arguments, but got 0.
 !!! error TS2339: Property 'y' does not exist on type 'm3d'.
     }
     
-    module m3d { export var y = 2; }
+    namespace m3d { export var y = 2; }
     declare class m3d { constructor(foo); foo(): void; static bar(); }
     var r = new m3d(); // error
             ~~~~~~~~~

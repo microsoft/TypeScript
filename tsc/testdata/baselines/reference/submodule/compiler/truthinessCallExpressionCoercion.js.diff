@@ -1,6 +1,6 @@
 --- old.truthinessCallExpressionCoercion.js
 +++ new.truthinessCallExpressionCoercion.js
-@@= skipped -144, +144 lines =@@
+@@= skipped -145, +145 lines =@@
      }
  }
  class Foo {

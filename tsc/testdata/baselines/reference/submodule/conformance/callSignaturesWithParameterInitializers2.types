@@ -37,7 +37,7 @@ class C {
 >1 : 1
 }
 
-var c: C;
+declare var c: C;
 >c : C
 
 c.foo();

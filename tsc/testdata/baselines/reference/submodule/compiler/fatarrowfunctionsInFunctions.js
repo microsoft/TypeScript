@@ -16,6 +16,7 @@ messenger.start();
 
 
 //// [fatarrowfunctionsInFunctions.js]
+"use strict";
 var messenger = {
     message: "Hello World",
     start: function () {

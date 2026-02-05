@@ -1,0 +1,18 @@
+--- old.assignmentToVoidZero1.errors.txt
++++ new.assignmentToVoidZero1.errors.txt
+@@= skipped -0, +0 lines =@@
+-assignmentToVoidZero1.js(2,1): error TS2322: Type 'undefined' is not assignable to type '2'.
+-assignmentToVoidZero1.js(2,13): error TS2322: Type 'undefined' is not assignable to type '1'.
+-
+-
+-==== assignmentToVoidZero1.js (2 errors) ====
+-    // #38552
+-    exports.y = exports.x = void 0;
+-    ~~~~~~~~~
+-!!! error TS2322: Type 'undefined' is not assignable to type '2'.
+-                ~~~~~~~~~
+-!!! error TS2322: Type 'undefined' is not assignable to type '1'.
+-    exports.x = 1;
+-    exports.y = 2;
+-    
++<no content>

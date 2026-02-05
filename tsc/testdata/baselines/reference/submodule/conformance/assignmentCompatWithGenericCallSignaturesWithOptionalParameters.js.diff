@@ -1,6 +1,6 @@
 --- old.assignmentCompatWithGenericCallSignaturesWithOptionalParameters.js
 +++ new.assignmentCompatWithGenericCallSignaturesWithOptionalParameters.js
-@@= skipped -136, +136 lines =@@
+@@= skipped -137, +137 lines =@@
  var ClassTypeParam;
  (function (ClassTypeParam) {
      class Base {

@@ -14,6 +14,7 @@ class arrTest {
 }
 
 //// [heterogeneousArrayAndOverloads.js]
+"use strict";
 class arrTest {
     test(arg1) { }
     callTest() {

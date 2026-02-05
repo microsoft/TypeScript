@@ -1,0 +1,517 @@
+--- old.staticPropertyNameConflicts(target=es2015,usedefineforclassfields=false).errors.txt
++++ new.staticPropertyNameConflicts(target=es2015,usedefineforclassfields=false).errors.txt
+@@= skipped -0, +0 lines =@@
+-staticPropertyNameConflicts.ts(11,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'.
+ staticPropertyNameConflicts.ts(12,5): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(16,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName2'.
+ staticPropertyNameConflicts.ts(17,5): error TS2564: Property '[FunctionPropertyNames.name]' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(21,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'.
+-staticPropertyNameConflicts.ts(26,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn2'.
+-staticPropertyNameConflicts.ts(32,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'.
+ staticPropertyNameConflicts.ts(33,5): error TS2564: Property 'length' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(37,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength2'.
+ staticPropertyNameConflicts.ts(38,5): error TS2564: Property '[FunctionPropertyNames.length]' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(42,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn'.
+-staticPropertyNameConflicts.ts(47,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn2'.
+ staticPropertyNameConflicts.ts(53,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
+ staticPropertyNameConflicts.ts(54,5): error TS2564: Property 'prototype' has no initializer and is not definitely assigned in the constructor.
+ staticPropertyNameConflicts.ts(58,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype2'.
+@@= skipped -17, +9 lines =@@
+ staticPropertyNameConflicts.ts(63,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
+ staticPropertyNameConflicts.ts(68,12): error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
+ staticPropertyNameConflicts.ts(68,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn2'.
+-staticPropertyNameConflicts.ts(74,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
+ staticPropertyNameConflicts.ts(75,5): error TS2564: Property 'caller' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(79,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller2'.
+ staticPropertyNameConflicts.ts(80,5): error TS2564: Property '[FunctionPropertyNames.caller]' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(84,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
+-staticPropertyNameConflicts.ts(89,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn2'.
+-staticPropertyNameConflicts.ts(95,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
+ staticPropertyNameConflicts.ts(96,5): error TS2564: Property 'arguments' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(100,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments2'.
+ staticPropertyNameConflicts.ts(101,5): error TS2564: Property '[FunctionPropertyNames.arguments]' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(105,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
+-staticPropertyNameConflicts.ts(110,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn2'.
+-staticPropertyNameConflicts.ts(119,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName_Anonymous'.
+ staticPropertyNameConflicts.ts(120,5): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(124,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName_Anonymous2'.
+ staticPropertyNameConflicts.ts(125,5): error TS2564: Property '[FunctionPropertyNames.name]' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(129,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn_Anonymous'.
+-staticPropertyNameConflicts.ts(134,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn_Anonymous2'.
+-staticPropertyNameConflicts.ts(140,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength_Anonymous'.
+ staticPropertyNameConflicts.ts(141,5): error TS2564: Property 'length' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(145,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength_Anonymous2'.
+ staticPropertyNameConflicts.ts(146,5): error TS2564: Property '[FunctionPropertyNames.length]' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(150,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn_Anonymous'.
+-staticPropertyNameConflicts.ts(155,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn_Anonymous2'.
+ staticPropertyNameConflicts.ts(161,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype_Anonymous'.
+ staticPropertyNameConflicts.ts(162,5): error TS2564: Property 'prototype' has no initializer and is not definitely assigned in the constructor.
+ staticPropertyNameConflicts.ts(166,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype_Anonymous2'.
+@@= skipped -32, +16 lines =@@
+ staticPropertyNameConflicts.ts(171,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous'.
+ staticPropertyNameConflicts.ts(176,12): error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
+ staticPropertyNameConflicts.ts(176,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous2'.
+-staticPropertyNameConflicts.ts(182,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller_Anonymous'.
+ staticPropertyNameConflicts.ts(183,5): error TS2564: Property 'caller' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(187,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller_Anonymous2'.
+ staticPropertyNameConflicts.ts(188,5): error TS2564: Property '[FunctionPropertyNames.caller]' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(192,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn_Anonymous'.
+-staticPropertyNameConflicts.ts(197,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn_Anonymous2'.
+-staticPropertyNameConflicts.ts(203,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments_Anonymous'.
+ staticPropertyNameConflicts.ts(204,5): error TS2564: Property 'arguments' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(208,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments_Anonymous2'.
+ staticPropertyNameConflicts.ts(209,5): error TS2564: Property '[FunctionPropertyNames.arguments]' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(213,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn_Anonymous'.
+-staticPropertyNameConflicts.ts(218,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn_Anonymous2'.
+-staticPropertyNameConflicts.ts(228,16): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'.
+ staticPropertyNameConflicts.ts(229,9): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(234,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'ExportedStaticName'.
+ staticPropertyNameConflicts.ts(235,5): error TS2564: Property '[FunctionPropertyNames.name]' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(240,16): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'.
+-staticPropertyNameConflicts.ts(246,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'ExportedStaticNameFn'.
+ staticPropertyNameConflicts.ts(252,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+-staticPropertyNameConflicts.ts(253,16): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'.
+ staticPropertyNameConflicts.ts(254,9): error TS2564: Property 'length' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(259,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'ExportedStaticLength'.
+ staticPropertyNameConflicts.ts(260,5): error TS2564: Property '[FunctionPropertyNames.length]' has no initializer and is not definitely assigned in the constructor.
+ staticPropertyNameConflicts.ts(264,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+-staticPropertyNameConflicts.ts(265,16): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn'.
+-staticPropertyNameConflicts.ts(271,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'ExportedStaticLengthFn'.
+ staticPropertyNameConflicts.ts(277,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+ staticPropertyNameConflicts.ts(278,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
+ staticPropertyNameConflicts.ts(279,9): error TS2564: Property 'prototype' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -37, +21 lines =@@
+ staticPropertyNameConflicts.ts(296,12): error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
+ staticPropertyNameConflicts.ts(296,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'ExportedStaticPrototypeFn'.
+ staticPropertyNameConflicts.ts(302,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+-staticPropertyNameConflicts.ts(303,16): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
+ staticPropertyNameConflicts.ts(304,9): error TS2564: Property 'caller' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(309,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'ExportedStaticCaller'.
+ staticPropertyNameConflicts.ts(310,5): error TS2564: Property '[FunctionPropertyNames.caller]' has no initializer and is not definitely assigned in the constructor.
+ staticPropertyNameConflicts.ts(314,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+-staticPropertyNameConflicts.ts(315,16): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
+-staticPropertyNameConflicts.ts(321,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'ExportedStaticCallerFn'.
+ staticPropertyNameConflicts.ts(327,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+-staticPropertyNameConflicts.ts(328,16): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
+ staticPropertyNameConflicts.ts(329,9): error TS2564: Property 'arguments' has no initializer and is not definitely assigned in the constructor.
+-staticPropertyNameConflicts.ts(334,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'ExportedStaticArguments'.
+ staticPropertyNameConflicts.ts(335,5): error TS2564: Property '[FunctionPropertyNames.arguments]' has no initializer and is not definitely assigned in the constructor.
+ staticPropertyNameConflicts.ts(339,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+-staticPropertyNameConflicts.ts(340,16): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
+-staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'ExportedStaticArgumentsFn'.
+-
+-
+-==== staticPropertyNameConflicts.ts (104 errors) ====
++
++
++==== staticPropertyNameConflicts.ts (56 errors) ====
+     const FunctionPropertyNames = {
+         name: 'name',
+         length: 'length',
+@@= skipped -29, +21 lines =@@
+     // name
+     class StaticName {
+         static name: number; // error without useDefineForClassFields
+-               ~~~~
+-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'.
+         name: string; // ok
+         ~~~~
+ !!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -9, +7 lines =@@
+     
+     class StaticName2 {
+         static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName2'.
+         [FunctionPropertyNames.name]: number; // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2564: Property '[FunctionPropertyNames.name]' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -9, +7 lines =@@
+     
+     class StaticNameFn {
+         static name() {} // error without useDefineForClassFields
+-               ~~~~
+-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'.
+         name() {} // ok
+     }
+     
+     class StaticNameFn2 {
+         static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn2'.
+         [FunctionPropertyNames.name]() {} // ok
+     }
+     
+     // length
+     class StaticLength {
+         static length: number; // error without useDefineForClassFields
+-               ~~~~~~
+-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'.
+         length: string; // ok
+         ~~~~~~
+ !!! error TS2564: Property 'length' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -24, +18 lines =@@
+     
+     class StaticLength2 {
+         static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength2'.
+         [FunctionPropertyNames.length]: number; // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2564: Property '[FunctionPropertyNames.length]' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -9, +7 lines =@@
+     
+     class StaticLengthFn {
+         static length() {} // error without useDefineForClassFields
+-               ~~~~~~
+-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn'.
+         length() {} // ok
+     }
+     
+     class StaticLengthFn2 {
+         static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn2'.
+         [FunctionPropertyNames.length]() {} // ok
+     }
+     
+@@= skipped -52, +48 lines =@@
+     // caller
+     class StaticCaller {
+         static caller: number; // error without useDefineForClassFields
+-               ~~~~~~
+-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
+         caller: string; // ok
+         ~~~~~~
+ !!! error TS2564: Property 'caller' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -9, +7 lines =@@
+     
+     class StaticCaller2 {
+         static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller2'.
+         [FunctionPropertyNames.caller]: string; // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2564: Property '[FunctionPropertyNames.caller]' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -9, +7 lines =@@
+     
+     class StaticCallerFn {
+         static caller() {} // error without useDefineForClassFields
+-               ~~~~~~
+-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
+         caller() {} // ok
+     }
+     
+     class StaticCallerFn2 {
+         static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn2'.
+         [FunctionPropertyNames.caller]() {} // ok
+     }
+     
+     // arguments
+     class StaticArguments {
+         static arguments: number; // error without useDefineForClassFields
+-               ~~~~~~~~~
+-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
+         arguments: string; // ok
+         ~~~~~~~~~
+ !!! error TS2564: Property 'arguments' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -24, +18 lines =@@
+     
+     class StaticArguments2 {
+         static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments2'.
+         [FunctionPropertyNames.arguments]: string; // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2564: Property '[FunctionPropertyNames.arguments]' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -9, +7 lines =@@
+     
+     class StaticArgumentsFn {
+         static arguments() {} // error without useDefineForClassFields
+-               ~~~~~~~~~
+-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
+         arguments() {} // ok
+     }
+     
+     class StaticArgumentsFn2 {
+         static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn2'.
+         [FunctionPropertyNames.arguments]() {} // ok
+     }
+     
+@@= skipped -18, +14 lines =@@
+     // name
+     var StaticName_Anonymous = class {
+         static name: number; // error without useDefineForClassFields
+-               ~~~~
+-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName_Anonymous'.
+         name: string; // ok
+         ~~~~
+ !!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -9, +7 lines =@@
+     
+     var StaticName_Anonymous2 = class {
+         static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName_Anonymous2'.
+         [FunctionPropertyNames.name]: string; // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2564: Property '[FunctionPropertyNames.name]' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -9, +7 lines =@@
+     
+     var StaticNameFn_Anonymous = class {
+         static name() {} // error without useDefineForClassFields
+-               ~~~~
+-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn_Anonymous'.
+         name() {} // ok
+     }
+     
+     var StaticNameFn_Anonymous2 = class {
+         static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn_Anonymous2'.
+         [FunctionPropertyNames.name]() {} // ok
+     }
+     
+     // length
+     var StaticLength_Anonymous = class {
+         static length: number; // error without useDefineForClassFields
+-               ~~~~~~
+-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength_Anonymous'.
+         length: string; // ok
+         ~~~~~~
+ !!! error TS2564: Property 'length' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -24, +18 lines =@@
+     
+     var StaticLength_Anonymous2 = class {
+         static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength_Anonymous2'.
+         [FunctionPropertyNames.length]: string; // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2564: Property '[FunctionPropertyNames.length]' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -9, +7 lines =@@
+     
+     var StaticLengthFn_Anonymous = class {
+         static length() {} // error without useDefineForClassFields
+-               ~~~~~~
+-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn_Anonymous'.
+         length() {} // ok
+     }
+     
+     var StaticLengthFn_Anonymous2 = class {
+         static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn_Anonymous2'.
+         [FunctionPropertyNames.length]() {} // ok
+     }
+     
+@@= skipped -52, +48 lines =@@
+     // caller
+     var StaticCaller_Anonymous = class {
+         static caller: number; // error without useDefineForClassFields
+-               ~~~~~~
+-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller_Anonymous'.
+         caller: string; // ok
+         ~~~~~~
+ !!! error TS2564: Property 'caller' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -9, +7 lines =@@
+     
+     var StaticCaller_Anonymous2 = class {
+         static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller_Anonymous2'.
+         [FunctionPropertyNames.caller]: string; // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2564: Property '[FunctionPropertyNames.caller]' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -9, +7 lines =@@
+     
+     var StaticCallerFn_Anonymous = class {
+         static caller() {} // error without useDefineForClassFields
+-               ~~~~~~
+-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn_Anonymous'.
+         caller() {} // ok
+     }
+     
+     var StaticCallerFn_Anonymous2 = class {
+         static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn_Anonymous2'.
+         [FunctionPropertyNames.caller]() {} // ok
+     }
+     
+     // arguments
+     var StaticArguments_Anonymous = class {
+         static arguments: number; // error without useDefineForClassFields
+-               ~~~~~~~~~
+-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments_Anonymous'.
+         arguments: string; // ok
+         ~~~~~~~~~
+ !!! error TS2564: Property 'arguments' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -24, +18 lines =@@
+     
+     var StaticArguments_Anonymous2 = class {
+         static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments_Anonymous2'.
+         [FunctionPropertyNames.arguments]: string; // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2564: Property '[FunctionPropertyNames.arguments]' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -9, +7 lines =@@
+     
+     var StaticArgumentsFn_Anonymous = class {
+         static arguments() {} // error without useDefineForClassFields
+-               ~~~~~~~~~
+-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn_Anonymous'.
+         arguments() {} // ok
+     }
+     
+     var StaticArgumentsFn_Anonymous2 = class {
+         static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn_Anonymous2'.
+         [FunctionPropertyNames.arguments]() {} // ok
+     }
+     
+@@= skipped -19, +15 lines =@@
+     namespace TestOnDefaultExportedClass_1 {
+         class StaticName {
+             static name: number; // error without useDefineForClassFields
+-                   ~~~~
+-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'.
+             name: string; // ok
+             ~~~~
+ !!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -10, +8 lines =@@
+     
+     export class ExportedStaticName {
+         static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'ExportedStaticName'.
+         [FunctionPropertyNames.name]: string; // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2564: Property '[FunctionPropertyNames.name]' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -10, +8 lines =@@
+     namespace TestOnDefaultExportedClass_2 {
+         class StaticNameFn {
+             static name() {} // error without useDefineForClassFields
+-                   ~~~~
+-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'.
+             name() {} // ok
+         }
+     }
+     
+     export class ExportedStaticNameFn {
+         static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'ExportedStaticNameFn'.
+         [FunctionPropertyNames.name]() {} // ok
+     }
+     
+@@= skipped -19, +15 lines =@@
+                ~~~~~~~
+ !!! error TS1319: A default export can only be used in an ECMAScript-style module.
+             static length: number; // error without useDefineForClassFields
+-                   ~~~~~~
+-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'.
+             length: string; // ok
+             ~~~~~~
+ !!! error TS2564: Property 'length' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -10, +8 lines =@@
+     
+     export class ExportedStaticLength {
+         static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'ExportedStaticLength'.
+         [FunctionPropertyNames.length]: string; // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2564: Property '[FunctionPropertyNames.length]' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -12, +10 lines =@@
+                ~~~~~~~
+ !!! error TS1319: A default export can only be used in an ECMAScript-style module.
+             static length() {} // error without useDefineForClassFields
+-                   ~~~~~~
+-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn'.
+             length() {} // ok
+         }
+     }
+     
+     export class ExportedStaticLengthFn {
+         static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'ExportedStaticLengthFn'.
+         [FunctionPropertyNames.length]() {} // ok
+     }
+     
+@@= skipped -64, +60 lines =@@
+                ~~~~~~~
+ !!! error TS1319: A default export can only be used in an ECMAScript-style module.
+             static caller: number; // error without useDefineForClassFields
+-                   ~~~~~~
+-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
+             caller: string; // ok
+             ~~~~~~
+ !!! error TS2564: Property 'caller' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -10, +8 lines =@@
+     
+     export class ExportedStaticCaller {
+         static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'ExportedStaticCaller'.
+         [FunctionPropertyNames.caller]: string; // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2564: Property '[FunctionPropertyNames.caller]' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -12, +10 lines =@@
+                ~~~~~~~
+ !!! error TS1319: A default export can only be used in an ECMAScript-style module.
+             static caller() {} // error without useDefineForClassFields
+-                   ~~~~~~
+-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
+             caller() {} // ok
+         }
+     }
+     
+     export class ExportedStaticCallerFn {
+         static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'ExportedStaticCallerFn'.
+         [FunctionPropertyNames.caller]() {} // ok
+     }
+     
+@@= skipped -19, +15 lines =@@
+                ~~~~~~~
+ !!! error TS1319: A default export can only be used in an ECMAScript-style module.
+             static arguments: number; // error without useDefineForClassFields
+-                   ~~~~~~~~~
+-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
+             arguments: string; // ok
+             ~~~~~~~~~
+ !!! error TS2564: Property 'arguments' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -10, +8 lines =@@
+     
+     export class ExportedStaticArguments {
+         static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'ExportedStaticArguments'.
+         [FunctionPropertyNames.arguments]: string; // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ !!! error TS2564: Property '[FunctionPropertyNames.arguments]' has no initializer and is not definitely assigned in the constructor.
+@@= skipped -12, +10 lines =@@
+                ~~~~~~~
+ !!! error TS1319: A default export can only be used in an ECMAScript-style module.
+             static arguments() {} // error without useDefineForClassFields
+-                   ~~~~~~~~~
+-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
+             arguments() {} // ok
+         }
+     }
+     
+     export class ExportedStaticArgumentsFn {
+         static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
+-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-!!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'ExportedStaticArgumentsFn'.
+         [FunctionPropertyNames.arguments]() {} // ok
+     }

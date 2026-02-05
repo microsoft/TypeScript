@@ -32,6 +32,7 @@ function f() {
 
 
 //// [baseCheck.js]
+"use strict";
 class C {
     constructor(x, y) { }
 }

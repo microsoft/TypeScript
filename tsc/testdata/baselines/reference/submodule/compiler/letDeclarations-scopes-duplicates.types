@@ -92,7 +92,7 @@ try {
 >0 : 0
 }
 catch (e) {
->e : any
+>e : unknown
 
     let var11 = 0;
 >var11 : number
@@ -147,7 +147,7 @@ try {
 >0 : 0
 }
 catch (e) {
->e : any
+>e : unknown
 
     let var20 = 0;
 >var20 : number

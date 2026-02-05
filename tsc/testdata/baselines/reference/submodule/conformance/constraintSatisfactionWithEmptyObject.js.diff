@@ -1,6 +1,6 @@
 --- old.constraintSatisfactionWithEmptyObject.js
 +++ new.constraintSatisfactionWithEmptyObject.js
-@@= skipped -46, +46 lines =@@
+@@= skipped -47, +47 lines =@@
  var a = {};
  var r = foo({});
  class C {

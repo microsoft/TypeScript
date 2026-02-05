@@ -18,7 +18,7 @@ interface B<T> {
     val: T;
 >val : T
 }
-var x: A<number>;
+declare var x: A<number>;
 >x : A<number>
 
 x.val = 5;         // val -> number

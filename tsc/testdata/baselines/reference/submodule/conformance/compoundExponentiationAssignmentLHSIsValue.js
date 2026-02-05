@@ -24,7 +24,7 @@ function foo() {
 this **= value;
 
 // identifiers: module, class, enum, function
-module M { export var a; }
+namespace M { export var a; }
 M **= value;
 
 C **= value;
@@ -88,6 +88,7 @@ foo() **= value;
 (foo()) **= value;
 
 //// [compoundExponentiationAssignmentLHSIsValue.js]
+"use strict";
 // expected error for all the LHS of compound assignments (arithmetic and addition)
 var value;
 // this

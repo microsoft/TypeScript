@@ -1,6 +1,6 @@
 --- old.namedTupleMembers.js
 +++ new.namedTupleMembers.js
-@@= skipped -130, +130 lines =@@
+@@= skipped -125, +125 lines =@@
  export declare function useState<T>(initial: T): [value: T, setter: (T: any) => void];
  export type Iter = Func<[step: number, iterations: number]>;
  export declare function readSegment([length, count]: [number, number]): void;

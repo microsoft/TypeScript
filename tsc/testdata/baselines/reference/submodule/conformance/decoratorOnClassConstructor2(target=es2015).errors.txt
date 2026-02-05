@@ -1,0 +1,25 @@
+2.ts(1,20): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+2.ts(2,19): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+2.ts(4,18): error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+  Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+
+
+==== 0.ts (0 errors) ====
+    export class base { }
+    export function foo(target: Object, propertyKey: string | symbol, parameterIndex: number) { }
+    
+==== 2.ts (3 errors) ====
+    import {base} from "./0.ts"
+                       ~~~~~~~~
+!!! error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+    import {foo} from "./0.ts"
+                      ~~~~~~~~
+!!! error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+    export class C  extends base{
+        constructor(@foo prop: any) {
+                     ~~~
+!!! error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+!!! error TS1239:   Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+            super();
+        }
+    }

@@ -16,6 +16,7 @@ takesCallback(
 
 
 //// [innerTypeCheckOfLambdaArgument.js]
+"use strict";
 function takesCallback(callback) {
 }
 takesCallback(function inner(n) {

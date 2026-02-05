@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-fields-nonStatic(target=esnext,usedefineforclassfields=false).js
 +++ new.esDecorators-classDeclaration-fields-nonStatic(target=esnext,usedefineforclassfields=false).js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [esDecorators-classDeclaration-fields-nonStatic.js]
+ "use strict";
  const field3 = "field3";
 -let C = (() => {
 -    var _a;

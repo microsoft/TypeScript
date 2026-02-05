@@ -1,9 +1,9 @@
 --- old.parameterPropertyInConstructor4.js
 +++ new.parameterPropertyInConstructor4.js
-@@= skipped -11, +11 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.C = void 0;
- class C {
+@@= skipped -8, +8 lines =@@
+
+ //// [parameterPropertyInConstructor4.js]
+ export class C {
 +    a;
      constructor(a = [], b) {
          this.a = a;

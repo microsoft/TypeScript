@@ -1,9 +1,15 @@
+assignFromStringInterface2.ts(42,1): error TS2740: Type 'NotString' is missing the following properties from type 'String': codePointAt, includes, endsWith, normalize, and 16 more.
+assignFromStringInterface2.ts(44,1): error TS2322: Type 'String' is not assignable to type 'NotString'.
+  The types returned by 'match(...)' are incompatible between these types.
+    Type 'RegExpMatchArray | null' is not assignable to type 'RegExpMatchArray'.
+      Type 'null' is not assignable to type 'RegExpMatchArray'.
+assignFromStringInterface2.ts(45,1): error TS2322: Type 'string' is not assignable to type 'NotString'.
 assignFromStringInterface2.ts(47,1): error TS2322: Type 'String' is not assignable to type 'string'.
   'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
 assignFromStringInterface2.ts(48,1): error TS2322: Type 'NotString' is not assignable to type 'string'.
 
 
-==== assignFromStringInterface2.ts (2 errors) ====
+==== assignFromStringInterface2.ts (5 errors) ====
     interface String {
         doStuff(): string;
     }
@@ -41,14 +47,23 @@ assignFromStringInterface2.ts(48,1): error TS2322: Type 'NotString' is not assig
     }
     
     var x = '';
-    var a: String;
-    var b: NotString;
+    declare var a: String;
+    declare var b: NotString;
     
     a = x;
     a = b;
+    ~
+!!! error TS2740: Type 'NotString' is missing the following properties from type 'String': codePointAt, includes, endsWith, normalize, and 16 more.
     
     b = a;
+    ~
+!!! error TS2322: Type 'String' is not assignable to type 'NotString'.
+!!! error TS2322:   The types returned by 'match(...)' are incompatible between these types.
+!!! error TS2322:     Type 'RegExpMatchArray | null' is not assignable to type 'RegExpMatchArray'.
+!!! error TS2322:       Type 'null' is not assignable to type 'RegExpMatchArray'.
     b = x;
+    ~
+!!! error TS2322: Type 'string' is not assignable to type 'NotString'.
     
     x = a; // expected error
     ~

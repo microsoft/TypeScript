@@ -7,12 +7,12 @@ class A {
     aProp: string;
 >aProp : string
 }
-module A {
+namespace A {
     export interface X { s: string }
 >s : string
 }
 
-module B {
+namespace B {
 >B : typeof B
 
     var A = 1;

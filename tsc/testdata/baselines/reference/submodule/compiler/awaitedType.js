@@ -255,6 +255,7 @@ async function test40330() {
 
 
 //// [awaitedType.js]
+"use strict";
 async function main() {
     let aaa;
     let bbb;

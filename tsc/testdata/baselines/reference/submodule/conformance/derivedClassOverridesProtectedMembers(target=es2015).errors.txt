@@ -1,0 +1,60 @@
+derivedClassOverridesProtectedMembers.ts(5,15): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+derivedClassOverridesProtectedMembers.ts(9,15): error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+derivedClassOverridesProtectedMembers.ts(21,15): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+derivedClassOverridesProtectedMembers.ts(25,15): error TS2416: Property 'd' in type 'Derived' is not assignable to the same property in base type 'Base'.
+  Type '(a: { foo: string; bar: string; }) => void' is not assignable to type '(a: { foo: string; }) => void'.
+    Types of parameters 'a' and 'a' are incompatible.
+      Property 'bar' is missing in type '{ foo: string; }' but required in type '{ foo: string; bar: string; }'.
+derivedClassOverridesProtectedMembers.ts(25,15): error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+
+
+==== derivedClassOverridesProtectedMembers.ts (5 errors) ====
+    var x: { foo: string; }
+    var y: { foo: string; bar: string; }
+    
+    class Base {
+        protected a: typeof x;
+                  ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        protected b(a: typeof x) { }
+        protected get c() { return x; }
+        protected set c(v: typeof x) { }
+        protected d: (a: typeof x) => void;
+                  ~
+!!! error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+    
+        protected static r: typeof x;
+        protected static s(a: typeof x) { }
+        protected static get t() { return x; }
+        protected static set t(v: typeof x) { }
+        protected static u: (a: typeof x) => void;
+    
+        constructor(a: typeof x) { }
+    }
+    
+    class Derived extends Base {
+        protected a: typeof y;
+                  ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        protected b(a: typeof y) { }
+        protected get c() { return y; }
+        protected set c(v: typeof y) { }
+        protected d: (a: typeof y) => void;
+                  ~
+!!! error TS2416: Property 'd' in type 'Derived' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type '(a: { foo: string; bar: string; }) => void' is not assignable to type '(a: { foo: string; }) => void'.
+!!! error TS2416:     Types of parameters 'a' and 'a' are incompatible.
+!!! error TS2416:       Property 'bar' is missing in type '{ foo: string; }' but required in type '{ foo: string; bar: string; }'.
+!!! related TS2728 derivedClassOverridesProtectedMembers.ts:2:23: 'bar' is declared here.
+                  ~
+!!! error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+    
+        protected static r: typeof y;
+        protected static s(a: typeof y) { }
+        protected static get t() { return y; }
+        protected static set t(a: typeof y) { }
+        protected static u: (a: typeof y) => void;
+    
+        constructor(a: typeof y) { super(x) }
+    }
+    

@@ -1,6 +1,6 @@
 --- old.typeTagNoErasure.js
 +++ new.typeTagNoErasure.js
-@@= skipped -19, +19 lines =@@
+@@= skipped -20, +20 lines =@@
 
  //// [typeTagNoErasure.d.ts]
  /** @template T @typedef {<T1 extends T>(data: T1) => T1} Test */

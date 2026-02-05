@@ -15,6 +15,7 @@ var r7b = map<number>([1, ""], (x) => x.toString()); // error
 var r8 = map<any, string>([1, ""], (x) => x.toString());
 
 //// [mismatchedExplicitTypeParameterAndArgumentType.js]
+"use strict";
 function map(xs, f) {
     var ys = [];
     xs.forEach(x => ys.push(f(x)));

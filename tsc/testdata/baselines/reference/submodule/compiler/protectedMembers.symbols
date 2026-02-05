@@ -5,11 +5,11 @@
 class C1 {
 >C1 : Symbol(C1, Decl(protectedMembers.ts, 0, 0))
 
-    protected x: number;
+    protected x!: number;
 >x : Symbol(C1.x, Decl(protectedMembers.ts, 1, 10))
 
     protected static sx: number;
->sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 24))
+>sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 25))
 
     protected f() {
 >f : Symbol(C1.f, Decl(protectedMembers.ts, 3, 32))
@@ -23,9 +23,9 @@ class C1 {
 >sf : Symbol(C1.sf, Decl(protectedMembers.ts, 6, 5))
 
         return this.sx;
->this.sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 24))
+>this.sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 25))
 >this : Symbol(C1, Decl(protectedMembers.ts, 0, 0))
->sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 24))
+>sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 25))
     }
 }
 
@@ -52,9 +52,9 @@ class C2 extends C1 {
 >super.sf : Symbol(C1.sf, Decl(protectedMembers.ts, 6, 5))
 >super : Symbol(C1, Decl(protectedMembers.ts, 0, 0))
 >sf : Symbol(C1.sf, Decl(protectedMembers.ts, 6, 5))
->this.sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 24))
+>this.sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 25))
 >this : Symbol(C2, Decl(protectedMembers.ts, 10, 1))
->sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 24))
+>sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 25))
     }
 }
 
@@ -63,14 +63,14 @@ class C3 extends C2 {
 >C3 : Symbol(C3, Decl(protectedMembers.ts, 20, 1))
 >C2 : Symbol(C2, Decl(protectedMembers.ts, 10, 1))
 
-    x: number;
+    x!: number;
 >x : Symbol(C3.x, Decl(protectedMembers.ts, 23, 21))
 
-    static sx: number;
->sx : Symbol(C3.sx, Decl(protectedMembers.ts, 24, 14))
+    static sx: number
+>sx : Symbol(C3.sx, Decl(protectedMembers.ts, 24, 15))
 
     f() {
->f : Symbol(C3.f, Decl(protectedMembers.ts, 25, 22))
+>f : Symbol(C3.f, Decl(protectedMembers.ts, 25, 21))
 
         return super.f();
 >super.f : Symbol(C2.f, Decl(protectedMembers.ts, 13, 21))
@@ -87,33 +87,33 @@ class C3 extends C2 {
     }
 }
 
-var c1: C1;
->c1 : Symbol(c1, Decl(protectedMembers.ts, 34, 3))
+declare var c1: C1;
+>c1 : Symbol(c1, Decl(protectedMembers.ts, 34, 11))
 >C1 : Symbol(C1, Decl(protectedMembers.ts, 0, 0))
 
-var c2: C2;
->c2 : Symbol(c2, Decl(protectedMembers.ts, 35, 3))
+declare var c2: C2;
+>c2 : Symbol(c2, Decl(protectedMembers.ts, 35, 11))
 >C2 : Symbol(C2, Decl(protectedMembers.ts, 10, 1))
 
-var c3: C3;
->c3 : Symbol(c3, Decl(protectedMembers.ts, 36, 3))
+declare var c3: C3;
+>c3 : Symbol(c3, Decl(protectedMembers.ts, 36, 11))
 >C3 : Symbol(C3, Decl(protectedMembers.ts, 20, 1))
 
 // All of these should be errors
 c1.x;
 >c1.x : Symbol(C1.x, Decl(protectedMembers.ts, 1, 10))
->c1 : Symbol(c1, Decl(protectedMembers.ts, 34, 3))
+>c1 : Symbol(c1, Decl(protectedMembers.ts, 34, 11))
 >x : Symbol(C1.x, Decl(protectedMembers.ts, 1, 10))
 
 c1.f();
 >c1.f : Symbol(C1.f, Decl(protectedMembers.ts, 3, 32))
->c1 : Symbol(c1, Decl(protectedMembers.ts, 34, 3))
+>c1 : Symbol(c1, Decl(protectedMembers.ts, 34, 11))
 >f : Symbol(C1.f, Decl(protectedMembers.ts, 3, 32))
 
 C1.sx;
->C1.sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 24))
+>C1.sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 25))
 >C1 : Symbol(C1, Decl(protectedMembers.ts, 0, 0))
->sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 24))
+>sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 25))
 
 C1.sf();
 >C1.sf : Symbol(C1.sf, Decl(protectedMembers.ts, 6, 5))
@@ -123,18 +123,18 @@ C1.sf();
 // All of these should be errors
 c2.x;
 >c2.x : Symbol(C1.x, Decl(protectedMembers.ts, 1, 10))
->c2 : Symbol(c2, Decl(protectedMembers.ts, 35, 3))
+>c2 : Symbol(c2, Decl(protectedMembers.ts, 35, 11))
 >x : Symbol(C1.x, Decl(protectedMembers.ts, 1, 10))
 
 c2.f();
 >c2.f : Symbol(C2.f, Decl(protectedMembers.ts, 13, 21))
->c2 : Symbol(c2, Decl(protectedMembers.ts, 35, 3))
+>c2 : Symbol(c2, Decl(protectedMembers.ts, 35, 11))
 >f : Symbol(C2.f, Decl(protectedMembers.ts, 13, 21))
 
 C2.sx;
->C2.sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 24))
+>C2.sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 25))
 >C2 : Symbol(C2, Decl(protectedMembers.ts, 10, 1))
->sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 24))
+>sx : Symbol(C1.sx, Decl(protectedMembers.ts, 2, 25))
 
 C2.sf();
 >C2.sf : Symbol(C2.sf, Decl(protectedMembers.ts, 16, 5))
@@ -144,18 +144,18 @@ C2.sf();
 // All of these should be ok
 c3.x;
 >c3.x : Symbol(C3.x, Decl(protectedMembers.ts, 23, 21))
->c3 : Symbol(c3, Decl(protectedMembers.ts, 36, 3))
+>c3 : Symbol(c3, Decl(protectedMembers.ts, 36, 11))
 >x : Symbol(C3.x, Decl(protectedMembers.ts, 23, 21))
 
 c3.f();
->c3.f : Symbol(C3.f, Decl(protectedMembers.ts, 25, 22))
->c3 : Symbol(c3, Decl(protectedMembers.ts, 36, 3))
->f : Symbol(C3.f, Decl(protectedMembers.ts, 25, 22))
+>c3.f : Symbol(C3.f, Decl(protectedMembers.ts, 25, 21))
+>c3 : Symbol(c3, Decl(protectedMembers.ts, 36, 11))
+>f : Symbol(C3.f, Decl(protectedMembers.ts, 25, 21))
 
 C3.sx;
->C3.sx : Symbol(C3.sx, Decl(protectedMembers.ts, 24, 14))
+>C3.sx : Symbol(C3.sx, Decl(protectedMembers.ts, 24, 15))
 >C3 : Symbol(C3, Decl(protectedMembers.ts, 20, 1))
->sx : Symbol(C3.sx, Decl(protectedMembers.ts, 24, 14))
+>sx : Symbol(C3.sx, Decl(protectedMembers.ts, 24, 15))
 
 C3.sf();
 >C3.sf : Symbol(C3.sf, Decl(protectedMembers.ts, 28, 5))
@@ -259,21 +259,21 @@ class B1 {
     x;
 >x : Symbol(B1.x, Decl(protectedMembers.ts, 91, 10))
 }
-var a1: A1;
->a1 : Symbol(a1, Decl(protectedMembers.ts, 94, 3))
+declare var a1: A1;
+>a1 : Symbol(a1, Decl(protectedMembers.ts, 94, 11))
 >A1 : Symbol(A1, Decl(protectedMembers.ts, 86, 1))
 
-var b1: B1;
->b1 : Symbol(b1, Decl(protectedMembers.ts, 95, 3))
+declare var b1: B1;
+>b1 : Symbol(b1, Decl(protectedMembers.ts, 95, 11))
 >B1 : Symbol(B1, Decl(protectedMembers.ts, 90, 1))
 
 a1 = b1;  // Error, B1 doesn't derive from A1
->a1 : Symbol(a1, Decl(protectedMembers.ts, 94, 3))
->b1 : Symbol(b1, Decl(protectedMembers.ts, 95, 3))
+>a1 : Symbol(a1, Decl(protectedMembers.ts, 94, 11))
+>b1 : Symbol(b1, Decl(protectedMembers.ts, 95, 11))
 
 b1 = a1;  // Error, x is protected in A1 but public in B1
->b1 : Symbol(b1, Decl(protectedMembers.ts, 95, 3))
->a1 : Symbol(a1, Decl(protectedMembers.ts, 94, 3))
+>b1 : Symbol(b1, Decl(protectedMembers.ts, 95, 11))
+>a1 : Symbol(a1, Decl(protectedMembers.ts, 94, 11))
 
 class A2 {
 >A2 : Symbol(A2, Decl(protectedMembers.ts, 97, 8))

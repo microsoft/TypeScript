@@ -1,0 +1,8 @@
+ES5For-ofTypeCheck4.ts(2,17): error TS2454: Variable 'union' is used before being assigned.
+
+
+==== ES5For-ofTypeCheck4.ts (1 errors) ====
+    var union: string | string[];
+    for (const v of union) { }
+                    ~~~~~
+!!! error TS2454: Variable 'union' is used before being assigned.

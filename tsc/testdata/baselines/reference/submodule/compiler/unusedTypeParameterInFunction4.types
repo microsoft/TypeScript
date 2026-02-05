@@ -4,10 +4,10 @@
 function f1<X, Y, Z>() {
 >f1 : <X, Y, Z>() => void
 
-    var a: Y;
+    var a!: Y;
 >a : Y
 
-    var b: Z;
+    var b!: Z;
 >b : Z
 
     a;

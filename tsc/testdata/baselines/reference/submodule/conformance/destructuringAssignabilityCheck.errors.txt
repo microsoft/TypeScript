@@ -1,23 +1,23 @@
-destructuringAssignabilityCheck.ts(1,7): error TS2461: Type '{}' is not an array type.
+destructuringAssignabilityCheck.ts(1,7): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
 destructuringAssignabilityCheck.ts(2,7): error TS2532: Object is possibly 'undefined'.
-destructuringAssignabilityCheck.ts(3,3): error TS2461: Type '{}' is not an array type.
+destructuringAssignabilityCheck.ts(3,3): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
 destructuringAssignabilityCheck.ts(4,3): error TS2532: Object is possibly 'undefined'.
 destructuringAssignabilityCheck.ts(6,14): error TS2532: Object is possibly 'undefined'.
-destructuringAssignabilityCheck.ts(9,14): error TS2461: Type '{}' is not an array type.
+destructuringAssignabilityCheck.ts(9,14): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
 destructuringAssignabilityCheck.ts(13,7): error TS2532: Object is possibly 'undefined'.
-destructuringAssignabilityCheck.ts(15,7): error TS2461: Type '{}' is not an array type.
+destructuringAssignabilityCheck.ts(15,7): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
 ==== destructuringAssignabilityCheck.ts (8 errors) ====
     const [] = {}; // should be error
           ~~
-!!! error TS2461: Type '{}' is not an array type.
+!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
     const {} = undefined; // error correctly
           ~~
 !!! error TS2532: Object is possibly 'undefined'.
     (([]) => 0)({}); // should be error
       ~~
-!!! error TS2461: Type '{}' is not an array type.
+!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
     (({}) => 0)(undefined); // should be error
       ~~
 !!! error TS2532: Object is possibly 'undefined'.
@@ -29,7 +29,7 @@ destructuringAssignabilityCheck.ts(15,7): error TS2461: Type '{}' is not an arra
     }
     function bar([]: {}) {
                  ~~~~~~
-!!! error TS2461: Type '{}' is not an array type.
+!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
         return 0
     }
     
@@ -39,5 +39,5 @@ destructuringAssignabilityCheck.ts(15,7): error TS2461: Type '{}' is not an arra
     
     const []: {} = {}
           ~~
-!!! error TS2461: Type '{}' is not an array type.
+!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
     

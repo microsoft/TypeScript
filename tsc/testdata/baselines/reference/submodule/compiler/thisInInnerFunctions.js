@@ -20,6 +20,7 @@ function test() {
 
 
 //// [thisInInnerFunctions.js]
+"use strict";
 class Foo {
     x = "hello";
     bar() {

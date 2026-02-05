@@ -136,7 +136,7 @@ var derived: Derived;
 var derived2: Derived2;
 >derived2 : Derived2
 
-module Derived {
+namespace Derived {
 >Derived : typeof Derived
 
     var h = [{ foo: base, basear: derived }, { foo: base }]; // {foo: Base}[]
@@ -229,7 +229,7 @@ module Derived {
 >derived : Derived
 }
 
-module WithContextualType {
+namespace WithContextualType {
 >WithContextualType : typeof WithContextualType
 
     // no errors

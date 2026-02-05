@@ -1,8 +1,8 @@
 --- old.constructorParameterProperties.js
 +++ new.constructorParameterProperties.js
-@@= skipped -24, +24 lines =@@
-
+@@= skipped -25, +25 lines =@@
  //// [constructorParameterProperties.js]
+ "use strict";
  class C {
 +    x;
 +    z;
@@ -10,7 +10,7 @@
      constructor(x, z) {
          this.x = x;
          this.z = z;
-@@= skipped -10, +13 lines =@@
+@@= skipped -9, +12 lines =@@
  var r2 = c.x; // error
  var r3 = c.z; // error
  class D {

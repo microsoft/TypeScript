@@ -4,4 +4,5 @@
 var x = `abc${ +Infinity }def`;
 
 //// [templateStringWithEmbeddedUnaryPlusES6.js]
+"use strict";
 var x = `abc${+Infinity}def`;

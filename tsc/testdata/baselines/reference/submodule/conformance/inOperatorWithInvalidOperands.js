@@ -8,12 +8,12 @@ var x: any;
 
 // invalid left operands
 // the left operand is required to be of type Any, the String primitive type, or the Number primitive type
-var a1: boolean;
-var a2: void;
-var a3: {};
-var a4: E;
-var a5: Foo | string;
-var a6: Foo;
+declare var a1: boolean;
+declare var a2: void;
+declare var a3: {};
+declare var a4: E;
+declare var a5: Foo | string;
+declare var a6: Foo;
 
 var ra1 = a1 in x;
 var ra2 = a2 in x;
@@ -29,11 +29,11 @@ var ra11 = a6 in x;
 
 // invalid right operands
 // the right operand is required to be of type Any, an object type, or a type parameter type
-var b1: number;
-var b2: boolean;
-var b3: string;
-var b4: void;
-var b5: string | number;
+declare var b1: number;
+declare var b2: boolean;
+declare var b3: string;
+declare var b4: void;
+declare var b5: string | number;
 
 var rb1 = x in b1;
 var rb2 = x in b2;
@@ -50,6 +50,7 @@ var rb10 = x in undefined;
 var rc1 = {} in '';
 
 //// [inOperatorWithInvalidOperands.js]
+"use strict";
 class Foo {
 }
 var E;
@@ -57,14 +58,6 @@ var E;
     E[E["a"] = 0] = "a";
 })(E || (E = {}));
 var x;
-// invalid left operands
-// the left operand is required to be of type Any, the String primitive type, or the Number primitive type
-var a1;
-var a2;
-var a3;
-var a4;
-var a5;
-var a6;
 var ra1 = a1 in x;
 var ra2 = a2 in x;
 var ra3 = a3 in x;
@@ -76,13 +69,6 @@ var ra8 = false in x;
 var ra9 = {} in x;
 var ra10 = a5 in x;
 var ra11 = a6 in x;
-// invalid right operands
-// the right operand is required to be of type Any, an object type, or a type parameter type
-var b1;
-var b2;
-var b3;
-var b4;
-var b5;
 var rb1 = x in b1;
 var rb2 = x in b2;
 var rb3 = x in b3;

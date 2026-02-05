@@ -70,11 +70,11 @@ function test1(x: Foo) {
 class Bar {
 >Bar : Symbol(Bar, Decl(optionalMethods.ts, 15, 1))
 
-    a: number;
+    a: number = 0;
 >a : Symbol(Bar.a, Decl(optionalMethods.ts, 17, 11))
 
     b?: number;
->b : Symbol(Bar.b, Decl(optionalMethods.ts, 18, 14))
+>b : Symbol(Bar.b, Decl(optionalMethods.ts, 18, 18))
 
     c? = 2;
 >c : Symbol(Bar.c, Decl(optionalMethods.ts, 19, 15))
@@ -109,9 +109,9 @@ function test2(x: Bar) {
 >a : Symbol(Bar.a, Decl(optionalMethods.ts, 17, 11))
 
     x.b;
->x.b : Symbol(Bar.b, Decl(optionalMethods.ts, 18, 14))
+>x.b : Symbol(Bar.b, Decl(optionalMethods.ts, 18, 18))
 >x : Symbol(x, Decl(optionalMethods.ts, 31, 15))
->b : Symbol(Bar.b, Decl(optionalMethods.ts, 18, 14))
+>b : Symbol(Bar.b, Decl(optionalMethods.ts, 18, 18))
 
     x.c;
 >x.c : Symbol(Bar.c, Decl(optionalMethods.ts, 19, 15))

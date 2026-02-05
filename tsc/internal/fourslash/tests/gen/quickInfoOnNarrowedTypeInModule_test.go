@@ -13,8 +13,9 @@ func TestQuickInfoOnNarrowedTypeInModule(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `var strOrNum: string | number;
-module m {
+	const content = `// @strict: false
+var strOrNum: string | number;
+namespace m {
     var nonExportedStrOrNum: string | number;
     export var exportedStrOrNum: string | number;
     var num: number;

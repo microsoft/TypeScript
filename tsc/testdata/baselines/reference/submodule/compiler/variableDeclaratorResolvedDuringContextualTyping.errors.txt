@@ -4,7 +4,7 @@ variableDeclaratorResolvedDuringContextualTyping.ts(116,43): error TS2304: Canno
 
 
 ==== variableDeclaratorResolvedDuringContextualTyping.ts (3 errors) ====
-    module WinJS {
+    namespace WinJS {
         export interface ValueCallback {
             (value: any): any;
         }
@@ -69,7 +69,7 @@ variableDeclaratorResolvedDuringContextualTyping.ts(116,43): error TS2304: Canno
         }
     }
     
-    module Services {
+    namespace Services {
         export interface IRequestService {
             /**
              * Returns the URL that can be used to access the provided service. The optional second argument can
@@ -87,14 +87,14 @@ variableDeclaratorResolvedDuringContextualTyping.ts(116,43): error TS2304: Canno
         }
     }
     
-    module Errors {
+    namespace Errors {
         export class ConnectionError /* extends Error */ {
             constructor(request: XMLHttpRequest) {
             }
         }
     }
     
-    module Files {
+    namespace Files {
         export interface IUploadResult {
             stat: string;
             isNew: boolean;

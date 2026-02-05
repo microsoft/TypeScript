@@ -1,0 +1,55 @@
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts(3,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts(4,9): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts(22,9): error TS2564: Property 'length' has no initializer and is not definitely assigned in the constructor.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts(30,17): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+
+
+==== TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts (4 errors) ====
+    namespace A {
+        export class Point {
+            x: number;
+            ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+            y: number;
+            ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+        }
+    }
+    
+    namespace A {
+        class Point {
+            fromCarthesian(p: A.Point) {
+                return { x: p.x, y: p.y };
+            }
+        }
+    }
+    
+    // ensure merges as expected
+    var p: { x: number; y: number; };
+    var p: A.Point;
+    
+    namespace X.Y.Z {
+        export class Line {
+            length: number;
+            ~~~~~~
+!!! error TS2564: Property 'length' has no initializer and is not definitely assigned in the constructor.
+        }
+    }
+    
+    namespace X {
+        export namespace Y {
+            export namespace Z {
+                class Line {
+                    name: string;
+                    ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+                }
+            }
+        }
+    }
+    
+    // ensure merges as expected
+    var l: { length: number; }
+    var l: X.Y.Z.Line;
+    
+    

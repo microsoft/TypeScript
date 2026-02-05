@@ -4,3 +4,4 @@
 
 
 //// [emptyFile.js]
+"use strict";

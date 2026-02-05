@@ -7,11 +7,11 @@ var x = { one: 1 };
 >one : number
 >1 : 1
 
-var y: { [index: string]: any };
+declare var y: { [index: string]: any };
 >y : { [index: string]: any; }
 >index : string
 
-var z: { [index: number]: any };
+declare var z: { [index: number]: any };
 >z : { [index: number]: any; }
 >index : number
 

@@ -1,8 +1,8 @@
 --- old.indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.js
 +++ new.indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.js
-@@= skipped -25, +25 lines =@@
-
+@@= skipped -26, +26 lines =@@
  //// [indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.js]
+ "use strict";
  class A {
 +    foo;
  }

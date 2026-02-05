@@ -27,7 +27,7 @@ switch (foo) {
 >(foo as S[])[0] : S
 >(foo as S[]) : S[]
 >foo as S[] : S[]
->foo : S[]
+>foo : T
 >0 : 0
 
         break;

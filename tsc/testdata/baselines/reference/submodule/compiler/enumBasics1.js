@@ -40,6 +40,7 @@ enum E2 { // should error for continued autonumbering
 }
 
 //// [enumBasics1.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 1] = "A";

@@ -1,6 +1,6 @@
 --- old.callSignatureAssignabilityInInheritance3.js
 +++ new.callSignatureAssignabilityInInheritance3.js
-@@= skipped -120, +120 lines =@@
+@@= skipped -121, +121 lines =@@
  var Errors;
  (function (Errors) {
      class Base {

@@ -1,6 +1,6 @@
 --- old.plusOperatorWithStringType.js
 +++ new.plusOperatorWithStringType.js
-@@= skipped -47, +47 lines =@@
+@@= skipped -46, +46 lines =@@
  var STRING1 = ["", "abc"];
  function foo() { return "abc"; }
  class A {

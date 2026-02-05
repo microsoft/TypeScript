@@ -8,6 +8,7 @@ interface I {
 }
 
 //// [declFileForInterfaceWithRestParams.js]
+"use strict";
 
 
 //// [declFileForInterfaceWithRestParams.d.ts]

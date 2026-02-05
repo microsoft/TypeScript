@@ -1,8 +1,8 @@
 --- old.derivedClassSuperCallsWithThisArg.js
 +++ new.derivedClassSuperCallsWithThisArg.js
-@@= skipped -31, +31 lines =@@
-
+@@= skipped -32, +32 lines =@@
  //// [derivedClassSuperCallsWithThisArg.js]
+ "use strict";
  class Base {
 +    x;
      constructor(a) { }

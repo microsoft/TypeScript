@@ -88,6 +88,7 @@ numberOrObject.x *= 1;
 numberOrObject.x /= 1;
 
 //// [getterSetterSubtypeAssignment.js]
+"use strict";
 class NumberOrUndefined {
     _x;
     get x() { var _a; return (_a = this._x) !== null && _a !== void 0 ? _a : 0; }

@@ -1,8 +1,10 @@
 //// [tests/cases/compiler/typeAliasDeclareKeywordNewlines.ts] ////
 
 === typeAliasDeclareKeywordNewlines.ts ===
-var declare: string, type: number;
+declare var declare: string;
 >declare : string
+
+declare var type: number;
 >type : number
 
 // The following is invalid but should declare a type alias named 'T1':
@@ -13,7 +15,7 @@ T1 = null;
 const t1: T1 = null; // Assert that T1 is the null type.
 >t1 : null
 
-let T: null;
+let T: null = null;
 >T : null
 
 // The following should use a variable named 'declare', use a variable named

@@ -1,6 +1,6 @@
 --- old.typeofModuleWithoutExports.js
 +++ new.typeofModuleWithoutExports.js
-@@= skipped -14, +14 lines =@@
+@@= skipped -15, +15 lines =@@
  (function (M) {
      var x = 1;
      class C {

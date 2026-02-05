@@ -22,6 +22,7 @@ var obj: { f: () => any; };
 
 
 //// [thisInObjectLiterals.js]
+"use strict";
 class MyClass {
     t;
     fn() {

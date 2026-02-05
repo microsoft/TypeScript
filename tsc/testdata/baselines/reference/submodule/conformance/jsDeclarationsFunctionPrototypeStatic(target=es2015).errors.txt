@@ -1,0 +1,19 @@
+source.js(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+
+==== source.js (1 errors) ====
+    module.exports = MyClass;
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    
+    function MyClass() {}
+    MyClass.staticMethod = function() {}
+    MyClass.prototype.method = function() {}
+    MyClass.staticProperty = 123;
+    
+    /**
+     * Callback to be invoked when test execution is complete.
+     *
+     * @callback DoneCB
+     * @param {number} failures - Number of failures that occurred.
+     */

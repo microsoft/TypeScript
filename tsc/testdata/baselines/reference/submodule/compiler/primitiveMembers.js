@@ -9,7 +9,7 @@ x.toBAZ();
 x.toString();
 
 var n = 0;
-var N: Number;
+declare var N: Number;
 
 n = N;  // should not work, as 'number' has a different brand
 N = n; // should work
@@ -34,13 +34,13 @@ class foo extends baz { public bar(){ return undefined}; }
 
 
 //// [primitiveMembers.js]
+"use strict";
 var x = 5;
 var r = /yo/;
 r.source;
 x.toBAZ();
 x.toString();
 var n = 0;
-var N;
 n = N; // should not work, as 'number' has a different brand
 N = n; // should work
 var o = {};

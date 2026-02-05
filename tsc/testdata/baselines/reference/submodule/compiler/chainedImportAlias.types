@@ -17,7 +17,7 @@ y.m.foo();
 >foo : () => void
 
 === chainedImportAlias_file0.ts ===
-export module m {
+export namespace m {
 >m : typeof m
 
     export function foo() { }

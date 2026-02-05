@@ -6,6 +6,7 @@ var obj = {
 }
 
 //// [symbolDeclarationEmit8.js]
+"use strict";
 var obj = {
     [Symbol.isConcatSpreadable]: 0
 };

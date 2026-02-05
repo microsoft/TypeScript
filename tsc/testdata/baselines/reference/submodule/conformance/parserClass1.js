@@ -12,10 +12,7 @@
     }
 
 //// [parserClass1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.NullLogger = void 0;
-class NullLogger {
+export class NullLogger {
     information() { return false; }
     debug() { return false; }
     warning() { return false; }
@@ -24,4 +21,3 @@ class NullLogger {
     log(s) {
     }
 }
-exports.NullLogger = NullLogger;

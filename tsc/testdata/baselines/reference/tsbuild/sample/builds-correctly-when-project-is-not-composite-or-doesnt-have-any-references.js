@@ -70,7 +70,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'core/tsconfig.json'...
 
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -99,10 +99,7 @@ export declare const World = "hello";
 //// [/user/username/projects/sample1/core/anotherModule.d.ts.map] *new* 
 {"version":3,"file":"anotherModule.d.ts","sourceRoot":"","sources":["anotherModule.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,KAAK,UAAU,CAAC"}
 //// [/user/username/projects/sample1/core/anotherModule.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.World = void 0;
-exports.World = "hello";
+export const World = "hello";
 
 //// [/user/username/projects/sample1/core/index.d.ts] *new* 
 export declare const someString: string;
@@ -112,14 +109,9 @@ export declare function multiply(a: number, b: number): number;
 //// [/user/username/projects/sample1/core/index.d.ts.map] *new* 
 {"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,UAAU,EAAE,MAAsB,CAAC;AAChD,wBAAgB,OAAO,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB;AAC/D,wBAAgB,QAAQ,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB"}
 //// [/user/username/projects/sample1/core/index.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.someString = void 0;
-exports.leftPad = leftPad;
-exports.multiply = multiply;
-exports.someString = "HELLO WORLD";
-function leftPad(s, n) { return s + n; }
-function multiply(a, b) { return a * b; }
+export const someString = "HELLO WORLD";
+export function leftPad(s, n) { return s + n; }
+export function multiply(a, b) { return a * b; }
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo] *new* 
 {"version":"FakeTSVersion","root":["./anotherModule.ts","./index.ts","./some_decl.d.ts"]}
@@ -151,7 +143,7 @@ function multiply(a, b) { return a * b; }
 
 core/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /user/username/projects/sample1/core/anotherModule.ts
 *refresh*    /user/username/projects/sample1/core/index.ts
 *refresh*    /user/username/projects/sample1/core/some_decl.d.ts

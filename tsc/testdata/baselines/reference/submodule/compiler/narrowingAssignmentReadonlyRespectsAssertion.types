@@ -113,9 +113,9 @@ function testFunc() {
 >val1.slice().reverse() : any[]
 >val1.slice().reverse : () => any[]
 >val1.slice() : any[]
->val1.slice : (start?: number, end?: number) => any[]
+>val1.slice : (start?: number | undefined, end?: number | undefined) => any[]
 >val1 : any[]
->slice : (start?: number, end?: number) => any[]
+>slice : (start?: number | undefined, end?: number | undefined) => any[]
 >reverse : () => any[]
 
           console.log(reversedVal1);

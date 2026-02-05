@@ -1,9 +1,10 @@
 invalidImportAliasIdentifiers.ts(5,12): error TS2503: Cannot find namespace 'V'.
+invalidImportAliasIdentifiers.ts(8,5): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
 invalidImportAliasIdentifiers.ts(11,12): error TS2702: 'C' only refers to a type, but is being used as a namespace here.
 invalidImportAliasIdentifiers.ts(23,12): error TS2702: 'I' only refers to a type, but is being used as a namespace here.
 
 
-==== invalidImportAliasIdentifiers.ts (3 errors) ====
+==== invalidImportAliasIdentifiers.ts (4 errors) ====
     // none of these should work, since non are actually modules
     
     var V = 12;
@@ -14,6 +15,8 @@ invalidImportAliasIdentifiers.ts(23,12): error TS2702: 'I' only refers to a type
     
     class C {
         name: string;
+        ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
     }
     
     import c = C;

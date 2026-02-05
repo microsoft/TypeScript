@@ -1,10 +1,13 @@
 --- old.typeGuardsNestedAssignments.js
 +++ new.typeGuardsNestedAssignments.js
-@@= skipped -48, +48 lines =@@
-
+@@= skipped -49, +49 lines =@@
  //// [typeGuardsNestedAssignments.js]
+ "use strict";
  class Foo {
-+    x;
+-    constructor() {
+-        this.x = "";
+-    }
++    x = "";
  }
  function f1() {
      let foo;

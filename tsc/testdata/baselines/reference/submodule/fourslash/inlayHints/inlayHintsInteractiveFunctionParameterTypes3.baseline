@@ -12,6 +12,12 @@
     },
     {
       "value": "boolean"
+    },
+    {
+      "value": " | "
+    },
+    {
+      "value": "undefined"
     }
   ],
   "kind": 1,

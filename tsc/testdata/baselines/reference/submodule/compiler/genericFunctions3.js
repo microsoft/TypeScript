@@ -12,6 +12,7 @@ function from<T>(arg: any): Query<T> {
 
 
 //// [genericFunctions3.js]
+"use strict";
 function from(arg) {
     return undefined;
 }

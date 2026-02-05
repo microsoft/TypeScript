@@ -7,6 +7,7 @@ class C {
 }
 
 //// [thisTypeAsConstraint.js]
+"use strict";
 class C {
     m() {
     }

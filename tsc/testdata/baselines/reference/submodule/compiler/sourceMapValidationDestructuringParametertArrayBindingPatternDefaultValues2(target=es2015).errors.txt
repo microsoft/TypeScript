@@ -1,0 +1,50 @@
+sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.ts(7,15): error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.ts(11,15): error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.ts(15,15): error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
+sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.ts(15,35): error TS2488: Type 'string[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.ts (4 errors) ====
+    declare var console: {
+        log(msg: any): void;
+    }
+    type Robot = [string, string[]];
+    var robotA: Robot = ["trimmer", ["trimming", "edging"]];
+    
+    function foo1([, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "skill2"]]) {
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(skillA);
+    }
+    
+    function foo2([nameMB = "noName"]: Robot = ["name", ["skill1", "skill2"]]) {
+                  ~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(nameMB);
+    }
+    
+    function foo3([nameMA = "noName", [
+                  ~~~~~~~~~~~~~~~~~~~~~
+                                      ~
+        primarySkillA = "primary",
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        secondarySkillA = "secondary"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ] = ["noSkill", "noSkill"]]: Robot) {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2488: Type 'Robot' must have a '[Symbol.iterator]()' method that returns an iterator.
+    ~
+!!! error TS2488: Type 'string[]' must have a '[Symbol.iterator]()' method that returns an iterator.
+        console.log(nameMA);
+    }
+    
+    foo1(robotA);
+    foo1(["roomba", ["vacuum", "mopping"]]);
+    
+    foo2(robotA);
+    foo2(["roomba", ["vacuum", "mopping"]]);
+    
+    foo3(robotA);
+    foo3(["roomba", ["vacuum", "mopping"]]);

@@ -11,6 +11,7 @@ function* h() {
 
 
 //// [generatorTypeCheck48.js]
+"use strict";
 function* g() {
     yield;
 }

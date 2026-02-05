@@ -1,8 +1,8 @@
 --- old.typeArgumentInferenceWithClassExpression3.js
 +++ new.typeArgumentInferenceWithClassExpression3.js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
  //// [typeArgumentInferenceWithClassExpression3.js]
+ "use strict";
  function foo(x = class {
 +    prop;
  }) {

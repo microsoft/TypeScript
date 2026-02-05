@@ -17,6 +17,7 @@ rootConnection('test');
 
 
 //// [objectRest2.js]
+"use strict";
 function rootConnection(name) {
     return {
         resolve: async (context, args) => {

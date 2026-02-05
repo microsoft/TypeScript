@@ -15,6 +15,7 @@ function f2() {
 }
 
 //// [duplicateLocalVariable3.js]
+"use strict";
 var x = 1;
 var x = 2;
 function f() {

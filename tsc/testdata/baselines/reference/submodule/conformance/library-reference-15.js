@@ -11,5 +11,6 @@ $.foo(); // should OK
 $2.foo(); // should error
 
 //// [consumer.js]
+"use strict";
 $.foo(); // should OK
 $2.foo(); // should error

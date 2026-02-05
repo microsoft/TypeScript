@@ -1,13 +1,13 @@
 //// [tests/cases/conformance/es6/computedProperties/computedPropertyNames6_ES6.ts] ////
 
 === computedPropertyNames6_ES6.ts ===
-var p1: number | string;
+declare var p1: number | string;
 >p1 : string | number
 
-var p2: number | number[];
+declare var p2: number | number[];
 >p2 : number | number[]
 
-var p3: string | boolean;
+declare var p3: string | boolean;
 >p3 : string | boolean
 
 var v = {

@@ -1,8 +1,11 @@
+reactNamespaceMissingDeclaration.tsx(2,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 reactNamespaceMissingDeclaration.tsx(2,2): error TS2874: This JSX tag requires 'myReactLib' to be in scope, but it could not be found.
 
 
-==== reactNamespaceMissingDeclaration.tsx (1 errors) ====
+==== reactNamespaceMissingDeclaration.tsx (2 errors) ====
     // Error myReactLib not declared
     <foo data/>
+    ~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
      ~~~
 !!! error TS2874: This JSX tag requires 'myReactLib' to be in scope, but it could not be found.

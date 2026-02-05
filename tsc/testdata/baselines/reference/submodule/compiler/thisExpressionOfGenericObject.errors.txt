@@ -1,0 +1,13 @@
+thisExpressionOfGenericObject.ts(2,13): error TS2564: Property 'obj' has no initializer and is not definitely assigned in the constructor.
+
+
+==== thisExpressionOfGenericObject.ts (1 errors) ====
+    class MyClass1<T> {
+        private obj: MyClass1<string>;
+                ~~~
+!!! error TS2564: Property 'obj' has no initializer and is not definitely assigned in the constructor.
+        constructor() {
+            () => this;
+        }
+    }
+    

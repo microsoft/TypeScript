@@ -1,12 +1,12 @@
 --- old.tsNoCheckForTypescript.js
 +++ new.tsNoCheckForTypescript.js
-@@= skipped -20, +20 lines =@@
- exports.Bet = exports.a = void 0;
- exports.a = 1 + {}; // This is an error, ofc, `Operator '+' cannot be applied to types '1' and '{}'`, which will be suppressed by the `nocheck` comment
- class Bet {
+@@= skipped -17, +17 lines =@@
+ // @ts-nocheck
+ export const a = 1 + {}; // This is an error, ofc, `Operator '+' cannot be applied to types '1' and '{}'`, which will be suppressed by the `nocheck` comment
+ export class Bet {
 -    constructor() {
 -        this.q = "lol"; // And so will this implements error
 -    }
 +    q = "lol"; // And so will this implements error
  }
- exports.Bet = Bet;
+

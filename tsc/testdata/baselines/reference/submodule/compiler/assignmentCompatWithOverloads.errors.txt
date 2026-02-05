@@ -1,3 +1,6 @@
+assignmentCompatWithOverloads.ts(1,34): error TS2322: Type 'null' is not assignable to type 'number'.
+assignmentCompatWithOverloads.ts(3,34): error TS2322: Type 'null' is not assignable to type 'string'.
+assignmentCompatWithOverloads.ts(5,34): error TS2322: Type 'null' is not assignable to type 'number'.
 assignmentCompatWithOverloads.ts(17,1): error TS2322: Type '(x: string) => string' is not assignable to type '(s1: string) => number'.
   Type 'string' is not assignable to type 'number'.
 assignmentCompatWithOverloads.ts(19,1): error TS2322: Type '(x: number) => number' is not assignable to type '(s1: string) => number'.
@@ -10,12 +13,18 @@ assignmentCompatWithOverloads.ts(30,1): error TS2322: Type 'typeof C' is not ass
     Type 'number' is not assignable to type 'string'.
 
 
-==== assignmentCompatWithOverloads.ts (4 errors) ====
+==== assignmentCompatWithOverloads.ts (7 errors) ====
     function f1(x: string): number { return null; }
+                                     ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'number'.
     
     function f2(x: string): string { return null; }
+                                     ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'string'.
     
     function f3(x: number): number { return null; }
+                                     ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'number'.
     
     function f4(x: string): string;
     

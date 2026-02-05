@@ -10,6 +10,7 @@ var x = {
 }
 
 //// [symbolProperty4.js]
+"use strict";
 var x = {
     [Symbol()]: 0,
     [Symbol()]() { },

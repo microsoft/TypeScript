@@ -35,6 +35,7 @@ A.s = A.t = function g(m) {
 
     return m + this.x
 >m : Symbol(m, Decl(a.js, 10, 23))
+>this : Symbol(A, Decl(a.js, 0, 0))
 }
 var a = new A()
 >a : Symbol(a, Decl(a.js, 13, 3))

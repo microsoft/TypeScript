@@ -19,11 +19,11 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'project/tsconfig.json'...
 
-../../tslibs/TS/Lib/lib.d.ts
-   Default library for target 'ES5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+   Default library for target 'ES2024'
 project/src/main.tsx
    Matched by include pattern 'src/**/*.tsx' in 'project/tsconfig.json'
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -50,10 +50,7 @@ declare const console: { log(msg: any): void; };
 export declare const x = 10;
 
 //// [/home/src/workspaces/solution/project/src/main.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+export const x = 10;
 
 //// [/home/src/workspaces/solution/project/tsconfig.tsbuildinfo] *new* 
 {"version":"FakeTSVersion","root":["./src/main.tsx"]}
@@ -73,7 +70,7 @@ exports.x = 10;
 
 project/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/solution/project/src/main.tsx
 Signatures::
 

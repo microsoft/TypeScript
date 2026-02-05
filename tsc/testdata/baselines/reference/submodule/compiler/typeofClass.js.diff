@@ -1,11 +1,11 @@
 --- old.typeofClass.js
 +++ new.typeofClass.js
-@@= skipped -14, +14 lines =@@
-
+@@= skipped -15, +15 lines =@@
  //// [typeofClass.js]
+ "use strict";
  class K {
 +    foo;
 +    static bar;
  }
- var k1;
  k1.foo;
+ k1.bar;

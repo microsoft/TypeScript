@@ -1,6 +1,6 @@
 --- old.literalTypes2.js
 +++ new.literalTypes2.js
-@@= skipped -245, +245 lines =@@
+@@= skipped -246, +246 lines =@@
      let x8 = c8;
  }
  class C1 {

@@ -11,7 +11,8 @@ func TestDefaultParamsAndContextualTypes(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface FooOptions {
+	const content = `// @strict: false
+interface FooOptions {
     text?: string;
 }
 interface Foo {

@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserMemberVariableDeclaration3.js]
+"use strict";
 class C {
     static Foo;
 }

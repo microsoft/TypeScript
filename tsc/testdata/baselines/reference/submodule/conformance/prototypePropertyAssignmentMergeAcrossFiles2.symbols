@@ -37,8 +37,9 @@ Ns.Two.prototype = {
 /**
  * @type {Ns.One}
  */
-var one;
+var one = undefined;
 >one : Symbol(one, Decl(other.js, 3, 3))
+>undefined : Symbol(undefined)
 
 one.wat;
 >one : Symbol(one, Decl(other.js, 3, 3))
@@ -46,8 +47,9 @@ one.wat;
 /**
  * @type {Ns.Two}
  */
-var two;
+var two = undefined;
 >two : Symbol(two, Decl(other.js, 8, 3))
+>undefined : Symbol(undefined)
 
 two.wat;
 >two : Symbol(two, Decl(other.js, 8, 3))

@@ -1,0 +1,37 @@
+typeGuardNarrowsPrimitiveIntersection.ts(6,16): error TS2454: Variable 'value' is used before being assigned.
+typeGuardNarrowsPrimitiveIntersection.ts(9,12): error TS2454: Variable 'value' is used before being assigned.
+typeGuardNarrowsPrimitiveIntersection.ts(17,17): error TS2454: Variable 'value' is used before being assigned.
+typeGuardNarrowsPrimitiveIntersection.ts(20,13): error TS2454: Variable 'value' is used before being assigned.
+
+
+==== typeGuardNarrowsPrimitiveIntersection.ts (4 errors) ====
+    type Tag = {__tag: any};
+    declare function isNonBlank(value: string) : value is (string & Tag);
+    declare function doThis(value: string & Tag): void;
+    declare function doThat(value: string) : void;
+    let value: string;
+    if (isNonBlank(value)) {
+                   ~~~~~
+!!! error TS2454: Variable 'value' is used before being assigned.
+        doThis(value);
+    } else {
+        doThat(value);
+               ~~~~~
+!!! error TS2454: Variable 'value' is used before being assigned.
+    }
+    
+    
+    const enum Tag2 {}
+    declare function isNonBlank2(value: string) : value is (string & Tag2);
+    declare function doThis2(value: string & Tag2): void;
+    declare function doThat2(value: string) : void;
+    if (isNonBlank2(value)) {
+                    ~~~~~
+!!! error TS2454: Variable 'value' is used before being assigned.
+        doThis2(value);
+    } else {
+        doThat2(value);
+                ~~~~~
+!!! error TS2454: Variable 'value' is used before being assigned.
+    }
+    

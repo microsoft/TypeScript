@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution14.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 }
 
@@ -13,5 +13,6 @@ var obj1: Obj1;
 
 
 //// [file.jsx]
+"use strict";
 var obj1;
 <obj1 x={10}/>; // OK

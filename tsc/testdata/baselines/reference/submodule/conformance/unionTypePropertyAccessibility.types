@@ -29,49 +29,49 @@ class Private {
 >member : number
 }
 
-var v1: Default;
+declare var v1: Default;
 >v1 : Default
 
-var v2: Public;
+declare var v2: Public;
 >v2 : Public
 
-var v3: Protected;
+declare var v3: Protected;
 >v3 : Protected
 
-var v4: Private;
+declare var v4: Private;
 >v4 : Private
 
-var v5: Default | Public;
+declare var v5: Default | Public;
 >v5 : Default | Public
 
-var v6: Default | Protected;
+declare var v6: Default | Protected;
 >v6 : Default | Protected
 
-var v7: Default | Private;
+declare var v7: Default | Private;
 >v7 : Default | Private
 
-var v8: Public | Protected;
+declare var v8: Public | Protected;
 >v8 : Protected | Public
 
-var v9: Public | Private;
+declare var v9: Public | Private;
 >v9 : Private | Public
 
-var v10: Protected | Private;
+declare var v10: Protected | Private;
 >v10 : Private | Protected
 
-var v11: Default | Public | Protected;
+declare var v11: Default | Public | Protected;
 >v11 : Default | Protected | Public
 
-var v12: Default | Public | Private;
+declare var v12: Default | Public | Private;
 >v12 : Default | Private | Public
 
-var v13: Default | Protected | Private;
+declare var v13: Default | Protected | Private;
 >v13 : Default | Private | Protected
 
-var v14: Public | Private | Protected;
+declare var v14: Public | Private | Protected;
 >v14 : Private | Protected | Public
 
-var v15: Default | Public | Private | Protected;
+declare var v15: Default | Public | Private | Protected;
 >v15 : Default | Private | Protected | Public
 
 v1.member;

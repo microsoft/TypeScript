@@ -6,6 +6,7 @@ function * foo() {
 }
 
 //// [FunctionDeclaration9_es6.js]
+"use strict";
 function* foo() {
     var v = { [yield]: foo };
 }

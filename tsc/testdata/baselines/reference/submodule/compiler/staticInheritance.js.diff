@@ -1,7 +1,7 @@
 --- old.staticInheritance.js
 +++ new.staticInheritance.js
-@@= skipped -15, +15 lines =@@
- //// [staticInheritance.js]
+@@= skipped -16, +16 lines =@@
+ "use strict";
  function doThing(x) { }
  class A {
 -    constructor() {

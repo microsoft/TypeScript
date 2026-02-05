@@ -7,6 +7,7 @@ let y = true;
 x = (a => a) && (b => b);
 
 //// [contextuallyTypeLogicalAnd03.js]
+"use strict";
 let x;
 let y = true;
 x = (a => a) && (b => b);

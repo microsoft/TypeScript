@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/interfaceInReopenedModule.ts] ////
 
 //// [interfaceInReopenedModule.ts]
-module m {
+namespace m {
 }
 
 // In second instance of same module, exported interface is not visible
-module m {
+namespace m {
     interface f {}
     export class n { 
         private n: f;
@@ -14,6 +14,7 @@ module m {
 
 
 //// [interfaceInReopenedModule.js]
+"use strict";
 // In second instance of same module, exported interface is not visible
 var m;
 (function (m) {

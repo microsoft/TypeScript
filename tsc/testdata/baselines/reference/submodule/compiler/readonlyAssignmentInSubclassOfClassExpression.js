@@ -10,6 +10,7 @@ class C extends (class {} as new () => Readonly<{ attrib: number }>) {
 
 
 //// [readonlyAssignmentInSubclassOfClassExpression.js]
+"use strict";
 class C extends class {
 } {
     constructor() {

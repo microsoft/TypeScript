@@ -7,3 +7,4 @@ interface I {
 }
 
 //// [duplicateConstructSignature.js]
+"use strict";

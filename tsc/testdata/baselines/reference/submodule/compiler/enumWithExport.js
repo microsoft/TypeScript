@@ -9,6 +9,7 @@ enum x {
 }
 
 //// [enumWithExport.js]
+"use strict";
 var x;
 (function (x) {
     x.y = 123;

@@ -20,6 +20,7 @@ var z1: A & typeof bc;
 
 
 //// [intersectionTypeEquivalence.js]
+"use strict";
 // A & B is equivalent to B & A.
 var y;
 var y;

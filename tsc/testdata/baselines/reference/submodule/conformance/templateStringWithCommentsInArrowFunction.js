@@ -16,6 +16,7 @@ const f2 = () =>
 
 
 //// [templateStringWithCommentsInArrowFunction.js]
+"use strict";
 const a = 1;
 const f1 = () => `${
 // a

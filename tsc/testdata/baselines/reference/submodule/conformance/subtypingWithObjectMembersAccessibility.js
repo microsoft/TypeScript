@@ -36,6 +36,7 @@ class B3 extends A3 {
 }
 
 //// [subtypingWithObjectMembersAccessibility.js]
+"use strict";
 // Derived member is private, base member is not causes errors
 class Base {
     foo;

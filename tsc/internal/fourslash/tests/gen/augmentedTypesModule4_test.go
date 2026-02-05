@@ -12,7 +12,7 @@ func TestAugmentedTypesModule4(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module m3d { export var y = 2; }
+	const content = `namespace m3d { export var y = 2; }
 declare class m3d { foo(): void }
 var /*1*/r = new m3d();
 r./*2*/

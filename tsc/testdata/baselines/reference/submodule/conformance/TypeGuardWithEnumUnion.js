@@ -39,6 +39,7 @@ function f2(x: Color | string | string[]) {
 
 
 //// [TypeGuardWithEnumUnion.js]
+"use strict";
 var Color;
 (function (Color) {
     Color[Color["R"] = 0] = "R";

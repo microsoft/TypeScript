@@ -16,6 +16,7 @@ function foo12<T extends undefined>(test: T) { }
 function foo13<T extends void>(test: T) { }
 
 //// [typeParameterConstraints1.js]
+"use strict";
 function foo1(test) { }
 function foo2(test) { }
 function foo3(test) { }

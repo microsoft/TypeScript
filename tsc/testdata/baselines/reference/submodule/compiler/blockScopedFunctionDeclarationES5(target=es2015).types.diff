@@ -1,0 +1,10 @@
+--- old.blockScopedFunctionDeclarationES5(target=es2015).types
++++ new.blockScopedFunctionDeclarationES5(target=es2015).types
+@@= skipped -11, +11 lines =@@
+ >foo : () => void
+ }
+ foo();
+->foo() : any
+->foo : any
++>foo() : void
++>foo : () => void

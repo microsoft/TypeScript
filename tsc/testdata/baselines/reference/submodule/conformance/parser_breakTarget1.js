@@ -5,4 +5,5 @@ target:
   break target;
 
 //// [parser_breakTarget1.js]
+"use strict";
 target: break target;

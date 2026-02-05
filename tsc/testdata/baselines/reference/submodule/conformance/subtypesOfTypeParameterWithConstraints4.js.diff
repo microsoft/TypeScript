@@ -1,7 +1,7 @@
 --- old.subtypesOfTypeParameterWithConstraints4.js
 +++ new.subtypesOfTypeParameterWithConstraints4.js
-@@= skipped -82, +82 lines =@@
- //// [subtypesOfTypeParameterWithConstraints4.js]
+@@= skipped -83, +83 lines =@@
+ "use strict";
  // checking whether other types are subtypes of type parameters with constraints
  class Foo {
 +    foo;

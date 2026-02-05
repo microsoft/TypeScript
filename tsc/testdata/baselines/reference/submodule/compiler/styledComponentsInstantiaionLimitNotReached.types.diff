@@ -1,6 +1,15 @@
 --- old.styledComponentsInstantiaionLimitNotReached.types
 +++ new.styledComponentsInstantiaionLimitNotReached.types
-@@= skipped -331, +331 lines =@@
+@@= skipped -313, +313 lines =@@
+     > extends ForwardRefExoticBase<StyledComponentProps<C, T, O, A>> {
+     // add our own fake call signature to implement the polymorphic 'as' prop
+     (props: StyledComponentProps<C, T, O, A> & { as?: never; forwardedAs?: never }): React.ReactElement<
+->props : StyledComponentProps<C, T, O, A> & { as?: never; forwardedAs?: never; }
++>props : StyledComponentProps<C, T, O, A> & { as?: undefined; forwardedAs?: undefined; }
+ >as : undefined
+ >forwardedAs : undefined
+ >React : any
+@@= skipped -18, +18 lines =@@
  >React : any
 
      withComponent<WithC extends AnyStyledComponent>(

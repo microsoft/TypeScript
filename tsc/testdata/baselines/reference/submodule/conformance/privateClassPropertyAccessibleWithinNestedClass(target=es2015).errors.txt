@@ -1,0 +1,55 @@
+privateClassPropertyAccessibleWithinNestedClass.ts(4,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+privateClassPropertyAccessibleWithinNestedClass.ts(19,26): error TS2454: Variable 'x' is used before being assigned.
+privateClassPropertyAccessibleWithinNestedClass.ts(20,26): error TS2454: Variable 'x' is used before being assigned.
+privateClassPropertyAccessibleWithinNestedClass.ts(21,26): error TS2454: Variable 'x' is used before being assigned.
+privateClassPropertyAccessibleWithinNestedClass.ts(22,26): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== privateClassPropertyAccessibleWithinNestedClass.ts (5 errors) ====
+    // no errors
+    
+    class C {
+        private x: string;
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+        private get y() { return this.x; }
+        private set y(x) { this.y = this.x; }
+        private foo() { return this.foo; }
+    
+        private static x: string;
+        private static get y() { return this.x; }
+        private static set y(x) { this.y = this.x; }
+        private static foo() { return this.foo; }
+        private static bar() { this.foo(); }
+    
+        private bar() {
+            class C2 {
+                private foo() {
+                    let x: C;
+                    var x1 = x.foo;
+                             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                    var x2 = x.bar;
+                             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                    var x3 = x.x;
+                             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                    var x4 = x.y;
+                             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
+                    var sx1 = C.x;
+                    var sx2 = C.y;
+                    var sx3 = C.bar;
+                    var sx4 = C.foo;
+    
+                    let y = new C();
+                    var y1 = y.foo;
+                    var y2 = y.bar;
+                    var y3 = y.x;
+                    var y4 = y.y;
+                }
+            }
+        }
+    }

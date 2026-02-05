@@ -1,6 +1,6 @@
 --- old.declarationsAndAssignments.js
 +++ new.declarationsAndAssignments.js
-@@= skipped -283, +283 lines =@@
+@@= skipped -284, +284 lines =@@
  f14([2, ["abc", { y: false }]]); // Error, no x
  var M;
  (function (M) {

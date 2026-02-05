@@ -16,6 +16,7 @@ var d: Derived;
 d.p;  // public, OK
 
 //// [classConstructorParametersAccessibility3.js]
+"use strict";
 class Base {
     p;
     constructor(p) {

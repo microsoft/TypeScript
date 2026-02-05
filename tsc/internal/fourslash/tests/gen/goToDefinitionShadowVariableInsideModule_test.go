@@ -11,7 +11,7 @@ func TestGoToDefinitionShadowVariableInsideModule(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module shdModule {
+	const content = `namespace shdModule {
     var /*shadowVariableDefinition*/shdVar;
     /*shadowVariableReference*/shdVar = 1;
 }`

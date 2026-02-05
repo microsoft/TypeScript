@@ -1,0 +1,11 @@
+--- old.bundlerSyntaxRestrictions(module=esnext).types
++++ new.bundlerSyntaxRestrictions(module=esnext).types
+@@= skipped -9, +9 lines =@@
+ >"fs" : typeof import("fs")
+
+     export function readFileSync(path: string, encoding?: string): string;
+->readFileSync : (path: string, encoding?: string) => string
++>readFileSync : (path: string, encoding?: string | undefined) => string
+ >path : string
+ >encoding : string | undefined
+ }

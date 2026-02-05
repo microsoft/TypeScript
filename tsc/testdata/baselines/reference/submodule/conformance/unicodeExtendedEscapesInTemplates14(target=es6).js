@@ -6,5 +6,6 @@ var x = `\u{-DDDD}`;
 
 
 //// [unicodeExtendedEscapesInTemplates14.js]
+"use strict";
 // Shouldn't work, negatives are not allowed.
 var x = `\u{-DDDD}`;

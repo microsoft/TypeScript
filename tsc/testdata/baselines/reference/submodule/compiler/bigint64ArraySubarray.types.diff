@@ -1,0 +1,31 @@
+--- old.bigint64ArraySubarray.types
++++ new.bigint64ArraySubarray.types
+@@= skipped -11, +11 lines =@@
+
+     arr.subarray();
+ >arr.subarray() : BigInt64Array<ArrayBuffer>
+->arr.subarray : (begin?: number, end?: number) => BigInt64Array<ArrayBuffer>
++>arr.subarray : (begin?: number | undefined, end?: number | undefined) => BigInt64Array<ArrayBuffer>
+ >arr : BigInt64Array<ArrayBuffer>
+->subarray : (begin?: number, end?: number) => BigInt64Array<ArrayBuffer>
++>subarray : (begin?: number | undefined, end?: number | undefined) => BigInt64Array<ArrayBuffer>
+
+     arr.subarray(0);
+ >arr.subarray(0) : BigInt64Array<ArrayBuffer>
+->arr.subarray : (begin?: number, end?: number) => BigInt64Array<ArrayBuffer>
++>arr.subarray : (begin?: number | undefined, end?: number | undefined) => BigInt64Array<ArrayBuffer>
+ >arr : BigInt64Array<ArrayBuffer>
+->subarray : (begin?: number, end?: number) => BigInt64Array<ArrayBuffer>
++>subarray : (begin?: number | undefined, end?: number | undefined) => BigInt64Array<ArrayBuffer>
+ >0 : 0
+
+     arr.subarray(0, 10);
+ >arr.subarray(0, 10) : BigInt64Array<ArrayBuffer>
+->arr.subarray : (begin?: number, end?: number) => BigInt64Array<ArrayBuffer>
++>arr.subarray : (begin?: number | undefined, end?: number | undefined) => BigInt64Array<ArrayBuffer>
+ >arr : BigInt64Array<ArrayBuffer>
+->subarray : (begin?: number, end?: number) => BigInt64Array<ArrayBuffer>
++>subarray : (begin?: number | undefined, end?: number | undefined) => BigInt64Array<ArrayBuffer>
+ >0 : 0
+ >10 : 10
+ }

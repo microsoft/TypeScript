@@ -50,6 +50,7 @@ class C3 extends Base {
 
 
 //// [esDecorators-classExpression-classSuper.5.js]
+"use strict";
 const x = "x";
 (
 @dec

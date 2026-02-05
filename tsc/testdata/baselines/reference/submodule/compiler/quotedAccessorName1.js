@@ -6,6 +6,7 @@ class C {
 }
 
 //// [quotedAccessorName1.js]
+"use strict";
 class C {
     get "foo"() { return 0; }
 }

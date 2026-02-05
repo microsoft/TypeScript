@@ -6,7 +6,7 @@ Animation.AnimationModel.ScreenshotCapture.Request;
 >Animation.AnimationModel.ScreenshotCapture.Request : any
 >Animation.AnimationModel.ScreenshotCapture : any
 >Animation.AnimationModel : any
->Animation : { new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }
+>Animation : { new (effect?: AnimationEffect | null | undefined, timeline?: AnimationTimeline | null | undefined): Animation; prototype: Animation; }
 >AnimationModel : any
 >ScreenshotCapture : any
 >Request : any
@@ -16,7 +16,7 @@ Animation.AnimationModel.ScreenshotCapture.Request;
 >Animation.AnimationModel.ScreenshotCapture.Request : any
 >Animation.AnimationModel.ScreenshotCapture : any
 >Animation.AnimationModel : any
->Animation : { new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }
+>Animation : { new (effect?: AnimationEffect | null | undefined, timeline?: AnimationTimeline | null | undefined): Animation; prototype: Animation; }
 >AnimationModel : any
 >ScreenshotCapture : any
 >Request : any

@@ -1,8 +1,8 @@
 --- old.typeOfThisInstanceMemberNarrowedWithLoopAntecedent.js
 +++ new.typeOfThisInstanceMemberNarrowedWithLoopAntecedent.js
-@@= skipped -34, +34 lines =@@
-
+@@= skipped -35, +35 lines =@@
  //// [typeOfThisInstanceMemberNarrowedWithLoopAntecedent.js]
+ "use strict";
  class SomeClass {
 +    state;
      method() {

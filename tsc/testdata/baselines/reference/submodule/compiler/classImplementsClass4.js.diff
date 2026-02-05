@@ -1,8 +1,8 @@
 --- old.classImplementsClass4.js
 +++ new.classImplementsClass4.js
-@@= skipped -19, +19 lines =@@
-
+@@= skipped -20, +20 lines =@@
  //// [classImplementsClass4.js]
+ "use strict";
  class A {
 -    constructor() {
 -        this.x = 1;

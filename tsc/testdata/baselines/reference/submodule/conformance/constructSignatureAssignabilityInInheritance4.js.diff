@@ -1,7 +1,7 @@
 --- old.constructSignatureAssignabilityInInheritance4.js
 +++ new.constructSignatureAssignabilityInInheritance4.js
-@@= skipped -63, +63 lines =@@
- //// [constructSignatureAssignabilityInInheritance4.js]
+@@= skipped -64, +64 lines =@@
+ "use strict";
  // checking subtype relations for function types as it relates to contextual signature instantiation
  class Base {
 +    foo;

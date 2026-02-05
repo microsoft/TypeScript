@@ -21,6 +21,7 @@ namespace Namespace {
 
 
 //// [classStaticInitializersUsePropertiesBeforeDeclaration.js]
+"use strict";
 class Foo {
     static enumMember = Enum.A;
     static objLiteralMember = ObjLiteral.A;

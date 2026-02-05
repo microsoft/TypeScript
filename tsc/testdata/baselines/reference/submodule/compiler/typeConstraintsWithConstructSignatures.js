@@ -15,6 +15,7 @@ class C<T extends Constructable> {
 
 
 //// [typeConstraintsWithConstructSignatures.js]
+"use strict";
 class C {
     data;
     data2;

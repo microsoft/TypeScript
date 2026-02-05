@@ -19,6 +19,7 @@ class C {
 
 
 //// [noUnusedLocals_destructuringAssignment.js]
+"use strict";
 class C {
     x = 0;
     m() {

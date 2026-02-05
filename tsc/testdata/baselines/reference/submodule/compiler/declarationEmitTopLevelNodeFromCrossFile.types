@@ -5,15 +5,15 @@ export type X = string;
 >X : string
 
 export const fn = { o: (a?: (X | undefined)[]) => {} };
->fn : { o: (a?: string[]) => void; }
->{ o: (a?: (X | undefined)[]) => {} } : { o: (a?: string[]) => void; }
->o : (a?: string[]) => void
->(a?: (X | undefined)[]) => {} : (a?: string[]) => void
->a : string[]
+>fn : { o: (a?: (string | undefined)[] | undefined) => void; }
+>{ o: (a?: (X | undefined)[]) => {} } : { o: (a?: (string | undefined)[] | undefined) => void; }
+>o : (a?: (string | undefined)[] | undefined) => void
+>(a?: (X | undefined)[]) => {} : (a?: (string | undefined)[] | undefined) => void
+>a : (string | undefined)[] | undefined
 
 === b.ts ===
 import {fn} from "./a";
->fn : { o: (a?: string[]) => void; }
+>fn : { o: (a?: (string | undefined)[] | undefined) => void; }
 
 export const m = {                        
 >m : { prop: number; }
@@ -29,8 +29,8 @@ export const m = {
 
 
 export const x = { p: fn }; 
->x : { p: { o: (a?: string[]) => void; }; }
->{ p: fn } : { p: { o: (a?: string[]) => void; }; }
->p : { o: (a?: string[]) => void; }
->fn : { o: (a?: string[]) => void; }
+>x : { p: { o: (a?: (string | undefined)[] | undefined) => void; }; }
+>{ p: fn } : { p: { o: (a?: (string | undefined)[] | undefined) => void; }; }
+>p : { o: (a?: (string | undefined)[] | undefined) => void; }
+>fn : { o: (a?: (string | undefined)[] | undefined) => void; }
 

@@ -1,6 +1,6 @@
 --- old.genericCallWithObjectTypeArgsAndConstraints2.js
 +++ new.genericCallWithObjectTypeArgsAndConstraints2.js
-@@= skipped -43, +43 lines =@@
+@@= skipped -44, +44 lines =@@
  // Generic call with constraints infering type parameter from object member properties
  // No errors expected
  class Base {

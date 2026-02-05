@@ -20,8 +20,8 @@ class C1T5 {
     }
 }
 
-// CONTEXT: Module property declaration
-module C2T5 {
+// CONTEXT: Namespace property declaration
+namespace C2T5 {
     export var foo: (i: number, s: string) => number = function(i) {
         return i;
     }
@@ -65,8 +65,8 @@ class C4T5 {
     }
 }
 
-// CONTEXT: Module property assignment
-module C5T5 {
+// CONTEXT: Namespace property assignment
+namespace C5T5 {
     export var foo: (i: number, s: string) => string;
     foo = function(i, s) {
         return s;
@@ -78,7 +78,7 @@ var c6t5: (n: number) => IFoo;
 c6t5 = <(n: number) => IFoo>function(n) { return <IFoo>({}) };
 
 // CONTEXT: Array index assignment
-var c7t2: IFoo[];
+var c7t2: IFoo[] = [];
 c7t2[0] = <IFoo>({n: 1});
 
 // CONTEXT: Object property assignment
@@ -227,13 +227,14 @@ var x: B = { };
 
 
 //// [contextualTyping.js]
+"use strict";
 // CONTEXT: Class property declaration
 class C1T5 {
     foo = function (i) {
         return i;
     };
 }
-// CONTEXT: Module property declaration
+// CONTEXT: Namespace property declaration
 var C2T5;
 (function (C2T5) {
     C2T5.foo = function (i) {
@@ -272,7 +273,7 @@ class C4T5 {
         };
     }
 }
-// CONTEXT: Module property assignment
+// CONTEXT: Namespace property assignment
 var C5T5;
 (function (C5T5) {
     C5T5.foo = function (i, s) {
@@ -283,7 +284,7 @@ var C5T5;
 var c6t5;
 c6t5 = function (n) { return ({}); };
 // CONTEXT: Array index assignment
-var c7t2;
+var c7t2 = [];
 c7t2[0] = ({ n: 1 });
 var objc8 = ({});
 objc8.t1 = (function (s) { return s; });

@@ -795,11 +795,11 @@ define(function () {
 
     isArray = ('isArray' in Array) ?
 >isArray : Symbol(isArray, Decl(fixSignatureCaching.ts, 289, 53))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         Array.isArray : function (value) { return Object.prototype.toString.call(value) === '[object Array]'; };
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(fixSignatureCaching.ts, 297, 34))
 >Object.prototype.toString.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
@@ -813,7 +813,7 @@ define(function () {
 
     isArray = 'isArray' in Array
 >isArray : Symbol(isArray, Decl(fixSignatureCaching.ts, 289, 53))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         ? function (value) { return Object.prototype.toString.call(value) === '[object Array]'; }
 >value : Symbol(value, Decl(fixSignatureCaching.ts, 299, 20))
@@ -827,7 +827,7 @@ define(function () {
 >value : Symbol(value, Decl(fixSignatureCaching.ts, 299, 20))
 
         : Array.isArray;
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     function equalIC(a, b) {
 >equalIC : Symbol(equalIC, Decl(fixSignatureCaching.ts, 300, 24))
@@ -897,7 +897,7 @@ define(function () {
                 object[key] = new RegExp(object[key], 'i');
 >object : Symbol(object, Decl(fixSignatureCaching.ts, 320, 34))
 >key : Symbol(key, Decl(fixSignatureCaching.ts, 321, 16))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >object : Symbol(object, Decl(fixSignatureCaching.ts, 320, 34))
 >key : Symbol(key, Decl(fixSignatureCaching.ts, 321, 16))
             }
@@ -973,7 +973,7 @@ define(function () {
                     values[i] = new RegExp(value, 'i');
 >values : Symbol(values, Decl(fixSignatureCaching.ts, 329, 16))
 >i : Symbol(i, Decl(fixSignatureCaching.ts, 329, 31))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >value : Symbol(value, Decl(fixSignatureCaching.ts, 329, 24))
                 }
                 mobileDetectRules.props[key] = values;
@@ -1992,11 +1992,11 @@ define(function () {
 
             if (!(pattern instanceof RegExp)) {
 >pattern : Symbol(pattern, Decl(fixSignatureCaching.ts, 925, 25))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
                 pattern = new RegExp(pattern, 'i');
 >pattern : Symbol(pattern, Decl(fixSignatureCaching.ts, 925, 25))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >pattern : Symbol(pattern, Decl(fixSignatureCaching.ts, 925, 25))
             }
             return pattern.test(this.ua);

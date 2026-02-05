@@ -1,6 +1,6 @@
 --- old.newArrays.js
 +++ new.newArrays.js
-@@= skipped -19, +19 lines =@@
+@@= skipped -20, +20 lines =@@
      class Foo {
      }
      class Gar {

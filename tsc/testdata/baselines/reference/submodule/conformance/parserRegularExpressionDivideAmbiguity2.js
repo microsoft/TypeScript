@@ -4,4 +4,5 @@
 (1) /notregexp/a.foo();
 
 //// [parserRegularExpressionDivideAmbiguity2.js]
+"use strict";
 (1) / notregexp / a.foo();

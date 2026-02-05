@@ -4,13 +4,13 @@
 // If one operand is the undefined or undefined value, it is treated as having the type of the
 // other operand.
 
-var a: boolean;
+declare var a: boolean;
 >a : boolean
 
-var b: string;
+declare var b: string;
 >b : string
 
-var c: Object;
+declare var c: Object;
 >c : Object
 
 // operator **

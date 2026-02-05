@@ -1,9 +1,0 @@
---- old.genericArray0.js
-+++ new.genericArray0.js
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/genericArray0.ts] ////
-
- //// [genericArray0.ts]
--
- var x:number[];
-

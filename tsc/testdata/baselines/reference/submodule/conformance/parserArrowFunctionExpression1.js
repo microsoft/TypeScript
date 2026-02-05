@@ -4,4 +4,5 @@
 var v = (public x: string) => { };
 
 //// [parserArrowFunctionExpression1.js]
+"use strict";
 var v = (x) => { };

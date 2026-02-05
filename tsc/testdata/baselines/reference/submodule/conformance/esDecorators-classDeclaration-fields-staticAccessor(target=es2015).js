@@ -21,6 +21,7 @@ class D {
 }
 
 //// [esDecorators-classDeclaration-fields-staticAccessor.js]
+"use strict";
 const field3 = "field3";
 class C {
     @dec(1)

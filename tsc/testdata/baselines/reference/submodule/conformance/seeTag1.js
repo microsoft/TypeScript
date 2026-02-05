@@ -22,6 +22,7 @@ const c = ""
 
 
 //// [seeTag1.js]
+"use strict";
 /** @see {Foo} foooo*/
 const a = "";
 /** @see {NS.Bar} ns.bar*/

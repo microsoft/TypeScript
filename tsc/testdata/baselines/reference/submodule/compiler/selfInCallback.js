@@ -10,6 +10,7 @@ class C {
 }
 
 //// [selfInCallback.js]
+"use strict";
 class C {
     p1 = 0;
     callback(cb) { cb(); }

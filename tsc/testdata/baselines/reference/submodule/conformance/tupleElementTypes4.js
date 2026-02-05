@@ -4,4 +4,5 @@
 function f([a, b] = [0, undefined]) { }
 
 //// [tupleElementTypes4.js]
+"use strict";
 function f([a, b] = [0, undefined]) { }

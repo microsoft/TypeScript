@@ -48,7 +48,9 @@ export var publicUse_im_private_mi_public = new im_private_mi_public.c_public();
 
 
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.js]
+"use strict";
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.js]
+"use strict";
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

@@ -12,6 +12,7 @@ var test = TShirtSize[mySize];
 test + ''
 
 //// [enumMapBackIntoItself.js]
+"use strict";
 var TShirtSize;
 (function (TShirtSize) {
     TShirtSize[TShirtSize["Small"] = 0] = "Small";

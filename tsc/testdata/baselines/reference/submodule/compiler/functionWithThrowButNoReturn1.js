@@ -8,6 +8,7 @@ function fn(): number {
 
 
 //// [functionWithThrowButNoReturn1.js]
+"use strict";
 function fn() {
     throw new Error('NYI');
     var t;

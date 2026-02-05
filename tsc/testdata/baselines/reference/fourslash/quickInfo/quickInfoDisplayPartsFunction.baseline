@@ -4,7 +4,7 @@
 //          ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | function foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
+// | function foo(param: string, optionalParam?: string | undefined, paramWithInitializer?: string, ...restParam: string[]): void
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -73,7 +73,7 @@
 // ^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | function foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void
+// | function foo(param: string, optionalParam?: string | undefined, paramWithInitializer?: string, ...restParam: string[]): void
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -131,7 +131,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n"
+        "value": "```tsx\nfunction foo(param: string, optionalParam?: string | undefined, paramWithInitializer?: string, ...restParam: string[]): void\n```\n"
       },
       "range": {
         "start": {
@@ -347,7 +347,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction foo(param: string, optionalParam?: string, paramWithInitializer?: string, ...restParam: string[]): void\n```\n"
+        "value": "```tsx\nfunction foo(param: string, optionalParam?: string | undefined, paramWithInitializer?: string, ...restParam: string[]): void\n```\n"
       },
       "range": {
         "start": {

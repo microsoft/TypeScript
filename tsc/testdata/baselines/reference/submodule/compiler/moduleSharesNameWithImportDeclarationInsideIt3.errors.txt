@@ -3,15 +3,15 @@ moduleSharesNameWithImportDeclarationInsideIt3.ts(11,12): error TS2300: Duplicat
 
 
 ==== moduleSharesNameWithImportDeclarationInsideIt3.ts (2 errors) ====
-    module Z {
-        export module M {
+    namespace Z {
+        export namespace M {
             export function bar() {
                 return "";
             }
         }
         export interface I { }
     }
-    module A.M {
+    namespace A.M {
         import M = Z.M;
                ~
 !!! error TS2300: Duplicate identifier 'M'.

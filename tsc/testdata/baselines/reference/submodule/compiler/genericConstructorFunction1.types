@@ -5,7 +5,7 @@ function f1<T>(args: T) {
 >f1 : <T>(args: T) => Date
 >args : T
 
-    var v1: { [index: string]: new (arg: T) => Date };
+    var v1!: { [index: string]: new (arg: T) => Date };
 >v1 : { [index: string]: new (arg: T) => Date; }
 >index : string
 >arg : T
@@ -35,7 +35,7 @@ function f2<T>(args: T) {
 >f2 : <T>(args: T) => Date
 >args : T
 
-    var v1: { [index: string]: I1<T> };
+    var v1!: { [index: string]: I1<T> };
 >v1 : { [index: string]: I1<T>; }
 >index : string
 

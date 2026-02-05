@@ -1,8 +1,8 @@
 --- old.derivedClassWithoutExplicitConstructor.js
 +++ new.derivedClassWithoutExplicitConstructor.js
-@@= skipped -28, +28 lines =@@
-
+@@= skipped -29, +29 lines =@@
  //// [derivedClassWithoutExplicitConstructor.js]
+ "use strict";
  class Base {
 -    constructor(x) {
 -        this.a = 1;

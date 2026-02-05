@@ -1,0 +1,98 @@
+--- old.declFileMethods(target=es2015).types
++++ new.declFileMethods(target=es2015).types
+@@= skipped -29, +29 lines =@@
+ >a + rests.join("") : string
+ >a : string
+ >rests.join("") : string
+->rests.join : (separator?: string) => string
++>rests.join : (separator?: string | undefined) => string
+ >rests : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"" : ""
+     }
+
+@@= skipped -49, +49 lines =@@
+ >a + rests.join("") : string
+ >a : string
+ >rests.join("") : string
+->rests.join : (separator?: string) => string
++>rests.join : (separator?: string | undefined) => string
+ >rests : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"" : ""
+     }
+     private privateFooWithOverloads(a: string): string;
+@@= skipped -48, +48 lines =@@
+ >a + rests.join("") : string
+ >a : string
+ >rests.join("") : string
+->rests.join : (separator?: string) => string
++>rests.join : (separator?: string | undefined) => string
+ >rests : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"" : ""
+     }
+     static staticFooWithOverloads(a: string): string;
+@@= skipped -48, +48 lines =@@
+ >a + rests.join("") : string
+ >a : string
+ >rests.join("") : string
+->rests.join : (separator?: string) => string
++>rests.join : (separator?: string | undefined) => string
+ >rests : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"" : ""
+     }
+     private static privateStaticFooWithOverloads(a: string): string;
+@@= skipped -80, +80 lines =@@
+ >a + rests.join("") : string
+ >a : string
+ >rests.join("") : string
+->rests.join : (separator?: string) => string
++>rests.join : (separator?: string | undefined) => string
+ >rests : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"" : ""
+     }
+
+@@= skipped -49, +49 lines =@@
+ >a + rests.join("") : string
+ >a : string
+ >rests.join("") : string
+->rests.join : (separator?: string) => string
++>rests.join : (separator?: string | undefined) => string
+ >rests : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"" : ""
+     }
+     private privateFooWithOverloads(a: string): string;
+@@= skipped -48, +48 lines =@@
+ >a + rests.join("") : string
+ >a : string
+ >rests.join("") : string
+->rests.join : (separator?: string) => string
++>rests.join : (separator?: string | undefined) => string
+ >rests : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"" : ""
+     }
+     static staticFooWithOverloads(a: string): string;
+@@= skipped -48, +48 lines =@@
+ >a + rests.join("") : string
+ >a : string
+ >rests.join("") : string
+->rests.join : (separator?: string) => string
++>rests.join : (separator?: string | undefined) => string
+ >rests : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"" : ""
+     }
+     private static privateStaticFooWithOverloads(a: string): string;

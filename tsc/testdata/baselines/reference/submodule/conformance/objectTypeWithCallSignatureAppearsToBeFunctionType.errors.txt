@@ -1,0 +1,32 @@
+objectTypeWithCallSignatureAppearsToBeFunctionType.ts(9,16): error TS2454: Variable 'i' is used before being assigned.
+objectTypeWithCallSignatureAppearsToBeFunctionType.ts(10,37): error TS2454: Variable 'i' is used before being assigned.
+objectTypeWithCallSignatureAppearsToBeFunctionType.ts(16,16): error TS2454: Variable 'b' is used before being assigned.
+objectTypeWithCallSignatureAppearsToBeFunctionType.ts(17,37): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== objectTypeWithCallSignatureAppearsToBeFunctionType.ts (4 errors) ====
+    // objects with call signatures should be permitted where function types are expected
+    // no errors expected below
+    
+    interface I {
+        (): void;
+    }
+    
+    var i: I;
+    var r2: void = i();
+                   ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    var r2b: (x: any, y?: any) => any = i.apply;
+                                        ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    
+    var b: {
+        (): void;
+    }
+    
+    var r4: void = b();
+                   ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rb4: (x: any, y?: any) => any = b.apply;
+                                        ~
+!!! error TS2454: Variable 'b' is used before being assigned.

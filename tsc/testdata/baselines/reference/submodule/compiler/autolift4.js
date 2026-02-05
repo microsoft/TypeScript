@@ -26,6 +26,7 @@ class Point3D extends Point {
 
 
 //// [autolift4.js]
+"use strict";
 class Point {
     x;
     y;

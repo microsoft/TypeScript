@@ -1,6 +1,6 @@
 --- old.conditionalTypeAssignabilityWhenDeferred.js
 +++ new.conditionalTypeAssignabilityWhenDeferred.js
-@@= skipped -169, +169 lines =@@
+@@= skipped -166, +166 lines =@@
      const o6 = o;
  }
  class Foo2 {

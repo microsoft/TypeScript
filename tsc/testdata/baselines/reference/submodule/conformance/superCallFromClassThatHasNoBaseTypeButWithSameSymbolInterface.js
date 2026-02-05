@@ -11,6 +11,7 @@ class Foo {
 
 
 //// [superCallFromClassThatHasNoBaseTypeButWithSameSymbolInterface.js]
+"use strict";
 class Foo {
     constructor() {
         super(); // error

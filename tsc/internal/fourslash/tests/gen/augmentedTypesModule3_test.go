@@ -13,7 +13,7 @@ func TestAugmentedTypesModule3(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `function m2g() { };
-module m2g { export class C { foo(x: number) { } } }
+namespace m2g { export class C { foo(x: number) { } } }
 var x: m2g./*1*/;
 var /*2*/r = m2g/*3*/;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

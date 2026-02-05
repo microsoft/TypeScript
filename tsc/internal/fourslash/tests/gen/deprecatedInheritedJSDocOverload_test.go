@@ -11,7 +11,8 @@ func TestDeprecatedInheritedJSDocOverload(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface PartialObserver<T> {}
+	const content = `// @strict: false
+interface PartialObserver<T> {}
 interface Subscription {}
 interface Unsubscribable {}
 

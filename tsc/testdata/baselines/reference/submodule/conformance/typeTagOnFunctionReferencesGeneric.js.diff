@@ -1,6 +1,6 @@
 --- old.typeTagOnFunctionReferencesGeneric.js
 +++ new.typeTagOnFunctionReferencesGeneric.js
-@@= skipped -37, +37 lines =@@
+@@= skipped -34, +34 lines =@@
 
 
  //// [typeTagOnFunctionReferencesGeneric.d.ts]

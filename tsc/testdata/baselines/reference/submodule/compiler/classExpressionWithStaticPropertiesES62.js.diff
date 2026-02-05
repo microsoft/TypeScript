@@ -1,9 +1,9 @@
 --- old.classExpressionWithStaticPropertiesES62.js
 +++ new.classExpressionWithStaticPropertiesES62.js
-@@= skipped -10, +10 lines =@@
-  };
+@@= skipped -11, +11 lines =@@
 
  //// [classExpressionWithStaticPropertiesES62.js]
+ "use strict";
 -var _a;
 -var v = (_a = class C {
 -    },

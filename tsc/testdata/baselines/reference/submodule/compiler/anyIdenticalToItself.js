@@ -15,6 +15,7 @@ class C {
 }
 
 //// [anyIdenticalToItself.js]
+"use strict";
 function foo(x, y) { }
 class C {
     get X() {

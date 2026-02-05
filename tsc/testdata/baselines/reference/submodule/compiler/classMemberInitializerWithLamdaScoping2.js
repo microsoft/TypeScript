@@ -18,8 +18,10 @@ class Test1 {
 }
 
 //// [classMemberInitializerWithLamdaScoping2_0.js]
+"use strict";
 var field1;
 //// [classMemberInitializerWithLamdaScoping2_1.js]
+"use strict";
 class Test1 {
     field1;
     constructor(field1) {

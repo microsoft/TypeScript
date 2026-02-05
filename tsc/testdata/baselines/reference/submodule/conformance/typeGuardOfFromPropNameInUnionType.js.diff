@@ -1,8 +1,8 @@
 --- old.typeGuardOfFromPropNameInUnionType.js
 +++ new.typeGuardOfFromPropNameInUnionType.js
-@@= skipped -109, +109 lines =@@
-
+@@= skipped -110, +110 lines =@@
  //// [typeGuardOfFromPropNameInUnionType.js]
+ "use strict";
  class A {
 +    a;
  }

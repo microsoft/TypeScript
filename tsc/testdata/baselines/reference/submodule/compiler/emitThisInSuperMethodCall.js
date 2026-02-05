@@ -30,6 +30,7 @@ class RegisteredUser extends User {
 
 
 //// [emitThisInSuperMethodCall.js]
+"use strict";
 class User {
     sayHello() {
     }

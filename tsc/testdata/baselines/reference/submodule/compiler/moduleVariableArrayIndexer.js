@@ -1,13 +1,14 @@
 //// [tests/cases/compiler/moduleVariableArrayIndexer.ts] ////
 
 //// [moduleVariableArrayIndexer.ts]
-module Bar {
+namespace Bar {
     export var a = 1;
     var t = undefined[a][a]; // CG: var t = undefined[Bar.a][a];
 }
 
 
 //// [moduleVariableArrayIndexer.js]
+"use strict";
 var Bar;
 (function (Bar) {
     Bar.a = 1;

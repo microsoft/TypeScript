@@ -1,6 +1,6 @@
 --- old.jsDeclarationsTypedefDescriptionsPreserved.js
 +++ new.jsDeclarationsTypedefDescriptionsPreserved.js
-@@= skipped -37, +37 lines =@@
+@@= skipped -38, +38 lines =@@
  //// [index.d.ts]
  /**
   * Options for Foo <------------

@@ -175,6 +175,7 @@ var r18 = foo18(r18arg1);
 
 
 //// [subtypingWithConstructSignatures2.js]
+"use strict";
 // checking subtype relations for function types as it relates to contextual signature instantiation
 class Base {
     foo;

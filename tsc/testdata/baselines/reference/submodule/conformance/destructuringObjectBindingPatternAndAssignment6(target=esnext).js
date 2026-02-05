@@ -11,6 +11,7 @@ console.log(aVal, bVal);
 
 
 //// [destructuringObjectBindingPatternAndAssignment6.js]
+"use strict";
 const a = "a";
 const b = "b";
 const { [a]: aVal, [b]: bVal } = (() => {

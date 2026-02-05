@@ -7,6 +7,7 @@ class C {
 }
 
 //// [ParameterList6.js]
+"use strict";
 class C {
     constructor(C) {
     }

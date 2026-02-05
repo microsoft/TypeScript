@@ -14,15 +14,11 @@ export declare class Bar2 {
 }
 
 //// [noImplicitAnyDestructuringInPrivateMethod.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Bar = void 0;
-class Bar {
+export class Bar {
     bar({ a, }) {
         return a;
     }
 }
-exports.Bar = Bar;
 
 
 //// [noImplicitAnyDestructuringInPrivateMethod.d.ts]

@@ -1,7 +1,7 @@
 --- old.memberVariableDeclarations1.js
 +++ new.memberVariableDeclarations1.js
-@@= skipped -31, +31 lines =@@
- //// [memberVariableDeclarations1.js]
+@@= skipped -32, +32 lines =@@
+ "use strict";
  // from spec
  class Employee {
 -    constructor() {

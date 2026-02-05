@@ -11,11 +11,11 @@ func TestQuickInfoCloduleWithRecursiveReference(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
+	const content = `namespace M {
     export class C {
         foo() { }
     }
-    export module C {
+    export namespace C {
     export var /**/C = M.C
   }
 }`

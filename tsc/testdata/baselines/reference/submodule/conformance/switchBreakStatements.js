@@ -58,6 +58,7 @@ switch ('') {
 
 
 //// [switchBreakStatements.js]
+"use strict";
 switch ('') {
     case 'a':
         break;

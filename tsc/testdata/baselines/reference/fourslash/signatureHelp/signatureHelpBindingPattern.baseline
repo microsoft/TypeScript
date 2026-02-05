@@ -19,8 +19,8 @@
 // emptyArr()
 //          ^
 // | ----------------------------------------------------------------------
-// | emptyArr(**[]: any[]**): void
-// | - `[]: any[]`: An empty array binding pattern.
+// | emptyArr(**[]: Iterable<any, void, undefined>**): void
+// | - `[]: Iterable<any, void, undefined>`: An empty array binding pattern.
 
 // | ----------------------------------------------------------------------
 // 
@@ -200,10 +200,10 @@
     "item": {
       "signatures": [
         {
-          "label": "emptyArr([]: any[]): void",
+          "label": "emptyArr([]: Iterable<any, void, undefined>): void",
           "parameters": [
             {
-              "label": "[]: any[]",
+              "label": "[]: Iterable<any, void, undefined>",
               "documentation": {
                 "kind": "markdown",
                 "value": "An empty array binding pattern.\n"

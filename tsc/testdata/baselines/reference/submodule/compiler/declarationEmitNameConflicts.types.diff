@@ -13,4 +13,4 @@
 +>d : typeof import("declarationEmit_nameConflicts_1")
  }
 
- export module M.Q {
+ export namespace M.Q {

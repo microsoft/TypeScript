@@ -1,0 +1,34 @@
+--- old.constructSignaturesWithOverloads.types
++++ new.constructSignaturesWithOverloads.types
+@@= skipped -96, +96 lines =@@
+ >'' : ""
+
+ var a: {
+->a : { new (x: number, y?: string): C; new (x: number, y: string): C; }
++>a : { new (x: number, y?: string | undefined): C; new (x: number, y: string): C; }
+
+     new(x: number, y?: string): C;
+ >x : number
+@@= skipped -14, +14 lines =@@
+ var r5 = new a(1, '');
+ >r5 : C
+ >new a(1, '') : C
+->a : { new (x: number, y?: string): C; new (x: number, y: string): C; }
++>a : { new (x: number, y?: string | undefined): C; new (x: number, y: string): C; }
+ >1 : 1
+ >'' : ""
+
+ var b: {
+->b : { new <T>(x: T, y?: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
++>b : { new <T>(x: T, y?: string | undefined): C2<T>; new <T>(x: T, y: string): C2<T>; }
+
+     new<T>(x: T, y?: string): C2<T>;
+ >x : T
+@@= skipped -19, +19 lines =@@
+ var r6 = new b(1, '');
+ >r6 : C2<number>
+ >new b(1, '') : C2<number>
+->b : { new <T>(x: T, y?: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
++>b : { new <T>(x: T, y?: string | undefined): C2<T>; new <T>(x: T, y: string): C2<T>; }
+ >1 : 1
+ >'' : ""

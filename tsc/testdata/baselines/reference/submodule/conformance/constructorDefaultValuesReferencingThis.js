@@ -22,6 +22,7 @@ class F extends C {
 
 
 //// [constructorDefaultValuesReferencingThis.js]
+"use strict";
 class C {
     baseProp = 1;
     constructor(x = this) { }

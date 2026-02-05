@@ -1,14 +1,21 @@
 --- old.2dArrays.js
 +++ new.2dArrays.js
-@@= skipped -20, +20 lines =@@
+@@= skipped -21, +21 lines =@@
  class Cell {
  }
  class Ship {
-+    isSunk;
+-    constructor() {
+-        this.isSunk = false;
+-    }
++    isSunk = false;
  }
  class Board {
-+    ships;
-+    cells;
+-    constructor() {
+-        this.ships = [];
+-        this.cells = [];
+-    }
++    ships = [];
++    cells = [];
      allShipsSunk() {
          return this.ships.every(function (val) { return val.isSunk; });
      }

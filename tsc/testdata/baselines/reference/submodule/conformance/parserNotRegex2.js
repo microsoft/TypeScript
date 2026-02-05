@@ -13,5 +13,6 @@ B(
 
 
 //// [parserNotRegex2.js]
+"use strict";
 const x = (A / 2);
 B(C(), () => { }, () => { });

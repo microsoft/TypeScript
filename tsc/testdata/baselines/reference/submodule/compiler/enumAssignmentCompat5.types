@@ -30,7 +30,7 @@ enum Computed {
 >1 : 1
 >3 : 3
 }
-let n: number;
+declare let n: number;
 >n : number
 
 let e: E = n; // ok because it's too inconvenient otherwise

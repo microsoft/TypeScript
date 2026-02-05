@@ -1,8 +1,8 @@
 --- old.classExpression3.js
 +++ new.classExpression3.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [classExpression3.js]
+ "use strict";
  let C = class extends class extends class {
 -    constructor() {
 -        this.a = 1;

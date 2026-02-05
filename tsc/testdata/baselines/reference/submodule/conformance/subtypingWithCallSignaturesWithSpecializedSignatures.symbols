@@ -3,11 +3,11 @@
 === subtypingWithCallSignaturesWithSpecializedSignatures.ts ===
 // same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results
 
-module CallSignature {
+namespace CallSignature {
 >CallSignature : Symbol(CallSignature, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 0, 0))
 
     interface Base { // T
->Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 2, 22))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 2, 25))
 
         // M's
         (x: 'a'): void;
@@ -21,7 +21,7 @@ module CallSignature {
     // S's
     interface I extends Base {
 >I : Symbol(I, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 7, 5))
->Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 2, 22))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 2, 25))
 
         // N's
         (x: 'a'): number; // ok because base returns void
@@ -74,11 +74,11 @@ module CallSignature {
     }
 }
 
-module MemberWithCallSignature {
+namespace MemberWithCallSignature {
 >MemberWithCallSignature : Symbol(MemberWithCallSignature, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 35, 1))
 
     interface Base { // T
->Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 37, 32))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 37, 35))
 
         // M's
         a: {
@@ -111,7 +111,7 @@ module MemberWithCallSignature {
     // S's
     interface I extends Base {
 >I : Symbol(I, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 49, 5))
->Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 37, 32))
+>Base : Symbol(Base, Decl(subtypingWithCallSignaturesWithSpecializedSignatures.ts, 37, 35))
 
         // N's
         a: (x: string) => number; // ok because base returns void

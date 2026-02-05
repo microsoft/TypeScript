@@ -21,6 +21,7 @@ foo2(1, { length: {} });
 foo2([], ['']);
 
 //// [typeParameterAsTypeParameterConstraint2.js]
+"use strict";
 // using a type parameter as a constraint for a type parameter is invalid
 // these should be errors unless otherwise noted
 function foo(x, y) { return y; } // this is now an error

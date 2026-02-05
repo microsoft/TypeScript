@@ -46,7 +46,7 @@ Output::
   ],
   "size": 59
 }
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -72,7 +72,7 @@ declare const console: { log(msg: any): void; };
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/projects/project/a.ts
 Signatures::
 
@@ -112,7 +112,7 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
@@ -140,6 +140,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 //// [/home/src/projects/project/a.js] *new* 
+"use strict";
 const a = "hello";
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *rewrite with same content*
@@ -147,7 +148,7 @@ const a = "hello";
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
@@ -179,7 +180,7 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/projects/project/a.ts
 Signatures::
 
@@ -225,7 +226,7 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/projects/project/a.ts
 Signatures::
 
@@ -258,6 +259,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 //// [/home/src/projects/project/a.js] *modified* 
+"use strict";
 const a = "hello;
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] *rewrite with same content*
@@ -265,7 +267,7 @@ const a = "hello;
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/projects/project/a.ts
 Signatures::
 
@@ -302,6 +304,6 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *not cached* /home/src/projects/project/a.ts
 Signatures::

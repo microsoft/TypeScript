@@ -1,9 +1,9 @@
 --- old.typeOfThisInStaticMembers2.js
 +++ new.typeOfThisInStaticMembers2.js
-@@= skipped -9, +9 lines =@@
- }
+@@= skipped -10, +10 lines =@@
 
  //// [typeOfThisInStaticMembers2.js]
+ "use strict";
 -var _a, _b;
  class C {
 +    static foo = this; // ok

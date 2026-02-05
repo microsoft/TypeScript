@@ -1,6 +1,6 @@
 --- old.invalidVoidAssignments.js
 +++ new.invalidVoidAssignments.js
-@@= skipped -37, +37 lines =@@
+@@= skipped -38, +38 lines =@@
  var c = x;
  var d = x;
  class C {

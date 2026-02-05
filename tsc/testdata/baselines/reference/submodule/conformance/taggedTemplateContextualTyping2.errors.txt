@@ -1,0 +1,35 @@
+taggedTemplateContextualTyping2.ts(14,31): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+taggedTemplateContextualTyping2.ts(15,39): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
+taggedTemplateContextualTyping2.ts(15,92): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
+taggedTemplateContextualTyping2.ts(16,39): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
+taggedTemplateContextualTyping2.ts(16,67): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'FuncType2'.
+
+
+==== taggedTemplateContextualTyping2.ts (5 errors) ====
+    type FuncType1 = (x: <T>(p: T) => T) => typeof x;
+    type FuncType2 = (x: <S, T>(p: T) => T) => typeof x;
+    
+    function tempTag2(templateStrs: TemplateStringsArray, f: FuncType1, x: number): number;
+    function tempTag2(templateStrs: TemplateStringsArray, f: FuncType2, h: FuncType2, x: string): string;
+    function tempTag2(...rest: any[]): any {
+        return undefined;
+    }
+    
+    // If contextual typing takes place, these functions should work.
+    // Otherwise, the arrow functions' parameters will be typed as 'any',
+    // and it is an error to invoke an any-typed value with type arguments,
+    // so this test will error.
+    tempTag2 `${ x => { x<number>(undefined); return x; }         }${ 0 }`;
+                                  ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+    tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<string, number>(null); return y; } }${ "hello" }`;
+                                          ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
+                                                                                               ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
+    tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }`;
+                                          ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
+                                                                      ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'FuncType2'.
+!!! related TS2793 taggedTemplateContextualTyping2.ts:6:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.

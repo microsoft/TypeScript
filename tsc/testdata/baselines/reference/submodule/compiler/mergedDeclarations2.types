@@ -15,7 +15,7 @@ enum Foo {
 >b : Foo
 }
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 
     export var x = b

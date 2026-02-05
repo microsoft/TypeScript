@@ -1,0 +1,114 @@
+--- old.subtypingWithCallSignaturesWithRestParameters.types
++++ new.subtypingWithCallSignaturesWithRestParameters.types
+@@= skipped -13, +13 lines =@@
+ >z : number[]
+
+     a3: (x: number, y?: string, ...z: number[]) => number;
+->a3 : (x: number, y?: string, ...z: number[]) => number
++>a3 : (x: number, y?: string | undefined, ...z: number[]) => number
+ >x : number
+ >y : string | undefined
+ >z : number[]
+
+     a4: (x?: number, y?: string, ...z: number[]) => number;
+->a4 : (x?: number, y?: string, ...z: number[]) => number
++>a4 : (x?: number | undefined, y?: string | undefined, ...z: number[]) => number
+ >x : number | undefined
+ >y : string | undefined
+ >z : number[]
+@@= skipped -31, +31 lines =@@
+
+ interface I2 extends Base {
+     a: (x?: number) => number; // ok, same number of required params
+->a : (x?: number) => number
++>a : (x?: number | undefined) => number
+ >x : number | undefined
+ }
+
+ interface I2B extends Base {
+     a: (x?: number, y?: number, z?: number) => number; // ok, same number of required params
+->a : (x?: number, y?: number, z?: number) => number
++>a : (x?: number | undefined, y?: number | undefined, z?: number | undefined) => number
+ >x : number | undefined
+ >y : number | undefined
+ >z : number | undefined
+@@= skipped -20, +20 lines =@@
+
+ interface I3B extends Base {
+     a: (x?: string) => number; // error, incompatible type
+->a : (x?: string) => number
++>a : (x?: string | undefined) => number
+ >x : string | undefined
+ }
+
+@@= skipped -19, +19 lines =@@
+
+ interface I5 extends Base {
+     a2: (x?: number) => number; // ok, fewer required params
+->a2 : (x?: number) => number
++>a2 : (x?: number | undefined) => number
+ >x : number | undefined
+ }
+
+@@= skipped -33, +33 lines =@@
+
+ interface I6E extends Base {
+     a2: (x: number, y?: number) => number; // ok, same number of required params
+->a2 : (x: number, y?: number) => number
++>a2 : (x: number, y?: number | undefined) => number
+ >x : number
+ >y : number | undefined
+ }
+@@= skipped -14, +14 lines =@@
+
+ interface I8 extends Base {
+     a3: (x?: number) => number; // ok, fewer required params
+->a3 : (x?: number) => number
++>a3 : (x?: number | undefined) => number
+ >x : number | undefined
+ }
+
+@@= skipped -19, +19 lines =@@
+
+ interface I10B extends Base {
+     a3: (x: number, y?: number, z?: number) => number;  // error
+->a3 : (x: number, y?: number, z?: number) => number
++>a3 : (x: number, y?: number | undefined, z?: number | undefined) => number
+ >x : number
+ >y : number | undefined
+ >z : number | undefined
+@@= skipped -15, +15 lines =@@
+
+ interface I10D extends Base {
+     a3: (x: string, y?: string, z?: string) => number;  // error, incompatible types
+->a3 : (x: string, y?: string, z?: string) => number
++>a3 : (x: string, y?: string | undefined, z?: string | undefined) => number
+ >x : string
+ >y : string | undefined
+ >z : string | undefined
+@@= skipped -20, +20 lines =@@
+
+ interface I12 extends Base {
+     a4: (x?: number, y?: number) => number; // error, type mismatch
+->a4 : (x?: number, y?: number) => number
++>a4 : (x?: number | undefined, y?: number | undefined) => number
+ >x : number | undefined
+ >y : number | undefined
+ }
+@@= skipped -13, +13 lines =@@
+
+ interface I14 extends Base {
+     a4: (x: number, y?: number) => number;  // error, second param has type mismatch
+->a4 : (x: number, y?: number) => number
++>a4 : (x: number, y?: number | undefined) => number
+ >x : number
+ >y : number | undefined
+ }
+
+ interface I15 extends Base {
+     a4: (x?: number, y?: string) => number;  // ok, same number of required params with matching types
+->a4 : (x?: number, y?: string) => number
++>a4 : (x?: number | undefined, y?: string | undefined) => number
+ >x : number | undefined
+ >y : string | undefined
+ }

@@ -38,7 +38,7 @@ function F2(x: number): boolean { return x < 42; }
 >x : number
 >42 : 42
 
-module M {
+namespace M {
 >M : typeof M
 
     export class A {
@@ -52,12 +52,12 @@ module M {
 >F2 : (x: number) => string
 >x : number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (radix?: number | undefined) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 }
 
-module N {
+namespace N {
 >N : typeof N
 
     export class A {
@@ -71,9 +71,9 @@ module N {
 >F2 : (x: number) => string
 >x : number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (radix?: number | undefined) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 }
 
 var aNumber: number = 'this is a string';

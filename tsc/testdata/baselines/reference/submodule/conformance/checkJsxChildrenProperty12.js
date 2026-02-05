@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/checkJsxChildrenProperty12.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 interface ButtonProp {
@@ -36,6 +38,7 @@ class InnerButton extends React.Component<InnerButtonProp, any> {
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 class Button extends React.Component {

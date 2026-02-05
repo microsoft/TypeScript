@@ -27,6 +27,7 @@ function foo4(bar:{a:any;}):any{ return bar };
 var x = foo4({a:true}); // error
 
 //// [overloadResolutionTest1.js]
+"use strict";
 function foo(bar) { return bar; }
 ;
 var x1 = foo([{ a: true }]); // works

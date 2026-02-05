@@ -1,8 +1,8 @@
 --- old.typeGuardFunctionGenerics.js
 +++ new.typeGuardFunctionGenerics.js
-@@= skipped -35, +35 lines =@@
-
+@@= skipped -36, +36 lines =@@
  //// [typeGuardFunctionGenerics.js]
+ "use strict";
  class A {
 +    propA;
  }

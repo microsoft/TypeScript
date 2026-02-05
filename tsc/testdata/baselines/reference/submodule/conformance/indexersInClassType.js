@@ -20,6 +20,7 @@ var r3 = r.a
 
 
 //// [indexersInClassType.js]
+"use strict";
 class C {
     1;
     'a';

@@ -14,6 +14,7 @@ function createInstance2<T>(ctor: INewable<T>): T {
 }
 
 //// [genericNewInterface.js]
+"use strict";
 function createInstance(ctor) {
     return new ctor(42); //should be an error
 }

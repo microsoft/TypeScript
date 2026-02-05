@@ -1,17 +1,18 @@
 //// [tests/cases/compiler/internalAliasClass.ts] ////
 
 //// [internalAliasClass.ts]
-module a {
+namespace a {
     export class c {
     }
 }
 
-module c {
+namespace c {
     import b = a.c;
     export var x: b = new b();
 }
 
 //// [internalAliasClass.js]
+"use strict";
 var a;
 (function (a) {
     class c {

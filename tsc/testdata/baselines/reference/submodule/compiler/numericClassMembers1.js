@@ -18,6 +18,7 @@ class C236 {
 
 
 //// [numericClassMembers1.js]
+"use strict";
 class C234 {
     0 = 1;
     0.0 = 2;

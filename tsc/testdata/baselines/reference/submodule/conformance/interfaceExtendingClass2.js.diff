@@ -1,8 +1,8 @@
 --- old.interfaceExtendingClass2.js
 +++ new.interfaceExtendingClass2.js
-@@= skipped -18, +18 lines =@@
-
+@@= skipped -19, +19 lines =@@
  //// [interfaceExtendingClass2.js]
+ "use strict";
  class Foo {
 +    x;
      y() { }

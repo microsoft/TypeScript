@@ -33,11 +33,11 @@ declare var ng: ng.IAngularStatic;
 >ng : Symbol(ng, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 34), Decl(moduleAugmentation.ts, 0, 29))
 >IAngularStatic : Symbol(ng.IAngularStatic, Decl(index.d.ts, 5, 4), Decl(moduleAugmentation.ts, 1, 26))
 
-declare module ng {
+declare namespace ng {
 >ng : Symbol(ng, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 34), Decl(moduleAugmentation.ts, 0, 29))
 
    export interface IModule {
->IModule : Symbol(IModule, Decl(index.d.ts, 2, 19))
+>IModule : Symbol(IModule, Decl(index.d.ts, 2, 22))
 
       name: string;
 >name : Symbol(IModule.name, Decl(index.d.ts, 3, 29))
@@ -49,7 +49,7 @@ declare module ng {
        module: (s: string) => IModule;
 >module : Symbol(IAngularStatic.module, Decl(index.d.ts, 7, 36))
 >s : Symbol(s, Decl(index.d.ts, 8, 16))
->IModule : Symbol(IModule, Decl(index.d.ts, 2, 19))
+>IModule : Symbol(IModule, Decl(index.d.ts, 2, 22))
    }
 }
 

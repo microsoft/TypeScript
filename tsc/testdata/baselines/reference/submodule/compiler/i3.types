@@ -2,13 +2,13 @@
 
 === i3.ts ===
 interface I3 { one?: number; }; 
->one : number
+>one : number | undefined
 
-var x: {one: number};
+declare var x: {one: number};
 >x : { one: number; }
 >one : number
 
-var i: I3;
+declare var i: I3;
 >i : I3
 
 i = x;

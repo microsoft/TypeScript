@@ -21,8 +21,8 @@ exports.default = {
 
 //// [declarationEmitInferredDefaultExportType.d.ts]
 declare const _default: {
-    foo: any[];
-    bar: any;
-    baz: any;
+    foo: never[];
+    bar: undefined;
+    baz: null;
 };
 export default _default;

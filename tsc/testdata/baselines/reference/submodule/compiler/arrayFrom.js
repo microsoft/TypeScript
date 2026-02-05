@@ -39,6 +39,7 @@ function getEither<T> (in1: Iterable<T>, in2: ArrayLike<T>) {
 
 
 //// [arrayFrom.js]
+"use strict";
 // Tests fix for #20432, ensures Array.from accepts all valid inputs
 // Also tests for #19682
 const inputA = [];

@@ -1,14 +1,20 @@
 duplicateIdentifierComputedName.ts(2,5): error TS2300: Duplicate identifier '["a"]'.
+duplicateIdentifierComputedName.ts(2,5): error TS2564: Property '["a"]' has no initializer and is not definitely assigned in the constructor.
 duplicateIdentifierComputedName.ts(3,5): error TS2300: Duplicate identifier '["a"]'.
+duplicateIdentifierComputedName.ts(3,5): error TS2564: Property '["a"]' has no initializer and is not definitely assigned in the constructor.
 
 
-==== duplicateIdentifierComputedName.ts (2 errors) ====
+==== duplicateIdentifierComputedName.ts (4 errors) ====
     class C {
         ["a"]: string;
         ~~~~~
 !!! error TS2300: Duplicate identifier '["a"]'.
+        ~~~~~
+!!! error TS2564: Property '["a"]' has no initializer and is not definitely assigned in the constructor.
         ["a"]: string;
         ~~~~~
 !!! error TS2300: Duplicate identifier '["a"]'.
+        ~~~~~
+!!! error TS2564: Property '["a"]' has no initializer and is not definitely assigned in the constructor.
     }
     

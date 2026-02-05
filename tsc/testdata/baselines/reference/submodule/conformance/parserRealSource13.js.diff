@@ -1,6 +1,6 @@
 --- old.parserRealSource13.js
 +++ new.parserRealSource13.js
-@@= skipped -153, +153 lines =@@
+@@= skipped -154, +154 lines =@@
  ///<reference path='typescript.ts' />
  var TypeScript;
  (function (TypeScript) {

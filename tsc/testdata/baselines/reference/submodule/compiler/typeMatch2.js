@@ -47,6 +47,7 @@ function f4() {
 
 
 //// [typeMatch2.js]
+"use strict";
 function f1() {
     var a = { x: 1, y: 2 };
     a = {}; // error

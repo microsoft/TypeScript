@@ -9,6 +9,7 @@ function f1 () {
 }
 
 //// [unusedVariablesinForLoop4.js]
+"use strict";
 function f1() {
     for (const elem of ["a", "b", "c"]) {
         elem;

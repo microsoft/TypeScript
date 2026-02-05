@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/arraySigChecking.ts] ////
 
 === arraySigChecking.ts ===
-declare module M {
+declare namespace M {
 >M : typeof M
 
     interface iBar { t: any; }
@@ -28,7 +28,7 @@ interface myInt {
     voidFn(): void;
 >voidFn : () => void
 }
-var myVar: myInt;
+declare var myVar: myInt;
 >myVar : myInt
 
 var strArray: string[] = [myVar.voidFn()];
@@ -67,7 +67,7 @@ function isEmpty(l: { length: number }) {
 isEmpty([]);
 >isEmpty([]) : boolean
 >isEmpty : (l: { length: number; }) => boolean
->[] : undefined[]
+>[] : never[]
 
 isEmpty(new Array(3));
 >isEmpty(new Array(3)) : boolean

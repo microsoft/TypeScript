@@ -4,30 +4,59 @@
  // 
  // export {}
 
--// === lib.d.ts ===
+-// === /home/src/tslibs/TS/Lib/lib.es5.d.ts ===
++// === lib.es2015.promise.d.ts ===
++// --- (line: --) skipped ---
++//     resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>;
++// }
++// 
++// <|declare var [|Promise|]: PromiseConstructor;|>
++// 
++
 +// === lib.es5.d.ts ===
  // --- (line: --) skipped ---
  // /**
  //  * Represents the completion of an asynchronous operation
-@@= skipped -25, +25 lines =@@
+@@= skipped -25, +33 lines =@@
  // /**
  //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
  // --- (line: --) skipped ---
-+// 
+-
+-// === /home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts ===
+-// --- (line: --) skipped ---
+-//     resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>;
+-// }
+-// 
+-// <|declare var [|Promise|]: PromiseConstructor;|>
+ // 
 
 
-
-@@= skipped -12, +13 lines =@@
+@@= skipped -20, +13 lines =@@
  // 
  // export {}
 
--// === lib.d.ts ===
+-// === /home/src/tslibs/TS/Lib/lib.es5.d.ts ===
++// === lib.es2015.promise.d.ts ===
++// --- (line: --) skipped ---
++//     resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>;
++// }
++// 
++// <|declare var [|Promise|]: PromiseConstructor;|>
++// 
++
 +// === lib.es5.d.ts ===
  // --- (line: --) skipped ---
  // /**
  //  * Represents the completion of an asynchronous operation
-@@= skipped -25, +25 lines =@@
+@@= skipped -25, +33 lines =@@
  // /**
  //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
  // --- (line: --) skipped ---
-+// 
+-
+-// === /home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts ===
+-// --- (line: --) skipped ---
+-//     resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>;
+-// }
+-// 
+-// <|declare var [|Promise|]: PromiseConstructor;|>
+ // 

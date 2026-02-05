@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxParseTests1.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements { div; span; }
 }
@@ -10,4 +10,5 @@ var x = <div><div><span><div></div></span></div></div>;
 
 
 //// [file.jsx]
+"use strict";
 var x = <div><div><span><div></div></span></div></div>;

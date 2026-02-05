@@ -1,4 +1,4 @@
-destructuringTuple.ts(11,7): error TS2461: Type 'number' is not an array type.
+destructuringTuple.ts(11,7): error TS2488: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.
 destructuringTuple.ts(11,48): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Type 'never[]' is not assignable to type '[]'.
@@ -21,7 +21,7 @@ destructuringTuple.ts(11,60): error TS2769: No overload matches this call.
     
     const [oops1] = [1, 2, 3].reduce((accu, el) => accu.concat(el), []);
           ~~~~~~~
-!!! error TS2461: Type 'number' is not an array type.
+!!! error TS2488: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.
                                                    ~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.

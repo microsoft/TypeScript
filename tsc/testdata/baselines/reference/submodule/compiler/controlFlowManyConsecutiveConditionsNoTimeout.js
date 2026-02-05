@@ -135,14 +135,12 @@ while (true) {
 
 
 //// [controlFlowManyConsecutiveConditionsNoTimeout.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Choice = void 0;
+export { Choice };
 var Choice;
 (function (Choice) {
     Choice[Choice["One"] = 0] = "One";
     Choice[Choice["Two"] = 1] = "Two";
-})(Choice || (exports.Choice = Choice = {}));
+})(Choice || (Choice = {}));
 const choice = Choice.One;
 const choiceOne = Choice.One;
 if (choice === choiceOne) { }

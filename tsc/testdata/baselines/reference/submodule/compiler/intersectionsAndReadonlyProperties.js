@@ -21,6 +21,7 @@ ia.a = 2; // Error
 
 
 //// [intersectionsAndReadonlyProperties.js]
+"use strict";
 i1.a = 2;
 i2.a = 2;
 ia.a = 2; // Error

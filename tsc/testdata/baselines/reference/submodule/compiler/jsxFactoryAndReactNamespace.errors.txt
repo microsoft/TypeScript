@@ -36,7 +36,7 @@ error TS5053: Option 'reactNamespace' cannot be specified with option 'jsxFactor
 ==== test.tsx (0 errors) ====
     import { Element} from './Element';
     
-    let c: {
+    declare let c: {
     	a?: {
     		b: string
     	}

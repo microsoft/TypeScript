@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/importDeclarations/importAliasIdentifiers.ts] ////
 
 === importAliasIdentifiers.ts ===
-module moduleA {
+namespace moduleA {
 >moduleA : typeof moduleA
 
     export class Point {
@@ -37,7 +37,7 @@ class clodule {
 >name : string
 }
 
-module clodule {
+namespace clodule {
 >clodule : typeof clodule
 
     export interface Point {
@@ -83,7 +83,7 @@ function fundule() {
 >0 : 0
 }
 
-module fundule {
+namespace fundule {
 >fundule : typeof fundule
 
     export interface Point {

@@ -14,13 +14,15 @@ func TestCloduleAsBaseClass(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `class A {
+	const content = `// @lib: es5
+// @strict: false
+class A {
     constructor(x: number) { }
     foo() { }
     static bar() { }
 }
 
-module A {
+namespace A {
     export var x = 1;
     export function baz() { }
 }

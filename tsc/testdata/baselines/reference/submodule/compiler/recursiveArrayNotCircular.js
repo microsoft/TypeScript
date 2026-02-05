@@ -39,6 +39,7 @@ function reducer(action: ReducerAction): void {
 }
 
 //// [recursiveArrayNotCircular.js]
+"use strict";
 var ActionType;
 (function (ActionType) {
     ActionType[ActionType["Foo"] = 0] = "Foo";

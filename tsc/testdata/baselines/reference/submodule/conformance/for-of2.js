@@ -5,5 +5,6 @@ const v;
 for (v of []) { }
 
 //// [for-of2.js]
+"use strict";
 const v;
 for (v of []) { }

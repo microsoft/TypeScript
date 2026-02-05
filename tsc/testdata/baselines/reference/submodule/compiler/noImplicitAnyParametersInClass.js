@@ -94,6 +94,7 @@ class C {
 }
 
 //// [noImplicitAnyParametersInClass.js]
+"use strict";
 class C {
     // No implicit-'any' errors.
     pub_f1() { }

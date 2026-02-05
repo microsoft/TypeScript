@@ -12,17 +12,17 @@ func TestMemberListOfModuleBeforeKeyword(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module TypeModule1 {
+	const content = `namespace TypeModule1 {
     export class C1 { }
     export class C2 { }
 }
 var x: TypeModule1./*namedType*/
-module TypeModule2 {
+namespace TypeModule2 {
     export class Test3 {}
 }
 
 TypeModule1./*dottedExpression*/
-module TypeModule3 {
+namespace TypeModule3 {
     export class Test3 {}
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

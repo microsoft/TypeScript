@@ -19,21 +19,21 @@ type c = unknown;
 >c : unknown
 
 declare const a: typeof A | undefined;
->a : typeof A
+>a : typeof A | undefined
 >A : typeof A
 
 a?.b<c>.d;
 >a?.b<c>.d : number
->a?.b<c> : { new (x: unknown): A.b<unknown>; d: number; prototype: A.b<any>; }
->a?.b : typeof A.b
->a : typeof A
->b : typeof A.b
+>a?.b<c> : { new (x: unknown): A.b<unknown>; d: number; prototype: A.b<any>; } | undefined
+>a?.b : typeof A.b | undefined
+>a : typeof A | undefined
+>b : typeof A.b | undefined
 >d : number
 
 a?.b.d
->a?.b.d : number
->a?.b : typeof A.b
->a : typeof A
->b : typeof A.b
->d : number
+>a?.b.d : number | undefined
+>a?.b : typeof A.b | undefined
+>a : typeof A | undefined
+>b : typeof A.b | undefined
+>d : number | undefined
 

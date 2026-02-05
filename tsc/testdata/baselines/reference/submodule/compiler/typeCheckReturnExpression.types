@@ -2,7 +2,7 @@
 
 === typeCheckReturnExpression.ts ===
 var foo = () => undefined;
->foo : () => any
->() => undefined : () => any
+>foo : () => undefined
+>() => undefined : () => undefined
 >undefined : undefined
 

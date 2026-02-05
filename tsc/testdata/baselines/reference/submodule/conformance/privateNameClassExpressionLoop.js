@@ -13,6 +13,7 @@ for (let i = 0; i < 10; ++i) {
 
 
 //// [privateNameClassExpressionLoop.js]
+"use strict";
 const array = [];
 for (let i = 0; i < 10; ++i) {
     array.push(class C {

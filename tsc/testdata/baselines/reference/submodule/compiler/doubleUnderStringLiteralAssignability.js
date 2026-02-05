@@ -8,6 +8,7 @@ var alsoOk: '_sunder' = '_sunder';
 
 
 //// [doubleUnderStringLiteralAssignability.js]
+"use strict";
 var shouldBeOk = '__dunder';
 var bad = 'no_dunder';
 var okok = '___thunder';

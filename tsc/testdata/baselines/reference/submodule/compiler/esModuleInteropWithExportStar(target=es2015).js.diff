@@ -1,0 +1,12 @@
+--- old.esModuleInteropWithExportStar(target=es2015).js
++++ new.esModuleInteropWithExportStar(target=es2015).js
+@@= skipped -54, +54 lines =@@
+ const fs = __importStar(require("./fs"));
+ fs;
+ __exportStar(require("./fs"), exports);
+-var fs_1 = require("./fs");
++const fs_1 = require("./fs");
+ Object.defineProperty(exports, "x", { enumerable: true, get: function () { return fs_1.x; } });
+-var fs_2 = require("./fs");
++const fs_2 = require("./fs");
+ Object.defineProperty(exports, "y", { enumerable: true, get: function () { return fs_2.x; } });

@@ -3,11 +3,11 @@
 === subtypingWithConstructSignaturesWithSpecializedSignatures.ts ===
 // same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results
 
-module CallSignature {
+namespace CallSignature {
 >CallSignature : Symbol(CallSignature, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 0, 0))
 
     interface Base { // T
->Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 2, 22))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 2, 25))
 
         // M's
         new (x: 'a'): void;
@@ -21,7 +21,7 @@ module CallSignature {
     // S's
     interface I extends Base {
 >I : Symbol(I, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 7, 5))
->Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 2, 22))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 2, 25))
 
         // N's
         new (x: 'a'): number; // ok because base returns void
@@ -74,11 +74,11 @@ module CallSignature {
     }
 }
 
-module MemberWithCallSignature {
+namespace MemberWithCallSignature {
 >MemberWithCallSignature : Symbol(MemberWithCallSignature, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 35, 1))
 
     interface Base { // T
->Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 37, 32))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 37, 35))
 
         // M's
         a: {
@@ -111,7 +111,7 @@ module MemberWithCallSignature {
     // S's
     interface I extends Base {
 >I : Symbol(I, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 49, 5))
->Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 37, 32))
+>Base : Symbol(Base, Decl(subtypingWithConstructSignaturesWithSpecializedSignatures.ts, 37, 35))
 
         // N's
         a: new (x: string) => number; // ok because base returns void

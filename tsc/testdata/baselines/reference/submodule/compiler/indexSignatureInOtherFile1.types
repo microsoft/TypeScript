@@ -11,7 +11,7 @@ interface Array1<T> {
 
 interface ArrayConstructor1 {
   new(arrayLength?: number): Array1<any>;
->arrayLength : number
+>arrayLength : number | undefined
 }
 
 declare var Array1: ArrayConstructor1;

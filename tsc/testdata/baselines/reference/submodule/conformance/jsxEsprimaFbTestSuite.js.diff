@@ -1,6 +1,6 @@
 --- old.jsxEsprimaFbTestSuite.js
 +++ new.jsxEsprimaFbTestSuite.js
-@@= skipped -70, +70 lines =@@
+@@= skipped -71, +71 lines =@@
  </AbC_def>;
  <a b={x ? <c /> : <d />}/>;
  <a></a>;

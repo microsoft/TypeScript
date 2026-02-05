@@ -1,0 +1,31 @@
+cyclicGenericTypeInstantiationInference.ts(6,12): error TS2454: Variable 'y' is used before being assigned.
+cyclicGenericTypeInstantiationInference.ts(15,12): error TS2454: Variable 'y' is used before being assigned.
+
+
+==== cyclicGenericTypeInstantiationInference.ts (2 errors) ====
+    function foo<T>() {
+        var z = foo<typeof y>();
+        var y: {
+            y2: typeof z
+        };
+        return y;
+               ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+    }
+    
+    
+    function bar<T>() {
+        var z = bar<typeof y>();
+        var y: {
+            y2: typeof z;
+        }
+        return y;
+               ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+    }
+    
+    var a = foo<number>();
+    var b = bar<number>();
+    
+    function test<T>(x: typeof a): void { }
+    test(b);

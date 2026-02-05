@@ -10,4 +10,5 @@ type Promised = PromisedTuple<[1, 2, 3]>
 
 
 //// [recursiveResolveTypeMembers.js]
+"use strict";
 // Repro from #25291

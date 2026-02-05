@@ -7,3 +7,4 @@ interface I1 {
 }
 
 //// [unusedMethodsInInterface.js]
+"use strict";

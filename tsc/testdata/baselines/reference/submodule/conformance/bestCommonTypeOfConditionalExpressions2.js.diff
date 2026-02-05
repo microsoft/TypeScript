@@ -1,6 +1,6 @@
 --- old.bestCommonTypeOfConditionalExpressions2.js
 +++ new.bestCommonTypeOfConditionalExpressions2.js
-@@= skipped -29, +29 lines =@@
+@@= skipped -30, +30 lines =@@
  // conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
  // these are errors
  class Base {

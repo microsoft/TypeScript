@@ -30,6 +30,7 @@ class C extends A {
 
 
 //// [foo.js]
+"use strict";
 /**
  * @constructor
  */

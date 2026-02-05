@@ -56,6 +56,7 @@ else {
 }
 
 //// [typeGuardOfFormNotExpr.js]
+"use strict";
 var str;
 var bool;
 var num;

@@ -13,7 +13,7 @@ interface Derived extends Base {
 
 // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
 // foo properties are valid, bar properties cause errors in the derived class declarations
-module NotOptional {
+namespace NotOptional {
     interface A {
         foo: Base;
 >foo : Base
@@ -63,52 +63,52 @@ module NotOptional {
     }
 }
 
-module Optional {
+namespace Optional {
     interface A {
         foo?: Base;
->foo : Base
+>foo : Base | undefined
 
         bar?: Derived;
->bar : Derived
+>bar : Derived | undefined
     }
 
     interface B extends A {
         foo?: Derived; // ok
->foo : Derived
+>foo : Derived | undefined
 
         bar?: Base; // error
->bar : Base
+>bar : Base | undefined
     }
 
     interface A2 {
         1?: Base;
->1 : Base
+>1 : Base | undefined
 
         2.0?: Derived;
->2.0 : Derived
+>2.0 : Derived | undefined
     }
 
     interface B2 extends A2 {
         1?: Derived; // ok
->1 : Derived
+>1 : Derived | undefined
 
         2?: Base; // error
->2 : Base
+>2 : Base | undefined
     }
 
     interface A3 {
         '1'?: Base;
->'1' : Base
+>'1' : Base | undefined
 
         '2.0'?: Derived;
->'2.0' : Derived
+>'2.0' : Derived | undefined
     }
 
     interface B3 extends A3 {
         '1'?: Derived; // ok
->'1' : Derived
+>'1' : Derived | undefined
 
         '2.0'?: Base; // error
->'2.0' : Base
+>'2.0' : Base | undefined
     }
 }

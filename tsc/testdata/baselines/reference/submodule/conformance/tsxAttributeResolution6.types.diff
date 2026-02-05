@@ -1,0 +1,10 @@
+--- old.tsxAttributeResolution6.types
++++ new.tsxAttributeResolution6.types
+@@= skipped -4, +4 lines =@@
+ 	interface Element { }
+ 	interface IntrinsicElements {
+ 		test1: { n?: boolean; s?: string};
+->test1 : { n?: boolean; s?: string; }
++>test1 : { n?: boolean | undefined; s?: string | undefined; }
+ >n : boolean | undefined
+ >s : string | undefined

@@ -20,6 +20,7 @@ a = new C; // error, cannot instantiate abstract class.
 a.foo();
 
 //// [classAbstractUsingAbstractMethod1.js]
+"use strict";
 class A {
 }
 class B extends A {

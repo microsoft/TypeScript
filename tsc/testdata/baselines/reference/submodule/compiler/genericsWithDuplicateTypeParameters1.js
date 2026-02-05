@@ -19,6 +19,7 @@ var m = {
 }
 
 //// [genericsWithDuplicateTypeParameters1.js]
+"use strict";
 function f() { }
 function f2(a, b) { return null; }
 class C {

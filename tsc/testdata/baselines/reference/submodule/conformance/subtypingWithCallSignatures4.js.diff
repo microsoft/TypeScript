@@ -1,7 +1,7 @@
 --- old.subtypingWithCallSignatures4.js
 +++ new.subtypingWithCallSignatures4.js
-@@= skipped -115, +115 lines =@@
- //// [subtypingWithCallSignatures4.js]
+@@= skipped -116, +116 lines =@@
+ "use strict";
  // checking subtype relations for function types as it relates to contextual signature instantiation
  class Base {
 +    foo;

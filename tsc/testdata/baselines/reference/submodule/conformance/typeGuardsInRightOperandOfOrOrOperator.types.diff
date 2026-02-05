@@ -13,8 +13,8 @@
  >10 : 10
  }
  function foo2(x: number | string) {
-->foo2 : (x: number | string) => number | true
-+>foo2 : (x: string | number) => number | true
+->foo2 : (x: number | string) => 10 | true
++>foo2 : (x: string | number) => 10 | true
  >x : string | number
 
      // modify x in right hand operand
@@ -22,8 +22,8 @@
  >x : number
  }
  function foo3(x: number | string) {
-->foo3 : (x: number | string) => string | true
-+>foo3 : (x: string | number) => string | true
+->foo3 : (x: number | string) => "hello" | true
++>foo3 : (x: string | number) => "hello" | true
  >x : string | number
 
      // modify x in right hand operand with string type itself
@@ -31,8 +31,8 @@
  >x : string
  }
  function foo4(x: number | string | boolean) {
-->foo4 : (x: number | string | boolean) => boolean
-+>foo4 : (x: string | number | boolean) => boolean
+->foo4 : (x: number | string | boolean) => x is string | number | true
++>foo4 : (x: string | number | boolean) => x is string | number | true
  >x : string | number | boolean
 
      return typeof x === "string" // string | number | boolean
@@ -46,7 +46,7 @@
 
      // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
 @@= skipped -32, +32 lines =@@
- >x : boolean
+ >x : false
  }
  function foo6(x: number | string | boolean) {
 ->foo6 : (x: number | string | boolean) => boolean
@@ -58,8 +58,20 @@
  >10 : 10
  }
  function foo7(x: number | string | boolean) {
-->foo7 : (x: number | string | boolean) => string | number | true
-+>foo7 : (x: string | number | boolean) => string | number | true
+->foo7 : (x: number | string | boolean) => string | number | boolean
++>foo7 : (x: string | number | boolean) => string | number | boolean
  >x : string | number | boolean
 
      var y: number| boolean | string;
+@@= skipped -42, +42 lines =@@
+ >x : string | number | boolean
+ >10 : 10
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+         // do not change value
+         : ((y = x) && x.toString()))); // number | boolean | string

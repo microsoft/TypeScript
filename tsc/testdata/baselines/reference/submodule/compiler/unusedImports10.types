@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/unusedImports10.ts] ////
 
 === unusedImports10.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     export class Calculator {
@@ -13,7 +13,7 @@ module A {
     }
 }
 
-module B {
+namespace B {
     import a = A;
 >a : typeof a
 >A : typeof a

@@ -6,6 +6,7 @@ if (true) {
 }
 
 //// [commentOnIfStatement1.js]
+"use strict";
 // Test
 if (true) {
 }

@@ -14,10 +14,13 @@ func TestImportSuggestionsCache_invalidPackageJson(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @Filename: /home/src/workspaces/project/jsconfig.json
+	const content = `// @lib: es5
+// @Filename: /home/src/workspaces/project/jsconfig.json
 {
   "compilerOptions": {
+    "lib": ["es5"],
     "module": "commonjs",
+    "types": ["*"]
   },
 }
 // @Filename: /home/src/workspaces/project/node_modules/@types/node/index.d.ts

@@ -8,3 +8,4 @@ declare global {
 
 
 //// [globalThisGlobalExportAsGlobal.js]
+"use strict";

@@ -2,7 +2,9 @@ optionalPropertiesTest.ts(14,1): error TS2741: Property 'id' is missing in type 
 optionalPropertiesTest.ts(25,5): error TS2741: Property 'M' is missing in type '{}' but required in type 'i1'.
 optionalPropertiesTest.ts(26,5): error TS2741: Property 'M' is missing in type '{}' but required in type 'i3'.
 optionalPropertiesTest.ts(40,1): error TS2322: Type 'i2' is not assignable to type 'i1'.
-  Property 'M' is optional in type 'i2' but required in type 'i1'.
+  Types of property 'M' are incompatible.
+    Type '(() => void) | undefined' is not assignable to type '() => void'.
+      Type 'undefined' is not assignable to type '() => void'.
 
 
 ==== optionalPropertiesTest.ts (4 errors) ====
@@ -50,11 +52,13 @@ optionalPropertiesTest.ts(40,1): error TS2322: Type 'i2' is not assignable to ty
     var test8: i4 = { M: 5 }
     test8 = {};
     var test9_1: i2;
-    var test9_2: i1;
+    declare var test9_2: i1;
     test9_1 = test9_2;
     var test10_1: i1;
-    var test10_2: i2;
+    declare var test10_2: i2;
     test10_1 = test10_2;
     ~~~~~~~~
 !!! error TS2322: Type 'i2' is not assignable to type 'i1'.
-!!! error TS2322:   Property 'M' is optional in type 'i2' but required in type 'i1'.
+!!! error TS2322:   Types of property 'M' are incompatible.
+!!! error TS2322:     Type '(() => void) | undefined' is not assignable to type '() => void'.
+!!! error TS2322:       Type 'undefined' is not assignable to type '() => void'.

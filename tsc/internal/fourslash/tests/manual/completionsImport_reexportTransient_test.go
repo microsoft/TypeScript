@@ -14,7 +14,8 @@ func TestCompletionsImport_reexportTransient(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @esModuleInterop: true
+	const content = `// @lib: es5
+// @esModuleInterop: true
 // @Filename: /transient.d.ts
 declare const map: { [K in "one"]: number };
 export = map;

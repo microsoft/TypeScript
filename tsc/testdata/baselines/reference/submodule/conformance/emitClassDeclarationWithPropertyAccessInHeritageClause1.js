@@ -8,6 +8,7 @@ function foo() {
 class C extends (foo()).B {}
 
 //// [emitClassDeclarationWithPropertyAccessInHeritageClause1.js]
+"use strict";
 class B {
 }
 function foo() {

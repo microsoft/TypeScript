@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxEmit1.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -56,8 +56,8 @@ var selfClosed7 = <div x={p} y='p' />;
 >selfClosed7 : JSX.Element
 ><div x={p} y='p' /> : JSX.Element
 >div : any
->x : any
->p : any
+>x : undefined
+>p : undefined
 >y : string
 
 var openClosed1 = <div></div>;
@@ -78,7 +78,7 @@ var openClosed3 = <div n='m'>{p}</div>;
 ><div n='m'>{p}</div> : JSX.Element
 >div : any
 >n : string
->p : any
+>p : undefined
 >div : any
 
 var openClosed4 = <div n='m'>{p < p}</div>;
@@ -87,8 +87,8 @@ var openClosed4 = <div n='m'>{p < p}</div>;
 >div : any
 >n : string
 >p < p : boolean
->p : any
->p : any
+>p : undefined
+>p : undefined
 >div : any
 
 var openClosed5 = <div n='m'>{p > p}</div>;
@@ -97,8 +97,8 @@ var openClosed5 = <div n='m'>{p > p}</div>;
 >div : any
 >n : string
 >p > p : boolean
->p : any
->p : any
+>p : undefined
+>p : undefined
 >div : any
 
 class SomeClass {
@@ -176,7 +176,7 @@ var whitespace2 = <div>  {p}    </div>;
 >whitespace2 : JSX.Element
 ><div>  {p}    </div> : JSX.Element
 >div : any
->p : any
+>p : undefined
 >div : any
 
 var whitespace3 = <div>  
@@ -185,7 +185,7 @@ var whitespace3 = <div>
 >div : any
 
       {p}    
->p : any
+>p : undefined
 
       </div>;
 >div : any

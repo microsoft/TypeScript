@@ -9,3 +9,15 @@
  >{ a: "a" } : { a: "a"; }
  >a : "a"
  >"a" : "a"
+@@= skipped -12, +12 lines =@@
+ >(m) => m.substring(0) : (m: string) => string
+ >m : string
+ >m.substring(0) : string
+->m.substring : (start: number, end?: number) => string
++>m.substring : (start: number, end?: number | undefined) => string
+ >m : string
+->substring : (start: number, end?: number) => string
++>substring : (start: number, end?: number | undefined) => string
+ >0 : 0
+
+ const t6 = /** @satisfies {[number, number]} */ ([1, 2]);

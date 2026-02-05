@@ -6,6 +6,7 @@
 ~quux;
 
 //// [unaryOperators1.js]
+"use strict";
 +foo;
 -bar;
 ~quux;

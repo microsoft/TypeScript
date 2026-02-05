@@ -27,6 +27,7 @@ export function foo() { return "foo"; }
 //// [1.js]
 export function backup() { return "backup"; }
 //// [2.js]
+"use strict";
 const specify = bar() ? "./0" : undefined;
 let myModule = import(specify);
 let myModule1 = import(undefined);

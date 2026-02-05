@@ -62,6 +62,7 @@ module.exports.j = function j() {}
 
 
 //// [index.js]
+"use strict";
 module.exports.a = function a() { };
 module.exports.b = function b() { };
 module.exports.b.cat = "cat";
@@ -127,7 +128,7 @@ declare function g(a: {
     x: string;
 }, b: {
     y: typeof module.exports.b;
-}): void;
+}): void | "";
 export declare var g: typeof g;
 /**
  * @param {{x: string}} a
@@ -137,7 +138,7 @@ declare function hh(a: {
     x: string;
 }, b: {
     y: typeof module.exports.b;
-}): void;
+}): void | "";
 export declare var h: typeof hh;
 export declare var i: () => void;
 export declare var ii: () => void;

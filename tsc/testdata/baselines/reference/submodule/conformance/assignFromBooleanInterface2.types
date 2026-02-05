@@ -15,10 +15,10 @@ var x = true;
 >x : boolean
 >true : true
 
-var a: Boolean;
+declare var a: Boolean;
 >a : Boolean
 
-var b: NotBoolean;
+declare var b: NotBoolean;
 >b : NotBoolean
 
 a = x;

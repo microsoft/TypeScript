@@ -4,22 +4,23 @@
 declare var console: any;
  
 var x = 1;
-module M {
+namespace M {
     export var x = 2;
     console.log(x); // 2
 }
  
-module M {
+namespace M {
     console.log(x); // 2
 }
  
-module M {
+namespace M {
     var x = 3;
     console.log(x); // 3
 }
 
 
 //// [moduleVariables.js]
+"use strict";
 var x = 1;
 var M;
 (function (M) {

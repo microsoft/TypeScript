@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/anonterface.ts] ////
 
 //// [anonterface.ts]
-module M {
+namespace M {
     export class C {
         m(fn:{ (n:number):string; },n2:number):string {
             return fn(n2);
@@ -17,6 +17,7 @@ c.m(function(n) { return "hello: "+n; },18);
 
 
 //// [anonterface.js]
+"use strict";
 var M;
 (function (M) {
     class C {

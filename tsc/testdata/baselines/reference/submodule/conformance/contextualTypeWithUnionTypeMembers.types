@@ -359,7 +359,7 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
 >[i11, i21, i11 || i21, {         // Like i1        commonMethodDifferentReturnType: (a, b) => {            var z = a.charAt(b);            return z;        },        commonPropertyDifferentType: "hello",    }, {         // Like i2        commonMethodDifferentReturnType: (a, b) => {            var z = a.charCodeAt(b);            return z;        },        commonPropertyDifferentType: 10,    }] : (I11 | I21)[]
 >i11 : I11
 >i21 : I21
->i11 || i21 : I11 | I21
+>i11 || i21 : I11
 >i11 : I11
 >i21 : I21
 >{         // Like i1        commonMethodDifferentReturnType: (a, b) => {            var z = a.charAt(b);            return z;        },        commonPropertyDifferentType: "hello",    } : { commonMethodDifferentReturnType: (a: string, b: number) => string; commonPropertyDifferentType: string; }

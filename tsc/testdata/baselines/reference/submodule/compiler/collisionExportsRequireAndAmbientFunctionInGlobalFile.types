@@ -7,7 +7,7 @@ declare function exports(): number;
 declare function require(): string;
 >require : () => string
 
-declare module m3 {
+declare namespace m3 {
 >m3 : typeof m3
 
     function exports(): string[];
@@ -16,7 +16,7 @@ declare module m3 {
     function require(): number[];
 >require : () => number[]
 }
-module m4 {
+namespace m4 {
 >m4 : typeof m4
 
     export declare function exports(): string;

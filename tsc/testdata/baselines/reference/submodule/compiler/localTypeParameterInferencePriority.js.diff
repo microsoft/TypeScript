@@ -1,8 +1,8 @@
 --- old.localTypeParameterInferencePriority.js
 +++ new.localTypeParameterInferencePriority.js
-@@= skipped -25, +25 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -23, +23 lines =@@
+
+ //// [localTypeParameterInferencePriority.js]
  class Table {
 +    __schema;
      // Removing this line, removes the error 

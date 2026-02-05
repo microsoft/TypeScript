@@ -7,6 +7,7 @@ class C {
 }
 
 //// [ClassDeclaration22.js]
+"use strict";
 class C {
     "bar"() { }
 }

@@ -86,6 +86,7 @@ var getParamType3 = {
 
 
 //// [objectLiteralGettersAndSetters.js]
+"use strict";
 // Get and set accessor with the same name
 var sameName1a = { get 'a'() { return ''; }, set a(n) { var p = n; var p; } };
 var sameName2a = { get 0.0() { return ''; }, set 0(n) { var p = n; var p; } };

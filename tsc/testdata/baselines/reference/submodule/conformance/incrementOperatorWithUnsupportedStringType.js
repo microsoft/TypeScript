@@ -2,16 +2,16 @@
 
 //// [incrementOperatorWithUnsupportedStringType.ts]
 // ++ operator on string type
-var STRING: string;
+declare var STRING: string;
 var STRING1: string[] = ["", ""];
 
 function foo(): string { return ""; }
 
 class A {
-    public a: string;
+    public a!: string;
     static foo() { return ""; }
 }
-module M {
+namespace M {
     export var n: string;
 }
 
@@ -68,8 +68,7 @@ M.n++;
 objA.a++, M.n++;
 
 //// [incrementOperatorWithUnsupportedStringType.js]
-// ++ operator on string type
-var STRING;
+"use strict";
 var STRING1 = ["", ""];
 function foo() { return ""; }
 class A {

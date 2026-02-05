@@ -5,9 +5,9 @@ interface I {
     new (...args: any[]): string;
     new (): number;
 }
-var tag: I;
+declare var tag: I;
 tag `Hello world!`;
 
 //// [taggedTemplateWithConstructableTag02.js]
-var tag;
+"use strict";
 tag `Hello world!`;

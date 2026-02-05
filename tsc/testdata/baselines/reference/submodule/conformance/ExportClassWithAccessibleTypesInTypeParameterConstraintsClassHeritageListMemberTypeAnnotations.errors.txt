@@ -1,0 +1,32 @@
+ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts(4,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts(5,9): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts(11,9): error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+
+
+==== ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts (3 errors) ====
+    namespace A {
+    
+        export class Point {
+            x: number;
+            ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+            y: number;
+            ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        export var Origin: Point = { x: 0, y: 0 };
+    
+        export class Point3d extends Point {
+            z: number;
+            ~
+!!! error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
+    
+        export class Line<TPoint extends Point>{
+            constructor(public start: TPoint, public end: TPoint) { }
+        }
+    }
+    

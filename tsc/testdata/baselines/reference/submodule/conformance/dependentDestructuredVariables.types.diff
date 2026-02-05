@@ -167,12 +167,10 @@
 
  const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
 ->f52 : (...args: ["A", number] | ["B"]) => void
-->args : ["A", number] | ["B"]
 +>f52 : (...args: ["B"] | ["A", number]) => void
-+>args : ["B"] | ["A", number]
+ >args : ["B"] | ["A", number]
  >(kind, payload?) => {    if (kind === 'A') {        payload.toFixed();    }    else {        payload;  // undefined    }} : (kind: "A" | "B", payload?: number | undefined) => void
  >kind : "A" | "B"
- >payload : number | undefined
 @@= skipped -13, +13 lines =@@
 
          payload.toFixed();
@@ -190,45 +188,37 @@
 
    method(...args:
 ->method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => void
-->args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
 +>method : (...args: [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]) => void
-+>args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
+ >args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
 
      [type: "str", cb: (e: string) => void] |
- >e : string
 @@= skipped -44, +44 lines =@@
  >FooAsyncMethod : FooAsyncMethod
 
    method(...args:
 ->method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Promise<any>
-->args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
 +>method : (...args: [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]) => Promise<any>
-+>args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
+ >args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
 
      [type: "str", cb: (e: string) => void] |
- >e : string
 @@= skipped -44, +44 lines =@@
  >FooGenMethod : FooGenMethod
 
    method(...args:
 ->method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Generator<any, any, any>
-->args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
 +>method : (...args: [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]) => Generator<any, any, any>
-+>args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
+ >args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
 
      [type: "str", cb: (e: string) => void] |
- >e : string
 @@= skipped -44, +44 lines =@@
  >FooAsyncGenMethod : FooAsyncGenMethod
 
    method(...args:
 ->method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => AsyncGenerator<any, any, any>
-->args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
 +>method : (...args: [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]) => AsyncGenerator<any, any, any>
-+>args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
+ >args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
 
      [type: "str", cb: (e: string) => void] |
- >e : string
 @@= skipped -59, +59 lines =@@
 
          payload.toFixed();  // error

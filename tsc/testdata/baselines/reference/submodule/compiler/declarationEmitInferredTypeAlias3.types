@@ -13,11 +13,11 @@ export { }
 
 === 1.ts ===
 var x = "hi" || 5;
->x : string | number
->"hi" || 5 : "hi" | 5
+>x : string
+>"hi" || 5 : "hi"
 >"hi" : "hi"
 >5 : 5
 
 export default x;
->x : string | number
+>x : string
 

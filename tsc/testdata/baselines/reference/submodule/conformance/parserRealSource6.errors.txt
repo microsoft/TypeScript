@@ -7,7 +7,9 @@ parserRealSource6.ts(17,23): error TS2304: Cannot find name 'SymbolScope'.
 parserRealSource6.ts(18,30): error TS2304: Cannot find name 'AstWalkOptions'.
 parserRealSource6.ts(20,35): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource6.ts(20,83): error TS2304: Cannot find name 'ASTFlags'.
+parserRealSource6.ts(26,16): error TS2322: Type 'null' is not assignable to type '() => SymbolScope'.
 parserRealSource6.ts(26,35): error TS2304: Cannot find name 'SymbolScope'.
+parserRealSource6.ts(27,16): error TS2322: Type 'null' is not assignable to type '() => SymbolScope'.
 parserRealSource6.ts(27,48): error TS2304: Cannot find name 'SymbolScope'.
 parserRealSource6.ts(28,31): error TS2304: Cannot find name 'AST'.
 parserRealSource6.ts(30,35): error TS2304: Cannot find name 'ModuleDeclaration'.
@@ -57,15 +59,16 @@ parserRealSource6.ts(212,50): error TS2304: Cannot find name 'ILogger'.
 parserRealSource6.ts(212,67): error TS2304: Cannot find name 'Script'.
 parserRealSource6.ts(212,81): error TS2304: Cannot find name 'ISourceText'.
 parserRealSource6.ts(215,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
+parserRealSource6.ts(218,13): error TS2322: Type 'null' is not assignable to type 'EnclosingScopeContext'.
 
 
-==== parserRealSource6.ts (59 errors) ====
+==== parserRealSource6.ts (62 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
     
-    module TypeScript {
+    namespace TypeScript {
         export class TypeCollectionContext {
             public script: Script = null;
                            ~~~~~~
@@ -104,9 +107,13 @@ parserRealSource6.ts(215,20): error TS2339: Property 'getAstWalkerFactory' does 
         export class EnclosingScopeContext {
     
             public scopeGetter: () => SymbolScope = null;
+                   ~~~~~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type '() => SymbolScope'.
                                       ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SymbolScope'.
             public objectLiteralScopeGetter: () => SymbolScope = null;
+                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type '() => SymbolScope'.
                                                    ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SymbolScope'.
             public scopeStartAST: AST = null;
@@ -398,6 +405,8 @@ parserRealSource6.ts(215,20): error TS2339: Property 'getAstWalkerFactory' does 
     
             if (context.scopeStartAST === null)
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'EnclosingScopeContext'.
             return context;
         }
     }

@@ -1,6 +1,6 @@
 --- old.objectTypeWithDuplicateNumericProperty.js
 +++ new.objectTypeWithDuplicateNumericProperty.js
-@@= skipped -37, +37 lines =@@
+@@= skipped -38, +38 lines =@@
  // numeric properties must be distinct after a ToNumber operation
  // so the below are all errors
  class C {

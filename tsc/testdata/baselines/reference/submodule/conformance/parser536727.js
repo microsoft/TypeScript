@@ -12,6 +12,7 @@ foo(x);
 
 
 //// [parser536727.js]
+"use strict";
 function foo(f) {
     return f("");
 }

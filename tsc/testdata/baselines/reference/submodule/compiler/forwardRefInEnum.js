@@ -17,6 +17,7 @@ enum E1 {
 
 
 //// [forwardRefInEnum.js]
+"use strict";
 var E1;
 (function (E1) {
     // illegal case

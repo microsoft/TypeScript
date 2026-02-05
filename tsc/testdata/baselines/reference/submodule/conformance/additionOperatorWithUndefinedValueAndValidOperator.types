@@ -9,16 +9,16 @@ enum E { a, b, c }
 >b : E.b
 >c : E.c
 
-var a: any;
+declare var a: any;
 >a : any
 
-var b: number;
+declare var b: number;
 >b : number
 
-var c: E;
+declare var c: E;
 >c : E
 
-var d: string;
+declare var d: string;
 >d : string
 
 // undefined + any

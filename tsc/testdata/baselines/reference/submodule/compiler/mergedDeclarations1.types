@@ -20,7 +20,7 @@ function point(x: number, y: number): Point {
 >y : number
 >y : number
 }
-module point {
+namespace point {
 >point : typeof point
 
     export var origin = point(0, 0);

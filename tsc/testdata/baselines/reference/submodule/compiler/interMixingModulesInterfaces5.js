@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/interMixingModulesInterfaces5.ts] ////
 
 //// [interMixingModulesInterfaces5.ts]
-module A {
+namespace A {
 
     interface B {
         name: string;
         value: number;
     }
 
-    export module B {
+    export namespace B {
         export function createB(): number {
             return null;
         }
@@ -18,6 +18,7 @@ module A {
 var x: number = A.B.createB();
 
 //// [interMixingModulesInterfaces5.js]
+"use strict";
 var A;
 (function (A) {
     let B;

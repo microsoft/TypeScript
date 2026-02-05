@@ -21,6 +21,7 @@ class A {
 }
 
 //// [privateNameStaticAccessorsCallExpression.js]
+"use strict";
 class A {
     static get #fieldFunc() { return function () { A.#x = 10; }; }
     static get #fieldFunc2() { return function (a, ...b) { }; }

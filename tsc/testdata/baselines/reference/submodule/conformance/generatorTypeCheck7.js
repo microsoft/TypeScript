@@ -7,4 +7,5 @@ interface WeirdIter extends IterableIterator<number> {
 function* g1(): WeirdIter { }
 
 //// [generatorTypeCheck7.js]
+"use strict";
 function* g1() { }

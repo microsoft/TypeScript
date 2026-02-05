@@ -10,6 +10,7 @@ var ANY = ANY void ;    //expect error
 var ANY1 = void ;
 
 //// [voidOperatorInvalidOperations.js]
+"use strict";
 // Unary operator void
 // operand before void
 var ANY = ANY;

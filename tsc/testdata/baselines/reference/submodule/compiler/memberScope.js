@@ -1,15 +1,16 @@
 //// [tests/cases/compiler/memberScope.ts] ////
 
 //// [memberScope.ts]
-module Salt {
+namespace Salt {
   export class Pepper {}
-  export module Basil { }
+  export namespace Basil { }
   var z = Basil.Pepper;
 }
 
 
 
 //// [memberScope.js]
+"use strict";
 var Salt;
 (function (Salt) {
     class Pepper {

@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/corrupted.ts] ////
 
 //// [corrupted.ts]
-Æ¼Á
+ï¿½ï¿½ï¿½
 
 //// [corrupted.js]
+"use strict";

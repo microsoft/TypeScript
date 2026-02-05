@@ -1,8 +1,8 @@
 --- old.recursiveTypeInGenericConstraint.js
 +++ new.recursiveTypeInGenericConstraint.js
-@@= skipped -16, +16 lines =@@
-
+@@= skipped -17, +17 lines =@@
  //// [recursiveTypeInGenericConstraint.js]
+ "use strict";
  class G {
 +    x; // infinitely expanding type reference
  }

@@ -32,13 +32,11 @@
  >{    // SOME PROPS HERE} : {}
 
      // SOME PROPS HERE
-@@= skipped -15, +15 lines =@@
-  * @returns {number|null} Result.
+@@= skipped -16, +16 lines =@@
   */
  function testFn(input) {
-->testFn : (input: testFnTypes.input) => number | null
+ >testFn : (input: testFnTypes.input) => number | null
 ->input : import("file2").testFnTypes.input
-+>testFn : (input: testFnTypes.input) => number
 +>input : testFnTypes.input
 
      if (typeof input === 'number') {
@@ -57,10 +55,8 @@
      } else {
          return null;
 @@= skipped -20, +20 lines =@@
- }
 
  export {testFn, testFnTypes};
-->testFn : (input: testFnTypes.input) => number | null
+ >testFn : (input: testFnTypes.input) => number | null
 ->testFnTypes : { [x: string]: any; }
-+>testFn : (input: testFnTypes.input) => number
 +>testFnTypes : any

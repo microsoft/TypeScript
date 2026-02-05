@@ -11,9 +11,9 @@ func TestRemoveExportedClassFromReopenedModule(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module multiM { }
+	const content = `namespace multiM { }
 
-module multiM {
+namespace multiM {
     /*1*/export class c { }
 }
 `

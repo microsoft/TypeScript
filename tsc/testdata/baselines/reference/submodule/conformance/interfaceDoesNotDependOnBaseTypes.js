@@ -11,6 +11,7 @@ type StringTree = string | StringTreeArray;
 interface StringTreeArray extends Array<StringTree> { }
 
 //// [interfaceDoesNotDependOnBaseTypes.js]
+"use strict";
 var x;
 if (typeof x !== "string") {
     x.push("");

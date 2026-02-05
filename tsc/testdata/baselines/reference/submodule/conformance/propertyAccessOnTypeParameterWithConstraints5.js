@@ -13,7 +13,7 @@ class B extends A {
 
 class C<U extends T, T extends A> {
     f() {
-        var x: U;
+        var x: U = {} as any;
         var a = x['foo'](); // should be string
         return a + x.foo() + x.notHere();
     }
@@ -24,11 +24,11 @@ var r = (new C<B, A>()).f();
 interface I<U extends T, T extends A> {
     foo: U;
 }
-var i: I<B, A>;
+declare var i: I<B, A>;
 var r2 = i.foo.notHere();
 var r2b = i.foo['foo']();
 
-var a: {
+declare var a: {
     <U extends T, T extends A>(): U;
 }
 // BUG 794164
@@ -47,6 +47,7 @@ var b = {
 var r4 = b.foo(new B()); // error after constraints above made illegal, doesn't matter
 
 //// [propertyAccessOnTypeParameterWithConstraints5.js]
+"use strict";
 class A {
     foo() { return ''; }
 }
@@ -57,16 +58,14 @@ class B extends A {
 }
 class C {
     f() {
-        var x;
+        var x = {};
         var a = x['foo'](); // should be string
         return a + x.foo() + x.notHere();
     }
 }
 var r = (new C()).f();
-var i;
 var r2 = i.foo.notHere();
 var r2b = i.foo['foo']();
-var a;
 // BUG 794164
 var r3 = a().notHere();
 var r3b = a()['foo']();

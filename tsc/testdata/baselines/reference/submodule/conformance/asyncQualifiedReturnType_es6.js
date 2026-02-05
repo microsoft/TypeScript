@@ -10,6 +10,7 @@ async function f(): X.MyPromise<void> {
 }
 
 //// [asyncQualifiedReturnType_es6.js]
+"use strict";
 var X;
 (function (X) {
     class MyPromise extends Promise {

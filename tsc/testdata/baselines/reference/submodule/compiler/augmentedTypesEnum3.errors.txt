@@ -2,15 +2,15 @@ augmentedTypesEnum3.ts(16,5): error TS2432: In an enum with multiple declaration
 
 
 ==== augmentedTypesEnum3.ts (1 errors) ====
-    module E {
+    namespace E {
         var t;
     }
     enum E { }
     
     enum F { }
-    module F { var t; }
+    namespace F { var t; }
     
-    module A {
+    namespace A {
         var o;
     }
     enum A {
@@ -21,6 +21,6 @@ augmentedTypesEnum3.ts(16,5): error TS2432: In an enum with multiple declaration
         ~
 !!! error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
     }
-    module A {
+    namespace A {
         var p;
     }

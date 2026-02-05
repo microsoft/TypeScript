@@ -11,7 +11,8 @@ func TestDeclarationMapsOutOfDateMapping(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @Filename: /home/src/workspaces/project/node_modules/a/dist/index.d.ts
+	const content = `// @lib: es5
+// @Filename: /home/src/workspaces/project/node_modules/a/dist/index.d.ts
 export declare class Foo {
     bar: any;
 }

@@ -5,11 +5,12 @@ namespace Foo {
   export default foo;
 }
 
-module Bar {
+namespace Bar {
   export default bar;
 }
 
 //// [parserExportAssignment9.js]
+"use strict";
 var Foo;
 (function (Foo) {
     export default foo;

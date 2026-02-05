@@ -37,7 +37,7 @@ class B3 extends A3 {
     '2.0': string; // error
 }
 
-module TwoLevels {
+namespace TwoLevels {
     class A {
         foo: Base;
         bar: Base;
@@ -70,6 +70,7 @@ module TwoLevels {
 }
 
 //// [subtypingWithObjectMembers.js]
+"use strict";
 class Base {
     foo;
 }

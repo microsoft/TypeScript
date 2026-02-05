@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/declFileInternalAliases.ts] ////
 
 === declFileInternalAliases.ts ===
-module m {
+namespace m {
 >m : typeof m
 
     export class c {
 >c : c
     }
 }
-module m1 {
+namespace m1 {
 >m1 : typeof m1
 
     import x = m.c;
@@ -21,7 +21,7 @@ module m1 {
 >new x() : x
 >x : typeof x
 }
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 
     export import x = m.c;

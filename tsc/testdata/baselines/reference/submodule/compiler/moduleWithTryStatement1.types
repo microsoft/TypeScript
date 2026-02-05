@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/moduleWithTryStatement1.ts] ////
 
 === moduleWithTryStatement1.ts ===
-module M {
+namespace M {
 >M : typeof M
 
   try {
   }
   catch (e) {
->e : any
+>e : unknown
   }
 }
 var v = M;

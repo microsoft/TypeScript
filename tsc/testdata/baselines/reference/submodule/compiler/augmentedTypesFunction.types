@@ -49,12 +49,12 @@ enum y4 { One } // error
 function y5() { }
 >y5 : () => void
 
-module y5 { } // ok since module is not instantiated
+namespace y5 { } // ok since module is not instantiated
 
 function y5a() { }
 >y5a : typeof y5a
 
-module y5a { var y = 2; } // should be an error
+namespace y5a { var y = 2; } // should be an error
 >y5a : typeof y5a
 >y : number
 >2 : 2
@@ -62,7 +62,7 @@ module y5a { var y = 2; } // should be an error
 function y5b() { }
 >y5b : typeof y5b
 
-module y5b { export var y = 3; } // should be an error
+namespace y5b { export var y = 3; } // should be an error
 >y5b : typeof y5b
 >y : number
 >3 : 3
@@ -70,7 +70,7 @@ module y5b { export var y = 3; } // should be an error
 function y5c() { }
 >y5c : () => void
 
-module y5c { export interface I { foo(): void } } // should be an error
+namespace y5c { export interface I { foo(): void } } // should be an error
 >foo : () => void
 
 // function then import, messes with other errors

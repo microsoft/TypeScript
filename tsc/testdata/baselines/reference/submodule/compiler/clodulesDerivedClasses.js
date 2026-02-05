@@ -5,7 +5,7 @@ class Shape {
     id: number;
 }
 
-module Shape.Utils {
+namespace Shape.Utils {
     export function convert(): Shape { return null;}
 }
 
@@ -14,7 +14,7 @@ class Path extends Shape {
 
 }
 
-module Path.Utils {
+namespace Path.Utils {
     export function convert2(): Path {
         return null;
     }
@@ -25,6 +25,7 @@ module Path.Utils {
 
 
 //// [clodulesDerivedClasses.js]
+"use strict";
 class Shape {
     id;
 }

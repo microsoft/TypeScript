@@ -5,6 +5,7 @@
 var v = 1;
 
 //// [commentsVariableStatement1.js]
+"use strict";
 /** Comment */
 var v = 1;
 

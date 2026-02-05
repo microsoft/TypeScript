@@ -4,76 +4,8 @@
  	 * @param {object} [foo={}]
  	 */
  	constructor(foo = {}) {
-->foo : any
+->foo : object | undefined
 +>foo : object
  >{} : {}
 
  		const key = "bar";
-@@= skipped -11, +11 lines =@@
- 		 * @type object
- 		 */
- 		this.foo = foo;
-->this.foo = foo : any
-->this.foo : any
-+>this.foo = foo : object
-+>this.foo : object
- >this : this
-->foo : any
-->foo : any
-+>foo : object
-+>foo : object
-
- 		/**
- 		 * @type object
- 		 */
- 		const arguments = this.arguments;
-->arguments : any
-+>arguments : object
- >this.arguments : { bar: {}; }
- >this : this
- >arguments : { bar: {}; }
-@@= skipped -20, +20 lines =@@
- 		 */
- 		this.bar = arguments.bar;
- >this.bar = arguments.bar : any
-->this.bar : any
-+>this.bar : object
- >this : this
-->bar : any
-+>bar : object
- >arguments.bar : any
-->arguments : any
-+>arguments : object
- >bar : any
-
- 		/**
-@@= skipped -12, +12 lines =@@
- 		 */
- 		this.baz = arguments[key];
- >this.baz = arguments[key] : any
-->this.baz : any
-+>this.baz : object
- >this : this
-->baz : any
-+>baz : object
- >arguments[key] : any
-->arguments : any
-+>arguments : object
- >key : "bar"
-
- 		/**
- 		 * @type object
- 		 */
- 		this.options = arguments;
-->this.options = arguments : any
-->this.options : any
-+>this.options = arguments : object
-+>this.options : object
- >this : this
-->options : any
-->arguments : any
-+>options : object
-+>arguments : object
- 	}
-
- 	get arguments() {

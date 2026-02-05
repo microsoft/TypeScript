@@ -1,9 +1,0 @@
---- old.parserSetAccessorWithTypeParameters1.js
-+++ new.parserSetAccessorWithTypeParameters1.js
-@@= skipped -6, +6 lines =@@
-
- //// [parserSetAccessorWithTypeParameters1.js]
- class C {
--    set foo<T>(v) { }
-+    set foo(v) { }
- }

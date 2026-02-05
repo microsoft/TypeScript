@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : typeof TypeScript
 
     export class TypeCollectionContext {
@@ -237,7 +237,7 @@ module TypeScript {
 >state : any
 
         if (hasFlag(ast.flags, memScope.matchFlag) && ((memScope.pos < 0) || (memScope.pos == ast.limChar))) {
->hasFlag(ast.flags, memScope.matchFlag) && ((memScope.pos < 0) || (memScope.pos == ast.limChar)) : boolean
+>hasFlag(ast.flags, memScope.matchFlag) && ((memScope.pos < 0) || (memScope.pos == ast.limChar)) : any
 >hasFlag(ast.flags, memScope.matchFlag) : any
 >hasFlag : any
 >ast.flags : any

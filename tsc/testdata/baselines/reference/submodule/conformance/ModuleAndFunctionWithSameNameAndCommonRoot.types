@@ -1,10 +1,10 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/ModuleAndFunctionWithSameNameAndCommonRoot.ts] ////
 
 === module.ts ===
-module A {
+namespace A {
 >A : typeof A
 
-    export module Point {
+    export namespace Point {
 >Point : typeof Point
 
         export var Origin = { x: 0, y: 0 };
@@ -18,7 +18,7 @@ module A {
 }
 
 === function.ts ===
-module A {
+namespace A {
 >A : typeof A
 
     // duplicate identifier error
@@ -35,10 +35,10 @@ module A {
 }
 
 === simple.ts ===
-module B {
+namespace B {
 >B : typeof B
 
-    export module Point {
+    export namespace Point {
 >Point : typeof Point
 
         export var Origin = { x: 0, y: 0 };

@@ -21,11 +21,11 @@ export class Foo {
 >this : this
 >foo : string
 >this.foo.slice() : string
->this.foo.slice : (start?: number, end?: number) => string
+>this.foo.slice : (start?: number | undefined, end?: number | undefined) => string
 >this.foo : string
 >this : this
 >foo : string
->slice : (start?: number, end?: number) => string
+>slice : (start?: number | undefined, end?: number | undefined) => string
     }
     m() {
 >m : () => void

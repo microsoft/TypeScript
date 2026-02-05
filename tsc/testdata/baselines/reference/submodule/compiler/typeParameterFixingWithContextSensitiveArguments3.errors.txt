@@ -6,7 +6,7 @@ typeParameterFixingWithContextSensitiveArguments3.ts(7,35): error TS2741: Proper
     interface A { a: A; }
     interface B extends A { b: B; }
     
-    var a: A, b: B;
+    declare var a: A, b: B;
     
     var d = f(a, b, u2 => u2.b, t2 => t2);
                                       ~~

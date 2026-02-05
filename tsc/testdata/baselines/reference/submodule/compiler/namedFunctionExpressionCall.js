@@ -15,6 +15,7 @@ var recurser = function foo() {
 });
 
 //// [namedFunctionExpressionCall.js]
+"use strict";
 var recurser = function foo() {
     // using the local name
     foo();

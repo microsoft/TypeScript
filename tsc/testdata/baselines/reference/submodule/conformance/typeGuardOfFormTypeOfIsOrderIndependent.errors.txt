@@ -1,0 +1,81 @@
+typeGuardOfFormTypeOfIsOrderIndependent.ts(10,25): error TS2454: Variable 'strOrNum' is used before being assigned.
+typeGuardOfFormTypeOfIsOrderIndependent.ts(14,5): error TS2322: Type 'string | number' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+typeGuardOfFormTypeOfIsOrderIndependent.ts(14,11): error TS2454: Variable 'strOrNum' is used before being assigned.
+typeGuardOfFormTypeOfIsOrderIndependent.ts(16,27): error TS2454: Variable 'strOrFunc' is used before being assigned.
+typeGuardOfFormTypeOfIsOrderIndependent.ts(20,5): error TS2322: Type 'string | (() => void)' is not assignable to type 'string'.
+  Type '() => void' is not assignable to type 'string'.
+typeGuardOfFormTypeOfIsOrderIndependent.ts(20,11): error TS2454: Variable 'strOrFunc' is used before being assigned.
+typeGuardOfFormTypeOfIsOrderIndependent.ts(22,25): error TS2454: Variable 'numOrBool' is used before being assigned.
+typeGuardOfFormTypeOfIsOrderIndependent.ts(26,5): error TS2322: Type 'number | boolean' is not assignable to type 'boolean'.
+  Type 'number' is not assignable to type 'boolean'.
+typeGuardOfFormTypeOfIsOrderIndependent.ts(26,12): error TS2454: Variable 'numOrBool' is used before being assigned.
+typeGuardOfFormTypeOfIsOrderIndependent.ts(28,26): error TS2454: Variable 'strOrBool' is used before being assigned.
+typeGuardOfFormTypeOfIsOrderIndependent.ts(32,5): error TS2322: Type 'string | boolean' is not assignable to type 'string'.
+  Type 'boolean' is not assignable to type 'string'.
+typeGuardOfFormTypeOfIsOrderIndependent.ts(32,11): error TS2454: Variable 'strOrBool' is used before being assigned.
+
+
+==== typeGuardOfFormTypeOfIsOrderIndependent.ts (12 errors) ====
+    var strOrNum: string | number;
+    var strOrBool: string | boolean;
+    var strOrFunc: string | (() => void);
+    var numOrBool: number | boolean
+    var str: string;
+    var num: number;
+    var bool: boolean;
+    var func: () => void;
+    
+    if ("string" === typeof strOrNum) {
+                            ~~~~~~~~
+!!! error TS2454: Variable 'strOrNum' is used before being assigned.
+        str = strOrNum;
+    }
+    else {
+        num = strOrNum;
+        ~~~
+!!! error TS2322: Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+              ~~~~~~~~
+!!! error TS2454: Variable 'strOrNum' is used before being assigned.
+    }
+    if ("function" === typeof strOrFunc) {
+                              ~~~~~~~~~
+!!! error TS2454: Variable 'strOrFunc' is used before being assigned.
+        func = strOrFunc;
+    }
+    else {
+        str = strOrFunc;
+        ~~~
+!!! error TS2322: Type 'string | (() => void)' is not assignable to type 'string'.
+!!! error TS2322:   Type '() => void' is not assignable to type 'string'.
+              ~~~~~~~~~
+!!! error TS2454: Variable 'strOrFunc' is used before being assigned.
+    }
+    if ("number" === typeof numOrBool) {
+                            ~~~~~~~~~
+!!! error TS2454: Variable 'numOrBool' is used before being assigned.
+        num = numOrBool;
+    }
+    else {
+        bool = numOrBool;
+        ~~~~
+!!! error TS2322: Type 'number | boolean' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'number' is not assignable to type 'boolean'.
+               ~~~~~~~~~
+!!! error TS2454: Variable 'numOrBool' is used before being assigned.
+    }
+    if ("boolean" === typeof strOrBool) {
+                             ~~~~~~~~~
+!!! error TS2454: Variable 'strOrBool' is used before being assigned.
+        bool = strOrBool;
+    }
+    else {
+        str = strOrBool;
+        ~~~
+!!! error TS2322: Type 'string | boolean' is not assignable to type 'string'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string'.
+              ~~~~~~~~~
+!!! error TS2454: Variable 'strOrBool' is used before being assigned.
+    }
+    

@@ -7,6 +7,7 @@ class A {
 
 
 //// [privateNameConstructorReserved.js]
+"use strict";
 class A {
     #constructor() { } // Error: `#constructor` is a reserved word.
 }

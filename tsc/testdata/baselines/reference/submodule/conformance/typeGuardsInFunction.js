@@ -90,6 +90,7 @@ function f4() {
 strOrNum = typeof f4() === "string" && f4(); // string | number 
 
 //// [typeGuardsInFunction.js]
+"use strict";
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
 // variables in global

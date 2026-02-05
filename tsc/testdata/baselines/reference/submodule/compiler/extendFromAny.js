@@ -15,6 +15,7 @@ C.sunknown.length; // ok: sunknown: any
 
 
 //// [extendFromAny.js]
+"use strict";
 class C extends Base {
     known = 1;
     static sknown = 2;

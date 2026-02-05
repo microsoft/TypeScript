@@ -9,6 +9,7 @@ constructor(public S17: S0<any, (S18) => A>) { }
 
 
 //// [recursiveSpecializationOfSignatures.js]
+"use strict";
 class S0 {
     S17;
     set S1(S2) {

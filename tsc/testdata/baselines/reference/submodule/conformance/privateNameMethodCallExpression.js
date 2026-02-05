@@ -27,6 +27,7 @@ class AA {
 
 
 //// [privateNameMethodCallExpression.js]
+"use strict";
 class AA {
     #method() { this.x = 10; }
     ;

@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations7.ts ===
 // interface Foo { }
-// module Foo {
+// namespace Foo {
 //     export interface /*FIND ALL REFS*/[|Bar|] { }
 //     export module Bar { export interface Baz { } }
 //     export function Bar() { }
@@ -15,7 +15,7 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations7.ts ===
 // interface Foo { }
-// module Foo {
+// namespace Foo {
 //     export interface Bar { }
 //     export module /*FIND ALL REFS*/[|Bar|] { export interface Baz { } }
 //     export function Bar() { }
@@ -29,7 +29,7 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations7.ts ===
 // interface Foo { }
-// module Foo {
+// namespace Foo {
 //     export interface Bar { }
 //     export module Bar { export interface Baz { } }
 //     export function /*FIND ALL REFS*/[|Bar|]() { }
@@ -43,7 +43,7 @@
 // === findAllReferences ===
 // === /referencesForMergedDeclarations7.ts ===
 // interface Foo { }
-// module Foo {
+// namespace Foo {
 //     export interface [|Bar|] { }
 //     export module [|Bar|] { export interface Baz { } }
 //     export function [|Bar|]() { }

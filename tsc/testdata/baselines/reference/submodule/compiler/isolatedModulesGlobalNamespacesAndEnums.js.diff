@@ -1,7 +1,7 @@
 --- old.isolatedModulesGlobalNamespacesAndEnums.js
 +++ new.isolatedModulesGlobalNamespacesAndEnums.js
-@@= skipped -56, +56 lines =@@
- //// [enum2.js]
+@@= skipped -59, +59 lines =@@
+ "use strict";
  var Enum;
  (function (Enum) {
 -    Enum["D"] = "d";

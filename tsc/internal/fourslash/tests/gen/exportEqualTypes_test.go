@@ -12,7 +12,10 @@ func TestExportEqualTypes(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @Filename: exportEqualTypes_file0.ts
+	const content = `// @module: commonjs
+// @lib: es5
+// @strict: false
+// @Filename: exportEqualTypes_file0.ts
 interface x {
     (): Date;
     foo: string;

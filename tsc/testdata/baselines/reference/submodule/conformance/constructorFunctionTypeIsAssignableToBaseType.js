@@ -22,6 +22,7 @@ class Derived2 extends Base {
 }
 
 //// [constructorFunctionTypeIsAssignableToBaseType.js]
+"use strict";
 class Base {
     static foo;
 }

@@ -18,6 +18,7 @@ class B {
 }
 
 //// [mixedStaticAndInstanceClassMembers.js]
+"use strict";
 class A {
     f() { }
     m1(a) {

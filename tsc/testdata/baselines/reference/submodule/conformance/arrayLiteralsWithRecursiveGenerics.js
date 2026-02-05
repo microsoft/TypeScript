@@ -28,6 +28,7 @@ var myDerivedList: DerivedList<number>;
 var as = [list, myDerivedList]; // List<number>[]
 
 //// [arrayLiteralsWithRecursiveGenerics.js]
+"use strict";
 class List {
     data;
     next;

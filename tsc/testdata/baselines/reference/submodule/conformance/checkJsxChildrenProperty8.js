@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/checkJsxChildrenProperty8.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 interface Prop {
@@ -33,6 +35,7 @@ let k4 = <Comp a={10} b="hi"><Button />  </Comp>;
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 class Button extends React.Component {

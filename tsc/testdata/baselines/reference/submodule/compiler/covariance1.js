@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/covariance1.ts] ////
 
 //// [covariance1.ts]
-module M {
+namespace M {
 
     interface X { m1:number; }
     export class XX implements X { constructor(public m1:number) { } }
@@ -20,6 +20,7 @@ module M {
 
 
 //// [covariance1.js]
+"use strict";
 var M;
 (function (M) {
     class XX {

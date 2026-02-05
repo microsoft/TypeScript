@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxGenericAttributesType5.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 class B1<T extends { x: string }> extends React.Component<T, {}> {
@@ -17,6 +19,7 @@ class B<U> extends React.Component<U, {}> {
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 class B1 extends React.Component {

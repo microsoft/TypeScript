@@ -27,6 +27,7 @@ var r11 = b ** E.b;
 var r12 = 1 ** E.b;
 
 //// [exponentiationOperatorWithEnum.js]
+"use strict";
 // operands of an enum type are treated as having the primitive type Number.
 var E;
 (function (E) {

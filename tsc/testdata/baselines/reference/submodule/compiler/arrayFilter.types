@@ -2,8 +2,8 @@
 
 === arrayFilter.ts ===
 var foo = [
->foo : { name: string; }[]
->[    { name: 'bar' },    { name: null },    { name: 'baz' }] : { name: string; }[]
+>foo : ({ name: string; } | { name: null; })[]
+>[    { name: 'bar' },    { name: null },    { name: 'baz' }] : ({ name: string; } | { name: null; })[]
 
     { name: 'bar' },
 >{ name: 'bar' } : { name: string; }
@@ -22,13 +22,13 @@ var foo = [
 ]
 
 foo.filter(x => x.name); //should accepted all possible types not only boolean! 
->foo.filter(x => x.name) : { name: string; }[]
->foo.filter : { <S extends { name: string; }>(predicate: (value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: any): S[]; (predicate: (value: { name: string; }, index: number, array: { name: string; }[]) => unknown, thisArg?: any): { name: string; }[]; }
->foo : { name: string; }[]
->filter : { <S extends { name: string; }>(predicate: (value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: any): S[]; (predicate: (value: { name: string; }, index: number, array: { name: string; }[]) => unknown, thisArg?: any): { name: string; }[]; }
->x => x.name : (x: { name: string; }) => string
->x : { name: string; }
->x.name : string
->x : { name: string; }
->name : string
+>foo.filter(x => x.name) : ({ name: string; } | { name: null; })[]
+>foo.filter : { <S extends { name: string; } | { name: null; }>(predicate: (value: { name: string; } | { name: null; }, index: number, array: ({ name: string; } | { name: null; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { name: string; } | { name: null; }, index: number, array: ({ name: string; } | { name: null; })[]) => unknown, thisArg?: any): ({ name: string; } | { name: null; })[]; }
+>foo : ({ name: string; } | { name: null; })[]
+>filter : { <S extends { name: string; } | { name: null; }>(predicate: (value: { name: string; } | { name: null; }, index: number, array: ({ name: string; } | { name: null; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { name: string; } | { name: null; }, index: number, array: ({ name: string; } | { name: null; })[]) => unknown, thisArg?: any): ({ name: string; } | { name: null; })[]; }
+>x => x.name : (x: { name: string; } | { name: null; }) => string | null
+>x : { name: string; } | { name: null; }
+>x.name : string | null
+>x : { name: string; } | { name: null; }
+>name : string | null
 

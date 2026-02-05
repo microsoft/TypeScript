@@ -17,8 +17,8 @@
  export const a2 = (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN;
 ->a2 : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN
 ->(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN
-+>a2 : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
-+>(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
++>a2 : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
++>(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
  >isNaN : (number: number) => boolean
  >globalThis.isNaN : (number: number) => boolean
  >globalThis : typeof globalThis
@@ -50,8 +50,8 @@
  export const aObj = {
 ->aObj : { a1: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN; a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN; a3: (isNaN: number, bar: typeof globalThis.isNaN) => typeof globalThis.isNaN; a4: (isNaN: number) => typeof globalThis.isNaN; }
 ->{    a1: (isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN => isNaN,    a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN,    a3: (isNaN: number, bar: typeof globalThis.isNaN): typeof globalThis.isNaN => bar,    a4: (isNaN: number): typeof globalThis.isNaN => globalThis.isNaN,} : { a1: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN; a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN; a3: (isNaN: number, bar: typeof globalThis.isNaN) => typeof globalThis.isNaN; a4: (isNaN: number) => typeof globalThis.isNaN; }
-+>aObj : { a1: (isNaN: (number: number) => boolean) => (number: number) => boolean; a2: (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean; a3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; a4: (isNaN: number) => (number: number) => boolean; }
-+>{    a1: (isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN => isNaN,    a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN,    a3: (isNaN: number, bar: typeof globalThis.isNaN): typeof globalThis.isNaN => bar,    a4: (isNaN: number): typeof globalThis.isNaN => globalThis.isNaN,} : { a1: (isNaN: (number: number) => boolean) => (number: number) => boolean; a2: (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean; a3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; a4: (isNaN: number) => (number: number) => boolean; }
++>aObj : { a1: (isNaN: (number: number) => boolean) => (number: number) => boolean; a2: (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean; a3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; a4: (isNaN: number) => (number: number) => boolean; }
++>{    a1: (isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN => isNaN,    a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN,    a3: (isNaN: number, bar: typeof globalThis.isNaN): typeof globalThis.isNaN => bar,    a4: (isNaN: number): typeof globalThis.isNaN => globalThis.isNaN,} : { a1: (isNaN: (number: number) => boolean) => (number: number) => boolean; a2: (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean; a3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; a4: (isNaN: number) => (number: number) => boolean; }
 
      a1: (isNaN: typeof globalThis.isNaN): typeof globalThis.isNaN => isNaN,
 ->a1 : (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN
@@ -67,8 +67,8 @@
      a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN,
 ->a2 : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN
 ->(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN
-+>a2 : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
-+>(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
++>a2 : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
++>(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
  >isNaN : (number: number) => boolean
  >globalThis.isNaN : (number: number) => boolean
  >globalThis : typeof globalThis
@@ -104,7 +104,7 @@
  export type a4oReturn = ReturnType<ReturnType<typeof aObj['a4']>>;
  >a4oReturn : boolean
 ->aObj : { a1: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN; a2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN; a3: (isNaN: number, bar: typeof globalThis.isNaN) => typeof globalThis.isNaN; a4: (isNaN: number) => typeof globalThis.isNaN; }
-+>aObj : { a1: (isNaN: (number: number) => boolean) => (number: number) => boolean; a2: (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean; a3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; a4: (isNaN: number) => (number: number) => boolean; }
++>aObj : { a1: (isNaN: (number: number) => boolean) => (number: number) => boolean; a2: (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean; a3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; a4: (isNaN: number) => (number: number) => boolean; }
 
  export const b1 = (isNaN: typeof globalThis.isNaN) => isNaN;
 ->b1 : (isNaN: typeof globalThis.isNaN) => (number: number) => boolean
@@ -120,8 +120,8 @@
  export const b2 = (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN;
 ->b2 : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => (number: number) => boolean
 ->(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => (number: number) => boolean
-+>b2 : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
-+>(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
++>b2 : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
++>(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
  >isNaN : (number: number) => boolean
  >globalThis.isNaN : (number: number) => boolean
  >globalThis : typeof globalThis
@@ -142,8 +142,8 @@
  export const bObj = {
 ->bObj : { b1: (isNaN: typeof globalThis.isNaN) => (number: number) => boolean; b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => (number: number) => boolean; b3: (isNaN: number, bar: typeof globalThis.isNaN) => (number: number) => boolean; b4: (isNaN: number) => (number: number) => boolean; }
 ->{    b1: (isNaN: typeof globalThis.isNaN) => isNaN,    b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN,    b3: (isNaN: number, bar: typeof globalThis.isNaN) => bar,    b4: (isNaN: number) => globalThis.isNaN,} : { b1: (isNaN: typeof globalThis.isNaN) => (number: number) => boolean; b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => (number: number) => boolean; b3: (isNaN: number, bar: typeof globalThis.isNaN) => (number: number) => boolean; b4: (isNaN: number) => (number: number) => boolean; }
-+>bObj : { b1: (isNaN: (number: number) => boolean) => (number: number) => boolean; b2: (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean; b3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; b4: (isNaN: number) => (number: number) => boolean; }
-+>{    b1: (isNaN: typeof globalThis.isNaN) => isNaN,    b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN,    b3: (isNaN: number, bar: typeof globalThis.isNaN) => bar,    b4: (isNaN: number) => globalThis.isNaN,} : { b1: (isNaN: (number: number) => boolean) => (number: number) => boolean; b2: (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean; b3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; b4: (isNaN: number) => (number: number) => boolean; }
++>bObj : { b1: (isNaN: (number: number) => boolean) => (number: number) => boolean; b2: (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean; b3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; b4: (isNaN: number) => (number: number) => boolean; }
++>{    b1: (isNaN: typeof globalThis.isNaN) => isNaN,    b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN,    b3: (isNaN: number, bar: typeof globalThis.isNaN) => bar,    b4: (isNaN: number) => globalThis.isNaN,} : { b1: (isNaN: (number: number) => boolean) => (number: number) => boolean; b2: (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean; b3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; b4: (isNaN: number) => (number: number) => boolean; }
 
      b1: (isNaN: typeof globalThis.isNaN) => isNaN,
 ->b1 : (isNaN: typeof globalThis.isNaN) => (number: number) => boolean
@@ -159,8 +159,8 @@
      b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN,
 ->b2 : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => (number: number) => boolean
 ->(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => (number: number) => boolean
-+>b2 : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
-+>(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
++>b2 : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
++>(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => bar ?? isNaN : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
  >isNaN : (number: number) => boolean
  >globalThis.isNaN : (number: number) => boolean
  >globalThis : typeof globalThis
@@ -180,7 +180,7 @@
  export type b4oReturn = ReturnType<ReturnType<typeof bObj['b4']>>;
  >b4oReturn : boolean
 ->bObj : { b1: (isNaN: typeof globalThis.isNaN) => (number: number) => boolean; b2: (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => (number: number) => boolean; b3: (isNaN: number, bar: typeof globalThis.isNaN) => (number: number) => boolean; b4: (isNaN: number) => (number: number) => boolean; }
-+>bObj : { b1: (isNaN: (number: number) => boolean) => (number: number) => boolean; b2: (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean; b3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; b4: (isNaN: number) => (number: number) => boolean; }
++>bObj : { b1: (isNaN: (number: number) => boolean) => (number: number) => boolean; b2: (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean; b3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; b4: (isNaN: number) => (number: number) => boolean; }
 
  export function c1(isNaN: typeof globalThis.isNaN) { return isNaN }
 ->c1 : (isNaN: typeof globalThis.isNaN) => (number: number) => boolean
@@ -193,7 +193,7 @@
 
  export function c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) { return bar ?? isNaN }
 ->c2 : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => (number: number) => boolean
-+>c2 : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
++>c2 : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
  >isNaN : (number: number) => boolean
  >globalThis.isNaN : (number: number) => boolean
  >globalThis : typeof globalThis
@@ -212,8 +212,8 @@
  export const cObj = {
 ->cObj : { c1(isNaN: typeof globalThis.isNaN): (number: number) => boolean; c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): (number: number) => boolean; c3(isNaN: number, bar: typeof globalThis.isNaN): (number: number) => boolean; c4(isNaN: number): (number: number) => boolean; }
 ->{    c1(isNaN: typeof globalThis.isNaN) { return isNaN },    c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) { return bar ?? isNaN },    c3(isNaN: number, bar: typeof globalThis.isNaN) { return bar },    c4(isNaN: number) { return globalThis.isNaN; },} : { c1(isNaN: typeof globalThis.isNaN): (number: number) => boolean; c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): (number: number) => boolean; c3(isNaN: number, bar: typeof globalThis.isNaN): (number: number) => boolean; c4(isNaN: number): (number: number) => boolean; }
-+>cObj : { c1(isNaN: (number: number) => boolean): (number: number) => boolean; c2(isNaN: (number: number) => boolean, bar?: (number: number) => boolean): (number: number) => boolean; c3(isNaN: number, bar: (number: number) => boolean): (number: number) => boolean; c4(isNaN: number): (number: number) => boolean; }
-+>{    c1(isNaN: typeof globalThis.isNaN) { return isNaN },    c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) { return bar ?? isNaN },    c3(isNaN: number, bar: typeof globalThis.isNaN) { return bar },    c4(isNaN: number) { return globalThis.isNaN; },} : { c1(isNaN: (number: number) => boolean): (number: number) => boolean; c2(isNaN: (number: number) => boolean, bar?: (number: number) => boolean): (number: number) => boolean; c3(isNaN: number, bar: (number: number) => boolean): (number: number) => boolean; c4(isNaN: number): (number: number) => boolean; }
++>cObj : { c1(isNaN: (number: number) => boolean): (number: number) => boolean; c2(isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined): (number: number) => boolean; c3(isNaN: number, bar: (number: number) => boolean): (number: number) => boolean; c4(isNaN: number): (number: number) => boolean; }
++>{    c1(isNaN: typeof globalThis.isNaN) { return isNaN },    c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) { return bar ?? isNaN },    c3(isNaN: number, bar: typeof globalThis.isNaN) { return bar },    c4(isNaN: number) { return globalThis.isNaN; },} : { c1(isNaN: (number: number) => boolean): (number: number) => boolean; c2(isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined): (number: number) => boolean; c3(isNaN: number, bar: (number: number) => boolean): (number: number) => boolean; c4(isNaN: number): (number: number) => boolean; }
 
      c1(isNaN: typeof globalThis.isNaN) { return isNaN },
 ->c1 : (isNaN: typeof globalThis.isNaN) => (number: number) => boolean
@@ -226,7 +226,7 @@
 
      c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) { return bar ?? isNaN },
 ->c2 : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => (number: number) => boolean
-+>c2 : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
++>c2 : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
  >isNaN : (number: number) => boolean
  >globalThis.isNaN : (number: number) => boolean
  >globalThis : typeof globalThis
@@ -244,7 +244,7 @@
  export type c4oReturn = ReturnType<ReturnType<typeof cObj['c4']>>;
  >c4oReturn : boolean
 ->cObj : { c1(isNaN: typeof globalThis.isNaN): (number: number) => boolean; c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): (number: number) => boolean; c3(isNaN: number, bar: typeof globalThis.isNaN): (number: number) => boolean; c4(isNaN: number): (number: number) => boolean; }
-+>cObj : { c1(isNaN: (number: number) => boolean): (number: number) => boolean; c2(isNaN: (number: number) => boolean, bar?: (number: number) => boolean): (number: number) => boolean; c3(isNaN: number, bar: (number: number) => boolean): (number: number) => boolean; c4(isNaN: number): (number: number) => boolean; }
++>cObj : { c1(isNaN: (number: number) => boolean): (number: number) => boolean; c2(isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined): (number: number) => boolean; c3(isNaN: number, bar: (number: number) => boolean): (number: number) => boolean; c4(isNaN: number): (number: number) => boolean; }
 
  export function d1() {
 ->d1 : () => () => (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN
@@ -270,13 +270,13 @@
 
  export function d2() {
 ->d2 : () => () => (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN
-+>d2 : () => () => (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
++>d2 : () => () => (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
 
      const fn = (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN;
 ->fn : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN
 ->(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN
-+>fn : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
-+>(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
++>fn : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
++>(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN): typeof globalThis.isNaN => bar ?? isNaN : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
  >isNaN : (number: number) => boolean
  >globalThis.isNaN : (number: number) => boolean
  >globalThis : typeof globalThis
@@ -286,8 +286,8 @@
      return function() { return fn };
 ->function() { return fn } : () => (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN
 ->fn : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => typeof globalThis.isNaN
-+>function() { return fn } : () => (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
-+>fn : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
++>function() { return fn } : () => (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
++>fn : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
  }
 
  export function d3() {
@@ -353,7 +353,7 @@
 
      method2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) { return bar ?? isNaN }
 ->method2 : (isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) => (number: number) => boolean
-+>method2 : (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean
++>method2 : (isNaN: (number: number) => boolean, bar?: ((number: number) => boolean) | undefined) => (number: number) => boolean
  >isNaN : (number: number) => boolean
  >globalThis.isNaN : (number: number) => boolean
  >globalThis : typeof globalThis

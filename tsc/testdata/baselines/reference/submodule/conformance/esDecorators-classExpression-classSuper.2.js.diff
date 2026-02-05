@@ -1,8 +1,8 @@
 --- old.esDecorators-classExpression-classSuper.2.js
 +++ new.esDecorators-classExpression-classSuper.2.js
-@@= skipped -29, +29 lines =@@
-
+@@= skipped -30, +30 lines =@@
  //// [esDecorators-classExpression-classSuper.2.js]
+ "use strict";
  // class expression in extends should not get an assigned name
 -((() => {
 -    let _classDecorators = [dec];

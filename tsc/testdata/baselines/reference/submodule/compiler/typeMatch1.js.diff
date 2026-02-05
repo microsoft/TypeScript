@@ -1,6 +1,6 @@
 --- old.typeMatch1.js
 +++ new.typeMatch1.js
-@@= skipped -33, +33 lines =@@
+@@= skipped -31, +31 lines =@@
  var x4 = i2;
  var x5 = i2;
  class C {

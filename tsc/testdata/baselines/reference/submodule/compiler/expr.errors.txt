@@ -78,12 +78,12 @@ expr.ts(242,7): error TS2363: The right-hand side of an arithmetic operation mus
     }
     
     function f() {
-        var a: any;
+        var a!: any;
         var n=3;
         var s="";
         var b=false;
-        var i:I;
-        var e:E;
+        var i!: I;
+        var e!: E;
     
         n&&a;
         n&&s;

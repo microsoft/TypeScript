@@ -12,7 +12,7 @@ declare namespace JSX {
 class foundFirst { }
 class Other {}
 
-module Dotted {
+namespace Dotted {
 	export class Name { }
 }
 
@@ -27,6 +27,7 @@ var e = <Dotted.Name />;
 
 
 //// [tsxElementResolution.jsx]
+"use strict";
 class foundFirst {
 }
 class Other {

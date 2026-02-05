@@ -1,6 +1,6 @@
 --- old.heterogeneousArrayLiterals.js
 +++ new.heterogeneousArrayLiterals.js
-@@= skipped -149, +149 lines =@@
+@@= skipped -150, +150 lines =@@
  var m = [() => 1, () => '', () => null]; // { (): any }[]
  var n = [[() => 1], [() => '']]; // {}[]
  class Base {

@@ -9,7 +9,9 @@ function foo() {
 
 
 //// [plainJSGrammarErrors3.js]
+"use strict";
 //// [a.js]
+"use strict";
 function foo() {
     await new Promise(undefined);
 }

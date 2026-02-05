@@ -1,7 +1,7 @@
 --- old.circularTypeAliasForUnionWithClass.js
 +++ new.circularTypeAliasForUnionWithClass.js
-@@= skipped -22, +22 lines =@@
- //// [circularTypeAliasForUnionWithClass.js]
+@@= skipped -23, +23 lines =@@
+ "use strict";
  var v0;
  class I0 {
 +    x;

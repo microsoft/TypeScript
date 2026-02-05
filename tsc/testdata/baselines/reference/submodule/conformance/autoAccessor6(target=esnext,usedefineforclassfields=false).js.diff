@@ -1,6 +1,6 @@
 --- old.autoAccessor6(target=esnext,usedefineforclassfields=false).js
 +++ new.autoAccessor6(target=esnext,usedefineforclassfields=false).js
-@@= skipped -18, +18 lines =@@
+@@= skipped -19, +19 lines =@@
      accessor a;
  }
  class C2 extends C1 {

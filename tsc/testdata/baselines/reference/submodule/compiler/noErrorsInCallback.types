@@ -15,9 +15,9 @@ var one = new Bar({}); // Error
 
 [].forEach(() => {
 >[].forEach(() => {    var two = new Bar({}); // No error?}) : void
->[].forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
->[] : undefined[]
->forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
+>[].forEach : (callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any) => void
+>[] : never[]
+>forEach : (callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any) => void
 >() => {    var two = new Bar({}); // No error?} : () => void
 
     var two = new Bar({}); // No error?

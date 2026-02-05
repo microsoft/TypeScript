@@ -241,6 +241,7 @@ for (const y = 0; y < 1;) {
 
 
 //// [capturedLetConstInLoop6.js]
+"use strict";
 // ====let
 for (let x of []) {
     (function () { return x; });

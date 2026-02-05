@@ -1,8 +1,8 @@
 --- old.importCallExpression4ES2020.js
 +++ new.importCallExpression4ES2020.js
-@@= skipped -35, +35 lines =@@
- export function backup() { return "backup"; }
+@@= skipped -36, +36 lines =@@
  //// [2.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.myModule = import("./0");

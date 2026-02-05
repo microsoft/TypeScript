@@ -4,6 +4,7 @@
 let x = {} as {a: number; a: number};
 
 //// [duplicatePropertiesInTypeAssertions02.js]
+"use strict";
 let x = {};
 
 

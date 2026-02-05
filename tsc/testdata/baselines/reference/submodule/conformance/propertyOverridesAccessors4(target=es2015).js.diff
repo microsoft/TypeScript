@@ -1,0 +1,17 @@
+--- old.propertyOverridesAccessors4(target=es2015).js
++++ new.propertyOverridesAccessors4(target=es2015).js
+@@= skipped -12, +12 lines =@@
+ //// [propertyOverridesAccessors4.js]
+ "use strict";
+ class Lion extends Animal {
+-    constructor() {
+-        super(...arguments);
+-        Object.defineProperty(this, "sound", {
+-            enumerable: true,
+-            configurable: true,
+-            writable: true,
+-            value: 'RAWR!'
+-        }); // error here
+-    }
++    sound = 'RAWR!'; // error here
+ }

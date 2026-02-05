@@ -1,9 +1,15 @@
+taggedTemplateStringsTypeArgumentInference.ts(33,28): error TS2345: Argument of type 'null' is not assignable to parameter of type '(x: unknown) => void'.
+taggedTemplateStringsTypeArgumentInference.ts(39,25): error TS2345: Argument of type 'null' is not assignable to parameter of type '(x: unknown) => void'.
+taggedTemplateStringsTypeArgumentInference.ts(56,6): error TS2345: Argument of type 'null' is not assignable to parameter of type '(a: unknown) => unknown'.
+taggedTemplateStringsTypeArgumentInference.ts(60,5): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 taggedTemplateStringsTypeArgumentInference.ts(62,36): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
 taggedTemplateStringsTypeArgumentInference.ts(63,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
-taggedTemplateStringsTypeArgumentInference.ts(76,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; }', but here has type '{}'.
+taggedTemplateStringsTypeArgumentInference.ts(76,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; } | undefined', but here has type '{}'.
+taggedTemplateStringsTypeArgumentInference.ts(89,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'never[] | null | undefined', but here has type 'any[]'.
 
 
-==== taggedTemplateStringsTypeArgumentInference.ts (3 errors) ====
+==== taggedTemplateStringsTypeArgumentInference.ts (8 errors) ====
     // Generic tag with one parameter
     function noParams<T>(n: T) { }
     noParams ``;
@@ -37,12 +43,16 @@ taggedTemplateStringsTypeArgumentInference.ts(76,5): error TS2403: Subsequent va
     someGenerics4 `${4}${ () => null }`;
     someGenerics4 `${''}${ () => 3 }`;
     someGenerics4 `${ null }${ null }`;
+                               ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type '(x: unknown) => void'.
     
     // 2 parameter generic tag with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
     function someGenerics5<U, T>(strs: TemplateStringsArray, n: T, f: (x: U) => void) { }
     someGenerics5 `${ 4 } ${ () => null }`;
     someGenerics5 `${ '' }${ () => 3 }`;
     someGenerics5 `${null}${null}`;
+                            ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type '(x: unknown) => void'.
     
     // Generic tag with multiple arguments of function types that each have parameters of the same generic type
     function someGenerics6<A>(strs: TemplateStringsArray, a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
@@ -60,10 +70,15 @@ taggedTemplateStringsTypeArgumentInference.ts(76,5): error TS2403: Subsequent va
     function someGenerics8<T>(strs: TemplateStringsArray, n: T): T { return n; }
     var x = someGenerics8 `${ someGenerics7 }`;
     x `${null}${null}${null}`;
+         ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type '(a: unknown) => unknown'.
     
     // Generic tag with multiple parameters of generic type passed arguments with no best common type
     function someGenerics9<T>(strs: TemplateStringsArray, a: T, b: T, c: T): T {
         return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
     }
     var a9a = someGenerics9 `${ '' }${ 0 }${ [] }`;
                                        ~
@@ -86,7 +101,7 @@ taggedTemplateStringsTypeArgumentInference.ts(76,5): error TS2403: Subsequent va
     var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }`;
     var a9e: {};
         ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; }', but here has type '{}'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; } | undefined', but here has type '{}'.
 !!! related TS6203 taggedTemplateStringsTypeArgumentInference.ts:75:5: 'a9e' was also declared here.
     
     // Generic tag with multiple parameters of generic type passed arguments with a single best common type
@@ -101,5 +116,8 @@ taggedTemplateStringsTypeArgumentInference.ts(76,5): error TS2403: Subsequent va
     // Generic tag with multiple parameters of generic type where one argument is [] and the other is not 'any'
     var arr = someGenerics9 `${ [] }${ null }${ undefined }`;
     var arr: any[];
+        ~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'never[] | null | undefined', but here has type 'any[]'.
+!!! related TS6203 taggedTemplateStringsTypeArgumentInference.ts:88:5: 'arr' was also declared here.
     
     

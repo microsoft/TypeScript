@@ -24,6 +24,7 @@ var r2c = x.arguments;
 
 
 //// [objectTypeWithConstructSignatureHidingMembersOfFunction.js]
+"use strict";
 var i;
 var r1 = i.apply;
 var r1b = i.call;

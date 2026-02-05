@@ -2,7 +2,7 @@
 +++ new.jsFileCompilationWithMapFileAsJsWithOutDir.js.map
 @@= skipped -0, +0 lines =@@
  //// [a.js.map]
- {"version":3,"file":"a.js","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC;CACN"}
+ {"version":3,"file":"a.js","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":";AAAA,MAAM,CAAC;CACN"}
  //// [b.js.map]
--{"version":3,"file":"b.js","sourceRoot":"","sources":["../b.js"],"names":[],"mappings":"AAAA,SAAS,GAAG;AACZ,CAAC"}
-+{"version":3,"file":"b.js","sourceRoot":"","sources":["../b.js"],"names":[],"mappings":"AAAA,SAAS,GAAG,GAAG;AAAC,CACf"}
+-{"version":3,"file":"b.js","sourceRoot":"","sources":["../b.js"],"names":[],"mappings":";AAAA,SAAS,GAAG;AACZ,CAAC"}
++{"version":3,"file":"b.js","sourceRoot":"","sources":["../b.js"],"names":[],"mappings":";AAAA,SAAS,GAAG,GAAG;AAAC,CACf"}

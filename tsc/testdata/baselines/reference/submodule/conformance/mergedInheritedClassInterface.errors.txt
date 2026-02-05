@@ -1,0 +1,94 @@
+mergedInheritedClassInterface.ts(8,5): error TS2564: Property 'baseNumber' has no initializer and is not definitely assigned in the constructor.
+mergedInheritedClassInterface.ts(16,5): error TS2564: Property 'classNumber' has no initializer and is not definitely assigned in the constructor.
+mergedInheritedClassInterface.ts(24,5): error TS2564: Property 'classString' has no initializer and is not definitely assigned in the constructor.
+mergedInheritedClassInterface.ts(32,1): error TS2454: Variable 'child' is used before being assigned.
+mergedInheritedClassInterface.ts(33,1): error TS2454: Variable 'child' is used before being assigned.
+mergedInheritedClassInterface.ts(34,1): error TS2454: Variable 'child' is used before being assigned.
+mergedInheritedClassInterface.ts(35,1): error TS2454: Variable 'child' is used before being assigned.
+mergedInheritedClassInterface.ts(36,1): error TS2454: Variable 'child' is used before being assigned.
+mergedInheritedClassInterface.ts(37,1): error TS2454: Variable 'child' is used before being assigned.
+mergedInheritedClassInterface.ts(38,1): error TS2454: Variable 'child' is used before being assigned.
+mergedInheritedClassInterface.ts(41,1): error TS2454: Variable 'grandchild' is used before being assigned.
+mergedInheritedClassInterface.ts(42,1): error TS2454: Variable 'grandchild' is used before being assigned.
+mergedInheritedClassInterface.ts(43,1): error TS2454: Variable 'grandchild' is used before being assigned.
+mergedInheritedClassInterface.ts(44,1): error TS2454: Variable 'grandchild' is used before being assigned.
+mergedInheritedClassInterface.ts(45,1): error TS2454: Variable 'grandchild' is used before being assigned.
+
+
+==== mergedInheritedClassInterface.ts (15 errors) ====
+    interface BaseInterface {
+        required: number;
+        optional?: number;
+    }
+    
+    class BaseClass {
+        baseMethod() { }
+        baseNumber: number;
+        ~~~~~~~~~~
+!!! error TS2564: Property 'baseNumber' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    interface Child extends BaseInterface {
+        additional: number;
+    }
+    
+    class Child extends BaseClass {
+        classNumber: number;
+        ~~~~~~~~~~~
+!!! error TS2564: Property 'classNumber' has no initializer and is not definitely assigned in the constructor.
+        method() { }
+    }
+    
+    interface ChildNoBaseClass extends BaseInterface {
+        additional2: string;
+    }
+    class ChildNoBaseClass {
+        classString: string;
+        ~~~~~~~~~~~
+!!! error TS2564: Property 'classString' has no initializer and is not definitely assigned in the constructor.
+        method2() { }
+    }
+    class Grandchild extends ChildNoBaseClass {
+    }
+    
+    // checks if properties actually were merged
+    var child : Child;
+    child.required;
+    ~~~~~
+!!! error TS2454: Variable 'child' is used before being assigned.
+    child.optional;
+    ~~~~~
+!!! error TS2454: Variable 'child' is used before being assigned.
+    child.additional;
+    ~~~~~
+!!! error TS2454: Variable 'child' is used before being assigned.
+    child.baseNumber;
+    ~~~~~
+!!! error TS2454: Variable 'child' is used before being assigned.
+    child.classNumber;
+    ~~~~~
+!!! error TS2454: Variable 'child' is used before being assigned.
+    child.baseMethod();
+    ~~~~~
+!!! error TS2454: Variable 'child' is used before being assigned.
+    child.method();
+    ~~~~~
+!!! error TS2454: Variable 'child' is used before being assigned.
+    
+    var grandchild: Grandchild;
+    grandchild.required;
+    ~~~~~~~~~~
+!!! error TS2454: Variable 'grandchild' is used before being assigned.
+    grandchild.optional;
+    ~~~~~~~~~~
+!!! error TS2454: Variable 'grandchild' is used before being assigned.
+    grandchild.additional2;
+    ~~~~~~~~~~
+!!! error TS2454: Variable 'grandchild' is used before being assigned.
+    grandchild.classString;
+    ~~~~~~~~~~
+!!! error TS2454: Variable 'grandchild' is used before being assigned.
+    grandchild.method2();
+    ~~~~~~~~~~
+!!! error TS2454: Variable 'grandchild' is used before being assigned.
+    

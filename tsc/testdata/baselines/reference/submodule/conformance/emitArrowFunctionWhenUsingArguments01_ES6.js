@@ -34,6 +34,7 @@ function bar() {
 }
 
 //// [emitArrowFunctionWhenUsingArguments01_ES6.js]
+"use strict";
 var a = () => {
     var arg = arguments[0]; // error
 };

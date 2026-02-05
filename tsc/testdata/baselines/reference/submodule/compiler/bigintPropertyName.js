@@ -60,6 +60,7 @@ type T = { [t in  Q]: string };
 
 
 //// [a.js]
+"use strict";
 // BigInt cannot be used as an object literal property
 {
     ({ 1n: 123 });
@@ -76,6 +77,7 @@ const { 0n: f } = arr; // bigint should give an index error
 // BigInt cannot be used as an property name
 const x = { 0n: 123 };
 //// [g.js]
+"use strict";
 class K {
     4n = 0;
 }
@@ -101,3 +103,4 @@ l2[5n];
 g;
 .2n; // not valid JS
 //// [q.js]
+"use strict";

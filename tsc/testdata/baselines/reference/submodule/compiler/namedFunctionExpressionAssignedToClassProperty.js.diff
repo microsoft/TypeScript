@@ -1,8 +1,8 @@
 --- old.namedFunctionExpressionAssignedToClassProperty.js
 +++ new.namedFunctionExpressionAssignedToClassProperty.js
-@@= skipped -17, +17 lines =@@
-
+@@= skipped -18, +18 lines =@@
  //// [namedFunctionExpressionAssignedToClassProperty.js]
+ "use strict";
  class Foo {
 +    a = function bar() {
 +    }; // this shouldn't crash the compiler...

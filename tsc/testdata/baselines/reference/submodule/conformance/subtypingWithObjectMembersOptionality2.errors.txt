@@ -1,9 +1,15 @@
 subtypingWithObjectMembersOptionality2.ts(10,11): error TS2430: Interface 'S' incorrectly extends interface 'T'.
-  Property 'Foo' is optional in type 'S' but required in type 'T'.
+  Types of property 'Foo' are incompatible.
+    Type 'Derived | undefined' is not assignable to type 'Base'.
+      Type 'undefined' is not assignable to type 'Base'.
 subtypingWithObjectMembersOptionality2.ts(18,11): error TS2430: Interface 'S2' incorrectly extends interface 'T2'.
-  Property '1' is optional in type 'S2' but required in type 'T2'.
+  Types of property '1' are incompatible.
+    Type 'Derived | undefined' is not assignable to type 'Base'.
+      Type 'undefined' is not assignable to type 'Base'.
 subtypingWithObjectMembersOptionality2.ts(26,11): error TS2430: Interface 'S3' incorrectly extends interface 'T3'.
-  Property ''1'' is optional in type 'S3' but required in type 'T3'.
+  Types of property ''1'' are incompatible.
+    Type 'Derived | undefined' is not assignable to type 'Base'.
+      Type 'undefined' is not assignable to type 'Base'.
 
 
 ==== subtypingWithObjectMembersOptionality2.ts (3 errors) ====
@@ -19,7 +25,9 @@ subtypingWithObjectMembersOptionality2.ts(26,11): error TS2430: Interface 'S3' i
     interface S extends T {
               ~
 !!! error TS2430: Interface 'S' incorrectly extends interface 'T'.
-!!! error TS2430:   Property 'Foo' is optional in type 'S' but required in type 'T'.
+!!! error TS2430:   Types of property 'Foo' are incompatible.
+!!! error TS2430:     Type 'Derived | undefined' is not assignable to type 'Base'.
+!!! error TS2430:       Type 'undefined' is not assignable to type 'Base'.
         Foo?: Derived // error
     }
     
@@ -30,7 +38,9 @@ subtypingWithObjectMembersOptionality2.ts(26,11): error TS2430: Interface 'S3' i
     interface S2 extends T2 {
               ~~
 !!! error TS2430: Interface 'S2' incorrectly extends interface 'T2'.
-!!! error TS2430:   Property '1' is optional in type 'S2' but required in type 'T2'.
+!!! error TS2430:   Types of property '1' are incompatible.
+!!! error TS2430:     Type 'Derived | undefined' is not assignable to type 'Base'.
+!!! error TS2430:       Type 'undefined' is not assignable to type 'Base'.
         1?: Derived; // error
     }
     
@@ -41,11 +51,13 @@ subtypingWithObjectMembersOptionality2.ts(26,11): error TS2430: Interface 'S3' i
     interface S3 extends T3 {
               ~~
 !!! error TS2430: Interface 'S3' incorrectly extends interface 'T3'.
-!!! error TS2430:   Property ''1'' is optional in type 'S3' but required in type 'T3'.
+!!! error TS2430:   Types of property ''1'' are incompatible.
+!!! error TS2430:     Type 'Derived | undefined' is not assignable to type 'Base'.
+!!! error TS2430:       Type 'undefined' is not assignable to type 'Base'.
         '1'?: Derived; // error
     }
     
     // object literal case
-    var a: { Foo: Base; }
-    var b: { Foo?: Derived; }
+    declare var a: { Foo: Base; }
+    declare var b: { Foo?: Derived; }
     var r = true ? a : b; // ok

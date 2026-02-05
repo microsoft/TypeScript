@@ -1,6 +1,6 @@
 --- old.strictModeReservedWordInClassDeclaration.js
 +++ new.strictModeReservedWordInClassDeclaration.js
-@@= skipped -37, +37 lines =@@
+@@= skipped -38, +38 lines =@@
      banana(x) { }
  }
  class C {

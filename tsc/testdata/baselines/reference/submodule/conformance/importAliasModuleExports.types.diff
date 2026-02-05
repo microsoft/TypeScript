@@ -8,12 +8,3 @@
 +>module : { Alias: typeof Alias; }
  >exports : typeof Alias
  >Alias : typeof Alias
-
-@@= skipped -27, +27 lines =@@
- >function() { this._func = 0; } : () => void
- >this._func = 0 : 0
- >this._func : any
-->this : A
-+>this : any
- >_func : any
- >0 : 0

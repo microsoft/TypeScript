@@ -1,6 +1,6 @@
 --- old.commonJSAliasedExport.js
 +++ new.commonJSAliasedExport.js
-@@= skipped -31, +31 lines =@@
+@@= skipped -33, +33 lines =@@
 
 
  //// [commonJSAliasedExport.d.ts]

@@ -19,3 +19,4 @@ interface Derived extends Base {
 }
 
 //// [interfaceWithStringIndexerHidingBaseTypeIndexer3.js]
+"use strict";

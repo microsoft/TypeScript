@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/namespaces2.ts] ////
 
 === namespaces2.ts ===
-module A {
+namespace A {
 >A : typeof A
 
-    export module B {
+    export namespace B {
 >B : typeof B
 
         export class C { }

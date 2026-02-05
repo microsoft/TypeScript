@@ -1,10 +1,10 @@
 --- old.asyncArrowFunction8_es6.js
 +++ new.asyncArrowFunction8_es6.js
-@@= skipped -5, +5 lines =@@
- }
+@@= skipped -6, +6 lines =@@
 
  //// [asyncArrowFunction8_es6.js]
--var foo = () => __awaiter(this, void 0, void 0, function* () {
+ "use strict";
+-var foo = () => __awaiter(void 0, void 0, void 0, function* () {
 -    var v = { [yield ]: foo };
 -});
 +var foo = async () => {

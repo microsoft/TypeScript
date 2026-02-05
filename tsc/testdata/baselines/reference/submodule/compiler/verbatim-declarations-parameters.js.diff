@@ -1,16 +1,16 @@
 --- old.verbatim-declarations-parameters.js
 +++ new.verbatim-declarations-parameters.js
-@@= skipped -29, +29 lines =@@
- exports.Foo = void 0;
- exports.foo1 = foo1;
- class Foo {
+@@= skipped -25, +25 lines =@@
+
+ //// [verbatim-declarations-parameters.js]
+ export class Foo {
 +    reuseTypeNode;
 +    reuseTypeNode2;
 +    resolveType;
      constructor(
      // Type node is accurate, preserve
      reuseTypeNode, reuseTypeNode2, 
-@@= skipped -27, +30 lines =@@
+@@= skipped -26, +29 lines =@@
  export declare class Foo {
      reuseTypeNode?: Map | undefined;
      reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">;

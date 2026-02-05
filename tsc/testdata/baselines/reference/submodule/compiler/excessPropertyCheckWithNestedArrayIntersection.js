@@ -26,6 +26,7 @@ const repro: BugRepro = {
 
 
 //// [excessPropertyCheckWithNestedArrayIntersection.js]
+"use strict";
 const repro = {
     dataType: {
         fields: [{

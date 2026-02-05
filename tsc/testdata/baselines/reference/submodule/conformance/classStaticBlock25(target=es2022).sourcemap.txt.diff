@@ -1,6 +1,6 @@
 --- old.classStaticBlock25(target=es2022).sourcemap.txt
 +++ new.classStaticBlock25(target=es2022).sourcemap.txt
-@@= skipped -65, +65 lines =@@
+@@= skipped -66, +66 lines =@@
  ---
  >>>    static {
  1->^^^^
@@ -10,8 +10,8 @@
  1-> {
    >    
 +2 >    static 
- 1->Emitted(4, 5) Source(5, 5) + SourceIndex(0)
-+2 >Emitted(4, 12) Source(5, 12) + SourceIndex(0)
+ 1->Emitted(5, 5) Source(5, 5) + SourceIndex(0)
++2 >Emitted(5, 12) Source(5, 12) + SourceIndex(0)
  ---
  >>>        const a = 11;
  1->^^^^^^^^
@@ -30,11 +30,11 @@
  1 >
 -  >    
 -2 >    }
--1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
+-1 >Emitted(9, 5) Source(10, 5) + SourceIndex(0)
 +2 >    
 +  >        }
-+1 >Emitted(8, 5) Source(9, 11) + SourceIndex(0)
- 2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
++1 >Emitted(9, 5) Source(9, 11) + SourceIndex(0)
+ 2 >Emitted(9, 6) Source(10, 6) + SourceIndex(0)
  ---
  >>>    static {
  1->^^^^
@@ -45,8 +45,8 @@
    >
    >    
 +2 >    static 
- 1->Emitted(9, 5) Source(12, 5) + SourceIndex(0)
-+2 >Emitted(9, 12) Source(12, 12) + SourceIndex(0)
+ 1->Emitted(10, 5) Source(12, 5) + SourceIndex(0)
++2 >Emitted(10, 12) Source(12, 12) + SourceIndex(0)
  ---
  >>>        const a = 11;
  1->^^^^^^^^
@@ -65,10 +65,10 @@
  1 >
 -  >    
 -2 >    }
--1 >Emitted(13, 5) Source(17, 5) + SourceIndex(0)
+-1 >Emitted(14, 5) Source(17, 5) + SourceIndex(0)
 +2 >    
 +  >        }
-+1 >Emitted(13, 5) Source(16, 11) + SourceIndex(0)
- 2 >Emitted(13, 6) Source(17, 6) + SourceIndex(0)
++1 >Emitted(14, 5) Source(16, 11) + SourceIndex(0)
+ 2 >Emitted(14, 6) Source(17, 6) + SourceIndex(0)
  ---
  >>>}

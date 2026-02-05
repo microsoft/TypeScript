@@ -36,6 +36,7 @@ function foo4() {
 
 
 //// [doNotEmitDetachedCommentsAtStartOfFunctionBody.js]
+"use strict";
 function foo1() {
     return 42;
 }

@@ -138,7 +138,7 @@ interface KnockoutObservableArrayStatic {
 >T : Symbol(T, Decl(genericClassPropertyInheritanceSpecialization.ts, 32, 5))
 }
 
-declare module ko {
+declare namespace ko {
 >ko : Symbol(ko, Decl(genericClassPropertyInheritanceSpecialization.ts, 33, 1))
 
     export var observableArray: KnockoutObservableArrayStatic;
@@ -146,13 +146,13 @@ declare module ko {
 >KnockoutObservableArrayStatic : Symbol(KnockoutObservableArrayStatic, Decl(genericClassPropertyInheritanceSpecialization.ts, 27, 1))
 }
 
-module Portal.Controls.Validators {
+namespace Portal.Controls.Validators {
 >Portal : Symbol(Portal, Decl(genericClassPropertyInheritanceSpecialization.ts, 37, 1))
->Controls : Symbol(Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 14))
->Validators : Symbol(Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 23))
+>Controls : Symbol(Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 17))
+>Validators : Symbol(Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 26))
 
     export class Validator<TValue> {
->Validator : Symbol(Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 35))
+>Validator : Symbol(Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 38))
 >TValue : Symbol(TValue, Decl(genericClassPropertyInheritanceSpecialization.ts, 41, 27))
 
         private _subscription;
@@ -184,29 +184,29 @@ module Portal.Controls.Validators {
     }
 }
 
-module PortalFx.ViewModels.Controls.Validators {
+namespace PortalFx.ViewModels.Controls.Validators {
 >PortalFx : Symbol(PortalFx, Decl(genericClassPropertyInheritanceSpecialization.ts, 50, 1))
->ViewModels : Symbol(ViewModels, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 16))
->Controls : Symbol(Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 27))
->Validators : Symbol(Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 36))
+>ViewModels : Symbol(ViewModels, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 19))
+>Controls : Symbol(Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 30))
+>Validators : Symbol(Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 39))
 
     export class Validator<TValue> extends Portal.Controls.Validators.Validator<TValue> {
->Validator : Symbol(Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 48))
+>Validator : Symbol(Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 51))
 >TValue : Symbol(TValue, Decl(genericClassPropertyInheritanceSpecialization.ts, 54, 27))
->Portal.Controls.Validators.Validator : Symbol(Portal.Controls.Validators.Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 35))
->Portal.Controls.Validators : Symbol(Portal.Controls.Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 23))
->Portal.Controls : Symbol(Portal.Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 14))
+>Portal.Controls.Validators.Validator : Symbol(Portal.Controls.Validators.Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 38))
+>Portal.Controls.Validators : Symbol(Portal.Controls.Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 26))
+>Portal.Controls : Symbol(Portal.Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 17))
 >Portal : Symbol(Portal, Decl(genericClassPropertyInheritanceSpecialization.ts, 37, 1))
->Controls : Symbol(Portal.Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 14))
->Validators : Symbol(Portal.Controls.Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 23))
->Validator : Symbol(Portal.Controls.Validators.Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 35))
+>Controls : Symbol(Portal.Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 17))
+>Validators : Symbol(Portal.Controls.Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 26))
+>Validator : Symbol(Portal.Controls.Validators.Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 38))
 >TValue : Symbol(TValue, Decl(genericClassPropertyInheritanceSpecialization.ts, 54, 27))
 
         constructor(message?: string) {
 >message : Symbol(message, Decl(genericClassPropertyInheritanceSpecialization.ts, 56, 20))
 
             super(message);
->super : Symbol(Portal.Controls.Validators.Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 35))
+>super : Symbol(Portal.Controls.Validators.Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 39, 38))
 >message : Symbol(message, Decl(genericClassPropertyInheritanceSpecialization.ts, 56, 20))
         }
     }
@@ -221,10 +221,10 @@ interface Contract<TValue> {
 >validators : Symbol(Contract.validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 63, 28))
 >KnockoutObservableArray : Symbol(KnockoutObservableArray, Decl(genericClassPropertyInheritanceSpecialization.ts, 10, 1))
 >PortalFx : Symbol(PortalFx, Decl(genericClassPropertyInheritanceSpecialization.ts, 50, 1))
->ViewModels : Symbol(PortalFx.ViewModels, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 16))
->Controls : Symbol(PortalFx.ViewModels.Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 27))
->Validators : Symbol(PortalFx.ViewModels.Controls.Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 36))
->Validator : Symbol(PortalFx.ViewModels.Controls.Validators.Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 48))
+>ViewModels : Symbol(PortalFx.ViewModels, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 19))
+>Controls : Symbol(PortalFx.ViewModels.Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 30))
+>Validators : Symbol(PortalFx.ViewModels.Controls.Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 39))
+>Validator : Symbol(PortalFx.ViewModels.Controls.Validators.Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 51))
 >TValue : Symbol(TValue, Decl(genericClassPropertyInheritanceSpecialization.ts, 63, 19))
 }
 
@@ -239,19 +239,19 @@ class ViewModel<TValue> implements Contract<TValue> {
 >validators : Symbol(ViewModel.validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 69, 53))
 >KnockoutObservableArray : Symbol(KnockoutObservableArray, Decl(genericClassPropertyInheritanceSpecialization.ts, 10, 1))
 >PortalFx : Symbol(PortalFx, Decl(genericClassPropertyInheritanceSpecialization.ts, 50, 1))
->ViewModels : Symbol(PortalFx.ViewModels, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 16))
->Controls : Symbol(PortalFx.ViewModels.Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 27))
->Validators : Symbol(PortalFx.ViewModels.Controls.Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 36))
->Validator : Symbol(PortalFx.ViewModels.Controls.Validators.Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 48))
+>ViewModels : Symbol(PortalFx.ViewModels, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 19))
+>Controls : Symbol(PortalFx.ViewModels.Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 30))
+>Validators : Symbol(PortalFx.ViewModels.Controls.Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 39))
+>Validator : Symbol(PortalFx.ViewModels.Controls.Validators.Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 51))
 >TValue : Symbol(TValue, Decl(genericClassPropertyInheritanceSpecialization.ts, 69, 16))
 >ko.observableArray : Symbol(ko.observableArray, Decl(genericClassPropertyInheritanceSpecialization.ts, 36, 14))
 >ko : Symbol(ko, Decl(genericClassPropertyInheritanceSpecialization.ts, 33, 1))
 >observableArray : Symbol(ko.observableArray, Decl(genericClassPropertyInheritanceSpecialization.ts, 36, 14))
 >PortalFx : Symbol(PortalFx, Decl(genericClassPropertyInheritanceSpecialization.ts, 50, 1))
->ViewModels : Symbol(PortalFx.ViewModels, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 16))
->Controls : Symbol(PortalFx.ViewModels.Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 27))
->Validators : Symbol(PortalFx.ViewModels.Controls.Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 36))
->Validator : Symbol(PortalFx.ViewModels.Controls.Validators.Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 48))
+>ViewModels : Symbol(PortalFx.ViewModels, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 19))
+>Controls : Symbol(PortalFx.ViewModels.Controls, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 30))
+>Validators : Symbol(PortalFx.ViewModels.Controls.Validators, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 39))
+>Validator : Symbol(PortalFx.ViewModels.Controls.Validators.Validator, Decl(genericClassPropertyInheritanceSpecialization.ts, 52, 51))
 >TValue : Symbol(TValue, Decl(genericClassPropertyInheritanceSpecialization.ts, 69, 16))
 }
 

@@ -1,8 +1,8 @@
 --- old.inferenceDoesntCompareAgainstUninstantiatedTypeParameter.js
 +++ new.inferenceDoesntCompareAgainstUninstantiatedTypeParameter.js
-@@= skipped -38, +38 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -36, +36 lines =@@
+
+ //// [inferenceDoesntCompareAgainstUninstantiatedTypeParameter.js]
  class ClassA {
 +    entity;
 +    settings;

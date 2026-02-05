@@ -1,6 +1,6 @@
 --- old.tsxGenericAttributesType6.js
 +++ new.tsxGenericAttributesType6.js
-@@= skipped -24, +24 lines =@@
+@@= skipped -27, +27 lines =@@
      }
  }
  class B extends React.Component {

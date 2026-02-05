@@ -13,6 +13,7 @@ const byNonKey = Map.groupBy(employees, x => x);
 
 
 //// [mapGroupBy.js]
+"use strict";
 const basic = Map.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
 const chars = Map.groupBy('a string', c => c);
 const employees = new Set();

@@ -44,7 +44,7 @@ func (tx *useStrictTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node 
 	}
 
 	if isExternalModule ||
-		tx.compilerOptions.AlwaysStrict.DefaultIfUnknown(tx.compilerOptions.Strict).IsTrue() {
+		tx.compilerOptions.AlwaysStrict.IsTrueOrUnknown() {
 		statements := tx.Factory().EnsureUseStrict(node.Statements.Nodes)
 		statementList := tx.Factory().NewNodeList(statements)
 		statementList.Loc = node.Statements.Loc

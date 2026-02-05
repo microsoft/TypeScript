@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/recursiveGenericUnionType1.ts] ////
 
 //// [recursiveGenericUnionType1.ts]
-declare module Test1 {
+declare namespace Test1 {
     export type Container<T> = T | {
         [i: string]: Container<T>;
     };
     export type IStringContainer = Container<string>;
 }
 
-declare module Test2 {
+declare namespace Test2 {
     export type Container<T> = T | {
         [i: string]: Container<T>;
     };
@@ -24,6 +24,7 @@ s2 = s1;
 
 
 //// [recursiveGenericUnionType1.js]
+"use strict";
 var x;
 var s1;
 var s2;

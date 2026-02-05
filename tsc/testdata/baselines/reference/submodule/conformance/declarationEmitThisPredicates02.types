@@ -23,7 +23,7 @@ export const obj = {
 >dis : Foo
 >this as {} as Foo : Foo
 >this as {} : {}
->this : any
+>this : { m(): this is Foo; }
 
         return dis.a != null && dis.b != null && dis.c != null;
 >dis.a != null && dis.b != null && dis.c != null : boolean

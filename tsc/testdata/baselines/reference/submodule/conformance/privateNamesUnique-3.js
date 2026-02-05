@@ -17,6 +17,7 @@ class B {
 
 
 //// [privateNamesUnique-3.js]
+"use strict";
 class A {
     #foo = 1;
     static #foo = true; // error (duplicate)

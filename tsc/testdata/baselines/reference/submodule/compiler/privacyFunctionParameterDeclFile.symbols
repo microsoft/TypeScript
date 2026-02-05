@@ -378,11 +378,11 @@ declare function privateAmbientFunctionWithPrivateModuleParameterTypes(param: pr
 >privateModule : Symbol(privateModule, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 262, 1))
 >publicClass : Symbol(privateModule.publicClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 266, 5))
 
-export module publicModule {
+export namespace publicModule {
 >publicModule : Symbol(publicModule, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 128, 111))
 
     class privateClass {
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
     }
 
     export class publicClass {
@@ -395,18 +395,18 @@ export module publicModule {
 
         new (param: privateClass): publicClass; // Error
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 139, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
 >publicClass : Symbol(publicClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 132, 5))
 
         (param: privateClass): publicClass; // Error
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 140, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
 >publicClass : Symbol(publicClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 132, 5))
 
         myMethod(param: privateClass): void; // Error
 >myMethod : Symbol(publicInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 140, 43))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 141, 17))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
@@ -433,18 +433,18 @@ export module publicModule {
 
         new (param: privateClass): privateClass;
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 151, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
 
         (param: privateClass): privateClass;
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 152, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
 
         myMethod(param: privateClass): void;
 >myMethod : Symbol(privateInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 152, 44))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 153, 17))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
@@ -472,30 +472,30 @@ export module publicModule {
         static myPublicStaticMethod(param: privateClass) { // Error
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 162, 58))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 163, 36))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
         }
         private static myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 164, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 165, 45))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
         }
         myPublicMethod(param: privateClass) { // Error
 >myPublicMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 166, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 167, 23))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
         }
         private myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 168, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 169, 32))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
         }
         constructor(param: privateClass, private param1: privateClass, public param2: privateClass) { // Error
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 171, 20))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
 >param1 : Symbol(publicClassWithWithPrivateParmeterTypes.param1, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 171, 40))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
 >param2 : Symbol(publicClassWithWithPrivateParmeterTypes.param2, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 171, 70))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
         }
     }
 
@@ -538,30 +538,30 @@ export module publicModule {
         static myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 188, 52))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 189, 36))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
         }
         private static myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 190, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 191, 45))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
         }
         myPublicMethod(param: privateClass) {
 >myPublicMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 192, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 193, 23))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
         }
         private myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 194, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 195, 32))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
         }
         constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 197, 20))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
 >param1 : Symbol(privateClassWithWithPrivateParmeterTypes.param1, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 197, 40))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
 >param2 : Symbol(privateClassWithWithPrivateParmeterTypes.param2, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 197, 70))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
         }
     }
 
@@ -601,7 +601,7 @@ export module publicModule {
     export function publicFunctionWithPrivateParmeterTypes(param: privateClass) { // Error
 >publicFunctionWithPrivateParmeterTypes : Symbol(publicFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 212, 5))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 214, 59))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
     }
     export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
 >publicFunctionWithPublicParmeterTypes : Symbol(publicFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 215, 5))
@@ -611,7 +611,7 @@ export module publicModule {
     function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
 >privateFunctionWithPrivateParmeterTypes : Symbol(privateFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 217, 5))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 218, 53))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
     }
     function privateFunctionWithPublicParmeterTypes(param: publicClass) {
 >privateFunctionWithPublicParmeterTypes : Symbol(privateFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 219, 5))
@@ -622,7 +622,7 @@ export module publicModule {
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
 >publicAmbientFunctionWithPrivateParmeterTypes : Symbol(publicAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 221, 5))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 223, 74))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
 
     export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
 >publicAmbientFunctionWithPublicParmeterTypes : Symbol(publicAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 223, 101))
@@ -632,7 +632,7 @@ export module publicModule {
     declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
 >privateAmbientFunctionWithPrivateParmeterTypes : Symbol(privateAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 224, 99))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 225, 68))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 28))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 130, 31))
 
     declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
 >privateAmbientFunctionWithPublicParmeterTypes : Symbol(privateAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 225, 95))
@@ -761,11 +761,11 @@ export module publicModule {
 
 }
 
-module privateModule {
+namespace privateModule {
 >privateModule : Symbol(privateModule, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 262, 1))
 
     class privateClass {
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
     }
 
     export class publicClass {
@@ -777,18 +777,18 @@ module privateModule {
 
         new (param: privateClass): publicClass;
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 272, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
 >publicClass : Symbol(publicClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 266, 5))
 
         (param: privateClass): publicClass;
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 273, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
 >publicClass : Symbol(publicClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 266, 5))
 
         myMethod(param: privateClass): void;
 >myMethod : Symbol(publicInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 273, 43))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 274, 17))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
@@ -815,18 +815,18 @@ module privateModule {
 
         new (param: privateClass): privateClass;
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 284, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
 
         (param: privateClass): privateClass;
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 285, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
 
         myMethod(param: privateClass): void;
 >myMethod : Symbol(privateInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 285, 44))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 286, 17))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
@@ -854,30 +854,30 @@ module privateModule {
         static myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 295, 58))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 296, 36))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
         }
         private static myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 297, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 298, 45))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
         }
         myPublicMethod(param: privateClass) {
 >myPublicMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 299, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 300, 23))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
         }
         private myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 301, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 302, 32))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
         }
         constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 304, 20))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
 >param1 : Symbol(publicClassWithWithPrivateParmeterTypes.param1, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 304, 40))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
 >param2 : Symbol(publicClassWithWithPrivateParmeterTypes.param2, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 304, 70))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
         }
     }
 
@@ -920,30 +920,30 @@ module privateModule {
         static myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 321, 52))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 322, 36))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
         }
         private static myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 323, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 324, 45))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
         }
         myPublicMethod(param: privateClass) {
 >myPublicMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 325, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 326, 23))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
         }
         private myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 327, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 328, 32))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
         }
         constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 330, 20))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
 >param1 : Symbol(privateClassWithWithPrivateParmeterTypes.param1, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 330, 40))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
 >param2 : Symbol(privateClassWithWithPrivateParmeterTypes.param2, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 330, 70))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
         }
     }
 
@@ -983,7 +983,7 @@ module privateModule {
     export function publicFunctionWithPrivateParmeterTypes(param: privateClass) {
 >publicFunctionWithPrivateParmeterTypes : Symbol(publicFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 345, 5))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 347, 59))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
     }
     export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
 >publicFunctionWithPublicParmeterTypes : Symbol(publicFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 348, 5))
@@ -993,7 +993,7 @@ module privateModule {
     function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
 >privateFunctionWithPrivateParmeterTypes : Symbol(privateFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 350, 5))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 351, 53))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
     }
     function privateFunctionWithPublicParmeterTypes(param: publicClass) {
 >privateFunctionWithPublicParmeterTypes : Symbol(privateFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 352, 5))
@@ -1004,7 +1004,7 @@ module privateModule {
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
 >publicAmbientFunctionWithPrivateParmeterTypes : Symbol(publicAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 354, 5))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 356, 74))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
 
     export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
 >publicAmbientFunctionWithPublicParmeterTypes : Symbol(publicAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 356, 101))
@@ -1014,7 +1014,7 @@ module privateModule {
     declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
 >privateAmbientFunctionWithPrivateParmeterTypes : Symbol(privateAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 357, 99))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 358, 68))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 22))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 264, 25))
 
     declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
 >privateAmbientFunctionWithPublicParmeterTypes : Symbol(privateAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_externalModule.ts, 358, 95))
@@ -1206,22 +1206,22 @@ declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(param: pub
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 21, 70))
 >publicClassInGlobal : Symbol(publicClassInGlobal, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 0, 0))
 
-module publicModuleInGlobal {
+namespace publicModuleInGlobal {
 >publicModuleInGlobal : Symbol(publicModuleInGlobal, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 21, 104))
 
     class privateClass {
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
     }
 
     export class publicClass {
 >publicClass : Symbol(publicClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 25, 5))
     }
 
-    module privateModule {
+    namespace privateModule {
 >privateModule : Symbol(privateModule, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 28, 5))
 
         class privateClass {
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
         }
 
         export class publicClass {
@@ -1233,18 +1233,18 @@ module publicModuleInGlobal {
 
             new (param: privateClass): publicClass;
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 38, 17))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
 >publicClass : Symbol(publicClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 32, 9))
 
             (param: privateClass): publicClass;
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 39, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
 >publicClass : Symbol(publicClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 32, 9))
 
             myMethod(param: privateClass): void;
 >myMethod : Symbol(publicInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 39, 47))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 40, 21))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
         }
 
         export interface publicInterfaceWithPublicParmeterTypes {
@@ -1271,18 +1271,18 @@ module publicModuleInGlobal {
 
             new (param: privateClass): privateClass;
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 50, 17))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
 
             (param: privateClass): privateClass;
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 51, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
 
             myMethod(param: privateClass): void;
 >myMethod : Symbol(privateInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 51, 48))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 52, 21))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
         }
 
         interface privateInterfaceWithPublicParmeterTypes {
@@ -1310,30 +1310,30 @@ module publicModuleInGlobal {
             static myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 61, 62))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 62, 40))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
             }
             private static myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 63, 13))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 64, 49))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
             }
             myPublicMethod(param: privateClass) {
 >myPublicMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 65, 13))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 66, 27))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
             }
             private myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 67, 13))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 68, 36))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
             }
             constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 70, 24))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
 >param1 : Symbol(publicClassWithWithPrivateParmeterTypes.param1, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 70, 44))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
 >param2 : Symbol(publicClassWithWithPrivateParmeterTypes.param2, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 70, 74))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
             }
         }
 
@@ -1376,30 +1376,30 @@ module publicModuleInGlobal {
             static myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 87, 56))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 88, 40))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
             }
             private static myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 89, 13))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 90, 49))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
             }
             myPublicMethod(param: privateClass) {
 >myPublicMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 91, 13))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 92, 27))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
             }
             private myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 93, 13))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 94, 36))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
             }
             constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 96, 24))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
 >param1 : Symbol(privateClassWithWithPrivateParmeterTypes.param1, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 96, 44))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
 >param2 : Symbol(privateClassWithWithPrivateParmeterTypes.param2, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 96, 74))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
             }
         }
 
@@ -1439,7 +1439,7 @@ module publicModuleInGlobal {
         export function publicFunctionWithPrivateParmeterTypes(param: privateClass) {
 >publicFunctionWithPrivateParmeterTypes : Symbol(publicFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 111, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 113, 63))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
         }
         export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
 >publicFunctionWithPublicParmeterTypes : Symbol(publicFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 114, 9))
@@ -1449,7 +1449,7 @@ module publicModuleInGlobal {
         function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
 >privateFunctionWithPrivateParmeterTypes : Symbol(privateFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 116, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 117, 57))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
         }
         function privateFunctionWithPublicParmeterTypes(param: publicClass) {
 >privateFunctionWithPublicParmeterTypes : Symbol(privateFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 118, 9))
@@ -1460,7 +1460,7 @@ module publicModuleInGlobal {
         export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
 >publicAmbientFunctionWithPrivateParmeterTypes : Symbol(publicAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 120, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 122, 78))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
 
         export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
 >publicAmbientFunctionWithPublicParmeterTypes : Symbol(publicAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 122, 105))
@@ -1470,7 +1470,7 @@ module publicModuleInGlobal {
         declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
 >privateAmbientFunctionWithPrivateParmeterTypes : Symbol(privateAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 123, 103))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 124, 72))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 26))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 30, 29))
 
         declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
 >privateAmbientFunctionWithPublicParmeterTypes : Symbol(privateAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 124, 99))
@@ -1603,18 +1603,18 @@ module publicModuleInGlobal {
 
         new (param: privateClass): publicClass; // Error
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 163, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
 >publicClass : Symbol(publicClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 25, 5))
 
         (param: privateClass): publicClass; // Error
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 164, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
 >publicClass : Symbol(publicClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 25, 5))
 
         myMethod(param: privateClass): void; // Error
 >myMethod : Symbol(publicInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 164, 43))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 165, 17))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
@@ -1641,18 +1641,18 @@ module publicModuleInGlobal {
 
         new (param: privateClass): privateClass;
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 175, 13))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
 
         (param: privateClass): privateClass;
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 176, 9))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
 
         myMethod(param: privateClass): void;
 >myMethod : Symbol(privateInterfaceWithPrivateParmeterTypes.myMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 176, 44))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 177, 17))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
@@ -1680,30 +1680,30 @@ module publicModuleInGlobal {
         static myPublicStaticMethod(param: privateClass) { // Error
 >myPublicStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 186, 58))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 187, 36))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
         }
         private static myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 188, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 189, 45))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
         }
         myPublicMethod(param: privateClass) { // Error
 >myPublicMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 190, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 191, 23))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
         }
         private myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 192, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 193, 32))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
         }
         constructor(param: privateClass, private param1: privateClass, public param2: privateClass) { // Error
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 195, 20))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
 >param1 : Symbol(publicClassWithWithPrivateParmeterTypes.param1, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 195, 40))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
 >param2 : Symbol(publicClassWithWithPrivateParmeterTypes.param2, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 195, 70))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
         }
     }
 
@@ -1746,30 +1746,30 @@ module publicModuleInGlobal {
         static myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 212, 52))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 213, 36))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
         }
         private static myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 214, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 215, 45))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
         }
         myPublicMethod(param: privateClass) {
 >myPublicMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 216, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 217, 23))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
         }
         private myPrivateMethod(param: privateClass) {
 >myPrivateMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPrivateMethod, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 218, 9))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 219, 32))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
         }
         constructor(param: privateClass, private param1: privateClass, public param2: privateClass) {
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 221, 20))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
 >param1 : Symbol(privateClassWithWithPrivateParmeterTypes.param1, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 221, 40))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
 >param2 : Symbol(privateClassWithWithPrivateParmeterTypes.param2, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 221, 70))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
         }
     }
 
@@ -1809,7 +1809,7 @@ module publicModuleInGlobal {
     export function publicFunctionWithPrivateParmeterTypes(param: privateClass) { // Error
 >publicFunctionWithPrivateParmeterTypes : Symbol(publicFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 236, 5))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 238, 59))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
     }
     export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
 >publicFunctionWithPublicParmeterTypes : Symbol(publicFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 239, 5))
@@ -1819,7 +1819,7 @@ module publicModuleInGlobal {
     function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
 >privateFunctionWithPrivateParmeterTypes : Symbol(privateFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 241, 5))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 242, 53))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
     }
     function privateFunctionWithPublicParmeterTypes(param: publicClass) {
 >privateFunctionWithPublicParmeterTypes : Symbol(privateFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 243, 5))
@@ -1830,7 +1830,7 @@ module publicModuleInGlobal {
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
 >publicAmbientFunctionWithPrivateParmeterTypes : Symbol(publicAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 245, 5))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 247, 74))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
 
     export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
 >publicAmbientFunctionWithPublicParmeterTypes : Symbol(publicAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 247, 101))
@@ -1840,7 +1840,7 @@ module publicModuleInGlobal {
     declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
 >privateAmbientFunctionWithPrivateParmeterTypes : Symbol(privateAmbientFunctionWithPrivateParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 248, 99))
 >param : Symbol(param, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 249, 68))
->privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 29))
+>privateClass : Symbol(privateClass, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 23, 32))
 
     declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
 >privateAmbientFunctionWithPublicParmeterTypes : Symbol(privateAmbientFunctionWithPublicParmeterTypes, Decl(privacyFunctionParameterDeclFile_GlobalFile.ts, 249, 95))

@@ -2,14 +2,17 @@
 +++ new.moduleExportAlias4.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
++bug24024.js(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +bug24024.js(3,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +bug24024.js(4,16): error TS2339: Property 'D' does not exist on type 'typeof C'.
 +
 +
-+==== bug24024.js (2 errors) ====
++==== bug24024.js (3 errors) ====
 +    // #24024
 +    var wat = require('./bug24024')
 +    module.exports = class C {}
++    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
++!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
 +    module.exports.D = class D { }

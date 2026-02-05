@@ -13,7 +13,7 @@
 
 
 function testcase() {
->testcase : () => boolean
+>testcase : () => true | undefined
 
   var obj = {toString:function (){return 0}};
 >obj : { toString: () => number; }
@@ -35,8 +35,8 @@ function testcase() {
 >3 : 3
 
   var a = new Array(false,undefined,null,"0",obj,-1.3333333333333, "str",-0,true,+0, one, 1,0, false, _float, -(4/3));
->a : boolean[]
->new Array(false,undefined,null,"0",obj,-1.3333333333333, "str",-0,true,+0, one, 1,0, false, _float, -(4/3)) : boolean[]
+>a : (boolean | null | undefined)[]
+>new Array(false,undefined,null,"0",obj,-1.3333333333333, "str",-0,true,+0, one, 1,0, false, _float, -(4/3)) : (boolean | null | undefined)[]
 >Array : ArrayConstructor
 >false : false
 >undefined : undefined
@@ -67,9 +67,9 @@ function testcase() {
 >a.indexOf(-(4/3)) === 14 &&      // a[14]=_float===-(4/3)      a.indexOf(0) === 7 : boolean
 >a.indexOf(-(4/3)) === 14 : boolean
 >a.indexOf(-(4/3)) : number
->a.indexOf : (searchElement: boolean, fromIndex?: number) => number
->a : boolean[]
->indexOf : (searchElement: boolean, fromIndex?: number) => number
+>a.indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
+>a : (boolean | null | undefined)[]
+>indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
 >-(4/3) : number
 >(4/3) : number
 >4/3 : number
@@ -80,18 +80,18 @@ function testcase() {
       a.indexOf(0) === 7      &&       // a[7] = +0, 0===+0
 >a.indexOf(0) === 7 : boolean
 >a.indexOf(0) : number
->a.indexOf : (searchElement: boolean, fromIndex?: number) => number
->a : boolean[]
->indexOf : (searchElement: boolean, fromIndex?: number) => number
+>a.indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
+>a : (boolean | null | undefined)[]
+>indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
 >0 : 0
 >7 : 7
 
       a.indexOf(-0) === 7      &&     // a[7] = +0, -0===+0
 >a.indexOf(-0) === 7 : boolean
 >a.indexOf(-0) : number
->a.indexOf : (searchElement: boolean, fromIndex?: number) => number
->a : boolean[]
->indexOf : (searchElement: boolean, fromIndex?: number) => number
+>a.indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
+>a : (boolean | null | undefined)[]
+>indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
 >-0 : 0
 >0 : 0
 >7 : 7
@@ -99,9 +99,9 @@ function testcase() {
       a.indexOf(1) === 10 )            // a[10] =one=== 1
 >a.indexOf(1) === 10 : boolean
 >a.indexOf(1) : number
->a.indexOf : (searchElement: boolean, fromIndex?: number) => number
->a : boolean[]
->indexOf : (searchElement: boolean, fromIndex?: number) => number
+>a.indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
+>a : (boolean | null | undefined)[]
+>indexOf : (searchElement: boolean | null | undefined, fromIndex?: number | undefined) => number
 >1 : 1
 >10 : 10
   {
@@ -112,5 +112,5 @@ function testcase() {
 runTestCase(testcase);
 >runTestCase(testcase) : any
 >runTestCase : any
->testcase : () => boolean
+>testcase : () => true | undefined
 

@@ -11,8 +11,10 @@ var x = <div></div><div></div>
 
 
 //// [file1.jsx]
+"use strict";
 <div></div>
     ,
         <div></div>;
 //// [file2.jsx]
+"use strict";
 var x = (<div></div>, <div></div>);

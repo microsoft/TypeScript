@@ -89,6 +89,7 @@ function f101(x: string | Record<string, any>) {
 
 
 //// [typeGuardOfFormTypeOfFunction.js]
+"use strict";
 function f1(x) {
     if (typeof x === "function") {
         x; // any

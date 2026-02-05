@@ -10,6 +10,7 @@ enum Nums {
 }
 
 //// [enumIdentifierLiterals.js]
+"use strict";
 var Nums;
 (function (Nums) {
     Nums[Nums[1] = 0] = 1;

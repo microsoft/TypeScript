@@ -19,6 +19,7 @@ function foo1(x: number) {
 
 
 //// [overload2.js]
+"use strict";
 var A;
 (function (A) {
 })(A || (A = {}));

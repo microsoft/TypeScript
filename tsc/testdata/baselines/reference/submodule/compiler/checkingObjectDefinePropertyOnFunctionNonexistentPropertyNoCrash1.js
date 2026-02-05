@@ -13,10 +13,7 @@ export function test(fn) {
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = test;
-function test(fn) {
+export function test(fn) {
     const composed = function (...args) { };
     Object.defineProperty(composed, 'name', {
         value: composed.fn + '_test'

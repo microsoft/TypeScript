@@ -4,4 +4,5 @@
 \u0076ar x = "hello";
 
 //// [scannerUnicodeEscapeInKeyword1.js]
+"use strict";
 var x = "hello";

@@ -36,13 +36,14 @@ test7 = {};
 var test8: i4 = { M: 5 }
 test8 = {};
 var test9_1: i2;
-var test9_2: i1;
+declare var test9_2: i1;
 test9_1 = test9_2;
 var test10_1: i1;
-var test10_2: i2;
+declare var test10_2: i2;
 test10_1 = test10_2;
 
 //// [optionalPropertiesTest.js]
+"use strict";
 var x;
 var foo;
 foo = { id: 1234 }; // Ok
@@ -67,8 +68,6 @@ test7 = {};
 var test8 = { M: 5 };
 test8 = {};
 var test9_1;
-var test9_2;
 test9_1 = test9_2;
 var test10_1;
-var test10_2;
 test10_1 = test10_2;

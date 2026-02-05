@@ -15,6 +15,7 @@ var a2Gb = makeArrayG<any>(1, "");
 var a2Gc = makeArrayG<any[]>(1, ""); // error
 
 //// [genericRestArgs.js]
+"use strict";
 function makeArrayG(...items) { return items; }
 var a1Ga = makeArrayG(1, ""); // no error
 var a1Gb = makeArrayG(1, "");

@@ -31,6 +31,7 @@ switch (x)
 }
 
 //// [sourceMapValidationSwitch.js]
+"use strict";
 var x = 10;
 switch (x) {
     case 5:

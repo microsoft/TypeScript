@@ -1,8 +1,8 @@
 --- old.interfaceClassMerging2.js
 +++ new.interfaceClassMerging2.js
-@@= skipped -39, +39 lines =@@
-
+@@= skipped -40, +40 lines =@@
  //// [interfaceClassMerging2.js]
+ "use strict";
  class Foo {
 +    classFooProperty;
      classFooMethod() {

@@ -18,6 +18,7 @@ const send = handlers => new Promise((resolve, reject) => {
 })
 
 //// [foo.js]
+"use strict";
 /**
  * @typedef {{
  *   [id: string]: [Function, Function];

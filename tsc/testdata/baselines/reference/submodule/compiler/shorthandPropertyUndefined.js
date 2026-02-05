@@ -4,4 +4,5 @@
 var a = { b };
 
 //// [shorthandPropertyUndefined.js]
+"use strict";
 var a = { b };

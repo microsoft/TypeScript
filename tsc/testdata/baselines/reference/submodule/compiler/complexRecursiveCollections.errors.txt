@@ -1,15 +1,26 @@
+immutable.ts(261,76): error TS2344: Type 'T' does not satisfy the constraint 'Object'.
+immutable.ts(270,22): error TS2320: Interface 'Keyed<K, V>' cannot simultaneously extend types 'Seq<K, V>' and 'Keyed<K, V>'.
+  Named property 'size' of types 'Seq<K, V>' and 'Keyed<K, V>' are not identical.
+immutable.ts(289,22): error TS2320: Interface 'Indexed<T>' cannot simultaneously extend types 'Seq<number, T>' and 'Indexed<T>'.
+  Named property 'size' of types 'Seq<number, T>' and 'Indexed<T>' are not identical.
+immutable.ts(305,22): error TS2320: Interface 'Set<T>' cannot simultaneously extend types 'Seq<never, T>' and 'Set<T>'.
+  Named property 'size' of types 'Seq<never, T>' and 'Set<T>' are not identical.
+immutable.ts(323,20): error TS2430: Interface 'Seq<K, V>' incorrectly extends interface 'Collection<K, V>'.
+  The types returned by 'map(...).size' are incompatible between these types.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
 immutable.ts(341,22): error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
   The types returned by 'toSeq()' are incompatible between these types.
     Type 'Keyed<K, V>' is not assignable to type 'this'.
-      'Keyed<K, V>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Keyed<K, V>'.
+      'this' could be instantiated with an arbitrary type which could be unrelated to 'Keyed<K, V>'.
 immutable.ts(359,22): error TS2430: Interface 'Indexed<T>' incorrectly extends interface 'Collection<number, T>'.
   The types returned by 'toSeq()' are incompatible between these types.
     Type 'Indexed<T>' is not assignable to type 'this'.
-      'Indexed<T>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Indexed<T>'.
+      'this' could be instantiated with an arbitrary type which could be unrelated to 'Indexed<T>'.
 immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends interface 'Collection<never, T>'.
   The types returned by 'toSeq()' are incompatible between these types.
     Type 'Set<T>' is not assignable to type 'this'.
-      'Set<T>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Set<T>'.
+      'this' could be instantiated with an arbitrary type which could be unrelated to 'Set<T>'.
 
 
 ==== complex.ts (0 errors) ====
@@ -33,11 +44,11 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         flatMap<M>(mapper: (value: T, key: void, iter: this) => Ara<M>, context?: any): N2<M>;
         toSeq(): N2<T>;
     }
-==== immutable.ts (3 errors) ====
+==== immutable.ts (8 errors) ====
     // Test that complex recursive collections can pass the `extends` assignability check without
     // running out of memory. This bug was exposed in Typescript 2.4 when more generic signatures
     // started being checked.
-    declare module Immutable {
+    declare namespace Immutable {
       export function fromJS(jsValue: any, reviver?: (key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any): any;
       export function is(first: any, second: any): boolean;
       export function hash(value: any): number;
@@ -52,7 +63,7 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         equals(other: any): boolean;
         hashCode(): number;
       }
-      export module List {
+      export namespace List {
         function isList(maybeList: any): maybeList is List<any>;
         function of<T>(...values: Array<T>): List<T>;
       }
@@ -97,7 +108,7 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): List<F>;
         filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
       }
-      export module Map {
+      export namespace Map {
         function isMap(maybeMap: any): maybeMap is Map<any, any>;
         function of(...keyValues: Array<any>): Map<any, any>;
       }
@@ -143,7 +154,7 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Map<K, F>;
         filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
       }
-      export module OrderedMap {
+      export namespace OrderedMap {
         function isOrderedMap(maybeOrderedMap: any): maybeOrderedMap is OrderedMap<any, any>;
       }
       export function OrderedMap<K, V>(collection: Iterable<[K, V]>): OrderedMap<K, V>;
@@ -162,7 +173,7 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): OrderedMap<K, F>;
         filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
       }
-      export module Set {
+      export namespace Set {
         function isSet(maybeSet: any): maybeSet is Set<any>;
         function of<T>(...values: Array<T>): Set<T>;
         function fromKeys<T>(iter: Collection<T, any>): Set<T>;
@@ -194,7 +205,7 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>;
         filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
       }
-      export module OrderedSet {
+      export namespace OrderedSet {
         function isOrderedSet(maybeOrderedSet: any): boolean;
         function of<T>(...values: Array<T>): OrderedSet<T>;
         function fromKeys<T>(iter: Collection<T, any>): OrderedSet<T>;
@@ -215,7 +226,7 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         zipWith<U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z>;
         zipWith<Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): OrderedSet<Z>;
       }
-      export module Stack {
+      export namespace Stack {
         function isStack(maybeStack: any): maybeStack is Stack<any>;
         function of<T>(...values: Array<T>): Stack<T>;
       }
@@ -246,7 +257,7 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
       }
       export function Range(start?: number, end?: number, step?: number): Seq.Indexed<number>;
       export function Repeat<T>(value: T, times?: number): Seq.Indexed<T>;
-      export module Record {
+      export namespace Record {
         export function isRecord(maybeRecord: any): maybeRecord is Record.Instance<any>;
         export function getDescriptiveName(record: Instance<any>): string;
         export interface Class<T extends Object> {
@@ -295,15 +306,21 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         }
       }
       export function Record<T>(defaultValues: T, name?: string): Record.Class<T>;
-      export module Seq {
+                                                                               ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'Object'.
+!!! related TS2208 immutable.ts:261:26: This type parameter might need an `extends Object` constraint.
+      export namespace Seq {
         function isSeq(maybeSeq: any): maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>;
         function of<T>(...values: Array<T>): Seq.Indexed<T>;
-        export module Keyed {}
+        export namespace Keyed {}
         export function Keyed<K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>;
         export function Keyed<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
         export function Keyed<K, V>(): Seq.Keyed<K, V>;
         export function Keyed(): Seq.Keyed<any, any>;
         export interface Keyed<K, V> extends Seq<K, V>, Collection.Keyed<K, V> {
+                         ~~~~~
+!!! error TS2320: Interface 'Keyed<K, V>' cannot simultaneously extend types 'Seq<K, V>' and 'Keyed<K, V>'.
+!!! error TS2320:   Named property 'size' of types 'Seq<K, V>' and 'Keyed<K, V>' are not identical.
           toJS(): Object;
           toJSON(): { [key: string]: V };
           toSeq(): this;
@@ -316,13 +333,16 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
           filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>;
           filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
         }
-        module Indexed {
+        namespace Indexed {
           function of<T>(...values: Array<T>): Seq.Indexed<T>;
         }
         export function Indexed(): Seq.Indexed<any>;
         export function Indexed<T>(): Seq.Indexed<T>;
         export function Indexed<T>(collection: Iterable<T>): Seq.Indexed<T>;
         export interface Indexed<T> extends Seq<number, T>, Collection.Indexed<T> {
+                         ~~~~~~~
+!!! error TS2320: Interface 'Indexed<T>' cannot simultaneously extend types 'Seq<number, T>' and 'Indexed<T>'.
+!!! error TS2320:   Named property 'size' of types 'Seq<number, T>' and 'Indexed<T>' are not identical.
           toJS(): Array<any>;
           toJSON(): Array<T>;
           toSeq(): this;
@@ -332,13 +352,16 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
           filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Seq.Indexed<F>;
           filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
         }
-        export module Set {
+        export namespace Set {
           function of<T>(...values: Array<T>): Seq.Set<T>;
         }
         export function Set(): Seq.Set<any>;
         export function Set<T>(): Seq.Set<T>;
         export function Set<T>(collection: Iterable<T>): Seq.Set<T>;
         export interface Set<T> extends Seq<never, T>, Collection.Set<T> {
+                         ~~~
+!!! error TS2320: Interface 'Set<T>' cannot simultaneously extend types 'Seq<never, T>' and 'Set<T>'.
+!!! error TS2320:   Named property 'size' of types 'Seq<never, T>' and 'Set<T>' are not identical.
           toJS(): Array<any>;
           toJSON(): Array<T>;
           toSeq(): this;
@@ -357,6 +380,11 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
       export function Seq<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
       export function Seq(): Seq<any, any>;
       export interface Seq<K, V> extends Collection<K, V> {
+                       ~~~
+!!! error TS2430: Interface 'Seq<K, V>' incorrectly extends interface 'Collection<K, V>'.
+!!! error TS2430:   The types returned by 'map(...).size' are incompatible between these types.
+!!! error TS2430:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2430:       Type 'undefined' is not assignable to type 'number'.
         readonly size: number | undefined;
         // Force evaluation
         cacheResult(): this;
@@ -366,12 +394,12 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
         filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq<K, F>;
         filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
       }
-      export module Collection {
+      export namespace Collection {
         function isKeyed(maybeKeyed: any): maybeKeyed is Collection.Keyed<any, any>;
         function isIndexed(maybeIndexed: any): maybeIndexed is Collection.Indexed<any>;
         function isAssociative(maybeAssociative: any): maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>;
         function isOrdered(maybeOrdered: any): boolean;
-        export module Keyed {}
+        export namespace Keyed {}
         export function Keyed<K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>;
         export function Keyed<V>(obj: {[key: string]: V}): Collection.Keyed<string, V>;
         export interface Keyed<K, V> extends Collection<K, V> {
@@ -379,7 +407,7 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
 !!! error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
 !!! error TS2430:   The types returned by 'toSeq()' are incompatible between these types.
 !!! error TS2430:     Type 'Keyed<K, V>' is not assignable to type 'this'.
-!!! error TS2430:       'Keyed<K, V>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Keyed<K, V>'.
+!!! error TS2430:       'this' could be instantiated with an arbitrary type which could be unrelated to 'Keyed<K, V>'.
           toJS(): Object;
           toJSON(): { [key: string]: V };
           toSeq(): Seq.Keyed<K, V>;
@@ -395,14 +423,14 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
           filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
           [Symbol.iterator](): IterableIterator<[K, V]>;
         }
-        export module Indexed {}
+        export namespace Indexed {}
         export function Indexed<T>(collection: Iterable<T>): Collection.Indexed<T>;
         export interface Indexed<T> extends Collection<number, T> {
                          ~~~~~~~
 !!! error TS2430: Interface 'Indexed<T>' incorrectly extends interface 'Collection<number, T>'.
 !!! error TS2430:   The types returned by 'toSeq()' are incompatible between these types.
 !!! error TS2430:     Type 'Indexed<T>' is not assignable to type 'this'.
-!!! error TS2430:       'Indexed<T>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Indexed<T>'.
+!!! error TS2430:       'this' could be instantiated with an arbitrary type which could be unrelated to 'Indexed<T>'.
           toJS(): Array<any>;
           toJSON(): Array<T>;
           // Reading values
@@ -432,14 +460,14 @@ immutable.ts(391,22): error TS2430: Interface 'Set<T>' incorrectly extends inter
           filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
           [Symbol.iterator](): IterableIterator<T>;
         }
-        export module Set {}
+        export namespace Set {}
         export function Set<T>(collection: Iterable<T>): Collection.Set<T>;
         export interface Set<T> extends Collection<never, T> {
                          ~~~
 !!! error TS2430: Interface 'Set<T>' incorrectly extends interface 'Collection<never, T>'.
 !!! error TS2430:   The types returned by 'toSeq()' are incompatible between these types.
 !!! error TS2430:     Type 'Set<T>' is not assignable to type 'this'.
-!!! error TS2430:       'Set<T>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Set<T>'.
+!!! error TS2430:       'this' could be instantiated with an arbitrary type which could be unrelated to 'Set<T>'.
           toJS(): Array<any>;
           toJSON(): Array<T>;
           toSeq(): Seq.Set<T>;

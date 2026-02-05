@@ -12,13 +12,13 @@ type U3 = | () => number
 >U3 : () => number
 
 type U4 = | (foo?: number) => void;
->U4 : (foo?: number) => void
->foo : number
+>U4 : (foo?: number | undefined) => void
+>foo : number | undefined
 
 type U5 = string | (number: number, foo?: string) => void | number;
 >U5 : U5
 >number : number
->foo : string
+>foo : string | undefined
 
 type U6 =
 >U6 : U6
@@ -40,7 +40,7 @@ type I3 = & () => boolean
 >I3 : () => boolean
 
 type I4 = & () => boolean & null;
->I4 : () => null
+>I4 : () => never
 
 type I5 = string & (any: any, any2: any) => any & any;
 >I5 : I5

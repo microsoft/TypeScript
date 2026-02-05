@@ -5,17 +5,17 @@ export const a = 1;
 export const b = 2;
 
 //// [1.ts]
-import './0' assert { type: "json" }
-import { a, b } from './0' assert { "type": "json" }
-import * as foo from './0' assert { type: "json" }
+import './0' with { type: "json" }
+import { a, b } from './0' with { "type": "json" }
+import * as foo from './0' with { type: "json" }
 a;
 b;
 foo.a;
 foo.b;
 
 //// [2.ts]
-import { a, b } from './0' assert {}
-import { a as c, b as d } from './0' assert { a: "a", b: "b", c: "c" }
+import { a, b } from './0' with {}
+import { a as c, b as d } from './0' with { a: "a", b: "b", c: "c" }
 a;
 b;
 c;
@@ -23,15 +23,15 @@ d;
 
 //// [3.ts]
 const a = import('./0')
-const b = import('./0', { assert: { type: "json" } })
-const c = import('./0', { assert: { type: "json", ttype: "typo" } })
-const d = import('./0', { assert: {} })
+const b = import('./0', { with: { type: "json" } })
+const c = import('./0', { with: { type: "json", ttype: "typo" } })
+const d = import('./0', { with: {} })
 const dd = import('./0', {})
 declare function foo(): any;
 const e = import('./0', foo())
 const f = import()
 const g = import('./0', {}, {})
-const h = import('./0', { assert: { type: "json" }},)
+const h = import('./0', { with: { type: "json" }},)
 
 
 
@@ -94,6 +94,7 @@ _0_1.b;
 _0_2.a;
 _0_2.b;
 //// [3.js]
+"use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);

@@ -6,6 +6,7 @@ s++;
 s--;
 
 //// [symbolType4.js]
+"use strict";
 var s = Symbol.for("postfix");
 s++;
 s--;

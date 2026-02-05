@@ -10,6 +10,7 @@ var x: I = {
 }
 
 //// [objectLiteralIndexerNoImplicitAny.js]
+"use strict";
 var x = {
     p: null
 };

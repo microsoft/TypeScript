@@ -1,8 +1,8 @@
 --- old.chainedAssignmentChecking.js
 +++ new.chainedAssignmentChecking.js
-@@= skipped -25, +25 lines =@@
-
+@@= skipped -26, +26 lines =@@
  //// [chainedAssignmentChecking.js]
+ "use strict";
  class X {
 +    z;
      constructor(z) {

@@ -15,3 +15,4 @@ interface C {
 
 
 //// [functionOverloadsOnGenericArity1.js]
+"use strict";

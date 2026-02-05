@@ -1,0 +1,13 @@
+decoratorOnClassConstructorParameter1.ts(4,18): error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+  Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+
+
+==== decoratorOnClassConstructorParameter1.ts (1 errors) ====
+    declare function dec(target: Function, propertyKey: string | symbol, parameterIndex: number): void;
+    
+    class C {
+        constructor(@dec p: number) {}
+                     ~~~
+!!! error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+!!! error TS1239:   Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+    }

@@ -1,8 +1,8 @@
 --- old.spreadMethods.js
 +++ new.spreadMethods.js
-@@= skipped -44, +44 lines =@@
-
+@@= skipped -45, +45 lines =@@
  //// [spreadMethods.js]
+ "use strict";
  class K {
 -    constructor() {
 -        this.p = 12;

@@ -1,4 +1,6 @@
 b.js(4,20): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+b.js(34,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+b.js(41,21): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 b.js(45,23): error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
 b.js(49,26): error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
@@ -17,7 +19,7 @@ b.js(67,8): error TS2454: Variable 'numOrStr' is used before being assigned.
 ==== a.ts (0 errors) ====
     var W: string;
     
-==== b.js (9 errors) ====
+==== b.js (11 errors) ====
     // @ts-check
     var W = /** @type {string} */(/** @type {*} */ (4));
     
@@ -54,6 +56,8 @@ b.js(67,8): error TS2454: Variable 'numOrStr' is used before being assigned.
     function SomeFakeClass() {
         /** @type {string|number} */
         this.p = "bar";
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     
     // Type assertion should check for assignability in either direction
@@ -61,6 +65,8 @@ b.js(67,8): error TS2454: Variable 'numOrStr' is used before being assigned.
     var someDerived = new SomeDerived();
     var someOther = new SomeOther();
     var someFakeClass = new SomeFakeClass();
+                        ~~~~~~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
     
     someBase = /** @type {SomeBase} */(someDerived);
     someBase = /** @type {SomeBase} */(someBase);

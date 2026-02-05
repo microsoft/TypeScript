@@ -1,6 +1,6 @@
 --- old.contextualTyping.types
 +++ new.contextualTyping.types
-@@= skipped -326, +326 lines =@@
+@@= skipped -327, +327 lines =@@
      }
 
  var objc8: {

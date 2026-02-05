@@ -18,13 +18,13 @@ class B extends X { propertyB: string };
 >X : X
 >propertyB : string
 
-var x: X;
+declare var x: X;
 >x : X
 
-var a: A;
+declare var a: A;
 >a : A
 
-var b: B;
+declare var b: B;
 >b : B
 
 // No errors anymore, uses union types

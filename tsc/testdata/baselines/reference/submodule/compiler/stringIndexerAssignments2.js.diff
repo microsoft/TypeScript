@@ -1,8 +1,8 @@
 --- old.stringIndexerAssignments2.js
 +++ new.stringIndexerAssignments2.js
-@@= skipped -23, +23 lines =@@
-
+@@= skipped -24, +24 lines =@@
  //// [stringIndexerAssignments2.js]
+ "use strict";
  class C1 {
 +    one;
  }
@@ -13,5 +13,5 @@
 +    one;
 +    two;
  }
- var x;
- var a;
+ x = a;
+ x = b;

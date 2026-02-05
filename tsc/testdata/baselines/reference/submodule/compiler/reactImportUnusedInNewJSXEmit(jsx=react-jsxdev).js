@@ -18,7 +18,7 @@ export function Foo() {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = Foo;
 const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-const _jsxFileName = "index.tsx";
+const _jsxFileName = "/.src/index.tsx";
 function Bar() {
     return jsx_dev_runtime_1.jsxDEV("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 6, columnNumber: 9 }, this);
 }

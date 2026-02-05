@@ -4,4 +4,5 @@
 !foo;
 
 //// [logicalNotExpression1.js]
+"use strict";
 !foo;

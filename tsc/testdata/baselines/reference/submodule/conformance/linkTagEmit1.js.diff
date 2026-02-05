@@ -1,6 +1,6 @@
 --- old.linkTagEmit1.js
 +++ new.linkTagEmit1.js
-@@= skipped -52, +52 lines =@@
+@@= skipped -53, +53 lines =@@
   * @property {1} e Just link to {@link NS.R} this time
   * @property {1} m Wyatt Earp loved {@link N integers} I bet.
   */

@@ -47,6 +47,7 @@ class a {
 }
 
 //// [duplicateClassElements.js]
+"use strict";
 class a {
     a;
     a;

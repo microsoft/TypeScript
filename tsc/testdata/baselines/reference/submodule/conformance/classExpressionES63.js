@@ -9,6 +9,7 @@ c.c;
 
 
 //// [classExpressionES63.js]
+"use strict";
 let C = class extends class extends class {
     a = 1;
 } {

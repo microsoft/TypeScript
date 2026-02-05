@@ -11,6 +11,7 @@ class A {
 }
 
 //// [typeParametersAndParametersInComputedNames.js]
+"use strict";
 function foo(a) {
     return "";
 }

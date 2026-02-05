@@ -7,8 +7,8 @@ var ANY;
 
 // operand before delete operator
 var BOOLEAN1 = ANY delete ;     //expect error
->BOOLEAN1 : any
->ANY : any
+>BOOLEAN1 : undefined
+>ANY : undefined
 >delete : boolean
 > : any
 

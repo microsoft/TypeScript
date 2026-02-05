@@ -1,7 +1,7 @@
 --- old.objectTypePropertyAccess.js
 +++ new.objectTypePropertyAccess.js
-@@= skipped -33, +33 lines =@@
- //// [objectTypePropertyAccess.js]
+@@= skipped -34, +34 lines =@@
+ "use strict";
  // Index notation should resolve to the type of a declared property with that same name
  class C {
 +    foo;

@@ -1,8 +1,8 @@
 --- old.symbolProperty12.js
 +++ new.symbolProperty12.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [symbolProperty12.js]
+ "use strict";
  class C {
 +    [Symbol.iterator];
  }

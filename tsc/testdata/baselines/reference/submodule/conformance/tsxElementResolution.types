@@ -21,7 +21,7 @@ class foundFirst { }
 class Other {}
 >Other : Other
 
-module Dotted {
+namespace Dotted {
 >Dotted : typeof Dotted
 
 	export class Name { }

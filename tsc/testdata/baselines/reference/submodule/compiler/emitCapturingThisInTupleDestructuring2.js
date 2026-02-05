@@ -13,6 +13,7 @@ class B {
 }
 
 //// [emitCapturingThisInTupleDestructuring2.js]
+"use strict";
 var array1 = [1, 2];
 class B {
     test;

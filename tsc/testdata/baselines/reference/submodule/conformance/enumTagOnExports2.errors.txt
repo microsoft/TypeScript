@@ -1,0 +1,9 @@
+enumTagOnExports.js(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+
+==== enumTagOnExports.js (1 errors) ====
+    /** @enum {string} */
+    module.exports = {};
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    

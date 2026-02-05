@@ -9,7 +9,7 @@ enum enumdule {
 >Blue : enumdule.Blue
 }
 
-module enumdule {
+namespace enumdule {
 >enumdule : typeof enumdule
 
     export class Point {

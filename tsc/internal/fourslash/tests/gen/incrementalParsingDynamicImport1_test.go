@@ -12,6 +12,7 @@ func TestIncrementalParsingDynamicImport1(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// @lib: es6
+// @module: commonjs
 // @Filename: ./foo.ts
 export function bar() { return 1; }
 var x1 = import("./foo");

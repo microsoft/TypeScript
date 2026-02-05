@@ -1,8 +1,8 @@
 --- old.typeParametersAvailableInNestedScope.js
 +++ new.typeParametersAvailableInNestedScope.js
-@@= skipped -24, +24 lines =@@
-
+@@= skipped -25, +25 lines =@@
  //// [typeParametersAvailableInNestedScope.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.x = (a) => {

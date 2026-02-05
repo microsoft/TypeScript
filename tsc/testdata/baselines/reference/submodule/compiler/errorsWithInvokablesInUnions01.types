@@ -13,10 +13,10 @@ interface IDirectiveLinkFn<TScope> {
 
 interface IDirectivePrePost<TScope> {
     pre?: IDirectiveLinkFn<TScope>;
->pre : IDirectiveLinkFn<TScope>
+>pre : IDirectiveLinkFn<TScope> | undefined
 
     post?: IDirectiveLinkFn<TScope>;
->post : IDirectiveLinkFn<TScope>
+>post : IDirectiveLinkFn<TScope> | undefined
 }
 
 export let blah: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<number> = (x: string) => {}

@@ -1,17 +1,29 @@
+assignmentToVoidZero2.js(2,1): error TS7005: Variable 'k' implicitly has an 'any' type.
+assignmentToVoidZero2.js(5,1): error TS7008: Member 'y' implicitly has an 'any' type.
+assignmentToVoidZero2.js(9,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+assignmentToVoidZero2.js(10,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 assignmentToVoidZero2.js(12,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
 
-==== assignmentToVoidZero2.js (1 errors) ====
+==== assignmentToVoidZero2.js (5 errors) ====
     exports.j = 1;
     exports.k = void 0;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS7005: Variable 'k' implicitly has an 'any' type.
     var o = {}
     o.x = 1
     o.y = void 0
+    ~~~~~~~~~~~~
+!!! error TS7008: Member 'y' implicitly has an 'any' type.
     o.x + o.y
     
     function C() {
         this.p = 1
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
         this.q = void 0
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     var c = new C()
             ~~~~~~~

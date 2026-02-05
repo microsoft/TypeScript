@@ -12,10 +12,6 @@ import { b } from "baz/main.ts";
 
 
 //// [bar.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = 1234;
+export const a = 1234;
 //// [test.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

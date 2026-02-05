@@ -1,5 +1,5 @@
 arityAndOrderCompatibility01.ts(15,12): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
-arityAndOrderCompatibility01.ts(17,5): error TS2461: Type '{ 0: string; 1: number; length: 2; }' is not an array type.
+arityAndOrderCompatibility01.ts(17,5): error TS2488: Type '{ 0: string; 1: number; length: 2; }' must have a '[Symbol.iterator]()' method that returns an iterator.
 arityAndOrderCompatibility01.ts(18,5): error TS2322: Type '[string, number]' is not assignable to type '[number, number, number]'.
   Source has 2 element(s) but target requires 3.
 arityAndOrderCompatibility01.ts(19,5): error TS2741: Property '2' is missing in type 'StrNum' but required in type '[number, number, number]'.
@@ -12,14 +12,14 @@ arityAndOrderCompatibility01.ts(24,5): error TS2322: Type '[string, number]' is 
   Source has 2 element(s) but target allows only 1.
 arityAndOrderCompatibility01.ts(25,5): error TS2322: Type 'StrNum' is not assignable to type '[number]'.
   The types returned by 'pop()' are incompatible between these types.
-    Type 'string | number' is not assignable to type 'number'.
+    Type 'string | number | undefined' is not assignable to type 'number | undefined'.
       Type 'string' is not assignable to type 'number'.
 arityAndOrderCompatibility01.ts(26,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[number]'.
 arityAndOrderCompatibility01.ts(27,5): error TS2322: Type '[string, number]' is not assignable to type '[string]'.
   Source has 2 element(s) but target allows only 1.
 arityAndOrderCompatibility01.ts(28,5): error TS2322: Type 'StrNum' is not assignable to type '[string]'.
   The types returned by 'pop()' are incompatible between these types.
-    Type 'string | number' is not assignable to type 'string'.
+    Type 'string | number | undefined' is not assignable to type 'string | undefined'.
       Type 'number' is not assignable to type 'string'.
 arityAndOrderCompatibility01.ts(29,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[string]'.
 arityAndOrderCompatibility01.ts(30,5): error TS2322: Type '[string, number]' is not assignable to type '[number, string]'.
@@ -38,9 +38,9 @@ arityAndOrderCompatibility01.ts(32,5): error TS2322: Type '{ 0: string; 1: numbe
         length: 2;
     }
     
-    var x: [string, number];
-    var y: StrNum
-    var z: {
+    declare var x: [string, number];
+    declare var y: StrNum
+    declare var z: {
         0: string;
         1: number;
         length: 2;
@@ -52,7 +52,7 @@ arityAndOrderCompatibility01.ts(32,5): error TS2322: Type '{ 0: string; 1: numbe
     var [d, e, f] = y;
     var [g, h, i] = z;
         ~~~~~~~~~
-!!! error TS2461: Type '{ 0: string; 1: number; length: 2; }' is not an array type.
+!!! error TS2488: Type '{ 0: string; 1: number; length: 2; }' must have a '[Symbol.iterator]()' method that returns an iterator.
     var j1: [number, number, number] = x;
         ~~
 !!! error TS2322: Type '[string, number]' is not assignable to type '[number, number, number]'.
@@ -81,7 +81,7 @@ arityAndOrderCompatibility01.ts(32,5): error TS2322: Type '{ 0: string; 1: numbe
         ~~
 !!! error TS2322: Type 'StrNum' is not assignable to type '[number]'.
 !!! error TS2322:   The types returned by 'pop()' are incompatible between these types.
-!!! error TS2322:     Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'number | undefined'.
 !!! error TS2322:       Type 'string' is not assignable to type 'number'.
     var l3: [number] = z;
         ~~
@@ -94,7 +94,7 @@ arityAndOrderCompatibility01.ts(32,5): error TS2322: Type '{ 0: string; 1: numbe
         ~~
 !!! error TS2322: Type 'StrNum' is not assignable to type '[string]'.
 !!! error TS2322:   The types returned by 'pop()' are incompatible between these types.
-!!! error TS2322:     Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'string | undefined'.
 !!! error TS2322:       Type 'number' is not assignable to type 'string'.
     var m3: [string] = z;
         ~~

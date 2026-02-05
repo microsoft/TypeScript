@@ -4,4 +4,5 @@
 var v = { a; b; c }
 
 //// [objectLiteralWithSemicolons1.js]
+"use strict";
 var v = { a, b, c };

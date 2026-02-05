@@ -14,6 +14,7 @@ async function bar3() {
 }
 
 //// [await_unaryExpression_es6_2.js]
+"use strict";
 async function bar1() {
     delete await 42;
 }

@@ -1,7 +1,7 @@
 --- old.declarationEmitNameConflicts2.js
 +++ new.declarationEmitNameConflicts2.js
-@@= skipped -19, +19 lines =@@
- //// [declarationEmitNameConflicts2.js]
+@@= skipped -20, +20 lines =@@
+ "use strict";
  var X;
  (function (X) {
 -    var Y;

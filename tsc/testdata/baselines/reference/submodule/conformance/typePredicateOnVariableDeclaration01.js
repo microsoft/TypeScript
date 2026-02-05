@@ -4,6 +4,7 @@
 var x: this is string;
 
 //// [typePredicateOnVariableDeclaration01.js]
+"use strict";
 var x;
 
 

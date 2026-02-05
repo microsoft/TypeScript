@@ -23,6 +23,7 @@ type T7<S extends 'a'|'b', L extends 'a'> = {[key in AB[S]]: true}[L];
 
 
 //// [mappedTypeErrors2.js]
+"use strict";
 // Repros from #17238
 
 

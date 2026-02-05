@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/mergedModuleDeclarationWithSharedExportedVar.ts] ////
 
 === mergedModuleDeclarationWithSharedExportedVar.ts ===
-module M {
+namespace M {
 >M : typeof M
 
     export var v = 10;
@@ -11,7 +11,7 @@ module M {
     v;
 >v : number
 }
-module M {
+namespace M {
 >M : typeof M
 
     v;

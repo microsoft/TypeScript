@@ -1,8 +1,8 @@
 --- old.inheritanceStaticAccessorOverridingProperty.js
 +++ new.inheritanceStaticAccessorOverridingProperty.js
-@@= skipped -15, +15 lines =@@
-
+@@= skipped -16, +16 lines =@@
  //// [inheritanceStaticAccessorOverridingProperty.js]
+ "use strict";
  class a {
 +    static x;
  }

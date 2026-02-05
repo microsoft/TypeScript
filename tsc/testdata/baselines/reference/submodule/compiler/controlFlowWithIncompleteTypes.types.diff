@@ -1,0 +1,26 @@
+--- old.controlFlowWithIncompleteTypes.types
++++ new.controlFlowWithIncompleteTypes.types
+@@= skipped -25, +25 lines =@@
+ >x = x.slice() : string
+ >x : string | number | boolean
+ >x.slice() : string
+->x.slice : (start?: number, end?: number) => string
++>x.slice : (start?: number | undefined, end?: number | undefined) => string
+ >x : string
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+         }
+         else {
+             x = "abc";
+@@= skipped -39, +39 lines =@@
+ >x = x.slice() : string
+ >x : string | number | boolean
+ >x.slice() : string
+->x.slice : (start?: number, end?: number) => string
++>x.slice : (start?: number | undefined, end?: number | undefined) => string
+ >x : string
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+         }
+     }
+ }

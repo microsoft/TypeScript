@@ -6,6 +6,7 @@ var x: string;
 [x] = a;
 
 //// [arrayAssignmentPatternWithAny.js]
+"use strict";
 var a;
 var x;
 [x] = a;

@@ -28,6 +28,7 @@ a['value'] = (item) => item.property
 
 
 //// [divergentAccessorsTypes7.js]
+"use strict";
 class Test {
     constructor() { }
     set value(value) { }

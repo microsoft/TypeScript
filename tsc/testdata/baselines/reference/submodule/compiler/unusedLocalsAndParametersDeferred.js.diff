@@ -1,6 +1,6 @@
 --- old.unusedLocalsAndParametersDeferred.js
 +++ new.unusedLocalsAndParametersDeferred.js
-@@= skipped -189, +189 lines =@@
+@@= skipped -187, +187 lines =@@
  farrow(2);
  let prop1;
  class C {

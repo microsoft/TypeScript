@@ -31,6 +31,7 @@ class parser {
 }
 
 //// [arrayconcat.js]
+"use strict";
 class parser {
     options;
     m() {

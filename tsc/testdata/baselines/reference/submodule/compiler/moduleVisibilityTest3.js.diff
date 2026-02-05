@@ -1,6 +1,6 @@
 --- old.moduleVisibilityTest3.js
 +++ new.moduleVisibilityTest3.js
-@@= skipped -36, +36 lines =@@
+@@= skipped -37, +37 lines =@@
  //_modes. // produces an internal error - please implement in derived class
  var editor;
  (function (editor) {

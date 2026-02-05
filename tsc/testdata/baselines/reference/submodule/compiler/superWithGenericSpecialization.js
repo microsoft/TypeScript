@@ -17,6 +17,7 @@ var r: string = d.x;
 var r2: number = d.y;
 
 //// [superWithGenericSpecialization.js]
+"use strict";
 class C {
     x;
 }

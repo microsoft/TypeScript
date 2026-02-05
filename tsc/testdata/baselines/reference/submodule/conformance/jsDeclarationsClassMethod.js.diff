@@ -1,6 +1,6 @@
 --- old.jsDeclarationsClassMethod.js
 +++ new.jsDeclarationsClassMethod.js
-@@= skipped -128, +128 lines =@@
+@@= skipped -129, +129 lines =@@
 
  //// [jsDeclarationsClassMethod.d.ts]
  declare function C1(): void;

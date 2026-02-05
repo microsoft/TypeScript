@@ -1,8 +1,8 @@
 --- old.propertyParameterWithQuestionMark.js
 +++ new.propertyParameterWithQuestionMark.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [propertyParameterWithQuestionMark.js]
+ "use strict";
  class C {
 +    x;
      constructor(x) {

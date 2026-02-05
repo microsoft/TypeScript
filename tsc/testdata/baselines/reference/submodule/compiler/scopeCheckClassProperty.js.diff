@@ -1,7 +1,7 @@
 --- old.scopeCheckClassProperty.js
 +++ new.scopeCheckClassProperty.js
-@@= skipped -14, +14 lines =@@
- //// [scopeCheckClassProperty.js]
+@@= skipped -15, +15 lines =@@
+ "use strict";
  class C {
      constructor() {
 -        this.x = new A().p; // should also be ok

@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/reboundIdentifierOnImportAlias.ts] ////
 
 === reboundIdentifierOnImportAlias.ts ===
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 
     export var x = "hello";
 >x : string
 >"hello" : "hello"
 }
-module Bar {
+namespace Bar {
 >Bar : typeof Bar
 
     var Foo = 1;

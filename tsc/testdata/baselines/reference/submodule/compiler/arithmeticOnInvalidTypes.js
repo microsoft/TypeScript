@@ -9,6 +9,7 @@ var z3 = x * y;
 var z4 = x / y;
 
 //// [arithmeticOnInvalidTypes.js]
+"use strict";
 var x;
 var y;
 var z = x + y;

@@ -23,6 +23,7 @@ class Weird {
 
 
 //// [inferParameterWithMethodCallInitializer.js]
+"use strict";
 function getNumber() {
     return 1;
 }

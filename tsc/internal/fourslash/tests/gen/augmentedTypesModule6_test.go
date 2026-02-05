@@ -13,7 +13,7 @@ func TestAugmentedTypesModule6(t *testing.T) {
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `declare class m3f { foo(x: number): void }
-module m3f { export interface I { foo(): void } }
+namespace m3f { export interface I { foo(): void } }
 var x: m3f./*1*/
 var /*4*/r = new /*2*/m3f(/*3*/);
 r./*5*/

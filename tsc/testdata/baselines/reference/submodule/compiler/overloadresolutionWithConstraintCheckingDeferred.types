@@ -59,13 +59,16 @@ var result2: number = foo(x => new G<typeof x>(x)); // x has type D, new G(x) fa
 
 var result3: string = foo(x => { // x has type D
 >result3 : string
->foo(x => { // x has type D    var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error    return y;}) : never
+>foo(x => { // x has type D    var y: G<typeof x> = new G(x); // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error    return y;}) : never
 >foo : { (arg: (x: D) => number): string; (arg: (x: C) => any): string; (arg: (x: B) => any): number; }
->x => { // x has type D    var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error    return y;} : (x: D) => G<D>
+>x => { // x has type D    var y: G<typeof x> = new G(x); // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error    return y;} : (x: D) => G<D>
 >x : D
 
-    var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
+    var y: G<typeof x> = new G(x); // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
 >y : G<D>
+>x : D
+>new G(x) : G<A>
+>G : typeof G
 >x : D
 
     return y;

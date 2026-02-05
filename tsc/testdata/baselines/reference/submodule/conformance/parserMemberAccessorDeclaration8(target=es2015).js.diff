@@ -1,0 +1,9 @@
+--- old.parserMemberAccessorDeclaration8(target=es2015).js
++++ new.parserMemberAccessorDeclaration8(target=es2015).js
+@@= skipped -7, +7 lines =@@
+ //// [parserMemberAccessorDeclaration8.js]
+ "use strict";
+ class C {
++    static static;
+     get Foo() { }
+ }

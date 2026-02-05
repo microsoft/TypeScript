@@ -12,6 +12,7 @@ var x = new X();
 
 
 //// [constructorReturnsInvalidType.js]
+"use strict";
 class X {
     constructor() {
         return 1;

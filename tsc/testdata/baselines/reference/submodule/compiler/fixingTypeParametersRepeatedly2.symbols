@@ -16,12 +16,12 @@ interface Derived extends Base {
 >Base : Symbol(Base, Decl(fixingTypeParametersRepeatedly2.ts, 0, 0))
 }
 
-var derived: Derived;
->derived : Symbol(derived, Decl(fixingTypeParametersRepeatedly2.ts, 7, 3))
+declare var derived: Derived;
+>derived : Symbol(derived, Decl(fixingTypeParametersRepeatedly2.ts, 7, 11))
 >Derived : Symbol(Derived, Decl(fixingTypeParametersRepeatedly2.ts, 2, 1))
 
 declare function foo<T>(x: T, func: (p: T) => T): T;
->foo : Symbol(foo, Decl(fixingTypeParametersRepeatedly2.ts, 7, 21))
+>foo : Symbol(foo, Decl(fixingTypeParametersRepeatedly2.ts, 7, 29))
 >T : Symbol(T, Decl(fixingTypeParametersRepeatedly2.ts, 9, 21))
 >x : Symbol(x, Decl(fixingTypeParametersRepeatedly2.ts, 9, 24))
 >T : Symbol(T, Decl(fixingTypeParametersRepeatedly2.ts, 9, 21))
@@ -33,8 +33,8 @@ declare function foo<T>(x: T, func: (p: T) => T): T;
 
 var result = foo(derived, d => d.toBase());
 >result : Symbol(result, Decl(fixingTypeParametersRepeatedly2.ts, 10, 3), Decl(fixingTypeParametersRepeatedly2.ts, 16, 3))
->foo : Symbol(foo, Decl(fixingTypeParametersRepeatedly2.ts, 7, 21))
->derived : Symbol(derived, Decl(fixingTypeParametersRepeatedly2.ts, 7, 3))
+>foo : Symbol(foo, Decl(fixingTypeParametersRepeatedly2.ts, 7, 29))
+>derived : Symbol(derived, Decl(fixingTypeParametersRepeatedly2.ts, 7, 11))
 >d : Symbol(d, Decl(fixingTypeParametersRepeatedly2.ts, 10, 25))
 >d.toBase : Symbol(Derived.toBase, Decl(fixingTypeParametersRepeatedly2.ts, 3, 32))
 >d : Symbol(d, Decl(fixingTypeParametersRepeatedly2.ts, 10, 25))
@@ -67,7 +67,7 @@ declare function bar<T>(x: T, func: (p: T) => T): T;
 var result = bar(derived, d => d.toBase());
 >result : Symbol(result, Decl(fixingTypeParametersRepeatedly2.ts, 10, 3), Decl(fixingTypeParametersRepeatedly2.ts, 16, 3))
 >bar : Symbol(bar, Decl(fixingTypeParametersRepeatedly2.ts, 10, 43), Decl(fixingTypeParametersRepeatedly2.ts, 14, 52))
->derived : Symbol(derived, Decl(fixingTypeParametersRepeatedly2.ts, 7, 3))
+>derived : Symbol(derived, Decl(fixingTypeParametersRepeatedly2.ts, 7, 11))
 >d : Symbol(d, Decl(fixingTypeParametersRepeatedly2.ts, 16, 25))
 >d.toBase : Symbol(Derived.toBase, Decl(fixingTypeParametersRepeatedly2.ts, 3, 32))
 >d : Symbol(d, Decl(fixingTypeParametersRepeatedly2.ts, 16, 25))

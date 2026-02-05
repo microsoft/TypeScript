@@ -8,6 +8,7 @@ function f(x: string) {
 }
 
 //// [templateStringInFunctionParameterTypeES6.js]
+"use strict";
 function f(x) {
     return x;
 }

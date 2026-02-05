@@ -34,7 +34,7 @@ for (var x in /[a-z]/) { }
 
 for (var x in new Date()) { }
 >x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var c: any, d: any, e: any;
 >c : Symbol(c, Decl(for-inStatements.ts, 16, 3))
@@ -194,11 +194,11 @@ for (var x in i[42]) { }
 >i : Symbol(i, Decl(for-inStatements.ts, 61, 3))
 
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(for-inStatements.ts, 63, 24))
 
     export class X<T> {
->X : Symbol(X, Decl(for-inStatements.ts, 66, 10))
+>X : Symbol(X, Decl(for-inStatements.ts, 66, 13))
 >T : Symbol(T, Decl(for-inStatements.ts, 67, 19))
 
         name:string
@@ -212,9 +212,9 @@ for (var x in M) { }
 
 for (var x in M.X) { }
 >x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
->M.X : Symbol(M.X, Decl(for-inStatements.ts, 66, 10))
+>M.X : Symbol(M.X, Decl(for-inStatements.ts, 66, 13))
 >M : Symbol(M, Decl(for-inStatements.ts, 63, 24))
->X : Symbol(M.X, Decl(for-inStatements.ts, 66, 10))
+>X : Symbol(M.X, Decl(for-inStatements.ts, 66, 13))
 
 enum Color { Red, Blue }
 >Color : Symbol(Color, Decl(for-inStatements.ts, 73, 22))

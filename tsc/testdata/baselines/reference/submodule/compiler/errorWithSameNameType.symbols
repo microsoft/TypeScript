@@ -23,23 +23,23 @@ import * as A from './a'
 import * as B from './b'
 >B : Symbol(B, Decl(c.ts, 1, 6))
 
-let a: A.F
->a : Symbol(a, Decl(c.ts, 3, 3))
+declare let a: A.F
+>a : Symbol(a, Decl(c.ts, 3, 11))
 >A : Symbol(A, Decl(c.ts, 0, 6))
 >F : Symbol(A.F, Decl(a.ts, 0, 0))
 
-let b: B.F
->b : Symbol(b, Decl(c.ts, 4, 3))
+declare let b: B.F
+>b : Symbol(b, Decl(c.ts, 4, 11))
 >B : Symbol(B, Decl(c.ts, 1, 6))
 >F : Symbol(B.F, Decl(b.ts, 0, 0))
 
 if (a === b) {
->a : Symbol(a, Decl(c.ts, 3, 3))
->b : Symbol(b, Decl(c.ts, 4, 3))
+>a : Symbol(a, Decl(c.ts, 3, 11))
+>b : Symbol(b, Decl(c.ts, 4, 11))
 
 }
 
 a = b
->a : Symbol(a, Decl(c.ts, 3, 3))
->b : Symbol(b, Decl(c.ts, 4, 3))
+>a : Symbol(a, Decl(c.ts, 3, 11))
+>b : Symbol(b, Decl(c.ts, 4, 11))
 

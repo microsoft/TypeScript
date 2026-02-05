@@ -56,6 +56,7 @@ class ADD extends AD {
 
 
 //// [override7.js]
+"use strict";
 class B {
     p1 = 1;
     p2 = 2;

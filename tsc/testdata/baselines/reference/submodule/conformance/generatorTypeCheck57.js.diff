@@ -1,7 +1,7 @@
 --- old.generatorTypeCheck57.js
 +++ new.generatorTypeCheck57.js
-@@= skipped -9, +9 lines =@@
- //// [generatorTypeCheck57.js]
+@@= skipped -10, +10 lines =@@
+ "use strict";
  function* g() {
      class C {
 -        constructor() {

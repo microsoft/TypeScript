@@ -20,5 +20,5 @@ f6('', /**/false)`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 	f.GoToMarker(t, "")
-	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "f6(arg0: string, arg1?: boolean): number"})
+	f.VerifySignatureHelp(t, fourslash.VerifySignatureHelpOptions{Text: "f6(arg0: string, arg1?: boolean | undefined): number"})
 }

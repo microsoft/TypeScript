@@ -11,6 +11,7 @@ while (true) {
 }
 
 //// [parser_continueTarget5.js]
+"use strict";
 target: while (true) {
     function f() {
         while (true) {

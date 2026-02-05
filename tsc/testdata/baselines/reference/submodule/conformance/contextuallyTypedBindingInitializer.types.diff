@@ -1,0 +1,50 @@
+--- old.contextuallyTypedBindingInitializer.types
++++ new.contextuallyTypedBindingInitializer.types
+@@= skipped -11, +11 lines =@@
+ >v => v.toString() : (v: number) => string
+ >v : number
+ >v.toString() : string
+->v.toString : (radix?: number) => string
++>v.toString : (radix?: number | undefined) => string
+ >v : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+ function f2({ "show": showRename = v => v.toString() }: Show) {}
+ >f2 : ({ "show": showRename }: Show) => void
+@@= skipped -10, +10 lines =@@
+ >v => v.toString() : (v: number) => string
+ >v : number
+ >v.toString() : string
+->v.toString : (radix?: number) => string
++>v.toString : (radix?: number | undefined) => string
+ >v : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+ function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
+ >f3 : ({ ["show"]: showRename }: Show) => void
+@@= skipped -11, +11 lines =@@
+ >v => v.toString() : (v: number) => string
+ >v : number
+ >v.toString() : string
+->v.toString : (radix?: number) => string
++>v.toString : (radix?: number | undefined) => string
+ >v : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+ interface Nested {
+     nested: Show
+@@= skipped -16, +16 lines =@@
+ >v => v.toString() : (v: number) => string
+ >v : number
+ >v.toString() : string
+->v.toString : (radix?: number) => string
++>v.toString : (radix?: number | undefined) => string
+ >v : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+
+ interface Tuples {
+     prop: [string, number];

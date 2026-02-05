@@ -9,5 +9,6 @@ var sym: symbol;
 sym.newSymbolProp;
 
 //// [symbolType16.js]
+"use strict";
 var sym;
 sym.newSymbolProp;

@@ -13,4 +13,5 @@ declare const a: number;
 a;
 
 //// [a.js]
+"use strict";
 a;

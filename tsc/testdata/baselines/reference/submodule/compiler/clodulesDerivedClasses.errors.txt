@@ -1,15 +1,23 @@
+clodulesDerivedClasses.ts(2,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+clodulesDerivedClasses.ts(6,40): error TS2322: Type 'null' is not assignable to type 'Shape'.
 clodulesDerivedClasses.ts(9,7): error TS2417: Class static side 'typeof Path' incorrectly extends base class static side 'typeof Shape'.
   Types of property 'Utils' are incompatible.
     Property 'convert' is missing in type 'typeof Path.Utils' but required in type 'typeof Shape.Utils'.
+clodulesDerivedClasses.ts(10,5): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+clodulesDerivedClasses.ts(16,9): error TS2322: Type 'null' is not assignable to type 'Path'.
 
 
-==== clodulesDerivedClasses.ts (1 errors) ====
+==== clodulesDerivedClasses.ts (5 errors) ====
     class Shape {
         id: number;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
     }
     
-    module Shape.Utils {
+    namespace Shape.Utils {
         export function convert(): Shape { return null;}
+                                           ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Shape'.
     }
     
     class Path extends Shape {
@@ -19,12 +27,16 @@ clodulesDerivedClasses.ts(9,7): error TS2417: Class static side 'typeof Path' in
 !!! error TS2417:     Property 'convert' is missing in type 'typeof Path.Utils' but required in type 'typeof Shape.Utils'.
 !!! related TS2728 clodulesDerivedClasses.ts:6:21: 'convert' is declared here.
         name: string;
+        ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
     
     }
     
-    module Path.Utils {
+    namespace Path.Utils {
         export function convert2(): Path {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Path'.
         }
     }
     

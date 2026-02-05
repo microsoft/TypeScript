@@ -1,24 +1,24 @@
 --- old.baseClassImprovedMismatchErrors.errors.txt
 +++ new.baseClassImprovedMismatchErrors.errors.txt
-@@= skipped -5, +5 lines =@@
-           Type 'string | number' is not assignable to type 'number'.
+@@= skipped -7, +7 lines =@@
              Type 'string' is not assignable to type 'number'.
+ baseClassImprovedMismatchErrors.ts(8,5): error TS2564: Property 'n' has no initializer and is not definitely assigned in the constructor.
  baseClassImprovedMismatchErrors.ts(9,5): error TS2416: Property 'fn' in type 'Derived' is not assignable to the same property in base type 'Base'.
 -  Type '() => number | string' is not assignable to type '() => number'.
 +  Type '() => string | number' is not assignable to type '() => number'.
      Type 'string | number' is not assignable to type 'number'.
        Type 'string' is not assignable to type 'number'.
  baseClassImprovedMismatchErrors.ts(14,5): error TS2416: Property 'n' in type 'DerivedInterface' is not assignable to the same property in base type 'Base'.
-@@= skipped -11, +11 lines =@@
-           Type 'string | number' is not assignable to type 'number'.
+@@= skipped -12, +12 lines =@@
              Type 'string' is not assignable to type 'number'.
+ baseClassImprovedMismatchErrors.ts(14,5): error TS2564: Property 'n' has no initializer and is not definitely assigned in the constructor.
  baseClassImprovedMismatchErrors.ts(15,5): error TS2416: Property 'fn' in type 'DerivedInterface' is not assignable to the same property in base type 'Base'.
 -  Type '() => number | string' is not assignable to type '() => number'.
 +  Type '() => string | number' is not assignable to type '() => number'.
      Type 'string | number' is not assignable to type 'number'.
        Type 'string' is not assignable to type 'number'.
 
-@@= skipped -25, +25 lines =@@
+@@= skipped -29, +29 lines =@@
          fn() {
          ~~
  !!! error TS2416: Property 'fn' in type 'Derived' is not assignable to the same property in base type 'Base'.
@@ -27,7 +27,7 @@
  !!! error TS2416:     Type 'string | number' is not assignable to type 'number'.
  !!! error TS2416:       Type 'string' is not assignable to type 'number'.
              return 10 as number | string;
-@@= skipped -19, +19 lines =@@
+@@= skipped -21, +21 lines =@@
          fn() {
          ~~
  !!! error TS2416: Property 'fn' in type 'DerivedInterface' is not assignable to the same property in base type 'Base'.

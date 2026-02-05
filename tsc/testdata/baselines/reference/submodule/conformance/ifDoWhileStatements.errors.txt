@@ -1,3 +1,11 @@
+ifDoWhileStatements.ts(6,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+ifDoWhileStatements.ts(7,5): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+ifDoWhileStatements.ts(11,5): error TS2564: Property 'valid' has no initializer and is not definitely assigned in the constructor.
+ifDoWhileStatements.ts(15,5): error TS2564: Property 'source' has no initializer and is not definitely assigned in the constructor.
+ifDoWhileStatements.ts(16,5): error TS2564: Property 'recurse' has no initializer and is not definitely assigned in the constructor.
+ifDoWhileStatements.ts(17,5): error TS2564: Property 'wrapped' has no initializer and is not definitely assigned in the constructor.
+ifDoWhileStatements.ts(25,9): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+ifDoWhileStatements.ts(33,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
 ifDoWhileStatements.ts(44,5): error TS2873: This kind of expression is always falsy.
 ifDoWhileStatements.ts(45,8): error TS2873: This kind of expression is always falsy.
 ifDoWhileStatements.ts(46,13): error TS2873: This kind of expression is always falsy.
@@ -28,42 +36,60 @@ ifDoWhileStatements.ts(82,13): error TS2872: This kind of expression is always t
 ifDoWhileStatements.ts(84,5): error TS2872: This kind of expression is always truthy.
 ifDoWhileStatements.ts(85,8): error TS2872: This kind of expression is always truthy.
 ifDoWhileStatements.ts(86,13): error TS2872: This kind of expression is always truthy.
+ifDoWhileStatements.ts(152,30): error TS2322: Type 'null' is not assignable to type 'I'.
+ifDoWhileStatements.ts(157,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 
 
-==== ifDoWhileStatements.ts (30 errors) ====
+==== ifDoWhileStatements.ts (40 errors) ====
     interface I {
         id: number;
     }
     
     class C implements I {
         id: number;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         name: string;
+        ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C2 extends C {
         valid: boolean;
+        ~~~~~
+!!! error TS2564: Property 'valid' has no initializer and is not definitely assigned in the constructor.
     }
     
     class D<T>{
         source: T;
+        ~~~~~~
+!!! error TS2564: Property 'source' has no initializer and is not definitely assigned in the constructor.
         recurse: D<T>;
+        ~~~~~~~
+!!! error TS2564: Property 'recurse' has no initializer and is not definitely assigned in the constructor.
         wrapped: D<D<T>>
+        ~~~~~~~
+!!! error TS2564: Property 'wrapped' has no initializer and is not definitely assigned in the constructor.
     }
     
     function F(x: string): number { return 42; }
     function F2(x: number): boolean { return x < 42; }
     
-    module M {
+    namespace M {
         export class A {
             name: string;
+            ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
         }
     
         export function F2(x: number): string { return x.toString(); }
     }
     
-    module N {
+    namespace N {
         export class A {
             id: number;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         }
     
         export function F2(x: number): string { return x.toString(); }
@@ -243,11 +269,15 @@ ifDoWhileStatements.ts(86,13): error TS2872: This kind of expression is always t
     do { }while(k)
     
     function fn(x?: string): I { return null; }
+                                 ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'I'.
     if (fn()) { }
     while (fn()) { }
     do { }while(fn())
     
     if (fn) { }
+        ~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
     while (fn) { }
     do { }while(fn)
     

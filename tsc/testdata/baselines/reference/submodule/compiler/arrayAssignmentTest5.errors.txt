@@ -1,9 +1,11 @@
+arrayAssignmentTest5.ts(21,66): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 arrayAssignmentTest5.ts(23,17): error TS2322: Type 'IToken[]' is not assignable to type 'IStateToken[]'.
   Property 'state' is missing in type 'IToken' but required in type 'IStateToken'.
+arrayAssignmentTest5.ts(29,13): error TS2322: Type 'null' is not assignable to type 'ILineTokens'.
 
 
-==== arrayAssignmentTest5.ts (1 errors) ====
-    module Test {
+==== arrayAssignmentTest5.ts (3 errors) ====
+    namespace Test {
         interface IState {
         }
         interface IToken {
@@ -24,6 +26,8 @@ arrayAssignmentTest5.ts(23,17): error TS2322: Type 'IToken[]' is not assignable 
         }
         export class Bug implements IMode {
             public onEnter(line:string, state:IState, offset:number):IAction {
+                                                                     ~~~~~~~
+!!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
                 var lineTokens:ILineTokens= this.tokenize(line, state, true);
                 var tokens:IStateToken[]= lineTokens.tokens;
                     ~~~~~~
@@ -36,6 +40,8 @@ arrayAssignmentTest5.ts(23,17): error TS2322: Type 'IToken[]' is not assignable 
             }
             public tokenize(line:string, state:IState, includeStates:boolean):ILineTokens {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'ILineTokens'.
             }
         }
     }

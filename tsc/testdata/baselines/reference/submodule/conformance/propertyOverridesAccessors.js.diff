@@ -1,6 +1,6 @@
 --- old.propertyOverridesAccessors.js
 +++ new.propertyOverridesAccessors.js
-@@= skipped -21, +21 lines =@@
+@@= skipped -22, +22 lines =@@
      get p() { return 'oh no'; }
  }
  class B extends A {

@@ -1,0 +1,17 @@
+detachedCommentAtStartOfLambdaFunction2.ts(2,5): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+
+
+==== detachedCommentAtStartOfLambdaFunction2.ts (1 errors) ====
+    class TestFile {
+        name: string;
+        ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+        foo(message: string): () => string {
+            return (...x: string[]) =>
+                /// <summary>Test summary</summary>
+                /// <param name="message" type="String" />
+                /// <returns type="Function" />
+    
+                message + this.name;
+        }
+    }

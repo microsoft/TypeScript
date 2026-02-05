@@ -1,7 +1,7 @@
 --- old.esDecorators-classDeclaration-classSuper.7.js
 +++ new.esDecorators-classDeclaration-classSuper.7.js
-@@= skipped -44, +44 lines =@@
- //// [esDecorators-classDeclaration-classSuper.7.js]
+@@= skipped -45, +45 lines =@@
+ "use strict";
  class A {
  }
 -let B = (() => {

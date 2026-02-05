@@ -33,9 +33,9 @@ this = value;
 >value : Symbol(value, Decl(assignmentLHSIsValue.ts, 1, 3))
 
 // identifiers: module, class, enum, function
-module M { export var a; }
+namespace M { export var a; }
 >M : Symbol(M, Decl(assignmentLHSIsValue.ts, 12, 13))
->a : Symbol(a, Decl(assignmentLHSIsValue.ts, 15, 21))
+>a : Symbol(a, Decl(assignmentLHSIsValue.ts, 15, 24))
 
 M = value;
 >M : Symbol(M, Decl(assignmentLHSIsValue.ts, 12, 13))

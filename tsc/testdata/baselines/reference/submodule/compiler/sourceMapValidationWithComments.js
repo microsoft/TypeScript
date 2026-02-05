@@ -24,6 +24,7 @@ class DebugClass {
 }
 
 //// [sourceMapValidationWithComments.js]
+"use strict";
 class DebugClass {
     static debugFunc() {
         // Start Debugger Test Code

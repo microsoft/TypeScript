@@ -1,7 +1,7 @@
 --- old.typeofOperatorWithBooleanType.js
 +++ new.typeofOperatorWithBooleanType.js
-@@= skipped -56, +56 lines =@@
- var BOOLEAN;
+@@= skipped -55, +55 lines =@@
+ "use strict";
  function foo() { return true; }
  class A {
 +    a;

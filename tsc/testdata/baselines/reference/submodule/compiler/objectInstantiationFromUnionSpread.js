@@ -23,6 +23,7 @@ function f2<T>(a: Item[]) {
 
 
 //// [objectInstantiationFromUnionSpread.js]
+"use strict";
 // #40995
 function f1(a) {
     a.map(item => (Object.assign({}, item))).filter(value => { });

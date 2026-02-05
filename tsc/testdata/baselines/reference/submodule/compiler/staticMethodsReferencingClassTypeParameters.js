@@ -6,6 +6,7 @@ class C<T> {
 }
 
 //// [staticMethodsReferencingClassTypeParameters.js]
+"use strict";
 class C {
     static s(p) { return p; }
 }

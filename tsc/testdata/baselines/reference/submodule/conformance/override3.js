@@ -28,6 +28,7 @@ class EB extends D {
 
 
 //// [override3.js]
+"use strict";
 class DB extends B {
     foo() { }
     bar() { }

@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/listFailure.ts] ////
 
 === listFailure.ts ===
-module Editor {
+namespace Editor {
 >Editor : Symbol(Editor, Decl(listFailure.ts, 0, 0))
 
     export class Buffer {
->Buffer : Symbol(Buffer, Decl(listFailure.ts, 0, 15))
+>Buffer : Symbol(Buffer, Decl(listFailure.ts, 0, 18))
 
     	lines: List<Line> = ListMakeHead<Line>();
 >lines : Symbol(Buffer.lines, Decl(listFailure.ts, 2, 25))
@@ -29,7 +29,7 @@ module Editor {
 >lineEntry : Symbol(lineEntry, Decl(listFailure.ts, 8, 15))
 >this.lines.add : Symbol(List.add, Decl(listFailure.ts, 27, 29))
 >this.lines : Symbol(Buffer.lines, Decl(listFailure.ts, 2, 25))
->this : Symbol(Buffer, Decl(listFailure.ts, 0, 15))
+>this : Symbol(Buffer, Decl(listFailure.ts, 0, 18))
 >lines : Symbol(Buffer.lines, Decl(listFailure.ts, 2, 25))
 >add : Symbol(List.add, Decl(listFailure.ts, 27, 29))
 >line : Symbol(line, Decl(listFailure.ts, 7, 15))

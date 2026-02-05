@@ -14,6 +14,7 @@ interface A {
 }
 
 //// [app.js]
+"use strict";
 /// <reference types="lib" preserve="true" />
 /// <reference path="ref.d.ts" />
 

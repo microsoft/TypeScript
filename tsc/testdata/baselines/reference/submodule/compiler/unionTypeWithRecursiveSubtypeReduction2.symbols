@@ -35,19 +35,19 @@ class Property {
 >Class : Symbol(Class, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 6, 1))
 }
 
-var c: Class;
->c : Symbol(c, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 16, 3))
+declare var c: Class;
+>c : Symbol(c, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 16, 11))
 >Class : Symbol(Class, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 6, 1))
 
-var p: Property;
->p : Symbol(p, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 17, 3))
+declare var p: Property;
+>p : Symbol(p, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 17, 11))
 >Property : Symbol(Property, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 10, 1))
 
 c = p;
->c : Symbol(c, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 16, 3))
->p : Symbol(p, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 17, 3))
+>c : Symbol(c, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 16, 11))
+>p : Symbol(p, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 17, 11))
 
 p = c;
->p : Symbol(p, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 17, 3))
->c : Symbol(c, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 16, 3))
+>p : Symbol(p, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 17, 11))
+>c : Symbol(c, Decl(unionTypeWithRecursiveSubtypeReduction2.ts, 16, 11))
 

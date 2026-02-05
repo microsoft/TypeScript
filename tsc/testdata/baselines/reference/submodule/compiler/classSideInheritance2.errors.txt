@@ -1,7 +1,8 @@
 classSideInheritance2.ts(7,23): error TS2449: Class 'TextBase' used before its declaration.
+classSideInheritance2.ts(15,16): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 
 
-==== classSideInheritance2.ts (1 errors) ====
+==== classSideInheritance2.ts (2 errors) ====
     interface IText {
         foo: number;
     }
@@ -20,6 +21,8 @@ classSideInheritance2.ts(7,23): error TS2449: Class 'TextBase' used before its d
     
     class TextBase implements IText {
             public foo: number;
+                   ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
             public subText(span: TextSpan): IText {
     
                 return new SubText(this, span);

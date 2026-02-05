@@ -4,22 +4,8 @@
  	 * @param {object} [foo={}]
  	 */
  	constructor(foo = {}) {
-->foo : any
+->foo : object | undefined
 +>foo : object
  >{} : {}
 
  		/**
- 		 * @type object
- 		 */
- 		this.arguments = foo;
-->this.arguments = foo : any
-->this.arguments : any
-+>this.arguments = foo : object
-+>this.arguments : object
- >this : this
-->arguments : any
-->foo : any
-+>arguments : object
-+>foo : object
- 	}
- }

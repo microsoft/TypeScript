@@ -6,7 +6,7 @@ class C {
     constructor(y: number) { } // ok
 }
 
-var c: C;
+declare var c: C;
 var r = c.y;
 
 class D {
@@ -14,7 +14,7 @@ class D {
     constructor(public y: number) { } // error
 }
 
-var d: D;
+declare var d: D;
 var r2 = d.y;
 
 class E {
@@ -22,7 +22,7 @@ class E {
     constructor(private y: number) { } // error
 }
 
-var e: E;
+declare var e: E;
 var r3 = e.y; // error
 
 class F {
@@ -30,16 +30,16 @@ class F {
     constructor(protected y: number) { } // error
 }
 
-var f: F;
+declare var f: F;
 var r4 = f.y; // error
 
 
 //// [constructorParameterProperties2.js]
+"use strict";
 class C {
     y;
     constructor(y) { } // ok
 }
-var c;
 var r = c.y;
 class D {
     y;
@@ -48,7 +48,6 @@ class D {
         this.y = y;
     } // error
 }
-var d;
 var r2 = d.y;
 class E {
     y;
@@ -57,7 +56,6 @@ class E {
         this.y = y;
     } // error
 }
-var e;
 var r3 = e.y; // error
 class F {
     y;
@@ -66,5 +64,4 @@ class F {
         this.y = y;
     } // error
 }
-var f;
 var r4 = f.y; // error

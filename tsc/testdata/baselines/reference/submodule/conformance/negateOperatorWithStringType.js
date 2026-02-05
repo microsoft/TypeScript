@@ -2,17 +2,17 @@
 
 //// [negateOperatorWithStringType.ts]
 // - operator on string type
-var STRING: string;
+declare var STRING: string;
 var STRING1: string[] = ["", "abc"];
 
 function foo(): string { return "abc"; }
 
 class A {
-    public a: string;
+    public a!: string;
     static foo() { return ""; }
 }
-module M {
-    export var n: string;
+namespace M {
+    export var n: string = "";
 }
 
 var objA = new A();
@@ -43,8 +43,7 @@ var ResultIsNumber12 = -STRING.charAt(0);
 -objA.a,M.n;
 
 //// [negateOperatorWithStringType.js]
-// - operator on string type
-var STRING;
+"use strict";
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
 class A {
@@ -53,6 +52,7 @@ class A {
 }
 var M;
 (function (M) {
+    M.n = "";
 })(M || (M = {}));
 var objA = new A();
 // string type var

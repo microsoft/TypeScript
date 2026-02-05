@@ -11,7 +11,8 @@ func TestGetJavaScriptSyntacticDiagnostics01(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @allowJs: true
+	const content = `// @lib: es5
+// @allowJs: true
 // @Filename: a.js
 var ===;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

@@ -4,9 +4,9 @@
 // When a function expression is inferentially typed (section 4.9.3) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, 
 // the corresponding inferred type arguments to become fixed and no further candidate inferences are made for them.
 
-module onlyT {
+namespace onlyT {
     function foo<T>(a: (x: T) => T, b: (x: T) => T) {
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
         return r;
     }
 
@@ -20,7 +20,7 @@ module onlyT {
     }
 
     function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
         return r;
     }
 
@@ -33,16 +33,16 @@ module onlyT {
     enum F { A }
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
         return r;
     }
 
     var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
 }
 
-module TU {
+namespace TU {
     function foo<T, U>(a: (x: T) => T, b: (x: U) => U) {
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
         return r;
     }
 
@@ -55,7 +55,7 @@ module TU {
     }
 
     function foo2<T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) {
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
         return r;
     }
 
@@ -68,7 +68,7 @@ module TU {
     enum F { A }
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: U) => U) {
-        var r: (x: T) => T;
+        var r!: (x: T) => T;
         return r;
     }
 
@@ -76,6 +76,7 @@ module TU {
 }
 
 //// [genericCallWithGenericSignatureArguments2.js]
+"use strict";
 // When a function expression is inferentially typed (section 4.9.3) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, 
 // the corresponding inferred type arguments to become fixed and no further candidate inferences are made for them.
 var onlyT;

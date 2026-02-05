@@ -17,6 +17,7 @@ var v: string;
 for (v of new NumberIterator) { } // Should succeed
 
 //// [for-of17.js]
+"use strict";
 class NumberIterator {
     next() {
         return {

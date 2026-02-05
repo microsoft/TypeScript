@@ -9,6 +9,7 @@ function f() {
 }
 
 //// [returnStatement1.js]
+"use strict";
 function f() {
     return function (s) {
         var x = s;

@@ -1,0 +1,11 @@
+--- old.noErrorUsingImportExportModuleAugmentationInDeclarationFile2(target=es2015).js
++++ new.noErrorUsingImportExportModuleAugmentationInDeclarationFile2(target=es2015).js
+@@= skipped -7, +7 lines =@@
+ declare var a: number;
+
+ //// [1.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-exports.j = void 0;
+-exports.j = "hello"; // error
++export var j = "hello"; // error

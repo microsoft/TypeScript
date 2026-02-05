@@ -4,4 +4,5 @@
 for (let [v, v] of [[]]) {}
 
 //// [for-of52.js]
+"use strict";
 for (let [v, v] of [[]]) { }

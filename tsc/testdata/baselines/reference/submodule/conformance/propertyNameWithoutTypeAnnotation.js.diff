@@ -1,8 +1,8 @@
 --- old.propertyNameWithoutTypeAnnotation.js
 +++ new.propertyNameWithoutTypeAnnotation.js
-@@= skipped -24, +24 lines =@@
-
+@@= skipped -25, +25 lines =@@
  //// [propertyNameWithoutTypeAnnotation.js]
+ "use strict";
  class C {
 +    foo;
  }

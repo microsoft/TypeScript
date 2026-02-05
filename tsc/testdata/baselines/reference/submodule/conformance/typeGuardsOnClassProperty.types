@@ -29,9 +29,9 @@ class D {
 >"string" : "string"
 >data : string
 >data.join(" ") : string
->data.join : (separator?: string) => string
+>data.join : (separator?: string | undefined) => string
 >data : string[]
->join : (separator?: string) => string
+>join : (separator?: string | undefined) => string
 >" " : " "
     }
 
@@ -50,11 +50,11 @@ class D {
 >this : this
 >data : string
 >this.data.join(" ") : string
->this.data.join : (separator?: string) => string
+>this.data.join : (separator?: string | undefined) => string
 >this.data : string[]
 >this : this
 >data : string[]
->join : (separator?: string) => string
+>join : (separator?: string | undefined) => string
 >" " : " "
     }
 }
@@ -81,7 +81,7 @@ var o: {
     }
 
 if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
->typeof o.prop1 === "string" && o.prop1.toLowerCase() : string
+>typeof o.prop1 === "string" && o.prop1.toLowerCase() : string | false
 >typeof o.prop1 === "string" : boolean
 >typeof o.prop1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >o.prop1 : string | number
@@ -102,13 +102,13 @@ var prop1 = o.prop1;
 >prop1 : string | number
 
 if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
->typeof prop1 === "string" && prop1.toLocaleLowerCase() : string
+>typeof prop1 === "string" && prop1.toLocaleLowerCase() : string | false
 >typeof prop1 === "string" : boolean
 >typeof prop1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >prop1 : string | number
 >"string" : "string"
 >prop1.toLocaleLowerCase() : string
->prop1.toLocaleLowerCase : (locales?: string | string[]) => string
+>prop1.toLocaleLowerCase : (locales?: string | string[] | undefined) => string
 >prop1 : string
->toLocaleLowerCase : (locales?: string | string[]) => string
+>toLocaleLowerCase : (locales?: string | string[] | undefined) => string
 

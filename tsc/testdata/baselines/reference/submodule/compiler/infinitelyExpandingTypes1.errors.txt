@@ -1,7 +1,13 @@
+infinitelyExpandingTypes1.ts(17,1): error TS2454: Variable 'l' is used before being assigned.
+infinitelyExpandingTypes1.ts(17,6): error TS2454: Variable 'm' is used before being assigned.
+infinitelyExpandingTypes1.ts(21,1): error TS2454: Variable 'l' is used before being assigned.
 infinitelyExpandingTypes1.ts(21,1): error TS2367: This comparison appears to be unintentional because the types 'List<number>' and 'List<string>' have no overlap.
+infinitelyExpandingTypes1.ts(21,6): error TS2454: Variable 'l2' is used before being assigned.
+infinitelyExpandingTypes1.ts(23,1): error TS2454: Variable 'l' is used before being assigned.
+infinitelyExpandingTypes1.ts(23,6): error TS2454: Variable 'l' is used before being assigned.
 
 
-==== infinitelyExpandingTypes1.ts (1 errors) ====
+==== infinitelyExpandingTypes1.ts (7 errors) ====
     interface List<T> {
         data: T;
         next: List<T>;
@@ -19,11 +25,23 @@ infinitelyExpandingTypes1.ts(21,1): error TS2367: This comparison appears to be 
     var m: MyList<number>;
     
     l == m; // should error
+    ~
+!!! error TS2454: Variable 'l' is used before being assigned.
+         ~
+!!! error TS2454: Variable 'm' is used before being assigned.
     
     var l2: List<string>;
     
     l == l2; // should error;
+    ~
+!!! error TS2454: Variable 'l' is used before being assigned.
     ~~~~~~~
 !!! error TS2367: This comparison appears to be unintentional because the types 'List<number>' and 'List<string>' have no overlap.
+         ~~
+!!! error TS2454: Variable 'l2' is used before being assigned.
     
     l == l; // should not error
+    ~
+!!! error TS2454: Variable 'l' is used before being assigned.
+         ~
+!!! error TS2454: Variable 'l' is used before being assigned.

@@ -15,6 +15,7 @@ class C {
 }
 
 //// [staticMemberAssignsToConstructorFunctionMembers.js]
+"use strict";
 class C {
     static foo() {
         C.foo = () => { };

@@ -25,7 +25,7 @@ var r2 = f2<string>(1);
 >f2 : (x: number) => any
 >1 : 1
 
-var f3: { (x: number): any; }
+declare var f3: { (x: number): any; }
 >f3 : (x: number) => any
 >x : number
 
@@ -60,7 +60,7 @@ interface I {
 >f : (x: number) => any
 >x : number
 }
-var i: I;
+declare var i: I;
 >i : I
 
 var r5 = i.f<string>(1);
@@ -96,7 +96,7 @@ interface I2 {
 >f : (x: number) => any
 >x : number
 }
-var i2: I2;
+declare var i2: I2;
 >i2 : I2
 
 var r7 = i2.f<string>(1);
@@ -107,7 +107,7 @@ var r7 = i2.f<string>(1);
 >f : (x: number) => any
 >1 : 1
 
-var a;
+declare var a;
 >a : any
 
 var r8 = a<number>();
@@ -115,7 +115,7 @@ var r8 = a<number>();
 >a<number>() : any
 >a : any
 
-var a2: any;
+declare var a2: any;
 >a2 : any
 
 var r8 = a2<number>();

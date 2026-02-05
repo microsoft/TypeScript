@@ -1,6 +1,6 @@
 --- old.abstractClassUnionInstantiation.js
 +++ new.abstractClassUnionInstantiation.js
-@@= skipped -28, +28 lines =@@
+@@= skipped -29, +29 lines =@@
  class ConcreteB {
  }
  class AbstractA {

@@ -4,3 +4,4 @@
 function foo():string;
 
 //// [functionOverloads3.js]
+"use strict";

@@ -12,14 +12,15 @@ func TestCompletionsMergedDeclarations1(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface Point {
+	const content = `// @lib: es5
+interface Point {
     x: number;
     y: number;
 }
 function point(x: number, y: number): Point {
     return { x: x, y: y };
 }
-module point {
+namespace point {
     export var origin = point(0, 0);
     export function equals(p1: Point, p2: Point) {
         return p1.x == p2.x && p1.y == p2.y;

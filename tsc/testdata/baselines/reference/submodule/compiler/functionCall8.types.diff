@@ -1,0 +1,33 @@
+--- old.functionCall8.types
++++ new.functionCall8.types
+@@= skipped -1, +1 lines =@@
+
+ === functionCall8.ts ===
+ function foo(a?:string){}
+->foo : (a?: string) => void
++>foo : (a?: string | undefined) => void
+ >a : string | undefined
+
+ foo('foo'); 
+ >foo('foo') : void
+->foo : (a?: string) => void
++>foo : (a?: string | undefined) => void
+ >'foo' : "foo"
+
+ foo('foo', 'bar'); 
+ >foo('foo', 'bar') : void
+->foo : (a?: string) => void
++>foo : (a?: string | undefined) => void
+ >'foo' : "foo"
+ >'bar' : "bar"
+
+ foo(4);
+ >foo(4) : void
+->foo : (a?: string) => void
++>foo : (a?: string | undefined) => void
+ >4 : 4
+
+ foo();
+ >foo() : void
+->foo : (a?: string) => void
++>foo : (a?: string | undefined) => void

@@ -18,6 +18,7 @@ let x3 = obj3.value;  // before: string, after: "1"
 
 
 //// [freshLiteralInference.js]
+"use strict";
 const value = f1("1"); // regular "1"
 let x1 = value; // regular "1"
 const obj2 = f2({ value: "1" }); // { value: regular "1" }

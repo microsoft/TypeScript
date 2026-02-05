@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/knockout.ts] ////
 
 === knockout.ts ===
-  declare module ko {
+  declare namespace ko {
 >ko : Symbol(ko, Decl(knockout.ts, 0, 0))
 
    export interface Observable<T> {
->Observable : Symbol(Observable, Decl(knockout.ts, 0, 21))
+>Observable : Symbol(Observable, Decl(knockout.ts, 0, 24))
 >T : Symbol(T, Decl(knockout.ts, 1, 31))
 
      (): T;
@@ -30,7 +30,7 @@
 >T : Symbol(T, Decl(knockout.ts, 8, 30))
 >value : Symbol(value, Decl(knockout.ts, 8, 33))
 >T : Symbol(T, Decl(knockout.ts, 8, 30))
->Observable : Symbol(Observable, Decl(knockout.ts, 0, 21))
+>Observable : Symbol(Observable, Decl(knockout.ts, 0, 24))
 >T : Symbol(T, Decl(knockout.ts, 8, 30))
  }
  var o = {

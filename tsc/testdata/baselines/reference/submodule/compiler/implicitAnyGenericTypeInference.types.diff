@@ -1,7 +1,7 @@
 --- old.implicitAnyGenericTypeInference.types
 +++ new.implicitAnyGenericTypeInference.types
 @@= skipped -48, +48 lines =@@
- >async () => null : () => Promise<any>
+ >async () => null : () => Promise<null>
 
  declare function f3<T>(cb: () => Generator<T>): void;
 ->f3 : <T>(cb: () => Generator<T>) => void
@@ -13,7 +13,7 @@
  >f3(function* () { yield null; }) : void
 ->f3 : <T>(cb: () => Generator<T>) => void
 +>f3 : <T>(cb: () => Generator<T, any, any>) => void
- >function* () { yield null; } : () => Generator<any, void, any>
+ >function* () { yield null; } : () => Generator<null, void, any>
  >yield null : any
 
  declare function f4<T>(cb: () => Generator<unknown, T>): void;
@@ -26,7 +26,7 @@
  >f4(function* () { return null; }) : void
 ->f4 : <T>(cb: () => Generator<unknown, T>) => void
 +>f4 : <T>(cb: () => Generator<unknown, T, any>) => void
- >function* () { return null; } : () => Generator<never, any, any>
+ >function* () { return null; } : () => Generator<never, null, any>
 
  declare function f5<T>(cb: () => AsyncGenerator<T>): void;
 ->f5 : <T>(cb: () => AsyncGenerator<T>) => void
@@ -38,7 +38,7 @@
  >f5(async function* () { yield null; }) : void
 ->f5 : <T>(cb: () => AsyncGenerator<T>) => void
 +>f5 : <T>(cb: () => AsyncGenerator<T, any, any>) => void
- >async function* () { yield null; } : () => AsyncGenerator<any, void, any>
+ >async function* () { yield null; } : () => AsyncGenerator<null, void, any>
  >yield null : any
 
  declare function f6<T>(cb: () => AsyncGenerator<unknown, T>): void;
@@ -51,6 +51,6 @@
  >f6(async function* () { return null; }) : void
 ->f6 : <T>(cb: () => AsyncGenerator<unknown, T>) => void
 +>f6 : <T>(cb: () => AsyncGenerator<unknown, T, any>) => void
- >async function* () { return null; } : () => AsyncGenerator<never, any, any>
+ >async function* () { return null; } : () => AsyncGenerator<never, null, any>
 
  // https://github.com/microsoft/TypeScript/issues/44913

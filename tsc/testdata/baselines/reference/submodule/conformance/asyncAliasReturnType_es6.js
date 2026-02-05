@@ -7,5 +7,6 @@ async function f(): PromiseAlias<void> {
 }
 
 //// [asyncAliasReturnType_es6.js]
+"use strict";
 async function f() {
 }

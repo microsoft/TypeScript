@@ -1,7 +1,7 @@
 --- old.additionOperatorWithInvalidOperands.js
 +++ new.additionOperatorWithInvalidOperands.js
-@@= skipped -44, +44 lines =@@
- //// [additionOperatorWithInvalidOperands.js]
+@@= skipped -45, +45 lines =@@
+ "use strict";
  function foo() { }
  class C {
 +    a;

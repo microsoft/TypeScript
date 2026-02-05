@@ -6,3 +6,4 @@ declare module "M" {
 }
 
 //// [parserExportAssignment6.js]
+"use strict";

@@ -4,4 +4,5 @@
 const a = 1
 
 //// [VariableDeclaration3_es6.js]
+"use strict";
 const a = 1;

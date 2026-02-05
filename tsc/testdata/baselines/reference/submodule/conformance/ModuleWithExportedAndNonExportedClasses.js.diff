@@ -1,6 +1,6 @@
 --- old.ModuleWithExportedAndNonExportedClasses.js
 +++ new.ModuleWithExportedAndNonExportedClasses.js
-@@= skipped -38, +38 lines =@@
+@@= skipped -39, +39 lines =@@
  var A;
  (function (A_1) {
      class A {

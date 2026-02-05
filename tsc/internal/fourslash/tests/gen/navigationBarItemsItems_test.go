@@ -21,7 +21,7 @@ interface IPoint {
 }
 
 /// Module
-module Shapes {
+namespace Shapes {
 
     // Class
     export class Point implements IPoint {

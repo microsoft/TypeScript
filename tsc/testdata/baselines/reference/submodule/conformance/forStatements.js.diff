@@ -1,8 +1,8 @@
 --- old.forStatements.js
 +++ new.forStatements.js
-@@= skipped -49, +49 lines =@@
-
+@@= skipped -50, +50 lines =@@
  //// [forStatements.js]
+ "use strict";
  class C {
 +    id;
  }

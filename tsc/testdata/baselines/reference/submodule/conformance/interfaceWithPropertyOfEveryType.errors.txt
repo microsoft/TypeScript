@@ -1,0 +1,55 @@
+interfaceWithPropertyOfEveryType.ts(1,11): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+interfaceWithPropertyOfEveryType.ts(31,5): error TS2322: Type 'null' is not assignable to type 'void'.
+interfaceWithPropertyOfEveryType.ts(36,8): error TS2352: Conversion of type 'null' to type 'Foo' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== interfaceWithPropertyOfEveryType.ts (3 errors) ====
+    class C { foo: string; }
+              ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    function f1() { }
+    namespace M {
+        export var y = 1;
+    }
+    enum E { A }
+    
+    interface Foo {
+        a: number;
+        b: string;
+        c: boolean;
+        d: any;
+        e: void;
+        f: number[];
+        g: Object;
+        h: (x: number) => number;
+        i: <T>(x: T) => T;
+        j: Foo;
+        k: C;
+        l: typeof f1;
+        m: typeof M;
+        n: {};
+        o: E;
+    }
+    
+    var a: Foo = {
+        a: 1,
+        b: '',
+        c: true,
+        d: {},
+        e: null ,
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'void'.
+!!! related TS6500 interfaceWithPropertyOfEveryType.ts:13:5: The expected type comes from property 'e' which is declared here on type 'Foo'
+        f: [1],
+        g: {},
+        h: (x: number) => 1,
+        i: <T>(x: T) => x,
+        j: <Foo>null,
+           ~~~~~~~~~
+!!! error TS2352: Conversion of type 'null' to type 'Foo' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+        k: new C(),
+        l: f1,
+        m: M,
+        n: {},
+        o: E.A
+    }

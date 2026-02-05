@@ -1,0 +1,7 @@
+for-of56.ts(1,10): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+
+
+==== for-of56.ts (1 errors) ====
+    for (var let of []) {}
+             ~~~
+!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.

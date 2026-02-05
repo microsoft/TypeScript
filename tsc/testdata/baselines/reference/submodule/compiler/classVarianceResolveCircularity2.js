@@ -21,9 +21,7 @@ class Foo<T> {
 }
 
 //// [classVarianceResolveCircularity2.js]
-"use strict";
 // Issue #52813
-Object.defineProperty(exports, "__esModule", { value: true });
 class Bar {
     num;
     Value = callme(new Foo(this)).bar.num;
@@ -35,3 +33,4 @@ class Foo {
         this.bar = bar;
     }
 }
+export {};

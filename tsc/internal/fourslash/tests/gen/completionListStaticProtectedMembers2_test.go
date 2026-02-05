@@ -14,7 +14,9 @@ func TestCompletionListStaticProtectedMembers2(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `class Base {
+	const content = `// @target: es2015
+// @lib: es5
+class Base {
     private static privateMethod() { }
     private static privateProperty;
 

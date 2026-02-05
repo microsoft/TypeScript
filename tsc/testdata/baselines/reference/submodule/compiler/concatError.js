@@ -34,6 +34,7 @@ c = c.m(cc);
 */
 
 //// [concatError.js]
+"use strict";
 var n1;
 /*
 interface Array<T> {

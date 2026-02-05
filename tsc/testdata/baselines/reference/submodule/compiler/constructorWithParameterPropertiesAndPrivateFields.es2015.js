@@ -32,6 +32,7 @@ class B {
 
 
 //// [constructorWithParameterPropertiesAndPrivateFields.es2015.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/48771
 class A {
     exposedField;

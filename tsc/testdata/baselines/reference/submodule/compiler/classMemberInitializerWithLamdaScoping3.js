@@ -18,12 +18,10 @@ export class Test1 {
 }
 
 //// [classMemberInitializerWithLamdaScoping3_0.js]
+"use strict";
 var field1;
 //// [classMemberInitializerWithLamdaScoping3_1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Test1 = void 0;
-class Test1 {
+export class Test1 {
     field1;
     constructor(field1) {
         this.field1 = field1;
@@ -34,4 +32,3 @@ class Test1 {
         // it would resolve to private field1 and thats not what user intended here. 
     };
 }
-exports.Test1 = Test1;

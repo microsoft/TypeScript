@@ -5,5 +5,6 @@ async function foo(a = await): Promise<void> {
 }
 
 //// [asyncFunctionDeclaration6_es6.js]
+"use strict";
 async function foo(a = await ) {
 }

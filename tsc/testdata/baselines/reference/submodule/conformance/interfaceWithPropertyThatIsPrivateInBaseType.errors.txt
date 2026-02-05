@@ -1,12 +1,16 @@
+interfaceWithPropertyThatIsPrivateInBaseType.ts(2,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 interfaceWithPropertyThatIsPrivateInBaseType.ts(5,11): error TS2430: Interface 'Foo' incorrectly extends interface 'Base'.
   Property 'x' is private in type 'Base' but not in type 'Foo'.
+interfaceWithPropertyThatIsPrivateInBaseType.ts(10,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 interfaceWithPropertyThatIsPrivateInBaseType.ts(13,11): error TS2430: Interface 'Foo2<T>' incorrectly extends interface 'Base2<T>'.
   Property 'x' is private in type 'Base2<T>' but not in type 'Foo2<T>'.
 
 
-==== interfaceWithPropertyThatIsPrivateInBaseType.ts (2 errors) ====
+==== interfaceWithPropertyThatIsPrivateInBaseType.ts (4 errors) ====
     class Base {
         private x: number;
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     interface Foo extends Base { // error
@@ -18,6 +22,8 @@ interfaceWithPropertyThatIsPrivateInBaseType.ts(13,11): error TS2430: Interface 
     
     class Base2<T> {
         private x: T;
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     interface Foo2<T> extends Base2<T> { // error

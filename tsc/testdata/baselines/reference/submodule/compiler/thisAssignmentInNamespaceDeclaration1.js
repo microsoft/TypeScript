@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/thisAssignmentInNamespaceDeclaration1.ts] ////
 
 //// [a.js]
-module foo {
+namespace foo {
     this.bar = 4;
 }
 
@@ -12,11 +12,13 @@ namespace blah {
 
 
 //// [a.js]
+"use strict";
 var foo;
 (function (foo) {
     this.bar = 4;
 })(foo || (foo = {}));
 //// [b.js]
+"use strict";
 var blah;
 (function (blah) {
     this.prop = 42;

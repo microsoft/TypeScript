@@ -10,7 +10,7 @@ const obj = {
 >Foo : () => void
 >this.bar = "bar" : "bar"
 >this.bar : any
->this : any
+>this : { Foo(): void; }
 >bar : any
 >"bar" : "bar"
 

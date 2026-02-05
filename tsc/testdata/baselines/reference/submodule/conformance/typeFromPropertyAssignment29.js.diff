@@ -1,6 +1,6 @@
 --- old.typeFromPropertyAssignment29.js
 +++ new.typeFromPropertyAssignment29.js
-@@= skipped -149, +149 lines =@@
+@@= skipped -150, +150 lines =@@
  var n = ExpandoExpr2.prop + ExpandoExpr2.m(12) + ExpandoExpr2(101).length;
  // Should not work in typescript -- classes already have statics
  class ExpandoClass {

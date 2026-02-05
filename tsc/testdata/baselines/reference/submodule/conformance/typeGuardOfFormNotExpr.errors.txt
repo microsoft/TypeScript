@@ -1,0 +1,138 @@
+typeGuardOfFormNotExpr.ts(13,14): error TS2454: Variable 'strOrNum' is used before being assigned.
+typeGuardOfFormNotExpr.ts(14,5): error TS2454: Variable 'num' is used before being assigned.
+typeGuardOfFormNotExpr.ts(14,13): error TS2454: Variable 'strOrNum' is used before being assigned.
+typeGuardOfFormNotExpr.ts(20,14): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(20,52): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(21,5): error TS2322: Type 'string | number | boolean' is not assignable to type 'boolean'.
+  Type 'string' is not assignable to type 'boolean'.
+typeGuardOfFormNotExpr.ts(21,12): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(27,14): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(27,55): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(31,5): error TS2322: Type 'string | number | boolean' is not assignable to type 'boolean'.
+  Type 'string' is not assignable to type 'boolean'.
+typeGuardOfFormNotExpr.ts(31,12): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(34,14): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(34,52): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(38,5): error TS2322: Type 'string | number | boolean' is not assignable to type 'boolean'.
+  Type 'string' is not assignable to type 'boolean'.
+typeGuardOfFormNotExpr.ts(38,12): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(41,14): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(41,55): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(42,5): error TS2322: Type 'string | number | boolean' is not assignable to type 'boolean'.
+  Type 'string' is not assignable to type 'boolean'.
+typeGuardOfFormNotExpr.ts(42,12): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(48,14): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(48,46): error TS2454: Variable 'numOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(48,60): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+typeGuardOfFormNotExpr.ts(49,5): error TS2322: Type 'string | number | boolean' is not assignable to type 'number | boolean'.
+  Type 'string' is not assignable to type 'number | boolean'.
+typeGuardOfFormNotExpr.ts(49,17): error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+
+
+==== typeGuardOfFormNotExpr.ts (24 errors) ====
+    var str: string;
+    var bool: boolean;
+    var num: number;
+    var strOrNum: string | number;
+    var strOrNumOrBool: string | number | boolean;
+    var numOrBool: number | boolean;
+    
+    // A type guard of the form !expr
+    // - when true, narrows the type of x by expr when false, or
+    // - when false, narrows the type of x by expr when true.
+    
+    // !typeguard1
+    if (!(typeof strOrNum === "string")) {
+                 ~~~~~~~~
+!!! error TS2454: Variable 'strOrNum' is used before being assigned.
+        num === strOrNum; // number
+        ~~~
+!!! error TS2454: Variable 'num' is used before being assigned.
+                ~~~~~~~~
+!!! error TS2454: Variable 'strOrNum' is used before being assigned.
+    }
+    else {
+        str = strOrNum; // string
+    }
+    // !(typeguard1 || typeguard2)
+    if (!(typeof strOrNumOrBool === "string" || typeof strOrNumOrBool === "number")) {
+                 ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+                                                       ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+        bool = strOrNumOrBool; // boolean
+        ~~~~
+!!! error TS2322: Type 'string | number | boolean' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'string' is not assignable to type 'boolean'.
+               ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+    }
+    else {
+        strOrNum = strOrNumOrBool; // string | number
+    }
+    // !(typeguard1) || !(typeguard2)
+    if (!(typeof strOrNumOrBool !== "string") || !(typeof strOrNumOrBool !== "number")) {
+                 ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+                                                          ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+        strOrNum = strOrNumOrBool; // string | number
+    }
+    else {
+        bool = strOrNumOrBool; // boolean
+        ~~~~
+!!! error TS2322: Type 'string | number | boolean' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'string' is not assignable to type 'boolean'.
+               ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+    }
+    // !(typeguard1 && typeguard2)
+    if (!(typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number")) {
+                 ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+                                                       ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+        strOrNum = strOrNumOrBool; // string | number
+    }
+    else {
+        bool = strOrNumOrBool; // boolean
+        ~~~~
+!!! error TS2322: Type 'string | number | boolean' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'string' is not assignable to type 'boolean'.
+               ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+    }
+    // !(typeguard1) && !(typeguard2)
+    if (!(typeof strOrNumOrBool === "string") && !(typeof strOrNumOrBool === "number")) {
+                 ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+                                                          ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+        bool = strOrNumOrBool; // boolean
+        ~~~~
+!!! error TS2322: Type 'string | number | boolean' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'string' is not assignable to type 'boolean'.
+               ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+    }
+    else {
+        strOrNum = strOrNumOrBool; // string | number
+    }
+    // !(typeguard1) && simpleExpr
+    if (!(typeof strOrNumOrBool === "string") && numOrBool !== strOrNumOrBool) {
+                 ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+                                                 ~~~~~~~~~
+!!! error TS2454: Variable 'numOrBool' is used before being assigned.
+                                                               ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+        numOrBool = strOrNumOrBool; // number | boolean
+        ~~~~~~~~~
+!!! error TS2322: Type 'string | number | boolean' is not assignable to type 'number | boolean'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number | boolean'.
+                    ~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'strOrNumOrBool' is used before being assigned.
+    }
+    else {
+        var r1: string | number | boolean = strOrNumOrBool; // string | number | boolean
+    }

@@ -118,22 +118,22 @@ Cp.prototype = {
     m1() { return this.x },
 >m1 : () => any
 >this.x : any
->this : any
+>this : { m1(): any; m2(): any; }
 >x : any
 
     m2() { this.z = this.x + 1; return this.y }
 >m2 : () => any
 >this.z = this.x + 1 : any
 >this.z : any
->this : any
+>this : { m1(): any; m2(): any; }
 >z : any
 >this.x + 1 : any
 >this.x : any
->this : any
+>this : { m1(): any; m2(): any; }
 >x : any
 >1 : 1
 >this.y : any
->this : any
+>this : { m1(): any; m2(): any; }
 >y : any
 }
 var cp = new Cp(1)

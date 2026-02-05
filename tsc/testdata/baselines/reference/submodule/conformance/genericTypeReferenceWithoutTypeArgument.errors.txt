@@ -1,3 +1,4 @@
+genericTypeReferenceWithoutTypeArgument.ts(5,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 genericTypeReferenceWithoutTypeArgument.ts(8,8): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(10,13): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(11,14): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
@@ -15,6 +16,7 @@ genericTypeReferenceWithoutTypeArgument.ts(18,27): error TS2314: Generic type 'C
 genericTypeReferenceWithoutTypeArgument.ts(18,38): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(20,17): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(23,21): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument.ts(26,25): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 genericTypeReferenceWithoutTypeArgument.ts(29,18): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(30,20): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(31,22): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
@@ -24,12 +26,14 @@ genericTypeReferenceWithoutTypeArgument.ts(36,10): error TS2314: Generic type 'C
 genericTypeReferenceWithoutTypeArgument.ts(37,10): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 
 
-==== genericTypeReferenceWithoutTypeArgument.ts (24 errors) ====
+==== genericTypeReferenceWithoutTypeArgument.ts (26 errors) ====
     // it is an error to use a generic type without type arguments
     // all of these are errors 
     
     class C<T> {
         foo: T;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     
     var c: C;
@@ -83,8 +87,10 @@ genericTypeReferenceWithoutTypeArgument.ts(37,10): error TS2314: Generic type 'E
                         ~
 !!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
     
-    module M {
+    namespace M {
         export class E<T> { foo: T }
+                            ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     
     class D2 extends M.E { }

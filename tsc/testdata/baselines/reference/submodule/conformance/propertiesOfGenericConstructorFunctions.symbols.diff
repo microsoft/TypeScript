@@ -77,6 +77,7 @@
 ->this.x : Symbol(Cp.x, Decl(propertiesOfGenericConstructorFunctions.js, 32, 16))
 ->this : Symbol(Cp, Decl(propertiesOfGenericConstructorFunctions.js, 25, 23), Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
 ->x : Symbol(Cp.x, Decl(propertiesOfGenericConstructorFunctions.js, 32, 16))
++>this : Symbol(__object, Decl(propertiesOfGenericConstructorFunctions.js, 36, 14))
 
      m2() { this.z = this.x + 1; return this.y }
  >m2 : Symbol(m2, Decl(propertiesOfGenericConstructorFunctions.js, 37, 27))
@@ -89,6 +90,9 @@
 ->this.y : Symbol(Cp.y, Decl(propertiesOfGenericConstructorFunctions.js, 33, 14))
 ->this : Symbol(Cp, Decl(propertiesOfGenericConstructorFunctions.js, 25, 23), Decl(propertiesOfGenericConstructorFunctions.js, 35, 1))
 ->y : Symbol(Cp.y, Decl(propertiesOfGenericConstructorFunctions.js, 33, 14))
++>this : Symbol(__object, Decl(propertiesOfGenericConstructorFunctions.js, 36, 14))
++>this : Symbol(__object, Decl(propertiesOfGenericConstructorFunctions.js, 36, 14))
++>this : Symbol(__object, Decl(propertiesOfGenericConstructorFunctions.js, 36, 14))
  }
  var cp = new Cp(1)
  >cp : Symbol(cp, Decl(propertiesOfGenericConstructorFunctions.js, 40, 3))

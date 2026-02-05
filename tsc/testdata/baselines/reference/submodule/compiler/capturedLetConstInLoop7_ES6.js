@@ -378,6 +378,7 @@ for (const y = 0; y < 1;) {
 }
 
 //// [capturedLetConstInLoop7_ES6.js]
+"use strict";
 //===let
 l0: for (let x of []) {
     (function () { return x; });

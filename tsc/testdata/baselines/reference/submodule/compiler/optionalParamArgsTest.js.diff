@@ -1,6 +1,6 @@
 --- old.optionalParamArgsTest.js
 +++ new.optionalParamArgsTest.js
-@@= skipped -128, +128 lines =@@
+@@= skipped -129, +129 lines =@@
  // Optional parameter and default argument tests
  // test basic configurations
  class C1 {

@@ -10,9 +10,9 @@ declare module "fs" {
 >"fs" : typeof import("fs")
 
     export function readFileSync(path: string, encoding?: string): string;
->readFileSync : (path: string, encoding?: string) => string
+>readFileSync : (path: string, encoding?: string | undefined) => string
 >path : string
->encoding : string
+>encoding : string | undefined
 }
 declare module "path" {
 >"path" : typeof import("path")

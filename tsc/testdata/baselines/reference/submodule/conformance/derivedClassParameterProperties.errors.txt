@@ -1,17 +1,21 @@
+derivedClassParameterProperties.ts(4,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 derivedClassParameterProperties.ts(47,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 derivedClassParameterProperties.ts(56,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
 derivedClassParameterProperties.ts(57,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 derivedClassParameterProperties.ts(58,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassParameterProperties.ts(74,18): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 derivedClassParameterProperties.ts(79,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
 derivedClassParameterProperties.ts(80,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 derivedClassParameterProperties.ts(81,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== derivedClassParameterProperties.ts (7 errors) ====
+==== derivedClassParameterProperties.ts (9 errors) ====
     // ordering of super calls in derived constructors matters depending on other class contents
     
     class Base {
         x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Derived extends Base {
@@ -90,6 +94,8 @@ derivedClassParameterProperties.ts(81,9): error TS17009: 'super' must be called 
     
     // generic cases of Derived7 and Derived8
     class Base2<T> { x: T; }
+                     ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     
     class Derived9<T> extends Base2<T> {
         a = 1;

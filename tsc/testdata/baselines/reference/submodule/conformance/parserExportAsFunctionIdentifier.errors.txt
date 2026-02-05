@@ -1,0 +1,13 @@
+parserExportAsFunctionIdentifier.ts(6,9): error TS2454: Variable 'f' is used before being assigned.
+
+
+==== parserExportAsFunctionIdentifier.ts (1 errors) ====
+    interface Foo {
+           export(): string;
+    }
+    
+    var f: Foo;
+    var x = f.export();
+            ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    

@@ -13,6 +13,7 @@ for (kowloona of [c = 1, d = c]) {
 
 
 //// [assignmentNestedInLiterals.js]
+"use strict";
 var target, x, y;
 target = [x = 1, y = x];
 var aegis, a, b;

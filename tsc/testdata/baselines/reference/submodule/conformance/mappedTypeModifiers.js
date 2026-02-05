@@ -101,6 +101,7 @@ function f4(x: { [P in keyof Foo]: Foo[P] }) {
 
 
 //// [mappedTypeModifiers.js]
+"use strict";
 var v00;
 var v00;
 var v00;

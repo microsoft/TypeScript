@@ -18,6 +18,7 @@ interface C {
 
 
 //// [privateNameDeclarationMerging.js]
+"use strict";
 class D {
 }
 ;

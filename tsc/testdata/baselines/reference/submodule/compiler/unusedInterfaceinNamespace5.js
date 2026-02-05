@@ -26,6 +26,7 @@ namespace Validation {
 }
 
 //// [unusedInterfaceinNamespace5.js]
+"use strict";
 var Validation;
 (function (Validation) {
     class c1 {

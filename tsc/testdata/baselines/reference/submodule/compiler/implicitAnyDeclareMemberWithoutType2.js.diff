@@ -1,7 +1,7 @@
 --- old.implicitAnyDeclareMemberWithoutType2.js
 +++ new.implicitAnyDeclareMemberWithoutType2.js
-@@= skipped -13, +13 lines =@@
- //// [implicitAnyDeclareMemberWithoutType2.js]
+@@= skipped -14, +14 lines =@@
+ "use strict";
  // this should be an error
  class C {
 -    constructor(c1, c2, c3) {

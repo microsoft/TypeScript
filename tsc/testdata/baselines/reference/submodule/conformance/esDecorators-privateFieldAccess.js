@@ -27,6 +27,7 @@ class C {
 
 
 //// [esDecorators-privateFieldAccess.js]
+"use strict";
 @dec(x => x.#foo) // error
 class A {
     #foo = 3;

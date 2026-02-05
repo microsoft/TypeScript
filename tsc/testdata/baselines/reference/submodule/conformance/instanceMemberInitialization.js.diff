@@ -1,8 +1,8 @@
 --- old.instanceMemberInitialization.js
 +++ new.instanceMemberInitialization.js
-@@= skipped -20, +20 lines =@@
-
+@@= skipped -21, +21 lines =@@
  //// [instanceMemberInitialization.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.x = 1;

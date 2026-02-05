@@ -6,6 +6,7 @@ class Outer
 static public
 
 //// [parserAccessibilityAfterStatic6.js]
+"use strict";
 class Outer {
     static public;
 }

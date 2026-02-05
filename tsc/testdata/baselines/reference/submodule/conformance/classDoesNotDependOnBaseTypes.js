@@ -15,6 +15,7 @@ if (typeof x !== "string") {
 }
 
 //// [classDoesNotDependOnBaseTypes.js]
+"use strict";
 class StringTreeCollectionBase {
 }
 class StringTreeCollection extends StringTreeCollectionBase {

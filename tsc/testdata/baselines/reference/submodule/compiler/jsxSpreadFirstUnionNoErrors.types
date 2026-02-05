@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/jsxSpreadFirstUnionNoErrors.tsx] ////
 
 === jsxSpreadFirstUnionNoErrors.tsx ===
+/// <reference path="react.d.ts" />
 import React from "react";
 >React : typeof React
 

@@ -55,8 +55,8 @@ test({
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Includes: []fourslash.CompletionsExpectedItem{
-				"\"foo\"",
 				"\"bar\"",
+				"\"foo\"",
 			},
 		},
 	})

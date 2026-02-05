@@ -4,5 +4,6 @@
 retValue = bfs.VARIABLES >> );
 
 //// [parserErrorRecovery_LeftShift1.js]
+"use strict";
 retValue = bfs.VARIABLES >> ;
 ;

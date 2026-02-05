@@ -1,0 +1,24 @@
+--- old.privateConstructorFunction.errors.txt
++++ new.privateConstructorFunction.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++privateConstructorFunction.js(7,9): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++privateConstructorFunction.js(9,5): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
++
++
++==== privateConstructorFunction.js (2 errors) ====
++    {
++        // make sure not to crash when parent's a block rather than a source file or some other
++        // symbol-having node.
++    
++        /** @private */
++        function C() {
++            this.x = 1
++            ~~~~
++!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++        }
++        new C()
++        ~~~~~~~
++!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
++    }
++    

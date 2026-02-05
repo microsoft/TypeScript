@@ -4,10 +4,10 @@
 function f<T, U extends string>() {
 >f : <T, U extends string>() => void
 
-    var t: T;
+    var t!: T;
 >t : T
 
-    var u: U;
+    var u!: U;
 >u : U
 
     var v = {

@@ -42,11 +42,11 @@ class C1 { foo: number; }
 class C2<T> { foo: T; }
 enum E { A }
 function f() { }
-module f {
+namespace f {
     export var bar = 1;
 }
 class c { baz: string }
-module c {
+namespace c {
     export var bar = 1;
 }
 
@@ -160,6 +160,7 @@ function f21<T extends Number>(x: T) {
 }
 
 //// [subtypesOfTypeParameterWithConstraints2.js]
+"use strict";
 // checking whether other types are subtypes of type parameters with constraints
 function f1(x, y) {
     var r = true ? x : y;

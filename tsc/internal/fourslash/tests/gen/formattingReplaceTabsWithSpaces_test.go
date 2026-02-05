@@ -11,7 +11,7 @@ func TestFormattingReplaceTabsWithSpaces(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module Foo {
+	const content = `namespace Foo {
 /*1*/				class Test { }
 /*2*/			class Test { }
 /*3*/class Test { }

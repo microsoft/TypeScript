@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxUnionElementType3.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : typeof React
 
@@ -12,7 +14,7 @@ class RC1 extends React.Component<{x : number}, {}> {
 >x : number
 
     render() {
->render : () => any
+>render : () => null
 
         return null;
     }
@@ -26,7 +28,7 @@ class RC2 extends React.Component<{ x: string }, {}> {
 >x : string
 
     render() {
->render : () => any
+>render : () => null
 
         return null;
     }
@@ -41,7 +43,7 @@ class RC3 extends React.Component<{}, {}> {
 >Component : typeof React.Component
 
     render() {
->render : () => any
+>render : () => null
 
         return null;
     }
@@ -54,7 +56,7 @@ class RC4 extends React.Component<{}, {}> {
 >Component : typeof React.Component
 
     render() {
->render : () => any
+>render : () => null
 
         return null;
     }
@@ -67,14 +69,14 @@ var EmptyRCComp = RC3 || RC4;
 >RC4 : typeof RC4
 
 var PartRCComp = RC1 || RC4;
->PartRCComp : typeof RC4
->RC1 || RC4 : typeof RC4
+>PartRCComp : typeof RC1
+>RC1 || RC4 : typeof RC1
 >RC1 : typeof RC1
 >RC4 : typeof RC4
 
 var RCComp = RC1 || RC2;
->RCComp : typeof RC1 | typeof RC2
->RC1 || RC2 : typeof RC1 | typeof RC2
+>RCComp : typeof RC1
+>RC1 || RC2 : typeof RC1
 >RC1 : typeof RC1
 >RC2 : typeof RC2
 
@@ -82,7 +84,7 @@ var RCComp = RC1 || RC2;
 let a = <RCComp x="Hi" />;
 >a : JSX.Element
 ><RCComp x="Hi" /> : JSX.Element
->RCComp : typeof RC1 | typeof RC2
+>RCComp : typeof RC1
 >x : string
 
 let a1 = <EmptyRCComp />;
@@ -99,11 +101,11 @@ let a2 = <EmptyRCComp data-prop="hello" />;
 let b = <PartRCComp />
 >b : JSX.Element
 ><PartRCComp /> : JSX.Element
->PartRCComp : typeof RC4
+>PartRCComp : typeof RC1
 
 let c = <PartRCComp data-extra="hello" />
 >c : JSX.Element
 ><PartRCComp data-extra="hello" /> : JSX.Element
->PartRCComp : typeof RC4
+>PartRCComp : typeof RC1
 >data-extra : string
 

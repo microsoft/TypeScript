@@ -1,0 +1,18 @@
+--- old.parser519458.errors.txt
++++ new.parser519458.errors.txt
+@@= skipped -0, +0 lines =@@
+ parser519458.ts(1,15): error TS2503: Cannot find namespace 'module'.
+-parser519458.ts(1,15): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++parser519458.ts(1,15): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ parser519458.ts(1,21): error TS1005: ';' expected.
+
+
+@@= skipped -7, +7 lines =@@
+                   ~~~~~~
+ !!! error TS2503: Cannot find namespace 'module'.
+                   ~~~~~~
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                         ~
+ !!! error TS1005: ';' expected.
+     

@@ -9,7 +9,7 @@ class Derived extends Based {
 >Derived : Derived
 >Based : Based
 
-    public x: number;
+    public x!: number;
 >x : number
 
     constructor() {

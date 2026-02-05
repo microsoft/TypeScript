@@ -1,0 +1,11 @@
+--- old.jsDeclarationsClassLikeHeuristic(target=es2015).js
++++ new.jsDeclarationsClassLikeHeuristic(target=es2015).js
+@@= skipped -14, +14 lines =@@
+
+
+ //// [index.d.ts]
+-declare class A {
+-    private constructor();
+-    b: {};
+-}
++declare let A: any;

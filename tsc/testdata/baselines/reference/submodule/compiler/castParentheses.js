@@ -14,6 +14,7 @@ var b = (<any>new a.b);
 var b = (<any>new a).b 
 
 //// [castParentheses.js]
+"use strict";
 class a {
     static b;
 }

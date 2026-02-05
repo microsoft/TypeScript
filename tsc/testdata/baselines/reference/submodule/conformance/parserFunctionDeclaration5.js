@@ -5,4 +5,5 @@ function foo();
 function foo() { }
 
 //// [parserFunctionDeclaration5.js]
+"use strict";
 function foo() { }

@@ -11,7 +11,7 @@ function f<_T, _S>() {
   interface NumArray<T extends number> extends Array<T> {}
 >NumArray : Symbol(NumArray, Decl(circularTypeArgumentsLocalAndOuterNoCrash1.ts, 2, 22))
 >T : Symbol(T, Decl(circularTypeArgumentsLocalAndOuterNoCrash1.ts, 3, 21))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(circularTypeArgumentsLocalAndOuterNoCrash1.ts, 3, 21))
 
   type X = NumArray<X extends {} ? number : number>;

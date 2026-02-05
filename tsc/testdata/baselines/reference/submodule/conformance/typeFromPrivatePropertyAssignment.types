@@ -3,16 +3,16 @@
 === typeFromPrivatePropertyAssignment.ts ===
 type Foo = { foo?: string };
 >Foo : Foo
->foo : string
+>foo : string | undefined
 
 class C {
 >C : C
 
     #a?: Foo;
->#a : Foo
+>#a : Foo | undefined
 
     #b?: Foo;
->#b : Foo
+>#b : Foo | undefined
 
     m() {
 >m : () => void
@@ -20,16 +20,16 @@ class C {
         const a = this.#a || {};
 >a : Foo
 >this.#a || {} : Foo
->this.#a : Foo
+>this.#a : Foo | undefined
 >this : this
 >{} : {}
 
         this.#b = this.#b || {};
 >this.#b = this.#b || {} : Foo
->this.#b : Foo
+>this.#b : Foo | undefined
 >this : this
 >this.#b || {} : Foo
->this.#b : Foo
+>this.#b : Foo | undefined
 >this : this
 >{} : {}
     }

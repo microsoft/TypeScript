@@ -1,0 +1,11 @@
+--- old.infinitelyExpandingOverloads.types
++++ new.infinitelyExpandingOverloads.types
+@@= skipped -6, +6 lines =@@
+ }
+ interface KnockoutObservableBase2<T> {
+     subscribe(callback: (newValue: T) => void, target?: any, topic?: string): KnockoutSubscription2<T>;
+->subscribe : (callback: (newValue: T) => void, target?: any, topic?: string) => KnockoutSubscription2<T>
++>subscribe : (callback: (newValue: T) => void, target?: any, topic?: string | undefined) => KnockoutSubscription2<T>
+ >callback : (newValue: T) => void
+ >newValue : T
+ >target : any

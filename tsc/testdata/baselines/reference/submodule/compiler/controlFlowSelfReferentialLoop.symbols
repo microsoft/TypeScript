@@ -61,7 +61,7 @@ function md5(string:string): void {
 
     var x=Array();
 >x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     var k,AA,BB,CC,DD,a,b,c,d;
 >k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))

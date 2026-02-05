@@ -3,7 +3,7 @@ importDeclWithDeclareModifier.ts(5,29): error TS2694: Namespace 'x' has no expor
 
 
 ==== importDeclWithDeclareModifier.ts (2 errors) ====
-    module x {
+    namespace x {
         interface c {
         }
     }

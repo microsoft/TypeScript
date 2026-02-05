@@ -33,6 +33,7 @@ var d: new(x: number) => void;
 d = C; // Error
 
 //// [assignmentCompatWithOverloads.js]
+"use strict";
 function f1(x) { return null; }
 function f2(x) { return null; }
 function f3(x) { return null; }

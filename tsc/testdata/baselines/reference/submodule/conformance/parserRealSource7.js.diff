@@ -1,6 +1,6 @@
 --- old.parserRealSource7.js
 +++ new.parserRealSource7.js
-@@= skipped -841, +841 lines =@@
+@@= skipped -842, +842 lines =@@
  var TypeScript;
  (function (TypeScript) {
      class Continuation {

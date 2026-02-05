@@ -1,3 +1,4 @@
+decrementOperatorWithUnsupportedBooleanType.ts(7,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 decrementOperatorWithUnsupportedBooleanType.ts(17,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 decrementOperatorWithUnsupportedBooleanType.ts(19,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 decrementOperatorWithUnsupportedBooleanType.ts(22,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
@@ -29,17 +30,19 @@ decrementOperatorWithUnsupportedBooleanType.ts(54,1): error TS2356: An arithmeti
 decrementOperatorWithUnsupportedBooleanType.ts(54,11): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== decrementOperatorWithUnsupportedBooleanType.ts (29 errors) ====
+==== decrementOperatorWithUnsupportedBooleanType.ts (30 errors) ====
     // -- operator on boolean type
-    var BOOLEAN: boolean;
+    declare var BOOLEAN: boolean;
     
     function foo(): boolean { return true; }
     
     class A {
         public a: boolean;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
         static foo() { return true; }
     }
-    module M {
+    namespace M {
         export var n: boolean;
     }
     

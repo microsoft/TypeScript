@@ -4,25 +4,97 @@
      }
 
      function foo4(cb: typeof a) {
-->foo4 : (cb: typeof a) => boolean
-+>foo4 : (cb: { new (x: boolean): boolean; new (x: string): string; }) => boolean
+->foo4 : (cb: typeof a) => never
++>foo4 : (cb: { new (x: boolean): boolean; new (x: string): string; }) => never
  >cb : { new (x: boolean): boolean; new (x: string): string; }
  >a : { new (x: boolean): boolean; new (x: string): string; }
 
 @@= skipped -12, +12 lines =@@
      var r = foo4(a);
- >r : boolean
- >foo4(a) : boolean
-->foo4 : (cb: typeof a) => boolean
-+>foo4 : (cb: { new (x: boolean): boolean; new (x: string): string; }) => boolean
+ >r : never
+ >foo4(a) : never
+->foo4 : (cb: typeof a) => never
++>foo4 : (cb: { new (x: boolean): boolean; new (x: string): string; }) => never
  >a : { new (x: boolean): boolean; new (x: string): string; }
 
      var b: { new <T>(x: T): T };
 @@= skipped -10, +10 lines =@@
      var r2 = foo4(b);
- >r2 : boolean
- >foo4(b) : boolean
-->foo4 : (cb: typeof a) => boolean
-+>foo4 : (cb: { new (x: boolean): boolean; new (x: string): string; }) => boolean
+ >r2 : never
+ >foo4(b) : never
+->foo4 : (cb: typeof a) => never
++>foo4 : (cb: { new (x: boolean): boolean; new (x: string): string; }) => never
  >b : new <T>(x: T) => T
+ }
+
+@@= skipped -44, +44 lines =@@
+ >b : { new <T>(x: T): string; new <T>(x: number): T; }
+
+     function foo6<T>(cb: { new(x: T): string; new(x: T, y?: T): string }) {
+->foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
+->cb : { new (x: T): string; new (x: T, y?: T): string; }
++>foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => { new (x: T): string; new (x: T, y?: T | undefined): string; }
++>cb : { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >x : T
+ >x : T
+ >y : T | undefined
+
+         return cb;
+->cb : { new (x: T): string; new (x: T, y?: T): string; }
++>cb : { new (x: T): string; new (x: T, y?: T | undefined): string; }
+     }
+
+     var r8 = foo6(a); // error
+ >r8 : { new (x: boolean): string; new (x: boolean, y?: boolean | undefined): string; }
+ >foo6(a) : { new (x: boolean): string; new (x: boolean, y?: boolean | undefined): string; }
+->foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
++>foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >a : { new (x: boolean): string; new (x: number): boolean; }
+
+     var r9 = foo6(b); // new any => string; new(x:any, y?:any) => string
+ >r9 : { new (x: number): string; new (x: number, y?: number | undefined): string; }
+ >foo6(b) : { new (x: number): string; new (x: number, y?: number | undefined): string; }
+->foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
++>foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >b : { new <T>(x: T): string; new <T>(x: number): T; }
+
+     function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {
+->foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
++>foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >x : T
+->cb : { new (x: T): string; new (x: T, y?: T): string; }
++>cb : { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >x : T
+ >x : T
+ >y : T | undefined
+
+         return cb;
+->cb : { new (x: T): string; new (x: T, y?: T): string; }
++>cb : { new (x: T): string; new (x: T, y?: T | undefined): string; }
+     }
+
+     var r13 = foo7(1, b); // new any => string; new(x:any, y?:any) => string
+ >r13 : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+ >foo7(1, b) : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+->foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
++>foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >1 : 1
+ >b : { new <T>(x: T): string; new <T>(x: number): T; }
+
+@@= skipped -54, +54 lines =@@
+     var r14 = foo7(1, c); // new any => string; new(x:any, y?:any) => string
+ >r14 : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+ >foo7(1, c) : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+->foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
++>foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >1 : 1
+ >c : { <T>(x: number): T; new <T>(x: T): string; }
+
+     var r15 = foo7(1, c2); // new any => string; new(x:any, y?:any) => string
+ >r15 : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+ >foo7(1, c2) : { new (x: 1): string; new (x: 1, y?: 1 | undefined): string; }
+->foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
++>foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T | undefined): string; }) => { new (x: T): string; new (x: T, y?: T | undefined): string; }
+ >1 : 1
+ >c2 : { new <T>(x: T): string; new <T>(x: number): T; }
  }

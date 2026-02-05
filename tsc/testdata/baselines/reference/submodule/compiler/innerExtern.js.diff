@@ -1,6 +1,6 @@
 --- old.innerExtern.js
 +++ new.innerExtern.js
-@@= skipped -20, +20 lines =@@
+@@= skipped -21, +21 lines =@@
      let B;
      (function (B) {
          class C {

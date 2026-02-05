@@ -5,12 +5,12 @@ function salt() {}
 >salt : () => void
 
 salt.apply("hello", []);
->salt.apply("hello", []) : any
->salt.apply : (this: Function, thisArg: any, argArray?: any) => any
+>salt.apply("hello", []) : void
+>salt.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >salt : () => void
->apply : (this: Function, thisArg: any, argArray?: any) => any
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >"hello" : "hello"
->[] : undefined[]
+>[] : []
 
 (new Function("return 5"))();
 >(new Function("return 5"))() : any

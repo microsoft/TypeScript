@@ -12,7 +12,8 @@ func TestTypeReferenceOnServer(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `/// <reference types="foo" />
+	const content = `// @lib: es5
+/// <reference types="foo" />
 var x: number;
 x./*1*/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

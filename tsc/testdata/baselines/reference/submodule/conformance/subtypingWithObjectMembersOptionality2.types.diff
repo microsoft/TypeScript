@@ -1,0 +1,19 @@
+--- old.subtypingWithObjectMembersOptionality2.types
++++ new.subtypingWithObjectMembersOptionality2.types
+@@= skipped -44, +44 lines =@@
+ >Foo : Base
+
+ declare var b: { Foo?: Derived; }
+->b : { Foo?: Derived; }
++>b : { Foo?: Derived | undefined; }
+ >Foo : Derived | undefined
+
+ var r = true ? a : b; // ok
+->r : { Foo: Base; } | { Foo?: Derived; }
+->true ? a : b : { Foo: Base; } | { Foo?: Derived; }
++>r : { Foo: Base; } | { Foo?: Derived | undefined; }
++>true ? a : b : { Foo: Base; } | { Foo?: Derived | undefined; }
+ >true : true
+ >a : { Foo: Base; }
+->b : { Foo?: Derived; }
++>b : { Foo?: Derived | undefined; }

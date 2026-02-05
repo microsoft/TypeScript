@@ -31,7 +31,7 @@ interface Tuple4<T0, T1, T2, T3> extends Array<any> {
     3: T3;
 }
 
-module Underscore {
+namespace Underscore {
     export interface WrappedObject<T> {
         keys(): string[];
         values(): any[];
@@ -775,7 +775,7 @@ var initialize = _.once(createApplication);
 initialize();
 initialize();
 
-var notes: any[];
+var notes: any[] = [];
 var render = () => alert("rendering...");
 var renderNotes = _.after(notes.length, render);
 _.each(notes, (note) => note.asyncSave({ success: renderNotes }));
@@ -903,7 +903,9 @@ template2({ name: "Mustache" });
 _.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'data' });
 
 //// [underscoreTest1_underscore.js]
+"use strict";
 //// [underscoreTest1_underscoreTests.js]
+"use strict";
 /// <reference path="underscoreTest1_underscore.ts" />
 _.each([1, 2, 3], (num) => alert(num.toString()));
 _.each({ one: 1, two: 2, three: 3 }, (value, key) => alert(value.toString()));
@@ -991,7 +993,7 @@ var createApplication = () => alert('creating application...');
 var initialize = _.once(createApplication);
 initialize();
 initialize();
-var notes;
+var notes = [];
 var render = () => alert("rendering...");
 var renderNotes = _.after(notes.length, render);
 _.each(notes, (note) => note.asyncSave({ success: renderNotes }));

@@ -1,20 +1,29 @@
+circularConstraintYieldsAppropriateError.ts(3,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+circularConstraintYieldsAppropriateError.ts(7,5): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
 circularConstraintYieldsAppropriateError.ts(10,7): error TS2310: Type 'Foo' recursively references itself as a base type.
+circularConstraintYieldsAppropriateError.ts(11,5): error TS2564: Property 'someProp' has no initializer and is not definitely assigned in the constructor.
 
 
-==== circularConstraintYieldsAppropriateError.ts (1 errors) ====
+==== circularConstraintYieldsAppropriateError.ts (4 errors) ====
     // https://github.com/Microsoft/TypeScript/issues/16861
     class BaseType<T> {
         bar: T
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
     }
     
     class NextType<C extends { someProp: any }, T = C['someProp']> extends BaseType<T> {
         baz: string;
+        ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Foo extends NextType<Foo> {
           ~~~
 !!! error TS2310: Type 'Foo' recursively references itself as a base type.
         someProp: {
+        ~~~~~~~~
+!!! error TS2564: Property 'someProp' has no initializer and is not definitely assigned in the constructor.
             test: true
         }
     }

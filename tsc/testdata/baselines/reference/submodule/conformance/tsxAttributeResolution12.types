@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution12.tsx] ////
 
 === react.d.ts ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 	}
@@ -11,7 +11,7 @@ declare module JSX {
 	}
 	interface IntrinsicAttributes {
 		ref?: string;
->ref : string
+>ref : string | undefined
 	}
 }
 
@@ -20,24 +20,24 @@ declare class Component<P, S>  {
 >Component : Component<P, S>
 
 	constructor(props?: P, context?: any);
->props : P
+>props : P | undefined
 >context : any
 
 	setState(f: (prevState: S, props: P) => S, callback?: () => any): void;
->setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
+>setState : { (f: (prevState: S, props: P) => S, callback?: (() => any) | undefined): void; (state: S, callback?: (() => any) | undefined): void; }
 >f : (prevState: S, props: P) => S
 >prevState : S
 >props : P
->callback : () => any
+>callback : (() => any) | undefined
 
 	setState(state: S, callback?: () => any): void;
->setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
+>setState : { (f: (prevState: S, props: P) => S, callback?: (() => any) | undefined): void; (state: S, callback?: (() => any) | undefined): void; }
 >state : S
->callback : () => any
+>callback : (() => any) | undefined
 
 	forceUpdate(callBack?: () => any): void;
->forceUpdate : (callBack?: () => any) => void
->callBack : () => any
+>forceUpdate : (callBack?: (() => any) | undefined) => void
+>callBack : (() => any) | undefined
 
 	render(): JSX.Element;
 >render : () => JSX.Element
@@ -56,11 +56,11 @@ declare class Component<P, S>  {
 
 interface ComponentClass<P> {
 	new (props?: P, context?: any): Component<P, any>;
->props : P
+>props : P | undefined
 >context : any
 }
 
-declare module TestMod {
+declare namespace TestMod {
 >TestMod : typeof TestMod
 
 	interface TestClass extends ComponentClass<{reqd: any}> {

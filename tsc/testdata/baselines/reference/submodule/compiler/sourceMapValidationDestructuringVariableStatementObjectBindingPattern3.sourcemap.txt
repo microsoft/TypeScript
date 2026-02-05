@@ -8,6 +8,7 @@ sources: sourceMapValidationDestructuringVariableStatementObjectBindingPattern3.
 emittedFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern3.js
 sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern3.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>var { x = 500 } = { x: 20 };
 1 >
 2 >^^^^
@@ -38,19 +39,19 @@ sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern
 12>                       20
 13>                          }
 14>                           ;
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
-3 >Emitted(1, 7) Source(1, 6) + SourceIndex(0)
-4 >Emitted(1, 8) Source(1, 7) + SourceIndex(0)
-5 >Emitted(1, 11) Source(1, 10) + SourceIndex(0)
-6 >Emitted(1, 14) Source(1, 13) + SourceIndex(0)
-7 >Emitted(1, 16) Source(1, 14) + SourceIndex(0)
-8 >Emitted(1, 19) Source(1, 17) + SourceIndex(0)
-9 >Emitted(1, 21) Source(1, 19) + SourceIndex(0)
-10>Emitted(1, 22) Source(1, 20) + SourceIndex(0)
-11>Emitted(1, 24) Source(1, 22) + SourceIndex(0)
-12>Emitted(1, 26) Source(1, 24) + SourceIndex(0)
-13>Emitted(1, 28) Source(1, 26) + SourceIndex(0)
-14>Emitted(1, 29) Source(1, 27) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(2, 7) Source(1, 6) + SourceIndex(0)
+4 >Emitted(2, 8) Source(1, 7) + SourceIndex(0)
+5 >Emitted(2, 11) Source(1, 10) + SourceIndex(0)
+6 >Emitted(2, 14) Source(1, 13) + SourceIndex(0)
+7 >Emitted(2, 16) Source(1, 14) + SourceIndex(0)
+8 >Emitted(2, 19) Source(1, 17) + SourceIndex(0)
+9 >Emitted(2, 21) Source(1, 19) + SourceIndex(0)
+10>Emitted(2, 22) Source(1, 20) + SourceIndex(0)
+11>Emitted(2, 24) Source(1, 22) + SourceIndex(0)
+12>Emitted(2, 26) Source(1, 24) + SourceIndex(0)
+13>Emitted(2, 28) Source(1, 26) + SourceIndex(0)
+14>Emitted(2, 29) Source(1, 27) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern3.js.map

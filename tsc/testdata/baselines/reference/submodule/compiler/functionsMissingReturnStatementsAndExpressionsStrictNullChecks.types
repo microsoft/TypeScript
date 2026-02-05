@@ -28,9 +28,9 @@ const f20: () => undefined = () => {
 
 const f21: () => undefined | number = () => {
 >f21 : () => number | undefined
->() => {    // Error, regular void function because contextual type for implicit return isn't just undefined} : () => void
+>() => {    // Ok, contextual type for implicit return contains undefined} : () => void
 
-    // Error, regular void function because contextual type for implicit return isn't just undefined
+    // Ok, contextual type for implicit return contains undefined
 }
 
 const f22: () => number = () => {
@@ -99,4 +99,31 @@ f(h2);
 >f(h2) : void
 >f : (a: () => undefined) => void
 >h2 : () => undefined
+
+// https://github.com/microsoft/TypeScript/issues/57840
+
+type FN = () => Promise<undefined> | undefined;
+>FN : FN
+
+const fn1: FN = () => {
+>fn1 : FN
+>() => {    return;} : () => void
+
+    return;
+};
+
+const fn2: FN = async () => {
+>fn2 : FN
+>async () => {    return;} : () => Promise<undefined>
+
+    return;
+};
+
+const fn3: FN = () => {};
+>fn3 : FN
+>() => {} : () => void
+
+const fn4: FN = async () => {};
+>fn4 : FN
+>async () => {} : () => Promise<undefined>
 

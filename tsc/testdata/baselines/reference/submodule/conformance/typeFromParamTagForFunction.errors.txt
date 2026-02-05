@@ -1,8 +1,14 @@
+a-ext.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+a-ext.js(2,10): error TS2339: Property 'x' does not exist on type 'typeof import("a-ext")'.
 a.js(3,13): error TS2749: 'A' refers to a value, but is being used as a type here. Did you mean 'typeof A'?
 b.js(3,13): error TS2749: 'B' refers to a value, but is being used as a type here. Did you mean 'typeof B'?
+c-ext.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 c.js(3,13): error TS2749: 'C' refers to a value, but is being used as a type here. Did you mean 'typeof C'?
+d-ext.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 d.js(3,13): error TS2749: 'D' refers to a value, but is being used as a type here. Did you mean 'typeof D'?
+f.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 f.js(5,13): error TS2749: 'F' refers to a value, but is being used as a type here. Did you mean 'typeof F'?
+g.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 g.js(5,13): error TS2749: 'G' refers to a value, but is being used as a type here. Did you mean 'typeof G'?
 
 
@@ -10,9 +16,13 @@ g.js(5,13): error TS2749: 'G' refers to a value, but is being used as a type her
     declare function require(id: string): any;
     declare var module: any, exports: any;
     
-==== a-ext.js (0 errors) ====
+==== a-ext.js (2 errors) ====
     exports.A = function () {
         this.x = 1;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+             ~
+!!! error TS2339: Property 'x' does not exist on type 'typeof import("a-ext")'.
     };
     
 ==== a.js (1 errors) ====
@@ -38,9 +48,12 @@ g.js(5,13): error TS2749: 'G' refers to a value, but is being used as a type her
 !!! error TS2749: 'B' refers to a value, but is being used as a type here. Did you mean 'typeof B'?
     function b(p) { p.x; }
     
-==== c-ext.js (0 errors) ====
+==== c-ext.js (1 errors) ====
     export function C() {
         this.x = 1;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 c-ext.js:1:17: An outer value of 'this' is shadowed by this container.
     }
     
 ==== c.js (1 errors) ====
@@ -51,9 +64,12 @@ g.js(5,13): error TS2749: 'G' refers to a value, but is being used as a type her
 !!! error TS2749: 'C' refers to a value, but is being used as a type here. Did you mean 'typeof C'?
     function c(p) { p.x; }
     
-==== d-ext.js (0 errors) ====
+==== d-ext.js (1 errors) ====
     export var D = function() {
         this.x = 1;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 d-ext.js:1:12: An outer value of 'this' is shadowed by this container.
     };
     
 ==== d.js (1 errors) ====
@@ -77,9 +93,11 @@ g.js(5,13): error TS2749: 'G' refers to a value, but is being used as a type her
     /** @param {E} p */
     function e(p) { p.x; }
     
-==== f.js (1 errors) ====
+==== f.js (2 errors) ====
     var F = function () {
         this.x = 1;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     };
     
     /** @param {F} p */
@@ -87,9 +105,11 @@ g.js(5,13): error TS2749: 'G' refers to a value, but is being used as a type her
 !!! error TS2749: 'F' refers to a value, but is being used as a type here. Did you mean 'typeof F'?
     function f(p) { p.x; }
     
-==== g.js (1 errors) ====
+==== g.js (2 errors) ====
     function G() {
         this.x = 1;
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     
     /** @param {G} p */

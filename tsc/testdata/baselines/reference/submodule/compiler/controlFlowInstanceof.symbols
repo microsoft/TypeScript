@@ -111,22 +111,22 @@ function f4(s: Set<string> | Set<number>) {
 
 // More tests
 
-class A { a: string }
+class A { a: string = "" }
 >A : Symbol(A, Decl(controlFlowInstanceof.ts, 41, 1))
 >a : Symbol(A.a, Decl(controlFlowInstanceof.ts, 45, 9))
 
-class B extends A { b: string }
->B : Symbol(B, Decl(controlFlowInstanceof.ts, 45, 21))
+class B extends A { b: string = "" }
+>B : Symbol(B, Decl(controlFlowInstanceof.ts, 45, 26))
 >A : Symbol(A, Decl(controlFlowInstanceof.ts, 41, 1))
 >b : Symbol(B.b, Decl(controlFlowInstanceof.ts, 46, 19))
 
-class C extends A { c: string }
->C : Symbol(C, Decl(controlFlowInstanceof.ts, 46, 31))
+class C extends A { c: string = "" }
+>C : Symbol(C, Decl(controlFlowInstanceof.ts, 46, 36))
 >A : Symbol(A, Decl(controlFlowInstanceof.ts, 41, 1))
 >c : Symbol(C.c, Decl(controlFlowInstanceof.ts, 47, 19))
 
 function foo(x: A | undefined) {
->foo : Symbol(foo, Decl(controlFlowInstanceof.ts, 47, 31))
+>foo : Symbol(foo, Decl(controlFlowInstanceof.ts, 47, 36))
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 49, 13))
 >A : Symbol(A, Decl(controlFlowInstanceof.ts, 41, 1))
 
@@ -135,9 +135,9 @@ function foo(x: A | undefined) {
 
     if (x instanceof B || x instanceof C) {
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 49, 13))
->B : Symbol(B, Decl(controlFlowInstanceof.ts, 45, 21))
+>B : Symbol(B, Decl(controlFlowInstanceof.ts, 45, 26))
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 49, 13))
->C : Symbol(C, Decl(controlFlowInstanceof.ts, 46, 31))
+>C : Symbol(C, Decl(controlFlowInstanceof.ts, 46, 36))
 
         x;  // B | C
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 49, 13))
@@ -147,9 +147,9 @@ function foo(x: A | undefined) {
 
     if (x instanceof B && x instanceof C) {
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 49, 13))
->B : Symbol(B, Decl(controlFlowInstanceof.ts, 45, 21))
+>B : Symbol(B, Decl(controlFlowInstanceof.ts, 45, 26))
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 49, 13))
->C : Symbol(C, Decl(controlFlowInstanceof.ts, 46, 31))
+>C : Symbol(C, Decl(controlFlowInstanceof.ts, 46, 36))
 
         x;  // B & C
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 49, 13))
@@ -167,14 +167,14 @@ function foo(x: A | undefined) {
 
     if (x instanceof B) {
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 49, 13))
->B : Symbol(B, Decl(controlFlowInstanceof.ts, 45, 21))
+>B : Symbol(B, Decl(controlFlowInstanceof.ts, 45, 26))
 
         x;  // B
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 49, 13))
 
         if (x instanceof C) {
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 49, 13))
->C : Symbol(C, Decl(controlFlowInstanceof.ts, 46, 31))
+>C : Symbol(C, Decl(controlFlowInstanceof.ts, 46, 36))
 
             x;  // B & C
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 49, 13))
@@ -200,14 +200,14 @@ function foo(x: A | undefined) {
 interface X {
 >X : Symbol(X, Decl(controlFlowInstanceof.ts, 77, 1))
 
-    x?: string;
+    x?: string
 >x : Symbol(X.x, Decl(controlFlowInstanceof.ts, 82, 13))
 }
 
 class Y {
 >Y : Symbol(Y, Decl(controlFlowInstanceof.ts, 84, 1))
 
-    y: string;
+    y: string = "";
 >y : Symbol(Y.y, Decl(controlFlowInstanceof.ts, 86, 9))
 }
 
@@ -251,21 +251,24 @@ if (x instanceof ctor) {
 
 // Repro from #27550 (based on uglify code)
 === uglify.js ===
-/** @constructor */
+/**
+ * @constructor
+ * @param {any} val
+ */
 function AtTop(val) { this.val = val }
 >AtTop : Symbol(AtTop, Decl(uglify.js, 0, 0))
->val : Symbol(val, Decl(uglify.js, 1, 15))
->val : Symbol(val, Decl(uglify.js, 1, 15))
+>val : Symbol(val, Decl(uglify.js, 4, 15))
+>val : Symbol(val, Decl(uglify.js, 4, 15))
 
 /** @type {*} */
 var v = 1;
->v : Symbol(v, Decl(uglify.js, 3, 3))
+>v : Symbol(v, Decl(uglify.js, 6, 3))
 
 if (v instanceof AtTop) {
->v : Symbol(v, Decl(uglify.js, 3, 3))
+>v : Symbol(v, Decl(uglify.js, 6, 3))
 >AtTop : Symbol(AtTop, Decl(uglify.js, 0, 0))
 
     v.val
->v : Symbol(v, Decl(uglify.js, 3, 3))
+>v : Symbol(v, Decl(uglify.js, 6, 3))
 }
 

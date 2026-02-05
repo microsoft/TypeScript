@@ -41,6 +41,7 @@ do {
 }while (true)
 
 //// [invalidDoWhileContinueStatements.js]
+"use strict";
 // All errors
 // naked continue not allowed
 continue;

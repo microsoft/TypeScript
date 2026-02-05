@@ -1,0 +1,62 @@
+--- old.conditionalReturnExpression.types
++++ new.conditionalReturnExpression.types
+@@= skipped -23, +23 lines =@@
+     return x.startsWith("a") ? getAny() : 1;
+ >x.startsWith("a") ? getAny() : 1 : any
+ >x.startsWith("a") : boolean
+->x.startsWith : (searchString: string, position?: number) => boolean
++>x.startsWith : (searchString: string, position?: number | undefined) => boolean
+ >x : string
+->startsWith : (searchString: string, position?: number) => boolean
++>startsWith : (searchString: string, position?: number | undefined) => boolean
+ >"a" : "a"
+ >getAny() : any
+ >getAny : () => any
+@@= skipped -16, +16 lines =@@
+     return x.startsWith("a") ? "a" : x;
+ >x.startsWith("a") ? "a" : x : string
+ >x.startsWith("a") : boolean
+->x.startsWith : (searchString: string, position?: number) => boolean
++>x.startsWith : (searchString: string, position?: number | undefined) => boolean
+ >x : string
+->startsWith : (searchString: string, position?: number) => boolean
++>startsWith : (searchString: string, position?: number | undefined) => boolean
+ >"a" : "a"
+ >"a" : "a"
+ >x : string
+@@= skipped -17, +17 lines =@@
+ >(x.startsWith("a") ? getAny() : 1) : any
+ >x.startsWith("a") ? getAny() : 1 : any
+ >x.startsWith("a") : boolean
+->x.startsWith : (searchString: string, position?: number) => boolean
++>x.startsWith : (searchString: string, position?: number | undefined) => boolean
+ >x : string
+->startsWith : (searchString: string, position?: number) => boolean
++>startsWith : (searchString: string, position?: number | undefined) => boolean
+ >"a" : "a"
+ >getAny() : any
+ >getAny : () => any
+@@= skipped -15, +15 lines =@@
+ >x : string
+ >x.startsWith("a") ? getAny() : 1 : any
+ >x.startsWith("a") : boolean
+->x.startsWith : (searchString: string, position?: number) => boolean
++>x.startsWith : (searchString: string, position?: number | undefined) => boolean
+ >x : string
+->startsWith : (searchString: string, position?: number) => boolean
++>startsWith : (searchString: string, position?: number | undefined) => boolean
+ >"a" : "a"
+ >getAny() : any
+ >getAny : () => any
+@@= skipped -16, +16 lines =@@
+ >(x.startsWith("a") ? getAny() : 1) : any
+ >x.startsWith("a") ? getAny() : 1 : any
+ >x.startsWith("a") : boolean
+->x.startsWith : (searchString: string, position?: number) => boolean
++>x.startsWith : (searchString: string, position?: number | undefined) => boolean
+ >x : string
+->startsWith : (searchString: string, position?: number) => boolean
++>startsWith : (searchString: string, position?: number | undefined) => boolean
+ >"a" : "a"
+ >getAny() : any
+ >getAny : () => any

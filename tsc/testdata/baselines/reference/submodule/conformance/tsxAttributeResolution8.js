@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution8.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: {x: string};
@@ -13,6 +13,7 @@ var x: any;
 <test1 {...x} />
 
 //// [file.jsx]
+"use strict";
 var x;
 // Should be OK
 <test1 {...x}/>;

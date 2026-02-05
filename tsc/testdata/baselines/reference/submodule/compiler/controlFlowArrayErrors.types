@@ -9,7 +9,7 @@ function f1() {
 
     let x = [];  // Implicit any[] error in some locations
 >x : any[]
->[] : undefined[]
+>[] : never[]
 
     let y = x;   // Implicit any[] error
 >y : any[]
@@ -34,9 +34,9 @@ function f2() {
 >x : any
 
     x = [];
->x = [] : undefined[]
+>x = [] : never[]
 >x : any
->[] : undefined[]
+>[] : never[]
 
     let y = x;   // Implicit any[] error
 >y : any[]
@@ -59,7 +59,7 @@ function f3() {
 
     let x = [];  // Implicit any[] error in some locations
 >x : any[]
->[] : undefined[]
+>[] : never[]
 
     x.push(5);
 >x.push(5) : number
@@ -125,9 +125,9 @@ function f6() {
 >cond : () => boolean
 
         x = [];
->x = [] : undefined[]
+>x = [] : never[]
 >x : any
->[] : undefined[]
+>[] : never[]
 
         x.push(5);
 >x.push(5) : number
@@ -166,7 +166,7 @@ function f7() {
 
     let x = [];       // x has evolving array value
 >x : any[]
->[] : undefined[]
+>[] : never[]
 
     x.push(5);
 >x.push(5) : number
@@ -199,7 +199,7 @@ function f8() {
 
     const x = [];  // Implicit any[] error in some locations
 >x : any[]
->[] : undefined[]
+>[] : never[]
 
     x.push(5);
 >x.push(5) : number

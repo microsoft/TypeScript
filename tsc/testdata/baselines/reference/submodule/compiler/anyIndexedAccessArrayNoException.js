@@ -5,4 +5,5 @@ var x: any[[]];
 
 
 //// [anyIndexedAccessArrayNoException.js]
+"use strict";
 var x;

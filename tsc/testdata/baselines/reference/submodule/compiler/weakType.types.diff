@@ -1,0 +1,35 @@
+--- old.weakType.types
++++ new.weakType.types
+@@= skipped -85, +85 lines =@@
+ >ChangeOptions : ChangeOptions
+
+ function del(options: ConfigurableStartEnd = {},
+->del : (options?: ConfigurableStartEnd, error?: { error?: number; }) => void
++>del : (options?: ConfigurableStartEnd, error?: { error?: number | undefined; }) => void
+ >options : ConfigurableStartEnd
+ >{} : {}
+
+              error: { error?: number } = {}) {
+->error : { error?: number; }
++>error : { error?: number | undefined; }
+ >error : number | undefined
+ >{} : {}
+
+@@= skipped -25, +25 lines =@@
+ >changes.push : (...items: ChangeOptions[]) => number
+ >changes : ChangeOptions[]
+ >push : (...items: ChangeOptions[]) => number
+->error : { error?: number; }
++>error : { error?: number | undefined; }
+ }
+
+ class K {
+@@= skipped -32, +32 lines =@@
+ >a : number | undefined
+
+     properties?: {
+->properties : { b?: number; } | undefined
++>properties : { b?: number | undefined; } | undefined
+
+         b?: number
+ >b : number | undefined

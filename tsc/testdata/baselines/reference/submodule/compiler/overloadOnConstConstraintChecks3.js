@@ -15,6 +15,7 @@ function foo(name: any): A {
 
 
 //// [overloadOnConstConstraintChecks3.js]
+"use strict";
 class A {
     x = 1;
 }

@@ -15,6 +15,7 @@ const C = class extends A {}
 
 
 //// [classAbstractInheritance2.js]
+"use strict";
 class A {
 }
 class B extends A {

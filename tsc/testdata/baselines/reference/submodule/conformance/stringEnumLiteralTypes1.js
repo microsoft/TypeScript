@@ -102,6 +102,7 @@ function f21(x: Item) {
 }
 
 //// [stringEnumLiteralTypes1.js]
+"use strict";
 ;
 function f1() {
     var a;

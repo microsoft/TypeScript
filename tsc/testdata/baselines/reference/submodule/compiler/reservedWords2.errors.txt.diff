@@ -1,0 +1,19 @@
+--- old.reservedWords2.errors.txt
++++ new.reservedWords2.errors.txt
+@@= skipped -0, +0 lines =@@
+ reservedWords2.ts(1,8): error TS1109: Expression expected.
+ reservedWords2.ts(1,14): error TS1005: '(' expected.
+-reservedWords2.ts(1,16): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++reservedWords2.ts(1,16): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ reservedWords2.ts(1,31): error TS1005: ')' expected.
+ reservedWords2.ts(2,12): error TS2300: Duplicate identifier '(Missing)'.
+ reservedWords2.ts(2,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+@@= skipped -44, +44 lines =@@
+                  ~
+ !!! error TS1005: '(' expected.
+                    ~~~~~~~
+-!!! error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                                   ~
+ !!! error TS1005: ')' expected.
+     import * as  while from "foo"

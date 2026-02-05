@@ -4,4 +4,5 @@
 1 >>>= 2;
 
 //// [parserGreaterThanTokenAmbiguity16.js]
+"use strict";
 1 >>>= 2;

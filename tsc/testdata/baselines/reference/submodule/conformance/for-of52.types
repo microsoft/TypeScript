@@ -2,8 +2,8 @@
 
 === for-of52.ts ===
 for (let [v, v] of [[]]) {}
->v : any
->v : any
->[[]] : undefined[][]
->[] : undefined[]
+>v : never
+>v : never
+>[[]] : never[][]
+>[] : never[]
 

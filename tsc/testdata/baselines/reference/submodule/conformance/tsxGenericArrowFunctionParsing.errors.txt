@@ -1,11 +1,14 @@
+file.tsx(2,22): error TS7008: Member 'isElement' implicitly has an 'any' type.
 file.tsx(8,17): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 file.tsx(20,32): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 file.tsx(24,25): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 
 
-==== file.tsx (3 errors) ====
-    declare module JSX {
+==== file.tsx (4 errors) ====
+    declare namespace JSX {
     	interface Element { isElement; }
+    	                    ~~~~~~~~~
+!!! error TS7008: Member 'isElement' implicitly has an 'any' type.
     }
     
     var T: any, T1: any, T2: any;

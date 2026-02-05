@@ -1,8 +1,10 @@
-file.tsx(11,38): error TS2322: Type '{ property1: string; property2: number; Property1: true; }' is not assignable to type 'IntrinsicAttributes & AnotherComponentProps'.
+file.tsx(13,38): error TS2322: Type '{ property1: string; property2: number; Property1: true; }' is not assignable to type 'IntrinsicAttributes & AnotherComponentProps'.
   Property 'Property1' does not exist on type 'IntrinsicAttributes & AnotherComponentProps'. Did you mean 'property1'?
 
 
 ==== file.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react');
     
     interface ComponentProps {

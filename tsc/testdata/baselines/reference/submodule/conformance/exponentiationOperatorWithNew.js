@@ -9,6 +9,7 @@ new a ** new b ** c;
 new (a ** b ** c);
 
 //// [exponentiationOperatorWithNew.js]
+"use strict";
 var a;
 var b;
 var c;

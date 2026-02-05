@@ -14,12 +14,12 @@ var d: void = null;
 >d : void
 
 var e: typeof undefined = null;
->e : any
+>e : undefined
 >undefined : undefined
 
 e = null; // ok
 >e = null : null
->e : any
+>e : undefined
 
 enum E { A }
 >E : E
@@ -60,7 +60,7 @@ I = null; // error
 >I = null : null
 >I : any
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : typeof M
 >x : number
 >1 : 1

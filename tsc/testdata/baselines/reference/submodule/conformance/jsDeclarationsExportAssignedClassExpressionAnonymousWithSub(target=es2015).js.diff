@@ -1,0 +1,33 @@
+--- old.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub(target=es2015).js
++++ new.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub(target=es2015).js
+@@= skipped -33, +33 lines =@@
+
+
+ //// [index.d.ts]
+-export = exports;
+-declare class exports {
+-    /**
+-     * @param {number} p
+-     */
+-    constructor(p: number);
+-    t: number;
+-}
+-declare namespace exports {
+-    export { Sub };
+-}
+-declare class Sub {
+-    instance: import(".");
+-}
++declare const _default: {
++    new (p: number): {
++        t: number;
++    };
++};
++export = _default;
++export declare var Sub: {
++    new (): {
++        instance: {
++            t: number;
++        };
++    };
++};

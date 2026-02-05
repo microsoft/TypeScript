@@ -2,10 +2,10 @@
 +++ new.classAbstractClinterfaceAssignability.js
 @@= skipped -27, +27 lines =@@
  //// [classAbstractClinterfaceAssignability.js]
- var I;
+ "use strict";
  class A {
 +    x;
 +    static y;
  }
- var AA;
  AA = I;
+ AAA = A;

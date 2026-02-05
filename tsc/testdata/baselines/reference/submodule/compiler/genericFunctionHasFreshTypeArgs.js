@@ -5,6 +5,7 @@ function f(p: <T>(x: T) => void) { };
 f(x => f(y => x = y));
 
 //// [genericFunctionHasFreshTypeArgs.js]
+"use strict";
 function f(p) { }
 ;
 f(x => f(y => x = y));

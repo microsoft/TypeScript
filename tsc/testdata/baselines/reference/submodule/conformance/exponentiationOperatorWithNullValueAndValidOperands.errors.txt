@@ -17,8 +17,8 @@ exponentiationOperatorWithNullValueAndValidOperands.ts(20,17): error TS18050: Th
         b
     }
     
-    var a: any;
-    var b: number;
+    declare var a: any;
+    declare var b: number;
     
     // operator **
     var r1 = null ** a;

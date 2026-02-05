@@ -1,8 +1,8 @@
 --- old.literalTypesWidenInParameterPosition.js
 +++ new.literalTypesWidenInParameterPosition.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [literalTypesWidenInParameterPosition.js]
+ "use strict";
  class D {
 +    widen;
 +    noWiden = 1;

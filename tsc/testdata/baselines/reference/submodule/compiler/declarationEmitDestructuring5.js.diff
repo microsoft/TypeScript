@@ -1,6 +1,6 @@
 --- old.declarationEmitDestructuring5.js
 +++ new.declarationEmitDestructuring5.js
-@@= skipped -15, +15 lines =@@
+@@= skipped -16, +16 lines =@@
 
 
  //// [declarationEmitDestructuring5.d.ts]

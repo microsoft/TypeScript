@@ -24,15 +24,3 @@
 
  c["bar"];
  >c : Symbol(c, Decl(noPropertyAccessFromIndexSignature1.ts, 15, 13))
-@@= skipped -19, +19 lines =@@
-
- // optional access index signature
- d?.bar;
-->d?.bar : Symbol(C.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
-+>d?.bar : Symbol(C[__index], Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
- >d : Symbol(d, Decl(noPropertyAccessFromIndexSignature1.ts, 16, 13))
-->bar : Symbol(C.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
-+>bar : Symbol(C[__index], Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
-
- d?.["bar"];
- >d : Symbol(d, Decl(noPropertyAccessFromIndexSignature1.ts, 16, 13))

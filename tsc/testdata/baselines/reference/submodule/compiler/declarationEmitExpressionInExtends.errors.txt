@@ -1,0 +1,25 @@
+declarationEmitExpressionInExtends.ts(6,5): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+declarationEmitExpressionInExtends.ts(9,17): error TS2454: Variable 'x' is used before being assigned.
+declarationEmitExpressionInExtends.ts(13,1): error TS2454: Variable 'q' is used before being assigned.
+
+
+==== declarationEmitExpressionInExtends.ts (3 errors) ====
+    var x: {
+        new<T>(s: any): Q;
+    }
+    
+    class Q {
+        s: string;    
+        ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class B extends x<string> {    
+                    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    }
+    
+    var q: B;
+    q.s;
+    ~
+!!! error TS2454: Variable 'q' is used before being assigned.

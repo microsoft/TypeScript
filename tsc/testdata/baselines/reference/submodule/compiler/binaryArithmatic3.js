@@ -4,4 +4,5 @@
 var v = undefined | undefined;
 
 //// [binaryArithmatic3.js]
+"use strict";
 var v = undefined | undefined;

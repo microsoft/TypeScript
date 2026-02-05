@@ -1,0 +1,14 @@
+--- old.controlFlowIfStatement.types
++++ new.controlFlowIfStatement.types
+@@= skipped -102, +102 lines =@@
+
+         return JSON.parse(data);
+ >JSON.parse(data) : any
+->JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
++>JSON.parse : (text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined) => any
+ >JSON : JSON
+->parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
++>parse : (text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined) => any
+ >data : string | (T & string)
+     }
+     else {

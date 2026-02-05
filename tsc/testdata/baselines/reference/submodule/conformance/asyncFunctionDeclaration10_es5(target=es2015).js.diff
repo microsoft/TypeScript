@@ -1,0 +1,11 @@
+--- old.asyncFunctionDeclaration10_es5(target=es2015).js
++++ new.asyncFunctionDeclaration10_es5(target=es2015).js
+@@= skipped -5, +5 lines =@@
+
+ //// [asyncFunctionDeclaration10_es5.js]
+ "use strict";
+-function foo() {
+-    return __awaiter(this, arguments, void 0, function* (a = yield , await) {
+-    });
++async function foo(a = await , await) {
+ }

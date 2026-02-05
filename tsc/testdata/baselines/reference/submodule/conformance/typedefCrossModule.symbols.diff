@@ -44,6 +44,7 @@
 ->this.p : Symbol(C.p, Decl(mod3.js, 5, 24))
 ->this : Symbol(C, Decl(mod3.js, 5, 11))
 ->p : Symbol(C.p, Decl(mod3.js, 5, 24))
++>this : Symbol("mod3", Decl(mod3.js, 0, 0))
  }
 
  === use.js ===

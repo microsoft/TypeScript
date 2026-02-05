@@ -11,7 +11,7 @@ interface I {
 >y : any
 }
 
-declare module M {
+declare namespace M {
 >M : typeof M
 
     export class C {
@@ -22,7 +22,7 @@ declare module M {
     }
 }
 
-declare module M {
+declare namespace M {
 >M : typeof M
 
     export extension class C {
@@ -51,7 +51,7 @@ c.p;
 >c : M.C
 >p : number
 
-var i:I;
+declare var i:I;
 >i : I
 
 i.x;

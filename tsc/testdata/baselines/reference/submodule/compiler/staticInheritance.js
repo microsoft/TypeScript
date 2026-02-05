@@ -14,6 +14,7 @@ doThing(B); //OK
 
 
 //// [staticInheritance.js]
+"use strict";
 function doThing(x) { }
 class A {
     static n;

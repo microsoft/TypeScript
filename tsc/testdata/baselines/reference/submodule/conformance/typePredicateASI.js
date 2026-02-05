@@ -7,3 +7,4 @@ interface I {
 }
 
 //// [typePredicateASI.js]
+"use strict";

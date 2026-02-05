@@ -19,6 +19,7 @@ function fn3() {
 
 
 //// [implicitAnyDeclareFunctionWithoutFormalType2.js]
+"use strict";
 // generates function fn1(): number;
 function fn1() {
     var x;

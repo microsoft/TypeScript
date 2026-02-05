@@ -19,7 +19,7 @@
  parserRealSource7.ts(51,36): error TS2304: Cannot find name 'TypeLink'.
  parserRealSource7.ts(55,30): error TS2304: Cannot find name 'SignatureGroup'.
  parserRealSource7.ts(59,66): error TS2304: Cannot find name 'Type'.
-@@= skipped -35, +35 lines =@@
+@@= skipped -36, +36 lines =@@
  parserRealSource7.ts(155,55): error TS2304: Cannot find name 'VarFlags'.
  parserRealSource7.ts(162,51): error TS2339: Property 'getType' does not exist on type 'Symbol'.
  parserRealSource7.ts(165,28): error TS2304: Cannot find name 'ModuleType'.
@@ -97,8 +97,8 @@
  parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionScope'.
 
 
--==== parserRealSource7.ts (304 errors) ====
-+==== parserRealSource7.ts (303 errors) ====
+-==== parserRealSource7.ts (305 errors) ====
++==== parserRealSource7.ts (304 errors) ====
      // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
      // See LICENSE.txt in the project root for complete license information.
      
@@ -106,7 +106,7 @@
 -                        ~~~~~~~~~~~~~
 -!!! error TS6053: File 'typescript.ts' not found.
      
-     module TypeScript {
+     namespace TypeScript {
          export class Continuation {
 @@= skipped -72, +70 lines =@@
              var fieldSymbol =
@@ -128,7 +128,7 @@
              signature.returnType = new TypeLink();
                                         ~~~~~~~~
  !!! error TS2304: Cannot find name 'TypeLink'.
-@@= skipped -181, +182 lines =@@
+@@= skipped -183, +184 lines =@@
      
              typeSymbol = new TypeSymbol(importDecl.id.text, importDecl.minChar,
                               ~~~~~~~~~~

@@ -3,10 +3,10 @@
 === typeofOperatorWithAnyOtherType.ts ===
 // typeof  operator on any type
 
-var ANY: any;
+declare var ANY: any;
 >ANY : any
 
-var ANY1;
+declare var ANY1;
 >ANY1 : any
 
 var ANY2: any[] = ["", ""];
@@ -15,7 +15,7 @@ var ANY2: any[] = ["", ""];
 >"" : ""
 >"" : ""
 
-var obj: () => {}
+declare var obj: () => {};
 >obj : () => {}
 
 var obj1 = { x: "a", y: () => { }};
@@ -29,7 +29,7 @@ var obj1 = { x: "a", y: () => { }};
 function foo(): any {
 >foo : () => any
 
-    var a;
+    var a!: any;
 >a : any
 
     return a;
@@ -44,17 +44,17 @@ class A {
     static foo() {
 >foo : () => any
 
-        var a;
+        var a!: any;
 >a : any
 
         return a;
 >a : any
     }
 }
-module M {
+namespace M {
 >M : typeof M
 
-    export var n: any;
+    export var n!: any;
 >n : any
 }
 var objA = new A();
@@ -241,13 +241,13 @@ typeof M.n;
 >n : any
 
 // use typeof in type query
-var z: any;
+var z!: any;
 >z : any
 
-var x: any[];
+var x!: any[];
 >x : any[]
 
-var r: () => any;
+var r!: () => any;
 >r : () => any
 
 z: typeof ANY;

@@ -4,11 +4,11 @@
 class A {
     a: number;
 }
-module A {
+namespace A {
     export var v: string;
 }
 
-module Foo {
+namespace Foo {
     var A = 1;
     class B extends A {
         b: string;
@@ -16,6 +16,7 @@ module Foo {
 }
 
 //// [classExtendsClauseClassMergedWithModuleNotReferingConstructor.js]
+"use strict";
 class A {
     a;
 }

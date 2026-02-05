@@ -6,6 +6,7 @@ x = undefined;
 x = null;
 
 //// [validVoidValues.js]
+"use strict";
 var x;
 x = undefined;
 x = null;

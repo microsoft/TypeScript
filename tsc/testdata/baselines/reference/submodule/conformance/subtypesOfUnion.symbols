@@ -23,21 +23,21 @@ class A2<T> { foo: T; }
 function f() { }
 >f : Symbol(f, Decl(subtypesOfUnion.ts, 3, 23), Decl(subtypesOfUnion.ts, 4, 16))
 
-module f { export var bar = 1; }
+namespace f { export var bar = 1; }
 >f : Symbol(f, Decl(subtypesOfUnion.ts, 3, 23), Decl(subtypesOfUnion.ts, 4, 16))
->bar : Symbol(bar, Decl(subtypesOfUnion.ts, 5, 21))
+>bar : Symbol(bar, Decl(subtypesOfUnion.ts, 5, 24))
 
 class c { baz: string }
->c : Symbol(c, Decl(subtypesOfUnion.ts, 5, 32), Decl(subtypesOfUnion.ts, 6, 23))
+>c : Symbol(c, Decl(subtypesOfUnion.ts, 5, 35), Decl(subtypesOfUnion.ts, 6, 23))
 >baz : Symbol(c.baz, Decl(subtypesOfUnion.ts, 6, 9))
 
-module c { export var bar = 1; }
->c : Symbol(c, Decl(subtypesOfUnion.ts, 5, 32), Decl(subtypesOfUnion.ts, 6, 23))
->bar : Symbol(bar, Decl(subtypesOfUnion.ts, 7, 21))
+namespace c { export var bar = 1; }
+>c : Symbol(c, Decl(subtypesOfUnion.ts, 5, 35), Decl(subtypesOfUnion.ts, 6, 23))
+>bar : Symbol(bar, Decl(subtypesOfUnion.ts, 7, 24))
 
 // A type T is a subtype of a union type U if T is a subtype of any type in U.
 interface I1<T> {
->I1 : Symbol(I1, Decl(subtypesOfUnion.ts, 7, 32))
+>I1 : Symbol(I1, Decl(subtypesOfUnion.ts, 7, 35))
 >T : Symbol(T, Decl(subtypesOfUnion.ts, 10, 13))
 
     [x: string]: string | number;
@@ -61,11 +61,11 @@ interface I1<T> {
 
     foo6: Date; // error
 >foo6 : Symbol(I1.foo6, Decl(subtypesOfUnion.ts, 16, 12))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo7: RegExp; // error
 >foo7 : Symbol(I1.foo7, Decl(subtypesOfUnion.ts, 17, 15))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo8: { bar: number }; // error
 >foo8 : Symbol(I1.foo8, Decl(subtypesOfUnion.ts, 18, 17))
@@ -100,7 +100,7 @@ interface I1<T> {
 
     foo15: typeof c; // error
 >foo15 : Symbol(I1.foo15, Decl(subtypesOfUnion.ts, 25, 20))
->c : Symbol(c, Decl(subtypesOfUnion.ts, 5, 32), Decl(subtypesOfUnion.ts, 6, 23))
+>c : Symbol(c, Decl(subtypesOfUnion.ts, 5, 35), Decl(subtypesOfUnion.ts, 6, 23))
 
     foo16: T; // error
 >foo16 : Symbol(I1.foo16, Decl(subtypesOfUnion.ts, 26, 20))
@@ -139,11 +139,11 @@ interface I2<T> {
 
     foo6: Date; // error
 >foo6 : Symbol(I2.foo6, Decl(subtypesOfUnion.ts, 37, 12))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo7: RegExp; // error
 >foo7 : Symbol(I2.foo7, Decl(subtypesOfUnion.ts, 38, 15))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     foo8: { bar: number }; // error
 >foo8 : Symbol(I2.foo8, Decl(subtypesOfUnion.ts, 39, 17))
@@ -178,7 +178,7 @@ interface I2<T> {
 
     foo15: typeof c; // error
 >foo15 : Symbol(I2.foo15, Decl(subtypesOfUnion.ts, 46, 20))
->c : Symbol(c, Decl(subtypesOfUnion.ts, 5, 32), Decl(subtypesOfUnion.ts, 6, 23))
+>c : Symbol(c, Decl(subtypesOfUnion.ts, 5, 35), Decl(subtypesOfUnion.ts, 6, 23))
 
     foo16: T; // error
 >foo16 : Symbol(I2.foo16, Decl(subtypesOfUnion.ts, 47, 20))

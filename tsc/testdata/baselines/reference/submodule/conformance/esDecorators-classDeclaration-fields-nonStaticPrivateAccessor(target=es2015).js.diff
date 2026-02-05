@@ -1,9 +1,9 @@
 --- old.esDecorators-classDeclaration-fields-nonStaticPrivateAccessor(target=es2015).js
 +++ new.esDecorators-classDeclaration-fields-nonStaticPrivateAccessor(target=es2015).js
-@@= skipped -8, +8 lines =@@
-
+@@= skipped -9, +9 lines =@@
 
  //// [esDecorators-classDeclaration-fields-nonStaticPrivateAccessor.js]
+ "use strict";
 -let C = (() => {
 -    var _C_instances, _a, _C_field1_accessor_storage, _C_field1_get, _C_field1_set;
 -    let _private_field1_decorators;

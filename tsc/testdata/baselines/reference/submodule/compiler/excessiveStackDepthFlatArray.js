@@ -43,6 +43,7 @@ const Component = () => {
 
 
 //// [index.js]
+"use strict";
 configureStore({
     middleware: [...defaultMiddleware], // Should not error
 });

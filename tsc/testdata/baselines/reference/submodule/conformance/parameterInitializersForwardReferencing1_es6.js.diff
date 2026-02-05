@@ -1,6 +1,6 @@
 --- old.parameterInitializersForwardReferencing1_es6.js
 +++ new.parameterInitializersForwardReferencing1_es6.js
-@@= skipped -65, +65 lines =@@
+@@= skipped -66, +66 lines =@@
      let foo = 2;
  }
  class Foo {

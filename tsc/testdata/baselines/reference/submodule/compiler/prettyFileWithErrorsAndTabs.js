@@ -10,6 +10,7 @@ function f() {
 }
 
 //// [prettyFileWithErrorsAndTabs.js]
+"use strict";
 function f() {
     {
         const x = 12;

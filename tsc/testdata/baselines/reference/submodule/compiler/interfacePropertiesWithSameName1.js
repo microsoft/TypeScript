@@ -16,3 +16,4 @@ interface MoverShaker extends Mover, Shaker {
 
 
 //// [interfacePropertiesWithSameName1.js]
+"use strict";

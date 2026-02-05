@@ -1,0 +1,12 @@
+--- old.moduleResolution_automaticTypeDirectiveNames.types
++++ new.moduleResolution_automaticTypeDirectiveNames.types
+@@= skipped -1, +1 lines =@@
+
+ === /a.ts ===
+ a;
+->a : string
+-
+-=== /node_modules/@types/a/index.d.ts ===
+-declare const a: string;
+->a : string
++>a : any

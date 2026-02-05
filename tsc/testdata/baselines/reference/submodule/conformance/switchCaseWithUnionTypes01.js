@@ -27,6 +27,7 @@ switch (strOrNum) {
 }
 
 //// [switchCaseWithUnionTypes01.js]
+"use strict";
 var strOrNum;
 var numOrBool;
 var str;

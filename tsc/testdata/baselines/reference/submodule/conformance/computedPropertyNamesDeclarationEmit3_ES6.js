@@ -6,6 +6,7 @@ interface I {
 }
 
 //// [computedPropertyNamesDeclarationEmit3_ES6.js]
+"use strict";
 
 
 //// [computedPropertyNamesDeclarationEmit3_ES6.d.ts]

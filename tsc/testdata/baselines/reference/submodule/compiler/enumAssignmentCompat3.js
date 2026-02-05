@@ -52,21 +52,21 @@ namespace Merged2 {
     export enum E {
         a, b, c
     }
-    export module E {
+    export namespace E {
         export let d = 5;
     }
 }
 
-var abc: First.E;
-var secondAbc: Abc.E;
-var secondAbcd: Abcd.E;
-var secondAb: Ab.E;
-var secondCd: Cd.E;
-var nope: Abc.Nope;
-var k: Const.E;
-var decl: Decl.E;
-var merged: Merged.E;
-var merged2: Merged2.E;
+declare var abc: First.E;
+declare var secondAbc: Abc.E;
+declare var secondAbcd: Abcd.E;
+declare var secondAb: Ab.E;
+declare var secondCd: Cd.E;
+declare var nope: Abc.Nope;
+declare var k: Const.E;
+declare var decl: Decl.E;
+declare var merged: Merged.E;
+declare var merged2: Merged2.E;
 abc = secondAbc; // ok
 abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok
@@ -92,6 +92,7 @@ abc = merged2; // ok
 merged2 = abc; // ok
 
 //// [enumAssignmentCompat3.js]
+"use strict";
 var First;
 (function (First) {
     let E;
@@ -169,16 +170,6 @@ var Merged2;
         E.d = 5;
     })(E = Merged2.E || (Merged2.E = {}));
 })(Merged2 || (Merged2 = {}));
-var abc;
-var secondAbc;
-var secondAbcd;
-var secondAb;
-var secondCd;
-var nope;
-var k;
-var decl;
-var merged;
-var merged2;
 abc = secondAbc; // ok
 abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok

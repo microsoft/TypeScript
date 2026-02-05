@@ -2,21 +2,22 @@
 
 //// [incrementOnTypeParameter.ts]
 class C<T> {
-    a: T;
+    a!: T;
     foo() {
         this.a++; 
-        for (var i: T, j = 0; j < 10; i++) { 
+        for (var i: T = this.a, j = 0; j < 10; i++) { 
         }
     }
 }
 
 
 //// [incrementOnTypeParameter.js]
+"use strict";
 class C {
     a;
     foo() {
         this.a++;
-        for (var i, j = 0; j < 10; i++) {
+        for (var i = this.a, j = 0; j < 10; i++) {
         }
     }
 }

@@ -8,6 +8,7 @@ var z1: number = foo1({ x: undefined, y: "def" });  // Best common type is any
 
 
 //// [widenToAny1.js]
+"use strict";
 function foo1(f1) {
     return undefined;
 }

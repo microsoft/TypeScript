@@ -1,8 +1,0 @@
---- old.parserES5ComputedPropertyName9.js
-+++ new.parserES5ComputedPropertyName9.js
-@@= skipped -6, +6 lines =@@
-
- //// [parserES5ComputedPropertyName9.js]
- class C {
-+    [e];
- }

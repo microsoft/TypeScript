@@ -50,7 +50,7 @@ class C {
     }
 }
 
-var c: C;
+declare var c: C;
 >c : C
 
 c.x1(1, (x: 'hi') => { return 1; } );

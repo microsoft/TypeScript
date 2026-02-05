@@ -20,7 +20,6 @@ export type {Row2} from './common';
 export interface Row2 { b: string }
 
 //// [main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const x = {};
 const y = { s: '' };
+export {};

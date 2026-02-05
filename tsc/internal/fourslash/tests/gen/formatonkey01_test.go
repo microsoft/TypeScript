@@ -11,7 +11,8 @@ func TestFormatonkey01(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `switch (1) {
+	const content = `// @lib: es5
+switch (1) {
     case 1:
         {
             /*1*/

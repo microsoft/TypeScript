@@ -1,7 +1,7 @@
 --- old.contextualTyping.js
 +++ new.contextualTyping.js
-@@= skipped -228, +228 lines =@@
- //// [contextualTyping.js]
+@@= skipped -229, +229 lines =@@
+ "use strict";
  // CONTEXT: Class property declaration
  class C1T5 {
 -    constructor() {
@@ -13,7 +13,7 @@
 +        return i;
 +    };
  }
- // CONTEXT: Module property declaration
+ // CONTEXT: Namespace property declaration
  var C2T5;
 @@= skipped -38, +36 lines =@@
  });

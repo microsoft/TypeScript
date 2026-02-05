@@ -27,6 +27,7 @@ with (window)
     const enum H {}
 
 //// [elidedEmbeddedStatementsReplacedWithSemicolon.js]
+"use strict";
 if (1)
     ;
 else

@@ -18,6 +18,7 @@ var d = new D();
 var d2 = new D(null); // error
 
 //// [classWithoutExplicitConstructor.js]
+"use strict";
 class C {
     x = 1;
     y = 'hello';

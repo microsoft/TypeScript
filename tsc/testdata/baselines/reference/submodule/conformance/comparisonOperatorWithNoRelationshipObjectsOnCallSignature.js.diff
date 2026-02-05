@@ -1,8 +1,8 @@
 --- old.comparisonOperatorWithNoRelationshipObjectsOnCallSignature.js
 +++ new.comparisonOperatorWithNoRelationshipObjectsOnCallSignature.js
-@@= skipped -171, +171 lines =@@
-
+@@= skipped -172, +172 lines =@@
  //// [comparisonOperatorWithNoRelationshipObjectsOnCallSignature.js]
+ "use strict";
  class Base {
 +    a;
  }
@@ -12,5 +12,5 @@
  class C {
 +    c;
  }
- var a1;
- var b1;
+ // operator <
+ var r1a1 = a1 < b1;

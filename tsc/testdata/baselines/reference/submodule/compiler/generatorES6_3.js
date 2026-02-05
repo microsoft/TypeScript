@@ -6,6 +6,7 @@ var v = function*() {
 }
 
 //// [generatorES6_3.js]
+"use strict";
 var v = function* () {
     yield 0;
 };

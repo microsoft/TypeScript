@@ -10,6 +10,7 @@ const p = {
 
 
 //// [typeSatisfaction_contextualTyping1.js]
+"use strict";
 const p = {
     isEven: n => n % 2 === 0,
     isOdd: n => n % 2 === 1

@@ -5,8 +5,9 @@ var v = 3;
 >v : number
 >3 : 3
 
-var v2: typeof v;
+var v2: typeof v = v;
 >v2 : number
+>v : number
 >v : number
 
 var v3: string = v2; // Not assignment compatible
@@ -18,15 +19,15 @@ interface I<T> { x: T; }
 
 interface J { }
 
-var numberJ: typeof J; //Error, cannot reference type in typeof
+declare var numberJ: typeof J; //Error, cannot reference type in typeof
 >numberJ : any
 >J : any
 
-var numberI: I<typeof v2>;
+declare var numberI: I<typeof v2>;
 >numberI : I<number>
 >v2 : number
 
-var fun: () => I<number>;
+declare var fun: () => I<number>;
 >fun : () => I<number>
 
 numberI = fun();

@@ -18,6 +18,7 @@ class Base {
 
 
 //// [privateNameNestedClassMethodShadowing.js]
+"use strict";
 class Base {
     #x() { }
     ;

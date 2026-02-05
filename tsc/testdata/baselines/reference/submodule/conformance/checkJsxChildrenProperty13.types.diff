@@ -1,6 +1,6 @@
 --- old.checkJsxChildrenProperty13.types
 +++ new.checkJsxChildrenProperty13.types
-@@= skipped -28, +28 lines =@@
+@@= skipped -30, +30 lines =@@
  >(<InnerButton {...this.props} children="hi">            <div>Hello World</div>            </InnerButton>) : JSX.Element
  ><InnerButton {...this.props} children="hi">            <div>Hello World</div>            </InnerButton> : JSX.Element
  >InnerButton : typeof InnerButton

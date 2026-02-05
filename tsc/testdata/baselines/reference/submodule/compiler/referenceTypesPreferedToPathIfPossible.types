@@ -2,21 +2,11 @@
 
 === usage.ts ===
 import { parse } from "url";
->parse : () => import("url").Url
+>parse : any
 
 export const thing = () => parse();
->thing : () => import("url").Url
->() => parse() : () => import("url").Url
->parse() : import("url").Url
->parse : () => import("url").Url
+>thing : () => any
+>() => parse() : () => any
+>parse() : any
+>parse : any
 
-=== node_modules/@types/node/index.d.ts ===
-declare module "url" {
->"url" : typeof import("url")
-
-    export class Url {}
->Url : Url
-
-    export function parse(): Url; 
->parse : () => Url
-}

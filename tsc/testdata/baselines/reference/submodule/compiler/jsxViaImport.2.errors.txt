@@ -1,0 +1,26 @@
+component.d.ts(2,41): error TS7008: Member 'props' implicitly has an 'any' type.
+
+
+==== consumer.tsx (0 errors) ====
+    /// <reference path="component.d.ts" />
+    import BaseComponent from 'BaseComponent';
+    class TestComponent extends React.Component<any, {}> {
+        render() {
+            return <BaseComponent />;
+        }
+    }
+    
+==== component.d.ts (1 errors) ====
+    declare namespace JSX {
+      interface ElementAttributesProperty { props; }
+                                            ~~~~~
+!!! error TS7008: Member 'props' implicitly has an 'any' type.
+    }
+    declare namespace React {
+      class Component<T, U> { }
+    }
+    declare module "BaseComponent" {
+        export default class extends React.Component<any, {}> {
+        }
+    }
+    

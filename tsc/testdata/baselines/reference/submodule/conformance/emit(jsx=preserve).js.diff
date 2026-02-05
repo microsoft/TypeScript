@@ -1,0 +1,8 @@
+--- old.emit(jsx=preserve).js
++++ new.emit(jsx=preserve).js
+@@= skipped -117, +117 lines =@@
+ import("node:path");
+ require("node:path");
+ //// [lol.js]
+-"use strict";
+ // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207

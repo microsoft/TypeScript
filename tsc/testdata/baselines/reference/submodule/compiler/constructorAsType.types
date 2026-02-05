@@ -9,7 +9,7 @@ var Person:new () => {name: string;} = function () {return {name:"joe"};};
 >name : string
 >"joe" : "joe"
 
-var Person2:{new() : {name:string;};};
+declare var Person2:{new() : {name:string;};};
 >Person2 : new () => { name: string; }
 >name : string
 

@@ -27,6 +27,7 @@ class D {
 }
 
 //// [classStaticBlock16.js]
+"use strict";
 let getX;
 class C {
     #x = 1;

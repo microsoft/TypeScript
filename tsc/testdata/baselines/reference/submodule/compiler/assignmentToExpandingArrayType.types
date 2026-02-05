@@ -4,7 +4,7 @@
 // Fixes exponential time/space in #14628
 let x = []
 >x : any[]
->[] : undefined[]
+>[] : never[]
 
 x[0] = { foo: 'hi' }
 >x[0] = { foo: 'hi' } : { foo: string; }

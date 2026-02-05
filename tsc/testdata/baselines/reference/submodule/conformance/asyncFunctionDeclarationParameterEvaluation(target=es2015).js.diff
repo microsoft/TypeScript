@@ -1,8 +1,8 @@
 --- old.asyncFunctionDeclarationParameterEvaluation(target=es2015).js
 +++ new.asyncFunctionDeclarationParameterEvaluation(target=es2015).js
-@@= skipped -28, +28 lines =@@
-
+@@= skipped -29, +29 lines =@@
  //// [asyncFunctionDeclarationParameterEvaluation.js]
+ "use strict";
  // https://github.com/microsoft/TypeScript/issues/40410
 -function f1(x_1) {
 -    return __awaiter(this, arguments, void 0, function* (x, y = z) { });

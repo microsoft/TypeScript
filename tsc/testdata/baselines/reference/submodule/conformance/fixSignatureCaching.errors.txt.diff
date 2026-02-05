@@ -1,0 +1,31 @@
+--- old.fixSignatureCaching.errors.txt
++++ new.fixSignatureCaching.errors.txt
+@@= skipped -49, +49 lines =@@
+ fixSignatureCaching.ts(915,53): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
+ fixSignatureCaching.ts(955,42): error TS2339: Property 'mobileGrade' does not exist on type '{}'.
+ fixSignatureCaching.ts(964,57): error TS2339: Property 'getDeviceSmallerSide' does not exist on type '{}'.
+-fixSignatureCaching.ts(978,16): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+-fixSignatureCaching.ts(978,42): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+-fixSignatureCaching.ts(979,37): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++fixSignatureCaching.ts(978,16): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++fixSignatureCaching.ts(978,42): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++fixSignatureCaching.ts(979,37): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ fixSignatureCaching.ts(980,23): error TS2304: Cannot find name 'define'.
+ fixSignatureCaching.ts(980,48): error TS2304: Cannot find name 'define'.
+ fixSignatureCaching.ts(981,16): error TS2304: Cannot find name 'define'.
+@@= skipped -1093, +1093 lines =@@
+     })((function (undefined) {
+         if (typeof module !== 'undefined' && module.exports) {
+                    ~~~~~~
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                                              ~~~~~~
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+             return function (factory) { module.exports = factory(); };
+                                         ~~~~~~
+-!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+         } else if (typeof define === 'function' && define.amd) {
+                           ~~~~~~
+ !!! error TS2304: Cannot find name 'define'.

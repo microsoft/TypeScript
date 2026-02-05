@@ -4,15 +4,15 @@
      import X2 = A.B;
  >X2 : Symbol(X2, Decl(dottedModuleName2.ts, 35, 18))
  >A : Symbol(X1, Decl(dottedModuleName2.ts, 0, 0), Decl(dottedModuleName2.ts, 18, 21))
-->B : Symbol(X1.B, Decl(dottedModuleName2.ts, 0, 9), Decl(dottedModuleName2.ts, 21, 9))
-+>B : Symbol(X2, Decl(dottedModuleName2.ts, 0, 9), Decl(dottedModuleName2.ts, 21, 9))
+->B : Symbol(X1.B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 12))
++>B : Symbol(X2, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 12))
   
      import X3 = A.B.C;
  >X3 : Symbol(X3, Decl(dottedModuleName2.ts, 37, 20))
  >A : Symbol(X1, Decl(dottedModuleName2.ts, 0, 0), Decl(dottedModuleName2.ts, 18, 21))
-->B : Symbol(X1.B, Decl(dottedModuleName2.ts, 0, 9), Decl(dottedModuleName2.ts, 21, 9))
-->C : Symbol(X2.C, Decl(dottedModuleName2.ts, 21, 11))
-+>B : Symbol(X2, Decl(dottedModuleName2.ts, 0, 9), Decl(dottedModuleName2.ts, 21, 9))
-+>C : Symbol(X3, Decl(dottedModuleName2.ts, 21, 11))
+->B : Symbol(X1.B, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 12))
+->C : Symbol(X2.C, Decl(dottedModuleName2.ts, 21, 14))
++>B : Symbol(X2, Decl(dottedModuleName2.ts, 0, 12), Decl(dottedModuleName2.ts, 21, 12))
++>C : Symbol(X3, Decl(dottedModuleName2.ts, 21, 14))
   
  }

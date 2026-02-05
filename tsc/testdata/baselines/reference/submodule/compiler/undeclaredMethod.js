@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/undeclaredMethod.ts] ////
 
 //// [undeclaredMethod.ts]
-module M {
+namespace M {
     export class C {
         public salt() {}
     }
@@ -15,6 +15,7 @@ c.saltbar();	// crash
 
 
 //// [undeclaredMethod.js]
+"use strict";
 var M;
 (function (M) {
     class C {

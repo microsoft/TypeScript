@@ -1,0 +1,10 @@
+--- old.asyncFunctionDeclaration12_es5(target=es2015).js
++++ new.asyncFunctionDeclaration12_es5(target=es2015).js
+@@= skipped -4, +4 lines =@@
+
+ //// [asyncFunctionDeclaration12_es5.js]
+ "use strict";
+-var v = function await() {
+-    return __awaiter(this, void 0, void 0, function* () { });
+-};
++var v = async function await() { };

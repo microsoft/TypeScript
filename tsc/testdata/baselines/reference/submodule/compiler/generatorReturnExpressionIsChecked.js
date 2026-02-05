@@ -7,6 +7,7 @@ function* f(): Iterator<number> {
 
 
 //// [generatorReturnExpressionIsChecked.js]
+"use strict";
 function* f() {
     return invalid;
 }

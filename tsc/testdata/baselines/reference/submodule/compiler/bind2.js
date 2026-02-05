@@ -4,3 +4,4 @@
  
 
 //// [bind2.js]
+"use strict";

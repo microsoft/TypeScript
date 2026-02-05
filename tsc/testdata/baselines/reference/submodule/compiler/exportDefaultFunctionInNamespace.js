@@ -11,6 +11,7 @@ namespace ns_async_function {
 
 
 //// [exportDefaultFunctionInNamespace.js]
+"use strict";
 var ns_function;
 (function (ns_function) {
     function () { }

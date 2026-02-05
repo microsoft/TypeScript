@@ -4,4 +4,5 @@
 var a = { f: a };
 
 //// [recursiveObjectLiteral.js]
+"use strict";
 var a = { f: a };

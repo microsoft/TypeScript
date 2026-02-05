@@ -1,8 +1,8 @@
 --- old.destructuringAssignment_private.js
 +++ new.destructuringAssignment_private.js
-@@= skipped -17, +17 lines =@@
-
+@@= skipped -18, +18 lines =@@
  //// [destructuringAssignment_private.js]
+ "use strict";
  class C {
 -    constructor() {
 -        this.x = 0;

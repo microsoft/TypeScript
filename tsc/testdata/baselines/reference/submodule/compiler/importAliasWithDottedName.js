@@ -1,20 +1,21 @@
 //// [tests/cases/compiler/importAliasWithDottedName.ts] ////
 
 //// [importAliasWithDottedName.ts]
-module M {
+namespace M {
     export var x = 1;
-    export module N {
+    export namespace N {
         export var y = 2;
     }
 }
 
-module A {
+namespace A {
     import N = M.N;
     var r = N.y;
     var r2 = M.N.y;
 }
 
 //// [importAliasWithDottedName.js]
+"use strict";
 var M;
 (function (M) {
     M.x = 1;

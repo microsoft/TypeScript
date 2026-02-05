@@ -16,8 +16,8 @@ function foo<T, U extends T>(t: T, t2: U) {
     return (x: T) => t2;
 }
 
-var c: C;
-var d: D;
+declare var c: C;
+declare var d: D;
 var r2 = foo(d, c); // the constraints are self-referencing, no downstream error
 var r9 = foo(() => 1, () => { }); // the constraints are self-referencing, no downstream error
 
@@ -27,6 +27,7 @@ function other<T, U extends T>() {
 
 
 //// [genericCallWithObjectTypeArgsAndConstraints5.js]
+"use strict";
 // Generic call with constraints infering type parameter from object member properties
 class C {
     x;
@@ -38,8 +39,6 @@ class D {
 function foo(t, t2) {
     return (x) => t2;
 }
-var c;
-var d;
 var r2 = foo(d, c); // the constraints are self-referencing, no downstream error
 var r9 = foo(() => 1, () => { }); // the constraints are self-referencing, no downstream error
 function other() {

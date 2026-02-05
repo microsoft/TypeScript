@@ -8,6 +8,7 @@ class C {
 }
 
 //// [parserComputedPropertyName29.js]
+"use strict";
 class C {
     // yes ASI
     [e] = id++;

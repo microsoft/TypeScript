@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts] ////
 
 === staticPropertyNotInClassType.ts ===
-module NonGeneric {
+namespace NonGeneric {
 >NonGeneric : typeof NonGeneric
 
     class C {
@@ -27,7 +27,7 @@ module NonGeneric {
 >foo : string
     }
 
-    module C {
+    namespace C {
 >C : typeof C
 
         export var bar = ''; // not reflected in class type
@@ -68,7 +68,7 @@ module NonGeneric {
 >x : any
 }
 
-module Generic {
+namespace Generic {
 >Generic : typeof Generic
 
     class C<T, U> {
@@ -94,7 +94,7 @@ module Generic {
 >foo : T
     }
 
-    module C {
+    namespace C {
 >C : typeof C
 
         export var bar = ''; // not reflected in class type

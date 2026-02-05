@@ -1,9 +1,12 @@
-file.tsx(11,21): error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
-  Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
-file.tsx(14,39): error TS2532: Object is possibly 'undefined'.
+file.tsx(9,5): error TS2564: Property 'greeting' has no initializer and is not definitely assigned in the constructor.
+file.tsx(13,21): error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode | undefined; }'.
+  Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode | undefined; }'.
+file.tsx(16,39): error TS2532: Object is possibly 'undefined'.
 
 
-==== file.tsx (2 errors) ====
+==== file.tsx (3 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react');
     
     class BigGreeter extends React.Component<{ }, {}> {
@@ -11,13 +14,15 @@ file.tsx(14,39): error TS2532: Object is possibly 'undefined'.
             return <div>Default hi</div>;
         }
         greeting: string;
+        ~~~~~~~~
+!!! error TS2564: Property 'greeting' has no initializer and is not definitely assigned in the constructor.
     }
     
     // Error
     let a = <BigGreeter prop1="hello" />
                         ~~~~~
-!!! error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
-!!! error TS2322:   Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
+!!! error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode | undefined; }'.
+!!! error TS2322:   Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode | undefined; }'.
     
     // OK
     let b = <BigGreeter ref={(input) => { this.textInput = input; }} />

@@ -5,5 +5,6 @@ var _this = 1;
 var f = () => this;
 
 //// [collisionThisExpressionAndVarInGlobal.js]
+"use strict";
 var _this = 1;
 var f = () => this;

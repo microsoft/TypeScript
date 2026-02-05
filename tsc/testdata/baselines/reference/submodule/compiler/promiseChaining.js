@@ -14,6 +14,7 @@ class Chain<T> {
 
 
 //// [promiseChaining.js]
+"use strict";
 class Chain {
     value;
     constructor(value) {

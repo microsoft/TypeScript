@@ -182,14 +182,14 @@ function foo7(x: number | string | boolean) {
 >10 : 10
 }
 function foo8(x: number | string | boolean) {
->foo8 : (x: string | number | boolean) => boolean
+>foo8 : (x: string | number | boolean) => 0 | boolean
 >x : string | number | boolean
 
     var b: number | boolean;
 >b : number | boolean
 
     return typeof x === "string"
->typeof x === "string"        ? x === "hello"        : ((b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : boolean
+>typeof x === "string"        ? x === "hello"        : ((b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : 0 | boolean
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number | boolean
@@ -201,8 +201,8 @@ function foo8(x: number | string | boolean) {
 >"hello" : "hello"
 
         : ((b = x) && //  number | boolean
->((b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : boolean
->(b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10) : boolean
+>((b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : 0 | boolean
+>(b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10) : 0 | boolean
 >(b = x) : number | boolean
 >b = x : number | boolean
 >b : number | boolean
@@ -225,7 +225,7 @@ function foo8(x: number | string | boolean) {
 >10 : 10
 }
 function foo9(x: number | string) {
->foo9 : (x: string | number) => boolean
+>foo9 : (x: string | number) => 0 | boolean
 >x : string | number
 
     var y = 10;
@@ -234,15 +234,15 @@ function foo9(x: number | string) {
 
     // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
     return typeof x === "string"
->typeof x === "string"        ? ((y = x.length) && x === "hello") // boolean        : x === 10 : boolean
+>typeof x === "string"        ? ((y = x.length) && x === "hello") // boolean        : x === 10 : 0 | boolean
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number
 >"string" : "string"
 
         ? ((y = x.length) && x === "hello") // boolean
->((y = x.length) && x === "hello") : boolean
->(y = x.length) && x === "hello" : boolean
+>((y = x.length) && x === "hello") : 0 | boolean
+>(y = x.length) && x === "hello" : 0 | boolean
 >(y = x.length) : number
 >y = x.length : number
 >y : number
@@ -259,7 +259,7 @@ function foo9(x: number | string) {
 >10 : 10
 }
 function foo10(x: number | string | boolean) {
->foo10 : (x: string | number | boolean) => string
+>foo10 : (x: string | number | boolean) => string | 0 | false
 >x : string | number | boolean
 
     // Mixing typeguards
@@ -267,7 +267,7 @@ function foo10(x: number | string | boolean) {
 >b : number | boolean
 
     return typeof x === "string"
->typeof x === "string"        ? x // string        : ((b = x) // x is number | boolean        && typeof x === "number"        && x.toString()) : string
+>typeof x === "string"        ? x // string        : ((b = x) // x is number | boolean        && typeof x === "number"        && x.toString()) : string | 0 | false
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number | boolean
@@ -277,9 +277,9 @@ function foo10(x: number | string | boolean) {
 >x : string
 
         : ((b = x) // x is number | boolean
->((b = x) // x is number | boolean        && typeof x === "number"        && x.toString()) : string
->(b = x) // x is number | boolean        && typeof x === "number"        && x.toString() : string
->(b = x) // x is number | boolean        && typeof x === "number" : boolean
+>((b = x) // x is number | boolean        && typeof x === "number"        && x.toString()) : string | 0 | false
+>(b = x) // x is number | boolean        && typeof x === "number"        && x.toString() : string | 0 | false
+>(b = x) // x is number | boolean        && typeof x === "number" : 0 | boolean
 >(b = x) : number | boolean
 >b = x : number | boolean
 >b : number | boolean
@@ -293,12 +293,12 @@ function foo10(x: number | string | boolean) {
 
         && x.toString()); // x is number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (radix?: number | undefined) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 }
 function foo11(x: number | string | boolean) {
->foo11 : (x: string | number | boolean) => string | number
+>foo11 : (x: string | number | boolean) => string | number | false
 >x : string | number | boolean
 
     // Mixing typeguards
@@ -306,7 +306,7 @@ function foo11(x: number | string | boolean) {
 >b : string | number | boolean
 
     return typeof x === "string"
->typeof x === "string"        ? x // string        : ((b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x) : string | number
+>typeof x === "string"        ? x // string        : ((b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x) : string | number | false
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number | boolean
@@ -316,10 +316,10 @@ function foo11(x: number | string | boolean) {
 >x : string
 
         : ((b = x) // x is number | boolean
->((b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x) : number
->(b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x : number
->(b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) : 0 | 10
->(b = x) // x is number | boolean        && typeof x === "number" : boolean
+>((b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x) : number | false
+>(b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x : number | false
+>(b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) : 0 | 10 | false
+>(b = x) // x is number | boolean        && typeof x === "number" : 0 | boolean
 >(b = x) : number | boolean
 >b = x : number | boolean
 >b : string | number | boolean
@@ -341,7 +341,7 @@ function foo11(x: number | string | boolean) {
 >x : number
 }
 function foo12(x: number | string | boolean) {
->foo12 : (x: string | number | boolean) => number
+>foo12 : (x: string | number | boolean) => number | false
 >x : string | number | boolean
 
     // Mixing typeguards
@@ -349,7 +349,7 @@ function foo12(x: number | string | boolean) {
 >b : string | number | boolean
 
     return typeof x === "string"
->typeof x === "string"        ? ((x = 10) && x.toString().length) // number        : ((b = x) // x is number | boolean        && typeof x === "number"        && x) : number
+>typeof x === "string"        ? ((x = 10) && x.toString().length) // number        : ((b = x) // x is number | boolean        && typeof x === "number"        && x) : number | false
 >typeof x === "string" : boolean
 >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >x : string | number | boolean
@@ -364,15 +364,15 @@ function foo12(x: number | string | boolean) {
 >10 : 10
 >x.toString().length : number
 >x.toString() : string
->x.toString : (radix?: number) => string
+>x.toString : (radix?: number | undefined) => string
 >x : number
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 >length : number
 
         : ((b = x) // x is number | boolean
->((b = x) // x is number | boolean        && typeof x === "number"        && x) : number
->(b = x) // x is number | boolean        && typeof x === "number"        && x : number
->(b = x) // x is number | boolean        && typeof x === "number" : boolean
+>((b = x) // x is number | boolean        && typeof x === "number"        && x) : number | false
+>(b = x) // x is number | boolean        && typeof x === "number"        && x : number | false
+>(b = x) // x is number | boolean        && typeof x === "number" : 0 | boolean
 >(b = x) : number | boolean
 >b = x : number | boolean
 >b : string | number | boolean

@@ -13,6 +13,7 @@ export { default as A } from "./a";
 
 
 //// [plainJSGrammarErrors2.js]
+"use strict";
 //// [a.js]
 export default 1;
 //// [b.js]

@@ -22,19 +22,18 @@ interface D {
 }
 
 var a: A;
-var b: B;
+declare var b: B;
 var c: C;
-var d: D;
+declare var d: D;
 
 a = b;
 c = d; // Should not be allowed
 
 
 //// [typeComparisonCaching.js]
+"use strict";
 // Check that we only cache results of type comparisons that are free of assumptions
 var a;
-var b;
 var c;
-var d;
 a = b;
 c = d; // Should not be allowed

@@ -9,6 +9,7 @@ async function test(isError: boolean = false) {
 }
 
 //// [noImplicitReturnsInAsync1.js]
+"use strict";
 async function test(isError = false) {
     if (isError === true) {
         return;

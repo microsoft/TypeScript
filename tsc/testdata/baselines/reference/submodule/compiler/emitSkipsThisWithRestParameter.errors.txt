@@ -1,0 +1,14 @@
+emitSkipsThisWithRestParameter.ts(3,31): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[base: any, ...args: any[]]'.
+  Source provides no match for required element at position 0 in target.
+
+
+==== emitSkipsThisWithRestParameter.ts (1 errors) ====
+    function rebase(fn: (base: any, ...args: any[]) => any): (...args: any[]) => any {
+        return function(this: any, ...args: any[]) {
+            return fn.apply(this, [ this ].concat(args));
+                                  ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[base: any, ...args: any[]]'.
+!!! error TS2345:   Source provides no match for required element at position 0 in target.
+        };
+    }
+    

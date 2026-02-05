@@ -7,10 +7,10 @@ interface T {
     new (x: number): void;
 >x : number
 }
-var t: T;
+declare var t: T;
 >t : T
 
-var a: { new (x: number): void };
+declare var a: { new (x: number): void };
 >a : new (x: number) => void
 >x : number
 
@@ -28,10 +28,10 @@ interface S {
     new (x: number): string;
 >x : number
 }
-var s: S;
+declare var s: S;
 >s : S
 
-var a2: { new (x: number): string };
+declare var a2: { new (x: number): string };
 >a2 : new (x: number) => string
 >x : number
 
@@ -59,10 +59,10 @@ interface S2 {
     (x: string): void;
 >x : string
 }
-var s2: S2;
+declare var s2: S2;
 >s2 : S2
 
-var a3: { (x: string): void };
+declare var a3: { (x: string): void };
 >a3 : (x: string) => void
 >x : string
 

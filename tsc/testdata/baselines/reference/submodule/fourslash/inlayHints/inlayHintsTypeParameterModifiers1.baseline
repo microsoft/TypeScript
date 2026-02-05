@@ -1,0 +1,107 @@
+// === Inlay Hints ===
+function test1() {
+                ^
+{
+  "position": {
+    "line": 0,
+    "character": 16
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "const"
+    },
+    {
+      "value": "T",
+      "location": {
+        "uri": "file:///inlayHintsTypeParameterModifiers1.ts",
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 25
+          },
+          "end": {
+            "line": 1,
+            "character": 26
+          }
+        }
+      }
+    },
+    {
+      "value": ">"
+    },
+    {
+      "value": "("
+    },
+    {
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsTypeParameterModifiers1.ts",
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 28
+          },
+          "end": {
+            "line": 1,
+            "character": 29
+          }
+        }
+      }
+    },
+    {
+      "value": ": "
+    },
+    {
+      "value": "T",
+      "location": {
+        "uri": "file:///inlayHintsTypeParameterModifiers1.ts",
+        "range": {
+          "start": {
+            "line": 1,
+            "character": 25
+          },
+          "end": {
+            "line": 1,
+            "character": 26
+          }
+        }
+      }
+    },
+    {
+      "value": ")"
+    },
+    {
+      "value": " => "
+    },
+    {
+      "value": "void"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+  return function <const T>(a: T) {};
+                                 ^
+{
+  "position": {
+    "line": 1,
+    "character": 33
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "void"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

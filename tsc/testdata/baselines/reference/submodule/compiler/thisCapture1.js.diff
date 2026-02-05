@@ -1,8 +1,8 @@
 --- old.thisCapture1.js
 +++ new.thisCapture1.js
-@@= skipped -12, +12 lines =@@
-
+@@= skipped -13, +13 lines =@@
  //// [thisCapture1.js]
+ "use strict";
  class X {
 -    constructor() {
 -        this.y = 0;

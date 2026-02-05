@@ -12,7 +12,8 @@ func TestCompletionInIncompleteCallExpression(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `var array = [1, 2, 4]
+	const content = `// @lib: es5
+var array = [1, 2, 4]
 function a4(x, y, z) { }
 a4(...<crash>/**/`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

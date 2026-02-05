@@ -125,7 +125,7 @@ promisePermutations.ts(144,35): error TS2769: No overload matches this call.
 promisePermutations.ts(152,36): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
-      Property 'catch' is missing in type 'IPromise<string>' but required in type 'Promise<number>'.
+      Type 'IPromise<string>' is missing the following properties from type 'Promise<number>': catch, [Symbol.toStringTag]
 promisePermutations.ts(156,21): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
@@ -200,29 +200,29 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
     declare function testFunction12P<T>(x: T): IPromise<T>;
     declare function testFunction12P<T>(x: T, y: T): Promise<T>;
     
-    var r1: IPromise<number>;
+    declare var r1: IPromise<number>;
     var r1a = r1.then(testFunction, testFunction, testFunction);
     var r1b = r1.then(testFunction, testFunction, testFunction).then(testFunction, testFunction, testFunction);
     var r1c = r1.then(testFunctionP, testFunctionP, testFunctionP);
-    var s1: Promise<number>;
+    declare var s1: Promise<number>;
     var s1a = s1.then(testFunction, testFunction, testFunction);
     var s1b = s1.then(testFunctionP, testFunctionP, testFunctionP);
     var s1c = s1.then(testFunctionP, testFunction, testFunction);
     var s1d = s1.then(testFunctionP, testFunction, testFunction).then(testFunction, testFunction, testFunction);
     
-    var r2: IPromise<{ x: number; }>;
+    declare var r2: IPromise<{ x: number; }>;
     var r2a = r2.then(testFunction2, testFunction2, testFunction2);
     var r2b = r2.then(testFunction2, testFunction2, testFunction2).then(testFunction2, testFunction2, testFunction2);
-    var s2: Promise<{ x: number; }>;
+    declare var s2: Promise<{ x: number; }>;
     var s2a = s2.then(testFunction2, testFunction2, testFunction2);
     var s2b = s2.then(testFunction2P, testFunction2P, testFunction2P);
     var s2c = s2.then(testFunction2P, testFunction2, testFunction2);
     var s2d = s2.then(testFunction2P, testFunction2, testFunction2).then(testFunction2, testFunction2, testFunction2);
     
-    var r3: IPromise<number>;
+    declare var r3: IPromise<number>;
     var r3a = r3.then(testFunction3, testFunction3, testFunction3);
     var r3b = r3.then(testFunction3, testFunction3, testFunction3).then(testFunction3, testFunction3, testFunction3);
-    var s3: Promise<number>;
+    declare var s3: Promise<number>;
     var s3a = s3.then(testFunction3, testFunction3, testFunction3);
     var s3b = s3.then(testFunction3P, testFunction3P, testFunction3P);
     var s3c = s3.then(testFunction3P, testFunction3, testFunction3);
@@ -235,9 +235,9 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769:         Type 'IPromise<number>' is not assignable to type 'number'.
 !!! related TS2771 promisePermutations.ts:5:5: The last overload is declared here.
     
-    var r4: IPromise<string>;
-    var sIPromise: (x: any) => IPromise<string>;
-    var sPromise: (x: any) => Promise<string>;
+    declare var r4: IPromise<string>;
+    declare var sIPromise: (x: any) => IPromise<string>;
+    declare var sPromise: (x: any) => Promise<string>;
     var r4a = r4.then(testFunction4, testFunction4, testFunction4); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -247,7 +247,7 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769:         Type 'string' is not assignable to type 'number'.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testFunction4, testFunction4); // ok
-    var s4: Promise<string>;
+    declare var s4: Promise<string>;
     var s4a = s4.then(testFunction4, testFunction4, testFunction4); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -274,7 +274,7 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! related TS2771 promisePermutations.ts:5:5: The last overload is declared here.
     var s4d = s4.then(sIPromise, testFunction4P, testFunction4).then(sIPromise, testFunction4P, testFunction4);
     
-    var r5: IPromise<string>;
+    declare var r5: IPromise<string>;
     var r5a = r5.then(testFunction5, testFunction5, testFunction5); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -283,7 +283,7 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769:       Target signature provides too few arguments. Expected 2 or more, but got 1.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var r5b = r5.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
-    var s5: Promise<string>;
+    declare var s5: Promise<string>;
     var s5a = s5.then(testFunction5, testFunction5, testFunction5); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -307,7 +307,7 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! related TS2771 promisePermutations.ts:5:5: The last overload is declared here.
     var s5d = s5.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok
     
-    var r6: IPromise<string>;
+    declare var r6: IPromise<string>;
     var r6a = r6.then(testFunction6, testFunction6, testFunction6); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -316,7 +316,7 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769:       Target signature provides too few arguments. Expected 2 or more, but got 1.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var r6b = r6.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
-    var s6: Promise<string>;
+    declare var s6: Promise<string>;
     var s6a = s6.then(testFunction6, testFunction6, testFunction6); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -340,7 +340,7 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! related TS2771 promisePermutations.ts:5:5: The last overload is declared here.
     var s6d = s6.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok
     
-    var r7: IPromise<string>;
+    declare var r7: IPromise<string>;
     var r7a = r7.then(testFunction7, testFunction7, testFunction7); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -350,7 +350,7 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769:         Type 'string' is not assignable to type '<T>(a: T) => T'.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var r7b = r7.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
-    var s7: Promise<string>;
+    declare var s7: Promise<string>;
     var s7a = r7.then(testFunction7, testFunction7, testFunction7); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -377,9 +377,9 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var s7d = r7.then(sPromise, sPromise, sPromise).then(sPromise, sPromise, sPromise); // ok?
     
-    var r8: IPromise<number>;
-    var nIPromise: (x: any) => IPromise<number>;
-    var nPromise: (x: any) => Promise<number>;
+    declare var r8: IPromise<number>;
+    declare var nIPromise: (x: any) => IPromise<number>;
+    declare var nPromise: (x: any) => Promise<number>;
     var r8a = r8.then(testFunction8, testFunction8, testFunction8); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -412,7 +412,7 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! related TS2771 promisePermutations.ts:5:5: The last overload is declared here.
     var s8d = s8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok
     
-    var r9: IPromise<number>;
+    declare var r9: IPromise<number>;
     var r9a = r9.then(testFunction9, testFunction9, testFunction9); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -431,7 +431,7 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769:         Type 'string' is not assignable to type 'number'.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
     var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
-    var s9: Promise<number>;
+    declare var s9: Promise<number>;
     var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
                       ~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -489,12 +489,11 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
-!!! error TS2769:       Property 'catch' is missing in type 'IPromise<string>' but required in type 'Promise<number>'.
-!!! related TS2728 lib.es5.d.ts:--:--: 'catch' is declared here.
+!!! error TS2769:       Type 'IPromise<string>' is missing the following properties from type 'Promise<number>': catch, [Symbol.toStringTag]
 !!! related TS2771 promisePermutations.ts:5:5: The last overload is declared here.
     var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok
     
-    var r11: IPromise<number>;
+    declare var r11: IPromise<number>;
     var r11a = r11.then(testFunction11, testFunction11, testFunction11); // error
                         ~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -503,7 +502,7 @@ promisePermutations.ts(160,21): error TS2769: No overload matches this call.
 !!! error TS2769:       Type 'IPromise<number>' is not assignable to type 'IPromise<string>'.
 !!! error TS2769:         Type 'number' is not assignable to type 'string'.
 !!! related TS2771 promisePermutations.ts:13:5: The last overload is declared here.
-    var s11: Promise<number>;
+    declare var s11: Promise<number>;
     var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
                         ~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.

@@ -158,7 +158,7 @@ function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[
 
     if(Math.random() > 0.5) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
       return s as T
@@ -191,7 +191,7 @@ function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff
 
     if(Math.random() > 0.5) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
       return arr as T[]
@@ -337,7 +337,7 @@ type DeepWritable<T> = T extends Function ? T : { -readonly [K in keyof T]: Deep
 >DeepWritable : Symbol(DeepWritable, Decl(reverseMappedTypeIntersectionConstraint.ts, 116, 73))
 >T : Symbol(T, Decl(reverseMappedTypeIntersectionConstraint.ts, 118, 18))
 >T : Symbol(T, Decl(reverseMappedTypeIntersectionConstraint.ts, 118, 18))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(reverseMappedTypeIntersectionConstraint.ts, 118, 18))
 >K : Symbol(K, Decl(reverseMappedTypeIntersectionConstraint.ts, 118, 61))
 >T : Symbol(T, Decl(reverseMappedTypeIntersectionConstraint.ts, 118, 18))
@@ -353,7 +353,7 @@ interface ProvidedActor {
 
   logic: () => Promise<unknown>;
 >logic : Symbol(ProvidedActor.logic, Decl(reverseMappedTypeIntersectionConstraint.ts, 121, 14))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 type DistributeActors<TActor> = TActor extends { src: infer TSrc }
@@ -441,6 +441,9 @@ declare function createXMachine<
 
 const child = () => Promise.resolve("foo");
 >child : Symbol(child, Decl(reverseMappedTypeIntersectionConstraint.ts, 151, 5))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 const config = createXMachine({
 >config : Symbol(config, Decl(reverseMappedTypeIntersectionConstraint.ts, 153, 5))

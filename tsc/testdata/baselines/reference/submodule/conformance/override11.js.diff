@@ -1,8 +1,8 @@
 --- old.override11.js
 +++ new.override11.js
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
  //// [override11.js]
+ "use strict";
  class Base {
 -    constructor() {
 -        this.foo = 1;

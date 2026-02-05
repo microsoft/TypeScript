@@ -21,13 +21,13 @@ interface MultiRobot {
 >name : string
 
     skills: {
->skills : { primary?: string; secondary?: string; }
+>skills : { primary?: string | undefined; secondary?: string | undefined; }
 
         primary?: string;
->primary : string
+>primary : string | undefined
 
         secondary?: string;
->secondary : string
+>secondary : string | undefined
 
     };
 }

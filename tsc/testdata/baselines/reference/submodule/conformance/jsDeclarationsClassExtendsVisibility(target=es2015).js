@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassExtendsVisibility.ts] ////
+
+//// [bar.js]
+class Bar {}
+module.exports = Bar;
+//// [cls.js]
+const Bar = require("./bar");
+const Strings = {
+    a: "A",
+    b: "B"
+};
+class Foo extends Bar {}
+module.exports = Foo;
+module.exports.Strings = Strings;
+
+//// [bar.js]
+"use strict";
+class Bar {
+}
+module.exports = Bar;
+//// [cls.js]
+"use strict";
+const Bar = require("./bar");
+const Strings = {
+    a: "A",
+    b: "B"
+};
+class Foo extends Bar {
+}
+module.exports = Foo;
+module.exports.Strings = Strings;
+
+
+//// [bar.d.ts]
+export = Bar;
+//// [cls.d.ts]
+export = Foo;
+export declare var Strings: {
+    a: string;
+    b: string;
+};

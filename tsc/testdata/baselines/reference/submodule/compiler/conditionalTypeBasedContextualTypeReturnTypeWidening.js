@@ -15,6 +15,7 @@ const func4 = useState2(() => () => 0);
 
 
 //// [conditionalTypeBasedContextualTypeReturnTypeWidening.js]
+"use strict";
 const func1 = useState1(() => () => 0);
 const func2 = useState2(() => () => 0);
 const func3 = useState1(() => () => 0);

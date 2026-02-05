@@ -1,0 +1,20 @@
+destructuringWithGenericParameter.ts(2,5): error TS2564: Property 'payload' has no initializer and is not definitely assigned in the constructor.
+
+
+==== destructuringWithGenericParameter.ts (1 errors) ====
+    class GenericClass<T> {
+        payload: T;
+        ~~~~~~~
+!!! error TS2564: Property 'payload' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var genericObject = new GenericClass<{ greeting: string }>();
+    
+    function genericFunction<T>(object: GenericClass<T>, callback: (payload: T) => void) {
+        callback(object.payload);
+    }
+    
+    genericFunction(genericObject, ({greeting}) => {
+        var s = greeting.toLocaleLowerCase();  // Greeting should be of type string
+    });
+    

@@ -13,7 +13,7 @@ function require() {
     return "require";
 >"require" : "require"
 }
-module m3 {
+namespace m3 {
 >m3 : typeof m3
 
     function exports() {
@@ -29,7 +29,7 @@ module m3 {
 >"require" : "require"
     }
 }
-module m4 {
+namespace m4 {
 >m4 : typeof m4
 
     export function exports() {

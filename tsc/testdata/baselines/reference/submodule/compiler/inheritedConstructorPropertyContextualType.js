@@ -15,6 +15,7 @@ class Assignment extends Base<State> {
 }
 
 //// [inheritedConstructorPropertyContextualType.js]
+"use strict";
 class Assignment extends Base {
     constructor() {
         super();

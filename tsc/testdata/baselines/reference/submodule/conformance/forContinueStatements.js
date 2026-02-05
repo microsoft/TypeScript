@@ -40,6 +40,7 @@ for (; ;) {
 
 
 //// [forContinueStatements.js]
+"use strict";
 for (;;) {
     continue;
 }

@@ -1,0 +1,13 @@
+--- old.innerModExport1.types
++++ new.innerModExport1.types
+@@= skipped -38, +38 lines =@@
+ }
+
+ Outer.ExportFunc();
+->Outer.ExportFunc() : any
+->Outer.ExportFunc : any
++>Outer.ExportFunc() : number
++>Outer.ExportFunc : () => number
+ >Outer : typeof Outer
+->ExportFunc : any
++>ExportFunc : () => number

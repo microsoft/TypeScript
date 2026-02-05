@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/overload1.ts] ////
 
 //// [overload1.ts]
-module O {
+namespace O {
     export class A {
         
     }
@@ -42,6 +42,7 @@ var v=x.g;
 
 
 //// [overload1.js]
+"use strict";
 var O;
 (function (O) {
     class A {

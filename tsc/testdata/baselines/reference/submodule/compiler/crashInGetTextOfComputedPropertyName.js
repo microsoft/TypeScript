@@ -33,8 +33,6 @@ typeof itemWithTSError // :(
 // Error from compilation: TypeError: Cannot read property 'charCodeAt' of undefined  TypeError: Cannot read property 'charCodeAt' of undefined
 
 //// [crashInGetTextOfComputedPropertyName.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const itemId = 'some-id';
 // --- test on first level ---
 const items = {};
@@ -46,5 +44,6 @@ typeof itemOk2; // pass
 const { items: { [itemId]: itemWithTSError } = {} /*happens when default value is provided*/ } = objWithItems;
 // in order to re-produce the error, uncomment next line:
 typeof itemWithTSError; // :(
+export {};
 // will result in:
 // Error from compilation: TypeError: Cannot read property 'charCodeAt' of undefined  TypeError: Cannot read property 'charCodeAt' of undefined

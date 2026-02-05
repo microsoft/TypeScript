@@ -1,6 +1,6 @@
 --- old.functionExpressionReturningItself.js
 +++ new.functionExpressionReturningItself.js
-@@= skipped -7, +7 lines =@@
+@@= skipped -8, +8 lines =@@
 
 
  //// [functionExpressionReturningItself.d.ts]

@@ -1,18 +1,24 @@
+ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(2,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(3,5): error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
 ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(5,12): error TS2300: Duplicate identifier 'fn'.
 ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(10,21): error TS2300: Duplicate identifier 'fn'.
 
 
-==== ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts (2 errors) ====
+==== ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts (4 errors) ====
     class clodule<T> {
         id: string;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         value: T;
+        ~~~~~
+!!! error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
     
         static fn<U>(id: U) { }
                ~~
 !!! error TS2300: Duplicate identifier 'fn'.
     }
     
-    module clodule {
+    namespace clodule {
         // error: duplicate identifier expected
         export function fn<T>(x: T, y: T): T {
                         ~~

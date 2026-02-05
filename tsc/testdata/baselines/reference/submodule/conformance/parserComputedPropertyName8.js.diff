@@ -1,8 +1,8 @@
 --- old.parserComputedPropertyName8.js
 +++ new.parserComputedPropertyName8.js
-@@= skipped -6, +6 lines =@@
-
+@@= skipped -7, +7 lines =@@
  //// [parserComputedPropertyName8.js]
+ "use strict";
  class C {
 +    [e];
  }

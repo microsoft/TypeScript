@@ -27,7 +27,7 @@ interface B2 extends A {
 >x : number
 }
 
-module Generics {
+namespace Generics {
     interface A<T extends Derived> {
         [x: number]: T;
 >x : number

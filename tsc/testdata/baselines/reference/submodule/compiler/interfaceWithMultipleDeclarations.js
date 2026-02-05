@@ -40,5 +40,6 @@ interface I4<T extends Foo<T>> { // Should not be error
 }
 
 //// [interfaceWithMultipleDeclarations.js]
+"use strict";
 class Foo {
 }

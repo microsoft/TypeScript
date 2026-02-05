@@ -11,6 +11,7 @@ let e: "foo" | "bar" = d;
 
 
 //// [stringLiteralTypesAndLogicalOrExpressions01.js]
+"use strict";
 let a = "foo";
 let b = a || "foo";
 let c = b;
@@ -23,5 +24,5 @@ declare function myRandBool(): boolean;
 declare let a: "foo";
 declare let b: "foo";
 declare let c: "foo";
-declare let d: string;
+declare let d: "foo";
 declare let e: "foo" | "bar";

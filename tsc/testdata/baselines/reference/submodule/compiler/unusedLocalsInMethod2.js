@@ -8,6 +8,7 @@ class greeter {
 }
 
 //// [unusedLocalsInMethod2.js]
+"use strict";
 class greeter {
     function1() {
         var x, y = 10;

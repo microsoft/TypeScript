@@ -8,6 +8,7 @@ console.log("Hello, world!");
 
 
 //// [not-a-module.js]
+"use strict";
 console.log("Hello, world!");
 //// [index.js]
 "use strict";

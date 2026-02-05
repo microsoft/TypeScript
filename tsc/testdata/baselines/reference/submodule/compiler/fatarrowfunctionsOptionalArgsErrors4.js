@@ -25,6 +25,7 @@
     );
 
 //// [fatarrowfunctionsOptionalArgsErrors4.js]
+"use strict";
 false ? (arg = 0) => 47 : null;
 false ? ((arg = 0) => 57) : null;
 false ? null : (arg = 0) => 67;

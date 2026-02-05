@@ -219,13 +219,13 @@ enum NumEnum { a, b }
 >a : Symbol(NumEnum.a, Decl(noImplicitAnyStringIndexerOnObject.ts, 73, 14))
 >b : Symbol(NumEnum.b, Decl(noImplicitAnyStringIndexerOnObject.ts, 73, 17))
 
-let numEnumKey: NumEnum;
->numEnumKey : Symbol(numEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 74, 3))
+declare let numEnumKey: NumEnum;
+>numEnumKey : Symbol(numEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 74, 11))
 >NumEnum : Symbol(NumEnum, Decl(noImplicitAnyStringIndexerOnObject.ts, 71, 7))
 
 o[numEnumKey];
 >o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 61, 5))
->numEnumKey : Symbol(numEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 74, 3))
+>numEnumKey : Symbol(numEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 74, 11))
 
 
 enum StrEnum { a = "a", b = "b" }
@@ -233,13 +233,13 @@ enum StrEnum { a = "a", b = "b" }
 >a : Symbol(StrEnum.a, Decl(noImplicitAnyStringIndexerOnObject.ts, 78, 14))
 >b : Symbol(StrEnum.b, Decl(noImplicitAnyStringIndexerOnObject.ts, 78, 23))
 
-let strEnumKey: StrEnum;
->strEnumKey : Symbol(strEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 79, 3))
+declare let strEnumKey: StrEnum;
+>strEnumKey : Symbol(strEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 79, 11))
 >StrEnum : Symbol(StrEnum, Decl(noImplicitAnyStringIndexerOnObject.ts, 75, 14))
 
 o[strEnumKey];
 >o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 61, 5))
->strEnumKey : Symbol(strEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 79, 3))
+>strEnumKey : Symbol(strEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 79, 11))
 
 
 interface MyMap<K, T> {

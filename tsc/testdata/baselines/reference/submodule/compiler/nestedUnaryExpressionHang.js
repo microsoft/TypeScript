@@ -5,4 +5,5 @@
 
 
 //// [nestedUnaryExpressionHang.js]
+"use strict";
 3333 % !!!!!!!!!!!!!!!!!!!!!!!!!!!!;

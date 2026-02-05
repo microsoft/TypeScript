@@ -11,7 +11,7 @@
        Type '{ <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }' is not assignable to type '{ <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }'.
          Types of parameters 'onfulfilled' and 'success' are incompatible.
            Types of parameters 'value' and 'value' are incompatible.
-@@= skipped -318, +318 lines =@@
+@@= skipped -317, +317 lines =@@
      var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // ok
                          ~~~~~~~~~~~~~~~
  !!! error TS2345: Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.

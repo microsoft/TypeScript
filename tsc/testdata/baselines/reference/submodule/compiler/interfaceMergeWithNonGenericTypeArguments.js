@@ -11,15 +11,10 @@ export class MergedClass extends SomeBaseClass<any> {
 }
 
 //// [interfaceMergeWithNonGenericTypeArguments.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MergedClass = exports.SomeBaseClass = void 0;
-class SomeBaseClass {
+export class SomeBaseClass {
 }
-exports.SomeBaseClass = SomeBaseClass;
-class MergedClass extends SomeBaseClass {
+export class MergedClass extends SomeBaseClass {
     constructor() {
         super();
     }
 }
-exports.MergedClass = MergedClass;

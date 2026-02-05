@@ -14,6 +14,7 @@ func TestNodeNextModuleKindCaching1(t *testing.T) {
 	const content = `// @Filename: tsconfig.json
 {
     "compilerOptions": {
+      "lib": ["es5"],
       "rootDir": "src",
       "outDir": "dist",
       "target": "ES2020",

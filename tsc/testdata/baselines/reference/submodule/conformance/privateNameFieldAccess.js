@@ -10,6 +10,7 @@ class A {
 
 
 //// [privateNameFieldAccess.js]
+"use strict";
 class A {
     #myField = "hello world";
     constructor() {

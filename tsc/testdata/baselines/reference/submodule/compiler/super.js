@@ -40,6 +40,7 @@ s.foo() + ss.foo();
 
 
 //// [super.js]
+"use strict";
 class Base {
     constructor() {
         var x;

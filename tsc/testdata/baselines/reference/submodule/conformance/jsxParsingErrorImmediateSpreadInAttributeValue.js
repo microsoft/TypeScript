@@ -15,6 +15,7 @@ const a: any
 
 
 //// [a.js]
+"use strict";
 const X;
 const a;
 React.createElement(X, { a: , a: true });

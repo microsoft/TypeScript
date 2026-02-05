@@ -2,7 +2,7 @@ qualifiedModuleLocals.ts(5,27): error TS2339: Property 'b' does not exist on typ
 
 
 ==== qualifiedModuleLocals.ts (1 errors) ====
-    module A {
+    namespace A {
     
       function b() {}
     

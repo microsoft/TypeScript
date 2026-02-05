@@ -11,7 +11,8 @@ func TestGetSemanticDiagnosticForDeclaration(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @module: CommonJS
+	const content = `// @strict: false
+// @module: CommonJS
 // @declaration: true
 export function /*1*/foo/*2*/() {
     interface privateInterface {}

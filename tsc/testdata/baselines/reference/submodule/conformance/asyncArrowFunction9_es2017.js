@@ -5,6 +5,7 @@ var foo = async (a = await => await): Promise<void> => {
 }
 
 //// [asyncArrowFunction9_es2017.js]
+"use strict";
 var foo = async(a = await => await), Promise;
 ;
 {

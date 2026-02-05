@@ -48,6 +48,7 @@ createMachine<GreetingEvent>({
 		},
 		Items: &fourslash.CompletionsExpectedItems{
 			Exact: []fourslash.CompletionsExpectedItem{
+				"ALOHAx",
 				"ALOHA",
 				"LUNCH_TIME",
 				"MORNING",

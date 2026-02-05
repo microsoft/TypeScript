@@ -1,7 +1,7 @@
 --- old.staticAutoAccessors(target=es2022).js
 +++ new.staticAutoAccessors(target=es2022).js
-@@= skipped -15, +15 lines =@@
- //// [staticAutoAccessors.js]
+@@= skipped -16, +16 lines =@@
+ "use strict";
  // https://github.com/microsoft/TypeScript/issues/53752
  class A {
 -    static #x_accessor_storage = 1;

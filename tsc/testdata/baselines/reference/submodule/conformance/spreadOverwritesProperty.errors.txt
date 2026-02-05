@@ -1,0 +1,29 @@
+spreadOverwritesProperty.ts(4,17): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+spreadOverwritesProperty.ts(9,14): error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+spreadOverwritesProperty.ts(12,14): error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+
+
+==== spreadOverwritesProperty.ts (3 errors) ====
+    // without strict null checks, none of these should be an error
+    declare var ab: { a: number, b: number };
+    declare var abq: { a: number, b?: number };
+    var unused1 = { b: 1, ...ab }
+                    ~~~~
+!!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 spreadOverwritesProperty.ts:4:23: This spread always overwrites this property.
+    var unused2 = { ...ab, ...ab }
+    var unused3 = { b: 1, ...abq }
+    
+    function g(obj: { x: number | undefined }) {
+        return { x: 1, ...obj };
+                 ~~~~
+!!! error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 spreadOverwritesProperty.ts:9:20: This spread always overwrites this property.
+    }
+    function h(obj: { x: number }) {
+        return { x: 1, ...obj };
+                 ~~~~
+!!! error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 spreadOverwritesProperty.ts:12:20: This spread always overwrites this property.
+    }
+    

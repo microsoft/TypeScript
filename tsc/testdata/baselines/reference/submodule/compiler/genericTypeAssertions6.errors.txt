@@ -40,5 +40,5 @@ genericTypeAssertions6.ts(19,17): error TS2352: Conversion of type 'U' to type '
         }
     }
     
-    var b: B<Date, Date>;
+    declare var b: B<Date, Date>;
     var c: A<Date, Date> = <A<Date, Date>>b;

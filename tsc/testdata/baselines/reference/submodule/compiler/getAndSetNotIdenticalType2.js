@@ -18,6 +18,7 @@ var r = x.x;
 x.x = r;
 
 //// [getAndSetNotIdenticalType2.js]
+"use strict";
 class A {
     foo;
 }

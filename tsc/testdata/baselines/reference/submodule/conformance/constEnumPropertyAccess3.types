@@ -39,73 +39,73 @@ const enum E {
 
 E.A.toString();
 >E.A.toString() : string
->E.A.toString : (radix?: number) => string
+>E.A.toString : (radix?: number | undefined) => string
 >E.A : E.A
 >E : typeof E
 >A : E.A
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
 E.B.toString();
 >E.B.toString() : string
->E.B.toString : (radix?: number) => string
+>E.B.toString : (radix?: number | undefined) => string
 >E.B : E.B
 >E : typeof E
 >B : E.B
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
 E.C.toString();
 >E.C.toString() : string
->E.C.toString : (radix?: number) => string
+>E.C.toString : (radix?: number | undefined) => string
 >E.C : E.C
 >E : typeof E
 >C : E.C
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
 E.D.toString();
 >E.D.toString() : string
->E.D.toString : (radix?: number) => string
+>E.D.toString : (radix?: number | undefined) => string
 >E.D : E.C
 >E : typeof E
 >D : E.C
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
 E["A"].toString();
 >E["A"].toString() : string
->E["A"].toString : (radix?: number) => string
+>E["A"].toString : (radix?: number | undefined) => string
 >E["A"] : E.A
 >E : typeof E
 >"A" : "A"
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
 E["B"].toString();
 >E["B"].toString() : string
->E["B"].toString : (radix?: number) => string
+>E["B"].toString : (radix?: number | undefined) => string
 >E["B"] : E.B
 >E : typeof E
 >"B" : "B"
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
 E["C"].toString();
 >E["C"].toString() : string
->E["C"].toString : (radix?: number) => string
+>E["C"].toString : (radix?: number | undefined) => string
 >E["C"] : E.C
 >E : typeof E
 >"C" : "C"
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
 E["D"].toString();
 >E["D"].toString() : string
->E["D"].toString : (radix?: number) => string
+>E["D"].toString : (radix?: number | undefined) => string
 >E["D"] : E.C
 >E : typeof E
 >"D" : "D"
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 
 E["E"].toString();
 >E["E"].toString() : string
->E["E"].toString : (radix?: number) => string
+>E["E"].toString : (radix?: number | undefined) => string
 >E["E"] : E.E
 >E : typeof E
 >"E" : "E"
->toString : (radix?: number) => string
+>toString : (radix?: number | undefined) => string
 

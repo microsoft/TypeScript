@@ -17,11 +17,8 @@ export const yun = unwrap(y);
 export const yone = unwrap(sepsis({ low: 1, sign: { kind: 'a', a: 3 }}));
 
 //// [returnTypeInferenceNotTooBroad.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.yone = exports.yun = exports.y = void 0;
-exports.y = sepsis({ low: 1, sign: { kind: 'a', a: 3 } });
+export const y = sepsis({ low: 1, sign: { kind: 'a', a: 3 } });
 // $ExpectType { kind: "a"; a: 3; }
-exports.yun = unwrap(exports.y);
+export const yun = unwrap(y);
 // $ExpectType { kind: "a"; a: 3; }
-exports.yone = unwrap(sepsis({ low: 1, sign: { kind: 'a', a: 3 } }));
+export const yone = unwrap(sepsis({ low: 1, sign: { kind: 'a', a: 3 } }));

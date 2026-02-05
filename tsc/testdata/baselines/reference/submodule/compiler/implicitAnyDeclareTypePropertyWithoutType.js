@@ -20,6 +20,7 @@ var x5: () => any;
 
 
 //// [implicitAnyDeclareTypePropertyWithoutType.js]
+"use strict";
 class C {
     constructor() { }
 }

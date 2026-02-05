@@ -16,6 +16,7 @@ function foo(tagName: any): Base {
 
 
 //// [constantOverloadFunction.js]
+"use strict";
 class Base {
     foo() { }
 }

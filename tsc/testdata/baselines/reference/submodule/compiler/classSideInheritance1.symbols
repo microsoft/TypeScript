@@ -17,19 +17,19 @@ class C2 extends A {}
 >C2 : Symbol(C2, Decl(classSideInheritance1.ts, 5, 1))
 >A : Symbol(A, Decl(classSideInheritance1.ts, 0, 0))
 
-var a: A;
->a : Symbol(a, Decl(classSideInheritance1.ts, 9, 3))
+declare var a: A;
+>a : Symbol(a, Decl(classSideInheritance1.ts, 9, 11))
 >A : Symbol(A, Decl(classSideInheritance1.ts, 0, 0))
 
-var c: C2;
->c : Symbol(c, Decl(classSideInheritance1.ts, 10, 3))
+declare var c: C2;
+>c : Symbol(c, Decl(classSideInheritance1.ts, 10, 11))
 >C2 : Symbol(C2, Decl(classSideInheritance1.ts, 5, 1))
 
 a.bar(); // static off an instance - should be an error
->a : Symbol(a, Decl(classSideInheritance1.ts, 9, 3))
+>a : Symbol(a, Decl(classSideInheritance1.ts, 9, 11))
 
 c.bar(); // static off an instance - should be an error
->c : Symbol(c, Decl(classSideInheritance1.ts, 10, 3))
+>c : Symbol(c, Decl(classSideInheritance1.ts, 10, 11))
 
 A.bar(); // valid
 >A.bar : Symbol(A.bar, Decl(classSideInheritance1.ts, 0, 9))

@@ -5,4 +5,5 @@ public break;
 
 
 //// [parserPublicBreak1.js]
+"use strict";
 break;

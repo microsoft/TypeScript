@@ -15,7 +15,6 @@ func TestRenameNoDefaultLib(t *testing.T) {
 // @allowJs: true
 // @Filename: /foo.js
 // @ts-check
-/// <reference no-default-lib="true" />
 const [|/**/foo|] = 1;`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()

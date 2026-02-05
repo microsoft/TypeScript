@@ -1,10 +1,10 @@
 --- old.objectTypeWithStringIndexerHidingObjectIndexer.js
 +++ new.objectTypeWithStringIndexerHidingObjectIndexer.js
-@@= skipped -38, +38 lines =@@
+@@= skipped -39, +39 lines =@@
  var o = {};
  var r = o['']; // should be Object
  class C {
 +    foo;
  }
- var c;
  var r2 = c[''];
+ var r3 = i[''];

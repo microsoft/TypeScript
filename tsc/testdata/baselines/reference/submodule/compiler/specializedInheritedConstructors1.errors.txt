@@ -1,0 +1,23 @@
+specializedInheritedConstructors1.ts(7,5): error TS2564: Property 'model' has no initializer and is not definitely assigned in the constructor.
+
+
+==== specializedInheritedConstructors1.ts (1 errors) ====
+    interface ViewOptions<TModel> {
+        model: TModel;
+    }
+    
+    class View<TModel> {
+        constructor(options: ViewOptions<TModel>) { }
+        model: TModel;
+        ~~~~~
+!!! error TS2564: Property 'model' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class Model { }
+    class MyView extends View<Model> { }
+    
+    var m: ViewOptions<Model> = { model: new Model() };
+    var aView = new View({ model: new Model() }); 
+    var aView2 = new View(m); 
+    var myView = new MyView(m); // was error
+    

@@ -1,6 +1,6 @@
 --- old.sourceMapPercentEncoded.js
 +++ new.sourceMapPercentEncoded.js
-@@= skipped -8, +8 lines =@@
+@@= skipped -9, +9 lines =@@
  var a = 1;
  var b = 2;
  var c = 3;

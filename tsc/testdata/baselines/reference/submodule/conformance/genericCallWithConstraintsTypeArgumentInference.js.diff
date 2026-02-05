@@ -1,7 +1,7 @@
 --- old.genericCallWithConstraintsTypeArgumentInference.js
 +++ new.genericCallWithConstraintsTypeArgumentInference.js
-@@= skipped -111, +111 lines =@@
- //// [genericCallWithConstraintsTypeArgumentInference.js]
+@@= skipped -112, +112 lines =@@
+ "use strict";
  // Basic type inference with generic calls and constraints, no errors expected
  class Base {
 +    foo;

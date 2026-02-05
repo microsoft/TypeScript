@@ -1,0 +1,18 @@
+--- old.derivedClassWithPrivateStaticShadowingProtectedStatic(target=es2015).js
++++ new.derivedClassWithPrivateStaticShadowingProtectedStatic(target=es2015).js
+@@= skipped -24, +24 lines =@@
+ //// [derivedClassWithPrivateStaticShadowingProtectedStatic.js]
+ "use strict";
+ class Base {
++    static x;
+     static fn() {
+         return '';
+     }
+@@= skipped -8, +9 lines =@@
+ }
+ // should be error
+ class Derived extends Base {
++    static x;
+     static fn() {
+         return '';
+     }

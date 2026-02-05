@@ -76,3 +76,48 @@ import "./mod1";
 export declare const cls: typeof Cls;
 export declare const foo: Lib;
 export declare const bar: Lib;
+
+
+//// [DtsFileErrors]
+
+
+/mod1.d.ts(3,16): error TS2304: Cannot find name 'Lib'.
+/mod1.d.ts(6,25): error TS2304: Cannot find name 'Lib'.
+/mod2.d.ts(4,27): error TS2304: Cannot find name 'Lib'.
+/mod2.d.ts(5,27): error TS2304: Cannot find name 'Lib'.
+
+
+==== /mod2.d.ts (2 errors) ====
+    import { Cls } from "./main";
+    import "./mod1";
+    export declare const cls: typeof Cls;
+    export declare const foo: Lib;
+                              ~~~
+!!! error TS2304: Cannot find name 'Lib'.
+    export declare const bar: Lib;
+                              ~~~
+!!! error TS2304: Cannot find name 'Lib'.
+    
+==== /types/lib/index.d.ts (0 errors) ====
+    interface Lib { x }
+    
+==== /main.d.ts (0 errors) ====
+    export declare class Cls {
+        x: any;
+    }
+    
+==== /mod1.d.ts (2 errors) ====
+    declare module "./main" {
+        interface Cls {
+            foo(): Lib;
+                   ~~~
+!!! error TS2304: Cannot find name 'Lib'.
+        }
+        namespace Cls {
+            function bar(): Lib;
+                            ~~~
+!!! error TS2304: Cannot find name 'Lib'.
+        }
+    }
+    export {};
+    

@@ -7,6 +7,7 @@ function c2() { } // error
 var c2 = () => { }
 
 //// [augmentedTypesClass2a.js]
+"use strict";
 //// class then function
 class c2 {
     foo() { }

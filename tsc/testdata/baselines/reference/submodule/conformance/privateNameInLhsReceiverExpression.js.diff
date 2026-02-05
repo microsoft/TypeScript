@@ -1,9 +1,9 @@
 --- old.privateNameInLhsReceiverExpression.js
 +++ new.privateNameInLhsReceiverExpression.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
 
  //// [privateNameInLhsReceiverExpression.js]
+ "use strict";
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
 -    if (kind === "m") throw new TypeError("Private method is not writable");
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");

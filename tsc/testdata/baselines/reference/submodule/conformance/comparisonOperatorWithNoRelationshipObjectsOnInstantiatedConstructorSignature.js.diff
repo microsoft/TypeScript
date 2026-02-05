@@ -1,8 +1,8 @@
 --- old.comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.js
 +++ new.comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.js
-@@= skipped -152, +152 lines =@@
-
+@@= skipped -153, +153 lines =@@
  //// [comparisonOperatorWithNoRelationshipObjectsOnInstantiatedConstructorSignature.js]
+ "use strict";
  class Base {
 +    a;
  }

@@ -14,7 +14,7 @@ try {
 >1 : 1
 
 } catch (e) {
->e : any
+>e : unknown
 
     x = x - 1;
 >x = x - 1 : number
@@ -45,7 +45,7 @@ try
 >Error : ErrorConstructor
 }
 catch (e)
->e : any
+>e : unknown
 {
     x = x - 1;
 >x = x - 1 : number

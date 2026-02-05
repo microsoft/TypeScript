@@ -35,6 +35,7 @@ var y2 = {
 }
 
 //// [objectLiteralWidened.js]
+"use strict";
 // object literal properties are widened to any
 var x1 = {
     foo: null,

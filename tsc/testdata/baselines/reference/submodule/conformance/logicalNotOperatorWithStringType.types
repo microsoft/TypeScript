@@ -2,7 +2,7 @@
 
 === logicalNotOperatorWithStringType.ts ===
 // ! operator on string type
-var STRING: string;
+declare var STRING: string;
 >STRING : string
 
 var STRING1: string[] = ["", "abc"];
@@ -18,17 +18,17 @@ function foo(): string { return "abc"; }
 class A {
 >A : A
 
-    public a: string;
+    public a!: string;
 >a : string
 
     static foo() { return ""; }
 >foo : () => string
 >"" : ""
 }
-module M {
+namespace M {
 >M : typeof M
 
-    export var n: string;
+    export declare var n: string;
 >n : string
 }
 
@@ -45,7 +45,7 @@ var ResultIsBoolean1 = !STRING;
 
 var ResultIsBoolean2 = !STRING1;
 >ResultIsBoolean2 : boolean
->!STRING1 : boolean
+>!STRING1 : false
 >STRING1 : string[]
 
 // string type literal
@@ -56,7 +56,7 @@ var ResultIsBoolean3 = !"";
 
 var ResultIsBoolean4 = !{ x: "", y: "" };
 >ResultIsBoolean4 : boolean
->!{ x: "", y: "" } : boolean
+>!{ x: "", y: "" } : false
 >{ x: "", y: "" } : { x: string; y: string; }
 >x : string
 >"" : ""
@@ -65,7 +65,7 @@ var ResultIsBoolean4 = !{ x: "", y: "" };
 
 var ResultIsBoolean5 = !{ x: "", y: (s: string) => { return s; } };
 >ResultIsBoolean5 : boolean
->!{ x: "", y: (s: string) => { return s; } } : boolean
+>!{ x: "", y: (s: string) => { return s; } } : false
 >{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
 >x : string
 >"" : ""
@@ -154,7 +154,7 @@ var ResultIsBoolean14 = !!!(STRING + STRING);
 >STRING : string
 
 !STRING1;
->!STRING1 : boolean
+>!STRING1 : false
 >STRING1 : string[]
 
 !foo();

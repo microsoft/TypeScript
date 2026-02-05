@@ -8,6 +8,7 @@ var r3 = <<T>(x: T) => T>f; // ambiguous, appears to the parser as a << operatio
 
 
 //// [ambiguousGenericAssertion1.js]
+"use strict";
 function f(x) { return null; }
 var r = (x) => x;
 var r2 = f; // valid

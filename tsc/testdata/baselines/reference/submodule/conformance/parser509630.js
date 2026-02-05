@@ -9,6 +9,7 @@ class Any extends Type {
 
 
 //// [parser509630.js]
+"use strict";
 class Type {
     examples = []; // typing here
 }

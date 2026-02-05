@@ -1,8 +1,8 @@
 --- old.propertyOrdering2.js
 +++ new.propertyOrdering2.js
-@@= skipped -11, +11 lines =@@
-
+@@= skipped -12, +12 lines =@@
  //// [propertyOrdering2.js]
+ "use strict";
  class Foo {
 +    x;
      constructor(x, y) {

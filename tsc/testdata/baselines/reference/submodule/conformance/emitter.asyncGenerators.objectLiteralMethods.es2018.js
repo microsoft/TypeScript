@@ -44,41 +44,48 @@ const o7 = {
 
 
 //// [O1.js]
+"use strict";
 const o1 = {
     async *f() {
     }
 };
 //// [O2.js]
+"use strict";
 const o2 = {
     async *f() {
         const x = yield;
     }
 };
 //// [O3.js]
+"use strict";
 const o3 = {
     async *f() {
         const x = yield 1;
     }
 };
 //// [O4.js]
+"use strict";
 const o4 = {
     async *f() {
         const x = yield* [1];
     }
 };
 //// [O5.js]
+"use strict";
 const o5 = {
     async *f() {
         const x = yield* (async function* () { yield 1; })();
     }
 };
 //// [O6.js]
+"use strict";
 const o6 = {
     async *f() {
         const x = await 1;
     }
 };
 //// [O7.js]
+"use strict";
 const o7 = {
     async *f() {
         return 1;

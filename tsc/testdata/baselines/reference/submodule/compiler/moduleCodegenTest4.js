@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleCodegenTest4.ts] ////
 
 //// [moduleCodegenTest4.ts]
-export module Baz { export var x = "hello"; }
+export namespace Baz { export var x = "hello"; }
 
 Baz.x = "goodbye";
 void 0;

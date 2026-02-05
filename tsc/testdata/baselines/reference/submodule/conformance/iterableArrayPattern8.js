@@ -20,6 +20,7 @@ var a: Bar, b: string;
 [a, ...b] = new FooIterator;
 
 //// [iterableArrayPattern8.js]
+"use strict";
 class Bar {
     x;
 }

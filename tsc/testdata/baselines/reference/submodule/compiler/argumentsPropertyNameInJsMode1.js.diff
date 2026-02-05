@@ -1,6 +1,6 @@
 --- old.argumentsPropertyNameInJsMode1.js
 +++ new.argumentsPropertyNameInJsMode1.js
-@@= skipped -22, +22 lines =@@
+@@= skipped -23, +23 lines =@@
 
 
  //// [a.d.ts]

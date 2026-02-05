@@ -1,19 +1,28 @@
+genericSpecializations2.ts(3,9): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 genericSpecializations2.ts(8,5): error TS2416: Property 'foo' in type 'IntFooBad' is not assignable to the same property in base type 'IFoo<number>'.
   Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
     Types of parameters 'x' and 'x' are incompatible.
       Type 'T' is not assignable to type 'string'.
 genericSpecializations2.ts(8,9): error TS2368: Type parameter name cannot be 'string'.
+genericSpecializations2.ts(8,38): error TS2322: Type 'null' is not assignable to type 'string'.
 genericSpecializations2.ts(12,5): error TS2416: Property 'foo' in type 'StringFoo2' is not assignable to the same property in base type 'IFoo<string>'.
   Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
     Types of parameters 'x' and 'x' are incompatible.
       Type 'T' is not assignable to type 'string'.
 genericSpecializations2.ts(12,9): error TS2368: Type parameter name cannot be 'string'.
+genericSpecializations2.ts(12,38): error TS2322: Type 'null' is not assignable to type 'string'.
+genericSpecializations2.ts(16,23): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 
 
-==== genericSpecializations2.ts (4 errors) ====
+==== genericSpecializations2.ts (8 errors) ====
     class IFoo<T> {
         foo<T>(x: T): T { // no error on implementors because IFoo's T is different from foo's T
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
         }
     }
     
@@ -27,6 +36,8 @@ genericSpecializations2.ts(12,9): error TS2368: Type parameter name cannot be 's
 !!! related TS2208 genericSpecializations2.ts:2:9: This type parameter might need an `extends string` constraint.
             ~~~~~~
 !!! error TS2368: Type parameter name cannot be 'string'.
+                                         ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'string'.
     }
     
     class StringFoo2 implements IFoo<string> {
@@ -39,10 +50,15 @@ genericSpecializations2.ts(12,9): error TS2368: Type parameter name cannot be 's
 !!! related TS2208 genericSpecializations2.ts:2:9: This type parameter might need an `extends string` constraint.
             ~~~~~~
 !!! error TS2368: Type parameter name cannot be 'string'.
+                                         ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'string'.
     }
     
     class StringFoo3 implements IFoo<string> {
         foo<T>(x: T): T { return null; }
+                          ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
     }
     
     

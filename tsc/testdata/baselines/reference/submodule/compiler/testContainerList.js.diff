@@ -1,6 +1,6 @@
 --- old.testContainerList.js
 +++ new.testContainerList.js
-@@= skipped -13, +13 lines =@@
+@@= skipped -14, +14 lines =@@
  var A;
  (function (A) {
      class C {

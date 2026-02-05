@@ -1,6 +1,6 @@
 --- old.constructorWithAssignableReturnExpression.js
 +++ new.constructorWithAssignableReturnExpression.js
-@@= skipped -44, +44 lines =@@
+@@= skipped -45, +45 lines =@@
      }
  }
  class D {

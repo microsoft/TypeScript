@@ -1,0 +1,84 @@
+additionOperatorWithNumberAndEnum.ts(8,10): error TS2454: Variable 'a' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(8,14): error TS2454: Variable 'a' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(9,10): error TS2454: Variable 'a' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(9,14): error TS2454: Variable 'b' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(10,10): error TS2454: Variable 'b' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(10,14): error TS2454: Variable 'a' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(11,10): error TS2454: Variable 'b' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(11,14): error TS2454: Variable 'b' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(13,14): error TS2454: Variable 'a' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(19,11): error TS2454: Variable 'a' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(19,15): error TS2454: Variable 'c' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(20,11): error TS2454: Variable 'c' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(20,15): error TS2454: Variable 'a' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(21,11): error TS2454: Variable 'b' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(21,15): error TS2454: Variable 'c' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(22,11): error TS2454: Variable 'c' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(22,15): error TS2454: Variable 'b' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(23,11): error TS2454: Variable 'c' is used before being assigned.
+additionOperatorWithNumberAndEnum.ts(23,15): error TS2454: Variable 'c' is used before being assigned.
+
+
+==== additionOperatorWithNumberAndEnum.ts (19 errors) ====
+    enum E { a, b }
+    enum F { c, d }
+    
+    var a: number;
+    var b: E;
+    var c: E | F;
+    
+    var r1 = a + a;
+             ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var r2 = a + b;
+             ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var r3 = b + a;
+             ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var r4 = b + b;
+             ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                 ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    var r5 = 0 + a;
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var r6 = E.a + 0;
+    var r7 = E.a + E.b;
+    var r8 = E['a'] + E['b'];
+    var r9 = E['a'] + F['c'];
+    
+    var r10 = a + c;
+              ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r11 = c + a;
+              ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var r12 = b + c;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r13 = c + b;
+              ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var r14 = c + c;
+              ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    

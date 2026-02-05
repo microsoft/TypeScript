@@ -24,6 +24,7 @@ class C5 {
 
 
 //// [getAndSetAsMemberNames.js]
+"use strict";
 class C1 {
     set;
     get = 1;

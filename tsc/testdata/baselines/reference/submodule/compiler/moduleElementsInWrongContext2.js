@@ -2,7 +2,7 @@
 
 //// [moduleElementsInWrongContext2.ts]
 function blah () {
-    module M { }
+    namespace M { }
     export namespace N {
         export interface I { }
     }
@@ -33,6 +33,7 @@ function blah () {
 
 
 //// [moduleElementsInWrongContext2.js]
+"use strict";
 function blah() {
     export = M;
     var v;

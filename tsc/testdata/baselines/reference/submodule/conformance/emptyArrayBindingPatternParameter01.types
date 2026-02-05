@@ -2,7 +2,7 @@
 
 === emptyArrayBindingPatternParameter01.ts ===
 function f([]) {
->f : ([]: any[]) => void
+>f : ([]: Iterable<any, void, undefined>) => void
 
     var x, y, z;
 >x : any

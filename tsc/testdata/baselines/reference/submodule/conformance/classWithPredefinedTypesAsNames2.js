@@ -6,6 +6,7 @@
 class void {}
 
 //// [classWithPredefinedTypesAsNames2.js]
+"use strict";
 // classes cannot use predefined types as names
 class {
 }

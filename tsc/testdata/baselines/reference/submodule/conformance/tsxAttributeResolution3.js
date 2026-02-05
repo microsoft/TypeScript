@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution3.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: Attribs1;
@@ -43,6 +43,7 @@ var obj7 = { x: 'foo' };
 
 
 //// [file.jsx]
+"use strict";
 // OK
 var obj1 = { x: 'foo' };
 <test1 {...obj1}/>;

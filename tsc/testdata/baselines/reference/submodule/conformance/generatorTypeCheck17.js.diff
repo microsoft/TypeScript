@@ -1,8 +1,8 @@
 --- old.generatorTypeCheck17.js
 +++ new.generatorTypeCheck17.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [generatorTypeCheck17.js]
+ "use strict";
  class Foo {
 +    x;
  }

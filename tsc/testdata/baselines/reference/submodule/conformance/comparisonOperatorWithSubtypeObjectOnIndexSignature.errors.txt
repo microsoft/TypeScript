@@ -1,0 +1,500 @@
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(2,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(6,12): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(22,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(22,17): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(23,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(23,17): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(24,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(24,17): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(25,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(25,17): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(27,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(27,17): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(28,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(28,17): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(29,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(29,17): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(30,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(30,17): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(33,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(33,17): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(34,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(34,17): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(35,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(35,17): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(36,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(36,17): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(38,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(38,17): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(39,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(39,17): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(40,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(40,17): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(41,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(41,17): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(44,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(44,18): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(45,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(45,18): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(46,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(46,18): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(47,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(47,18): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(49,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(49,18): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(50,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(50,18): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(51,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(51,18): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(52,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(52,18): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(55,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(55,18): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(56,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(56,18): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(57,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(57,18): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(58,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(58,18): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(60,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(60,18): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(61,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(61,18): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(62,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(62,18): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(63,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(63,18): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(66,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(66,18): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(67,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(67,18): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(68,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(68,18): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(69,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(69,18): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(71,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(71,18): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(72,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(72,18): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(73,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(73,18): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(74,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(74,18): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(77,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(77,18): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(78,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(78,18): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(79,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(79,18): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(80,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(80,18): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(82,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(82,18): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(83,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(83,18): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(84,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(84,18): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(85,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(85,18): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(88,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(88,19): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(89,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(89,19): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(90,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(90,19): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(91,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(91,19): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(93,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(93,19): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(94,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(94,19): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(95,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(95,19): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(96,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(96,19): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(99,12): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(99,19): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(100,12): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(100,19): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(101,12): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(101,19): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(102,12): error TS2454: Variable 'a4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(102,19): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(104,12): error TS2454: Variable 'b1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(104,19): error TS2454: Variable 'a1' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(105,12): error TS2454: Variable 'b2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(105,19): error TS2454: Variable 'a2' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(106,12): error TS2454: Variable 'b3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(106,19): error TS2454: Variable 'a3' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(107,12): error TS2454: Variable 'b4' is used before being assigned.
+comparisonOperatorWithSubtypeObjectOnIndexSignature.ts(107,19): error TS2454: Variable 'a4' is used before being assigned.
+
+
+==== comparisonOperatorWithSubtypeObjectOnIndexSignature.ts (130 errors) ====
+    class Base {
+        public a: string;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class Derived extends Base {
+        public b: string;
+               ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var a1: { [a: string]: string };
+    var b1: { [b: string]: string };
+    
+    var a2: { [index: string]: Base };
+    var b2: { [index: string]: Derived };
+    
+    var a3: { [index: number]: string };
+    var b3: { [index: number]: string };
+    
+    var a4: { [index: number]: Base };
+    var b4: { [index: string]: Derived };
+    
+    // operator <
+    var r1a1 = a1 < b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r1a1 = a2 < b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r1a1 = a3 < b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r1a1 = a4 < b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    
+    var r1b1 = b1 < a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r1b1 = b2 < a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r1b1 = b3 < a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r1b1 = b4 < a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    
+    // operator >
+    var r2a1 = a1 > b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r2a1 = a2 > b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r2a1 = a3 > b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r2a1 = a4 > b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    
+    var r2b1 = b1 > a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r2b1 = b2 > a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r2b1 = b3 > a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r2b1 = b4 > a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    
+    // operator <=
+    var r3a1 = a1 <= b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r3a1 = a2 <= b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r3a1 = a3 <= b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r3a1 = a4 <= b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    
+    var r3b1 = b1 <= a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r3b1 = b2 <= a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r3b1 = b3 <= a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r3b1 = b4 <= a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    
+    // operator >=
+    var r4a1 = a1 >= b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r4a1 = a2 >= b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r4a1 = a3 >= b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r4a1 = a4 >= b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    
+    var r4b1 = b1 >= a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r4b1 = b2 >= a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r4b1 = b3 >= a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r4b1 = b4 >= a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    
+    // operator ==
+    var r5a1 = a1 == b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r5a1 = a2 == b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r5a1 = a3 == b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r5a1 = a4 == b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    
+    var r5b1 = b1 == a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r5b1 = b2 == a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r5b1 = b3 == a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r5b1 = b4 == a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    
+    // operator !=
+    var r6a1 = a1 != b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r6a1 = a2 != b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r6a1 = a3 != b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r6a1 = a4 != b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    
+    var r6b1 = b1 != a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r6b1 = b2 != a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r6b1 = b3 != a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r6b1 = b4 != a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                     ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    
+    // operator ===
+    var r7a1 = a1 === b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r7a1 = a2 === b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r7a1 = a3 === b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r7a1 = a4 === b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    
+    var r7b1 = b1 === a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r7b1 = b2 === a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r7b1 = b3 === a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r7b1 = b4 === a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+    
+    // operator !==
+    var r8a1 = a1 !== b1;
+               ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+    var r8a1 = a2 !== b2;
+               ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+    var r8a1 = a3 !== b3;
+               ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+    var r8a1 = a4 !== b4;
+               ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+    
+    var r8b1 = b1 !== a1;
+               ~~
+!!! error TS2454: Variable 'b1' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
+    var r8b1 = b2 !== a2;
+               ~~
+!!! error TS2454: Variable 'b2' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
+    var r8b1 = b3 !== a3;
+               ~~
+!!! error TS2454: Variable 'b3' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
+    var r8b1 = b4 !== a4;
+               ~~
+!!! error TS2454: Variable 'b4' is used before being assigned.
+                      ~~
+!!! error TS2454: Variable 'a4' is used before being assigned.

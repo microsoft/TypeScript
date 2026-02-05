@@ -11,7 +11,8 @@ func TestGoToTypeDefinition_arrayType(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `type User = { name: string };
+	const content = `// @lib: es5
+type User = { name: string };
 declare const users: User[]
 /*reference*/users
 

@@ -16,6 +16,7 @@ class C {
 
 
 //// [classStaticBlock11.js]
+"use strict";
 let getX;
 class C {
     #x = 1;

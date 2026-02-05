@@ -1,0 +1,132 @@
+emitCompoundExponentiationOperator2.ts(3,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(4,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(4,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(5,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(5,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(6,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(6,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(7,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(7,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(8,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(8,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(10,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(10,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(11,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(11,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(12,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(12,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(13,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(13,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(15,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(15,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(16,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(16,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(17,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(17,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(18,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(18,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(20,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(20,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(21,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(21,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(22,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(22,10): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(23,1): error TS2454: Variable 'comp' is used before being assigned.
+emitCompoundExponentiationOperator2.ts(23,10): error TS2454: Variable 'comp' is used before being assigned.
+
+
+==== emitCompoundExponentiationOperator2.ts (35 errors) ====
+    var comp: number;
+    
+    comp **= 1;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= 1;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= 1 + 2;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= 1 - 2;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= 1 * 2;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= 1 / 2;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    
+    comp **= comp **= (1 + 2);
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= (1 - 2);
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= (1 * 2);
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= (1 / 2);
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    
+    comp **= comp **= 1 + 2 ** 3;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= 1 - 2 ** 4;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= 1 * 2 ** 5;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= 1 / 2 ** 6;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    
+    comp **= comp **= (1 + 2) ** 3;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= (1 - 2) ** 4;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= (1 * 2) ** 5;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    comp **= comp **= (1 / 2) ** 6;
+    ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+             ~~~~
+!!! error TS2454: Variable 'comp' is used before being assigned.
+    

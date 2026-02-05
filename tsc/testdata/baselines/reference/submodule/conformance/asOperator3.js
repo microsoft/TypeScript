@@ -13,6 +13,7 @@ var g = tag `Hello ${123} World` as string;
 var h = tag `Hello` as string;
 
 //// [asOperator3.js]
+"use strict";
 var a = `${123 + 456}`;
 var b = `leading ${123 + 456}`;
 var c = `${123 + 456} trailing`;

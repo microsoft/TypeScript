@@ -1,8 +1,8 @@
 --- old.specializedLambdaTypeArguments.js
 +++ new.specializedLambdaTypeArguments.js
-@@= skipped -9, +9 lines =@@
-
+@@= skipped -10, +10 lines =@@
  //// [specializedLambdaTypeArguments.js]
+ "use strict";
  class X {
 +    prop;
  }

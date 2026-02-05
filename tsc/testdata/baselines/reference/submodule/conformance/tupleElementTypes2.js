@@ -4,4 +4,5 @@
 function f([a, b]: [number, any]) { }
 
 //// [tupleElementTypes2.js]
+"use strict";
 function f([a, b]) { }

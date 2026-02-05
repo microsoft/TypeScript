@@ -1,0 +1,31 @@
+--- old.spreadUnionPropOverride.types
++++ new.spreadUnionPropOverride.types
+@@= skipped -17, +17 lines =@@
+ >[] : never[]
+
+ function find(id: string): undefined | Thing {
+->find : (id: string) => undefined | Thing
++>find : (id: string) => Thing | undefined
+ >id : string
+
+     return things.find(thing => thing.id === id);
+@@= skipped -33, +33 lines =@@
+     ...find('foo') ?? {
+ >find('foo') ?? {        label: 'Foo',    } : Thing | { label: string; }
+ >find('foo') : Thing | undefined
+->find : (id: string) => undefined | Thing
++>find : (id: string) => Thing | undefined
+ >'foo' : "foo"
+ >{        label: 'Foo',    } : { label: string; }
+
+@@= skipped -100, +100 lines =@@
+
+ // Should error when property is required in all types
+ const obj4 = {
+->obj4 : { a: string; b?: number; } | { a: string; c: boolean; }
+->{    a: "test",    ...partial,} : { a: string; b?: number; } | { a: string; c: boolean; }
++>obj4 : { a: string; b?: number | undefined; } | { a: string; c: boolean; }
++>{    a: "test",    ...partial,} : { a: string; b?: number | undefined; } | { a: string; c: boolean; }
+
+     a: "test",
+ >a : string

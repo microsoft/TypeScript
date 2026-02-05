@@ -4,8 +4,8 @@
  // Repro from #37660
 
  function foo(instance: Function | object) {
-->foo : (instance: Function | object) => number
-+>foo : (instance: object | Function) => number
+->foo : (instance: Function | object) => number | undefined
++>foo : (instance: object | Function) => number | undefined
  >instance : object | Function
 
      if (typeof instance === 'function') {

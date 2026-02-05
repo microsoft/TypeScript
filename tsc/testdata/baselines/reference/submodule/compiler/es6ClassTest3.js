@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/es6ClassTest3.ts] ////
 
 //// [es6ClassTest3.ts]
-module M {	
+namespace M {	
 	class Visibility {
 	    public foo() { };
 	    private bar() { };
@@ -17,6 +17,7 @@ module M {
 }
 
 //// [es6ClassTest3.js]
+"use strict";
 var M;
 (function (M) {
     class Visibility {

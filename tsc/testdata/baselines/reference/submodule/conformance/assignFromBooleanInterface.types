@@ -5,7 +5,7 @@ var x = true;
 >x : boolean
 >true : true
 
-var a: Boolean;
+declare var a: Boolean;
 >a : Boolean
 
 x = a;

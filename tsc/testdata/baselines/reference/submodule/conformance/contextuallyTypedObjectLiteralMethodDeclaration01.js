@@ -48,6 +48,7 @@ function getFoo3(): Foo {
 }
 
 //// [contextuallyTypedObjectLiteralMethodDeclaration01.js]
+"use strict";
 function getFoo1() {
     return {
         method1(arg) {

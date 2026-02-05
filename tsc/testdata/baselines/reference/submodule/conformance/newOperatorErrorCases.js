@@ -40,6 +40,7 @@ var s = new fnNumber(); // Error
 
 
 //// [newOperatorErrorCases.js]
+"use strict";
 class C0 {
 }
 class C1 {

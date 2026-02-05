@@ -1,13 +1,19 @@
+baseTypePrivateMemberClash.ts(2,13): error TS2564: Property 'm' has no initializer and is not definitely assigned in the constructor.
+baseTypePrivateMemberClash.ts(5,13): error TS2564: Property 'm' has no initializer and is not definitely assigned in the constructor.
 baseTypePrivateMemberClash.ts(8,11): error TS2320: Interface 'Z' cannot simultaneously extend types 'X' and 'Y'.
   Named property 'm' of types 'X' and 'Y' are not identical.
 
 
-==== baseTypePrivateMemberClash.ts (1 errors) ====
+==== baseTypePrivateMemberClash.ts (3 errors) ====
     class X {
         private m: number;
+                ~
+!!! error TS2564: Property 'm' has no initializer and is not definitely assigned in the constructor.
     }
     class Y {
         private m: string;
+                ~
+!!! error TS2564: Property 'm' has no initializer and is not definitely assigned in the constructor.
     }
     
     interface Z extends X, Y { }

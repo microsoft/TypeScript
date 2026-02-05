@@ -24,10 +24,7 @@ export function evaluate(expression: Expression): boolean {
 }
 
 //// [arrayDestructuringInSwitch1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.evaluate = evaluate;
-function evaluate(expression) {
+export function evaluate(expression) {
     if (Array.isArray(expression)) {
         const [operator, ...operands] = expression;
         switch (operator) {

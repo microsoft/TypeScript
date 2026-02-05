@@ -1,11 +1,10 @@
 --- old.mappedTypeProperties.js
 +++ new.mappedTypeProperties.js
-@@= skipped -45, +45 lines =@@
+@@= skipped -44, +44 lines =@@
+
 
  //// [mappedTypeProperties.js]
- "use strict";
 -var _a, _b;
- Object.defineProperty(exports, "__esModule", { value: true });
  class C {
 +    [P in PlaceType];
  }
@@ -24,6 +23,5 @@
 +const E = class {
 +    [P in 'a' | 'b'];
 +};
+ export {};
 
-
- //// [mappedTypeProperties.d.ts]

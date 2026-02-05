@@ -1,8 +1,8 @@
 --- old.stringNamedPropertyAccess.js
 +++ new.stringNamedPropertyAccess.js
-@@= skipped -26, +26 lines =@@
-
+@@= skipped -27, +27 lines =@@
  //// [stringNamedPropertyAccess.js]
+ "use strict";
  class C {
 +    "a b";
 +    static "c d";

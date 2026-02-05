@@ -1,9 +1,9 @@
 --- old.emitter.asyncGenerators.objectLiteralMethods.es2015.js
 +++ new.emitter.asyncGenerators.objectLiteralMethods.es2015.js
-@@= skipped -43, +43 lines =@@
-
+@@= skipped -44, +44 lines =@@
 
  //// [O1.js]
+ "use strict";
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -25,6 +25,7 @@
      }
  };
  //// [O2.js]
+ "use strict";
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -48,6 +49,7 @@
      }
  };
  //// [O3.js]
+ "use strict";
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -71,6 +73,7 @@
      }
  };
  //// [O4.js]
+ "use strict";
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;
@@ -106,6 +109,7 @@
      }
  };
  //// [O5.js]
+ "use strict";
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -141,6 +145,7 @@
      }
  };
  //// [O6.js]
+ "use strict";
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -164,6 +169,7 @@
      }
  };
  //// [O7.js]
+ "use strict";
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");

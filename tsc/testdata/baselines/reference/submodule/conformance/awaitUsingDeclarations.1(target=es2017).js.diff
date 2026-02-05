@@ -1,6 +1,6 @@
 --- old.awaitUsingDeclarations.1(target=es2017).js
 +++ new.awaitUsingDeclarations.1(target=es2017).js
-@@= skipped -151, +151 lines =@@
+@@= skipped -162, +162 lines =@@
      var e = new Error(message);
      return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
  });
@@ -17,129 +17,129 @@
 -    function reject(value) { resume("throw", value); }
 -    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 -};
-+var d1, a, C1, env_1;
++var d1, a, C1;
  async function af() {
-     const env_15 = { stack: [], error: void 0, hasError: false };
+     const env_18 = { stack: [], error: void 0, hasError: false };
      try {
 @@= skipped -29, +17 lines =@@
-             await result_15;
+             await result_18;
      }
  }
 -function ag() {
 -    return __asyncGenerator(this, arguments, function* ag_1() {
--        const env_16 = { stack: [], error: void 0, hasError: false };
+-        const env_19 = { stack: [], error: void 0, hasError: false };
 -        try {
--            const d5 = __addDisposableResource(env_16, { async [Symbol.asyncDispose]() { } }, true);
+-            const d5 = __addDisposableResource(env_19, { async [Symbol.asyncDispose]() { } }, true);
 -            yield yield __await(void 0);
 -            yield __await(null);
 -        }
--        catch (e_16) {
--            env_16.error = e_16;
--            env_16.hasError = true;
+-        catch (e_19) {
+-            env_19.error = e_19;
+-            env_19.hasError = true;
 -        }
 -        finally {
--            const result_16 = __disposeResources(env_16);
--            if (result_16)
--                yield __await(result_16);
+-            const result_19 = __disposeResources(env_19);
+-            if (result_19)
+-                yield __await(result_19);
 -        }
 -    });
 +async function* ag() {
-+    const env_16 = { stack: [], error: void 0, hasError: false };
++    const env_19 = { stack: [], error: void 0, hasError: false };
 +    try {
-+        const d5 = __addDisposableResource(env_16, { async [Symbol.asyncDispose]() { } }, true);
++        const d5 = __addDisposableResource(env_19, { async [Symbol.asyncDispose]() { } }, true);
 +        yield;
 +        await null;
 +    }
-+    catch (e_16) {
-+        env_16.error = e_16;
-+        env_16.hasError = true;
++    catch (e_19) {
++        env_19.error = e_19;
++        env_19.hasError = true;
 +    }
 +    finally {
-+        const result_16 = __disposeResources(env_16);
-+        if (result_16)
-+            await result_16;
++        const result_19 = __disposeResources(env_19);
++        if (result_19)
++            await result_19;
 +    }
  }
--var d1, a, C1, env_1;
- const env_2 = { stack: [], error: void 0, hasError: false };
+-var d1, a, C1;
+ const env_1 = { stack: [], error: void 0, hasError: false };
  try {
-     d1 = __addDisposableResource(env_2, { async [Symbol.asyncDispose]() { } }, true);
+     d1 = __addDisposableResource(env_1, { async [Symbol.asyncDispose]() { } }, true);
 @@= skipped -39, +36 lines =@@
          }
      };
      C1 = class C1 {
 -        constructor() {
 -            this.a = async () => {
--                const env_18 = { stack: [], error: void 0, hasError: false };
+-                const env_21 = { stack: [], error: void 0, hasError: false };
 -                try {
--                    const d7 = __addDisposableResource(env_18, { async [Symbol.asyncDispose]() { } }, true);
+-                    const d7 = __addDisposableResource(env_21, { async [Symbol.asyncDispose]() { } }, true);
 -                }
--                catch (e_18) {
--                    env_18.error = e_18;
--                    env_18.hasError = true;
+-                catch (e_21) {
+-                    env_21.error = e_21;
+-                    env_21.hasError = true;
 -                }
 -                finally {
--                    const result_18 = __disposeResources(env_18);
--                    if (result_18)
--                        await result_18;
+-                    const result_21 = __disposeResources(env_21);
+-                    if (result_21)
+-                        await result_21;
 -                }
 -            };
 -        }
 +        a = async () => {
-+            const env_18 = { stack: [], error: void 0, hasError: false };
++            const env_21 = { stack: [], error: void 0, hasError: false };
 +            try {
-+                const d7 = __addDisposableResource(env_18, { async [Symbol.asyncDispose]() { } }, true);
++                const d7 = __addDisposableResource(env_21, { async [Symbol.asyncDispose]() { } }, true);
 +            }
-+            catch (e_18) {
-+                env_18.error = e_18;
-+                env_18.hasError = true;
++            catch (e_21) {
++                env_21.error = e_21;
++                env_21.hasError = true;
 +            }
 +            finally {
-+                const result_18 = __disposeResources(env_18);
-+                if (result_18)
-+                    await result_18;
++                const result_21 = __disposeResources(env_21);
++                if (result_21)
++                    await result_21;
 +            }
 +        };
          async am() {
-             const env_19 = { stack: [], error: void 0, hasError: false };
+             const env_22 = { stack: [], error: void 0, hasError: false };
              try {
 @@= skipped -33, +31 lines =@@
-                     await result_19;
+                     await result_22;
              }
          }
 -        ag() {
 -            return __asyncGenerator(this, arguments, function* ag_2() {
--                const env_20 = { stack: [], error: void 0, hasError: false };
+-                const env_23 = { stack: [], error: void 0, hasError: false };
 -                try {
--                    const d15 = __addDisposableResource(env_20, { async [Symbol.asyncDispose]() { } }, true);
+-                    const d15 = __addDisposableResource(env_23, { async [Symbol.asyncDispose]() { } }, true);
 -                    yield yield __await(void 0);
 -                    yield __await(null);
 -                }
--                catch (e_20) {
--                    env_20.error = e_20;
--                    env_20.hasError = true;
+-                catch (e_23) {
+-                    env_23.error = e_23;
+-                    env_23.hasError = true;
 -                }
 -                finally {
--                    const result_20 = __disposeResources(env_20);
--                    if (result_20)
--                        yield __await(result_20);
+-                    const result_23 = __disposeResources(env_23);
+-                    if (result_23)
+-                        yield __await(result_23);
 -                }
 -            });
 +        async *ag() {
-+            const env_20 = { stack: [], error: void 0, hasError: false };
++            const env_23 = { stack: [], error: void 0, hasError: false };
 +            try {
-+                const d15 = __addDisposableResource(env_20, { async [Symbol.asyncDispose]() { } }, true);
++                const d15 = __addDisposableResource(env_23, { async [Symbol.asyncDispose]() { } }, true);
 +                yield;
 +                await null;
 +            }
-+            catch (e_20) {
-+                env_20.error = e_20;
-+                env_20.hasError = true;
++            catch (e_23) {
++                env_23.error = e_23;
++                env_23.hasError = true;
 +            }
 +            finally {
-+                const result_20 = __disposeResources(env_20);
-+                if (result_20)
-+                    await result_20;
++                const result_23 = __disposeResources(env_23);
++                if (result_23)
++                    await result_23;
 +            }
          }
      };

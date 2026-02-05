@@ -1,16 +1,17 @@
 weakType.ts(15,13): error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
 weakType.ts(16,13): error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
+weakType.ts(17,13): error TS2352: Conversion of type 'null' to type 'CtorOnly' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 weakType.ts(17,13): error TS2560: Value of type 'CtorOnly' has no properties in common with type 'Settings'. Did you mean to call it?
 weakType.ts(18,13): error TS2559: Type '12' has no properties in common with type 'Settings'.
 weakType.ts(19,13): error TS2559: Type '"completely wrong"' has no properties in common with type 'Settings'.
 weakType.ts(20,13): error TS2559: Type 'false' has no properties in common with type 'Settings'.
-weakType.ts(37,18): error TS2559: Type '{ error?: number; }' has no properties in common with type 'ChangeOptions'.
+weakType.ts(37,18): error TS2559: Type '{ error?: number | undefined; }' has no properties in common with type 'ChangeOptions'.
 weakType.ts(62,5): error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
   Types of property 'properties' are incompatible.
-    Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
+    Type '{ wrong: string; }' has no properties in common with type '{ b?: number | undefined; }'.
 
 
-==== weakType.ts (8 errors) ====
+==== weakType.ts (9 errors) ====
     interface Settings {
         timeout?: number;
         onError?(): void;
@@ -34,6 +35,8 @@ weakType.ts(62,5): error TS2322: Type '{ properties: { wrong: string; }; }' is n
 !!! error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
 !!! related TS6212 weakType.ts:16:13: Did you mean to call this expression?
     doSomething(null as CtorOnly);
+                ~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'null' to type 'CtorOnly' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
                 ~~~~~~~~~~~~~~~~
 !!! error TS2560: Value of type 'CtorOnly' has no properties in common with type 'Settings'. Did you mean to call it?
 !!! related TS6213 weakType.ts:17:13: Did you mean to use 'new' with this expression?
@@ -60,11 +63,11 @@ weakType.ts(62,5): error TS2322: Type '{ properties: { wrong: string; }; }' is n
     
     function del(options: ConfigurableStartEnd = {},
                  error: { error?: number } = {}) {
-        let changes: ChangeOptions[];
+        let changes: ChangeOptions[] = [];
         changes.push(options);
         changes.push(error);
                      ~~~~~
-!!! error TS2559: Type '{ error?: number; }' has no properties in common with type 'ChangeOptions'.
+!!! error TS2559: Type '{ error?: number | undefined; }' has no properties in common with type 'ChangeOptions'.
     }
     
     class K {
@@ -93,6 +96,6 @@ weakType.ts(62,5): error TS2322: Type '{ properties: { wrong: string; }; }' is n
         ~~~~
 !!! error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
 !!! error TS2322:   Types of property 'properties' are incompatible.
-!!! error TS2322:     Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
+!!! error TS2322:     Type '{ wrong: string; }' has no properties in common with type '{ b?: number | undefined; }'.
     
     

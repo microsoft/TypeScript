@@ -1,10 +1,10 @@
 // === documentHighlights ===
 // === /qualifiedName_import_declaration_with_variable_entity_names.ts ===
-// module Alpha {
+// namespace Alpha {
 //     export var [|x|] = 100;
 // }
 // 
-// module Beta {
+// namespace Beta {
 //     import p = Alpha./*HIGHLIGHTS*/[|x|];
 // }
 // 

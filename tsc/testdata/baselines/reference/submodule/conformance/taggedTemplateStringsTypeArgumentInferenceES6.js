@@ -94,6 +94,7 @@ var arr: any[];
 
 
 //// [taggedTemplateStringsTypeArgumentInferenceES6.js]
+"use strict";
 // Generic tag with one parameter
 function noParams(n) { }
 noParams ``;

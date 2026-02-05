@@ -4,5 +4,6 @@
 var v = class C {};
 
 //// [classExpressionES61.js]
+"use strict";
 var v = class C {
 };

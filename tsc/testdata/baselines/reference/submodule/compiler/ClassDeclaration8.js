@@ -6,5 +6,6 @@ class C {
 }
 
 //// [ClassDeclaration8.js]
+"use strict";
 class C {
 }

@@ -25,6 +25,7 @@ interface C {
 
 
 //// [duplicateIdentifierDifferentModifiers.js]
+"use strict";
 // OK
 class A {
     y;

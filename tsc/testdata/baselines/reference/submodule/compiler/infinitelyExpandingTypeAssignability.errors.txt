@@ -1,0 +1,17 @@
+infinitelyExpandingTypeAssignability.ts(10,21): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== infinitelyExpandingTypeAssignability.ts (1 errors) ====
+    interface A<T> {
+       x : T
+    }
+     
+    interface B<T> extends A<B<B<B<T>>>> { }
+    
+    interface C<T> extends A<C<C<C<T>>>> { }
+     
+    var x : B<string>
+    var y : C<string> = x
+                        ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    

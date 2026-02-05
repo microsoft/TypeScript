@@ -8,6 +8,7 @@ class C {
 var { x } = new C;
 
 //// [destructuringWithNewExpression.js]
+"use strict";
 class C {
     x = 0;
 }

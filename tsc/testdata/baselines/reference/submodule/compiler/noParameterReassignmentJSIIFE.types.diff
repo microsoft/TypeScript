@@ -4,22 +4,22 @@
 
  === index.js ===
  self.importScripts = (function (importScripts) {
-->self.importScripts = (function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : (...args: string[]) => any
-+>self.importScripts = (function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : () => any
+->self.importScripts = (function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : (...args: string[]) => void
++>self.importScripts = (function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : () => void
  >self.importScripts : (...urls: string[]) => void
  >self : Window & typeof globalThis
  >importScripts : (...urls: string[]) => void
-->(function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : (...args: string[]) => any
-->(function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };}) : (importScripts: (...urls: string[]) => void) => (...args: string[]) => any
-->function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };} : (importScripts: (...urls: string[]) => void) => (...args: string[]) => any
-+>(function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : () => any
-+>(function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };}) : (importScripts: (...urls: string[]) => void) => () => any
-+>function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };} : (importScripts: (...urls: string[]) => void) => () => any
+->(function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : (...args: string[]) => void
+->(function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };}) : (importScripts: (...urls: string[]) => void) => (...args: string[]) => void
+->function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };} : (importScripts: (...urls: string[]) => void) => (...args: string[]) => void
++>(function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : () => void
++>(function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };}) : (importScripts: (...urls: string[]) => void) => () => void
++>function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };} : (importScripts: (...urls: string[]) => void) => () => void
  >importScripts : (...urls: string[]) => void
 
      return function () {
-->function () {        return importScripts.apply(this, arguments);    } : (...args: string[]) => any
-+>function () {        return importScripts.apply(this, arguments);    } : () => any
+->function () {        return importScripts.apply(this, arguments);    } : (...args: string[]) => void
++>function () {        return importScripts.apply(this, arguments);    } : () => void
 
          return importScripts.apply(this, arguments);
- >importScripts.apply(this, arguments) : any
+ >importScripts.apply(this, arguments) : void

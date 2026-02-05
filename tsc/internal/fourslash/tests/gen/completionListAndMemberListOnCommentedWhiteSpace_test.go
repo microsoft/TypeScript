@@ -11,7 +11,7 @@ func TestCompletionListAndMemberListOnCommentedWhiteSpace(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module M {
+	const content = `namespace M {
   export class C { public pub = 0; private priv = 1; }
   export var V = 0;
 }

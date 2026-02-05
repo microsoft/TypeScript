@@ -6,8 +6,8 @@
 interface T {
     f(x: number): void;
 }
-var t: T;
-var a: { f(x: number): void };
+declare var t: T;
+declare var a: { f(x: number): void };
 
 t = a;
 a = t;
@@ -15,8 +15,8 @@ a = t;
 interface S {
     f(x: number): string;
 }
-var s: S;
-var a2: { f(x: number): string };
+declare var s: S;
+declare var a2: { f(x: number): string };
 t = s;
 t = a2;
 a = s;
@@ -39,8 +39,8 @@ a = function (x: number) { return ''; }
 interface S2 {
     f(x: string): void;
 }
-var s2: S2;
-var a3: { f(x: string): void };
+declare var s2: S2;
+declare var a3: { f(x: string): void };
 // these are errors
 t = s2;
 t = a3;
@@ -53,13 +53,10 @@ a = function (x: string) { return ''; }
 
 
 //// [assignmentCompatWithCallSignatures2.js]
+"use strict";
 // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
-var t;
-var a;
 t = a;
 a = t;
-var s;
-var a2;
 t = s;
 t = a2;
 a = s;
@@ -76,8 +73,6 @@ t = () => 1;
 t = function (x) { return ''; };
 a = () => 1;
 a = function (x) { return ''; };
-var s2;
-var a3;
 // these are errors
 t = s2;
 t = a3;

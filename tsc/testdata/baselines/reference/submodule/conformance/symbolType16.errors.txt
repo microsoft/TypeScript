@@ -1,0 +1,12 @@
+symbolType16.ts(6,1): error TS2454: Variable 'sym' is used before being assigned.
+
+
+==== symbolType16.ts (1 errors) ====
+    interface Symbol {
+        newSymbolProp: number;
+    }
+    
+    var sym: symbol;
+    sym.newSymbolProp;
+    ~~~
+!!! error TS2454: Variable 'sym' is used before being assigned.

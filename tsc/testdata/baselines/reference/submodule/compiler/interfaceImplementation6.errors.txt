@@ -1,16 +1,20 @@
+interfaceImplementation6.ts(6,12): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
 interfaceImplementation6.ts(9,7): error TS2420: Class 'C2' incorrectly implements interface 'I1'.
   Property 'item' is private in type 'C2' but not in type 'I1'.
+interfaceImplementation6.ts(10,13): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
 interfaceImplementation6.ts(13,7): error TS2420: Class 'C3' incorrectly implements interface 'I1'.
   Property 'item' is missing in type 'C3' but required in type 'I1'.
 
 
-==== interfaceImplementation6.ts (2 errors) ====
+==== interfaceImplementation6.ts (4 errors) ====
     interface I1 {
         item:number;
     }
     
     class C1 implements I1 {
         public item:number;
+               ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C2 implements I1 {
@@ -18,6 +22,8 @@ interfaceImplementation6.ts(13,7): error TS2420: Class 'C3' incorrectly implemen
 !!! error TS2420: Class 'C2' incorrectly implements interface 'I1'.
 !!! error TS2420:   Property 'item' is private in type 'C2' but not in type 'I1'.
         private item:number;
+                ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C3 implements I1 {

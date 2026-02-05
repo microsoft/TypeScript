@@ -4,4 +4,5 @@
 using x = {};
 
 //// [usingDeclarations.14.js]
+"use strict";
 using x = {};

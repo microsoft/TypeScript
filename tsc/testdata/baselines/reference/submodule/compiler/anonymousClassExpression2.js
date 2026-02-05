@@ -21,6 +21,7 @@ while (0) {
 
 
 //// [anonymousClassExpression2.js]
+"use strict";
 // Fixes #14860
 // note: repros with `while (0);` too
 // but it's less inscrutable and more obvious to put it *inside* the loop

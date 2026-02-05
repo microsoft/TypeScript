@@ -11,7 +11,8 @@ func TestRenameDestructuringAssignmentNestedInFor2(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `interface MultiRobot {
+	const content = `// @strict: false
+interface MultiRobot {
     name: string;
     skills: {
         [|[|{| "contextRangeIndex": 0 |}primary|]: string;|]

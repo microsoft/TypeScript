@@ -10,14 +10,15 @@ class A {
  
 class C2 extends A {}
 
-var a: A;
-var c: C2;
+declare var a: A;
+declare var c: C2;
 a.bar(); // static off an instance - should be an error
 c.bar(); // static off an instance - should be an error
 A.bar(); // valid
 C2.bar(); // valid
 
 //// [classSideInheritance1.js]
+"use strict";
 class A {
     static bar() {
         return "";
@@ -26,8 +27,6 @@ class A {
 }
 class C2 extends A {
 }
-var a;
-var c;
 a.bar(); // static off an instance - should be an error
 c.bar(); // static off an instance - should be an error
 A.bar(); // valid

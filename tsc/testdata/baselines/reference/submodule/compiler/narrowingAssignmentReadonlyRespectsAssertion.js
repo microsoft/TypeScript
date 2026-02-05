@@ -43,6 +43,7 @@ testFunc();
 
 
 //// [narrowingAssignmentReadonlyRespectsAssertion.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/41984
 function subDataFunc() {
     return [

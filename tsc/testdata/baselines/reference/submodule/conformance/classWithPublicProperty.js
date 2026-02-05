@@ -24,6 +24,7 @@ var r7: string = C.f();
 var r8: string = C.g();
 
 //// [classWithPublicProperty.js]
+"use strict";
 class C {
     x;
     a = '';

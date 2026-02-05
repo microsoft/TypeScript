@@ -9,3 +9,4 @@ interface HTMLSelectElement {
 
 
 //// [recursiveSpecializationOfExtendedTypeWithError.js]
+"use strict";

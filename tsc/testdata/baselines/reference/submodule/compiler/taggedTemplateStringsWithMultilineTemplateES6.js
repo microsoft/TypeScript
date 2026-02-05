@@ -10,6 +10,7 @@ f `
 `;
 
 //// [taggedTemplateStringsWithMultilineTemplateES6.js]
+"use strict";
 function f(...args) {
 }
 f `

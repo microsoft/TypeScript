@@ -1,6 +1,6 @@
 --- old.genericBaseClassLiteralProperty2.js
 +++ new.genericBaseClassLiteralProperty2.js
-@@= skipped -20, +20 lines =@@
+@@= skipped -21, +21 lines =@@
  class CollectionItem2 {
  }
  class BaseCollection2 {

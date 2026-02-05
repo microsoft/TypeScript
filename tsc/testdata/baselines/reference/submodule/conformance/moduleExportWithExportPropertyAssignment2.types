@@ -10,9 +10,9 @@ var mod1 = require('./mod1')
 
 mod1.toFixed(12)
 >mod1.toFixed(12) : string
->mod1.toFixed : (fractionDigits?: number) => string
+>mod1.toFixed : (fractionDigits?: number | undefined) => string
 >mod1 : 1
->toFixed : (fractionDigits?: number) => string
+>toFixed : (fractionDigits?: number | undefined) => string
 >12 : 12
 
 mod1.f() // error, 'f' is not a property on 'number'

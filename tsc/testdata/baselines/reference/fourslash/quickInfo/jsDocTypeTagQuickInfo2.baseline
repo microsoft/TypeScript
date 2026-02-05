@@ -77,7 +77,7 @@
 //     ^^^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | var nullable: number
+// | var nullable: number | null
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -338,7 +338,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar nullable: number\n```\n"
+        "value": "```tsx\nvar nullable: number | null\n```\n"
       },
       "range": {
         "start": {

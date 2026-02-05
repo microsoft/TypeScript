@@ -2,7 +2,7 @@ parameterPropertyInConstructor1.ts(3,17): error TS2369: A parameter property is 
 
 
 ==== parameterPropertyInConstructor1.ts (1 errors) ====
-    declare module mod {
+    declare namespace mod {
       class Customers {
         constructor(public names: string);
                     ~~~~~~~~~~~~~~~~~~~~

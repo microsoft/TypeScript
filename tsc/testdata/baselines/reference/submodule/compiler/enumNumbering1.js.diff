@@ -1,6 +1,6 @@
 --- old.enumNumbering1.js
 +++ new.enumNumbering1.js
-@@= skipped -14, +14 lines =@@
+@@= skipped -15, +15 lines =@@
  (function (Test) {
      Test[Test["A"] = 0] = "A";
      Test[Test["B"] = 1] = "B";

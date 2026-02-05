@@ -26,3 +26,21 @@
      };
  };
  export declare class FooItem {
+@@= skipped -12, +12 lines =@@
+     new (...args: any[]): {
+         tags(): void;
+         foo(): void;
+-        name?: string;
++        name?: string | undefined;
+     };
+     getTags(): void;
+ } & T;
+@@= skipped -8, +8 lines =@@
+     new (...args: any[]): {
+         tags(): void;
+         foo(): void;
+-        name?: string;
++        name?: string | undefined;
+     };
+     getTags(): void;
+ } & typeof FooItem;

@@ -1,0 +1,11 @@
+--- old.nonObjectUnionNestedExcessPropertyCheck.types
++++ new.nonObjectUnionNestedExcessPropertyCheck.types
+@@= skipped -5, +5 lines =@@
+ >iconProp : string | undefined
+
+     nestedProp?: {
+->nestedProp : { testBool?: boolean; } | undefined
++>nestedProp : { testBool?: boolean | undefined; } | undefined
+
+         testBool?: boolean;
+ >testBool : boolean | undefined

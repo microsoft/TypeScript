@@ -9,7 +9,7 @@ instantiateNonGenericTypeWithTypeArguments.ts(18,10): error TS2347: Untyped func
     // all of these are errors
     
     class C {
-        x: string;
+        x!: string;
     }
     
     var c = new C<number>();
@@ -21,7 +21,7 @@ instantiateNonGenericTypeWithTypeArguments.ts(18,10): error TS2347: Untyped func
                     ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
     
-    var f: { (): void };
+    declare var f: { (): void };
     var r2 = new f<number>();
                    ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.

@@ -1,8 +1,8 @@
 --- old.classPropertyAsProtected.js
 +++ new.classPropertyAsProtected.js
-@@= skipped -26, +26 lines =@@
-
+@@= skipped -27, +27 lines =@@
  //// [classPropertyAsProtected.js]
+ "use strict";
  class C {
 +    x;
      get y() { return null; }

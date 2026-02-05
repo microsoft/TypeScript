@@ -1,6 +1,6 @@
 --- old.destructuringParameterDeclaration5.js
 +++ new.destructuringParameterDeclaration5.js
-@@= skipped -57, +57 lines =@@
+@@= skipped -58, +58 lines =@@
      constructor() { }
  }
  class SubClass extends Class {

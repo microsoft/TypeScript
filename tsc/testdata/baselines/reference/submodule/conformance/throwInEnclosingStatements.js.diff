@@ -1,6 +1,6 @@
 --- old.throwInEnclosingStatements.js
 +++ new.throwInEnclosingStatements.js
-@@= skipped -77, +77 lines =@@
+@@= skipped -78, +78 lines =@@
      throw j;
  }
  class C {

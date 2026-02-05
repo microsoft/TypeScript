@@ -1,9 +1,9 @@
 --- old.emitter.asyncGenerators.functionExpressions.es2015.js
 +++ new.emitter.asyncGenerators.functionExpressions.es2015.js
-@@= skipped -29, +29 lines =@@
-
+@@= skipped -30, +30 lines =@@
 
  //// [F1.js]
+ "use strict";
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -23,6 +23,7 @@
 +const f1 = async function* () {
  };
  //// [F2.js]
+ "use strict";
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -44,6 +45,7 @@
 +    const x = yield;
  };
  //// [F3.js]
+ "use strict";
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -65,6 +67,7 @@
 +    const x = yield 1;
  };
  //// [F4.js]
+ "use strict";
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;
@@ -98,6 +101,7 @@
 +    const x = yield* [1];
  };
  //// [F5.js]
+ "use strict";
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -131,6 +135,7 @@
 +    const x = yield* (async function* () { yield 1; })();
  };
  //// [F6.js]
+ "use strict";
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -152,6 +157,7 @@
 +    const x = await 1;
  };
  //// [F7.js]
+ "use strict";
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");

@@ -7,6 +7,7 @@ class Unused {
 
 
 //// [unusedSemicolonInClass.js]
+"use strict";
 class Unused {
     ;
 }

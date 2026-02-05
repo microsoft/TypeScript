@@ -1,13 +1,21 @@
+instancePropertiesInheritedIntoClassType.ts(3,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+instancePropertiesInheritedIntoClassType.ts(12,25): error TS2564: Property 'e' has no initializer and is not definitely assigned in the constructor.
 instancePropertiesInheritedIntoClassType.ts(19,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
   Type 'Number' has no call signatures.
+instancePropertiesInheritedIntoClassType.ts(25,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+instancePropertiesInheritedIntoClassType.ts(27,13): error TS2322: Type 'null' is not assignable to type 'U'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+instancePropertiesInheritedIntoClassType.ts(34,37): error TS2564: Property 'e' has no initializer and is not definitely assigned in the constructor.
 instancePropertiesInheritedIntoClassType.ts(41,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
   Type 'String' has no call signatures.
 
 
-==== instancePropertiesInheritedIntoClassType.ts (2 errors) ====
-    module NonGeneric {
+==== instancePropertiesInheritedIntoClassType.ts (7 errors) ====
+    namespace NonGeneric {
         class C {
             x: string;
+            ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
             get y() {
                 return 1;
             }
@@ -17,6 +25,8 @@ instancePropertiesInheritedIntoClassType.ts(41,16): error TS6234: This expressio
         }
     
         class D extends C { e: string; }
+                            ~
+!!! error TS2564: Property 'e' has no initializer and is not definitely assigned in the constructor.
     
         var d = new D(1, 2);
         var r = d.fn();
@@ -30,11 +40,16 @@ instancePropertiesInheritedIntoClassType.ts(41,16): error TS6234: This expressio
     
     }
     
-    module Generic {
+    namespace Generic {
         class C<T, U> {
             x: T;
+            ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
             get y() {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'U'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'null'.
             }
             set y(v: U) { }
             fn() { return this; }
@@ -42,6 +57,8 @@ instancePropertiesInheritedIntoClassType.ts(41,16): error TS6234: This expressio
         }
     
         class D<T, U> extends C<T, U> { e: T; }
+                                        ~
+!!! error TS2564: Property 'e' has no initializer and is not definitely assigned in the constructor.
     
         var d = new D(1, '');
         var r = d.fn();

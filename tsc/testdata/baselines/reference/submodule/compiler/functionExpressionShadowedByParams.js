@@ -16,6 +16,7 @@ var x = {
 
 
 //// [functionExpressionShadowedByParams.js]
+"use strict";
 function b1(b1) {
     b1.toPrecision(2); // should not error
     b1(12); // should error

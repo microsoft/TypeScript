@@ -8,3 +8,4 @@ type FFG<T> = T extends O ? X<ReturnType<T['m']>> : never; // error!
 
 
 //// [substituteReturnTypeSatisfiesConstraint.js]
+"use strict";

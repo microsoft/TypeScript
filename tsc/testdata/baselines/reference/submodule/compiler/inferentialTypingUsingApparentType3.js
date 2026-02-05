@@ -29,6 +29,7 @@ var person = new ObjectField({
 person.fields.id;
 
 //// [inferentialTypingUsingApparentType3.js]
+"use strict";
 class CharField {
     clean(input) {
         return "Yup";

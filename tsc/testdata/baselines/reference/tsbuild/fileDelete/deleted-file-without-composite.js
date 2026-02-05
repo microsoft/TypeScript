@@ -26,18 +26,18 @@ Output::
 
 ======== Resolving module '../child/child2' from '/home/src/workspaces/solution/child/child.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 Loading module as file / folder, candidate module location '/home/src/workspaces/solution/child/child2', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/workspaces/solution/child/child2.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child2' was successfully resolved to '/home/src/workspaces/solution/child/child2.ts'. ========
-../../tslibs/TS/Lib/lib.d.ts
-   Default library for target 'ES5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+   Default library for target 'ES2024'
 child/child2.ts
    Imported via "../child/child2" from file 'child/child.ts'
    Matched by default include pattern '**/*'
 child/child.ts
    Matched by default include pattern '**/*'
-//// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -61,19 +61,13 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/solution/child/child.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.child = child;
-const child2_1 = require("../child/child2");
-function child() {
-    (0, child2_1.child2)();
+import { child2 } from "../child/child2";
+export function child() {
+    child2();
 }
 
 //// [/home/src/workspaces/solution/child/child2.js] *new* 
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.child2 = child2;
-function child2() {
+export function child2() {
 }
 
 //// [/home/src/workspaces/solution/child/tsconfig.tsbuildinfo] *new* 
@@ -100,7 +94,7 @@ function child2() {
 
 child/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/solution/child/child2.ts
 *refresh*    /home/src/workspaces/solution/child/child.ts
 Signatures::
@@ -122,7 +116,7 @@ Output::
 
 ======== Resolving module '../child/child2' from '/home/src/workspaces/solution/child/child.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 Loading module as file / folder, candidate module location '/home/src/workspaces/solution/child/child2', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/workspaces/solution/child/child2.ts' does not exist.
 File '/home/src/workspaces/solution/child/child2.tsx' does not exist.
@@ -136,8 +130,8 @@ Directory '/home/src/workspaces/solution/child/child2' does not exist, skipping 
 [7m1[0m import { child2 } from "../child/child2";
 [7m [0m [91m                       ~~~~~~~~~~~~~~~~~[0m
 
-../../tslibs/TS/Lib/lib.d.ts
-   Default library for target 'ES5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+   Default library for target 'ES2024'
 child/child.ts
    Matched by default include pattern '**/*'
 
@@ -163,6 +157,6 @@ Found 1 error in child/child.ts[90m:1[0m
 
 child/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 *refresh*    /home/src/workspaces/solution/child/child.ts
 Signatures::

@@ -2,11 +2,11 @@
 
 === deleteOperatorWithBooleanType.ts ===
 // delete  operator on boolean type
-var BOOLEAN: boolean;
->BOOLEAN : Symbol(BOOLEAN, Decl(deleteOperatorWithBooleanType.ts, 1, 3))
+declare var BOOLEAN: boolean;
+>BOOLEAN : Symbol(BOOLEAN, Decl(deleteOperatorWithBooleanType.ts, 1, 11))
 
 function foo(): boolean { return true; }
->foo : Symbol(foo, Decl(deleteOperatorWithBooleanType.ts, 1, 21))
+>foo : Symbol(foo, Decl(deleteOperatorWithBooleanType.ts, 1, 29))
 
 class A {
 >A : Symbol(A, Decl(deleteOperatorWithBooleanType.ts, 3, 40))
@@ -17,7 +17,7 @@ class A {
     static foo() { return false; }
 >foo : Symbol(A.foo, Decl(deleteOperatorWithBooleanType.ts, 6, 22))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(deleteOperatorWithBooleanType.ts, 8, 1))
 
     export var n: boolean;
@@ -31,7 +31,7 @@ var objA = new A();
 // boolean type var
 var ResultIsBoolean1 = delete BOOLEAN;
 >ResultIsBoolean1 : Symbol(ResultIsBoolean1, Decl(deleteOperatorWithBooleanType.ts, 16, 3))
->BOOLEAN : Symbol(BOOLEAN, Decl(deleteOperatorWithBooleanType.ts, 1, 3))
+>BOOLEAN : Symbol(BOOLEAN, Decl(deleteOperatorWithBooleanType.ts, 1, 11))
 
 // boolean type literal
 var ResultIsBoolean2 = delete true;
@@ -57,7 +57,7 @@ var ResultIsBoolean5 = delete M.n;
 
 var ResultIsBoolean6 = delete foo();
 >ResultIsBoolean6 : Symbol(ResultIsBoolean6, Decl(deleteOperatorWithBooleanType.ts, 25, 3))
->foo : Symbol(foo, Decl(deleteOperatorWithBooleanType.ts, 1, 21))
+>foo : Symbol(foo, Decl(deleteOperatorWithBooleanType.ts, 1, 29))
 
 var ResultIsBoolean7 = delete A.foo();
 >ResultIsBoolean7 : Symbol(ResultIsBoolean7, Decl(deleteOperatorWithBooleanType.ts, 26, 3))
@@ -68,15 +68,15 @@ var ResultIsBoolean7 = delete A.foo();
 // multiple delete  operator
 var ResultIsBoolean8 = delete delete BOOLEAN;
 >ResultIsBoolean8 : Symbol(ResultIsBoolean8, Decl(deleteOperatorWithBooleanType.ts, 29, 3))
->BOOLEAN : Symbol(BOOLEAN, Decl(deleteOperatorWithBooleanType.ts, 1, 3))
+>BOOLEAN : Symbol(BOOLEAN, Decl(deleteOperatorWithBooleanType.ts, 1, 11))
 
 // miss assignment operators
 delete true;
 delete BOOLEAN;
->BOOLEAN : Symbol(BOOLEAN, Decl(deleteOperatorWithBooleanType.ts, 1, 3))
+>BOOLEAN : Symbol(BOOLEAN, Decl(deleteOperatorWithBooleanType.ts, 1, 11))
 
 delete foo();
->foo : Symbol(foo, Decl(deleteOperatorWithBooleanType.ts, 1, 21))
+>foo : Symbol(foo, Decl(deleteOperatorWithBooleanType.ts, 1, 29))
 
 delete true, false;
 delete objA.a;

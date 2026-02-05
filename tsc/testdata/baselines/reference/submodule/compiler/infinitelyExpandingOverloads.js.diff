@@ -1,8 +1,8 @@
 --- old.infinitelyExpandingOverloads.js
 +++ new.infinitelyExpandingOverloads.js
-@@= skipped -29, +29 lines =@@
-
+@@= skipped -30, +30 lines =@@
  //// [infinitelyExpandingOverloads.js]
+ "use strict";
  class Validator2 {
 +    _subscription;
  }

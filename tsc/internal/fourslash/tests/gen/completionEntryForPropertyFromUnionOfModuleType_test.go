@@ -13,11 +13,11 @@ func TestCompletionEntryForPropertyFromUnionOfModuleType(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `module E {
+	const content = `namespace E {
     export var n = 1;
     export var x = 0;
 }
-module F {
+namespace F {
     export var n = 1;
     export var y = 0;
 }

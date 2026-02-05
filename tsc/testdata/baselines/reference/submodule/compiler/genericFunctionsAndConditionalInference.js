@@ -41,6 +41,7 @@ const rightOk = ok(right)
 const rightOrphaned = orphaned(right)
 
 //// [genericFunctionsAndConditionalInference.js]
+"use strict";
 function foo(obj) {
     return unboxify(obj);
 }

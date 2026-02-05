@@ -59,7 +59,7 @@ var r4 = b.bar;
 >bar : string
 
 // basic non-generic and generic case inside a module
-module M {
+namespace M {
 >M : typeof M
 
     interface A {

@@ -17,6 +17,7 @@ var s3 = s2.func(num => num.toString())
 
 
 //// [genericChainedCalls.js]
+"use strict";
 var r1 = v1.func(num => num.toString())
     .func(str => str.length) // error, number doesn't have a length
     .func(num => num.toString());

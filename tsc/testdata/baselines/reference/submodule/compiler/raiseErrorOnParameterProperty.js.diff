@@ -1,8 +1,8 @@
 --- old.raiseErrorOnParameterProperty.js
 +++ new.raiseErrorOnParameterProperty.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [raiseErrorOnParameterProperty.js]
+ "use strict";
  class C1 {
 +    x;
      constructor(x) {

@@ -1,7 +1,7 @@
 --- old.undefinedIsSubtypeOfEverything.js
 +++ new.undefinedIsSubtypeOfEverything.js
-@@= skipped -125, +125 lines =@@
- //// [undefinedIsSubtypeOfEverything.js]
+@@= skipped -126, +126 lines =@@
+ "use strict";
  // undefined is a subtype of every other types, no errors expected below
  class Base {
 +    foo;

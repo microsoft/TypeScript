@@ -61,6 +61,7 @@ class D extends C {
 
 
 //// [callWithSpread.js]
+"use strict";
 function foo(x, y, ...z) {
 }
 var a;

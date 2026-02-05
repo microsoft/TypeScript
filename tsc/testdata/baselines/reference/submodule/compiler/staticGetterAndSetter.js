@@ -8,6 +8,7 @@ class Foo {
 
 
 //// [staticGetterAndSetter.js]
+"use strict";
 class Foo {
     static get Foo() { return 0; }
     static set Foo(n) { }

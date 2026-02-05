@@ -1,8 +1,8 @@
 --- old.numericNamedPropertyDuplicates.js
 +++ new.numericNamedPropertyDuplicates.js
-@@= skipped -24, +24 lines =@@
-
+@@= skipped -25, +25 lines =@@
  //// [numericNamedPropertyDuplicates.js]
+ "use strict";
  class C {
 +    1;
 +    1.0;

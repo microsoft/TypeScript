@@ -9,6 +9,7 @@ function* test() {
 
 
 //// [YieldExpression20_es6.js]
+"use strict";
 function* test() {
     return () => ({
         b: yield 2, // error

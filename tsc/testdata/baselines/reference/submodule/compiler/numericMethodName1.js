@@ -7,6 +7,7 @@ class C {
 
 
 //// [numericMethodName1.js]
+"use strict";
 class C {
     1 = 2;
 }

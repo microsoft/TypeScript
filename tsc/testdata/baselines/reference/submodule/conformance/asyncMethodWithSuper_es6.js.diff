@@ -1,6 +1,6 @@
 --- old.asyncMethodWithSuper_es6.js
 +++ new.asyncMethodWithSuper_es6.js
-@@= skipped -223, +223 lines =@@
+@@= skipped -224, +224 lines =@@
  }
  class B extends A {
      // async method with only call/get on 'super' does not require a binding

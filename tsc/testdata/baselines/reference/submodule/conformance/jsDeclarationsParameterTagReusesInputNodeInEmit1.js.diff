@@ -1,6 +1,6 @@
 --- old.jsDeclarationsParameterTagReusesInputNodeInEmit1.js
 +++ new.jsDeclarationsParameterTagReusesInputNodeInEmit1.js
-@@= skipped -59, +59 lines =@@
+@@= skipped -61, +61 lines =@@
 
 
  //// [base.d.ts]

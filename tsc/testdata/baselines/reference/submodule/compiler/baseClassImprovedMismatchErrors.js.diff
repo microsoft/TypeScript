@@ -1,8 +1,8 @@
 --- old.baseClassImprovedMismatchErrors.js
 +++ new.baseClassImprovedMismatchErrors.js
-@@= skipped -21, +21 lines =@@
-
+@@= skipped -22, +22 lines =@@
  //// [baseClassImprovedMismatchErrors.js]
+ "use strict";
  class Base {
 +    n;
      fn() {

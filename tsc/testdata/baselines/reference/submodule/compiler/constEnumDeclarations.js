@@ -14,6 +14,7 @@ const enum E2 {
 }
 
 //// [constEnumDeclarations.js]
+"use strict";
 
 
 //// [constEnumDeclarations.d.ts]

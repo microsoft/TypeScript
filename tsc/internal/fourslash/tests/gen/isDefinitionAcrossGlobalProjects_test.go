@@ -76,6 +76,7 @@ const ic: I = { FC() {} };
 {
     "compilerOptions": {
         "composite": true,
+        "lib": ["es5"],
     },
     "references": [
         { "path": "a" },
@@ -90,6 +91,7 @@ const ic: I = { FC() {} };
         "declarationMap": true,
         "module": "none",
         "emitDeclarationOnly": true,
+        "lib": ["es5"],
     }
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

@@ -6,5 +6,6 @@ if (x) using a = null;
 
 
 //// [usingDeclarations.10.js]
+"use strict";
 if (x)
     using a = null;

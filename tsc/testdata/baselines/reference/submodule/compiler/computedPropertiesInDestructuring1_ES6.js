@@ -39,6 +39,7 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 
 
 //// [computedPropertiesInDestructuring1_ES6.js]
+"use strict";
 // destructuring in variable declarations
 let foo = "bar";
 let { [foo]: bar } = { bar: "bar" };

@@ -1,0 +1,11 @@
+--- old.classIsSubtypeOfBaseType.types
++++ new.classIsSubtypeOfBaseType.types
+@@= skipped -27, +27 lines =@@
+ >bar : string
+
+     foo: {
+->foo : { bar?: string; }
++>foo : { bar?: string | undefined; }
+
+         bar?: string; // error
+ >bar : string | undefined

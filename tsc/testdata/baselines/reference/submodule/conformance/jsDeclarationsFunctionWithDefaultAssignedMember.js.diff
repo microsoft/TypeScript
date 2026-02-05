@@ -1,6 +1,6 @@
 --- old.jsDeclarationsFunctionWithDefaultAssignedMember.js
 +++ new.jsDeclarationsFunctionWithDefaultAssignedMember.js
-@@= skipped -14, +14 lines =@@
+@@= skipped -15, +15 lines =@@
 
 
  //// [index.d.ts]

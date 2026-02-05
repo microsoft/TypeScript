@@ -15,7 +15,7 @@ declare function withRest(a: any, ...args: Array<any>): void;
 >a : any
 >args : any[]
 
-var n: number[];
+declare var n: number[];
 >n : number[]
 
 fn(1) // no error

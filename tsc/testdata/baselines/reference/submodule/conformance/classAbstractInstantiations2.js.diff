@@ -1,6 +1,6 @@
 --- old.classAbstractInstantiations2.js
 +++ new.classAbstractInstantiations2.js
-@@= skipped -80, +80 lines =@@
+@@= skipped -81, +81 lines =@@
      bar() { return 2; }
  }
  class G {

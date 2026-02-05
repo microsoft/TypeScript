@@ -1,9 +1,9 @@
 --- old.asyncClass_es6.js
 +++ new.asyncClass_es6.js
-@@= skipped -4, +4 lines =@@
- }
+@@= skipped -5, +5 lines =@@
 
  //// [asyncClass_es6.js]
+ "use strict";
 -class C {
 +async class C {
  }

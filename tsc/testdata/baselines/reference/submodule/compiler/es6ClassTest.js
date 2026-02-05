@@ -34,7 +34,7 @@ class Foo  extends Bar {
 
 var f = new Foo();
 
-declare module AmbientMod {
+declare namespace AmbientMod {
 	export class Provide {
 		foo:number;
 		zoo:string;
@@ -87,6 +87,7 @@ declare module AmbientMod {
 
 
 //// [es6ClassTest.js]
+"use strict";
 class Bar {
     goo;
     prop1(x) {

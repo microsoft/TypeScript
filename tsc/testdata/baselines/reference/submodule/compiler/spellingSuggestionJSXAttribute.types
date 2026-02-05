@@ -6,21 +6,21 @@ import * as React from "react";
 >React : typeof React
 
 function MyComp2(props: { className?: string, htmlFor?: string }) {
->MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
->props : { className?: string; htmlFor?: string; }
->className : string
->htmlFor : string
+>MyComp2 : (props: { className?: string | undefined; htmlFor?: string | undefined; }) => never
+>props : { className?: string | undefined; htmlFor?: string | undefined; }
+>className : string | undefined
+>htmlFor : string | undefined
 
     return null!;
->null! : null
+>null! : never
 }
 class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
 >MyComp : MyComp
->React.Component : React.Component<{ className?: string; htmlFor?: string; }, {}, any>
+>React.Component : React.Component<{ className?: string | undefined; htmlFor?: string | undefined; }, {}, any>
 >React : typeof React
 >Component : typeof React.Component
->className : string
->htmlFor : string
+>className : string | undefined
+>htmlFor : string | undefined
 
 <a class="" />;
 ><a class="" /> : JSX.Element
@@ -50,7 +50,7 @@ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> {
 
 <MyComp2 class="" />;
 ><MyComp2 class="" /> : JSX.Element
->MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
+>MyComp2 : (props: { className?: string | undefined; htmlFor?: string | undefined; }) => never
 >class : string
 
 <MyComp for="" />;
@@ -60,6 +60,6 @@ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> {
 
 <MyComp2 for="" />;
 ><MyComp2 for="" /> : JSX.Element
->MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
+>MyComp2 : (props: { className?: string | undefined; htmlFor?: string | undefined; }) => never
 >for : string
 

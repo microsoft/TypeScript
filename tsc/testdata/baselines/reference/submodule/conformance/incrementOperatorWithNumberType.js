@@ -8,7 +8,7 @@ var NUMBER1: number[] = [1, 2];
 class A {
     public a: number;
 }
-module M {
+namespace M {
     export var n: number;
 }
 
@@ -42,6 +42,7 @@ M.n++;
 objA.a++, M.n++;
 
 //// [incrementOperatorWithNumberType.js]
+"use strict";
 // ++ operator on number type
 var NUMBER;
 var NUMBER1 = [1, 2];

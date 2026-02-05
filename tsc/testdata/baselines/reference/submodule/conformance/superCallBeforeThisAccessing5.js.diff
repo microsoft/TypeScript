@@ -1,8 +1,8 @@
 --- old.superCallBeforeThisAccessing5.js
 +++ new.superCallBeforeThisAccessing5.js
-@@= skipped -10, +10 lines =@@
-
+@@= skipped -11, +11 lines =@@
  //// [superCallBeforeThisAccessing5.js]
+ "use strict";
  class D extends null {
 +    _t;
      constructor() {

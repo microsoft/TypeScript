@@ -1,7 +1,7 @@
 --- old.subtypingWithObjectMembers4.js
 +++ new.subtypingWithObjectMembers4.js
-@@= skipped -37, +37 lines =@@
- //// [subtypingWithObjectMembers4.js]
+@@= skipped -38, +38 lines =@@
+ "use strict";
  // subtyping when property names do not match
  class Base {
 +    foo;

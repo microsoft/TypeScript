@@ -17,6 +17,7 @@ class C {
 
 
 //// [implicitAnyInCatch.js]
+"use strict";
 // this should not be an error
 try { }
 catch (error) {

@@ -1,6 +1,6 @@
 --- old.interfaceInReopenedModule.js
 +++ new.interfaceInReopenedModule.js
-@@= skipped -17, +17 lines =@@
+@@= skipped -18, +18 lines =@@
  var m;
  (function (m) {
      class n {

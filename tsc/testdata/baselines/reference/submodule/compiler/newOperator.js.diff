@@ -1,6 +1,6 @@
 --- old.newOperator.js
 +++ new.newOperator.js
-@@= skipped -78, +78 lines =@@
+@@= skipped -79, +79 lines =@@
  // Unresolved symbol
  var f = new q();
  // not legal

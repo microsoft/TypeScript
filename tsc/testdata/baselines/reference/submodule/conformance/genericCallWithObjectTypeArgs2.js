@@ -35,6 +35,7 @@ var i: I<Base, Derived>;
 var r4 = f2(i); // Base => Derived
 
 //// [genericCallWithObjectTypeArgs2.js]
+"use strict";
 class Base {
     x;
 }

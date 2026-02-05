@@ -1,0 +1,19 @@
+unusedImportDeclaration_testerB.ts(2,5): error TS2564: Property 'me' has no initializer and is not definitely assigned in the constructor.
+
+
+==== unusedImportDeclaration_testerA.ts (0 errors) ====
+    import B = require("./unusedImportDeclaration_testerB");
+    var thingy: B = {
+        me: "A"
+    };
+    declare function foo(a: string): void;
+    foo("IN " + thingy.me + "!");
+    
+==== unusedImportDeclaration_testerB.ts (1 errors) ====
+    class TesterB {
+        me: string;
+        ~~
+!!! error TS2564: Property 'me' has no initializer and is not definitely assigned in the constructor.
+    }
+    export = TesterB;
+    

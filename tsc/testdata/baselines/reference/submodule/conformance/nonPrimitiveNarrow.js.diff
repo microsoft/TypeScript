@@ -1,10 +1,10 @@
 --- old.nonPrimitiveNarrow.js
 +++ new.nonPrimitiveNarrow.js
-@@= skipped -26, +26 lines =@@
-
+@@= skipped -27, +27 lines =@@
  //// [nonPrimitiveNarrow.js]
+ "use strict";
  class Narrow {
 +    narrowed;
  }
- var a;
  if (a instanceof Narrow) {
+     a.narrowed; // ok
