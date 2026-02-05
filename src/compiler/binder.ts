@@ -1539,11 +1539,19 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindForStatement(node: ForStatement): void {
+        bind(node.initializer);
+        if (currentFlow === unreachableFlow) {
+            // follow what `bindChildren` already does for `unreachableFlow`
+            // given `node.initializer` was already bound we have to manually bind the rest of the statement instead of relying on `bindEach`
+            bind(node.condition);
+            bind(node.statement);
+            bind(node.incrementor);
+            return;
+        }
         const preLoopLabel = setContinueTarget(node, createLoopLabel());
         const preBodyLabel = createBranchLabel();
         const preIncrementorLabel = createBranchLabel();
         const postLoopLabel = createBranchLabel();
-        bind(node.initializer);
         addAntecedent(preLoopLabel, currentFlow);
         currentFlow = preLoopLabel;
         bindCondition(node.condition, preBodyLabel, postLoopLabel);
