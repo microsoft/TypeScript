@@ -21,7 +21,6 @@ import {
     getLineAndCharacterOfPosition,
     getOriginalNode,
     getSemanticJsxChildren,
-    getTokenPosOfNode,
     Identifier,
     idText,
     ImportSpecifier,
@@ -72,6 +71,7 @@ import {
     setParentRecursive,
     setTextRange,
     singleOrUndefined,
+    skipTrivia,
     SourceFile,
     spanMap,
     startOnNewLine,
@@ -285,17 +285,20 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
 
     function visitJsxElement(node: JsxElement, isChild: boolean) {
         const tagTransform = shouldUseCreateElement(node.openingElement) ? visitJsxOpeningLikeElementCreateElement : visitJsxOpeningLikeElementJSX;
-        return tagTransform(node.openingElement, node.children, isChild, /*location*/ createRange(getTokenPosOfNode(node, currentSourceFile), node.end));
+        const triviaSkippedPosition = skipTrivia(currentSourceFile.text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ false);
+        return tagTransform(node.openingElement, node.children, isChild, /*location*/ createRange(triviaSkippedPosition, node.end));
     }
 
     function visitJsxSelfClosingElement(node: JsxSelfClosingElement, isChild: boolean) {
         const tagTransform = shouldUseCreateElement(node) ? visitJsxOpeningLikeElementCreateElement : visitJsxOpeningLikeElementJSX;
-        return tagTransform(node, /*children*/ undefined, isChild, /*location*/ createRange(getTokenPosOfNode(node, currentSourceFile), node.end));
+        const triviaSkippedPosition = skipTrivia(currentSourceFile.text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ false);
+        return tagTransform(node, /*children*/ undefined, isChild, /*location*/ createRange(triviaSkippedPosition, node.end));
     }
 
     function visitJsxFragment(node: JsxFragment, isChild: boolean) {
         const tagTransform = currentFileState.importSpecifier === undefined ? visitJsxOpeningFragmentCreateElement : visitJsxOpeningFragmentJSX;
-        return tagTransform(node.openingFragment, node.children, isChild, /*location*/ createRange(getTokenPosOfNode(node, currentSourceFile), node.end));
+        const triviaSkippedPosition = skipTrivia(currentSourceFile.text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ false);
+        return tagTransform(node.openingFragment, node.children, isChild, /*location*/ createRange(triviaSkippedPosition, node.end));
     }
 
     function convertJsxChildrenToChildrenPropObject(children: readonly JsxChild[]) {
