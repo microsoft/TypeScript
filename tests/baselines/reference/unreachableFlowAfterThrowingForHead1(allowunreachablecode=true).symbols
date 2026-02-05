@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/unreachableFlowAfterThrowingForHead1.ts] ////
+
+=== unreachableFlowAfterThrowingForHead1.ts ===
+try {
+    for (
+        (function () { throw "1"; })();
+        (function* () { throw "2"; })();
+        (function* () { throw "3"; })()
+    ) { }
+}
+catch (e) { }
+>e : Symbol(e, Decl(unreachableFlowAfterThrowingForHead1.ts, 7, 7))
+
+ as  ;
+

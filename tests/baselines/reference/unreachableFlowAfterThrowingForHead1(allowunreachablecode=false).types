@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/unreachableFlowAfterThrowingForHead1.ts] ////
+
+=== unreachableFlowAfterThrowingForHead1.ts ===
+try {
+    for (
+        (function () { throw "1"; })();
+>(function () { throw "1"; })() : never
+>                               : ^^^^^
+>(function () { throw "1"; }) : () => never
+>                             : ^^^^^^^^^^^
+>function () { throw "1"; } : () => never
+>                           : ^^^^^^^^^^^
+>"1" : "1"
+>    : ^^^
+
+        (function* () { throw "2"; })();
+>(function* () { throw "2"; })() : Generator<never, never, unknown>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function* () { throw "2"; }) : () => Generator<never, never, unknown>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* () { throw "2"; } : () => Generator<never, never, unknown>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"2" : "2"
+>    : ^^^
+
+        (function* () { throw "3"; })()
+>(function* () { throw "3"; })() : Generator<never, never, unknown>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function* () { throw "3"; }) : () => Generator<never, never, unknown>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* () { throw "3"; } : () => Generator<never, never, unknown>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"3" : "3"
+>    : ^^^
+
+    ) { }
+}
+catch (e) { }
+>e : unknown
+>  : ^^^^^^^
+
+ as  ;
+>as : any
+>   : ^^^
+

@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/unreachableFlowAfterThrowingForHead2.ts] ////
+
+=== unreachableFlowAfterThrowingForHead2.ts ===
+function test1(v: 0 | 1 | 2) {
+>test1 : (v: 0 | 1 | 2) => void
+>      : ^ ^^         ^^^^^^^^^
+>v : 0 | 1 | 2
+>  : ^^^^^^^^^
+
+  try {
+    for (
+      (function () {
+>(function () {        throw new Error("");      })() : never
+>                                                     : ^^^^^
+>(function () {        throw new Error("");      }) : () => never
+>                                                   : ^^^^^^^^^^^
+>function () {        throw new Error("");      } : () => never
+>                                                 : ^^^^^^^^^^^
+
+        throw new Error("");
+>new Error("") : Error
+>              : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+      })();
+      v;
+>v : 0 | 1 | 2
+>  : ^^^^^^^^^
+
+      v++
+>v++ : number
+>    : ^^^^^^
+>v : number
+>  : ^^^^^^
+
+    ) {}
+  } catch (e) {}
+>e : unknown
+>  : ^^^^^^^
+
+  v;
+>v : 0 | 1 | 2
+>  : ^^^^^^^^^
+}
+
