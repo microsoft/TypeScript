@@ -88,10 +88,6 @@ Info seq  [hh:mm:ss:mss] Creating ExternalProject: /user/username/projects/app/t
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/file3.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/test1.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/test1.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test1.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -191,12 +187,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
-
-PolledWatches::
-/user/username/projects/app/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
@@ -459,10 +449,6 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/app/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/app/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/bower_components: *new*
   {"pollingInterval":500}
 /user/username/projects/project/node_modules: *new*
@@ -684,12 +670,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Creating ExternalProject: /user/username/projects/project/app/test2.csproj, currentDirectory: /user/username/projects/project/app
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/app/test2.csproj
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/app/node_modules/@types 1 undefined Project: /user/username/projects/project/app/test2.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/app/node_modules/@types 1 undefined Project: /user/username/projects/project/app/test2.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/app/test2.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/app/test2.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/app/test2.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/app/test2.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/app/test2.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/app/test2.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -787,30 +767,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/user/username/projects/app/bower_components:
-  {"pollingInterval":500}
-/user/username/projects/app/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/app/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/app/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/bower_components:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  {}
-/user/username/projects/project/file3.d.ts:
-  {}
 
 Timeout callback:: count: 2
 2: /user/username/projects/app/test1.csproj
@@ -964,21 +920,13 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/app/node_modules:
   {"pollingInterval":500}
-/user/username/projects/app/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/app/bower_components: *new*
   {"pollingInterval":500}
 /user/username/projects/project/app/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/project/app/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/bower_components:
   {"pollingInterval":500}
 /user/username/projects/project/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

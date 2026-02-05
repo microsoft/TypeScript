@@ -2,6 +2,7 @@
 // @target: es2015
 // @declaration: true
 // @noImplicitReferences: true
+// @types: *
 // @filename: /.src/node_modules/@types/node/index.d.ts
 declare module "url" {
     export class Url {}

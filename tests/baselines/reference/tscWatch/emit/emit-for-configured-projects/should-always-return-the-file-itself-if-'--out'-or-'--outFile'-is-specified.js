@@ -109,14 +109,6 @@ System.register("moduleFile2", [], function (exports_4, context_4) {
 
 
 
-PolledWatches::
-/home/src/projects/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/a/b/file1Consumer1.ts: *new*
   {}

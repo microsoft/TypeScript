@@ -74,10 +74,6 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/username/worksp
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/workspace/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/workspace/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/username/workspace/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/username/workspace/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -179,11 +175,7 @@ After request
 
 
 PolledWatches::
-/a/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
 /a/username/workspace/project: *new*
-  {"pollingInterval":500}
-/a/username/workspace/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /a/username/workspace/project/src: *new*
   {"pollingInterval":500}
@@ -321,11 +313,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 After running Timeout callback:: count: 1
 
 PolledWatches::
-/a/username/workspace/node_modules/@types:
-  {"pollingInterval":500}
 /a/username/workspace/project:
-  {"pollingInterval":500}
-/a/username/workspace/project/node_modules/@types:
   {"pollingInterval":500}
 /a/username/workspace/project/src:
   {"pollingInterval":500}

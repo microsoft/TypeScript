@@ -96,12 +96,6 @@ FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.scripthost.d.ts 250
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/index.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/utils.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules/@types 1 undefined Type roots
 [96mproject1/file2.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2727: [0mCannot find lib definition for 'webworker2'. Did you mean 'webworker'?
 
 [7m1[0m /// <reference lib="webworker2"/>
@@ -254,15 +248,9 @@ export declare const x = "type1";
 PolledWatches::
 /home/src/workspace/node_modules: *new*
   {"pollingInterval":500}
-/home/src/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/workspace/projects/node_modules: *new*
   {"pollingInterval":500}
-/home/src/workspace/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/workspace/projects/project1/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/workspace/projects/project1/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -674,15 +662,9 @@ project1/utils.d.ts
 PolledWatches::
 /home/src/workspace/node_modules:
   {"pollingInterval":500}
-/home/src/workspace/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/workspace/projects/node_modules:
   {"pollingInterval":500}
-/home/src/workspace/projects/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/workspace/projects/project1/node_modules:
-  {"pollingInterval":500}
-/home/src/workspace/projects/project1/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1098,15 +1080,9 @@ project1/utils.d.ts
 PolledWatches::
 /home/src/workspace/node_modules:
   {"pollingInterval":500}
-/home/src/workspace/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/workspace/projects/node_modules:
   {"pollingInterval":500}
-/home/src/workspace/projects/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/workspace/projects/project1/node_modules:
-  {"pollingInterval":500}
-/home/src/workspace/projects/project1/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

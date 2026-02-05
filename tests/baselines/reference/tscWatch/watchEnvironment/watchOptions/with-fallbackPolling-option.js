@@ -58,16 +58,12 @@ let y = 1;
 PolledWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {"pollingInterval":250}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project: *new*
   {"pollingInterval":500}
 /user/username/projects/project/commonFile1.ts: *new*
   {"pollingInterval":250}
 /user/username/projects/project/commonFile2.ts: *new*
   {"pollingInterval":250}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 

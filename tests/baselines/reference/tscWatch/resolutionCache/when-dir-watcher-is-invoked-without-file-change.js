@@ -53,10 +53,6 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefin
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/index.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/main.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
@@ -78,12 +74,6 @@ import { y } from "./app/services/generated";
 const x = y;
 
 
-
-PolledWatches::
-/home/src/workspaces/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
@@ -198,12 +188,6 @@ FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/src/app/services/g
 
 
 //// [/home/src/workspaces/project/src/main.js] file written with same contents
-
-PolledWatches::
-/home/src/workspaces/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
@@ -324,12 +308,6 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src
 export const y = 10;
 
 
-
-PolledWatches::
-/home/src/workspaces/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:

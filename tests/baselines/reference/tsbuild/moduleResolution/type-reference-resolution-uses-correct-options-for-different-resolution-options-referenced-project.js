@@ -9,6 +9,9 @@ export const theNum: TheNum = "type1";
     "composite": true,
     "typeRoots": [
       "./typeroot1"
+    ],
+    "types": [
+      "*"
     ]
   },
   "files": [
@@ -28,6 +31,9 @@ export const theNum: TheNum2 = "type2";
     "composite": true,
     "typeRoots": [
       "./typeroot2"
+    ],
+    "types": [
+      "*"
     ]
   },
   "files": [

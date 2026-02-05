@@ -242,13 +242,6 @@ File '/home/src/workspace/package.json' does not exist according to earlier cach
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-======== Resolving type reference directive 'sometype', containing file '/home/src/workspace/projects/project1/__inferred type names__.ts', root directory '/home/src/workspace/projects/project1/typeroot1'. ========
-Resolving with primary search path '/home/src/workspace/projects/project1/typeroot1'.
-File '/home/src/workspace/projects/project1/typeroot1/sometype.d.ts' does not exist.
-File '/home/src/workspace/projects/project1/typeroot1/sometype/package.json' does not exist.
-File '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
-======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
 ======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -293,7 +286,6 @@ project1/utils.d.ts
   Matched by default include pattern '**/*'
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
-  Entry point for implicit type library 'sometype'
 [[90mHH:MM:SS AM[0m] Project 'project2/tsconfig.json' is out of date because output file 'project2/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project2/tsconfig.json'...
@@ -472,7 +464,6 @@ FileWatcher:: Added:: WatchInfo: /home/package.json 2000 undefined package.json 
 FileWatcher:: Added:: WatchInfo: /package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1/sometype/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2/tsconfig.json 2000 undefined Config file /home/src/workspace/projects/project2/tsconfig.json
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2 1 undefined Wild card directory /home/src/workspace/projects/project2/tsconfig.json
@@ -895,8 +886,6 @@ PolledWatches::
 /home/src/workspace/projects/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /home/src/workspace/projects/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/workspace/projects/project1/typeroot1/sometype/package.json: *new*
   {"pollingInterval":2000}
 /package.json: *new*
   {"pollingInterval":2000}

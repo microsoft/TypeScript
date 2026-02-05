@@ -234,7 +234,7 @@ default: false
 [94m--noImplicitAny[39m
 Enable error reporting for expressions and declarations with an implied 'any' type.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--noImplicitOverride[39m
 Ensure overriding members in derived classes are marked with an override modifier.
@@ -249,7 +249,7 @@ default: false
 [94m--noImplicitThis[39m
 Enable error reporting when 'this' is given the type 'any'.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--noPropertyAccessFromIndexSignature[39m
 Enforces using indexed accessors for keys declared using an indexed type.
@@ -279,32 +279,32 @@ default: true
 [94m--strictBindCallApply[39m
 Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--strictBuiltinIteratorReturn[39m
 Built-in iterators are instantiated with a 'TReturn' type of 'undefined' instead of 'any'.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--strictFunctionTypes[39m
 When assigning functions, check to ensure parameters and the return values are subtype-compatible.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--strictNullChecks[39m
 When type checking, take into account 'null' and 'undefined'.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--strictPropertyInitialization[39m
 Check for class properties that are declared but not set in the constructor.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--useUnknownInCatchVariables[39m
 Default catch clause variables as 'unknown' instead of 'any'.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 ### Watch and Build Modes
 

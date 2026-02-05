@@ -148,12 +148,8 @@ const classnames_1 = __importDefault(require("classnames"));
 
 
 PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/package.json: *new*
   {"pollingInterval":2000}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules/classnames/package.json: *new*
   {"pollingInterval":2000}
 /users/username/projects/project/node_modules/package.json: *new*
@@ -227,12 +223,8 @@ export {}; declare module "classnames" { interface Result {} }
 
 
 PolledWatches *deleted*::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/package.json:
   {"pollingInterval":2000}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules/classnames/package.json:
   {"pollingInterval":2000}
 /users/username/projects/project/node_modules/package.json:
@@ -375,12 +367,8 @@ Output::
 
 
 PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/package.json: *new*
   {"pollingInterval":2000}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules/classnames/package.json: *new*
   {"pollingInterval":2000}
 /users/username/projects/project/node_modules/package.json: *new*

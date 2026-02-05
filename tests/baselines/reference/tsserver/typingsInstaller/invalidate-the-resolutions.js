@@ -73,10 +73,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/pro
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -100,14 +96,10 @@ TI:: Creating typing installer
 PolledWatches::
 /home/src/projects/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/package.json: *new*
   {"pollingInterval":2000}
 /home/src/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-/home/src/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/project/node_modules/fooo/package.json: *new*
   {"pollingInterval":2000}
 /home/src/projects/project/node_modules/package.json: *new*
@@ -277,16 +269,12 @@ After request
 PolledWatches::
 /home/src/projects/node_modules:
   {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/package.json:
   {"pollingInterval":2000}
 /home/src/projects/project/bower_components: *new*
   {"pollingInterval":500}
 /home/src/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/node_modules/fooo/package.json:
   {"pollingInterval":2000}
 /home/src/projects/project/node_modules/package.json:
@@ -557,16 +545,12 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/projects/node_modules:
   {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/package.json:
   {"pollingInterval":2000}
 /home/src/projects/project/bower_components:
   {"pollingInterval":500}
 /home/src/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/node_modules/fooo/package.json:
   {"pollingInterval":2000}
 /home/src/projects/project/node_modules/package.json:

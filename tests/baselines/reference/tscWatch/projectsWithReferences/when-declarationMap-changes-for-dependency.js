@@ -310,14 +310,6 @@ export declare const m: typeof mod;
 }
 
 
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/sample1/logic/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}

@@ -7,6 +7,7 @@
 ////  "compilerOptions": {
 ////    "lib": ["es5"],
 ////    "module": "commonjs",
+////    "types": ["*"]
 ////  },
 ////}
 

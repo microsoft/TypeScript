@@ -51,6 +51,7 @@ declare class TestLib {
                 compilerOptions: {
                     module: "amd",
                     typeRoots: ["../lib/@types", "../lib/@app"],
+                    types: ["*"],
                     traceResolution: true,
                 },
             }),

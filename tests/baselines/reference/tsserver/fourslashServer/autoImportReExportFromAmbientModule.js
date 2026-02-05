@@ -8,6 +8,9 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "options": {
           "module": "commonjs",
+          "types": [
+            "*"
+          ],
           "lib": [
             "es5"
           ],
@@ -42,6 +45,7 @@ declare module "fs" {
 {
   "compilerOptions": {
     "module": "commonjs",
+    "types": ["*"],
     "lib": ["es5"]
   }
 }
@@ -65,6 +69,9 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  ],
  "options": {
   "module": 1,
+  "types": [
+   "*"
+  ],
   "lib": [
    "lib.es5.d.ts"
   ],
@@ -181,7 +188,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"commonjs\",\n    \"lib\": [\"es5\"]\n  }\n}"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n  \"compilerOptions\": {\n    \"module\": \"commonjs\",\n    \"types\": [\"*\"],\n    \"lib\": [\"es5\"]\n  }\n}"
 	/home/src/workspaces/project/node_modules/@types/fs-extra/index.d.ts Text-1 "export * from \"fs\";"
 	/home/src/workspaces/project/node_modules/@types/node/index.d.ts Text-1 "declare module \"fs\" {\n  export function accessSync(path: string): void;\n}"
 

@@ -130,13 +130,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project1/tsconfig.json'...
 
-======== Resolving type reference directive 'sometype', containing file '/home/src/workspace/projects/project1/__inferred type names__.ts', root directory '/home/src/workspace/projects/project1/typeroot1'. ========
-Resolving with primary search path '/home/src/workspace/projects/project1/typeroot1'.
-File '/home/src/workspace/projects/project1/typeroot1/sometype.d.ts' does not exist.
-File '/home/src/workspace/projects/project1/typeroot1/sometype/package.json' does not exist.
-File '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
-======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
@@ -158,7 +151,6 @@ project1/utils.d.ts
   Matched by default include pattern '**/*'
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
-  Entry point for implicit type library 'sometype'
 [[90mHH:MM:SS AM[0m] Project 'project2/tsconfig.json' is out of date because output file 'project2/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project2/tsconfig.json'...

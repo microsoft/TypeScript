@@ -40,6 +40,9 @@ class TestClass1 {
       "../lib/@types",
       "../lib/@app"
     ],
+    "types": [
+      "*"
+    ],
     "traceResolution": true
   }
 }
@@ -80,6 +83,9 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/test/tsconfig
   "typeRoots": [
    "/user/username/projects/myproject/lib/@types",
    "/user/username/projects/myproject/lib/@app"
+  ],
+  "types": [
+   "*"
   ],
   "traceResolution": true,
   "configFilePath": "/user/username/projects/myproject/test/tsconfig.json"
@@ -185,6 +191,9 @@ Info seq  [hh:mm:ss:mss] event:
             "module": "amd",
             "typeRoots": [
               "",
+              ""
+            ],
+            "types": [
               ""
             ],
             "traceResolution": true

@@ -156,14 +156,6 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/pa
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/package.json 2000 undefined File location affecting resolution
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
 ../../tslibs/TS/Lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
 packages/package1/dist/index.d.ts
@@ -187,17 +179,9 @@ export {};
 
 
 PolledWatches::
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -283,21 +267,13 @@ sysLog:: /home/src/projects/project/packages/package1/dist:: Changing watcher to
 
 
 PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package1/dist: *new*
   {"pollingInterval":500}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {"pollingInterval":250}
 /home/src/projects/project/packages/package2/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -425,17 +401,9 @@ sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 PolledWatches::
 /home/src/projects/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules:
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -669,17 +637,9 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_
 PolledWatches::
 /home/src/projects/node_modules:
   {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules:
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -780,17 +740,9 @@ packages/package2/src/index.ts
 //// [/home/src/projects/project/packages/package2/dist/index.d.ts] file written with same contents Inode:: 129
 
 PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules:
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::

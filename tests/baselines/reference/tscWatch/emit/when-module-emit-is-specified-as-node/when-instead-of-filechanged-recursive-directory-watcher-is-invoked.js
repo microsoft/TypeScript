@@ -66,16 +66,6 @@ var z = 10;
 
 
 
-PolledWatches::
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/rootFolder/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/rootFolder/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/a/rootFolder/project/Scripts/Javascript.js: *new*
   {}

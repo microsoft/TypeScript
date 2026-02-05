@@ -9,8 +9,8 @@ parserharness.ts(24,13): error TS7005: Variable 'run' implicitly has an 'any' ty
 parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
 parserharness.ts(26,13): error TS7005: Variable '__dirname' implicitly has an 'any' type.
 parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
-parserharness.ts(43,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-parserharness.ts(44,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+parserharness.ts(43,19): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+parserharness.ts(44,14): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 parserharness.ts(52,21): error TS7010: 'on', which lacks return-type annotation, implicitly has an 'any' return type.
 parserharness.ts(116,31): error TS7006: Parameter 'actual' implicitly has an 'any' type.
 parserharness.ts(116,39): error TS7006: Parameter 'expected' implicitly has an 'any' type.
@@ -274,10 +274,10 @@ parserharness.ts(2067,62): error TS18048: 'comparison' is possibly 'undefined'.
         eval(typescriptServiceFile);
     } else if (typeof require === "function") {
                       ~~~~~~~
-!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+!!! error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
         var vm = require('vm');
                  ~~~~~~~
-!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+!!! error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
         vm.runInThisContext(typescriptServiceFile, 'typescriptServices.js');
     } else {
         throw new Error('Unknown context');

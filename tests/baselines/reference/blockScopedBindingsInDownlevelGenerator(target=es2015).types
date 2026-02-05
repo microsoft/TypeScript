@@ -29,6 +29,7 @@ function* a() {
 
     yield i
 >yield i : any
+>        : ^^^
 >i : number
 >  : ^^^^^^
   }

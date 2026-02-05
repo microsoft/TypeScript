@@ -29,7 +29,11 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "openExternalProject",
       "arguments": {
         "projectFileName": "/home/src/projects/project/a/app/test.csproj",
-        "options": {},
+        "options": {
+          "types": [
+            "*"
+          ]
+        },
         "rootFiles": [
           {
             "fileName": "/home/src/projects/project/a/b/app.js"
@@ -182,6 +186,9 @@ TI:: [hh:mm:ss:mss] Got install request
         "/home/src/projects/project/a/b/app.js"
       ],
       "compilerOptions": {
+        "types": [
+          "*"
+        ],
         "allowNonTsExtensions": true,
         "noEmitForJsFiles": true
       },
@@ -236,6 +243,9 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
+        "types": [
+          "*"
+        ],
         "allowNonTsExtensions": true,
         "noEmitForJsFiles": true
       },
@@ -256,6 +266,9 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
+          "types": [
+            "*"
+          ],
           "allowNonTsExtensions": true,
           "noEmitForJsFiles": true
         },
@@ -288,7 +301,11 @@ Info seq  [hh:mm:ss:mss] event:
             "deferred": 0,
             "deferredSize": 0
           },
-          "compilerOptions": {},
+          "compilerOptions": {
+            "types": [
+              ""
+            ]
+          },
           "typeAcquisition": {
             "enable": true,
             "include": false,

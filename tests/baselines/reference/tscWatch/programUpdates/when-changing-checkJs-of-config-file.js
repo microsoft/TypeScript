@@ -42,10 +42,6 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 unde
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/b.js :: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/b.js :: WatchInfo: /user/username/projects/myproject 0 undefined Failed Lookup Locations
 [96mb.ts[0m:[93m1[0m:[93m25[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module './a.js'. '/user/username/projects/myproject/a.js' implicitly has an 'any' type.
@@ -65,12 +61,6 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 export {};
 
 
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
@@ -155,12 +145,6 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.js 250 unde
 
 
 //// [/user/username/projects/myproject/b.js] file written with same contents
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:

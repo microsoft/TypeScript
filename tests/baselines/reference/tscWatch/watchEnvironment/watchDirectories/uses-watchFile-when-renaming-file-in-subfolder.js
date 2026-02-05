@@ -42,11 +42,7 @@ Output::
 
 
 PolledWatches::
-/a/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /a/username/projects/project: *new*
-  {"pollingInterval":500}
-/a/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /a/username/projects/project/src: *new*
   {"pollingInterval":500}
@@ -94,11 +90,7 @@ sysLog:: /a/username/projects/project/src/file1.ts:: Changing watcher to Missing
 
 
 PolledWatches::
-/a/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /a/username/projects/project:
-  {"pollingInterval":500}
-/a/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 /a/username/projects/project/src:
   {"pollingInterval":500}
@@ -137,11 +129,7 @@ Output::
 
 
 PolledWatches::
-/a/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /a/username/projects/project:
-  {"pollingInterval":500}
-/a/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 /a/username/projects/project/src:
   {"pollingInterval":500}

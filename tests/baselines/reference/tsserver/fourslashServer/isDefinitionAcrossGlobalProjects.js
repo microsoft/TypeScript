@@ -208,12 +208,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es5.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/a/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
@@ -314,14 +308,6 @@ watchedFiles::
 /home/src/workspaces/project/tsconfig.settings.json: *new*
   {"pollingInterval":2000}
 
-watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/a/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/node_modules/@types: *new*
-  {}
-
 Projects::
 /home/src/workspaces/project/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
@@ -398,10 +384,6 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  ]
 }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
@@ -540,16 +522,6 @@ watchedFiles::
 /home/src/workspaces/project/tsconfig.settings.json:
   {"pollingInterval":2000}
 
-watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules/@types:
-  {}
-  {} *new*
-/home/src/workspaces/project/a/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules/@types:
-  {}
-  {} *new*
-
 Projects::
 /home/src/workspaces/project/a/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
@@ -588,12 +560,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -654,12 +620,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/c/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -821,48 +781,6 @@ Info seq  [hh:mm:ss:mss] response:
       ]
     }
 After Request
-watchedFiles::
-/home/src/tslibs/TS/Lib/lib.decorators.d.ts:
-  {"pollingInterval":500}
-/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
-  {"pollingInterval":500}
-/home/src/tslibs/TS/Lib/lib.es5.d.ts:
-  {"pollingInterval":500}
-/home/src/workspaces/project/a/index.d.ts:
-  {"pollingInterval":2000}
-/home/src/workspaces/project/a/tsconfig.json:
-  {"pollingInterval":2000}
-/home/src/workspaces/project/b/index.ts:
-  {"pollingInterval":500}
-/home/src/workspaces/project/b/tsconfig.json:
-  {"pollingInterval":2000}
-/home/src/workspaces/project/c/index.ts:
-  {"pollingInterval":500}
-/home/src/workspaces/project/c/tsconfig.json:
-  {"pollingInterval":2000}
-/home/src/workspaces/project/tsconfig.json:
-  {"pollingInterval":2000}
-/home/src/workspaces/project/tsconfig.settings.json:
-  {"pollingInterval":2000}
-
-watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules/@types:
-  {}
-  {}
-  {} *new*
-  {} *new*
-/home/src/workspaces/project/a/node_modules/@types:
-  {}
-/home/src/workspaces/project/b/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/c/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/node_modules/@types:
-  {}
-  {}
-  {} *new*
-  {} *new*
-
 Projects::
 /home/src/workspaces/project/a/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
@@ -1102,24 +1020,6 @@ watchedFiles *deleted*::
 /home/src/workspaces/project/b/index.ts:
   {"pollingInterval":500}
 
-watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules/@types:
-  {}
-  {}
-  {}
-  {}
-/home/src/workspaces/project/a/node_modules/@types:
-  {}
-/home/src/workspaces/project/b/node_modules/@types:
-  {}
-/home/src/workspaces/project/c/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules/@types:
-  {}
-  {}
-  {}
-  {}
-
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
@@ -1286,24 +1186,6 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/tsconfig.settings.json:
   {"pollingInterval":2000}
-
-watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules/@types:
-  {}
-  {}
-  {}
-  {}
-/home/src/workspaces/project/a/node_modules/@types:
-  {}
-/home/src/workspaces/project/b/node_modules/@types:
-  {}
-/home/src/workspaces/project/c/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules/@types:
-  {}
-  {}
-  {}
-  {}
 
 Projects::
 /home/src/workspaces/project/a/tsconfig.json (Configured)
@@ -1653,24 +1535,6 @@ watchedFiles *deleted*::
 /home/src/workspaces/project/c/index.ts:
   {"pollingInterval":500}
 
-watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules/@types:
-  {}
-  {}
-  {}
-  {}
-/home/src/workspaces/project/a/node_modules/@types:
-  {}
-/home/src/workspaces/project/b/node_modules/@types:
-  {}
-/home/src/workspaces/project/c/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules/@types:
-  {}
-  {}
-  {}
-  {}
-
 ScriptInfos::
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
@@ -1828,24 +1692,6 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/tsconfig.settings.json:
   {"pollingInterval":2000}
-
-watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules/@types:
-  {}
-  {}
-  {}
-  {}
-/home/src/workspaces/project/a/node_modules/@types:
-  {}
-/home/src/workspaces/project/b/node_modules/@types:
-  {}
-/home/src/workspaces/project/c/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules/@types:
-  {}
-  {}
-  {}
-  {}
 
 Projects::
 /home/src/workspaces/project/a/tsconfig.json (Configured)

@@ -8971,6 +8971,14 @@ export function importSyntaxAffectsModuleResolution(options: CompilerOptions): b
         || getResolvePackageJsonImports(options);
 }
 
+/**
+ * @internal
+ * Returns true if this option's types array includes "*"
+ */
+export function usesWildcardTypes(options: CompilerOptions): options is CompilerOptions & { types: string[]; } {
+    return some(options.types, t => t === "*");
+}
+
 type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };
 function createComputedCompilerOptions<T extends Record<string, CompilerOptionKeys[]>>(
     options: {

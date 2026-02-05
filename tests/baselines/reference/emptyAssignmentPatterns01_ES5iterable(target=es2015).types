@@ -3,18 +3,25 @@
 === emptyAssignmentPatterns01_ES5iterable.ts ===
 var a: any;
 >a : any
+>  : ^^^
 
 ({} = a);
 >({} = a) : any
+>         : ^^^
 >{} = a : any
+>       : ^^^
 >{} : {}
 >   : ^^
 >a : any
+>  : ^^^
 
 ([] = a);
 >([] = a) : any
+>         : ^^^
 >[] = a : any
+>       : ^^^
 >[] : []
 >   : ^^
 >a : any
+>  : ^^^
 

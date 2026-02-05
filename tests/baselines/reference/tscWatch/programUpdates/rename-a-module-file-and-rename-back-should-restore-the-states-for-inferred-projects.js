@@ -43,12 +43,6 @@ T.bar();
 
 
 
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
@@ -113,11 +107,7 @@ Output::
 //// [/users/username/projects/project/file1.js] file written with same contents
 
 PolledWatches::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/project/moduleFile: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -195,12 +185,6 @@ export function bar() { }
 ;
 
 
-
-PolledWatches::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /users/username/projects/project/moduleFile:

@@ -78,13 +78,13 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
             TestServerHost.createWatchedSystem({
                 "/home/src/workspaces/project/packages/pkg1_index.ts": `export const theNum: TheNum = "type1";`,
                 "/home/src/workspaces/project/packages/pkg1.tsconfig.json": jsonToReadableText({
-                    compilerOptions: { composite: true, typeRoots: ["./typeroot1"] },
+                    compilerOptions: { composite: true, typeRoots: ["./typeroot1"], types: ["*"] },
                     files: ["./pkg1_index.ts"],
                 }),
                 "/home/src/workspaces/project/packages/typeroot1/sometype/index.d.ts": dedent`declare type TheNum = "type1";`,
                 "/home/src/workspaces/project/packages/pkg2_index.ts": `export const theNum: TheNum2 = "type2";`,
                 "/home/src/workspaces/project/packages/pkg2.tsconfig.json": jsonToReadableText({
-                    compilerOptions: { composite: true, typeRoots: ["./typeroot2"] },
+                    compilerOptions: { composite: true, typeRoots: ["./typeroot2"], types: ["*"] },
                     files: ["./pkg2_index.ts"],
                 }),
                 "/home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts": dedent`declare type TheNum2 = "type2";`,
@@ -163,7 +163,7 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
             TestServerHost.createWatchedSystem({
                 "/home/src/workspaces/project/a/src/index.ts": "",
                 "/home/src/workspaces/project/a/tsconfig.json": jsonToReadableText({
-                    compilerOptions: { strict: true },
+                    compilerOptions: { strict: true, types: ["*"] },
                 }),
                 "/home/src/workspaces/project/b/src/index.ts": dedent`
                     import pg from "pg";

@@ -29,7 +29,7 @@ const angularCorePackageJson: File = {
 };
 const tsconfig: File = {
     path: "/user/username/projects/project/tsconfig.json",
-    content: `{ "compilerOptions": { "module": "commonjs" } }`,
+    content: `{ "compilerOptions": { "module": "commonjs", "types": ["*"] } }`,
 };
 const packageJson: File = {
     path: "/user/username/projects/project/package.json",

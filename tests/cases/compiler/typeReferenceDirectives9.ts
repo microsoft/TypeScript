@@ -4,6 +4,7 @@
 // @noImplicitReferences: true
 // @declaration: true
 // @typeRoots: /types
+// @types: *
 // @traceResolution: true
 // @currentDirectory: /
 

@@ -80,37 +80,16 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/index.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/callback.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es5.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/home/src/workspaces/project/node_modules/@types/yargs/package.json SVC-1-0 "{\n    \"name\": \"@types/yargs\",\n    \"version\": \"1.0.0\",\n    \"types\": \"./index.d.ts\"\n}"
-	/home/src/workspaces/project/node_modules/@types/yargs/callback.d.ts Text-1 "export declare class Yargs { positional(): Yargs; }"
-	/home/src/workspaces/project/node_modules/@types/yargs/index.d.ts Text-1 "import { Yargs } from \"./callback\";\nexport declare function command(command: string, cb: (yargs: Yargs) => void): void;"
 
 
 	../../../../../tslibs/TS/Lib/lib.es5.d.ts
@@ -121,14 +100,10 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Library referenced via 'decorators.legacy' from file '../../../../../tslibs/TS/Lib/lib.es5.d.ts'
 	package.json
 	  Root file specified for compilation
-	callback.d.ts
-	  Imported via "./callback" from file 'index.d.ts' with packageId '@types/yargs/callback.d.ts@1.0.0'
-	index.d.ts
-	  Entry point for implicit type library 'yargs' with packageId '@types/yargs/index.d.ts@1.0.0'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -157,13 +132,7 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/tsconfig.json: *new*
   {"pollingInterval":2000}
-/home/src/workspaces/project/node_modules/@types/yargs/callback.d.ts: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types/yargs/index.d.ts: *new*
-  {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/@types/yargs/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/home/src/workspaces/project/node_modules/@types/yargs/package.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/yargs/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -171,26 +140,6 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/tsconfig.json: *new*
   {"pollingInterval":2000}
-
-watchedDirectories::
-/home/src/workspaces/project/node_modules/@types/yargs: *new*
-  {}
-
-watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/node_modules: *new*
-  {}
-/home/src/workspaces/project/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/node_modules/@types/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/node_modules/@types/yargs/node_modules: *new*
-  {}
-/home/src/workspaces/project/node_modules/@types/yargs/node_modules/@types: *new*
-  {}
-/home/src/workspaces/project/node_modules/node_modules/@types: *new*
-  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
@@ -207,14 +156,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es5.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/home/src/workspaces/project/node_modules/@types/yargs/callback.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/home/src/workspaces/project/node_modules/@types/yargs/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -237,18 +178,16 @@ Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject2*, 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/yargs/callback.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/yargs/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (6)
@@ -270,13 +209,12 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Imported via "./callback" from file 'node_modules/@types/yargs/index.d.ts' with packageId '@types/yargs/callback.d.ts@1.0.0'
 	node_modules/@types/yargs/index.d.ts
 	  Imported via "yargs" from file 'index.ts' with packageId '@types/yargs/index.d.ts@1.0.0'
-	  Entry point for implicit type library 'yargs' with packageId '@types/yargs/index.d.ts@1.0.0'
 	index.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
@@ -313,15 +251,14 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/tsconfig.json:
   {"pollingInterval":2000}
-/home/src/workspaces/project/node_modules/@types/yargs/callback.d.ts:
+/home/src/workspaces/project/node_modules/@types/yargs/callback.d.ts: *new*
   {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types/yargs/index.d.ts:
+/home/src/workspaces/project/node_modules/@types/yargs/index.d.ts: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/node_modules/@types/yargs/jsconfig.json:
   {"pollingInterval":2000}
-/home/src/workspaces/project/node_modules/@types/yargs/package.json:
+/home/src/workspaces/project/node_modules/@types/yargs/package.json: *new*
   {"pollingInterval":2000}
-  {"pollingInterval":2000} *new*
 /home/src/workspaces/project/node_modules/@types/yargs/tsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/jsconfig.json:
@@ -338,26 +275,9 @@ watchedDirectories::
   {}
 /home/src/workspaces/project: *new*
   {}
-/home/src/workspaces/project/node_modules/@types/yargs:
-  {}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules/@types:
-  {}
-  {} *new*
-/home/src/workspaces/project/node_modules:
-  {}
-  {} *new*
-/home/src/workspaces/project/node_modules/@types:
-  {}
-  {} *new*
-/home/src/workspaces/project/node_modules/@types/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules/@types/yargs/node_modules:
-  {}
-/home/src/workspaces/project/node_modules/@types/yargs/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules/node_modules/@types:
+/home/src/workspaces/project/node_modules: *new*
   {}
 
 Projects::
@@ -389,16 +309,14 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2* *default*
-/home/src/workspaces/project/node_modules/@types/yargs/callback.d.ts *changed*
+/home/src/workspaces/project/node_modules/@types/yargs/callback.d.ts *new*
     version: Text-1
-    containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
-        /dev/null/inferredProject2* *new*
-/home/src/workspaces/project/node_modules/@types/yargs/index.d.ts *changed*
+    containingProjects: 1
+        /dev/null/inferredProject2*
+/home/src/workspaces/project/node_modules/@types/yargs/index.d.ts *new*
     version: Text-1
-    containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
-        /dev/null/inferredProject2* *new*
+    containingProjects: 1
+        /dev/null/inferredProject2*
 /home/src/workspaces/project/node_modules/@types/yargs/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -499,7 +417,6 @@ watchedFiles::
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/yargs/package.json:
   {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/@types/yargs/tsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules/jsconfig.json:
@@ -523,30 +440,13 @@ watchedDirectories::
 /home/src/workspaces/project:
   {}
   {} *new*
-/home/src/workspaces/project/node_modules/@types/yargs:
-  {}
 
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules: *new*
   {}
-/home/src/workspaces/node_modules/@types:
-  {}
-  {}
 /home/src/workspaces/project/node_modules:
   {}
-  {}
   {} *new*
-/home/src/workspaces/project/node_modules/@types:
-  {}
-  {}
-/home/src/workspaces/project/node_modules/@types/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules/@types/yargs/node_modules:
-  {}
-/home/src/workspaces/project/node_modules/@types/yargs/node_modules/@types:
-  {}
-/home/src/workspaces/project/node_modules/node_modules/@types:
-  {}
 
 Projects::
 /dev/null/auxiliaryProject1* (Auxiliary) *new*
@@ -587,13 +487,11 @@ ScriptInfos::
 /home/src/workspaces/project/node_modules/@types/yargs/callback.d.ts *changed*
     version: Text-1
     sourceMapFilePath: false *changed*
-    containingProjects: 2
-        /dev/null/inferredProject1*
+    containingProjects: 1
         /dev/null/inferredProject2*
 /home/src/workspaces/project/node_modules/@types/yargs/index.d.ts
     version: Text-1
-    containingProjects: 2
-        /dev/null/inferredProject1*
+    containingProjects: 1
         /dev/null/inferredProject2*
 /home/src/workspaces/project/node_modules/@types/yargs/package.json (Open)
     version: SVC-1-0
