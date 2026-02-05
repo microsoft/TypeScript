@@ -18,9 +18,14 @@ function test1(v: 0 | 1 | 2) {
       v++
 >v : Symbol(v, Decl(unreachableFlowAfterThrowingForHead2.ts, 0, 15))
 
-    ) {}
+    ) {
+      console.log("1");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
   } catch (e) {}
->e : Symbol(e, Decl(unreachableFlowAfterThrowingForHead2.ts, 9, 11))
+>e : Symbol(e, Decl(unreachableFlowAfterThrowingForHead2.ts, 11, 11))
 
   v;
 >v : Symbol(v, Decl(unreachableFlowAfterThrowingForHead2.ts, 0, 15))

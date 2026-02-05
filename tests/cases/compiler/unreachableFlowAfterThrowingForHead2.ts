@@ -10,7 +10,9 @@ function test1(v: 0 | 1 | 2) {
       })();
       v;
       v++
-    ) {}
+    ) {
+      console.log("1");
+    }
   } catch (e) {}
   v;
 }

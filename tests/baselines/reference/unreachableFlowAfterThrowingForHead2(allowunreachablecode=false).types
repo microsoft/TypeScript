@@ -36,7 +36,19 @@ function test1(v: 0 | 1 | 2) {
 >v : number
 >  : ^^^^^^
 
-    ) {}
+    ) {
+      console.log("1");
+>console.log("1") : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"1" : "1"
+>    : ^^^
+    }
   } catch (e) {}
 >e : unknown
 >  : ^^^^^^^

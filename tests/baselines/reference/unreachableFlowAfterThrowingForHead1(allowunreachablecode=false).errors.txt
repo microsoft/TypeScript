@@ -1,13 +1,18 @@
-unreachableFlowAfterThrowingForHead1.ts(9,2): error TS2304: Cannot find name 'as'.
+unreachableFlowAfterThrowingForHead1.ts(7,9): error TS7027: Unreachable code detected.
+unreachableFlowAfterThrowingForHead1.ts(11,2): error TS2304: Cannot find name 'as'.
 
 
-==== unreachableFlowAfterThrowingForHead1.ts (1 errors) ====
+==== unreachableFlowAfterThrowingForHead1.ts (2 errors) ====
     try {
         for (
             (function () { throw "1"; })();
             (function* () { throw "2"; })();
             (function* () { throw "3"; })()
-        ) { }
+        ) {
+            console.log("1");
+            ~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+        }
     }
     catch (e) { }
      as  ;

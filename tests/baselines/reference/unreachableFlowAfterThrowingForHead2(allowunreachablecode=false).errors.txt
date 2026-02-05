@@ -1,0 +1,21 @@
+unreachableFlowAfterThrowingForHead2.ts(10,7): error TS7027: Unreachable code detected.
+
+
+==== unreachableFlowAfterThrowingForHead2.ts (1 errors) ====
+    function test1(v: 0 | 1 | 2) {
+      try {
+        for (
+          (function () {
+            throw new Error("");
+          })();
+          v;
+          v++
+        ) {
+          console.log("1");
+          ~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
+        }
+      } catch (e) {}
+      v;
+    }
+    
