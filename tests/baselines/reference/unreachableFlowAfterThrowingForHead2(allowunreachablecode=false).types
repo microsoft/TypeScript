@@ -7,6 +7,55 @@ function test1(v: 0 | 1 | 2) {
 >v : 0 | 1 | 2
 >  : ^^^^^^^^^
 
+  for (
+    (function () {
+>(function () {      throw new Error("");    })() : never
+>                                                 : ^^^^^
+>(function () {      throw new Error("");    }) : () => never
+>                                               : ^^^^^^^^^^^
+>function () {      throw new Error("");    } : () => never
+>                                             : ^^^^^^^^^^^
+
+      throw new Error("");
+>new Error("") : Error
+>              : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"" : ""
+>   : ^^
+
+    })();
+    v;
+>v : 0 | 1 | 2
+>  : ^^^^^^^^^
+
+    v++
+>v++ : number
+>    : ^^^^^^
+>v : number
+>  : ^^^^^^
+
+  ) {
+    console.log("1");
+>console.log("1") : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"1" : "1"
+>    : ^^^
+  }
+}
+
+function test2(v: 0 | 1 | 2) {
+>test2 : (v: 0 | 1 | 2) => void
+>      : ^ ^^         ^^^^^^^^^
+>v : 0 | 1 | 2
+>  : ^^^^^^^^^
+
   try {
     for (
       (function () {

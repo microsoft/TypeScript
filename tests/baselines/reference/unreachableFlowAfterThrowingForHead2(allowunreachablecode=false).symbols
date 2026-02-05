@@ -5,6 +5,30 @@ function test1(v: 0 | 1 | 2) {
 >test1 : Symbol(test1, Decl(unreachableFlowAfterThrowingForHead2.ts, 0, 0))
 >v : Symbol(v, Decl(unreachableFlowAfterThrowingForHead2.ts, 0, 15))
 
+  for (
+    (function () {
+      throw new Error("");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    })();
+    v;
+>v : Symbol(v, Decl(unreachableFlowAfterThrowingForHead2.ts, 0, 15))
+
+    v++
+>v : Symbol(v, Decl(unreachableFlowAfterThrowingForHead2.ts, 0, 15))
+
+  ) {
+    console.log("1");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+  }
+}
+
+function test2(v: 0 | 1 | 2) {
+>test2 : Symbol(test2, Decl(unreachableFlowAfterThrowingForHead2.ts, 10, 1))
+>v : Symbol(v, Decl(unreachableFlowAfterThrowingForHead2.ts, 12, 15))
+
   try {
     for (
       (function () {
@@ -13,10 +37,10 @@ function test1(v: 0 | 1 | 2) {
 
       })();
       v;
->v : Symbol(v, Decl(unreachableFlowAfterThrowingForHead2.ts, 0, 15))
+>v : Symbol(v, Decl(unreachableFlowAfterThrowingForHead2.ts, 12, 15))
 
       v++
->v : Symbol(v, Decl(unreachableFlowAfterThrowingForHead2.ts, 0, 15))
+>v : Symbol(v, Decl(unreachableFlowAfterThrowingForHead2.ts, 12, 15))
 
     ) {
       console.log("1");
@@ -25,9 +49,9 @@ function test1(v: 0 | 1 | 2) {
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
     }
   } catch (e) {}
->e : Symbol(e, Decl(unreachableFlowAfterThrowingForHead2.ts, 11, 11))
+>e : Symbol(e, Decl(unreachableFlowAfterThrowingForHead2.ts, 23, 11))
 
   v;
->v : Symbol(v, Decl(unreachableFlowAfterThrowingForHead2.ts, 0, 15))
+>v : Symbol(v, Decl(unreachableFlowAfterThrowingForHead2.ts, 12, 15))
 }
 
