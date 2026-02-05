@@ -44,12 +44,6 @@ T.bar();
 
 
 
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
@@ -128,11 +122,7 @@ export function bar() { }
 
 
 PolledWatches::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/project/moduleFile: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -227,12 +217,6 @@ export function bar() { }
 ;
 
 
-
-PolledWatches::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /users/username/projects/project/moduleFile:

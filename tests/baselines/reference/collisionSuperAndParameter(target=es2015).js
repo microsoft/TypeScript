@@ -65,6 +65,7 @@ class Foo4 extends Foo {
 }
 
 //// [collisionSuperAndParameter.js]
+"use strict";
 class Foo {
     a() {
         var lamda = (_super) => {

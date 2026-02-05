@@ -18,6 +18,7 @@ class E extends B {
 }
 
 //// [classAbstractExtends.js]
+"use strict";
 class A {
     foo() { }
 }

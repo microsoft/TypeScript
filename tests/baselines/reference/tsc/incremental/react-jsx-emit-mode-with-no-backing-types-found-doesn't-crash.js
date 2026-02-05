@@ -26,7 +26,10 @@ export const App = () => <div propA={true}></div>;
     "module": "commonjs",
     "jsx": "react-jsx",
     "incremental": true,
-    "jsxImportSource": "react"
+    "jsxImportSource": "react",
+    "types": [
+      "react"
+    ]
   }
 }
 

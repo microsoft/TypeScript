@@ -66,6 +66,7 @@ class Test6 {
 
 
 //// [unusedPrivateMembers.js]
+"use strict";
 var Test1 = /** @class */ (function () {
     function Test1() {
     }

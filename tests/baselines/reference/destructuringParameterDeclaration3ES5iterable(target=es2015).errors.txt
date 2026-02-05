@@ -1,3 +1,4 @@
+error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 destructuringParameterDeclaration3ES5iterable.ts(12,13): error TS7019: Rest parameter 'a' implicitly has an 'any[]' type.
 destructuringParameterDeclaration3ES5iterable.ts(16,14): error TS7031: Binding element 'a' implicitly has an 'any' type.
 destructuringParameterDeclaration3ES5iterable.ts(16,17): error TS7031: Binding element 'b' implicitly has an 'any' type.
@@ -13,6 +14,7 @@ destructuringParameterDeclaration3ES5iterable.ts(30,5): error TS2345: Argument o
   Source has 2 element(s) but target requires 3.
 
 
+!!! error TS5101: Option 'downlevelIteration' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== destructuringParameterDeclaration3ES5iterable.ts (11 errors) ====
     // If the parameter is a rest parameter, the parameter type is any[]
     // A type annotation for a rest parameter must denote an array type.

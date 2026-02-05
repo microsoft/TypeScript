@@ -46,6 +46,7 @@ class class2 {
 }
 
 //// [collisionThisExpressionAndLocalVarInAccessors.js]
+"use strict";
 var class1 = /** @class */ (function () {
     function class1() {
     }

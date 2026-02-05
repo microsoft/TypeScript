@@ -153,10 +153,6 @@ exports.App = App;
 
 
 PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules/react/jsx-runtime/package.json: *new*
   {"pollingInterval":2000}
 
@@ -230,10 +226,6 @@ Input::
 
 
 PolledWatches *deleted*::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules/react/jsx-runtime/package.json:
   {"pollingInterval":2000}
 
@@ -381,10 +373,6 @@ exports.App = App;
 
 
 PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules/preact/jsx-runtime/package.json: *new*
   {"pollingInterval":2000}
 

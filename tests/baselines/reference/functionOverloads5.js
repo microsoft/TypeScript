@@ -8,6 +8,7 @@ class baz {
 
 
 //// [functionOverloads5.js]
+"use strict";
 class baz {
     foo(bar) { }
 }

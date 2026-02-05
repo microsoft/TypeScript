@@ -91,6 +91,7 @@ namespace SourceHasOptional {
 }
 
 //// [assignmentCompatWithObjectMembersOptionality.js]
+"use strict";
 // Derived member is not optional but base member is, should be ok
 class Base {
 }

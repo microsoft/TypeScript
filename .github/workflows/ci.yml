@@ -29,71 +29,60 @@ jobs:
       fail-fast: ${{ github.event_name == 'merge_group' }}
       matrix:
         config:
-          # Main builds
+          # PRs only check the newest and oldest Node versions.
+          # macOS only ever checks the neest and oldest Node versions, but never in PR runs.
           - os: ubuntu-latest
             node-version: '24'
             bundle: true
+          - os: windows-latest
+            node-version: '24'
+            bundle: true
+            skip: ${{ github.event_name == 'merge_group' }}
+          - os: macos-latest
+            node-version: '24'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
 
-          # Other builds (skipped in merge queues)
-          - os: windows-latest
-            node-version: '24'
-            bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
-          - os: macos-latest
-            node-version: '24'
-            bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
           - os: ubuntu-latest
             node-version: '22'
             bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
           - os: windows-latest
             node-version: '22'
             bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
-          # Skip macOS for this version; resources are limited.
-          # - os: macos-latest
-          #   node-version: '22'
-          #   bundle: true
-          #   skip: ${{ github.event_name == 'merge_group' }}
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+
           - os: ubuntu-latest
             node-version: '20'
             bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
           - os: windows-latest
             node-version: '20'
             bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
-          # Skip macOS for this version; resources are limited.
-          # - os: macos-latest
-          #   node-version: '20'
-          #   bundle: true
-          #   skip: ${{ github.event_name == 'merge_group' }}
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+
           - os: ubuntu-latest
             node-version: '18'
             bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
           - os: windows-latest
             node-version: '18'
             bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
-          # Skip macOS for this version; resources are limited.
-          # - os: macos-latest
-          #   node-version: '18'
-          #   bundle: true
-          #   skip: ${{ github.event_name == 'merge_group' }}
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+
           - os: ubuntu-latest
             node-version: '16'
             bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
           - os: windows-latest
             node-version: '16'
             bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
           - os: macos-latest
             node-version: '16'
             bundle: true
-            skip: ${{ github.event_name == 'merge_group' }}
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+
           - os: ubuntu-latest
             node-version: '14'
             bundle: true
@@ -102,12 +91,9 @@ jobs:
             node-version: '14'
             bundle: true
             skip: ${{ github.event_name == 'merge_group' }}
-          # No Node 14 on ARM macOS
-          # - os: macos-latest
-          #   node-version: '14'
-          #   bundle: true
-          #   skip: ${{ github.event_name == 'merge_group' }}
+            # Node 14 does not support macOS ARM.
 
+          # --no-bundle build
           - os: ubuntu-latest
             node-version: 'lts/*'
             bundle: false

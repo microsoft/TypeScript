@@ -59,7 +59,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem watchin
         const tsconfig = {
             path: "/users/username/projects/project/tsconfig.json",
             content: jsonToReadableText({
-                compilerOptions: {},
+                compilerOptions: { types: ["*"] },
                 exclude: ["node_modules"],
             }),
         };

@@ -21,6 +21,7 @@ class a {
 }
 
 //// [collisionThisExpressionAndLocalVarInMethod.js]
+"use strict";
 class a {
     method1() {
         return {

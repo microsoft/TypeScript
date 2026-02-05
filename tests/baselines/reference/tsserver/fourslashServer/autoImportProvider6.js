@@ -11,6 +11,9 @@ Info seq  [hh:mm:ss:mss] request:
           "lib": [
             "es2019"
           ],
+          "types": [
+            "*"
+          ],
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }
@@ -39,7 +42,7 @@ import "react";
 { "dependencies": { "antd": "*", "react": "*" } }
 
 //// [/home/src/workspaces/project/tsconfig.json]
-{ "compilerOptions": { "module": "commonjs", "lib": ["es2019"] } }
+{ "compilerOptions": { "module": "commonjs", "lib": ["es2019"], "types": ["*"] } }
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -62,6 +65,9 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
   "module": 1,
   "lib": [
    "lib.es2019.d.ts"
+  ],
+  "types": [
+   "*"
   ],
   "configFilePath": "/home/src/workspaces/project/tsconfig.json"
  }
@@ -330,7 +336,7 @@ Info seq  [hh:mm:ss:mss] 	Files (38)
 	/home/src/tslibs/TS/Lib/lib.es2019.intl.d.ts Text-1 lib.es2019.intl.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{ \"compilerOptions\": { \"module\": \"commonjs\", \"lib\": [\"es2019\"] } }"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{ \"compilerOptions\": { \"module\": \"commonjs\", \"lib\": [\"es2019\"], \"types\": [\"*\"] } }"
 	/home/src/workspaces/project/node_modules/@types/react/index.d.ts Text-1 "export declare function Component(): void;"
 
 

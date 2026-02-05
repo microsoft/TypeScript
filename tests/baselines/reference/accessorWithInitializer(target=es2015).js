@@ -7,6 +7,7 @@ class C {
 }
 
 //// [accessorWithInitializer.js]
+"use strict";
 class C {
     set X(v = 0) { }
     static set X(v2 = 0) { }

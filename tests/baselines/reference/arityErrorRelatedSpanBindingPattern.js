@@ -11,6 +11,7 @@ bar("", 0);
 
 
 //// [arityErrorRelatedSpanBindingPattern.js]
+"use strict";
 function foo(a, b, { c }) { }
 function bar(a, b, [c]) { }
 foo("", 0);

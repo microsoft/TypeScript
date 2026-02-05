@@ -50,14 +50,6 @@ export var x = Foo();
 
 
 
-PolledWatches::
-/home/src/projects/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/a/b/moduleFile1.ts: *new*
   {}
@@ -133,12 +125,6 @@ Output::
 
 PolledWatches::
 /home/src/projects/a/b/moduleFile1.ts: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

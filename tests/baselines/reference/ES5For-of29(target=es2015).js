@@ -7,6 +7,7 @@ for (const {x: a = 0, y: b = 1} of [2, 3]) {
 }
 
 //// [ES5For-of29.js]
+"use strict";
 for (const { x: a = 0, y: b = 1 } of [2, 3]) {
     a;
     b;

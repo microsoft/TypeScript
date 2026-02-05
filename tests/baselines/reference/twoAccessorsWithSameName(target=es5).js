@@ -37,6 +37,7 @@ var y = {
 }
 
 //// [twoAccessorsWithSameName.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

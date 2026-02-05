@@ -131,6 +131,7 @@ var obj = { n: super.wat, p: super.foo() };
 
 
 //// [errorSuperPropertyAccess.js]
+"use strict";
 //super property access in constructor of class with no base type
 //super property access in instance member function of class with no base type
 //super property access in instance member accessor(get and set) of class with no base type

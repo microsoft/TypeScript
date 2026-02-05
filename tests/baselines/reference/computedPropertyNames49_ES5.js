@@ -27,6 +27,7 @@ var x = {
 }
 
 //// [computedPropertyNames49_ES5.js]
+"use strict";
 var x = {
     p1: 10,
     get [1 + 1]() {

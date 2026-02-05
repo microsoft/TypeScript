@@ -5,4 +5,5 @@ function sum (...) {}
 
 
 //// [restArgMissingName.js]
+"use strict";
 function sum(...) { }

@@ -20,6 +20,7 @@ declare namespace A {
 
 
 //// [out.js]
+"use strict";
 var C;
 (function (C) {
     var Name = /** @class */ (function () {

@@ -88,6 +88,7 @@ async function newExpression20() {
 }
 
 //// [es5-asyncFunctionNewExpressions.js]
+"use strict";
 function newExpression0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

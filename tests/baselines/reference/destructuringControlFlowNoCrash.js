@@ -20,6 +20,7 @@ const { constructor } = async () => {};
 
 
 //// [destructuringControlFlowNoCrash.js]
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -36,4 +37,4 @@ date.toISOString();
 const { date2, } = (inspectedElement) => , props;
 date2.toISOString();
 // It could also be an async function
-const { constructor } = () => __awaiter(this, void 0, void 0, function* () { });
+const { constructor } = () => __awaiter(void 0, void 0, void 0, function* () { });

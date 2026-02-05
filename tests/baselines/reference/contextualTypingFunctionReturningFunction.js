@@ -15,6 +15,7 @@ f({
 
 
 //// [contextualTypingFunctionReturningFunction.js]
+"use strict";
 f({
     a: s => { },
     b: () => n => { },

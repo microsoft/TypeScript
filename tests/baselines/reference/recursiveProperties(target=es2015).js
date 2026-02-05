@@ -10,6 +10,7 @@ class B {
 }
 
 //// [recursiveProperties.js]
+"use strict";
 class A {
     get testProp() { return this.testProp; }
 }

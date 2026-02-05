@@ -43,6 +43,7 @@ class D<T> {
 }
 
 //// [memberFunctionsWithPublicOverloads.js]
+"use strict";
 class C {
     foo(x, y) { }
     bar(x, y) { }

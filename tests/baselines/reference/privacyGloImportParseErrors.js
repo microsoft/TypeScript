@@ -155,6 +155,7 @@ namespace m2 {
 }
 
 //// [privacyGloImportParseErrors.js]
+"use strict";
 var m1;
 (function (m1) {
     let m1_M1_public;

@@ -11,6 +11,7 @@ function f14 ({ [sym]: string }: O) { };
 
 
 //// [renamingDestructuredPropertyInFunctionType3.js]
+"use strict";
 const sym = Symbol();
 const f13 = ({ [sym]: string }) => { };
 function f14({ [sym]: string }) { }

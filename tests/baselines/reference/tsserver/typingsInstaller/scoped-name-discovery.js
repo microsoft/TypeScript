@@ -7,7 +7,13 @@ Before request
 
 
 //// [/user/username/projects/project/jsconfig.json]
-{}
+{
+  "compilerOptions": {
+    "types": [
+      "*"
+    ]
+  }
+}
 
 //// [/user/username/projects/project/package.json]
 {
@@ -69,6 +75,9 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/jsconfig.json :
   "allowSyntheticDefaultImports": true,
   "skipLibCheck": true,
   "noEmit": true,
+  "types": [
+   "*"
+  ],
   "configFilePath": "/user/username/projects/project/jsconfig.json"
  }
 }
@@ -202,6 +211,9 @@ TI:: [hh:mm:ss:mss] Got install request
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
         "noEmit": true,
+        "types": [
+          "*"
+        ],
         "configFilePath": "/user/username/projects/project/jsconfig.json",
         "allowNonTsExtensions": true
       },
@@ -322,7 +334,10 @@ Info seq  [hh:mm:ss:mss] event:
             "maxNodeModuleJsDepth": 2,
             "allowSyntheticDefaultImports": true,
             "skipLibCheck": true,
-            "noEmit": true
+            "noEmit": true,
+            "types": [
+              ""
+            ]
           },
           "typeAcquisition": {
             "enable": true,
@@ -457,6 +472,9 @@ TI:: [hh:mm:ss:mss] Sending response:
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
         "noEmit": true,
+        "types": [
+          "*"
+        ],
         "configFilePath": "/user/username/projects/project/jsconfig.json",
         "allowNonTsExtensions": true
       },
@@ -486,6 +504,9 @@ Info seq  [hh:mm:ss:mss] event:
           "allowSyntheticDefaultImports": true,
           "skipLibCheck": true,
           "noEmit": true,
+          "types": [
+            "*"
+          ],
           "configFilePath": "/user/username/projects/project/jsconfig.json",
           "allowNonTsExtensions": true
         },
@@ -580,6 +601,9 @@ TI:: [hh:mm:ss:mss] Got install request
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
         "noEmit": true,
+        "types": [
+          "*"
+        ],
         "configFilePath": "/user/username/projects/project/jsconfig.json",
         "allowNonTsExtensions": true
       },
@@ -631,6 +655,9 @@ TI:: [hh:mm:ss:mss] Sending response:
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
         "noEmit": true,
+        "types": [
+          "*"
+        ],
         "configFilePath": "/user/username/projects/project/jsconfig.json",
         "allowNonTsExtensions": true
       },
@@ -658,6 +685,9 @@ Info seq  [hh:mm:ss:mss] event:
           "allowSyntheticDefaultImports": true,
           "skipLibCheck": true,
           "noEmit": true,
+          "types": [
+            "*"
+          ],
           "configFilePath": "/user/username/projects/project/jsconfig.json",
           "allowNonTsExtensions": true
         },
@@ -701,6 +731,9 @@ TI:: [hh:mm:ss:mss] Got install request
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
         "noEmit": true,
+        "types": [
+          "*"
+        ],
         "configFilePath": "/user/username/projects/project/jsconfig.json",
         "allowNonTsExtensions": true
       },
@@ -752,6 +785,9 @@ TI:: [hh:mm:ss:mss] Sending response:
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
         "noEmit": true,
+        "types": [
+          "*"
+        ],
         "configFilePath": "/user/username/projects/project/jsconfig.json",
         "allowNonTsExtensions": true
       },
@@ -777,6 +813,9 @@ Info seq  [hh:mm:ss:mss] event:
           "allowSyntheticDefaultImports": true,
           "skipLibCheck": true,
           "noEmit": true,
+          "types": [
+            "*"
+          ],
           "configFilePath": "/user/username/projects/project/jsconfig.json",
           "allowNonTsExtensions": true
         },

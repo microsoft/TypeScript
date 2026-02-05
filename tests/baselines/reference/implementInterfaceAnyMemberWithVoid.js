@@ -12,6 +12,7 @@ class Bug implements I {
 
 
 //// [implementInterfaceAnyMemberWithVoid.js]
+"use strict";
 class Bug {
     foo(value) {
     }

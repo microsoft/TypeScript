@@ -15,6 +15,7 @@ class Foo {
 }
 
 //// [staticClassMemberError.js]
+"use strict";
 class C {
     a() {
         s = 1;

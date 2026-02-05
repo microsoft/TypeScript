@@ -8,6 +8,7 @@ class C {
 }
 
 //// [emitArrowFunctionWhenUsingArguments12.js]
+"use strict";
 class C {
     f(arguments) {
         var a = () => arguments;

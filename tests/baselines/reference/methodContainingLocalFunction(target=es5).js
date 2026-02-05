@@ -53,6 +53,7 @@ enum E {
 }
 
 //// [methodContainingLocalFunction.js]
+"use strict";
 // The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
 var BugExhibition = /** @class */ (function () {
     function BugExhibition() {

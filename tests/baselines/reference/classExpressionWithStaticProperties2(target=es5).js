@@ -11,6 +11,7 @@ var v = class C {
  };
 
 //// [classExpressionWithStaticProperties2.js]
+"use strict";
 var _a;
 var v = (_a = /** @class */ (function () {
         function C() {

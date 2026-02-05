@@ -25,6 +25,7 @@ function f<T, U extends A, V extends U>(): void {
 }
 
 //// [errorMessagesIntersectionTypes04.js]
+"use strict";
 function f() {
     let num;
     let bool;

@@ -55,6 +55,7 @@ interface I2<T> {
 }
 
 //// [subtypesOfUnion.js]
+"use strict";
 var E;
 (function (E) {
     E[E["e1"] = 0] = "e1";

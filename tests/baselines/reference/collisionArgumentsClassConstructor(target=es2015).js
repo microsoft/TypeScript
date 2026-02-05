@@ -89,6 +89,7 @@ declare class c6NoError {
 }
 
 //// [collisionArgumentsClassConstructor.js]
+"use strict";
 // Constructors
 class c1 {
     constructor(i, ...arguments) {

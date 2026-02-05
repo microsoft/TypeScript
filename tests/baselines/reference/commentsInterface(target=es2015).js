@@ -72,6 +72,7 @@ i3_i.nc_l(10);
 
 
 //// [commentsInterface.js]
+"use strict";
 var i1_i;
 var nc_i1_i;
 var i2_i;

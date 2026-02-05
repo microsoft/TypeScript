@@ -10,6 +10,7 @@ abstract class A {
 
 
 //// [classAbstractAccessor.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

@@ -754,6 +754,6 @@ File '/node_modules/fs/index.jsx' does not exist.
 
 MissingPaths:: []
 
-home/src/workspaces/project/a/b/app.ts(2,21): error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+home/src/workspaces/project/a/b/app.ts(2,21): error TS2591: Cannot find name 'fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 
 

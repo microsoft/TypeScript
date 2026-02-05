@@ -916,7 +916,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Enable_error_reporting_for_expressions_and_declarations_with_an_implied_any_type,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "strictNullChecks",
@@ -926,7 +926,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.When_type_checking_take_into_account_null_and_undefined,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "strictFunctionTypes",
@@ -936,7 +936,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.When_assigning_functions_check_to_ensure_parameters_and_the_return_values_are_subtype_compatible,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "strictBindCallApply",
@@ -946,7 +946,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Check_that_the_arguments_for_bind_call_and_apply_methods_match_the_original_function,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "strictPropertyInitialization",
@@ -956,7 +956,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Check_for_class_properties_that_are_declared_but_not_set_in_the_constructor,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "strictBuiltinIteratorReturn",
@@ -966,7 +966,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Built_in_iterators_are_instantiated_with_a_TReturn_type_of_undefined_instead_of_any,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "noImplicitThis",
@@ -976,7 +976,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Enable_error_reporting_when_this_is_given_the_type_any,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "useUnknownInCatchVariables",
@@ -986,7 +986,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Default_catch_clause_variables_as_unknown_instead_of_any,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "alwaysStrict",
@@ -994,10 +994,9 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsSourceFile: true,
         affectsEmit: true,
         affectsBuildInfo: true,
-        strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Ensure_use_strict_is_always_emitted,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: true,
     },
 
     // Additional Checks

@@ -2,6 +2,7 @@
 // @traceResolution: true
 // @noImplicitReferences: true
 // @currentDirectory: /
+// @types: *
 // This tests that `types` references are not lowercased.
 
 // @filename: /tsconfig.json

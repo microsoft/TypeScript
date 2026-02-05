@@ -13,6 +13,7 @@ class C {
 }
 
 //// [computedPropertyNames2_ES5.js]
+"use strict";
 var methodName = "method";
 var accessorName = "accessor";
 class C {

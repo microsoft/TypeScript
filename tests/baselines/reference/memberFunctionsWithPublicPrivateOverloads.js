@@ -65,6 +65,7 @@ declare var d: D<number>;
 var r2 = d.foo(2); // error
 
 //// [memberFunctionsWithPublicPrivateOverloads.js]
+"use strict";
 class C {
     foo(x, y) { }
     bar(x, y) { }

@@ -75,6 +75,7 @@ ANY2--;
 ++ANY2[0]--;
 
 //// [decrementOperatorWithAnyOtherTypeInvalidOperations.js]
+"use strict";
 var ANY2 = ["", ""];
 var obj1 = { x: "", y: () => { } };
 function foo() {

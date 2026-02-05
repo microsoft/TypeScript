@@ -50,12 +50,6 @@ export var x = Foo();
 PolledWatches::
 /home/src/projects/a/b/moduleFile2.ts: *new*
   {"pollingInterval":500}
-/home/src/projects/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/a/b/referenceFile1.ts: *new*
@@ -165,14 +159,6 @@ Input::
 export var Foo4 = 10;
 
 
-PolledWatches::
-/home/src/projects/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-
 PolledWatches *deleted*::
 /home/src/projects/a/b/moduleFile2.ts:
   {"pollingInterval":500}
@@ -220,14 +206,6 @@ Output::
 export var Foo4 = 10;
 
 
-
-PolledWatches::
-/home/src/projects/a/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/a/b/moduleFile2.ts: *new*

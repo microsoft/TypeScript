@@ -8,6 +8,8 @@ a ? (b) => (c): d => e
 
 
 //// [fileJs.js]
+"use strict";
 a ? (b) => (c) : d => e; // Legal JS
 //// [fileTs.js]
+"use strict";
 a ? (b) => (c) : d => e;

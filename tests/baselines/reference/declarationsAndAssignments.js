@@ -189,6 +189,7 @@ function f21(v: [number, string, boolean]) {
 
 
 //// [declarationsAndAssignments.js]
+"use strict";
 function f0() {
     var [] = [1, "hello"];
     var [x] = [1, "hello"];

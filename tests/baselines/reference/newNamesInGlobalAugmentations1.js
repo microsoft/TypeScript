@@ -21,6 +21,7 @@ new Cls().x
 let c = a + b + X;
 
 //// [main.js]
+"use strict";
 Symbol.observable;
 new Cls().x;
 let c = a + b + X;

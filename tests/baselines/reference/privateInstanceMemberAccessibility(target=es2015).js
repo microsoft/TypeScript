@@ -16,6 +16,7 @@ class Derived extends Base {
 }
 
 //// [privateInstanceMemberAccessibility.js]
+"use strict";
 class Base {
 }
 class Derived extends Base {

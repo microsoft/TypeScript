@@ -4,6 +4,7 @@
 //// {
 ////   "compilerOptions": {
 ////     "module": "commonjs",
+////     "types": ["*"],
 ////     "lib": ["es5"]
 ////   }
 //// }

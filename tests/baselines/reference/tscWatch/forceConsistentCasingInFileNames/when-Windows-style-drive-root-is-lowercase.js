@@ -66,14 +66,6 @@ b;
 
 
 
-PolledWatches::
-c:/workspaces/node_modules/@types: *new*
-  {"pollingInterval":500}
-c:/workspaces/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
-c:/workspaces/solution/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 c:/home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}

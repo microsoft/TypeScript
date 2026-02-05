@@ -87,6 +87,7 @@ declare namespace AmbientMod {
 
 
 //// [es6ClassTest.js]
+"use strict";
 class Bar {
     prop1(x) {
         return x;

@@ -26,6 +26,7 @@ namespace M {
 
 
 //// [lambdaPropSelf.js]
+"use strict";
 class Person {
     constructor(name, children) {
         this.name = name;

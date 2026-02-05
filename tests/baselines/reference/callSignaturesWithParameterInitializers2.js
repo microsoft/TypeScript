@@ -28,6 +28,7 @@ b.foo();
 b.foo(1);
 
 //// [callSignaturesWithParameterInitializers2.js]
+"use strict";
 // Optional parameters allow initializers only in implementation signatures
 // All the below declarations are errors
 function foo(x = 1) { }

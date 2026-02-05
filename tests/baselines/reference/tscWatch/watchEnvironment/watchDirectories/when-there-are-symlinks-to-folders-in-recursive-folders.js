@@ -95,10 +95,6 @@ FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/real
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/package.json 2000 undefined File location affecting resolution
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
@@ -111,16 +107,12 @@ export {};
 
 
 PolledWatches::
-/home/user/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/user/projects/myproject/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /home/user/projects/myproject/node_modules/reala/package.json: *new*
   {"pollingInterval":2000}
 /home/user/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
-/home/user/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/user/projects/package.json: *new*
   {"pollingInterval":2000}
 
@@ -195,8 +187,6 @@ sysLog:: /home/user/projects/myproject/node_modules/reala/index.d.ts:: Changing 
 
 
 PolledWatches::
-/home/user/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /home/user/projects/myproject/node_modules/package.json:
   {"pollingInterval":2000}
 /home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
@@ -205,8 +195,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/user/projects/myproject/package.json:
   {"pollingInterval":2000}
-/home/user/projects/node_modules/@types:
-  {"pollingInterval":500}
 /home/user/projects/package.json:
   {"pollingInterval":2000}
 
@@ -343,11 +331,7 @@ sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 //// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 128
 
 PolledWatches::
-/home/user/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /home/user/projects/node_modules: *new*
-  {"pollingInterval":500}
-/home/user/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::

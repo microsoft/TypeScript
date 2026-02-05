@@ -1,5 +1,7 @@
 // @target: es5, es2015
+// @ignoreDeprecations: 6.0
 // @strict: false
+// @alwaysStrict: true, false
 var f1 = (i: number, ...arguments) => { //arguments is error
     var arguments: any[]; // no error
 }

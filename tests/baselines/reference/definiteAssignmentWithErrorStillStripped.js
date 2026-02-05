@@ -6,6 +6,7 @@ class C {
 }
 
 //// [definiteAssignmentWithErrorStillStripped.js]
+"use strict";
 class C {
     p;
 }

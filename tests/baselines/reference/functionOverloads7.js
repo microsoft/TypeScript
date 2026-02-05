@@ -13,6 +13,7 @@ class foo {
 
 
 //// [functionOverloads7.js]
+"use strict";
 class foo {
     bar(foo) { return "foo"; }
     n() {

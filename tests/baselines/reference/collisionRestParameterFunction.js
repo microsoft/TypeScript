@@ -36,6 +36,7 @@ declare function f6(_i: number); // no codegen no error
 declare function f6(_i: string); // no codegen no error
 
 //// [collisionRestParameterFunction.js]
+"use strict";
 // Functions
 function f1(_i, ...restParameters) {
     var _i = 10; // no error

@@ -10,6 +10,7 @@ class B {
 }
 
 //// [recursiveProperties.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
     }

@@ -16,6 +16,7 @@ namespace A {
 
 
 //// [innerExtern.js]
+"use strict";
 var A;
 (function (A) {
     let B;

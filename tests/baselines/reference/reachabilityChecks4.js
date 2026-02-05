@@ -68,6 +68,7 @@ function f2(transition: Transition): any {
 
 
 //// [reachabilityChecks4.js]
+"use strict";
 function foo(x, y) {
     switch (x) {
         case 1:

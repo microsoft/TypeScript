@@ -73,6 +73,7 @@ foo() = value;
 (foo()) = value;
 
 //// [assignmentLHSIsValue.js]
+"use strict";
 // expected error for all the LHS of assignments
 var value;
 // this

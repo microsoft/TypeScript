@@ -49,6 +49,7 @@ var rc2 = x in (c2 || c3);
 
 
 //// [inOperatorWithValidOperands.js]
+"use strict";
 var x;
 var ra1 = x in x;
 var ra2 = a1 in x;

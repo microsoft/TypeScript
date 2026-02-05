@@ -13,6 +13,7 @@ class Foo extends Base {
 
 
 //// [thisInSuperCall1.js]
+"use strict";
 class Base {
     constructor(a) { }
 }

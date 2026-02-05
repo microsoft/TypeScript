@@ -415,14 +415,6 @@ tests/index.ts
 
 
 
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/sample1/tests/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
@@ -1074,14 +1066,6 @@ tests/index.ts
   "size": 1588
 }
 
-
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/sample1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/sample1/tests/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:

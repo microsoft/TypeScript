@@ -21,6 +21,7 @@ var a: any;
 var r2 = new a<number>();
 
 //// [instantiateNonGenericTypeWithTypeArguments.js]
+"use strict";
 // it is an error to provide type arguments to a non-generic call
 // all of these are errors
 class C {

@@ -1,6 +1,6 @@
 error TS-1: Pre-emit (93) and post-emit (94) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2503: Cannot find namespace 'module'.
-constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 constructorWithIncompleteTypeAnnotation.ts(11,19): error TS1005: ';' expected.
 constructorWithIncompleteTypeAnnotation.ts(22,35): error TS1005: ')' expected.
 constructorWithIncompleteTypeAnnotation.ts(22,39): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -112,7 +112,7 @@ constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or 
                 ~~~~~~
 !!! error TS2503: Cannot find namespace 'module'.
                 ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
                       ~
 !!! error TS1005: ';' expected.
     

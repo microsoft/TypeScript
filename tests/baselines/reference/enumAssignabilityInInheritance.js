@@ -112,6 +112,7 @@ declare function foo17(x: E): E;
 var r4 = foo16(E.A);
 
 //// [enumAssignabilityInInheritance.js]
+"use strict";
 // enum is only a subtype of number, no types are subtypes of enum, all of these except the first are errors
 var E;
 (function (E) {

@@ -98,10 +98,6 @@ FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/real
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
 DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js :: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js :: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
@@ -116,16 +112,12 @@ export {};
 
 
 PolledWatches::
-/home/user/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/user/projects/myproject/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /home/user/projects/myproject/node_modules/reala/package.json: *new*
   {"pollingInterval":2000}
 /home/user/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
-/home/user/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/user/projects/package.json: *new*
   {"pollingInterval":2000}
 
@@ -212,8 +204,6 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/no
 
 
 PolledWatches::
-/home/user/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /home/user/projects/myproject/node_modules/package.json:
   {"pollingInterval":2000}
 /home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
@@ -222,8 +212,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/user/projects/myproject/package.json:
   {"pollingInterval":2000}
-/home/user/projects/node_modules/@types:
-  {"pollingInterval":500}
 /home/user/projects/package.json:
   {"pollingInterval":2000}
 
@@ -337,11 +325,7 @@ FileWatcher:: Close:: WatchInfo: /home/user/projects/package.json 2000 {"synchro
 //// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 128
 
 PolledWatches::
-/home/user/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /home/user/projects/node_modules: *new*
-  {"pollingInterval":500}
-/home/user/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::

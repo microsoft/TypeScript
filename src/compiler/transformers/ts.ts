@@ -47,6 +47,7 @@ import {
     FunctionExpression,
     FunctionLikeDeclaration,
     GetAccessorDeclaration,
+    getAlwaysStrict,
     getEffectiveBaseTypeNode,
     getEmitFlags,
     getEmitModuleKind,
@@ -57,7 +58,6 @@ import {
     getOriginalNode,
     getParseTreeNode,
     getProperties,
-    getStrictOptionValue,
     getTextOfNode,
     hasDecorators,
     hasSyntacticModifier,
@@ -836,7 +836,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
     }
 
     function visitSourceFile(node: SourceFile) {
-        const alwaysStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") &&
+        const alwaysStrict = getAlwaysStrict(compilerOptions) &&
             !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015) &&
             !isJsonSourceFile(node);
 

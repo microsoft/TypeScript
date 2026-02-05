@@ -7,6 +7,7 @@ class C {
 }
 
 //// [parameterPropertyOutsideConstructor.js]
+"use strict";
 class C {
     foo(x) {
     }

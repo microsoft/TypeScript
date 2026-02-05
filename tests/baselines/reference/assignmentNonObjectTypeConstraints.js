@@ -22,6 +22,7 @@ bar(new B);
 
 
 //// [assignmentNonObjectTypeConstraints.js]
+"use strict";
 function foo(x) {
     var y = x; // Ok
 }

@@ -21,7 +21,7 @@ verify.getSemanticDiagnostics([{
     code: 2393
 }]);
 verify.verifyGetEmitOutputContentsForCurrentFile([
-    { name: "out.js", text: "function foo() { return 10; }\nfunction foo() { return 30; }\n", writeByteOrderMark: false },
+    { name: "out.js", text: "\"use strict\";\nfunction foo() { return 10; }\nfunction foo() { return 30; }\n", writeByteOrderMark: false },
     { name: "out.d.ts", text: "declare function foo(): number;\ndeclare function foo(): number;\n", writeByteOrderMark: false }]);
 goTo.marker("2");
 verify.getSemanticDiagnostics([{
