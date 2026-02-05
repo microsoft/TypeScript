@@ -7541,7 +7541,7 @@ export interface CompilerOptions {
     strictNullChecks?: boolean; // Always combine with strict property
     strictPropertyInitialization?: boolean; // Always combine with strict property
     strictBuiltinIteratorReturn?: boolean; // Always combine with strict property
-    /** @deprecated */
+    /** @internal */
     stableTypeOrdering?: boolean;
     stripInternal?: boolean;
     /** @deprecated */

@@ -7114,8 +7114,6 @@ declare namespace ts {
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
         strictBuiltinIteratorReturn?: boolean;
-        /** @deprecated */
-        stableTypeOrdering?: boolean;
         stripInternal?: boolean;
         /** @deprecated */
         suppressExcessPropertyErrors?: boolean;
