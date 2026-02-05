@@ -1,3 +1,4 @@
+// @target: es2015
 // enum then var
 enum e1111 { One } // error
 var e1111 = 1; // error

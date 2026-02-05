@@ -56,7 +56,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 2
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/index.d.ts 250 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Source file
 ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/foo.d.ts 250 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects 0 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
@@ -67,9 +67,6 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} File location affecting resolution
-ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Type roots
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
@@ -78,11 +75,11 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excl
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Wild card directory
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var bar_1 = require("bar");
-(0, bar_1.foo)();
+import { foo } from "bar";
+foo();
 
 
 
@@ -93,13 +90,11 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects: *new*
   {}
@@ -130,19 +125,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/node_modules/bar/foo.d.ts
 /user/username/projects/myproject/node_modules/bar/index.d.ts
 /user/username/projects/myproject/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/node_modules/bar/foo.d.ts
 /user/username/projects/myproject/node_modules/bar/index.d.ts
 /user/username/projects/myproject/src/main.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/node_modules/bar/foo.d.ts (used version)
 /user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
 /user/username/projects/myproject/src/main.ts (used version)

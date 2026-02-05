@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 type isUnknown<T> = unknown extends T ? true : false;

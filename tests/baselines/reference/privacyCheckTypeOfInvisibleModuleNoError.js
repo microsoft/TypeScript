@@ -11,9 +11,10 @@ namespace Outer {
 
 
 //// [privacyCheckTypeOfInvisibleModuleNoError.js]
+"use strict";
 var Outer;
 (function (Outer) {
-    var Inner;
+    let Inner;
     (function (Inner) {
     })(Inner || (Inner = {}));
 })(Outer || (Outer = {}));

@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace foo {
     export function x(): any;
 }

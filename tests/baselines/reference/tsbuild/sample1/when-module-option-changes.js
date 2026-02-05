@@ -103,6 +103,8 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -122,18 +124,18 @@ function multiply(a, b) { return a * b; }
 
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-3090574810-export const World = \"hello\";","-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[2,4]],"options":{"module":1},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-3090574810-export const World = \"hello\";","-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[2,4]],"options":{"module":1},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./anothermodule.ts",
     "./index.ts",
     "./some_decl.d.ts"
   ],
   "fileInfos": {
-    "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -177,7 +179,7 @@ function multiply(a, b) { return a * b; }
     "module": 1
   },
   "version": "FakeTSVersion",
-  "size": 955
+  "size": 967
 }
 
 
@@ -237,18 +239,18 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-3090574810-export const World = \"hello\";","-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[2,4]],"options":{"module":2},"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-3090574810-export const World = \"hello\";","-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[2,4]],"options":{"module":2},"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./anothermodule.ts",
     "./index.ts",
     "./some_decl.d.ts"
   ],
   "fileInfos": {
-    "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -293,7 +295,7 @@ define(["require", "exports"], function (require, exports) {
   },
   "errors": true,
   "version": "FakeTSVersion",
-  "size": 969
+  "size": 981
 }
 
 

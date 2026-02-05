@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // primitive types are identical to themselves so these overloads will all cause errors
 
 function foo1(x: number);

@@ -17,8 +17,8 @@ namespace Underscore {
 >    : ^ ^^    ^^   ^^        ^^^                    ^^       ^^^   ^^^^^ 
 >list : T[]
 >     : ^^^
->iterator : Iterator<T, boolean>
->         : ^^^^^^^^^^^^^^^^^^^^
+>iterator : Iterator<T, boolean> | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : any
 >        : ^^^
 
@@ -36,18 +36,18 @@ declare var _: Underscore.Static;
 >           : ^^^
 
 var r = _.all([true, 1, null, 'yes'], _.identity);
->r : string | number | boolean
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
->_.all([true, 1, null, 'yes'], _.identity) : string | number | boolean
->                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>r : string | number | boolean | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_.all([true, 1, null, 'yes'], _.identity) : string | number | boolean | null
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^ 
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^ 
->[true, 1, null, 'yes'] : (string | number | true)[]
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[true, 1, null, 'yes'] : (string | number | true | null)[]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >1 : 1
@@ -84,18 +84,18 @@ var r2 = _.all([true], _.identity);
 >         : ^ ^^     ^^ ^^^^^ 
 
 var r3 = _.all([], _.identity);
->r3 : any
->   : ^^^
->_.all([], _.identity) : any
->                      : ^^^
+>r3 : never
+>   : ^^^^^
+>_.all([], _.identity) : never
+>                      : ^^^^^
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^ 
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^ 
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >_.identity : <T>(value: T) => T
 >           : ^ ^^     ^^ ^^^^^ 
 >_ : Underscore.Static

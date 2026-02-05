@@ -7,8 +7,6 @@ class C {
 }
 
 //// [parserIndexMemberDeclaration2.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}

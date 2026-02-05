@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: false
 // @declaration: true
 // @emitDeclarationOnly: true

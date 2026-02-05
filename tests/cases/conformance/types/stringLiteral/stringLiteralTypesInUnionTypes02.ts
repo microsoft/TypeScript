@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @declaration: true
 
 type T = string | "foo" | "bar" | "baz";

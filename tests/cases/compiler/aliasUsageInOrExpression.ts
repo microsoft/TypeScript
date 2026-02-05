@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: aliasUsageInOrExpression_backbone.ts
 export class Model {
@@ -16,7 +17,7 @@ import moduleA = require("./aliasUsageInOrExpression_moduleA");
 interface IHasVisualizationModel {
     VisualizationModel: typeof Backbone.Model;
 }
-var i: IHasVisualizationModel;
+declare var i: IHasVisualizationModel;
 var d1 = i || moduleA;
 var d2: IHasVisualizationModel = i || moduleA;
 var d2: IHasVisualizationModel = moduleA || i;

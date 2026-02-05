@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 // @Filename: /a.tsx
 ////var x: Array<numb/*a*/;
 ////[].map<numb/*b*/;

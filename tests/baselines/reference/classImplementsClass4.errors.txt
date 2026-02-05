@@ -20,8 +20,8 @@ classImplementsClass4.ts(16,1): error TS2741: Property 'x' is missing in type 'C
     
     class C2 extends A {}
     
-    var c: C;
-    var c2: C2;
+    declare var c: C;
+    declare var c2: C2;
     c = c2;
     c2 = c;
     ~~

@@ -1,3 +1,4 @@
+// @target: es2015
 // call signatures in derived types must have the same or fewer optional parameters as the target for assignment
 
 interface Base { 

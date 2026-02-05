@@ -33,6 +33,7 @@ function i<T>(a: T) {
 i = null; // error
 
 //// [validNullAssignments.js]
+"use strict";
 var a = null;
 var b = null;
 var c = null;
@@ -44,11 +45,8 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 E.A = null; // error
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var f;
 f = null; // ok
 C = null; // error

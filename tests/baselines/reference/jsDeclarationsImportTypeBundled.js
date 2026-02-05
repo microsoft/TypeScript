@@ -15,16 +15,17 @@ const items = [{x: 12}];
 module.exports = items;
 
 //// [out.js]
+"use strict";
 /**
  * @typedef {{x: number}} Item
  */
 /**
  * @type {Item};
  */
-var x = { x: 12 };
+const x = { x: 12 };
 module.exports = x;
 /** @type {(typeof import("./folder/mod1"))[]} */
-var items = [{ x: 12 }];
+const items = [{ x: 12 }];
 module.exports = items;
 
 

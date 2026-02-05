@@ -9,6 +9,7 @@ namespace foo {
 
 
 //// [genericMergedDeclarationUsingTypeParameter.js]
+"use strict";
 function foo(y, z) { return y; }
 (function (foo) {
     var y = 1;

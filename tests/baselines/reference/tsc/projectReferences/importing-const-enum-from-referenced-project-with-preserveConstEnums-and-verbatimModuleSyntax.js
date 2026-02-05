@@ -71,6 +71,8 @@ Output::
 project/index.ts(2,10): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/solution/project/index.js]
 import { E } from "../preserve";
 import { F } from "../no-preserve";

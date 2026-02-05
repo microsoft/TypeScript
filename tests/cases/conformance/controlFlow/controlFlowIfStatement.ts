@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnreachableCode: true
 
 let x: string | number | boolean | RegExp;

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @declaration: true
 
 type Kind = "A" | "B"

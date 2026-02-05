@@ -1,5 +1,6 @@
+// @target: es2015
 // Unary operator !
-var b: number;
+declare var b: number;
 
 // operand before !
 var BOOLEAN1 = b!;  //expect error

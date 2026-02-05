@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @isolatedModules: true
 
 // @filename: enum.ts

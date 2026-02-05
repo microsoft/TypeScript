@@ -44,3 +44,4 @@ namespace M3 {
 }
 
 //// [twoGenericInterfacesWithTheSameNameButDifferentArity.js]
+"use strict";

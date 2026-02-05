@@ -15,9 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     uhoh: "another default",
 };
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 exports.default = C;

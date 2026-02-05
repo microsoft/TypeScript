@@ -7,5 +7,6 @@ while (true) {
 }
 
 //// [duplicateLabel1.js]
+"use strict";
 target: target: while (true) {
 }

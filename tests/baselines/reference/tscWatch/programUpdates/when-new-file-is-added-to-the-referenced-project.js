@@ -62,15 +62,7 @@ CreatingProgramWith::
 Loading config file: /user/username/projects/myproject/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class1.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2/class2.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
 [96mproject2/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m3[0m     "module": "none",
@@ -85,12 +77,12 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/projects/project2/class2.js]
-var class2 = /** @class */ (function () {
-    function class2() {
-    }
-    return class2;
-}());
+"use strict";
+class class2 {
+}
 
 
 //// [/user/username/projects/myproject/projects/project2/class2.d.ts]
@@ -99,17 +91,17 @@ declare class class2 {
 
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[3],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[3],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "../project1/class1.d.ts",
     "./class2.ts"
   ],
   "fileInfos": {
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -150,7 +142,7 @@ declare class class2 {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -164,22 +156,12 @@ declare class class2 {
   ],
   "latestChangedDtsFile": "./class2.d.ts",
   "version": "FakeTSVersion",
-  "size": 909
+  "size": 921
 }
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts: *new*
   {}
@@ -209,14 +191,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/projects/project1/class1.d.ts
 /user/username/projects/myproject/projects/project2/class2.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/projects/project1/class1.d.ts (used version)
 /user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts during emit)
 
@@ -277,19 +259,11 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/projects/project1/class3.d.ts: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts:
   {}
@@ -320,7 +294,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/projects/project1/class1.d.ts
 /user/username/projects/myproject/projects/project2/class2.ts
 
@@ -347,22 +321,12 @@ Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detec
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
 PolledWatches *deleted*::
 /user/username/projects/myproject/projects/project1/class3.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts:
   {}
@@ -407,18 +371,18 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 //// [/user/username/projects/myproject/projects/project2/class2.js] file written with same contents
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[4],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[4],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "../project1/class1.d.ts",
     "../project1/class3.d.ts",
     "./class2.ts"
   ],
   "fileInfos": {
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -468,7 +432,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -486,22 +450,12 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
   ],
   "latestChangedDtsFile": "./class2.d.ts",
   "version": "FakeTSVersion",
-  "size": 1013
+  "size": 1025
 }
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts:
   {}
@@ -534,7 +488,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/projects/project1/class1.d.ts
 /user/username/projects/myproject/projects/project1/class3.d.ts
 /user/username/projects/myproject/projects/project2/class2.ts
@@ -623,17 +577,17 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 //// [/user/username/projects/myproject/projects/project2/class2.js] file written with same contents
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[3],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[3],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "../project1/class1.d.ts",
     "./class2.ts"
   ],
   "fileInfos": {
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -674,7 +628,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -688,24 +642,16 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
   ],
   "latestChangedDtsFile": "./class2.d.ts",
   "version": "FakeTSVersion",
-  "size": 909
+  "size": 921
 }
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/projects/project1/class3.d.ts: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts:
   {}
@@ -740,7 +686,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/projects/project1/class1.d.ts
 /user/username/projects/myproject/projects/project2/class2.ts
 
@@ -769,22 +715,12 @@ Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detec
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
 PolledWatches *deleted*::
 /user/username/projects/myproject/projects/project1/class3.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts:
   {}
@@ -829,18 +765,18 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 //// [/user/username/projects/myproject/projects/project2/class2.js] file written with same contents
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[4],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[4],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "../project1/class1.d.ts",
     "../project1/class3.d.ts",
     "./class2.ts"
   ],
   "fileInfos": {
-    "../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -890,7 +826,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -908,22 +844,12 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
   ],
   "latestChangedDtsFile": "./class2.d.ts",
   "version": "FakeTSVersion",
-  "size": 1013
+  "size": 1025
 }
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class1.d.ts:
   {}
@@ -956,7 +882,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/projects/project1/class1.d.ts
 /user/username/projects/myproject/projects/project1/class3.d.ts
 /user/username/projects/myproject/projects/project2/class2.ts

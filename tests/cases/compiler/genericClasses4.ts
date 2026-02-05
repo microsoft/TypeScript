@@ -1,3 +1,4 @@
+// @target: es2015
 // once caused stack overflow
 class Vec2_T<A>
 {

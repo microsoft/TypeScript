@@ -1,3 +1,4 @@
+// @target: es2015
 interface NumberMap<T> {
     [index: number]: T;
 }
@@ -9,8 +10,8 @@ interface StringMap<T> {
 declare function numberMapToArray<T>(object: NumberMap<T>): T[];
 declare function stringMapToArray<T>(object: StringMap<T>): T[];
 
-var numberMap: NumberMap<Function>;
-var stringMap: StringMap<Function>;
+declare var numberMap: NumberMap<Function>;
+declare var stringMap: StringMap<Function>;
 
 var v1: Function[];
 var v1 = numberMapToArray(numberMap);  // Ok

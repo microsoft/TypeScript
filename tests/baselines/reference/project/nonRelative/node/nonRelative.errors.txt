@@ -1,4 +1,5 @@
 error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+consume.ts(11,18): error TS7010: 'fail', which lacks return-type annotation, implicitly has an 'any' return type.
 
 
 !!! error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
@@ -16,7 +17,7 @@ error TS5107: Option 'moduleResolution=classic' is deprecated and will stop func
 ==== a.ts (0 errors) ====
     export function hello() { }
     
-==== consume.ts (0 errors) ====
+==== consume.ts (1 errors) ====
     import mod = require("decl");
     import x = require("lib/foo/a");
     import y = require("lib/bar/a");
@@ -28,6 +29,8 @@ error TS5107: Option 'moduleResolution=classic' is deprecated and will stop func
     
     
     declare function fail();
+                     ~~~~
+!!! error TS7010: 'fail', which lacks return-type annotation, implicitly has an 'any' return type.
     if(str !== "success") {
         fail();
     }

@@ -14,6 +14,7 @@ utils.fold(null, null, null); // no error
 
 
 //// [genericFunctionsWithOptionalParameters1.js]
+"use strict";
 var utils;
 utils.fold(); // no error
 utils.fold(null); // no error

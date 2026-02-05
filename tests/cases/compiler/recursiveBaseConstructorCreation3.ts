@@ -1,3 +1,4 @@
+// @target: es2015
 declare class base<T> {
 }
 declare class abc<T> extends base<T> {

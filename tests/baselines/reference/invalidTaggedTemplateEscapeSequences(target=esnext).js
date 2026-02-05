@@ -28,6 +28,7 @@ const a14 = tag`${ 100 }\x00` // \x00
 
 
 //// [invalidTaggedTemplateEscapeSequences.js]
+"use strict";
 function tag(str, ...args) {
     return str;
 }

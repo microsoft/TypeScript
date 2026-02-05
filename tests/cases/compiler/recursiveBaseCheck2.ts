@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace Box2D.Collision.Shapes {
     export class b2CircleShape extends b2Shape {
     }

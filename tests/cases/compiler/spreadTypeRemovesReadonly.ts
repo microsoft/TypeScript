@@ -1,3 +1,4 @@
+// @target: es2015
 interface ReadonlyData {
     readonly value: string;
 }

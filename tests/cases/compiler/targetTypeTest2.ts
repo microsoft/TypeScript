@@ -1,3 +1,4 @@
+// @target: es2015
 // Test target typing for array literals and call expressions
 
 

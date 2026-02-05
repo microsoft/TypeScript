@@ -18,8 +18,8 @@ export namespace dom {
 >      : ^^^^^^^^^^^^^         ^^^
 
                 children?: Element[];
->children : Element[]
->         : ^^^^^^^^^
+>children : Element[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^
 
             };
         }
@@ -63,8 +63,8 @@ export namespace predom {
 >      : ^^^^^^^^^^^^^         ^^^
 
                 children?: Element[];
->children : Element[]
->         : ^^^^^^^^^
+>children : Element[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^
 
             };
         }
@@ -107,8 +107,8 @@ export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Elemen
 >  : ^^^^^^
 >y : number
 >  : ^^^^^^
->children : predom.JSX.Element[]
->         : ^^^^^^^^^^^^^^^^^^^^
+>children : predom.JSX.Element[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predom : any
 >       : ^^^
 >JSX : any
@@ -177,8 +177,8 @@ export class MyClass implements predom.JSX.Element {
 >  : ^^^^^^
 >y : number
 >  : ^^^^^^
->children : predom.JSX.Element[]
->         : ^^^^^^^^^^^^^^^^^^^^
+>children : predom.JSX.Element[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predom : any
 >       : ^^^
 >JSX : any
@@ -239,16 +239,16 @@ export class MyClass implements predom.JSX.Element {
 >  : ^^^^^^
 
             {...this.props.children}
->this.props.children : predom.JSX.Element[]
->                    : ^^^^^^^^^^^^^^^^^^^^
+>this.props.children : predom.JSX.Element[] | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
 >           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >this : this
 >     : ^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
 >      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
->children : predom.JSX.Element[]
->         : ^^^^^^^^^^^^^^^^^^^^
+>children : predom.JSX.Element[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         </p>;
 >p : any
@@ -350,8 +350,8 @@ const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => 
 >  : ^^^^^^
 >y : number
 >  : ^^^^^^
->children : dom.JSX.Element[]
->         : ^^^^^^^^^^^^^^^^^
+>children : dom.JSX.Element[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dom : any
 >    : ^^^
 >JSX : any
@@ -386,12 +386,12 @@ const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => 
 >      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >y : number
 >  : ^^^^^^
->props.children : dom.JSX.Element[]
->               : ^^^^^^^^^^^^^^^^^
+>props.children : dom.JSX.Element[] | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
 >      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
->children : dom.JSX.Element[]
->         : ^^^^^^^^^^^^^^^^^
+>children : dom.JSX.Element[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : any
 >  : ^^^
 
@@ -416,8 +416,8 @@ class DOMClass implements dom.JSX.Element {
 >  : ^^^^^^
 >y : number
 >  : ^^^^^^
->children : dom.JSX.Element[]
->         : ^^^^^^^^^^^^^^^^^
+>children : dom.JSX.Element[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dom : any
 >    : ^^^
 >JSX : any
@@ -474,16 +474,16 @@ class DOMClass implements dom.JSX.Element {
 >      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >y : number
 >  : ^^^^^^
->this.props.children : dom.JSX.Element[]
->                    : ^^^^^^^^^^^^^^^^^
+>this.props.children : dom.JSX.Element[] | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
 >           : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >this : this
 >     : ^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
 >      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
->children : dom.JSX.Element[]
->         : ^^^^^^^^^^^^^^^^^
+>children : dom.JSX.Element[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : any
 >  : ^^^
     }

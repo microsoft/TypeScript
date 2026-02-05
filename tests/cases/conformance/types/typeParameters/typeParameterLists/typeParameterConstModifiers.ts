@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 declare function f1<const T>(x: T): T;

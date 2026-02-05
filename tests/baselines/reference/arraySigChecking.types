@@ -36,7 +36,7 @@ interface myInt {
 >voidFn : () => void
 >       : ^^^^^^    
 }
-var myVar: myInt;
+declare var myVar: myInt;
 >myVar : myInt
 >      : ^^^^^
 
@@ -99,8 +99,8 @@ isEmpty([]);
 >            : ^^^^^^^
 >isEmpty : (l: { length: number; }) => boolean
 >        : ^ ^^                   ^^^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 isEmpty(new Array(3));
 >isEmpty(new Array(3)) : boolean

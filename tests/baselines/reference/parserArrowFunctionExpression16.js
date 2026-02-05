@@ -8,6 +8,8 @@ true ? false ? (param): string => param : null : null
 
 
 //// [fileJs.js]
+"use strict";
 true ? false ? (param) => param : null : null; // Not legal JS; "Unexpected token ':'" at last colon
 //// [fileTs.js]
+"use strict";
 true ? false ? (param) => param : null : null;

@@ -1,3 +1,4 @@
+// @target: es2015
 function foo(a:string, b?:number, c?:string){}
 foo('foo', 1); 
 foo('foo'); 

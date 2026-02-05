@@ -6,12 +6,13 @@ namespace __test1__ {
     export var __val__obj4 = obj4;
 }
 namespace __test2__ {
-    export var aa:{[index:number]:number;};;
+    export declare var aa:{[index:number]:number;};;
     export var __val__aa = aa;
 }
 __test2__.__val__aa = __test1__.__val__obj4
 
 //// [assignmentCompatability35.js]
+"use strict";
 var __test1__;
 (function (__test1__) {
     ;

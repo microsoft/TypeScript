@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "compilerOptions": { "module": "commonjs", "allowJs": true } }
+//// { "compilerOptions": { "module": "commonjs", "allowJs": true, "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/third_party/marked/src/defaults.js
 //// function getDefaults() {

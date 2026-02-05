@@ -1,3 +1,4 @@
+// @target: es2015
 var fa = function(): any { return 3; }
 fa = function() { } // should not work
 

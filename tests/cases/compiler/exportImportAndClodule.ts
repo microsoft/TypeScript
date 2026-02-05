@@ -1,3 +1,4 @@
+// @target: es2015
 namespace K {
     export class L {
         constructor(public name: string) { }

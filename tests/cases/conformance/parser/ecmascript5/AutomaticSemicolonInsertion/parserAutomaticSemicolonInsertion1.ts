@@ -1,13 +1,14 @@
+// @target: es2015
 interface I {
     (): void;
 }
  
-var i: I;
+declare var i: I;
 var o: Object;
 o = i;
 i = o;
  
-var a: {
+declare var a: {
     (): void
 }
 o = a;

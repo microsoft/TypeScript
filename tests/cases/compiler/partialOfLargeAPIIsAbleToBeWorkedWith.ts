@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 interface MyAPI {
     0: (x: 0) => string;

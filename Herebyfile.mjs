@@ -677,7 +677,7 @@ export const watchLocal = task({
     dependencies: [localize, watchTsc, watchTsserver, watchServices, lssl, watchOtherOutputs, dts, watchSrc],
 });
 
-const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts] : []);
+const runtestsDeps = [tests, generateLibs, generateTypesMap].concat(cmdLineOptions.typecheck ? [dts] : []);
 
 export const runTests = task({
     name: "runtests",

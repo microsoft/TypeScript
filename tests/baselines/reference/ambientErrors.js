@@ -62,4 +62,5 @@ declare module 'bar' {
 
 
 //// [ambientErrors.js]
+"use strict";
 ;

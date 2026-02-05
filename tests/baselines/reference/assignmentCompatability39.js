@@ -12,6 +12,7 @@ namespace __test2__ {
 __test2__.__val__x2 = __test1__.__val__obj4
 
 //// [assignmentCompatability39.js]
+"use strict";
 var __test1__;
 (function (__test1__) {
     ;
@@ -21,13 +22,12 @@ var __test1__;
 })(__test1__ || (__test1__ = {}));
 var __test2__;
 (function (__test2__) {
-    var classWithTwoPublic = /** @class */ (function () {
-        function classWithTwoPublic(one, two) {
+    class classWithTwoPublic {
+        constructor(one, two) {
             this.one = one;
             this.two = two;
         }
-        return classWithTwoPublic;
-    }());
+    }
     __test2__.classWithTwoPublic = classWithTwoPublic;
     var x2 = new classWithTwoPublic(1, "a");
     ;

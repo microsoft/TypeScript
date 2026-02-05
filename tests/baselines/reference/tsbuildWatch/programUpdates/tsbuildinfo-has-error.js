@@ -34,23 +34,22 @@ Output::
 
 
 //// [/user/username/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./main.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"version":"FakeTSVersion"}
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/project/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+export const x = 10;
 
 
 //// [/user/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./main.ts"
   ],
   "fileInfos": {
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -71,7 +70,7 @@ exports.x = 10;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 599
+  "size": 611
 }
 
 
@@ -96,15 +95,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/project/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/project/main.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/project/main.ts (used version)
 
 exitCode:: ExitStatus.undefined

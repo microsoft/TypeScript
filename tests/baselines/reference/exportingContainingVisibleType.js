@@ -17,18 +17,11 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
-    var Foo = /** @class */ (function () {
-        function Foo() {
+    class Foo {
+        get foo() {
+            var i;
+            return i; // Should be fine (previous bug report visibility error).
         }
-        Object.defineProperty(Foo.prototype, "foo", {
-            get: function () {
-                var i;
-                return i; // Should be fine (previous bug report visibility error).
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return Foo;
-    }());
+    }
     exports.x = 5;
 });

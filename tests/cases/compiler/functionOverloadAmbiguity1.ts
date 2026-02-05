@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 function callb(lam: (l: number) => void );
 function callb(lam: (n: string) => void );
 function callb(a) { }

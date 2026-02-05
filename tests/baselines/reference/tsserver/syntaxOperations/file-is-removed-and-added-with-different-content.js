@@ -58,20 +58,16 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/app.ts SVC-1-0 "console.log('Hello world');"
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	app.ts
 	  Matched by default include pattern '**/*'
 
@@ -156,15 +152,11 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/tsconfig.json: *new*
   {}
@@ -180,7 +172,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -236,13 +228,13 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/app.ts SVC-1-0 "console.log('Hello world');"
 	/user/username/projects/myproject/unitTest1.ts Text-1 "import assert = require('assert');\n\ndescribe(\"Test Suite 1\", () => {\n    it(\"Test A\", () => {\n        assert.ok(true, \"This shouldn't fail\");\n    });\n\n    it(\"Test B\", () => {\n        assert.ok(1 === 1, \"This shouldn't fail\");\n        assert.ok(false, \"This should fail\");\n    });\n});"
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	app.ts
 	  Matched by default include pattern '**/*'
 	unitTest1.ts
@@ -283,15 +275,11 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /user/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects: *new*
   {}
@@ -314,7 +302,7 @@ Projects::
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -363,15 +351,11 @@ After request
 PolledWatches::
 /user/username/projects/myproject/node_modules:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects:
   {}
@@ -389,7 +373,7 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -564,7 +548,7 @@ Projects::
     dirty: true *changed*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -595,12 +579,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/app.ts SVC-1-0 "console.log('Hello world');"
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	app.ts
 	  Matched by default include pattern '**/*'
 
@@ -636,12 +620,6 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules:
   {"pollingInterval":500}
@@ -649,7 +627,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/myproject/tsconfig.json:
   {}
@@ -714,13 +692,13 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/myproject/app.ts SVC-1-0 "console.log('Hello world');"
 	/user/username/projects/myproject/unitTest1.ts Text-2 "import assert = require('assert');\n\nexport function Test1() {\n    assert.ok(true, \"This shouldn't fail\");\n};\n\nexport function Test2() {\n    assert.ok(1 === 1, \"This shouldn't fail\");\n    assert.ok(false, \"This should fail\");\n};"
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	app.ts
 	  Matched by default include pattern '**/*'
 	unitTest1.ts
@@ -761,15 +739,11 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /user/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects: *new*
   {}
@@ -791,7 +765,7 @@ Projects::
     dirty: false *changed*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -840,15 +814,11 @@ After request
 PolledWatches::
 /user/username/projects/myproject/node_modules:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects:
   {}
@@ -866,7 +836,7 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json

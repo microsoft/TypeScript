@@ -85,13 +85,13 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules/@types/yargs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules/yargs/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
@@ -99,24 +99,18 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/proje
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/folder/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/users/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts Text-1 "export declare class Yargs { positional(): Yargs; }\n"
 	/user/users/projects/myproject/folder/random.ts Text-1 "import { Yargs } from \"yargs/callback\";\n"
 	/user/users/projects/myproject/node_modules/@types/yargs/index.d.ts Text-1 "\nimport { Yargs } from \"./callback\";\nexport declare function command(command: string, cb: (yargs: Yargs) => void): void;\n"
 	/user/users/projects/myproject/some/index.ts SVC-1-0 "import { random } from \"../folder/random\";\nimport { command } from \"yargs\";\ncommand(\"foo\", yargs => {\n    yargs.positional();\n});\n"
 
 
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../node_modules/@types/yargs/callback.d.ts
 	  Imported via "yargs/callback" from file '../folder/random.ts' with packageId '@types/yargs/callback.d.ts@1.0.0'
 	  Imported via "./callback" from file '../node_modules/@types/yargs/index.d.ts' with packageId '@types/yargs/callback.d.ts@1.0.0'
@@ -124,7 +118,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Imported via "../folder/random" from file 'index.ts'
 	../node_modules/@types/yargs/index.d.ts
 	  Imported via "yargs" from file 'index.ts' with packageId '@types/yargs/index.d.ts@1.0.0'
-	  Entry point for implicit type library 'yargs' with packageId '@types/yargs/index.d.ts@1.0.0'
 	index.ts
 	  Root file specified for compilation
 
@@ -148,6 +141,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
 /user/users/projects/myproject/folder/node_modules: *new*
@@ -158,17 +153,13 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/users/projects/myproject/some/node_modules: *new*
   {"pollingInterval":500}
-/user/users/projects/myproject/some/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/users/projects/myproject/some/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/users/projects/myproject/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/users/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/users/projects: *new*
   {}
@@ -188,8 +179,6 @@ FsWatchesRecursive::
   {}
 /user/users/projects/myproject/node_modules: *new*
   {}
-/user/users/projects/myproject/node_modules/@types: *new*
-  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
@@ -198,7 +187,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -310,19 +299,15 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/users/projects/myproject/some/node_modules:
   {"pollingInterval":500}
-/user/users/projects/myproject/some/node_modules/@types:
-  {"pollingInterval":500}
 /user/users/projects/myproject/some/tsconfig.json:
   {"pollingInterval":2000}
 /user/users/projects/myproject/tsconfig.json:
   {"pollingInterval":2000}
 /user/users/projects/node_modules: *new*
   {"pollingInterval":500}
-/user/users/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/users/projects:
   {}
@@ -342,8 +327,6 @@ FsWatchesRecursive::
   {}
 /user/users/projects/myproject/node_modules:
   {}
-/user/users/projects/myproject/node_modules/@types:
-  {}
 
 Projects::
 /dev/null/auxiliaryProject1* (Auxiliary) *new*
@@ -358,7 +341,7 @@ Projects::
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*

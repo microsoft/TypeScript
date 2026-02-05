@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 declare var ko: any;
 
 class Person {

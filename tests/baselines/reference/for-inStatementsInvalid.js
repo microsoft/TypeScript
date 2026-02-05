@@ -15,7 +15,7 @@ for (var idx : number in {}) { }
 function fn(): void { }
 for (var x in fn()) { }
 
-var c : string, d:string, e;
+declare var c : string, d:string, e: any;
 
 for (var x in c || d) { }
 for (var x in e ? c : d) { }
@@ -60,27 +60,13 @@ interface I {
     id: number;
     [idx: number]: number;
 }
-var i: I;
+declare var i: I;
 
 for (var x in i[42]) { } 
 
 
 //// [for-inStatementsInvalid.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+"use strict";
 var aNumber;
 for (aNumber in {}) { }
 var aBoolean;
@@ -90,46 +76,36 @@ for (aRegExp in {}) { }
 for (var idx in {}) { }
 function fn() { }
 for (var x in fn()) { }
-var c, d, e;
 for (var x in c || d) { }
 for (var x in e ? c : d) { }
 for (var x in 42 ? c : d) { }
 for (var x in '' ? c : d) { }
 for (var x in 42 ? d[x] : c[x]) { }
 for (var x in c[23]) { }
-for (var x in (function (x) { return x; })) { }
+for (var x in ((x) => x)) { }
 for (var x in function (x, y) { return x + y; }) { }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.biz = function () {
+class A {
+    biz() {
         for (var x in this.biz()) { }
         for (var x in this.biz) { }
         for (var x in this) { }
         return null;
-    };
-    A.baz = function () {
+    }
+    static baz() {
         for (var x in this) { }
         for (var x in this.baz) { }
         for (var x in this.baz()) { }
         return null;
-    };
-    return A;
-}());
-var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    B.prototype.boz = function () {
+}
+class B extends A {
+    boz() {
         for (var x in this.biz()) { }
         for (var x in this.biz) { }
         for (var x in this) { }
-        for (var x in _super.prototype.biz) { }
-        for (var x in _super.prototype.biz.call(this)) { }
+        for (var x in super.biz) { }
+        for (var x in super.biz()) { }
         return null;
-    };
-    return B;
-}(A));
-var i;
+    }
+}
 for (var x in i[42]) { }

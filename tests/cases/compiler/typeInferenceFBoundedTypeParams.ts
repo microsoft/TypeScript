@@ -1,3 +1,4 @@
+// @target: es2015
 // Example from #6037
 
 function fold<a, r>(values: a[], result: r, fold: (result: r, value: a) => r): r {

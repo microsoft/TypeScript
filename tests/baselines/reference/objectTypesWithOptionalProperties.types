@@ -8,14 +8,14 @@ var a: {
 >  : ^^^^^^      ^^^
 
     x?: number; // ok
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface I {
     x?: number; // ok
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 class C {
@@ -23,14 +23,14 @@ class C {
 >  : ^
 
     x?: number; // ok
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface I2<T> {
     x?: T; // ok
->x : T
->  : ^
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
 }
 
 class C2<T> {
@@ -38,8 +38,8 @@ class C2<T> {
 >   : ^^^^^
 
     x?: T; // ok
->x : T
->  : ^
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
 }
 
 var b = {

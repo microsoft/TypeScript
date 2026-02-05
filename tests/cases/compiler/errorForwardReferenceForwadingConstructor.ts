@@ -1,3 +1,4 @@
+// @target: es2015
 // Error forward referencing derived class with forwarding constructor
 
 function f() {

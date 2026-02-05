@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @allowJs: true
+// @target: es5
 
 // @Filename: /a.js
 ////exports.x = 0;

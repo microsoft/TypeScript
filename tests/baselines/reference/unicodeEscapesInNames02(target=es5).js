@@ -2,8 +2,8 @@
 
 //// [extendedEscapesForAstralsInVarsAndClasses.ts]
 // U+102A7 CARIAN LETTER A2
-var 𐊧: string;
-var \u{102A7}: string;
+declare var 𐊧: string;
+declare var \u{102A7}: string;
 
 if (Math.random()) {
     𐊧 = "hello";
@@ -31,9 +31,6 @@ import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClass
 
 
 //// [extendedEscapesForAstralsInVarsAndClasses.js]
-// U+102A7 CARIAN LETTER A2
-var string;
-var u, A7 = (void 0)[102];
 if (Math.random()) {
     "hello";
 }

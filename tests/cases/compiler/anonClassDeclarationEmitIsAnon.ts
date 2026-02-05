@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 // @filename: wrapClass.ts
 export function wrapClass(param: any) {

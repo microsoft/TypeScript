@@ -55,7 +55,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo = __importStar(require("./foo"));
+const foo = __importStar(require("./foo"));
 function f(map) {
     // ...
 }

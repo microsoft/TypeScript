@@ -1,5 +1,8 @@
 //// [tests/cases/conformance/nonjsExtensions/declarationFileForHtmlFileWithinDeclarationFile.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === component.d.html.ts ===
 // html modules were proposed at https://github.com/WICG/webcomponents/blob/gh-pages/proposals/html-modules-explainer.md
 

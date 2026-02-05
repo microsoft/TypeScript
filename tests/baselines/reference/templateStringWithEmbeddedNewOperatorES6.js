@@ -4,4 +4,5 @@
 var x = `abc${ new String("Hi") }def`;
 
 //// [templateStringWithEmbeddedNewOperatorES6.js]
+"use strict";
 var x = `abc${new String("Hi")}def`;

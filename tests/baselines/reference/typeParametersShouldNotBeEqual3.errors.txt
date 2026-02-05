@@ -7,7 +7,7 @@ typeParametersShouldNotBeEqual3.ts(5,5): error TS2322: Type 'Object' is not assi
 
 ==== typeParametersShouldNotBeEqual3.ts (2 errors) ====
     function ff<T extends Object, U extends Object>(x: T, y: U) {
-        var z: Object;
+        var z!: Object;
         x = x;  // Ok
         x = y;  // Ok
         ~

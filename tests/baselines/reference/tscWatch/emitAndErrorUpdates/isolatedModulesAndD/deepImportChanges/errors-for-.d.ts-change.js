@@ -46,11 +46,11 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
-var b = new b_1.B();
+import { B } from './b';
+let b = new B();
 console.log(b.c.d);
 
 
@@ -59,14 +59,8 @@ export {};
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject: *new*
   {}
@@ -96,19 +90,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.d.ts
 /user/username/projects/myproject/b.d.ts
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.d.ts
 /user/username/projects/myproject/b.d.ts
 /user/username/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/c.d.ts (used version)
 /user/username/projects/myproject/b.d.ts (used version)
 /user/username/projects/myproject/a.ts (computed .d.ts during emit)
@@ -162,7 +156,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.d.ts
 /user/username/projects/myproject/b.d.ts
 /user/username/projects/myproject/a.ts
@@ -221,7 +215,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.d.ts
 /user/username/projects/myproject/b.d.ts
 /user/username/projects/myproject/a.ts
@@ -285,7 +279,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.d.ts
 /user/username/projects/myproject/b.d.ts
 /user/username/projects/myproject/a.ts

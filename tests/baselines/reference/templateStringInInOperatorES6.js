@@ -4,4 +4,5 @@
 var x = `${ "hi" }` in { hi: 10, hello: 20};
 
 //// [templateStringInInOperatorES6.js]
+"use strict";
 var x = `${"hi"}` in { hi: 10, hello: 20 };

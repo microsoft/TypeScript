@@ -1,3 +1,4 @@
+// @target: es2015
 class Linq {
     public static select<T, S>(values: T[], func: (v: T) => A): any[] {
         var result = new Array(values.length);

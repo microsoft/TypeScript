@@ -16,17 +16,11 @@ new Foo3();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = void 0;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 exports.default = Foo;
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    return Bar;
-}());
+class Bar {
+}
 exports.Bar = Bar;
 //// [idx.js]
 "use strict";
@@ -67,9 +61,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mod_1 = __importDefault(require("./mod"));
-var mod_2 = __importDefault(require("./mod"));
-var mod_3 = __importStar(require("./mod"));
+const mod_1 = __importDefault(require("./mod"));
+const mod_2 = __importDefault(require("./mod"));
+const mod_3 = __importStar(require("./mod"));
 new mod_1.default();
 new mod_2.default();
 new mod_3.Bar();

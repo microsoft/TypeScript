@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/outFileIsDeprecated.ts] ////
+
+=== /foo/a.ts ===
+const a = 1;
+>a : Symbol(a, Decl(a.ts, 0, 5))
+
+=== /foo/b.ts ===
+const b = 1;
+>b : Symbol(b, Decl(b.ts, 0, 5))
+

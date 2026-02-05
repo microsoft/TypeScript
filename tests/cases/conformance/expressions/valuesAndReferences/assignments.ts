@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // In this file:
 //  Assign to a module
 //  Assign to a class

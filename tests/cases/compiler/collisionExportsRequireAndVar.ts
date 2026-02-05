@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 //@filename: collisionExportsRequireAndVar_externalmodule.ts
 export function foo() {

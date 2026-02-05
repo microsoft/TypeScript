@@ -28,15 +28,22 @@ let x6 = <div>>{"foo"}</div>;
 
 
 //// [file.jsx]
+"use strict";
 //// [Error1.jsx]
-var x1 = <div>}</div>;
+"use strict";
+let x1 = <div>}</div>;
 //// [Error2.jsx]
-var x2 = <div>></div>;
+"use strict";
+let x2 = <div>></div>;
 //// [Error3.jsx]
-var x3 = <div>{"foo"}}</div>;
+"use strict";
+let x3 = <div>{"foo"}}</div>;
 //// [Error4.jsx]
-var x4 = <div>{"foo"}></div>;
+"use strict";
+let x4 = <div>{"foo"}></div>;
 //// [Error5.jsx]
-var x5 = <div>}{"foo"}</div>;
+"use strict";
+let x5 = <div>}{"foo"}</div>;
 //// [Error6.jsx]
-var x6 = <div>>{"foo"}</div>;
+"use strict";
+let x6 = <div>>{"foo"}</div>;

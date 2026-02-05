@@ -105,11 +105,10 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/sample1/core/anotherModule.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.World = void 0;
-exports.World = "hello";
+export const World = "hello";
 
 
 //// [/user/username/projects/sample1/core/anotherModule.d.ts.map]
@@ -120,14 +119,9 @@ export declare const World = "hello";
 //# sourceMappingURL=anotherModule.d.ts.map
 
 //// [/user/username/projects/sample1/core/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.someString = void 0;
-exports.leftPad = leftPad;
-exports.multiply = multiply;
-exports.someString = "HELLO WORLD";
-function leftPad(s, n) { return s + n; }
-function multiply(a, b) { return a * b; }
+export const someString = "HELLO WORLD";
+export function leftPad(s, n) { return s + n; }
+export function multiply(a, b) { return a * b; }
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map]

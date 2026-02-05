@@ -262,22 +262,7 @@ function testFunctionThisParameter2(
 
 //// [assertionTypePredicates1.js]
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var assert = function (value) { };
+const assert = value => { };
 function f01(x) {
     if (!!true) {
         assert(typeof x === "string");
@@ -357,32 +342,30 @@ function f10(x) {
         x; // Unreachable
     }
 }
-var Test = /** @class */ (function () {
-    function Test() {
-    }
-    Test.prototype.assert = function (value) {
+class Test {
+    assert(value) {
         if (value)
             return;
         throw new Error();
-    };
-    Test.prototype.isTest2 = function () {
+    }
+    isTest2() {
         return this instanceof Test2;
-    };
-    Test.prototype.assertIsTest2 = function () {
+    }
+    assertIsTest2() {
         if (this instanceof Test2)
             return;
         throw new Error();
-    };
-    Test.prototype.assertThis = function () {
+    }
+    assertThis() {
         if (!this)
             return;
         throw new Error();
-    };
-    Test.prototype.bar = function () {
+    }
+    bar() {
         this.assertThis();
         this;
-    };
-    Test.prototype.foo = function (x) {
+    }
+    foo(x) {
         this.assert(typeof x === "string");
         x.length;
         if (this.isTest2()) {
@@ -390,40 +373,30 @@ var Test = /** @class */ (function () {
         }
         this.assertIsTest2();
         this.z;
-    };
-    Test.prototype.baz = function (x) {
+    }
+    baz(x) {
         this.assert(false);
         x; // Unreachable
-    };
-    return Test;
-}());
-var Test2 = /** @class */ (function (_super) {
-    __extends(Test2, _super);
-    function Test2() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.z = 0;
-        return _this;
     }
-    return Test2;
-}(Test));
-var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);
-    function Derived() {
-        return _super !== null && _super.apply(this, arguments) || this;
+}
+class Test2 extends Test {
+    constructor() {
+        super(...arguments);
+        this.z = 0;
     }
-    Derived.prototype.foo = function (x) {
-        _super.prototype.assert.call(this, typeof x === "string");
+}
+class Derived extends Test {
+    foo(x) {
+        super.assert(typeof x === "string");
         x.length;
-    };
-    Derived.prototype.baz = function (x) {
-        _super.prototype.assert.call(this, false);
+    }
+    baz(x) {
+        super.assert(false);
         x; // Unreachable
-    };
-    return Derived;
-}(Test));
+    }
+}
 function f11(items) {
-    for (var _i = 0, items_1 = items; _i < items_1.length; _i++) {
-        var item = items_1[_i];
+    for (let item of items) {
         if (item.isTest2()) {
             item.z;
         }
@@ -432,53 +405,45 @@ function f11(items) {
     }
 }
 function f20(x) {
-    var assert = function (value) { };
+    const assert = (value) => { };
     assert(typeof x === "string"); // Error
-    var a = [assert];
+    const a = [assert];
     a[0](typeof x === "string"); // Error
-    var t1 = new Test();
+    const t1 = new Test();
     t1.assert(typeof x === "string"); // Error
-    var t2 = new Test();
+    const t2 = new Test();
     t2.assert(typeof x === "string");
 }
 function example1(things) {
-    for (var _i = 0, things_1 = things; _i < things_1.length; _i++) {
-        var thing = things_1[_i];
+    for (let thing of things) {
         thing.isGood();
         thing.good;
     }
 }
-var TestPropertyDeclaration1 = /** @class */ (function () {
-    function TestPropertyDeclaration1() {
-        this.assert = function (value) { };
+class TestPropertyDeclaration1 {
+    constructor() {
+        this.assert = (value) => { };
     }
-    TestPropertyDeclaration1.prototype.other = function (x) {
+    other(x) {
         this.assert(x); // error
         x;
-    };
-    return TestPropertyDeclaration1;
-}());
-var TestPropertyDeclaration2 = /** @class */ (function () {
-    function TestPropertyDeclaration2() {
-        this.assert = function (value) { };
     }
-    TestPropertyDeclaration2.prototype.other = function (x) {
+}
+class TestPropertyDeclaration2 {
+    constructor() {
+        this.assert = (value) => { };
+    }
+    other(x) {
         this.assert(x); // ok
         x;
-    };
-    return TestPropertyDeclaration2;
-}());
-var ChildInheritedPropertyDeclaration = /** @class */ (function (_super) {
-    __extends(ChildInheritedPropertyDeclaration, _super);
-    function ChildInheritedPropertyDeclaration() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    ChildInheritedPropertyDeclaration.prototype.other = function (x) {
+}
+class ChildInheritedPropertyDeclaration extends ParentInheritedPropertyDeclaration {
+    other(x) {
         this.assert(x); // ok
         x;
-    };
-    return ChildInheritedPropertyDeclaration;
-}(ParentInheritedPropertyDeclaration));
+    }
+}
 function testPropertySignature(x, y) {
     x.assert(y); // ok
     x;

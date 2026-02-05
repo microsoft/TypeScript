@@ -13,6 +13,7 @@ function foo() {
 
 
 //// [out.js]
+"use strict";
 function foo() {
     return 30;
 }

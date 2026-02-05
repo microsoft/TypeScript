@@ -6,8 +6,8 @@ declare const x: number
 >  : ^^^^^^
 
 declare const nnnu: [number, number, number?]
->nnnu : [number, number, number?]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>nnnu : [number, number, (number | undefined)?]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const nntnnnt: [number, number] | [number, number, number]
 >nntnnnt : [number, number] | [number, number, number]
@@ -30,10 +30,10 @@ fn(...nnnu, x)
 >               : ^^^^^^
 >fn : (a: number, b: number, bb: number, ...c: number[]) => number
 >   : ^ ^^      ^^ ^^      ^^  ^^      ^^^^^ ^^        ^^^^^      
->...nnnu : number
->        : ^^^^^^
->nnnu : [number, number, number?]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>...nnnu : number | undefined
+>        : ^^^^^^^^^^^^^^^^^^
+>nnnu : [number, number, (number | undefined)?]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 

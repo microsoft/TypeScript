@@ -7,4 +7,5 @@ f((a: any) => "")
 
 
 //// [functionExpressionContextualTyping3.js]
-f(function (a) { return ""; });
+"use strict";
+f((a) => "");

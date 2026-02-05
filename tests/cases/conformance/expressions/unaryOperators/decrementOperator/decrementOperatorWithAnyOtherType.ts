@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // -- operator on any type
 
 var ANY: any;

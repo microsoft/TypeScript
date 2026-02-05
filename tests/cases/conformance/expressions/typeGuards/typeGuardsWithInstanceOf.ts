@@ -1,4 +1,5 @@
-﻿// @strictNullChecks: true
+﻿// @target: es2015
+// @strictNullChecks: true
 
 interface I { global: string; }
 var result!: I;

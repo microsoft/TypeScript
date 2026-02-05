@@ -58,7 +58,7 @@ namespace moduleType1 {
 >baz1 : number
 >     : ^^^^^^
 }
-module moduleType\u0032 { 
+declare module moduleType\u0032 { 
 >moduleType\u0032 : typeof moduleType\u0032
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -29,6 +29,8 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/users/username/projects/project/foo.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
@@ -40,15 +42,11 @@ define(["require", "exports"], function (require, exports) {
 PolledWatches::
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /users/username/projects: *new*
   {}
@@ -65,13 +63,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/foo.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /users/username/projects/project/foo.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -107,12 +105,6 @@ Output::
 
 //// [/users/username/projects/project/foo.js] file written with same contents
 
-PolledWatches::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
 PolledWatches *deleted*::
 /users/username/projects/node_modules:
   {"pollingInterval":500}
@@ -120,7 +112,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /users/username/projects/project:
   {}
@@ -145,7 +137,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/bar.d.ts
 /users/username/projects/project/foo.ts
 

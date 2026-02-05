@@ -11,6 +11,7 @@ using x
 
 
 //// [decoratorOnUsing.js]
+"use strict";
 using ;
 1;
 using x;

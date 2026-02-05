@@ -93,7 +93,8 @@ class C {
 >  : ^
         }
         catch (e) {
->e : any
+>e : unknown
+>  : ^^^^^^^
 
             var x = 2;
 >x : number

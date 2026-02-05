@@ -10,15 +10,15 @@ class Foo {
 
 
 //// [declarationEmitPrivateReadonlyLiterals.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+"use strict";
+class Foo {
+    constructor() {
         this.B = "b";
         this.D = 42;
     }
-    Foo.A = "a";
-    Foo.C = 42;
-    return Foo;
-}());
+}
+Foo.A = "a";
+Foo.C = 42;
 
 
 //// [declarationEmitPrivateReadonlyLiterals.d.ts]

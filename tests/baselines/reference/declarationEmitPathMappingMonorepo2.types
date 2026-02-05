@@ -22,8 +22,8 @@ import { StyledComponentProps } from "@ts-bug/styles";
 
 export interface SvgIconProps extends StyledComponentProps<"root"> {
     children?: string[];
->children : string[]
->         : ^^^^^^^^
+>children : string[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^
 }
 export interface SomeInterface {
     myProp: string;
@@ -56,7 +56,7 @@ export function createSvgIcon(path: string, displayName: string): typeof SvgIcon
 === packages/styles/src/index.d.ts ===
 export interface StyledComponentProps<ClassKey extends string> {
     classes?: Record<ClassKey, string>;
->classes : Record<ClassKey, string>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>classes : Record<ClassKey, string> | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

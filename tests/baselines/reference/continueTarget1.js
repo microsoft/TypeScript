@@ -5,4 +5,5 @@ target:
   continue target;
 
 //// [continueTarget1.js]
+"use strict";
 target: continue target;

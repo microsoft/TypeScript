@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: propertiesOfGenericConstructorFunctions.js
 // @allowJs: true
 // @checkJs: true

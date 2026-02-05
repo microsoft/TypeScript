@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 export declare type ThenArg<T> = T extends any ? any : T extends PromiseLike<infer U> ? U : T;
 

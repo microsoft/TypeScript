@@ -1,3 +1,4 @@
+// @target: es2015
 var foo = [
     { name: 'bar' },
     { name: null },

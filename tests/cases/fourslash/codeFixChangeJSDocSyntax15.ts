@@ -1,4 +1,5 @@
 /// <reference path='fourslash.ts' />
+// @strict: false
 //// var f = <[|function(number?): number|]>(x => x);
 
 verify.codeFix({

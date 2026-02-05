@@ -15,12 +15,11 @@ function bar() {
 }
 
 //// [a.js]
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+"use strict";
+class c {
+}
 //// [b.js]
+"use strict";
 /// <reference path="c.js"/>
 // b.d.ts should have c.d.ts as the reference path
 function foo() {

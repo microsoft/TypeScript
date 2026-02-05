@@ -17,7 +17,7 @@ var v: C = {}; // Should succeed
 >{} : {}
 >   : ^^
 
-var v2: { x? }
+declare var v2: { x? }
 >v2 : { x?: any; }
 >   : ^^^^^^^^^^^^
 >x : any

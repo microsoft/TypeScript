@@ -1,3 +1,5 @@
+// @target: es5, es2015
+// @strict: false
 // @allowUnreachableCode: true
 
 // FunctionExpression with no return type annotation with multiple return statements with unrelated types
@@ -27,7 +29,7 @@ var f4 = function () {
 function f5(): number {
 }
 
-var m;
+declare var m: any;
 // Function signature with parameter initializer referencing in scope local variable
 function f6(n = m) {
     var m = 4;

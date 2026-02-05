@@ -42,16 +42,17 @@ M.foo.y // ok
 M.foo.z // error
 
 //// [mergedDeclarations3.js]
+"use strict";
 var M;
 (function (M) {
-    var Color;
+    let Color;
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
         Color[Color["Green"] = 1] = "Green";
     })(Color = M.Color || (M.Color = {}));
 })(M || (M = {}));
 (function (M) {
-    var Color;
+    let Color;
     (function (Color) {
         Color.Blue = 4;
     })(Color = M.Color || (M.Color = {}));
@@ -63,19 +64,19 @@ var p = M.Color.Blue; // ok
     M.foo = foo;
 })(M || (M = {}));
 (function (M) {
-    var foo;
+    let foo;
     (function (foo) {
         foo.x = 1;
     })(foo || (foo = {}));
 })(M || (M = {}));
 (function (M) {
-    var foo;
+    let foo;
     (function (foo) {
         foo.y = 2;
     })(foo = M.foo || (M.foo = {}));
 })(M || (M = {}));
 (function (M) {
-    var foo;
+    let foo;
     (function (foo) {
         foo.z = 1;
     })(foo || (foo = {}));

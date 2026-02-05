@@ -1,3 +1,4 @@
+// @target: es2015
 namespace mOfGloalFile {
     export class c {
     }

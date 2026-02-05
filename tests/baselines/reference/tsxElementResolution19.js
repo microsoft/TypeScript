@@ -23,11 +23,8 @@ import {MyClass} from './file1';
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
-var MyClass = /** @class */ (function () {
-    function MyClass() {
-    }
-    return MyClass;
-}());
+class MyClass {
+}
 exports.MyClass = MyClass;
 //// [file2.js]
 "use strict";
@@ -66,6 +63,6 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 // Should not elide React import
-var React = __importStar(require("react"));
-var file1_1 = require("./file1");
+const React = __importStar(require("react"));
+const file1_1 = require("./file1");
 React.createElement(file1_1.MyClass, null);

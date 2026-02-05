@@ -1,3 +1,4 @@
+// @target: es2015
 // The following are errors because of circular references
 var c: typeof c;
 var c: any;

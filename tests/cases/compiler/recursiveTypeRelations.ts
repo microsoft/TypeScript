@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #14896
 
 type Attributes<Keys extends keyof any> = {

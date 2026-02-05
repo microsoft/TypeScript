@@ -21,6 +21,7 @@ interface Node {
 
 
 //// [missingDomElements.js]
+"use strict";
 ({}.textContent);
 ({}.textContent);
 ({}.textContent);

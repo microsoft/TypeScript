@@ -19,7 +19,7 @@ class C {
     }
 }
 
-var c: C;
+declare var c: C;
 // all ok
 var r = c.x;
 var ra = c.x.x.x;
@@ -34,8 +34,12 @@ rs.forEach(x => {
 });
 
 //// [typeOfThisInInstanceMember.js]
-var C = /** @class */ (function () {
-    function C(x) {
+"use strict";
+class C {
+    foo() {
+        return this;
+    }
+    constructor(x) {
         this.x = this;
         var t = this;
         t.x;
@@ -43,26 +47,17 @@ var C = /** @class */ (function () {
         t.z;
         var r = t.foo();
     }
-    C.prototype.foo = function () {
+    get y() {
         return this;
-    };
-    Object.defineProperty(C.prototype, "y", {
-        get: function () {
-            return this;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
-var c;
+    }
+}
 // all ok
 var r = c.x;
 var ra = c.x.x.x;
 var r2 = c.y;
 var r3 = c.foo();
 var rs = [r, r2, r3];
-rs.forEach(function (x) {
+rs.forEach(x => {
     x.foo;
     x.x;
     x.y;

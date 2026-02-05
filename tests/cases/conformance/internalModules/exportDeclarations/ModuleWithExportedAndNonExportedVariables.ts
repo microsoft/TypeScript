@@ -1,3 +1,4 @@
+// @target: es2015
 namespace A {
     export var x = 'hello world'
     var y = 12;

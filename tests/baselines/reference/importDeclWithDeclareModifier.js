@@ -10,10 +10,7 @@ var b: a;
 
 
 //// [importDeclWithDeclareModifier.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = x.c;
+export var a = x.c;
 var b;
 
 
@@ -22,9 +19,7 @@ var b;
 ===================================================================
 --- Expected	The full check baseline
 +++ Actual	with noCheck set
-@@ -1,5 +1,3 @@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
--exports.a = void 0;
--exports.a = x.c;
+@@ -1,2 +1,2 @@
+-export var a = x.c;
  var b;
++export {};

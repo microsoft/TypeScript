@@ -9,6 +9,7 @@ declare var Foo, Bar, baz;
 <Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo>;
 
 //// [test.js]
+"use strict";
 React.createElement(Foo, null,
     " ",
     React.createElement(Bar, null, " q "),

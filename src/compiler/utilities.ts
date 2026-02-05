@@ -1283,16 +1283,6 @@ export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFil
 }
 
 /** @internal */
-export function getNonModifierTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
-    const lastModifier = !nodeIsMissing(node) && canHaveModifiers(node) && node.modifiers ? last(node.modifiers) : undefined;
-    if (!lastModifier) {
-        return getTokenPosOfNode(node, sourceFile);
-    }
-
-    return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, lastModifier.end);
-}
-
-/** @internal */
 export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia = false): string {
     return getTextOfNodeFromSourceText(sourceFile.text, node, includeTrivia);
 }
@@ -2142,7 +2132,7 @@ export function isEffectiveStrictModeSourceFile(node: SourceFile, compilerOption
         return false;
     }
     // If `alwaysStrict` is set, then treat the file as strict.
-    if (getStrictOptionValue(compilerOptions, "alwaysStrict")) {
+    if (getAlwaysStrict(compilerOptions)) {
         return true;
     }
     // Starting with a "use strict" directive indicates the file is strict.
@@ -6642,7 +6632,7 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
     // Json file is not emitted if outDir is not specified
     if (!options.outDir) return false;
     // Otherwise if rootDir or composite config file, we know common sourceDir and can check if file would be emitted in same location
-    if (options.rootDir || (options.composite && options.configFilePath)) {
+    if (options.rootDir || options.configFilePath) {
         const commonDir = getNormalizedAbsolutePath(getCommonSourceDirectory(options, () => [], host.getCurrentDirectory(), host.getCanonicalFileName), host.getCurrentDirectory());
         const outputPath = getSourceFilePathInNewDirWorker(sourceFile.fileName, options.outDir, host.getCurrentDirectory(), commonDir, host.getCanonicalFileName);
         if (comparePaths(sourceFile.fileName, outputPath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo) return false;
@@ -8981,6 +8971,14 @@ export function importSyntaxAffectsModuleResolution(options: CompilerOptions): b
         || getResolvePackageJsonImports(options);
 }
 
+/**
+ * @internal
+ * Returns true if this option's types array includes "*"
+ */
+export function usesWildcardTypes(options: CompilerOptions): options is CompilerOptions & { types: string[]; } {
+    return some(options.types, t => t === "*");
+}
+
 type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };
 function createComputedCompilerOptions<T extends Record<string, CompilerOptionKeys[]>>(
     options: {
@@ -9001,23 +8999,32 @@ const _computedOptions = createComputedCompilerOptions({
         },
     },
     target: {
-        dependencies: ["module"],
+        dependencies: [],
         computeValue: compilerOptions => {
             const target = compilerOptions.target === ScriptTarget.ES3 ? undefined : compilerOptions.target;
-            return target ??
-                ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
-                    (compilerOptions.module === ModuleKind.Node18 && ScriptTarget.ES2022) ||
-                    (compilerOptions.module === ModuleKind.Node20 && ScriptTarget.ES2023) ||
-                    (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
-                    ScriptTarget.ES5);
+            return target ?? ScriptTarget.LatestStandard;
         },
     },
     module: {
         dependencies: ["target"],
         computeValue: (compilerOptions): ModuleKind => {
-            return typeof compilerOptions.module === "number" ?
-                compilerOptions.module :
-                _computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
+            if (typeof compilerOptions.module === "number") {
+                return compilerOptions.module;
+            }
+            const target = _computedOptions.target.computeValue(compilerOptions);
+            if (target === ScriptTarget.ESNext) {
+                return ModuleKind.ESNext;
+            }
+            if (target >= ScriptTarget.ES2022) {
+                return ModuleKind.ES2022;
+            }
+            if (target >= ScriptTarget.ES2020) {
+                return ModuleKind.ES2020;
+            }
+            if (target >= ScriptTarget.ES2015) {
+                return ModuleKind.ES2015;
+            }
+            return ModuleKind.CommonJS;
         },
     },
     moduleResolution: {
@@ -9213,10 +9220,11 @@ const _computedOptions = createComputedCompilerOptions({
             return getStrictOptionValue(compilerOptions, "strictBuiltinIteratorReturn");
         },
     },
+    // Previously a strict-mode flag, but no longer.
     alwaysStrict: {
-        dependencies: ["strict"],
+        dependencies: [],
         computeValue: compilerOptions => {
-            return getStrictOptionValue(compilerOptions, "alwaysStrict");
+            return compilerOptions.alwaysStrict !== false;
         },
     },
     useUnknownInCatchVariables: {
@@ -9264,6 +9272,8 @@ export const getAreDeclarationMapsEnabled: (compilerOptions: CompilerOptions) =>
 export const getAllowJSCompilerOption: (compilerOptions: CompilerOptions) => boolean = _computedOptions.allowJs.computeValue;
 /** @internal */
 export const getUseDefineForClassFields: (compilerOptions: CompilerOptions) => boolean = _computedOptions.useDefineForClassFields.computeValue;
+/** @internal */
+export const getAlwaysStrict: (compilerOptions: CompilerOptions) => boolean = _computedOptions.alwaysStrict.computeValue;
 
 /** @internal */
 export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean {
@@ -9306,12 +9316,11 @@ export type StrictOptionName =
     | "strictBindCallApply"
     | "strictPropertyInitialization"
     | "strictBuiltinIteratorReturn"
-    | "alwaysStrict"
     | "useUnknownInCatchVariables";
 
 /** @internal */
 export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
-    return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
+    return compilerOptions[flag] === undefined ? (compilerOptions.strict !== false) : !!compilerOptions[flag];
 }
 
 /** @internal */

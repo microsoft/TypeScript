@@ -66,7 +66,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/proj/foo/boo/moo/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/proj/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/proj/foo 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/proj/foo 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects 0 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Failed Lookup Locations
@@ -77,20 +77,16 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/proj 0 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/proj 0 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/proj/node_modules/@types 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/proj/node_modules/@types 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/proj/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/proj/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/users/username/projects/proj/foo/boo/app.ts SVC-1-0 "import * as debug from \"debug\""
 	/users/username/projects/proj/foo/boo/moo/app.ts Text-1 "import * as debug from \"debug\""
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	foo/boo/app.ts
 	  Part of 'files' list in tsconfig.json
 	foo/boo/moo/app.ts
@@ -192,19 +188,17 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/proj/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/proj/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /users/username/projects: *new*
   {}
@@ -226,7 +220,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /users/username/projects/proj/tsconfig.json
@@ -269,17 +263,13 @@ export {}
 PolledWatches::
 /users/username/projects/node_modules:
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/proj/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /users/username/projects/proj/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /users/username/projects:
   {}
@@ -332,14 +322,14 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/proj/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/proj/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/users/username/projects/proj/node_modules/debug/index.d.ts Text-1 "export {}"
 	/users/username/projects/proj/foo/boo/app.ts SVC-1-0 "import * as debug from \"debug\""
 	/users/username/projects/proj/foo/boo/moo/app.ts Text-1 "import * as debug from \"debug\""
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	node_modules/debug/index.d.ts
 	  Imported via "debug" from file 'foo/boo/app.ts'
 	  Imported via "debug" from file 'foo/boo/moo/app.ts'
@@ -381,12 +371,8 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/package.json: *new*
   {"pollingInterval":2000}
-/users/username/projects/proj/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/proj/node_modules/debug/package.json: *new*
   {"pollingInterval":2000}
 /users/username/projects/proj/node_modules/package.json: *new*
@@ -399,7 +385,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /users/username/projects:
   {}
@@ -424,7 +410,7 @@ Projects::
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /users/username/projects/proj/tsconfig.json

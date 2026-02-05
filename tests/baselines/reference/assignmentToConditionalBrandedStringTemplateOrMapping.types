@@ -6,16 +6,16 @@ let a: (<T>() => T extends `${'a' & { a: 1 }}` ? 1 : 2) = null!;
 >  : ^ ^^^^^^^                                      
 >a : 1
 >  : ^
->null! : null
->      : ^^^^
+>null! : never
+>      : ^^^^^
 
 let b: (<T>() => T extends `${'a' & { a: 1 }}` ? 1 : 2) = null!;
 >b : <T>() => T extends `${"a" & { a: 1; }}` ? 1 : 2
 >  : ^ ^^^^^^^                                      
 >a : 1
 >  : ^
->null! : null
->      : ^^^^
+>null! : never
+>      : ^^^^^
 
 a = b;
 >a = b : <T>() => T extends `${"a" & { a: 1; }}` ? 1 : 2
@@ -30,16 +30,16 @@ let c: (<T>() => T extends Uppercase<'a' & { a: 1 }> ? 1 : 2) = null!;
 >  : ^ ^^^^^^^                                            
 >a : 1
 >  : ^
->null! : null
->      : ^^^^
+>null! : never
+>      : ^^^^^
 
 let d: (<T>() => T extends Uppercase<'a' & { a: 1 }> ? 1 : 2) = null!;
 >d : <T>() => T extends Uppercase<"a" & { a: 1; }> ? 1 : 2
 >  : ^ ^^^^^^^                                            
 >a : 1
 >  : ^
->null! : null
->      : ^^^^
+>null! : never
+>      : ^^^^^
 
 c = d;
 >c = d : <T>() => T extends Uppercase<"a" & { a: 1; }> ? 1 : 2

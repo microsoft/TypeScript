@@ -1,1 +1,2 @@
-﻿var x = `abc${ " " }def` ? `abc${ " " }def` : `abc${ " " }def`;
+﻿// @target: es2015
+var x = `abc${ " " }def` ? `abc${ " " }def` : `abc${ " " }def`;

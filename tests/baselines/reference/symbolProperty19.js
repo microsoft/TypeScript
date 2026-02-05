@@ -10,6 +10,7 @@ var it = i[Symbol.iterator];
 var str = i[Symbol.toStringTag]();
 
 //// [symbolProperty19.js]
+"use strict";
 var i = {
     [Symbol.iterator]: { p: null },
     [Symbol.toStringTag]() { return { p: undefined }; }

@@ -1,11 +1,12 @@
+// @target: es2015
 // ++ operator on string type
-var STRING: string;
+declare var STRING: string;
 var STRING1: string[] = ["", ""];
 
 function foo(): string { return ""; }
 
 class A {
-    public a: string;
+    public a!: string;
     static foo() { return ""; }
 }
 namespace M {

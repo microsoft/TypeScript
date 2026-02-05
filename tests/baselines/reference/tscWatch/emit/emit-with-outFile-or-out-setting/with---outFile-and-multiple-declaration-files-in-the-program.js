@@ -46,16 +46,28 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96msrc/main2.ts[0m:[93m1[0m:[93m114[0m - [91merror[0m[90m TS2724: [0m'Common.SomeComponent.DynamicMenu' has no exported member named 'z'. Did you mean 'Z'?
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
 
-[7m1[0m namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }
-[7m [0m [91m                                                                                                                 ~[0m
+[7m3[0m     "outFile": "../output/common.js",
+[7m [0m [91m    ~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../output/common.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "target": "es5"
+[7m [0m [91m              ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
 
 
 
 //// [/home/src/projects/a/b/output/common.js]
+"use strict";
 var Main;
 (function (Main) {
     function fooBar() { }
@@ -71,16 +83,6 @@ var main;
 })(main || (main = {}));
 
 
-
-PolledWatches::
-/home/src/projects/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/b/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/a/b/dependencies/file2.d.ts: *new*
@@ -116,12 +118,7 @@ Program files::
 /home/src/projects/a/b/project/src/main.ts
 /home/src/projects/a/b/project/src/main2.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/projects/a/b/output/AnotherDependency/file1.d.ts
-/home/src/projects/a/b/dependencies/file2.d.ts
-/home/src/projects/a/b/project/src/main.ts
-/home/src/projects/a/b/project/src/main2.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 

@@ -41,6 +41,7 @@ do{
 
 
 //// [doWhileContinueStatements.js]
+"use strict";
 do {
     continue;
 } while (true);

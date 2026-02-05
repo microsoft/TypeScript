@@ -8,9 +8,10 @@ namespace Test1 {
 }
 
 //// [errorForUsingPropertyOfTypeAsType02.js]
+"use strict";
 var Test1;
 (function (Test1) {
     function foo(x) {
-        var a = x.abc;
+        let a = x.abc;
     }
 })(Test1 || (Test1 = {}));

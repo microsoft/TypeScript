@@ -1,3 +1,4 @@
+// @target: es2015
 // @captureSuggestions: true
 
 1 << 1; // ok

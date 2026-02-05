@@ -12,9 +12,10 @@ y = 1;
 y = 0; // error
 
 //// [conditionalAnyCheckTypePicksBothBranches.js]
-var x;
+"use strict";
+let x;
 x = 1;
 x = 0; // not an error
-var y;
+let y;
 y = 1;
 y = 0; // error

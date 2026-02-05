@@ -33,64 +33,23 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/workspace/solution/projects/projectc/f3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 1;
+export let y = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/f2.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("../projectc/f3"), exports);
+export * from "../projectc/f3";
 
 
 //// [/user/username/workspace/solution/projects/project/f1.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./f2"), exports);
+export * from "./f2";
 
 
-
-PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/workspace/solution/projects/project/f1.ts: *new*
   {}
@@ -108,19 +67,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/projectc/f3.ts
 /user/username/workspace/solution/projects/project/f2.ts
 /user/username/workspace/solution/projects/project/f1.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/projectc/f3.ts
 /user/username/workspace/solution/projects/project/f2.ts
 /user/username/workspace/solution/projects/project/f1.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/workspace/solution/projects/projectc/f3.ts (used version)
 /user/username/workspace/solution/projects/project/f2.ts (used version)
 /user/username/workspace/solution/projects/project/f1.ts (used version)
@@ -155,16 +114,8 @@ Output::
 
 //// [/user/username/workspace/solution/projects/project/f1.js] file written with same contents
 
-PolledWatches::
-/user/username/workspace/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/workspace/solution/projects/project/f1.ts:
   {}
@@ -189,7 +140,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/f1.ts
 
 Semantic diagnostics in builder refreshed for::

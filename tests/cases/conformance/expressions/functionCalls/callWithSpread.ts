@@ -1,3 +1,4 @@
+// @target: es2015
 interface X {
     foo(x: number, y: number, ...z: string[]): X;
 }

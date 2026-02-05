@@ -18,7 +18,7 @@ interface Obj1type {
 >x : number
 >  : ^^^^^^
 }
-var Obj1: Obj1type;
+declare var Obj1: Obj1type;
 >Obj1 : Obj1type
 >     : ^^^^^^^^
 
@@ -41,7 +41,7 @@ interface Obj2type {
 >render : any
 >       : ^^^
 }
-var Obj2: Obj2type;
+declare var Obj2: Obj2type;
 >Obj2 : Obj2type
 >     : ^^^^^^^^
 

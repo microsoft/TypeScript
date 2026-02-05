@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
 // @module: commonjs
 
 // @Filename: c:/workspaces/project/node_modules/.store/aws-sdk-virtual-adfe098/package/package.json

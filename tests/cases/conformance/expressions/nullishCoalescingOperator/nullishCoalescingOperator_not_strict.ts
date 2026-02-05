@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 
 declare const a1: 'literal' | undefined | null

@@ -27,8 +27,8 @@ class Table<S extends Schema>  {
 >        : ^ ^^^^^^^^^       ^^^^^^^                                
 
         return null!
->null! : null
->      : ^^^^
+>null! : never
+>      : ^^^^^
     }
 }
 

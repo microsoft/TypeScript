@@ -1,3 +1,4 @@
+// @target: es2015
 // repro from #22093
 enum A { one = "one", two = "two" };
 enum B { foo = "foo", bar = "bar" };

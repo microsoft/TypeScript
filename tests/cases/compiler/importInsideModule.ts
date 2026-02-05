@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 // @Filename: importInsideModule_file1.ts
 export var x = 1;

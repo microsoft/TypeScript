@@ -11,3 +11,4 @@ declare namespace ng {
         all(promises: IPromise < any > []): IPromise<
 
 //// [parserUnterminatedGeneric2.js]
+"use strict";

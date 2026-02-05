@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 ////class C {
 ////    constructor(x: number) { }
 ////    foo() { }

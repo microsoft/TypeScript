@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 /////// This is simple /// comments
 ////function simple() {
 ////}

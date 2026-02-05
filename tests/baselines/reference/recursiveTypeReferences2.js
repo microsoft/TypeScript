@@ -29,6 +29,7 @@ const p = {};
 
 
 //// [bug39372.js]
+"use strict";
 /** @typedef {ReadonlyArray<Json>} JsonArray */
 /** @typedef {{ readonly [key: string]: Json }} JsonRecord */
 /** @typedef {boolean | number | string | null | JsonRecord | JsonArray | readonly []} Json */
@@ -51,7 +52,7 @@ const p = {};
   )
 }} XMLObject<T> */
 /** @type {XMLObject<{foo:string}>} */
-var p = {};
+const p = {};
 
 
 //// [bug39372.d.ts]

@@ -30,11 +30,12 @@ function TodoListNoError({ todos }: TodoListProps) {
         {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
     </div>;
 }
-let x: TodoListProps;
+declare let x: TodoListProps;
     <TodoList {...x}/>
 
 
 //// [tsxSpreadChildrenInvalidType.js]
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -67,5 +68,4 @@ function TodoListNoError(_a) {
     // any is not checked
     return React.createElement.apply(React, __spreadArray(["div", null], React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }), false));
 }
-var x;
 React.createElement(TodoList, __assign({}, x));

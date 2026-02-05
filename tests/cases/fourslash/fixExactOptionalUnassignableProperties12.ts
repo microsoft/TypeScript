@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 // @strictNullChecks: true
 // @exactOptionalPropertyTypes: true
 //// interface IC2 {
@@ -9,10 +10,10 @@
 ////     a?: number | undefined
 //// }
 //// declare var j: J
-//// class C {
+//// interface C {
 ////     ic2: IC2
 //// }
-//// var c = new C()
+//// declare var c: C
 //// c.ic2/**/ = j
 verify.codeFixAvailable([
     { description: ts.Diagnostics.Add_undefined_to_optional_property_type.message }
@@ -29,10 +30,10 @@ interface J {
     a?: number | undefined
 }
 declare var j: J
-class C {
+interface C {
     ic2: IC2
 }
-var c = new C()
+declare var c: C
 c.ic2 = j`,
 });
 

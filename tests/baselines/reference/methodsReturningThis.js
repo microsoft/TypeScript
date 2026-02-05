@@ -22,6 +22,7 @@ Class.prototype.m9 = function () { return this; };
 
 
 //// [output.js]
+"use strict";
 function Class() {
 }
 // error: 'Class' doesn't have property 'notPresent'

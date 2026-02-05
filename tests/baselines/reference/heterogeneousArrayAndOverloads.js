@@ -14,15 +14,13 @@ class arrTest {
 }
 
 //// [heterogeneousArrayAndOverloads.js]
-var arrTest = /** @class */ (function () {
-    function arrTest() {
-    }
-    arrTest.prototype.test = function (arg1) { };
-    arrTest.prototype.callTest = function () {
+"use strict";
+class arrTest {
+    test(arg1) { }
+    callTest() {
         this.test([1, 2, 3, 5]);
         this.test(["hi"]);
         this.test([]);
         this.test([1, 2, "hi", 5]); // Error
-    };
-    return arrTest;
-}());
+    }
+}

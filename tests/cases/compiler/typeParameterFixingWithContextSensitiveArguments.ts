@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 function f<T, U>(y: T, f: (x: T) => U, x: T): [T, U] { return [y, f(x)]; }
 interface A { a: A; }
 interface B extends A { b; }

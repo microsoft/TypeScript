@@ -9,8 +9,6 @@ import {x} from "foo";
 
 
 //// [lib.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [app.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

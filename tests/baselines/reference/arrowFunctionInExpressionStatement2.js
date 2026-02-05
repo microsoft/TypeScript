@@ -6,7 +6,8 @@ namespace M {
 }
 
 //// [arrowFunctionInExpressionStatement2.js]
+"use strict";
 var M;
 (function (M) {
-    (function () { return 0; });
+    () => 0;
 })(M || (M = {}));

@@ -7,3 +7,4 @@ declare namespace ambiModule {
 
 
 //// [parser509618.js]
+"use strict";

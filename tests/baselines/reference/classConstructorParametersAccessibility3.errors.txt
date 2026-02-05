@@ -1,0 +1,19 @@
+classConstructorParametersAccessibility3.ts(13,1): error TS2454: Variable 'd' is used before being assigned.
+
+
+==== classConstructorParametersAccessibility3.ts (1 errors) ====
+    class Base {
+        constructor(protected p: number) { }
+    }
+    
+    class Derived extends Base {
+        constructor(public p: number) {
+            super(p);
+            this.p; // OK
+        }
+    }
+    
+    var d: Derived;
+    d.p;  // public, OK
+    ~
+!!! error TS2454: Variable 'd' is used before being assigned.

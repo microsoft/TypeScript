@@ -1,3 +1,4 @@
+// @target: es2015
 class A {
 
     static one<T>(source: T, value: number): T {

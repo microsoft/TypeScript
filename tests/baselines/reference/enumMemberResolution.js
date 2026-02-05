@@ -10,6 +10,7 @@ var z = Position2.IgnoreRulesSpecific; // no error
 
 
 //// [enumMemberResolution.js]
+"use strict";
 var Position2;
 (function (Position2) {
     Position2[Position2["IgnoreRulesSpecific"] = 0] = "IgnoreRulesSpecific";

@@ -1,3 +1,4 @@
+// @target: es2015
 namespace A { }
 var a: A; // error
 

@@ -1,7 +1,32 @@
 Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
 Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
 Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
-Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "arguments": {
+        "options": {
+          "noLib": true,
+          "lib": [
+            "es5"
+          ],
+          "target": "es2024",
+          "newLine": "crlf",
+          "skipDefaultLibCheck": true
+        }
+      },
+      "command": "compilerOptionsForInferredProjects"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "compilerOptionsForInferredProjects",
+      "request_seq": 0,
+      "success": true,
+      "body": true
+    }
 //// [/home/src/workspaces/project/index.ts]
 someMo
 
@@ -10,12 +35,12 @@ export const someModule = 0;
 export default 1;
 
 //// [/home/src/workspaces/project/tsconfig.json]
-{ "compilerOptions": { "noLib": true } }
+{ "compilerOptions": { "noLib": true, "lib": ["es5"] } }
 
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 0,
+      "seq": 1,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/tsconfig.json"
@@ -32,6 +57,9 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  ],
  "options": {
   "noLib": true,
+  "lib": [
+   "lib.es5.d.ts"
+  ],
   "configFilePath": "/home/src/workspaces/project/tsconfig.json"
  }
 }
@@ -50,10 +78,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/someModule.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -86,6 +110,34 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/home/src/workspaces/project/tsconfig.json",
         "diagnostics": [
           {
+            "start": {
+              "line": 1,
+              "offset": 24
+            },
+            "end": {
+              "line": 1,
+              "offset": 31
+            },
+            "text": "Option 'lib' cannot be specified with option 'noLib'.",
+            "code": 5053,
+            "category": "error",
+            "fileName": "/home/src/workspaces/project/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 1,
+              "offset": 39
+            },
+            "end": {
+              "line": 1,
+              "offset": 44
+            },
+            "text": "Option 'lib' cannot be specified with option 'noLib'.",
+            "code": 5053,
+            "category": "error",
+            "fileName": "/home/src/workspaces/project/tsconfig.json"
+          },
+          {
             "text": "Cannot find global type 'Array'.",
             "code": 2318,
             "category": "error"
@@ -96,12 +148,22 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "error"
           },
           {
+            "text": "Cannot find global type 'CallableFunction'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
             "text": "Cannot find global type 'Function'.",
             "code": 2318,
             "category": "error"
           },
           {
             "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'NewableFunction'.",
             "code": 2318,
             "category": "error"
           },
@@ -132,15 +194,10 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /home/src/workspaces/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{ \"compilerOptions\": { \"noLib\": true } }"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{ \"compilerOptions\": { \"noLib\": true, \"lib\": [\"es5\"] } }"
 
 
 	tsconfig.json
@@ -163,7 +220,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 0,
+      "request_seq": 1,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -171,8 +228,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /home/src/workspaces/project/index.ts: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/jsconfig.json: *new*
@@ -183,13 +238,7 @@ watchedFiles::
   {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules/@types: *new*
-  {}
-  {}
 /home/src/workspaces/project: *new*
-  {}
-/home/src/workspaces/project/node_modules/@types: *new*
-  {}
   {}
 
 Projects::
@@ -218,7 +267,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 1,
+      "seq": 2,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/index.ts"
@@ -245,13 +294,11 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 1,
+      "request_seq": 2,
       "success": true
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/workspaces/project/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/someModule.ts:
@@ -264,13 +311,7 @@ watchedFiles *deleted*::
   {"pollingInterval":500}
 
 watchedDirectoriesRecursive::
-/home/src/workspaces/node_modules/@types:
-  {}
-  {}
 /home/src/workspaces/project:
-  {}
-/home/src/workspaces/project/node_modules/@types:
-  {}
   {}
 
 Projects::
@@ -300,7 +341,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 2,
+      "seq": 3,
       "type": "request",
       "arguments": {
         "preferences": {
@@ -314,7 +355,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "configure",
-      "request_seq": 2,
+      "request_seq": 3,
       "success": true
     }
 After Request
@@ -329,7 +370,7 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 3,
+      "seq": 4,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/index.ts",
@@ -353,7 +394,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "completionInfo",
-      "request_seq": 3,
+      "request_seq": 4,
       "success": true,
       "body": {
         "flags": 9,
@@ -833,7 +874,7 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 4,
+      "seq": 5,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/index.ts",
@@ -860,7 +901,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "completionEntryDetails-full",
-      "request_seq": 4,
+      "request_seq": 5,
       "success": true,
       "body": [
         {
@@ -939,7 +980,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 5,
+      "seq": 6,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/index.ts",
@@ -966,7 +1007,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "completionEntryDetails-full",
-      "request_seq": 5,
+      "request_seq": 6,
       "success": true,
       "body": [
         {
@@ -1037,7 +1078,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 6,
+      "seq": 7,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/index.ts",
@@ -1063,7 +1104,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "completionEntryDetails-full",
-      "request_seq": 6,
+      "request_seq": 7,
       "success": true,
       "body": [
         {
@@ -1142,7 +1183,7 @@ Info seq  [hh:mm:ss:mss] response:
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 7,
+      "seq": 8,
       "type": "request",
       "arguments": {
         "file": "/home/src/workspaces/project/index.ts",
@@ -1159,7 +1200,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 7,
+      "request_seq": 8,
       "success": true
     }
 After Request

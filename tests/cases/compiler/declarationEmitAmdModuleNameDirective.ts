@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @module: umd
 // @filename: foo.ts

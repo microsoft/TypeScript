@@ -95,10 +95,6 @@ Info seq  [hh:mm:ss:mss] Config: /user/someuser/projects/project/tsconfig.json :
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project 1 undefined Config: /user/someuser/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project 1 undefined Config: /user/someuser/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/someuser/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/someuser/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/someuser/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
@@ -185,12 +181,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-PolledWatches::
-/user/someuser/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/someuser/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /user/someuser/projects/project/tsconfig.json: *new*
@@ -316,34 +306,26 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Creating ExternalProject: /user/someuser/projects/project/WebApplication6.csproj, currentDirectory: /user/someuser/projects/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/someuser/projects/project/js/site.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/someuser/projects/project/WebApplication6.csproj
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/node_modules/@types 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/node_modules/@types 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/someuser/projects/project/WebApplication6.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/someuser/projects/project/WebApplication6.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/someuser/projects/project/js/site.js Text-1 ""
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	js/site.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
-PolledWatches::
-/user/someuser/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/someuser/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/someuser/projects/project/js/site.js: *new*
   {}
@@ -366,7 +348,7 @@ Projects::
     deferredClose: true
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/someuser/projects/project/WebApplication6.csproj
@@ -398,7 +380,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/someuser/projects/project/WebApplication6.csproj",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "/user/someuser/projects/project/js/site.js"
       ],
       "compilerOptions": {
@@ -535,10 +517,6 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/someuser/projects/project 1 undefined Config: /user/someuser/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/someuser/projects/project 1 undefined Config: /user/someuser/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/someuser/projects/project/tsconfig.json 2000 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/someuser/projects/project/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/someuser/projects/project/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Project '/user/someuser/projects/project/WebApplication6.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
@@ -555,17 +533,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/someuser/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/someuser/projects/project/bower_components: *new*
   {"pollingInterval":500}
 /user/someuser/projects/project/node_modules: *new*
   {"pollingInterval":500}
-/user/someuser/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/someuser/projects/project/js/site.js:
   {}

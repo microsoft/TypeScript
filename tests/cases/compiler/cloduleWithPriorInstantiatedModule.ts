@@ -1,4 +1,5 @@
-﻿// Non-ambient & instantiated module.
+﻿// @target: es2015
+// Non-ambient & instantiated module.
 namespace Moclodule {
     export interface Someinterface {
         foo(): void;

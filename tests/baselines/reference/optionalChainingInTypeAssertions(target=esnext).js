@@ -20,6 +20,7 @@ const foo = new Foo();
 (<any>foo?.["m"]).length;
 
 //// [optionalChainingInTypeAssertions.js]
+"use strict";
 class Foo {
     m() { }
 }

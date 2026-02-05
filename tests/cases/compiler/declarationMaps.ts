@@ -1,3 +1,6 @@
+// @target: es2015
+// @module: commonjs
+// @strict: false
 // @declaration: true
 // @declarationMap: true
 namespace m2 {

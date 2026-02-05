@@ -26,11 +26,11 @@ fn1(fn2<string>(4)); // Error
 >4 : 4
 >  : ^
 
-var a: any;
+declare var a: any;
 >a : any
 >  : ^^^
 
-var s: string;
+declare var s: string;
 >s : string
 >  : ^^^^^^
 
@@ -202,11 +202,11 @@ someOther = <SomeOther>someOther;
 >          : ^^^^^^^^^
 
 // Type assertion cannot be a type-predicate type
-var numOrStr: number | string;
+declare var numOrStr: number | string;
 >numOrStr : string | number
 >         : ^^^^^^^^^^^^^^^
 
-var str: string;
+declare var str: string;
 >str : string
 >    : ^^^^^^
 

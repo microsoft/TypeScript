@@ -100,16 +100,16 @@ class Render {
          * @type {Rectangle[]}
          */
         this.objects = [];
->this.objects = [] : undefined[]
->                  : ^^^^^^^^^^^
+>this.objects = [] : never[]
+>                  : ^^^^^^^
 >this.objects : Rectangle[]
 >             : ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >objects : Rectangle[]
 >        : ^^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
     }
     /**
      * Adds a rectangle

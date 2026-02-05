@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 export interface A<T> {
    new (dbSet: DbSet<T>): T;

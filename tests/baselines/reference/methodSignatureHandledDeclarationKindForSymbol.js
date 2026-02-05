@@ -12,3 +12,4 @@ interface Foo {
 
 
 //// [methodSignatureHandledDeclarationKindForSymbol.js]
+"use strict";

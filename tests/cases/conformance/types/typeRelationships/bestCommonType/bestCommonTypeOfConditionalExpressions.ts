@@ -1,3 +1,4 @@
+// @target: es2015
 // conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
 // no errors expected here
 

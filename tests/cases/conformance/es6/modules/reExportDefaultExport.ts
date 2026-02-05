@@ -1,5 +1,5 @@
 // @module: commonjs
-// @target: ES5
+// @target: ES5, ES2015
 
 // @filename: m1.ts
 export default function f() {

@@ -1,0 +1,21 @@
+iteratorSpreadInArray7.ts(15,1): error TS2454: Variable 'array' is used before being assigned.
+
+
+==== iteratorSpreadInArray7.ts (1 errors) ====
+    class SymbolIterator {
+        next() {
+            return {
+                value: Symbol(),
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
+    
+    var array: symbol[];
+    array.concat([...new SymbolIterator]);
+    ~~~~~
+!!! error TS2454: Variable 'array' is used before being assigned.

@@ -8,11 +8,9 @@ class C<T extends C<T>> {
 }
 
 //// [assertInWrapSomeTypeParameter.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function (x) {
+"use strict";
+class C {
+    foo(x) {
         return null;
-    };
-    return C;
-}());
+    }
+}

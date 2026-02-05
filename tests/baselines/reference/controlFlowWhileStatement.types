@@ -226,8 +226,8 @@ function f() {
             break;
         }
         if (cond) {
->cond : true
->     : ^^^^
+>cond : never
+>     : ^^^^^
 
             x = true;
 >x = true : true
@@ -286,8 +286,8 @@ function g() {
             break;
         }
         if (cond) {
->cond : boolean
->     : ^^^^^^^
+>cond : false
+>     : ^^^^^
 
             x = true;
 >x = true : true

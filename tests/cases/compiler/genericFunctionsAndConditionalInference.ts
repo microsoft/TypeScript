@@ -1,3 +1,4 @@
+// @target: es2015
 type Boxified<T> = { [P in keyof T]: { value: T[P]} };
 
 declare function unboxify<T>(obj: Boxified<T>): T;

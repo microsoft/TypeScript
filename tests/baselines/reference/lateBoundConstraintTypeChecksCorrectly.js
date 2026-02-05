@@ -23,13 +23,12 @@ function f<T extends Foo<number>>(x: T) {
 
 
 //// [lateBoundConstraintTypeChecksCorrectly.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function f(x) {
-    var abc = x[fooProp]; // expected: 'T[typeof fooProp]'
+    const abc = x[fooProp]; // expected: 'T[typeof fooProp]'
     /**
      * Expected: no error
      */
-    var def = x[fooProp];
-    var def2 = x[barProp];
+    const def = x[fooProp];
+    const def2 = x[barProp];
 }
+export {};

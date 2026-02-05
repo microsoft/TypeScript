@@ -9,6 +9,7 @@ function doStuff<T extends object, T1 extends T>(a: Array<Fn<T>>, b: Array<Fn<T1
 
 
 //// [arrayConcat3.js]
+"use strict";
 function doStuff(a, b) {
     b.concat(a);
 }

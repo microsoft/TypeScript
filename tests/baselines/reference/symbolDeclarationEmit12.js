@@ -15,6 +15,7 @@ namespace M {
 }
 
 //// [symbolDeclarationEmit12.js]
+"use strict";
 var M;
 (function (M) {
     class C {

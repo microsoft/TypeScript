@@ -1,3 +1,6 @@
+// @module: commonjs
+// @target: es2015
+// @strict: false
 // @declaration: true
 // @filename: thingB.ts
 export interface ThingB { }

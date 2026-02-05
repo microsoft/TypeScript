@@ -9,11 +9,11 @@ enum E { a, b }
 >b : E.b
 >  : ^^^
 
-var a: void;
+declare var a: void;
 >a : void
 >  : ^^^^
 
-var x1: boolean;
+declare var x1: boolean;
 >x1 : boolean
 >   : ^^^^^^^
 
@@ -75,7 +75,7 @@ x1 += undefined;
 >undefined : undefined
 >          : ^^^^^^^^^
 
-var x2: {};
+declare var x2: {};
 >x2 : {}
 >   : ^^
 
@@ -137,7 +137,7 @@ x2 += undefined;
 >undefined : undefined
 >          : ^^^^^^^^^
 
-var x3: void;
+declare var x3: void;
 >x3 : void
 >   : ^^^^
 
@@ -199,7 +199,7 @@ x3 += undefined;
 >undefined : undefined
 >          : ^^^^^^^^^
 
-var x4: number;
+declare var x4: number;
 >x4 : number
 >   : ^^^^^^
 
@@ -227,7 +227,7 @@ x4 += {};
 >{} : {}
 >   : ^^
 
-var x5: E;
+declare var x5: E;
 >x5 : E
 >   : ^
 

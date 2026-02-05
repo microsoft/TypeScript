@@ -15,6 +15,7 @@ class Base {
   
 
 //// [redefinedPararameterProperty.js]
+"use strict";
 class Base {
     a = 1;
 }

@@ -23,12 +23,10 @@ class Component {
 }
 
 //// [commentsOnJSXExpressionsArePreserved.js]
-var _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
-var Component = /** @class */ (function () {
-    function Component() {
+"use strict";
+const _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
+class Component {
+    render() {
+        return _jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 16 }, this);
     }
-    Component.prototype.render = function () {
-        return _jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
-    };
-    return Component;
-}());
+}

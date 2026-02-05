@@ -1,3 +1,4 @@
+// @target: es2015
 class A { a: string; }
 class B { b: number; }
 class C { b: Object; }

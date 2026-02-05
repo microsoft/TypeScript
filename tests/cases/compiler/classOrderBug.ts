@@ -1,3 +1,4 @@
+// @target: es2015
 class bar {
     public baz: foo;
     constructor() {

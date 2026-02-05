@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from comment in #21496
 
 function Mixin<TBase extends {new (...args: any[]): {}}>(Base: TBase) {

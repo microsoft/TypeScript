@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
 	public p1 = 0;
 	public callback(cb:()=>void) {cb();}

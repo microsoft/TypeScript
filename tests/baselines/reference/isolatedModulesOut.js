@@ -8,4 +8,5 @@ var y;
 //// [file1.js]
 export var x;
 //// [file2.js]
+"use strict";
 var y;

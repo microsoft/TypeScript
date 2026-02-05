@@ -31,6 +31,7 @@ var array = [...new NumberIterator, ...new SymbolIterator];
 
 
 //// [iteratorSpreadInArray2.js]
+"use strict";
 class SymbolIterator {
     next() {
         return {

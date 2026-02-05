@@ -20,5 +20,5 @@ exports.default = null;
 /**
  * JSDoc Comments
  */
-declare const _default: any;
+declare const _default: null;
 export default _default;

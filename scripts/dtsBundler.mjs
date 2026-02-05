@@ -73,7 +73,7 @@ function getDeclarationStatement(node) {
     return undefined;
 }
 
-const program = ts.createProgram([entrypoint], { target: ts.ScriptTarget.ES5 });
+const program = ts.createProgram([entrypoint], { target: ts.ScriptTarget.ES2015 });
 
 const typeChecker = program.getTypeChecker();
 

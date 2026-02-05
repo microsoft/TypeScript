@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/recursiveCloduleReference.ts] ////
 
 //// [recursiveCloduleReference.ts]
-module M
+namespace M
 {
   export class C {
   }
@@ -13,13 +13,11 @@ module M
 
 
 //// [recursiveCloduleReference.js]
+"use strict";
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     M.C = C;
     (function (C_1) {
         C_1.C = M.C;

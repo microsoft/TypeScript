@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @allowUnreachableCode: true
 
 class Base { private p; }

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @allowUnreachableCode: true
 
 // Call signatures without a return type should infer one from the function body (if present)

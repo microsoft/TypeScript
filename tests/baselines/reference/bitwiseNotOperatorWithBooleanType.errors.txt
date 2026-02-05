@@ -1,0 +1,53 @@
+bitwiseNotOperatorWithBooleanType.ts(7,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+bitwiseNotOperatorWithBooleanType.ts(17,24): error TS2454: Variable 'BOOLEAN' is used before being assigned.
+bitwiseNotOperatorWithBooleanType.ts(30,25): error TS2454: Variable 'BOOLEAN' is used before being assigned.
+bitwiseNotOperatorWithBooleanType.ts(34,2): error TS2454: Variable 'BOOLEAN' is used before being assigned.
+
+
+==== bitwiseNotOperatorWithBooleanType.ts (4 errors) ====
+    // ~ operator on boolean type
+    var BOOLEAN: boolean;
+    
+    function foo(): boolean { return true; }
+    
+    class A {
+        public a: boolean;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        static foo() { return false; }
+    }
+    namespace M {
+        export var n: boolean;
+    }
+    
+    var objA = new A();
+    
+    // boolean type var
+    var ResultIsNumber1 = ~BOOLEAN;
+                           ~~~~~~~
+!!! error TS2454: Variable 'BOOLEAN' is used before being assigned.
+    
+    // boolean type literal
+    var ResultIsNumber2 = ~true;
+    var ResultIsNumber3 = ~{ x: true, y: false };
+    
+    // boolean type expressions
+    var ResultIsNumber4 = ~objA.a;
+    var ResultIsNumber5 = ~M.n;
+    var ResultIsNumber6 = ~foo();
+    var ResultIsNumber7 = ~A.foo();
+    
+    // multiple ~ operators
+    var ResultIsNumber8 = ~~BOOLEAN;
+                            ~~~~~~~
+!!! error TS2454: Variable 'BOOLEAN' is used before being assigned.
+    
+    // miss assignment operators
+    ~true;
+    ~BOOLEAN;
+     ~~~~~~~
+!!! error TS2454: Variable 'BOOLEAN' is used before being assigned.
+    ~foo();
+    ~true, false;
+    ~objA.a;
+    ~M.n;

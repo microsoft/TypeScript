@@ -16,6 +16,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-accessors-nonStatic.js]
+"use strict";
 var method3 = "method3";
 var C = function () {
     var _a;

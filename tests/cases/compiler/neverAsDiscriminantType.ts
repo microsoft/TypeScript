@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true, false
 
 type Foo1 = { kind: 'a', a: number } | { kind: 'b' } | { kind: never };

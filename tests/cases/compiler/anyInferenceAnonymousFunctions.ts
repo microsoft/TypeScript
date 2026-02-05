@@ -1,3 +1,4 @@
+// @target: es2015
 var paired: any[];
 
 paired.reduce(function (a1, a2) {

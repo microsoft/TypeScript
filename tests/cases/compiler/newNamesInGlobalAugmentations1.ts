@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es6
 
 // @filename: f1.d.ts

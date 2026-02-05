@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict
 
 function narrow(x: readonly number[] | number): readonly number[] {

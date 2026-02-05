@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @noImplicitReferences: true
 // @traceResolution: true
 // @noUncheckedSideEffectImports: false

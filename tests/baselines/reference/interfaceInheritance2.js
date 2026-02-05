@@ -12,5 +12,6 @@ v1();
 
 
 //// [interfaceInheritance2.js]
+"use strict";
 var v1;
 v1();

@@ -11,7 +11,7 @@ class A {
 >A : A
 >  : ^
 
-    foo: string;
+    foo!: string;
 >foo : string
 >    : ^^^^^^
 }
@@ -22,7 +22,7 @@ class B extends A {
 >A : A
 >  : ^
 
-    bar: string;
+    bar!: string;
 >bar : string
 >    : ^^^^^^
 }
@@ -45,7 +45,7 @@ class C {
 >valueOf : () => void
 >        : ^^^^^^^^^^
 
-    data: B;
+    data!: B;
 >data : B
 >     : ^
 
@@ -54,7 +54,7 @@ class C {
 >  : ^^^^^^
 }
 
-var c: C;
+declare var c: C;
 >c : C
 >  : ^
 
@@ -114,7 +114,7 @@ interface I {
 >  : ^^^^^^
 }
 
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 
@@ -223,7 +223,7 @@ var r3d = i['hm'];
 >'hm' : "hm"
 >     : ^^^^
 
-var b: {
+declare var b: {
 >b : { [x: string]: any; valueOf(): void; data: B; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^ ^^^
 

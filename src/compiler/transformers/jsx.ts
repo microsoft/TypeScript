@@ -7,6 +7,7 @@ import {
     createExpressionForJsxFragment,
     createExpressionFromEntityName,
     createJsxFactoryExpression,
+    createRange,
     Debug,
     emptyArray,
     Expression,
@@ -70,6 +71,7 @@ import {
     setParentRecursive,
     setTextRange,
     singleOrUndefined,
+    skipTrivia,
     SourceFile,
     spanMap,
     startOnNewLine,
@@ -283,17 +285,17 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
 
     function visitJsxElement(node: JsxElement, isChild: boolean) {
         const tagTransform = shouldUseCreateElement(node.openingElement) ? visitJsxOpeningLikeElementCreateElement : visitJsxOpeningLikeElementJSX;
-        return tagTransform(node.openingElement, node.children, isChild, /*location*/ node);
+        return tagTransform(node.openingElement, node.children, isChild, /*location*/ createRange(skipTrivia(currentSourceFile.text, node.pos), node.end));
     }
 
     function visitJsxSelfClosingElement(node: JsxSelfClosingElement, isChild: boolean) {
         const tagTransform = shouldUseCreateElement(node) ? visitJsxOpeningLikeElementCreateElement : visitJsxOpeningLikeElementJSX;
-        return tagTransform(node, /*children*/ undefined, isChild, /*location*/ node);
+        return tagTransform(node, /*children*/ undefined, isChild, /*location*/ createRange(skipTrivia(currentSourceFile.text, node.pos), node.end));
     }
 
     function visitJsxFragment(node: JsxFragment, isChild: boolean) {
         const tagTransform = currentFileState.importSpecifier === undefined ? visitJsxOpeningFragmentCreateElement : visitJsxOpeningFragmentJSX;
-        return tagTransform(node.openingFragment, node.children, isChild, /*location*/ node);
+        return tagTransform(node.openingFragment, node.children, isChild, /*location*/ createRange(skipTrivia(currentSourceFile.text, node.pos), node.end));
     }
 
     function convertJsxChildrenToChildrenPropObject(children: readonly JsxChild[]) {

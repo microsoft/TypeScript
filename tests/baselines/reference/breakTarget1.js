@@ -5,4 +5,5 @@ target:
   break target;
 
 //// [breakTarget1.js]
+"use strict";
 target: break target;

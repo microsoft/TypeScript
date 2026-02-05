@@ -8,3 +8,4 @@ declare enum E {
 }
 
 //// [initializersInAmbientEnums.js]
+"use strict";

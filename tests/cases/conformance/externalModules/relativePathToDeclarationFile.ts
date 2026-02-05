@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @ModuleResolution: classic
 // @Filename: test/foo.d.ts
 export declare namespace M2 {

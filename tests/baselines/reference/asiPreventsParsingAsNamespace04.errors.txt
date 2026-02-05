@@ -1,8 +1,0 @@
-asiPreventsParsingAsNamespace04.ts(2,1): error TS2304: Cannot find name 'namespace'.
-
-
-==== asiPreventsParsingAsNamespace04.ts (1 errors) ====
-    let module = 10;
-    namespace in {}
-    ~~~~~~~~~
-!!! error TS2304: Cannot find name 'namespace'.

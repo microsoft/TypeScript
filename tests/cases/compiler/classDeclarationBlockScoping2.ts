@@ -1,3 +1,4 @@
+// @target: es2015
 function f() {
     class C {}
     var c1 = C;

@@ -119,54 +119,54 @@ function f2<T, U>(x: T, y: U) {
 >  : ^
 
     var r0 = true ? x : null;
->r0 : T
->   : ^
->true ? x : null : T
->                : ^
+>r0 : T | null
+>   : ^^^^^^^^
+>true ? x : null : T | null
+>                : ^^^^^^^^
 >true : true
 >     : ^^^^
 >x : T
 >  : ^
 
     var r0 = true ? null : x;
->r0 : T
->   : ^
->true ? null : x : T
->                : ^
+>r0 : T | null
+>   : ^^^^^^^^
+>true ? null : x : T | null
+>                : ^^^^^^^^
 >true : true
 >     : ^^^^
 >x : T
 >  : ^
 
     var u: typeof undefined;
->u : any
->  : ^^^
+>u : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
     var r0b = true ? u : x;
->r0b : any
->    : ^^^
->true ? u : x : any
->             : ^^^
+>r0b : T | undefined
+>    : ^^^^^^^^^^^^^
+>true ? u : x : T | undefined
+>             : ^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
->u : any
->  : ^^^
+>u : undefined
+>  : ^^^^^^^^^
 >x : T
 >  : ^
 
     var r0b = true ? x : u;
->r0b : any
->    : ^^^
->true ? x : u : any
->             : ^^^
+>r0b : T | undefined
+>    : ^^^^^^^^^^^^^
+>true ? x : u : T | undefined
+>             : ^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >x : T
 >  : ^
->u : any
->  : ^^^
+>u : undefined
+>  : ^^^^^^^^^
 
     var r1 = true ? 1 : x; 
 >r1 : number | T
@@ -645,10 +645,10 @@ function f2<T, U>(x: T, y: U) {
     }
 
     var r19 = true ? new Object() : x; // BCT is Object
->r19 : Object
->    : ^^^^^^
->true ? new Object() : x : Object
->                        : ^^^^^^
+>r19 : Object | T
+>    : ^^^^^^^^^^
+>true ? new Object() : x : Object | T
+>                        : ^^^^^^^^^^
 >true : true
 >     : ^^^^
 >new Object() : Object
@@ -659,10 +659,10 @@ function f2<T, U>(x: T, y: U) {
 >  : ^
 
     var r19 = true ? x : new Object(); // BCT is Object
->r19 : Object
->    : ^^^^^^
->true ? x : new Object() : Object
->                        : ^^^^^^
+>r19 : Object | T
+>    : ^^^^^^^^^^
+>true ? x : new Object() : Object | T
+>                        : ^^^^^^^^^^
 >true : true
 >     : ^^^^
 >x : T
@@ -673,10 +673,10 @@ function f2<T, U>(x: T, y: U) {
 >       : ^^^^^^^^^^^^^^^^^
 
     var r20 = true ? {} : x; // ok
->r20 : {}
->    : ^^
->true ? {} : x : {}
->              : ^^
+>r20 : T | {}
+>    : ^^^^^^
+>true ? {} : x : T | {}
+>              : ^^^^^^
 >true : true
 >     : ^^^^
 >{} : {}
@@ -685,10 +685,10 @@ function f2<T, U>(x: T, y: U) {
 >  : ^
 
     var r20 = true ? x : {}; // ok
->r20 : {}
->    : ^^
->true ? x : {} : {}
->              : ^^
+>r20 : T | {}
+>    : ^^^^^^
+>true ? x : {} : T | {}
+>              : ^^^^^^
 >true : true
 >     : ^^^^
 >x : T

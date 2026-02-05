@@ -1,0 +1,267 @@
+subtypingWithConstructSignatures3.ts(5,18): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+subtypingWithConstructSignatures3.ts(6,34): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+subtypingWithConstructSignatures3.ts(7,38): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+subtypingWithConstructSignatures3.ts(8,39): error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
+subtypingWithConstructSignatures3.ts(58,19): error TS2454: Variable 'r1arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(59,16): error TS2454: Variable 'r1arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(59,24): error TS2454: Variable 'r1arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(60,16): error TS2454: Variable 'r1arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(60,24): error TS2454: Variable 'r1arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(64,19): error TS2454: Variable 'r2arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(65,16): error TS2454: Variable 'r2arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(65,24): error TS2454: Variable 'r2arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(66,16): error TS2454: Variable 'r2arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(66,24): error TS2454: Variable 'r2arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(70,19): error TS2454: Variable 'r3arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(71,16): error TS2454: Variable 'r3arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(71,24): error TS2454: Variable 'r3arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(72,16): error TS2454: Variable 'r3arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(72,24): error TS2454: Variable 'r3arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(76,20): error TS2454: Variable 'r4arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(77,16): error TS2454: Variable 'r4arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(77,24): error TS2454: Variable 'r4arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(78,16): error TS2454: Variable 'r4arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(78,24): error TS2454: Variable 'r4arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(82,20): error TS2454: Variable 'r5arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(83,16): error TS2454: Variable 'r5arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(83,24): error TS2454: Variable 'r5arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(84,16): error TS2454: Variable 'r5arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(84,24): error TS2454: Variable 'r5arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(88,20): error TS2454: Variable 'r6arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(89,16): error TS2454: Variable 'r6arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(89,24): error TS2454: Variable 'r6arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(90,16): error TS2454: Variable 'r6arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(90,24): error TS2454: Variable 'r6arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(94,20): error TS2454: Variable 'r7arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(95,16): error TS2454: Variable 'r7arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(95,24): error TS2454: Variable 'r7arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(96,16): error TS2454: Variable 'r7arg1' is used before being assigned.
+subtypingWithConstructSignatures3.ts(96,24): error TS2454: Variable 'r7arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(99,21): error TS2454: Variable 'r7arg3' is used before being assigned.
+subtypingWithConstructSignatures3.ts(100,16): error TS2454: Variable 'r7arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(100,24): error TS2454: Variable 'r7arg3' is used before being assigned.
+subtypingWithConstructSignatures3.ts(101,16): error TS2454: Variable 'r7arg3' is used before being assigned.
+subtypingWithConstructSignatures3.ts(101,24): error TS2454: Variable 'r7arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(104,20): error TS2454: Variable 'r8arg' is used before being assigned.
+subtypingWithConstructSignatures3.ts(107,20): error TS2454: Variable 'r9arg' is used before being assigned.
+subtypingWithConstructSignatures3.ts(114,19): error TS2454: Variable 'r2arg2' is used before being assigned.
+subtypingWithConstructSignatures3.ts(119,19): error TS2454: Variable 'r3arg2' is used before being assigned.
+
+
+==== subtypingWithConstructSignatures3.ts (48 errors) ====
+    // checking subtype relations for function types as it relates to contextual signature instantiation
+    // error cases, so function calls will all result in 'any'
+    
+    namespace Errors {
+        class Base { foo: string; }
+                     ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+        class Derived extends Base { bar: string; }
+                                     ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+        class Derived2 extends Derived { baz: string; }
+                                         ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+        class OtherDerived extends Base { bing: string; }
+                                          ~~~~
+!!! error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
+    
+        declare function foo2(a2: new (x: number) => string[]): typeof a2;
+        declare function foo2(a2: any): any;
+    
+        declare function foo7(a2: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2): typeof a2;
+        declare function foo7(a2: any): any;
+    
+        declare function foo8(a2: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived): typeof a2;
+        declare function foo8(a2: any): any;
+    
+        declare function foo10(a2: new (...x: Base[]) => Base): typeof a2;
+        declare function foo10(a2: any): any;
+    
+        declare function foo11(a2: new (x: { foo: string }, y: { foo: string; bar: string }) => Base): typeof a2;
+        declare function foo11(a2: any): any;
+    
+        declare function foo12(a2: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>): typeof a2;
+        declare function foo12(a2: any): any;
+    
+        declare function foo15(a2: new (x: { a: string; b: number }) => number): typeof a2;
+        declare function foo15(a2: any): any;
+    
+        declare function foo16(a2: {
+            // type of parameter is overload set which means we can't do inference based on this type
+            new (x: {
+                new (a: number): number;
+                new (a?: number): number;
+            }): number[];
+            new (x: {
+                new (a: boolean): boolean;
+                new (a?: boolean): boolean;
+            }): boolean[];
+        }): typeof a2;
+        declare function foo16(a2: any): any;
+    
+        declare function foo17(a2: {
+            new (x: {
+                new <T extends Derived>(a: T): T;
+                new <T extends Base>(a: T): T;
+            }): any[];
+            new (x: {
+                new <T extends Derived2>(a: T): T;
+                new <T extends Base>(a: T): T;
+            }): any[];
+        }): typeof a2;
+        declare function foo17(a2: any): any;
+    
+        var r1arg1: new <T, U>(x: T) => U[];
+        var r1arg2: new (x: number) => string[]; 
+        var r1 = foo2(r1arg1); // any
+                      ~~~~~~
+!!! error TS2454: Variable 'r1arg1' is used before being assigned.
+        var r1a = [r1arg2, r1arg1];
+                   ~~~~~~
+!!! error TS2454: Variable 'r1arg2' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r1arg1' is used before being assigned.
+        var r1b = [r1arg1, r1arg2];
+                   ~~~~~~
+!!! error TS2454: Variable 'r1arg1' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r1arg2' is used before being assigned.
+    
+        var r2arg1: new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V;
+        var r2arg2: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2;
+        var r2 = foo7(r2arg1); // any
+                      ~~~~~~
+!!! error TS2454: Variable 'r2arg1' is used before being assigned.
+        var r2a = [r2arg2, r2arg1];
+                   ~~~~~~
+!!! error TS2454: Variable 'r2arg2' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r2arg1' is used before being assigned.
+        var r2b = [r2arg1, r2arg2];
+                   ~~~~~~
+!!! error TS2454: Variable 'r2arg1' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r2arg2' is used before being assigned.
+    
+        var r3arg1: new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U;
+        var r3arg2: new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived;
+        var r3 = foo8(r3arg1); // any
+                      ~~~~~~
+!!! error TS2454: Variable 'r3arg1' is used before being assigned.
+        var r3a = [r3arg2, r3arg1];
+                   ~~~~~~
+!!! error TS2454: Variable 'r3arg2' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r3arg1' is used before being assigned.
+        var r3b = [r3arg1, r3arg2];
+                   ~~~~~~
+!!! error TS2454: Variable 'r3arg1' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r3arg2' is used before being assigned.
+    
+        var r4arg1: new <T extends Derived>(...x: T[]) => T;
+        var r4arg2: new (...x: Base[]) => Base;
+        var r4 = foo10(r4arg1); // any
+                       ~~~~~~
+!!! error TS2454: Variable 'r4arg1' is used before being assigned.
+        var r4a = [r4arg2, r4arg1];
+                   ~~~~~~
+!!! error TS2454: Variable 'r4arg2' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r4arg1' is used before being assigned.
+        var r4b = [r4arg1, r4arg2];
+                   ~~~~~~
+!!! error TS2454: Variable 'r4arg1' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r4arg2' is used before being assigned.
+    
+        var r5arg1: new <T extends Derived>(x: T, y: T) => T;
+        var r5arg2: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
+        var r5 = foo11(r5arg1); // any
+                       ~~~~~~
+!!! error TS2454: Variable 'r5arg1' is used before being assigned.
+        var r5a = [r5arg2, r5arg1];
+                   ~~~~~~
+!!! error TS2454: Variable 'r5arg2' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r5arg1' is used before being assigned.
+        var r5b = [r5arg1, r5arg2];
+                   ~~~~~~
+!!! error TS2454: Variable 'r5arg1' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r5arg2' is used before being assigned.
+    
+        var r6arg1: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
+        var r6arg2: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T;
+        var r6 = foo12(r6arg1); // new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
+                       ~~~~~~
+!!! error TS2454: Variable 'r6arg1' is used before being assigned.
+        var r6a = [r6arg2, r6arg1];
+                   ~~~~~~
+!!! error TS2454: Variable 'r6arg2' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r6arg1' is used before being assigned.
+        var r6b = [r6arg1, r6arg2];
+                   ~~~~~~
+!!! error TS2454: Variable 'r6arg1' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r6arg2' is used before being assigned.
+    
+        var r7arg1: new <T>(x: { a: T; b: T }) => T;
+        var r7arg2: new (x: { a: string; b: number }) => number;
+        var r7 = foo15(r7arg1); // (x: { a: string; b: number }) => number): number;
+                       ~~~~~~
+!!! error TS2454: Variable 'r7arg1' is used before being assigned.
+        var r7a = [r7arg2, r7arg1];
+                   ~~~~~~
+!!! error TS2454: Variable 'r7arg2' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r7arg1' is used before being assigned.
+        var r7b = [r7arg1, r7arg2];
+                   ~~~~~~
+!!! error TS2454: Variable 'r7arg1' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r7arg2' is used before being assigned.
+    
+        var r7arg3: new <T extends Base>(x: { a: T; b: T }) => number;
+        var r7c = foo15(r7arg3); // any
+                        ~~~~~~
+!!! error TS2454: Variable 'r7arg3' is used before being assigned.
+        var r7d = [r7arg2, r7arg3];
+                   ~~~~~~
+!!! error TS2454: Variable 'r7arg2' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r7arg3' is used before being assigned.
+        var r7e = [r7arg3, r7arg2];
+                   ~~~~~~
+!!! error TS2454: Variable 'r7arg3' is used before being assigned.
+                           ~~~~~~
+!!! error TS2454: Variable 'r7arg2' is used before being assigned.
+    
+        var r8arg: new <T>(x: new (a: T) => T) => T[];
+        var r8 = foo16(r8arg); // any
+                       ~~~~~
+!!! error TS2454: Variable 'r8arg' is used before being assigned.
+    
+        var r9arg: new <T>(x: new (a: T) => T) => any[];
+        var r9 = foo17(r9arg); // // (x: { <T extends Derived >(a: T): T; <T extends Base >(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[];
+                       ~~~~~
+!!! error TS2454: Variable 'r9arg' is used before being assigned.
+    }
+    
+    namespace WithGenericSignaturesInBaseType {
+        declare function foo2(a2: new <T>(x: T) => T[]): typeof a2;
+        declare function foo2(a2: any): any;
+        var r2arg2: new <T>(x: T) => string[];
+        var r2 = foo2(r2arg2); // <T>(x:T) => T[] since we can infer from generic signatures now
+                      ~~~~~~
+!!! error TS2454: Variable 'r2arg2' is used before being assigned.
+    
+        declare function foo3(a2: new <T>(x: T) => string[]): typeof a2;
+        declare function foo3(a2: any): any;
+        var r3arg2: new <T>(x: T) => T[];
+        var r3 = foo3(r3arg2); // any
+                      ~~~~~~
+!!! error TS2454: Variable 'r3arg2' is used before being assigned.
+    }

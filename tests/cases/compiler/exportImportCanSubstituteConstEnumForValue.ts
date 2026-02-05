@@ -1,6 +1,6 @@
 // @module: amd
 // @declaration: true
-// @target: es5
+// @target: es5, es2015
 namespace MsPortalFx.ViewModels.Dialogs {
 
     export const enum DialogResult {

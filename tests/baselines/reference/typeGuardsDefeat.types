@@ -54,8 +54,8 @@ function foo(x: number | string) {
     }
 }
 function foo2(x: number | string) {
->foo2 : (x: number | string) => number
->     : ^ ^^               ^^^^^^^^^^^
+>foo2 : (x: number | string) => number | undefined
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -109,8 +109,8 @@ function foo2(x: number | string) {
 >  : ^^^^^^^^^^^^
 }
 function foo3(x: number | string) {
->foo3 : (x: number | string) => number
->     : ^ ^^               ^^^^^^^^^^^
+>foo3 : (x: number | string) => number | undefined
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 

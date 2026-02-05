@@ -1,0 +1,20 @@
+switchComparableCompatForBrands.ts(3,13): error TS2564: Property '_a' has no initializer and is not definitely assigned in the constructor.
+
+
+==== switchComparableCompatForBrands.ts (1 errors) ====
+    class MyBrand
+    {
+        private _a: number;
+                ~~
+!!! error TS2564: Property '_a' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    function test(strInput: string & MyBrand) {
+        switch(strInput)
+        {
+            case "a":
+            return 1;
+        }
+        return 0;
+    }
+    

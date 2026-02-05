@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
+
 // @Filename: /a.ts
 ////const _break = 0;
 ////export { _break as break };

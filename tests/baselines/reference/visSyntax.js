@@ -14,13 +14,11 @@ namespace M {
 
 
 //// [visSyntax.js]
+"use strict";
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     M.C = C;
     M.x = 10;
 })(M || (M = {}));

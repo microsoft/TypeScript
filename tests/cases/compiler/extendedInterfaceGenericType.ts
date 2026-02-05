@@ -1,3 +1,4 @@
+// @target: es2015
 interface Alpha<T> {
     takesArgOfT(arg: T): Alpha<T>;
     makeBetaOfNumber(): Beta<number>;

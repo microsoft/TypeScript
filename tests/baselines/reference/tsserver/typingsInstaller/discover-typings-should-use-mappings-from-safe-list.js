@@ -41,7 +41,11 @@ ts.JsTyping.discoverTypings::
       },
       "unresolvedImports": [],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["jquery","chroma-js"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []

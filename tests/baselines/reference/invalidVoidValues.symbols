@@ -27,29 +27,29 @@ x = E.A;
 >E : Symbol(E, Decl(invalidVoidValues.ts, 3, 9))
 >A : Symbol(E.A, Decl(invalidVoidValues.ts, 5, 8))
 
-class C { foo: string }
+class C { foo!: string }
 >C : Symbol(C, Decl(invalidVoidValues.ts, 7, 8))
 >foo : Symbol(C.foo, Decl(invalidVoidValues.ts, 9, 9))
 
-var a: C;
->a : Symbol(a, Decl(invalidVoidValues.ts, 10, 3))
+declare var a: C;
+>a : Symbol(a, Decl(invalidVoidValues.ts, 10, 11))
 >C : Symbol(C, Decl(invalidVoidValues.ts, 7, 8))
 
 x = a;
 >x : Symbol(x, Decl(invalidVoidValues.ts, 0, 3))
->a : Symbol(a, Decl(invalidVoidValues.ts, 10, 3))
+>a : Symbol(a, Decl(invalidVoidValues.ts, 10, 11))
 
 interface I { foo: string }
 >I : Symbol(I, Decl(invalidVoidValues.ts, 11, 6))
 >foo : Symbol(I.foo, Decl(invalidVoidValues.ts, 13, 13))
 
-var b: I;
->b : Symbol(b, Decl(invalidVoidValues.ts, 14, 3))
+declare var b: I;
+>b : Symbol(b, Decl(invalidVoidValues.ts, 14, 11))
 >I : Symbol(I, Decl(invalidVoidValues.ts, 11, 6))
 
 x = b;
 >x : Symbol(x, Decl(invalidVoidValues.ts, 0, 3))
->b : Symbol(b, Decl(invalidVoidValues.ts, 14, 3))
+>b : Symbol(b, Decl(invalidVoidValues.ts, 14, 11))
 
 x = { f() {} }
 >x : Symbol(x, Decl(invalidVoidValues.ts, 0, 3))

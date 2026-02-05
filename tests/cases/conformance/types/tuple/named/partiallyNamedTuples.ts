@@ -1,3 +1,4 @@
+// @target: es2015
 type NamedAndAnonymous = [a: string, number];
 
 function fa1(...args: NamedAndAnonymous) {}

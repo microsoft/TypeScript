@@ -1,0 +1,17 @@
+nestedInfinitelyExpandedRecursiveTypes.ts(10,5): error TS2454: Variable 'g' is used before being assigned.
+
+
+==== nestedInfinitelyExpandedRecursiveTypes.ts (1 errors) ====
+    interface F<T> {
+          t: G<F<() => T>>;
+    }
+    interface G<U> {
+          t: G<G<() => U>>;
+    }
+     
+    var f: F<string>;
+    var g: G<string>;
+    f = g;
+        ~
+!!! error TS2454: Variable 'g' is used before being assigned.
+    g = f;

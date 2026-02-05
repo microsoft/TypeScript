@@ -30,8 +30,8 @@ foo2(); // should be an error
 function foo3(a?:string, ...b:number[]){}
 >foo3 : (a?: string, ...b: number[]) => void
 >     : ^ ^^^      ^^^^^ ^^        ^^^^^^^^^
->a : string
->  : ^^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : number[]
 >  : ^^^^^^^^
 

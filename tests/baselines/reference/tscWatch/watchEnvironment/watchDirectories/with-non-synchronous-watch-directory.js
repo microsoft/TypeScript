@@ -39,29 +39,26 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 18
+
 //// [/user/username/projects/myproject/src/file1.js] Inode:: 117
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/file2/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+  {"inode":18}
 /user/username/projects/myproject: *new*
   {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
@@ -90,14 +87,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/node_modules/file2/index.d.ts (used version)
 /user/username/projects/myproject/src/file1.ts (used version)
 
@@ -129,8 +126,6 @@ sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to Mi
 PolledWatches::
 /user/username/projects/myproject/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
   {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/file2/package.json:
@@ -139,14 +134,12 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/myproject/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":18}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/src:
@@ -196,11 +189,7 @@ Output::
 PolledWatches::
 /user/username/projects/myproject/node_modules:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -216,8 +205,8 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":18}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/src:
@@ -242,7 +231,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 No cached semantic diagnostics in the builder::
@@ -307,7 +296,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 No cached semantic diagnostics in the builder::
@@ -326,11 +315,7 @@ sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to Pr
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -338,8 +323,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":18}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
@@ -388,16 +373,12 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 2
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":18}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules:
@@ -462,16 +443,12 @@ Output::
 //// [/user/username/projects/myproject/src/file1.js] file written with same contents Inode:: 117
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/file2/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
@@ -480,8 +457,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":18}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules:
@@ -508,7 +485,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
 /user/username/projects/myproject/src/file1.ts
 

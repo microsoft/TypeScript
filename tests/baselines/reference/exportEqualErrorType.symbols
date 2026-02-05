@@ -13,7 +13,7 @@ connect().use(connect.static('foo')); // Error  1      The property 'static' doe
 
 === exportEqualErrorType_0.ts ===
 namespace server {
->server : Symbol(server, Decl(exportEqualErrorType_0.ts, 0, 0), Decl(exportEqualErrorType_0.ts, 8, 3))
+>server : Symbol(server, Decl(exportEqualErrorType_0.ts, 0, 0), Decl(exportEqualErrorType_0.ts, 8, 11))
 
     export interface connectModule {
 >connectModule : Symbol(connectModule, Decl(exportEqualErrorType_0.ts, 0, 18))
@@ -33,11 +33,11 @@ namespace server {
 >connectExport : Symbol(connectExport, Decl(exportEqualErrorType_0.ts, 3, 5))
     }
 }
-var server: {
->server : Symbol(server, Decl(exportEqualErrorType_0.ts, 0, 0), Decl(exportEqualErrorType_0.ts, 8, 3))
+declare var server: {
+>server : Symbol(server, Decl(exportEqualErrorType_0.ts, 0, 0), Decl(exportEqualErrorType_0.ts, 8, 11))
 
     (): server.connectExport;
->server : Symbol(server, Decl(exportEqualErrorType_0.ts, 0, 0), Decl(exportEqualErrorType_0.ts, 8, 3))
+>server : Symbol(server, Decl(exportEqualErrorType_0.ts, 0, 0), Decl(exportEqualErrorType_0.ts, 8, 11))
 >connectExport : Symbol(server.connectExport, Decl(exportEqualErrorType_0.ts, 3, 5))
 
     foo: Date;
@@ -46,5 +46,5 @@ var server: {
 
 };
 export = server;
->server : Symbol(server, Decl(exportEqualErrorType_0.ts, 0, 0), Decl(exportEqualErrorType_0.ts, 8, 3))
+>server : Symbol(server, Decl(exportEqualErrorType_0.ts, 0, 0), Decl(exportEqualErrorType_0.ts, 8, 11))
  

@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro for #27596
 
 type MyMap<T> = {[P in keyof T]: T[keyof T]};

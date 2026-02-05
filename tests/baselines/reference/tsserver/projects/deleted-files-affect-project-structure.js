@@ -45,24 +45,18 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/b/f2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/c/f3.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/c/f3.ts Text-1 "export let y = 1;"
 	/user/username/projects/project/b/f2.ts Text-1 "export * from \"../c/f3\""
 	/user/username/projects/project/b/f1.ts SVC-1-0 "export * from \"./f2\""
 
 
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../c/f3.ts
 	  Imported via "../c/f3" from file 'f2.ts'
 	f2.ts
@@ -90,25 +84,21 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project/b/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/project/b/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project/b/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/project/b/f2.ts: *new*
   {}
@@ -122,7 +112,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -172,23 +162,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/b/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/b/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/b/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/project/b/f2.ts:
   {}
@@ -198,7 +182,7 @@ FsWatches *deleted*::
   {}
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -237,7 +221,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -265,12 +249,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/b/f1.ts SVC-1-0 "export * from \"./f2\""
 
 
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	f1.ts
 	  Root file specified for compilation
 
@@ -290,21 +274,15 @@ Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject2*, 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/c/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/c/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/c/f3.ts Text-1 "export let y = 1;"
 
 
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	f3.ts
 	  Root file specified for compilation
 
@@ -339,31 +317,23 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/b/f2: *new*
   {"pollingInterval":500}
 /user/username/projects/project/b/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/b/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/b/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/c/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/project/c/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project/c/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/project/b: *new*
   {}
@@ -382,7 +352,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*

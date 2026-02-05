@@ -8,14 +8,11 @@ declare const y: number;
 export const x = y;
 
 
-//// [/app/bin/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
+//// [/app/bin/src/index.js]
 /// <reference path="../lib/bar.d.ts" preserve="true" />
-exports.x = y;
-//# sourceMappingURL=../src/myMapRoot/index.js.map
+export const x = y;
+//# sourceMappingURL=../../myMapRoot/src/index.js.map
 
-//// [/app/bin/index.d.ts]
-/// <reference path="../lib/bar.d.ts" preserve="true" />
+//// [/app/bin/src/index.d.ts]
+/// <reference path="../../lib/bar.d.ts" preserve="true" />
 export declare const x: number;

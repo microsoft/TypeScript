@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 //===let
 l0:
 for (let x of []) {

@@ -15,8 +15,8 @@ declare var abq: { a: number, b?: number };
 >    : ^^^^^      ^^^^^^      ^^^
 >a : number
 >  : ^^^^^^
->b : number
->  : ^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 var unused1 = { b: 1, ...ab }
 >unused1 : { a: number; b: number; }
@@ -57,8 +57,8 @@ function g(obj: { x: number | undefined }) {
 >  : ^   ^^                          ^^^^^^^^^^                  ^^^
 >obj : { x: number | undefined; }
 >    : ^^^^^                  ^^^
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     return { x: 1, ...obj };
 >{ x: 1, ...obj } : { x: number | undefined; }

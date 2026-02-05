@@ -15,5 +15,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var A = "a";
+const A = "a";
 A.toUpperCase();

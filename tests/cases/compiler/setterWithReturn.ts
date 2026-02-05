@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class C234 {
     public set p1(arg1) {
         if (true) {

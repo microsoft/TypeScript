@@ -109,6 +109,7 @@ import {
     GetCanonicalFileName,
     getCommonSourceDirectory as ts_getCommonSourceDirectory,
     getCommonSourceDirectoryOfConfig,
+    getComputedCommonSourceDirectory,
     getDeclarationDiagnostics as ts_getDeclarationDiagnostics,
     getDefaultLibFileName,
     getDirectoryPath,
@@ -132,6 +133,7 @@ import {
     getPackageScopeForPath,
     getPathFromPathComponents,
     getPositionOfLineAndCharacter,
+    getRelativePathFromFile,
     getResolvedModuleFromResolution,
     getResolvedTypeReferenceDirectiveFromResolution,
     getResolveJsonModule,
@@ -4254,6 +4256,35 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             }
         }
 
+        if (
+            !options.noEmit &&
+            !options.composite &&
+            !options.rootDir &&
+            options.configFilePath &&
+            (options.outDir || // there is --outDir specified
+                (getEmitDeclarations(options) && options.declarationDir) || // there is --declarationDir specified
+                options.outFile)
+        ) {
+            // Check if rootDir inferred changed and issue diagnostic
+            const dir = getCommonSourceDirectory();
+            const emittedFiles = mapDefined(files, file => !file.isDeclarationFile && sourceFileMayBeEmitted(file, program) ? file.fileName : undefined);
+            const dir59 = getComputedCommonSourceDirectory(emittedFiles, currentDirectory, getCanonicalFileName);
+            if (dir59 !== "" && getCanonicalFileName(dir) !== getCanonicalFileName(dir59)) {
+                // change in layout
+                createDiagnosticForOption(
+                    /*onKey*/ true,
+                    options.outFile ? "outFile" : options.outDir ? "outDir" : "declarationDir",
+                    !options.outFile && options.outDir ? "declarationDir" : undefined,
+                    chainDiagnosticMessages(
+                        chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information),
+                        Diagnostics.The_common_source_directory_of_0_is_1_The_rootDir_setting_must_be_explicitly_set_to_this_or_another_path_to_adjust_your_output_s_file_layout,
+                        getBaseFileName(options.configFilePath),
+                        getRelativePathFromFile(options.configFilePath, dir59, getCanonicalFileName),
+                    ),
+                );
+            }
+        }
+
         if (options.checkJs && !getAllowJSCompilerOption(options)) {
             createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs");
         }
@@ -4484,7 +4515,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                 createDeprecatedDiagnostic("charset");
             }
             if (options.out) {
-                createDeprecatedDiagnostic("out", /*value*/ undefined, "outFile");
+                createDeprecatedDiagnostic("out");
             }
             if (options.importsNotUsedAsValues) {
                 createDeprecatedDiagnostic("importsNotUsedAsValues", /*value*/ undefined, "verbatimModuleSyntax");
@@ -4495,6 +4526,12 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         });
 
         checkDeprecations("6.0", "7.0", createDiagnostic, createDeprecatedDiagnostic => {
+            if (options.alwaysStrict === false) {
+                createDeprecatedDiagnostic("alwaysStrict", "false", /*useInstead*/ undefined, /*related*/ undefined);
+            }
+            if (options.target === ScriptTarget.ES5) {
+                createDeprecatedDiagnostic("target", "ES5");
+            }
             if (options.moduleResolution === ModuleResolutionKind.Node10) {
                 createDeprecatedDiagnostic("moduleResolution", "node10", /*useInstead*/ undefined, Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information);
             }
@@ -4510,8 +4547,14 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             if (options.allowSyntheticDefaultImports === false) {
                 createDeprecatedDiagnostic("allowSyntheticDefaultImports", "false", /*useInstead*/ undefined, /*related*/ undefined);
             }
+            if (options.outFile) {
+                createDeprecatedDiagnostic("outFile");
+            }
             if (options.module === ModuleKind.None || options.module === ModuleKind.AMD || options.module === ModuleKind.UMD || options.module === ModuleKind.System) {
                 createDeprecatedDiagnostic("module", ModuleKind[options.module], /*useInstead*/ undefined, /*related*/ undefined);
+            }
+            if (options.downlevelIteration !== undefined) {
+                createDeprecatedDiagnostic("downlevelIteration");
             }
         });
     }

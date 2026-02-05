@@ -6,3 +6,4 @@ interface Foo<A> {
 }
 
 //// [errorTypesAsTypeArguments.js]
+"use strict";

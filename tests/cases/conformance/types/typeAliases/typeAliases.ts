@@ -1,3 +1,4 @@
+// @target: es2015
 // Writing a reference to a type alias has exactly the same effect as writing the aliased type itself.
 
 type T1 = number;

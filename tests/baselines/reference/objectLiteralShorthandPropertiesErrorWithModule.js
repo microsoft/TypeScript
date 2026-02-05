@@ -18,6 +18,7 @@ m.y.x;
 
 
 //// [objectLiteralShorthandPropertiesErrorWithModule.js]
+"use strict";
 // module export
 var x = "Foo";
 var m;
@@ -27,8 +28,7 @@ var n;
 (function (n) {
     var z = 10000;
     n.y = {
-        m: m,
-        : .x // error
+        m, : .x // error
     };
 })(n || (n = {}));
 m.y.x;

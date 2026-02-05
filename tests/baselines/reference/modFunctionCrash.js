@@ -9,4 +9,5 @@ declare namespace Q {
 Q.f(function() {this;});
 
 //// [modFunctionCrash.js]
+"use strict";
 Q.f(function () { this; });

@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es2020
 // @declaration: true
 

@@ -15,3 +15,4 @@ interface List2<T> {
 
 
 //// [recursiveTypeParameterReferenceError2.js]
+"use strict";

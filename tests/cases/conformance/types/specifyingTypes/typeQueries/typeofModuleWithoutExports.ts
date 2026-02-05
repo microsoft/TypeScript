@@ -1,3 +1,4 @@
+// @target: es2015
 namespace M {
     var x = 1;
     class C {

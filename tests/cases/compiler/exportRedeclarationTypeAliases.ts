@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 export type Foo = number;
 export function Foo(): number;

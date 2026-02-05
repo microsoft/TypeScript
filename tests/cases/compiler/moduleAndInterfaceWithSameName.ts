@@ -1,3 +1,4 @@
+// @target: es2015
 namespace Foo1 {
     export namespace Bar {
         export var x = 42;

@@ -1,3 +1,4 @@
+// @target: es2015
 interface Synthetic<A, B extends A> {}
 type SyntheticDestination<T, U> = U extends Synthetic<T, infer V> ? V : never;
 type TestSynthetic = // Resolved to T, should be `number` or an inference failure (`unknown`)

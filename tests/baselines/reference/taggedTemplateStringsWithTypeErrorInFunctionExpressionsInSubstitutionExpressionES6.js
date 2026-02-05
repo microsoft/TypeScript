@@ -7,6 +7,7 @@ function foo(...rest: any[]) {
 foo `${function (x: number) { x = "bad"; } }`;
 
 //// [taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpressionES6.js]
+"use strict";
 function foo(...rest) {
 }
 foo `${function (x) { x = "bad"; }}`;

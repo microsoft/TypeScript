@@ -1,3 +1,4 @@
+// @target: es2015
 // @jsx: preserve
 // @filename: 1.tsx
 declare var React: any;

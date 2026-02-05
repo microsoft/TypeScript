@@ -67,7 +67,7 @@ Output::
 
 ======== Resolving module 'const' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 'baseUrl' option is set to '/user/username/projects/myproject/packages/pkg2', using this value to resolve non-relative module name 'const'.
 Resolving module name 'const' relative to base url '/user/username/projects/myproject/packages/pkg2' - '/user/username/projects/myproject/packages/pkg2/const'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const', target file types: TypeScript, JavaScript, Declaration, JSON.
@@ -85,7 +85,7 @@ File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it 
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' does not exist.
 File '/user/username/projects/myproject/packages/package.json' does not exist.
 File '/user/username/projects/myproject/package.json' does not exist.
@@ -115,7 +115,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 ======== Resolving module 'const' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'Bundler'.
-Resolving in CJS mode with conditions 'require', 'types'.
+Resolving in CJS mode with conditions 'import', 'types'.
 'baseUrl' option is set to '/user/username/projects/myproject/packages/pkg2', using this value to resolve non-relative module name 'const'.
 Resolving module name 'const' relative to base url '/user/username/projects/myproject/packages/pkg2' - '/user/username/projects/myproject/packages/pkg2/const'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const', target file types: TypeScript, JavaScript, Declaration, JSON.
@@ -126,9 +126,10 @@ Found 1 error.
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/packages/pkg2/build/const.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/const.d.ts]
@@ -136,8 +137,7 @@ export type TheNum = 42;
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/index.d.ts]
@@ -145,12 +145,12 @@ export type { TheNum } from 'const';
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.d.ts","../const.ts","../index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-10837689162-export type { TheNum } from 'const';","signature":"-9751391360-export type { TheNum } from 'const';\n"}],"root":[2,3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","../const.ts","../index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-10837689162-export type { TheNum } from 'const';","signature":"-9751391360-export type { TheNum } from 'const';\n"}],"root":[2,3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "../const.ts",
     "../index.ts"
   ],
@@ -160,7 +160,7 @@ export type { TheNum } from 'const';
     ]
   ],
   "fileInfos": {
-    "../../../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -207,7 +207,7 @@ export type { TheNum } from 'const';
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../../../../home/src/tslibs/ts/lib/lib.d.ts",
+      "../../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -221,14 +221,11 @@ export type { TheNum } from 'const';
   ],
   "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 987
+  "size": 999
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.theNum = void 0;
-exports.theNum = 42;
+export const theNum = 42;
 
 
 //// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]

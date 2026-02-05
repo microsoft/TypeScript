@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: true
 var x = 1
 const y = 2

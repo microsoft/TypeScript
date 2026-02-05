@@ -45,8 +45,8 @@ export class ObjectTypeComposer<TSource, TContext> {
 >            : ^               ^^    ^^                                              ^^^^^    
 >opts : { type?: Thunk<ComposeOutputTypeDefinition>; }
 >     : ^^^^^^^^^                                  ^^^
->type : Thunk<ComposeOutputTypeDefinition>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : Thunk<ComposeOutputTypeDefinition> | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 export class Resolver {

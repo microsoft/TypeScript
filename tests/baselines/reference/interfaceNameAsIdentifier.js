@@ -16,5 +16,6 @@ m2.C();
 
 
 //// [interfaceNameAsIdentifier.js]
+"use strict";
 C();
 m2.C();

@@ -1,3 +1,4 @@
+// @target: es2015
 interface A { a: string; }
 interface B extends A { b: string; }
 interface C extends B { c: string; }

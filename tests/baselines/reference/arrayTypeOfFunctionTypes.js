@@ -19,6 +19,7 @@ var r6 = r5();
 var r6b = new r5(); // error
 
 //// [arrayTypeOfFunctionTypes.js]
+"use strict";
 // valid uses of arrays of function types
 var x;
 var r = x[1];

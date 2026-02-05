@@ -1,3 +1,4 @@
+// @target: es2015
 // - operator on any type
 
 var ANY: any;
@@ -11,7 +12,7 @@ function foo(): any {
     return a;
 }
 class A {
-    public a: any;
+    public a!: any;
     static foo(): any {
         var a;
         return a;

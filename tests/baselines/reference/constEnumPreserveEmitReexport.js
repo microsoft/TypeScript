@@ -24,7 +24,7 @@ var MyConstEnum;
 //// [ImportExport.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ConstEnum_1 = require("./ConstEnum");
+const ConstEnum_1 = require("./ConstEnum");
 exports.default = ConstEnum_1.MyConstEnum;
 //// [ReExport.js]
 "use strict";

@@ -1,3 +1,4 @@
+// @target: es2015
 // string indexer tests
 interface A {
     [s: string]: number;

@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 export namespace TypeScript.Strasse.Street {
 	export class Rue {

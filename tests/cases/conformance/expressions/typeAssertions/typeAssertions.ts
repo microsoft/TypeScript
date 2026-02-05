@@ -1,11 +1,13 @@
+// @target: es2015
+// @strict: false
 // Function call whose argument is a 1 arg generic function call with explicit type arguments
 function fn1<T>(t: T) { }
 function fn2(t: any) { }
 
 fn1(fn2<string>(4)); // Error
 
-var a: any;
-var s: string;
+declare var a: any;
+declare var s: string;
 
 // Type assertion of non - unary expression
 var a = <any>"" + 4;
@@ -39,8 +41,8 @@ someOther = <SomeOther>someBase; // Error
 someOther = <SomeOther>someOther;
 
 // Type assertion cannot be a type-predicate type
-var numOrStr: number | string;
-var str: string;
+declare var numOrStr: number | string;
+declare var str: string;
 if(<numOrStr is string>(numOrStr === undefined)) { // Error
 	str = numOrStr; // Error, no narrowing occurred
 }

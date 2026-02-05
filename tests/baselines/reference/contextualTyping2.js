@@ -4,4 +4,5 @@
 var foo: {id:number;} = {id:4, name:"foo"};
 
 //// [contextualTyping2.js]
+"use strict";
 var foo = { id: 4, name: "foo" };

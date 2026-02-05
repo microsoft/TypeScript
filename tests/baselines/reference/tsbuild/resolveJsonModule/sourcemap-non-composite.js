@@ -58,38 +58,46 @@ Output::
 [7m3[0m     "moduleResolution": "node",
 [7m [0m [91m                        ~~~~~~[0m
 
-TSFILE: /home/src/workspaces/solution/project/dist/hello.json
-TSFILE: /home/src/workspaces/solution/project/dist/index.js
-TSFILE: /home/src/workspaces/solution/project/dist/index.js.map
+[96mproject/tsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "outDir": "dist",
+[7m [0m [91m    ~~~~~~~~[0m
+
+TSFILE: /home/src/workspaces/solution/project/dist/src/hello.json
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js.map
 TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 project/src/hello.json
   Imported via "./hello.json" from file 'project/src/index.ts'
   Part of 'files' list in tsconfig.json
 project/src/index.ts
   Part of 'files' list in tsconfig.json
 
-Found 1 error.
+Found 2 errors.
 
 
 
-//// [/home/src/workspaces/solution/project/dist/hello.json]
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
+//// [/home/src/workspaces/solution/project/dist/src/hello.json]
 {
     "hello": "world"
 }
 
 
-//// [/home/src/workspaces/solution/project/dist/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":";;;;;AAAA,4DAAgC;AAChC,kBAAe,oBAAK,CAAC,KAAK,CAAA"}
+//// [/home/src/workspaces/solution/project/dist/src/index.js.map]
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,8DAAgC;AAChC,kBAAe,oBAAK,CAAC,KAAK,CAAA"}
 
-//// [/home/src/workspaces/solution/project/dist/index.js]
+//// [/home/src/workspaces/solution/project/dist/src/index.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var hello_json_1 = __importDefault(require("./hello.json"));
+const hello_json_1 = __importDefault(require("./hello.json"));
 exports.default = hello_json_1.default.hello;
 //# sourceMappingURL=index.js.map
 
@@ -129,25 +137,31 @@ Output::
 [7m3[0m     "moduleResolution": "node",
 [7m [0m [91m                        ~~~~~~[0m
 
-TSFILE: /home/src/workspaces/solution/project/dist/hello.json
-TSFILE: /home/src/workspaces/solution/project/dist/index.js
-TSFILE: /home/src/workspaces/solution/project/dist/index.js.map
+[96mproject/tsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "outDir": "dist",
+[7m [0m [91m    ~~~~~~~~[0m
+
+TSFILE: /home/src/workspaces/solution/project/dist/src/hello.json
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js.map
 TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 project/src/hello.json
   Imported via "./hello.json" from file 'project/src/index.ts'
   Part of 'files' list in tsconfig.json
 project/src/index.ts
   Part of 'files' list in tsconfig.json
 
-Found 1 error.
+Found 2 errors.
 
 
 
-//// [/home/src/workspaces/solution/project/dist/hello.json] file written with same contents
-//// [/home/src/workspaces/solution/project/dist/index.js.map] file written with same contents
-//// [/home/src/workspaces/solution/project/dist/index.js] file written with same contents
+//// [/home/src/workspaces/solution/project/dist/src/hello.json] file written with same contents
+//// [/home/src/workspaces/solution/project/dist/src/index.js.map] file written with same contents
+//// [/home/src/workspaces/solution/project/dist/src/index.js] file written with same contents
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo] file written with same contents
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 

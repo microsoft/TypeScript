@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 //@allowJs: true
+//@module: commonjs
 
 // @Filename: /mymodule.js
 ////(function ([|root|], factory) {
@@ -12,12 +13,18 @@
 
 // @Filename: /app.js
 //////@ts-check
-////require("./mymodule");
+////[|require("./mymodule")|];
 
-const [range0, range1] = test.ranges();
+const [range0, range1, range2] = test.ranges();
 
 goTo.file("/app.js");
-verify.getSuggestionDiagnostics([]);
+verify.getSuggestionDiagnostics([
+    {
+        code: 80001,
+        message: "File is a CommonJS module; it may be converted to an ES module.",
+        range: range2,
+    },
+]);
 
 goTo.file("/mymodule.js");
 verify.getSuggestionDiagnostics([

@@ -11,9 +11,7 @@ class C {
 }
 
 //// [indexSignatureWithInitializer.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 x = 0;

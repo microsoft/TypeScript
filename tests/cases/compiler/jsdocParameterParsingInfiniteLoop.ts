@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: example.js
 // @checkJs: true
 // @allowJs: true

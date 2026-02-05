@@ -9,8 +9,9 @@ function f(x: { [key: string]: number; } | null | undefined) {
 }
 
 //// [forInStrictNullChecksNoError.js]
+"use strict";
 function f(x) {
-    for (var key in x) { // 1
+    for (const key in x) { // 1
         console.log(x[key]); // 2
     }
     x["no"]; // should still error

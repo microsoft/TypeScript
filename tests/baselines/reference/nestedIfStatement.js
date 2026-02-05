@@ -9,6 +9,7 @@ if (0) {
 }
 
 //// [nestedIfStatement.js]
+"use strict";
 if (0) {
 }
 else if (1) {

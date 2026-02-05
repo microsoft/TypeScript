@@ -4,4 +4,5 @@
 var v: [number, string]
 
 //// [TupleType2.js]
+"use strict";
 var v;

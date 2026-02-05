@@ -30,7 +30,7 @@ function TodoListNoError({ todos }: TodoListProps) {
         {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
     </div>;
 }
-let x: TodoListProps;
+declare let x: TodoListProps;
     <TodoList {...x}/>
 
 
@@ -70,5 +70,4 @@ function TodoListNoError(_a) {
     // any is not checked
     return (0, jsx_runtime_1.jsxs)("div", { children: __spreadArray([], (0, jsx_runtime_1.jsx)(Todo, { todo: todos[0].todo }, todos[0].id), true) });
 }
-var x;
 (0, jsx_runtime_1.jsx)(TodoList, __assign({}, x));

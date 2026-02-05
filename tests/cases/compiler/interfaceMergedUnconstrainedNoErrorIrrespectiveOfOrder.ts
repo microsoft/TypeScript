@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: working.ts
 // minmal samples from #33395
 export namespace ns {

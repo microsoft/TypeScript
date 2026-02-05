@@ -6,6 +6,7 @@ namespace M {
 }
 
 //// [declarationEmitDestructuringArrayPattern3.js]
+"use strict";
 var M;
 (function (M) {
     var _a;

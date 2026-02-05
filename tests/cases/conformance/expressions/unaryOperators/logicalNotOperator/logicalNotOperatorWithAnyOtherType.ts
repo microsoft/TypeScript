@@ -1,9 +1,10 @@
+// @target: es2015
 // ! operator on any type
 
 var ANY: any;
 var ANY1;
 var ANY2: any[] = ["", ""];
-var obj: () => {}
+declare var obj: () => {}
 var obj1 = { x: "", y: () => { }};
 function foo(): any {
     var a;

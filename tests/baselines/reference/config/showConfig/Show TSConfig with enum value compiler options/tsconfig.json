@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "jsx": "react"
+        "jsx": "react",
+        "module": "commonjs",
+        "useDefineForClassFields": false
     }
 }

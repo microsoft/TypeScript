@@ -1,3 +1,4 @@
+// @target: es2015
 // @noimplicitany: true
 // this should be an error
 var x;                   // no error, control flow typed

@@ -17,17 +17,17 @@ function diamondTop<Top>() {
 >T : Symbol(T, Decl(typeParameterDiamond4.ts, 1, 27))
 >U : Symbol(U, Decl(typeParameterDiamond4.ts, 1, 29))
 
-            var top: Top;
+            var top!: Top;
 >top : Symbol(top, Decl(typeParameterDiamond4.ts, 3, 15))
 >Top : Symbol(Top, Decl(typeParameterDiamond4.ts, 0, 20))
 
-            var middle: Top | T | U;
+            var middle!: Top | T | U;
 >middle : Symbol(middle, Decl(typeParameterDiamond4.ts, 4, 15))
 >Top : Symbol(Top, Decl(typeParameterDiamond4.ts, 0, 20))
 >T : Symbol(T, Decl(typeParameterDiamond4.ts, 1, 27))
 >U : Symbol(U, Decl(typeParameterDiamond4.ts, 1, 29))
 
-            var bottom: Bottom;
+            var bottom!: Bottom;
 >bottom : Symbol(bottom, Decl(typeParameterDiamond4.ts, 5, 15))
 >Bottom : Symbol(Bottom, Decl(typeParameterDiamond4.ts, 2, 31))
 

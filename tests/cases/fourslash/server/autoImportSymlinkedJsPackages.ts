@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
+// @lib: es5
+
 // @Filename: /home/src/workspaces/project/packages/a/package.json
 //// {
 ////   "name": "package-a",
@@ -19,7 +21,7 @@
 
 // @link: /home/src/workspaces/project/packages/b -> /home/src/workspaces/project/packages/a/node_modules/package-b
 
-config.setCompilerOptionsForInferredProjects({ module: "commonjs", allowJs: true, maxNodeModulesJsDepth: 2 });
+config.setCompilerOptionsForInferredProjects({ module: "commonjs", lib: ["es5"], allowJs: true, maxNodeModulesJsDepth: 2 });
 goTo.marker("");
 verify.completions({
   marker: "",

@@ -13,11 +13,11 @@ interface B extends A {
 >  : ^^^^^^
 }
 
-var a: A;
+declare var a: A;
 >a : A
 >  : ^
 
-var b: B;
+declare var b: B;
 >b : B
 >  : ^
 

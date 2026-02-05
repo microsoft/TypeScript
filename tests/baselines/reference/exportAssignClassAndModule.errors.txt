@@ -1,0 +1,25 @@
+exportAssignClassAndModule_0.ts(2,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+exportAssignClassAndModule_1.ts(6,1): error TS2454: Variable 'zz' is used before being assigned.
+
+
+==== exportAssignClassAndModule_1.ts (1 errors) ====
+    ///<reference path='exportAssignClassAndModule_0.ts'/>
+    import Foo = require('./exportAssignClassAndModule_0');
+    
+    var z: Foo.Bar;
+    var zz: Foo;
+    zz.x;
+    ~~
+!!! error TS2454: Variable 'zz' is used before being assigned.
+==== exportAssignClassAndModule_0.ts (1 errors) ====
+    class Foo {
+        x: Foo.Bar;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    namespace Foo {
+        export interface Bar {
+        }
+    }
+    export = Foo;
+    

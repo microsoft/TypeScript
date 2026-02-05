@@ -9,6 +9,7 @@ var obj = {
 obj[Symbol["nonsense"]];
 
 //// [symbolProperty57.js]
+"use strict";
 var obj = {
     [Symbol.iterator]: 0
 };

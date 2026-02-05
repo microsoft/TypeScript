@@ -13,6 +13,7 @@ namespace c {
 
 
 //// [internalAliasInterface.js]
+"use strict";
 var c;
 (function (c) {
 })(c || (c = {}));

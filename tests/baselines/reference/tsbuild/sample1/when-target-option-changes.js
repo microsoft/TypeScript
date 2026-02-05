@@ -14,6 +14,7 @@ Input::
 export const someString: string = "HELLO WORLD";
 export function leftPad(s: string, n: number) { return s + n; }
 export function multiply(a: number, b: number) { return a * b; }
+export function exponentiate(a: number, b: number) { return a ** b; }
 
 
 //// [/user/username/projects/sample1/core/some_decl.d.ts]
@@ -115,10 +116,11 @@ export const World = "hello";
 export const someString = "HELLO WORLD";
 export function leftPad(s, n) { return s + n; }
 export function multiply(a, b) { return a * b; }
+export function exponentiate(a, b) { return a ** b; }
 
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.esnext.d.ts","../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-6693461415-/// <reference lib=\"esnext\" />","-3090574810-export const World = \"hello\";","-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[3,5]],"options":{"target":99},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.esnext.d.ts","../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-6693461415-/// <reference lib=\"esnext\" />","-3090574810-export const World = \"hello\";","-1328264963-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\nexport function exponentiate(a: number, b: number) { return a ** b; }\n",{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[3,5]],"options":{"target":99},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -148,8 +150,8 @@ export function multiply(a, b) { return a * b; }
       "signature": "-3090574810-export const World = \"hello\";"
     },
     "./index.ts": {
-      "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
-      "signature": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n"
+      "version": "-1328264963-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\nexport function exponentiate(a: number, b: number) { return a ** b; }\n",
+      "signature": "-1328264963-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\nexport function exponentiate(a: number, b: number) { return a ** b; }\n"
     },
     "./some_decl.d.ts": {
       "original": {
@@ -178,7 +180,7 @@ export function multiply(a, b) { return a * b; }
     "target": 99
   },
   "version": "FakeTSVersion",
-  "size": 1071
+  "size": 1141
 }
 
 
@@ -193,7 +195,7 @@ Input::
     "incremental": true,
     "listFiles": true,
     "listEmittedFiles": true,
-    "target": "es5"
+    "target": "es2015"
   }
 }
 
@@ -210,49 +212,35 @@ Output::
 TSFILE: /user/username/projects/sample1/core/anotherModule.js
 TSFILE: /user/username/projects/sample1/core/index.js
 TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/tslibs/TS/Lib/lib.esnext.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
 /user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
 /user/username/projects/sample1/core/some_decl.d.ts
 
 
-//// [/user/username/projects/sample1/core/anotherModule.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.World = void 0;
-exports.World = "hello";
+//// [/home/src/tslibs/TS/Lib/lib.es6.d.ts] *Lib*
 
-
+//// [/user/username/projects/sample1/core/anotherModule.js] file written with same contents
 //// [/user/username/projects/sample1/core/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.someString = void 0;
-exports.leftPad = leftPad;
-exports.multiply = multiply;
-exports.someString = "HELLO WORLD";
-function leftPad(s, n) { return s + n; }
-function multiply(a, b) { return a * b; }
+export const someString = "HELLO WORLD";
+export function leftPad(s, n) { return s + n; }
+export function multiply(a, b) { return a * b; }
+export function exponentiate(a, b) { return Math.pow(a, b); }
 
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.d.ts","../../../../../home/src/tslibs/ts/lib/lib.esnext.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":["-6693461415-/// <reference lib=\"esnext\" />",{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-3090574810-export const World = \"hello\";","-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[3,5]],"options":{"target":1},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.es6.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3090574810-export const World = \"hello\";","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-1328264963-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\nexport function exponentiate(a: number, b: number) { return a ** b; }\n","signature":"-7014098401-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare function exponentiate(a: number, b: number): number;\n"},{"version":"-7959511260-declare const dts: any;","affectsGlobalScope":true}],"root":[[2,4]],"options":{"target":2},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../home/src/tslibs/ts/lib/lib.d.ts",
-    "../../../../../home/src/tslibs/ts/lib/lib.esnext.d.ts",
+    "../../../../../home/src/tslibs/ts/lib/lib.es6.d.ts",
     "./anothermodule.ts",
     "./index.ts",
     "./some_decl.d.ts"
   ],
   "fileInfos": {
-    "../../../../../home/src/tslibs/ts/lib/lib.d.ts": {
-      "version": "-6693461415-/// <reference lib=\"esnext\" />",
-      "signature": "-6693461415-/// <reference lib=\"esnext\" />"
-    },
-    "../../../../../home/src/tslibs/ts/lib/lib.esnext.d.ts": {
+    "../../../../../home/src/tslibs/ts/lib/lib.es6.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -262,12 +250,20 @@ function multiply(a, b) { return a * b; }
       "affectsGlobalScope": true
     },
     "./anothermodule.ts": {
+      "original": {
+        "version": "-3090574810-export const World = \"hello\";",
+        "signature": "-9234818176-export declare const World = \"hello\";\n"
+      },
       "version": "-3090574810-export const World = \"hello\";",
-      "signature": "-3090574810-export const World = \"hello\";"
+      "signature": "-9234818176-export declare const World = \"hello\";\n"
     },
     "./index.ts": {
-      "version": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n",
-      "signature": "-15745098553-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\n"
+      "original": {
+        "version": "-1328264963-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\nexport function exponentiate(a: number, b: number) { return a ** b; }\n",
+        "signature": "-7014098401-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare function exponentiate(a: number, b: number): number;\n"
+      },
+      "version": "-1328264963-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }\nexport function exponentiate(a: number, b: number) { return a ** b; }\n",
+      "signature": "-7014098401-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare function exponentiate(a: number, b: number): number;\n"
     },
     "./some_decl.d.ts": {
       "original": {
@@ -282,8 +278,8 @@ function multiply(a, b) { return a * b; }
   "root": [
     [
       [
-        3,
-        5
+        2,
+        4
       ],
       [
         "./anothermodule.ts",
@@ -293,10 +289,10 @@ function multiply(a, b) { return a * b; }
     ]
   ],
   "options": {
-    "target": 1
+    "target": 2
   },
   "version": "FakeTSVersion",
-  "size": 1058
+  "size": 1388
 }
 
 

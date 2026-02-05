@@ -23,8 +23,8 @@ function main1() : number {
 >    : ^^^^^^      
     }
     catch(e) {
->e : any
->  : ^^^
+>e : unknown
+>  : ^^^^^^^
 
         log("in catch");
 >log("in catch") : void

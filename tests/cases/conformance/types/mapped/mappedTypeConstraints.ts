@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 function f0<T extends { a: string, b: string }>(obj: Pick<T, Extract<keyof T, 'b'>>) {

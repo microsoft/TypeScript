@@ -27,7 +27,7 @@ isEmpty([]); // error
 >            : ^^^^^^^
 >isEmpty : (list: { length: number; }) => boolean
 >        : ^    ^^                   ^^^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
  
 

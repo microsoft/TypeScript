@@ -1,4 +1,4 @@
-﻿// @target: es5
+﻿// @target: es5, es2015
 
 var t1 = 10;
 var t2 = 10;

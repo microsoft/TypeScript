@@ -308,15 +308,15 @@ function fx10(s) {
 }
 // Repro from #37807
 function f1(x) { }
-var v1;
+let v1;
 f1(v1);
 v1; // number | undefined
 function f2(x) { }
-var v2;
+let v2;
 f2(v2);
 v2; // 6 | undefined
-var TEST_CASES = [
-    function (value) {
+const TEST_CASES = [
+    (value) => {
         if (isEmptyString(value)) {
             value; // ""
         }
@@ -330,7 +330,7 @@ var TEST_CASES = [
             value; // string
         }
     },
-    function (value) {
+    (value) => {
         if (isMaybeEmptyString(value)) {
             value; // "" | undefined
         }
@@ -338,7 +338,7 @@ var TEST_CASES = [
             value; // string
         }
     },
-    function (value) {
+    (value) => {
         if (isZero(value)) {
             value; // 0
         }
@@ -352,7 +352,7 @@ var TEST_CASES = [
             value; // number
         }
     },
-    function (value) {
+    (value) => {
         if (isMaybeZero(value)) {
             value; // 0 | undefined
         }
@@ -360,7 +360,7 @@ var TEST_CASES = [
             value; // number
         }
     },
-    function (value) {
+    (value) => {
         if (isEmptyArray(value)) {
             value; // []
         }
@@ -374,7 +374,7 @@ var TEST_CASES = [
             value; // string[]
         }
     },
-    function (value) {
+    (value) => {
         if (isMaybeEmptyArray(value)) {
             value; // [] | undefined
         }
@@ -386,7 +386,7 @@ var TEST_CASES = [
 function isEmpty(value) {
     return value === '' || value === null || value === undefined;
 }
-var test;
+let test;
 if (isEmpty(test)) {
     test; // EmptyString
 }

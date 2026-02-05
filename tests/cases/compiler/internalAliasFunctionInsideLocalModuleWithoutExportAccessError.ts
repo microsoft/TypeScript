@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 export namespace a {
     export function foo(x: number) {

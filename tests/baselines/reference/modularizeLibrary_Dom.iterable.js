@@ -6,6 +6,7 @@ for (const element of document.getElementsByTagName("a")) {
 }
 
 //// [modularizeLibrary_Dom.iterable.js]
+"use strict";
 for (const element of document.getElementsByTagName("a")) {
     element.href;
 }

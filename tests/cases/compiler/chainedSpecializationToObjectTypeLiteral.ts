@@ -1,3 +1,4 @@
+// @target: es2015
 interface Sequence<T> {
     each(iterator: (value: T) => void): void;
     map<U>(iterator: (value: T) => U): Sequence<U>;

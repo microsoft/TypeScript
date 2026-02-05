@@ -1,3 +1,4 @@
+// @target: es2015
 class X {
     static illegalBeforeProperty = X.data;
     static okBeforeMethod = X.method;

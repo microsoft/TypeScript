@@ -1,3 +1,5 @@
+// @lib: es5
+
 ////[|//#region
 ////function foo()[| {
 ////

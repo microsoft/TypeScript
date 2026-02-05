@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 
 var e1 = Object.create(1);               // Error

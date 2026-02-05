@@ -14,6 +14,7 @@ var a1: typeof a0 | ((n: number, s: string) => string);
 a1 = (foo, bar) => { return true; }  // Error
 
 //// [functionExpressionContextualTyping2.js]
+"use strict";
 // A contextual signature S is extracted from a function type T as follows:
 //      If T is a function type with exactly one call signature, and if that call signature is non- generic, S is that signature.
 //      If T is a union type, let U be the set of element types in T that have call signatures.
@@ -23,4 +24,4 @@ a1 = (foo, bar) => { return true; }  // Error
 //      Otherwise, no contextual signature can be extracted from T and S is undefined.
 var a0;
 var a1;
-a1 = function (foo, bar) { return true; }; // Error
+a1 = (foo, bar) => { return true; }; // Error

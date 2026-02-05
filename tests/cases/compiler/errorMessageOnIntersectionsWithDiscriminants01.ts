@@ -1,3 +1,4 @@
+// @target: es2015
 // @noEmit: true
 
 export type Common = { test: true } | { test: false };

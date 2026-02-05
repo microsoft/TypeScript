@@ -1,0 +1,19 @@
+typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts(12,1): error TS2454: Variable 'nodes' is used before being assigned.
+
+
+==== typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts (1 errors) ====
+    type TreeNode = {
+        name: string;
+        parent: TreeNode;
+    }
+    
+    type TreeNodeMiddleman = {
+        name: string;
+        parent: TreeNode;
+    }
+    
+    var nodes: TreeNodeMiddleman[];
+    nodes.map(n => n.name);
+    ~~~~~
+!!! error TS2454: Variable 'nodes' is used before being assigned.
+    

@@ -28,6 +28,7 @@ namespace M {
 
         public dummy: any;
 >dummy : any
+>      : ^^^
     }
     export class B<T> extends C1<A<T>> { }
 >B : B<T>
@@ -66,6 +67,7 @@ namespace M {
             // both of these should work
             v.subscribe(f);
 >v.subscribe(f) : any
+>               : ^^^
 >v.subscribe : (callback: (newValue: A<T>) => void) => any
 >            : ^        ^^^        ^^^^^^^^^^^    ^^^^^   
 >v : I<A<T>>
@@ -77,6 +79,7 @@ namespace M {
 
             v.subscribe((newValue: A<T>) => { });
 >v.subscribe((newValue: A<T>) => { }) : any
+>                                     : ^^^
 >v.subscribe : (callback: (newValue: A<T>) => void) => any
 >            : ^        ^^^        ^^^^^^^^^^^    ^^^^^   
 >v : I<A<T>>

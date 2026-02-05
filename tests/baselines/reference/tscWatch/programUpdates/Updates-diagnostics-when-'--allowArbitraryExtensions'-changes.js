@@ -45,24 +45,15 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/workspace/solution/projects/project/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
-
-PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/workspace/solution/projects/project/a.ts: *new*
   {}
@@ -82,17 +73,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/b.d.css.ts
 /user/username/workspace/solution/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/b.d.css.ts
 /user/username/workspace/solution/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/workspace/solution/projects/project/b.d.css.ts (used version)
 /user/username/workspace/solution/projects/project/a.ts (used version)
 
@@ -135,18 +126,8 @@ Output::
 
 //// [/user/username/workspace/solution/projects/project/a.js] file written with same contents
 
-PolledWatches::
-/user/username/workspace/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/workspace/solution/projects/project/a.ts:
   {}
@@ -169,7 +150,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -217,18 +198,8 @@ Output::
 
 //// [/user/username/workspace/solution/projects/project/a.js] file written with same contents
 
-PolledWatches::
-/user/username/workspace/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/workspace/solution/projects/project/a.ts:
   {}
@@ -249,12 +220,12 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/b.d.css.ts
 /user/username/workspace/solution/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/workspace/solution/projects/project/b.d.css.ts
 /user/username/workspace/solution/projects/project/a.ts
 

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 declare const f11: 1 | 0 | '' | null | undefined;

@@ -28,18 +28,13 @@ var b = {
 }
 
 //// [objectTypesWithOptionalProperties.js]
+"use strict";
 // Basic uses of optional properties
 var a;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
+class C {
+}
+class C2 {
+}
 var b = {
     x: 1 // error
 };

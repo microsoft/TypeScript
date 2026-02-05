@@ -1,3 +1,4 @@
+// @target: es2015
 // @jsx: preserve
 declare namespace JSX {
     interface IntrinsicElements {

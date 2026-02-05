@@ -71,41 +71,39 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime classic */
-var React = __importStar(require("react"));
-var HelloWorld = function () { return React.createElement("h1", null, "Hello world"); };
+const React = __importStar(require("react"));
+const HelloWorld = () => React.createElement("h1", null, "Hello world");
 exports.HelloWorld = HelloWorld;
 exports.frag = React.createElement(React.Fragment, null,
     React.createElement("div", null));
 exports.selfClosing = React.createElement("img", { src: "./image.png" });
 //// [two.js]
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-var _jsxFileName = "two.tsx";
-/// <reference path="react16.d.ts" />
+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+const _jsxFileName = "two.tsx";
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime automatic */
-var HelloWorld = function () { return (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: "Hello world" }, void 0, false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 32 }, _this); };
+const HelloWorld = () => (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: "Hello world" }, void 0, false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 33 }, this);
 exports.HelloWorld = HelloWorld;
-exports.frag = (0, jsx_dev_runtime_1.jsxDEV)(jsx_dev_runtime_1.Fragment, { children: (0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 23 }, this) }, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 20 }, this);
-exports.selfClosing = (0, jsx_dev_runtime_1.jsxDEV)("img", { src: "./image.png" }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 27 }, this);
+exports.frag = (0, jsx_dev_runtime_1.jsxDEV)(jsx_dev_runtime_1.Fragment, { children: (0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 23 }, this) }, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 21 }, this);
+exports.selfClosing = (0, jsx_dev_runtime_1.jsxDEV)("img", { src: "./image.png" }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 28 }, this);
 //// [three.js]
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-var _jsxFileName = "three.tsx";
-/// <reference path="react16.d.ts" />
+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+const _jsxFileName = "three.tsx";
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime classic */
 /* @jsxRuntime automatic */
-var HelloWorld = function () { return (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: "Hello world" }, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 32 }, _this); };
+const HelloWorld = () => (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: "Hello world" }, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 33 }, this);
 exports.HelloWorld = HelloWorld;
-exports.frag = (0, jsx_dev_runtime_1.jsxDEV)(jsx_dev_runtime_1.Fragment, { children: (0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 23 }, this) }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 20 }, this);
-exports.selfClosing = (0, jsx_dev_runtime_1.jsxDEV)("img", { src: "./image.png" }, void 0, false, { fileName: _jsxFileName, lineNumber: 6, columnNumber: 27 }, this);
+exports.frag = (0, jsx_dev_runtime_1.jsxDEV)(jsx_dev_runtime_1.Fragment, { children: (0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 23 }, this) }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 21 }, this);
+exports.selfClosing = (0, jsx_dev_runtime_1.jsxDEV)("img", { src: "./image.png" }, void 0, false, { fileName: _jsxFileName, lineNumber: 6, columnNumber: 28 }, this);
 //// [four.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -143,11 +141,11 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime automatic */
 /* @jsxRuntime classic */
-var React = __importStar(require("react"));
-var HelloWorld = function () { return React.createElement("h1", null, "Hello world"); };
+const React = __importStar(require("react"));
+const HelloWorld = () => React.createElement("h1", null, "Hello world");
 exports.HelloWorld = HelloWorld;
 exports.frag = React.createElement(React.Fragment, null,
     React.createElement("div", null));

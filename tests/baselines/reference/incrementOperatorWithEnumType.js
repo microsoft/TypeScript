@@ -15,6 +15,7 @@ var ResultIsNumber2 = ENUM1.B++;
 ENUM1.B++;
 
 //// [incrementOperatorWithEnumType.js]
+"use strict";
 // ++ operator on enum type
 var ENUM1;
 (function (ENUM1) {

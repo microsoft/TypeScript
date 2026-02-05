@@ -24,9 +24,9 @@ assignmentCompatWithObjectMembersOptionality.ts(84,5): error TS2322: Type 'E' is
         interface C {
             opt?: Base
         }
-        var c: C;
+        declare var c: C;
     
-        var a: { opt?: Base; }
+        declare var a: { opt?: Base; };
         var b: typeof a = { opt: new Base() }
     
         // sources
@@ -39,9 +39,9 @@ assignmentCompatWithObjectMembersOptionality.ts(84,5): error TS2322: Type 'E' is
         interface F {
             opt?: Derived;
         }
-        var d: D;
-        var e: E;
-        var f: F;
+        declare var d: D;
+        declare var e: E;
+        declare var f: F;
     
         // all ok
         c = d;
@@ -66,9 +66,9 @@ assignmentCompatWithObjectMembersOptionality.ts(84,5): error TS2322: Type 'E' is
         interface C {
             opt: Base
         }
-        var c: C;
+        declare var c: C;
     
-        var a: { opt: Base; }
+        declare var a: { opt: Base; };
         var b = { opt: new Base() }
     
         // sources
@@ -81,9 +81,9 @@ assignmentCompatWithObjectMembersOptionality.ts(84,5): error TS2322: Type 'E' is
         interface F {
             opt: Derived;
         }
-        var d: D;
-        var e: E;
-        var f: F;
+        declare var d: D;
+        declare var e: E;
+        declare var f: F;
     
         c = d; // error
         ~

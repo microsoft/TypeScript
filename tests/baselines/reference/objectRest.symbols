@@ -51,44 +51,44 @@ var { d: renamed, ...d } = o2;
 >d : Symbol(d, Decl(objectRest.ts, 9, 17))
 >o2 : Symbol(o2, Decl(objectRest.ts, 8, 3))
 
-let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
->nestedrest : Symbol(nestedrest, Decl(objectRest.ts, 11, 3))
->x : Symbol(x, Decl(objectRest.ts, 11, 17))
->n1 : Symbol(n1, Decl(objectRest.ts, 11, 28))
->y : Symbol(y, Decl(objectRest.ts, 11, 34))
->n2 : Symbol(n2, Decl(objectRest.ts, 11, 45))
->z : Symbol(z, Decl(objectRest.ts, 11, 51))
->n3 : Symbol(n3, Decl(objectRest.ts, 11, 62))
->n4 : Symbol(n4, Decl(objectRest.ts, 11, 68))
->rest : Symbol(rest, Decl(objectRest.ts, 11, 86))
->restrest : Symbol(restrest, Decl(objectRest.ts, 11, 100))
+declare let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
+>nestedrest : Symbol(nestedrest, Decl(objectRest.ts, 11, 11))
+>x : Symbol(x, Decl(objectRest.ts, 11, 25))
+>n1 : Symbol(n1, Decl(objectRest.ts, 11, 36))
+>y : Symbol(y, Decl(objectRest.ts, 11, 42))
+>n2 : Symbol(n2, Decl(objectRest.ts, 11, 53))
+>z : Symbol(z, Decl(objectRest.ts, 11, 59))
+>n3 : Symbol(n3, Decl(objectRest.ts, 11, 70))
+>n4 : Symbol(n4, Decl(objectRest.ts, 11, 76))
+>rest : Symbol(rest, Decl(objectRest.ts, 11, 94))
+>restrest : Symbol(restrest, Decl(objectRest.ts, 11, 108))
 
 var { x, n1: { y, n2: { z, n3: { ...nr } } }, ...restrest } = nestedrest;
 >x : Symbol(x, Decl(objectRest.ts, 12, 5), Decl(objectRest.ts, 17, 5))
->n1 : Symbol(n1, Decl(objectRest.ts, 11, 28))
+>n1 : Symbol(n1, Decl(objectRest.ts, 11, 36))
 >y : Symbol(y, Decl(objectRest.ts, 12, 14))
->n2 : Symbol(n2, Decl(objectRest.ts, 11, 45))
+>n2 : Symbol(n2, Decl(objectRest.ts, 11, 53))
 >z : Symbol(z, Decl(objectRest.ts, 12, 23))
->n3 : Symbol(n3, Decl(objectRest.ts, 11, 62))
+>n3 : Symbol(n3, Decl(objectRest.ts, 11, 70))
 >nr : Symbol(nr, Decl(objectRest.ts, 12, 32))
 >restrest : Symbol(restrest, Decl(objectRest.ts, 12, 45))
->nestedrest : Symbol(nestedrest, Decl(objectRest.ts, 11, 3))
+>nestedrest : Symbol(nestedrest, Decl(objectRest.ts, 11, 11))
 
-let complex: { x: { ka, ki }, y: number };
->complex : Symbol(complex, Decl(objectRest.ts, 14, 3))
->x : Symbol(x, Decl(objectRest.ts, 14, 14))
->ka : Symbol(ka, Decl(objectRest.ts, 14, 19))
->ki : Symbol(ki, Decl(objectRest.ts, 14, 23))
->y : Symbol(y, Decl(objectRest.ts, 14, 29))
+declare let complex: { x: { ka, ki }, y: number };
+>complex : Symbol(complex, Decl(objectRest.ts, 14, 11))
+>x : Symbol(x, Decl(objectRest.ts, 14, 22))
+>ka : Symbol(ka, Decl(objectRest.ts, 14, 27))
+>ki : Symbol(ki, Decl(objectRest.ts, 14, 31))
+>y : Symbol(y, Decl(objectRest.ts, 14, 37))
 
 var { x: { ka, ...nested }, y: other, ...rest } = complex;
->x : Symbol(x, Decl(objectRest.ts, 14, 14))
+>x : Symbol(x, Decl(objectRest.ts, 14, 22))
 >ka : Symbol(ka, Decl(objectRest.ts, 15, 10))
 >nested : Symbol(nested, Decl(objectRest.ts, 15, 14))
->y : Symbol(y, Decl(objectRest.ts, 14, 29))
+>y : Symbol(y, Decl(objectRest.ts, 14, 37))
 >other : Symbol(other, Decl(objectRest.ts, 15, 27))
 >rest : Symbol(rest, Decl(objectRest.ts, 15, 37))
->complex : Symbol(complex, Decl(objectRest.ts, 14, 3))
+>complex : Symbol(complex, Decl(objectRest.ts, 14, 11))
 
 ({x: { ka, ...nested }, y: other, ...rest} = complex);
 >x : Symbol(x, Decl(objectRest.ts, 16, 2))
@@ -97,7 +97,7 @@ var { x: { ka, ...nested }, y: other, ...rest } = complex;
 >y : Symbol(y, Decl(objectRest.ts, 16, 23))
 >other : Symbol(other, Decl(objectRest.ts, 15, 27))
 >rest : Symbol(rest, Decl(objectRest.ts, 15, 37))
->complex : Symbol(complex, Decl(objectRest.ts, 14, 3))
+>complex : Symbol(complex, Decl(objectRest.ts, 14, 11))
 
 var { x, ...fresh } = { x: 1, y: 2 };
 >x : Symbol(x, Decl(objectRest.ts, 12, 5), Decl(objectRest.ts, 17, 5))
@@ -114,14 +114,14 @@ var { x, ...fresh } = { x: 1, y: 2 };
 class Removable {
 >Removable : Symbol(Removable, Decl(objectRest.ts, 18, 35))
 
-    private x: number;
+    private x!: number;
 >x : Symbol(Removable.x, Decl(objectRest.ts, 20, 17))
 
-    protected y: number;
->y : Symbol(Removable.y, Decl(objectRest.ts, 21, 22))
+    protected y!: number;
+>y : Symbol(Removable.y, Decl(objectRest.ts, 21, 23))
 
     set z(value: number) { }
->z : Symbol(Removable.z, Decl(objectRest.ts, 22, 24))
+>z : Symbol(Removable.z, Decl(objectRest.ts, 22, 25))
 >value : Symbol(value, Decl(objectRest.ts, 23, 10))
 
     get both(): number { return 12 }
@@ -134,11 +134,11 @@ class Removable {
     m() { }
 >m : Symbol(Removable.m, Decl(objectRest.ts, 25, 31))
 
-    removed: string;
+    removed!: string;
 >removed : Symbol(Removable.removed, Decl(objectRest.ts, 26, 11))
 
-    remainder: string;
->remainder : Symbol(Removable.remainder, Decl(objectRest.ts, 27, 20))
+    remainder!: string;
+>remainder : Symbol(Removable.remainder, Decl(objectRest.ts, 27, 21))
 }
 interface I {
 >I : Symbol(I, Decl(objectRest.ts, 29, 1))

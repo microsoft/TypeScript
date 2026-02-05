@@ -4,4 +4,5 @@
 var x = `abc${ typeof "hi" }def`;
 
 //// [templateStringWithEmbeddedTypeOfOperatorES6.js]
+"use strict";
 var x = `abc${typeof "hi"}def`;

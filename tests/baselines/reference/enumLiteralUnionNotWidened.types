@@ -43,8 +43,8 @@ class List<T>
 	private readonly items: T[] = [];
 >items : T[]
 >      : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 }
 
 function asList<T>(arg: T): List<T> { return new List(); }

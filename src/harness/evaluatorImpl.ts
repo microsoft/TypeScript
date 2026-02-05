@@ -39,7 +39,9 @@ export function evaluateTypeScript(source: string | { files: vfs.FileSet; rootFi
     const compilerOptions: ts.CompilerOptions = {
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.CommonJS,
+        strict: false,
         lib: ["lib.esnext.d.ts", "lib.dom.d.ts"],
+        ignoreDeprecations: "6.0",
         ...options,
     };
     const host = new fakes.CompilerHost(fs, compilerOptions);

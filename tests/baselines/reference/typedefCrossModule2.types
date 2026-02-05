@@ -26,12 +26,12 @@ var bbb = new mod.Baz();
 >    : ^^^
 >new mod.Baz() : Baz
 >              : ^^^
->mod.Baz : typeof Baz
->        : ^^^^^^^^^^
+>mod.Baz : typeof Baz | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >mod : { Baz: typeof Baz; Bar: typeof mod.Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof mod.Bar; Quid: 2; Baz?: undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Baz : typeof Baz
->    : ^^^^^^^^^^
+>Baz : typeof Baz | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 === mod1.js ===
 // error

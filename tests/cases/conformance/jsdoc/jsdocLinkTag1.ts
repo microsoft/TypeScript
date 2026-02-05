@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @noUnusedLocals: true
 // @filename: /a.ts
 export interface A {}

@@ -1,3 +1,4 @@
+// @target: es2015
 
 namespace m1 {
     interface Promise<T> {
@@ -6,7 +7,7 @@ namespace m1 {
 
     declare function testFunction(n: number): Promise<number>;
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
     var newPromise = numPromise.then(testFunction);
 }
 
@@ -20,7 +21,7 @@ namespace m2 {
     declare function testFunction(n: number): Promise<number>;
     declare function testFunction(s: string): Promise<string>;
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
     var newPromise = numPromise.then(testFunction);
 }
 
@@ -34,7 +35,7 @@ namespace m3 {
 
     declare function testFunction(n: number): Promise<number>;
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
     var newPromise = numPromise.then(testFunction);
 }
 
@@ -49,7 +50,7 @@ namespace m4 {
     declare function testFunction(n: number): Promise<number>;
     declare function testFunction(s: string): Promise<string>;
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
     var newPromise = numPromise.then(testFunction);
 }
 
@@ -65,7 +66,7 @@ namespace m5 {
     declare function testFunction(n: number): Promise<number>;
     declare function testFunction(s: string): Promise<string>;
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
     var newPromise = numPromise.then(testFunction);
 }
 
@@ -81,6 +82,6 @@ namespace m6 {
     declare function testFunction(s: string): Promise<string>;
     declare function testFunction(b: boolean): Promise<boolean>;
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
     var newPromise = numPromise.then(testFunction);
 }

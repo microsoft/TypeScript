@@ -23,7 +23,9 @@ var d: number = c.a();
 var e: Date = c.b();
 
 //// [mergedInterfaceFromMultipleFiles1_0.js]
+"use strict";
 //// [mergedInterfaceFromMultipleFiles1_1.js]
+"use strict";
 /// <reference path='mergedInterfaceFromMultipleFiles1_0.ts'/>
 var c;
 var a = c.foo();

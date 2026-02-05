@@ -22,18 +22,19 @@ x = y;
 y = x;
 
 //// [stringLiteralTypesInUnionTypes03.js]
+"use strict";
 var x;
 var y = undefined;
 if (x === "foo") {
-    var a = x;
+    let a = x;
 }
 else if (x !== "bar") {
-    var b = x || y;
+    let b = x || y;
 }
 else {
-    var c = x;
-    var d = y;
-    var e = c || d;
+    let c = x;
+    let d = y;
+    let e = c || d;
 }
 x = y;
 y = x;

@@ -1,3 +1,4 @@
+// @target: es2015
 class C1 extends Object { }
 class C2 extends Function { }
 class C3 extends String { }

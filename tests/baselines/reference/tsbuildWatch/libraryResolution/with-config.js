@@ -132,13 +132,6 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project1/tsconfig.json'...
 
-======== Resolving type reference directive 'sometype', containing file '/home/src/workspace/projects/project1/__inferred type names__.ts', root directory '/home/src/workspace/projects/project1/typeroot1'. ========
-Resolving with primary search path '/home/src/workspace/projects/project1/typeroot1'.
-File '/home/src/workspace/projects/project1/typeroot1/sometype.d.ts' does not exist.
-File '/home/src/workspace/projects/project1/typeroot1/sometype/package.json' does not exist.
-File '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
-======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
 ../../tslibs/TS/Lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'project1/file2.ts'
   Library 'lib.es5.d.ts' specified in compilerOptions
@@ -160,7 +153,6 @@ project1/utils.d.ts
   Matched by default include pattern '**/*'
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
-  Entry point for implicit type library 'sometype'
 [[90mHH:MM:SS AM[0m] Project 'project2/tsconfig.json' is out of date because output file 'project2/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project2/tsconfig.json'...
@@ -210,7 +202,6 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/file2.ts 
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/index.ts 250 undefined Source file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/utils.d.ts 250 undefined Source file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts 250 undefined Source file /home/src/workspace/projects/project1/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1/typeroot1/sometype/package.json 2000 undefined package.json file /home/src/workspace/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2/tsconfig.json 2000 undefined Config file /home/src/workspace/projects/project2/tsconfig.json
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2 1 undefined Wild card directory /home/src/workspace/projects/project2/tsconfig.json
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project2 1 undefined Wild card directory /home/src/workspace/projects/project2/tsconfig.json
@@ -233,10 +224,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project4/utils.d.t
 //// [/home/src/tslibs/TS/Lib/lib.esnext.d.ts] *Lib*
 
 //// [/home/src/workspace/projects/project1/file.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.file = void 0;
-exports.file = 10;
+export const file = 10;
 
 
 //// [/home/src/workspace/projects/project1/file.d.ts]
@@ -244,6 +232,7 @@ export declare const file = 10;
 
 
 //// [/home/src/workspace/projects/project1/file2.js]
+"use strict";
 /// <reference lib="webworker"/>
 /// <reference lib="scripthost"/>
 /// <reference lib="es5"/>
@@ -253,10 +242,7 @@ export declare const file = 10;
 
 
 //// [/home/src/workspace/projects/project1/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "type1";
+export const x = "type1";
 
 
 //// [/home/src/workspace/projects/project1/index.d.ts]
@@ -379,10 +365,7 @@ export declare const x = "type1";
 }
 
 //// [/home/src/workspace/projects/project2/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
+export const y = 10;
 
 
 //// [/home/src/workspace/projects/project2/index.d.ts]
@@ -451,10 +434,7 @@ export declare const y = 10;
 }
 
 //// [/home/src/workspace/projects/project3/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.z = void 0;
-exports.z = 10;
+export const z = 10;
 
 
 //// [/home/src/workspace/projects/project3/index.d.ts]
@@ -523,10 +503,7 @@ export declare const z = 10;
 }
 
 //// [/home/src/workspace/projects/project4/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.z = void 0;
-exports.z = 10;
+export const z = 10;
 
 
 //// [/home/src/workspace/projects/project4/index.d.ts]
@@ -604,10 +581,6 @@ export declare const z = 10;
   "size": 1029
 }
 
-
-PolledWatches::
-/home/src/workspace/projects/project1/typeroot1/sometype/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/workspace/projects/project1/core.d.ts: *new*

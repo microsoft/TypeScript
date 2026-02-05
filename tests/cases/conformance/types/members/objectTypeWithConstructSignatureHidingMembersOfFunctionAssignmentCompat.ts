@@ -1,13 +1,14 @@
+// @target: es2015
 interface I {
     new(): any;
 }
 
-var i: I;
-var f: Object;
+declare var i: I;
+declare var f: Object;
 f = i;
 i = f;
 
-var a: {
+declare var a: {
     new(): any
 }
 f = a;

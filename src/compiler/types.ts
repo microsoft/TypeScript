@@ -6394,7 +6394,7 @@ export const enum TypeFlags {
     /** @internal */
     ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
     /** @internal */
-    Simplifiable = IndexedAccess | Conditional,
+    Simplifiable = IndexedAccess | Conditional | Index,
     /** @internal */
     Singleton = Any | Unknown | String | Number | Boolean | BigInt | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
     // 'Narrowable' types are types where narrowing actually narrows.
@@ -7431,6 +7431,7 @@ export interface CompilerOptions {
     disableSourceOfProjectReferenceRedirect?: boolean;
     disableSolutionSearching?: boolean;
     disableReferencedProjectLoad?: boolean;
+    /** @deprecated */
     downlevelIteration?: boolean;
     emitBOM?: boolean;
     emitDecoratorMetadata?: boolean;
@@ -7659,6 +7660,7 @@ export const enum ScriptKind {
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
+    /** @deprecated */
     ES5 = 1,
     ES2015 = 2,
     ES2016 = 3,
@@ -7673,6 +7675,7 @@ export const enum ScriptTarget {
     ESNext = 99,
     JSON = 100,
     Latest = ESNext,
+    LatestStandard = ES2024,
 }
 
 export const enum LanguageVariant {

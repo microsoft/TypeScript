@@ -40,8 +40,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var react_emotion_1 = __importDefault(require("react-emotion"));
-var Form = (0, react_emotion_1.default)('div')({ color: "red" });
+const react_emotion_1 = __importDefault(require("react-emotion"));
+const Form = (0, react_emotion_1.default)('div')({ color: "red" });
 exports.default = Form;
 
 

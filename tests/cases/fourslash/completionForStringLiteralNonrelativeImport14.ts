@@ -5,6 +5,7 @@
 // @Filename: tsconfig.json
 //// {
 ////     "compilerOptions": {
+////         "lib": ["es5"],
 ////         "baseUrl": "./modules",
 ////         "paths": {
 ////             "/module1": ["some/path/whatever.ts"],
@@ -27,7 +28,7 @@
 
 verify.completions({
     marker: ["import_as0",],
-    exact: ["lib", "lib.decorators", "lib.decorators.legacy", "tests",
+    exact: ["home", "tests",
         {
             name: "/module1",
             replacementSpan: {
@@ -50,7 +51,7 @@ verify.completions({
 
 verify.completions({
     marker: ["import_equals0",],
-    exact: ["lib", "lib.decorators", "lib.decorators.legacy", "tests",
+    exact: ["home", "tests",
         {
             name: "/module1",
             replacementSpan: {
@@ -72,7 +73,7 @@ verify.completions({
 
 verify.completions({
     marker: ["require0",],
-    exact: ["lib", "lib.decorators", "lib.decorators.legacy", "tests",
+    exact: ["home", "tests",
         {
             name: "/module1",
             replacementSpan: {

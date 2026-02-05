@@ -9,6 +9,7 @@ var regex4 = /**// /**/asdf /;
 var regex5 = /**// asdf/**/ /;
 
 //// [parseRegularExpressionMixedWithComments.js]
+"use strict";
 var regex1 = / asdf /;
 var regex2 = /**/ / asdf /;
 var regex3 = /**/ //**/ asdf /       // should be a comment line

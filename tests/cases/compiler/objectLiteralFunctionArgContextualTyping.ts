@@ -1,3 +1,4 @@
+// @target: es2015
 interface I {
     value: string;
     toString: (t: string) => string;

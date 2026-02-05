@@ -14,7 +14,7 @@ class X<T> {
 }
 
 function foo<T>(t: X<T>, t2: X<T>) {
-    var x: T;
+    var x!: T;
     return x;
 }
 
@@ -24,21 +24,13 @@ var r = foo(c1, d1); // error
 var r2 = foo(c1, c1); // ok
 
 //// [genericCallWithObjectTypeArgs.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
-var X = /** @class */ (function () {
-    function X() {
-    }
-    return X;
-}());
+"use strict";
+class C {
+}
+class D {
+}
+class X {
+}
 function foo(t, t2) {
     var x;
     return x;

@@ -24,16 +24,16 @@ declare namespace M {
 var c=new M.C();
 c.pe;
 c.p;
-var i:I;
+declare var i:I;
 i.x;
 i.y;
 
 
 
 //// [extension.js]
+"use strict";
 var c = new M.C();
 c.pe;
 c.p;
-var i;
 i.x;
 i.y;

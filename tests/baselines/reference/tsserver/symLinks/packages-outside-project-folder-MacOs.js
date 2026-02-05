@@ -13,7 +13,8 @@ export * from './c';
 {
   "compilerOptions": {
     "outDir": "lib",
-    "declaration": true
+    "declaration": true,
+    "rootDir": "src"
   },
   "include": [
     "src/**/*.ts"
@@ -42,7 +43,8 @@ export * from 'c';
 {
   "compilerOptions": {
     "outDir": "lib",
-    "declaration": true
+    "declaration": true,
+    "rootDir": "src"
   },
   "include": [
     "src/**/*.ts"
@@ -67,7 +69,8 @@ import { a } from 'a';
 //// [/home/src/projects/b/2/b-impl/b/tsconfig.json] Inode:: 36
 {
   "compilerOptions": {
-    "outDir": "lib"
+    "outDir": "lib",
+    "rootDir": "src"
   },
   "include": [
     "src/**/*.ts"
@@ -109,6 +112,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/projects/b/2/b-impl/b/tsconfig.json :
  ],
  "options": {
   "outDir": "/home/src/projects/b/2/b-impl/b/lib",
+  "rootDir": "/home/src/projects/b/2/b-impl/b/src",
   "configFilePath": "/home/src/projects/b/2/b-impl/b/tsconfig.json"
  }
 }
@@ -125,7 +129,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Config: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Config: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/b/2/b-impl/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl 0 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -151,25 +155,15 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/package.json 2000 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/b/2/b-impl/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/b/2/b-impl/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/b/2/b-impl/b/src/index.ts SVC-1-0 "import { a } from 'a';"
 
 
-	../../../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	src/index.ts
 	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 
@@ -207,7 +201,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "outDir": ""
+            "outDir": "",
+            "rootDir": ""
           },
           "typeAcquisition": {
             "enable": false,
@@ -256,25 +251,17 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 47
+
 
 PolledWatches::
-/home/src/projects/b/2/b-impl/b/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/b/2/b-impl/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/projects/b/2/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/b/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -292,8 +279,8 @@ FsWatches::
   {"inode":33}
 /home/src/projects/b/2/b-impl/b/tsconfig.json: *new*
   {"inode":36}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"inode":45}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+  {"inode":47}
 
 FsWatchesRecursive::
 /home/src/projects/b/2/b-impl/b/node_modules: *new*
@@ -314,7 +301,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/b/2/b-impl/b/tsconfig.json *default*
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/b/2/b-impl/b/tsconfig.json
@@ -713,19 +700,16 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 1
 10: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 149
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-exports.c = 'test';
+export const c = 'test';
 
 
 //// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 150
@@ -733,47 +717,28 @@ export declare const c: string;
 
 
 //// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 151
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./c"), exports);
+export * from './c';
 
 
 //// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 152
 export * from './c';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 153
-{"root":["../src/c.ts","../src/index.ts"],"version":"FakeTSVersion"}
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo] Inode:: 153
+{"root":["./src/c.ts","./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 154
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 154
 {
   "root": [
-    "../src/c.ts",
-    "../src/index.ts"
+    "./src/c.ts",
+    "./src/index.ts"
   ],
   "version": "FakeTSVersion",
-  "size": 68
+  "size": 66
 }
 
 //// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 156
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = 'test';
+export const a = 'test';
 
 
 //// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 157
@@ -781,24 +746,8 @@ export declare const a: string;
 
 
 //// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 158
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./a"), exports);
-__exportStar(require("c"), exports);
+export * from './a';
+export * from 'c';
 
 
 //// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 159
@@ -806,17 +755,17 @@ export * from './a';
 export * from 'c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 160
-{"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo] Inode:: 160
+{"root":["./src/a.ts","./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 161
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 161
 {
   "root": [
-    "../src/a.ts",
-    "../src/index.ts"
+    "./src/a.ts",
+    "./src/index.ts"
   ],
   "version": "FakeTSVersion",
-  "size": 68
+  "size": 66
 }
 
 
@@ -871,7 +820,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/b/2/b-impl/b/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/b/2/b-impl/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/a/1/a-impl/a/lib/a.d.ts Text-1 "export declare const a: string;\n"
 	/home/src/projects/c/3/c-impl/c/lib/c.d.ts Text-1 "export declare const c: string;\n"
 	/home/src/projects/c/3/c-impl/c/lib/index.d.ts Text-1 "export * from './c';\n"
@@ -879,8 +828,8 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/projects/b/2/b-impl/b/src/index.ts SVC-1-0 "import { a } from 'a';"
 
 
-	../../../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../../../../a/1/a-impl/a/lib/a.d.ts
 	  Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
 	../../../../c/3/c-impl/c/lib/c.d.ts
@@ -927,16 +876,6 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /home/src/projects/b/2/b-impl/node_modules:
@@ -973,8 +912,8 @@ FsWatches::
   {"inode":152}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":45}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":47}
 
 FsWatchesRecursive::
 /home/src/projects/a: *new*
@@ -1020,7 +959,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/b/2/b-impl/b/tsconfig.json
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/b/2/b-impl/b/tsconfig.json
@@ -1402,12 +1341,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/index.js :: WatchInfo: /home/src/projects/c 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/index.js :: WatchInfo: /home/src/projects/c 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/c 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/c 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/c 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/c 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib :: WatchInfo: /home/src/projects/c 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib :: WatchInfo: /home/src/projects/c 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -1431,31 +1364,21 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/index.js :: WatchInfo: /home/src/projects/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/index.js :: WatchInfo: /home/src/projects/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib :: WatchInfo: /home/src/projects/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib :: WatchInfo: /home/src/projects/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 3
-33: /home/src/projects/b/2/b-impl/b/tsconfig.json
-34: *ensureProjectForOpenFiles*
-39: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
+31: /home/src/projects/b/2/b-impl/b/tsconfig.json
+32: *ensureProjectForOpenFiles*
+35: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/c/3/c-impl/c/lib/c.js] deleted
 //// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] deleted
 //// [/home/src/projects/c/3/c-impl/c/lib/index.js] deleted
 //// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] deleted
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] deleted
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] deleted
 //// [/home/src/projects/a/1/a-impl/a/lib/a.js] deleted
 //// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] deleted
 //// [/home/src/projects/a/1/a-impl/a/lib/index.js] deleted
 //// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] deleted
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] deleted
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] deleted
 
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
@@ -1464,19 +1387,9 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/a/1/a-impl/a/lib/node_modules:
   {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
   {"pollingInterval":500}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1496,8 +1409,8 @@ FsWatches::
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/package.json:
   {"inode":12}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":45}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":47}
 
 FsWatches *deleted*::
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts:
@@ -1522,9 +1435,9 @@ FsWatchesRecursive::
   {"inode":4}
 
 Timeout callback:: count: 3
-33: /home/src/projects/b/2/b-impl/b/tsconfig.json *new*
-34: *ensureProjectForOpenFiles* *new*
-39: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation *new*
+31: /home/src/projects/b/2/b-impl/b/tsconfig.json *new*
+32: *ensureProjectForOpenFiles* *new*
+35: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /home/src/projects/b/2/b-impl/b/tsconfig.json (Configured) *changed*
@@ -1561,7 +1474,7 @@ ScriptInfos::
     deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /home/src/projects/b/2/b-impl/b/tsconfig.json *deleted*
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/b/2/b-impl/b/tsconfig.json
@@ -1590,12 +1503,12 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/b/2/b-impl/b/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/b/2/b-impl/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/b/2/b-impl/b/src/index.ts SVC-1-0 "import { a } from 'a';"
 
 
-	../../../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	src/index.ts
 	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 
@@ -1636,27 +1549,17 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts:
   {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/b/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/b/2/b-impl/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/b/2/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/b/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts:
   {"pollingInterval":500}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts:
   {"pollingInterval":500}
 /home/src/projects/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -1678,8 +1581,8 @@ FsWatches::
   {"inode":33}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":45}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":47}
 
 FsWatches *deleted*::
 /home/src/projects/c/3/c-impl/c/package.json:
@@ -1702,7 +1605,7 @@ FsWatchesRecursive *deleted*::
   {"inode":4}
 
 Timeout callback:: count: 0
-39: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation *deleted*
+35: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation *deleted*
 
 Projects::
 /home/src/projects/b/2/b-impl/b/tsconfig.json (Configured) *changed*
@@ -1735,10 +1638,10 @@ Info seq  [hh:mm:ss:mss] request:
 After request
 
 Timeout callback:: count: 1
-40: checkOne *new*
+36: checkOne *new*
 
 Before running Timeout callback:: count: 1
-40: checkOne
+36: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1868,19 +1771,14 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/pr
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 1
-47: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
+41: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo] file written with same contents Inode:: 153
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 154
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo] file written with same contents Inode:: 160
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 161
 //// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 165
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-exports.c = 'test';
+export const c = 'test';
 
 
 //// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 166
@@ -1888,111 +1786,40 @@ export declare const c: string;
 
 
 //// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 167
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./c"), exports);
+export * from './c';
 
 
 //// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 168
 export * from './c';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 169
-{"root":["../src/c.ts","../src/index.ts"],"version":"FakeTSVersion"}
-
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 170
-{
-  "root": [
-    "../src/c.ts",
-    "../src/index.ts"
-  ],
-  "version": "FakeTSVersion",
-  "size": 68
-}
-
-//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 172
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = 'test';
+//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 170
+export const a = 'test';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 173
+//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 171
 export declare const a: string;
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 174
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./a"), exports);
-__exportStar(require("c"), exports);
-
-
-//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 175
+//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 172
 export * from './a';
 export * from 'c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 176
-{"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
+//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 173
+export * from './a';
+export * from 'c';
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 177
-{
-  "root": [
-    "../src/a.ts",
-    "../src/index.ts"
-  ],
-  "version": "FakeTSVersion",
-  "size": 68
-}
 
 
 PolledWatches::
-/home/src/projects/b/2/b-impl/b/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/b/2/b-impl/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/b/2/node_modules:
   {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/b/node_modules:
   {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -2009,9 +1836,9 @@ FsWatches::
 /home/src/projects:
   {"inode":3}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
-  {"inode":173}
+  {"inode":171}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
-  {"inode":175}
+  {"inode":173}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
 /home/src/projects/b:
@@ -2028,8 +1855,8 @@ FsWatches::
   {"inode":166}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
   {"inode":168}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":45}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":47}
 
 FsWatchesRecursive::
 /home/src/projects/b/2/b-impl/b/node_modules:
@@ -2040,7 +1867,7 @@ FsWatchesRecursive::
   {"inode":34}
 
 Timeout callback:: count: 1
-47: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation *new*
+41: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation *new*
 
 ScriptInfos::
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts *changed*
@@ -2067,7 +1894,7 @@ ScriptInfos::
     pendingReloadFromDisk: true
     deferredDelete: undefined *changed*
     containingProjects: 0
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/b/2/b-impl/b/tsconfig.json
@@ -2078,8 +1905,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-48: /home/src/projects/b/2/b-impl/b/tsconfig.json *new*
-49: *ensureProjectForOpenFiles* *new*
+42: /home/src/projects/b/2/b-impl/b/tsconfig.json *new*
+43: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/projects/b/2/b-impl/b/tsconfig.json (Configured) *changed*
@@ -2088,8 +1915,8 @@ Projects::
     dirty: true *changed*
 
 Before running Timeout callback:: count: 2
-48: /home/src/projects/b/2/b-impl/b/tsconfig.json
-49: *ensureProjectForOpenFiles*
+42: /home/src/projects/b/2/b-impl/b/tsconfig.json
+43: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/b/2/b-impl/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/b/2/b-impl/b/tsconfig.json
@@ -2115,7 +1942,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/b/2/b-impl/b/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/b/2/b-impl/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/a/1/a-impl/a/lib/a.d.ts Text-1 "export declare const a: string;\n"
 	/home/src/projects/c/3/c-impl/c/lib/c.d.ts Text-1 "export declare const c: string;\n"
 	/home/src/projects/c/3/c-impl/c/lib/index.d.ts Text-1 "export * from './c';\n"
@@ -2123,8 +1950,8 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/home/src/projects/b/2/b-impl/b/src/index.ts SVC-1-0 "import { a } from 'a';"
 
 
-	../../../../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	../../../../a/1/a-impl/a/lib/a.d.ts
 	  Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
 	../../../../c/3/c-impl/c/lib/c.d.ts
@@ -2171,16 +1998,6 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /home/src/projects/b/2/b-impl/node_modules:
@@ -2196,9 +2013,9 @@ FsWatches::
 /home/src/projects:
   {"inode":3}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts:
-  {"inode":173}
+  {"inode":171}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts:
-  {"inode":175}
+  {"inode":173}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
 /home/src/projects/b:
@@ -2217,8 +2034,8 @@ FsWatches::
   {"inode":168}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":45}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":47}
 
 FsWatchesRecursive::
 /home/src/projects/a: *new*
@@ -2267,7 +2084,7 @@ ScriptInfos::
     pendingReloadFromDisk: false *changed*
     containingProjects: 1 *changed*
         /home/src/projects/b/2/b-impl/b/tsconfig.json *new*
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/b/2/b-impl/b/tsconfig.json
@@ -2293,10 +2110,10 @@ Info seq  [hh:mm:ss:mss] request:
 After request
 
 Timeout callback:: count: 1
-50: checkOne *new*
+44: checkOne *new*
 
 Before running Timeout callback:: count: 1
-50: checkOne
+44: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {

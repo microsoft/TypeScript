@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace Windows.Foundation {
     export interface IPromise<T> {
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;

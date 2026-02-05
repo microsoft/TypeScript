@@ -1,12 +1,15 @@
 readonlyReadonly.ts(2,14): error TS1030: 'readonly' modifier already seen.
+readonlyReadonly.ts(2,23): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 readonlyReadonly.ts(3,26): error TS1030: 'readonly' modifier already seen.
 
 
-==== readonlyReadonly.ts (2 errors) ====
+==== readonlyReadonly.ts (3 errors) ====
     class C {
         readonly readonly x: number;
                  ~~~~~~~~
 !!! error TS1030: 'readonly' modifier already seen.
+                          ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         constructor(readonly readonly y: number) {}
                              ~~~~~~~~
 !!! error TS1030: 'readonly' modifier already seen.

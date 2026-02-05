@@ -25,8 +25,8 @@ import {B} from "./f2";
 >  : ^^^^^^^^
 
 A.prototype.foo = function () { return undefined; }
->A.prototype.foo = function () { return undefined; } : () => any
->                                                    : ^^^^^^^^^
+>A.prototype.foo = function () { return undefined; } : () => undefined
+>                                                    : ^^^^^^^^^^^^^^^
 >A.prototype.foo : () => B
 >                : ^^^^^^ 
 >A.prototype : A
@@ -37,8 +37,8 @@ A.prototype.foo = function () { return undefined; }
 >          : ^
 >foo : () => B
 >    : ^^^^^^ 
->function () { return undefined; } : () => any
->                                  : ^^^^^^^^^
+>function () { return undefined; } : () => undefined
+>                                  : ^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

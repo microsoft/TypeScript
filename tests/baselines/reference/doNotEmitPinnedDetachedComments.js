@@ -35,6 +35,7 @@ function foo() {
 
 
 //// [doNotEmitPinnedDetachedComments.js]
+"use strict";
 var x = 10;
 function baz() { }
 function bar() {

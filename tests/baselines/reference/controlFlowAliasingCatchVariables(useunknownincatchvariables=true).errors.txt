@@ -1,4 +1,4 @@
-controlFlowAliasingCatchVariables.ts(20,11): error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
+controlFlowAliasingCatchVariables.ts(20,9): error TS18046: 'e' is of type 'unknown'.
 
 
 ==== controlFlowAliasingCatchVariables.ts (1 errors) ====
@@ -22,8 +22,8 @@ controlFlowAliasingCatchVariables.ts(20,11): error TS2339: Property 'toUpperCase
     
         if (isString) {
             e.toUpperCase(); // e any/unknown
-              ~~~~~~~~~~~
-!!! error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
+            ~
+!!! error TS18046: 'e' is of type 'unknown'.
         }
     
         if (typeof e === 'string') {

@@ -21,8 +21,8 @@ infiniteExpansionThroughInstantiation.ts(21,5): error TS2322: Type 'OwnerList<T>
         name: string;
     }
     
-    var list: List<string>;
-    var ownerList: OwnerList<string>;
+    declare var list: List<string>;
+    declare var ownerList: OwnerList<string>;
     list = ownerList; 
     ~~~~
 !!! error TS2322: Type 'OwnerList<string>' is not assignable to type 'List<string>'.
@@ -31,7 +31,7 @@ infiniteExpansionThroughInstantiation.ts(21,5): error TS2322: Type 'OwnerList<T>
     
     function other<T>(x: T) {
         var list: List<T>;
-        var ownerList: OwnerList<T>;
+        var ownerList!: OwnerList<T>;
         list = ownerList; 
         ~~~~
 !!! error TS2322: Type 'OwnerList<T>' is not assignable to type 'List<T>'.

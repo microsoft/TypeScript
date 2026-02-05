@@ -40,6 +40,7 @@ new A().test();
 
 
 //// [privateNameComputedPropertyName1.js]
+"use strict";
 class A {
     #a = 'a';
     #b;

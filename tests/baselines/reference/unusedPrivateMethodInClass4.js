@@ -17,18 +17,16 @@ class greeter {
 }
 
 //// [unusedPrivateMethodInClass4.js]
-var greeter = /** @class */ (function () {
-    function greeter() {
+"use strict";
+class greeter {
+    function1() {
+        var y = 10;
     }
-    greeter.prototype.function1 = function () {
+    function2() {
         var y = 10;
-    };
-    greeter.prototype.function2 = function () {
-        var y = 10;
-    };
-    greeter.prototype.function3 = function () {
+    }
+    function3() {
         var y = 10;
         this.function2();
-    };
-    return greeter;
-}());
+    }
+}

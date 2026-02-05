@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 declare function isBig(x: any): x is { big: true };
 function bigger(this: {}) {

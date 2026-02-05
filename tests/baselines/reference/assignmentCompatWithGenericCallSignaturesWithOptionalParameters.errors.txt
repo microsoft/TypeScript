@@ -162,8 +162,8 @@ assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(116,13): erro
     
     
         function foo<T>() {
-            var b: Base2;
-            var t: Target<T>;
+            var b!: Base2;
+            var t!: Target<T>;
     
             // all errors
             b.a = t.a;

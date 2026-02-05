@@ -8,6 +8,7 @@ async function main() {
 
 
 //// [usingDeclarationsInForAwaitOf.js]
+"use strict";
 async function main() {
     for await (using d1 of [{ [Symbol.dispose]() { } }, null, undefined]) {
     }

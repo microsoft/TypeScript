@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace D3 {
     var x: D3.Color.Color;
 

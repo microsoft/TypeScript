@@ -56,6 +56,7 @@ delete b.b
 
 
 //// [deleteExpressionMustBeOptional_exactOptionalPropertyTypes.js]
+"use strict";
 delete f.a;
 delete f.b;
 delete f.c;
