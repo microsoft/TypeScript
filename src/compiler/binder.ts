@@ -1541,8 +1541,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindForStatement(node: ForStatement): void {
         bind(node.initializer);
         if (currentFlow === unreachableFlow) {
-            // follow what `bindChildren` already does for `unreachableFlow`
-            // given `node.initializer` was already bound we have to manually bind the rest of the statement instead of relying on `bindEach`
+            // Unlike while/do, the for-loop initializer is bound inside this function before the loop's
+            // flow graph is constructed. If it makes flow unreachable (e.g. a throwing IIFE), addAntecedent
+            // will filter out the unreachable entry to preLoopLabel, leaving only the back-edge from the
+            // incrementor. This creates a cycle with no exit that crashes isReachableFlowNodeWorker.
+            // Bail out early and just bind the remaining children with unreachable flow.
             bind(node.condition);
             bind(node.statement);
             bind(node.incrementor);
