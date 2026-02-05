@@ -7759,6 +7759,7 @@ export interface CommandLineOptionBase {
     isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
     isCommandLineOnly?: boolean;
     showInSimplifiedHelpView?: boolean;
+    showInHelp?: boolean;
     category?: DiagnosticMessage;
     strictFlag?: true;                                      // true if the option is one of the flag under strict
     allowJsFlag?: true;

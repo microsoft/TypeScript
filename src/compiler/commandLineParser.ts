@@ -966,6 +966,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "boolean",
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
+        showInHelp: false,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Ensure_types_are_ordered_stably_and_deterministically_across_compilations,
         defaultValueDescription: false,
