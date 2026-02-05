@@ -19,6 +19,7 @@ var v: variable = new variable();
 m.doSomething(v);
 
 //// [differentTypesWithSameName.js]
+"use strict";
 var m;
 (function (m) {
     class variable {

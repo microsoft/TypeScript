@@ -10,6 +10,7 @@ function foo() {
 
 
 //// [out.js]
+"use strict";
 class c {
 }
 function foo() {

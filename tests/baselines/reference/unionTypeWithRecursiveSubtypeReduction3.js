@@ -9,4 +9,5 @@ var s: string = b;
 
 
 //// [unionTypeWithRecursiveSubtypeReduction3.js]
+"use strict";
 var s = b;

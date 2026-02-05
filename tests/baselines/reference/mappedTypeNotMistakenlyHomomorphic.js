@@ -38,6 +38,7 @@ b = a;
 
 
 //// [mappedTypeNotMistakenlyHomomorphic.js]
+"use strict";
 var ABC;
 (function (ABC) {
     ABC[ABC["A"] = 0] = "A";

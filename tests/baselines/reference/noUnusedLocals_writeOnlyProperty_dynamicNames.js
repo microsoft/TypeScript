@@ -14,6 +14,7 @@ class C {
 
 
 //// [noUnusedLocals_writeOnlyProperty_dynamicNames.js]
+"use strict";
 const x = Symbol("x");
 const y = Symbol("y");
 class C {

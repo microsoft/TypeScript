@@ -27,6 +27,7 @@ function other<T>(x: T) {
 
 
 //// [infiniteExpansionThroughInstantiation.js]
+"use strict";
 // instantiating a derived type can cause an infinitely expanding type reference to be generated
 list = ownerList;
 function other(x) {

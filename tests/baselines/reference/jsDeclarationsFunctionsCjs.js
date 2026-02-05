@@ -62,6 +62,7 @@ module.exports.j = function j() {}
 
 
 //// [index.js]
+"use strict";
 module.exports.a = function a() { };
 module.exports.b = function b() { };
 module.exports.b.cat = "cat";
@@ -144,7 +145,7 @@ export function g(a: {
         (): void;
         cat: string;
     };
-}): void;
+}): void | "";
 /**
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
@@ -156,5 +157,5 @@ declare function hh(a: {
         (): void;
         cat: string;
     };
-}): void;
+}): void | "";
 export { hh as h, i as ii, j as jj };

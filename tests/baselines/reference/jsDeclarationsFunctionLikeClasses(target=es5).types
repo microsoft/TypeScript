@@ -87,22 +87,22 @@ export function magnitude(p) {
 >                    : ^^^^^^
 >p.x ** 2 : number
 >         : ^^^^^^
->p.x : number
->    : ^^^^^^
+>p.x : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >p : Point
 >  : ^^^^^
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 >p.y ** 2 : number
 >         : ^^^^^^
->p.y : number
->    : ^^^^^^
+>p.y : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >p : Point
 >  : ^^^^^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 }

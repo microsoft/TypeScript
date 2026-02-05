@@ -25,6 +25,7 @@ out2.responseXML.activeElement.className.length
 
 
 //// [mappedTypeRecursiveInference.js]
+"use strict";
 const out = foo(a);
 out.a;
 out.a.a;

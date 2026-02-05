@@ -56,23 +56,15 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/projects/a/rootFolder/project/Static/scripts/Scripts/Javascript.js]
+"use strict";
 var zz = 10;
 
 
 //// [/home/src/projects/a/rootFolder/project/Static/scripts/Scripts/TypeScript.js]
+"use strict";
 var z = 10;
 
 
-
-PolledWatches::
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/rootFolder/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/rootFolder/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/a/rootFolder/project/Scripts/Javascript.js: *new*
@@ -150,6 +142,7 @@ Output::
 
 //// [/home/src/projects/a/rootFolder/project/Static/scripts/Scripts/Javascript.js] file written with same contents
 //// [/home/src/projects/a/rootFolder/project/Static/scripts/Scripts/TypeScript.js]
+"use strict";
 var zz30 = 100;
 
 

@@ -18,6 +18,7 @@ class Foo2 {
 
 
 //// [es6MemberScoping.js]
+"use strict";
 class Foo {
     constructor(store) {
         this._store = store; // should be an error.

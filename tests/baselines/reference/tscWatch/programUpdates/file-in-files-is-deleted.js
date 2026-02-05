@@ -42,23 +42,15 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/workspace/solution/projects/project/f1.js]
+"use strict";
 let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/f2.js]
+"use strict";
 let y = 1;
 
 
-
-PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
@@ -129,15 +121,7 @@ Output::
 //// [/user/username/workspace/solution/projects/project/f1.js] file written with same contents
 
 PolledWatches::
-/user/username/workspace/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/workspace/solution/projects/project/f2.ts: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

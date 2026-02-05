@@ -20,6 +20,7 @@ function f2(): F<T> {
 
 
 //// [parserGenericsInTypeContexts1.js]
+"use strict";
 class C extends A {
 }
 var v1;

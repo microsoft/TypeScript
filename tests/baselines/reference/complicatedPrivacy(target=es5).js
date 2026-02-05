@@ -107,6 +107,7 @@ namespace mglo5 {
 
 
 //// [complicatedPrivacy.js]
+"use strict";
 var m1;
 (function (m1) {
     var m2;

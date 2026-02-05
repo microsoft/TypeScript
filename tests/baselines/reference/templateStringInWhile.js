@@ -6,6 +6,7 @@ while (`abc${0}abc`) {
 }
 
 //// [templateStringInWhile.js]
+"use strict";
 while (`abc${0}abc`) {
     `def${1}def`;
 }

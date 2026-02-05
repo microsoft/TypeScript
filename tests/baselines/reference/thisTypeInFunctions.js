@@ -197,6 +197,7 @@ function missingTypeIsImplicitAny(this, a: number) { return this.anything + a; }
 
 
 //// [thisTypeInFunctions.js]
+"use strict";
 // body checking
 class B {
 }

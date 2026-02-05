@@ -6,3 +6,4 @@ declare class C {
 }
 
 //// [parserAccessors6.js]
+"use strict";

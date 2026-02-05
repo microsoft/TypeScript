@@ -12,6 +12,7 @@
 })();
 
 //// [emptyVariableDeclarationBindingPatterns02_ES5.js]
+"use strict";
 (function () {
     var _a = void 0;
     var _b = void 0;

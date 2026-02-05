@@ -21,6 +21,7 @@ namespace M {
 
 
 //// [enumBasics3.js]
+"use strict";
 var M;
 (function (M) {
     let N;

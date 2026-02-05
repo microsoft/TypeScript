@@ -33,15 +33,10 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/username/workspaces/project/src/file1.js]
+"use strict";
 var a = 10;
 
 
-
-PolledWatches::
-/home/username/workspaces/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/username/workspaces/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
@@ -102,15 +97,10 @@ Output::
 
 
 //// [/home/username/workspaces/project/src/file2.js]
+"use strict";
 var a = 10;
 
 
-
-PolledWatches::
-/home/username/workspaces/node_modules/@types:
-  {"pollingInterval":500}
-/home/username/workspaces/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:

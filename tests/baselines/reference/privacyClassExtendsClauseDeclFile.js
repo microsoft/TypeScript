@@ -173,6 +173,7 @@ class publicClassExtendingFromPrivateModuleClass extends privateModule.publicCla
 }
 exports.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
 //// [privacyClassExtendsClauseDeclFile_GlobalFile.js]
+"use strict";
 var publicModuleInGlobal;
 (function (publicModuleInGlobal) {
     class publicClassInPublicModule {

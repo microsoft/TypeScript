@@ -59,20 +59,13 @@ export {};
 
 
 //// [/home/src/projects/a/b/globalFile3.js]
+"use strict";
 
 
 //// [/home/src/projects/a/b/moduleFile2.js]
 export var Foo4 = 10;
 
 
-
-PolledWatches::
-/home/src/projects/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/a/b/file1Consumer1.ts: *new*
@@ -159,6 +152,7 @@ Output::
 //// [/home/src/projects/a/b/file1Consumer1.js] file written with same contents
 //// [/home/src/projects/a/b/file1Consumer2.js] file written with same contents
 //// [/home/src/projects/a/b/globalFile3.js]
+"use strict";
 var T2;
 
 

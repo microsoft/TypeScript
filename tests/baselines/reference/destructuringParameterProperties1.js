@@ -32,6 +32,7 @@ c3 = new C3({x: 0, "y": "y", z: true});
 var [c3_x, c3_y, c3_z] = [c3.x, c3.y, c3.z];
 
 //// [destructuringParameterProperties1.js]
+"use strict";
 class C1 {
     constructor([x, y, z]) {
     }

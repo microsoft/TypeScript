@@ -5,4 +5,5 @@ var x = "\u{00000000000067}
 
 
 //// [unicodeExtendedEscapesInStrings25.js]
+"use strict";
 var x = "\u{00000000000067};

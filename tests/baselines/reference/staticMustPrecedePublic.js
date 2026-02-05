@@ -8,5 +8,6 @@ class Outer {
 
 
 //// [staticMustPrecedePublic.js]
+"use strict";
 class Outer {
 }

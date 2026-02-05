@@ -13,6 +13,7 @@ namespace B {
 
 
 //// [internalImportInstantiatedModuleNotReferencingInstance.js]
+"use strict";
 var A;
 (function (A) {
     A.a = 10;

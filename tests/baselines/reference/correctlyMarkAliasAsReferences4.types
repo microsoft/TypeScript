@@ -5,6 +5,7 @@
 ///<reference path="declaration.d.ts" />
 import * as cx from 'classnames';
 >cx : any
+>   : ^^^
 
 import * as React from "react";
 >React : typeof React
@@ -26,8 +27,11 @@ let k = <button {...buttonProps} className={cx('class1', { class2: true })} />;
 >buttonProps : { [attributeName: string]: ""; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >className : any
+>          : ^^^
 >cx('class1', { class2: true }) : any
+>                               : ^^^
 >cx : any
+>   : ^^^
 >'class1' : "class1"
 >         : ^^^^^^^^
 >{ class2: true } : { class2: boolean; }
@@ -40,4 +44,5 @@ let k = <button {...buttonProps} className={cx('class1', { class2: true })} />;
 === declaration.d.ts ===
 declare module "classnames";
 >"classnames" : any
+>             : ^^^
 

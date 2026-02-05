@@ -6,6 +6,7 @@ class derived extends base { private n() {} }
 
 
 //// [shadowPrivateMembers.js]
+"use strict";
 class base {
     n() { }
 }

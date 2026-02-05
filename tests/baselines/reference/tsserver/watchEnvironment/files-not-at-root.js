@@ -63,14 +63,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/workspaces/myfolder/allproject/project/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/workspaces/myfolder/allproject/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/workspaces/myfolder/allproject/project/node_modules/@types 1 undefined Project: c:/workspaces/myfolder/allproject/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/workspaces/myfolder/allproject/project/node_modules/@types 1 undefined Project: c:/workspaces/myfolder/allproject/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/workspaces/myfolder/allproject/node_modules/@types 1 undefined Project: c:/workspaces/myfolder/allproject/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/workspaces/myfolder/allproject/node_modules/@types 1 undefined Project: c:/workspaces/myfolder/allproject/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/workspaces/myfolder/node_modules/@types 1 undefined Project: c:/workspaces/myfolder/allproject/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/workspaces/myfolder/node_modules/@types 1 undefined Project: c:/workspaces/myfolder/allproject/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/workspaces/node_modules/@types 1 undefined Project: c:/workspaces/myfolder/allproject/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/workspaces/node_modules/@types 1 undefined Project: c:/workspaces/myfolder/allproject/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/workspaces/myfolder/allproject/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/workspaces/myfolder/allproject/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -169,16 +161,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 //// [c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
-
-PolledWatches::
-c:/workspaces/myfolder/allproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-c:/workspaces/myfolder/allproject/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-c:/workspaces/myfolder/node_modules/@types: *new*
-  {"pollingInterval":500}
-c:/workspaces/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*

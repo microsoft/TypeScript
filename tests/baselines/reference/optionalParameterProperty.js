@@ -13,6 +13,7 @@ class D extends C {
 
 
 //// [optionalParameterProperty.js]
+"use strict";
 class C {
     constructor() {
         this.p = 0;

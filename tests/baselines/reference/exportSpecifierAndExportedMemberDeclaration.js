@@ -15,3 +15,4 @@ declare module "m2" {
 }
 
 //// [exportSpecifierAndExportedMemberDeclaration.js]
+"use strict";

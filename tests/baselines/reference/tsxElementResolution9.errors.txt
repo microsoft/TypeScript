@@ -1,3 +1,4 @@
+file.tsx(2,22): error TS7008: Member 'something' implicitly has an 'any' type.
 file.tsx(11,2): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
     Type '{}' is not assignable to type 'string'.
@@ -10,7 +11,6 @@ file.tsx(18,2): error TS2769: No overload matches this call.
     Type '{}' is not assignable to type 'number'.
 file.tsx(18,2): error TS2786: 'Obj2' cannot be used as a JSX component.
   Its return type '{ x: number; } & { y: string; }' is not a valid JSX element.
-    Property 'something' is missing in type '{ x: number; } & { y: string; }' but required in type 'Element'.
 file.tsx(25,2): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
     Type '{ x: number; }' is not assignable to type 'string'.
@@ -18,12 +18,13 @@ file.tsx(25,2): error TS2769: No overload matches this call.
     Type '{ x: number; }' is not assignable to type 'number'.
 file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
   Its return type '{ x: number; } & { x: number; y: string; }' is not a valid JSX element.
-    Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
 
 
-==== file.tsx (5 errors) ====
+==== file.tsx (6 errors) ====
     declare namespace JSX {
     	interface Element { something; }
+    	                    ~~~~~~~~~
+!!! error TS7008: Member 'something' implicitly has an 'any' type.
     	interface IntrinsicElements { }
     }
     
@@ -55,8 +56,6 @@ file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
      ~~~~
 !!! error TS2786: 'Obj2' cannot be used as a JSX component.
 !!! error TS2786:   Its return type '{ x: number; } & { y: string; }' is not a valid JSX element.
-!!! error TS2786:     Property 'something' is missing in type '{ x: number; } & { y: string; }' but required in type 'Element'.
-!!! related TS2728 file.tsx:2:22: 'something' is declared here.
     
     interface Obj3 {
     	(n: string): { x: number };
@@ -73,6 +72,4 @@ file.tsx(25,2): error TS2786: 'Obj3' cannot be used as a JSX component.
      ~~~~
 !!! error TS2786: 'Obj3' cannot be used as a JSX component.
 !!! error TS2786:   Its return type '{ x: number; } & { x: number; y: string; }' is not a valid JSX element.
-!!! error TS2786:     Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
-!!! related TS2728 file.tsx:2:22: 'something' is declared here.
     

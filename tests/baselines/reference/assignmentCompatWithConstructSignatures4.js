@@ -101,6 +101,7 @@ namespace Errors {
 }
 
 //// [assignmentCompatWithConstructSignatures4.js]
+"use strict";
 // checking assignment compatibility relations for function types.
 var Errors;
 (function (Errors) {

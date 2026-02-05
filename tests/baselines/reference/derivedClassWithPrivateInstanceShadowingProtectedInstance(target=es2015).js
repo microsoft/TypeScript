@@ -24,6 +24,7 @@ class Derived extends Base {
 
 
 //// [derivedClassWithPrivateInstanceShadowingProtectedInstance.js]
+"use strict";
 class Base {
     fn() {
         return '';

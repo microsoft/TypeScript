@@ -10,6 +10,7 @@ class C2 {
 }
 
 //// [staticPrototypeProperty.js]
+"use strict";
 class C {
     static prototype() { }
 }

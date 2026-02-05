@@ -51,6 +51,7 @@ async function i(): Promise<string> {
 
 
 //// [truthinessPromiseCoercion.js]
+"use strict";
 async function f() {
     if (p) { } // err
     if (!!p) { } // no err

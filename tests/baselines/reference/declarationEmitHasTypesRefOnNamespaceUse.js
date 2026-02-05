@@ -14,6 +14,7 @@ class Src implements NS.Dep { }
 
 
 //// [index.js]
+"use strict";
 class Src {
 }
 

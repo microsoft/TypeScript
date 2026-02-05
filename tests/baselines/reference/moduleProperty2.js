@@ -17,6 +17,7 @@ namespace N {
 }
 
 //// [moduleProperty2.js]
+"use strict";
 var M;
 (function (M) {
     function f() {

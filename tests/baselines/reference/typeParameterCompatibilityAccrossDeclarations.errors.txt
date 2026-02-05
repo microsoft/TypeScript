@@ -1,10 +1,17 @@
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+typeParameterCompatibilityAccrossDeclarations.ts(2,31): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+typeParameterCompatibilityAccrossDeclarations.ts(17,5): error TS2454: Variable 'i' is used before being assigned.
+typeParameterCompatibilityAccrossDeclarations.ts(20,6): error TS2454: Variable 'i2' is used before being assigned.
 
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== typeParameterCompatibilityAccrossDeclarations.ts (0 errors) ====
+==== typeParameterCompatibilityAccrossDeclarations.ts (3 errors) ====
     var a = {
        x: function <T>(y: T): T { return null; }
+                                  ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
     }
     var a2 = {
        x: function (y: any): any { return null; }
@@ -20,8 +27,12 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     var i2: I2;
      
     a = i; // error
+        ~
+!!! error TS2454: Variable 'i' is used before being assigned.
     i = a; // error
      
     a2 = i2; // no error
+         ~~
+!!! error TS2454: Variable 'i2' is used before being assigned.
     i2 = a2; // no error
     

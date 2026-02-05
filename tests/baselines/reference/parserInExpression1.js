@@ -4,4 +4,5 @@
 console.log("a" in { "a": true });
 
 //// [parserInExpression1.js]
+"use strict";
 console.log("a" in { "a": true });

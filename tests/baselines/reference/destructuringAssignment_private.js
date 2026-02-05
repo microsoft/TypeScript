@@ -17,6 +17,7 @@ const nameO = "o";
 
 
 //// [destructuringAssignment_private.js]
+"use strict";
 class C {
     constructor() {
         this.x = 0;

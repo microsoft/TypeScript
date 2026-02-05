@@ -8,6 +8,7 @@ class C {
 }
 
 //// [symbolDeclarationEmit3.js]
+"use strict";
 class C {
     [Symbol.toPrimitive](x) { }
 }

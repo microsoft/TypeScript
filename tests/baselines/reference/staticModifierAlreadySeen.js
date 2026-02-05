@@ -7,6 +7,7 @@ class C {
 }
 
 //// [staticModifierAlreadySeen.js]
+"use strict";
 class C {
     constructor() {
         this.foo = 1;

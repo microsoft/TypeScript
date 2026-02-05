@@ -26,6 +26,7 @@ const C14 = class C extends boolean { }
 
 
 //// [classExtendingPrimitive.js]
+"use strict";
 // classes cannot extend primitives
 class C extends number {
 }

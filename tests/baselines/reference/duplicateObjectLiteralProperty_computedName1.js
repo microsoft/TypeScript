@@ -38,6 +38,7 @@ const t7 = {
 
 
 //// [duplicateObjectLiteralProperty_computedName1.js]
+"use strict";
 const t1 = {
     1: 1,
     [1]: 0 // duplicate

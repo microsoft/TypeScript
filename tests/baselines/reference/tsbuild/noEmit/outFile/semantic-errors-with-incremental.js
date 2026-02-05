@@ -327,6 +327,7 @@ Found 1 error.
 }
 
 //// [/home/src/projects/outFile.js]
+"use strict";
 const a = "hello";
 
 

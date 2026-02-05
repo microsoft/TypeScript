@@ -18,6 +18,7 @@ a;
 
 
 //// [checkJsdocTypeTagOnExportAssignment1.js]
+"use strict";
 //// [a.js]
 "use strict";
 /**

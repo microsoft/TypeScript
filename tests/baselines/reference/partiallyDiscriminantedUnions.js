@@ -49,6 +49,7 @@ function fail(s: Shapes) {
 }
 
 //// [partiallyDiscriminantedUnions.js]
+"use strict";
 // Repro from #10586
 const ab = {};
 if (ab.type === 'a') {

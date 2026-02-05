@@ -6,6 +6,7 @@ abstract class A {
 }
 
 //// [classAbstractConstructor.js]
+"use strict";
 class A {
     constructor() { }
 }

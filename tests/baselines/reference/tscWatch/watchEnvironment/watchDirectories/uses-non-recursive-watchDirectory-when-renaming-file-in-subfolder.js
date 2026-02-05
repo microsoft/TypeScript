@@ -37,14 +37,9 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 15
 
 //// [/a/username/projects/project/src/file1.js] Inode:: 114
+"use strict";
 
 
-
-PolledWatches::
-/a/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/a/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /a/username/projects/project: *new*
@@ -93,10 +88,6 @@ sysLog:: /a/username/projects/project/src/file1.ts:: Changing watcher to Missing
 
 
 PolledWatches::
-/a/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/a/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /a/username/projects/project/src/file1.ts: *new*
   {"pollingInterval":250}
 
@@ -131,14 +122,9 @@ Output::
 
 
 //// [/a/username/projects/project/src/file2.js] Inode:: 116
+"use strict";
 
 
-
-PolledWatches::
-/a/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/a/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /a/username/projects/project/src/file1.ts:

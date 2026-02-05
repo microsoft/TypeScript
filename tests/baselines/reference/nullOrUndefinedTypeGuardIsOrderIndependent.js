@@ -17,6 +17,7 @@ function test(strOrNull: string | null, strOrUndefined: string | undefined) {
 
 
 //// [nullOrUndefinedTypeGuardIsOrderIndependent.js]
+"use strict";
 function test(strOrNull, strOrUndefined) {
     var str = "original";
     var nil;

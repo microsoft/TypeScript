@@ -7,6 +7,7 @@ var y = 1;
 + ++y;
 
 //// [prefixIncrementAsOperandOfPlusExpression.js]
+"use strict";
 var x = 1;
 var y = 1;
 + ++x;

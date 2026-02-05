@@ -16,6 +16,7 @@ namespace Foo {
 }
 
 //// [cloduleAndTypeParameters.js]
+"use strict";
 class Foo {
     constructor() {
     }

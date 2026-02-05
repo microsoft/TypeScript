@@ -25,6 +25,7 @@ class Foo {
 
 
 //// [asiInES6Classes.js]
+"use strict";
 class Foo {
     constructor() {
         this.defaults = {

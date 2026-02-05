@@ -7,6 +7,7 @@ A = {};
 A.prototype.b = {};
 
 //// [index.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/35801
 var A;
 A = {};

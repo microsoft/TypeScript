@@ -8,6 +8,7 @@ f();
 
 
 //// [nullableFunctionError.js]
+"use strict";
 null();
 undefined();
 let f;

@@ -15,7 +15,8 @@ function fn() {
     }
 
     try { } catch (x) { var x: any; }
->x : any
+>x : unknown
+>  : ^^^^^^^
 >x : any
 
     try { } finally { }
@@ -23,5 +24,6 @@ function fn() {
     try { } catch { } finally { }
 
     try { } catch (z) { } finally { }
->z : any
+>z : unknown
+>  : ^^^^^^^
 }

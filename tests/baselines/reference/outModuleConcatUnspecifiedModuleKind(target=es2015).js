@@ -7,4 +7,5 @@ export class A { } // module
 var x = 0; // global
 
 //// [out.js]
+"use strict";
 var x = 0; // global

@@ -26,6 +26,7 @@ class C5 implements C1 { // okay
 }
 
 //// [classImplementsMergedClassInterface.js]
+"use strict";
 class C2 {
 }
 class C3 {

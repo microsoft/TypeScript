@@ -22,6 +22,7 @@ namespace Outer {
 Outer.ExportFunc();
 
 //// [innerModExport1.js]
+"use strict";
 var Outer;
 (function (Outer) {
     // inner mod 1

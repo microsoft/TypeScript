@@ -9,6 +9,7 @@ class Beta extends Alpha.x {
 }
 
 //// [qualifiedName_entity-name-resolution-does-not-affect-class-heritage.js]
+"use strict";
 var Alpha;
 (function (Alpha) {
     Alpha.x = 100;

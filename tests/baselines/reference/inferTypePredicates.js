@@ -315,6 +315,7 @@ function negative(t: Something) {
 
 
 //// [inferTypePredicates.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/16069
 const numsOrNull = [1, 2, 3, 4, null];
 const filteredNumsTruthy = numsOrNull.filter(x => !!x); // should error

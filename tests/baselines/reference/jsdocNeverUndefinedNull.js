@@ -12,6 +12,7 @@ function f(p1, p2, p3) {
 
 
 //// [out.js]
+"use strict";
 /**
  * @param {never} p1
  * @param {undefined} p2

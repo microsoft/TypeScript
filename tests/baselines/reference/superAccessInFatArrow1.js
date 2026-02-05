@@ -18,6 +18,7 @@ namespace test {
 }
 
 //// [superAccessInFatArrow1.js]
+"use strict";
 var test;
 (function (test) {
     class A {

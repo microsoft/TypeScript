@@ -17,6 +17,7 @@ const C9 = class C implements boolean { }
 
 
 //// [classImplementsPrimitive.js]
+"use strict";
 // classes cannot implement primitives
 class C {
 }

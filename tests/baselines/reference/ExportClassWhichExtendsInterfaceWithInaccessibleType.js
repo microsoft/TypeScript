@@ -22,6 +22,7 @@ namespace A {
 
 
 //// [ExportClassWhichExtendsInterfaceWithInaccessibleType.js]
+"use strict";
 var A;
 (function (A) {
     class Point2d {

@@ -6,6 +6,7 @@ namespace foo {
 }
 
 //// [thisKeyword.js]
+"use strict";
 var foo;
 (function (foo) {
     this.bar = 4;

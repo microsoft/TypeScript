@@ -8,6 +8,7 @@ async function main() {
 
 
 //// [awaitUsingDeclarationsInForOf.3.js]
+"use strict";
 async function main() {
     for (await using {} of []) {
     }

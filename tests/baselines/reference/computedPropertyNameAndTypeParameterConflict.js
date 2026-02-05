@@ -9,6 +9,7 @@ declare class Bar<O> {
 
 
 //// [computedPropertyNameAndTypeParameterConflict.js]
+"use strict";
 
 
 //// [computedPropertyNameAndTypeParameterConflict.d.ts]

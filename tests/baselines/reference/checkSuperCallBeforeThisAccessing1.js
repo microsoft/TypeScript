@@ -13,6 +13,7 @@ class Derived extends Based {
 }
 
 //// [checkSuperCallBeforeThisAccessing1.js]
+"use strict";
 class Based {
 }
 class Derived extends Based {

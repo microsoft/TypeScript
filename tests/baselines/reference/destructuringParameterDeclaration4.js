@@ -40,6 +40,7 @@ foo1(1, 2, "string", E1.a, E.b);  // Error
 
 
 //// [destructuringParameterDeclaration4.js]
+"use strict";
 // If the parameter is a rest parameter, the parameter type is any[]
 // A type annotation for a rest parameter must denote an array type.
 function a0(...x) { } // Error, rest parameter must be array type

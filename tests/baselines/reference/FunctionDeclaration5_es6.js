@@ -5,5 +5,6 @@ function*foo(yield) {
 }
 
 //// [FunctionDeclaration5_es6.js]
+"use strict";
 function* foo(yield) {
 }

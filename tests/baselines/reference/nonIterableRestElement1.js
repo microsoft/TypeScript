@@ -5,5 +5,6 @@ var c = {};
 [...c] = ["", 0];
 
 //// [nonIterableRestElement1.js]
+"use strict";
 var c = {};
 [...c] = ["", 0];

@@ -11,6 +11,7 @@ function* gen() {
 }
 
 //// [yieldInForInInDownlevelGenerator.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/49808
 function* gen() {
     var obj = { foo: 1, bar: 2 };

@@ -12,6 +12,7 @@ var v = {
 
 
 //// [commentsOnObjectLiteral4.js]
+"use strict";
 var v = {
     /**
      * @type {number}

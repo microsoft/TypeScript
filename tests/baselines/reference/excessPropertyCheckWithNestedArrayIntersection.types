@@ -7,8 +7,8 @@ interface ValueOnlyFields {
 >       : ^^^^^^^^^             ^^^^^
 
         value: number | null;
->value : number
->      : ^^^^^^
+>value : number | null
+>      : ^^^^^^^^^^^^^
 
     }>;
 }
@@ -18,12 +18,12 @@ interface ValueAndKeyFields {
 >       : ^^^^^^^             ^^^^^^^^^             ^^^^^
 
         key: string | null;
->key : string
->    : ^^^^^^
+>key : string | null
+>    : ^^^^^^^^^^^^^
 
         value: number | null;
->value : number
->      : ^^^^^^
+>value : number | null
+>      : ^^^^^^^^^^^^^
 
     }>;
 }

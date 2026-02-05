@@ -11,6 +11,7 @@ module.exports = {
 };
 
 //// [index.js]
+"use strict";
 var x = 12;
 module.exports = {
     extends: 'base',

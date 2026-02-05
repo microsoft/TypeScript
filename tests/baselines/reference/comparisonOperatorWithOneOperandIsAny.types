@@ -3,6 +3,7 @@
 === comparisonOperatorWithOneOperandIsAny.ts ===
 var x: any;
 >x : any
+>  : ^^^
 
 enum E { a, b, c }
 >E : E
@@ -28,6 +29,7 @@ function foo<T>(t: T) {
 >t : T
 >  : ^
 >x : any
+>  : ^^^
 
     var foo_r2 = t > x;
 >foo_r2 : boolean
@@ -37,6 +39,7 @@ function foo<T>(t: T) {
 >t : T
 >  : ^
 >x : any
+>  : ^^^
 
     var foo_r3 = t <= x;
 >foo_r3 : boolean
@@ -46,6 +49,7 @@ function foo<T>(t: T) {
 >t : T
 >  : ^
 >x : any
+>  : ^^^
 
     var foo_r4 = t >= x;
 >foo_r4 : boolean
@@ -55,6 +59,7 @@ function foo<T>(t: T) {
 >t : T
 >  : ^
 >x : any
+>  : ^^^
 
     var foo_r5 = t == x;
 >foo_r5 : boolean
@@ -64,6 +69,7 @@ function foo<T>(t: T) {
 >t : T
 >  : ^
 >x : any
+>  : ^^^
 
     var foo_r6 = t != x;
 >foo_r6 : boolean
@@ -73,6 +79,7 @@ function foo<T>(t: T) {
 >t : T
 >  : ^
 >x : any
+>  : ^^^
 
     var foo_r7 = t === x;
 >foo_r7 : boolean
@@ -82,6 +89,7 @@ function foo<T>(t: T) {
 >t : T
 >  : ^
 >x : any
+>  : ^^^
 
     var foo_r8 = t !== x;
 >foo_r8 : boolean
@@ -91,6 +99,7 @@ function foo<T>(t: T) {
 >t : T
 >  : ^
 >x : any
+>  : ^^^
 
     var foo_r1 = x < t;
 >foo_r1 : boolean
@@ -98,6 +107,7 @@ function foo<T>(t: T) {
 >x < t : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >t : T
 >  : ^
 
@@ -107,6 +117,7 @@ function foo<T>(t: T) {
 >x > t : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >t : T
 >  : ^
 
@@ -116,6 +127,7 @@ function foo<T>(t: T) {
 >x <= t : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >t : T
 >  : ^
 
@@ -125,6 +137,7 @@ function foo<T>(t: T) {
 >x >= t : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >t : T
 >  : ^
 
@@ -134,6 +147,7 @@ function foo<T>(t: T) {
 >x == t : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >t : T
 >  : ^
 
@@ -143,6 +157,7 @@ function foo<T>(t: T) {
 >x != t : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >t : T
 >  : ^
 
@@ -152,6 +167,7 @@ function foo<T>(t: T) {
 >x === t : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >t : T
 >  : ^
 
@@ -161,6 +177,7 @@ function foo<T>(t: T) {
 >x !== t : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >t : T
 >  : ^
 }
@@ -200,6 +217,7 @@ var r1a1 = x < a;
 >x < a : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >a : boolean
 >  : ^^^^^^^
 
@@ -209,6 +227,7 @@ var r1a2 = x < b;
 >x < b : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -218,6 +237,7 @@ var r1a3 = x < c;
 >x < c : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >c : string
 >  : ^^^^^^
 
@@ -227,6 +247,7 @@ var r1a4 = x < d;
 >x < d : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >d : void
 >  : ^^^^
 
@@ -236,6 +257,7 @@ var r1a5 = x < e;
 >x < e : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >e : E
 >  : ^
 
@@ -245,6 +267,7 @@ var r1a6 = x < f;
 >x < f : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >f : {}
 >  : ^^
 
@@ -254,6 +277,7 @@ var r1a7 = x < g;
 >x < g : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >g : string[]
 >  : ^^^^^^^^
 
@@ -265,6 +289,7 @@ var r1b1 = a < x;
 >a : boolean
 >  : ^^^^^^^
 >x : any
+>  : ^^^
 
 var r1b2 = b < x;
 >r1b2 : boolean
@@ -274,6 +299,7 @@ var r1b2 = b < x;
 >b : number
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r1b3 = c < x;
 >r1b3 : boolean
@@ -283,6 +309,7 @@ var r1b3 = c < x;
 >c : string
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r1b4 = d < x;
 >r1b4 : boolean
@@ -292,6 +319,7 @@ var r1b4 = d < x;
 >d : void
 >  : ^^^^
 >x : any
+>  : ^^^
 
 var r1b5 = e < x;
 >r1b5 : boolean
@@ -301,6 +329,7 @@ var r1b5 = e < x;
 >e : E
 >  : ^
 >x : any
+>  : ^^^
 
 var r1b6 = f < x;
 >r1b6 : boolean
@@ -310,6 +339,7 @@ var r1b6 = f < x;
 >f : {}
 >  : ^^
 >x : any
+>  : ^^^
 
 var r1b7 = g < x;
 >r1b7 : boolean
@@ -319,6 +349,7 @@ var r1b7 = g < x;
 >g : string[]
 >  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 // operator >
 var r2a1 = x > a;
@@ -327,6 +358,7 @@ var r2a1 = x > a;
 >x > a : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >a : boolean
 >  : ^^^^^^^
 
@@ -336,6 +368,7 @@ var r2a2 = x > b;
 >x > b : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -345,6 +378,7 @@ var r2a3 = x > c;
 >x > c : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >c : string
 >  : ^^^^^^
 
@@ -354,6 +388,7 @@ var r2a4 = x > d;
 >x > d : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >d : void
 >  : ^^^^
 
@@ -363,6 +398,7 @@ var r2a5 = x > e;
 >x > e : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >e : E
 >  : ^
 
@@ -372,6 +408,7 @@ var r2a6 = x > f;
 >x > f : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >f : {}
 >  : ^^
 
@@ -381,6 +418,7 @@ var r2a7 = x > g;
 >x > g : boolean
 >      : ^^^^^^^
 >x : any
+>  : ^^^
 >g : string[]
 >  : ^^^^^^^^
 
@@ -392,6 +430,7 @@ var r2b1 = a > x;
 >a : boolean
 >  : ^^^^^^^
 >x : any
+>  : ^^^
 
 var r2b2 = b > x;
 >r2b2 : boolean
@@ -401,6 +440,7 @@ var r2b2 = b > x;
 >b : number
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r2b3 = c > x;
 >r2b3 : boolean
@@ -410,6 +450,7 @@ var r2b3 = c > x;
 >c : string
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r2b4 = d > x;
 >r2b4 : boolean
@@ -419,6 +460,7 @@ var r2b4 = d > x;
 >d : void
 >  : ^^^^
 >x : any
+>  : ^^^
 
 var r2b5 = e > x;
 >r2b5 : boolean
@@ -428,6 +470,7 @@ var r2b5 = e > x;
 >e : E
 >  : ^
 >x : any
+>  : ^^^
 
 var r2b6 = f > x;
 >r2b6 : boolean
@@ -437,6 +480,7 @@ var r2b6 = f > x;
 >f : {}
 >  : ^^
 >x : any
+>  : ^^^
 
 var r2b7 = g > x;
 >r2b7 : boolean
@@ -446,6 +490,7 @@ var r2b7 = g > x;
 >g : string[]
 >  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 // operator <=
 var r3a1 = x <= a;
@@ -454,6 +499,7 @@ var r3a1 = x <= a;
 >x <= a : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >a : boolean
 >  : ^^^^^^^
 
@@ -463,6 +509,7 @@ var r3a2 = x <= b;
 >x <= b : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -472,6 +519,7 @@ var r3a3 = x <= c;
 >x <= c : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >c : string
 >  : ^^^^^^
 
@@ -481,6 +529,7 @@ var r3a4 = x <= d;
 >x <= d : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >d : void
 >  : ^^^^
 
@@ -490,6 +539,7 @@ var r3a5 = x <= e;
 >x <= e : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >e : E
 >  : ^
 
@@ -499,6 +549,7 @@ var r3a6 = x <= f;
 >x <= f : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >f : {}
 >  : ^^
 
@@ -508,6 +559,7 @@ var r3a7 = x <= g;
 >x <= g : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >g : string[]
 >  : ^^^^^^^^
 
@@ -519,6 +571,7 @@ var r3b1 = a <= x;
 >a : boolean
 >  : ^^^^^^^
 >x : any
+>  : ^^^
 
 var r3b2 = b <= x;
 >r3b2 : boolean
@@ -528,6 +581,7 @@ var r3b2 = b <= x;
 >b : number
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r3b3 = c <= x;
 >r3b3 : boolean
@@ -537,6 +591,7 @@ var r3b3 = c <= x;
 >c : string
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r3b4 = d <= x;
 >r3b4 : boolean
@@ -546,6 +601,7 @@ var r3b4 = d <= x;
 >d : void
 >  : ^^^^
 >x : any
+>  : ^^^
 
 var r3b5 = e <= x;
 >r3b5 : boolean
@@ -555,6 +611,7 @@ var r3b5 = e <= x;
 >e : E
 >  : ^
 >x : any
+>  : ^^^
 
 var r3b6 = f <= x;
 >r3b6 : boolean
@@ -564,6 +621,7 @@ var r3b6 = f <= x;
 >f : {}
 >  : ^^
 >x : any
+>  : ^^^
 
 var r3b7 = g <= x;
 >r3b7 : boolean
@@ -573,6 +631,7 @@ var r3b7 = g <= x;
 >g : string[]
 >  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 // operator >=
 var r4a1 = x >= a;
@@ -581,6 +640,7 @@ var r4a1 = x >= a;
 >x >= a : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >a : boolean
 >  : ^^^^^^^
 
@@ -590,6 +650,7 @@ var r4a2 = x >= b;
 >x >= b : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -599,6 +660,7 @@ var r4a3 = x >= c;
 >x >= c : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >c : string
 >  : ^^^^^^
 
@@ -608,6 +670,7 @@ var r4a4 = x >= d;
 >x >= d : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >d : void
 >  : ^^^^
 
@@ -617,6 +680,7 @@ var r4a5 = x >= e;
 >x >= e : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >e : E
 >  : ^
 
@@ -626,6 +690,7 @@ var r4a6 = x >= f;
 >x >= f : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >f : {}
 >  : ^^
 
@@ -635,6 +700,7 @@ var r4a7 = x >= g;
 >x >= g : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >g : string[]
 >  : ^^^^^^^^
 
@@ -646,6 +712,7 @@ var r4b1 = a >= x;
 >a : boolean
 >  : ^^^^^^^
 >x : any
+>  : ^^^
 
 var r4b2 = b >= x;
 >r4b2 : boolean
@@ -655,6 +722,7 @@ var r4b2 = b >= x;
 >b : number
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r4b3 = c >= x;
 >r4b3 : boolean
@@ -664,6 +732,7 @@ var r4b3 = c >= x;
 >c : string
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r4b4 = d >= x;
 >r4b4 : boolean
@@ -673,6 +742,7 @@ var r4b4 = d >= x;
 >d : void
 >  : ^^^^
 >x : any
+>  : ^^^
 
 var r4b5 = e >= x;
 >r4b5 : boolean
@@ -682,6 +752,7 @@ var r4b5 = e >= x;
 >e : E
 >  : ^
 >x : any
+>  : ^^^
 
 var r4b6 = f >= x;
 >r4b6 : boolean
@@ -691,6 +762,7 @@ var r4b6 = f >= x;
 >f : {}
 >  : ^^
 >x : any
+>  : ^^^
 
 var r4b7 = g >= x;
 >r4b7 : boolean
@@ -700,6 +772,7 @@ var r4b7 = g >= x;
 >g : string[]
 >  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 // operator ==
 var r5a1 = x == a;
@@ -708,6 +781,7 @@ var r5a1 = x == a;
 >x == a : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >a : boolean
 >  : ^^^^^^^
 
@@ -717,6 +791,7 @@ var r5a2 = x == b;
 >x == b : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -726,6 +801,7 @@ var r5a3 = x == c;
 >x == c : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >c : string
 >  : ^^^^^^
 
@@ -735,6 +811,7 @@ var r5a4 = x == d;
 >x == d : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >d : void
 >  : ^^^^
 
@@ -744,6 +821,7 @@ var r5a5 = x == e;
 >x == e : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >e : E
 >  : ^
 
@@ -753,6 +831,7 @@ var r5a6 = x == f;
 >x == f : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >f : {}
 >  : ^^
 
@@ -762,6 +841,7 @@ var r5a7 = x == g;
 >x == g : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >g : string[]
 >  : ^^^^^^^^
 
@@ -773,6 +853,7 @@ var r5b1 = a == x;
 >a : boolean
 >  : ^^^^^^^
 >x : any
+>  : ^^^
 
 var r5b2 = b == x;
 >r5b2 : boolean
@@ -782,6 +863,7 @@ var r5b2 = b == x;
 >b : number
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r5b3 = c == x;
 >r5b3 : boolean
@@ -791,6 +873,7 @@ var r5b3 = c == x;
 >c : string
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r5b4 = d == x;
 >r5b4 : boolean
@@ -800,6 +883,7 @@ var r5b4 = d == x;
 >d : void
 >  : ^^^^
 >x : any
+>  : ^^^
 
 var r5b5 = e == x;
 >r5b5 : boolean
@@ -809,6 +893,7 @@ var r5b5 = e == x;
 >e : E
 >  : ^
 >x : any
+>  : ^^^
 
 var r5b6 = f == x;
 >r5b6 : boolean
@@ -818,6 +903,7 @@ var r5b6 = f == x;
 >f : {}
 >  : ^^
 >x : any
+>  : ^^^
 
 var r5b7 = g == x;
 >r5b7 : boolean
@@ -827,6 +913,7 @@ var r5b7 = g == x;
 >g : string[]
 >  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 // operator !=
 var r6a1 = x != a;
@@ -835,6 +922,7 @@ var r6a1 = x != a;
 >x != a : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >a : boolean
 >  : ^^^^^^^
 
@@ -844,6 +932,7 @@ var r6a2 = x != b;
 >x != b : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -853,6 +942,7 @@ var r6a3 = x != c;
 >x != c : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >c : string
 >  : ^^^^^^
 
@@ -862,6 +952,7 @@ var r6a4 = x != d;
 >x != d : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >d : void
 >  : ^^^^
 
@@ -871,6 +962,7 @@ var r6a5 = x != e;
 >x != e : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >e : E
 >  : ^
 
@@ -880,6 +972,7 @@ var r6a6 = x != f;
 >x != f : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >f : {}
 >  : ^^
 
@@ -889,6 +982,7 @@ var r6a7 = x != g;
 >x != g : boolean
 >       : ^^^^^^^
 >x : any
+>  : ^^^
 >g : string[]
 >  : ^^^^^^^^
 
@@ -900,6 +994,7 @@ var r6b1 = a != x;
 >a : boolean
 >  : ^^^^^^^
 >x : any
+>  : ^^^
 
 var r6b2 = b != x;
 >r6b2 : boolean
@@ -909,6 +1004,7 @@ var r6b2 = b != x;
 >b : number
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r6b3 = c != x;
 >r6b3 : boolean
@@ -918,6 +1014,7 @@ var r6b3 = c != x;
 >c : string
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r6b4 = d != x;
 >r6b4 : boolean
@@ -927,6 +1024,7 @@ var r6b4 = d != x;
 >d : void
 >  : ^^^^
 >x : any
+>  : ^^^
 
 var r6b5 = e != x;
 >r6b5 : boolean
@@ -936,6 +1034,7 @@ var r6b5 = e != x;
 >e : E
 >  : ^
 >x : any
+>  : ^^^
 
 var r6b6 = f != x;
 >r6b6 : boolean
@@ -945,6 +1044,7 @@ var r6b6 = f != x;
 >f : {}
 >  : ^^
 >x : any
+>  : ^^^
 
 var r6b7 = g != x;
 >r6b7 : boolean
@@ -954,6 +1054,7 @@ var r6b7 = g != x;
 >g : string[]
 >  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 // operator ===
 var r7a1 = x === a;
@@ -962,6 +1063,7 @@ var r7a1 = x === a;
 >x === a : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >a : boolean
 >  : ^^^^^^^
 
@@ -971,6 +1073,7 @@ var r7a2 = x === b;
 >x === b : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -980,6 +1083,7 @@ var r7a3 = x === c;
 >x === c : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >c : string
 >  : ^^^^^^
 
@@ -989,6 +1093,7 @@ var r7a4 = x === d;
 >x === d : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >d : void
 >  : ^^^^
 
@@ -998,6 +1103,7 @@ var r7a5 = x === e;
 >x === e : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >e : E
 >  : ^
 
@@ -1007,6 +1113,7 @@ var r7a6 = x === f;
 >x === f : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >f : {}
 >  : ^^
 
@@ -1016,6 +1123,7 @@ var r7a7 = x === g;
 >x === g : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >g : string[]
 >  : ^^^^^^^^
 
@@ -1027,6 +1135,7 @@ var r7b1 = a === x;
 >a : boolean
 >  : ^^^^^^^
 >x : any
+>  : ^^^
 
 var r7b2 = b === x;
 >r7b2 : boolean
@@ -1036,6 +1145,7 @@ var r7b2 = b === x;
 >b : number
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r7b3 = c === x;
 >r7b3 : boolean
@@ -1045,6 +1155,7 @@ var r7b3 = c === x;
 >c : string
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r7b4 = d === x;
 >r7b4 : boolean
@@ -1054,6 +1165,7 @@ var r7b4 = d === x;
 >d : void
 >  : ^^^^
 >x : any
+>  : ^^^
 
 var r7b5 = e === x;
 >r7b5 : boolean
@@ -1063,6 +1175,7 @@ var r7b5 = e === x;
 >e : E
 >  : ^
 >x : any
+>  : ^^^
 
 var r7b6 = f === x;
 >r7b6 : boolean
@@ -1072,6 +1185,7 @@ var r7b6 = f === x;
 >f : {}
 >  : ^^
 >x : any
+>  : ^^^
 
 var r7b7 = g === x;
 >r7b7 : boolean
@@ -1081,6 +1195,7 @@ var r7b7 = g === x;
 >g : string[]
 >  : ^^^^^^^^
 >x : any
+>  : ^^^
 
 // operator !==
 var r8a1 = x !== a;
@@ -1089,6 +1204,7 @@ var r8a1 = x !== a;
 >x !== a : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >a : boolean
 >  : ^^^^^^^
 
@@ -1098,6 +1214,7 @@ var r8a2 = x !== b;
 >x !== b : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -1107,6 +1224,7 @@ var r8a3 = x !== c;
 >x !== c : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >c : string
 >  : ^^^^^^
 
@@ -1116,6 +1234,7 @@ var r8a4 = x !== d;
 >x !== d : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >d : void
 >  : ^^^^
 
@@ -1125,6 +1244,7 @@ var r8a5 = x !== e;
 >x !== e : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >e : E
 >  : ^
 
@@ -1134,6 +1254,7 @@ var r8a6 = x !== f;
 >x !== f : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >f : {}
 >  : ^^
 
@@ -1143,6 +1264,7 @@ var r8a7 = x !== g;
 >x !== g : boolean
 >        : ^^^^^^^
 >x : any
+>  : ^^^
 >g : string[]
 >  : ^^^^^^^^
 
@@ -1154,6 +1276,7 @@ var r8b1 = a !== x;
 >a : boolean
 >  : ^^^^^^^
 >x : any
+>  : ^^^
 
 var r8b2 = b !== x;
 >r8b2 : boolean
@@ -1163,6 +1286,7 @@ var r8b2 = b !== x;
 >b : number
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r8b3 = c !== x;
 >r8b3 : boolean
@@ -1172,6 +1296,7 @@ var r8b3 = c !== x;
 >c : string
 >  : ^^^^^^
 >x : any
+>  : ^^^
 
 var r8b4 = d !== x;
 >r8b4 : boolean
@@ -1181,6 +1306,7 @@ var r8b4 = d !== x;
 >d : void
 >  : ^^^^
 >x : any
+>  : ^^^
 
 var r8b5 = e !== x;
 >r8b5 : boolean
@@ -1190,6 +1316,7 @@ var r8b5 = e !== x;
 >e : E
 >  : ^
 >x : any
+>  : ^^^
 
 var r8b6 = f !== x;
 >r8b6 : boolean
@@ -1199,6 +1326,7 @@ var r8b6 = f !== x;
 >f : {}
 >  : ^^
 >x : any
+>  : ^^^
 
 var r8b7 = g !== x;
 >r8b7 : boolean
@@ -1208,4 +1336,5 @@ var r8b7 = g !== x;
 >g : string[]
 >  : ^^^^^^^^
 >x : any
+>  : ^^^
 

@@ -22,6 +22,7 @@ declare namespace A {
 }
 
 //// [exportAlreadySeen.js]
+"use strict";
 var M;
 (function (M) {
     M.x = 1;

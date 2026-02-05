@@ -11,6 +11,7 @@ class List<T> {
 
 
 //// [staticOffOfInstance2.js]
+"use strict";
 class List {
     Blah() {
         this.Foo(); // no error

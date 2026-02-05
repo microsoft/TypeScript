@@ -26,6 +26,7 @@ function* g4(): Generator<number, boolean, string> {
 }
 
 //// [generatorExplicitReturnType.js]
+"use strict";
 function* g1() {
     yield; // error
     yield "a"; // error

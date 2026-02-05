@@ -24,6 +24,7 @@ namespace m {
 }
 
 //// [declarationEmitDestructuringObjectLiteralPattern.js]
+"use strict";
 var {} = { x: 5, y: "hello" };
 var { x4 } = { x4: 5, y4: "hello" };
 var { y5 } = { x5: 5, y5: "hello" };

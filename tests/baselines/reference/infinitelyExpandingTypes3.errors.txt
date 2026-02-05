@@ -1,0 +1,24 @@
+infinitelyExpandingTypes3.ts(18,6): error TS2454: Variable 'o2' is used before being assigned.
+
+
+==== infinitelyExpandingTypes3.ts (1 errors) ====
+    interface List<T> {
+        data: T;
+        next: List<T>; // will be recursive reference when OwnerList is expanded
+        owner: OwnerList<T>;
+    }
+    
+    interface OwnerList<U> extends List<List<U>> {
+        name: string;
+    }
+    
+    interface OwnerList2<U> extends List<List<U>> {
+        name: string;
+    }
+    
+    var o1: OwnerList<number>;
+    var o2: OwnerList2<number>;
+    
+    o1 = o2; // should not error
+         ~~
+!!! error TS2454: Variable 'o2' is used before being assigned.

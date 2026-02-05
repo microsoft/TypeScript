@@ -55,20 +55,12 @@ export {};
 
 
 PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/workspace/package.json: *new*
   {"pollingInterval":2000}
-/user/username/workspace/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/workspace/solution/package.json: *new*
   {"pollingInterval":2000}
-/user/username/workspace/solution/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/workspace/solution/projects/package.json: *new*
   {"pollingInterval":2000}
-/user/username/workspace/solution/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/workspace/solution/projects/project/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /user/username/workspace/solution/projects/project/package.json: *new*
@@ -150,16 +142,6 @@ Output::
 export {};
 
 
-
-PolledWatches::
-/user/username/workspace/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /user/username/workspace/package.json:

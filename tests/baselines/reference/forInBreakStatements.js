@@ -40,6 +40,7 @@ for (var x in {}){
 
 
 //// [forInBreakStatements.js]
+"use strict";
 for (var x in {}) {
     break;
 }

@@ -72,10 +72,10 @@
 // |     property8: {
 // |         [key: string]: unknown;
 // |     };
-// |     property9: string;
-// |     property10: number;
-// |     property11: boolean;
-// |     property12: Date;
+// |     property9: string | null;
+// |     property10: number | null;
+// |     property11: boolean | null;
+// |     property12: Date | null;
 // |     property13: string | number;
 // |     property14: number | boolean;
 // |     property15: string | boolean;
@@ -1333,6 +1333,22 @@
           "kind": "keyword"
         },
         {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "null",
+          "kind": "keyword"
+        },
+        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -1358,6 +1374,22 @@
         },
         {
           "text": "number",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "null",
           "kind": "keyword"
         },
         {
@@ -1389,6 +1421,22 @@
           "kind": "keyword"
         },
         {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "null",
+          "kind": "keyword"
+        },
+        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -1415,6 +1463,22 @@
         {
           "text": "Date",
           "kind": "localName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "null",
+          "kind": "keyword"
         },
         {
           "text": ";",

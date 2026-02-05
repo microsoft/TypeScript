@@ -44,8 +44,8 @@ export class AddressComp extends React.Component<Properties, void> {
 >          : ^^^^^^^^^^^^^^^^^^^^^^
 
   public render() {
->render : () => any
->       : ^^^^^^^^^
+>render : () => null
+>       : ^^^^^^^^^^
 
     return null;
   }

@@ -4,6 +4,7 @@
 a / finally
 
 //// [parserMissingToken1.js]
+"use strict";
 a / ;
 try { }
 finally { }

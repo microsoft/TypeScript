@@ -36,6 +36,7 @@ for (var a = new Array<string>(); ;) { }
 for (var a: typeof a; ;) { }
 
 //// [forStatementsMultipleValidDecl.js]
+"use strict";
 // all expected to be valid
 for (var x;;) { }
 for (var x = 2;;) { }

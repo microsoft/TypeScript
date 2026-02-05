@@ -1,0 +1,19 @@
+transitiveTypeArgumentInference1.ts(5,5): error TS2322: Type 'null' is not assignable to type 'I1<boolean, string>'.
+
+
+==== transitiveTypeArgumentInference1.ts (1 errors) ====
+    interface I1<T, U> {
+    	m(value: T): U;
+    }
+    
+    var i: I1<boolean, string> = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'I1<boolean, string>'.
+    
+    class C<T> {
+    	constructor(p: I1<boolean, T>) {
+    	}
+    }
+    
+    var c = new C(i);
+    

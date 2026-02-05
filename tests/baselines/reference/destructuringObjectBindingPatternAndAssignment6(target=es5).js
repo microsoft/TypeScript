@@ -11,6 +11,7 @@ console.log(aVal, bVal);
 
 
 //// [destructuringObjectBindingPatternAndAssignment6.js]
+"use strict";
 var a = "a";
 var b = "b";
 var _a = (function () {

@@ -16,6 +16,7 @@ isn't this a lot of fun";
 }
 
 //// [sourceMap-StringLiteralWithNewLine.js]
+"use strict";
 var Foo;
 (function (Foo) {
     var x = "test1";

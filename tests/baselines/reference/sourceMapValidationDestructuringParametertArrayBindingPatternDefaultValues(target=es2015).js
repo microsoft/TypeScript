@@ -36,6 +36,7 @@ foo4(robotA);
 foo4([2, "trimmer", "trimming"]);
 
 //// [sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues.js]
+"use strict";
 var robotA = [1, "mower", "mowing"];
 function foo1([, nameA = "noName"] = [-1, "name", "skill"]) {
     console.log(nameA);

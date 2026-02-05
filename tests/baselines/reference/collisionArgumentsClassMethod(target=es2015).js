@@ -51,6 +51,7 @@ class c3 {
 }
 
 //// [collisionArgumentsClassMethod.js]
+"use strict";
 class c1 {
     foo(i, ...arguments) {
         var arguments; // no error

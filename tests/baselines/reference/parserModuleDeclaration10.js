@@ -6,3 +6,4 @@ function next(): string;
 
 
 //// [parserModuleDeclaration10.js]
+"use strict";

@@ -1,0 +1,36 @@
+file.tsx(12,9): error TS2454: Variable 'condition1' is used before being assigned.
+
+
+==== file.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
+    import React = require('react');
+    
+    interface ComponentProps {
+        property1: string;
+        property2: number;
+    }
+    
+    export default function Component(props: ComponentProps) {
+        let condition1: boolean;
+        if (condition1) {
+            ~~~~~~~~~~
+!!! error TS2454: Variable 'condition1' is used before being assigned.
+            return (
+                <ChildComponent {...props} />
+            );
+        }
+        else {
+            return (<ChildComponent {...props} property1="NewString" />);
+        }
+    }
+    
+    interface AnotherComponentProps {
+        property1: string;
+    }
+    
+    function ChildComponent({ property1 }: AnotherComponentProps) {
+        return (
+            <span>{property1}</span>
+        );
+    }

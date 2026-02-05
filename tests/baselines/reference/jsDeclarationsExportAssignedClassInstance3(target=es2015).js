@@ -11,6 +11,7 @@ module.exports = new Foo();
 module.exports.additional = 20;
 
 //// [index.js]
+"use strict";
 class Foo {
     constructor() {
         this.member = 10;

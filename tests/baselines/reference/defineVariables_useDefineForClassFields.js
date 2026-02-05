@@ -6,6 +6,7 @@ const b = () => null
 a()
 
 //// [defineVariables_useDefineForClassFields.js]
+"use strict";
 const a = () => b();
 const b = () => null;
 a();

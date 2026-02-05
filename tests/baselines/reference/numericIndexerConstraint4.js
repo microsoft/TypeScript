@@ -15,6 +15,7 @@ var x: {
 
 
 //// [numericIndexerConstraint4.js]
+"use strict";
 class A {
 }
 class B extends A {

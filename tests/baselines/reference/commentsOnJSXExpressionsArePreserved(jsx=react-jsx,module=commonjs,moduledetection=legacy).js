@@ -23,6 +23,7 @@ class Component {
 }
 
 //// [commentsOnJSXExpressionsArePreserved.js]
+"use strict";
 class Component {
     render() {
         return (0, _a.jsx)("div", { children: null /* preserved */ });

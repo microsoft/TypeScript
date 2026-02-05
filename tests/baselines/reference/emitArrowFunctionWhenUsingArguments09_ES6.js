@@ -6,6 +6,7 @@ function f(_arguments) {
 }
 
 //// [emitArrowFunctionWhenUsingArguments09_ES6.js]
+"use strict";
 function f(_arguments) {
     var a = () => () => arguments;
 }

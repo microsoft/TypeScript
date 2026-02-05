@@ -16,6 +16,7 @@ var d = Derived.create();
 d.foo();  
 
 //// [staticFactory1.js]
+"use strict";
 class Base {
     foo() { return 1; }
     static create() {

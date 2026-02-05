@@ -5,5 +5,6 @@ class foo {
 
 
 //// [parser512084.js]
+"use strict";
 class foo {
 }

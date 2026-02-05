@@ -45,16 +45,11 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/projects/a/out.js]
+"use strict";
 let x = 1;
 let y = 1;
 
 
-
-PolledWatches::
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/a/a.ts: *new*
@@ -121,6 +116,7 @@ Output::
 
 
 //// [/home/src/projects/a/out.js]
+"use strict";
 let x = 11;
 let y = 1;
 
@@ -178,6 +174,7 @@ Output::
 
 
 //// [/home/src/projects/a/out.js]
+"use strict";
 let xy = 11;
 let y = 1;
 

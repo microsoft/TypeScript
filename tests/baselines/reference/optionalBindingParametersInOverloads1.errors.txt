@@ -1,9 +1,12 @@
+optionalBindingParametersInOverloads1.ts(1,10): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
 optionalBindingParametersInOverloads1.ts(8,6): error TS2322: Type 'boolean' is not assignable to type 'string'.
 optionalBindingParametersInOverloads1.ts(8,16): error TS2322: Type 'string' is not assignable to type 'boolean'.
 
 
-==== optionalBindingParametersInOverloads1.ts (2 errors) ====
+==== optionalBindingParametersInOverloads1.ts (3 errors) ====
     function foo([x, y, z] ?: [string, number, boolean]);
+             ~~~
+!!! error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
     function foo(...rest: any[]) {
     
     }

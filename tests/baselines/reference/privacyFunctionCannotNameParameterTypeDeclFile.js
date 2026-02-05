@@ -155,6 +155,7 @@ function privateFunctionWithPrivateModuleParameterTypes1(param= exporter.createE
 }
 
 //// [privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.js]
+"use strict";
 //// [privacyFunctionCannotNameParameterTypeDeclFile_Widgets.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

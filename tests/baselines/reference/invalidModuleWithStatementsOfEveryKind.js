@@ -81,6 +81,7 @@ namespace YYY4 {
 
 
 //// [invalidModuleWithStatementsOfEveryKind.js]
+"use strict";
 // All of these should be an error
 var Y;
 (function (Y) {

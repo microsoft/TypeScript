@@ -153,6 +153,7 @@ i2_i = i3_i;
 
 
 //// [commentsInheritance.js]
+"use strict";
 class c1 {
     // i1_f1
     i1_f1() {

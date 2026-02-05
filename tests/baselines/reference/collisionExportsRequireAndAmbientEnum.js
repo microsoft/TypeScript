@@ -67,6 +67,7 @@ var m2;
 (function (m2) {
 })(m2 || (m2 = {}));
 //// [collisionExportsRequireAndAmbientEnum_globalFile.js]
+"use strict";
 var m4;
 (function (m4) {
 })(m4 || (m4 = {}));

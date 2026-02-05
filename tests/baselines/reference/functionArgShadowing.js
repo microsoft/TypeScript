@@ -17,6 +17,7 @@ class C {
 }
 
 //// [functionArgShadowing.js]
+"use strict";
 class A {
     foo() { }
 }

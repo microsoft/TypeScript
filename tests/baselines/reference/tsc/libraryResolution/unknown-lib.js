@@ -115,6 +115,7 @@ export declare const file = 10;
 
 
 //// [/home/src/workspace/projects/project1/file2.js]
+"use strict";
 /// <reference lib="webworker2"/>
 /// <reference lib="unknownlib"/>
 /// <reference lib="scripthost"/>

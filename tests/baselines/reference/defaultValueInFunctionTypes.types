@@ -8,8 +8,8 @@ type Foo = ({ first = 0 }: { first?: number }) => unknown;
 >      : ^^^^^^
 >0 : 0
 >  : ^
->first : number
->      : ^^^^^^
+>first : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
 var x: (a: number = 1) => number;
 >x : (a?: number) => number

@@ -30,6 +30,7 @@ function h({ prop = "baz" }: StringUnion) {}
 
 
 //// [contextuallyTypedBindingInitializerNegative.js]
+"use strict";
 function f({ show: showRename = v => v }) { }
 function f2({ "show": showRename = v => v }) { }
 function f3({ ["show"]: showRename = v => v }) { }

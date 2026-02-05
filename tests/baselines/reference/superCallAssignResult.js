@@ -13,6 +13,7 @@ class H extends E {
 }
 
 //// [superCallAssignResult.js]
+"use strict";
 class E {
     constructor(arg) { }
 }

@@ -20,8 +20,8 @@ class RC1 extends React.Component<{x : number}, {}> {
 >  : ^^^^^^
 
     render() {
->render : () => any
->       : ^^^^^^^^^
+>render : () => null
+>       : ^^^^^^^^^^
 
         return null;
     }
@@ -40,8 +40,8 @@ class RC2 extends React.Component<{ x: string }, {}> {
 >  : ^^^^^^
 
     render() {
->render : () => any
->       : ^^^^^^^^^
+>render : () => null
+>       : ^^^^^^^^^^
 
         return null;
     }
@@ -61,8 +61,8 @@ class RC3 extends React.Component<{}, {}> {
 >          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
->render : () => any
->       : ^^^^^^^^^
+>render : () => null
+>       : ^^^^^^^^^^
 
         return null;
     }
@@ -79,8 +79,8 @@ class RC4 extends React.Component<{}, {}> {
 >          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
->render : () => any
->       : ^^^^^^^^^
+>render : () => null
+>       : ^^^^^^^^^^
 
         return null;
     }
@@ -97,9 +97,9 @@ var EmptyRCComp = RC3 || RC4;
 >    : ^^^^^^^^^^
 
 var PartRCComp = RC1 || RC4;
->PartRCComp : typeof RC4
+>PartRCComp : typeof RC1
 >           : ^^^^^^^^^^
->RC1 || RC4 : typeof RC4
+>RC1 || RC4 : typeof RC1
 >           : ^^^^^^^^^^
 >RC1 : typeof RC1
 >    : ^^^^^^^^^^
@@ -107,10 +107,10 @@ var PartRCComp = RC1 || RC4;
 >    : ^^^^^^^^^^
 
 var RCComp = RC1 || RC2;
->RCComp : typeof RC1 | typeof RC2
->       : ^^^^^^^^^^^^^^^^^^^^^^^
->RC1 || RC2 : typeof RC1 | typeof RC2
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>RCComp : typeof RC1
+>       : ^^^^^^^^^^
+>RC1 || RC2 : typeof RC1
+>           : ^^^^^^^^^^
 >RC1 : typeof RC1
 >    : ^^^^^^^^^^
 >RC2 : typeof RC2
@@ -122,8 +122,8 @@ let a = <RCComp x="Hi" />;
 >  : ^^^^^^^^^^^
 ><RCComp x="Hi" /> : JSX.Element
 >                  : ^^^^^^^^^^^
->RCComp : typeof RC1 | typeof RC2
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>RCComp : typeof RC1
+>       : ^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -150,7 +150,7 @@ let b = <PartRCComp />
 >  : ^^^^^^^^^^^
 ><PartRCComp /> : JSX.Element
 >               : ^^^^^^^^^^^
->PartRCComp : typeof RC4
+>PartRCComp : typeof RC1
 >           : ^^^^^^^^^^
 
 let c = <PartRCComp data-extra="hello" />
@@ -158,7 +158,7 @@ let c = <PartRCComp data-extra="hello" />
 >  : ^^^^^^^^^^^
 ><PartRCComp data-extra="hello" /> : JSX.Element
 >                                  : ^^^^^^^^^^^
->PartRCComp : typeof RC4
+>PartRCComp : typeof RC1
 >           : ^^^^^^^^^^
 >data-extra : string
 >           : ^^^^^^

@@ -80,6 +80,7 @@ async function forOfStatement18() {
 }
 
 //// [es5-asyncFunctionForOfStatements.js]
+"use strict";
 function forOfStatement0() {
     return __awaiter(this, void 0, void 0, function () {
         var _i, y_1;

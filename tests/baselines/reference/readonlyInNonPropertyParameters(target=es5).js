@@ -11,6 +11,7 @@ class X {
 (readonly) => 0;
 
 //// [readonlyInNonPropertyParameters.js]
+"use strict";
 // `readonly` won't work outside of property parameters
 var X = /** @class */ (function () {
     function X() {

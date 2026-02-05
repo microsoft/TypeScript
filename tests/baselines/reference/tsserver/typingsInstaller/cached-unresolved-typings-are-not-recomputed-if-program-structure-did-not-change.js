@@ -42,10 +42,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -68,15 +64,11 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/project: *new*
   {"pollingInterval":500}
 /home/src/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 /home/src/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -254,8 +246,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/node_modules:
   {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project:
   {"pollingInterval":500}
 /home/src/projects/project/bower_components: *new*
@@ -263,8 +253,6 @@ PolledWatches::
 /home/src/projects/project/jsconfig.json:
   {"pollingInterval":2000}
 /home/src/projects/project/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/project/tsconfig.json:
   {"pollingInterval":2000}

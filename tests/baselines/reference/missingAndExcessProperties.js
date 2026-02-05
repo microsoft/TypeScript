@@ -37,6 +37,7 @@ function f4() {
 
 
 //// [missingAndExcessProperties.js]
+"use strict";
 // Missing properties
 function f1() {
     var { x, y } = {};

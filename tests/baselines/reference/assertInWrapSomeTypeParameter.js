@@ -8,6 +8,7 @@ class C<T extends C<T>> {
 }
 
 //// [assertInWrapSomeTypeParameter.js]
+"use strict";
 class C {
     foo(x) {
         return null;

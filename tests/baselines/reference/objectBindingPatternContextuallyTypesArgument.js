@@ -6,4 +6,5 @@ const { f = (x: string) => x.length } = id({ f: x => x.charAt });
 
 
 //// [objectBindingPatternContextuallyTypesArgument.js]
+"use strict";
 const { f = (x) => x.length } = id({ f: x => x.charAt });

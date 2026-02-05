@@ -6,6 +6,7 @@ function f1 (a: number, b: typeof a) {
 }
 
 //// [unusedParameterUsedInTypeOf.js]
+"use strict";
 function f1(a, b) {
     return b;
 }

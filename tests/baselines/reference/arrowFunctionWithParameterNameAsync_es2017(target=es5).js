@@ -4,4 +4,5 @@
 const x = async => async;
 
 //// [arrowFunctionWithParameterNameAsync_es2017.js]
+"use strict";
 var x = function (async) { return async; };

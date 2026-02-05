@@ -19,6 +19,7 @@ class None<T> implements IOption<T>{
 
 
 //// [genericInterfaceImplementation.js]
+"use strict";
 class None {
     get() {
         throw null;

@@ -5,12 +5,12 @@ interface Promise<T> {
     then<U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>;
 >then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>; }
 >     : ^^^        ^^^^^^        ^^^^^^^^^^           ^^^                                                                   ^^          ^^^                                                                      ^^^                            ^^^ ^^         ^^^               ^^        ^^^                  ^^^          ^^^
->onFulfill : (value: T) => U
->          : ^     ^^ ^^^^^ 
+>onFulfill : ((value: T) => U) | undefined
+>          : ^^     ^^ ^^^^^ ^^^^^^^^^^^^^
 >value : T
 >      : ^
->onReject : (reason: any) => U
->         : ^      ^^   ^^^^^ 
+>onReject : ((reason: any) => U) | undefined
+>         : ^^      ^^   ^^^^^ ^^^^^^^^^^^^^
 >reason : any
 >       : ^^^
 }
@@ -22,12 +22,12 @@ var a = function then<U>(onFulfill?: (value: string) => U, onReject?: (reason: a
 >                                                                                                              : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >then : <U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>
 >     : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
->onFulfill : (value: string) => U
->          : ^     ^^      ^^^^^ 
+>onFulfill : ((value: string) => U) | undefined
+>          : ^^     ^^      ^^^^^ ^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
->onReject : (reason: any) => U
->         : ^      ^^   ^^^^^ 
+>onReject : ((reason: any) => U) | undefined
+>         : ^^      ^^   ^^^^^ ^^^^^^^^^^^^^
 >reason : any
 >       : ^^^
 
@@ -38,12 +38,12 @@ var b = function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: a
 >                                                                                                              : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >then : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
 >     : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
->onFulFill : (value: number) => U
->          : ^     ^^      ^^^^^ 
+>onFulFill : ((value: number) => U) | undefined
+>          : ^^     ^^      ^^^^^ ^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
->onReject : (reason: any) => U
->         : ^      ^^   ^^^^^ 
+>onReject : ((reason: any) => U) | undefined
+>         : ^^      ^^   ^^^^^ ^^^^^^^^^^^^^
 >reason : any
 >       : ^^^
 

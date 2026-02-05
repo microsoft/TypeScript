@@ -7,6 +7,7 @@ namespace M {
 
 
 //// [topLevelLambda.js]
+"use strict";
 var M;
 (function (M) {
     var f = () => { this.window; };

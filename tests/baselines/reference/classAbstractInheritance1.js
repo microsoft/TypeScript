@@ -24,6 +24,7 @@ class FF extends CC {}
 abstract class GG extends CC {}
 
 //// [classAbstractInheritance1.js]
+"use strict";
 class A {
 }
 class B extends A {

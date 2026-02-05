@@ -1,3 +1,4 @@
+"use strict";
 /// <reference path='m1.ts'/>
 var a1 = 10;
 class c1 {

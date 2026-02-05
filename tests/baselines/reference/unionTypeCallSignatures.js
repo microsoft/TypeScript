@@ -78,6 +78,7 @@ strOrNum = unionWithRestParameter4("hello", "world");
 
 
 //// [unionTypeCallSignatures.js]
+"use strict";
 numOrDate = unionOfDifferentReturnType(10);
 strOrBoolean = unionOfDifferentReturnType("hello"); // error 
 unionOfDifferentReturnType1(true); // error in type of parameter

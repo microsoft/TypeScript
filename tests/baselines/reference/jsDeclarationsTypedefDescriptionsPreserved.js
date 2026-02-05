@@ -19,6 +19,7 @@
 
 
 //// [index.js]
+"use strict";
 /**
  * Options for Foo <------------
  * @typedef {Object} FooOptions

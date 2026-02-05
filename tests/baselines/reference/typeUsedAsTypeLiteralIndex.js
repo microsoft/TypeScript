@@ -29,4 +29,5 @@ type T4 = {
 
 
 //// [typeUsedAsTypeLiteralIndex.js]
+"use strict";
 const K1 = Symbol();

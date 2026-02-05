@@ -20,6 +20,7 @@ else {
 
 
 //// [typeGuardInClass.js]
+"use strict";
 if (typeof x === "string") {
     let n = class {
         constructor() {

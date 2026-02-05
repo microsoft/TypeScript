@@ -46,6 +46,7 @@ interface I2 {
 }
 
 //// [constructorsWithSpecializedSignatures.js]
+"use strict";
 // errors
 class D {
     constructor(x) { }

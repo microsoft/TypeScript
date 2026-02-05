@@ -15,12 +15,12 @@ declare function log(...args: any[]): void;
 
 export interface ClickableProps {
     children?: string;
->children : string
->         : ^^^^^^
+>children : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 
     className?: string;
->className : string
->          : ^^^^^^
+>className : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 }
 
 export interface ButtonProps extends ClickableProps {

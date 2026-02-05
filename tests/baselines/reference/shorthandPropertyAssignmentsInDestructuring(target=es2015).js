@@ -118,6 +118,7 @@ function foo({a = 4, b = { x: 5 }}) {
 }
 
 //// [shorthandPropertyAssignmentsInDestructuring.js]
+"use strict";
 (function () {
     var s0;
     for ({ s0 = 5 } of [{ s0: 1 }]) {

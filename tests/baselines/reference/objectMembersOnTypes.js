@@ -12,6 +12,7 @@ c.toString(); // used to be an error
 
 
 //// [objectMembersOnTypes.js]
+"use strict";
 class AAA {
 }
 var x;

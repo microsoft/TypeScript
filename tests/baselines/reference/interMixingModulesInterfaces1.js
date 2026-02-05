@@ -18,6 +18,7 @@ namespace A {
 var x: A.B = A.B.createB();
 
 //// [interMixingModulesInterfaces1.js]
+"use strict";
 var A;
 (function (A) {
     let B;

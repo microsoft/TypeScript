@@ -1,3 +1,5 @@
+file.tsx(43,16): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+file.tsx(46,12): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 file.tsx(50,13): error TS2769: No overload matches this call.
   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
@@ -33,7 +35,7 @@ file.tsx(58,13): error TS2769: No overload matches this call.
         Type 'boolean' is not assignable to type 'string'.
 
 
-==== file.tsx (4 errors) ====
+==== file.tsx (6 errors) ====
     /// <reference path="/.lib/react.d.ts" />
     
     import React = require('react')
@@ -77,9 +79,15 @@ file.tsx(58,13): error TS2769: No overload matches this call.
         const linkProps = props as LinkProps;
         if(linkProps.to) {
             return this._buildMainLink(props);
+                   ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 file.tsx:40:17: An outer value of 'this' is shadowed by this container.
         }
     
         return this._buildMainButton(props);
+               ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 file.tsx:40:17: An outer value of 'this' is shadowed by this container.
     }
     
     // Error

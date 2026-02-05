@@ -10,6 +10,7 @@ class C {
 }
 
 //// [computedPropertyNamesOnOverloads_ES5.js]
+"use strict";
 var methodName = "method";
 var accessorName = "accessor";
 var C = /** @class */ (function () {

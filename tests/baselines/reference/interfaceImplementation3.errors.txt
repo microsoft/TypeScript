@@ -1,8 +1,10 @@
 interfaceImplementation3.ts(8,7): error TS2420: Class 'C4' incorrectly implements interface 'I1'.
   Property 'iAny' is missing in type 'C4' but required in type 'I1'.
+interfaceImplementation3.ts(9,12): error TS2564: Property 'iObj' has no initializer and is not definitely assigned in the constructor.
+interfaceImplementation3.ts(10,12): error TS2564: Property 'iNum' has no initializer and is not definitely assigned in the constructor.
 
 
-==== interfaceImplementation3.ts (1 errors) ====
+==== interfaceImplementation3.ts (3 errors) ====
     interface I1 {
         iObj:{ };
         iNum:number;
@@ -16,7 +18,11 @@ interfaceImplementation3.ts(8,7): error TS2420: Class 'C4' incorrectly implement
 !!! error TS2420:   Property 'iAny' is missing in type 'C4' but required in type 'I1'.
 !!! related TS2728 interfaceImplementation3.ts:4:5: 'iAny' is declared here.
         public iObj:{ };
+               ~~~~
+!!! error TS2564: Property 'iObj' has no initializer and is not definitely assigned in the constructor.
         public iNum:number;
+               ~~~~
+!!! error TS2564: Property 'iNum' has no initializer and is not definitely assigned in the constructor.
         public iFn() { }
     }
     

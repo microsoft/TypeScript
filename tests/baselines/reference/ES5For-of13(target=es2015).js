@@ -6,6 +6,7 @@ for (let v of ['a', 'b', 'c']) {
 }
 
 //// [ES5For-of13.js]
+"use strict";
 for (let v of ['a', 'b', 'c']) {
     var x = v;
 }

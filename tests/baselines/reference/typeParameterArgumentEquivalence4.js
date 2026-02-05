@@ -10,6 +10,7 @@ function foo<T,U>() {
 
 
 //// [typeParameterArgumentEquivalence4.js]
+"use strict";
 function foo() {
     var x;
     var y;

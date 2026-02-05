@@ -14,6 +14,7 @@ class C {
 }
 
 //// [commentOnClassAccessor2.js]
+"use strict";
 class C {
     /**
      * Getter.

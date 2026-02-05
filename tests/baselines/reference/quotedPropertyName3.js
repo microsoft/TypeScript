@@ -10,6 +10,7 @@ class Test {
 }
 
 //// [quotedPropertyName3.js]
+"use strict";
 class Test {
     foo() {
         var x = () => this["prop1"];

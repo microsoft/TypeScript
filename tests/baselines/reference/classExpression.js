@@ -15,6 +15,7 @@ namespace M {
 }
 
 //// [classExpression.js]
+"use strict";
 var x = class C {
 };
 var y = {

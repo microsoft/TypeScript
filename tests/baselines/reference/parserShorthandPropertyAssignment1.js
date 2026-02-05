@@ -6,6 +6,7 @@ var name:any, id: any;
 foo({ name?, id? });
 
 //// [parserShorthandPropertyAssignment1.js]
+"use strict";
 function foo(obj) { }
 var name, id;
 foo({ name, id });

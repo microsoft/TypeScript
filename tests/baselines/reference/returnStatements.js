@@ -27,6 +27,7 @@ function fn13(): C { return null; }
 
 
 //// [returnStatements.js]
+"use strict";
 // all the following should be valid
 function fn1() { return 1; }
 function fn2() { return ''; }

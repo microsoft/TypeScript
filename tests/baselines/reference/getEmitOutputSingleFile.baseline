@@ -2,6 +2,7 @@
 EmitSkipped: false
 
 FileName : outputDir/singleFile.js
+"use strict";
 var x;
 class Bar {
     x;

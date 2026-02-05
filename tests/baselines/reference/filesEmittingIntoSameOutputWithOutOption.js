@@ -10,6 +10,7 @@ function foo() {
 
 
 //// [a.js]
+"use strict";
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

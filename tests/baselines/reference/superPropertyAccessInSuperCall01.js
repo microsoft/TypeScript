@@ -14,6 +14,7 @@ class B extends A {
 }
 
 //// [superPropertyAccessInSuperCall01.js]
+"use strict";
 class A {
     constructor(f) {
     }

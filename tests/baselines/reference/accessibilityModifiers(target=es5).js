@@ -47,6 +47,7 @@ class E {
 
 
 //// [accessibilityModifiers.js]
+"use strict";
 // No errors
 var C = /** @class */ (function () {
     function C() {

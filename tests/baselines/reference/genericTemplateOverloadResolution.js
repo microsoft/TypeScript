@@ -14,4 +14,5 @@ expect(fooFn<number>``);
 
 
 //// [genericTemplateOverloadResolution.js]
+"use strict";
 expect(fooFn ``);

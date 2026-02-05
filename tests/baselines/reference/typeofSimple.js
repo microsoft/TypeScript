@@ -15,6 +15,7 @@ declare var fun: () => I<number>;
 numberI = fun();
 
 //// [typeofSimple.js]
+"use strict";
 var v = 3;
 var v2 = v;
 var v3 = v2; // Not assignment compatible

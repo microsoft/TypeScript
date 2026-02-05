@@ -12,6 +12,7 @@ class Greeter {
 
 
 //// [getterThatThrowsShouldNotNeedReturn.js]
+"use strict";
 class Greeter {
     get greet() {
         throw ''; // should not raise an error

@@ -70,6 +70,7 @@ class RegisteredUser4 extends User {
 }
 
 //// [superInLambdas.js]
+"use strict";
 class User {
     constructor() {
         this.name = "Bob";

@@ -125,6 +125,7 @@ async function binaryComma1(): Promise<any> {
 }
 
 //// [es5-asyncFunctionBinaryExpressions.js]
+"use strict";
 function binaryPlus0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

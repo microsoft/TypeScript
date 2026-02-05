@@ -4,4 +4,5 @@
 var x = `abc${ " " }def` ? `abc${ " " }def` : `abc${ " " }def`;
 
 //// [templateStringInConditional.js]
+"use strict";
 var x = `abc${" "}def` ? `abc${" "}def` : `abc${" "}def`;

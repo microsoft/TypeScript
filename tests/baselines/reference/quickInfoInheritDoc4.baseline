@@ -9,7 +9,7 @@
 //     static value() {
 //            ^^^^^
 // | ----------------------------------------------------------------------
-// | (method) B.value(): any
+// | (method) B.value(): undefined
 // | @inheritdoc 
 // | ----------------------------------------------------------------------
 //         return undefined;
@@ -76,7 +76,7 @@
           "kind": "space"
         },
         {
-          "text": "any",
+          "text": "undefined",
           "kind": "keyword"
         }
       ],

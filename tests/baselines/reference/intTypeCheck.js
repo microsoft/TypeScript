@@ -208,6 +208,7 @@ var obj86: i8 = new <i8> anyVar;
 var obj87: i8 = new {};
 
 //// [intTypeCheck.js]
+"use strict";
 class Base {
     foo() { }
 }

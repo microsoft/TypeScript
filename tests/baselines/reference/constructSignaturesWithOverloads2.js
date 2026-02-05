@@ -42,6 +42,7 @@ var r4 = new i2(1, '');
 var r5 = new i2(1, 1);
 
 //// [constructSignaturesWithOverloads2.js]
+"use strict";
 // No errors expected for basic overloads of construct signatures with merged declarations
 // clodules
 class C {

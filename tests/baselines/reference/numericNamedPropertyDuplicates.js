@@ -24,6 +24,7 @@ var b = {
 }
 
 //// [numericNamedPropertyDuplicates.js]
+"use strict";
 class C {
 }
 var a;

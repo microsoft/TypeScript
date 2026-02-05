@@ -15,6 +15,7 @@ stringIndex[s].toFixed();
 
 
 //// [file.js]
+"use strict";
 // @ts-check
 let n = Math.random();
 let s = `${n}`;

@@ -10,6 +10,7 @@ namespace M {
    ¬
 
 //// [parserErrorRecovery_ClassElement3.js]
+"use strict";
 var M;
 (function (M) {
     class C {

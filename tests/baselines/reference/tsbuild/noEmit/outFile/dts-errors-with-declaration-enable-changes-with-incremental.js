@@ -439,6 +439,7 @@ Found 2 errors.
 }
 
 //// [/home/src/projects/outFile.js]
+"use strict";
 const a = class {
     p = 10;
 };

@@ -20,6 +20,7 @@ var openClosed1 = <div>
 var spread1 = <div {...p} x={0} />;
 
 //// [file.js]
+"use strict";
 var p;
 var openClosed1 = React.createElement("div", null, blah);
 // Should emit React.__spread({}, p, {x: 0})

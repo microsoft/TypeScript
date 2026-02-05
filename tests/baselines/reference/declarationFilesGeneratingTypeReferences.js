@@ -13,6 +13,7 @@ namespace Test {
 
 
 //// [out.js]
+"use strict";
 /// <reference types="jquery" preserve="true" />
 var Test;
 (function (Test) {

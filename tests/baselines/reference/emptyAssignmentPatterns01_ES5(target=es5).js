@@ -9,6 +9,7 @@ var a: any;
 var [,] = [1,2];
 
 //// [emptyAssignmentPatterns01_ES5.js]
+"use strict";
 var a;
 (a);
 (a);

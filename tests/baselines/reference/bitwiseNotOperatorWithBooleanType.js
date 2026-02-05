@@ -41,6 +41,7 @@ var ResultIsNumber8 = ~~BOOLEAN;
 ~M.n;
 
 //// [bitwiseNotOperatorWithBooleanType.js]
+"use strict";
 // ~ operator on boolean type
 var BOOLEAN;
 function foo() { return true; }

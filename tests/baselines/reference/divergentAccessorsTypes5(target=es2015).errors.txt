@@ -1,8 +1,9 @@
+divergentAccessorsTypes5.ts(8,3): error TS2564: Property 'prop2' has no initializer and is not definitely assigned in the constructor.
 divergentAccessorsTypes5.ts(31,1): error TS2322: Type '42' is not assignable to type '"hello"'.
 divergentAccessorsTypes5.ts(36,1): error TS2322: Type '"hello"' is not assignable to type '42'.
 
 
-==== divergentAccessorsTypes5.ts (2 errors) ====
+==== divergentAccessorsTypes5.ts (3 errors) ====
     // Not really different from divergentAccessorsTypes4.ts,
     // but goes through the deferred type code
     
@@ -11,6 +12,8 @@ divergentAccessorsTypes5.ts(36,1): error TS2322: Type '"hello"' is not assignabl
       set prop1(s: string | number) { }
     
       prop2: number;
+      ~~~~~
+!!! error TS2564: Property 'prop2' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Two {

@@ -160,6 +160,7 @@ function test2<T, K extends keyof T>(obj: Record<K, number>) {
 
 
 //// [mappedTypeErrors.js]
+"use strict";
 function f1(x) {
     let y; // Error
 }

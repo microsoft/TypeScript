@@ -7,6 +7,7 @@ x = a;
 a = x;
 
 //// [assignFromStringInterface.js]
+"use strict";
 var x = '';
 x = a;
 a = x;

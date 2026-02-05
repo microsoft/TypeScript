@@ -37,8 +37,8 @@ MyClass.prototype.optionalParam = function(required, notRequired) {
 >                                                   : ^        ^^      ^^           ^^^      ^^^^^       
 >required : string
 >         : ^^^^^^
->notRequired : string
->            : ^^^^^^
+>notRequired : string | undefined
+>            : ^^^^^^^^^^^^^^^^^^
 
     return this;
 >this : this

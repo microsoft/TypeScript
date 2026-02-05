@@ -23,6 +23,7 @@ import type Foo = ns.Foo;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [c.js]
+"use strict";
 var ns;
 (function (ns) {
     class Foo {

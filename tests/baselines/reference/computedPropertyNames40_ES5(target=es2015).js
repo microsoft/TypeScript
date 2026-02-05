@@ -13,6 +13,7 @@ class C {
 }
 
 //// [computedPropertyNames40_ES5.js]
+"use strict";
 class Foo {
 }
 class Foo2 {

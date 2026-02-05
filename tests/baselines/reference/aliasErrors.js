@@ -33,6 +33,7 @@ function use() {
 
 
 //// [aliasErrors.js]
+"use strict";
 var foo;
 (function (foo) {
     class Provide {

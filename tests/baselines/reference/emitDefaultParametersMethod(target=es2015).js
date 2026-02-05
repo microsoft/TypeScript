@@ -20,6 +20,7 @@ class E {
 
 
 //// [emitDefaultParametersMethod.js]
+"use strict";
 class C {
     constructor(t, z, x, y = "hello") { }
     foo(x, t = false) { }

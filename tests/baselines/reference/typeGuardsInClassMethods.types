@@ -23,12 +23,12 @@ class C1 {
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
->                                              : ^^^^^^
+>num = typeof var1 === "string" && var1.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var1 === "string" && var1.length : number
->                                        : ^^^^^^
+>typeof var1 === "string" && var1.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -50,12 +50,12 @@ class C1 {
 >     : ^^^^^^^^^^^^^^^
 
         num = typeof var2 === "string" && var2.length; // string
->num = typeof var2 === "string" && var2.length : number
->                                              : ^^^^^^
+>num = typeof var2 === "string" && var2.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var2 === "string" && var2.length : number
->                                        : ^^^^^^
+>typeof var2 === "string" && var2.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -73,12 +73,12 @@ class C1 {
 
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
->num = typeof param === "string" && param.length : number
->                                                : ^^^^^^
+>num = typeof param === "string" && param.length : number | false
+>                                                : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof param === "string" && param.length : number
->                                          : ^^^^^^
+>typeof param === "string" && param.length : number | false
+>                                          : ^^^^^^^^^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
 >typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -103,12 +103,12 @@ class C1 {
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
->                                              : ^^^^^^
+>num = typeof var1 === "string" && var1.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var1 === "string" && var1.length : number
->                                        : ^^^^^^
+>typeof var1 === "string" && var1.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -130,12 +130,12 @@ class C1 {
 >     : ^^^^^^^^^^^^^^^
 
         num = typeof var2 === "string" && var2.length; // string
->num = typeof var2 === "string" && var2.length : number
->                                              : ^^^^^^
+>num = typeof var2 === "string" && var2.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var2 === "string" && var2.length : number
->                                        : ^^^^^^
+>typeof var2 === "string" && var2.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -153,12 +153,12 @@ class C1 {
 
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
->num = typeof param === "string" && param.length : number
->                                                : ^^^^^^
+>num = typeof param === "string" && param.length : number | false
+>                                                : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof param === "string" && param.length : number
->                                          : ^^^^^^
+>typeof param === "string" && param.length : number | false
+>                                          : ^^^^^^^^^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
 >typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -183,12 +183,12 @@ class C1 {
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
->                                              : ^^^^^^
+>num = typeof var1 === "string" && var1.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var1 === "string" && var1.length : number
->                                        : ^^^^^^
+>typeof var1 === "string" && var1.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -210,12 +210,12 @@ class C1 {
 >     : ^^^^^^^^^^^^^^^
 
         num = typeof var2 === "string" && var2.length; // string
->num = typeof var2 === "string" && var2.length : number
->                                              : ^^^^^^
+>num = typeof var2 === "string" && var2.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var2 === "string" && var2.length : number
->                                        : ^^^^^^
+>typeof var2 === "string" && var2.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -233,12 +233,12 @@ class C1 {
 
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
->num = typeof param === "string" && param.length : number
->                                                : ^^^^^^
+>num = typeof param === "string" && param.length : number | false
+>                                                : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof param === "string" && param.length : number
->                                          : ^^^^^^
+>typeof param === "string" && param.length : number | false
+>                                          : ^^^^^^^^^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
 >typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -263,12 +263,12 @@ class C1 {
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
->                                              : ^^^^^^
+>num = typeof var1 === "string" && var1.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var1 === "string" && var1.length : number
->                                        : ^^^^^^
+>typeof var1 === "string" && var1.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -290,12 +290,12 @@ class C1 {
 >     : ^^^^^^^^^^^^^^^
 
         num = typeof var2 === "string" && var2.length; // string
->num = typeof var2 === "string" && var2.length : number
->                                              : ^^^^^^
+>num = typeof var2 === "string" && var2.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var2 === "string" && var2.length : number
->                                        : ^^^^^^
+>typeof var2 === "string" && var2.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -313,12 +313,12 @@ class C1 {
 
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
->num = typeof param === "string" && param.length : number
->                                                : ^^^^^^
+>num = typeof param === "string" && param.length : number | false
+>                                                : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof param === "string" && param.length : number
->                                          : ^^^^^^
+>typeof param === "string" && param.length : number | false
+>                                          : ^^^^^^^^^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
 >typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -343,12 +343,12 @@ class C1 {
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
->                                              : ^^^^^^
+>num = typeof var1 === "string" && var1.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var1 === "string" && var1.length : number
->                                        : ^^^^^^
+>typeof var1 === "string" && var1.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -370,12 +370,12 @@ class C1 {
 >     : ^^^^^^^^^^^^^^^
 
         num = typeof var2 === "string" && var2.length; // string
->num = typeof var2 === "string" && var2.length : number
->                                              : ^^^^^^
+>num = typeof var2 === "string" && var2.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var2 === "string" && var2.length : number
->                                        : ^^^^^^
+>typeof var2 === "string" && var2.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -393,12 +393,12 @@ class C1 {
 
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
->num = typeof param === "string" && param.length : number
->                                                : ^^^^^^
+>num = typeof param === "string" && param.length : number | false
+>                                                : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof param === "string" && param.length : number
->                                          : ^^^^^^
+>typeof param === "string" && param.length : number | false
+>                                          : ^^^^^^^^^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
 >typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"

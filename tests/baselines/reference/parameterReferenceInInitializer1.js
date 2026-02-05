@@ -15,6 +15,7 @@ class C {
 }
 
 //// [parameterReferenceInInitializer1.js]
+"use strict";
 function fn(y, set) {
     return undefined;
 }

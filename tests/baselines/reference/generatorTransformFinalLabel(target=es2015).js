@@ -11,6 +11,7 @@ async function test(skip: boolean) {
 }
 
 //// [generatorTransformFinalLabel.js]
+"use strict";
 function test(skip) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!skip) {

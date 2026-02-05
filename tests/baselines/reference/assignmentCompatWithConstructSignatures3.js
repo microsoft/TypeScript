@@ -102,6 +102,7 @@ b18 = a18; // ok
 
 
 //// [assignmentCompatWithConstructSignatures3.js]
+"use strict";
 // checking assignment compatibility relations for function types. All of these are valid.
 class Base {
 }

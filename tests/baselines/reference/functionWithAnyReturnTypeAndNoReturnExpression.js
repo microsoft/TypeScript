@@ -7,6 +7,7 @@ var f2: () => any = () => { };
 var f3 = (): any => { };
 
 //// [functionWithAnyReturnTypeAndNoReturnExpression.js]
+"use strict";
 // All should be allowed
 function f() { }
 var f2 = () => { };

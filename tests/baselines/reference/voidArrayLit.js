@@ -8,6 +8,7 @@ foo((()=>{})()); // error
 
 
 //// [voidArrayLit.js]
+"use strict";
 var va = [(() => { })()]; // ok
 (() => { })(); // ok
 function foo(s) { }

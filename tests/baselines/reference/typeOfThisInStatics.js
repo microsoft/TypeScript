@@ -13,6 +13,7 @@ class C {
 
 
 //// [typeOfThisInStatics.js]
+"use strict";
 class C {
     static foo() {
         var r = this;

@@ -9,6 +9,7 @@ var lengths = map(myItems, x => x.length);
 
 
 //// [genericFunctions2.js]
+"use strict";
 var myItems;
 var lengths = map(myItems, x => x.length);
 

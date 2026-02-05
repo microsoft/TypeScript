@@ -13,6 +13,7 @@ class C {
 
 
 //// [classStaticBlock1.js]
+"use strict";
 var a = 2;
 var C = /** @class */ (function () {
     function C() {

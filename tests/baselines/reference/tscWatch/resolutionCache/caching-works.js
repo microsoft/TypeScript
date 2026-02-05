@@ -35,6 +35,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/users/username/projects/project/f1.js]
+"use strict";
 foo();
 
 
@@ -45,12 +46,6 @@ define(["require", "exports"], function (require, exports) {
 });
 
 
-
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
@@ -176,11 +171,7 @@ define(["require", "exports"], function (require, exports) {
 PolledWatches::
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -247,12 +238,6 @@ Output::
 
 //// [/users/username/projects/project/f1.js] file written with same contents
 //// [/users/username/projects/project/d/f0.js] file written with same contents
-
-PolledWatches::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /users/username/projects/node_modules:

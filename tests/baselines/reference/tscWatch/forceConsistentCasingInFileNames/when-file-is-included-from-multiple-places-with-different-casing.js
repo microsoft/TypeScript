@@ -319,12 +319,8 @@ export {};
 
 
 PolledWatches::
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/package.json: *new*
   {"pollingInterval":2000}
-/home/src/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/project/node_modules/fp-ts/lib/package.json: *new*
   {"pollingInterval":2000}
 /home/src/projects/project/node_modules/fp-ts/package.json: *new*

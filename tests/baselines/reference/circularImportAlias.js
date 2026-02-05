@@ -22,6 +22,7 @@ var c = new B.a.C();
 
 
 //// [circularImportAlias.js]
+"use strict";
 // expected no error
 var B;
 (function (B) {

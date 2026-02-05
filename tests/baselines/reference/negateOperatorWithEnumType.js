@@ -20,6 +20,7 @@ var ResultIsNumber3 = -(ENUM1.B + ENUM1[""]);
 -ENUM, ENUM1;
 
 //// [negateOperatorWithEnumType.js]
+"use strict";
 // - operator on enum type
 var ENUM;
 (function (ENUM) {

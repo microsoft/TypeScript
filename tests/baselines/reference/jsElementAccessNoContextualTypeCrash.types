@@ -1,5 +1,8 @@
 //// [tests/cases/compiler/jsElementAccessNoContextualTypeCrash.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === jsElementAccessNoContextualTypeCrash.js ===
 var Common = {};
 >Common : typeof Common

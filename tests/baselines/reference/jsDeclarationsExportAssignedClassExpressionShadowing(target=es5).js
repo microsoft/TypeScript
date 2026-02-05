@@ -16,6 +16,7 @@ module.exports.Another = Q;
 
 
 //// [index.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
         this.member = new Q();

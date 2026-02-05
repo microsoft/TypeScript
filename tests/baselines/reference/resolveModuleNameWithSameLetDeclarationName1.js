@@ -11,4 +11,5 @@ declare namespace foo {
 let foo: foo.Bar; 
 
 //// [resolveModuleNameWithSameLetDeclarationName1.js]
+"use strict";
 let foo;

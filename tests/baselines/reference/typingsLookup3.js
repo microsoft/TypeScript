@@ -9,5 +9,6 @@ $.x;
 
 
 //// [a.js]
+"use strict";
 /// <reference types="JqUeRy" />
 $.x;

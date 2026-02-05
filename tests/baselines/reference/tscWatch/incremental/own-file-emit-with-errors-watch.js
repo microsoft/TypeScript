@@ -45,10 +45,12 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/users/username/projects/project/file1.js]
+"use strict";
 const x = 10;
 
 
 //// [/users/username/projects/project/file2.js]
+"use strict";
 const y = 20;
 
 
@@ -120,12 +122,6 @@ const y = 20;
 }
 
 
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
@@ -174,12 +170,6 @@ Input::
 const z = 10;
 
 
-PolledWatches *deleted*::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches *deleted*::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
@@ -208,6 +198,7 @@ Output::
 
 
 //// [/users/username/projects/project/file1.js]
+"use strict";
 const z = 10;
 
 
@@ -281,12 +272,6 @@ const z = 10;
   "size": 980
 }
 
-
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*

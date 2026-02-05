@@ -20,6 +20,7 @@ void class Foo {
 }
 
 //// [classStaticBlock27.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/44872
 var _a;
 void (_a = class Foo {

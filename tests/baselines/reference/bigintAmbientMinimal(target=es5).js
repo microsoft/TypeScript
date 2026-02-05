@@ -14,5 +14,6 @@ declare const n = 123n;
 const regular = 456n;
 
 //// [main.js]
+"use strict";
 // Non-ambient for comparison
 var regular = 456n;

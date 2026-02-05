@@ -40,6 +40,7 @@ function foo():string { return "a" };
 
 
 //// [overloadAssignmentCompat.js]
+"use strict";
 // ok - overload signatures are assignment compatible with their implementation
 class Accessor {
 }

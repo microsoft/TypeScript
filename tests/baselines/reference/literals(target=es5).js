@@ -41,6 +41,7 @@ var r = /\\\\/;
 
 
 //// [literals.js]
+"use strict";
 //typeof null is Null
 //typeof true is Boolean
 //typeof false is Boolean

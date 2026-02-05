@@ -102,12 +102,6 @@ Output::
 }
 
 
-PolledWatches::
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/project/a.ts: *new*
   {}
@@ -307,6 +301,7 @@ Output::
 }
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 const a = "hello";
 
 

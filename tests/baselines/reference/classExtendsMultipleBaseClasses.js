@@ -6,6 +6,7 @@ class B { }
 class C extends A,B { }
 
 //// [classExtendsMultipleBaseClasses.js]
+"use strict";
 class A {
 }
 class B {

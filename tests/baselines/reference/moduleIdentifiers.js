@@ -13,6 +13,7 @@ var x1 = M.a;
 //var q: m.P;
 
 //// [moduleIdentifiers.js]
+"use strict";
 var M;
 (function (M) {
     M.a = 1;

@@ -21,6 +21,7 @@ c2.b();
 
 
 //// [missingSelf.js]
+"use strict";
 class CalcButton {
     a() { this.onClick(); }
     onClick() { }

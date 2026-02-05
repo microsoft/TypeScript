@@ -15,6 +15,7 @@ c.saltbar();	// crash
 
 
 //// [undeclaredMethod.js]
+"use strict";
 var M;
 (function (M) {
     class C {

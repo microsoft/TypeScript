@@ -102,8 +102,8 @@ export class ConstructorWithOptionalParameterProperty {
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(public x?: string) {
->x : string
->  : ^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -221,8 +221,8 @@ class GlobalConstructorWithOptionalParameterProperty {
 >                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(public x?: string) {
->x : string
->  : ^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 

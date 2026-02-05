@@ -37,6 +37,7 @@ namespace E {
 }
 
 //// [importStatements.js]
+"use strict";
 var A;
 (function (A) {
     class Point {

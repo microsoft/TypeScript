@@ -12,6 +12,7 @@ v = v2; // Should succeed
 var v3: { x } = new C; // Should fail
 
 //// [propertyParameterWithQuestionMark.js]
+"use strict";
 class C {
     constructor(x) {
         this.x = x;

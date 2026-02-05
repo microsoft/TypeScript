@@ -9,6 +9,7 @@ enum A {
 
 
 //// [enumWithComputedMember.js]
+"use strict";
 var A;
 (function (A) {
     A[A["X"] = "".length] = "X";

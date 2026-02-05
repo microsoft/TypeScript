@@ -20,8 +20,8 @@ export class WithData {
 >         : ^^^^^^^^
 
     [dataSomething]?() {
->[dataSomething] : () => string
->                : ^^^^^^^^^^^^
+>[dataSomething] : (() => string) | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dataSomething : `data-${string}`
 >              : ^^^^^^^^^^^^^^^^
 
@@ -38,8 +38,8 @@ export const a = (new WithData())["ahahahaahah"]!();
 >                                   : ^^^^^^
 >(new WithData())["ahahahaahah"]! : () => string
 >                                 : ^^^^^^^^^^^^
->(new WithData())["ahahahaahah"] : () => string
->                                : ^^^^^^^^^^^^
+>(new WithData())["ahahahaahah"] : (() => string) | undefined
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(new WithData()) : WithData
 >                 : ^^^^^^^^
 >new WithData() : WithData

@@ -9,7 +9,10 @@ Before request
 //// [/user/username/projects/project/tsconfig.json]
 {
   "compilerOptions": {
-    "allowJs": true
+    "allowJs": true,
+    "types": [
+      "*"
+    ]
   },
   "typeAcquisition": {
     "enable": true
@@ -30,7 +33,10 @@ Before request
 //// [/user/username/projects/project2/tsconfig.json]
 {
   "compilerOptions": {
-    "allowJs": true
+    "allowJs": true,
+    "types": [
+      "*"
+    ]
   },
   "typeAcquisition": {
     "enable": true
@@ -78,6 +84,9 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/tsconfig.json :
  ],
  "options": {
   "allowJs": true,
+  "types": [
+   "*"
+  ],
   "configFilePath": "/user/username/projects/project/tsconfig.json"
  }
 }
@@ -198,6 +207,9 @@ TI:: [hh:mm:ss:mss] Got install request
       ],
       "compilerOptions": {
         "allowJs": true,
+        "types": [
+          "*"
+        ],
         "configFilePath": "/user/username/projects/project/tsconfig.json",
         "allowNonTsExtensions": true
       },
@@ -296,7 +308,10 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "allowJs": true
+            "allowJs": true,
+            "types": [
+              ""
+            ]
           },
           "typeAcquisition": {
             "enable": true,
@@ -409,6 +424,9 @@ TI:: [hh:mm:ss:mss] Sending response:
       },
       "compilerOptions": {
         "allowJs": true,
+        "types": [
+          "*"
+        ],
         "configFilePath": "/user/username/projects/project/tsconfig.json",
         "allowNonTsExtensions": true
       },
@@ -434,6 +452,9 @@ Info seq  [hh:mm:ss:mss] event:
         },
         "compilerOptions": {
           "allowJs": true,
+          "types": [
+            "*"
+          ],
           "configFilePath": "/user/username/projects/project/tsconfig.json",
           "allowNonTsExtensions": true
         },
@@ -517,6 +538,9 @@ TI:: [hh:mm:ss:mss] Got install request
       ],
       "compilerOptions": {
         "allowJs": true,
+        "types": [
+          "*"
+        ],
         "configFilePath": "/user/username/projects/project/tsconfig.json",
         "allowNonTsExtensions": true
       },
@@ -559,6 +583,9 @@ TI:: [hh:mm:ss:mss] Sending response:
       },
       "compilerOptions": {
         "allowJs": true,
+        "types": [
+          "*"
+        ],
         "configFilePath": "/user/username/projects/project/tsconfig.json",
         "allowNonTsExtensions": true
       },
@@ -582,6 +609,9 @@ Info seq  [hh:mm:ss:mss] event:
         },
         "compilerOptions": {
           "allowJs": true,
+          "types": [
+            "*"
+          ],
           "configFilePath": "/user/username/projects/project/tsconfig.json",
           "allowNonTsExtensions": true
         },
@@ -775,6 +805,9 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project2/tsconfig.json 
  ],
  "options": {
   "allowJs": true,
+  "types": [
+   "*"
+  ],
   "configFilePath": "/user/username/projects/project2/tsconfig.json"
  }
 }
@@ -817,6 +850,9 @@ TI:: [hh:mm:ss:mss] Got install request
       ],
       "compilerOptions": {
         "allowJs": true,
+        "types": [
+          "*"
+        ],
         "configFilePath": "/user/username/projects/project2/tsconfig.json",
         "allowNonTsExtensions": true
       },
@@ -914,7 +950,10 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "allowJs": true
+            "allowJs": true,
+            "types": [
+              ""
+            ]
           },
           "typeAcquisition": {
             "enable": true,

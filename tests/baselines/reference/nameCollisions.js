@@ -50,6 +50,7 @@ namespace T {
 }
 
 //// [nameCollisions.js]
+"use strict";
 var T;
 (function (T) {
     var x = 2;

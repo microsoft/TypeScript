@@ -13,3 +13,4 @@ namespace M
 
 
 //// [circularModuleImports.js]
+"use strict";

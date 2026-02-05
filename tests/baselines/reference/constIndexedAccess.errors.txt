@@ -1,0 +1,56 @@
+constIndexedAccess.ts(13,9): error TS2454: Variable 'test' is used before being assigned.
+constIndexedAccess.ts(14,9): error TS2454: Variable 'test' is used before being assigned.
+constIndexedAccess.ts(16,10): error TS2454: Variable 'test' is used before being assigned.
+constIndexedAccess.ts(17,10): error TS2454: Variable 'test' is used before being assigned.
+constIndexedAccess.ts(19,10): error TS2454: Variable 'test' is used before being assigned.
+constIndexedAccess.ts(20,10): error TS2454: Variable 'test' is used before being assigned.
+constIndexedAccess.ts(27,10): error TS2454: Variable 'test' is used before being assigned.
+constIndexedAccess.ts(28,10): error TS2454: Variable 'test' is used before being assigned.
+
+
+==== constIndexedAccess.ts (8 errors) ====
+    const enum numbers {
+        zero,
+        one
+    }
+    
+    interface indexAccess {
+        0: string;
+        1: number;
+    }
+    
+    let test: indexAccess;
+    
+    let s = test[0];
+            ~~~~
+!!! error TS2454: Variable 'test' is used before being assigned.
+    let n = test[1];
+            ~~~~
+!!! error TS2454: Variable 'test' is used before being assigned.
+    
+    let s1 = test[numbers.zero];
+             ~~~~
+!!! error TS2454: Variable 'test' is used before being assigned.
+    let n1 = test[numbers.one];
+             ~~~~
+!!! error TS2454: Variable 'test' is used before being assigned.
+    
+    let s2 = test[numbers["zero"]];
+             ~~~~
+!!! error TS2454: Variable 'test' is used before being assigned.
+    let n2 = test[numbers["one"]];
+             ~~~~
+!!! error TS2454: Variable 'test' is used before being assigned.
+    
+    enum numbersNotConst {
+        zero,
+        one
+    }
+    
+    let s3 = test[numbersNotConst.zero];
+             ~~~~
+!!! error TS2454: Variable 'test' is used before being assigned.
+    let n3 = test[numbersNotConst.one];
+             ~~~~
+!!! error TS2454: Variable 'test' is used before being assigned.
+    

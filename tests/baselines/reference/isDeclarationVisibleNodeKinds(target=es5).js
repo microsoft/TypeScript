@@ -71,6 +71,7 @@ namespace schema {
 }
 
 //// [isDeclarationVisibleNodeKinds.js]
+"use strict";
 // Function types
 var schema;
 (function (schema_1) {

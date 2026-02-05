@@ -12,6 +12,7 @@ class A<T extends T> {
 }
 
 //// [typeParameterWithInvalidConstraintType.js]
+"use strict";
 class A {
     foo() {
         var x;

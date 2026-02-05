@@ -24,6 +24,7 @@ a = b;
 
 
 //// [cyclicTypeInstantiation.js]
+"use strict";
 function foo() {
     var x;
     return x;

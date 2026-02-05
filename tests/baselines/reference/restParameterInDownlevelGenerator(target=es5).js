@@ -7,6 +7,7 @@ function * mergeStringLists(...strings: string[]) {
 }
 
 //// [restParameterInDownlevelGenerator.js]
+"use strict";
 // https://github.com/Microsoft/TypeScript/issues/30653
 function mergeStringLists() {
     var _i, strings_1, strings_1_1, str;

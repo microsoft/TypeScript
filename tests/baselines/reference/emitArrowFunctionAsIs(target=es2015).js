@@ -7,6 +7,7 @@ var arrow2 = (a) => { };
 var arrow3 = (a, b) => { };
 
 //// [emitArrowFunctionAsIs.js]
+"use strict";
 var arrow1 = a => { };
 var arrow2 = (a) => { };
 var arrow3 = (a, b) => { };

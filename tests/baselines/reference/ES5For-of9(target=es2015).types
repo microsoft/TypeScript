@@ -22,8 +22,8 @@ for (foo().x of []) {
 >    : ^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     for (foo().x of []) {
 >foo().x : number
@@ -34,8 +34,8 @@ for (foo().x of []) {
 >    : ^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
         var p = foo().x;
 >p : number

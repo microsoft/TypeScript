@@ -4,5 +4,6 @@
 class A<T extends A> { }
 
 //// [recursiveTypeParameterConstraintReferenceLacksTypeArgs.js]
+"use strict";
 class A {
 }

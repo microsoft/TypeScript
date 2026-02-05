@@ -9,6 +9,7 @@ function f1() {
 
 
 //// [commaOperator1.js]
+"use strict";
 var v1 = ((1, 2, 3), 4, 5, (6, 7));
 function f1() {
     var a = 1;

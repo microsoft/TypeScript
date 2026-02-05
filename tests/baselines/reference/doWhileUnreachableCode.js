@@ -15,6 +15,7 @@ function test() {
 }
 
 //// [doWhileUnreachableCode.js]
+"use strict";
 function test() {
     let foo = 0;
     testLoop: do {

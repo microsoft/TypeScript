@@ -89,6 +89,7 @@ async function callExpression20() {
 
 
 //// [es5-asyncFunctionCallExpressions.js]
+"use strict";
 function callExpression0() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

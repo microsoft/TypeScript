@@ -40,6 +40,7 @@ var r6 = f3(x => x, null);
 
 
 //// [genericCallWithObjectTypeArgsAndConstraints3.js]
+"use strict";
 // Generic call with constraints infering type parameter from object member properties
 class Base {
 }

@@ -9,6 +9,7 @@ class D extends C extends C {
 }
 
 //// [extendsClauseAlreadySeen.js]
+"use strict";
 class C {
 }
 class D extends C extends C {

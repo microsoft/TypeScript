@@ -22,6 +22,7 @@ const regexes: RegExp[] = [
 
 
 //// [regularExpressionCharacterClassRangeOrder.js]
+"use strict";
 // The characters in the following regular expressions are ASCII-lookalike characters found in Unicode, including:
 // - 𝘈 (U+1D608 Mathematical Sans-Serif Italic Capital A)
 // - 𝘡 (U+1D621 Mathematical Sans-Serif Italic Capital Z)

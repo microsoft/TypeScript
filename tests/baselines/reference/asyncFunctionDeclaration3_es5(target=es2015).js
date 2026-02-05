@@ -5,5 +5,6 @@ function f(await = await) {
 }
 
 //// [asyncFunctionDeclaration3_es5.js]
+"use strict";
 function f(await = await) {
 }

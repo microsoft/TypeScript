@@ -13,6 +13,7 @@ class Super extends Base {
 }
 
 //// [checkSuperCallBeforeThisAccessing6.js]
+"use strict";
 class Base {
     constructor(...arg) {
     }

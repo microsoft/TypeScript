@@ -9,6 +9,7 @@ f.privProp;
 
 
 //// [propertyAccessibility1.js]
+"use strict";
 class Foo {
     constructor() {
         this.privProp = 0;

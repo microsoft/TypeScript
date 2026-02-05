@@ -64,6 +64,7 @@ class Ds extends A {
 }
 
 //// [strictModeInConstructor.js]
+"use strict";
 class A {
 }
 class B extends A {

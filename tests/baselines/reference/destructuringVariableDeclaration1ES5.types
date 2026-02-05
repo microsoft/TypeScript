@@ -292,8 +292,8 @@ var {g: {g1 = [undefined, null]}}: { g: { g1: any[] } } = { g: { g1: [1, 2] } };
 >  : ^^^
 >g1 : any[]
 >   : ^^^^^
->[undefined, null] : null[]
->                  : ^^^^^^
+>[undefined, null] : (null | undefined)[]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >g : { g1: any[]; }
@@ -320,8 +320,8 @@ var {h: {h1 = [undefined, null]}}: { h: { h1: number[] } } = { h: { h1: [1, 2] }
 >  : ^^^
 >h1 : number[]
 >   : ^^^^^^^^
->[undefined, null] : null[]
->                  : ^^^^^^
+>[undefined, null] : (null | undefined)[]
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >h : { h1: number[]; }

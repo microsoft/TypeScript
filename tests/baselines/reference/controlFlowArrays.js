@@ -190,6 +190,7 @@ foo(arr);
 
 
 //// [controlFlowArrays.js]
+"use strict";
 function f1() {
     let x = [];
     x[0] = 5;

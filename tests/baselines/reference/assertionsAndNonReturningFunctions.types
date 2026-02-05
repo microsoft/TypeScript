@@ -94,10 +94,10 @@ function f1(x) {
 >  : ^^^
 
     if (!!true) {
->!!true : boolean
->       : ^^^^^^^
->!true : boolean
->      : ^^^^^^^
+>!!true : true
+>       : ^^^^
+>!true : false
+>      : ^^^^^
 >true : true
 >     : ^^^^
 
@@ -124,10 +124,10 @@ function f1(x) {
 >       : ^^^^^^
     }
     if (!!true) {
->!!true : boolean
->       : ^^^^^^^
->!true : boolean
->      : ^^^^^^^
+>!!true : true
+>       : ^^^^
+>!true : false
+>      : ^^^^^
 >true : true
 >     : ^^^^
 
@@ -154,10 +154,10 @@ function f1(x) {
 >       : ^^^^^^
     }
     if (!!true) {
->!!true : boolean
->       : ^^^^^^^
->!true : boolean
->      : ^^^^^^^
+>!!true : true
+>       : ^^^^
+>!true : false
+>      : ^^^^^
 >true : true
 >     : ^^^^
 
@@ -178,10 +178,10 @@ function f1(x) {
 >       : ^^^^^^
     }
     if (!!true) {
->!!true : boolean
->       : ^^^^^^^
->!true : boolean
->      : ^^^^^^^
+>!!true : true
+>       : ^^^^
+>!true : false
+>      : ^^^^^
 >true : true
 >     : ^^^^
 

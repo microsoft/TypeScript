@@ -11,5 +11,6 @@ fn(...nntnnnt, x)
 
 
 //// [callWithSpread5.js]
+"use strict";
 fn(...nnnu, x);
 fn(...nntnnnt, x);

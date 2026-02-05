@@ -70,6 +70,7 @@ namespace TwoLevels {
 }
 
 //// [subtypingWithObjectMembers.js]
+"use strict";
 class Base {
 }
 class Derived extends Base {

@@ -13,6 +13,7 @@ class BulkEditPreviewProvider {
 }
 
 //// [decoratorOnClassConstructorParameter5.js]
+"use strict";
 var BulkEditPreviewProvider_1;
 let BulkEditPreviewProvider = BulkEditPreviewProvider_1 = class BulkEditPreviewProvider {
     constructor(_modeService) {

@@ -11,7 +11,11 @@ export let a: number
 
 //// [/users/username/projects/project/tsconfig.json]
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "types": [
+      "*"
+    ]
+  },
   "exclude": [
     "node_modules"
   ]
@@ -49,6 +53,9 @@ Info seq  [hh:mm:ss:mss] Config: /users/username/projects/project/tsconfig.json 
   "/users/username/projects/project/app.ts"
  ],
  "options": {
+  "types": [
+   "*"
+  ],
   "configFilePath": "/users/username/projects/project/tsconfig.json"
  }
 }
@@ -127,7 +134,11 @@ Info seq  [hh:mm:ss:mss] event:
             "deferred": 0,
             "deferredSize": 0
           },
-          "compilerOptions": {},
+          "compilerOptions": {
+            "types": [
+              ""
+            ]
+          },
           "typeAcquisition": {
             "enable": false,
             "include": false,
@@ -310,7 +321,25 @@ Info seq  [hh:mm:ss:mss] event:
           {
             "text": "Cannot find type definition file for 'lib1'.\n  The file is in the program because:\n    Entry point for implicit type library 'lib1'",
             "code": 2688,
-            "category": "error"
+            "category": "error",
+            "relatedInformation": [
+              {
+                "span": {
+                  "start": {
+                    "line": 4,
+                    "offset": 7
+                  },
+                  "end": {
+                    "line": 4,
+                    "offset": 10
+                  },
+                  "file": "/users/username/projects/project/tsconfig.json"
+                },
+                "message": "File is entry point of type library specified here.",
+                "category": "message",
+                "code": 1419
+              }
+            ]
           }
         ]
       }

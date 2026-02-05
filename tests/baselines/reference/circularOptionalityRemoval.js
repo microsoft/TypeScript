@@ -8,6 +8,7 @@ function fn1(x: number | undefined = x > 0 ? x : 0) { }
 function fn2(x?: string = someCondition ? 'value1' : x) { }
 
 //// [circularOptionalityRemoval.js]
+"use strict";
 // Constructed repro
 function fn1(x = x > 0 ? x : 0) { }
 // Report from user

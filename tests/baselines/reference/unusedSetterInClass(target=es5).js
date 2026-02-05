@@ -10,6 +10,7 @@ class Employee {
 }
 
 //// [unusedSetterInClass.js]
+"use strict";
 var Employee = /** @class */ (function () {
     function Employee() {
     }

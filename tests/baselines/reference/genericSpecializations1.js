@@ -18,6 +18,7 @@ class StringFoo3 implements IFoo<string> {
 }
 
 //// [genericSpecializations1.js]
+"use strict";
 class IntFooBad {
     foo(x) { return null; }
 }

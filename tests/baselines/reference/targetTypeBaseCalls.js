@@ -21,6 +21,7 @@ class Bar extends Foo { constructor() { super(function(s) { s = 5 }) } }  // err
 
 
 //// [targetTypeBaseCalls.js]
+"use strict";
 function foo(x) { }
 class Foo {
     constructor(x) { }

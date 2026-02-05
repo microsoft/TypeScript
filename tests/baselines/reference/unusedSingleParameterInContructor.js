@@ -8,6 +8,7 @@ class Dummy {
 }
 
 //// [unusedSingleParameterInContructor.js]
+"use strict";
 class Dummy {
     constructor(person) {
         var unused = 20;

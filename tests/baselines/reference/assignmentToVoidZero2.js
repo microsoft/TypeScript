@@ -21,6 +21,7 @@ j + k
 
 
 //// [assignmentToVoidZero2.js]
+"use strict";
 exports.j = 1;
 exports.k = void 0;
 var o = {};

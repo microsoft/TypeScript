@@ -47,6 +47,7 @@ class E {
 
 
 //// [accessibilityModifiers.js]
+"use strict";
 // No errors
 class C {
     static privateMethod() { }

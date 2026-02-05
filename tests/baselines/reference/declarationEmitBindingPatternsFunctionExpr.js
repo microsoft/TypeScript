@@ -17,6 +17,7 @@ let value = "";
 const shadowedVariable = ({ value: alias }: { value: string }): typeof value => value;
 
 //// [declarationEmitBindingPatternsFunctionExpr.js]
+"use strict";
 // Tempting to remove alias if unused 
 let notReferenced = ({ name: alias }) => { };
 // Resons we can't remove aliases that are not used in the function signature: 

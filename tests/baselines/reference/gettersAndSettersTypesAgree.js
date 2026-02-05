@@ -13,6 +13,7 @@ var o1 = {get Foo(){return 0;}, set Foo(val){}}; // ok - types agree (inference)
 var o2 = {get Foo(){return 0;}, set Foo(val:number){}}; // ok - types agree
 
 //// [gettersAndSettersTypesAgree.js]
+"use strict";
 class C {
     get Foo() { return "foo"; } // ok
     set Foo(foo) { } // ok - type inferred from getter return statement

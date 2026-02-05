@@ -4,5 +4,6 @@
 // newlines are <CR>`\`
 
 //// [templateStringMultiline3.js]
+"use strict";
 // newlines are <CR>
 `\`;

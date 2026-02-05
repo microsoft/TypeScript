@@ -9,6 +9,7 @@ function test({c, d = c}: Record<string, number>) {}
 
 
 //// [useBeforeDeclaration_destructuring.js]
+"use strict";
 a;
 let { a, b = a } = { a: '', b: 1 };
 b;

@@ -12,6 +12,7 @@ class C {
 }
 
 //// [computedPropertyNames14_ES5.js]
+"use strict";
 var b;
 class C {
     [b]() { }

@@ -21,6 +21,7 @@ const enum AfterObject {
 
 
 //// [blockScopedEnumVariablesUseBeforeDef.js]
+"use strict";
 function foo1() {
     return E.A;
     let E;

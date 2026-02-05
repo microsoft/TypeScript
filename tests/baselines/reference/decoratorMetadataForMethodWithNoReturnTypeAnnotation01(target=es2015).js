@@ -16,6 +16,7 @@ class MyClass {
 
 
 //// [decoratorMetadataForMethodWithNoReturnTypeAnnotation01.js]
+"use strict";
 class MyClass {
     constructor(test, test2) {
     }

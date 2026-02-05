@@ -7,6 +7,7 @@ class C {
 }
 
 //// [parserClassDeclaration19.js]
+"use strict";
 class C {
     "foo"() { }
 }

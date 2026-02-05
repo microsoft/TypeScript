@@ -39,6 +39,7 @@ foo = bar;
 
 
 //// [interfaceClassMerging2.js]
+"use strict";
 class Foo {
     classFooMethod() {
         return this;

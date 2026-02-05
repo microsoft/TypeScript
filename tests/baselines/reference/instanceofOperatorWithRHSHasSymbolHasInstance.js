@@ -135,6 +135,7 @@ lhs0 instanceof rhs15 && lhs0;
 
 
 //// [instanceofOperatorWithRHSHasSymbolHasInstance.js]
+"use strict";
 lhs0 instanceof rhs0 && lhs0;
 lhs0 instanceof rhs1 && lhs0;
 lhs0 instanceof rhs2 && lhs0;

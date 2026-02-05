@@ -43,6 +43,7 @@ var r8 = d2[1];
 
 
 //// [derivedClassIncludesInheritedMembers.js]
+"use strict";
 class Base {
     b() { }
     get c() { return ''; }

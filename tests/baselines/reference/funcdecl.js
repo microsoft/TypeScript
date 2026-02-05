@@ -74,6 +74,7 @@ var f2 = () => {
 }
 
 //// [funcdecl.js]
+"use strict";
 function simpleFunc() {
     return "this is my simple func";
 }

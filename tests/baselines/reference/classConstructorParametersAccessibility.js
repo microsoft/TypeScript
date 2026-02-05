@@ -29,6 +29,7 @@ class Derived extends C3 {
 
 
 //// [classConstructorParametersAccessibility.js]
+"use strict";
 class C1 {
     constructor(x) {
         this.x = x;

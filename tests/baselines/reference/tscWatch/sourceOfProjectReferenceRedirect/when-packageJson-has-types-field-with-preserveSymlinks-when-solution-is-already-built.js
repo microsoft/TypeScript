@@ -307,17 +307,9 @@ Output::
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/A/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/A/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

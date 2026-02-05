@@ -6,3 +6,4 @@ declare namespace M {
 }
 
 //// [generatorInAmbientContext2.js]
+"use strict";

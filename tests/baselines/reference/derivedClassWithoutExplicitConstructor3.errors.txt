@@ -1,10 +1,14 @@
 derivedClassWithoutExplicitConstructor3.ts(21,9): error TS2554: Expected 2 arguments, but got 0.
 derivedClassWithoutExplicitConstructor3.ts(22,10): error TS2554: Expected 2 arguments, but got 1.
+derivedClassWithoutExplicitConstructor3.ts(31,5): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+derivedClassWithoutExplicitConstructor3.ts(41,5): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 derivedClassWithoutExplicitConstructor3.ts(44,9): error TS2554: Expected 2 arguments, but got 0.
 derivedClassWithoutExplicitConstructor3.ts(45,10): error TS2554: Expected 2 arguments, but got 1.
 
 
-==== derivedClassWithoutExplicitConstructor3.ts (4 errors) ====
+==== derivedClassWithoutExplicitConstructor3.ts (6 errors) ====
     // automatic constructors with a class hieararchy of depth > 2
     
     class Base {
@@ -42,6 +46,9 @@ derivedClassWithoutExplicitConstructor3.ts(45,10): error TS2554: Expected 2 argu
     
     class D<T> extends Base {
         b: T = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
         constructor(y: T, z: T) {
             super(2);
             this.b = y;
@@ -52,6 +59,9 @@ derivedClassWithoutExplicitConstructor3.ts(45,10): error TS2554: Expected 2 argu
     class D2<T extends Date> extends D<T> {
         x = 2
         y: T = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
     }
     
     var d = new D2(); // error

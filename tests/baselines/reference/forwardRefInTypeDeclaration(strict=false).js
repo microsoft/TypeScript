@@ -30,6 +30,7 @@ const obj2 = { d: 'd' } as const
 
 
 //// [forwardRefInTypeDeclaration.js]
+"use strict";
 const s1 = "x";
 const s2 = "x";
 const s3 = "x";

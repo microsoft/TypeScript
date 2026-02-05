@@ -12,6 +12,7 @@ namespace c {
 
 
 //// [internalAliasVar.js]
+"use strict";
 var a;
 (function (a) {
     a.x = 10;

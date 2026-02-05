@@ -52,6 +52,7 @@ var x;
 
 
 //// [everyTypeWithInitializer.js]
+"use strict";
 class C {
 }
 class D {

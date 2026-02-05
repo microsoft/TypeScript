@@ -11,6 +11,7 @@ function qux(bar: { value: number }) {
 
 
 //// [destructuringPropertyAssignmentNameIsNotAssignmentTarget.js]
+"use strict";
 // test for #10668
 function qux(bar) {
     let foo;

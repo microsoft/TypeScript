@@ -83,6 +83,7 @@ for (var x in Color.Blue) { }
 
 
 //// [for-inStatements.js]
+"use strict";
 var aString;
 for (aString in {}) { }
 var anAny;

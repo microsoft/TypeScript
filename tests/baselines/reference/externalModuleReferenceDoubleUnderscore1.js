@@ -19,3 +19,4 @@ declare module '__timezonecomplete/basics' {
 }
 
 //// [externalModuleReferenceDoubleUnderscore1.js]
+"use strict";

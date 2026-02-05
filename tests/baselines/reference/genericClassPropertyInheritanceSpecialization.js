@@ -78,6 +78,7 @@ class ViewModel<TValue> implements Contract<TValue> {
 
 
 //// [genericClassPropertyInheritanceSpecialization.js]
+"use strict";
 var Portal;
 (function (Portal) {
     var Controls;

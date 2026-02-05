@@ -15,6 +15,7 @@ const bad1: (typeof globalThis)["\"ambientModule\""] = 'ambientModule'
 
 
 //// [globalThisAmbientModules.js]
+"use strict";
 var valueModule;
 (function (valueModule) {
     valueModule.val = 1;

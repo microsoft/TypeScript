@@ -11,6 +11,7 @@ declare namespace JSX {
 }
 declare var React: any;
 >React : any
+>      : ^^^
 
 interface TodoProp {
     id: number;

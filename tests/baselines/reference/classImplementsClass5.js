@@ -20,6 +20,7 @@ c = c2;
 c2 = c;
 
 //// [classImplementsClass5.js]
+"use strict";
 class A {
     constructor() {
         this.x = 1;

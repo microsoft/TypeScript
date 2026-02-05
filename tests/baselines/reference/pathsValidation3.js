@@ -4,4 +4,5 @@
 let x = 1;
 
 //// [a.js]
+"use strict";
 let x = 1;

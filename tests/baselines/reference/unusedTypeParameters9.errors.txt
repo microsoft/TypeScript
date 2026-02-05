@@ -1,0 +1,20 @@
+unusedTypeParameters9.ts(6,15): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+
+
+==== unusedTypeParameters9.ts (1 errors) ====
+    // clas + interface
+    class C1<T> { }
+    interface C1<T> { a: T; }
+    
+    // interface + class
+    class C2<T> { a: T; }
+                  ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+    interface C2<T> { }
+    
+    // interfaces
+    interface C3<T> { a(c: (p: T) => void): void; }
+    interface C3<T> { b: string; }
+    interface C3<T> { c: number; }
+    interface C3<T> { d: boolean;  }
+    interface C3<T> { e: any; }

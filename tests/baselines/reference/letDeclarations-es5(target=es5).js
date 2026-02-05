@@ -15,6 +15,7 @@ for(let l12 = 0; l12 < 9; l12++) { }
 
 
 //// [letDeclarations-es5.js]
+"use strict";
 var l1;
 var l2;
 var l3, l4, l5, l6;

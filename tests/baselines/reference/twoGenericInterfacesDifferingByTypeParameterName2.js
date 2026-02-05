@@ -48,4 +48,5 @@ namespace M3 {
 
 
 //// [twoGenericInterfacesDifferingByTypeParameterName2.js]
+"use strict";
 // type parameter names are relevant when choosing whether to merge interface declarations

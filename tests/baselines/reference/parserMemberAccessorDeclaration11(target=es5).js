@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserMemberAccessorDeclaration11.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

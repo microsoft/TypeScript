@@ -46,6 +46,7 @@ var rh1 = a !== b;
 var rh2 = b !== a;
 
 //// [comparisonOperatorWithSubtypeObjectOnOptionalProperty.js]
+"use strict";
 var a;
 var b;
 // operator <

@@ -12,6 +12,7 @@ abstract class Sub extends Base {
 }
 
 //// [override10.js]
+"use strict";
 class Base {
 }
 class Sub extends Base {

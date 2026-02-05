@@ -18,6 +18,7 @@ var b: A.B; // ok
 
 
 //// [cloduleAcrossModuleDefinitions.js]
+"use strict";
 var A;
 (function (A) {
     class B {

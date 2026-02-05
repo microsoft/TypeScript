@@ -15,6 +15,7 @@ declare module "bar" {
 
 
 //// [declarationEmitModuleWithScopeMarker.js]
+"use strict";
 
 
 //// [declarationEmitModuleWithScopeMarker.d.ts]

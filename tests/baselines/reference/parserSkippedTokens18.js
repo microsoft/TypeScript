@@ -4,4 +4,5 @@
 foo(a \
 
 //// [parserSkippedTokens18.js]
+"use strict";
 foo(a);

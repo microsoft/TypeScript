@@ -1,0 +1,25 @@
+aliasUsageInArray_backbone.ts(2,12): error TS2564: Property 'someData' has no initializer and is not definitely assigned in the constructor.
+
+
+==== aliasUsageInArray_main.ts (0 errors) ====
+    import Backbone = require("./aliasUsageInArray_backbone");
+    import moduleA = require("./aliasUsageInArray_moduleA");
+    interface IHasVisualizationModel {
+        VisualizationModel: typeof Backbone.Model;
+    }
+    
+    var xs: IHasVisualizationModel[] = [moduleA];
+    var xs2: typeof moduleA[] = [moduleA];
+==== aliasUsageInArray_backbone.ts (1 errors) ====
+    export class Model {
+        public someData: string;
+               ~~~~~~~~
+!!! error TS2564: Property 'someData' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+==== aliasUsageInArray_moduleA.ts (0 errors) ====
+    import Backbone = require("./aliasUsageInArray_backbone");
+    export class VisualizationModel extends Backbone.Model {
+        // interesting stuff here
+    }
+    

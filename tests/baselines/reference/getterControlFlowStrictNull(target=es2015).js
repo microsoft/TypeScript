@@ -33,6 +33,7 @@ class C {
 }
 
 //// [getterControlFlowStrictNull.js]
+"use strict";
 class A {
     a() {
         if (Math.random() > 0.5) {

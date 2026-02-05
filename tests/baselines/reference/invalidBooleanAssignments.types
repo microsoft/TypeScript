@@ -26,8 +26,8 @@ var c: void = x;
 >  : ^^^^
 
 var d: typeof undefined = x;
->d : any
->  : ^^^
+>d : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >x : true

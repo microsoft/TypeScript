@@ -12,6 +12,7 @@ function f<T, K extends keyof T>() {
 
 
 //// [computedPropertyNames51_ES5.js]
+"use strict";
 function f() {
     var t;
     var k;

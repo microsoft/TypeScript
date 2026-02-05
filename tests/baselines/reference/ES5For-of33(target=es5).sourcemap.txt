@@ -8,6 +8,7 @@ sources: ES5For-of33.ts
 emittedFile:ES5For-of33.js
 sourceFile:ES5For-of33.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>var __values = (this && this.__values) || function(o) {
 >>>    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
 >>>    if (m) return m.call(o);
@@ -54,22 +55,22 @@ sourceFile:ES5For-of33.ts
 14>                                           
 15>                                                           ) 
 16>                                                                                       {
-1 >Emitted(14, 5) Source(1, 1) + SourceIndex(0)
-2 >Emitted(14, 10) Source(1, 15) + SourceIndex(0)
-3 >Emitted(14, 14) Source(1, 15) + SourceIndex(0)
-4 >Emitted(14, 19) Source(1, 15) + SourceIndex(0)
-5 >Emitted(14, 28) Source(1, 15) + SourceIndex(0)
-6 >Emitted(14, 29) Source(1, 16) + SourceIndex(0)
-7 >Emitted(14, 32) Source(1, 19) + SourceIndex(0)
-8 >Emitted(14, 34) Source(1, 21) + SourceIndex(0)
-9 >Emitted(14, 37) Source(1, 24) + SourceIndex(0)
-10>Emitted(14, 39) Source(1, 26) + SourceIndex(0)
-11>Emitted(14, 42) Source(1, 29) + SourceIndex(0)
-12>Emitted(14, 43) Source(1, 30) + SourceIndex(0)
-13>Emitted(14, 44) Source(1, 30) + SourceIndex(0)
-14>Emitted(14, 60) Source(1, 30) + SourceIndex(0)
-15>Emitted(14, 88) Source(1, 32) + SourceIndex(0)
-16>Emitted(14, 89) Source(1, 33) + SourceIndex(0)
+1 >Emitted(15, 5) Source(1, 1) + SourceIndex(0)
+2 >Emitted(15, 10) Source(1, 15) + SourceIndex(0)
+3 >Emitted(15, 14) Source(1, 15) + SourceIndex(0)
+4 >Emitted(15, 19) Source(1, 15) + SourceIndex(0)
+5 >Emitted(15, 28) Source(1, 15) + SourceIndex(0)
+6 >Emitted(15, 29) Source(1, 16) + SourceIndex(0)
+7 >Emitted(15, 32) Source(1, 19) + SourceIndex(0)
+8 >Emitted(15, 34) Source(1, 21) + SourceIndex(0)
+9 >Emitted(15, 37) Source(1, 24) + SourceIndex(0)
+10>Emitted(15, 39) Source(1, 26) + SourceIndex(0)
+11>Emitted(15, 42) Source(1, 29) + SourceIndex(0)
+12>Emitted(15, 43) Source(1, 30) + SourceIndex(0)
+13>Emitted(15, 44) Source(1, 30) + SourceIndex(0)
+14>Emitted(15, 60) Source(1, 30) + SourceIndex(0)
+15>Emitted(15, 88) Source(1, 32) + SourceIndex(0)
+16>Emitted(15, 89) Source(1, 33) + SourceIndex(0)
 ---
 >>>        var v = _c.value;
 1 >^^^^^^^^
@@ -80,10 +81,10 @@ sourceFile:ES5For-of33.ts
 2 >        var 
 3 >            v
 4 >             
-1 >Emitted(15, 9) Source(1, 6) + SourceIndex(0)
-2 >Emitted(15, 13) Source(1, 10) + SourceIndex(0)
-3 >Emitted(15, 14) Source(1, 11) + SourceIndex(0)
-4 >Emitted(15, 25) Source(1, 11) + SourceIndex(0)
+1 >Emitted(16, 9) Source(1, 6) + SourceIndex(0)
+2 >Emitted(16, 13) Source(1, 10) + SourceIndex(0)
+3 >Emitted(16, 14) Source(1, 11) + SourceIndex(0)
+4 >Emitted(16, 25) Source(1, 11) + SourceIndex(0)
 ---
 >>>        console.log(v);
 1 >^^^^^^^^
@@ -103,14 +104,14 @@ sourceFile:ES5For-of33.ts
 6 >                    v
 7 >                     )
 8 >                      ;
-1 >Emitted(16, 9) Source(2, 5) + SourceIndex(0)
-2 >Emitted(16, 16) Source(2, 12) + SourceIndex(0)
-3 >Emitted(16, 17) Source(2, 13) + SourceIndex(0)
-4 >Emitted(16, 20) Source(2, 16) + SourceIndex(0)
-5 >Emitted(16, 21) Source(2, 17) + SourceIndex(0)
-6 >Emitted(16, 22) Source(2, 18) + SourceIndex(0)
-7 >Emitted(16, 23) Source(2, 19) + SourceIndex(0)
-8 >Emitted(16, 24) Source(2, 20) + SourceIndex(0)
+1 >Emitted(17, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(17, 16) Source(2, 12) + SourceIndex(0)
+3 >Emitted(17, 17) Source(2, 13) + SourceIndex(0)
+4 >Emitted(17, 20) Source(2, 16) + SourceIndex(0)
+5 >Emitted(17, 21) Source(2, 17) + SourceIndex(0)
+6 >Emitted(17, 22) Source(2, 18) + SourceIndex(0)
+7 >Emitted(17, 23) Source(2, 19) + SourceIndex(0)
+8 >Emitted(17, 24) Source(2, 20) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -118,8 +119,8 @@ sourceFile:ES5For-of33.ts
 1 >
   >
 2 >    }
-1 >Emitted(17, 5) Source(3, 1) + SourceIndex(0)
-2 >Emitted(17, 6) Source(3, 2) + SourceIndex(0)
+1 >Emitted(18, 5) Source(3, 1) + SourceIndex(0)
+2 >Emitted(18, 6) Source(3, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_1_1) { e_1 = { error: e_1_1 }; }

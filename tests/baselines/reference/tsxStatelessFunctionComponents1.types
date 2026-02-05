@@ -35,8 +35,8 @@ function Greet(x: {name: string}) {
 >    : ^^^
 }
 function Meet({name = 'world'}) {
->Meet : ({ name }: { name?: string; }) => JSX.Element
->     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Meet : ({ name }: { name?: string | undefined; }) => JSX.Element
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >'world' : "world"
@@ -109,16 +109,16 @@ let c = <Meet />;
 >  : ^^^^^^^^^^^
 ><Meet /> : JSX.Element
 >         : ^^^^^^^^^^^
->Meet : ({ name }: { name?: string; }) => JSX.Element
->     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Meet : ({ name }: { name?: string | undefined; }) => JSX.Element
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let c1 = <Meet extra-prop/>;
 >c1 : JSX.Element
 >   : ^^^^^^^^^^^
 ><Meet extra-prop/> : JSX.Element
 >                   : ^^^^^^^^^^^
->Meet : ({ name }: { name?: string; }) => JSX.Element
->     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Meet : ({ name }: { name?: string | undefined; }) => JSX.Element
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >extra-prop : true
 >           : ^^^^
 
@@ -128,8 +128,8 @@ let d = <Meet name='me' />;
 >  : ^^^^^^^^^^^
 ><Meet name='me' /> : JSX.Element
 >                   : ^^^^^^^^^^^
->Meet : ({ name }: { name?: string; }) => JSX.Element
->     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Meet : ({ name }: { name?: string | undefined; }) => JSX.Element
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 
@@ -139,8 +139,8 @@ let e = <Meet name={42} />;
 >  : ^^^^^^^^^^^
 ><Meet name={42} /> : JSX.Element
 >                   : ^^^^^^^^^^^
->Meet : ({ name }: { name?: string; }) => JSX.Element
->     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Meet : ({ name }: { name?: string | undefined; }) => JSX.Element
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : number
 >     : ^^^^^^
 >42 : 42
@@ -152,8 +152,8 @@ let f = <Meet naaaaaaame='no' />;
 >  : ^^^^^^^^^^^
 ><Meet naaaaaaame='no' /> : JSX.Element
 >                         : ^^^^^^^^^^^
->Meet : ({ name }: { name?: string; }) => JSX.Element
->     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Meet : ({ name }: { name?: string | undefined; }) => JSX.Element
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >naaaaaaame : string
 >           : ^^^^^^
 

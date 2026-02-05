@@ -4,4 +4,5 @@
 var v = { get Foo() { } };
 
 //// [parserES3Accessors3.js]
+"use strict";
 var v = { get Foo() { } };

@@ -10,6 +10,7 @@ namespace Salt {
 
 
 //// [memberScope.js]
+"use strict";
 var Salt;
 (function (Salt) {
     class Pepper {

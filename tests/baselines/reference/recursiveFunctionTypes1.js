@@ -6,6 +6,7 @@ class C {
 }
 
 //// [recursiveFunctionTypes1.js]
+"use strict";
 class C {
     static g(t) { }
 }

@@ -14,6 +14,7 @@ type G = (x: any) => any;
 >G : G
 >  : ^
 >x : any
+>  : ^^^
 
 var fg: F & G;
 >fg : F & G
@@ -39,7 +40,9 @@ var x: string;
 
 var y = gf("abc");
 >y : any
+>  : ^^^
 >gf("abc") : any
+>          : ^^^
 >gf : G & F
 >   : ^^^^^
 >"abc" : "abc"
@@ -47,4 +50,5 @@ var y = gf("abc");
 
 var y: any;
 >y : any
+>  : ^^^
 

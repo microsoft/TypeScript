@@ -6,5 +6,6 @@ class C {
 }
 
 //// [indexSignatureWithInitializer1.js]
+"use strict";
 class C {
 }

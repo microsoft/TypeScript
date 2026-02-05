@@ -11,6 +11,7 @@ with (x) {
 }
 
 //// [withStatementNestedScope.js]
+"use strict";
 var x = 1;
 with (x) {
     function f(a) {

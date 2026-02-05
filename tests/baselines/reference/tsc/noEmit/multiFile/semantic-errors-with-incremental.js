@@ -319,6 +319,7 @@ Output::
 }
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 const a = "hello";
 
 

@@ -9,6 +9,7 @@ const foo: { new(): Foo } = Foo;
 
 
 //// [assignmentCompatability44.js]
+"use strict";
 class Foo {
     constructor(x) { }
 }

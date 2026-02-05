@@ -106,8 +106,8 @@ class HelloWorld {
 >             : ^     ^^  ^^^^^  
 >event : C3
 >      : ^^
->undefined! : undefined
->           : ^^^^^^^^^
+>undefined! : never
+>           : ^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 }

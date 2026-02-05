@@ -75,6 +75,7 @@ function foo6<T extends U, U, V>(t: T, u: U, v: V) {
 }
 
 //// [typeParameterAssignability2.js]
+"use strict";
 // type parameters are not assignable to one another unless directly or indirectly constrained to one another
 function foo(t, u) {
     t = u; // error

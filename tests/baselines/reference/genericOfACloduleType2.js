@@ -18,6 +18,7 @@ namespace N {
 }
 
 //// [genericOfACloduleType2.js]
+"use strict";
 class G {
     bar(x) { return x; }
 }

@@ -6,4 +6,5 @@ var x: {
 }
 
 //// [unusedTypeParameters4.js]
+"use strict";
 var x;

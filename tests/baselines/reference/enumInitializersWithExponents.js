@@ -12,3 +12,4 @@ declare enum E {
 }
 
 //// [enumInitializersWithExponents.js]
+"use strict";

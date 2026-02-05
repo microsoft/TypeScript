@@ -9,4 +9,5 @@ declare var tag: I;
 tag `Hello world!`;
 
 //// [taggedTemplateWithConstructableTag02.js]
+"use strict";
 tag `Hello world!`;

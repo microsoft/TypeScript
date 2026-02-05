@@ -152,6 +152,7 @@ class publicClassImplementingFromPrivateModuleInterface {
 }
 exports.publicClassImplementingFromPrivateModuleInterface = publicClassImplementingFromPrivateModuleInterface;
 //// [privacyClassImplementsClauseDeclFile_GlobalFile.js]
+"use strict";
 var publicModuleInGlobal;
 (function (publicModuleInGlobal) {
     class privateClassImplementingPublicInterfaceInModule {

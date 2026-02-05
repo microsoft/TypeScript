@@ -116,6 +116,7 @@ for (const y = 0; y < 1;) {
 }
 
 //// [capturedLetConstInLoop1_ES6.js]
+"use strict";
 //==== let
 for (let x in {}) {
     (function () { return x; });

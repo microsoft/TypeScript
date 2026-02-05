@@ -1,0 +1,37 @@
+button.tsx(6,16): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+button.tsx(6,35): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== react.d.ts (0 errors) ====
+    declare module 'react' {
+    	class Component<T, U> { }
+    }
+    
+==== app.tsx (0 errors) ====
+    import * as React from 'react';
+    
+    // Should see var button_1 = require('./button') here
+    import { Button } from './button';
+    
+    export class App extends React.Component<any, any> {
+    
+        render() {
+            return <Button />;
+        }
+    
+    }
+    
+==== button.tsx (2 errors) ====
+    import * as React from 'react';
+    
+    export class Button extends React.Component<any, any> {
+    
+        render() {
+            return <button>Some button</button>;
+                   ~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                                      ~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+        }
+    
+    }

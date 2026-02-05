@@ -1,10 +1,15 @@
 error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+decoratorOnClassConstructorParameter1.ts(4,18): error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+  Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
 
 
 !!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== decoratorOnClassConstructorParameter1.ts (0 errors) ====
+==== decoratorOnClassConstructorParameter1.ts (1 errors) ====
     declare function dec(target: Function, propertyKey: string | symbol, parameterIndex: number): void;
     
     class C {
         constructor(@dec p: number) {}
+                     ~~~
+!!! error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+!!! error TS1239:   Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
     }

@@ -15,6 +15,7 @@ function foo4([...r] = []) {
 
 
 //// [restElementWithNullInitializer.js]
+"use strict";
 function foo1(_a) {
     var r = (_a === void 0 ? null : _a).slice(0);
 }

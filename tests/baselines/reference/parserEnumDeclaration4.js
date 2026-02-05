@@ -5,6 +5,7 @@ enum void {
 }
 
 //// [parserEnumDeclaration4.js]
+"use strict";
 var ;
 (function () {
 })( || ( = {}));

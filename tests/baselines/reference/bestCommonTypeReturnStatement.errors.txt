@@ -1,0 +1,21 @@
+bestCommonTypeReturnStatement.ts(11,32): error TS2322: Type 'null' is not assignable to type 'IPromise<void>'.
+bestCommonTypeReturnStatement.ts(12,31): error TS2322: Type 'null' is not assignable to type 'IPromise<any>'.
+
+
+==== bestCommonTypeReturnStatement.ts (2 errors) ====
+    interface IPromise<T> {
+        then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise<any>;
+    }
+    
+    function f() {
+        if (true) return b();
+        return d();
+    }
+    
+    
+    function b(): IPromise<void> { return null; }
+                                   ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'IPromise<void>'.
+    function d(): IPromise<any> { return null; }
+                                  ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'IPromise<any>'.

@@ -65,6 +65,7 @@ var r8 = d2[1];
 
 
 //// [derivedClassOverridesPublicMembers.js]
+"use strict";
 var x;
 var y;
 class Base {

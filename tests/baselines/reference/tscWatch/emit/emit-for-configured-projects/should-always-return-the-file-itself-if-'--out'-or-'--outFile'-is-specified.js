@@ -60,6 +60,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/projects/a/b/out.js]
+"use strict";
 System.register("moduleFile1", [], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
@@ -107,14 +108,6 @@ System.register("moduleFile2", [], function (exports_4, context_4) {
 });
 
 
-
-PolledWatches::
-/home/src/projects/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/a/b/file1Consumer1.ts: *new*
@@ -198,6 +191,7 @@ Output::
 
 
 //// [/home/src/projects/a/b/out.js]
+"use strict";
 System.register("moduleFile1", [], function (exports_1, context_1) {
     "use strict";
     var T;

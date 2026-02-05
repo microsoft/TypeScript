@@ -1,4 +1,6 @@
 // @strict: false
+// @ignoreDeprecations: 6.0
+// @alwaysStrict: true, false
 // @allowUnreachableCode: true
 // @target: ES6
 

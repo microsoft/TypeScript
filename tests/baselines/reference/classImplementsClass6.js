@@ -24,6 +24,7 @@ c.bar(); // error
 c2.bar(); // should error
 
 //// [classImplementsClass6.js]
+"use strict";
 class A {
     static bar() {
         return "";

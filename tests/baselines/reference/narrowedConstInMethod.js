@@ -22,6 +22,7 @@ function f2() {
 
 
 //// [narrowedConstInMethod.js]
+"use strict";
 // Fixes #10501, possibly null 'x'
 function f() {
     const x = {};

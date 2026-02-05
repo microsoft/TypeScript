@@ -16,6 +16,7 @@ interface I {
 }
 
 //// [stringIndexerAndConstructor.js]
+"use strict";
 class C {
     constructor() { }
     static v() { }

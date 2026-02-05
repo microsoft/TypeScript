@@ -96,7 +96,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "property",
-    "name": "(property) A2.a?: number",
+    "name": "(property) A2.a?: number | undefined",
     "displayParts": [
      {
       "text": "(",
@@ -140,6 +140,22 @@
      },
      {
       "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "undefined",
       "kind": "keyword"
      }
     ]
@@ -224,7 +240,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "property",
-    "name": "(property) A2.a?: number",
+    "name": "(property) A2.a?: number | undefined",
     "displayParts": [
      {
       "text": "(",
@@ -268,6 +284,22 @@
      },
      {
       "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "undefined",
       "kind": "keyword"
      }
     ]

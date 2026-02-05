@@ -1,8 +1,10 @@
 classWithoutExplicitConstructor.ts(7,16): error TS2554: Expected 0 arguments, but got 1.
+classWithoutExplicitConstructor.ts(11,5): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 classWithoutExplicitConstructor.ts(15,16): error TS2554: Expected 0 arguments, but got 1.
 
 
-==== classWithoutExplicitConstructor.ts (2 errors) ====
+==== classWithoutExplicitConstructor.ts (3 errors) ====
     class C {
         x = 1
         y = 'hello';
@@ -16,6 +18,9 @@ classWithoutExplicitConstructor.ts(15,16): error TS2554: Expected 0 arguments, b
     class D<T extends Date> {
         x = 2
         y: T = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
     }
     
     var d = new D();

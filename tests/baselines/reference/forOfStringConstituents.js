@@ -11,5 +11,6 @@ declare let x: AB, y: CD;
 for (y of x.y);
 
 //// [forOfStringConstituents.js]
+"use strict";
 for (y of x.y)
     ;

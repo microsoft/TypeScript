@@ -13,6 +13,7 @@ namespace B {
 }
 
 //// [unusedImports10.js]
+"use strict";
 var A;
 (function (A) {
     class Calculator {

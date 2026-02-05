@@ -74,20 +74,12 @@ sourceFile:ref/a.ts
 3 >Emitted(27, 14) Source(1, 1) + SourceIndex(0)
 4 >Emitted(27, 18) Source(1, 19) + SourceIndex(0)
 ---
->>>            exports_1("A", A);
->>>        }
-1->^^^^^^^^
-2 >        ^
-1->
-  >
-2 >        
-1->Emitted(29, 9) Source(2, 1) + SourceIndex(0)
-2 >Emitted(29, 10) Source(2, 2) + SourceIndex(0)
----
 -------------------------------------------------------------------
 emittedFile:all.js
 sourceFile:b.ts
 -------------------------------------------------------------------
+>>>            exports_1("A", A);
+>>>        }
 >>>    };
 >>>});
 >>>System.register("b", ["ref/a"], function (exports_2, context_2) {
@@ -102,11 +94,11 @@ sourceFile:b.ts
 >>>        ],
 >>>        execute: function () {
 >>>            B = /** @class */ (function (_super) {
-1 >^^^^^^^^^^^^
+1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >import {A} from "./ref/a";
+1->import {A} from "./ref/a";
   >
-1 >Emitted(43, 13) Source(2, 1) + SourceIndex(1)
+1->Emitted(43, 13) Source(2, 1) + SourceIndex(1)
 ---
 >>>                __extends(B, _super);
 1->^^^^^^^^^^^^^^^^
@@ -163,13 +155,6 @@ sourceFile:b.ts
 ---
 >>>            exports_2("B", B);
 >>>        }
-1->^^^^^^^^
-2 >        ^
-1->
-2 >        
-1->Emitted(51, 9) Source(2, 29) + SourceIndex(1)
-2 >Emitted(51, 10) Source(2, 30) + SourceIndex(1)
----
 >>>    };
 >>>});
 >>>//# sourceMappingURL=all.js.map

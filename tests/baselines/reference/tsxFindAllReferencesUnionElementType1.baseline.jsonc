@@ -22,7 +22,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "var",
-    "name": "var SFCComp: ((prop: {\n    x: number;\n}) => JSX.Element) | ((prop: {\n    x: boolean;\n}) => JSX.Element)",
+    "name": "var SFCComp: (prop: {\n    x: number;\n}) => JSX.Element",
     "displayParts": [
      {
       "text": "var",
@@ -43,10 +43,6 @@
      {
       "text": " ",
       "kind": "space"
-     },
-     {
-      "text": "(",
-      "kind": "punctuation"
      },
      {
       "text": "(",
@@ -131,114 +127,6 @@
      {
       "text": "Element",
       "kind": "interfaceName"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "|",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "(",
-      "kind": "punctuation"
-     },
-     {
-      "text": "(",
-      "kind": "punctuation"
-     },
-     {
-      "text": "prop",
-      "kind": "parameterName"
-     },
-     {
-      "text": ":",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "{",
-      "kind": "punctuation"
-     },
-     {
-      "text": "\n",
-      "kind": "lineBreak"
-     },
-     {
-      "text": "    ",
-      "kind": "space"
-     },
-     {
-      "text": "x",
-      "kind": "propertyName"
-     },
-     {
-      "text": ":",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "boolean",
-      "kind": "keyword"
-     },
-     {
-      "text": ";",
-      "kind": "punctuation"
-     },
-     {
-      "text": "\n",
-      "kind": "lineBreak"
-     },
-     {
-      "text": "}",
-      "kind": "punctuation"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "=>",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "JSX",
-      "kind": "moduleName"
-     },
-     {
-      "text": ".",
-      "kind": "punctuation"
-     },
-     {
-      "text": "Element",
-      "kind": "interfaceName"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
      }
     ]
    }
@@ -270,7 +158,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "var",
-    "name": "var SFCComp: ((prop: {\n    x: number;\n}) => JSX.Element) | ((prop: {\n    x: boolean;\n}) => JSX.Element)",
+    "name": "var SFCComp: (prop: {\n    x: number;\n}) => JSX.Element",
     "displayParts": [
      {
       "text": "var",
@@ -291,10 +179,6 @@
      {
       "text": " ",
       "kind": "space"
-     },
-     {
-      "text": "(",
-      "kind": "punctuation"
      },
      {
       "text": "(",
@@ -379,114 +263,6 @@
      {
       "text": "Element",
       "kind": "interfaceName"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "|",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "(",
-      "kind": "punctuation"
-     },
-     {
-      "text": "(",
-      "kind": "punctuation"
-     },
-     {
-      "text": "prop",
-      "kind": "parameterName"
-     },
-     {
-      "text": ":",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "{",
-      "kind": "punctuation"
-     },
-     {
-      "text": "\n",
-      "kind": "lineBreak"
-     },
-     {
-      "text": "    ",
-      "kind": "space"
-     },
-     {
-      "text": "x",
-      "kind": "propertyName"
-     },
-     {
-      "text": ":",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "boolean",
-      "kind": "keyword"
-     },
-     {
-      "text": ";",
-      "kind": "punctuation"
-     },
-     {
-      "text": "\n",
-      "kind": "lineBreak"
-     },
-     {
-      "text": "}",
-      "kind": "punctuation"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "=>",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "JSX",
-      "kind": "moduleName"
-     },
-     {
-      "text": ".",
-      "kind": "punctuation"
-     },
-     {
-      "text": "Element",
-      "kind": "interfaceName"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
      }
     ]
    }
@@ -528,7 +304,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "var",
-    "name": "var SFCComp: ((prop: {\n    x: number;\n}) => JSX.Element) | ((prop: {\n    x: boolean;\n}) => JSX.Element)",
+    "name": "var SFCComp: (prop: {\n    x: number;\n}) => JSX.Element",
     "displayParts": [
      {
       "text": "var",
@@ -549,10 +325,6 @@
      {
       "text": " ",
       "kind": "space"
-     },
-     {
-      "text": "(",
-      "kind": "punctuation"
      },
      {
       "text": "(",
@@ -637,114 +409,6 @@
      {
       "text": "Element",
       "kind": "interfaceName"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "|",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "(",
-      "kind": "punctuation"
-     },
-     {
-      "text": "(",
-      "kind": "punctuation"
-     },
-     {
-      "text": "prop",
-      "kind": "parameterName"
-     },
-     {
-      "text": ":",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "{",
-      "kind": "punctuation"
-     },
-     {
-      "text": "\n",
-      "kind": "lineBreak"
-     },
-     {
-      "text": "    ",
-      "kind": "space"
-     },
-     {
-      "text": "x",
-      "kind": "propertyName"
-     },
-     {
-      "text": ":",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "boolean",
-      "kind": "keyword"
-     },
-     {
-      "text": ";",
-      "kind": "punctuation"
-     },
-     {
-      "text": "\n",
-      "kind": "lineBreak"
-     },
-     {
-      "text": "}",
-      "kind": "punctuation"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "=>",
-      "kind": "punctuation"
-     },
-     {
-      "text": " ",
-      "kind": "space"
-     },
-     {
-      "text": "JSX",
-      "kind": "moduleName"
-     },
-     {
-      "text": ".",
-      "kind": "punctuation"
-     },
-     {
-      "text": "Element",
-      "kind": "interfaceName"
-     },
-     {
-      "text": ")",
-      "kind": "punctuation"
      }
     ]
    }

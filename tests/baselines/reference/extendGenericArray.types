@@ -10,8 +10,8 @@ interface Array<T> {
 var arr: string[] = [];
 >arr : string[]
 >    : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 var x: number = arr.foo();
 >x : number

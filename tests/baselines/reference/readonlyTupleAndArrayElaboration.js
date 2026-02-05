@@ -76,6 +76,7 @@ const at8: [1] = at7;
 
 
 //// [readonlyTupleAndArrayElaboration.js]
+"use strict";
 // @strict
 // #Repro from #30839
 let point = [3, 4];

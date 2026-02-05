@@ -14,6 +14,7 @@ class A {
 }
 
 //// [checkSwitchStatementIfCaseTypeIsString.js]
+"use strict";
 class A {
     doIt(x) {
         x.forEach((v) => {

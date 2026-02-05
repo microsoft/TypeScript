@@ -129,6 +129,7 @@ Output::
 
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 const a = "hello";
 
 
@@ -207,6 +208,7 @@ Output::
 
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 const a = class {
     p = 10;
 };

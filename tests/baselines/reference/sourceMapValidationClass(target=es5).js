@@ -21,6 +21,7 @@ class Greeter {
 }
 
 //// [sourceMapValidationClass.js]
+"use strict";
 var Greeter = /** @class */ (function () {
     function Greeter(greeting) {
         var b = [];

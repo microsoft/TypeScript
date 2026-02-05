@@ -7,6 +7,7 @@ for (var v of a) {
 }
 
 //// [ES5For-of24.js]
+"use strict";
 var a = [1, 2, 3];
 for (var v of a) {
     let a = 0;

@@ -39,6 +39,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/class1.js]
+"use strict";
 const a = 1;
 console.log(a);
 

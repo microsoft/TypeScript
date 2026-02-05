@@ -11,6 +11,7 @@ class C {
 }
 
 //// [computedPropertyNamesSourceMap1_ES6.js]
+"use strict";
 class C {
     ["hello"]() {
         debugger;

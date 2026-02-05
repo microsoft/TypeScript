@@ -9,6 +9,7 @@ const example = {
 
 
 //// [emitThisInObjectLiteralGetter.js]
+"use strict";
 const example = {
     get foo() {
         return item => this.bar(item);

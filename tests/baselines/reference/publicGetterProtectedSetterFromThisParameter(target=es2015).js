@@ -39,6 +39,7 @@ function bar(this: A, a: A, b: B) {
 
 
 //// [publicGetterProtectedSetterFromThisParameter.js]
+"use strict";
 class A {
     get x() { return 0; }
     set x(v) { }

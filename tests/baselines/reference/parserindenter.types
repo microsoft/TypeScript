@@ -673,8 +673,8 @@ namespace Formatting {
 >       : ^^^
 
                 if (node.CanIndent() && token.Span.span.start() == node.AuthorNode.Details.StartOffset) {
->node.CanIndent() && token.Span.span.start() == node.AuthorNode.Details.StartOffset : boolean
->                                                                                   : ^^^^^^^
+>node.CanIndent() && token.Span.span.start() == node.AuthorNode.Details.StartOffset : any
+>                                                                                   : ^^^
 >node.CanIndent() : any
 >                 : ^^^
 >node.CanIndent : any

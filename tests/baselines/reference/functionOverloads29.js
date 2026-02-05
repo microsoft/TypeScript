@@ -8,5 +8,6 @@ var x = foo();
 
 
 //// [functionOverloads29.js]
+"use strict";
 function foo(bar) { return bar; }
 var x = foo();

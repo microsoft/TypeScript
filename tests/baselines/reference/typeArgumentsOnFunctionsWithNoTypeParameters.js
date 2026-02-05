@@ -10,6 +10,7 @@ function foo<T, U>(f: (v: T) => U) {
 
 
 //// [typeArgumentsOnFunctionsWithNoTypeParameters.js]
+"use strict";
 function foo(f) {
     var r1 = f(1);
     var r2 = f(1);

@@ -7,6 +7,7 @@ x = a;
 a = x;
 
 //// [assignFromBooleanInterface.js]
+"use strict";
 var x = true;
 x = a;
 a = x;

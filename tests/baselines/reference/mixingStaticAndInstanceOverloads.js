@@ -38,6 +38,7 @@ class C5 {
 }
 
 //// [mixingStaticAndInstanceOverloads.js]
+"use strict";
 class C1 {
     static foo1(a) { }
 }

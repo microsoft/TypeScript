@@ -11,6 +11,7 @@ namespace M {
 }
 
 //// [overloadsInDifferentContainersDisagreeOnAmbient.js]
+"use strict";
 var M;
 (function (M) {
     function f() { }

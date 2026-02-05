@@ -11,6 +11,7 @@ for (let {[a]: a} = { }; false; ) continue;
 let {[b]: b} = { };
 
 //// [blockScopedBindingUsedBeforeDef.js]
+"use strict";
 // 1:
 for (let { [a]: a } of [{}])
     continue;

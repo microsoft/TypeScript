@@ -124,8 +124,8 @@ export declare function __decorate(decorators: Function[], target: any, key?: st
 >decorators : Function[]
 >           : ^^^^^^^^^^
 >target : any
->key : string | symbol
->    : ^^^^^^^^^^^^^^^
+>key : string | symbol | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >desc : any
 
 export declare function __param(paramIndex: number, decorator: Function): Function;

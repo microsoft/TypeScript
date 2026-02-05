@@ -30,6 +30,7 @@ function f(): R2 { return 0; }
 
 
 //// [circularTypeofWithVarOrFunc.js]
+"use strict";
 var varOfAliasedType1;
 var varOfAliasedType2;
 function func() { return null; }

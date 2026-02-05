@@ -6,6 +6,7 @@ namespace X {
 }
 
 //// [separate1-2.js]
+"use strict";
 var X;
 (function (X) {
     function f() { }

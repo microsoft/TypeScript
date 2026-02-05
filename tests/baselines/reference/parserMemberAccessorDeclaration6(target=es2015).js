@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserMemberAccessorDeclaration6.js]
+"use strict";
 class C {
     set 0(i) { }
 }

@@ -20,6 +20,7 @@ var c = foo2 `${1}`;
 var d = foo2([], 1);
 
 //// [taggedTemplateStringsWithOverloadResolution2.js]
+"use strict";
 function foo1(...stuff) {
     return undefined;
 }

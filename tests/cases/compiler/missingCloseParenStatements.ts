@@ -1,5 +1,7 @@
 // @target: es2015
+// @ignoreDeprecations: 6.0
 // @strict: false
+// @alwaysStrict: true, false
 var a1, a2, a3 = 0;
 if ( a1 && (a2 + a3 > 0) {
     while( (a2 > 0) && a1

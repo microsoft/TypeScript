@@ -1,0 +1,21 @@
+stringLiteralMatchedInSwitch01.ts(5,9): error TS2454: Variable 'foo' is used before being assigned.
+stringLiteralMatchedInSwitch01.ts(10,16): error TS2454: Variable 'foo' is used before being assigned.
+
+
+==== stringLiteralMatchedInSwitch01.ts (2 errors) ====
+    type S = "a" | "b";
+    type T = S[] | S;
+    
+    var foo: T;
+    switch (foo) {
+            ~~~
+!!! error TS2454: Variable 'foo' is used before being assigned.
+        case "a":
+        case "b":
+            break;
+        default:
+            foo = (foo as S[])[0];
+                   ~~~
+!!! error TS2454: Variable 'foo' is used before being assigned.
+            break;
+    }

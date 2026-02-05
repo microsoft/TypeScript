@@ -12,6 +12,7 @@ class greeter {
 }
 
 //// [unusedPrivateVariableInClass5.js]
+"use strict";
 class greeter {
     constructor() {
         this.x;

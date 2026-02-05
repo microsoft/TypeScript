@@ -114,6 +114,7 @@ var r8b3 = b3 !== a3;
 var r8b4 = b4 !== a4;
 
 //// [comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.js]
+"use strict";
 class Base {
 }
 class Derived extends Base {

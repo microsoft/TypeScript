@@ -16,6 +16,7 @@ namespace c {
 }
 
 //// [internalAliasUninitializedModule.js]
+"use strict";
 var c;
 (function (c) {
     c.x.foo();

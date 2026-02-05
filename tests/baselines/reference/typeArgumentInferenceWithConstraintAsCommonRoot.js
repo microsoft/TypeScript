@@ -10,5 +10,6 @@ declare var e: Elephant;
 f(g, e); // valid because both Giraffe and Elephant satisfy the constraint. T is Animal
 
 //// [typeArgumentInferenceWithConstraintAsCommonRoot.js]
+"use strict";
 function f(x, y) { return undefined; }
 f(g, e); // valid because both Giraffe and Elephant satisfy the constraint. T is Animal

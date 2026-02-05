@@ -53,6 +53,7 @@ const foo12 = { a: E5.a as const }
 
 
 //// [constantEnumAssert.js]
+"use strict";
 var E1;
 (function (E1) {
     E1[E1["a"] = 0] = "a";

@@ -44,6 +44,7 @@ Found 1 error in tsconfig.json[90m:4[0m
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/users/username/projects/project/out.js]
+"use strict";
 const x = 10;
 const y = 20;
 

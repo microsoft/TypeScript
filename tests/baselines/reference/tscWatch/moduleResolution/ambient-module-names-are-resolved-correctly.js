@@ -197,10 +197,6 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefine
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymodule/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/package.json 2000 undefined File location affecting resolution
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Type roots
 ../../tslibs/TS/Lib/lib.es2024.full.d.ts
   Default library for target 'es2024'
 witha/node_modules/mymodule/index.d.ts
@@ -223,13 +219,9 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project
 PolledWatches::
 /home/src/workspaces/node_modules: *new*
   {"pollingInterval":500}
-/home/src/workspaces/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/workspaces/package.json: *new*
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/workspaces/project/package.json: *new*
   {"pollingInterval":2000}
@@ -517,13 +509,9 @@ withb/b.ts
 PolledWatches::
 /home/src/workspaces/node_modules:
   {"pollingInterval":500}
-/home/src/workspaces/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/workspaces/package.json:
   {"pollingInterval":2000}
 /home/src/workspaces/project/node_modules:
-  {"pollingInterval":500}
-/home/src/workspaces/project/node_modules/@types:
   {"pollingInterval":500}
 /home/src/workspaces/project/package.json:
   {"pollingInterval":2000}

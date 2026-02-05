@@ -13,6 +13,7 @@ class B extends A {
 
 
 //// [a.js]
+"use strict";
 class A {
     foo() { }
 }

@@ -100,17 +100,9 @@ export const theNum = 42;
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/pkg1/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -237,17 +229,9 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/pkg1/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -380,17 +364,9 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists -
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/pkg1/node_modules:
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

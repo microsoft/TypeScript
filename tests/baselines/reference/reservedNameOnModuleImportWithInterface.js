@@ -11,3 +11,4 @@ declare namespace test {
 
 
 //// [reservedNameOnModuleImportWithInterface.js]
+"use strict";

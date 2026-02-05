@@ -25,6 +25,7 @@ var s = obj.method1(0);
 var s1 = obj.method2("0");
 
 //// [0.js]
+"use strict";
 // @ts-check
 var lol;
 const obj = {

@@ -40,19 +40,15 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/project/commonFile1.js]
+"use strict";
 let x = 1;
 
 
 //// [/user/username/projects/project/commonFile2.js]
+"use strict";
 let y = 1;
 
 
-
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatchesRecursive::
 /user/username/projects/project: *new*
@@ -167,6 +163,7 @@ Output::
 
 
 //// [/user/username/projects/project/commonFile1.js]
+"use strict";
 var zz30 = 100;
 
 

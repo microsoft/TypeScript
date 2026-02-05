@@ -1,7 +1,9 @@
 typeGuardConstructorDerivedClass.ts(13,10): error TS2339: Property 'property1' does not exist on type 'never'.
+typeGuardConstructorDerivedClass.ts(52,5): error TS2564: Property 'property1' has no initializer and is not definitely assigned in the constructor.
+typeGuardConstructorDerivedClass.ts(56,5): error TS2564: Property 'property1' has no initializer and is not definitely assigned in the constructor.
 
 
-==== typeGuardConstructorDerivedClass.ts (1 errors) ====
+==== typeGuardConstructorDerivedClass.ts (3 errors) ====
     // Derived class with different structures
     class C1 {
         property1!: number;
@@ -56,10 +58,14 @@ typeGuardConstructorDerivedClass.ts(13,10): error TS2339: Property 'property1' d
     // Classes with the same structure
     class C7 {
         property1: number
+        ~~~~~~~~~
+!!! error TS2564: Property 'property1' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C8 {
         property1: number;
+        ~~~~~~~~~
+!!! error TS2564: Property 'property1' has no initializer and is not definitely assigned in the constructor.
     }
     
     declare let let4: C8 | string;

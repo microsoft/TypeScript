@@ -6,5 +6,6 @@ var x = typeof whatsthis
 
 
 //// [typeofUnknownSymbol.js]
+"use strict";
 // previously gave no error here
 var x = typeof whatsthis;

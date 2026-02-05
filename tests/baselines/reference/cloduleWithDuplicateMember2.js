@@ -14,6 +14,7 @@ namespace C {
 }
 
 //// [cloduleWithDuplicateMember2.js]
+"use strict";
 class C {
     set x(y) { }
     static set y(z) { }

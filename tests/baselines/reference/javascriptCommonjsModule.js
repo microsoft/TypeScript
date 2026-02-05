@@ -9,6 +9,7 @@ module.exports = Bar;
 
 
 //// [index.js]
+"use strict";
 class Foo {
 }
 class Bar extends Foo {

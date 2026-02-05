@@ -40,19 +40,15 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 15
 
 //// [/user/username/projects/project/commonFile1.js] Inode:: 114
+"use strict";
 let x = 1;
 
 
 //// [/user/username/projects/project/commonFile2.js] Inode:: 115
+"use strict";
 let y = 1;
 
 
-
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*

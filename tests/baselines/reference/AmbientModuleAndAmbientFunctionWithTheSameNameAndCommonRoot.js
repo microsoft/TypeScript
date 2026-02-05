@@ -14,6 +14,7 @@ var cl = Point();
 var cl = Point.Origin;
 
 //// [test.js]
+"use strict";
 var cl;
 var cl = Point();
 var cl = Point.Origin;

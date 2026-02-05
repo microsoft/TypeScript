@@ -10,6 +10,7 @@ class A {
 }
 
 //// [noEmitHelpers2.js]
+"use strict";
 let A = class A {
     constructor(a, b) {
     }

@@ -30,6 +30,7 @@ var r2 = i.x; // error
 var r3 = i.y; // error
 
 //// [interfaceExtendingClassWithProtecteds2.js]
+"use strict";
 class Foo {
 }
 class Bar {
