@@ -8983,17 +8983,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function getPropertyNameNodeForSymbol(symbol: Symbol, context: NodeBuilderContext) {
             const hashPrivateName = getClonedHashPrivateName(symbol);
             if (hashPrivateName) {
-                const shouldEmitErroneousFieldName = !!context.tracker.reportPrivateInBaseOfClassExpression &&
-                    context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral;
-                if (!shouldEmitErroneousFieldName) {
-                    return hashPrivateName;
-                }
-                else {
-                    let rawName = unescapeLeadingUnderscores(symbol.escapedName);
-                    // symbol IDs are unstable - replace #nnn# with #private#
-                    rawName = rawName.replace(/__#\d+@#/g, "__#private@#");
-                    return createPropertyNameNodeForIdentifierOrLiteral(rawName, getEmitScriptTarget(compilerOptions), /*singleQuote*/ false, /*stringNamed*/ true, !!(symbol.flags & SymbolFlags.Method));
-                }
+                return hashPrivateName;
             }
             const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
             const singleQuote = !!length(symbol.declarations) && every(symbol.declarations, isSingleQuotedStringNamed);
