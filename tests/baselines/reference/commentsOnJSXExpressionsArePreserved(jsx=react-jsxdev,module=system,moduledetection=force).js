@@ -37,7 +37,7 @@ System.register(["react/jsx-dev-runtime"], function (exports_1, context_1) {
             _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
             Component = class Component {
                 render() {
-                    return _jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
+                    return _jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 16 }, this);
                 }
             };
         }
