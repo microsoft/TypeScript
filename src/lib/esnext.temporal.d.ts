@@ -1,5 +1,6 @@
 /// <reference lib="es2015.symbol.wellknown" />
 /// <reference lib="es2020.intl" />
+/// <reference lib="es2025.intl" />
 
 declare namespace Temporal {
     type CalendarLike = PlainDate | PlainDateTime | PlainMonthDay | PlainYearMonth | ZonedDateTime | string;
@@ -344,7 +345,7 @@ declare namespace Temporal {
         total(totalOf: "day" | "days" | TimeUnit): number;
         total(totalOf: DurationTotalOptions): number;
         toString(options?: DurationToStringOptions): string;
-        toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string;
+        toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.DurationFormatOptions): string;
         toJSON(): string;
         valueOf(): never;
         readonly [Symbol.toStringTag]: "Temporal.Duration";
