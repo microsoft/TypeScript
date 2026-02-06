@@ -307,10 +307,11 @@ export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics:
 /** @internal */
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       `ScriptTargetFeatures`, `CommandLineOptionOfCustomType`, transformers/esnext.ts, compiler/commandLineParser.ts,
 //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 export const targetToLibMap: Map<ScriptTarget, string> = new Map([
     [ScriptTarget.ESNext, "lib.esnext.full.d.ts"],
+    [ScriptTarget.ES2025, "lib.es2025.full.d.ts"],
     [ScriptTarget.ES2024, "lib.es2024.full.d.ts"],
     [ScriptTarget.ES2023, "lib.es2023.full.d.ts"],
     [ScriptTarget.ES2022, "lib.es2022.full.d.ts"],
@@ -327,6 +328,7 @@ export function getDefaultLibFileName(options: CompilerOptions): string {
     const target = getEmitScriptTarget(options);
     switch (target) {
         case ScriptTarget.ESNext:
+        case ScriptTarget.ES2025:
         case ScriptTarget.ES2024:
         case ScriptTarget.ES2023:
         case ScriptTarget.ES2022:

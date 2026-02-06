@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/stableTypeOrdering.ts] ////
+
+=== stableTypeOrdering.ts ===
+class Message { value: string = ""; }
+>Message : Message
+>        : ^^^^^^^
+>value : string
+>      : ^^^^^^
+>"" : ""
+>   : ^^
+
+function takeMessageOrArray(message: Message | Message[]) { return message; }
+>takeMessageOrArray : (message: Message | Message[]) => Message | Message[]
+>                   : ^       ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^
+>message : Message | Message[]
+>        : ^^^^^^^^^^^^^^^^^^^
+>message : Message | Message[]
+>        : ^^^^^^^^^^^^^^^^^^^
+
+const result1 = takeMessageOrArray(null!);
+>result1 : Message | Message[]
+>        : ^^^^^^^^^^^^^^^^^^^
+>takeMessageOrArray(null!) : Message | Message[]
+>                          : ^^^^^^^^^^^^^^^^^^^
+>takeMessageOrArray : (message: Message | Message[]) => Message | Message[]
+>                   : ^       ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^
+>null! : never
+>      : ^^^^^
+
+function checkType(x: string | number | boolean) {
+>checkType : (x: string | number | boolean) => "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>          : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    const t = typeof x;
+>t : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return t;
+>t : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function mixedUnion(x: string | number[] | { a: number }) {
+>mixedUnion : (x: string | number[] | { a: number; }) => string | { a: number; } | number[]
+>           : ^ ^^                                  ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>x : string | { a: number; } | number[]
+>  : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+
+    return x;
+>x : string | { a: number; } | number[]
+>  : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+}
+
+enum Color { Red, Green, Blue }
+>Color : Color
+>      : ^^^^^
+>Red : Color.Red
+>    : ^^^^^^^^^
+>Green : Color.Green
+>      : ^^^^^^^^^^^
+>Blue : Color.Blue
+>     : ^^^^^^^^^^
+
+function enumUnion(x: Color | string | string[]) {
+>enumUnion : (x: Color | string | string[]) => string | Color | string[]
+>          : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | Color | string[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return x;
+>x : string | Color | string[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type Named = { name: string };
+>Named : Named
+>      : ^^^^^
+>name : string
+>     : ^^^^^^
+
+type Aged = { age: number };
+>Aged : Aged
+>     : ^^^^
+>age : number
+>    : ^^^^^^
+
+type Person = Named & Aged;
+>Person : Person
+>       : ^^^^^^
+
+declare const person: Person | null;
+>person : Person | null
+>       : ^^^^^^^^^^^^^
+
+const p = person;
+>p : Person | null
+>  : ^^^^^^^^^^^^^
+>person : Person | null
+>       : ^^^^^^^^^^^^^
+

@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @stableTypeOrdering: true
 ////class Test {
 ////    foo() {}
 ////
@@ -15,5 +16,5 @@
 
 verify.completions({
     marker: ["1", "2"],
-    exact: ["foo", "bar", "baz"]
+    exact: ["bar", "baz", "foo"]
 });

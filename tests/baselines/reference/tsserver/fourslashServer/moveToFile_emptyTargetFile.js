@@ -11,7 +11,7 @@ Info seq  [hh:mm:ss:mss] request:
           "lib": [
             "es5"
           ],
-          "target": "es2024",
+          "target": "es2025",
           "skipDefaultLibCheck": true
         }
       },

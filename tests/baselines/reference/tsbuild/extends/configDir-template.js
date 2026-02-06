@@ -145,8 +145,8 @@ Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/inde
 [7m3[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
 main.ts
@@ -160,7 +160,7 @@ Found 1 error.
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/projects/myproject/outDir/types/sometype.js]
 export const x = 10;

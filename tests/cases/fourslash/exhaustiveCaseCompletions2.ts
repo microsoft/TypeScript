@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @stableTypeOrdering: true
 // Import-related cases
 
 // @newline: LF
@@ -31,13 +32,13 @@ verify.completions(
         isNewIdentifierLocation: false,
         includes: [
             {
-                name: "case E.A: ...",
+                name: "case 1: ...",
                 source: completion.CompletionSource.SwitchCases,
                 sortText: completion.SortText.GlobalsOrKeywords,
                 insertText:
-`case E.A:
-case E.B:
-case 1:`,
+`case 1:
+case E.A:
+case E.B:`,
                 hasAction: true,
             },
         ],

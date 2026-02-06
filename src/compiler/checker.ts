@@ -82,6 +82,7 @@ import {
     classOrConstructorParameterIsDecorated,
     ClassStaticBlockDeclaration,
     clear,
+    compareComparableValues,
     compareDiagnostics,
     comparePaths,
     compareValues,
@@ -428,6 +429,7 @@ import {
     Identifier,
     identifierToKeywordKind,
     IdentifierTypePredicate,
+    identity,
     idText,
     IfStatement,
     ImportAttribute,
@@ -1540,6 +1542,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
     var noUncheckedSideEffectImports = compilerOptions.noUncheckedSideEffectImports !== false;
+    var stableTypeOrdering = !!compilerOptions.stableTypeOrdering;
+
+    var fileIndexMap = stableTypeOrdering ? new Map(host.getSourceFiles().map((file, i) => [file, i])) : undefined;
 
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
@@ -5556,7 +5561,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createTypeofType() {
-        return getUnionType(arrayFrom(typeofNEFacts.keys(), getStringLiteralType));
+        return getUnionType(map(stableTypeOrdering ? [...typeofNEFacts.keys()].sort() : arrayFrom(typeofNEFacts.keys()), getStringLiteralType));
     }
 
     function createTypeParameter(symbol?: Symbol) {
@@ -5575,22 +5580,67 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (name as string).charCodeAt(2) !== CharacterCodes.hash;
     }
 
-    function getNamedMembers(members: SymbolTable): Symbol[] {
-        let result: Symbol[] | undefined;
+    function getNamedMembers(members: SymbolTable, container: Symbol | undefined): Symbol[] {
+        if (!stableTypeOrdering) {
+            let result: Symbol[] | undefined;
+            members.forEach((symbol, id) => {
+                if (isNamedMember(symbol, id)) {
+                    (result ??= []).push(symbol);
+                }
+            });
+            return result ?? emptyArray;
+        }
+
+        if (members.size === 0) {
+            return emptyArray;
+        }
+
+        // For classes and interfaces, we store explicitly declared members ahead of inherited members. This ensures we process
+        // explicitly declared members first in type relations, which is beneficial because explicitly declared members are more
+        // likely to contain discriminating differences. See for example https://github.com/microsoft/typescript-go/issues/1968.
+        let contained: Symbol[] | undefined;
+        if (container && container.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+            members.forEach((symbol, id) => {
+                if (isNamedMember(symbol, id) && isDeclarationContainedBy(symbol, container)) {
+                    contained = append(contained, symbol);
+                }
+            });
+        }
+
+        let nonContained: Symbol[] | undefined;
         members.forEach((symbol, id) => {
-            if (isNamedMember(symbol, id)) {
-                (result || (result = [])).push(symbol);
+            if (isNamedMember(symbol, id) && (!container || !(container.flags & (SymbolFlags.Class | SymbolFlags.Interface)) || !isDeclarationContainedBy(symbol, container))) {
+                nonContained = append(nonContained, symbol);
             }
         });
-        return result || emptyArray;
+
+        contained?.sort(compareSymbols);
+        nonContained?.sort(compareSymbols);
+        return concatenate(contained, nonContained) ?? emptyArray;
+
+        function isDeclarationContainedBy(symbol: Symbol, container: Symbol): boolean {
+            const declaration = symbol.valueDeclaration;
+            if (declaration && container.declarations) {
+                for (const d of container.declarations) {
+                    if (containedBy(declaration, d)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+
+            function containedBy(a: Node, b: Node): boolean {
+                return b.pos <= a.pos && b.end >= a.end;
+            }
+        }
     }
 
     function isNamedMember(member: Symbol, escapedName: __String) {
         return !isReservedMemberName(escapedName) && symbolIsValue(member);
     }
 
-    function getNamedOrIndexSignatureMembers(members: SymbolTable): Symbol[] {
-        const result = getNamedMembers(members);
+    function getNamedOrIndexSignatureMembers(members: SymbolTable, symbol: Symbol): Symbol[] {
+        const result = getNamedMembers(members, symbol);
         const index = getIndexSymbolFromSymbolTable(members);
         return index ? concatenate(result, [index]) : result;
     }
@@ -5603,7 +5653,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         resolved.constructSignatures = constructSignatures;
         resolved.indexInfos = indexInfos;
         // This can loop back to getPropertyOfType() which would crash if `callSignatures` & `constructSignatures` are not initialized.
-        if (members !== emptySymbols) resolved.properties = getNamedMembers(members);
+        if (members !== emptySymbols) resolved.properties = getNamedMembers(members, type.symbol);
         return resolved;
     }
 
@@ -13706,7 +13756,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!(type as InterfaceTypeWithDeclaredMembers).declaredProperties) {
             const symbol = type.symbol;
             const members = getMembersOfSymbol(symbol);
-            (type as InterfaceTypeWithDeclaredMembers).declaredProperties = getNamedMembers(members);
+            (type as InterfaceTypeWithDeclaredMembers).declaredProperties = getNamedMembers(members, symbol);
             // Start with signatures at empty array in case of recursive types
             (type as InterfaceTypeWithDeclaredMembers).declaredCallSignatures = emptyArray;
             (type as InterfaceTypeWithDeclaredMembers).declaredConstructSignatures = emptyArray;
@@ -14582,7 +14632,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const classType = getDeclaredTypeOfClassOrInterface(symbol);
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.TypeVariable)) {
-                members = createSymbolTable(getNamedOrIndexSignatureMembers(members));
+                members = createSymbolTable(getNamedOrIndexSignatureMembers(members, symbol));
                 addInheritedMembers(members, getPropertiesOfType(baseConstructorType));
             }
             else if (baseConstructorType === anyType) {
@@ -15045,7 +15095,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     break;
                 }
             }
-            type.resolvedProperties = getNamedMembers(members);
+            type.resolvedProperties = getNamedMembers(members, type.symbol);
         }
         return type.resolvedProperties;
     }
@@ -18018,11 +18068,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function containsType(types: readonly Type[], type: Type): boolean {
-        return binarySearch(types, type, getTypeId, compareValues) >= 0;
+        return stableTypeOrdering ? binarySearch(types, type, identity, compareTypes) >= 0 : binarySearch(types, type, getTypeId, compareValues) >= 0;
     }
 
     function insertType(types: Type[], type: Type): boolean {
-        const index = binarySearch(types, type, getTypeId, compareValues);
+        const index = stableTypeOrdering ? binarySearch(types, type, identity, compareTypes) : binarySearch(types, type, getTypeId, compareValues);
         if (index < 0) {
             types.splice(~index, 0, type);
             return true;
@@ -18044,7 +18094,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else {
                 const len = typeSet.length;
-                const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
+                const index = stableTypeOrdering ? binarySearch(typeSet, type, identity, compareTypes) : (len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues));
                 if (index < 0) {
                     typeSet.splice(~index, 0, type);
                 }
@@ -35225,7 +35275,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // So the table *contains* `x` but `x` isn't actually in scope.
         // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
         if (symbol) return symbol;
-        let candidates: Symbol[];
+        let candidates = arrayFrom(symbols.values());
         if (symbols === globals) {
             const primitives = mapDefined(
                 ["string", "number", "boolean", "object", "bigint", "symbol"],
@@ -35233,11 +35283,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     ? createSymbol(SymbolFlags.TypeAlias, s as __String) as Symbol
                     : undefined,
             );
-            candidates = primitives.concat(arrayFrom(symbols.values()));
+            candidates = concatenate(primitives, candidates);
         }
-        else {
-            candidates = arrayFrom(symbols.values());
-        }
+        sortSymbolsIfTSGoCompat(candidates);
         return getSpellingSuggestionForName(unescapeLeadingUnderscores(name), candidates, meaning);
     }
     function getSuggestedSymbolForNonexistentSymbol(location: Node | undefined, outerName: __String, meaning: SymbolFlags): Symbol | undefined {
@@ -35247,7 +35295,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getSuggestedSymbolForNonexistentModule(name: Identifier, targetModule: Symbol): Symbol | undefined {
-        return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule), SymbolFlags.ModuleMember);
+        return targetModule.exports && getSpellingSuggestionForName(idText(name), sortSymbolsIfTSGoCompat(getExportsOfModuleAsArray(targetModule)), SymbolFlags.ModuleMember);
     }
 
     function getSuggestionForNonexistentIndexSignature(objectType: Type, expr: ElementAccessExpression, keyedType: Type): string | undefined {
@@ -50496,7 +50544,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             });
         }
-        return getNamedMembers(propsByName);
+        return getNamedMembers(propsByName, /*container*/ undefined);
     }
 
     function typeHasCallOrConstructSignatures(type: Type): boolean {
@@ -53746,6 +53794,395 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const specifier = file.imports[0];
         Debug.assert(specifier && nodeIsSynthesized(specifier) && specifier.text === "tslib", `Expected sourceFile.imports[0] to be the synthesized tslib import`);
         return specifier;
+    }
+
+    function sortSymbolsIfTSGoCompat(array: Symbol[]): Symbol[];
+    function sortSymbolsIfTSGoCompat(array: Symbol[] | undefined): Symbol[] | undefined;
+    function sortSymbolsIfTSGoCompat(array: Symbol[] | undefined): Symbol[] | undefined {
+        if (stableTypeOrdering && array) {
+            return array.sort(compareSymbols); // eslint-disable-line local/no-array-mutating-method-expressions
+        }
+        return array;
+    }
+
+    function compareSymbols(s1: Symbol | undefined, s2: Symbol | undefined): number {
+        if (s1 === s2) return 0;
+        if (s1 === undefined) return 1;
+        if (s2 === undefined) return -1;
+        if (length(s1.declarations) !== 0 && length(s2.declarations) !== 0) {
+            const r = compareNodes(s1.declarations![0], s2.declarations![0]);
+            if (r !== 0) return r;
+        }
+        else if (length(s1.declarations) !== 0) {
+            return -1;
+        }
+        else if (length(s2.declarations) !== 0) {
+            return 1;
+        }
+        const r = compareComparableValues(s1.escapedName as string, s2.escapedName as string);
+        if (r !== 0) return r;
+        return getSymbolId(s1) - getSymbolId(s2);
+    }
+
+    function compareNodes(n1: Node | undefined, n2: Node | undefined): number {
+        if (n1 === n2) return 0;
+        if (n1 === undefined) return 1;
+        if (n2 === undefined) return -1;
+        const s1 = getSourceFileOfNode(n1);
+        const s2 = getSourceFileOfNode(n2);
+        if (s1 !== s2) {
+            const f1 = fileIndexMap!.get(s1)!;
+            const f2 = fileIndexMap!.get(s2)!;
+            // Order by index of file in the containing program
+            return f1 - f2;
+        }
+        // In the same file, order by source position
+        return n1.pos - n2.pos;
+    }
+
+    function compareTypes(t1: Type | undefined, t2: Type | undefined): number {
+        if (t1 === t2) return 0;
+        if (t1 === undefined) return -1;
+        if (t2 === undefined) return 1;
+
+        // First sort in order of increasing type flags values.
+        let c = getSortOrderFlags(t1) - getSortOrderFlags(t2);
+        if (c !== 0) return c;
+
+        // Order named types by name and, in the case of aliased types, by alias type arguments.
+        c = compareTypeNames(t1, t2);
+        if (c !== 0) return c;
+
+        // We have unnamed types or types with identical names. Now sort by data specific to the type.
+        if (t1.flags & (TypeFlags.Any | TypeFlags.Unknown | TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean | TypeFlags.BigInt | TypeFlags.ESSymbol | TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Null | TypeFlags.Never | TypeFlags.NonPrimitive)) {
+            // Only distinguished by type IDs, handled below.
+        }
+        else if (t1.flags & TypeFlags.Object) {
+            // Order unnamed or identically named object types by symbol.
+            const c = compareSymbols(t1.symbol, t2.symbol);
+            if (c !== 0) return c;
+
+            // When object types have the same or no symbol, order by kind. We order type references before other kinds.
+            if (getObjectFlags(t1) & ObjectFlags.Reference && getObjectFlags(t2) & ObjectFlags.Reference) {
+                const r1 = t1 as TypeReference;
+                const r2 = t2 as TypeReference;
+                if (getObjectFlags(r1.target) & ObjectFlags.Tuple && getObjectFlags(r2.target) & ObjectFlags.Tuple) {
+                    // Tuple types have no associated symbol, instead we order by tuple element information.
+                    const c = compareTupleTypes(r1.target as TupleType, r2.target as TupleType);
+                    if (c !== 0) {
+                        return c;
+                    }
+                }
+                // Here we know we have references to instantiations of the same type because we have matching targets.
+                if (r1.node === undefined && r2.node === undefined) {
+                    // Non-deferred type references with the same target are sorted by their type argument lists.
+                    const c = compareTypeLists((t1 as TypeReference).resolvedTypeArguments, (t2 as TypeReference).resolvedTypeArguments);
+                    if (c !== 0) {
+                        return c;
+                    }
+                }
+                else {
+                    // Deferred type references with the same target are ordered by the source location of the reference.
+                    let c = compareNodes(r1.node, r2.node);
+                    if (c !== 0) {
+                        return c;
+                    }
+                    // Instantiations of the same deferred type reference are ordered by their associated type mappers
+                    // (which reflect the mapping of in-scope type parameters to type arguments).
+                    c = compareTypeMappers((t1 as AnonymousType).mapper, (t2 as AnonymousType).mapper);
+                    if (c !== 0) {
+                        return c;
+                    }
+                }
+            }
+            else if (getObjectFlags(t1) & ObjectFlags.Reference) {
+                return -1;
+            }
+            else if (getObjectFlags(t2) & ObjectFlags.Reference) {
+                return 1;
+            }
+            else {
+                // Order unnamed non-reference object types by kind associated type mappers. Reverse mapped types have
+                // neither symbols nor mappers so they're ultimately ordered by unstable type IDs, but given their rarity
+                // this should be fine.
+                let c = (getObjectFlags(t1) & ObjectFlags.ObjectTypeKindMask) - (getObjectFlags(t2) & ObjectFlags.ObjectTypeKindMask);
+                if (c !== 0) {
+                    return c;
+                }
+                c = compareTypeMappers((t1 as AnonymousType).mapper, (t2 as AnonymousType).mapper);
+                if (c !== 0) {
+                    return c;
+                }
+            }
+        }
+        else if (t1.flags & TypeFlags.Union) {
+            // Unions are ordered by origin and then constituent type lists.
+            const o1 = (t1 as UnionType).origin;
+            const o2 = (t2 as UnionType).origin;
+            if (o1 === undefined && o2 === undefined) {
+                const c = compareTypeLists((t1 as UnionType).types, (t2 as UnionType).types);
+                if (c !== 0) {
+                    return c;
+                }
+            }
+            else if (o1 === undefined) {
+                return 1;
+            }
+            else if (o2 === undefined) {
+                return -1;
+            }
+            else {
+                const c = compareTypes(o1, o2);
+                if (c !== 0) {
+                    return c;
+                }
+            }
+        }
+        else if (t1.flags & TypeFlags.Intersection) {
+            // Intersections are ordered by their constituent type lists.
+            const c = compareTypeLists((t1 as IntersectionType).types, (t2 as IntersectionType).types);
+            if (c !== 0) {
+                return c;
+            }
+        }
+        else if (t1.flags & (TypeFlags.Enum | TypeFlags.EnumLiteral | TypeFlags.UniqueESSymbol)) {
+            // Enum members are ordered by their symbol (and thus their declaration order).
+            const c = compareSymbols(t1.symbol, t2.symbol);
+            if (c !== 0) {
+                return c;
+            }
+        }
+        else if (t1.flags & TypeFlags.StringLiteral) {
+            // String literal types are ordered by their values.
+            const c = compareComparableValues((t1 as LiteralType).value as string, (t2 as LiteralType).value as string);
+            if (c !== 0) {
+                return c;
+            }
+        }
+        else if (t1.flags & TypeFlags.NumberLiteral) {
+            // Numeric literal types are ordered by their values.
+            const c = compareComparableValues((t1 as LiteralType).value as number, (t2 as LiteralType).value as number);
+            if (c !== 0) {
+                return c;
+            }
+        }
+        else if (t1.flags & TypeFlags.BooleanLiteral) {
+            const b1 = (t1 as IntrinsicType).intrinsicName === "true";
+            const b2 = (t2 as IntrinsicType).intrinsicName === "true";
+            if (b1 !== b2) {
+                if (b1) {
+                    return 1;
+                }
+                return -1;
+            }
+        }
+        else if (t1.flags & TypeFlags.TypeParameter) {
+            const c = compareSymbols(t1.symbol, t2.symbol);
+            if (c !== 0) {
+                return c;
+            }
+        }
+        else if (t1.flags & TypeFlags.Index) {
+            let c = compareTypes((t1 as IndexType).type, (t2 as IndexType).type);
+            if (c !== 0) {
+                return c;
+            }
+            c = (t1 as IndexType).indexFlags - (t2 as IndexType).indexFlags;
+            if (c !== 0) {
+                return c;
+            }
+        }
+        else if (t1.flags & TypeFlags.IndexedAccess) {
+            let c = compareTypes((t1 as IndexedAccessType).objectType, (t2 as IndexedAccessType).objectType);
+            if (c !== 0) {
+                return c;
+            }
+            c = compareTypes((t1 as IndexedAccessType).indexType, (t2 as IndexedAccessType).indexType);
+            if (c !== 0) {
+                return c;
+            }
+        }
+        else if (t1.flags & TypeFlags.Conditional) {
+            let c = compareNodes((t1 as ConditionalType).root.node, (t2 as ConditionalType).root.node);
+            if (c !== 0) {
+                return c;
+            }
+            c = compareTypeMappers((t1 as ConditionalType).mapper, (t2 as ConditionalType).mapper);
+            if (c !== 0) {
+                return c;
+            }
+        }
+        else if (t1.flags & TypeFlags.Substitution) {
+            let c = compareTypes((t1 as SubstitutionType).baseType, (t2 as SubstitutionType).baseType);
+            if (c !== 0) {
+                return c;
+            }
+            c = compareTypes((t1 as SubstitutionType).constraint, (t2 as SubstitutionType).constraint);
+            if (c !== 0) {
+                return c;
+            }
+        }
+        else if (t1.flags & TypeFlags.TemplateLiteral) {
+            let c = slicesCompareString((t1 as TemplateLiteralType).texts, (t2 as TemplateLiteralType).texts);
+            if (c !== 0) {
+                return c;
+            }
+            c = compareTypeLists((t1 as TemplateLiteralType).types, (t2 as TemplateLiteralType).types);
+            if (c !== 0) {
+                return c;
+            }
+        }
+        else if (t1.flags & TypeFlags.StringMapping) {
+            const c = compareTypes((t1 as StringMappingType).type, (t2 as StringMappingType).type);
+            if (c !== 0) {
+                return c;
+            }
+        }
+
+        // Fall back to type IDs. This results in type creation order for built-in types.
+        return t1.id - t2.id;
+
+        function slicesCompareString(s1: readonly string[], s2: readonly string[]): number {
+            for (let i = 0; i < s1.length; i++) {
+                if (i > s2.length) {
+                    return 1;
+                }
+                const v1 = s1[i];
+                const v2 = s2[i];
+                const c = compareComparableValues(v1, v2);
+                if (c !== 0) return c;
+            }
+            if (s1.length < s2.length) {
+                return -1;
+            }
+            return 0;
+        }
+    }
+
+    function getSortOrderFlags(t: Type): number {
+        // Return TypeFlagsEnum for all enum-like unit types (they'll be sorted by their symbols)
+        if (t.flags & (TypeFlags.EnumLiteral | TypeFlags.Enum) && !(t.flags & TypeFlags.Union)) {
+            return TypeFlags.Enum;
+        }
+        return t.flags;
+    }
+
+    function compareTypeNames(t1: Type, t2: Type): number {
+        const s1 = getTypeNameSymbol(t1);
+        const s2 = getTypeNameSymbol(t2);
+        if (s1 === s2) {
+            if (t1.aliasTypeArguments !== undefined) {
+                return compareTypeLists(t1.aliasTypeArguments, t2.aliasTypeArguments);
+            }
+            return 0;
+        }
+        if (s1 === undefined) {
+            return 1;
+        }
+        if (s2 === undefined) {
+            return -1;
+        }
+        return compareComparableValues(s1.escapedName as string, s2.escapedName as string);
+    }
+
+    function getTypeNameSymbol(t: Type): Symbol | undefined {
+        if (t.aliasSymbol !== undefined) {
+            return t.aliasSymbol;
+        }
+        if (t.flags & (TypeFlags.TypeParameter | TypeFlags.StringMapping) || getObjectFlags(t) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference)) {
+            return t.symbol;
+        }
+        return undefined;
+    }
+
+    function compareTupleTypes(t1: TupleType, t2: TupleType): number {
+        if (t1 === t2) {
+            return 0;
+        }
+        if (t1.readonly !== t2.readonly) {
+            return t1.readonly ? 1 : -1;
+        }
+        if (t1.elementFlags.length !== t2.elementFlags.length) {
+            return t1.elementFlags.length - t2.elementFlags.length;
+        }
+        for (let i = 0; i < t1.elementFlags.length; i++) {
+            const c = t1.elementFlags[i] - t2.elementFlags[i];
+            if (c !== 0) {
+                return c;
+            }
+        }
+        for (let i = 0; i < (t1.labeledElementDeclarations?.length ?? 0); i++) {
+            const c = compareElementLabels(t1.labeledElementDeclarations![i], t2.labeledElementDeclarations![i]);
+            if (c !== 0) {
+                return c;
+            }
+        }
+        return 0;
+    }
+
+    function compareElementLabels(n1: NamedTupleMember | ParameterDeclaration | undefined, n2: NamedTupleMember | ParameterDeclaration | undefined): number {
+        if (n1 === n2) {
+            return 0;
+        }
+        if (n1 === undefined) {
+            return -1;
+        }
+        if (n2 === undefined) {
+            return 1;
+        }
+        return compareComparableValues((n1.name as Identifier).escapedText as string, (n2.name as Identifier).escapedText as string);
+    }
+
+    function compareTypeLists(s1: readonly Type[] | undefined, s2: readonly Type[] | undefined): number {
+        if (length(s1) !== length(s2)) {
+            return length(s1) - length(s2);
+        }
+        for (let i = 0; i < length(s1); i++) {
+            const c = compareTypes(s1![i], s2?.[i]);
+            if (c !== 0) return c;
+        }
+        return 0;
+    }
+
+    function compareTypeMappers(m1: TypeMapper | undefined, m2: TypeMapper | undefined): number {
+        if (m1 === m2) {
+            return 0;
+        }
+        if (m1 === undefined) {
+            return 1;
+        }
+        if (m2 === undefined) {
+            return -1;
+        }
+        const kind1 = m1.kind;
+        const kind2 = m2.kind;
+        if (kind1 !== kind2) {
+            return kind1 - kind2;
+        }
+        switch (kind1) {
+            case TypeMapKind.Simple: {
+                const c = compareTypes(m1.source, (m2 as typeof m1).source);
+                if (c !== 0) {
+                    return c;
+                }
+                return compareTypes(m1.target, (m2 as typeof m1).target);
+            }
+            case TypeMapKind.Array: {
+                const c = compareTypeLists(m1.sources, (m2 as typeof m1).sources);
+                if (c !== 0) {
+                    return c;
+                }
+                return compareTypeLists(m1.targets, (m2 as typeof m1).targets);
+            }
+            case TypeMapKind.Merged: {
+                const c = compareTypeMappers(m1.mapper1, (m2 as typeof m1).mapper1);
+                if (c !== 0) {
+                    return c;
+                }
+                return compareTypeMappers(m1.mapper2, (m2 as typeof m1).mapper2);
+            }
+        }
+        return 0;
     }
 }
 

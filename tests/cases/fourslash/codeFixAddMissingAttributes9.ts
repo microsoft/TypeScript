@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @stableTypeOrdering: true
 // @jsx: preserve
 // @filename: foo.tsx
 
@@ -16,5 +17,5 @@
 verify.codeFix({
     index: 0,
     description: ts.Diagnostics.Add_missing_attributes.message,
-    newRangeContent: `<A a-d={"a-d"} a-c={"a-c"} b-d={"b-d"} b-c={"b-c"}></A>`
+    newRangeContent: `<A a-c={"a-c"} a-d={"a-d"} b-c={"b-c"} b-d={"b-d"}></A>`
 });
