@@ -32,6 +32,7 @@ var y = 20;
 }
 
 //// [letConstInCaseClauses.js]
+"use strict";
 var x = 10;
 var y = 20;
 {

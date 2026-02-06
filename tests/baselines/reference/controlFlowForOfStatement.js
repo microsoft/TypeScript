@@ -14,6 +14,7 @@ function a() {
 
 
 //// [controlFlowForOfStatement.js]
+"use strict";
 let obj;
 let x;
 function a() {

@@ -38,6 +38,7 @@ if (isDate(x)) {
 
 
 //// [narrowFromAnyWithTypePredicate.js]
+"use strict";
 if (isFunction(x)) { // 'any' is not narrowed when target type is 'Function'
     x();
     x(1, 2, 3);

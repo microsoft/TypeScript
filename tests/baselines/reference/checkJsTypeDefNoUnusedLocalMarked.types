@@ -16,6 +16,7 @@ declare global {
 
     var module: any; // Just here to remove unrelated error from test
 >module : any
+>       : ^^^
 }
 
 export = Foo;

@@ -1,0 +1,26 @@
+declFileWithExtendsClauseThatHasItsContainerNameConflict.ts(8,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+declFileWithExtendsClauseThatHasItsContainerNameConflict.ts(15,9): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+
+
+==== declFileWithExtendsClauseThatHasItsContainerNameConflict.ts (2 errors) ====
+    declare namespace A.B.C {
+        class B {
+        }
+    }
+    
+    namespace A.B {
+        export class EventManager {
+            id: number;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+    
+        }
+    }
+    
+    namespace A.B.C {
+        export class ContextMenu extends EventManager {
+            name: string;
+            ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+        }
+    }

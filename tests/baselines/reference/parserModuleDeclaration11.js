@@ -10,5 +10,6 @@ var x: string.X;
 
 
 //// [parserModuleDeclaration11.js]
+"use strict";
 string.foo("abc");
 var x;

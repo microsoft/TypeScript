@@ -11,6 +11,7 @@ namespace m1 {
 var foo = new m1.c1();
 
 //// [collisionCodeGenModuleWithPrivateMember.js]
+"use strict";
 var m1;
 (function (m1_1) {
     class m1 {

@@ -7,6 +7,7 @@ class C { }
 
 var x1: any;
 >x1 : any
+>   : ^^^
 
 var x2: Function;
 >x2 : Function
@@ -36,6 +37,7 @@ var r1 = a instanceof x1;
 >a : {}
 >  : ^^
 >x1 : any
+>   : ^^^
 
 var r2 = b instanceof x2;
 >r2 : boolean
@@ -55,6 +57,7 @@ var r3 = c instanceof x1;
 >c : C
 >  : ^
 >x1 : any
+>   : ^^^
 
 var r4 = d instanceof x1;
 >r4 : boolean
@@ -64,4 +67,5 @@ var r4 = d instanceof x1;
 >d : string | C
 >  : ^^^^^^^^^^
 >x1 : any
+>   : ^^^
 

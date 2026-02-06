@@ -28,3 +28,4 @@ declare namespace Data {
 }
 
 //// [arrayTypeInSignatureOfInterfaceAndClass.js]
+"use strict";

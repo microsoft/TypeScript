@@ -16,6 +16,7 @@ const a = {
 };
 
 //// [circularObjectLiteralAccessors.js]
+"use strict";
 // Repro from #6000
 var a = {
     b: {

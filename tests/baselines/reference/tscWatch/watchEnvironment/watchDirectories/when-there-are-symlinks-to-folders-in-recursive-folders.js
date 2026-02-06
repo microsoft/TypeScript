@@ -80,7 +80,7 @@ File '/home/user/package.json' does not exist according to earlier cached lookup
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects 0 undefined Failed Lookup Locations
@@ -95,39 +95,31 @@ FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/real
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/package.json 2000 undefined File location affecting resolution
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 25
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 25
 
-//// [/home/user/projects/myproject/src/file.js] Inode:: 124
+//// [/home/user/projects/myproject/src/file.js] Inode:: 128
 export {};
 
 
 
 PolledWatches::
-/home/user/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/user/projects/myproject/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /home/user/projects/myproject/node_modules/reala/package.json: *new*
   {"pollingInterval":2000}
 /home/user/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
-/home/user/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/user/projects/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {"inode":25}
 /home/user/projects: *new*
   {"inode":3}
@@ -168,17 +160,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/user/projects/myproject/node_modules/reala/index.d.ts
 /home/user/projects/myproject/src/file.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/user/projects/myproject/node_modules/reala/index.d.ts
 /home/user/projects/myproject/src/file.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/user/projects/myproject/node_modules/reala/index.d.ts (used version)
 /home/user/projects/myproject/src/file.ts (used version)
 
@@ -197,8 +189,6 @@ sysLog:: /home/user/projects/myproject/node_modules/reala/index.d.ts:: Changing 
 
 
 PolledWatches::
-/home/user/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /home/user/projects/myproject/node_modules/package.json:
   {"pollingInterval":2000}
 /home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
@@ -207,13 +197,11 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/user/projects/myproject/package.json:
   {"pollingInterval":2000}
-/home/user/projects/node_modules/@types:
-  {"pollingInterval":500}
 /home/user/projects/package.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":25}
 /home/user/projects:
   {"inode":3}
@@ -342,14 +330,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/no
 sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 
 
-//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 124
+//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 128
 
 PolledWatches::
-/home/user/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /home/user/projects/node_modules: *new*
-  {"pollingInterval":500}
-/home/user/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -365,7 +349,7 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":25}
 /home/user/projects:
   {"inode":3}
@@ -406,7 +390,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/user/projects/myproject/src/file.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -514,7 +498,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/user/projects/myproject/src/file.ts
 
 Semantic diagnostics in builder refreshed for::

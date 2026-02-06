@@ -60,7 +60,7 @@
 // var Obj;
 //     ^^^
 // | ----------------------------------------------------------------------
-// | var Obj: any
+// | var Obj: Object
 // | @type {Object}
 // | ----------------------------------------------------------------------
 // /** @type {Function} */
@@ -572,8 +572,8 @@
           "kind": "space"
         },
         {
-          "text": "any",
-          "kind": "keyword"
+          "text": "Object",
+          "kind": "localName"
         }
       ],
       "documentation": [],

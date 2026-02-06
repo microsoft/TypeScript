@@ -33,6 +33,7 @@ i.prop2 = "hello"; // error
 
 
 //// [divergentAccessorsTypes4.js]
+"use strict";
 var One = /** @class */ (function () {
     function One() {
     }

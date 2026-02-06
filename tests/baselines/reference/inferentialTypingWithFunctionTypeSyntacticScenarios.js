@@ -36,6 +36,7 @@ s = map("", (identity));
 s = map("", ("", identity));
 
 //// [inferentialTypingWithFunctionTypeSyntacticScenarios.js]
+"use strict";
 var s;
 // dotted name
 var dottedIdentity = { x: identity };

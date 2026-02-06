@@ -46,6 +46,7 @@ M.x.toString();
 
 
 //// [constDeclarations-access3.js]
+"use strict";
 var M;
 (function (M) {
     M.x = 0;

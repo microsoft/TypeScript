@@ -60,8 +60,8 @@ Output::
 TSFILE: /home/src/workspaces/solution/project/src/index.js
 TSFILE: /home/src/workspaces/solution/project/src/index.d.ts
 TSFILE: /home/src/workspaces/solution/project/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 project/src/hello.json
   Imported via "./hello.json" from file 'project/src/index.ts'
   Part of 'files' list in tsconfig.json
@@ -72,7 +72,7 @@ Found 1 error.
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/solution/project/src/index.js]
 "use strict";
@@ -90,12 +90,12 @@ export default _default;
 
 
 //// [/home/src/workspaces/solution/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.es2024.full.d.ts","./src/hello.json","./src/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"6651571919-{\n  \"hello\": \"world\"\n}",{"version":"-6443385642-import hello from \"./hello.json\"\nexport default hello.hello\n","signature":"6785192742-declare const _default: string;\nexport default _default;\n"}],"root":[2,3],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"skipDefaultLibCheck":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./src/index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2025.full.d.ts","./src/hello.json","./src/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"6651571919-{\n  \"hello\": \"world\"\n}",{"version":"-6443385642-import hello from \"./hello.json\"\nexport default hello.hello\n","signature":"6785192742-declare const _default: string;\nexport default _default;\n"}],"root":[2,3],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"skipDefaultLibCheck":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./src/index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./src/hello.json",
     "./src/index.ts"
   ],
@@ -105,7 +105,7 @@ export default _default;
     ]
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -151,7 +151,7 @@ export default _default;
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../tslibs/ts/lib/lib.es2024.full.d.ts",
+      "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -190,8 +190,8 @@ Output::
 [7m4[0m     "moduleResolution": "node",
 [7m [0m [91m                        ~~~~~~[0m
 
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 project/src/hello.json
   Imported via "./hello.json" from file 'project/src/index.ts'
   Part of 'files' list in tsconfig.json

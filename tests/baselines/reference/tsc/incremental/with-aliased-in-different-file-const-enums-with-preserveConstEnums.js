@@ -40,7 +40,7 @@ declare const console: { log(msg: any): void; };
 Output::
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/c.js]
 import { A } from "./b";
@@ -54,12 +54,12 @@ export {};
 
 
 //// [/home/src/workspaces/project/a.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[4],[2],[3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10088995516-export const enum AWorker {\n    ONE = 1\n}\n","-6488945853-export { AWorker as A } from \"./worker\";\n","-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"],"root":[5],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[4],[2],[3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10088995516-export const enum AWorker {\n    ONE = 1\n}\n","-6488945853-export { AWorker as A } from \"./worker\";\n","-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"],"root":[5],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/a.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./worker.d.ts",
     "./b.d.ts",
     "./c.ts",
@@ -77,7 +77,7 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -157,12 +157,12 @@ export {};
 
 
 //// [/home/src/workspaces/project/a.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[4],[2],[3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10088959579-export const enum AWorker {\n    ONE = 2\n}\n","-6488945853-export { AWorker as A } from \"./worker\";\n","-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"],"root":[5],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[4],[2],[3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10088959579-export const enum AWorker {\n    ONE = 2\n}\n","-6488945853-export { AWorker as A } from \"./worker\";\n","-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"],"root":[5],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/a.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./worker.d.ts",
     "./b.d.ts",
     "./c.ts",
@@ -180,7 +180,7 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -260,12 +260,12 @@ export {};
 
 
 //// [/home/src/workspaces/project/a.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[4],[2],[3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10088923642-export const enum AWorker {\n    ONE = 3\n}\n","-6488945853-export { AWorker as A } from \"./worker\";\n","-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"],"root":[5],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[4],[2],[3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10088923642-export const enum AWorker {\n    ONE = 3\n}\n","-6488945853-export { AWorker as A } from \"./worker\";\n","-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"],"root":[5],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/a.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./worker.d.ts",
     "./b.d.ts",
     "./c.ts",
@@ -283,7 +283,7 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -352,12 +352,12 @@ Output::
 //// [/home/src/workspaces/project/c.js] file written with same contents
 //// [/home/src/workspaces/project/a.js] file written with same contents
 //// [/home/src/workspaces/project/a.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[4],[2],[3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10088923642-export const enum AWorker {\n    ONE = 3\n}\n","-7383473792-export { AWorker as A } from \"./worker\";\nexport const randomThing = 10;",{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n"},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","signature":"-3531856636-export {};\n"}],"root":[5],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[4],[2],[3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10088923642-export const enum AWorker {\n    ONE = 3\n}\n","-7383473792-export { AWorker as A } from \"./worker\";\nexport const randomThing = 10;",{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n"},{"version":"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n","signature":"-3531856636-export {};\n"}],"root":[5],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/a.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./worker.d.ts",
     "./b.d.ts",
     "./c.ts",
@@ -375,7 +375,7 @@ Output::
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -451,12 +451,12 @@ Output::
 
 //// [/home/src/workspaces/project/c.js] file written with same contents
 //// [/home/src/workspaces/project/a.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[4],[2],[3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10088923642-export const enum AWorker {\n    ONE = 3\n}\n","2191846063-export { AWorker as A } from \"./worker\";\nexport const randomThing = 10;export const randomThing2 = 10;",{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n"},"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"],"root":[5],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./worker.d.ts","./b.d.ts","./c.ts","./a.ts"],"fileIdsList":[[4],[2],[3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10088923642-export const enum AWorker {\n    ONE = 3\n}\n","2191846063-export { AWorker as A } from \"./worker\";\nexport const randomThing = 10;export const randomThing2 = 10;",{"version":"-3548623266-import {A} from \"./b\"\nlet b = A.ONE\nexport {A}\n","signature":"3259150197-import { A } from \"./b\";\nexport { A };\n"},"-5009241479-import {A} from \"./c\"\nlet a = A.ONE\n"],"root":[5],"options":{"preserveConstEnums":true,"tsBuildInfoFile":"./a.tsbuildinfo"},"referencedMap":[[5,1],[3,2],[4,3]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/a.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./worker.d.ts",
     "./b.d.ts",
     "./c.ts",
@@ -474,7 +474,7 @@ Output::
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true

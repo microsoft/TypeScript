@@ -31,6 +31,7 @@ function fun2<T>(val: T) {
 
 
 //// [mappedTypeAsClauseRelationships.js]
+"use strict";
 function fun(val) {
     let x = val; // Ok
     let y = val; // Error

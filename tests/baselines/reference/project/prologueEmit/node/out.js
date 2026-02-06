@@ -1,3 +1,4 @@
+"use strict";
 // Add a lambda to ensure global 'this' capture is triggered
 (() => this.window);
 // class inheritance to ensure __extends is emitted

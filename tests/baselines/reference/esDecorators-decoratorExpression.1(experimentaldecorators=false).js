@@ -49,6 +49,7 @@ declare let x: any;
 
 
 //// [esDecorators-decoratorExpression.1.js]
+"use strict";
 {
     @x().y
     class C {

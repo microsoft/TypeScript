@@ -7,6 +7,7 @@
 2;
 
 //// [parserGreaterThanTokenAmbiguity10.js]
+"use strict";
 1
     // before
     >>> // after

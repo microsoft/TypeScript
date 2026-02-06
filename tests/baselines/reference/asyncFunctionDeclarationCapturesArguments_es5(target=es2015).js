@@ -12,6 +12,7 @@ class C {
 
 
 //// [asyncFunctionDeclarationCapturesArguments_es5.js]
+"use strict";
 class C {
     method() {
         function other() { }

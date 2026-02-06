@@ -45,6 +45,7 @@ function foo8() {
 }
 
 //// [declFileTypeAnnotationTypeQuery.js]
+"use strict";
 var c = /** @class */ (function () {
     function c() {
     }

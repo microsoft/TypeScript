@@ -4,4 +4,5 @@
 /(#?-?\d*\.\d\w*%?)|(@?#?[\w-?]+%?)/g;
 
 //// [parserRegularExpression1.js]
+"use strict";
 /(#?-?\d*\.\d\w*%?)|(@?#?[\w-?]+%?)/g;

@@ -194,12 +194,12 @@ Cp.prototype = {
 >   : ^^^^^^^
 >this.z = this.x + 1 : number
 >                    : ^^^^^^
->this.z : number
->       : ^^^^^^
+>this.z : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->z : number
->  : ^^^^^^
+>z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >this.x + 1 : number
 >           : ^^^^^^
 >this.x : number

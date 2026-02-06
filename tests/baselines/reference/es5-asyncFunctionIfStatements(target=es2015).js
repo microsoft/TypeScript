@@ -16,6 +16,7 @@ async function ifStatement3() {
 }
 
 //// [es5-asyncFunctionIfStatements.js]
+"use strict";
 function ifStatement1() {
     return __awaiter(this, void 0, void 0, function* () {
         if (yield x) {

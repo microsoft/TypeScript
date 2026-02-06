@@ -47,8 +47,8 @@ var d2: IHasVisualizationModel = i || moduleA;
 var d2: IHasVisualizationModel = moduleA || i;
 >d2 : IHasVisualizationModel
 >   : ^^^^^^^^^^^^^^^^^^^^^^
->moduleA || i : IHasVisualizationModel
->             : ^^^^^^^^^^^^^^^^^^^^^^
+>moduleA || i : typeof moduleA
+>             : ^^^^^^^^^^^^^^
 >moduleA : typeof moduleA
 >        : ^^^^^^^^^^^^^^
 >i : IHasVisualizationModel
@@ -77,8 +77,8 @@ var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x
 >  : ^^^^^                      ^^^
 >x : IHasVisualizationModel
 >  : ^^^^^^^^^^^^^^^^^^^^^^
-><{ x: IHasVisualizationModel }>null ? { x: moduleA } : null : { x: typeof moduleA; }
->                                                            : ^^^^^^^^^^^^^^^^^^^^^^
+><{ x: IHasVisualizationModel }>null ? { x: moduleA } : null : { x: typeof moduleA; } | null
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><{ x: IHasVisualizationModel }>null : { x: IHasVisualizationModel; }
 >                                    : ^^^^^                      ^^^
 >x : IHasVisualizationModel

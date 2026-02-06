@@ -4,4 +4,5 @@
 function t1(...) {}
 
 //// [varArgWithNoParamName.js]
+"use strict";
 function t1(...) { }

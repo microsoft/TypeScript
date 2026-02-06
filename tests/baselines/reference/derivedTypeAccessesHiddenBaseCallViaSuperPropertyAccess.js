@@ -20,6 +20,7 @@ class Derived extends Base {
 }
 
 //// [derivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.js]
+"use strict";
 class Base {
     foo(x) {
         return null;

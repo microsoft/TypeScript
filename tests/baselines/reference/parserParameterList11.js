@@ -4,4 +4,5 @@
 (...arg?) => 102;
 
 //// [parserParameterList11.js]
+"use strict";
 (...arg) => 102;

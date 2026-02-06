@@ -81,8 +81,8 @@ File '/home/src/workspaces/solution/child/child2.ts' exists - use it as a name r
 [7m5[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 child/child2.ts
   Imported via "../child/child2" from file 'child/child.ts'
   Matched by default include pattern '**/*'
@@ -142,8 +142,8 @@ File '/child.jsx' does not exist.
 [7m5[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 childResult.d.ts
   Output from referenced project 'child/tsconfig.json' included because '--outFile' specified
 main/main.ts
@@ -153,7 +153,7 @@ Found 4 errors.
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/solution/childResult.js]
 define("child2", ["require", "exports"], function (require, exports) {
@@ -183,17 +183,17 @@ declare module "child" {
 
 
 //// [/home/src/workspaces/solution/childResult.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./child/child2.ts","./child/child.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","6507293504-export function child2() {\n}\n","-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./childResult.js"},"semanticDiagnosticsPerFile":[1,2,3],"outSignature":"2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n","latestChangedDtsFile":"./childResult.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./child/child2.ts","./child/child.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","6507293504-export function child2() {\n}\n","-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./childResult.js"},"semanticDiagnosticsPerFile":[1,2,3],"outSignature":"2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n","latestChangedDtsFile":"./childResult.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/childResult.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./child/child2.ts",
     "./child/child.ts"
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./child/child2.ts": "6507293504-export function child2() {\n}\n",
     "./child/child.ts": "-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"
   },
@@ -214,7 +214,7 @@ declare module "child" {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+      "../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -250,17 +250,17 @@ declare module "main" {
 
 
 //// [/home/src/workspaces/solution/mainResult.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./childresult.d.ts","./main/main.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n","-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n"],"root":[3],"options":{"composite":true,"module":2,"outFile":"./mainResult.js"},"semanticDiagnosticsPerFile":[1,2,3],"outSignature":"7955277823-declare module \"main\" {\n    export function main(): void;\n}\n","latestChangedDtsFile":"./mainResult.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./childresult.d.ts","./main/main.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n","-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n"],"root":[3],"options":{"composite":true,"module":2,"outFile":"./mainResult.js"},"semanticDiagnosticsPerFile":[1,2,3],"outSignature":"7955277823-declare module \"main\" {\n    export function main(): void;\n}\n","latestChangedDtsFile":"./mainResult.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/mainResult.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./childresult.d.ts",
     "./main/main.ts"
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./childresult.d.ts": "2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n",
     "./main/main.ts": "-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n"
   },
@@ -277,7 +277,7 @@ declare module "main" {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+      "../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -331,8 +331,8 @@ File '/home/src/workspaces/solution/child/child2.jsx' does not exist.
 [7m5[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 child/child.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Project 'main/tsconfig.json' is out of date because buildinfo file 'mainResult.tsbuildinfo' indicates that program needs to report errors.
@@ -389,8 +389,8 @@ File '/child.jsx' does not exist.
 [7m5[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 childResult.d.ts
   Output from referenced project 'child/tsconfig.json' included because '--outFile' specified
 main/main.ts
@@ -418,16 +418,16 @@ declare module "child" {
 
 
 //// [/home/src/workspaces/solution/childResult.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./child/child.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"],"root":[2],"options":{"composite":true,"module":2,"outFile":"./childResult.js"},"semanticDiagnosticsPerFile":[1,2],"outSignature":"8966811613-declare module \"child\" {\n    export function child(): void;\n}\n","latestChangedDtsFile":"./childResult.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./child/child.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"],"root":[2],"options":{"composite":true,"module":2,"outFile":"./childResult.js"},"semanticDiagnosticsPerFile":[1,2],"outSignature":"8966811613-declare module \"child\" {\n    export function child(): void;\n}\n","latestChangedDtsFile":"./childResult.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/childResult.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./child/child.ts"
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./child/child.ts": "-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"
   },
   "root": [
@@ -443,7 +443,7 @@ declare module "child" {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+      "../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -459,17 +459,17 @@ declare module "child" {
 
 //// [/home/src/workspaces/solution/mainResult.js] file written with same contents
 //// [/home/src/workspaces/solution/mainResult.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./childresult.d.ts","./main/main.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","8966811613-declare module \"child\" {\n    export function child(): void;\n}\n","-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n"],"root":[3],"options":{"composite":true,"module":2,"outFile":"./mainResult.js"},"semanticDiagnosticsPerFile":[1,2,3],"outSignature":"7955277823-declare module \"main\" {\n    export function main(): void;\n}\n","latestChangedDtsFile":"./mainResult.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./childresult.d.ts","./main/main.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","8966811613-declare module \"child\" {\n    export function child(): void;\n}\n","-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n"],"root":[3],"options":{"composite":true,"module":2,"outFile":"./mainResult.js"},"semanticDiagnosticsPerFile":[1,2,3],"outSignature":"7955277823-declare module \"main\" {\n    export function main(): void;\n}\n","latestChangedDtsFile":"./mainResult.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/mainResult.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./childresult.d.ts",
     "./main/main.ts"
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./childresult.d.ts": "8966811613-declare module \"child\" {\n    export function child(): void;\n}\n",
     "./main/main.ts": "-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n"
   },
@@ -486,7 +486,7 @@ declare module "child" {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+      "../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [

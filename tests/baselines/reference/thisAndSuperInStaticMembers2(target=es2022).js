@@ -42,6 +42,7 @@ class C extends B {
 
 
 //// [thisAndSuperInStaticMembers2.js]
+"use strict";
 class C extends B {
     constructor() {
         super(...arguments);

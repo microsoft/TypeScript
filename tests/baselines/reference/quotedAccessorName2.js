@@ -6,6 +6,7 @@ class C {
 }
 
 //// [quotedAccessorName2.js]
+"use strict";
 class C {
     static get "foo"() { return 0; }
 }

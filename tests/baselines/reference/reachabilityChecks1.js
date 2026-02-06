@@ -77,6 +77,7 @@ function f4() {
 
 
 //// [reachabilityChecks1.js]
+"use strict";
 while (true)
     ;
 var x = 1;

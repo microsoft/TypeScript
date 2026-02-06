@@ -28,6 +28,7 @@ c = i;
 i = c;
 
 //// [classWithOnlyPublicMembersEquivalentToInterface.js]
+"use strict";
 // no errors expected
 class C {
     y(a) { return null; }

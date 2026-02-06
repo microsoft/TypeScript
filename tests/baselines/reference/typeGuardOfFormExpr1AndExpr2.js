@@ -49,6 +49,7 @@ else {
 }
 
 //// [typeGuardOfFormExpr1AndExpr2.js]
+"use strict";
 var str;
 var bool;
 var num;

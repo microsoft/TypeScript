@@ -6,3 +6,4 @@ declare class C {
 }
 
 //// [parserES5SymbolProperty3.js]
+"use strict";

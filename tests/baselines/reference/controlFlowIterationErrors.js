@@ -95,6 +95,7 @@ function h4() {
 
 
 //// [controlFlowIterationErrors.js]
+"use strict";
 let cond;
 function len(s) {
     return s.length;

@@ -20,3 +20,4 @@ declare namespace Module {
 
 
 //// [recursiveBaseCheck.js]
+"use strict";

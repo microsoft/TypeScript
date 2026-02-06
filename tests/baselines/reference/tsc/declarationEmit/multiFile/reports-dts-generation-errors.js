@@ -59,8 +59,8 @@ Output::
 [7m [0m [91m             ~~~[0m
 
 TSFILE: /home/src/workspaces/project/index.js
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'index.ts'
   File is ECMAScript module because 'node_modules/ky/package.json' has field "type" with value "module"
@@ -72,7 +72,7 @@ Found 1 error in index.ts[90m:2[0m
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/index.js]
 import ky from 'ky';
@@ -94,8 +94,8 @@ Output::
 [7m [0m [91m             ~~~[0m
 
 TSFILE: /home/src/workspaces/project/index.js
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'index.ts'
   File is ECMAScript module because 'node_modules/ky/package.json' has field "type" with value "module"
@@ -131,8 +131,8 @@ Output::
 
 TSFILE: /home/src/workspaces/project/index.js
 TSFILE: /home/src/workspaces/project/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'index.ts'
   File is ECMAScript module because 'node_modules/ky/package.json' has field "type" with value "module"

@@ -218,6 +218,7 @@ var r8e1 = e !== c;
 var r8e1 = e !== d;
 
 //// [comparisonOperatorWithNoRelationshipPrimitiveType.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

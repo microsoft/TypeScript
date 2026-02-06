@@ -31,6 +31,7 @@ namespace otherRoot {
 }
 
 //// [part1.js]
+"use strict";
 var Root;
 (function (Root) {
     let A;
@@ -45,6 +46,7 @@ var Root;
     })(A = Root.A || (Root.A = {}));
 })(Root || (Root = {}));
 //// [part2.js]
+"use strict";
 var otherRoot;
 (function (otherRoot) {
     let A;

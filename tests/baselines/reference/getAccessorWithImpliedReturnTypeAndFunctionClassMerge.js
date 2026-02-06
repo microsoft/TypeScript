@@ -30,6 +30,7 @@ namespace MyModule {
 }
 
 //// [getAccessorWithImpliedReturnTypeAndFunctionClassMerge.js]
+"use strict";
 var MyModule;
 (function (MyModule) {
     class MyClass {

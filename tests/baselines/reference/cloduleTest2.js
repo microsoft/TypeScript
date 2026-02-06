@@ -39,6 +39,7 @@ declare class m4d extends m3d { }
 var r2 = new m4d(); // error
 
 //// [cloduleTest2.js]
+"use strict";
 var T1;
 (function (T1) {
     let m3d;

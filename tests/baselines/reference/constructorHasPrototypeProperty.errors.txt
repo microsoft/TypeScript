@@ -1,0 +1,52 @@
+constructorHasPrototypeProperty.ts(3,9): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+constructorHasPrototypeProperty.ts(7,9): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+constructorHasPrototypeProperty.ts(18,9): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+constructorHasPrototypeProperty.ts(19,9): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+constructorHasPrototypeProperty.ts(23,9): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+constructorHasPrototypeProperty.ts(24,9): error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
+
+
+==== constructorHasPrototypeProperty.ts (6 errors) ====
+    namespace NonGeneric {
+        class C {
+            foo: string;
+            ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        class D extends C {
+            bar: string;
+            ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        var r = C.prototype;
+        r.foo;
+        var r2 = D.prototype;
+        r2.bar;
+    }
+    
+    namespace Generic {
+        class C<T,U> {
+            foo: T;
+            ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+            bar: U;
+            ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        class D<T,U> extends C<T,U> {
+            baz: T;
+            ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+            bing: U;
+            ~~~~
+!!! error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        var r = C.prototype; // C<any, any>
+        var ra = r.foo; // any
+        var r2 = D.prototype; // D<any, any>
+        var rb = r2.baz; // any
+    }

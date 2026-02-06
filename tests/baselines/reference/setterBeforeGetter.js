@@ -15,6 +15,7 @@ class Foo {
 
 
 //// [setterBeforeGetter.js]
+"use strict";
 class Foo {
     // should not be an error to order them this way
     set bar(thing) {

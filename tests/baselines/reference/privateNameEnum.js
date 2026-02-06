@@ -7,6 +7,7 @@ enum E {
 
 
 //// [privateNameEnum.js]
+"use strict";
 var E;
 (function (E) {
     E[E[] = 0] = ;

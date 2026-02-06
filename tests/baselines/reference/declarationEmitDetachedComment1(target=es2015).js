@@ -32,6 +32,7 @@ class Hola {
 
 
 //// [test1.js]
+"use strict";
 /*! Copyright 2015 MyCompany Inc. */
 /**
  * Hello class
@@ -39,6 +40,7 @@ class Hola {
 class Hello {
 }
 //// [test2.js]
+"use strict";
 /* A comment at the top of the file. */
 /**
  * Hi class
@@ -46,6 +48,7 @@ class Hello {
 class Hi {
 }
 //// [test3.js]
+"use strict";
 // A one-line comment at the top of the file.
 /**
  * Hola class

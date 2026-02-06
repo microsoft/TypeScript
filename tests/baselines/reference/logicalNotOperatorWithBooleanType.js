@@ -41,6 +41,7 @@ var ResultIsBoolean = !!BOOLEAN;
 !M.n;
 
 //// [logicalNotOperatorWithBooleanType.js]
+"use strict";
 function foo() { return true; }
 class A {
     static foo() { return false; }

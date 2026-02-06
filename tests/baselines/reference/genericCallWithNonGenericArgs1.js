@@ -6,5 +6,6 @@ f<any>(null)
 
 
 //// [genericCallWithNonGenericArgs1.js]
+"use strict";
 function f(x) { }
 f(null);

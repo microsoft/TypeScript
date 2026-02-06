@@ -1,14 +1,20 @@
 error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
+globalThisCapture.ts(2,6): error TS7041: The containing arrow function captures the global value of 'this'.
+globalThisCapture.ts(2,11): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
 
 
 !!! error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 !!! error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 !!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
-==== globalThisCapture.ts (0 errors) ====
+==== globalThisCapture.ts (2 errors) ====
     // Add a lambda to ensure global 'this' capture is triggered
     (()=>this.window);
+         ~~~~
+!!! error TS7041: The containing arrow function captures the global value of 'this'.
+              ~~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
     
 ==== __extends.ts (0 errors) ====
     // class inheritance to ensure __extends is emitted

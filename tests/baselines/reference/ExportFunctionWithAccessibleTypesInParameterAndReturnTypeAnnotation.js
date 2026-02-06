@@ -18,6 +18,7 @@ namespace A {
 }
 
 //// [ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.js]
+"use strict";
 var A;
 (function (A) {
     class Point {

@@ -8,5 +8,6 @@ static public intI: number;
 
 
 //// [parserAccessibilityAfterStatic1.js]
+"use strict";
 class Outer {
 }

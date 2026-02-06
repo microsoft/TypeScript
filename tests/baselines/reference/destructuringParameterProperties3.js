@@ -35,6 +35,7 @@ var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
 
 
 //// [destructuringParameterProperties3.js]
+"use strict";
 class C1 {
     constructor(k, [a, b, c]) {
         this.k = k;

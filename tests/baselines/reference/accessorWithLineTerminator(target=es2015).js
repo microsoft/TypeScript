@@ -10,6 +10,7 @@ class C {
 }
 
 //// [accessorWithLineTerminator.js]
+"use strict";
 class C {
     get x() { return 1; }
     set x(v) { }

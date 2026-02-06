@@ -248,6 +248,7 @@ function f() {
 }
 
 //// [expr.js]
+"use strict";
 var E;
 (function (E) {
     E[E["Red"] = 0] = "Red";

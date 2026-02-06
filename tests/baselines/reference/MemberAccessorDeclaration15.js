@@ -6,6 +6,7 @@ class C {
 }
 
 //// [MemberAccessorDeclaration15.js]
+"use strict";
 class C {
     set Foo(a) { }
 }

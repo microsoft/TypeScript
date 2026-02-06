@@ -43,6 +43,7 @@ var ResultIsNumber12 = +STRING.charAt(0);
 +objA.a,M.n;
 
 //// [plusOperatorWithStringType.js]
+"use strict";
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
 class A {

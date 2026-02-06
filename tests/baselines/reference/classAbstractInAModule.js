@@ -10,6 +10,7 @@ new M.A;
 new M.B;
 
 //// [classAbstractInAModule.js]
+"use strict";
 var M;
 (function (M) {
     class A {

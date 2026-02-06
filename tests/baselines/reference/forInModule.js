@@ -8,6 +8,7 @@ namespace Foo {
 }
 
 //// [forInModule.js]
+"use strict";
 var Foo;
 (function (Foo) {
     for (var i = 0; i < 1; i++) {

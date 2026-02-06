@@ -1378,7 +1378,7 @@ export type ScriptTargetFeatures = ReadonlyMap<string, ReadonlyMap<string, strin
 
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       `ScriptTargetFeatures`, `CommandLineOptionOfCustomType`, transformers/esnext.ts, compiler/commandLineParser.ts,
 //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 /** @internal */
 export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetFeatures =>
@@ -1486,6 +1486,11 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "unicodeSets",
             ],
         })),
+        RegExpConstructor: new Map(Object.entries({
+            es2025: [
+                "escape",
+            ],
+        })),
         Reflect: new Map(Object.entries({
             es2015: [
                 "apply",
@@ -1565,7 +1570,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "fround",
                 "cbrt",
             ],
-            esnext: [
+            es2025: [
                 "f16round",
             ],
         })),
@@ -1587,7 +1592,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "keys",
                 "values",
             ],
-            esnext: [
+            es2025: [
                 "union",
                 "intersection",
                 "difference",
@@ -1612,6 +1617,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             ],
             es2024: [
                 "withResolvers",
+            ],
+            es2025: [
+                "try",
             ],
         })),
         Symbol: new Map(Object.entries({
@@ -1714,6 +1722,21 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2018: [
                 "PluralRules",
             ],
+            es2020: [
+                "RelativeTimeFormat",
+                "Locale",
+                "DisplayNames",
+            ],
+            es2021: [
+                "ListFormat",
+                "DateTimeFormat",
+            ],
+            es2022: [
+                "Segmenter",
+            ],
+            es2025: [
+                "DurationFormat",
+            ],
         })),
         NumberFormat: new Map(Object.entries({
             es2018: [
@@ -1737,7 +1760,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "getBigInt64",
                 "getBigUint64",
             ],
-            esnext: [
+            es2025: [
                 "setFloat16",
                 "getFloat16",
             ],
@@ -1850,7 +1873,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             ],
         })),
         Float16Array: new Map(Object.entries({
-            esnext: emptyArray,
+            es2025: emptyArray,
         })),
         Float32Array: new Map(Object.entries({
             es2022: [
@@ -1911,11 +1934,22 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "cause",
             ],
         })),
+        ErrorConstructor: new Map(Object.entries({
+            esnext: [
+                "isError",
+            ],
+        })),
         Uint8ArrayConstructor: new Map(Object.entries({
             esnext: [
                 "fromBase64",
                 "fromHex",
             ],
+        })),
+        DisposableStack: new Map(Object.entries({
+            esnext: emptyArray,
+        })),
+        AsyncDisposableStack: new Map(Object.entries({
+            esnext: emptyArray,
         })),
     }))
 );
@@ -2132,7 +2166,7 @@ export function isEffectiveStrictModeSourceFile(node: SourceFile, compilerOption
         return false;
     }
     // If `alwaysStrict` is set, then treat the file as strict.
-    if (getStrictOptionValue(compilerOptions, "alwaysStrict")) {
+    if (getAlwaysStrict(compilerOptions)) {
         return true;
     }
     // Starting with a "use strict" directive indicates the file is strict.
@@ -8971,6 +9005,14 @@ export function importSyntaxAffectsModuleResolution(options: CompilerOptions): b
         || getResolvePackageJsonImports(options);
 }
 
+/**
+ * @internal
+ * Returns true if this option's types array includes "*"
+ */
+export function usesWildcardTypes(options: CompilerOptions): options is CompilerOptions & { types: string[]; } {
+    return some(options.types, t => t === "*");
+}
+
 type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };
 function createComputedCompilerOptions<T extends Record<string, CompilerOptionKeys[]>>(
     options: {
@@ -9212,10 +9254,11 @@ const _computedOptions = createComputedCompilerOptions({
             return getStrictOptionValue(compilerOptions, "strictBuiltinIteratorReturn");
         },
     },
+    // Previously a strict-mode flag, but no longer.
     alwaysStrict: {
-        dependencies: ["strict"],
+        dependencies: [],
         computeValue: compilerOptions => {
-            return getStrictOptionValue(compilerOptions, "alwaysStrict");
+            return compilerOptions.alwaysStrict !== false;
         },
     },
     useUnknownInCatchVariables: {
@@ -9263,6 +9306,8 @@ export const getAreDeclarationMapsEnabled: (compilerOptions: CompilerOptions) =>
 export const getAllowJSCompilerOption: (compilerOptions: CompilerOptions) => boolean = _computedOptions.allowJs.computeValue;
 /** @internal */
 export const getUseDefineForClassFields: (compilerOptions: CompilerOptions) => boolean = _computedOptions.useDefineForClassFields.computeValue;
+/** @internal */
+export const getAlwaysStrict: (compilerOptions: CompilerOptions) => boolean = _computedOptions.alwaysStrict.computeValue;
 
 /** @internal */
 export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean {
@@ -9305,12 +9350,11 @@ export type StrictOptionName =
     | "strictBindCallApply"
     | "strictPropertyInitialization"
     | "strictBuiltinIteratorReturn"
-    | "alwaysStrict"
     | "useUnknownInCatchVariables";
 
 /** @internal */
 export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
-    return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
+    return compilerOptions[flag] === undefined ? (compilerOptions.strict !== false) : !!compilerOptions[flag];
 }
 
 /** @internal */

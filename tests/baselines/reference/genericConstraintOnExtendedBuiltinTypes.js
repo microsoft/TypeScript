@@ -29,6 +29,7 @@ namespace EndGate.Tweening {
 }
 
 //// [genericConstraintOnExtendedBuiltinTypes.js]
+"use strict";
 var EndGate;
 (function (EndGate) {
     var Tweening;

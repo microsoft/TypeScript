@@ -16,6 +16,7 @@ async function conditional2() {
 }
 
 //// [es5-asyncFunctionConditionals.js]
+"use strict";
 function conditional0() {
     return __awaiter(this, void 0, void 0, function* () {
         a = (yield x) ? y : z;

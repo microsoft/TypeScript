@@ -4,4 +4,5 @@
 var { toExponential } = 0;
 
 //// [destructuringWithNumberLiteral.js]
+"use strict";
 var { toExponential } = 0;

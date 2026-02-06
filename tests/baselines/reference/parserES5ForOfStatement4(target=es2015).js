@@ -5,5 +5,6 @@ for (var a = 1 of X) {
 }
 
 //// [parserES5ForOfStatement4.js]
+"use strict";
 for (var a = 1 of X) {
 }

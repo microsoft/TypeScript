@@ -1,8 +1,9 @@
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+privacyCheckAnonymousFunctionParameter2.ts(12,13): error TS2345: Argument of type 'null' is not assignable to parameter of type '(a: Iterator<unknown>) => number'.
 
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== privacyCheckAnonymousFunctionParameter2.ts (0 errors) ====
+==== privacyCheckAnonymousFunctionParameter2.ts (1 errors) ====
     export var x = 1;  // Makes this an external module 
     interface Iterator<T> { x: T }
     
@@ -15,5 +16,7 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     namespace Q {
         function bar() {
             foo(null);
+                ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type '(a: Iterator<unknown>) => number'.
         }
     }

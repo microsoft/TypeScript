@@ -63,6 +63,7 @@ x6 *= ''
 x6 *= {};
 
 //// [compoundArithmeticAssignmentWithInvalidOperands.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

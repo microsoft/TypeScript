@@ -191,7 +191,7 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/producer/index.js]
 "use strict";
@@ -207,12 +207,12 @@ export interface ValueProducerFromTs {
 
 
 //// [/home/src/workspaces/project/producer/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.es2024.full.d.ts","../common.d.ts","./in-js.d.ts","./index.ts"],"fileIdsList":[[2],[2,3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"3658943742-export type OnValue = (value: number) => void","impliedFormat":1},{"version":"13199476566-import { OnValue } from \"@common\"\nexport interface ValueProducerDeclaration {\n    onValue: OnValue;\n}\n","impliedFormat":1},{"version":"-18594017076-export { ValueProducerDeclaration } from \"./in-js\"\nimport { OnValue } from \"@common\"\nexport interface ValueProducerFromTs {\n    onValue: OnValue;\n}\n","signature":"304566626-export { ValueProducerDeclaration } from \"./in-js\";\nimport { OnValue } from \"@common\";\nexport interface ValueProducerFromTs {\n    onValue: OnValue;\n}\n","impliedFormat":1}],"root":[3,4],"options":{"composite":true,"module":199,"strict":true},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2025.full.d.ts","../common.d.ts","./in-js.d.ts","./index.ts"],"fileIdsList":[[2],[2,3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"3658943742-export type OnValue = (value: number) => void","impliedFormat":1},{"version":"13199476566-import { OnValue } from \"@common\"\nexport interface ValueProducerDeclaration {\n    onValue: OnValue;\n}\n","impliedFormat":1},{"version":"-18594017076-export { ValueProducerDeclaration } from \"./in-js\"\nimport { OnValue } from \"@common\"\nexport interface ValueProducerFromTs {\n    onValue: OnValue;\n}\n","signature":"304566626-export { ValueProducerDeclaration } from \"./in-js\";\nimport { OnValue } from \"@common\";\nexport interface ValueProducerFromTs {\n    onValue: OnValue;\n}\n","impliedFormat":1}],"root":[3,4],"options":{"composite":true,"module":199,"strict":true},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/producer/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "../common.d.ts",
     "./in-js.d.ts",
     "./index.ts"
@@ -227,7 +227,7 @@ export interface ValueProducerFromTs {
     ]
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,

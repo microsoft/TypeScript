@@ -1,0 +1,35 @@
+instanceofOperatorWithRHSIsSubtypeOfFunction.ts(9,23): error TS2454: Variable 'f1' is used before being assigned.
+instanceofOperatorWithRHSIsSubtypeOfFunction.ts(10,23): error TS2454: Variable 'f2' is used before being assigned.
+instanceofOperatorWithRHSIsSubtypeOfFunction.ts(11,23): error TS2454: Variable 'f3' is used before being assigned.
+instanceofOperatorWithRHSIsSubtypeOfFunction.ts(12,23): error TS2454: Variable 'f4' is used before being assigned.
+instanceofOperatorWithRHSIsSubtypeOfFunction.ts(13,23): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+instanceofOperatorWithRHSIsSubtypeOfFunction.ts(14,23): error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+
+
+==== instanceofOperatorWithRHSIsSubtypeOfFunction.ts (6 errors) ====
+    interface I extends Function { }
+    
+    var x: any;
+    var f1: Function;
+    var f2: I;
+    var f3: { (): void };
+    var f4: { new (): number };
+    
+    var r1 = x instanceof f1;
+                          ~~
+!!! error TS2454: Variable 'f1' is used before being assigned.
+    var r2 = x instanceof f2;
+                          ~~
+!!! error TS2454: Variable 'f2' is used before being assigned.
+    var r3 = x instanceof f3;
+                          ~~
+!!! error TS2454: Variable 'f3' is used before being assigned.
+    var r4 = x instanceof f4;
+                          ~~
+!!! error TS2454: Variable 'f4' is used before being assigned.
+    var r5 = x instanceof null;
+                          ~~~~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.
+    var r6 = x instanceof undefined;
+                          ~~~~~~~~~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be either of type 'any', a class, function, or other type assignable to the 'Function' interface type, or an object type with a 'Symbol.hasInstance' method.

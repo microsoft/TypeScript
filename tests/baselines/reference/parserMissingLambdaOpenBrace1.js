@@ -11,6 +11,7 @@ class C {
 }
 
 //// [parserMissingLambdaOpenBrace1.js]
+"use strict";
 class C {
     where(filter) {
         return fromDoWhile(test => {

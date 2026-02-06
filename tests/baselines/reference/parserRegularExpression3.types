@@ -6,8 +6,8 @@ Foo(!/(\\?|&)adurl=/);
 >                      : ^^^
 >Foo : any
 >    : ^^^
->!/(\\?|&)adurl=/ : boolean
->                 : ^^^^^^^
+>!/(\\?|&)adurl=/ : false
+>                 : ^^^^^
 >/(\\?|&)adurl=/ : RegExp
 >                : ^^^^^^
 

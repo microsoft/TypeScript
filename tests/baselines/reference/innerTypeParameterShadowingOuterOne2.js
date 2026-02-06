@@ -40,6 +40,7 @@ class C2<T extends Date, U extends Date> {
 //}
 
 //// [innerTypeParameterShadowingOuterOne2.js]
+"use strict";
 // inner type parameters shadow outer ones of the same name
 // no errors expected
 class C {

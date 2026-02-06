@@ -8,16 +8,16 @@ var K = 'k'
 >    : ^^^
 
 var a = { p  : (true ? { [K] : 'v'}        : null) }
->a : { p: { [K]: string; }; }
->  : ^^^^^^^     ^^^^^^ ^^^^^
->{ p  : (true ? { [K] : 'v'}        : null) } : { p: { [K]: string; }; }
->                                             : ^^^^^^^     ^^^^^^ ^^^^^
->p : { [K]: string; }
->  : ^^     ^^^^^^ ^^
->(true ? { [K] : 'v'}        : null) : { [K]: string; }
->                                    : ^^     ^^^^^^ ^^
->true ? { [K] : 'v'}        : null : { [K]: string; }
->                                  : ^^     ^^^^^^ ^^
+>a : { p: { [K]: string; } | null; }
+>  : ^^^^^^^     ^^^^^^ ^^^^^^^^^^^^
+>{ p  : (true ? { [K] : 'v'}        : null) } : { p: { [K]: string; } | null; }
+>                                             : ^^^^^^^     ^^^^^^ ^^^^^^^^^^^^
+>p : { [K]: string; } | null
+>  : ^^     ^^^^^^ ^^^^^^^^^
+>(true ? { [K] : 'v'}        : null) : { [K]: string; } | null
+>                                    : ^^     ^^^^^^ ^^^^^^^^^
+>true ? { [K] : 'v'}        : null : { [K]: string; } | null
+>                                  : ^^     ^^^^^^ ^^^^^^^^^
 >true : true
 >     : ^^^^
 >{ [K] : 'v'} : { [K]: string; }

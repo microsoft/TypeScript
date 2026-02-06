@@ -46,6 +46,7 @@ namespace Generics {
 }
 
 //// [assignmentCompatWithNumericIndexer2.js]
+"use strict";
 // Derived type indexer must be subtype of base type indexer
 a = b;
 b = a; // error

@@ -2,31 +2,31 @@
 
 === ES5For-of7.ts ===
 for (var w of []) {
->w : any
->  : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>w : never
+>  : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     var x = w;
->x : any
->  : ^^^
->w : any
->  : ^^^
+>x : never
+>  : ^^^^^
+>w : never
+>  : ^^^^^
 }
 
 for (var v of []) {
->v : any
->  : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>v : never
+>  : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     var x = [w, v];
->x : any
->  : ^^^
->[w, v] : any[]
->       : ^^^^^
->w : any
->  : ^^^
->v : any
->  : ^^^
+>x : never
+>  : ^^^^^
+>[w, v] : never[]
+>       : ^^^^^^^
+>w : never
+>  : ^^^^^
+>v : never
+>  : ^^^^^
 }

@@ -6,4 +6,5 @@ run(1);
 
 
 //// [isolatedModulesPlainFile-UMD.js]
+"use strict";
 run(1);

@@ -6,6 +6,7 @@ class C1 {
 }
 
 //// [requiredInitializedParameter4.js]
+"use strict";
 class C1 {
     method(a = 0, b) { }
 }

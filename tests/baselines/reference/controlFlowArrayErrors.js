@@ -68,6 +68,7 @@ function f8() {
 }
 
 //// [controlFlowArrayErrors.js]
+"use strict";
 function f1() {
     let x = []; // Implicit any[] error in some locations
     let y = x; // Implicit any[] error

@@ -13,6 +13,7 @@ xs.push(...ys);
 
 
 //// [iteratorsAndStrictNullChecks.js]
+"use strict";
 // for..of
 for (const x of ["a", "b"]) {
     x.substring;

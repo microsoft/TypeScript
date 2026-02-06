@@ -41,6 +41,7 @@ var b = {
 }
 
 //// [callSignaturesWithDuplicateParameters.js]
+"use strict";
 // Duplicate parameter names are always an error
 function foo(x, x) { }
 var f = function foo(x, x) { };

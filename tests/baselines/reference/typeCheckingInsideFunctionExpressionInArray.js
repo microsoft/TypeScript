@@ -10,6 +10,7 @@ var functions = [function () {
 
 
 //// [typeCheckingInsideFunctionExpressionInArray.js]
+"use strict";
 var functions = [function () {
         var k = 10;
         k = new Object();

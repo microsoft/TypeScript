@@ -22,6 +22,7 @@ namespace X.Y.base.Z {
 
 
 //// [declFileWithClassNameConflictingWithClassReferredByExtendsClause.js]
+"use strict";
 var X;
 (function (X) {
     var Y;

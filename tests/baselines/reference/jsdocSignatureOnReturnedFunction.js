@@ -39,6 +39,7 @@ function f4() {
 
 
 //// [jsdocSignatureOnReturnedFunction.js]
+"use strict";
 function f1() {
     /**
      * @param {number} a

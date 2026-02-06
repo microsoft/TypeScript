@@ -30,6 +30,7 @@ class C {
 }
 
 //// [emitClassDeclarationWithGetterSetterInES6.js]
+"use strict";
 class C {
     get name() {
         return this._name;

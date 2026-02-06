@@ -18,6 +18,7 @@ function a() {
 
 
 //// [letConstMatchingParameterNames.js]
+"use strict";
 let parent = true;
 const parent2 = true;
 function a() {

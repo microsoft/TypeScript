@@ -34,6 +34,7 @@ declare namespace N {
 
 
 //// [file1.js]
+"use strict";
 class C1 {
 }
 class C2 {
@@ -50,6 +51,7 @@ var N;
     })(F = N.F || (N.F = {}));
 })(N || (N = {}));
 //// [file2.js]
+"use strict";
 class I {
 } // error -- cannot merge interface with non-ambient class
 function C2() { } // error -- cannot merge function with non-ambient class

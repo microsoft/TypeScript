@@ -8,6 +8,7 @@ class A {
 A.foo();
 
 //// [staticInstanceResolution4.js]
+"use strict";
 class A {
     foo() { }
 }

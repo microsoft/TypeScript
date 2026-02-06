@@ -10,5 +10,6 @@ class d {
 
 
 //// [out.js]
+"use strict";
 class d {
 }

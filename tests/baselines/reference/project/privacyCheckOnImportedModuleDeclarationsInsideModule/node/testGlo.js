@@ -1,3 +1,4 @@
+"use strict";
 var m2;
 (function (m2) {
     m2.c1 = new m2.mExported.me.class1;

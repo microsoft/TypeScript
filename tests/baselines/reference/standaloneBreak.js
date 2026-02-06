@@ -4,4 +4,5 @@
 break;
 
 //// [standaloneBreak.js]
+"use strict";
 break;

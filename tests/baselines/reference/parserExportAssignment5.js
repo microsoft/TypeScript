@@ -6,6 +6,7 @@ namespace M {
 }
 
 //// [parserExportAssignment5.js]
+"use strict";
 var M;
 (function (M) {
     export = A;

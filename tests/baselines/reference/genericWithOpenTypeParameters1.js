@@ -14,6 +14,7 @@ var f4 = (x: B<number>) => { return x.foo(1); } // no error
 
 
 //// [genericWithOpenTypeParameters1.js]
+"use strict";
 class B {
     foo(x) { return null; }
 }

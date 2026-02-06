@@ -30,6 +30,7 @@ const fooLong = async () => {
 
 
 //// [es5-asyncFunctionLongObjectLiteral.js]
+"use strict";
 // the generated code from both should be similar
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -40,7 +41,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const fooShort = () => __awaiter(this, void 0, void 0, function* () {
+const fooShort = () => __awaiter(void 0, void 0, void 0, function* () {
     return {
         a: yield Promise.resolve(0),
         b: yield Promise.resolve(1),
@@ -49,7 +50,7 @@ const fooShort = () => __awaiter(this, void 0, void 0, function* () {
         e: yield Promise.resolve(4),
     };
 });
-const fooLong = () => __awaiter(this, void 0, void 0, function* () {
+const fooLong = () => __awaiter(void 0, void 0, void 0, function* () {
     return {
         a: yield Promise.resolve(0),
         b: yield Promise.resolve(1),

@@ -57,6 +57,7 @@ f(_ => 1 +
 
 
 //// [arrowFunctionErrorSpan.js]
+"use strict";
 function f(a) { }
 // oneliner
 f(() => { });

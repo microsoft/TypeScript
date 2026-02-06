@@ -18,6 +18,7 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 
 
 //// [typeGuardNesting.js]
+"use strict";
 let strOrBool;
 if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'string') {
     let label = (typeof strOrBool === 'string') ? strOrBool : "string";

@@ -10,6 +10,7 @@ for (let v of []) {
 }
 
 //// [ES5For-of16.js]
+"use strict";
 for (let v of []) {
     v;
     for (let v of []) {

@@ -50,6 +50,7 @@ class FooBase {
 }
 
 //// [complexClassRelationships.js]
+"use strict";
 // There should be no errors in this file
 class Derived extends Base {
     static createEmpty() {

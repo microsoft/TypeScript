@@ -1,0 +1,77 @@
+declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(10,9): error TS2322: Type 'undefined' is not assignable to type 'private1'.
+declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(17,9): error TS2322: Type 'undefined' is not assignable to type 'private1'.
+declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(24,9): error TS2322: Type 'undefined' is not assignable to type 'public1'.
+declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(31,9): error TS2322: Type 'undefined' is not assignable to type 'public1'.
+declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(43,9): error TS2322: Type 'undefined' is not assignable to type 'public2'.
+declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts(50,9): error TS2322: Type 'undefined' is not assignable to type 'public2'.
+
+
+==== declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts (6 errors) ====
+    namespace m {
+        class private1 {
+        }
+    
+        export class public1 {
+        }
+    
+        // Directly using names from this module
+        function foo1(): private1 {
+            return;
+            ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'private1'.
+        }
+        function foo2() {
+            return new private1();
+        }
+    
+        export function foo3(): private1 {
+            return;
+            ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'private1'.
+        }
+        export function foo4() {
+            return new private1();
+        }
+    
+        function foo11(): public1 {
+            return;
+            ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'public1'.
+        }
+        function foo12() {
+            return new public1();
+        }
+    
+        export function foo13(): public1 {
+            return;
+            ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'public1'.
+        }
+        export function foo14() {
+            return new public1();
+        }
+    
+        namespace m2 {
+            export class public2 {
+            }
+        }
+    
+        function foo111(): m2.public2 {
+            return;
+            ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'public2'.
+        }
+        function foo112() {
+            return new m2.public2();
+        }
+    
+        export function foo113(): m2.public2 {
+            return;
+            ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'public2'.
+        }
+        export function foo114() {
+            return new m2.public2();
+        }
+    }
+    

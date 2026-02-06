@@ -40,6 +40,7 @@ class C {
 }
 
 //// [privateClassPropertyAccessibleWithinNestedClass.js]
+"use strict";
 // no errors
 class C {
     get y() { return this.x; }

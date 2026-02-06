@@ -11,6 +11,7 @@ declare namespace outer {
 
 
 //// [moduleOuterQualification.js]
+"use strict";
 
 
 //// [moduleOuterQualification.d.ts]

@@ -55,6 +55,7 @@ function SwitchWithTemplate(val: U) {
 }
 
 //// [discriminantElementAccessCheck.js]
+"use strict";
 function assertNever(x) {
     return x;
 }

@@ -83,6 +83,7 @@ var glo_v22_public: glo_C1_public = new glo_C1_public();
 
 
 //// [privacyGloVar.js]
+"use strict";
 var m1;
 (function (m1) {
     class C1_public {

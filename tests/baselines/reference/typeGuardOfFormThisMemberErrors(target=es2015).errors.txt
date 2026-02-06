@@ -1,14 +1,19 @@
+typeGuardOfFormThisMemberErrors.ts(4,3): error TS2564: Property 'isFSO' has no initializer and is not definitely assigned in the constructor.
 typeGuardOfFormThisMemberErrors.ts(4,10): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 typeGuardOfFormThisMemberErrors.ts(5,17): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 typeGuardOfFormThisMemberErrors.ts(11,22): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+typeGuardOfFormThisMemberErrors.ts(14,3): error TS2564: Property 'isNetworked' has no initializer and is not definitely assigned in the constructor.
 typeGuardOfFormThisMemberErrors.ts(14,16): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+typeGuardOfFormThisMemberErrors.ts(22,3): error TS2564: Property 'children' has no initializer and is not definitely assigned in the constructor.
 
 
-==== typeGuardOfFormThisMemberErrors.ts (4 errors) ====
+==== typeGuardOfFormThisMemberErrors.ts (7 errors) ====
     // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
     namespace Test {
     	export class FileSystemObject {
     		isFSO: this is FileSystemObject;
+    		~~~~~
+!!! error TS2564: Property 'isFSO' has no initializer and is not definitely assigned in the constructor.
     		       ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
     		get isFile(): this is File {
@@ -25,6 +30,8 @@ typeGuardOfFormThisMemberErrors.ts(14,16): error TS1228: A type predicate is onl
     			return this instanceof Directory;
     		}
     		isNetworked: this is (Networked & this);
+    		~~~~~~~~~~~
+!!! error TS2564: Property 'isNetworked' has no initializer and is not definitely assigned in the constructor.
     		             ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
     		constructor(public path: string) {}
@@ -35,6 +42,8 @@ typeGuardOfFormThisMemberErrors.ts(14,16): error TS1228: A type predicate is onl
     	}
     	export class Directory extends FileSystemObject {
     		children: FileSystemObject[];
+    		~~~~~~~~
+!!! error TS2564: Property 'children' has no initializer and is not definitely assigned in the constructor.
     	}
     	export interface Networked {
     		host: string;

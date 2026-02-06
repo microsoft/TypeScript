@@ -26,6 +26,7 @@ class D2 extends C implements I { // error
 } 
 
 //// [interfaceExtendsClassWithPrivate2.js]
+"use strict";
 class C {
     constructor() {
         this.x = 1;

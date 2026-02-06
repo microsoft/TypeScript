@@ -47,6 +47,7 @@ var ResultIsBoolean14 = !!!(STRING + STRING);
 !objA.a,M.n;
 
 //// [logicalNotOperatorWithStringType.js]
+"use strict";
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
 class A {

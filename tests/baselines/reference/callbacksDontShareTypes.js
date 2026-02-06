@@ -21,6 +21,7 @@ var r5a = _.map<number, string>(c2, (x) => { return x.toFixed() });
 var r5b = _.map<number, string>(c2, rf1);
 
 //// [callbacksDontShareTypes.js]
+"use strict";
 var _;
 var c2;
 var rf1 = (x) => { return x.toFixed(); };

@@ -10,5 +10,6 @@ x(true); // was error
 
 
 //// [genericWithCallSignatureReturningSpecialization.js]
+"use strict";
 var x;
 x(true); // was error

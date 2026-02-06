@@ -69,6 +69,7 @@ namespace Base4 {
 
 
 //// [super1.js]
+"use strict";
 // Case 1
 class Base1 {
     foo() {

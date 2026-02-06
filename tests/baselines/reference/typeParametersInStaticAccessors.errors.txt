@@ -1,12 +1,15 @@
 typeParametersInStaticAccessors.ts(2,29): error TS2302: Static members cannot reference class type parameters.
+typeParametersInStaticAccessors.ts(2,33): error TS2322: Type 'null' is not assignable to type '() => T'.
 typeParametersInStaticAccessors.ts(3,28): error TS2302: Static members cannot reference class type parameters.
 
 
-==== typeParametersInStaticAccessors.ts (2 errors) ====
+==== typeParametersInStaticAccessors.ts (3 errors) ====
     class foo<T> {
         static get Foo(): () => T { return null; }
                                 ~
 !!! error TS2302: Static members cannot reference class type parameters.
+                                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type '() => T'.
         static set Bar(v: { v: T }) { }
                                ~
 !!! error TS2302: Static members cannot reference class type parameters.

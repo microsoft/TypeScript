@@ -43,8 +43,8 @@ function foo(set: any) {
     const bar: any = [];
 >bar : any
 >    : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     (() => bar);
 >(() => bar) : () => any

@@ -64,6 +64,7 @@ l1 = sc;
 l1 = c;
 
 //// [inheritance1.js]
+"use strict";
 class Control {
 }
 class Button extends Control {

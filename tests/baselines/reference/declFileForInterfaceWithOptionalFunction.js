@@ -7,6 +7,7 @@ interface I {
 }
 
 //// [declFileForInterfaceWithOptionalFunction.js]
+"use strict";
 
 
 //// [declFileForInterfaceWithOptionalFunction.d.ts]

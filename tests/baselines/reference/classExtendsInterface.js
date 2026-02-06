@@ -11,6 +11,7 @@ class B2<T> implements Comparable2<T> {}
 
 
 //// [classExtendsInterface.js]
+"use strict";
 class A extends Comparable {
 }
 class B {

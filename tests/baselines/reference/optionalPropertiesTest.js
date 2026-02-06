@@ -43,6 +43,7 @@ declare var test10_2: i2;
 test10_1 = test10_2;
 
 //// [optionalPropertiesTest.js]
+"use strict";
 var x;
 var foo;
 foo = { id: 1234 }; // Ok

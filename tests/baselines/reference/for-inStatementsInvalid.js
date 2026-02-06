@@ -66,6 +66,7 @@ for (var x in i[42]) { }
 
 
 //// [for-inStatementsInvalid.js]
+"use strict";
 var aNumber;
 for (aNumber in {}) { }
 var aBoolean;

@@ -35,6 +35,7 @@ const v8: number = unbox(b8);
 
 
 //// [optionalChainingInference.js]
+"use strict";
 const b1 = { value: su === null || su === void 0 ? void 0 : su.length };
 const v1 = unbox(b1);
 const b2 = { value: su === null || su === void 0 ? void 0 : su.length };

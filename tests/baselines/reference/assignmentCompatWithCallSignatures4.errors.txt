@@ -1,3 +1,7 @@
+assignmentCompatWithCallSignatures4.ts(4,18): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+assignmentCompatWithCallSignatures4.ts(5,34): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+assignmentCompatWithCallSignatures4.ts(6,38): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+assignmentCompatWithCallSignatures4.ts(7,39): error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
 assignmentCompatWithCallSignatures4.ts(45,9): error TS2322: Type '(x: number) => string[]' is not assignable to type '<T, U>(x: T) => U[]'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'T' is not assignable to type 'number'.
@@ -17,15 +21,22 @@ assignmentCompatWithCallSignatures4.ts(53,9): error TS2322: Type '(x: (arg: Base
     Types of parameters 'arg' and 'arg' are incompatible.
       Type 'Base' is not assignable to type 'T'.
         'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Base'.
+assignmentCompatWithCallSignatures4.ts(57,9): error TS2322: Type '<T extends Derived>(...x: T[]) => T' is not assignable to type '(...x: Base[]) => Base'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 assignmentCompatWithCallSignatures4.ts(58,9): error TS2322: Type '(...x: Base[]) => Base' is not assignable to type '<T extends Derived>(...x: T[]) => T'.
   Type 'Base' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
+assignmentCompatWithCallSignatures4.ts(61,9): error TS2322: Type '<T extends Derived>(x: T, y: T) => T' is not assignable to type '(x: { foo: string; }, y: { foo: string; bar: string; }) => Base'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Property 'bar' is missing in type '{ foo: string; }' but required in type 'Derived'.
 assignmentCompatWithCallSignatures4.ts(62,9): error TS2322: Type '(x: { foo: string; }, y: { foo: string; bar: string; }) => Base' is not assignable to type '<T extends Derived>(x: T, y: T) => T'.
   Type 'Base' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
 assignmentCompatWithCallSignatures4.ts(66,9): error TS2322: Type '(x: Base[], y: Derived2[]) => Derived[]' is not assignable to type '<T extends Array<Derived2>>(x: Base[], y: Base[]) => T'.
-  Type 'Derived[]' is not assignable to type 'T'.
-    'T' could be instantiated with an arbitrary type which could be unrelated to 'Derived[]'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'Base[]' is not assignable to type 'Derived2[]'.
+      Type 'Base' is missing the following properties from type 'Derived2': baz, bar
 assignmentCompatWithCallSignatures4.ts(69,9): error TS2322: Type '<T>(x: { a: T; b: T; }) => T' is not assignable to type '(x: { a: string; b: number; }) => number'.
   Types of parameters 'x' and 'x' are incompatible.
     Type '{ a: string; b: number; }' is not assignable to type '{ a: string; b: string; }'.
@@ -63,14 +74,22 @@ assignmentCompatWithCallSignatures4.ts(96,9): error TS2322: Type '<T>(x: T) => s
       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
-==== assignmentCompatWithCallSignatures4.ts (15 errors) ====
+==== assignmentCompatWithCallSignatures4.ts (21 errors) ====
     // These are mostly permitted with the current loose rules. All ok unless otherwise noted.
     
     namespace Errors {
         class Base { foo: string; }
+                     ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         class Derived extends Base { bar: string; }
+                                     ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
         class Derived2 extends Derived { baz: string; }
+                                         ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
         class OtherDerived extends Base { bing: string; }
+                                          ~~~~
+!!! error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
     
         namespace WithNonGenericSignaturesInBaseType {
             // target type with non-generic call signatures
@@ -145,6 +164,11 @@ assignmentCompatWithCallSignatures4.ts(96,9): error TS2322: Type '<T>(x: T) => s
             
             declare var b10: <T extends Derived>(...x: T[]) => T; 
             a10 = b10;
+            ~~~
+!!! error TS2322: Type '<T extends Derived>(...x: T[]) => T' is not assignable to type '(...x: Base[]) => Base'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 assignmentCompatWithCallSignatures4.ts:5:34: 'bar' is declared here.
             b10 = a10;
             ~~~
 !!! error TS2322: Type '(...x: Base[]) => Base' is not assignable to type '<T extends Derived>(...x: T[]) => T'.
@@ -153,6 +177,11 @@ assignmentCompatWithCallSignatures4.ts(96,9): error TS2322: Type '<T>(x: T) => s
     
             declare var b11: <T extends Derived>(x: T, y: T) => T; 
             a11 = b11;
+            ~~~
+!!! error TS2322: Type '<T extends Derived>(x: T, y: T) => T' is not assignable to type '(x: { foo: string; }, y: { foo: string; bar: string; }) => Base'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Property 'bar' is missing in type '{ foo: string; }' but required in type 'Derived'.
+!!! related TS2728 assignmentCompatWithCallSignatures4.ts:5:34: 'bar' is declared here.
             b11 = a11;
             ~~~
 !!! error TS2322: Type '(x: { foo: string; }, y: { foo: string; bar: string; }) => Base' is not assignable to type '<T extends Derived>(x: T, y: T) => T'.
@@ -164,8 +193,9 @@ assignmentCompatWithCallSignatures4.ts(96,9): error TS2322: Type '<T>(x: T) => s
             b12 = a12;
             ~~~
 !!! error TS2322: Type '(x: Base[], y: Derived2[]) => Derived[]' is not assignable to type '<T extends Array<Derived2>>(x: Base[], y: Base[]) => T'.
-!!! error TS2322:   Type 'Derived[]' is not assignable to type 'T'.
-!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'Derived[]'.
+!!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2322:     Type 'Base[]' is not assignable to type 'Derived2[]'.
+!!! error TS2322:       Type 'Base' is missing the following properties from type 'Derived2': baz, bar
     
             declare var b15: <T>(x: { a: T; b: T }) => T; 
             a15 = b15;

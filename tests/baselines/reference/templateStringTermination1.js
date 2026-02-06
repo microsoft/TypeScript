@@ -4,4 +4,5 @@
 ``
 
 //// [templateStringTermination1.js]
+"use strict";
 ``;

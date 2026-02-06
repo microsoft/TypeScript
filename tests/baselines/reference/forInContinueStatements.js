@@ -40,6 +40,7 @@ for (var x in {}){
 
 
 //// [forInContinueStatements.js]
+"use strict";
 for (var x in {}) {
     continue;
 }

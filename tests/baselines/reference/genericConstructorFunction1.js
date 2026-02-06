@@ -18,6 +18,7 @@ function f2<T>(args: T) {
 }
 
 //// [genericConstructorFunction1.js]
+"use strict";
 function f1(args) {
     var v1;
     var v2 = v1['test'];

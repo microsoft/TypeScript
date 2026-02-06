@@ -16,6 +16,7 @@ async function nestedLoops() {
 }
 
 //// [es5-asyncFunctionNestedLoops.js]
+"use strict";
 function nestedLoops() {
     return __awaiter(this, void 0, void 0, function* () {
         A: while (x) {

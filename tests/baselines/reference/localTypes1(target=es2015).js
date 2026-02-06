@@ -143,6 +143,7 @@ function f6() {
 
 
 //// [localTypes1.js]
+"use strict";
 function f1() {
     let E;
     (function (E) {

@@ -27,7 +27,7 @@ declare const console: { log(msg: any): void; };
 Output::
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 
 Program root files: [
@@ -40,7 +40,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -64,7 +64,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -91,7 +91,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -115,7 +115,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -129,6 +129,7 @@ Output::
 
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 const a = "hello";
 
 
@@ -142,7 +143,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -166,7 +167,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -193,7 +194,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -207,6 +208,7 @@ Output::
 
 
 //// [/home/src/projects/project/a.js]
+"use strict";
 const a = class {
     p = 10;
 };
@@ -222,7 +224,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success
@@ -246,7 +248,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.Success

@@ -1,4 +1,4 @@
-﻿// @target: es2015
+﻿// @target: es5,es2015
 // @downlevelIteration: true
 // The type T associated with a destructuring variable declaration is determined as follows:
 //      If the declaration includes a type annotation, T is that type.

@@ -33,6 +33,7 @@ class OtherDerived extends OtherBase {
 
 
 //// [superCalls.js]
+"use strict";
 class Base {
     constructor(n) {
         this.x = 43;

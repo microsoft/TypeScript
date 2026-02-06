@@ -7,6 +7,7 @@ interface X {
 
 
 //// [declFileOptionalInterfaceMethod.js]
+"use strict";
 
 
 //// [declFileOptionalInterfaceMethod.d.ts]

@@ -20,6 +20,7 @@ k **= `2${ 3 }4`;
  
 
 //// [exponentiationOperatorWithTemplateStringInvalid.js]
+"use strict";
 var a = Math.pow(1, `${3}`);
 var b = Math.pow(1, `2${3}`);
 var c = Math.pow(1, `${3}4`);

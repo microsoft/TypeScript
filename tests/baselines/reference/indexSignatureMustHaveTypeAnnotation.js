@@ -18,6 +18,7 @@ class C2 {
 }
 
 //// [indexSignatureMustHaveTypeAnnotation.js]
+"use strict";
 class C {
 }
 class C2 {

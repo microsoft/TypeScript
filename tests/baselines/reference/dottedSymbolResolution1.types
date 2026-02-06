@@ -34,7 +34,9 @@ function each(collection: string, callback: (indexInArray: any, valueOfElement: 
 >callback : (indexInArray: any, valueOfElement: any) => any
 >         : ^            ^^   ^^              ^^   ^^^^^   
 >indexInArray : any
+>             : ^^^
 >valueOfElement : any
+>               : ^^^
 
 function each(collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any;
 >each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
@@ -52,10 +54,13 @@ function each(collection: any, callback: (indexInArray: any, valueOfElement: any
 >each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
 >     : ^^^          ^^      ^^        ^^                                               ^^^   ^^^          ^^      ^^        ^^                                                   ^^^   ^^^
 >collection : any
+>           : ^^^
 >callback : (indexInArray: any, valueOfElement: any) => any
 >         : ^            ^^   ^^              ^^   ^^^^^   
 >indexInArray : any
+>             : ^^^
 >valueOfElement : any
+>               : ^^^
 
     return null;
 }
@@ -72,6 +77,7 @@ function _setBarAndText(): void {
 
     each(x.find(" "), function () {
 >each(x.find(" "), function () {        var $this: JQuery = $(''),            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here    } ) : any
+>                                                                                                                                                                                              : ^^^
 >each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
 >     : ^^^          ^^      ^^        ^^                                               ^^^   ^^^          ^^      ^^        ^^                                                   ^^^   ^^^
 >x.find(" ") : JQuery

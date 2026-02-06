@@ -11,6 +11,7 @@ var /*2*/x = point./*3*/x;
 
 
 //// [declFileObjectLiteralWithOnlyGetter.js]
+"use strict";
 function makePoint(x) {
     return {
         get x() { return x; },

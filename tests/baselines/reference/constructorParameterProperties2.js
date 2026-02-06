@@ -35,6 +35,7 @@ var r4 = f.y; // error
 
 
 //// [constructorParameterProperties2.js]
+"use strict";
 class C {
     constructor(y) { } // ok
 }

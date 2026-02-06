@@ -46,6 +46,7 @@ var t2 = <TestMod.Test />;
 
 
 //// [file.jsx]
+"use strict";
 // Errors correctly
 const T = TestMod.Test;
 var t1 = <T />;

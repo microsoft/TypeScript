@@ -81,6 +81,7 @@ var bar3 = <any>0;
 var array = <any>[null, undefined];
 
 //// [implicitAnyCastedValue.js]
+"use strict";
 var x = function () {
     return 0; // this should not be an error
 };

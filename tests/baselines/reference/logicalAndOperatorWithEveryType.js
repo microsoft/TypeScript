@@ -126,6 +126,7 @@ var rj9 = null && undefined;
 var rj10 = undefined && undefined;
 
 //// [logicalAndOperatorWithEveryType.js]
+"use strict";
 // The && operator permits the operands to be of any type and produces a result of the same
 // type as the second operand.
 var E;

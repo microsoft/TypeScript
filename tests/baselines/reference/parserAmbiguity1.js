@@ -4,4 +4,5 @@
 f(g<A, B>(7));
 
 //// [parserAmbiguity1.js]
+"use strict";
 f(g(7));

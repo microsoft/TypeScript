@@ -20,6 +20,7 @@ var lambda10 = function temp1() { return 5; }
 
 
 //// [implicitAnyDeclareFunctionExprWithoutFormalType.js]
+"use strict";
 // these should be errors for implicit any parameter
 var lambda = (l1) => { }; // Error at "l1"
 var lambd2 = (ll1, ll2) => { }; // Error at "ll1"

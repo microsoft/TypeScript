@@ -6,5 +6,6 @@ let promise1 = new Promise(function(resolve, reject) {})
 
 
 //// [usePromiseFinally.js]
+"use strict";
 var promise1 = new Promise(function (resolve, reject) { })
     .finally(function () { });

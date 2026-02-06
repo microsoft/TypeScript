@@ -124,6 +124,7 @@ class D17 extends Base {
 
 
 //// [undefinedIsSubtypeOfEverything.js]
+"use strict";
 // undefined is a subtype of every other types, no errors expected below
 class Base {
 }

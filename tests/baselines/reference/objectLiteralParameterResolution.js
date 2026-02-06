@@ -19,6 +19,7 @@ var s = $.extend({
 
 
 //// [objectLiteralParameterResolution.js]
+"use strict";
 var s = $.extend({
     type: "GET",
     data: "data",

@@ -24,6 +24,7 @@ o = a; // error
 a = o; // ok
 
 //// [objectTypeHidingMembersOfObjectAssignmentCompat.js]
+"use strict";
 o = i; // error
 i = o; // ok
 class C {

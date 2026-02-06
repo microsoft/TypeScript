@@ -4,3 +4,4 @@
 function (a => b;
 
 //// [parserEqualsGreaterThanAfterFunction2.js]
+"use strict";

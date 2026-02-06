@@ -1,0 +1,16 @@
+targetTypeObjectLiteralToAny.ts(5,2): error TS2454: Variable 'TypeScriptKeywords' is used before being assigned.
+
+
+==== targetTypeObjectLiteralToAny.ts (1 errors) ====
+    function suggest(){ 
+    	var TypeScriptKeywords:string[];  
+    	var result:any;	
+    					
+    	TypeScriptKeywords.forEach(function(keyword) {						
+    	~~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'TypeScriptKeywords' is used before being assigned.
+    		result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any
+    	});			
+    }
+    
+    

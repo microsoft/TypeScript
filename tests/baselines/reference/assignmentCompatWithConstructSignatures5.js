@@ -68,6 +68,7 @@ b18 = a18; // ok
 
 
 //// [assignmentCompatWithConstructSignatures5.js]
+"use strict";
 // checking assignment compat for function types. All valid
 class Base {
 }

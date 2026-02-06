@@ -8,5 +8,6 @@ function foo<A extends any[]>(
 foo((t, u: number) => t.a)
 
 //// [contextuallyTypedGenericAssignment.js]
+"use strict";
 function foo(arg) { }
 foo((t, u) => t.a);

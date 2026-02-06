@@ -1,7 +1,9 @@
+classIndexer3.ts(8,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 classIndexer3.ts(9,5): error TS2411: Property 'y' of type 'string' is not assignable to 'string' index type 'number'.
+classIndexer3.ts(9,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 
 
-==== classIndexer3.ts (1 errors) ====
+==== classIndexer3.ts (3 errors) ====
     class C123 {
         [s: string]: number;
         constructor() {
@@ -10,7 +12,11 @@ classIndexer3.ts(9,5): error TS2411: Property 'y' of type 'string' is not assign
     
     class D123 extends C123 {
         x: number;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         y: string;
         ~
 !!! error TS2411: Property 'y' of type 'string' is not assignable to 'string' index type 'number'.
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }

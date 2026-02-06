@@ -49,6 +49,7 @@ NUMBER1--;
 foo()--;
 
 //// [decrementOperatorWithNumberTypeInvalidOperations.js]
+"use strict";
 var NUMBER1 = [1, 2];
 function foo() { return 1; }
 class A {

@@ -10,6 +10,7 @@ namespace a.e.f {
 
 
 //// [internalAliasWithDottedNameEmit.js]
+"use strict";
 var a;
 (function (a) {
     var b;

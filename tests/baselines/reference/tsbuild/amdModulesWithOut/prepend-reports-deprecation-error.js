@@ -134,9 +134,10 @@ Found 7 errors.
 
 
 //// [/home/src/workspaces/soltion/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/home/src/workspaces/soltion/lib/module.js]
+"use strict";
 var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -238,9 +239,10 @@ declare const globalConst = 10;
 }
 
 //// [/home/src/workspaces/soltion/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file3.ts","file4.ts"],"names":[],"mappings":";;;;IAAa,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,KAAK,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file4.ts","file3.ts"],"names":[],"mappings":";;;;;ICAa,QAAA,CAAC,GAAG,EAAE,CAAC;;ADApB,IAAM,KAAK,GAAG,EAAE,CAAC"}
 
 //// [/home/src/workspaces/soltion/app/module.js]
+"use strict";
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -331,6 +333,7 @@ sources: file0.ts,file1.ts,file2.ts,global.ts
 emittedFile:/home/src/workspaces/soltion/lib/module.js
 sourceFile:file0.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>var myGlob = 20;
 1 >
 2 >^^^^
@@ -345,12 +348,12 @@ sourceFile:file0.ts
 4 >           = 
 5 >             20
 6 >               ;
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
-3 >Emitted(1, 11) Source(1, 13) + SourceIndex(0)
-4 >Emitted(1, 14) Source(1, 16) + SourceIndex(0)
-5 >Emitted(1, 16) Source(1, 18) + SourceIndex(0)
-6 >Emitted(1, 17) Source(1, 19) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(2, 11) Source(1, 13) + SourceIndex(0)
+4 >Emitted(2, 14) Source(1, 16) + SourceIndex(0)
+5 >Emitted(2, 16) Source(1, 18) + SourceIndex(0)
+6 >Emitted(2, 17) Source(1, 19) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -373,12 +376,12 @@ sourceFile:file1.ts
 4 >              = 
 5 >                10
 6 >                  ;
-1->Emitted(6, 5) Source(1, 14) + SourceIndex(1)
-2 >Emitted(6, 13) Source(1, 14) + SourceIndex(1)
-3 >Emitted(6, 14) Source(1, 15) + SourceIndex(1)
-4 >Emitted(6, 17) Source(1, 18) + SourceIndex(1)
-5 >Emitted(6, 19) Source(1, 20) + SourceIndex(1)
-6 >Emitted(6, 20) Source(1, 21) + SourceIndex(1)
+1->Emitted(7, 5) Source(1, 14) + SourceIndex(1)
+2 >Emitted(7, 13) Source(1, 14) + SourceIndex(1)
+3 >Emitted(7, 14) Source(1, 15) + SourceIndex(1)
+4 >Emitted(7, 17) Source(1, 18) + SourceIndex(1)
+5 >Emitted(7, 19) Source(1, 20) + SourceIndex(1)
+6 >Emitted(7, 20) Source(1, 21) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -402,12 +405,12 @@ sourceFile:file2.ts
 4 >              = 
 5 >                20
 6 >                  ;
-1 >Emitted(12, 5) Source(1, 14) + SourceIndex(2)
-2 >Emitted(12, 13) Source(1, 14) + SourceIndex(2)
-3 >Emitted(12, 14) Source(1, 15) + SourceIndex(2)
-4 >Emitted(12, 17) Source(1, 18) + SourceIndex(2)
-5 >Emitted(12, 19) Source(1, 20) + SourceIndex(2)
-6 >Emitted(12, 20) Source(1, 21) + SourceIndex(2)
+1 >Emitted(13, 5) Source(1, 14) + SourceIndex(2)
+2 >Emitted(13, 13) Source(1, 14) + SourceIndex(2)
+3 >Emitted(13, 14) Source(1, 15) + SourceIndex(2)
+4 >Emitted(13, 17) Source(1, 18) + SourceIndex(2)
+5 >Emitted(13, 19) Source(1, 20) + SourceIndex(2)
+6 >Emitted(13, 20) Source(1, 21) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -428,12 +431,12 @@ sourceFile:global.ts
 4 >                = 
 5 >                  10
 6 >                    ;
-1 >Emitted(14, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(14, 5) Source(1, 7) + SourceIndex(3)
-3 >Emitted(14, 16) Source(1, 18) + SourceIndex(3)
-4 >Emitted(14, 19) Source(1, 21) + SourceIndex(3)
-5 >Emitted(14, 21) Source(1, 23) + SourceIndex(3)
-6 >Emitted(14, 22) Source(1, 24) + SourceIndex(3)
+1 >Emitted(15, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(15, 5) Source(1, 7) + SourceIndex(3)
+3 >Emitted(15, 16) Source(1, 18) + SourceIndex(3)
+4 >Emitted(15, 19) Source(1, 21) + SourceIndex(3)
+5 >Emitted(15, 21) Source(1, 23) + SourceIndex(3)
+6 >Emitted(15, 22) Source(1, 24) + SourceIndex(3)
 ---
 >>>//# sourceMappingURL=module.js.map
 
@@ -558,12 +561,13 @@ sourceFile:global.ts
 JsFile: module.js
 mapUrl: module.js.map
 sourceRoot: 
-sources: file3.ts,file4.ts
+sources: file4.ts,file3.ts
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/app/module.js
 sourceFile:file3.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>define("file3", ["require", "exports"], function (require, exports) {
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
@@ -581,12 +585,12 @@ sourceFile:file3.ts
 4 >              = 
 5 >                30
 6 >                  ;
-1 >Emitted(5, 5) Source(1, 14) + SourceIndex(0)
-2 >Emitted(5, 13) Source(1, 14) + SourceIndex(0)
-3 >Emitted(5, 14) Source(1, 15) + SourceIndex(0)
-4 >Emitted(5, 17) Source(1, 18) + SourceIndex(0)
-5 >Emitted(5, 19) Source(1, 20) + SourceIndex(0)
-6 >Emitted(5, 20) Source(1, 21) + SourceIndex(0)
+1 >Emitted(6, 5) Source(1, 14) + SourceIndex(1)
+2 >Emitted(6, 13) Source(1, 14) + SourceIndex(1)
+3 >Emitted(6, 14) Source(1, 15) + SourceIndex(1)
+4 >Emitted(6, 17) Source(1, 18) + SourceIndex(1)
+5 >Emitted(6, 19) Source(1, 20) + SourceIndex(1)
+6 >Emitted(6, 20) Source(1, 21) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/app/module.js
@@ -607,12 +611,12 @@ sourceFile:file4.ts
 4 >          = 
 5 >            30
 6 >              ;
-1 >Emitted(7, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(7, 5) Source(1, 7) + SourceIndex(1)
-3 >Emitted(7, 10) Source(1, 12) + SourceIndex(1)
-4 >Emitted(7, 13) Source(1, 15) + SourceIndex(1)
-5 >Emitted(7, 15) Source(1, 17) + SourceIndex(1)
-6 >Emitted(7, 16) Source(1, 18) + SourceIndex(1)
+1 >Emitted(8, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(8, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(8, 10) Source(1, 12) + SourceIndex(0)
+4 >Emitted(8, 13) Source(1, 15) + SourceIndex(0)
+5 >Emitted(8, 15) Source(1, 17) + SourceIndex(0)
+6 >Emitted(8, 16) Source(1, 18) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=module.js.map
 
@@ -750,9 +754,10 @@ Found 7 errors.
 
 
 //// [/home/src/workspaces/soltion/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICAtB,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICAtB,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/home/src/workspaces/soltion/lib/module.js]
+"use strict";
 var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -852,6 +857,7 @@ sources: file0.ts,file1.ts,file2.ts,global.ts
 emittedFile:/home/src/workspaces/soltion/lib/module.js
 sourceFile:file0.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>var myGlob = 20;
 1 >
 2 >^^^^
@@ -866,12 +872,12 @@ sourceFile:file0.ts
 4 >           = 
 5 >             20
 6 >               ;
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
-3 >Emitted(1, 11) Source(1, 13) + SourceIndex(0)
-4 >Emitted(1, 14) Source(1, 16) + SourceIndex(0)
-5 >Emitted(1, 16) Source(1, 18) + SourceIndex(0)
-6 >Emitted(1, 17) Source(1, 19) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(2, 11) Source(1, 13) + SourceIndex(0)
+4 >Emitted(2, 14) Source(1, 16) + SourceIndex(0)
+5 >Emitted(2, 16) Source(1, 18) + SourceIndex(0)
+6 >Emitted(2, 17) Source(1, 19) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -895,12 +901,12 @@ sourceFile:file1.ts
 4 >              = 
 5 >                10
 6 >                  ;
-1->Emitted(6, 5) Source(1, 14) + SourceIndex(1)
-2 >Emitted(6, 13) Source(1, 14) + SourceIndex(1)
-3 >Emitted(6, 14) Source(1, 15) + SourceIndex(1)
-4 >Emitted(6, 17) Source(1, 18) + SourceIndex(1)
-5 >Emitted(6, 19) Source(1, 20) + SourceIndex(1)
-6 >Emitted(6, 20) Source(1, 21) + SourceIndex(1)
+1->Emitted(7, 5) Source(1, 14) + SourceIndex(1)
+2 >Emitted(7, 13) Source(1, 14) + SourceIndex(1)
+3 >Emitted(7, 14) Source(1, 15) + SourceIndex(1)
+4 >Emitted(7, 17) Source(1, 18) + SourceIndex(1)
+5 >Emitted(7, 19) Source(1, 20) + SourceIndex(1)
+6 >Emitted(7, 20) Source(1, 21) + SourceIndex(1)
 ---
 >>>    console.log(exports.x);
 1->^^^^
@@ -919,14 +925,14 @@ sourceFile:file1.ts
 6 >                x
 7 >                         )
 8 >                          ;
-1->Emitted(7, 5) Source(1, 21) + SourceIndex(1)
-2 >Emitted(7, 12) Source(1, 28) + SourceIndex(1)
-3 >Emitted(7, 13) Source(1, 29) + SourceIndex(1)
-4 >Emitted(7, 16) Source(1, 32) + SourceIndex(1)
-5 >Emitted(7, 17) Source(1, 33) + SourceIndex(1)
-6 >Emitted(7, 26) Source(1, 34) + SourceIndex(1)
-7 >Emitted(7, 27) Source(1, 35) + SourceIndex(1)
-8 >Emitted(7, 28) Source(1, 36) + SourceIndex(1)
+1->Emitted(8, 5) Source(1, 21) + SourceIndex(1)
+2 >Emitted(8, 12) Source(1, 28) + SourceIndex(1)
+3 >Emitted(8, 13) Source(1, 29) + SourceIndex(1)
+4 >Emitted(8, 16) Source(1, 32) + SourceIndex(1)
+5 >Emitted(8, 17) Source(1, 33) + SourceIndex(1)
+6 >Emitted(8, 26) Source(1, 34) + SourceIndex(1)
+7 >Emitted(8, 27) Source(1, 35) + SourceIndex(1)
+8 >Emitted(8, 28) Source(1, 36) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -950,12 +956,12 @@ sourceFile:file2.ts
 4 >              = 
 5 >                20
 6 >                  ;
-1 >Emitted(13, 5) Source(1, 14) + SourceIndex(2)
-2 >Emitted(13, 13) Source(1, 14) + SourceIndex(2)
-3 >Emitted(13, 14) Source(1, 15) + SourceIndex(2)
-4 >Emitted(13, 17) Source(1, 18) + SourceIndex(2)
-5 >Emitted(13, 19) Source(1, 20) + SourceIndex(2)
-6 >Emitted(13, 20) Source(1, 21) + SourceIndex(2)
+1 >Emitted(14, 5) Source(1, 14) + SourceIndex(2)
+2 >Emitted(14, 13) Source(1, 14) + SourceIndex(2)
+3 >Emitted(14, 14) Source(1, 15) + SourceIndex(2)
+4 >Emitted(14, 17) Source(1, 18) + SourceIndex(2)
+5 >Emitted(14, 19) Source(1, 20) + SourceIndex(2)
+6 >Emitted(14, 20) Source(1, 21) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -976,12 +982,12 @@ sourceFile:global.ts
 4 >                = 
 5 >                  10
 6 >                    ;
-1 >Emitted(15, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(15, 5) Source(1, 7) + SourceIndex(3)
-3 >Emitted(15, 16) Source(1, 18) + SourceIndex(3)
-4 >Emitted(15, 19) Source(1, 21) + SourceIndex(3)
-5 >Emitted(15, 21) Source(1, 23) + SourceIndex(3)
-6 >Emitted(15, 22) Source(1, 24) + SourceIndex(3)
+1 >Emitted(16, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(16, 5) Source(1, 7) + SourceIndex(3)
+3 >Emitted(16, 16) Source(1, 18) + SourceIndex(3)
+4 >Emitted(16, 19) Source(1, 21) + SourceIndex(3)
+5 >Emitted(16, 21) Source(1, 23) + SourceIndex(3)
+6 >Emitted(16, 22) Source(1, 24) + SourceIndex(3)
 ---
 >>>//# sourceMappingURL=module.js.map
 

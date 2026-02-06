@@ -10,6 +10,7 @@ class C {
 (new C)[Symbol.iterator](0) // Should error
 
 //// [ES5SymbolProperty5.js]
+"use strict";
 class C {
     [Symbol.iterator]() { }
 }

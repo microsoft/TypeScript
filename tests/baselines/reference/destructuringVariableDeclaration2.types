@@ -130,8 +130,8 @@ var {d: {d1 = ["string", null]}}: { d: { d1: number[] } } = { d: { d1: [1, 2] } 
 >  : ^^^
 >d1 : number[]
 >   : ^^^^^^^^
->["string", null] : string[]
->                 : ^^^^^^^^
+>["string", null] : (string | null)[]
+>                 : ^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 >d : { d1: number[]; }

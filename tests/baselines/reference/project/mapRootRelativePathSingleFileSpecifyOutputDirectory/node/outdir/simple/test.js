@@ -1,3 +1,4 @@
+"use strict";
 var a1 = 10;
 class c1 {
     p1;

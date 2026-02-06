@@ -7,6 +7,7 @@ function foo(q: string, b: number) {
 
 
 //// [parserArrowFunctionExpression6.js]
+"use strict";
 function foo(q, b) {
     return true ? (q ? true : false) : (b = q.length, function () { });
 }

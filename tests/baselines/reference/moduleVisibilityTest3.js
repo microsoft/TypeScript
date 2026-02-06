@@ -29,6 +29,7 @@ namespace editor {
 
 
 //// [moduleVisibilityTest3.js]
+"use strict";
 var _modes;
 (function (_modes) {
     class Mode {

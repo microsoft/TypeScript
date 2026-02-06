@@ -1,9 +1,13 @@
+protectedClassPropertyAccessibleWithinNestedSubclass.ts(2,15): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 protectedClassPropertyAccessibleWithinNestedSubclass.ts(24,28): error TS2339: Property 'z' does not exist on type 'C'.
+protectedClassPropertyAccessibleWithinNestedSubclass.ts(36,15): error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
 
 
-==== protectedClassPropertyAccessibleWithinNestedSubclass.ts (1 errors) ====
+==== protectedClassPropertyAccessibleWithinNestedSubclass.ts (3 errors) ====
     class B {
         protected x: string;
+                  ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         protected static x: string;
     }
     
@@ -40,4 +44,6 @@ protectedClassPropertyAccessibleWithinNestedSubclass.ts(24,28): error TS2339: Pr
     
     class E extends C {
         protected z: string;
+                  ~
+!!! error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
     }

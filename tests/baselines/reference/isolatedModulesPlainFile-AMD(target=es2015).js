@@ -6,4 +6,5 @@ run(1);
 
 
 //// [isolatedModulesPlainFile-AMD.js]
+"use strict";
 run(1);

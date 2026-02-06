@@ -39,6 +39,7 @@ if (!!!x) {
 }
 
 //// [stringLiteralTypesInUnionTypes04.js]
+"use strict";
 let x = undefined;
 let y = undefined;
 if (x === "") {

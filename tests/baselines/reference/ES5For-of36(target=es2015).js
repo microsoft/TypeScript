@@ -7,6 +7,7 @@ for (let [a = 0, b = 1] of [2, 3]) {
 }
 
 //// [ES5For-of36.js]
+"use strict";
 for (let [a = 0, b = 1] of [2, 3]) {
     a;
     b;

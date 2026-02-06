@@ -13,6 +13,7 @@ baz.class = true;
 baz.normal = false;
 
 //// [source.js]
+"use strict";
 function foo() { }
 foo.null = true;
 function bar() { }

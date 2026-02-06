@@ -17,6 +17,7 @@ class Foo{
 
 
 //// [namedFunctionExpressionAssignedToClassProperty.js]
+"use strict";
 class Foo {
     constructor() {
         this.a = function bar() {

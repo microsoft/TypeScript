@@ -70,6 +70,7 @@ class B {
 }
 
 //// [thisInPropertyBoundDeclarations.js]
+"use strict";
 class Bug {
     foo(name) {
         this.name = name;

@@ -242,6 +242,7 @@
 
 
 //// [convertClassExpressionToFunctionFromObjectProperty2.js]
+"use strict";
 ({
     x: class {
         constructor() { }

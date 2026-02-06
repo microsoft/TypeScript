@@ -7,4 +7,5 @@ declare function f<T extends String>(x: T): T
 var v = f<string>("");
 
 //// [overloadsWithConstraints.js]
+"use strict";
 var v = f("");

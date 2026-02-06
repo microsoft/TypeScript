@@ -7,6 +7,7 @@
 
 
 //// [ifStatementInternalComments.js]
+"use strict";
 /*1*/ if /*2*/ ( /*3*/true /*4*/) /*5*/ { }
 /*1*/ if /*2*/ ( /*3*/true /*4*/) /*5*/ { } /*6*/
 else /*7*/ { }

@@ -8,6 +8,7 @@ class abstract {
 new abstract;
 
 //// [classAbstractAsIdentifier.js]
+"use strict";
 class abstract {
     foo() { return 1; }
 }

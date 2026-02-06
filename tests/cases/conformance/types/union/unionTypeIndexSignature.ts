@@ -1,4 +1,5 @@
-﻿// @target: es2015
+﻿// @strict: false
+// @target: es2015
 var numOrDate: number | Date;
 var anyVar: number;
 

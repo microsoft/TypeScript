@@ -23,6 +23,7 @@ for (const let in [1,2,3]) {}
 
 
 //// [letInLetConstDeclOfForOfAndForIn_ES5.js]
+"use strict";
 // Should be an error
 for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
     var let = _a[_i];

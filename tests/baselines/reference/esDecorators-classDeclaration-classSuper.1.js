@@ -24,6 +24,7 @@ class C extends Base {
 
 
 //// [esDecorators-classDeclaration-classSuper.1.js]
+"use strict";
 const method = "method";
 let C = (() => {
     let _classDecorators = [dec];

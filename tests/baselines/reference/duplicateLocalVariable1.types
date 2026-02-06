@@ -27,8 +27,8 @@ export class TestCase {
 >     : ^^^^^^
 >test : () => boolean
 >     : ^^^^^^       
->errorMessageRegEx : string
->                  : ^^^^^^
+>errorMessageRegEx : string | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
     }
 }
 export class TestRunner { 
@@ -38,8 +38,8 @@ export class TestRunner {
     private tests: TestCase[] = [];
 >tests : TestCase[]
 >      : ^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     static arrayCompare(arg1: any[], arg2: any[]): boolean {
 >arrayCompare : (arg1: any[], arg2: any[]) => boolean
@@ -188,12 +188,12 @@ export class TestRunner {
 >                                               : ^^^^^^^
 >typeof testcase.errorMessageRegEx : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->testcase.errorMessageRegEx : string
->                           : ^^^^^^
+>testcase.errorMessageRegEx : string | undefined
+>                           : ^^^^^^^^^^^^^^^^^^
 >testcase : TestCase
 >         : ^^^^^^^^
->errorMessageRegEx : string
->                  : ^^^^^^
+>errorMessageRegEx : string | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 
@@ -278,12 +278,12 @@ export class TestRunner {
 >                                           : ^^^^^^^
 >testcase.errorMessageRegEx !== undefined : boolean
 >                                         : ^^^^^^^
->testcase.errorMessageRegEx : string
->                           : ^^^^^^
+>testcase.errorMessageRegEx : string | undefined
+>                           : ^^^^^^^^^^^^^^^^^^
 >testcase : TestCase
 >         : ^^^^^^^^
->errorMessageRegEx : string
->                  : ^^^^^^
+>errorMessageRegEx : string | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >!exception : boolean
@@ -795,8 +795,8 @@ export var tests: TestRunner = (function () {
 >    : ^^^
 >App : any
 >    : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
             return (app.fixLines === false &&
 >(app.fixLines === false &&                   app.recurse === true &&                   app.lineEndings === "CRLF" &&                   app.matchPattern === undefined &&                   app.rootDirectory === ".\\" &&                   app.encodings[0] === "ascii" &&                   app.encodings[1] === "utf8nobom") : boolean
@@ -1497,8 +1497,8 @@ export var tests: TestRunner = (function () {
             var chars = [];
 >chars : any[]
 >      : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
             for (var i = 0; i < 11; i++) {
 >i : number
@@ -1614,8 +1614,8 @@ export var tests: TestRunner = (function () {
             var chars = [];
 >chars : any[]
 >      : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
             for (var i = 0; i < 6; i++) {
 >i : number
@@ -1778,8 +1778,8 @@ export var tests: TestRunner = (function () {
             var bytes = [];
 >bytes : any[]
 >      : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
             for (var i = 0; i < 14; i++) {
 >i : string
@@ -2288,8 +2288,8 @@ export var tests: TestRunner = (function () {
             var codePoints = [];
 >codePoints : any[]
 >           : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
             for (var i = 0; i < 6; i++) {
 >i : number
@@ -2423,8 +2423,8 @@ export var tests: TestRunner = (function () {
             var codePoints = [];
 >codePoints : any[]
 >           : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
             for (var i = 0; i < 6; i++) {
 >i : number

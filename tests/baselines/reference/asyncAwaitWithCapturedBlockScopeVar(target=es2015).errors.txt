@@ -1,0 +1,41 @@
+asyncAwaitWithCapturedBlockScopeVar.ts(27,23): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+
+
+==== asyncAwaitWithCapturedBlockScopeVar.ts (1 errors) ====
+    async function fn1() {
+        let ar = [];
+        for (let i = 0; i < 1; i++) {
+            await 1;
+            ar.push(() => i);
+        }
+    }
+    
+    async function fn2() {
+        let ar = [];
+        for (let i = 0; i < 1; i++) {
+            await 1;
+            ar.push(() => i);
+            break;
+        }
+    }
+    
+    async function fn3() {
+        let ar = [];
+        for (let i = 0; i < 1; i++) {
+            await 1;
+            ar.push(() => i);
+            continue;
+        }
+    }
+    
+    async function fn4(): Promise<number> {
+                          ~~~~~~~~~~~~~~~
+!!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+        let ar = [];
+        for (let i = 0; i < 1; i++) {
+            await 1;
+            ar.push(() => i);
+            return 1;
+        }
+    }
+    

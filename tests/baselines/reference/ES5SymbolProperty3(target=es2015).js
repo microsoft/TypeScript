@@ -10,6 +10,7 @@ class C {
 (new C)[Symbol.iterator]
 
 //// [ES5SymbolProperty3.js]
+"use strict";
 var Symbol;
 class C {
     [Symbol.iterator]() { }

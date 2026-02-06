@@ -49,6 +49,7 @@ for(var aClassInModule: M.A = new M.A();;){}
 for(var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';;){}
 
 //// [forStatements.js]
+"use strict";
 class C {
 }
 class D {

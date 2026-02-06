@@ -1,9 +1,10 @@
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 file.tsx(19,39): error TS2842: 'string' is an unused renaming of 'y1'. Did you intend to use it as a type annotation?
+file.tsx(19,39): error TS7031: Binding element 'string' implicitly has an 'any' type.
 
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== file.tsx (1 errors) ====
+==== file.tsx (2 errors) ====
     /// <reference path="/.lib/react.d.ts" />
     
     import React = require('react')
@@ -26,6 +27,8 @@ file.tsx(19,39): error TS2842: 'string' is an unused renaming of 'y1'. Did you i
                                           ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of 'y1'. Did you intend to use it as a type annotation?
 !!! related TS2843 file.tsx:19:46: We can only write a type for 'y1' by adding a type for the entire parameter here.
+                                          ~~~~~~
+!!! error TS7031: Binding element 'string' implicitly has an 'any' type.
     declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.Element;
     declare function TestingOneThing(n: {yy: number, direction?: number}): JSX.Element;
     declare function TestingOneThing(n: {yy: string, name: string}): JSX.Element;

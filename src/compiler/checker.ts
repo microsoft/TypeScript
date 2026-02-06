@@ -911,6 +911,7 @@ import {
     NodeBuilderFlags,
     nodeCanBeDecorated,
     NodeCheckFlags,
+    nodeCoreModules,
     NodeFlags,
     nodeHasName,
     nodeIsMissing,
@@ -1121,6 +1122,7 @@ import {
     UnionType,
     UnionTypeNode,
     UniqueESSymbolType,
+    usesWildcardTypes,
     usingSingleLineStringWriter,
     VariableDeclaration,
     VariableDeclarationList,
@@ -4708,9 +4710,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression, ignoreErrors?: boolean, errorMessage?: DiagnosticMessage): Symbol | undefined {
         const isClassic = getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic;
-        errorMessage ??= isClassic ?
+        errorMessage ??= getCannotResolveModuleNameErrorForSpecificModule(moduleReferenceExpression) ?? (isClassic ?
             Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_nodenext_or_to_add_aliases_to_the_paths_option
-            : Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations;
+            : Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations);
         return resolveExternalModuleNameWorker(location, moduleReferenceExpression, ignoreErrors ? undefined : errorMessage, ignoreErrors);
     }
 
@@ -27643,27 +27645,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case "console":
                 return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_include_dom;
             case "$":
-                return compilerOptions.types
-                    ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig
-                    : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery;
+                return usesWildcardTypes(compilerOptions)
+                    ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery
+                    : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig;
+            case "beforeEach":
             case "describe":
             case "suite":
             case "it":
             case "test":
-                return compilerOptions.types
-                    ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha_and_then_add_jest_or_mocha_to_the_types_field_in_your_tsconfig
-                    : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha;
+                return usesWildcardTypes(compilerOptions)
+                    ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha
+                    : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha_and_then_add_jest_or_mocha_to_the_types_field_in_your_tsconfig;
             case "process":
             case "require":
             case "Buffer":
             case "module":
-                return compilerOptions.types
-                    ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig
-                    : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode;
+            case "NodeJS":
+                return usesWildcardTypes(compilerOptions)
+                    ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode
+                    : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig;
             case "Bun":
-                return compilerOptions.types
-                    ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_Bun_Try_npm_i_save_dev_types_Slashbun_and_then_add_bun_to_the_types_field_in_your_tsconfig
-                    : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_Bun_Try_npm_i_save_dev_types_Slashbun;
+                return usesWildcardTypes(compilerOptions)
+                    ? Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_Bun_Try_npm_i_save_dev_types_Slashbun
+                    : Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_Bun_Try_npm_i_save_dev_types_Slashbun_and_then_add_bun_to_the_types_field_in_your_tsconfig;
             case "Map":
             case "Set":
             case "Promise":
@@ -27696,6 +27700,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return Diagnostics.Cannot_find_name_0;
                 }
         }
+    }
+
+    function getCannotResolveModuleNameErrorForSpecificModule(moduleName: Expression): DiagnosticMessage | undefined {
+        if (moduleName.kind === SyntaxKind.StringLiteral) {
+            if (nodeCoreModules.has((moduleName as StringLiteral).text)) {
+                if (usesWildcardTypes(compilerOptions)) {
+                    return Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode;
+                }
+                else {
+                    return Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig;
+                }
+            }
+        }
+        return undefined;
     }
 
     function getResolvedSymbol(node: Identifier): Symbol {

@@ -282,8 +282,8 @@ Output::
     [7m [0m [96m                     ~~~~~~~~~~[0m
     File is included via import here.
 
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/anotherFile.ts'
   Imported via "fp-ts/lib/struct" from file 'src/anotherFile.ts'
@@ -307,7 +307,7 @@ src/oneMore.ts
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/projects/project/src/anotherFile.js]
 export {};
@@ -319,12 +319,8 @@ export {};
 
 
 PolledWatches::
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/package.json: *new*
   {"pollingInterval":2000}
-/home/src/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/project/node_modules/fp-ts/lib/package.json: *new*
   {"pollingInterval":2000}
 /home/src/projects/project/node_modules/fp-ts/package.json: *new*
@@ -349,7 +345,7 @@ FsWatches::
   {}
 /home/src/projects/project/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -372,21 +368,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts
 /home/src/projects/project/src/Struct.d.ts
 /home/src/projects/project/src/anotherFile.ts
 /home/src/projects/project/src/oneMore.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts
 /home/src/projects/project/src/Struct.d.ts
 /home/src/projects/project/src/anotherFile.ts
 /home/src/projects/project/src/oneMore.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts (used version)
 /home/src/projects/project/src/struct.d.ts (used version)
 /home/src/projects/project/src/anotherfile.ts (used version)
@@ -652,8 +648,8 @@ Output::
     [7m [0m [96m                     ~~~~~~~~~~[0m
     File is included via import here.
 
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/anotherFile.ts'
   Imported via "fp-ts/lib/struct" from file 'src/anotherFile.ts'
@@ -693,7 +689,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts
 /home/src/projects/project/src/Struct.d.ts
 /home/src/projects/project/src/anotherFile.ts
@@ -919,8 +915,8 @@ Output::
     [7m [0m [96m                     ~~~~~~~~~~~~~~~~~~[0m
     File is included via import here.
 
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/anotherFile.ts'
   Imported via "fp-ts/lib/struct" from file 'src/anotherFile.ts'
@@ -959,7 +955,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts
 /home/src/projects/project/src/Struct.d.ts
 /home/src/projects/project/src/anotherFile.ts

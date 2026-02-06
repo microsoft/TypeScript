@@ -8,6 +8,7 @@ let x, y, z, a1, a2, a3;
 ([] = [ a1, a2, a3] = a);
 
 //// [emptyAssignmentPatterns02_ES5iterable.js]
+"use strict";
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;

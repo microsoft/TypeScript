@@ -5,3 +5,4 @@ interface string {
 }
 
 //// [InterfaceDeclaration8.js]
+"use strict";

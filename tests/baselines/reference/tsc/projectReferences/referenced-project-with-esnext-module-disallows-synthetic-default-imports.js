@@ -62,7 +62,7 @@ app/index.ts(2,28): error TS1192: Module '"/home/src/workspaces/project/lib/dist
 app/index.ts(3,28): error TS1192: Module '"/home/src/workspaces/project/lib/dist/utils"' has no default export.
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/app/index.js]
 import TestSrc from '../lib/src/utils'; // Error

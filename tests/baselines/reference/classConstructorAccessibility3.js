@@ -36,6 +36,7 @@ c = Bar;
 c = Baz;
 
 //// [classConstructorAccessibility3.js]
+"use strict";
 class Foo {
     constructor(x) {
         this.x = x;

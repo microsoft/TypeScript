@@ -11,6 +11,7 @@ namespace m1 {
 }
 
 //// [sourcemapValidationDuplicateNames.js]
+"use strict";
 var m1;
 (function (m1) {
     var x = 10;

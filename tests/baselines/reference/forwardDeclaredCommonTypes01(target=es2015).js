@@ -19,6 +19,7 @@ interface WeakSet<T extends object> {}
 
 
 //// [forwardDeclaredCommonTypes01.js]
+"use strict";
 (function () {
     new Promise;
     new Symbol;

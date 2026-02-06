@@ -1,0 +1,8 @@
+jsxEmitAttributeWithPreserve.tsx(2,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== jsxEmitAttributeWithPreserve.tsx (1 errors) ====
+    declare var React: any;
+    <foo data/>
+    ~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.

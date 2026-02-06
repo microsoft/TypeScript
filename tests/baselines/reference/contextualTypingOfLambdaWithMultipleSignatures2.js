@@ -9,5 +9,6 @@ var f: {
 f = (a) => { return a.asdf }
 
 //// [contextualTypingOfLambdaWithMultipleSignatures2.js]
+"use strict";
 var f;
 f = (a) => { return a.asdf; };

@@ -1,7 +1,8 @@
+typeofOperatorWithStringType.ts(8,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 typeofOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== typeofOperatorWithStringType.ts (1 errors) ====
+==== typeofOperatorWithStringType.ts (2 errors) ====
     // typeof  operator on string type
     declare var STRING: string;
     var STRING1: string[] = ["", "abc"];
@@ -10,6 +11,8 @@ typeofOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator
     
     class A {
         public a: string;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
         static foo() { return ""; }
     }
     namespace M {

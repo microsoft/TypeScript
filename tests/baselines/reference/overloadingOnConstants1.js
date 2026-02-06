@@ -28,6 +28,7 @@ var htmlDivElement2: Derived1 = d2.createElement("div");
 var htmlSpanElement2: Derived1 = d2.createElement("span");
 
 //// [overloadingOnConstants1.js]
+"use strict";
 class Base {
     foo() { }
 }

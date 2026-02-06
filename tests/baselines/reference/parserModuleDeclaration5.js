@@ -9,3 +9,4 @@ namespace M1 {
 }
 
 //// [parserModuleDeclaration5.js]
+"use strict";

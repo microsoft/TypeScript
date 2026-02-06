@@ -6,4 +6,5 @@ const x = 10;
 
 
 //// [incrementalInvalid.js]
+"use strict";
 const x = 10;

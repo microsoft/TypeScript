@@ -64,7 +64,7 @@ Found 2 errors in the same file, starting at: index.tsx[90m:10[0m
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/index.js]
 "use strict";
@@ -74,16 +74,16 @@ Found 2 errors in the same file, starting at: index.tsx[90m:10[0m
 
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./index.tsx"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"42569361247-declare namespace JSX {\n    interface ElementChildrenAttribute { children: {}; }\n    interface IntrinsicElements { div: {} }\n}\n\ndeclare var React: any;\n\ndeclare function Component(props: never): any;\ndeclare function Component(props: { children?: number }): any;\n(<Component>\n    <div />\n    <div />\n</Component>)","affectsGlobalScope":true}],"root":[2],"options":{"jsx":2,"module":99,"strict":true},"semanticDiagnosticsPerFile":[[2,[{"start":265,"length":9,"messageText":"This JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided.","category":1,"code":2746},{"start":265,"length":9,"code":2769,"category":1,"messageText":{"messageText":"No overload matches this call.","category":1,"code":2769,"next":[{"code":2746,"category":1,"messageText":"This JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided."},{"messageText":"Overload 2 of 2, '(props: { children?: number | undefined; }): any', gave the following error.","category":1,"code":2772,"next":[{"messageText":"Type '{ children: any[]; }' is not assignable to type '{ children?: number | undefined; }'.","category":1,"code":2322,"next":[{"messageText":"Types of property 'children' are incompatible.","category":1,"code":2326,"next":[{"messageText":"Type 'any[]' is not assignable to type 'number'.","category":1,"code":2322,"canonicalHead":{"code":2322,"messageText":"Type '{ children: any[]; }' is not assignable to type '{ children?: number | undefined; }'."}}]}]}]}]},"relatedInformation":[]}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./index.tsx"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"42569361247-declare namespace JSX {\n    interface ElementChildrenAttribute { children: {}; }\n    interface IntrinsicElements { div: {} }\n}\n\ndeclare var React: any;\n\ndeclare function Component(props: never): any;\ndeclare function Component(props: { children?: number }): any;\n(<Component>\n    <div />\n    <div />\n</Component>)","affectsGlobalScope":true}],"root":[2],"options":{"jsx":2,"module":99,"strict":true},"semanticDiagnosticsPerFile":[[2,[{"start":265,"length":9,"messageText":"This JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided.","category":1,"code":2746},{"start":265,"length":9,"code":2769,"category":1,"messageText":{"messageText":"No overload matches this call.","category":1,"code":2769,"next":[{"code":2746,"category":1,"messageText":"This JSX tag's 'children' prop expects a single child of type 'never', but multiple children were provided."},{"messageText":"Overload 2 of 2, '(props: { children?: number | undefined; }): any', gave the following error.","category":1,"code":2772,"next":[{"messageText":"Type '{ children: any[]; }' is not assignable to type '{ children?: number | undefined; }'.","category":1,"code":2322,"next":[{"messageText":"Types of property 'children' are incompatible.","category":1,"code":2326,"next":[{"messageText":"Type 'any[]' is not assignable to type 'number'.","category":1,"code":2322,"canonicalHead":{"code":2322,"messageText":"Type '{ children: any[]; }' is not assignable to type '{ children?: number | undefined; }'."}}]}]}]}]},"relatedInformation":[]}]]],"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./index.tsx"
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true

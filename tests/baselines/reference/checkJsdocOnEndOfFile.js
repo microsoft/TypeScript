@@ -7,6 +7,7 @@
 
 
 //// [output.js]
+"use strict";
 /**
  * @typedef {Array<bad>} Should have error here
  */

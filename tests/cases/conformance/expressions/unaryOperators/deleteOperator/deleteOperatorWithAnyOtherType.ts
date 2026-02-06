@@ -1,5 +1,7 @@
 // @target: es2015
+// @ignoreDeprecations: 6.0
 // @strict: false
+// @alwaysStrict: true, false
 // delete  operator on any type
 
 declare var ANY: any;

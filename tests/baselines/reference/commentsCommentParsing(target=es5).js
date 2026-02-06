@@ -156,6 +156,7 @@ class NoQuickInfoClass {
 }
 
 //// [commentsCommentParsing.js]
+"use strict";
 /// This is simple /// comments
 function simple() {
 }

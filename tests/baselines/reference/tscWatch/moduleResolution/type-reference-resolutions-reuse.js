@@ -134,20 +134,6 @@ Directory '/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Type reference directive 'pkg1' was not resolved. ========
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
-======== Resolving type reference directive 'pkg2', containing file '/user/username/projects/myproject/__inferred type names__.ts', root directory '/user/username/projects/myproject/node_modules/@types,/user/username/projects/node_modules/@types,/user/username/node_modules/@types,/user/node_modules/@types,/node_modules/@types'. ========
-Resolving with primary search path '/user/username/projects/myproject/node_modules/@types, /user/username/projects/node_modules/@types, /user/username/node_modules/@types, /user/node_modules/@types, /node_modules/@types'.
-File '/user/username/projects/myproject/node_modules/@types/pkg2/package.json' does not exist.
-File '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts', result '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts'.
-======== Type reference directive 'pkg2' was successfully resolved to '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts', primary: true. ========
-File '/user/username/projects/myproject/node_modules/@types/pkg2/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/@types/package.json' does not exist.
-File '/user/username/projects/myproject/node_modules/package.json' does not exist.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/TS/Lib/package.json' does not exist.
 File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
@@ -163,7 +149,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/a.js]
 export const x = 10;
@@ -183,29 +169,19 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types/pkg2/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/myproject/a.ts: *new*
   {}
 /user/username/projects/myproject/index.ts: *new*
-  {}
-/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts: *new*
   {}
 /user/username/projects/myproject/node_modules/pkg/import.d.ts: *new*
   {}
@@ -221,8 +197,6 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/node_modules: *new*
   {}
-/user/username/projects/myproject/node_modules/@types: *new*
-  {}
 
 Program root files: [
   "/user/username/projects/myproject/a.ts",
@@ -236,20 +210,18 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/node_modules/pkg/import.d.ts
 /user/username/projects/myproject/index.ts
-/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 /user/username/projects/myproject/node_modules/pkg/import.d.ts (used version)
 /user/username/projects/myproject/index.ts (used version)
-/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -291,14 +263,6 @@ File '/user/username/projects/package.json' does not exist according to earlier 
 File '/user/username/package.json' does not exist according to earlier cached lookups.
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/@types/pkg2/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -330,15 +294,6 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of type reference directive 'pkg' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg1' from '/user/username/projects/myproject/index.ts' of old program, it was not resolved.
-Reusing resolution of type reference directive 'pkg2' from '/user/username/projects/myproject/__inferred type names__.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts'.
-File '/user/username/projects/myproject/node_modules/@types/pkg2/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
 File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
@@ -373,11 +328,10 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/node_modules/pkg/import.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/index.ts
-/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts
 
 No cached semantic diagnostics in the builder::
 

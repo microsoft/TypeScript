@@ -23,6 +23,7 @@ var rk7 = 0 ** undefined;
 var rk8 = E.b ** undefined;
 
 //// [exponentiationOperatorWithUndefinedValueAndValidOperands.js]
+"use strict";
 // If one operand is the undefined or undefined value, it is treated as having the type of the
 // other operand.
 var E;

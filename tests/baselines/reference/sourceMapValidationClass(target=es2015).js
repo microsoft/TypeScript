@@ -21,6 +21,7 @@ class Greeter {
 }
 
 //// [sourceMapValidationClass.js]
+"use strict";
 class Greeter {
     constructor(greeting, ...b) {
         this.greeting = greeting;

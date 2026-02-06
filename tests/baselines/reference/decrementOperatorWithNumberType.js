@@ -42,6 +42,7 @@ M.n--;
 objA.a--, M.n--;
 
 //// [decrementOperatorWithNumberType.js]
+"use strict";
 // -- operator on number type
 var NUMBER;
 var NUMBER1 = [1, 2];

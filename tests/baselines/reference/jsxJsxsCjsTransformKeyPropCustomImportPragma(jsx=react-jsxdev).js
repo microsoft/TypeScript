@@ -29,7 +29,7 @@ const _jsxFileName = "/.src/preact.tsx";
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxImportSource preact */
 const props = { answer: 42 };
-const a = (0, jsx_dev_runtime_1.jsxDEV)("div", Object.assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 10 }, this);
+const a = (0, jsx_dev_runtime_1.jsxDEV)("div", Object.assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 11 }, this);
 const b = (0, preact_1.createElement)("div", Object.assign({}, props, { key: "bar" }), "text");
 //// [react.js]
 "use strict";
@@ -41,5 +41,5 @@ const _jsxFileName = "react.tsx";
 /* @jsxImportSource react */
 require("./preact");
 const props2 = { answer: 42 };
-const a2 = (0, jsx_dev_runtime_1.jsxDEV)("div", Object.assign({}, props2, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 11 }, this);
+const a2 = (0, jsx_dev_runtime_1.jsxDEV)("div", Object.assign({}, props2, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 12 }, this);
 const b2 = (0, react_1.createElement)("div", Object.assign({}, props2, { key: "bar" }), "text");

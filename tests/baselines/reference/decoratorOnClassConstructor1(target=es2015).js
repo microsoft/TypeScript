@@ -8,6 +8,7 @@ class C {
 }
 
 //// [decoratorOnClassConstructor1.js]
+"use strict";
 class C {
     constructor() { }
 }

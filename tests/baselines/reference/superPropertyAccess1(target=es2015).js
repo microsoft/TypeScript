@@ -30,6 +30,7 @@ class D extends C {
 }
 
 //// [superPropertyAccess1.js]
+"use strict";
 class C {
     foo() { }
     get x() {

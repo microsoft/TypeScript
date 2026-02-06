@@ -29,6 +29,7 @@ for ((x satisfies string) in { a: 10 }) {
 
 
 //// [referenceSatisfiesExpression.js]
+"use strict";
 let a = 10;
 --a;
 ++a;

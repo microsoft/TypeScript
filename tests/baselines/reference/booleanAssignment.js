@@ -15,6 +15,7 @@ declare var b2:boolean;
 b = b2; // OK
 
 //// [booleanAssignment.js]
+"use strict";
 var b = new Boolean();
 b = 1; // Error
 b = "a"; // Error

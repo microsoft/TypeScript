@@ -7,6 +7,7 @@ declare var h: any;
 <><span>1</span><><span>2.1</span><span>2.2</span></></>;
 
 //// [jsxFactoryAndJsxFragmentFactoryNull.js]
+"use strict";
 h(null, null);
 h(null, null,
     h("span", null, "1"),

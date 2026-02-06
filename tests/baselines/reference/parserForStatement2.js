@@ -9,6 +9,7 @@ for (a in b[c] = b[c] || [], d) {
 }
 
 //// [parserForStatement2.js]
+"use strict";
 var a;
 var b = [];
 var c;

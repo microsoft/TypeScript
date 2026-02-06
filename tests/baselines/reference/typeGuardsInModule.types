@@ -24,12 +24,12 @@ namespace m1 {
 
     // global vars in function declaration
     num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
->                                              : ^^^^^^
+>num = typeof var1 === "string" && var1.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var1 === "string" && var1.length : number
->                                        : ^^^^^^
+>typeof var1 === "string" && var1.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -74,12 +74,12 @@ namespace m1 {
     }
     else {
         num = var2; // number
->num = var2 : number
->           : ^^^^^^
+>num = var2 : string | number
+>           : ^^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->var2 : number
->     : ^^^^^^
+>var2 : string | number
+>     : ^^^^^^^^^^^^^^^
     }
 
     // exported variable in the module
@@ -107,12 +107,12 @@ namespace m1 {
     }
     else {
         strOrNum = var3; // string | number
->strOrNum = var3 : number
->                : ^^^^^^
+>strOrNum = var3 : string | number
+>                : ^^^^^^^^^^^^^^^
 >strOrNum : string | number
 >         : ^^^^^^^^^^^^^^^
->var3 : number
->     : ^^^^^^
+>var3 : string | number
+>     : ^^^^^^^^^^^^^^^
     }
 }
 // local module
@@ -134,12 +134,12 @@ namespace m2 {
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
->                                              : ^^^^^^
+>num = typeof var1 === "string" && var1.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var1 === "string" && var1.length : number
->                                        : ^^^^^^
+>typeof var1 === "string" && var1.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -157,12 +157,12 @@ namespace m2 {
 
         // local variables from outer module declaration
         num = typeof var2 === "string" && var2.length; // string
->num = typeof var2 === "string" && var2.length : number
->                                              : ^^^^^^
+>num = typeof var2 === "string" && var2.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var2 === "string" && var2.length : number
->                                        : ^^^^^^
+>typeof var2 === "string" && var2.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -180,12 +180,12 @@ namespace m2 {
 
         // exported variable from outer the module
         strOrNum = typeof var3 === "string" && var3; // string | number
->strOrNum = typeof var3 === "string" && var3 : string
->                                            : ^^^^^^
+>strOrNum = typeof var3 === "string" && var3 : string | false
+>                                            : ^^^^^^^^^^^^^^
 >strOrNum : string | number
 >         : ^^^^^^^^^^^^^^^
->typeof var3 === "string" && var3 : string
->                                 : ^^^^^^
+>typeof var3 === "string" && var3 : string | false
+>                                 : ^^^^^^^^^^^^^^
 >typeof var3 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -226,12 +226,12 @@ namespace m2 {
         }
         else {
             num = var4; // number
->num = var4 : number
->           : ^^^^^^
+>num = var4 : string | number
+>           : ^^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->var4 : number
->     : ^^^^^^
+>var4 : string | number
+>     : ^^^^^^^^^^^^^^^
         }
 
         // exported variable in the module
@@ -259,12 +259,12 @@ namespace m2 {
         }
         else {
             strOrNum = var5; // string | number
->strOrNum = var5 : number
->                : ^^^^^^
+>strOrNum = var5 : string | number
+>                : ^^^^^^^^^^^^^^^
 >strOrNum : string | number
 >         : ^^^^^^^^^^^^^^^
->var5 : number
->     : ^^^^^^
+>var5 : string | number
+>     : ^^^^^^^^^^^^^^^
         }
     }
 }
@@ -277,12 +277,12 @@ namespace m3.m4 {
 
     // global vars in function declaration
     num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
->                                              : ^^^^^^
+>num = typeof var1 === "string" && var1.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var1 === "string" && var1.length : number
->                                        : ^^^^^^
+>typeof var1 === "string" && var1.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -327,12 +327,12 @@ namespace m3.m4 {
     }
     else {
         num = var2; // number
->num = var2 : number
->           : ^^^^^^
+>num = var2 : string | number
+>           : ^^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->var2 : number
->     : ^^^^^^
+>var2 : string | number
+>     : ^^^^^^^^^^^^^^^
     }
 
     // exported variable in the module
@@ -360,12 +360,12 @@ namespace m3.m4 {
     }
     else {
         strOrNum = var3; // string | number
->strOrNum = var3 : number
->                : ^^^^^^
+>strOrNum = var3 : string | number
+>                : ^^^^^^^^^^^^^^^
 >strOrNum : string | number
 >         : ^^^^^^^^^^^^^^^
->var3 : number
->     : ^^^^^^
+>var3 : string | number
+>     : ^^^^^^^^^^^^^^^
     }
 }
 

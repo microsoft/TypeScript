@@ -40,8 +40,8 @@ class E<T> extends D<T> {
 >    : ^ ^^ ^^ ^^^      ^^^^^^^^^
 >x : T
 >  : ^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 declare var c: C<string>;

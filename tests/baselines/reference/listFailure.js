@@ -44,6 +44,7 @@ namespace Editor {
 }
 
 //// [listFailure.js]
+"use strict";
 var Editor;
 (function (Editor) {
     class Buffer {

@@ -98,10 +98,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components/whatever/alert.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -209,12 +205,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 //// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib*
 
-
-PolledWatches::
-/home/src/myprojects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/myprojects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/myprojects/project/components/whatever/alert.ts: *new*
@@ -363,11 +353,7 @@ After request
 PolledWatches::
 /home/src/myprojects/node_modules: *new*
   {"pollingInterval":500}
-/home/src/myprojects/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/myprojects/project/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/myprojects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -596,12 +582,6 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
-PolledWatches::
-/home/src/myprojects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/myprojects/project/node_modules/@types:
-  {"pollingInterval":500}
-
 PolledWatches *deleted*::
 /home/src/myprojects/node_modules:
   {"pollingInterval":500}
@@ -736,11 +716,7 @@ After request
 PolledWatches::
 /home/src/myprojects/node_modules: *new*
   {"pollingInterval":500}
-/home/src/myprojects/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/myprojects/project/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/myprojects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

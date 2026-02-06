@@ -47,6 +47,7 @@ var ResultIsNumber13 = ~~~(NUMBER + NUMBER);
 ~objA.a, M.n;
 
 //// [bitwiseNotOperatorWithNumberType.js]
+"use strict";
 // ~ operator on number type
 var NUMBER;
 var NUMBER1 = [1, 2];

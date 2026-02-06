@@ -10,3 +10,4 @@ declare namespace test {
 
 
 //// [reservedNameOnInterfaceImport.js]
+"use strict";

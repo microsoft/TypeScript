@@ -12,6 +12,7 @@ class Employee {
 }
 
 //// [unusedGetterInClass.js]
+"use strict";
 class Employee {
     get fullName() {
         return this._fullName;

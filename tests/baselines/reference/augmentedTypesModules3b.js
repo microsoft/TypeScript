@@ -21,6 +21,7 @@ namespace m3g { export class C { foo() { } } }
 
 
 //// [augmentedTypesModules3b.js]
+"use strict";
 class m3b {
     foo() { }
 }

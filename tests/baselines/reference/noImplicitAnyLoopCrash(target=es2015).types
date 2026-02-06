@@ -28,7 +28,7 @@ while (1) {
 >    : ^^^^^^^^^^
 >...bar : any
 >       : ^^^
->bar : number
->    : ^^^^^^
+>bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 }
 

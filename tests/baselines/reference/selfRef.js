@@ -21,6 +21,7 @@ namespace M
 
 
 //// [selfRef.js]
+"use strict";
 var M;
 (function (M) {
     class Test {

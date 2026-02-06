@@ -10,6 +10,7 @@ console.log(result)
 
 
 //// [capturedShorthandPropertyAssignmentNoCheck.js]
+"use strict";
 var fns = [];
 var _loop_1 = function (value) {
     fns.push(function () { return ({ value: value }); });

@@ -13,6 +13,7 @@ var /*2*/x = point.x;
 point./*3*/x = 30;
 
 //// [declFileObjectLiteralWithAccessors.js]
+"use strict";
 function makePoint(x) {
     return {
         b: 10,

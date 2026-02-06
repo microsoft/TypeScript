@@ -17,6 +17,7 @@ var n3 = new N.D2(); // no error, D2<any>
 
 
 //// [inheritanceOfGenericConstructorMethod2.js]
+"use strict";
 var M;
 (function (M) {
     class C1 {

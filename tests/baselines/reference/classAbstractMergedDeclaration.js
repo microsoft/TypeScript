@@ -43,6 +43,7 @@ new DCC1;
 new DCC2;
 
 //// [classAbstractMergedDeclaration.js]
+"use strict";
 class CM {
 }
 class MC {

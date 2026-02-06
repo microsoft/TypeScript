@@ -1,8 +1,22 @@
 error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+commentsInheritance.ts(21,12): error TS2564: Property 'i1_p1' has no initializer and is not definitely assigned in the constructor.
+commentsInheritance.ts(25,12): error TS2564: Property 'i1_l1' has no initializer and is not definitely assigned in the constructor.
+commentsInheritance.ts(26,12): error TS2564: Property 'i1_nc_p1' has no initializer and is not definitely assigned in the constructor.
+commentsInheritance.ts(29,12): error TS2564: Property 'i1_nc_l1' has no initializer and is not definitely assigned in the constructor.
+commentsInheritance.ts(31,12): error TS2564: Property 'p1' has no initializer and is not definitely assigned in the constructor.
+commentsInheritance.ts(36,12): error TS2564: Property 'l1' has no initializer and is not definitely assigned in the constructor.
+commentsInheritance.ts(38,12): error TS2564: Property 'nc_p1' has no initializer and is not definitely assigned in the constructor.
+commentsInheritance.ts(43,12): error TS2564: Property 'nc_l1' has no initializer and is not definitely assigned in the constructor.
+commentsInheritance.ts(59,12): error TS2564: Property 'c2_nc_p1' has no initializer and is not definitely assigned in the constructor.
+commentsInheritance.ts(66,12): error TS2564: Property 'p1' has no initializer and is not definitely assigned in the constructor.
+commentsInheritance.ts(74,12): error TS2564: Property 'nc_p1' has no initializer and is not definitely assigned in the constructor.
+commentsInheritance.ts(90,12): error TS2564: Property 'p1' has no initializer and is not definitely assigned in the constructor.
+commentsInheritance.ts(98,12): error TS2564: Property 'nc_p1' has no initializer and is not definitely assigned in the constructor.
+commentsInheritance.ts(149,8): error TS2454: Variable 'i3_i' is used before being assigned.
 
 
 !!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== commentsInheritance.ts (0 errors) ====
+==== commentsInheritance.ts (14 errors) ====
     /** i1 is interface with properties*/
     interface i1 {
         /** i1_p1*/
@@ -24,28 +38,44 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
     }
     class c1 implements i1 {
         public i1_p1: number;
+               ~~~~~
+!!! error TS2564: Property 'i1_p1' has no initializer and is not definitely assigned in the constructor.
         // i1_f1
         public i1_f1() {
         }
         public i1_l1: () => void;
+               ~~~~~
+!!! error TS2564: Property 'i1_l1' has no initializer and is not definitely assigned in the constructor.
         public i1_nc_p1: number;
+               ~~~~~~~~
+!!! error TS2564: Property 'i1_nc_p1' has no initializer and is not definitely assigned in the constructor.
         public i1_nc_f1() {
         }
         public i1_nc_l1: () => void;
+               ~~~~~~~~
+!!! error TS2564: Property 'i1_nc_l1' has no initializer and is not definitely assigned in the constructor.
         /** c1_p1*/
         public p1: number;
+               ~~
+!!! error TS2564: Property 'p1' has no initializer and is not definitely assigned in the constructor.
         /** c1_f1*/
         public f1() {
         }
         /** c1_l1*/
         public l1: () => void;
+               ~~
+!!! error TS2564: Property 'l1' has no initializer and is not definitely assigned in the constructor.
         /** c1_nc_p1*/
         public nc_p1: number;
+               ~~~~~
+!!! error TS2564: Property 'nc_p1' has no initializer and is not definitely assigned in the constructor.
         /** c1_nc_f1*/
         public nc_f1() {
         }
         /** c1_nc_l1*/
         public nc_l1: () => void;
+               ~~~~~
+!!! error TS2564: Property 'nc_l1' has no initializer and is not definitely assigned in the constructor.
     }
     var i1_i: i1;
     var c1_i = new c1();
@@ -62,6 +92,8 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
             return 10;
         }
         public c2_nc_p1: number;
+               ~~~~~~~~
+!!! error TS2564: Property 'c2_nc_p1' has no initializer and is not definitely assigned in the constructor.
         public c2_nc_f1() {
         }
         public get c2_nc_prop() {
@@ -69,6 +101,8 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         }
         /** c2 p1*/
         public p1: number;
+               ~~
+!!! error TS2564: Property 'p1' has no initializer and is not definitely assigned in the constructor.
         /** c2 f1*/
         public f1() {
         }
@@ -77,6 +111,8 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
             return 10;
         }
         public nc_p1: number;
+               ~~~~~
+!!! error TS2564: Property 'nc_p1' has no initializer and is not definitely assigned in the constructor.
         public nc_f1() {
         }
         public get nc_prop() {
@@ -93,6 +129,8 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
         }
         /** c3 p1*/
         public p1: number;
+               ~~
+!!! error TS2564: Property 'p1' has no initializer and is not definitely assigned in the constructor.
         /** c3 f1*/
         public f1() {
         }
@@ -101,6 +139,8 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
             return 10;
         }
         public nc_p1: number;
+               ~~~~~
+!!! error TS2564: Property 'nc_p1' has no initializer and is not definitely assigned in the constructor.
         public nc_f1() {
         }
         public get nc_prop() {
@@ -152,4 +192,6 @@ error TS5107: Option 'target=ES5' is deprecated and will stop functioning in Typ
     var i3_i: i3;
     // assign to interface
     i2_i = i3_i;
+           ~~~~
+!!! error TS2454: Variable 'i3_i' is used before being assigned.
     

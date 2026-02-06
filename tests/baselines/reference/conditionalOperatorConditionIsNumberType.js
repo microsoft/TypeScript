@@ -66,6 +66,7 @@ var resultIsObject3 = foo() / array[1] ? exprIsObject1 : exprIsObject2;
 var resultIsStringOrBoolean3 = foo() / array[1] ? exprString1 : exprBoolean1; // Union
 
 //// [conditionalOperatorConditionIsNumberType.js]
+"use strict";
 //Cond is a number type variable
 condNumber ? exprAny1 : exprAny2;
 condNumber ? exprBoolean1 : exprBoolean2;

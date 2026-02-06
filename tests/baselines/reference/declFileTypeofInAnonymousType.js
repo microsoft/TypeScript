@@ -24,6 +24,7 @@ var d = {
 };
 
 //// [declFileTypeofInAnonymousType.js]
+"use strict";
 var m1;
 (function (m1) {
     class c {

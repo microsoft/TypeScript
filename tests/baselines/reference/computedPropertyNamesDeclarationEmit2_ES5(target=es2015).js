@@ -8,6 +8,7 @@ class C {
 }
 
 //// [computedPropertyNamesDeclarationEmit2_ES5.js]
+"use strict";
 class C {
     static ["" + ""]() { }
     static get ["" + ""]() { return 0; }

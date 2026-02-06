@@ -15,6 +15,7 @@ class C<T extends Constructable> {
 
 
 //// [genericTypeWithCallableMembers.js]
+"use strict";
 class C {
     constructor(data, data2) {
         this.data = data;

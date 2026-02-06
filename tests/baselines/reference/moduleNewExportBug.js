@@ -16,6 +16,7 @@ var c : mod1.C; // ERROR: C should not be visible
 
 
 //// [moduleNewExportBug.js]
+"use strict";
 var mod1;
 (function (mod1) {
     class C {

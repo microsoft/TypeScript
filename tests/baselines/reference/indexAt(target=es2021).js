@@ -17,6 +17,7 @@ new BigUint64Array().at(0);
 
 
 //// [indexAt.js]
+"use strict";
 [0].at(0);
 "foo".at(0);
 new Int8Array().at(0);

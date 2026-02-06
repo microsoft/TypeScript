@@ -16,6 +16,7 @@ function sq(n?: number): number {
 sq(3);
 
 //// [strictNullLogicalAndOr.js]
+"use strict";
 // Repro from #9113
 let sinOrCos = Math.random() < .5;
 let choice = sinOrCos && Math.sin || Math.cos;

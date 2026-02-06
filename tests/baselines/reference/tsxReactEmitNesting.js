@@ -37,6 +37,7 @@ let render = (ctrl, model) =>
 
 
 //// [file.js]
+"use strict";
 // A simple render function with nesting and control statements
 let render = (ctrl, model) => vdom.createElement("section", { class: "todoapp" },
     vdom.createElement("header", { class: "header" },

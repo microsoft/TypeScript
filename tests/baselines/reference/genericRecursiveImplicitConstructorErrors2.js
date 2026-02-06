@@ -29,6 +29,7 @@ namespace TypeScript2 {
 
 
 //// [genericRecursiveImplicitConstructorErrors2.js]
+"use strict";
 var TypeScript2;
 (function (TypeScript2) {
     ;

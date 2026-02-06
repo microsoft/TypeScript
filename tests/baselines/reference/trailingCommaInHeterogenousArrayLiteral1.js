@@ -12,6 +12,7 @@ class arrTest {
 
 
 //// [trailingCommaInHeterogenousArrayLiteral1.js]
+"use strict";
 class arrTest {
     test(arg1) { }
     callTest() {

@@ -5,6 +5,7 @@
 ///<reference path="declaration.d.ts" />
 import * as cx from 'classnames';
 >cx : any
+>   : ^^^
 
 import * as React from "react";
 >React : typeof React
@@ -12,6 +13,7 @@ import * as React from "react";
 
 let buttonProps; // any
 >buttonProps : any
+>            : ^^^
 
 let k = <button {...buttonProps}>
 >k : JSX.Element
@@ -20,7 +22,8 @@ let k = <button {...buttonProps}>
 >                                                                                                          : ^^^^^^^^^^^
 >button : any
 >       : ^^^
->buttonProps : any
+>buttonProps : undefined
+>            : ^^^^^^^^^
 
             <span className={cx('class1', { class2: true })} />
 ><span className={cx('class1', { class2: true })} /> : JSX.Element
@@ -28,8 +31,11 @@ let k = <button {...buttonProps}>
 >span : any
 >     : ^^^
 >className : any
+>          : ^^^
 >cx('class1', { class2: true }) : any
+>                               : ^^^
 >cx : any
+>   : ^^^
 >'class1' : "class1"
 >         : ^^^^^^^^
 >{ class2: true } : { class2: boolean; }
@@ -46,4 +52,5 @@ let k = <button {...buttonProps}>
 === declaration.d.ts ===
 declare module "classnames";
 >"classnames" : any
+>             : ^^^
 

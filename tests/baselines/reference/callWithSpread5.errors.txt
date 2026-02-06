@@ -1,13 +1,18 @@
+callWithSpread5.ts(6,4): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
 callWithSpread5.ts(7,4): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 
 
-==== callWithSpread5.ts (1 errors) ====
+==== callWithSpread5.ts (2 errors) ====
     declare const x: number
     declare const nnnu: [number, number, number?]
     declare const nntnnnt: [number, number] | [number, number, number]
     declare function fn(a: number, b: number, bb: number, ...c: number[]): number
     
     fn(...nnnu, x)
+       ~~~~~~~
+!!! error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'undefined' is not assignable to type 'number'.
     fn(...nntnnnt, x)
        ~~~~~~~~~~
 !!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.

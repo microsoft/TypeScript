@@ -29,6 +29,7 @@ function h<T extends Record<K, number>, K extends string>(array: T[], prop: K): 
 
 
 //// [typeParameterExtendsPrimitive.js]
+"use strict";
 // #14473
 function f() {
     var t;

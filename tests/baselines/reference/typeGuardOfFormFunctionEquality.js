@@ -18,6 +18,7 @@ function isString3(a: number, b: number, c: Object): c is string {
 
 
 //// [typeGuardOfFormFunctionEquality.js]
+"use strict";
 switch (isString1(0, "")) {
     case isString2(""):
     default:

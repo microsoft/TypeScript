@@ -5,6 +5,7 @@ namespace M { export var x; }
 var m = M;
 
 //// [structuralTypeInDeclareFileForModule.js]
+"use strict";
 var M;
 (function (M) {
 })(M || (M = {}));

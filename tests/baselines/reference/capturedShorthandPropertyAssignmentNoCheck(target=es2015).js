@@ -10,6 +10,7 @@ console.log(result)
 
 
 //// [capturedShorthandPropertyAssignmentNoCheck.js]
+"use strict";
 const fns = [];
 for (const value of [1, 2, 3]) {
     fns.push(() => ({ value }));

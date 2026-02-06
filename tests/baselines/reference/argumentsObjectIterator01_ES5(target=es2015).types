@@ -14,8 +14,8 @@ function doubleAndReturnAsArray(x: number, y: number, z: number): [number, numbe
     let result = [];
 >result : any[]
 >       : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     for (let arg of arguments) {
 >arg : any

@@ -2,12 +2,10 @@
 
 === strictNullChecksNoWidening.ts ===
 var a1 = null;
->a1 : null
->   : ^^^^
+>a1 : any
 
 var a2 = undefined;
->a2 : undefined
->   : ^^^^^^^^^
+>a2 : any
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -20,8 +18,8 @@ var a3 = void 0;
 >  : ^
 
 var b1 = [];
->b1 : never[]
->   : ^^^^^^^
+>b1 : any[]
+>   : ^^^^^
 >[] : never[]
 >   : ^^^^^^^
 

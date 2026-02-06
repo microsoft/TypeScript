@@ -47,6 +47,7 @@ function ff () {
 }
 
 //// [override1.js]
+"use strict";
 class B {
     foo(v) { }
     fooo(v) { }

@@ -47,7 +47,7 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/workspace/solution/projects/project/file1.js]
 export {};
@@ -55,27 +55,19 @@ export {};
 
 
 PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/workspace/package.json: *new*
   {"pollingInterval":2000}
-/user/username/workspace/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/workspace/solution/package.json: *new*
   {"pollingInterval":2000}
-/user/username/workspace/solution/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/workspace/solution/projects/package.json: *new*
   {"pollingInterval":2000}
-/user/username/workspace/solution/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/workspace/solution/projects/project/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /user/username/workspace/solution/projects/project/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/workspace/solution/projects/project/file1.ts: *new*
   {}
@@ -99,14 +91,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/node_modules/module1.ts
 /user/username/workspace/solution/projects/project/file1.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/workspace/solution/projects/project/node_modules/module1.ts (used version)
 /user/username/workspace/solution/projects/project/file1.ts (used version)
 
@@ -151,16 +143,6 @@ export {};
 
 
 
-PolledWatches::
-/user/username/workspace/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
 PolledWatches *deleted*::
 /user/username/workspace/package.json:
   {"pollingInterval":2000}
@@ -174,7 +156,7 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/workspace/solution/projects/module1.ts: *new*
   {}
@@ -205,7 +187,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/module1.ts
 /user/username/workspace/solution/projects/project/file1.ts
 

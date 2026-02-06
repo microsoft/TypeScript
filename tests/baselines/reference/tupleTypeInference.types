@@ -27,8 +27,8 @@ interface IQService {
     when<T>(t?: T): IPromise<T>;
 >when : <T>(t?: T) => IPromise<T>
 >     : ^ ^^ ^^^ ^^^^^           
->t : T
->  : ^
+>t : T | undefined
+>  : ^^^^^^^^^^^^^
 }
 
 interface IPromise<T> {

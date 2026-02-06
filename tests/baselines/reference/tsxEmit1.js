@@ -43,6 +43,7 @@ var whitespace3 = <div>
 
 
 //// [file.jsx]
+"use strict";
 var p;
 var selfClosed1 = <div />;
 var selfClosed2 = <div x="1"/>;

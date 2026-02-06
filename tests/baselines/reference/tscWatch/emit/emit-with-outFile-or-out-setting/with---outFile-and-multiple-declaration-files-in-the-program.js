@@ -67,6 +67,7 @@ Output::
 
 
 //// [/home/src/projects/a/b/output/common.js]
+"use strict";
 var Main;
 (function (Main) {
     function fooBar() { }
@@ -82,16 +83,6 @@ var main;
 })(main || (main = {}));
 
 
-
-PolledWatches::
-/home/src/projects/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/b/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/a/b/dependencies/file2.d.ts: *new*

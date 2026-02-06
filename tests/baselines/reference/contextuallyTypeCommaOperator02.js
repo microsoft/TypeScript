@@ -9,6 +9,7 @@ x = (100, a => {
 });
 
 //// [contextuallyTypeCommaOperator02.js]
+"use strict";
 let x;
 x = (100, a => {
     const b = a;

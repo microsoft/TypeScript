@@ -91,6 +91,7 @@ enum Three {
 
 
 //// [overshifts.js]
+"use strict";
 1 << 1; // ok
 1 << 32; // overshift
 1 << 123;

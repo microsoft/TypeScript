@@ -15,6 +15,7 @@ var a = new C1([{ x1: 10, x2: "", x3: true }, "", false]);
 var [a_x1, a_x2, a_x3, a_y, a_z] = [a.x1, a.x2, a.x3, a.y, a.z];
 
 //// [destructuringParameterProperties5.js]
+"use strict";
 class C1 {
     constructor([{ x1, x2, x3 }, y, z]) {
         var foo = x1 || x2 || x3 || y || z;

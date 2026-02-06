@@ -12,6 +12,7 @@ interface Array<T> {
 
 
 //// [innerBoundLambdaEmit.js]
+"use strict";
 var M;
 (function (M) {
     class Foo {

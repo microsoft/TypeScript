@@ -18,6 +18,7 @@ function b() {
 module.exports = {x, b}
 
 //// [index1.js]
+"use strict";
 /**
  * const doc comment
  */

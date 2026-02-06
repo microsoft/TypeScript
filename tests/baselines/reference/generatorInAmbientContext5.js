@@ -6,6 +6,7 @@ class C {
 }
 
 //// [generatorInAmbientContext5.js]
+"use strict";
 class C {
     *generator() { }
 }

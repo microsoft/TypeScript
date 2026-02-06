@@ -36,6 +36,7 @@ class D extends C {
 }
 
 //// [derivedClassConstructorWithExplicitReturns01.js]
+"use strict";
 class C {
     foo() { return "this never gets used."; }
     constructor(value) {

@@ -8,7 +8,8 @@ namespace M {
   try {
   }
   catch (e) {
->e : any
+>e : unknown
+>  : ^^^^^^^
   }
 }
 var v = M;

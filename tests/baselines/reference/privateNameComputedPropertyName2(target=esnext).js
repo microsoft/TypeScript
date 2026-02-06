@@ -12,6 +12,7 @@ console.log(getX(new A));
 
 
 //// [privateNameComputedPropertyName2.js]
+"use strict";
 let getX;
 class A {
     #x = 100;

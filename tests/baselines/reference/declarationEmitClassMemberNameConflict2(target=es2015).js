@@ -23,6 +23,7 @@ class Foo {
 }
 
 //// [declarationEmitClassMemberNameConflict2.js]
+"use strict";
 const Bar = 'bar';
 var Hello;
 (function (Hello) {

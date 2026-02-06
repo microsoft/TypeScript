@@ -34,6 +34,7 @@ var r = a.x; // error
 var r2 = a.w; // error
 
 //// [mergedInterfacesWithInheritedPrivates2.js]
+"use strict";
 class C {
 }
 class C2 {

@@ -6,3 +6,4 @@ interface I {
 }
 
 //// [parserES5ComputedPropertyName5.js]
+"use strict";

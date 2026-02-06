@@ -27,6 +27,7 @@ const x2 = {
 
 
 //// [typeSatisfaction_propertyValueConformance2.js]
+"use strict";
 const x = {
     m: true
 };

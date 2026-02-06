@@ -46,6 +46,7 @@ abstract class AbstractAccessorMismatch {
 
 
 //// [abstractPropertyNegative.js]
+"use strict";
 class B {
 }
 class C extends B {

@@ -48,6 +48,7 @@ function k<T>(a: T) {
 }
 
 //// [assignAnyToEveryType.js]
+"use strict";
 // all of these are valid
 var x;
 var a = x;

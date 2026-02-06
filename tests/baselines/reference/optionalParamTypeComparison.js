@@ -8,5 +8,6 @@ f = g;
 g = f;
 
 //// [optionalParamTypeComparison.js]
+"use strict";
 f = g;
 g = f;

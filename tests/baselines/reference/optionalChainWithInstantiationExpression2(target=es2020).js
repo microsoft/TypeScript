@@ -16,5 +16,6 @@ a<b>?.();
 
 
 //// [optionalChainWithInstantiationExpression2.js]
+"use strict";
 a?.();
 a?.();

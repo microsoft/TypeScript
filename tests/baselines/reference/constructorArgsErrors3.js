@@ -8,6 +8,7 @@ class foo {
 
 
 //// [constructorArgsErrors3.js]
+"use strict";
 class foo {
     constructor(a) {
         this.a = a;

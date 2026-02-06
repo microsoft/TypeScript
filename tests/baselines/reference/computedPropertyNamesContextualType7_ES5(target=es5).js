@@ -22,6 +22,7 @@ g({ p: "" });
 
 
 //// [computedPropertyNamesContextualType7_ES5.js]
+"use strict";
 var _a;
 foo((_a = {
         0: function () { }

@@ -2556,10 +2556,11 @@ declare namespace ts {
                 ES2022 = "es2022",
                 ES2023 = "es2023",
                 ES2024 = "es2024",
+                ES2025 = "es2025",
                 ESNext = "esnext",
                 JSON = "json",
                 Latest = "esnext",
-                LatestStandard = "es2024",
+                LatestStandard = "es2025",
             }
         }
         namespace typingsInstaller {
@@ -7033,6 +7034,7 @@ declare namespace ts {
         disableSourceOfProjectReferenceRedirect?: boolean;
         disableSolutionSearching?: boolean;
         disableReferencedProjectLoad?: boolean;
+        /** @deprecated */
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
@@ -7221,10 +7223,11 @@ declare namespace ts {
         ES2022 = 9,
         ES2023 = 10,
         ES2024 = 11,
+        ES2025 = 12,
         ESNext = 99,
         JSON = 100,
         Latest = 99,
-        LatestStandard = 11,
+        LatestStandard = 12,
     }
     enum LanguageVariant {
         Standard = 0,
@@ -9326,7 +9329,7 @@ declare namespace ts {
      * Given a set of options, returns the set of type directive names
      *   that should be included for this program automatically.
      * This list could either come from the config file,
-     *   or from enumerating the types root + initial secondary types lookup location.
+     *   and/or from enumerating the types root + initial secondary types lookup location given "*" compat wildcard.
      * More type directives might appear in the program later as a result of loading actual source files;
      *   this list is only the set of defaults that are implicitly included.
      */

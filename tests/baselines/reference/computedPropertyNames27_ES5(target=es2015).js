@@ -8,6 +8,7 @@ class C extends Base {
 }
 
 //// [computedPropertyNames27_ES5.js]
+"use strict";
 class Base {
 }
 class C extends Base {

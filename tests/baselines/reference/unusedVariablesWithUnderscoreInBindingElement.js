@@ -92,6 +92,7 @@ function t7() {
 
 
 //// [unusedVariablesWithUnderscoreInBindingElement.js]
+"use strict";
 function t1() {
     const [_a1, b1] = [1, 2];
     console.log(b1);

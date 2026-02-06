@@ -1,13 +1,16 @@
 error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+asyncArrowFunctionCapturesArguments_es5.ts(4,52): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[]'.
 asyncArrowFunctionCapturesArguments_es5.ts(4,52): error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
 
 
 !!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== asyncArrowFunctionCapturesArguments_es5.ts (1 errors) ====
+==== asyncArrowFunctionCapturesArguments_es5.ts (2 errors) ====
     class C {
        method() {
           function other() {}
           var fn = async () => await other.apply(this, arguments);
+                                                       ~~~~~~~~~
+!!! error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[]'.
                                                        ~~~~~~~~~
 !!! error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.
        }

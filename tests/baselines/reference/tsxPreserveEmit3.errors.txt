@@ -1,4 +1,5 @@
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+test.d.ts(1,12): error TS7005: Variable 'React' implicitly has an 'any' type.
 
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
@@ -10,8 +11,10 @@ error TS5107: Option 'module=AMD' is deprecated and will stop functioning in Typ
     	}
     }
     
-==== test.d.ts (0 errors) ====
+==== test.d.ts (1 errors) ====
     export var React;
+               ~~~~~
+!!! error TS7005: Variable 'React' implicitly has an 'any' type.
     
 ==== react-consumer.tsx (0 errors) ====
     // This import should be elided

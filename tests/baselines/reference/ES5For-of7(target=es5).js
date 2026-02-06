@@ -10,6 +10,7 @@ for (var v of []) {
 }
 
 //// [ES5For-of7.js]
+"use strict";
 for (var _i = 0, _a = []; _i < _a.length; _i++) {
     var w = _a[_i];
     var x = w;

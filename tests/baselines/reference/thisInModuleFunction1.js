@@ -9,6 +9,7 @@ namespace bar {
 var z = bar.bar();
 
 //// [thisInModuleFunction1.js]
+"use strict";
 var bar;
 (function (bar_1) {
     function bar() {

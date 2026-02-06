@@ -241,6 +241,7 @@ const o4: Context = {
 };
 
 //// [uniqueSymbolsDeclarations.js]
+"use strict";
 // declarations with call initializer
 const constCall = Symbol();
 let letCall = Symbol();

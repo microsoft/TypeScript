@@ -9,8 +9,8 @@ function build() {
     var arr = [];
 >arr : any[]
 >    : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
     arr[arr.length] = 'value'; 
 >arr[arr.length] = 'value' : "value"

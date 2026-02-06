@@ -73,6 +73,7 @@ oneTwoOrThree(0n); oneTwoOrThree(1n); oneTwoOrThree(2n); oneTwoOrThree(3n);
 oneTwoOrThree(0);  oneTwoOrThree(1);  oneTwoOrThree(2);  oneTwoOrThree(3);
 
 //// [parseBigInt.js]
+"use strict";
 // All bases should allow "n" suffix
 const bin = 0b101, binBig = 5n; // 5, 5n
 const oct = 0o567, octBig = 375n; // 375, 375n

@@ -61,6 +61,7 @@ namespace MsPortalFx.ViewModels {
 
 
 //// [exportImportCanSubstituteConstEnumForValue.js]
+"use strict";
 var MsPortalFx;
 (function (MsPortalFx) {
     var ViewModels;

@@ -33,6 +33,7 @@ class c44 {
 
 
 //// [augmentedTypesClass2.js]
+"use strict";
 // Checking class with other things in type space not value space
 // class then interface
 class c11 {

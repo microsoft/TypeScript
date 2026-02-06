@@ -16,6 +16,7 @@ class A {
 
 
 //// [privateNameES5Ban.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
         _A_instances.add(this);

@@ -27,6 +27,7 @@ const O = {
 };
 
 //// [invalidNewTarget.es5.js]
+"use strict";
 var _a;
 var a = _newTarget;
 var b = function () { return _newTarget; };

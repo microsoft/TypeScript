@@ -5,5 +5,6 @@ protected class C {
 }
 
 //// [Protected1.js]
+"use strict";
 class C {
 }

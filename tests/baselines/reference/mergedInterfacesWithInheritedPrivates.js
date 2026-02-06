@@ -29,6 +29,7 @@ declare var a: A;
 var r = a.x; // error
 
 //// [mergedInterfacesWithInheritedPrivates.js]
+"use strict";
 class C {
 }
 class D {

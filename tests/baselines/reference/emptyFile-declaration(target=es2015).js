@@ -4,6 +4,7 @@
 
 
 //// [emptyFile-declaration.js]
+"use strict";
 
 
 //// [emptyFile-declaration.d.ts]

@@ -12,3 +12,4 @@ declare namespace D3 {
 }
 
 //// [moduleAndInterfaceSharingName4.js]
+"use strict";

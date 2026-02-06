@@ -11,6 +11,7 @@ function foo2(...rest: any[]) {
 }
 
 //// [declarationEmitDestructuringOptionalBindingParametersInOverloads.js]
+"use strict";
 function foo(...rest) {
 }
 function foo2(...rest) {

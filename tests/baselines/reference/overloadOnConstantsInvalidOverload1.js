@@ -14,6 +14,7 @@ function foo(name: "DIV"): Derived2 {
 foo("HI");
 
 //// [overloadOnConstantsInvalidOverload1.js]
+"use strict";
 class Base {
     foo() { }
 }

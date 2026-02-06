@@ -6,4 +6,5 @@ var a
   , c
 
 //// [parserVariableStatement2.js]
+"use strict";
 var a, b, c;

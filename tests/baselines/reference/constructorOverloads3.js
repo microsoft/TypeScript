@@ -25,6 +25,7 @@ f1.bar1();
 
 
 //// [constructorOverloads3.js]
+"use strict";
 class Foo extends FooBase {
     constructor(x, y) { }
     bar1() { }

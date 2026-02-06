@@ -9,6 +9,7 @@ function f() {
 }
 
 //// [functionDeclarationWithResolutionOfTypeOfSameName01.js]
+"use strict";
 function f() {
     f;
 }

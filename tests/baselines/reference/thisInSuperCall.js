@@ -25,6 +25,7 @@ class Foo3 extends Base {
 }
 
 //// [thisInSuperCall.js]
+"use strict";
 class Base {
     constructor(x) { }
 }

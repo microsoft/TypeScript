@@ -25,6 +25,7 @@ class C extends B {
 }
 
 //// [thisAndSuperInStaticMembers4.js]
+"use strict";
 var _a, _b;
 class C extends (_b = B) {
     constructor() {

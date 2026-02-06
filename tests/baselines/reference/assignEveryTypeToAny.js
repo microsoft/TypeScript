@@ -58,6 +58,7 @@ function j<T>(a: T) {
 }
 
 //// [assignEveryTypeToAny.js]
+"use strict";
 // all of these are valid
 var x;
 x = 1;

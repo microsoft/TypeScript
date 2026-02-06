@@ -17,6 +17,7 @@ function from(arg: any): any {
 
 
 //// [infinitelyExpandingTypes5.js]
+"use strict";
 function from(arg) {
     return undefined;
 }

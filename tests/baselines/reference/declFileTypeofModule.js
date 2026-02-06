@@ -15,6 +15,7 @@ var m2_1 = m2;
 var m2_2: typeof m2;
 
 //// [declFileTypeofModule.js]
+"use strict";
 var m1;
 (function (m1) {
 })(m1 || (m1 = {}));

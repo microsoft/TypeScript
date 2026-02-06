@@ -28,6 +28,7 @@ class T6 extends T5<number>{
 
 
 //// [superCallArgsMustMatch.js]
+"use strict";
 class T5 {
     constructor(bar) {
         this.bar = bar;

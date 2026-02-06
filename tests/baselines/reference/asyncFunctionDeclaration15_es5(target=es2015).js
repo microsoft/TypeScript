@@ -27,6 +27,7 @@ async function fn19() { await thenable; } // error
 
 
 //// [asyncFunctionDeclaration15_es5.js]
+"use strict";
 function fn1() {
     return __awaiter(this, void 0, void 0, function* () { });
 } // valid: Promise<void>

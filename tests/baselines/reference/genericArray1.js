@@ -17,6 +17,7 @@ var lengths = ["a", "b", "c"].map(x => x.length);
 
 
 //// [genericArray1.js]
+"use strict";
 /*
 var n: number[];
 

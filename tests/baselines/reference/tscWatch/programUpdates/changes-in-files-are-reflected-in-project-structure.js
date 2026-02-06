@@ -29,8 +29,8 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 project/f2.ts
   Imported via "./f2" from file 'project/f1.ts'
 project/f1.ts
@@ -39,7 +39,7 @@ project/f1.ts
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/workspace/solution/projects/project/f2.js]
 export let x = 1;
@@ -50,16 +50,8 @@ export * from "./f2";
 
 
 
-PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/workspace/solution/projects/project/f1.ts: *new*
   {}
@@ -75,17 +67,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/f2.ts
 /user/username/workspace/solution/projects/project/f1.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/f2.ts
 /user/username/workspace/solution/projects/project/f1.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/workspace/solution/projects/project/f2.ts (used version)
 /user/username/workspace/solution/projects/project/f1.ts (used version)
 
@@ -110,8 +102,8 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 projectc/f3.ts
   Imported via "../projectc/f3" from file 'project/f2.ts'
 project/f2.ts
@@ -132,16 +124,8 @@ export let y = 1;
 
 
 
-PolledWatches::
-/user/username/workspace/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/workspace/solution/projects/project/f1.ts:
   {}
@@ -160,7 +144,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/projectc/f3.ts
 /user/username/workspace/solution/projects/project/f2.ts
 /user/username/workspace/solution/projects/project/f1.ts

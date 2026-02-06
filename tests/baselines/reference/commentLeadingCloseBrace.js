@@ -14,6 +14,7 @@ function ifelse() {
 }
 
 //// [commentLeadingCloseBrace.js]
+"use strict";
 function ifelse() {
     if (commentedParameters(1, 2)) {
         /*comment1*/

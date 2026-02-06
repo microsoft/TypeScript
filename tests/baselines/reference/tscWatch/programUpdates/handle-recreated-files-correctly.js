@@ -29,8 +29,8 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-../../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 commonFile1.ts
   Matched by default include pattern '**/*'
 commonFile2.ts
@@ -39,29 +39,21 @@ commonFile2.ts
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
+"use strict";
 let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
 let y = 1;
 
 
 
-PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/workspace/solution/projects/project/commonFile1.ts: *new*
   {}
@@ -85,17 +77,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/workspace/solution/projects/project/commonfile1.ts (used version)
 /user/username/workspace/solution/projects/project/commonfile2.ts (used version)
 
@@ -120,8 +112,8 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-../../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 commonFile1.ts
   Matched by default include pattern '**/*'
 commonFile2.ts
@@ -132,6 +124,7 @@ commonFile2.ts
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
 let y = 1;
 let xy = 10;
 
@@ -149,18 +142,18 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
 /user/username/workspace/solution/projects/project/commonfile2.ts (computed .d.ts)
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/workspace/solution/projects/project/commonfile1.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
@@ -182,8 +175,8 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-../../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 commonFile1.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
@@ -192,18 +185,8 @@ commonFile1.ts
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
 
-PolledWatches::
-/user/username/workspace/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/workspace/solution/projects/project/commonFile1.ts:
   {}
@@ -229,7 +212,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -259,8 +242,8 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-../../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 commonFile1.ts
   Matched by default include pattern '**/*'
 commonFile2.ts
@@ -271,22 +254,13 @@ commonFile2.ts
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
 let y = 1;
 
 
 
-PolledWatches::
-/user/username/workspace/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/workspace/solution/projects/project/commonFile1.ts:
   {}
@@ -311,12 +285,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 

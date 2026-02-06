@@ -1,6 +1,7 @@
 assignmentCompatability23.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: boolean[]; }'.
   Types of property 'two' are incompatible.
-    Type 'string' is not assignable to type 'boolean[]'.
+    Type 'string | undefined' is not assignable to type 'boolean[]'.
+      Type 'undefined' is not assignable to type 'boolean[]'.
 
 
 ==== assignmentCompatability23.ts (1 errors) ====
@@ -16,4 +17,5 @@ assignmentCompatability23.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOpt
     ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: boolean[]; }'.
 !!! error TS2322:   Types of property 'two' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'boolean[]'.
+!!! error TS2322:     Type 'string | undefined' is not assignable to type 'boolean[]'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'boolean[]'.

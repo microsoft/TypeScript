@@ -9,6 +9,7 @@ for ({ a: b = 1, b: a = ""} of []) {
 }
 
 //// [ES5For-of31.js]
+"use strict";
 var a, b;
 for ({ a: b = 1, b: a = "" } of []) {
     a;

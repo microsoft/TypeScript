@@ -8,6 +8,7 @@ for (let {x = 'a' in {}} in { '': 0 }) console.log(x)
 
 
 //// [parserForInStatement8.js]
+"use strict";
 // repro from https://github.com/microsoft/TypeScript/issues/54769
 for (var _a = (void 0)[0], x = _a === void 0 ? 'a' in {} : _a in { '': 0 })
     console.log(x);

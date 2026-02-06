@@ -39,6 +39,7 @@ a = function (x: string) { return ''; }
 
 
 //// [assignmentCompatWithConstructSignatures.js]
+"use strict";
 // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
 t = a;
 a = t;

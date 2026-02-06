@@ -21,6 +21,7 @@ var r2: new (x: string) => A = B; // error
 var r3: typeof A = C; // ok
 
 //// [classSideInheritance3.js]
+"use strict";
 class A {
     constructor(x) {
         this.x = x;

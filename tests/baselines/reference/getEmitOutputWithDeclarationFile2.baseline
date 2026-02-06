@@ -14,5 +14,6 @@ exports.Foo = Foo;
 EmitSkipped: false
 
 FileName : /tests/cases/fourslash/inputFile3.js
+"use strict";
 var x = "hello";
 

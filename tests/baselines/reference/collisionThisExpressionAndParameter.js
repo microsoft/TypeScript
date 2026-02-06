@@ -96,6 +96,7 @@ declare function f4(_this: number); // no code gen - no error
 declare function f4(_this: string); // no code gen - no error
 
 //// [collisionThisExpressionAndParameter.js]
+"use strict";
 class Foo {
     x() {
         var _this = 10; // Local var. No this capture in x(), so no conflict.

@@ -14,6 +14,7 @@ class C<T> {
 }
 
 //// [genericInstanceOf.js]
+"use strict";
 class C {
     constructor(a, b) {
         this.a = a;

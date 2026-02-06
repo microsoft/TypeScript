@@ -22,6 +22,7 @@ g({ p: "" });
 
 
 //// [computedPropertyNamesContextualType7_ES5.js]
+"use strict";
 foo({
     0: () => { },
     ["hi" + "bye"]: true,

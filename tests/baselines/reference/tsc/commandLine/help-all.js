@@ -219,7 +219,7 @@ default: undefined
 [94m--alwaysStrict[39m
 Ensure 'use strict' is always emitted.
 type: boolean
-default: `false`, unless `strict` is set
+default: true
 
 [94m--exactOptionalPropertyTypes[39m
 Interpret optional property types as written, rather than adding 'undefined'.
@@ -234,7 +234,7 @@ default: false
 [94m--noImplicitAny[39m
 Enable error reporting for expressions and declarations with an implied 'any' type.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--noImplicitOverride[39m
 Ensure overriding members in derived classes are marked with an override modifier.
@@ -249,7 +249,7 @@ default: false
 [94m--noImplicitThis[39m
 Enable error reporting when 'this' is given the type 'any'.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--noPropertyAccessFromIndexSignature[39m
 Enforces using indexed accessors for keys declared using an indexed type.
@@ -274,37 +274,37 @@ default: false
 [94m--strict[39m
 Enable all strict type-checking options.
 type: boolean
-default: false
+default: true
 
 [94m--strictBindCallApply[39m
 Check that the arguments for 'bind', 'call', and 'apply' methods match the original function.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--strictBuiltinIteratorReturn[39m
 Built-in iterators are instantiated with a 'TReturn' type of 'undefined' instead of 'any'.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--strictFunctionTypes[39m
 When assigning functions, check to ensure parameters and the return values are subtype-compatible.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--strictNullChecks[39m
 When type checking, take into account 'null' and 'undefined'.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--strictPropertyInitialization[39m
 Check for class properties that are declared but not set in the constructor.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 [94m--useUnknownInCatchVariables[39m
 Default catch clause variables as 'unknown' instead of 'any'.
 type: boolean
-default: `false`, unless `strict` is set
+default: `true`, unless `strict` is `false`
 
 ### Watch and Build Modes
 
@@ -577,7 +577,7 @@ default: react
 
 [94m--lib[39m
 Specify a set of bundled library declaration files that describe the target runtime environment.
-one or more: es5, es6/es2015, es7/es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, esnext, dom, dom.iterable, dom.asynciterable, webworker, webworker.importscripts, webworker.iterable, webworker.asynciterable, scripthost, es2015.core, es2015.collection, es2015.generator, es2015.iterable, es2015.promise, es2015.proxy, es2015.reflect, es2015.symbol, es2015.symbol.wellknown, es2016.array.include, es2016.intl, es2017.arraybuffer, es2017.date, es2017.object, es2017.sharedmemory, es2017.string, es2017.intl, es2017.typedarrays, es2018.asyncgenerator, es2018.asynciterable/esnext.asynciterable, es2018.intl, es2018.promise, es2018.regexp, es2019.array, es2019.object, es2019.string, es2019.symbol/esnext.symbol, es2019.intl, es2020.bigint/esnext.bigint, es2020.date, es2020.promise, es2020.sharedmemory, es2020.string, es2020.symbol.wellknown, es2020.intl, es2020.number, es2021.promise, es2021.string, es2021.weakref/esnext.weakref, es2021.intl, es2022.array, es2022.error, es2022.intl, es2022.object, es2022.string, es2022.regexp, es2023.array, es2023.collection, es2023.intl, es2024.arraybuffer, es2024.collection, es2024.object/esnext.object, es2024.promise, es2024.regexp/esnext.regexp, es2024.sharedmemory, es2024.string/esnext.string, esnext.array, esnext.collection, esnext.intl, esnext.disposable, esnext.promise, esnext.decorators, esnext.iterator, esnext.float16, esnext.typedarrays, esnext.error, esnext.sharedmemory, decorators, decorators.legacy
+one or more: es5, es6/es2015, es7/es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, es2025, esnext, dom, dom.iterable, dom.asynciterable, webworker, webworker.importscripts, webworker.iterable, webworker.asynciterable, scripthost, es2015.core, es2015.collection, es2015.generator, es2015.iterable, es2015.promise, es2015.proxy, es2015.reflect, es2015.symbol, es2015.symbol.wellknown, es2016.array.include, es2016.intl, es2017.arraybuffer, es2017.date, es2017.object, es2017.sharedmemory, es2017.string, es2017.intl, es2017.typedarrays, es2018.asyncgenerator, es2018.asynciterable/esnext.asynciterable, es2018.intl, es2018.promise, es2018.regexp, es2019.array, es2019.object, es2019.string, es2019.symbol/esnext.symbol, es2019.intl, es2020.bigint/esnext.bigint, es2020.date, es2020.promise, es2020.sharedmemory, es2020.string, es2020.symbol.wellknown, es2020.intl, es2020.number, es2021.promise, es2021.string, es2021.weakref/esnext.weakref, es2021.intl, es2022.array, es2022.error, es2022.intl, es2022.object, es2022.string, es2022.regexp, es2023.array, es2023.collection, es2023.intl, es2024.arraybuffer, es2024.collection, es2024.object/esnext.object, es2024.promise, es2024.regexp/esnext.regexp, es2024.sharedmemory, es2024.string/esnext.string, es2025.collection/esnext.collection, es2025.float16/esnext.float16, es2025.intl, es2025.iterator/esnext.iterator, es2025.promise/esnext.promise, es2025.regexp, esnext.array, esnext.decorators, esnext.disposable, esnext.error, esnext.intl, esnext.sharedmemory, esnext.typedarrays, decorators, decorators.legacy
 default: undefined
 
 [94m--libReplacement[39m
@@ -602,8 +602,8 @@ default: `React`
 
 [94m--target, -t[39m
 Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
-one of: es6/es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, esnext
-default: es2024
+one of: es6/es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, es2023, es2024, es2025, esnext
+default: es2025
 
 [94m--useDefineForClassFields[39m
 Emit ECMAScript-standard-compliant class fields.

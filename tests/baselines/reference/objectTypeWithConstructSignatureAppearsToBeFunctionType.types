@@ -34,12 +34,12 @@ var r2c: (x: any, y?: any) => any = i.apply;
 >  : ^^^
 >y : any
 >  : ^^^
->i.apply : (this: Function, thisArg: any, argArray?: any) => any
->        : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>i.apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
+>        : ^^^ ^^    ^^           ^^       ^^ ^^^    ^^^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^    ^^ ^^^    ^^^
 >i : I
 >  : ^
->apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
+>      : ^^^ ^^    ^^           ^^       ^^ ^^^    ^^^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^    ^^ ^^^    ^^^
 
 declare var b: {
 >b : new () => number
@@ -71,10 +71,10 @@ var r4c: (x: any, y?: any) => any = b.apply;
 >  : ^^^
 >y : any
 >  : ^^^
->b.apply : (this: Function, thisArg: any, argArray?: any) => any
->        : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>b.apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
+>        : ^^^ ^^    ^^           ^^       ^^ ^^^    ^^^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^    ^^ ^^^    ^^^
 >b : new () => number
 >  : ^^^^^^^^^^      
->apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
+>      : ^^^ ^^    ^^           ^^       ^^ ^^^    ^^^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^    ^^ ^^^    ^^^
 

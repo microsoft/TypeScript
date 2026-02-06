@@ -14,6 +14,7 @@ class P {
 }
 
 //// [thisInConstructorParameter2.js]
+"use strict";
 var _a;
 class P {
     constructor(z = this, zz = this, zzz = (p = this) => this) {

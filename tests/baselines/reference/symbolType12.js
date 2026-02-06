@@ -31,6 +31,7 @@ s |= 0;
 str += (s || str);
 
 //// [symbolType12.js]
+"use strict";
 var s = Symbol.for("assign");
 var str = "";
 s *= s;

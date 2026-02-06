@@ -20,6 +20,7 @@ module.exports = {
 };
 
 //// [errors.js]
+"use strict";
 class FancyError extends Error {
     constructor(status) {
         super(`error with status ${status}`);
@@ -29,6 +30,7 @@ module.exports = {
     FancyError
 };
 //// [index.js]
+"use strict";
 // issue arises here on compilation
 const errors = require("./errors");
 module.exports = {

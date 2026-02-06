@@ -16,6 +16,7 @@ class D {
 }
 
 //// [emitRestParametersMethod.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(name) {
         var rest = [];

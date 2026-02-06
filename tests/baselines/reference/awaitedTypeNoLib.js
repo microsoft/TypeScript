@@ -29,6 +29,7 @@ class Thenable<T> {
 }
 
 //// [awaitedTypeNoLib.js]
+"use strict";
 class Thenable {
     then(a) { }
     handleResolve(result, resolve) {

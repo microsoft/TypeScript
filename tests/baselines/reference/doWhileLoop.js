@@ -5,5 +5,6 @@ do { } while (false);
 var n;
 
 //// [doWhileLoop.js]
+"use strict";
 do { } while (false);
 var n;

@@ -20,6 +20,7 @@ class B extends A {
 }
 
 //// [superPropertyElementNoUnusedLexicalThisCapture.js]
+"use strict";
 class A {
     x() { }
 }

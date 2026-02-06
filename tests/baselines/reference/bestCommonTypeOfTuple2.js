@@ -25,6 +25,7 @@ var e51 = t5[2]; // {}
 
 
 //// [bestCommonTypeOfTuple2.js]
+"use strict";
 class C {
 }
 class D {

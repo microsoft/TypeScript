@@ -8,6 +8,7 @@ class C {
 
 
 //// [parsingClassRecoversWhenHittingUnexpectedSemicolon.js]
+"use strict";
 class C {
     f() { }
     ;

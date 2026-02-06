@@ -32,6 +32,7 @@ class Hola {
 
 
 //// [test1.js]
+"use strict";
 /*! Copyright 2015 MyCompany Inc. */
 var Hello = (function () {
     function Hello() {
@@ -39,12 +40,14 @@ var Hello = (function () {
     return Hello;
 }());
 //// [test2.js]
+"use strict";
 var Hi = (function () {
     function Hi() {
     }
     return Hi;
 }());
 //// [test3.js]
+"use strict";
 var Hola = (function () {
     function Hola() {
     }

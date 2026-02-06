@@ -18,6 +18,7 @@ class D extends Mod.Nested.I {}
 
 
 //// [classExtendsInterfaceInModule.js]
+"use strict";
 class C1 extends M.I1 {
 }
 class C2 extends M.I2 {

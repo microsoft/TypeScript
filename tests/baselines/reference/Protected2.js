@@ -5,3 +5,4 @@ protected namespace M {
 }
 
 //// [Protected2.js]
+"use strict";

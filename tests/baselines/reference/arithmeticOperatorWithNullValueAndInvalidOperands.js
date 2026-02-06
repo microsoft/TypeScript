@@ -179,6 +179,7 @@ var r10d2 = '' | null;
 var r10d3 = {} | null;
 
 //// [arithmeticOperatorWithNullValueAndInvalidOperands.js]
+"use strict";
 // If one operand is the null or undefined value, it is treated as having the type of the
 // other operand.
 // operator *

@@ -8,6 +8,7 @@ enum E {
 }
 
 //// [parserComputedPropertyName30.js]
+"use strict";
 var E;
 (function (E) {
     // no ASI, comma expected

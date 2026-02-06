@@ -42,6 +42,7 @@ if (var2.constructor === BigInt) {
 
 
 //// [typeGuardConstructorPrimitiveTypes.js]
+"use strict";
 // Narrow a union of primitive types
 let var1;
 if (var1.constructor === String) {

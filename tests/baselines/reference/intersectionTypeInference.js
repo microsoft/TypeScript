@@ -31,6 +31,7 @@ var z: string | number;
 
 
 //// [intersectionTypeInference.js]
+"use strict";
 function extend(obj1, obj2) {
     var result;
     obj1 = result;

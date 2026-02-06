@@ -27,6 +27,7 @@ switch (strAndNum) {
 }
 
 //// [switchCaseWithIntersectionTypes01.js]
+"use strict";
 var strAndNum;
 var numAndBool;
 var str;

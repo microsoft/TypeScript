@@ -146,6 +146,7 @@ function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { 
 
 
 //// [objectSpread.js]
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {

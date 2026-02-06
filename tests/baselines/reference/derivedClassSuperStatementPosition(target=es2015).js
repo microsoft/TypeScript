@@ -99,6 +99,7 @@ class DerivedInConditionalWithProperties extends Object {
 
 
 //// [derivedClassSuperStatementPosition.js]
+"use strict";
 class DerivedBasic extends Object {
     constructor() {
         super();

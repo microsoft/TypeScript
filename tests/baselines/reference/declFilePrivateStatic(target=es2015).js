@@ -16,6 +16,7 @@ class C {
 }
 
 //// [declFilePrivateStatic.js]
+"use strict";
 class C {
     static a() { }
     static b() { }

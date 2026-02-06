@@ -8,6 +8,7 @@ function foo<T extends T>(x: T): number {
 
 
 //// [typeParameterHasSelfAsConstraint.js]
+"use strict";
 function foo(x) {
     return x;
 }

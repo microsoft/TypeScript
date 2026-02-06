@@ -41,6 +41,7 @@ result+=x.fonly("a","b","c","d"); //ok
 
 
 //// [vararg.js]
+"use strict";
 var M;
 (function (M) {
     class C {

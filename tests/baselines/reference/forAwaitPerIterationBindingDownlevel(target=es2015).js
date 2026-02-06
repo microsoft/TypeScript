@@ -27,6 +27,7 @@ const log = console.log;
 })();
 
 //// [forAwaitPerIterationBindingDownlevel.js]
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -65,7 +66,7 @@ function gen() {
     });
 }
 const log = console.log;
-(() => __awaiter(this, void 0, void 0, function* () {
+(() => __awaiter(void 0, void 0, void 0, function* () {
     var _a, e_1, _b, _c;
     try {
         for (var _d = true, _e = __asyncValues(gen()), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
@@ -73,7 +74,7 @@ const log = console.log;
             _d = false;
             const outer = _c;
             log(`I'm loop ${outer}`);
-            (() => __awaiter(this, void 0, void 0, function* () {
+            (() => __awaiter(void 0, void 0, void 0, function* () {
                 const inner = outer;
                 yield sleep(2000);
                 if (inner === outer) {

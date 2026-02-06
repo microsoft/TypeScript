@@ -40,6 +40,7 @@ W.D;
 var p: W.D;
 
 //// [enumAssignmentCompat2.js]
+"use strict";
 var W;
 (function (W) {
     W[W["a"] = 0] = "a";

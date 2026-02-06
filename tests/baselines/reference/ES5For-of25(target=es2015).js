@@ -8,6 +8,7 @@ for (var v of a) {
 }
 
 //// [ES5For-of25.js]
+"use strict";
 var a = [1, 2, 3];
 for (var v of a) {
     v;

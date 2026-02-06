@@ -38,6 +38,7 @@ async function fn4(): Promise<number> {
 
 
 //// [asyncAwaitWithCapturedBlockScopeVar.js]
+"use strict";
 function fn1() {
     return __awaiter(this, void 0, void 0, function* () {
         let ar = [];

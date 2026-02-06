@@ -9,6 +9,7 @@ class Dummy {
 }
 
 //// [unusedMultipleParameter1InContructor.js]
+"use strict";
 class Dummy {
     constructor(person, person2) {
         var unused = 20;

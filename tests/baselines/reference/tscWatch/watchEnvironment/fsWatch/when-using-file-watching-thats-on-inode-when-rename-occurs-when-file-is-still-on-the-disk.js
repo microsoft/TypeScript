@@ -44,35 +44,25 @@ CreatingProgramWith::
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":4} Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 {"watchFile":4} Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":4} Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":4} Type roots
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 {"watchFile":4} Source file
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 15
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 15
 
-//// [/user/username/projects/myproject/foo.js] Inode:: 114
+//// [/user/username/projects/myproject/foo.js] Inode:: 118
 export {};
 
 
-//// [/user/username/projects/myproject/main.js] Inode:: 115
+//// [/user/username/projects/myproject/main.js] Inode:: 119
 import { foo } from "./foo";
 foo();
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {"inode":15}
 /user/username/projects/myproject/foo.ts: *new*
   {"inode":6}
@@ -92,17 +82,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/foo.ts
 /user/username/projects/myproject/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/foo.ts
 /user/username/projects/myproject/main.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/foo.ts (used version)
 /user/username/projects/myproject/main.ts (used version)
 
@@ -111,7 +101,7 @@ exitCode:: ExitStatus.undefined
 Change:: Introduce error such that when callback happens file is already appeared
 
 Input::
-//// [/user/username/projects/myproject/foo.ts] Inode:: 116
+//// [/user/username/projects/myproject/foo.ts] Inode:: 120
 export declare function foo2(): string;
 
 
@@ -122,14 +112,8 @@ Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo
 sysLog:: /user/username/projects/myproject/foo.ts:: Changing watcher to PresentFileSystemEntryWatcher
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":15}
 /user/username/projects/myproject/foo.ts:
   {} *new*
@@ -171,8 +155,8 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 114
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 115
+//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 118
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 119
 
 
 Program root files: [
@@ -186,7 +170,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/foo.ts
 /user/username/projects/myproject/main.ts
 
@@ -203,7 +187,7 @@ exitCode:: ExitStatus.undefined
 Change:: Replace file with rename event that fixes error
 
 Input::
-//// [/user/username/projects/myproject/foo.ts] Inode:: 117
+//// [/user/username/projects/myproject/foo.ts] Inode:: 121
 export declare function foo(): string;
 
 
@@ -222,17 +206,11 @@ Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo
 sysLog:: /user/username/projects/myproject/foo.ts:: Changing watcher to PresentFileSystemEntryWatcher
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":15}
 /user/username/projects/myproject/foo.ts:
-  {"inode":117} *new*
+  {"inode":121} *new*
 /user/username/projects/myproject/main.ts:
   {"inode":5}
 /user/username/projects/myproject/tsconfig.json:
@@ -261,8 +239,8 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 114
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 115
+//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 118
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 119
 
 
 Program root files: [
@@ -276,7 +254,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/foo.ts
 /user/username/projects/myproject/main.ts
 

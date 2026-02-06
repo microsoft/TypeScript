@@ -16,6 +16,7 @@ declare module "foo" {
 
 
 //// [es5ExportDefaultClassDeclaration4.js]
+"use strict";
 
 
 //// [es5ExportDefaultClassDeclaration4.d.ts]

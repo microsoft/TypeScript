@@ -41,6 +41,7 @@ var temp = 10;
 
 
 //// [exponentiationOperatorSyntaxError1.js]
+"use strict";
 // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
 Math.pow(// Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
 -1, 2);

@@ -6,6 +6,7 @@ function f1() {
 }
 
 //// [unusedParameterInCatchClause.js]
+"use strict";
 function f1() {
     try { }
     catch (ex) { }

@@ -44,42 +44,38 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 18
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 18
 
-//// [/user/username/projects/myproject/dist/src/file1.js] Inode:: 119
+//// [/user/username/projects/myproject/dist/src/file1.js] Inode:: 123
 export {};
 
 
-//// [/user/username/projects/myproject/dist/src/file1.d.ts] Inode:: 120
+//// [/user/username/projects/myproject/dist/src/file1.d.ts] Inode:: 124
 export {};
 
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/file2/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {"inode":18}
 /user/username/projects: *new*
   {"inode":3}
 /user/username/projects/myproject: *new*
   {"inode":4}
 /user/username/projects/myproject/dist: *new*
-  {"inode":117}
+  {"inode":121}
 /user/username/projects/myproject/dist/src: *new*
-  {"inode":118}
+  {"inode":122}
 /user/username/projects/myproject/node_modules: *new*
   {"inode":7}
 /user/username/projects/myproject/node_modules/file2: *new*
@@ -104,14 +100,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/node_modules/file2/index.d.ts (used version)
 /user/username/projects/myproject/src/file1.ts (computed .d.ts during emit)
 
@@ -127,7 +123,7 @@ exitCode:: ExitStatus.undefined
 Change:: Add new file, should schedule and run timeout to update directory watcher
 
 Input::
-//// [/user/username/projects/myproject/src/file3.ts] Inode:: 121
+//// [/user/username/projects/myproject/src/file3.ts] Inode:: 125
 export const y = 10;
 
 
@@ -171,40 +167,36 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/src/file3.js] Inode:: 122
+//// [/user/username/projects/myproject/dist/src/file3.js] Inode:: 126
 export const y = 10;
 
 
-//// [/user/username/projects/myproject/dist/src/file3.d.ts] Inode:: 123
+//// [/user/username/projects/myproject/dist/src/file3.d.ts] Inode:: 127
 export declare const y = 10;
 
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/file2/package.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/package.json:
   {"pollingInterval":2000}
 /user/username/projects/myproject/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":18}
 /user/username/projects:
   {"inode":3}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
-  {"inode":117}
+  {"inode":121}
 /user/username/projects/myproject/dist/src:
-  {"inode":118}
+  {"inode":122}
 /user/username/projects/myproject/node_modules:
   {"inode":7}
 /user/username/projects/myproject/node_modules/file2:
@@ -216,7 +208,7 @@ FsWatches::
 /user/username/projects/myproject/src/file1.ts:
   {"inode":6}
 /user/username/projects/myproject/src/file3.ts: *new*
-  {"inode":121}
+  {"inode":125}
 /user/username/projects/myproject/tsconfig.json:
   {"inode":10}
 
@@ -236,7 +228,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
 /user/username/projects/myproject/src/file1.ts
 /user/username/projects/myproject/src/file3.ts

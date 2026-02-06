@@ -7,6 +7,7 @@ function f() {
 class C2 { }
 
 //// [classDeclarationCheckUsedBeforeDefinitionInFunctionDeclaration.js]
+"use strict";
 function f() {
     new C2(); // OK
 }

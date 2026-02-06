@@ -8,6 +8,7 @@ enum _this { // Error
 var f = () => this;
 
 //// [collisionThisExpressionAndEnumInGlobal.js]
+"use strict";
 var _this;
 (function (_this) {
     _this[_this["_thisVal1"] = 0] = "_thisVal1";

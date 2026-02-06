@@ -26,6 +26,7 @@ var result61: (t: X) => number| string = true ? (m) => m.propertyX1 : (n) => n.p
 
 
 //// [conditionalOperatorWithoutIdenticalBCT.js]
+"use strict";
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
 class X {
 }

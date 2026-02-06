@@ -36,6 +36,7 @@ function testNonNullInferenceWithArrays(numbers: number[]) {
 }
 
 //// [nonNullFullInference.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/19577
 function testNonNullInference(numbers) {
     let last;

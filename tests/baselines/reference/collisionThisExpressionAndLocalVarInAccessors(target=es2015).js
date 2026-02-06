@@ -46,6 +46,7 @@ class class2 {
 }
 
 //// [collisionThisExpressionAndLocalVarInAccessors.js]
+"use strict";
 class class1 {
     get a() {
         var x2 = {

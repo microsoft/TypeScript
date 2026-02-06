@@ -91,6 +91,7 @@ class C7_public {
 }
 
 //// [privacyGloGetter.js]
+"use strict";
 var m1;
 (function (m1) {
     var C1_public = /** @class */ (function () {

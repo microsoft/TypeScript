@@ -39,6 +39,7 @@ class Contextual {
 
 
 //// [thisTypeInAccessors.js]
+"use strict";
 const explicit = {
     n: 12,
     get x() { return this.n; },

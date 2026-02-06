@@ -15,6 +15,7 @@ async function f() {
 }
 
 //// [awaitUnion_es6.js]
+"use strict";
 function f() {
     return __awaiter(this, void 0, void 0, function* () {
         let await_a = yield a;

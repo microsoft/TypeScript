@@ -10,6 +10,7 @@ class SymbolIterator {
 var array = [...new SymbolIterator];
 
 //// [iteratorSpreadInArray10.js]
+"use strict";
 class SymbolIterator {
     [Symbol.iterator]() {
         return this;

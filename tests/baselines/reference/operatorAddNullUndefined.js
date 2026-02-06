@@ -20,6 +20,7 @@ var x15 = E.x + null
 var x16 = E.x + undefined
 
 //// [operatorAddNullUndefined.js]
+"use strict";
 var E;
 (function (E) {
     E[E["x"] = 0] = "x";

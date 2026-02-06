@@ -8,6 +8,7 @@ namespace Bar {
 
 
 //// [moduleVariableArrayIndexer.js]
+"use strict";
 var Bar;
 (function (Bar) {
     Bar.a = 1;

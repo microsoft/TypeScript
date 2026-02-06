@@ -20,6 +20,7 @@ class Derived2 extends Base2 {
 }
 
 //// [derivedClassOverridesIndexersWithAssignmentCompatibility.js]
+"use strict";
 class Base {
 }
 // ok, use assignment compatibility

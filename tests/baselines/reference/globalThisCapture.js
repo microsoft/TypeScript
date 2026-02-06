@@ -11,6 +11,7 @@ parts[0];
 
 
 //// [globalThisCapture.js]
+"use strict";
 // Add a lambda to ensure global 'this' capture is triggered
 (() => this.window);
 var parts = [];

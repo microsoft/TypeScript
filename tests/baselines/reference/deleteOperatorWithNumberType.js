@@ -48,6 +48,7 @@ delete M.n;
 delete objA.a, M.n;
 
 //// [deleteOperatorWithNumberType.js]
+"use strict";
 var NUMBER1 = [1, 2];
 function foo() { return 1; }
 class A {

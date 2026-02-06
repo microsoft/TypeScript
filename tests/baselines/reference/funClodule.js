@@ -22,6 +22,7 @@ namespace foo3 {
 class foo3 { } // Should error
 
 //// [funClodule.js]
+"use strict";
 function foo3() { }
 (function (foo3) {
     function x() { }

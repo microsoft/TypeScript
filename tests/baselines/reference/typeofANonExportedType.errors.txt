@@ -1,15 +1,20 @@
+typeofANonExportedType.ts(6,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 typeofANonExportedType.ts(20,12): error TS2323: Cannot redeclare exported variable 'r5'.
 typeofANonExportedType.ts(21,12): error TS2323: Cannot redeclare exported variable 'r5'.
+typeofANonExportedType.ts(26,9): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 typeofANonExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or indirectly in its own type annotation.
+typeofANonExportedType.ts(48,9): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 
 
-==== typeofANonExportedType.ts (3 errors) ====
+==== typeofANonExportedType.ts (6 errors) ====
     var x = 1;
     export var r1: typeof x;
     var y = { foo: '' };
     export var r2: typeof y;
     class C {
         foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     export var c: C;
     var c2: C;
@@ -34,6 +39,8 @@ typeofANonExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or 
         export var foo = '';
         export class C {
             foo: string;
+            ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         }
     }
     export var r6: typeof M;
@@ -58,6 +65,8 @@ typeofANonExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or 
         export var y = 1;
         export class C {
             foo: string;
+            ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         }
     }
     export var r13: typeof foo;

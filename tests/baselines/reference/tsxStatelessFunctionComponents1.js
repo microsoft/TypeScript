@@ -60,6 +60,7 @@ let j4 = <EmptyPropSFC {...{ "data-info": "hi"}} />
 
 
 //// [file.jsx]
+"use strict";
 /// <reference path="/.lib/react.d.ts" />
 function EmptyPropSFC() {
     return <div> Default Greeting </div>;

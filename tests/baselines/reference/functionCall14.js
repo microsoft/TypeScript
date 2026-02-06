@@ -10,6 +10,7 @@ foo('foo', 1, 3);
 
 
 //// [functionCall14.js]
+"use strict";
 function foo(a, ...b) { }
 foo('foo', 1);
 foo('foo');

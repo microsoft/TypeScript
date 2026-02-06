@@ -1,5 +1,8 @@
 //// [tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === typeArgumentInferenceWithConstraints.ts ===
 // Generic call with no parameters
 function noParams<T extends {}>() { }
@@ -243,8 +246,8 @@ someGenerics3<Window>(() => undefined);
 >                                       : ^^^^
 >someGenerics3 : <T extends Window>(producer: () => T) => void
 >              : ^ ^^^^^^^^^      ^^        ^^       ^^^^^^^^^
->() => undefined : () => any
->                : ^^^^^^^^^
+>() => undefined : () => undefined
+>                : ^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -276,8 +279,8 @@ someGenerics4(4, () => null); // Valid
 >              : ^ ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^              ^^^^^^^^^
 >4 : 4
 >  : ^
->() => null : () => any
->           : ^^^^^^^^^
+>() => null : () => null
+>           : ^^^^^^^^^^
 
 someGenerics4<string, number>('', () => 3);
 >someGenerics4<string, number>('', () => 3) : void
@@ -329,8 +332,8 @@ someGenerics5(4, () => null); // Valid
 >              : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
 >4 : 4
 >  : ^
->() => null : () => any
->           : ^^^^^^^^^
+>() => null : () => null
+>           : ^^^^^^^^^^
 
 someGenerics5<number, string>('', () => 3);
 >someGenerics5<number, string>('', () => 3) : void
@@ -615,8 +618,8 @@ var a9a = someGenerics9('', 0, []);
 >   : ^^
 >0 : 0
 >  : ^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 var a9a: {};
 >a9a : string
@@ -629,10 +632,10 @@ var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >                                                                      : ^^^^^^      ^^^^^^      ^^^
 >someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >              : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
->a : number
->  : ^^^^^^
->b : string
->  : ^^^^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >{ a: 0 } : { a: number; }
 >         : ^^^^^^^^^^^^^^
 >a : number
@@ -649,10 +652,10 @@ var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 var a9b: { a?: number; b?: string; };
 >a9b : { a?: number; b?: string; }
 >    : ^^^^^^      ^^^^^^      ^^^
->a : number
->  : ^^^^^^
->b : string
->  : ^^^^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 // Generic call with multiple parameters of generic type passed arguments with multiple best common types
 interface A91 {
@@ -661,8 +664,8 @@ interface A91 {
 >  : ^^^^^^
 
     y?: string;
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 interface A92 {
     x: number;
@@ -670,14 +673,14 @@ interface A92 {
 >  : ^^^^^^
 
     z?: Window;
->z : Window
->  : ^^^^^^
+>z : Window | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
->a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
->                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; } | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; } | undefined
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >              : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >undefined : undefined
@@ -704,8 +707,8 @@ var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >   : ^^
 
 var a9e: {};
->a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; } | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >a9f : A92
@@ -799,19 +802,19 @@ var a: any;
 
 // Generic call with multiple parameters of generic type where one argument is [] and the other is not 'any'
 var arr = someGenerics9([], null, undefined);
->arr : any[]
->    : ^^^^^
->someGenerics9([], null, undefined) : any[]
->                                   : ^^^^^
+>arr : never[] | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someGenerics9([], null, undefined) : never[] | null | undefined
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >              : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 var arr: any[];
->arr : any[]
->    : ^^^^^
+>arr : never[] | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 

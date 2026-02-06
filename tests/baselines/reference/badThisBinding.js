@@ -16,6 +16,7 @@ class Greeter {
 } 
 
 //// [badThisBinding.js]
+"use strict";
 class Greeter {
     constructor() {
         foo(() => {

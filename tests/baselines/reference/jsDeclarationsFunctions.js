@@ -163,7 +163,7 @@ export function g(a: {
     x: string;
 }, b: {
     y: typeof import(".").b;
-}): void;
+}): void | "";
 /**
  * @param {{x: string}} a
  * @param {{y: typeof b}} b
@@ -172,5 +172,5 @@ declare function hh(a: {
     x: string;
 }, b: {
     y: typeof import(".").b;
-}): void;
+}): void | "";
 export { hh as h, i as ii, j as jj };

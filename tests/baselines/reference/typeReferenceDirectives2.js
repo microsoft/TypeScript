@@ -9,6 +9,7 @@ interface A {
 }
 
 //// [app.js]
+"use strict";
 
 
 //// [app.d.ts]

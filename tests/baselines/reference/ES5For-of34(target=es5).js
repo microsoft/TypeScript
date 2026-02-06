@@ -9,6 +9,7 @@ for (foo().x of ['a', 'b', 'c']) {
 }
 
 //// [ES5For-of34.js]
+"use strict";
 var __values = (this && this.__values) || function(o) {
     var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
     if (m) return m.call(o);

@@ -10,6 +10,7 @@ namespace M1 {
 }
 
 //// [varNameConflictsWithImportInDifferentPartOfModule.js]
+"use strict";
 var M1;
 (function (M1) {
     M1.q = 5;

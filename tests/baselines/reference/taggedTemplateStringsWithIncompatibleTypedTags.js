@@ -36,6 +36,7 @@ f.thisIsNotATag(`abc${1}def${2}ghi`);
 
 
 //// [taggedTemplateStringsWithIncompatibleTypedTags.js]
+"use strict";
 f `abc`;
 f `abc${1}def${2}ghi`;
 f `abc`.member;

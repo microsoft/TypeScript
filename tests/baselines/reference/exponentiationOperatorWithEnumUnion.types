@@ -30,6 +30,7 @@ enum F {
 
 var a: any;
 >a : any
+>  : ^^^
 
 var b: number;
 >b : number
@@ -48,6 +49,7 @@ var r1 = c ** a;
 >c : E | F
 >  : ^^^^^
 >a : any
+>  : ^^^
 
 var r2 = c ** b;
 >r2 : number
@@ -75,6 +77,7 @@ var r4 = a ** c;
 >a ** c : number
 >       : ^^^^^^
 >a : any
+>  : ^^^
 >c : E | F
 >  : ^^^^^
 
@@ -100,6 +103,7 @@ var r6 = E.a ** a;
 >a : E.a
 >  : ^^^
 >a : any
+>  : ^^^
 
 var r7 = E.a ** b;
 >r7 : number
@@ -153,6 +157,7 @@ var r10 = a ** E.b;
 >a ** E.b : number
 >         : ^^^^^^
 >a : any
+>  : ^^^
 >E.b : E.b
 >    : ^^^
 >E : typeof E

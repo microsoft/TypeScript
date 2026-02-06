@@ -17,6 +17,7 @@ foo((y: string) => {
 });
 
 //// [contextuallyTypedFunctionExpressionsAndReturnAnnotations.js]
+"use strict";
 // Contextually type the parameter even if there is a return annotation
 foo((y) => {
     var z = y.charAt(0); // Should be string

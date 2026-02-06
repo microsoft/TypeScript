@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/es2025/float16Array.ts] ////
+
+=== float16Array.ts ===
+const float16 = new Float16Array(4);
+>float16 : Symbol(float16, Decl(float16Array.ts, 0, 5))
+>Float16Array : Symbol(Float16Array, Decl(lib.es2025.float16.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
+

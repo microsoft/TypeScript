@@ -10,6 +10,7 @@ import x = m.m;
 
 
 //// [importAndVariableDeclarationConflict4.js]
+"use strict";
 var m;
 (function (m_1) {
     m_1.m = '';

@@ -9,6 +9,7 @@ Foo<number>``;
 
 
 //// [a.js]
+"use strict";
 Foo < number > ();
 Foo < number > (1);
 Foo < number > ``;

@@ -10,6 +10,7 @@ class Derived extends Based {
 }
 
 //// [checkSuperCallBeforeThisAccessing5.js]
+"use strict";
 class Based {
     constructor(...arg) { }
 }

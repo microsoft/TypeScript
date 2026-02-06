@@ -15,6 +15,7 @@ var q: m.P;             // Error
 
 
 //// [primaryExpressionMods.js]
+"use strict";
 var M;
 (function (M) {
     M.a = 1;

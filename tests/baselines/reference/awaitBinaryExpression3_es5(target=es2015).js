@@ -12,6 +12,7 @@ async function func(): Promise<void> {
 }
 
 //// [awaitBinaryExpression3_es5.js]
+"use strict";
 function func() {
     return __awaiter(this, void 0, void 0, function* () {
         before();

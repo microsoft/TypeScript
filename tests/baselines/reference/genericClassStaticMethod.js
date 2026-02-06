@@ -13,6 +13,7 @@ class Bar<T> extends Foo<T> {
 
 
 //// [genericClassStaticMethod.js]
+"use strict";
 class Foo {
     static getFoo() {
     }

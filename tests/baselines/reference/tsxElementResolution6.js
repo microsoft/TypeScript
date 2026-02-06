@@ -12,6 +12,7 @@ var div: any;
 
 
 //// [file.jsx]
+"use strict";
 var div;
 // Still an error
 <div n='x'/>;

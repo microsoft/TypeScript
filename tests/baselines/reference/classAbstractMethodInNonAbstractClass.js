@@ -10,6 +10,7 @@ class B {
 }
 
 //// [classAbstractMethodInNonAbstractClass.js]
+"use strict";
 class A {
 }
 class B {

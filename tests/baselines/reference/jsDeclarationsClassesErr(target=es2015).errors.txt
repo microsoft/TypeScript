@@ -1,7 +1,9 @@
 index.js(4,16): error TS8004: Type parameter declarations can only be used in TypeScript files.
+index.js(5,5): error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
 index.js(5,12): error TS8010: Type annotations can only be used in TypeScript files.
 index.js(8,16): error TS8004: Type parameter declarations can only be used in TypeScript files.
 index.js(8,29): error TS8011: Type arguments can only be used in TypeScript files.
+index.js(9,5): error TS2564: Property 'other' has no initializer and is not definitely assigned in the constructor.
 index.js(9,12): error TS8010: Type annotations can only be used in TypeScript files.
 index.js(13,11): error TS8010: Type annotations can only be used in TypeScript files.
 index.js(19,11): error TS8010: Type annotations can only be used in TypeScript files.
@@ -21,7 +23,7 @@ index.js(67,11): error TS8010: Type annotations can only be used in TypeScript f
 index.js(68,11): error TS8010: Type annotations can only be used in TypeScript files.
 
 
-==== index.js (21 errors) ====
+==== index.js (23 errors) ====
     // Pretty much all of this should be an error, (since index signatures and generics are forbidden in js),
     // but we should be able to synthesize declarations from the symbols regardless
     
@@ -29,6 +31,8 @@ index.js(68,11): error TS8010: Type annotations can only be used in TypeScript f
                    ~
 !!! error TS8004: Type parameter declarations can only be used in TypeScript files.
         field: T;
+        ~~~~~
+!!! error TS2564: Property 'field' has no initializer and is not definitely assigned in the constructor.
                ~
 !!! error TS8010: Type annotations can only be used in TypeScript files.
     }
@@ -39,6 +43,8 @@ index.js(68,11): error TS8010: Type annotations can only be used in TypeScript f
                                 ~
 !!! error TS8011: Type arguments can only be used in TypeScript files.
         other: U;
+        ~~~~~
+!!! error TS2564: Property 'other' has no initializer and is not definitely assigned in the constructor.
                ~
 !!! error TS8010: Type annotations can only be used in TypeScript files.
     }

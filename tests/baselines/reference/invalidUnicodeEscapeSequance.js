@@ -4,4 +4,5 @@
 var arg\u003
 
 //// [invalidUnicodeEscapeSequance.js]
+"use strict";
 var arg, u003;

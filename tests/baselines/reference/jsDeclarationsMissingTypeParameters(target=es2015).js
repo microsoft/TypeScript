@@ -23,6 +23,7 @@ function z() { return null ;}
 function w() { return null; }
 
 //// [file.js]
+"use strict";
 /**
   * @param {Array=} y desc
   */

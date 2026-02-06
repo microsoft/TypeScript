@@ -17,7 +17,7 @@ unionOfDifferentReturnType1(true);
 const unionOfDifferentReturnType1 = Math.random() ? (a: any) => 1 : (a: number) => ({}) as typeof Date;
 >unionOfDifferentReturnType1 : Symbol(unionOfDifferentReturnType1, Decl(controlFlowFunctionLikeCircular_2.ts, 1, 5))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(controlFlowFunctionLikeCircular_2.ts, 1, 53))
 >a : Symbol(a, Decl(controlFlowFunctionLikeCircular_2.ts, 1, 69))
@@ -35,7 +35,7 @@ function test(arg: () => string) {
 >fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_3.ts, 2, 7))
 >fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_3.ts, 2, 7))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_3.ts, 0, 14))
 >arg : Symbol(arg)
@@ -52,7 +52,7 @@ function test(arg: () => string) {
   const fn = Math.random() ? arg : (): (() => arg) => {};
 >fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_4.ts, 2, 7))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_4.ts, 0, 14))
 >arg : Symbol(arg)

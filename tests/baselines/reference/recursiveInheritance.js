@@ -10,3 +10,4 @@ interface i9 extends i8 { } // error
 
 
 //// [recursiveInheritance.js]
+"use strict";

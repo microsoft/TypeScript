@@ -1,4 +1,5 @@
 // [source.js]
+"use strict";
 function f1() { }
 class c {
 }

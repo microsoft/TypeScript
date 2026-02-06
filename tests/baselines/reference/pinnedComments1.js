@@ -12,6 +12,7 @@ class C {
 }
 
 //// [pinnedComments1.js]
+"use strict";
 /*!=========
     Keep this pinned comment
    =========

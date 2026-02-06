@@ -18,14 +18,14 @@ for (let [x = 'a' in {}] = []; !x; x = !x) console.log(x)
 >   : ^^^^^^^
 >x : boolean
 >  : ^^^^^^^
->x = !x : boolean
->       : ^^^^^^^
+>x = !x : true
+>       : ^^^^
 >x : boolean
 >  : ^^^^^^^
->!x : boolean
->   : ^^^^^^^
->x : boolean
->  : ^^^^^^^
+>!x : true
+>   : ^^^^
+>x : false
+>  : ^^^^^
 >console.log(x) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
@@ -34,8 +34,8 @@ for (let [x = 'a' in {}] = []; !x; x = !x) console.log(x)
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->x : boolean
->  : ^^^^^^^
+>x : false
+>  : ^^^^^
 
 for (let {x = 'a' in {}} = {}; !x; x = !x) console.log(x)
 >x : boolean
@@ -52,14 +52,14 @@ for (let {x = 'a' in {}} = {}; !x; x = !x) console.log(x)
 >   : ^^^^^^^
 >x : boolean
 >  : ^^^^^^^
->x = !x : boolean
->       : ^^^^^^^
+>x = !x : true
+>       : ^^^^
 >x : boolean
 >  : ^^^^^^^
->!x : boolean
->   : ^^^^^^^
->x : boolean
->  : ^^^^^^^
+>!x : true
+>   : ^^^^
+>x : false
+>  : ^^^^^
 >console.log(x) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
@@ -68,6 +68,6 @@ for (let {x = 'a' in {}} = {}; !x; x = !x) console.log(x)
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->x : boolean
->  : ^^^^^^^
+>x : false
+>  : ^^^^^
 

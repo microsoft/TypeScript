@@ -11,6 +11,7 @@ var r = f();
 var r2 = new f();
 
 //// [interfaceWithCallAndConstructSignature.js]
+"use strict";
 var f;
 var r = f();
 var r2 = new f();

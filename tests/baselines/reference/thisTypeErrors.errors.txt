@@ -4,16 +4,22 @@ thisTypeErrors.ts(3,9): error TS2526: A 'this' type is available only in a non-s
 thisTypeErrors.ts(5,16): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(5,23): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(6,12): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+thisTypeErrors.ts(7,12): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 thisTypeErrors.ts(11,13): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(12,14): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(13,18): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(14,23): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(15,15): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(15,22): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+thisTypeErrors.ts(19,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 thisTypeErrors.ts(19,13): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+thisTypeErrors.ts(20,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
 thisTypeErrors.ts(20,14): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+thisTypeErrors.ts(21,5): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
 thisTypeErrors.ts(21,18): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+thisTypeErrors.ts(22,5): error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
 thisTypeErrors.ts(22,23): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+thisTypeErrors.ts(23,5): error TS2564: Property 'e' has no initializer and is not definitely assigned in the constructor.
 thisTypeErrors.ts(23,15): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(23,22): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(27,15): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
@@ -22,6 +28,7 @@ thisTypeErrors.ts(29,19): error TS2526: A 'this' type is available only in a non
 thisTypeErrors.ts(29,26): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(35,19): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(36,20): error TS2331: 'this' cannot be referenced in a module or namespace body.
+thisTypeErrors.ts(36,20): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 thisTypeErrors.ts(41,14): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(41,21): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(46,23): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
@@ -30,7 +37,7 @@ thisTypeErrors.ts(50,18): error TS2526: A 'this' type is available only in a non
 thisTypeErrors.ts(50,25): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 
 
-==== thisTypeErrors.ts (30 errors) ====
+==== thisTypeErrors.ts (37 errors) ====
     var x1: this;
             ~~~~
 !!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
@@ -50,6 +57,8 @@ thisTypeErrors.ts(50,25): error TS2526: A 'this' type is available only in a non
                ~~~~
 !!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
         return this;
+               ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     
     interface I1 {
@@ -74,18 +83,28 @@ thisTypeErrors.ts(50,25): error TS2526: A 'this' type is available only in a non
     
     class C1 {
         a: { x: this };
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
                 ~~~~
 !!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
         b: { (): this };
+        ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
                  ~~~~
 !!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
         c: { new (): this };
+        ~
+!!! error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
                      ~~~~
 !!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
         d: { [x: string]: this };
+        ~
+!!! error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
                           ~~~~
 !!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
         e: { f(x: this): this };
+        ~
+!!! error TS2564: Property 'e' has no initializer and is not definitely assigned in the constructor.
                   ~~~~
 !!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
                          ~~~~
@@ -115,6 +134,8 @@ thisTypeErrors.ts(50,25): error TS2526: A 'this' type is available only in a non
         export var y = this;
                        ~~~~
 !!! error TS2331: 'this' cannot be referenced in a module or namespace body.
+                       ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     
     class C3 {

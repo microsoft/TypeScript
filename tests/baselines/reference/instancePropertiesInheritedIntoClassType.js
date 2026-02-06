@@ -45,6 +45,7 @@ namespace Generic {
 }
 
 //// [instancePropertiesInheritedIntoClassType.js]
+"use strict";
 var NonGeneric;
 (function (NonGeneric) {
     class C {

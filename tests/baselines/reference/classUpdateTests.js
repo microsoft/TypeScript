@@ -116,6 +116,7 @@ class R {
 }
 
 //// [classUpdateTests.js]
+"use strict";
 //
 // test codegen for instance properties
 //
