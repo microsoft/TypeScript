@@ -413,7 +413,9 @@ const nf = new Intl.NumberFormat("en-US", {
 
 });
 
-nf
+const filtered = nf
+>filtered : string
+>         : ^^^^^^
 >nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value)  .join("") : string
 >                                                                                                                               : ^^^^^^
 >nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value)  .join : (separator?: string) => string

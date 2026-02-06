@@ -39,7 +39,7 @@ const nf = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
-nf
+const filtered = nf
   .formatRangeToParts(100, 100)
   .filter((part) => part.type !== "approximatelySign")
   .map((part) => part.value)
@@ -78,7 +78,7 @@ const nf = new Intl.NumberFormat("en-US", {
     currency: "EUR",
     maximumFractionDigits: 0,
 });
-nf
+const filtered = nf
     .formatRangeToParts(100, 100)
     .filter((part) => part.type !== "approximatelySign")
     .map((part) => part.value)

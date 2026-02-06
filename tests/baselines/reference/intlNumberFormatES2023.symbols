@@ -148,7 +148,8 @@ const nf = new Intl.NumberFormat("en-US", {
 
 });
 
-nf
+const filtered = nf
+>filtered : Symbol(filtered, Decl(intlNumberFormatES2023.ts, 38, 5))
 >nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value)  .join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 >nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >nf  .formatRangeToParts(100, 100)  .filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
