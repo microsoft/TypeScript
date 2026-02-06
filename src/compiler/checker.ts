@@ -7777,10 +7777,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.tracker.reportNonSerializableProperty(symbolToString(propertySymbol));
                 }
             }
-            // For unique symbol property keys, preserve the original enclosing declaration
-            // to enable proper symbol accessibility checking and import tracking
+            // For unique symbol property keys from external modules, preserve the original enclosing declaration
+            // to enable proper symbol accessibility checking and import tracking.
+            // Built-in symbols (like Symbol.iterator) should use the normal enclosing declaration handling.
             const propNameType = getSymbolLinks(propertySymbol).nameType;
-            const useOriginalEnclosing = propNameType && (propNameType.flags & TypeFlags.UniqueESSymbol);
+            let useOriginalEnclosing = false;
+            if (propNameType && (propNameType.flags & TypeFlags.UniqueESSymbol) && saveEnclosingDeclaration) {
+                const symDecl = (propNameType as UniqueESSymbolType).symbol.declarations;
+                const symbolSourceFile = symDecl && symDecl[0] && getSourceFileOfNode(symDecl[0]);
+                const enclosingSourceFile = getSourceFileOfNode(saveEnclosingDeclaration);
+                // Only use original enclosing for symbols from different files (external modules)
+                useOriginalEnclosing = !!(symbolSourceFile && enclosingSourceFile && symbolSourceFile !== enclosingSourceFile);
+            }
             context.enclosingDeclaration = useOriginalEnclosing
                 ? saveEnclosingDeclaration
                 : (propertySymbol.valueDeclaration || propertySymbol.declarations?.[0] || saveEnclosingDeclaration);
@@ -9022,14 +9030,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (nameType.flags & TypeFlags.UniqueESSymbol) {
                     const uniqueSymbol = (nameType as UniqueESSymbolType).symbol;
-                    // Check if the unique symbol is directly accessible as a value from the enclosing declaration
-                    // Use isSymbolAccessibleByFlags with allowModules=false to ensure the symbol itself is accessible
-                    // (not just via parent module import type). If not directly accessible as a value,
-                    // report as non-serializable to trigger proper error message.
-                    if (context.tracker.canTrackSymbol && context.enclosingDeclaration) {
-                        const directlyAccessible = isSymbolAccessibleByFlags(uniqueSymbol, context.enclosingDeclaration, SymbolFlags.Value);
-                        if (!directlyAccessible && context.tracker.reportNonSerializableProperty) {
-                            context.tracker.reportNonSerializableProperty(symbolToString(uniqueSymbol));
+                    // For unique symbol property keys from external modules, verify value accessibility
+                    // and report error if the symbol cannot be named without an import
+                    if (context.tracker.canTrackSymbol && context.enclosingDeclaration && uniqueSymbol.declarations?.length) {
+                        const symSourceFile = getSourceFileOfNode(uniqueSymbol.declarations[0]);
+                        const enclosingFile = getSourceFileOfNode(context.enclosingDeclaration);
+                        // Only check for symbols from different source files (external modules)
+                        if (symSourceFile && enclosingFile && symSourceFile !== enclosingFile) {
+                            // Check if symbol is directly accessible as a value (not via parent module)
+                            if (!isSymbolAccessibleByFlags(uniqueSymbol, context.enclosingDeclaration, SymbolFlags.Value)) {
+                                if (context.tracker.reportNonSerializableProperty) {
+                                    context.tracker.reportNonSerializableProperty(symbolToString(uniqueSymbol));
+                                }
+                            }
                         }
                     }
                     return factory.createComputedPropertyName(symbolToExpression(uniqueSymbol, context, SymbolFlags.Value));
