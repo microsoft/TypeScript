@@ -61,7 +61,7 @@ declare namespace Intl {
         | {
             type: "literal";
             value: string;
-            unit?: DurationFormatUnit;
+            unit?: DurationFormatUnitSingular;
         }
         | {
             type: Exclude<NumberFormatPartTypes, "literal">;
