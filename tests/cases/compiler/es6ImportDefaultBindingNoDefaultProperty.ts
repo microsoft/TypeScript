@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 
 // @filename: es6ImportDefaultBindingNoDefaultProperty_0.ts

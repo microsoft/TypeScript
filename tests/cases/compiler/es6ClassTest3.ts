@@ -1,4 +1,6 @@
-module M {	
+// @target: es2015
+// @strict: false
+namespace M {	
 	class Visibility {
 	    public foo() { };
 	    private bar() { };

@@ -62,6 +62,7 @@ var rj3 = undefined | null;
 var rj4 = undefined | undefined;
 
 //// [arithmeticOperatorWithOnlyNullValueOrUndefinedValue.js]
+"use strict";
 // operator *
 var ra1 = null * null;
 var ra2 = null * undefined;

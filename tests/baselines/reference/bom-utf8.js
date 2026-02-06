@@ -5,4 +5,5 @@ var x=10;
 
 
 //// [bom-utf8.js]
+"use strict";
 var x = 10;

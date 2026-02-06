@@ -1,0 +1,14 @@
+typeofModuleWithoutExports.ts(4,9): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+
+
+==== typeofModuleWithoutExports.ts (1 errors) ====
+    namespace M {
+        var x = 1;
+        class C {
+            foo: number;
+            ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+        }
+    }
+    
+    var r: typeof M;

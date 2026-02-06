@@ -22,12 +22,13 @@ else {
 }
 
 //// [sourceMapValidationDestructuringVariableStatement.js]
+"use strict";
 var hello = "hello";
 var robotA = { name: "mower", skill: "mowing" };
 var robotB = { name: "trimmer", skill: "trimming" };
-var nameA = robotA.name;
-var nameB = robotB.name, skillB = robotB.skill;
-var _a = { name: "Edger", skill: "cutting edges" }, nameC = _a.name, skillC = _a.skill;
+var { name: nameA } = robotA;
+var { name: nameB, skill: skillB } = robotB;
+var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" };
 if (nameA == nameB) {
     console.log(skillB);
 }

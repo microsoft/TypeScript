@@ -1,7 +1,9 @@
+// @module: commonjs
+// @target: es2015
 // @composite: true
 // @filename: /foo/tsconfig.json
 {
-    "compilerOptions": { "composite": true, "declarationDir": "out" }
+    "compilerOptions": { "composite": true, "declarationDir": "out", "module": "commonjs", "target": "es2015" }
 }
 
 // @filename: /foo/test.ts

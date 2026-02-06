@@ -1,3 +1,4 @@
+// @target: es2015
 // @ts-expect-error additional commenting
 var invalidCommentedFancySingle: number = 'nope';
 

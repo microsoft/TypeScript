@@ -1,3 +1,4 @@
+// @strict: false
 //@jsx: react
 //@target: es6
 //@module: commonjs

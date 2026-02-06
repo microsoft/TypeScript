@@ -1,5 +1,7 @@
+// @target: es2015
+// @strict: false
 declare var v;
-declare module M {
+declare namespace M {
     export class D {
         public p;
     }

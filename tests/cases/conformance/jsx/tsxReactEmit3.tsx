@@ -1,7 +1,8 @@
+// @target: es2015
 //@jsx: react
 //@filename: test.tsx
 
-declare module JSX { interface Element { } }
+declare namespace JSX { interface Element { } }
 declare var React: any;
 
 declare var Foo, Bar, baz;

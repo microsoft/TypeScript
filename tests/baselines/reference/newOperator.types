@@ -177,7 +177,7 @@ new ctorUnion2("");
 >"" : ""
 >   : ^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

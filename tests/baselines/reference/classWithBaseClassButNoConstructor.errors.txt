@@ -1,16 +1,22 @@
+classWithBaseClassButNoConstructor.ts(6,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 classWithBaseClassButNoConstructor.ts(10,9): error TS2554: Expected 1 arguments, but got 0.
+classWithBaseClassButNoConstructor.ts(18,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 classWithBaseClassButNoConstructor.ts(22,9): error TS2554: Expected 1 arguments, but got 0.
+classWithBaseClassButNoConstructor.ts(27,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 classWithBaseClassButNoConstructor.ts(31,10): error TS2554: Expected 1 arguments, but got 0.
+classWithBaseClassButNoConstructor.ts(35,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 classWithBaseClassButNoConstructor.ts(39,10): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== classWithBaseClassButNoConstructor.ts (4 errors) ====
+==== classWithBaseClassButNoConstructor.ts (8 errors) ====
     class Base {
         constructor(x: number) { }
     }
     
     class C extends Base {
         foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     
     var r = C;
@@ -26,6 +32,8 @@ classWithBaseClassButNoConstructor.ts(39,10): error TS2554: Expected 1 arguments
     
     class D<T,U> extends Base2<T,U> {
         foo: U;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     
     var r2 = D;
@@ -38,6 +46,8 @@ classWithBaseClassButNoConstructor.ts(39,10): error TS2554: Expected 1 arguments
     // specialized base class
     class D2<T, U> extends Base2<string, number> {
         foo: U;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     
     var r3 = D2;
@@ -49,6 +59,8 @@ classWithBaseClassButNoConstructor.ts(39,10): error TS2554: Expected 1 arguments
     
     class D3 extends Base2<string, number> {
         foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     
     var r4 = D3;

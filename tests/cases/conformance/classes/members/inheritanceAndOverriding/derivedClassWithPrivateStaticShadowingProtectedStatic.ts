@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 
 class Base {
     protected static x: string;

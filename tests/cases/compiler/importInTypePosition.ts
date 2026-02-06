@@ -1,4 +1,5 @@
-module A {
+// @target: es2015
+namespace A {
     export class Point {
         constructor(public x: number, public y: number) { }
     }
@@ -6,12 +7,12 @@ module A {
 }
 
 // no code gen expected
-module B {
+namespace B {
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
 }
 // no code gen expected
-module C {
+namespace C {
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
     var m: typeof a;

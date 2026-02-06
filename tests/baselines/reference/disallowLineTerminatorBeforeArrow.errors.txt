@@ -102,7 +102,7 @@ disallowLineTerminatorBeforeArrow.ts(72,9): error TS1200: Line terminator not pe
         ~~
 !!! error TS1200: Line terminator not permitted before arrow.
     
-    module m {
+    namespace m {
         class City {
             constructor(x: number, thing = ()
                 => 100) {

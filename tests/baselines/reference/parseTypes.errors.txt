@@ -1,3 +1,7 @@
+parseTypes.ts(1,9): error TS2352: Conversion of type 'null' to type '() => number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+parseTypes.ts(2,9): error TS2352: Conversion of type 'null' to type '() => number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+parseTypes.ts(3,9): error TS2352: Conversion of type 'null' to type 'new () => number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+parseTypes.ts(4,9): error TS2352: Conversion of type 'null' to type '{ [x: number]: number; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 parseTypes.ts(8,1): error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
 parseTypes.ts(9,1): error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
@@ -8,11 +12,19 @@ parseTypes.ts(11,1): error TS2322: Type '(s: string) => void' is not assignable 
   Type '(s: string) => void' provides no match for the signature 'new (): number'.
 
 
-==== parseTypes.ts (4 errors) ====
+==== parseTypes.ts (8 errors) ====
     var x = <() => number>null;
+            ~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'null' to type '() => number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     var y = <{(): number; }>null;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'null' to type '() => number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     var z = <{new(): number; }>null
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'null' to type 'new () => number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     var w = <{[x:number]: number; }>null
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'null' to type '{ [x: number]: number; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     function f() { return 3 };
     function g(s: string) { true };
     y=f;

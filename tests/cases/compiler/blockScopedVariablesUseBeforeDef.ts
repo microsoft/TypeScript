@@ -1,4 +1,5 @@
-// @target: ES5
+// @strict: false
+// @target: ES5, ES2015
 // @lib: esnext, dom
 function foo0() {
     let a = x;
@@ -149,4 +150,12 @@ function wrapI2() {
         iter;
         yield 1;
     })();
+}
+
+function foo18() {
+    let a = (() => Enum.Yes)();
+    enum Enum {
+        No = 0,
+        Yes = 1,
+    }
 }

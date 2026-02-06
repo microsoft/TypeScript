@@ -21,8 +21,6 @@ abstract class A {
 
 
 //// [classAbstractMixedWithModifiers.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+"use strict";
+class A {
+}

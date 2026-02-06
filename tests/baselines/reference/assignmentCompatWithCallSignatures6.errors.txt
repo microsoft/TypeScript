@@ -1,3 +1,7 @@
+assignmentCompatWithCallSignatures6.ts(3,14): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+assignmentCompatWithCallSignatures6.ts(4,30): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+assignmentCompatWithCallSignatures6.ts(5,34): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+assignmentCompatWithCallSignatures6.ts(6,35): error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
 assignmentCompatWithCallSignatures6.ts(30,1): error TS2322: Type '<T>(x: T) => void' is not assignable to type '<T>(x: T) => T'.
   Type 'void' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
@@ -14,13 +18,21 @@ assignmentCompatWithCallSignatures6.ts(42,1): error TS2322: Type '<T extends Bas
         Type 'T' is not assignable to type 'Base'.
 
 
-==== assignmentCompatWithCallSignatures6.ts (3 errors) ====
+==== assignmentCompatWithCallSignatures6.ts (7 errors) ====
     // checking assignment compatibility relations for function types. All valid
     
     class Base { foo: string; }
+                 ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     class Derived extends Base { bar: string; }
+                                 ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
     class Derived2 extends Derived { baz: string; }
+                                     ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
     class OtherDerived extends Base { bing: string; }
+                                      ~~~~
+!!! error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
     
     interface A {
         a: <T>(x: T) => T[];
@@ -34,28 +46,28 @@ assignmentCompatWithCallSignatures6.ts(42,1): error TS2322: Type '<T extends Bas
         a16: <T extends Base>(x: { a: T; b: T }) => T[];
     }
     
-    var x: A;
+    declare var x: A;
     
-    var b: <T>(x: T) => T[]; 
+    declare var b: <T>(x: T) => T[]; 
     x.a = b;
     b = x.a;
-    var b2: <T>(x: T) => string[]; 
+    declare var b2: <T>(x: T) => string[]; 
     x.a2 = b2;
     b2 = x.a2;
-    var b3: <T>(x: T) => T;
+    declare var b3: <T>(x: T) => T;
     x.a3 = b3;
     b3 = x.a3;
     ~~
 !!! error TS2322: Type '<T>(x: T) => void' is not assignable to type '<T>(x: T) => T'.
 !!! error TS2322:   Type 'void' is not assignable to type 'T'.
 !!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
-    var b4: <T, U>(x: T, y: U) => string; 
+    declare var b4: <T, U>(x: T, y: U) => string; 
     x.a4 = b4;
     b4 = x.a4;
-    var b5: <T, U>(x: (arg: T) => U) => T; 
+    declare var b5: <T, U>(x: (arg: T) => U) => T; 
     x.a5 = b5;
     b5 = x.a5;
-    var b11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
+    declare var b11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
     x.a11 = b11;
     b11 = x.a11;
     ~~~
@@ -65,8 +77,8 @@ assignmentCompatWithCallSignatures6.ts(42,1): error TS2322: Type '<T extends Bas
 !!! error TS2322:       Types of property 'foo' are incompatible.
 !!! error TS2322:         Type 'U' is not assignable to type 'T'.
 !!! error TS2322:           'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 assignmentCompatWithCallSignatures6.ts:37:14: This type parameter might need an `extends T` constraint.
-    var b16: <T>(x: { a: T; b: T }) => T[]; 
+!!! related TS2208 assignmentCompatWithCallSignatures6.ts:37:22: This type parameter might need an `extends T` constraint.
+    declare var b16: <T>(x: { a: T; b: T }) => T[]; 
     x.a16 = b16;
     b16 = x.a16;
     ~~~
@@ -75,4 +87,4 @@ assignmentCompatWithCallSignatures6.ts(42,1): error TS2322: Type '<T extends Bas
 !!! error TS2322:     Type '{ a: T; b: T; }' is not assignable to type '{ a: Base; b: Base; }'.
 !!! error TS2322:       Types of property 'a' are incompatible.
 !!! error TS2322:         Type 'T' is not assignable to type 'Base'.
-!!! related TS2208 assignmentCompatWithCallSignatures6.ts:40:11: This type parameter might need an `extends Base` constraint.
+!!! related TS2208 assignmentCompatWithCallSignatures6.ts:40:19: This type parameter might need an `extends Base` constraint.

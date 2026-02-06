@@ -1,12 +1,12 @@
 /// <reference path='fourslash.ts' />
 
-////module Foo {
+////namespace Foo {
 ////  export class Bar {
 ////
 ////  }
 ////
 ////
-////  export module Blah {
+////  export namespace Blah {
 ////
 ////  }
 ////}

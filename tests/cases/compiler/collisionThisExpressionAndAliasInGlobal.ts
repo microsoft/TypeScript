@@ -1,4 +1,6 @@
-module a {
+// @target: es2015
+// @strict: false
+namespace a {
     export var b = 10;
 }
 var f = () => this;

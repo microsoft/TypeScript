@@ -1,6 +1,5 @@
 /// <reference path='fourslash.ts' />
-// @esModuleInterop: true
-// @module: amd
+
 // @Filename: foo.d.ts
 ////declare function foo(): void;
 ////declare namespace foo {}

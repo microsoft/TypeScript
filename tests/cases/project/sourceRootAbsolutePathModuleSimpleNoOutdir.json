@@ -8,5 +8,6 @@
     "declaration": true,
     "baselineCheck": true,
     "sourceRoot": "tests/cases/projects/outputdir_module_simple/src",
-    "resolveSourceRoot": true
+    "resolveSourceRoot": true,
+    "strict": false
 }

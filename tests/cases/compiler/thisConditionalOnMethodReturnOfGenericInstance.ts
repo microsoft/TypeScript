@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 class A<T> {
     unmeasurableUsage!: {[K in keyof T]-?: T[K]};

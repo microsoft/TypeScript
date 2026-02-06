@@ -49,3 +49,11 @@ export class InClassMethodOk1 { o(array: number[] = [], rParam: string): void { 
 export class InClassMethodOk2 { o(array: T | undefined = [], rParam: string): void { } };
 export class InClassMethodBad { o(array: T = [], rParam: string): void { } };
 
+// https://github.com/microsoft/TypeScript/issues/60976
+class Bar {}
+export class ClsWithRequiredInitializedParameter {
+  constructor(
+    private arr: Bar = new Bar(),
+    private bool: boolean,
+  ) {}
+}

@@ -15,7 +15,7 @@ bar.ts(3,22): error TS2305: Module '"./foo2"' has no exported member 'toString'.
     }
     
 ==== foo2.ts (0 errors) ====
-    let x: { a: string; c: string; } | { b: number; c: number; };
+    declare let x: { a: string; c: string; } | { b: number; c: number; };
     export = x
     
 ==== bar.ts (6 errors) ====

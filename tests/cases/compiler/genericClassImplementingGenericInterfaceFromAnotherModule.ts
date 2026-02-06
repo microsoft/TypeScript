@@ -1,7 +1,8 @@
+// @target: es2015
 // @declaration: true
-module foo {
+namespace foo {
     export interface IFoo<T> { }
 }
-module bar {
+namespace bar {
     export class Foo<T> implements foo.IFoo<T> { }
 }

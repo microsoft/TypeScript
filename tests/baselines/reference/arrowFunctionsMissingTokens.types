@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/arrowFunctionsMissingTokens.ts] ////
 
 === arrowFunctionsMissingTokens.ts ===
-module missingArrowsWithCurly {
+namespace missingArrowsWithCurly {
 >missingArrowsWithCurly : typeof missingArrowsWithCurly
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -46,11 +46,11 @@ module missingArrowsWithCurly {
 >  : ^^^^^^
 }
 
-module missingCurliesWithArrow {
+namespace missingCurliesWithArrow {
 >missingCurliesWithArrow : typeof missingCurliesWithArrow
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    module withStatement {
+    namespace withStatement {
 >withStatement : typeof withStatement
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -125,7 +125,7 @@ module missingCurliesWithArrow {
 >   : ^^
     }
 
-    module withoutStatement {
+    namespace withoutStatement {
 >withoutStatement : typeof withoutStatement
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -189,7 +189,7 @@ module missingCurliesWithArrow {
     }
 }
 
-module ce_nEst_pas_une_arrow_function {
+namespace ce_nEst_pas_une_arrow_function {
 >ce_nEst_pas_une_arrow_function : typeof ce_nEst_pas_une_arrow_function
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -242,7 +242,7 @@ module ce_nEst_pas_une_arrow_function {
 > : ^^^
 }
 
-module okay {
+namespace okay {
 >okay : typeof okay
 >     : ^^^^^^^^^^^
 

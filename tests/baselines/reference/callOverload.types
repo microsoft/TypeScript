@@ -23,7 +23,7 @@ declare function withRest(a: any, ...args: Array<any>): void;
 >args : any[]
 >     : ^^^^^
 
-var n: number[];
+declare var n: number[];
 >n : number[]
 >  : ^^^^^^^^
 

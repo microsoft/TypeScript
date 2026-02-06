@@ -3,6 +3,7 @@ import {
     createCompletionDetails,
     createCompletionDetailsForSymbol,
     getCompletionEntriesFromSymbols,
+    getConstraintOfTypeArgumentProperty,
     getDefaultCommitCharacters,
     getPropertiesForObjectExpression,
     Log,
@@ -12,6 +13,7 @@ import {
     addToSeen,
     altDirectorySeparator,
     arrayFrom,
+    BinaryExpression,
     CallLikeExpression,
     CancellationToken,
     CaseClause,
@@ -89,6 +91,7 @@ import {
     isApplicableVersionedTypesKey,
     isArray,
     isCallExpression,
+    isCallLikeExpression,
     isIdentifier,
     isIdentifierText,
     isImportCall,
@@ -427,7 +430,15 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 //      });
                 return stringLiteralCompletionsForObjectLiteral(typeChecker, parent.parent);
             }
-            return fromContextualType() || fromContextualType(ContextFlags.None);
+            if (findAncestor(parent.parent, isCallLikeExpression)) {
+                const uniques = new Set<string>();
+                const stringLiteralTypes = concatenate(
+                    getStringLiteralTypes(typeChecker.getContextualType(node, ContextFlags.None), uniques),
+                    getStringLiteralTypes(typeChecker.getContextualType(node, ContextFlags.IgnoreNodeInferences), uniques),
+                );
+                return toStringLiteralCompletionsFromTypes(stringLiteralTypes);
+            }
+            return fromContextualType(ContextFlags.None);
 
         case SyntaxKind.ElementAccessExpression: {
             const { expression, argumentExpression } = parent as ElementAccessExpression;
@@ -491,14 +502,29 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             const existing = new Set(namedImportsOrExports.elements.map(n => moduleExportNameTextEscaped(n.propertyName || n.name)));
             const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
             return { kind: StringLiteralCompletionKind.Properties, symbols: uniques, hasIndexSignature: false };
-
+        case SyntaxKind.BinaryExpression:
+            if ((parent as BinaryExpression).operatorToken.kind === SyntaxKind.InKeyword) {
+                const type = typeChecker.getTypeAtLocation((parent as BinaryExpression).right);
+                const properties = type.isUnion() ? typeChecker.getAllPossiblePropertiesOfTypes(type.types) : type.getApparentProperties();
+                return {
+                    kind: StringLiteralCompletionKind.Properties,
+                    symbols: properties.filter(prop => !prop.valueDeclaration || !isPrivateIdentifierClassElementDeclaration(prop.valueDeclaration)),
+                    hasIndexSignature: false,
+                };
+            }
+            return fromContextualType(ContextFlags.None);
         default:
             return fromContextualType() || fromContextualType(ContextFlags.None);
     }
 
     function fromUnionableLiteralType(grandParent: Node): StringLiteralCompletionsFromTypes | StringLiteralCompletionsFromProperties | undefined {
         switch (grandParent.kind) {
+            case SyntaxKind.CallExpression:
             case SyntaxKind.ExpressionWithTypeArguments:
+            case SyntaxKind.JsxOpeningElement:
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.NewExpression:
+            case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.TypeReference: {
                 const typeArgument = findAncestor(parent, n => n.parent === grandParent) as LiteralTypeNode;
                 if (typeArgument) {
@@ -518,6 +544,8 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                     return undefined;
                 }
                 return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode(objectType));
+            case SyntaxKind.PropertySignature:
+                return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(getConstraintOfTypeArgumentProperty(grandParent, typeChecker)), isNewIdentifier: false };
             case SyntaxKind.UnionType: {
                 const result = fromUnionableLiteralType(walkUpParentheses(grandParent.parent));
                 if (!result) {
@@ -534,15 +562,15 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
         }
     }
 
-    function fromContextualType(contextFlags: ContextFlags = ContextFlags.Completions): StringLiteralCompletionsFromTypes | undefined {
+    function fromContextualType(contextFlags: ContextFlags = ContextFlags.IgnoreNodeInferences): StringLiteralCompletionsFromTypes | undefined {
         // Get completion for string literal from string literal type
         // i.e. var x: "hi" | "hello" = "/*completion position*/"
-        const types = getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags));
-        if (!types.length) {
-            return;
-        }
-        return { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier: false };
+        return toStringLiteralCompletionsFromTypes(getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags)));
     }
+}
+
+function toStringLiteralCompletionsFromTypes(types: readonly StringLiteralType[]): StringLiteralCompletionsFromTypes | undefined {
+    return types.length ? { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier: false } : undefined;
 }
 
 function walkUpParentheses(node: Node) {
@@ -592,7 +620,7 @@ function stringLiteralCompletionsForObjectLiteral(checker: TypeChecker, objectLi
     const contextualType = checker.getContextualType(objectLiteralExpression);
     if (!contextualType) return undefined;
 
-    const completionsType = checker.getContextualType(objectLiteralExpression, ContextFlags.Completions);
+    const completionsType = checker.getContextualType(objectLiteralExpression, ContextFlags.IgnoreNodeInferences);
     const symbols = getPropertiesForObjectExpression(
         contextualType,
         completionsType,
@@ -1056,8 +1084,9 @@ function getCompletionEntriesForNonRelativeModules(
                     if (tryFileExists(host, packageFile)) {
                         const packageJson = readJson(packageFile, host);
                         const fragmentSubpath = components.join("/") + (components.length && hasTrailingDirectorySeparator(fragment) ? "/" : "");
-                        exportsOrImportsLookup((packageJson as MapLike<unknown>).exports, fragmentSubpath, packageDirectory, /*isExports*/ true, /*isImports*/ false);
-                        return;
+                        if (exportsOrImportsLookup((packageJson as MapLike<unknown>).exports, fragmentSubpath, packageDirectory, /*isExports*/ true, /*isImports*/ false)) {
+                            return;
+                        }
                     }
                     return nodeModulesDirectoryOrImportsLookup(ancestor);
                 };
@@ -1068,9 +1097,10 @@ function getCompletionEntriesForNonRelativeModules(
 
     return arrayFrom(result.values());
 
-    function exportsOrImportsLookup(lookupTable: unknown, fragment: string, baseDirectory: string, isExports: boolean, isImports: boolean) {
+    /** Returns true if the search should stop */
+    function exportsOrImportsLookup(lookupTable: unknown, fragment: string, baseDirectory: string, isExports: boolean, isImports: boolean): boolean {
         if (typeof lookupTable !== "object" || lookupTable === null) { // eslint-disable-line no-restricted-syntax
-            return; // null lookupTable or entrypoint only
+            return lookupTable !== undefined; // null lookupTable or entrypoint only
         }
         const keys = getOwnKeys(lookupTable as MapLike<unknown>);
         const conditions = getConditions(compilerOptions, mode);
@@ -1094,6 +1124,7 @@ function getCompletionEntriesForNonRelativeModules(
             },
             comparePatternKeys,
         );
+        return true;
     }
 }
 

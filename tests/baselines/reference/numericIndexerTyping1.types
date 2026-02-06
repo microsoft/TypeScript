@@ -10,7 +10,7 @@ interface I {
 interface I2 extends I {
 }
 
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 
@@ -24,7 +24,7 @@ var r: string = i[1]; // error: numeric indexer returns the type of the string i
 >1 : 1
 >  : ^
 
-var i2: I2;
+declare var i2: I2;
 >i2 : I2
 >   : ^^
 

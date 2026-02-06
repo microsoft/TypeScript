@@ -1,5 +1,6 @@
+// @target: es2015
 // -- operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 
 function foo(): boolean { return true; }
 
@@ -7,7 +8,7 @@ class A {
     public a: boolean;
     static foo() { return true; }
 }
-module M {
+namespace M {
     export var n: boolean;
 }
 

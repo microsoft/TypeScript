@@ -1,5 +1,6 @@
+// @target: es2015
 // @module: esnext
-// @moduleResolution: bundler, node10, classic
+// @moduleResolution: bundler, classic
 // @noEmit: true
 
 // @Filename: /node_modules/@types/foo/package.json

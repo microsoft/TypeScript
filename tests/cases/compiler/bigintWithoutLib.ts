@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 
 // Every line should error because these builtins are not declared
 

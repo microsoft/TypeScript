@@ -49,34 +49,34 @@ class F extends C { foo4() { } }
 >C : Symbol(C, Decl(unionTypeFromArrayLiteral.ts, 13, 54))
 >foo4 : Symbol(F.foo4, Decl(unionTypeFromArrayLiteral.ts, 17, 19))
 
-var c: C, d: D, e: E, f: F;
->c : Symbol(c, Decl(unionTypeFromArrayLiteral.ts, 18, 3))
+declare var c: C, d: D, e: E, f: F;
+>c : Symbol(c, Decl(unionTypeFromArrayLiteral.ts, 18, 11))
 >C : Symbol(C, Decl(unionTypeFromArrayLiteral.ts, 13, 54))
->d : Symbol(d, Decl(unionTypeFromArrayLiteral.ts, 18, 9))
+>d : Symbol(d, Decl(unionTypeFromArrayLiteral.ts, 18, 17))
 >D : Symbol(D, Decl(unionTypeFromArrayLiteral.ts, 14, 21))
->e : Symbol(e, Decl(unionTypeFromArrayLiteral.ts, 18, 15))
+>e : Symbol(e, Decl(unionTypeFromArrayLiteral.ts, 18, 23))
 >E : Symbol(E, Decl(unionTypeFromArrayLiteral.ts, 15, 22))
->f : Symbol(f, Decl(unionTypeFromArrayLiteral.ts, 18, 21))
+>f : Symbol(f, Decl(unionTypeFromArrayLiteral.ts, 18, 29))
 >F : Symbol(F, Decl(unionTypeFromArrayLiteral.ts, 16, 32))
 
 var arr6 = [c, d];  // (C | D)[]
 >arr6 : Symbol(arr6, Decl(unionTypeFromArrayLiteral.ts, 19, 3))
->c : Symbol(c, Decl(unionTypeFromArrayLiteral.ts, 18, 3))
->d : Symbol(d, Decl(unionTypeFromArrayLiteral.ts, 18, 9))
+>c : Symbol(c, Decl(unionTypeFromArrayLiteral.ts, 18, 11))
+>d : Symbol(d, Decl(unionTypeFromArrayLiteral.ts, 18, 17))
 
 var arr7 = [c, d, e]; // (C | D)[]
 >arr7 : Symbol(arr7, Decl(unionTypeFromArrayLiteral.ts, 20, 3))
->c : Symbol(c, Decl(unionTypeFromArrayLiteral.ts, 18, 3))
->d : Symbol(d, Decl(unionTypeFromArrayLiteral.ts, 18, 9))
->e : Symbol(e, Decl(unionTypeFromArrayLiteral.ts, 18, 15))
+>c : Symbol(c, Decl(unionTypeFromArrayLiteral.ts, 18, 11))
+>d : Symbol(d, Decl(unionTypeFromArrayLiteral.ts, 18, 17))
+>e : Symbol(e, Decl(unionTypeFromArrayLiteral.ts, 18, 23))
 
 var arr8 = [c, e]; // C[]
 >arr8 : Symbol(arr8, Decl(unionTypeFromArrayLiteral.ts, 21, 3))
->c : Symbol(c, Decl(unionTypeFromArrayLiteral.ts, 18, 3))
->e : Symbol(e, Decl(unionTypeFromArrayLiteral.ts, 18, 15))
+>c : Symbol(c, Decl(unionTypeFromArrayLiteral.ts, 18, 11))
+>e : Symbol(e, Decl(unionTypeFromArrayLiteral.ts, 18, 23))
 
 var arr9 = [e, f]; // (E|F)[]
 >arr9 : Symbol(arr9, Decl(unionTypeFromArrayLiteral.ts, 22, 3))
->e : Symbol(e, Decl(unionTypeFromArrayLiteral.ts, 18, 15))
->f : Symbol(f, Decl(unionTypeFromArrayLiteral.ts, 18, 21))
+>e : Symbol(e, Decl(unionTypeFromArrayLiteral.ts, 18, 23))
+>f : Symbol(f, Decl(unionTypeFromArrayLiteral.ts, 18, 29))
 

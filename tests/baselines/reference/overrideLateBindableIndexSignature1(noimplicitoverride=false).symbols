@@ -1,0 +1,53 @@
+//// [tests/cases/conformance/override/overrideLateBindableIndexSignature1.ts] ////
+
+=== overrideLateBindableIndexSignature1.ts ===
+const sym: symbol = Symbol();
+>sym : Symbol(sym, Decl(overrideLateBindableIndexSignature1.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+class Base1 {
+>Base1 : Symbol(Base1, Decl(overrideLateBindableIndexSignature1.ts, 0, 29))
+
+  [sym]() {}
+>[sym] : Symbol(Base1[sym], Decl(overrideLateBindableIndexSignature1.ts, 2, 13))
+>sym : Symbol(sym, Decl(overrideLateBindableIndexSignature1.ts, 0, 5))
+}
+
+class Derived1 extends Base1 {
+>Derived1 : Symbol(Derived1, Decl(overrideLateBindableIndexSignature1.ts, 4, 1))
+>Base1 : Symbol(Base1, Decl(overrideLateBindableIndexSignature1.ts, 0, 29))
+
+  override [sym]() {}
+>[sym] : Symbol(Derived1[sym], Decl(overrideLateBindableIndexSignature1.ts, 6, 30))
+>sym : Symbol(sym, Decl(overrideLateBindableIndexSignature1.ts, 0, 5))
+}
+
+class Base2 {
+>Base2 : Symbol(Base2, Decl(overrideLateBindableIndexSignature1.ts, 8, 1))
+
+  [sym]() {}
+>[sym] : Symbol(Base2[sym], Decl(overrideLateBindableIndexSignature1.ts, 10, 13))
+>sym : Symbol(sym, Decl(overrideLateBindableIndexSignature1.ts, 0, 5))
+}
+
+class Derived2 extends Base2 {
+>Derived2 : Symbol(Derived2, Decl(overrideLateBindableIndexSignature1.ts, 12, 1))
+>Base2 : Symbol(Base2, Decl(overrideLateBindableIndexSignature1.ts, 8, 1))
+
+  [sym]() {}
+>[sym] : Symbol(Derived2[sym], Decl(overrideLateBindableIndexSignature1.ts, 14, 30))
+>sym : Symbol(sym, Decl(overrideLateBindableIndexSignature1.ts, 0, 5))
+}
+
+class Base3 {}
+>Base3 : Symbol(Base3, Decl(overrideLateBindableIndexSignature1.ts, 16, 1))
+
+class Derived3 extends Base3 {
+>Derived3 : Symbol(Derived3, Decl(overrideLateBindableIndexSignature1.ts, 18, 14))
+>Base3 : Symbol(Base3, Decl(overrideLateBindableIndexSignature1.ts, 16, 1))
+
+  override [sym]() {}
+>[sym] : Symbol(Derived3[sym], Decl(overrideLateBindableIndexSignature1.ts, 20, 30))
+>sym : Symbol(sym, Decl(overrideLateBindableIndexSignature1.ts, 0, 5))
+}
+

@@ -7,4 +7,5 @@ function foo(bar:{a:any;}) { return {a:""} }
 
 
 //// [functionOverloads19.js]
+"use strict";
 function foo(bar) { return { a: "" }; }

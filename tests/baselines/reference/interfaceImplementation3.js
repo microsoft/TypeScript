@@ -18,9 +18,7 @@ class C4 implements I1 {
 
 
 //// [interfaceImplementation3.js]
-var C4 = /** @class */ (function () {
-    function C4() {
-    }
-    C4.prototype.iFn = function () { };
-    return C4;
-}());
+"use strict";
+class C4 {
+    iFn() { }
+}

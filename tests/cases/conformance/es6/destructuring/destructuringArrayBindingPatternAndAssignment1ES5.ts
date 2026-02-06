@@ -1,4 +1,5 @@
-﻿/* AssignmentPattern:
+﻿// @target: es2015
+/* AssignmentPattern:
  *      ObjectAssignmentPattern
  *      ArrayAssignmentPattern
  * ArrayAssignmentPattern:

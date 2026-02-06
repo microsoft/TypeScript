@@ -8,6 +8,6 @@ function f() {
     var arguments = [];
 >arguments : any[]
 >          : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 }

@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/jsx/tsxGenericArrowFunctionParsing.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
 	interface Element { isElement; }
->Element : Symbol(Element, Decl(file.tsx, 0, 20))
+>Element : Symbol(Element, Decl(file.tsx, 0, 23))
 >isElement : Symbol(Element.isElement, Decl(file.tsx, 1, 20))
 }
 

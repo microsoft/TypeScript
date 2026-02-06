@@ -12,13 +12,12 @@ export class Foo {
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-var key = Symbol(), value = 12;
-var Foo = /** @class */ (function () {
-    function Foo() {
+const key = Symbol(), value = 12;
+class Foo {
+    constructor() {
         this[_a] = value;
     }
-    return Foo;
-}());
+}
 exports.Foo = Foo;
 _a = key;
 

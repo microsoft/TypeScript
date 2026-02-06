@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #18277
 
 interface Foo<T> { (bar: Bar<T>): void };

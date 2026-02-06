@@ -1,13 +1,14 @@
-module A { }
+// @target: es2015
+namespace A { }
 var a: A; // error
 
-module B {
+namespace B {
     interface I {}
 }
 var b: B; // error
 
-module C {
-    module M {
+namespace C {
+    namespace M {
         interface I {}
     }
 }

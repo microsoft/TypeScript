@@ -22,7 +22,7 @@ import s2 = require('elements2');
 >          : ^^^^^^^^^^^^^^^^^^^
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements { }
 }

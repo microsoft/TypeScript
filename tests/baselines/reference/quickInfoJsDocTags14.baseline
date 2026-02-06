@@ -12,7 +12,7 @@
 // function fn(options, callback = null) { }
 //          ^^
 // | ----------------------------------------------------------------------
-// | function fn(options: any, callback?: any): void
+// | function fn(options: any, callback?: null): void
 // | @param options the args object
 // | @param options.a first number
 // | @param options.b second number
@@ -94,7 +94,7 @@
           "kind": "space"
         },
         {
-          "text": "any",
+          "text": "null",
           "kind": "keyword"
         },
         {

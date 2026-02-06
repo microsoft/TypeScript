@@ -1,0 +1,109 @@
+derivedClassOverridesProtectedMembers2.ts(5,15): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+derivedClassOverridesProtectedMembers2.ts(9,15): error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+derivedClassOverridesProtectedMembers2.ts(22,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+derivedClassOverridesProtectedMembers2.ts(26,5): error TS2416: Property 'd' in type 'Derived' is not assignable to the same property in base type 'Base'.
+  Type '(a: { foo: string; bar: string; }) => void' is not assignable to type '(a: { foo: string; }) => void'.
+    Types of parameters 'a' and 'a' are incompatible.
+      Property 'bar' is missing in type '{ foo: string; }' but required in type '{ foo: string; bar: string; }'.
+derivedClassOverridesProtectedMembers2.ts(26,5): error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+derivedClassOverridesProtectedMembers2.ts(37,30): error TS2454: Variable 'y' is used before being assigned.
+derivedClassOverridesProtectedMembers2.ts(39,14): error TS2454: Variable 'y' is used before being assigned.
+derivedClassOverridesProtectedMembers2.ts(42,7): error TS2454: Variable 'y' is used before being assigned.
+derivedClassOverridesProtectedMembers2.ts(44,20): error TS2454: Variable 'y' is used before being assigned.
+derivedClassOverridesProtectedMembers2.ts(47,13): error TS2454: Variable 'y' is used before being assigned.
+derivedClassOverridesProtectedMembers2.ts(60,10): error TS2454: Variable 'd2' is used before being assigned.
+derivedClassOverridesProtectedMembers2.ts(61,10): error TS2454: Variable 'd2' is used before being assigned.
+
+
+==== derivedClassOverridesProtectedMembers2.ts (12 errors) ====
+    var x: { foo: string; }
+    var y: { foo: string; bar: string; }
+    
+    class Base {
+        protected a: typeof x;
+                  ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        protected b(a: typeof x) { }
+        protected get c() { return x; }
+        protected set c(v: typeof x) { }
+        protected d: (a: typeof x) => void ;
+                  ~
+!!! error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+    
+        protected static r: typeof x;
+        protected static s(a: typeof x) { }
+        protected static get t() { return x; }
+        protected static set t(v: typeof x) { }
+        protected static u: (a: typeof x) => void ;
+    
+    constructor(a: typeof x) { }
+    }
+    
+    // Increase visibility of all protected members to public
+    class Derived extends Base {
+        a: typeof y;
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        b(a: typeof y) { }
+        get c() { return y; }
+        set c(v: typeof y) { }
+        d: (a: typeof y) => void;
+        ~
+!!! error TS2416: Property 'd' in type 'Derived' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type '(a: { foo: string; bar: string; }) => void' is not assignable to type '(a: { foo: string; }) => void'.
+!!! error TS2416:     Types of parameters 'a' and 'a' are incompatible.
+!!! error TS2416:       Property 'bar' is missing in type '{ foo: string; }' but required in type '{ foo: string; bar: string; }'.
+!!! related TS2728 derivedClassOverridesProtectedMembers2.ts:2:23: 'bar' is declared here.
+        ~
+!!! error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
+    
+        static r: typeof y;
+        static s(a: typeof y) { }
+        static get t() { return y; }
+        static set t(a: typeof y) { }
+        static u: (a: typeof y) => void;
+    
+        constructor(a: typeof y) { super(a); }
+    }
+    
+    var d: Derived = new Derived(y);
+                                 ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+    var r1 = d.a;
+    var r2 = d.b(y);
+                 ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+    var r3 = d.c;
+    var r3a = d.d;
+    d.c = y;
+          ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+    var r4 = Derived.r;
+    var r5 = Derived.s(y);
+                       ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+    var r6 = Derived.t;
+    var r6a = Derived.u;
+    Derived.t = y;
+                ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+    
+    class Base2 {
+        [i: string]: Object;
+        [i: number]: typeof x;
+    }
+    
+    class Derived2 extends Base2 {
+        [i: string]: typeof x;
+        [i: number]: typeof y;
+    }
+    
+    var d2: Derived2;
+    var r7 = d2[''];
+             ~~
+!!! error TS2454: Variable 'd2' is used before being assigned.
+    var r8 = d2[1];
+             ~~
+!!! error TS2454: Variable 'd2' is used before being assigned.
+    
+    

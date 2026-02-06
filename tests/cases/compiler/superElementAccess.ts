@@ -1,3 +1,4 @@
+// @target: es2015
 
 class MyBase {
     m1(a: string) { return a; }

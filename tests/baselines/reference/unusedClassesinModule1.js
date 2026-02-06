@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/unusedClassesinModule1.ts] ////
 
 //// [unusedClassesinModule1.ts]
-module A {
+namespace A {
     class Calculator {
         public handelChar() {
         }
@@ -9,13 +9,11 @@ module A {
 }
 
 //// [unusedClassesinModule1.js]
+"use strict";
 var A;
 (function (A) {
-    var Calculator = /** @class */ (function () {
-        function Calculator() {
+    class Calculator {
+        handelChar() {
         }
-        Calculator.prototype.handelChar = function () {
-        };
-        return Calculator;
-    }());
+    }
 })(A || (A = {}));

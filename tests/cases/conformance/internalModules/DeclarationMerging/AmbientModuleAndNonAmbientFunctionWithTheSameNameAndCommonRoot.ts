@@ -1,5 +1,6 @@
+// @target: es2015
 // @filename: module.d.ts
-declare module Point {
+declare namespace Point {
     export var Origin: { x: number; y: number; }
 }
 

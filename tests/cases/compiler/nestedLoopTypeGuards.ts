@@ -1,3 +1,4 @@
+// @target: es2015
 // Repros from #10378
 
 function f1() {

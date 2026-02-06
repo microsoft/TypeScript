@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @Filename: file1.ts
 var v1 = "sausages"; // Global scope
 

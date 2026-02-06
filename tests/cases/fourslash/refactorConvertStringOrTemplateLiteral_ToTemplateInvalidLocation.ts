@@ -2,8 +2,8 @@
 
 //// import * as a from "/*1a*/f/*1b*/oobar";
 //// export * as b from "/*2a*/f/*2b*/oobar";
-//// import * as c from "foobar" assert { "/*3a*/f/*3b*/oobar": "something" };
-//// import * as d from "foobar" assert { "something": "/*4a*/f/*4b*/oobar" };
+//// import * as c from "foobar" with { "/*3a*/f/*3b*/oobar": "something" };
+//// import * as d from "foobar" with { "something": "/*4a*/f/*4b*/oobar" };
 //// 
 //// let x = {
 ////     "/*5a*/f/*5b*/oobar": 1234,

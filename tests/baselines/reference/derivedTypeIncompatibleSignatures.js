@@ -34,3 +34,4 @@ interface H extends G {
 }
 
 //// [derivedTypeIncompatibleSignatures.js]
+"use strict";

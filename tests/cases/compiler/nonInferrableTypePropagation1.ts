@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 type Op<I, O> = (thing: Thing<I>) => Thing<O>;

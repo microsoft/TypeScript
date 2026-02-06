@@ -1,4 +1,5 @@
-﻿//﻿
+﻿// @target: es2015
+//﻿
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +17,7 @@
 ///<reference path='formatting.ts' />
 
 
-module Formatting {
+namespace Formatting {
     export class Indenter implements ILineIndenationResolver  {
 
         private indentationBag: IndentationBag;

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxReactEmit7.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -22,6 +22,7 @@ var e = <div xxxxx="val"></div>;
 
 
 //// [file.js]
+"use strict";
 var m = React.createElement("div", { "x-y": "val" });
 var n = React.createElement("div", { "xx-y": "val" });
 var o = React.createElement("div", { "x-yy": "val" });

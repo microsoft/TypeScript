@@ -4,4 +4,5 @@
 var v = { get foo() { return } };
 
 //// [parserReturnStatement4.js]
+"use strict";
 var v = { get foo() { return; } };

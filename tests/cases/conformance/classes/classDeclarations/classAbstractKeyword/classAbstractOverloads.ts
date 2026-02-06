@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 abstract class A {
     abstract foo();
     abstract foo() : number;

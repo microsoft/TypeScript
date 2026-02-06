@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/interfaceMergeWithNonGenericTypeArguments.ts] ////
+
+=== interfaceMergeWithNonGenericTypeArguments.ts ===
+export class SomeBaseClass { }
+>SomeBaseClass : Symbol(SomeBaseClass, Decl(interfaceMergeWithNonGenericTypeArguments.ts, 0, 0))
+
+export interface SomeInterface { }
+>SomeInterface : Symbol(SomeInterface, Decl(interfaceMergeWithNonGenericTypeArguments.ts, 0, 30))
+
+export interface MergedClass extends SomeInterface { }
+>MergedClass : Symbol(MergedClass, Decl(interfaceMergeWithNonGenericTypeArguments.ts, 1, 34), Decl(interfaceMergeWithNonGenericTypeArguments.ts, 2, 54))
+>SomeInterface : Symbol(SomeInterface, Decl(interfaceMergeWithNonGenericTypeArguments.ts, 0, 30))
+
+export class MergedClass extends SomeBaseClass<any> {
+>MergedClass : Symbol(MergedClass, Decl(interfaceMergeWithNonGenericTypeArguments.ts, 1, 34), Decl(interfaceMergeWithNonGenericTypeArguments.ts, 2, 54))
+>SomeBaseClass : Symbol(SomeBaseClass, Decl(interfaceMergeWithNonGenericTypeArguments.ts, 0, 0))
+
+	public constructor() {
+		super();
+>super : Symbol(SomeBaseClass, Decl(interfaceMergeWithNonGenericTypeArguments.ts, 0, 0))
+	}
+}

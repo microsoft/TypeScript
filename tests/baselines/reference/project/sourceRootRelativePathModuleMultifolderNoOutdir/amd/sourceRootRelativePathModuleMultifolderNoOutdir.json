@@ -8,6 +8,7 @@
     "declaration": true,
     "baselineCheck": true,
     "sourceRoot": "../src",
+    "strict": false,
     "resolvedInputFiles": [
         "lib.es5.d.ts",
         "lib.decorators.d.ts",

@@ -1,0 +1,22 @@
+infinitelyExpandingTypes2.ts(13,5): error TS2322: Type 'null' is not assignable to type 'Bar<number>'.
+
+
+==== infinitelyExpandingTypes2.ts (1 errors) ====
+    interface Foo<T> {
+        x: Foo<Foo<T>>;
+    } 
+    
+    interface Bar<T> extends Foo<T> {
+        y: string;
+    }
+    
+    function f(p: Foo<number>) {
+        console.log(p);
+    }
+    
+    var v: Bar<number> = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'Bar<number>'.
+    
+    f(v); // should not error
+    

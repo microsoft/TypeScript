@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/commentsMultiModuleMultiFile.ts] ////
+
+//// [commentsMultiModuleMultiFile_0.ts]
+/** this is multi declare module*/
+export namespace multiM {
+    /// class b comment
+    export class b {
+    }
+}
+/** thi is multi module 2*/
+export namespace multiM {
+    /** class c comment*/
+    export class c {
+    }
+
+    // class e comment
+    export class e {
+    }
+}
+
+new multiM.b();
+new multiM.c();
+
+//// [commentsMultiModuleMultiFile_1.ts]
+import m = require('commentsMultiModuleMultiFile_0');
+/** this is multi module 3 comment*/
+export namespace multiM {
+    /** class d comment*/
+    export class d {
+    }
+
+    /// class f comment
+    export class f {
+    }
+}
+new multiM.d();
+
+//// [commentsMultiModuleMultiFile_0.js]
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.multiM = void 0;
+    /** this is multi declare module*/
+    var multiM;
+    (function (multiM) {
+        /// class b comment
+        class b {
+        }
+        multiM.b = b;
+    })(multiM || (exports.multiM = multiM = {}));
+    /** thi is multi module 2*/
+    (function (multiM) {
+        /** class c comment*/
+        class c {
+        }
+        multiM.c = c;
+        // class e comment
+        class e {
+        }
+        multiM.e = e;
+    })(multiM || (exports.multiM = multiM = {}));
+    new multiM.b();
+    new multiM.c();
+});
+//// [commentsMultiModuleMultiFile_1.js]
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.multiM = void 0;
+    /** this is multi module 3 comment*/
+    var multiM;
+    (function (multiM) {
+        /** class d comment*/
+        class d {
+        }
+        multiM.d = d;
+        /// class f comment
+        class f {
+        }
+        multiM.f = f;
+    })(multiM || (exports.multiM = multiM = {}));
+    new multiM.d();
+});
+
+
+//// [commentsMultiModuleMultiFile_0.d.ts]
+/** this is multi declare module*/
+export declare namespace multiM {
+    class b {
+    }
+}
+/** thi is multi module 2*/
+export declare namespace multiM {
+    /** class c comment*/
+    class c {
+    }
+    class e {
+    }
+}
+//// [commentsMultiModuleMultiFile_1.d.ts]
+/** this is multi module 3 comment*/
+export declare namespace multiM {
+    /** class d comment*/
+    class d {
+    }
+    class f {
+    }
+}

@@ -1,0 +1,61 @@
+//// [tests/cases/conformance/importAttributes/importAttributes6.ts] ////
+
+=== mod.mts ===
+import * as thing1 from "./mod.mjs" with { field: 0 };
+>thing1 : typeof thing1
+>       : ^^^^^^^^^^^^^
+>field : any
+>      : ^^^
+
+import * as thing2 from "./mod.mjs" with { field: `a` };
+>thing2 : typeof thing1
+>       : ^^^^^^^^^^^^^
+>field : any
+>      : ^^^
+
+import * as thing3 from "./mod.mjs" with { field: /a/g };
+>thing3 : typeof thing1
+>       : ^^^^^^^^^^^^^
+>field : any
+>      : ^^^
+>/a/g : RegExp
+>     : ^^^^^^
+
+import * as thing4 from "./mod.mjs" with { field: ["a"] };
+>thing4 : typeof thing1
+>       : ^^^^^^^^^^^^^
+>field : any
+>      : ^^^
+>["a"] : string[]
+>      : ^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+import * as thing5 from "./mod.mjs" with { field: { a: 0 } };
+>thing5 : typeof thing1
+>       : ^^^^^^^^^^^^^
+>field : any
+>      : ^^^
+>{ a: 0 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+import * as thing6 from "./mod.mjs" with { type: "json", field: 0..toString() };
+>thing6 : typeof thing1
+>       : ^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+>field : any
+>      : ^^^
+>0..toString() : string
+>              : ^^^^^^
+>0..toString : (radix?: number) => string
+>            : ^     ^^^      ^^^^^      
+>0. : 0
+>   : ^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+

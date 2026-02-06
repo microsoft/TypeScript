@@ -69,6 +69,7 @@ type _Expect<TActual extends TExpected, TExpected> = TActual;
 
 
 //// [awaitedTypeStrictNull.js]
+"use strict";
 async function main() {
     let aaa;
     let bbb;

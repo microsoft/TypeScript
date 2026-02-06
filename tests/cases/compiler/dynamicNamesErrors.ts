@@ -24,8 +24,8 @@ interface T3 {
     [c1]: string;
 }
 
-let t1: T1;
-let t2: T2;
+declare let t1: T1;
+declare let t2: T2;
 t1 = t2;
 t2 = t1;
 

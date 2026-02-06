@@ -2,7 +2,7 @@ import * as Harness from "../../../_namespaces/Harness.js";
 import * as ts from "../../../_namespaces/ts.js";
 
 describe("unittests:: services:: extract:: Symbol Walker", () => {
-    function test(description: string, source: string, verifier: (file: ts.SourceFile, checker: ts.TypeChecker) => void) {
+    function test(description: string, source: string, verifier: (file: ts.SourceFile, checker: ts.TypeChecker, program: ts.Program) => void) {
         it(description, () => {
             const result = Harness.Compiler.compileFiles(
                 [{
@@ -16,7 +16,7 @@ describe("unittests:: services:: extract:: Symbol Walker", () => {
             );
             const file = result.program!.getSourceFile("main.ts")!;
             const checker = result.program!.getTypeChecker();
-            verifier(file, checker);
+            verifier(file, checker, result.program!);
         });
     }
 
@@ -29,13 +29,13 @@ interface Bar {
     history: Bar[];
 }
 export default function foo(a: number, b: Bar): void {}`,
-        (file, checker) => {
+        (file, checker, program) => {
             let foundCount = 0;
             let stdLibRefSymbols = 0;
             const expectedSymbols = ["default", "a", "b", "Bar", "x", "y", "history"];
             const walker = checker.getSymbolWalker(symbol => {
                 const isStdLibSymbol = ts.forEach(symbol.declarations, d => {
-                    return ts.getSourceFileOfNode(d).hasNoDefaultLib;
+                    return program.isSourceFileDefaultLibrary(ts.getSourceFileOfNode(d));
                 });
                 if (isStdLibSymbol) {
                     stdLibRefSymbols++;

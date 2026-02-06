@@ -2,7 +2,7 @@
 
 === b.ts ===
 ///<reference path="a.ts"/>
-module ElidedModule3 {
+namespace ElidedModule3 {
 >ElidedModule3 : Symbol(ElidedModule3, Decl(b.ts, 0, 0))
 }
 === a.ts ===
@@ -12,12 +12,12 @@ module ElidedModule3 {
 */
 
 /*! Don't keep this pinned comment */
-module ElidedModule {
+namespace ElidedModule {
 >ElidedModule : Symbol(ElidedModule, Decl(a.ts, 0, 0))
 }
 
 // Don't keep this comment.
-module ElidedModule2 {
+namespace ElidedModule2 {
 >ElidedModule2 : Symbol(ElidedModule2, Decl(a.ts, 7, 1))
 }
 

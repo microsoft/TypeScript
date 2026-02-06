@@ -1,3 +1,4 @@
+// @target: es2015
 function Foo<
     a1, a21, a31, a41, a51, a61,
     a119, a22, a32, a42, a52, a62,

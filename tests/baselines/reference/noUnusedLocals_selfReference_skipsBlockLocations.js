@@ -20,6 +20,7 @@ namespace n {
 
 
 //// [noUnusedLocals_selfReference_skipsBlockLocations.js]
+"use strict";
 var n;
 (function (n) {
     function f() {

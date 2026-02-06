@@ -28,8 +28,9 @@ interface Entry {
  
 
 //// [substitutionTypeNoMergeOfAssignableType.js]
+"use strict";
 function makeEntityStore(config) {
     return {};
 }
-var myTest = makeEntityStore({ test: { fields: { id: {} } } });
+const myTest = makeEntityStore({ test: { fields: { id: {} } } });
 myTest.test;

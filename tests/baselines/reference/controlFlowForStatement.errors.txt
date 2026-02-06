@@ -1,9 +1,13 @@
 controlFlowForStatement.ts(29,14): error TS2873: This kind of expression is always falsy.
 controlFlowForStatement.ts(29,50): error TS2873: This kind of expression is always falsy.
+controlFlowForStatement.ts(35,19): error TS2454: Variable 'x' is used before being assigned.
+controlFlowForStatement.ts(36,9): error TS2454: Variable 'x' is used before being assigned.
+controlFlowForStatement.ts(37,20): error TS2454: Variable 'x' is used before being assigned.
+controlFlowForStatement.ts(38,9): error TS2322: Type 'undefined' is not assignable to type 'string | number | boolean'.
 
 
-==== controlFlowForStatement.ts (2 errors) ====
-    let cond: boolean;
+==== controlFlowForStatement.ts (6 errors) ====
+    declare let cond: boolean;
     function a() {
         let x: string | number | boolean;
         for (x = ""; cond; x = 5) {
@@ -42,9 +46,17 @@ controlFlowForStatement.ts(29,50): error TS2873: This kind of expression is alwa
     function f() {
         let x: string | number | boolean;
         for (; typeof x !== "string";) {
+                      ~
+!!! error TS2454: Variable 'x' is used before being assigned.
             x; // number | boolean
+            ~
+!!! error TS2454: Variable 'x' is used before being assigned.
             if (typeof x === "number") break;
+                       ~
+!!! error TS2454: Variable 'x' is used before being assigned.
             x = undefined;
+            ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string | number | boolean'.
         }
         x; // string | number
     }

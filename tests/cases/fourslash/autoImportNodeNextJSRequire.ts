@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @module: nodenext
+// @module: node18
 // @allowJs: true
 // @checkJs: true
 // @noEmit: true

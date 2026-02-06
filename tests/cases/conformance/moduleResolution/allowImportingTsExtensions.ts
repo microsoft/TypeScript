@@ -1,6 +1,7 @@
+// @target: es2015
 // @allowImportingTsExtensions: true
 // @noEmit: true
-// @moduleResolution: classic,node10,node16,nodenext,bundler
+// @moduleResolution: classic,node16,nodenext,bundler
 // @jsx: preserve
 // @noTypesAndSymbols: true
 

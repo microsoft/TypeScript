@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 declare class Component<P, S = {}> {
     readonly props: Readonly<{ children?: unknown }> & Readonly<P>;

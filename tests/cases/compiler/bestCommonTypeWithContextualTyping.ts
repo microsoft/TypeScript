@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 interface Contextual {
     dummy;
     p?: number;
@@ -8,7 +10,7 @@ interface Ellement {
     p: any;
 }
 
-var e: Ellement;
+declare var e: Ellement;
 
 // All of these should pass. Neither type is a supertype of the other, but the RHS should
 // always use Ellement in these examples (not Contextual). Because Ellement is assignable

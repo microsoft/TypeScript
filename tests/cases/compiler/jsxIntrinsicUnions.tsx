@@ -1,3 +1,4 @@
+// @target: es2015
 // @jsx: react
 /// <reference path="/.lib/react16.d.ts" />
 

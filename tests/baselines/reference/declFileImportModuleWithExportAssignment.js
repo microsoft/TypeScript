@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileImportModuleWithExportAssignment.ts] ////
 
 //// [declFileImportModuleWithExportAssignment_0.ts]
-module m2 {
+namespace m2 {
     export interface connectModule {
         (res, req, next): void;
     }
@@ -34,7 +34,7 @@ module.exports = m2;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 /**This is on import declaration*/
-var a1 = require("./declFileImportModuleWithExportAssignment_0");
+const a1 = require("./declFileImportModuleWithExportAssignment_0");
 exports.a = a1;
 exports.a.test1(null, null, null);
 

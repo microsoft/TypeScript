@@ -7,5 +7,4 @@ export declare namespace Foo {
 
 
 //// [ambientNameRestrictions.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

@@ -216,6 +216,7 @@ class Derived extends Base {
 
 
 //// [asyncMethodWithSuper_es6.js]
+"use strict";
 class A {
     x() {
     }

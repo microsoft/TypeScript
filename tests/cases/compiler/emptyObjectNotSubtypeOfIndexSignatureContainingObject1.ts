@@ -1,3 +1,4 @@
+// @target: es2015
 // This should behave the same as emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts
 // Begin types from Lodash.
 interface Dictionary<T> {

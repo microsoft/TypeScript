@@ -12,7 +12,7 @@ function f() {
 
 function f() {
     let a = 1;
-    let { x, y, z }: { x: number; y: number; z: number; } = /*RENAME*/newFunction();
+    let { x, y, z }: { x: number | undefined; y: number | undefined; z: number | undefined; } = /*RENAME*/newFunction();
     a; x; y; z;
 
     function newFunction() {

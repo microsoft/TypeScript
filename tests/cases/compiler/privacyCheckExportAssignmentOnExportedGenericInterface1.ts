@@ -1,6 +1,7 @@
+// @target: es2015
 //@module: commonjs
 //@declaration: true
-module Foo {
+namespace Foo {
     export interface A<T> {
     }
 }

@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module SwitchTest {
+////namespace SwitchTest {
 ////    var a = 3;
 ////
 ////    if (a == 5) {

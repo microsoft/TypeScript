@@ -1,0 +1,46 @@
+error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+index.cjs(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#mjs")' call instead.
+index.cjs(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#type")' call instead.
+
+
+!!! error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+==== index.js (0 errors) ====
+    // esm format file
+    import * as cjs from "#cjs";
+    import * as mjs from "#mjs";
+    import * as type from "#type";
+    cjs;
+    mjs;
+    type;
+==== index.mjs (0 errors) ====
+    // esm format file
+    import * as cjs from "#cjs";
+    import * as mjs from "#mjs";
+    import * as type from "#type";
+    cjs;
+    mjs;
+    type;
+==== index.cjs (2 errors) ====
+    // esm format file
+    import * as cjs from "#cjs";
+    import * as mjs from "#mjs";
+                         ~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#mjs")' call instead.
+    import * as type from "#type";
+                          ~~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#type")' call instead.
+    cjs;
+    mjs;
+    type;
+==== package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+        "exports": "./index.js",
+        "imports": {
+            "#cjs": "./index.cjs",
+            "#mjs": "./index.mjs",
+            "#type": "./index.js"
+        }
+    }

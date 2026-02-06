@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution11.tsx] ////
 
 === react.d.ts ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 	}
@@ -12,8 +12,8 @@ declare module JSX {
 	}
 	interface IntrinsicAttributes {
 		ref?: string;
->ref : string
->    : ^^^^^^
+>ref : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 	}
 }
 
@@ -32,8 +32,8 @@ class MyComponent {
 >      : ^^^^^^^^      ^^^
 
 	  ref?: string;
->ref : string
->    : ^^^^^^
+>ref : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
   }
 }
 

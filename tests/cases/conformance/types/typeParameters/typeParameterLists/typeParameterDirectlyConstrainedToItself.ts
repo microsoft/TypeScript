@@ -1,3 +1,4 @@
+// @target: es2015
 // all of the below should be errors
 
 class C<T extends T> { } 

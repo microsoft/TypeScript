@@ -1,22 +1,28 @@
 classAndVariableWithSameName.ts(1,7): error TS2300: Duplicate identifier 'C'.
+classAndVariableWithSameName.ts(1,11): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 classAndVariableWithSameName.ts(2,5): error TS2300: Duplicate identifier 'C'.
 classAndVariableWithSameName.ts(5,11): error TS2300: Duplicate identifier 'D'.
+classAndVariableWithSameName.ts(6,9): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
 classAndVariableWithSameName.ts(9,9): error TS2300: Duplicate identifier 'D'.
 
 
-==== classAndVariableWithSameName.ts (4 errors) ====
+==== classAndVariableWithSameName.ts (6 errors) ====
     class C { foo: string; } // error
           ~
 !!! error TS2300: Duplicate identifier 'C'.
+              ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     var C = ''; // error
         ~
 !!! error TS2300: Duplicate identifier 'C'.
     
-    module M {
+    namespace M {
         class D { // error
               ~
 !!! error TS2300: Duplicate identifier 'D'.
             bar: string;
+            ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
         }
     
         var D = 1; // error

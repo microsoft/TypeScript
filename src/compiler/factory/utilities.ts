@@ -700,9 +700,10 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
         const impliedModuleKind = getImpliedNodeFormatForEmitWorker(sourceFile, compilerOptions);
         const helpers = getImportedHelpers(sourceFile);
         if (
-            (moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) ||
-            impliedModuleKind === ModuleKind.ESNext ||
-            impliedModuleKind === undefined && moduleKind === ModuleKind.Preserve
+            impliedModuleKind !== ModuleKind.CommonJS &&
+            ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) ||
+                impliedModuleKind === ModuleKind.ESNext ||
+                impliedModuleKind === undefined && moduleKind === ModuleKind.Preserve)
         ) {
             // When we emit as an ES module, generate an `import` declaration that uses named imports for helpers.
             // If we cannot determine the implied module kind under `module: preserve` we assume ESM.
@@ -730,7 +731,7 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
 
                     const externalHelpersImportDeclaration = nodeFactory.createImportDeclaration(
                         /*modifiers*/ undefined,
-                        nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
+                        nodeFactory.createImportClause(/*phaseModifier*/ undefined, /*name*/ undefined, namedBindings),
                         nodeFactory.createStringLiteral(externalHelpersModuleNameText),
                         /*attributes*/ undefined,
                     );

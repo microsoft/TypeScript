@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload2.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react')
 >React : typeof React
 >      : ^^^^^^^^^^^^
@@ -76,6 +78,7 @@ let obj2 = {
 
 let defaultObj: any;
 >defaultObj : any
+>           : ^^^
 
 // OK
 const c1 = <OneThing />
@@ -166,6 +169,7 @@ const c7 = <OneThing {...defaultObj} yy {...obj} />;  // No error. should pick s
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
 >         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >defaultObj : any
+>           : ^^^
 >yy : true
 >   : ^^^^
 >obj : { yy: number; yy1: string; }

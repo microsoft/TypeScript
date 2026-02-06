@@ -1,3 +1,4 @@
+// @target: es2015
 interface KnockoutSubscription2<T> {
     target: KnockoutObservableBase2<T>;
 }

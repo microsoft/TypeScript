@@ -29,8 +29,8 @@ if (typeof x === "number") {
 }
 else {
     x; // string
->x : string
->  : ^^^^^^
+>x : string | number | E | V
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 if (typeof x !== "number") {
@@ -44,8 +44,8 @@ if (typeof x !== "number") {
 >         : ^^^^^^^^
 
     x; // string
->x : string
->  : ^^^^^^
+>x : string | number | E | V
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 }
 else {
     x; // number|E|V

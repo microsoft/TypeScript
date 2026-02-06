@@ -1,3 +1,6 @@
+// @module: commonjs
+// @target: es2015
+// @strict: false
 // @filename: types.ts
 declare module "*.foo" {
   let everywhere: string;

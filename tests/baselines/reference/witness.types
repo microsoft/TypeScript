@@ -540,8 +540,8 @@ var propAcc1: { m: any; }
 >m : any
 >  : ^^^
 
-// Property access of module member
-module M2 {
+// Property access of namespace member
+namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 

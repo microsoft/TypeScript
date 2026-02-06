@@ -43,35 +43,30 @@ const elem6 = <obj. MemberClassComponent />;
 
 //// [jsxComponentTypeErrors.jsx]
 "use strict";
-function FunctionComponent(_a) {
-    var type = _a.type;
+function FunctionComponent({ type }) {
     return {
-        type: type
+        type
     };
 }
 FunctionComponent.useThis = function () {
     return <this type="foo"/>;
 };
-var ClassComponent = /** @class */ (function () {
-    function ClassComponent() {
+class ClassComponent {
+    constructor() {
         this.type = 'string';
     }
-    return ClassComponent;
-}());
-var MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
-var elem1 = <FunctionComponent type="abc"/>;
-var elem2 = <FunctionComponent />;
-var elem3 = <ClassComponent />;
-var elem4 = <MixedComponent />;
-var obj = {
-    MemberFunctionComponent: function () {
+}
+const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
+const elem1 = <FunctionComponent type="abc"/>;
+const elem2 = <FunctionComponent />;
+const elem3 = <ClassComponent />;
+const elem4 = <MixedComponent />;
+const obj = {
+    MemberFunctionComponent() {
         return {};
     },
-    MemberClassComponent: /** @class */ (function () {
-        function MemberClassComponent() {
-        }
-        return MemberClassComponent;
-    }()),
+    MemberClassComponent: class {
+    },
 };
-var elem5 = <obj.MemberFunctionComponent />;
-var elem6 = <obj.MemberClassComponent />;
+const elem5 = <obj.MemberFunctionComponent />;
+const elem6 = <obj.MemberClassComponent />;

@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/typeofInternalModules.ts] ////
 
 //// [typeofInternalModules.ts]
-module Outer {
-    export module instantiated {
+namespace Outer {
+    export namespace instantiated {
         export class C { }
     }
-    export module uninstantiated {
+    export namespace uninstantiated {
         export interface P { }
     }
 }
@@ -27,15 +27,13 @@ x7 = importInst;
 
 
 //// [typeofInternalModules.js]
+"use strict";
 var Outer;
 (function (Outer) {
-    var instantiated;
+    let instantiated;
     (function (instantiated) {
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
         instantiated.C = C;
     })(instantiated = Outer.instantiated || (Outer.instantiated = {}));
 })(Outer || (Outer = {}));

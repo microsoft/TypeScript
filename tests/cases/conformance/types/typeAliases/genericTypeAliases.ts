@@ -1,3 +1,4 @@
+// @target: es2015
 type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
 
 var tree: Tree<number> = {

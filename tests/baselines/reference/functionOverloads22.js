@@ -7,4 +7,5 @@ function foo(bar:any):{a:any;b?:any;}[] { return [{a:""}] }
 
 
 //// [functionOverloads22.js]
+"use strict";
 function foo(bar) { return [{ a: "" }]; }

@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es6
 // @module: commonjs
 
@@ -14,10 +15,10 @@ export enum E {
 export const enum D {
     A, B, C
 }
-export module M {
+export namespace M {
     export var x;
 }
-export module N {
+export namespace N {
     export interface I {
     }
 }

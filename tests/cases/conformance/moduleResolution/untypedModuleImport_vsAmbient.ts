@@ -1,3 +1,6 @@
+// @module: commonjs
+// @target: es2015
+// @strict: false
 // @noImplicitReferences: true
 // @currentDirectory: /
 // This tests that an ambient module declaration overrides an untyped import.

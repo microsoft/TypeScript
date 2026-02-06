@@ -1,0 +1,70 @@
+interfaceClassMerging.ts(9,5): error TS2564: Property 'additionalProperty' has no initializer and is not definitely assigned in the constructor.
+interfaceClassMerging.ts(17,5): error TS2416: Property 'method' in type 'Bar' is not assignable to the same property in base type 'Foo'.
+  Type '(a: number) => string | undefined' is not assignable to type '(a: number) => string'.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+interfaceClassMerging.ts(25,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+interfaceClassMerging.ts(38,7): error TS2454: Variable 'obj' is used before being assigned.
+interfaceClassMerging.ts(39,1): error TS2322: Type 'Bar' is not assignable to type '{ method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }'.
+  The types returned by 'method(...)' are incompatible between these types.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+
+
+==== interfaceClassMerging.ts (5 errors) ====
+    interface Foo {
+        method(a: number): string;
+        optionalMethod?(a: number): string;
+        property: string;
+        optionalProperty?: string;
+    }
+    
+    class Foo {
+        additionalProperty: string;
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'additionalProperty' has no initializer and is not definitely assigned in the constructor.
+    
+        additionalMethod(a: number): string {
+            return this.method(0);
+        }
+    }
+    
+    class Bar extends Foo {
+        method(a: number) {
+        ~~~~~~
+!!! error TS2416: Property 'method' in type 'Bar' is not assignable to the same property in base type 'Foo'.
+!!! error TS2416:   Type '(a: number) => string | undefined' is not assignable to type '(a: number) => string'.
+!!! error TS2416:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2416:       Type 'undefined' is not assignable to type 'string'.
+            return this.optionalProperty;
+        }
+    }
+    
+    
+    var bar = new Bar();
+    bar.method(0);
+    bar.optionalMethod(1);
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
+    bar.property;
+    bar.optionalProperty;
+    bar.additionalProperty;
+    bar.additionalMethod(2);
+    
+    var obj: {
+        method(a: number): string;
+        property: string;
+        additionalProperty: string;
+        additionalMethod(a: number): string;
+    };
+    
+    bar = obj;
+          ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
+    obj = bar;
+    ~~~
+!!! error TS2322: Type 'Bar' is not assignable to type '{ method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }'.
+!!! error TS2322:   The types returned by 'method(...)' are incompatible between these types.
+!!! error TS2322:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string'.
+    

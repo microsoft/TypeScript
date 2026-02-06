@@ -22,7 +22,7 @@ interfacePropertiesWithSameName2.ts(26,11): error TS2320: Interface 'MoverShaker
     }
     
     // Inside a module
-    declare module MoversAndShakers {
+    declare namespace MoversAndShakers {
         export class Mover {
             move(): void;
             getStatus(): { speed: number; };

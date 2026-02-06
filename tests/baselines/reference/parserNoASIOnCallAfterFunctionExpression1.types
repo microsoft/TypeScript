@@ -1,5 +1,8 @@
 //// [tests/cases/conformance/parser/ecmascript5/parserNoASIOnCallAfterFunctionExpression1.ts] ////
 
+=== Performance Stats ===
+Type Count: 100 -> 1,000
+
 === parserNoASIOnCallAfterFunctionExpression1.ts ===
 var x = function () { }
 >x : any

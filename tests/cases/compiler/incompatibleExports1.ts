@@ -1,3 +1,4 @@
+// @target: es2015
 declare module "foo" { 
     export interface x { a: string } 
     interface y { a: Date }
@@ -5,11 +6,11 @@ declare module "foo" {
 }
  
 declare module "baz" {
-    export module a {
+    export namespace a {
         export var b: number;
     }
  
-    module c {
+    namespace c {
         export var c: string;
     }
  

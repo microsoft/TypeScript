@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 interface Square {
     ["dash-ok"]: "square";

@@ -1,3 +1,4 @@
+// @target: es2015
 function f1(n:number):string {
     return n; // error return type mismatch
 }

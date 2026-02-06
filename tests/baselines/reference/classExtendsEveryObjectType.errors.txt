@@ -5,7 +5,7 @@ classExtendsEveryObjectType.ts(6,31): error TS1005: ',' expected.
 classExtendsEveryObjectType.ts(8,18): error TS2507: Type '{ foo: string; }' is not a constructor function type.
 classExtendsEveryObjectType.ts(11,18): error TS2507: Type 'typeof M' is not a constructor function type.
 classExtendsEveryObjectType.ts(14,18): error TS2507: Type '() => void' is not a constructor function type.
-classExtendsEveryObjectType.ts(16,18): error TS2507: Type 'undefined[]' is not a constructor function type.
+classExtendsEveryObjectType.ts(16,18): error TS2507: Type 'never[]' is not a constructor function type.
 
 
 ==== classExtendsEveryObjectType.ts (8 errors) ====
@@ -23,12 +23,12 @@ classExtendsEveryObjectType.ts(16,18): error TS2507: Type 'undefined[]' is not a
 !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                                   ~
 !!! error TS1005: ',' expected.
-    var x: { foo: string; }
+    declare var x: { foo: string; }
     class C3 extends x { } // error
                      ~
 !!! error TS2507: Type '{ foo: string; }' is not a constructor function type.
     
-    module M { export var x = 1; }
+    namespace M { export var x = 1; }
     class C4 extends M { } // error
                      ~
 !!! error TS2507: Type 'typeof M' is not a constructor function type.
@@ -40,4 +40,4 @@ classExtendsEveryObjectType.ts(16,18): error TS2507: Type 'undefined[]' is not a
     
     class C6 extends []{ } // error
                      ~~
-!!! error TS2507: Type 'undefined[]' is not a constructor function type.
+!!! error TS2507: Type 'never[]' is not a constructor function type.

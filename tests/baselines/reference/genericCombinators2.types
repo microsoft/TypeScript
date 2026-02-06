@@ -49,11 +49,11 @@ interface Combinators {
 >  : ^
 }
 
-var _: Combinators;
+declare var _: Combinators;
 >_ : Combinators
 >  : ^^^^^^^^^^^
 
-var c2: Collection<number, string>;
+declare var c2: Collection<number, string>;
 >c2 : Collection<number, string>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

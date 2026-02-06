@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: commentOnAmbientVariable2_1.ts
 var y = 1;
 

@@ -7,13 +7,15 @@ var s: string;
 >s : string
 >  : ^^^^^^
 
-module M1 {
+namespace M1 {
 >M1 : typeof M1
 >   : ^^^^^^^^^
 
-    export var s: number;
+    export var s: number = 0;
 >s : number
 >  : ^^^^^^
+>0 : 0
+>  : ^
 
     var n = s;
 >n : number
@@ -26,13 +28,15 @@ module M1 {
 >  : ^^^^^^
 }
 
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 
-    var s: number;
+    var s: number = 0;
 >s : number
 >  : ^^^^^^
+>0 : 0
+>  : ^
 
     var n = s;
 >n : number
@@ -49,15 +53,17 @@ function fn() {
 >fn : () => void
 >   : ^^^^^^^^^^
 
-    var s: boolean;
+    var s: boolean = false;
 >s : boolean
 >  : ^^^^^^^
+>false : false
+>      : ^^^^^
 
     var n = s;
 >n : boolean
 >  : ^^^^^^^
->s : boolean
->  : ^^^^^^^
+>s : false
+>  : ^^^^^
 
     var n: boolean;
 >n : boolean
@@ -68,7 +74,7 @@ class C {
 >C : C
 >  : ^
 
-    s: Date;
+    s!: Date;
 >s : Date
 >  : ^^^^
 
@@ -102,27 +108,23 @@ class C {
     }
 }
 
-module M3 {
+namespace M3 {
 >M3 : typeof M3
 >   : ^^^^^^^^^
 
     var s: any;
 >s : any
->  : ^^^
 
-    module M4 {
+    namespace M4 {
 >M4 : typeof M4
 >   : ^^^^^^^^^
 
         var n = s;
 >n : any
->  : ^^^
 >s : any
->  : ^^^
 
         var n: any;
 >n : any
->  : ^^^
     }
 }
 

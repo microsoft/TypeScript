@@ -1,3 +1,4 @@
+// @target: es2015
 declare var ooo:any;
 
 with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error

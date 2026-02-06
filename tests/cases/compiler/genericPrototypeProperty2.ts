@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 interface EventTarget { x } 
 class BaseEvent {
     target: EventTarget;

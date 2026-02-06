@@ -1,3 +1,4 @@
+// @target: es2015
 declare abstract class A {
     constructor(p: number);
     a: number;

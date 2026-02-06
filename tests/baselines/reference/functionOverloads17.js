@@ -6,4 +6,5 @@ function foo():{a:string;} { return {a:""} }
 
 
 //// [functionOverloads17.js]
+"use strict";
 function foo() { return { a: "" }; }

@@ -1,0 +1,122 @@
+//// [tests/cases/compiler/erasableSyntaxOnlyDeclaration.ts] ////
+
+=== index.d.cts ===
+declare function foo(): void;
+>foo : Symbol(foo, Decl(index.d.cts, 0, 0))
+
+export = foo;
+>foo : Symbol(foo, Decl(index.d.cts, 0, 0))
+
+
+=== index.d.ts ===
+namespace IllegalBecauseInstantiated {
+>IllegalBecauseInstantiated : Symbol(IllegalBecauseInstantiated, Decl(index.d.ts, 0, 0))
+
+    export const m = 1;
+>m : Symbol(m, Decl(index.d.ts, 1, 16))
+}
+
+namespace AlsoIllegalBecauseInstantiated {
+>AlsoIllegalBecauseInstantiated : Symbol(AlsoIllegalBecauseInstantiated, Decl(index.d.ts, 2, 1))
+
+    class PrivateClass {
+>PrivateClass : Symbol(PrivateClass, Decl(index.d.ts, 4, 42))
+
+    }
+}
+
+enum NotLegalEnum {
+>NotLegalEnum : Symbol(NotLegalEnum, Decl(index.d.ts, 8, 1))
+
+    B = 1
+>B : Symbol(NoGoodAlias, Decl(index.d.ts, 10, 19))
+}
+
+import NoGoodAlias = NotLegalEnum.B;
+>NoGoodAlias : Symbol(NoGoodAlias, Decl(index.d.ts, 12, 1))
+>NotLegalEnum : Symbol(NotLegalEnum, Decl(index.d.ts, 8, 1))
+>B : Symbol(NoGoodAlias, Decl(index.d.ts, 10, 19))
+
+const enum NotLegalConstEnum {
+>NotLegalConstEnum : Symbol(NotLegalConstEnum, Decl(index.d.ts, 14, 36))
+
+    C = 2
+>C : Symbol(NotLegalConstEnum.C, Decl(index.d.ts, 16, 30))
+}
+
+// No errors after this point
+class MyClassOk {
+>MyClassOk : Symbol(MyClassOk, Decl(index.d.ts, 18, 1))
+
+    // Not a parameter property, ok
+    constructor(foo: string);
+>foo : Symbol(foo, Decl(index.d.ts, 23, 16))
+}
+namespace NotInstantiated {
+>NotInstantiated : Symbol(NotInstantiated, Decl(index.d.ts, 24, 1))
+
+    export interface JustAType { }
+>JustAType : Symbol(JustAType, Decl(index.d.ts, 25, 27))
+
+    export type ATypeInANamespace = {};
+>ATypeInANamespace : Symbol(ATypeInANamespace, Decl(index.d.ts, 26, 34))
+}
+declare namespace AmbientIsNotInstantiated {
+>AmbientIsNotInstantiated : Symbol(AmbientIsNotInstantiated, Decl(index.d.ts, 28, 1))
+
+    export const stillOk = 12;
+>stillOk : Symbol(stillOk, Decl(index.d.ts, 30, 16))
+}
+
+declare enum LegalEnum {
+>LegalEnum : Symbol(LegalEnum, Decl(index.d.ts, 31, 1))
+
+    A = 1
+>A : Symbol(LegalEnum.A, Decl(index.d.ts, 33, 24))
+}
+
+declare namespace AmbientStuff {
+>AmbientStuff : Symbol(AmbientStuff, Decl(index.d.ts, 35, 1))
+
+    namespace Nested {
+>Nested : Symbol(Nested, Decl(index.d.ts, 37, 32))
+
+        export const stillOk = 12;
+>stillOk : Symbol(stillOk, Decl(index.d.ts, 39, 20))
+    }
+    enum EnumInAmbientContext {
+>EnumInAmbientContext : Symbol(EnumInAmbientContext, Decl(index.d.ts, 40, 5))
+
+        B = 1
+>B : Symbol(FineAlias, Decl(index.d.ts, 41, 31))
+    }
+
+    import FineAlias = EnumInAmbientContext.B;
+>FineAlias : Symbol(FineAlias, Decl(index.d.ts, 43, 5))
+>EnumInAmbientContext : Symbol(EnumInAmbientContext, Decl(index.d.ts, 40, 5))
+>B : Symbol(FineAlias, Decl(index.d.ts, 41, 31))
+}
+
+=== commonjs.d.cts ===
+import foo = require("./other.cjs");
+>foo : Symbol(foo, Decl(commonjs.d.cts, 0, 0))
+
+export = foo;
+>foo : Symbol(foo, Decl(commonjs.d.cts, 0, 0))
+
+
+=== other.d.cts ===
+declare function foo(): void;
+>foo : Symbol(foo, Decl(other.d.cts, 0, 0))
+
+export = foo;
+>foo : Symbol(foo, Decl(other.d.cts, 0, 0))
+
+
+=== esm.d.mts ===
+declare const foo = 1234;
+>foo : Symbol(foo, Decl(esm.d.mts, 0, 13))
+
+export default foo;
+>foo : Symbol(foo, Decl(esm.d.mts, 0, 13))
+

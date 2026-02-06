@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @jsx: react
 // @filename: renderer.d.ts
 export namespace dom {

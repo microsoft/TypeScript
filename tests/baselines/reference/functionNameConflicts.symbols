@@ -4,11 +4,11 @@
 //Function and variable of the same name in same declaration space
 //Function overload with different name from implementation signature 
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(functionNameConflicts.ts, 0, 0))
 
     function fn1() { }
->fn1 : Symbol(fn1, Decl(functionNameConflicts.ts, 3, 10))
+>fn1 : Symbol(fn1, Decl(functionNameConflicts.ts, 3, 13))
 
     var fn1;
 >fn1 : Symbol(fn1, Decl(functionNameConflicts.ts, 5, 7))

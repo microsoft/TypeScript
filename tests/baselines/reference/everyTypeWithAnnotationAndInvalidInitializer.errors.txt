@@ -1,3 +1,9 @@
+everyTypeWithAnnotationAndInvalidInitializer.ts(6,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+everyTypeWithAnnotationAndInvalidInitializer.ts(10,5): error TS2564: Property 'source' has no initializer and is not definitely assigned in the constructor.
+everyTypeWithAnnotationAndInvalidInitializer.ts(11,5): error TS2564: Property 'recurse' has no initializer and is not definitely assigned in the constructor.
+everyTypeWithAnnotationAndInvalidInitializer.ts(12,5): error TS2564: Property 'wrapped' has no initializer and is not definitely assigned in the constructor.
+everyTypeWithAnnotationAndInvalidInitializer.ts(20,9): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+everyTypeWithAnnotationAndInvalidInitializer.ts(28,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
 everyTypeWithAnnotationAndInvalidInitializer.ts(34,5): error TS2322: Type 'string' is not assignable to type 'number'.
 everyTypeWithAnnotationAndInvalidInitializer.ts(35,5): error TS2322: Type 'number' is not assignable to type 'string'.
 everyTypeWithAnnotationAndInvalidInitializer.ts(36,5): error TS2322: Type 'number' is not assignable to type 'Date'.
@@ -24,35 +30,47 @@ everyTypeWithAnnotationAndInvalidInitializer.ts(52,5): error TS2322: Type '(x: n
   Type 'boolean' is not assignable to type 'string'.
 
 
-==== everyTypeWithAnnotationAndInvalidInitializer.ts (15 errors) ====
+==== everyTypeWithAnnotationAndInvalidInitializer.ts (21 errors) ====
     interface I {
         id: number;
     }
     
     class C implements I {
         id: number;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
     }
     
     class D<T>{
         source: T;
+        ~~~~~~
+!!! error TS2564: Property 'source' has no initializer and is not definitely assigned in the constructor.
         recurse: D<T>;
+        ~~~~~~~
+!!! error TS2564: Property 'recurse' has no initializer and is not definitely assigned in the constructor.
         wrapped: D<D<T>>
+        ~~~~~~~
+!!! error TS2564: Property 'wrapped' has no initializer and is not definitely assigned in the constructor.
     }
     
     function F(x: string): number { return 42; }
     function F2(x: number): boolean { return x < 42; }
     
-    module M {
+    namespace M {
         export class A {
             name: string;
+            ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
         }
     
         export function F2(x: number): string { return x.toString(); }
     }
     
-    module N {
+    namespace N {
         export class A {
             id: number;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         }
     
         export function F2(x: number): string { return x.toString(); }

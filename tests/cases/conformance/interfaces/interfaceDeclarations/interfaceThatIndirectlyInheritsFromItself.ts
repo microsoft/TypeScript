@@ -1,3 +1,4 @@
+// @target: es2015
 interface Base extends Derived2 { // error
     x: string;
 }
@@ -10,7 +11,7 @@ interface Derived2 extends Derived {
     z: string;
 }
 
-module Generic {
+namespace Generic {
     interface Base<T> extends Derived2<T> { // error
         x: string;
     }

@@ -1,6 +1,6 @@
 // @noEmitHelpers: true
 // @lib: es2015
-// @target: es5
+// @target: es5, es2015
 // https://github.com/Microsoft/TypeScript/issues/16924
 // Should capture `this`
 

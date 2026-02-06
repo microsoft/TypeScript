@@ -1,3 +1,4 @@
+// @target: es2015
 // checking whether other types are subtypes of type parameters with constraints
 
 function f1<T extends U, U>(x: T, y: U) {
@@ -39,11 +40,11 @@ class C1 { foo: number; }
 class C2<T> { foo: T; }
 enum E { A }
 function f() { }
-module f {
+namespace f {
     export var bar = 1;
 }
 class c { baz: string }
-module c {
+namespace c {
     export var bar = 1;
 }
 

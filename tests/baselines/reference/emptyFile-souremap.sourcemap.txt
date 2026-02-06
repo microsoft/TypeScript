@@ -1,7 +1,0 @@
-===================================================================
-JsFile: emptyFile-souremap.js
-mapUrl: emptyFile-souremap.js.map
-sourceRoot: 
-sources: emptyFile-souremap.ts
-===================================================================
->>>//# sourceMappingURL=emptyFile-souremap.js.map

@@ -5,3 +5,4 @@ declare module "too*many*asterisks" { }
 
 
 //// [ambientDeclarationsPatterns_tooManyAsterisks.js]
+"use strict";

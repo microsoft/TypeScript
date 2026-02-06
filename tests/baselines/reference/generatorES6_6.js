@@ -8,6 +8,7 @@ class C {
 }
 
 //// [generatorES6_6.js]
+"use strict";
 class C {
     *[Symbol.iterator]() {
         let a = yield 1;

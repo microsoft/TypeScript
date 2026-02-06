@@ -729,6 +729,11 @@ export namespace SmartIndenter {
                     return false;
                 }
                 break;
+            case SyntaxKind.TryStatement:
+                if (childKind === SyntaxKind.Block) {
+                    return false;
+                }
+                break;
         }
         // No explicit rule for given nodes so the result will follow the default value argument
         return indentByDefault;

@@ -26,6 +26,9 @@ mjsi;
 typei;
 //// [index.d.ts]
 // cjs format file
+export const implicitCjsSource = true;
+//// [test.d.ts]
+// cjs format file
 import * as cjs from "inner/cjs/index";
 import * as mjs from "inner/mjs/index";
 import * as type from "inner/js/index";
@@ -34,6 +37,9 @@ export { mjs };
 export { type };
 //// [index.d.mts]
 // esm format file
+export const mjsSource = true;
+//// [test.d.mts]
+// esm format file
 import * as cjs from "inner/cjs/index";
 import * as mjs from "inner/mjs/index";
 import * as type from "inner/js/index";
@@ -41,6 +47,9 @@ export { cjs };
 export { mjs };
 export { type };
 //// [index.d.cts]
+// cjs format file
+export const cjsSource = true;
+//// [test.d.cts]
 // cjs format file
 import * as cjs from "inner/cjs/index";
 import * as mjs from "inner/mjs/index";
@@ -52,7 +61,7 @@ export { type };
 {
     "name": "package",
     "private": true,
-    "type": "module",
+    "type": "module"
 }
 //// [package.json]
 {
@@ -64,6 +73,7 @@ export { type };
         "./js/*": "./*.js"
     }
 }
+
 
 //// [index.js]
 // esm format file

@@ -1,3 +1,4 @@
+// @target: es2015
 interface Settings {
     timeout?: number;
     onError?(): void;
@@ -32,7 +33,7 @@ type ChangeOptions = ConfigurableStartEnd & InsertOptions;
 
 function del(options: ConfigurableStartEnd = {},
              error: { error?: number } = {}) {
-    let changes: ChangeOptions[];
+    let changes: ChangeOptions[] = [];
     changes.push(options);
     changes.push(error);
 }

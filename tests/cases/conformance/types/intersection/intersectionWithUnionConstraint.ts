@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 function f1<T extends string | number, U extends string | number>(x: T & U) {

@@ -3,7 +3,7 @@
 === circularImportAlias.ts ===
 // expected no error
 
-module B {
+namespace B {
 >B : typeof a.b
 >  : ^^^^^^^^^^
 
@@ -29,7 +29,7 @@ module B {
     }
 }
 
-module A {
+namespace A {
 >A : typeof b.a
 >  : ^^^^^^^^^^
 

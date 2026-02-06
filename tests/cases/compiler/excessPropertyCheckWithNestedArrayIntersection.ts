@@ -1,3 +1,4 @@
+// @target: es2015
 interface ValueOnlyFields {
     fields: Array<{
         value: number | null;

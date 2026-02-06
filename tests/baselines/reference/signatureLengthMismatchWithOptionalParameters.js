@@ -9,6 +9,7 @@ caller(callee);
 
 
 //// [signatureLengthMismatchWithOptionalParameters.js]
+"use strict";
 function callee(n, m) { }
 function caller(arg) { }
 caller(callee);

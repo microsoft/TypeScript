@@ -4,4 +4,5 @@
 self.cancelAnimationFrame(0);
 
 //// [multiExtendsSplitInterfaces1.js]
+"use strict";
 self.cancelAnimationFrame(0);

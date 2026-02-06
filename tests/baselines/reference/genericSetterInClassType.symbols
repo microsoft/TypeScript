@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts] ////
 
 === genericSetterInClassType.ts ===
-module Generic {
+namespace Generic {
 >Generic : Symbol(Generic, Decl(genericSetterInClassType.ts, 0, 0))
 
     class C<T> {
->C : Symbol(C, Decl(genericSetterInClassType.ts, 0, 16))
+>C : Symbol(C, Decl(genericSetterInClassType.ts, 0, 19))
 >T : Symbol(T, Decl(genericSetterInClassType.ts, 1, 12))
 
         get y(): T {
@@ -21,7 +21,7 @@ module Generic {
 
     var c = new C<number>();
 >c : Symbol(c, Decl(genericSetterInClassType.ts, 8, 7))
->C : Symbol(C, Decl(genericSetterInClassType.ts, 0, 16))
+>C : Symbol(C, Decl(genericSetterInClassType.ts, 0, 19))
 
     c.y = c.y;
 >c.y : Symbol(C.y, Decl(genericSetterInClassType.ts, 1, 16), Decl(genericSetterInClassType.ts, 4, 9))

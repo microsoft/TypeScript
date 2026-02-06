@@ -1,3 +1,4 @@
+// @target: es2015
 // @noStrictGenericChecks: true
 
 type A = <T, U>(x: T, y: U) => [T, U];

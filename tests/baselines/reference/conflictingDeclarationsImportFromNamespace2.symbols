@@ -22,7 +22,7 @@ declare module "./index" {
 
         ...props: Array<U>
 >props : Symbol(props, Decl(object.d.ts, 4, 18))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >U : Symbol(U, Decl(object.d.ts, 3, 30))
 
       ) => Pick<T, U>;

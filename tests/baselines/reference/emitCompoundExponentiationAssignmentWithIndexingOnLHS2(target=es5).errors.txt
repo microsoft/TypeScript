@@ -1,0 +1,16 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts (0 errors) ====
+    var globalCounter = 0;
+    function foo() {
+        globalCounter += 1;
+        return { 0: 2 };
+    }
+    foo()[0] **= foo()[0];
+    var result_foo1 = foo()[0] **= foo()[0];
+    foo()[0] **= foo()[0] **= 2;
+    var result_foo2 = foo()[0] **= foo()[0] **= 2;
+    foo()[0] **= foo()[0] ** 2;
+    var result_foo3 = foo()[0] **= foo()[0] ** 2;

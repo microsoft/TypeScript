@@ -83,6 +83,7 @@ var y: StringAndBoolean = ["1", false];
 y[0].toLowerCase();
 
 //// [typeAliases.js]
+"use strict";
 // Writing a reference to a type alias has exactly the same effect as writing the aliased type itself.
 var x1;
 var x1;
@@ -96,11 +97,8 @@ var x5;
 var x5;
 var x6;
 var x6;
-var C7 = /** @class */ (function () {
-    function C7() {
-    }
-    return C7;
-}());
+class C7 {
+}
 var x7;
 var x7;
 var x8;

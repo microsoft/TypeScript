@@ -21,7 +21,6 @@ export const x = 10;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -109,7 +108,7 @@ Info seq  [hh:mm:ss:mss] event:
 Custom watchDirectory:: Added:: {"id":2,"path":"/home/src/projects/myproject","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 1 undefined Config: /home/src/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -117,50 +116,20 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "createFileWatcher",
       "body": {
         "id": 3,
-        "path": "/home/src/tslibs/TS/Lib/lib.d.ts"
+        "path": "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts"
       }
     }
-Custom watchFile:: Added:: {"id":3,"path":"/home/src/tslibs/TS/Lib/lib.d.ts"}
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createDirectoryWatcher",
-      "body": {
-        "id": 4,
-        "path": "/home/src/projects/myproject/node_modules/@types",
-        "recursive": true,
-        "ignoreUpdate": true
-      }
-    }
-Custom watchDirectory:: Added:: {"id":4,"path":"/home/src/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createDirectoryWatcher",
-      "body": {
-        "id": 5,
-        "path": "/home/src/projects/node_modules/@types",
-        "recursive": true,
-        "ignoreUpdate": true
-      }
-    }
-Custom watchDirectory:: Added:: {"id":5,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
+Custom watchFile:: Added:: {"id":3,"path":"/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts"}
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/myproject/src/old.ts SVC-1-0 "export const x = 10;"
 	/home/src/projects/myproject/src/index.ts SVC-1-0 "import {} from '@/old';"
 
 
-	../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	src/old.ts
 	  Imported via '@/old' from file 'src/index.ts'
 	  Matched by default include pattern '**/*'
@@ -196,7 +165,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 413,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -250,20 +219,18 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/projects/myproject/tsconfig.json: *new*
   {"event":{"id":1,"path":"/home/src/projects/myproject/tsconfig.json"}}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"event":{"id":3,"path":"/home/src/tslibs/TS/Lib/lib.d.ts"}}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+  {"event":{"id":3,"path":"/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts"}}
 
 FsWatchesRecursive::
 /home/src/projects/myproject: *new*
   {"event":{"id":2,"path":"/home/src/projects/myproject","recursive":true,"ignoreUpdate":true}}
-/home/src/projects/myproject/node_modules/@types: *new*
-  {"event":{"id":4,"path":"/home/src/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
-/home/src/projects/node_modules/@types: *new*
-  {"event":{"id":5,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 Projects::
 /home/src/projects/myproject/tsconfig.json (Configured) *new*
@@ -280,7 +247,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/myproject/tsconfig.json *default*
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/myproject/tsconfig.json
@@ -327,14 +294,29 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 6,
+        "id": 4,
         "path": "/home/src/projects/myproject/src",
         "recursive": true,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":6,"path":"/home/src/projects/myproject/src","recursive":true,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":4,"path":"/home/src/projects/myproject/src","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createDirectoryWatcher",
+      "body": {
+        "id": 5,
+        "path": "/home/src/projects",
+        "recursive": false,
+        "ignoreUpdate": true
+      }
+    }
+Custom watchDirectory:: Added:: {"id":5,"path":"/home/src/projects","recursive":false,"ignoreUpdate":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -342,12 +324,12 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 7,
+        "id": 6,
         "path": "/home/src/projects/myproject/node_modules",
         "recursive": true
       }
     }
-Custom watchDirectory:: Added:: {"id":7,"path":"/home/src/projects/myproject/node_modules","recursive":true}
+Custom watchDirectory:: Added:: {"id":6,"path":"/home/src/projects/myproject/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
@@ -356,23 +338,38 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 8,
+        "id": 7,
         "path": "/home/src/projects/node_modules",
         "recursive": true
       }
     }
-Custom watchDirectory:: Added:: {"id":8,"path":"/home/src/projects/node_modules","recursive":true}
+Custom watchDirectory:: Added:: {"id":7,"path":"/home/src/projects/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 0 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createDirectoryWatcher",
+      "body": {
+        "id": 8,
+        "path": "/home/src/projects/myproject",
+        "recursive": false,
+        "ignoreUpdate": true
+      }
+    }
+Custom watchDirectory:: Added:: {"id":8,"path":"/home/src/projects/myproject","recursive":false,"ignoreUpdate":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 0 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/myproject/src/index.ts SVC-1-0 "import {} from '@/old';"
 	/home/src/projects/myproject/src/new.ts SVC-1-0 "export const x = 10;"
 
 
-	../../tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	src/index.ts
 	  Matched by default include pattern '**/*'
 	src/new.ts
@@ -401,22 +398,24 @@ After request
 PolledWatches::
 /home/src/projects/myproject/tsconfig.json:
   {"event":{"id":1,"path":"/home/src/projects/myproject/tsconfig.json"}}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"event":{"id":3,"path":"/home/src/tslibs/TS/Lib/lib.d.ts"}}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"event":{"id":3,"path":"/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts"}}
+
+FsWatches::
+/home/src/projects: *new*
+  {"event":{"id":5,"path":"/home/src/projects","recursive":false,"ignoreUpdate":true}}
+/home/src/projects/myproject: *new*
+  {"event":{"id":8,"path":"/home/src/projects/myproject","recursive":false,"ignoreUpdate":true}}
 
 FsWatchesRecursive::
 /home/src/projects/myproject:
   {"event":{"id":2,"path":"/home/src/projects/myproject","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/myproject/node_modules: *new*
-  {"event":{"id":7,"path":"/home/src/projects/myproject/node_modules","recursive":true}}
-/home/src/projects/myproject/node_modules/@types:
-  {"event":{"id":4,"path":"/home/src/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":6,"path":"/home/src/projects/myproject/node_modules","recursive":true}}
 /home/src/projects/myproject/src: *new*
-  {"event":{"id":6,"path":"/home/src/projects/myproject/src","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":4,"path":"/home/src/projects/myproject/src","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/node_modules: *new*
-  {"event":{"id":8,"path":"/home/src/projects/node_modules","recursive":true}}
-/home/src/projects/node_modules/@types:
-  {"event":{"id":5,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":7,"path":"/home/src/projects/node_modules","recursive":true}}
 
 Timeout callback:: count: 2
 3: /home/src/projects/myproject/tsconfig.json *new*
@@ -442,7 +441,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 0 *changed*
         /home/src/projects/myproject/tsconfig.json *deleted*
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/myproject/tsconfig.json
@@ -488,7 +487,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2
     documentPositionMappers: 1 *changed*
-        /home/src/tslibs/ts/lib/lib.d.ts: identitySourceMapConsumer *new*
+        /home/src/tslibs/ts/lib/lib.es2024.full.d.ts: identitySourceMapConsumer *new*
 
 ScriptInfos::
 /home/src/projects/myproject/src/index.ts (Open)
@@ -499,7 +498,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/myproject/tsconfig.json *default*
-/home/src/tslibs/TS/Lib/lib.d.ts *changed*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *changed*
     version: Text-1
     sourceMapFilePath: false *changed*
     containingProjects: 1
@@ -586,22 +585,24 @@ PolledWatches::
   {"event":{"id":9,"path":"/home/src/projects/myproject/src/new.ts"}}
 /home/src/projects/myproject/tsconfig.json:
   {"event":{"id":1,"path":"/home/src/projects/myproject/tsconfig.json"}}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"event":{"id":3,"path":"/home/src/tslibs/TS/Lib/lib.d.ts"}}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"event":{"id":3,"path":"/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts"}}
+
+FsWatches::
+/home/src/projects:
+  {"event":{"id":5,"path":"/home/src/projects","recursive":false,"ignoreUpdate":true}}
+/home/src/projects/myproject:
+  {"event":{"id":8,"path":"/home/src/projects/myproject","recursive":false,"ignoreUpdate":true}}
 
 FsWatchesRecursive::
 /home/src/projects/myproject:
   {"event":{"id":2,"path":"/home/src/projects/myproject","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/myproject/node_modules:
-  {"event":{"id":7,"path":"/home/src/projects/myproject/node_modules","recursive":true}}
-/home/src/projects/myproject/node_modules/@types:
-  {"event":{"id":4,"path":"/home/src/projects/myproject/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":6,"path":"/home/src/projects/myproject/node_modules","recursive":true}}
 /home/src/projects/myproject/src:
-  {"event":{"id":6,"path":"/home/src/projects/myproject/src","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":4,"path":"/home/src/projects/myproject/src","recursive":true,"ignoreUpdate":true}}
 /home/src/projects/node_modules:
-  {"event":{"id":8,"path":"/home/src/projects/node_modules","recursive":true}}
-/home/src/projects/node_modules/@types:
-  {"event":{"id":5,"path":"/home/src/projects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":7,"path":"/home/src/projects/node_modules","recursive":true}}
 
 ScriptInfos::
 /home/src/projects/myproject/src/index.ts (Open)
@@ -614,7 +615,7 @@ ScriptInfos::
     pendingReloadFromDisk: true *changed*
     containingProjects: 1
         /home/src/projects/myproject/tsconfig.json
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     sourceMapFilePath: false
     containingProjects: 1
@@ -710,7 +711,7 @@ ScriptInfos::
     pendingReloadFromDisk: false *changed*
     containingProjects: 1
         /home/src/projects/myproject/tsconfig.json
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     sourceMapFilePath: false
     containingProjects: 1

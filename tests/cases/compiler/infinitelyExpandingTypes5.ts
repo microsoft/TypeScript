@@ -1,3 +1,4 @@
+// @target: es2015
 interface Query<T> {
     foo(x: T): Query<T[]>;
 }

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/differentTypesWithSameName.ts] ////
 
 //// [differentTypesWithSameName.ts]
-module m {
+namespace m {
   export class variable{
     s: string;
   }
@@ -19,22 +19,17 @@ var v: variable = new variable();
 m.doSomething(v);
 
 //// [differentTypesWithSameName.js]
+"use strict";
 var m;
 (function (m) {
-    var variable = /** @class */ (function () {
-        function variable() {
-        }
-        return variable;
-    }());
+    class variable {
+    }
     m.variable = variable;
     function doSomething(v) {
     }
     m.doSomething = doSomething;
 })(m || (m = {}));
-var variable = /** @class */ (function () {
-    function variable() {
-    }
-    return variable;
-}());
+class variable {
+}
 var v = new variable();
 m.doSomething(v);

@@ -13,7 +13,7 @@ interface I {
 >  : ^^^
 }
 
-declare module M {
+declare namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -27,7 +27,7 @@ declare module M {
     }
 }
 
-declare module M {
+declare namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -71,7 +71,7 @@ c.p;
 >p : number
 >  : ^^^^^^
 
-var i:I;
+declare var i:I;
 >i : I
 >  : ^
 

@@ -11,8 +11,11 @@ var z;
 
 
 //// [file1.js]
+"use strict";
 var x;
 //// [file2.js]
+"use strict";
 var y;
 //// [file3.js]
+"use strict";
 var z;

@@ -23,7 +23,7 @@
 ////    }
 ////}
 ////
-////module m {
+////namespace m {
 ////    var x = th/*6*/is;
 ////    function f() {
 ////        this;

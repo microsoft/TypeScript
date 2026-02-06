@@ -6,17 +6,17 @@ var x: any;
 
 // valid left operands
 // the left operand is required to be of type Any, the String primitive type, or the Number primitive type
-var a1: string;
->a1 : Symbol(a1, Decl(inOperatorWithValidOperands.ts, 4, 3))
+declare var a1: string;
+>a1 : Symbol(a1, Decl(inOperatorWithValidOperands.ts, 4, 11))
 
-var a2: number;
->a2 : Symbol(a2, Decl(inOperatorWithValidOperands.ts, 5, 3))
+declare var a2: number;
+>a2 : Symbol(a2, Decl(inOperatorWithValidOperands.ts, 5, 11))
 
-var a3: string | number | symbol;
->a3 : Symbol(a3, Decl(inOperatorWithValidOperands.ts, 6, 3))
+declare var a3: string | number | symbol;
+>a3 : Symbol(a3, Decl(inOperatorWithValidOperands.ts, 6, 11))
 
-var a4: any;
->a4 : Symbol(a4, Decl(inOperatorWithValidOperands.ts, 7, 3))
+declare var a4: any;
+>a4 : Symbol(a4, Decl(inOperatorWithValidOperands.ts, 7, 11))
 
 var ra1 = x in x;
 >ra1 : Symbol(ra1, Decl(inOperatorWithValidOperands.ts, 9, 3))
@@ -25,12 +25,12 @@ var ra1 = x in x;
 
 var ra2 = a1 in x;
 >ra2 : Symbol(ra2, Decl(inOperatorWithValidOperands.ts, 10, 3))
->a1 : Symbol(a1, Decl(inOperatorWithValidOperands.ts, 4, 3))
+>a1 : Symbol(a1, Decl(inOperatorWithValidOperands.ts, 4, 11))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
 
 var ra3 = a2 in x;
 >ra3 : Symbol(ra3, Decl(inOperatorWithValidOperands.ts, 11, 3))
->a2 : Symbol(a2, Decl(inOperatorWithValidOperands.ts, 5, 3))
+>a2 : Symbol(a2, Decl(inOperatorWithValidOperands.ts, 5, 11))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
 
 var ra4 = '' in x;
@@ -43,23 +43,23 @@ var ra5 = 0 in x;
 
 var ra6 = a3 in x;
 >ra6 : Symbol(ra6, Decl(inOperatorWithValidOperands.ts, 14, 3))
->a3 : Symbol(a3, Decl(inOperatorWithValidOperands.ts, 6, 3))
+>a3 : Symbol(a3, Decl(inOperatorWithValidOperands.ts, 6, 11))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
 
 var ra7 = a4 in x;
 >ra7 : Symbol(ra7, Decl(inOperatorWithValidOperands.ts, 15, 3))
->a4 : Symbol(a4, Decl(inOperatorWithValidOperands.ts, 7, 3))
+>a4 : Symbol(a4, Decl(inOperatorWithValidOperands.ts, 7, 11))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
 
 // valid right operands
 // the right operand is required to be of type Any, an object type, or a type parameter type
-var b1: {};
->b1 : Symbol(b1, Decl(inOperatorWithValidOperands.ts, 19, 3))
+declare var b1: {};
+>b1 : Symbol(b1, Decl(inOperatorWithValidOperands.ts, 19, 11))
 
 var rb1 = x in b1;
 >rb1 : Symbol(rb1, Decl(inOperatorWithValidOperands.ts, 21, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
->b1 : Symbol(b1, Decl(inOperatorWithValidOperands.ts, 19, 3))
+>b1 : Symbol(b1, Decl(inOperatorWithValidOperands.ts, 19, 11))
 
 var rb2 = x in {};
 >rb2 : Symbol(rb2, Decl(inOperatorWithValidOperands.ts, 22, 3))
@@ -111,27 +111,27 @@ interface Y { y: number }
 >Y : Symbol(Y, Decl(inOperatorWithValidOperands.ts, 36, 25))
 >y : Symbol(Y.y, Decl(inOperatorWithValidOperands.ts, 37, 13))
 
-var c1: X | Y;
->c1 : Symbol(c1, Decl(inOperatorWithValidOperands.ts, 39, 3))
+declare var c1: X | Y;
+>c1 : Symbol(c1, Decl(inOperatorWithValidOperands.ts, 39, 11))
 >X : Symbol(X, Decl(inOperatorWithValidOperands.ts, 34, 1))
 >Y : Symbol(Y, Decl(inOperatorWithValidOperands.ts, 36, 25))
 
-var c2: X;
->c2 : Symbol(c2, Decl(inOperatorWithValidOperands.ts, 40, 3))
+declare var c2: X;
+>c2 : Symbol(c2, Decl(inOperatorWithValidOperands.ts, 40, 11))
 >X : Symbol(X, Decl(inOperatorWithValidOperands.ts, 34, 1))
 
-var c3: Y;
->c3 : Symbol(c3, Decl(inOperatorWithValidOperands.ts, 41, 3))
+declare var c3: Y;
+>c3 : Symbol(c3, Decl(inOperatorWithValidOperands.ts, 41, 11))
 >Y : Symbol(Y, Decl(inOperatorWithValidOperands.ts, 36, 25))
 
 var rc1 = x in c1;
 >rc1 : Symbol(rc1, Decl(inOperatorWithValidOperands.ts, 43, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
->c1 : Symbol(c1, Decl(inOperatorWithValidOperands.ts, 39, 3))
+>c1 : Symbol(c1, Decl(inOperatorWithValidOperands.ts, 39, 11))
 
 var rc2 = x in (c2 || c3);
 >rc2 : Symbol(rc2, Decl(inOperatorWithValidOperands.ts, 44, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
->c2 : Symbol(c2, Decl(inOperatorWithValidOperands.ts, 40, 3))
->c3 : Symbol(c3, Decl(inOperatorWithValidOperands.ts, 41, 3))
+>c2 : Symbol(c2, Decl(inOperatorWithValidOperands.ts, 40, 11))
+>c3 : Symbol(c3, Decl(inOperatorWithValidOperands.ts, 41, 11))
 

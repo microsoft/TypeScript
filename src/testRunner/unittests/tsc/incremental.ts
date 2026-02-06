@@ -23,7 +23,7 @@ describe("unittests:: tsc:: incremental::", () => {
                 "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
                 "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
-                        target: "es5",
+                        target: "es2015",
                         module: "commonjs",
                     },
                     include: [
@@ -188,7 +188,7 @@ declare global {
                     "/home/src/workspaces/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                     "/home/src/workspaces/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                     "/home/src/workspaces/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
-                    "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
+                    "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react", types: ["react"] } }),
                 }),
             commandLineArgs: ts.emptyArray,
         });
@@ -201,7 +201,7 @@ declare global {
                     "/home/src/workspaces/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                     "/home/src/workspaces/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                     "/home/src/workspaces/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
-                    "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
+                    "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react", types: ["react"] } }),
                 }),
             commandLineArgs: ["--strict"],
         });
@@ -295,34 +295,6 @@ declare global {
                 [libFile.path]: `${libFile.content}\ninterface ReadonlyArray<T> { readonly length: number }`,
             }),
         edits: noChangeOnlyRuns,
-    });
-
-    verifyTsc({
-        scenario: "incremental",
-        subScenario: "ts file with no-default-lib that augments the global scope",
-        sys: () =>
-            TestServerHost.createWatchedSystem({
-                "/home/src/workspaces/project/src/main.ts": dedent`
-                    /// <reference no-default-lib="true"/>
-                    /// <reference lib="esnext" />
-
-                    declare global {
-                        interface Test {
-                        }
-                    }
-
-                    export {};
-                `,
-                "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
-                    compilerOptions: {
-                        target: "ESNext",
-                        module: "ESNext",
-                        incremental: true,
-                        outDir: "dist",
-                    },
-                }),
-            }),
-        commandLineArgs: ["--rootDir", "src"],
     });
 
     verifyTsc({

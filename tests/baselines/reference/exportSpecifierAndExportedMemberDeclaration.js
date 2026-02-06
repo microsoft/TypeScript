@@ -2,7 +2,7 @@
 
 //// [exportSpecifierAndExportedMemberDeclaration.ts]
 declare module "m2" {
-    export module X {
+    export namespace X {
         interface I { }
     }
     function Y();
@@ -15,3 +15,4 @@ declare module "m2" {
 }
 
 //// [exportSpecifierAndExportedMemberDeclaration.js]
+"use strict";

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts] ////
 
 //// [symbolDeclarationEmit12.ts]
-module M {
+namespace M {
     interface I { }
     export class C {
         [Symbol.iterator]: I;
@@ -15,6 +15,7 @@ module M {
 }
 
 //// [symbolDeclarationEmit12.js]
+"use strict";
 var M;
 (function (M) {
     class C {

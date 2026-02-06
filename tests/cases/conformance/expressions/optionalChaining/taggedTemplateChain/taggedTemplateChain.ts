@@ -1,3 +1,4 @@
+// @target: es2015
 declare let a: any;
 a?.`b`;
 

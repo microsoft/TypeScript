@@ -16,27 +16,27 @@ function foo<T, U>(t: T, u: U) {
 >u : Symbol(u, Decl(additionOperatorWithTypeParameter.ts, 3, 24))
 >U : Symbol(U, Decl(additionOperatorWithTypeParameter.ts, 3, 15))
 
-    var a: any;
+    let a!: any;
 >a : Symbol(a, Decl(additionOperatorWithTypeParameter.ts, 4, 7))
 
-    var b: boolean;
+    let b!: boolean;
 >b : Symbol(b, Decl(additionOperatorWithTypeParameter.ts, 5, 7))
 
-    var c: number;
+    let c!: number;
 >c : Symbol(c, Decl(additionOperatorWithTypeParameter.ts, 6, 7))
 
-    var d: string;
+    let d!: string;
 >d : Symbol(d, Decl(additionOperatorWithTypeParameter.ts, 7, 7))
 
-    var e: Object;
+    let e!: Object;
 >e : Symbol(e, Decl(additionOperatorWithTypeParameter.ts, 8, 7))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
-    var g: E;
+    let g!: E;
 >g : Symbol(g, Decl(additionOperatorWithTypeParameter.ts, 9, 7))
 >E : Symbol(E, Decl(additionOperatorWithTypeParameter.ts, 0, 0))
 
-    var f: void;
+    let f!: void;
 >f : Symbol(f, Decl(additionOperatorWithTypeParameter.ts, 10, 7))
 
     // type parameter as left operand

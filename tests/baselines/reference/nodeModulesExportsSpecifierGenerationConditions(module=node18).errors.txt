@@ -1,0 +1,37 @@
+index.ts(2,23): error TS2307: Cannot find module 'inner/other.js' or its corresponding type declarations.
+
+
+==== index.ts (1 errors) ====
+    // esm format file
+    import { Thing } from "inner/other.js"; // should fail
+                          ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/other.js' or its corresponding type declarations.
+    export const a = (await import("inner")).x();
+==== node_modules/inner/index.d.ts (0 errors) ====
+    // esm format file
+    export { x } from "./other.js";
+==== node_modules/inner/other.d.ts (0 errors) ====
+    // esm format file
+    export interface Thing {}
+    export const x: () => Thing;
+==== package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+        "exports": "./index.js"
+    }
+==== node_modules/inner/package.json (0 errors) ====
+    {
+        "name": "inner",
+        "private": true,
+        "type": "module",
+        "exports": {
+            ".": {
+                "default": "./index.js"
+            },
+            "./other": {
+                "default": "./other.js"
+            }
+        }
+    }

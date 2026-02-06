@@ -1,0 +1,174 @@
+//// [tests/cases/compiler/contextualParamTypeVsNestedReturnTypeInference4.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== contextualParamTypeVsNestedReturnTypeInference4.ts ===
+type Covariant<A> = (_: never) => A;
+>Covariant : Covariant<A>
+>          : ^^^^^^^^^^^^
+>_ : never
+>  : ^^^^^
+
+interface Effect<out A, out E = never, out R = never> {
+  readonly _A: Covariant<A>;
+>_A : Covariant<A>
+>   : ^^^^^^^^^^^^
+
+  readonly _E: Covariant<E>;
+>_E : Covariant<E>
+>   : ^^^^^^^^^^^^
+
+  readonly _R: Covariant<R>;
+>_R : Covariant<R>
+>   : ^^^^^^^^^^^^
+}
+
+declare function effectGen<A, E, R, AEff>(
+>effectGen : <A, E, R, AEff>(f: () => Generator<Effect<A, E, R>, AEff, never>) => Effect<AEff, E, R>
+>          : ^ ^^ ^^ ^^    ^^ ^^                                             ^^^^^                  
+
+  f: () => Generator<Effect<A, E, R>, AEff, never>,
+>f : () => Generator<Effect<A, E, R>, AEff, never>
+>  : ^^^^^^                                       
+
+): Effect<AEff, E, R>;
+
+declare function effectFn<A, E, R, AEff, Args extends Array<any>>(
+>effectFn : <A, E, R, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Effect<A, E, R>, AEff, never>) => (...args: Args) => Effect<AEff, E, R>
+>         : ^ ^^ ^^ ^^    ^^    ^^^^^^^^^          ^^    ^^                                                          ^^^^^                                     
+
+  body: (...args: Args) => Generator<Effect<A, E, R>, AEff, never>,
+>body : (...args: Args) => Generator<Effect<A, E, R>, AEff, never>
+>     : ^^^^    ^^    ^^^^^                                       
+>args : Args
+>     : ^^^^
+
+): (...args: Args) => Effect<AEff, E, R>;
+>args : Args
+>     : ^^^^
+
+interface Tag<in out Id, in out Value> {
+  readonly _op: "Tag";
+>_op : "Tag"
+>    : ^^^^^
+
+  readonly Service: Value;
+>Service : Value
+>        : ^^^^^
+
+  readonly Identifier: Id;
+>Identifier : Id
+>           : ^^
+}
+
+interface TagClassShape<Id, Shape> {
+  readonly Type: Shape;
+>Type : Shape
+>     : ^^^^^
+
+  readonly Id: Id;
+>Id : Id
+>   : ^^
+}
+
+interface TagClass<Self, Id extends string, Type> extends Tag<Self, Type> {
+  new (_: never): TagClassShape<Id, Type>;
+>_ : never
+>  : ^^^^^
+
+  readonly key: Id;
+>key : Id
+>    : ^^
+}
+
+declare function layerEffect<I, S, E, R>(
+>layerEffect : <I, S, E, R>(tag: Tag<I, S>, effect: Effect<S, E, R>) => unknown
+>            : ^ ^^ ^^ ^^ ^^   ^^         ^^      ^^               ^^^^^       
+
+  tag: Tag<I, S>,
+>tag : Tag<I, S>
+>    : ^^^^^^^^^
+
+  effect: Effect<S, E, R>,
+>effect : Effect<S, E, R>
+>       : ^^^^^^^^^^^^^^^
+
+): unknown;
+
+declare function Tag<const Id extends string>(
+>Tag : <const Id extends string>(id: Id) => <Self, Shape>() => TagClass<Self, Id, Shape>
+>    : ^^^^^^^  ^^^^^^^^^      ^^  ^^  ^^^^^                                            
+
+  id: Id,
+>id : Id
+>   : ^^
+
+): <Self, Shape>() => TagClass<Self, Id, Shape>;
+
+class Foo extends Tag("Foo")<
+>Foo : Foo
+>    : ^^^
+>Tag("Foo")<  Foo,  {    fn: (a: string) => Effect<void>;  }>() : TagClassShape<"Foo", { fn: (a: string) => Effect<void>; }>
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^                           ^^^^
+>Tag("Foo") : <Self, Shape>() => TagClass<Self, "Foo", Shape>
+>           : ^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Tag : <const Id extends string>(id: Id) => <Self, Shape>() => TagClass<Self, Id, Shape>
+>    : ^^^^^^^  ^^^^^^^^^      ^^  ^^  ^^^^^                                            
+>"Foo" : "Foo"
+>      : ^^^^^
+
+  Foo,
+  {
+    fn: (a: string) => Effect<void>;
+>fn : (a: string) => Effect<void>
+>   : ^ ^^      ^^^^^            
+>a : string
+>  : ^^^^^^
+  }
+>() {}
+
+layerEffect(
+>layerEffect(  Foo,  effectGen(function* () {    return {      fn: effectFn(function* (a) {        a; // string      }),    };  }),) : unknown
+>                                                                                                                                    : ^^^^^^^
+>layerEffect : <I, S, E, R>(tag: Tag<I, S>, effect: Effect<S, E, R>) => unknown
+>            : ^ ^^ ^^ ^^ ^^   ^^         ^^      ^^               ^^^^^       
+
+  Foo,
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+  effectGen(function* () {
+>effectGen(function* () {    return {      fn: effectFn(function* (a) {        a; // string      }),    };  }) : Effect<{ fn: (a: string) => Effect<void, never, never>; }, unknown, unknown>
+>                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>effectGen : <A, E, R, AEff>(f: () => Generator<Effect<A, E, R>, AEff, never>) => Effect<AEff, E, R>
+>          : ^ ^^ ^^ ^^    ^^ ^^                                             ^^^^^                  
+>function* () {    return {      fn: effectFn(function* (a) {        a; // string      }),    };  } : () => Generator<never, { fn: (a: string) => Effect<void, never, never>; }, never>
+>                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return {
+>{      fn: effectFn(function* (a) {        a; // string      }),    } : { fn: (a: string) => Effect<void, never, never>; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      fn: effectFn(function* (a) {
+>fn : (a: string) => Effect<void, never, never>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>effectFn(function* (a) {        a; // string      }) : (a: string) => Effect<void, never, never>
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>effectFn : <A, E, R, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Effect<A, E, R>, AEff, never>) => (...args: Args) => Effect<AEff, E, R>
+>         : ^ ^^ ^^ ^^    ^^    ^^^^^^^^^          ^^    ^^                                                          ^^^^^                                     
+>function* (a) {        a; // string      } : (a: string) => Generator<never, void, never>
+>                                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+        a; // string
+>a : string
+>  : ^^^^^^
+
+      }),
+    };
+  }),
+);
+

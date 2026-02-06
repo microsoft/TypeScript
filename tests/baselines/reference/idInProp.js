@@ -9,6 +9,7 @@ var t: { (f: any) : any; };
 
 
 //// [idInProp.js]
+"use strict";
 function f() {
     var t;
 }

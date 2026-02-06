@@ -1,4 +1,7 @@
+destructuringParameterDeclaration6.ts(7,18): error TS7031: Binding element '(Missing)' implicitly has an 'any' type.
 destructuringParameterDeclaration6.ts(7,18): error TS1005: ':' expected.
+destructuringParameterDeclaration6.ts(8,14): error TS7031: Binding element 'public' implicitly has an 'any' type.
+destructuringParameterDeclaration6.ts(9,10): error TS7010: 'a4', which lacks return-type annotation, implicitly has an 'any' return type.
 destructuringParameterDeclaration6.ts(9,14): error TS1181: Array element destructuring pattern expected.
 destructuringParameterDeclaration6.ts(9,19): error TS2695: Left side of comma operator is unused and has no side effects.
 destructuringParameterDeclaration6.ts(9,19): error TS1005: '(' expected.
@@ -8,12 +11,17 @@ destructuringParameterDeclaration6.ts(9,24): error TS1005: '(' expected.
 destructuringParameterDeclaration6.ts(9,26): error TS2304: Cannot find name 'public'.
 destructuringParameterDeclaration6.ts(9,32): error TS1005: ';' expected.
 destructuringParameterDeclaration6.ts(9,33): error TS1128: Declaration or statement expected.
+destructuringParameterDeclaration6.ts(10,10): error TS7010: 'a5', which lacks return-type annotation, implicitly has an 'any' return type.
+destructuringParameterDeclaration6.ts(10,13): error TS7019: Rest parameter '(Missing)' implicitly has an 'any[]' type.
 destructuringParameterDeclaration6.ts(10,16): error TS1359: Identifier expected. 'while' is a reserved word that cannot be used here.
 destructuringParameterDeclaration6.ts(10,21): error TS1005: '(' expected.
+destructuringParameterDeclaration6.ts(11,13): error TS7019: Rest parameter 'public' implicitly has an 'any[]' type.
 destructuringParameterDeclaration6.ts(12,13): error TS2370: A rest parameter must be of an array type.
+destructuringParameterDeclaration6.ts(16,22): error TS7031: Binding element 'x' implicitly has an 'any' type.
+destructuringParameterDeclaration6.ts(17,21): error TS7031: Binding element 'y' implicitly has an 'any' type.
 
 
-==== destructuringParameterDeclaration6.ts (13 errors) ====
+==== destructuringParameterDeclaration6.ts (21 errors) ====
     // A parameter declaration may specify either an identifier or a binding pattern.
     
     // Reserved words are not allowed to be used as an identifier in parameter declaration
@@ -21,10 +29,16 @@ destructuringParameterDeclaration6.ts(12,13): error TS2370: A rest parameter mus
     
     // Error
     function a({while}) { }
+                     
+!!! error TS7031: Binding element '(Missing)' implicitly has an 'any' type.
                      ~
 !!! error TS1005: ':' expected.
     function a1({public}) { }
+                 ~~~~~~
+!!! error TS7031: Binding element 'public' implicitly has an 'any' type.
     function a4([while, for, public]){ }
+             ~~
+!!! error TS7010: 'a4', which lacks return-type annotation, implicitly has an 'any' return type.
                  ~~~~~
 !!! error TS1181: Array element destructuring pattern expected.
                       
@@ -44,11 +58,17 @@ destructuringParameterDeclaration6.ts(12,13): error TS2370: A rest parameter mus
                                     ~
 !!! error TS1128: Declaration or statement expected.
     function a5(...while) { }
+             ~~
+!!! error TS7010: 'a5', which lacks return-type annotation, implicitly has an 'any' return type.
+                ~~~
+!!! error TS7019: Rest parameter '(Missing)' implicitly has an 'any[]' type.
                    ~~~~~
 !!! error TS1359: Identifier expected. 'while' is a reserved word that cannot be used here.
                         ~
 !!! error TS1005: '(' expected.
     function a6(...public) { }
+                ~~~~~~~~~
+!!! error TS7019: Rest parameter 'public' implicitly has an 'any[]' type.
     function a7(...a: string) { }
                 ~~~~~~~~~~~~
 !!! error TS2370: A rest parameter must be of an array type.
@@ -56,7 +76,11 @@ destructuringParameterDeclaration6.ts(12,13): error TS2370: A rest parameter mus
     
     // No Error
     function b1({public: x}) { }
+                         ~
+!!! error TS7031: Binding element 'x' implicitly has an 'any' type.
     function b2({while: y}) { }
+                        ~
+!!! error TS7031: Binding element 'y' implicitly has an 'any' type.
     b1({ public: 1 });
     b2({ while: 1 });
     

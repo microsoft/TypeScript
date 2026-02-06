@@ -1,5 +1,6 @@
-﻿let x: "foo";
-let y: "foo" | "bar";
+﻿// @target: es2015
+declare let x: "foo";
+declare let y: "foo" | "bar";
 
 let b: boolean;
 b = x === y;

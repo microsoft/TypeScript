@@ -1,6 +1,7 @@
+// @target: es2015
 // @outFile: out.js
 // @module: system
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @noImplicitReferences: true
 
 // @fileName: /node_modules/projB/index.ts

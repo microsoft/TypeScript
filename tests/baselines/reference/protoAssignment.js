@@ -17,6 +17,7 @@ Number.prototype.compareTo = function (other: number) {
 
 
 //// [protoAssignment.js]
+"use strict";
 Number.prototype.compareTo = function (other) {
     return this.valueOf() == other;
 };

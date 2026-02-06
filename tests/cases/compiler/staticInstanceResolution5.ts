@@ -1,4 +1,5 @@
-//@module: amd
+// @target: es2015
+//@module: commonjs
 // @Filename: staticInstanceResolution5_0.ts
 export class Promise {
     static timeout(delay: number): Promise {
@@ -7,7 +8,7 @@ export class Promise {
 }
 
 // @Filename: staticInstanceResolution5_1.ts
-import WinJS = require('staticInstanceResolution5_0');
+import WinJS = require('./staticInstanceResolution5_0');
 
 // these 3 should be errors
 var x = (w1: WinJS) => { };

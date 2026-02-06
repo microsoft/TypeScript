@@ -3,7 +3,7 @@ importInsideModule_file2.ts(2,26): error TS2307: Cannot find module 'importInsid
 
 
 ==== importInsideModule_file2.ts (2 errors) ====
-    export module myModule {
+    export namespace myModule {
         import foo = require("importInsideModule_file1");
                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.

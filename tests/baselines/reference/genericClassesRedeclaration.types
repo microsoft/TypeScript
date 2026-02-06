@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericClassesRedeclaration.ts] ////
 
 === genericClassesRedeclaration.ts ===
-declare module TypeScript {
+declare namespace TypeScript {
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -253,7 +253,7 @@ declare module TypeScript {
     }
 }
 
-declare module TypeScript {
+declare namespace TypeScript {
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 

@@ -2,7 +2,7 @@
 
 //// [decrementOperatorWithUnsupportedStringType.ts]
 // -- operator on string type
-var STRING: string;
+declare var STRING: string;
 var STRING1: string[] = ["", ""];
 
 function foo(): string { return ""; }
@@ -11,7 +11,7 @@ class A {
     public a: string;
     static foo() { return ""; }
 }
-module M {
+namespace M {
     export var n: string;
 }
 
@@ -68,16 +68,12 @@ M.n--;
 objA.a--, M.n--;
 
 //// [decrementOperatorWithUnsupportedStringType.js]
-// -- operator on string type
-var STRING;
+"use strict";
 var STRING1 = ["", ""];
 function foo() { return ""; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return ""; };
-    return A;
-}());
+class A {
+    static foo() { return ""; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -90,10 +86,10 @@ var ResultIsNumber4 = STRING1--;
 // string type literal
 var ResultIsNumber5 = --"";
 var ResultIsNumber6 = --{ x: "", y: "" };
-var ResultIsNumber7 = --{ x: "", y: function (s) { return s; } };
+var ResultIsNumber7 = --{ x: "", y: (s) => { return s; } };
 var ResultIsNumber8 = ""--;
 var ResultIsNumber9 = { x: "", y: "" }--;
-var ResultIsNumber10 = { x: "", y: function (s) { return s; } }--;
+var ResultIsNumber10 = { x: "", y: (s) => { return s; } }--;
 // string type expressions
 var ResultIsNumber11 = --objA.a;
 var ResultIsNumber12 = --M.n;

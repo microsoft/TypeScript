@@ -6,11 +6,11 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(parserRealSource11.ts, 0, 0))
 
     export class ASTSpan {
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         public minChar: number = -1;  // -1 = "undefined" or "compiler generated"
 >minChar : Symbol(ASTSpan.minChar, Decl(parserRealSource11.ts, 6, 26))
@@ -21,7 +21,7 @@ module TypeScript {
 
     export class AST extends ASTSpan {
 >AST : Symbol(AST, Decl(parserRealSource11.ts, 9, 5))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         public type: Type = null;
 >type : Symbol(AST.type, Decl(parserRealSource11.ts, 11, 38))
@@ -50,7 +50,7 @@ module TypeScript {
 >NodeType : Symbol(NodeType)
 
             super();
->super : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>super : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
         }
 
         public isExpression() { return false; }
@@ -376,7 +376,7 @@ module TypeScript {
         public netFreeUses(container: Symbol, freeUses: StringHashTable) {
 >netFreeUses : Symbol(AST.netFreeUses, Decl(parserRealSource11.ts, 148, 9))
 >container : Symbol(container, Decl(parserRealSource11.ts, 150, 27))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >freeUses : Symbol(freeUses, Decl(parserRealSource11.ts, 150, 45))
 >StringHashTable : Symbol(StringHashTable)
         }
@@ -443,7 +443,7 @@ module TypeScript {
                     resolved += String.fromCharCode(charCode);
 >resolved : Symbol(resolved, Decl(parserRealSource11.ts, 160, 15))
 >String.fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 >fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
 >charCode : Symbol(charCode, Decl(parserRealSource11.ts, 166, 23))
 
@@ -710,7 +710,7 @@ module TypeScript {
 
         public sym: Symbol = null;
 >sym : Symbol(Identifier.sym, Decl(parserRealSource11.ts, 249, 41))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         public cloId = -1;
 >cloId : Symbol(Identifier.cloId, Decl(parserRealSource11.ts, 250, 34))
@@ -2111,7 +2111,7 @@ module TypeScript {
 
             if (Math.floor(this.value) != this.value) {
 >Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
 >this.value : Symbol(NumberLiteral.value, Decl(parserRealSource11.ts, 731, 21))
 >this : Symbol(NumberLiteral, Decl(parserRealSource11.ts, 728, 5))
@@ -2538,7 +2538,7 @@ module TypeScript {
 
         public sym: Symbol = null;
 >sym : Symbol(BoundDecl.sym, Decl(parserRealSource11.ts, 890, 40))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         constructor (public id: Identifier, nodeType: NodeType, public nestingLevel: number) {
 >id : Symbol(BoundDecl.id, Decl(parserRealSource11.ts, 893, 21))
@@ -2774,7 +2774,7 @@ module TypeScript {
 
         public freeVariables: Symbol[] = [];
 >freeVariables : Symbol(FuncDecl.freeVariables, Decl(parserRealSource11.ts, 967, 45))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         public unitIndex = -1;
 >unitIndex : Symbol(FuncDecl.unitIndex, Decl(parserRealSource11.ts, 968, 44))
@@ -2802,7 +2802,7 @@ module TypeScript {
 
         public accessorSymbol: Symbol = null;
 >accessorSymbol : Symbol(FuncDecl.accessorSymbol, Decl(parserRealSource11.ts, 975, 43))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         public leftCurlyCount = 0;
 >leftCurlyCount : Symbol(FuncDecl.leftCurlyCount, Decl(parserRealSource11.ts, 976, 45))
@@ -2820,7 +2820,7 @@ module TypeScript {
 
         public endingToken: ASTSpan = null;
 >endingToken : Symbol(FuncDecl.endingToken, Decl(parserRealSource11.ts, 980, 38))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         constructor (public name: Identifier, public bod: ASTList, public isConstructor: boolean,
 >name : Symbol(FuncDecl.name, Decl(parserRealSource11.ts, 983, 21))
@@ -2901,7 +2901,7 @@ module TypeScript {
 >id : Symbol(id, Decl(parserRealSource11.ts, 1006, 25))
 >Identifier : Symbol(Identifier, Decl(parserRealSource11.ts, 247, 5))
 >sym : Symbol(sym, Decl(parserRealSource11.ts, 1006, 40))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
             if (this.envids == null) {
 >this.envids : Symbol(FuncDecl.envids, Decl(parserRealSource11.ts, 962, 36))
@@ -2965,7 +2965,7 @@ module TypeScript {
         public addJumpRef(sym: Symbol): void {
 >addJumpRef : Symbol(FuncDecl.addJumpRef, Decl(parserRealSource11.ts, 1019, 9))
 >sym : Symbol(sym, Decl(parserRealSource11.ts, 1021, 26))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
             if (this.jumpRefs == null) {
 >this.jumpRefs : Symbol(FuncDecl.jumpRefs, Decl(parserRealSource11.ts, 963, 36))
@@ -3585,7 +3585,7 @@ module TypeScript {
 >scopes : Symbol(scopes, Decl(parserRealSource11.ts, 1204, 71))
 >ASTList : Symbol(ASTList, Decl(parserRealSource11.ts, 188, 5))
 >endingToken : Symbol(ModuleDeclaration.endingToken, Decl(parserRealSource11.ts, 1204, 88))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
             super(NodeType.ModuleDeclaration, name, members);
 >super : Symbol(NamedDeclaration, Decl(parserRealSource11.ts, 1180, 5))
@@ -3757,7 +3757,7 @@ module TypeScript {
 
         public endingToken: ASTSpan = null;
 >endingToken : Symbol(ClassDeclaration.endingToken, Decl(parserRealSource11.ts, 1258, 43))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         constructor (name: Identifier,
 >name : Symbol(name, Decl(parserRealSource11.ts, 1261, 21))
@@ -4742,8 +4742,8 @@ module TypeScript {
 
         public statement: ASTSpan = new ASTSpan();
 >statement : Symbol(IfStatement.statement, Decl(parserRealSource11.ts, 1567, 35))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         constructor (public cond: AST) {
 >cond : Symbol(IfStatement.cond, Decl(parserRealSource11.ts, 1570, 21))
@@ -5109,8 +5109,8 @@ module TypeScript {
         }
         public statement: ASTSpan = new ASTSpan();
 >statement : Symbol(ForInStatement.statement, Decl(parserRealSource11.ts, 1691, 9))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         public body: AST;
 >body : Symbol(ForInStatement.body, Decl(parserRealSource11.ts, 1692, 50))
@@ -5934,8 +5934,8 @@ module TypeScript {
 
         public statement: ASTSpan = new ASTSpan();
 >statement : Symbol(SwitchStatement.statement, Decl(parserRealSource11.ts, 1934, 49))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         constructor (public val: AST) {
 >val : Symbol(SwitchStatement.val, Decl(parserRealSource11.ts, 1937, 21))
@@ -6908,8 +6908,8 @@ module TypeScript {
         }
         public statement: ASTSpan = new ASTSpan();
 >statement : Symbol(Catch.statement, Decl(parserRealSource11.ts, 2226, 9))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
->ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 19))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
+>ASTSpan : Symbol(ASTSpan, Decl(parserRealSource11.ts, 5, 22))
 
         public containedScope: SymbolScope = null;
 >containedScope : Symbol(Catch.containedScope, Decl(parserRealSource11.ts, 2227, 50))
@@ -7280,11 +7280,11 @@ module TypeScript {
 >this.text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
->this.content.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>this.content.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >this.content : Symbol(Comment.content, Decl(parserRealSource11.ts, 2329, 21))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >content : Symbol(Comment.content, Decl(parserRealSource11.ts, 2329, 21))
->split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
                     for (var i = 0; i < this.text.length; i++) {
 >i : Symbol(i, Decl(parserRealSource11.ts, 2337, 28))
@@ -7301,12 +7301,12 @@ module TypeScript {
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >i : Symbol(i, Decl(parserRealSource11.ts, 2337, 28))
->this.text[i].replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.text[i].replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >this.text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >i : Symbol(i, Decl(parserRealSource11.ts, 2337, 28))
->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
                     }
                 }
                 else {
@@ -7314,11 +7314,11 @@ module TypeScript {
 >this.text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
->this.content.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.content.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >this.content : Symbol(Comment.content, Decl(parserRealSource11.ts, 2329, 21))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >content : Symbol(Comment.content, Decl(parserRealSource11.ts, 2329, 21))
->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
                 }
             }
 

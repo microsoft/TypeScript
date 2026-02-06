@@ -1,4 +1,5 @@
-module x {
+// @target: es2015
+namespace x {
     interface c {
     }
 }

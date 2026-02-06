@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxSfcReturnNullStrictNullChecks.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : typeof React
 >      : ^^^^^^^^^^^^
@@ -11,6 +13,7 @@ const Foo = (props: any) => null;
 >(props: any) => null : (props: any) => null
 >                     : ^     ^^   ^^^^^^^^^
 >props : any
+>      : ^^^
 
 function Greet(x: {name?: string}) {
 >Greet : (x: { name?: string; }) => null

@@ -1,3 +1,4 @@
+// @target: es2015
 class Base {
     constructor(protected p: number) { }
 }

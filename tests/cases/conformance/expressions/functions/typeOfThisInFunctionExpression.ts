@@ -1,3 +1,4 @@
+// @target: es2015
 // type of 'this' in FunctionExpression is Any
 
 function fn() {
@@ -26,7 +27,7 @@ class C {
     }
 }
 
-module M {
+namespace M {
     function fn() {
         var p = this;
         var p: any;

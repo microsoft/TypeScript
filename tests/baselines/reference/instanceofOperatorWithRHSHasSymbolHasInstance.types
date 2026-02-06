@@ -255,8 +255,8 @@ lhs0 instanceof rhs1 && lhs0;
 >lhs0 : any
 
 lhs0 instanceof rhs2 && lhs0;
->lhs0 instanceof rhs2 && lhs0 : Point
->                             : ^^^^^
+>lhs0 instanceof rhs2 && lhs0 : false | Point
+>                             : ^^^^^^^^^^^^^
 >lhs0 instanceof rhs2 : boolean
 >                     : ^^^^^^^
 >lhs0 : any
@@ -266,8 +266,8 @@ lhs0 instanceof rhs2 && lhs0;
 >     : ^^^^^
 
 lhs0 instanceof rhs3 && lhs0;
->lhs0 instanceof rhs3 && lhs0 : Point
->                             : ^^^^^
+>lhs0 instanceof rhs3 && lhs0 : false | Point
+>                             : ^^^^^^^^^^^^^
 >lhs0 instanceof rhs3 : boolean
 >                     : ^^^^^^^
 >lhs0 : any
@@ -277,8 +277,8 @@ lhs0 instanceof rhs3 && lhs0;
 >     : ^^^^^
 
 lhs0 instanceof rhs4 && lhs0;
->lhs0 instanceof rhs4 && lhs0 : Line
->                             : ^^^^
+>lhs0 instanceof rhs4 && lhs0 : false | Line
+>                             : ^^^^^^^^^^^^
 >lhs0 instanceof rhs4 : boolean
 >                     : ^^^^^^^
 >lhs0 : any
@@ -288,8 +288,8 @@ lhs0 instanceof rhs4 && lhs0;
 >     : ^^^^
 
 lhs0 instanceof rhs5 && lhs0;
->lhs0 instanceof rhs5 && lhs0 : Point3D
->                             : ^^^^^^^
+>lhs0 instanceof rhs5 && lhs0 : false | Point3D
+>                             : ^^^^^^^^^^^^^^^
 >lhs0 instanceof rhs5 : boolean
 >                     : ^^^^^^^
 >lhs0 : any
@@ -299,8 +299,8 @@ lhs0 instanceof rhs5 && lhs0;
 >     : ^^^^^^^
 
 lhs0 instanceof rhs6 && lhs0;
->lhs0 instanceof rhs6 && lhs0 : Point3D
->                             : ^^^^^^^
+>lhs0 instanceof rhs6 && lhs0 : false | Point3D
+>                             : ^^^^^^^^^^^^^^^
 >lhs0 instanceof rhs6 : boolean
 >                     : ^^^^^^^
 >lhs0 : any
@@ -310,8 +310,8 @@ lhs0 instanceof rhs6 && lhs0;
 >     : ^^^^^^^
 
 lhs0 instanceof Rhs7 && lhs0;
->lhs0 instanceof Rhs7 && lhs0 : Rhs7
->                             : ^^^^
+>lhs0 instanceof Rhs7 && lhs0 : false | Rhs7
+>                             : ^^^^^^^^^^^^
 >lhs0 instanceof Rhs7 : boolean
 >                     : ^^^^^^^
 >lhs0 : any
@@ -321,8 +321,8 @@ lhs0 instanceof Rhs7 && lhs0;
 >     : ^^^^
 
 lhs0 instanceof Rhs8 && lhs0;
->lhs0 instanceof Rhs8 && lhs0 : Rhs8
->                             : ^^^^
+>lhs0 instanceof Rhs8 && lhs0 : false | Rhs8
+>                             : ^^^^^^^^^^^^
 >lhs0 instanceof Rhs8 : boolean
 >                     : ^^^^^^^
 >lhs0 : any
@@ -332,8 +332,8 @@ lhs0 instanceof Rhs8 && lhs0;
 >     : ^^^^
 
 lhs0 instanceof Rhs9 && lhs0;
->lhs0 instanceof Rhs9 && lhs0 : Point
->                             : ^^^^^
+>lhs0 instanceof Rhs9 && lhs0 : false | Point
+>                             : ^^^^^^^^^^^^^
 >lhs0 instanceof Rhs9 : boolean
 >                     : ^^^^^^^
 >lhs0 : any
@@ -343,8 +343,8 @@ lhs0 instanceof Rhs9 && lhs0;
 >     : ^^^^^
 
 lhs0 instanceof Rhs10 && lhs0;
->lhs0 instanceof Rhs10 && lhs0 : Point
->                              : ^^^^^
+>lhs0 instanceof Rhs10 && lhs0 : false | Point
+>                              : ^^^^^^^^^^^^^
 >lhs0 instanceof Rhs10 : boolean
 >                      : ^^^^^^^
 >lhs0 : any
@@ -354,8 +354,8 @@ lhs0 instanceof Rhs10 && lhs0;
 >     : ^^^^^
 
 lhs0 instanceof Rhs11 && lhs0;
->lhs0 instanceof Rhs11 && lhs0 : Line
->                              : ^^^^
+>lhs0 instanceof Rhs11 && lhs0 : false | Line
+>                              : ^^^^^^^^^^^^
 >lhs0 instanceof Rhs11 : boolean
 >                      : ^^^^^^^
 >lhs0 : any
@@ -365,8 +365,8 @@ lhs0 instanceof Rhs11 && lhs0;
 >     : ^^^^
 
 lhs0 instanceof Rhs12 && lhs0;
->lhs0 instanceof Rhs12 && lhs0 : Point3D
->                              : ^^^^^^^
+>lhs0 instanceof Rhs12 && lhs0 : false | Point3D
+>                              : ^^^^^^^^^^^^^^^
 >lhs0 instanceof Rhs12 : boolean
 >                      : ^^^^^^^
 >lhs0 : any
@@ -376,8 +376,8 @@ lhs0 instanceof Rhs12 && lhs0;
 >     : ^^^^^^^
 
 lhs0 instanceof Rhs13 && lhs0;
->lhs0 instanceof Rhs13 && lhs0 : Point3D
->                              : ^^^^^^^
+>lhs0 instanceof Rhs13 && lhs0 : false | Point3D
+>                              : ^^^^^^^^^^^^^^^
 >lhs0 instanceof Rhs13 : boolean
 >                      : ^^^^^^^
 >lhs0 : any
@@ -387,8 +387,8 @@ lhs0 instanceof Rhs13 && lhs0;
 >     : ^^^^^^^
 
 lhs1 instanceof rhs0 && lhs1;
->lhs1 instanceof rhs0 && lhs1 : object
->                             : ^^^^^^
+>lhs1 instanceof rhs0 && lhs1 : false | object
+>                             : ^^^^^^^^^^^^^^
 >lhs1 instanceof rhs0 : boolean
 >                     : ^^^^^^^
 >lhs1 : object
@@ -399,8 +399,8 @@ lhs1 instanceof rhs0 && lhs1;
 >     : ^^^^^^
 
 lhs1 instanceof rhs1 && lhs1;
->lhs1 instanceof rhs1 && lhs1 : object
->                             : ^^^^^^
+>lhs1 instanceof rhs1 && lhs1 : false | object
+>                             : ^^^^^^^^^^^^^^
 >lhs1 instanceof rhs1 : boolean
 >                     : ^^^^^^^
 >lhs1 : object
@@ -411,8 +411,8 @@ lhs1 instanceof rhs1 && lhs1;
 >     : ^^^^^^
 
 lhs1 instanceof rhs2 && lhs1;
->lhs1 instanceof rhs2 && lhs1 : Point
->                             : ^^^^^
+>lhs1 instanceof rhs2 && lhs1 : false | Point
+>                             : ^^^^^^^^^^^^^
 >lhs1 instanceof rhs2 : boolean
 >                     : ^^^^^^^
 >lhs1 : object
@@ -423,8 +423,8 @@ lhs1 instanceof rhs2 && lhs1;
 >     : ^^^^^
 
 lhs1 instanceof Rhs7 && lhs1;
->lhs1 instanceof Rhs7 && lhs1 : Rhs7
->                             : ^^^^
+>lhs1 instanceof Rhs7 && lhs1 : false | Rhs7
+>                             : ^^^^^^^^^^^^
 >lhs1 instanceof Rhs7 : boolean
 >                     : ^^^^^^^
 >lhs1 : object
@@ -435,8 +435,8 @@ lhs1 instanceof Rhs7 && lhs1;
 >     : ^^^^
 
 lhs1 instanceof Rhs8 && lhs1;
->lhs1 instanceof Rhs8 && lhs1 : Rhs8
->                             : ^^^^
+>lhs1 instanceof Rhs8 && lhs1 : false | Rhs8
+>                             : ^^^^^^^^^^^^
 >lhs1 instanceof Rhs8 : boolean
 >                     : ^^^^^^^
 >lhs1 : object
@@ -447,8 +447,8 @@ lhs1 instanceof Rhs8 && lhs1;
 >     : ^^^^
 
 lhs1 instanceof Rhs9 && lhs1;
->lhs1 instanceof Rhs9 && lhs1 : Point
->                             : ^^^^^
+>lhs1 instanceof Rhs9 && lhs1 : false | Point
+>                             : ^^^^^^^^^^^^^
 >lhs1 instanceof Rhs9 : boolean
 >                     : ^^^^^^^
 >lhs1 : object
@@ -459,8 +459,8 @@ lhs1 instanceof Rhs9 && lhs1;
 >     : ^^^^^
 
 lhs2 instanceof rhs0 && lhs2;
->lhs2 instanceof rhs0 && lhs2 : Point | Point3D | Line
->                             : ^^^^^^^^^^^^^^^^^^^^^^
+>lhs2 instanceof rhs0 && lhs2 : false | Point | Point3D | Line
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs2 instanceof rhs0 : boolean
 >                     : ^^^^^^^
 >lhs2 : Point | Point3D | Line
@@ -471,8 +471,8 @@ lhs2 instanceof rhs0 && lhs2;
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 
 lhs2 instanceof rhs1 && lhs2;
->lhs2 instanceof rhs1 && lhs2 : Point | Point3D | Line
->                             : ^^^^^^^^^^^^^^^^^^^^^^
+>lhs2 instanceof rhs1 && lhs2 : false | Point | Point3D | Line
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs2 instanceof rhs1 : boolean
 >                     : ^^^^^^^
 >lhs2 : Point | Point3D | Line
@@ -483,8 +483,8 @@ lhs2 instanceof rhs1 && lhs2;
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 
 lhs2 instanceof rhs2 && lhs2;
->lhs2 instanceof rhs2 && lhs2 : Point
->                             : ^^^^^
+>lhs2 instanceof rhs2 && lhs2 : false | Point
+>                             : ^^^^^^^^^^^^^
 >lhs2 instanceof rhs2 : boolean
 >                     : ^^^^^^^
 >lhs2 : Point | Point3D | Line
@@ -495,8 +495,8 @@ lhs2 instanceof rhs2 && lhs2;
 >     : ^^^^^
 
 lhs2 instanceof rhs3 && lhs2;
->lhs2 instanceof rhs3 && lhs2 : Point
->                             : ^^^^^
+>lhs2 instanceof rhs3 && lhs2 : false | Point
+>                             : ^^^^^^^^^^^^^
 >lhs2 instanceof rhs3 : boolean
 >                     : ^^^^^^^
 >lhs2 : Point | Point3D | Line
@@ -507,8 +507,8 @@ lhs2 instanceof rhs3 && lhs2;
 >     : ^^^^^
 
 lhs2 instanceof rhs4 && lhs2;
->lhs2 instanceof rhs4 && lhs2 : Line
->                             : ^^^^
+>lhs2 instanceof rhs4 && lhs2 : false | Line
+>                             : ^^^^^^^^^^^^
 >lhs2 instanceof rhs4 : boolean
 >                     : ^^^^^^^
 >lhs2 : Point | Point3D | Line
@@ -519,8 +519,8 @@ lhs2 instanceof rhs4 && lhs2;
 >     : ^^^^
 
 lhs2 instanceof rhs5 && lhs2;
->lhs2 instanceof rhs5 && lhs2 : Point3D
->                             : ^^^^^^^
+>lhs2 instanceof rhs5 && lhs2 : false | Point3D
+>                             : ^^^^^^^^^^^^^^^
 >lhs2 instanceof rhs5 : boolean
 >                     : ^^^^^^^
 >lhs2 : Point | Point3D | Line
@@ -531,8 +531,8 @@ lhs2 instanceof rhs5 && lhs2;
 >     : ^^^^^^^
 
 lhs2 instanceof Rhs7 && lhs2;
->lhs2 instanceof Rhs7 && lhs2 : Point | Point3D | Line
->                             : ^^^^^^^^^^^^^^^^^^^^^^
+>lhs2 instanceof Rhs7 && lhs2 : false | Point | Point3D | Line
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs2 instanceof Rhs7 : boolean
 >                     : ^^^^^^^
 >lhs2 : Point | Point3D | Line
@@ -543,8 +543,8 @@ lhs2 instanceof Rhs7 && lhs2;
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 
 lhs2 instanceof Rhs8 && lhs2;
->lhs2 instanceof Rhs8 && lhs2 : Point | Point3D | Line
->                             : ^^^^^^^^^^^^^^^^^^^^^^
+>lhs2 instanceof Rhs8 && lhs2 : false | Point | Point3D | Line
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs2 instanceof Rhs8 : boolean
 >                     : ^^^^^^^
 >lhs2 : Point | Point3D | Line
@@ -555,8 +555,8 @@ lhs2 instanceof Rhs8 && lhs2;
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 
 lhs2 instanceof Rhs9 && lhs2;
->lhs2 instanceof Rhs9 && lhs2 : Point
->                             : ^^^^^
+>lhs2 instanceof Rhs9 && lhs2 : false | Point
+>                             : ^^^^^^^^^^^^^
 >lhs2 instanceof Rhs9 : boolean
 >                     : ^^^^^^^
 >lhs2 : Point | Point3D | Line
@@ -567,8 +567,8 @@ lhs2 instanceof Rhs9 && lhs2;
 >     : ^^^^^
 
 lhs2 instanceof Rhs10 && lhs2;
->lhs2 instanceof Rhs10 && lhs2 : Point
->                              : ^^^^^
+>lhs2 instanceof Rhs10 && lhs2 : false | Point
+>                              : ^^^^^^^^^^^^^
 >lhs2 instanceof Rhs10 : boolean
 >                      : ^^^^^^^
 >lhs2 : Point | Point3D | Line
@@ -579,8 +579,8 @@ lhs2 instanceof Rhs10 && lhs2;
 >     : ^^^^^
 
 lhs2 instanceof Rhs11 && lhs2;
->lhs2 instanceof Rhs11 && lhs2 : Line
->                              : ^^^^
+>lhs2 instanceof Rhs11 && lhs2 : false | Line
+>                              : ^^^^^^^^^^^^
 >lhs2 instanceof Rhs11 : boolean
 >                      : ^^^^^^^
 >lhs2 : Point | Point3D | Line
@@ -591,8 +591,8 @@ lhs2 instanceof Rhs11 && lhs2;
 >     : ^^^^
 
 lhs2 instanceof Rhs12 && lhs2;
->lhs2 instanceof Rhs12 && lhs2 : Point3D
->                              : ^^^^^^^
+>lhs2 instanceof Rhs12 && lhs2 : false | Point3D
+>                              : ^^^^^^^^^^^^^^^
 >lhs2 instanceof Rhs12 : boolean
 >                      : ^^^^^^^
 >lhs2 : Point | Point3D | Line
@@ -603,8 +603,8 @@ lhs2 instanceof Rhs12 && lhs2;
 >     : ^^^^^^^
 
 lhs3 instanceof rhs0 && lhs3;
->lhs3 instanceof rhs0 && lhs3 : Point3D | Line
->                             : ^^^^^^^^^^^^^^
+>lhs3 instanceof rhs0 && lhs3 : false | Point3D | Line
+>                             : ^^^^^^^^^^^^^^^^^^^^^^
 >lhs3 instanceof rhs0 : boolean
 >                     : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -615,8 +615,8 @@ lhs3 instanceof rhs0 && lhs3;
 >     : ^^^^^^^^^^^^^^
 
 lhs3 instanceof rhs1 && lhs3;
->lhs3 instanceof rhs1 && lhs3 : Point3D | Line
->                             : ^^^^^^^^^^^^^^
+>lhs3 instanceof rhs1 && lhs3 : false | Point3D | Line
+>                             : ^^^^^^^^^^^^^^^^^^^^^^
 >lhs3 instanceof rhs1 : boolean
 >                     : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -627,8 +627,8 @@ lhs3 instanceof rhs1 && lhs3;
 >     : ^^^^^^^^^^^^^^
 
 lhs3 instanceof rhs2 && lhs3;
->lhs3 instanceof rhs2 && lhs3 : (Point3D | Line) & Point
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^
+>lhs3 instanceof rhs2 && lhs3 : false | ((Point3D | Line) & Point)
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs3 instanceof rhs2 : boolean
 >                     : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -639,8 +639,8 @@ lhs3 instanceof rhs2 && lhs3;
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 lhs3 instanceof rhs3 && lhs3;
->lhs3 instanceof rhs3 && lhs3 : (Point3D | Line) & Point
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^
+>lhs3 instanceof rhs3 && lhs3 : false | ((Point3D | Line) & Point)
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs3 instanceof rhs3 : boolean
 >                     : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -651,8 +651,8 @@ lhs3 instanceof rhs3 && lhs3;
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 lhs3 instanceof rhs4 && lhs3;
->lhs3 instanceof rhs4 && lhs3 : Line
->                             : ^^^^
+>lhs3 instanceof rhs4 && lhs3 : false | Line
+>                             : ^^^^^^^^^^^^
 >lhs3 instanceof rhs4 : boolean
 >                     : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -663,8 +663,8 @@ lhs3 instanceof rhs4 && lhs3;
 >     : ^^^^
 
 lhs3 instanceof rhs5 && lhs3;
->lhs3 instanceof rhs5 && lhs3 : Point3D
->                             : ^^^^^^^
+>lhs3 instanceof rhs5 && lhs3 : false | Point3D
+>                             : ^^^^^^^^^^^^^^^
 >lhs3 instanceof rhs5 : boolean
 >                     : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -675,8 +675,8 @@ lhs3 instanceof rhs5 && lhs3;
 >     : ^^^^^^^
 
 lhs3 instanceof rhs6 && lhs3;
->lhs3 instanceof rhs6 && lhs3 : Point3D
->                             : ^^^^^^^
+>lhs3 instanceof rhs6 && lhs3 : false | Point3D
+>                             : ^^^^^^^^^^^^^^^
 >lhs3 instanceof rhs6 : boolean
 >                     : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -687,8 +687,8 @@ lhs3 instanceof rhs6 && lhs3;
 >     : ^^^^^^^
 
 lhs3 instanceof Rhs7 && lhs3;
->lhs3 instanceof Rhs7 && lhs3 : Point3D | Line
->                             : ^^^^^^^^^^^^^^
+>lhs3 instanceof Rhs7 && lhs3 : false | Point3D | Line
+>                             : ^^^^^^^^^^^^^^^^^^^^^^
 >lhs3 instanceof Rhs7 : boolean
 >                     : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -699,8 +699,8 @@ lhs3 instanceof Rhs7 && lhs3;
 >     : ^^^^^^^^^^^^^^
 
 lhs3 instanceof Rhs8 && lhs3;
->lhs3 instanceof Rhs8 && lhs3 : Point3D | Line
->                             : ^^^^^^^^^^^^^^
+>lhs3 instanceof Rhs8 && lhs3 : false | Point3D | Line
+>                             : ^^^^^^^^^^^^^^^^^^^^^^
 >lhs3 instanceof Rhs8 : boolean
 >                     : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -711,8 +711,8 @@ lhs3 instanceof Rhs8 && lhs3;
 >     : ^^^^^^^^^^^^^^
 
 lhs3 instanceof Rhs9 && lhs3;
->lhs3 instanceof Rhs9 && lhs3 : (Point3D | Line) & Point
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^
+>lhs3 instanceof Rhs9 && lhs3 : false | ((Point3D | Line) & Point)
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs3 instanceof Rhs9 : boolean
 >                     : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -723,8 +723,8 @@ lhs3 instanceof Rhs9 && lhs3;
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 lhs3 instanceof Rhs10 && lhs3;
->lhs3 instanceof Rhs10 && lhs3 : (Point3D | Line) & Point
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>lhs3 instanceof Rhs10 && lhs3 : false | ((Point3D | Line) & Point)
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs3 instanceof Rhs10 : boolean
 >                      : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -735,8 +735,8 @@ lhs3 instanceof Rhs10 && lhs3;
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 lhs3 instanceof Rhs11 && lhs3;
->lhs3 instanceof Rhs11 && lhs3 : Line
->                              : ^^^^
+>lhs3 instanceof Rhs11 && lhs3 : false | Line
+>                              : ^^^^^^^^^^^^
 >lhs3 instanceof Rhs11 : boolean
 >                      : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -747,8 +747,8 @@ lhs3 instanceof Rhs11 && lhs3;
 >     : ^^^^
 
 lhs3 instanceof Rhs12 && lhs3;
->lhs3 instanceof Rhs12 && lhs3 : Point3D
->                              : ^^^^^^^
+>lhs3 instanceof Rhs12 && lhs3 : false | Point3D
+>                              : ^^^^^^^^^^^^^^^
 >lhs3 instanceof Rhs12 : boolean
 >                      : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -759,8 +759,8 @@ lhs3 instanceof Rhs12 && lhs3;
 >     : ^^^^^^^
 
 lhs3 instanceof Rhs13 && lhs3;
->lhs3 instanceof Rhs13 && lhs3 : Point3D
->                              : ^^^^^^^
+>lhs3 instanceof Rhs13 && lhs3 : false | Point3D
+>                              : ^^^^^^^^^^^^^^^
 >lhs3 instanceof Rhs13 : boolean
 >                      : ^^^^^^^
 >lhs3 : Point3D | Line
@@ -771,8 +771,8 @@ lhs3 instanceof Rhs13 && lhs3;
 >     : ^^^^^^^
 
 lhs4 instanceof rhs0 && lhs4;
->lhs4 instanceof rhs0 && lhs4 : Point | Point3D2 | Line
->                             : ^^^^^^^^^^^^^^^^^^^^^^^
+>lhs4 instanceof rhs0 && lhs4 : false | Point | Point3D2 | Line
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs4 instanceof rhs0 : boolean
 >                     : ^^^^^^^
 >lhs4 : Point | Point3D2 | Line
@@ -783,8 +783,8 @@ lhs4 instanceof rhs0 && lhs4;
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 
 lhs4 instanceof rhs1 && lhs4;
->lhs4 instanceof rhs1 && lhs4 : Point | Point3D2 | Line
->                             : ^^^^^^^^^^^^^^^^^^^^^^^
+>lhs4 instanceof rhs1 && lhs4 : false | Point | Point3D2 | Line
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs4 instanceof rhs1 : boolean
 >                     : ^^^^^^^
 >lhs4 : Point | Point3D2 | Line
@@ -795,8 +795,8 @@ lhs4 instanceof rhs1 && lhs4;
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 
 lhs4 instanceof rhs2 && lhs4;
->lhs4 instanceof rhs2 && lhs4 : Point | Point3D2
->                             : ^^^^^^^^^^^^^^^^
+>lhs4 instanceof rhs2 && lhs4 : false | Point | Point3D2
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs4 instanceof rhs2 : boolean
 >                     : ^^^^^^^
 >lhs4 : Point | Point3D2 | Line
@@ -807,8 +807,8 @@ lhs4 instanceof rhs2 && lhs4;
 >     : ^^^^^^^^^^^^^^^^
 
 lhs4 instanceof rhs3 && lhs4;
->lhs4 instanceof rhs3 && lhs4 : Point | Point3D2
->                             : ^^^^^^^^^^^^^^^^
+>lhs4 instanceof rhs3 && lhs4 : false | Point | Point3D2
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs4 instanceof rhs3 : boolean
 >                     : ^^^^^^^
 >lhs4 : Point | Point3D2 | Line
@@ -819,8 +819,8 @@ lhs4 instanceof rhs3 && lhs4;
 >     : ^^^^^^^^^^^^^^^^
 
 lhs4 instanceof rhs4 && lhs4;
->lhs4 instanceof rhs4 && lhs4 : Line
->                             : ^^^^
+>lhs4 instanceof rhs4 && lhs4 : false | Line
+>                             : ^^^^^^^^^^^^
 >lhs4 instanceof rhs4 : boolean
 >                     : ^^^^^^^
 >lhs4 : Point | Point3D2 | Line
@@ -831,8 +831,8 @@ lhs4 instanceof rhs4 && lhs4;
 >     : ^^^^
 
 lhs4 instanceof rhs5 && lhs4;
->lhs4 instanceof rhs5 && lhs4 : Point3D
->                             : ^^^^^^^
+>lhs4 instanceof rhs5 && lhs4 : false | Point3D
+>                             : ^^^^^^^^^^^^^^^
 >lhs4 instanceof rhs5 : boolean
 >                     : ^^^^^^^
 >lhs4 : Point | Point3D2 | Line
@@ -843,8 +843,8 @@ lhs4 instanceof rhs5 && lhs4;
 >     : ^^^^^^^
 
 lhs4 instanceof Rhs7 && lhs4;
->lhs4 instanceof Rhs7 && lhs4 : Point | Point3D2 | Line
->                             : ^^^^^^^^^^^^^^^^^^^^^^^
+>lhs4 instanceof Rhs7 && lhs4 : false | Point | Point3D2 | Line
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs4 instanceof Rhs7 : boolean
 >                     : ^^^^^^^
 >lhs4 : Point | Point3D2 | Line
@@ -855,8 +855,8 @@ lhs4 instanceof Rhs7 && lhs4;
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 
 lhs4 instanceof Rhs8 && lhs4;
->lhs4 instanceof Rhs8 && lhs4 : Point | Point3D2 | Line
->                             : ^^^^^^^^^^^^^^^^^^^^^^^
+>lhs4 instanceof Rhs8 && lhs4 : false | Point | Point3D2 | Line
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs4 instanceof Rhs8 : boolean
 >                     : ^^^^^^^
 >lhs4 : Point | Point3D2 | Line
@@ -867,8 +867,8 @@ lhs4 instanceof Rhs8 && lhs4;
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 
 lhs4 instanceof Rhs9 && lhs4;
->lhs4 instanceof Rhs9 && lhs4 : Point | Point3D2
->                             : ^^^^^^^^^^^^^^^^
+>lhs4 instanceof Rhs9 && lhs4 : false | Point | Point3D2
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs4 instanceof Rhs9 : boolean
 >                     : ^^^^^^^
 >lhs4 : Point | Point3D2 | Line
@@ -879,8 +879,8 @@ lhs4 instanceof Rhs9 && lhs4;
 >     : ^^^^^^^^^^^^^^^^
 
 lhs4 instanceof Rhs10 && lhs4;
->lhs4 instanceof Rhs10 && lhs4 : Point | Point3D2
->                              : ^^^^^^^^^^^^^^^^
+>lhs4 instanceof Rhs10 && lhs4 : false | Point | Point3D2
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >lhs4 instanceof Rhs10 : boolean
 >                      : ^^^^^^^
 >lhs4 : Point | Point3D2 | Line
@@ -891,8 +891,8 @@ lhs4 instanceof Rhs10 && lhs4;
 >     : ^^^^^^^^^^^^^^^^
 
 lhs4 instanceof Rhs11 && lhs4;
->lhs4 instanceof Rhs11 && lhs4 : Line
->                              : ^^^^
+>lhs4 instanceof Rhs11 && lhs4 : false | Line
+>                              : ^^^^^^^^^^^^
 >lhs4 instanceof Rhs11 : boolean
 >                      : ^^^^^^^
 >lhs4 : Point | Point3D2 | Line
@@ -903,8 +903,8 @@ lhs4 instanceof Rhs11 && lhs4;
 >     : ^^^^
 
 lhs4 instanceof Rhs12 && lhs4;
->lhs4 instanceof Rhs12 && lhs4 : Point3D
->                              : ^^^^^^^
+>lhs4 instanceof Rhs12 && lhs4 : false | Point3D
+>                              : ^^^^^^^^^^^^^^^
 >lhs4 instanceof Rhs12 : boolean
 >                      : ^^^^^^^
 >lhs4 : Point | Point3D2 | Line
@@ -1065,8 +1065,8 @@ declare const rhs15: Rhs15;
 >      : ^^^^^
 
 lhs0 instanceof rhs15 && lhs0;
->lhs0 instanceof rhs15 && lhs0 : Point | Line
->                              : ^^^^^^^^^^^^
+>lhs0 instanceof rhs15 && lhs0 : false | Point | Line
+>                              : ^^^^^^^^^^^^^^^^^^^^
 >lhs0 instanceof rhs15 : boolean
 >                      : ^^^^^^^
 >lhs0 : any

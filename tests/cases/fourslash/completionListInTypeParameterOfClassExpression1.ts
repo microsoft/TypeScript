@@ -1,5 +1,7 @@
 ﻿/// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 ////var C0 = class D</*0*/
 ////var C1 = class D</*1*/T> {}
 ////var C2 = class D<T, /*2*/

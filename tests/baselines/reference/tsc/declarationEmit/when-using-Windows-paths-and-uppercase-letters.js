@@ -79,7 +79,6 @@ export interface MyType<T = any> extends Function {
 
 
 //// [D:/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -96,11 +95,23 @@ declare const console: { log(msg: any): void; };
 
 D:\home\src\tslibs\TS\Lib\tsc.js -p D:\Work\pkg1 --explainFiles
 Output::
-[96msrc/utils/index.ts[0m:[93m8[0m:[93m12[0m - [91merror[0m[90m TS2352: [0mConversion of type 'typeof PartialClassType' to type 'MyReturnType' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Cannot assign an abstract constructor type to a non-abstract constructor type.
+[96mtsconfig.json[0m:[93m13[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
 
-[7m8[0m     return PartialClassType as MyReturnType;
-[7m [0m [91m           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m13[0m     "outDir": "./dist",
+[7m  [0m [91m    ~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m14[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m14[0m     "baseUrl": "./",
+[7m  [0m [91m    ~~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m21[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m21[0m     "moduleResolution": "node",
+[7m  [0m [91m                        ~~~~~~[0m
 
 ../../home/src/tslibs/TS/Lib/lib.es2017.full.d.ts
   Default library for target 'es2017'
@@ -113,21 +124,21 @@ src/utils/index.ts
 src/main.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 1 error in src/utils/index.ts[90m:8[0m
+Found 3 errors in the same file, starting at: tsconfig.json[90m:13[0m
 
 
 
 //// [D:/home/src/tslibs/TS/Lib/lib.es2017.full.d.ts] *Lib*
 
-//// [D:/Work/pkg1/dist/utils/type-helpers.js.map]
-{"version":3,"file":"type-helpers.js","sourceRoot":"","sources":["../../src/utils/type-helpers.ts"],"names":[],"mappings":""}
+//// [D:/Work/pkg1/dist/src/utils/type-helpers.js.map]
+{"version":3,"file":"type-helpers.js","sourceRoot":"","sources":["../../../src/utils/type-helpers.ts"],"names":[],"mappings":""}
 
-//// [D:/Work/pkg1/dist/utils/type-helpers.js]
+//// [D:/Work/pkg1/dist/src/utils/type-helpers.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=type-helpers.js.map
 
-//// [D:/Work/pkg1/dist/utils/type-helpers.d.ts]
+//// [D:/Work/pkg1/dist/src/utils/type-helpers.d.ts]
 export type MyReturnType = {
     new (...args: any[]): any;
 };
@@ -136,10 +147,10 @@ export interface MyType<T = any> extends Function {
 }
 
 
-//// [D:/Work/pkg1/dist/utils/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/utils/index.ts"],"names":[],"mappings":";;AAEA,kCAMC;AAND,SAAgB,WAAW,CAAI,QAAmB;IAC9C,MAAe,gBAAgB;QAC3B,gBAAe,CAAC;KACnB;IAED,OAAO,gBAAgC,CAAC;AAC5C,CAAC"}
+//// [D:/Work/pkg1/dist/src/utils/index.js.map]
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/utils/index.ts"],"names":[],"mappings":";;AAEA,kCAMC;AAND,SAAgB,WAAW,CAAI,QAAmB;IAC9C,MAAe,gBAAgB;QAC3B,gBAAe,CAAC;KACnB;IAED,OAAO,gBAAgC,CAAC;AAC5C,CAAC"}
 
-//// [D:/Work/pkg1/dist/utils/index.js]
+//// [D:/Work/pkg1/dist/src/utils/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PartialType = PartialType;
@@ -151,15 +162,15 @@ function PartialType(classRef) {
 }
 //# sourceMappingURL=index.js.map
 
-//// [D:/Work/pkg1/dist/utils/index.d.ts]
+//// [D:/Work/pkg1/dist/src/utils/index.d.ts]
 import { MyType, MyReturnType } from './type-helpers';
 export declare function PartialType<T>(classRef: MyType<T>): MyReturnType;
 
 
-//// [D:/Work/pkg1/dist/main.js.map]
-{"version":3,"file":"main.js","sourceRoot":"","sources":["../src/main.ts"],"names":[],"mappings":";;;AAAA,mCAAsC;AAEtC,MAAM,MAAM;CAAG;AAEf,MAAa,GAAI,SAAQ,IAAA,mBAAW,EAAC,MAAM,CAAC;CAE3C;AAFD,kBAEC"}
+//// [D:/Work/pkg1/dist/src/main.js.map]
+{"version":3,"file":"main.js","sourceRoot":"","sources":["../../src/main.ts"],"names":[],"mappings":";;;AAAA,mCAAsC;AAEtC,MAAM,MAAM;CAAG;AAEf,MAAa,GAAI,SAAQ,IAAA,mBAAW,EAAC,MAAM,CAAC;CAE3C;AAFD,kBAEC"}
 
-//// [D:/Work/pkg1/dist/main.js]
+//// [D:/Work/pkg1/dist/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sub = void 0;
@@ -171,7 +182,7 @@ class Sub extends (0, utils_1.PartialType)(Common) {
 exports.Sub = Sub;
 //# sourceMappingURL=main.js.map
 
-//// [D:/Work/pkg1/dist/main.d.ts]
+//// [D:/Work/pkg1/dist/src/main.d.ts]
 declare const Sub_base: import("./utils/type-helpers").MyReturnType;
 export declare class Sub extends Sub_base {
     id: string;

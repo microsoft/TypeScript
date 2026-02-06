@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es2015
 // @allowNonTsExtensions: true
 // @Filename: jsdocCompletion_typedef.js
 

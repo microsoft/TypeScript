@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: a.ts
 export interface F {
     foo1: number
@@ -12,8 +14,8 @@ export interface F {
 import * as A from './a'
 import * as B from './b'
 
-let a: A.F
-let b: B.F
+declare let a: A.F
+declare let b: B.F
 
 if (a === b) {
 

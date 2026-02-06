@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "compilerOptions": { "module": "commonjs", "allowJs": true } }
+//// { "compilerOptions": { "module": "commonjs", "allowJs": true, "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/third_party/marked/src/defaults.js
 //// function getDefaults() {
@@ -36,7 +36,7 @@ verify.completions({
   excludes: ["newDefaults"],
   includes: [{
     name: "defaults",
-    source: "/home/src/workspaces/project/third_party/marked/src/defaults",
+    source: "./third_party/marked/src/defaults",
     hasAction: true,
     sortText: completion.SortText.AutoImportSuggestions,
   }],
@@ -45,11 +45,12 @@ verify.completions({
 
 verify.applyCodeActionFromCompletion("", {
   name: "defaults",
-  source: "/home/src/workspaces/project/third_party/marked/src/defaults",
+  source: "./third_party/marked/src/defaults",
   description: `Add import from "./third_party/marked/src/defaults"`,
   data: {
     exportName: "defaults",
     fileName: "/home/src/workspaces/project/third_party/marked/src/defaults.js",
+    moduleSpecifier: "./third_party/marked/src/defaults",
   },
   newFileContent: `import { defaults } from "./third_party/marked/src/defaults";
 

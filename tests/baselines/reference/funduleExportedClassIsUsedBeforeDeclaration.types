@@ -12,7 +12,7 @@ declare function B(): B.C;  // function merged with module
 >B : any
 >  : ^^^
 
-declare module B {
+declare namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 

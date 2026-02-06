@@ -4,10 +4,10 @@
 function foo(a?:string, b?:number, ...b:number[]){}
 >foo : (a?: string, b?: number, ...b: number[]) => void
 >    : ^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
->a : string
->  : ^^^^^^
->b : number
->  : ^^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : number[]
 >  : ^^^^^^^^
 

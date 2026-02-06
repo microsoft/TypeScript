@@ -1,6 +1,7 @@
-module a{
+// @target: es2015
+namespace a{
        var x:number;
-       module b{
+       namespace b{
                var y = x; // should not be an error
        }
 }

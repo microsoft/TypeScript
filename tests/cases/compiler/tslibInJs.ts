@@ -1,6 +1,6 @@
 // @checkJs: true
 // @allowJs: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @target: es2018
 // @module: commonjs
 // @importHelpers: true

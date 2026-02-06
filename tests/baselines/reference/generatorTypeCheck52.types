@@ -19,6 +19,7 @@ function* g() {
 
     yield new Foo;
 >yield new Foo : any
+>              : ^^^
 >new Foo : Foo
 >        : ^^^
 >Foo : typeof Foo
@@ -26,6 +27,7 @@ function* g() {
 
     yield new Baz;
 >yield new Baz : any
+>              : ^^^
 >new Baz : Baz
 >        : ^^^
 >Baz : typeof Baz

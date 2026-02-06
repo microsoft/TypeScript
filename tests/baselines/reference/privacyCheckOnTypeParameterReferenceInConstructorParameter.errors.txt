@@ -1,0 +1,15 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== privacyCheckOnTypeParameterReferenceInConstructorParameter.ts (0 errors) ====
+    export class A<T1>{
+        constructor(callback: (self: A<T1>) => void) {
+            var child = new B(this);
+        }
+    }
+    
+    export class B<T2> {
+        constructor(parent: T2) { }
+    }
+    

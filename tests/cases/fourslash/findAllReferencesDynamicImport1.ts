@@ -1,5 +1,7 @@
 ﻿/// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 // @Filename: foo.ts
 //// export function foo() { return "foo"; }
 

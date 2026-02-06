@@ -1,9 +1,12 @@
+functionExpressionInWithBlock.ts(2,2): error TS1101: 'with' statements are not allowed in strict mode.
 functionExpressionInWithBlock.ts(2,2): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== functionExpressionInWithBlock.ts (1 errors) ====
+==== functionExpressionInWithBlock.ts (2 errors) ====
     function x() {
      with({}) {
+     ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
      ~~~~~~~~
 !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
       function f() {

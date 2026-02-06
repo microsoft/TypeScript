@@ -1,3 +1,4 @@
+// @target: es2015
 var x = 1;
 with (x) {
     function f(a: number) {

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // Repro from #10697
 
 (function (define, undefined) {

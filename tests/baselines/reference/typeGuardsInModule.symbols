@@ -15,7 +15,7 @@ var var1: string | number;
 >var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
 
 // Inside module
-module m1 {
+namespace m1 {
 >m1 : Symbol(m1, Decl(typeGuardsInModule.ts, 6, 26))
 
     // global vars in function declaration
@@ -63,7 +63,7 @@ module m1 {
     }
 }
 // local module
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(typeGuardsInModule.ts, 29, 1))
 
     var var2: string | number;
@@ -72,7 +72,7 @@ module m2 {
     export var var3: string | number;
 >var3 : Symbol(var3, Decl(typeGuardsInModule.ts, 33, 14))
 
-    module m3 {
+    namespace m3 {
 >m3 : Symbol(m3, Decl(typeGuardsInModule.ts, 33, 37))
 
         // global vars in function declaration
@@ -135,9 +135,9 @@ module m2 {
     }
 }
 // Dotted module
-module m3.m4 {
+namespace m3.m4 {
 >m3 : Symbol(m3, Decl(typeGuardsInModule.ts, 62, 1))
->m4 : Symbol(m4, Decl(typeGuardsInModule.ts, 64, 10))
+>m4 : Symbol(m4, Decl(typeGuardsInModule.ts, 64, 13))
 
     // global vars in function declaration
     num = typeof var1 === "string" && var1.length; // string

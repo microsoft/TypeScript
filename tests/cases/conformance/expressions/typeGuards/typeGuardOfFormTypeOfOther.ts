@@ -1,3 +1,4 @@
+// @target: es2015
 class C { private p: string };
 
 var str: string;
@@ -7,9 +8,9 @@ var strOrNum: string | number;
 var strOrBool: string | boolean;
 var numOrBool: number | boolean
 var strOrNumOrBool: string | number | boolean;
-var strOrC: string | C;
-var numOrC: number | C;
-var boolOrC: boolean | C;
+declare var strOrC: string | C;
+declare var numOrC: number | C;
+declare var boolOrC: boolean | C;
 var emptyObj: {};
 var c: C;
 

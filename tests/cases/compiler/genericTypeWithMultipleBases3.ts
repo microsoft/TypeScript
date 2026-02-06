@@ -1,3 +1,4 @@
+// @target: es2015
 interface IA<T> {
 
 foo(x: T): T;

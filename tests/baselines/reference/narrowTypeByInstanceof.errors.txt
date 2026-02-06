@@ -1,0 +1,40 @@
+narrowTypeByInstanceof.ts(18,5): error TS2454: Variable 'elementA' is used before being assigned.
+narrowTypeByInstanceof.ts(18,38): error TS2454: Variable 'elementB' is used before being assigned.
+narrowTypeByInstanceof.ts(21,12): error TS2454: Variable 'elementA' is used before being assigned.
+narrowTypeByInstanceof.ts(21,41): error TS2454: Variable 'elementB' is used before being assigned.
+
+
+==== narrowTypeByInstanceof.ts (4 errors) ====
+        class Match {
+            public range(): any {
+                return undefined;
+            }
+        }
+    
+        class FileMatch {
+            public resource(): any {
+                return undefined;
+            }
+        }
+    
+    type FileMatchOrMatch = FileMatch | Match;
+    
+    
+    let elementA: FileMatchOrMatch, elementB: FileMatchOrMatch;
+    
+    if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
+        ~~~~~~~~
+!!! error TS2454: Variable 'elementA' is used before being assigned.
+                                         ~~~~~~~~
+!!! error TS2454: Variable 'elementB' is used before being assigned.
+        let a = elementA.resource().path;
+        let b = elementB.resource().path;
+    } else if (elementA instanceof Match && elementB instanceof Match) {
+               ~~~~~~~~
+!!! error TS2454: Variable 'elementA' is used before being assigned.
+                                            ~~~~~~~~
+!!! error TS2454: Variable 'elementB' is used before being assigned.
+        let a = elementA.range();
+        let b = elementB.range();
+    }
+    

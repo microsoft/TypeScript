@@ -19,5 +19,5 @@ function x() {
 }
 //// [foo2.js]
 "use strict";
-var foo1 = require("./foo1");
+const foo1 = require("./foo1");
 module.exports = foo1.x;

@@ -21,7 +21,7 @@
 //// }
 // inheritance
 //// {
-////     class Bar {
+////     class Bar/*B*/ {
 ////         a!: string;
 ////         bar(): void {}
 ////         baz(param: string): void {}
@@ -64,8 +64,9 @@ verify.baselineQuickInfo({
     f1: [0, 1],
     f2: [0, 1, 2],
     f3: [0, 1],
-    b1: [0, 1, 2],
+    b1: [0, 1],
     f4: [0, 1],
     n1: [0, 1],
     k1: [0, 1],
+    B: [0, 1],
 });

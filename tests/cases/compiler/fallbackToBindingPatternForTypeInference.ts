@@ -1,3 +1,4 @@
+// @target: es2015
 declare function trans<T>(f: (x: T) => string): number;
 trans(({a}) => a);
 trans(([b,c]) => 'foo');

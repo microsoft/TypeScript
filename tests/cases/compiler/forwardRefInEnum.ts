@@ -1,3 +1,4 @@
+// @target: es2015
 enum E1 {
     // illegal case
     // forward reference to the element of the same enum

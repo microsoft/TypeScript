@@ -1,3 +1,4 @@
+// @target: es2015
 // @noEmit: true
 // @lib: es5,es2015.promise
 

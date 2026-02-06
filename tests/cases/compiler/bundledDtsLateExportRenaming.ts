@@ -1,6 +1,7 @@
+// @target: es2015
 // @module: commonjs
 // @declaration: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @emitDeclarationOnly: true
 // @outFile: ./dist/out.d.ts
 

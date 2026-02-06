@@ -1,3 +1,4 @@
+// @target: es2015
 // @noUncheckedSideEffectImports: true,false
 // @module: commonjs,nodenext,preserve
 

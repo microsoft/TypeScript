@@ -10,12 +10,12 @@ export const a = async () => (await import("inner")).x();
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(await import("inner")).x : () => import("node_modules/inner/private").Thing
 >                          : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
->(await import("inner")) : typeof import("node_modules/inner/index")
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->await import("inner") : typeof import("node_modules/inner/index")
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->import("inner") : Promise<typeof import("node_modules/inner/index")>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(await import("inner")) : { default: typeof import("node_modules/inner/index"); x: () => import("node_modules/inner/private").Thing; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^
+>await import("inner") : { default: typeof import("node_modules/inner/index"); x: () => import("node_modules/inner/private").Thing; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^
+>import("inner") : Promise<{ default: typeof import("node_modules/inner/index"); x: () => import("node_modules/inner/private").Thing; }>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^
 >"inner" : "inner"
 >        : ^^^^^^^
 >x : () => import("node_modules/inner/private").Thing

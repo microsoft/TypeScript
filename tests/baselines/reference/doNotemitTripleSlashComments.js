@@ -36,10 +36,13 @@ function bar() { }
 
 
 //// [file0.js]
+"use strict";
 var x = 10;
 var y = "hello";
 //// [file1.js]
+"use strict";
 function foo() { }
 var z = "world";
 //// [file2.js]
+"use strict";
 function bar() { }

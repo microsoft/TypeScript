@@ -1,3 +1,4 @@
+// @target: es2015
 //// [scannerNonAsciiHorizontalWhitespace.ts]
 "  function f() {}"
 

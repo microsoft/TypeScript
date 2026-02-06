@@ -7,4 +7,5 @@ function foo(bar:any):(a)=>void { return function(){} }
 
 
 //// [functionOverloads24.js]
+"use strict";
 function foo(bar) { return function () { }; }

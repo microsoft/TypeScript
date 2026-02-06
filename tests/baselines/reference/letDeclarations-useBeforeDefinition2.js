@@ -8,5 +8,6 @@ const l = 0;
 
 
 //// [out.js]
+"use strict";
 l;
 const l = 0;

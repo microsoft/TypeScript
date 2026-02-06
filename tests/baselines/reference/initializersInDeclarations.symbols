@@ -25,7 +25,7 @@ declare var x = [];
 declare var y = {};
 >y : Symbol(y, Decl(file1.d.ts, 11, 11))
 
-declare module M1 {
+declare namespace M1 {
 >M1 : Symbol(M1, Decl(file1.d.ts, 11, 19))
 
 	while(true);

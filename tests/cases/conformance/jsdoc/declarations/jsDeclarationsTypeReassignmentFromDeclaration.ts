@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowJs: true
 // @checkJs: true
 // @outDir: /out

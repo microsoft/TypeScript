@@ -29,7 +29,7 @@ interface MoverShaker extends Mover, Shaker {
 }
 
 // Inside a module
-declare module MoversAndShakers {
+declare namespace MoversAndShakers {
 >MoversAndShakers : typeof MoversAndShakers
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 

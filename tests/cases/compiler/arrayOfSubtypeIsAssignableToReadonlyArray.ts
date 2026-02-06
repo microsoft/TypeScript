@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class A { a }
 class B extends A { b }
 class C<T> extends Array<T> { c }

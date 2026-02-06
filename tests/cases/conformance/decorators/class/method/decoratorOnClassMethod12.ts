@@ -1,6 +1,6 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @experimentaldecorators: true
-module M {
+namespace M {
     class S {
         decorator(target: Object, key: string): void { }
     }

@@ -4,6 +4,7 @@
 //// {
 ////   "compilerOptions": {
 ////     "module": "commonjs",
+////     "lib": ["es5"],
 ////     "paths": {
 ////       "pkg-1/*": ["./packages/pkg-1/src/*"],
 ////       "pkg-2/*": ["./packages/pkg-2/src/*"]
@@ -31,7 +32,7 @@
 // @Filename: /home/src/workspaces/project/packages/pkg-2/tsconfig.json
 //// {
 ////   "extends": "../../tsconfig.base.json",
-////   "compilerOptions": { "outDir": "dist", "rootDir": "src", "composite": true }
+////   "compilerOptions": { "outDir": "dist", "rootDir": "src", "composite": true, "lib": ["es5"] }
 //// }
 
 // @Filename: /home/src/workspaces/project/packages/pkg-2/src/index.ts

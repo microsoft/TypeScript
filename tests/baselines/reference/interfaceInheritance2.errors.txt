@@ -1,0 +1,15 @@
+interfaceInheritance2.ts(8,1): error TS2454: Variable 'v1' is used before being assigned.
+
+
+==== interfaceInheritance2.ts (1 errors) ====
+    interface I6 {
+     ():void;
+    }
+    
+    interface I7 extends I6 { }
+    
+    var v1:I7;
+    v1();
+    ~~
+!!! error TS2454: Variable 'v1' is used before being assigned.
+    

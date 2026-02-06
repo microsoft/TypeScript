@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/outFileIsDeprecated.ts] ////
+
+=== /foo/a.ts ===
+const a = 1;
+>a : 1
+>  : ^
+>1 : 1
+>  : ^
+
+=== /foo/b.ts ===
+const b = 1;
+>b : 1
+>  : ^
+>1 : 1
+>  : ^
+

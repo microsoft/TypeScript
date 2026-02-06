@@ -236,7 +236,7 @@ describe("unittests:: tscWatch:: resolutionCache:: tsc-watch module resolution c
     verifyTscWatch({
         scenario,
         subScenario: "works when module resolution changes to ambient module",
-        commandLineArgs: ["-w", "/users/username/projects/project/foo.ts"],
+        commandLineArgs: ["-w", "/users/username/projects/project/foo.ts", "-types", "node"],
         sys: () =>
             TestServerHost.createWatchedSystem([{
                 path: "/users/username/projects/project/foo.ts",
@@ -263,6 +263,7 @@ declare module "fs" {
     }
 }`,
                     });
+                    sys.runQueuedTimeoutCallbacks();
                 },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
@@ -381,7 +382,10 @@ declare module "fs" {
         edits: [
             {
                 caption: "npm install",
-                edit: sys => sys.renameFolder(`/user/username/projects/myproject/node_modules2`, `/user/username/projects/myproject/node_modules`),
+                edit: sys => {
+                    sys.renameFolder(`/user/username/projects/myproject/node_modules2`, `/user/username/projects/myproject/node_modules`);
+                    sys.runQueuedTimeoutCallbacks();
+                },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -424,7 +428,7 @@ declare module "fs" {
                 ],
             });
         }
-        verifyIgnore("watch without configFile", ["--w", `/user/username/projects/myproject/test.ts`]);
+        verifyIgnore("watch without configFile", ["--w", "--ignoreConfig", `/user/username/projects/myproject/test.ts`]);
         verifyIgnore("watch with configFile", ["--w", "-p", `/user/username/projects/myproject/tsconfig.json`]);
     });
 
@@ -565,7 +569,7 @@ declare namespace NodeJS {
                 };
                 const tsconfig: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: "{}",
+                    content: '{ "compilerOptions": { "types": ["*"] } }',
                 };
                 const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
                 return TestServerHost.createWatchedSystem(

@@ -1,9 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // Test that the completion is for the shortest path, even if that's a re-export.
-// Note that `source` in completionEntries will still be the original exporting path, but we use the re-export in completionDetails.
 
-// @moduleResolution: node
 // @module: commonJs
 // @noLib: true
 
@@ -21,10 +19,10 @@ verify.completions({
     exact: completion.globalsPlus([
         {
             name: "foo",
-            source: "/foo/lib/foo",
+            source: "./foo",
             sourceDisplay: "./foo",
-            text: "const foo: 0",
-            kind: "const",
+            text: "(alias) const foo: 0\nexport foo",
+            kind: "alias",
             kindModifiers: "export",
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
@@ -34,7 +32,7 @@ verify.completions({
 });
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
-    source: "/foo/lib/foo",
+    source: "./foo",
     description: `Add import from "./foo"`,
     newFileContent: `import { foo } from "./foo";
 

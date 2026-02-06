@@ -4,4 +4,5 @@
 var a = /
 
 //// [unterminatedRegexAtEndOfSource1.js]
+"use strict";
 var a = /;

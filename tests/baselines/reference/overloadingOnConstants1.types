@@ -57,7 +57,7 @@ interface Document2 {
 >        : ^^^^^^
 }
 
-var d2: Document2;
+declare var d2: Document2;
 >d2 : Document2
 >   : ^^^^^^^^^
 

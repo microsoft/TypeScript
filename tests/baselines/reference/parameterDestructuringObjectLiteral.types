@@ -10,8 +10,8 @@ const fn1 = (options: { headers?: {} }) => { };
 >                                   : ^       ^^                 ^^^^^^^^^
 >options : { headers?: {}; }
 >        : ^^^^^^^^^^^^  ^^^
->headers : {}
->        : ^^
+>headers : {} | undefined
+>        : ^^^^^^^^^^^^^^
 
 fn1({ headers: { foo: 1 } });
 >fn1({ headers: { foo: 1 } }) : void
@@ -30,10 +30,10 @@ fn1({ headers: { foo: 1 } });
 >  : ^
 
 const fn2 = ({ headers = {} }) => { };
->fn2 : ({ headers }: { headers?: {}; }) => void
->    : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->({ headers = {} }) => { } : ({ headers }: { headers?: {}; }) => void
->                          : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn2 : ({ headers }: { headers?: {} | undefined; }) => void
+>    : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({ headers = {} }) => { } : ({ headers }: { headers?: {} | undefined; }) => void
+>                          : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >headers : {}
 >        : ^^
 >{} : {}
@@ -42,8 +42,8 @@ const fn2 = ({ headers = {} }) => { };
 fn2({ headers: { foo: 1 } });
 >fn2({ headers: { foo: 1 } }) : void
 >                             : ^^^^
->fn2 : ({ headers }: { headers?: {}; }) => void
->    : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn2 : ({ headers }: { headers?: {} | undefined; }) => void
+>    : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ headers: { foo: 1 } } : { headers: { foo: number; }; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >headers : { foo: number; }

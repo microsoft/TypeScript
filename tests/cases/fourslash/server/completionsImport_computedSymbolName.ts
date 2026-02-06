@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "compilerOptions": { "module": "commonjs" } }
+//// { "compilerOptions": { "module": "commonjs", "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/node_modules/@types/ts-node/index.d.ts
 //// export {};

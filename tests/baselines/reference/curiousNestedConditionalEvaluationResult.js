@@ -7,3 +7,4 @@ type Hmm = [0] extends [infer T, any?] ?
     : never
 
 //// [curiousNestedConditionalEvaluationResult.js]
+"use strict";

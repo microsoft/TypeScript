@@ -2,8 +2,8 @@
 
 === typeofOperatorWithStringType.ts ===
 // typeof  operator on string type
-var STRING: string;
->STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 3))
+declare var STRING: string;
+>STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 11))
 
 var STRING1: string[] = ["", "abc"];
 >STRING1 : Symbol(STRING1, Decl(typeofOperatorWithStringType.ts, 2, 3))
@@ -20,10 +20,10 @@ class A {
     static foo() { return ""; }
 >foo : Symbol(A.foo, Decl(typeofOperatorWithStringType.ts, 7, 21))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(typeofOperatorWithStringType.ts, 9, 1))
 
-    export var n: string;
+    export var n!: string;
 >n : Symbol(n, Decl(typeofOperatorWithStringType.ts, 11, 14))
 }
 
@@ -34,7 +34,7 @@ var objA = new A();
 // string type var
 var ResultIsString1 = typeof STRING;
 >ResultIsString1 : Symbol(ResultIsString1, Decl(typeofOperatorWithStringType.ts, 17, 3))
->STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 11))
 
 var ResultIsString2 = typeof STRING1;
 >ResultIsString2 : Symbol(ResultIsString2, Decl(typeofOperatorWithStringType.ts, 18, 3))
@@ -85,29 +85,29 @@ var ResultIsString10 = typeof A.foo();
 
 var ResultIsString11 = typeof (STRING + STRING);
 >ResultIsString11 : Symbol(ResultIsString11, Decl(typeofOperatorWithStringType.ts, 31, 3))
->STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 3))
->STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 11))
+>STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 11))
 
 var ResultIsString12 = typeof STRING.charAt(0);
 >ResultIsString12 : Symbol(ResultIsString12, Decl(typeofOperatorWithStringType.ts, 32, 3))
 >STRING.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
->STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 11))
 >charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 
 // multiple typeof  operators
 var ResultIsString13 = typeof typeof STRING;
 >ResultIsString13 : Symbol(ResultIsString13, Decl(typeofOperatorWithStringType.ts, 35, 3))
->STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 11))
 
 var ResultIsString14 = typeof typeof typeof (STRING + STRING);
 >ResultIsString14 : Symbol(ResultIsString14, Decl(typeofOperatorWithStringType.ts, 36, 3))
->STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 3))
->STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 11))
+>STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 11))
 
 // miss assignment operators
 typeof "";
 typeof STRING;
->STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 11))
 
 typeof STRING1;
 >STRING1 : Symbol(STRING1, Decl(typeofOperatorWithStringType.ts, 2, 3))
@@ -124,17 +124,17 @@ typeof objA.a, M.n;
 >n : Symbol(M.n, Decl(typeofOperatorWithStringType.ts, 11, 14))
 
 // use typeof in type query
-var z: string;
->z : Symbol(z, Decl(typeofOperatorWithStringType.ts, 46, 3))
+declare var z: string;
+>z : Symbol(z, Decl(typeofOperatorWithStringType.ts, 46, 11))
 
-var x: string[];
->x : Symbol(x, Decl(typeofOperatorWithStringType.ts, 47, 3))
+declare var x: string[];
+>x : Symbol(x, Decl(typeofOperatorWithStringType.ts, 47, 11))
 
-var r: () => string;
->r : Symbol(r, Decl(typeofOperatorWithStringType.ts, 48, 3))
+declare var r: () => string;
+>r : Symbol(r, Decl(typeofOperatorWithStringType.ts, 48, 11))
 
 z: typeof STRING;
->STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 3))
+>STRING : Symbol(STRING, Decl(typeofOperatorWithStringType.ts, 1, 11))
 
 x: typeof STRING1;
 >STRING1 : Symbol(STRING1, Decl(typeofOperatorWithStringType.ts, 2, 3))

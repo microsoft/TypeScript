@@ -1,3 +1,4 @@
+// @target: es2015
 // overloading on arity not allowed
 interface C {
    f<T>(): string;

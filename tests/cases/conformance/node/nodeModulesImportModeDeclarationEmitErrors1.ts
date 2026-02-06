@@ -1,5 +1,6 @@
+// @target: es2022
 // @noImplicitReferences: true
-// @module: node16,nodenext
+// @module: node16,node18,node20,nodenext
 // @declaration: true
 // @outDir: out
 // @filename: /node_modules/pkg/package.json
@@ -17,11 +18,11 @@ export interface ImportInterface {}
 export interface RequireInterface {}
 // @filename: /index.ts
 // incorrect mode
-import type { RequireInterface } from "pkg" assert { "resolution-mode": "foobar" };
+import type { RequireInterface } from "pkg" with { "resolution-mode": "foobar" };
 // not type-only
-import { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+import { ImportInterface } from "pkg" with { "resolution-mode": "import" };
 // not exclusively type-only
-import {type RequireInterface as Req, RequireInterface as Req2} from "pkg" assert { "resolution-mode": "require" };
+import {type RequireInterface as Req, RequireInterface as Req2} from "pkg" with { "resolution-mode": "require" };
 
 export interface LocalInterface extends RequireInterface, ImportInterface {}
 

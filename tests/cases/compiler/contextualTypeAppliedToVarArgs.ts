@@ -1,3 +1,4 @@
+// @target: es2015
 function delegate(instance: any, method: (...args: any[]) => any, data?: any): (...args: any[]) => any {
     return function () { };
 }

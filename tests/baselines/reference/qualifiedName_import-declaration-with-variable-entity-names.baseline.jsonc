@@ -1,10 +1,10 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/qualifiedName_import-declaration-with-variable-entity-names.ts ===
-// module Alpha {
+// namespace Alpha {
 //     <|export var [|{| kind: "writtenReference" |}x|] = 100;|>
 // }
 // 
-// module Beta {
+// namespace Beta {
 //     import p = Alpha./*HIGHLIGHTS*/[|{| kind: "reference" |}x|];
 // }
 // 
@@ -14,11 +14,11 @@
 
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/qualifiedName_import-declaration-with-variable-entity-names.ts ===
-// module Alpha {
+// namespace Alpha {
 //     <|export var [|x|] = 100;|>
 // }
 // 
-// module Beta {
+// namespace Beta {
 //     import p = Alpha./*GOTO DEF POS*/x;
 // }
 // 

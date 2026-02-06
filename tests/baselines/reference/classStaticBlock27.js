@@ -20,23 +20,21 @@ void class Foo {
 }
 
 //// [classStaticBlock27.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/44872
 var _a;
-void (_a = /** @class */ (function () {
-        function Foo() {
-        }
-        return Foo;
-    }()),
+void (_a = class Foo {
+    },
     _a.prop = 1,
-    (function () {
+    (() => {
         console.log(_a.prop);
         _a.prop++;
     })(),
-    (function () {
+    (() => {
         console.log(_a.prop);
         _a.prop++;
     })(),
-    (function () {
+    (() => {
         console.log(_a.prop);
         _a.prop++;
     })(),

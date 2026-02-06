@@ -82,11 +82,11 @@ class SubE3 extends Base3 {
 }
 
 // Case 4
-module Base4 {
+namespace Base4 {
 >Base4 : Symbol(Base4, Decl(super1.ts, 43, 1))
 
     class Sub4 {
->Sub4 : Symbol(Sub4, Decl(super1.ts, 46, 14))
+>Sub4 : Symbol(Sub4, Decl(super1.ts, 46, 17))
 
         public x(){
 >x : Symbol(Sub4.x, Decl(super1.ts, 47, 16))
@@ -97,14 +97,14 @@ module Base4 {
     
     export class SubSub4 extends Sub4{
 >SubSub4 : Symbol(SubSub4, Decl(super1.ts, 51, 5))
->Sub4 : Symbol(Sub4, Decl(super1.ts, 46, 14))
+>Sub4 : Symbol(Sub4, Decl(super1.ts, 46, 17))
 
         public x(){
 >x : Symbol(SubSub4.x, Decl(super1.ts, 53, 38))
 
             return super.x();
 >super.x : Symbol(Sub4.x, Decl(super1.ts, 47, 16))
->super : Symbol(Sub4, Decl(super1.ts, 46, 14))
+>super : Symbol(Sub4, Decl(super1.ts, 46, 17))
 >x : Symbol(Sub4.x, Decl(super1.ts, 47, 16))
         }
     }

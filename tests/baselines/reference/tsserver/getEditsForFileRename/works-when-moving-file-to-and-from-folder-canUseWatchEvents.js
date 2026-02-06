@@ -35,7 +35,6 @@ export function alert(message: string) {
 
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -145,40 +144,10 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Custom watchFile:: Added:: {"id":4,"path":"/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts"}
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createDirectoryWatcher",
-      "body": {
-        "id": 5,
-        "path": "/home/src/myprojects/project/node_modules/@types",
-        "recursive": true,
-        "ignoreUpdate": true
-      }
-    }
-Custom watchDirectory:: Added:: {"id":5,"path":"/home/src/myprojects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "createDirectoryWatcher",
-      "body": {
-        "id": 6,
-        "path": "/home/src/myprojects/node_modules/@types",
-        "recursive": true,
-        "ignoreUpdate": true
-      }
-    }
-Custom watchDirectory:: Added:: {"id":6,"path":"/home/src/myprojects/node_modules/@types","recursive":true,"ignoreUpdate":true}
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/components/whatever/alert.ts Text-1 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 	/home/src/myprojects/project/index.ts SVC-1-0 "import { alert } from '@app/components/whatever/alert';\nalert('Hello, world!');\n"
 
@@ -220,7 +189,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 413,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -292,12 +261,8 @@ PolledWatches::
   {"event":{"id":4,"path":"/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts"}}
 
 FsWatchesRecursive::
-/home/src/myprojects/node_modules/@types: *new*
-  {"event":{"id":6,"path":"/home/src/myprojects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/myprojects/project: *new*
   {"event":{"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}}
-/home/src/myprojects/project/node_modules/@types: *new*
-  {"event":{"id":5,"path":"/home/src/myprojects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 Projects::
 /home/src/myprojects/project/tsconfig.json (Configured) *new*
@@ -412,14 +377,29 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 7,
+        "id": 5,
         "path": "/home/src/myprojects/project/components",
         "recursive": true,
         "ignoreUpdate": true
       }
     }
-Custom watchDirectory:: Added:: {"id":7,"path":"/home/src/myprojects/project/components","recursive":true,"ignoreUpdate":true}
+Custom watchDirectory:: Added:: {"id":5,"path":"/home/src/myprojects/project/components","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createDirectoryWatcher",
+      "body": {
+        "id": 6,
+        "path": "/home/src/myprojects",
+        "recursive": false,
+        "ignoreUpdate": true
+      }
+    }
+Custom watchDirectory:: Added:: {"id":6,"path":"/home/src/myprojects","recursive":false,"ignoreUpdate":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -427,12 +407,12 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 8,
+        "id": 7,
         "path": "/home/src/myprojects/project/node_modules",
         "recursive": true
       }
     }
-Custom watchDirectory:: Added:: {"id":8,"path":"/home/src/myprojects/project/node_modules","recursive":true}
+Custom watchDirectory:: Added:: {"id":7,"path":"/home/src/myprojects/project/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
@@ -441,17 +421,32 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 9,
+        "id": 8,
         "path": "/home/src/myprojects/node_modules",
         "recursive": true
       }
     }
-Custom watchDirectory:: Added:: {"id":9,"path":"/home/src/myprojects/node_modules","recursive":true}
+Custom watchDirectory:: Added:: {"id":8,"path":"/home/src/myprojects/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createDirectoryWatcher",
+      "body": {
+        "id": 9,
+        "path": "/home/src/myprojects/project",
+        "recursive": false,
+        "ignoreUpdate": true
+      }
+    }
+Custom watchDirectory:: Added:: {"id":9,"path":"/home/src/myprojects/project","recursive":false,"ignoreUpdate":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/index.ts SVC-1-0 "import { alert } from '@app/components/whatever/alert';\nalert('Hello, world!');\n"
 	/home/src/myprojects/project/functions/whatever/alert.ts SVC-1-0 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 
@@ -507,19 +502,21 @@ PolledWatches *deleted*::
 /home/src/myprojects/project/components/whatever/alert.ts:
   {"event":{"id":3,"path":"/home/src/myprojects/project/components/whatever/alert.ts"}}
 
+FsWatches::
+/home/src/myprojects: *new*
+  {"event":{"id":6,"path":"/home/src/myprojects","recursive":false,"ignoreUpdate":true}}
+/home/src/myprojects/project: *new*
+  {"event":{"id":9,"path":"/home/src/myprojects/project","recursive":false,"ignoreUpdate":true}}
+
 FsWatchesRecursive::
 /home/src/myprojects/node_modules: *new*
-  {"event":{"id":9,"path":"/home/src/myprojects/node_modules","recursive":true}}
-/home/src/myprojects/node_modules/@types:
-  {"event":{"id":6,"path":"/home/src/myprojects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":8,"path":"/home/src/myprojects/node_modules","recursive":true}}
 /home/src/myprojects/project:
   {"event":{"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}}
 /home/src/myprojects/project/components: *new*
-  {"event":{"id":7,"path":"/home/src/myprojects/project/components","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":5,"path":"/home/src/myprojects/project/components","recursive":true,"ignoreUpdate":true}}
 /home/src/myprojects/project/node_modules: *new*
-  {"event":{"id":8,"path":"/home/src/myprojects/project/node_modules","recursive":true}}
-/home/src/myprojects/project/node_modules/@types:
-  {"event":{"id":5,"path":"/home/src/myprojects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":7,"path":"/home/src/myprojects/project/node_modules","recursive":true}}
 
 Timeout callback:: count: 2
 5: /home/src/myprojects/project/tsconfig.json *deleted*
@@ -680,12 +677,36 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "closeFileWatcher",
       "body": {
+        "id": 5
+      }
+    }
+Custom watchDirectory:: Close:: {"id":5,"path":"/home/src/myprojects/project/components","recursive":true,"ignoreUpdate":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "closeFileWatcher",
+      "body": {
+        "id": 6
+      }
+    }
+Custom watchDirectory:: Close:: {"id":6,"path":"/home/src/myprojects","recursive":false,"ignoreUpdate":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "closeFileWatcher",
+      "body": {
         "id": 7
       }
     }
-Custom watchDirectory:: Close:: {"id":7,"path":"/home/src/myprojects/project/components","recursive":true,"ignoreUpdate":true}
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/components 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Custom watchDirectory:: Close:: {"id":7,"path":"/home/src/myprojects/project/node_modules","recursive":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -695,9 +716,9 @@ Info seq  [hh:mm:ss:mss] event:
         "id": 8
       }
     }
-Custom watchDirectory:: Close:: {"id":8,"path":"/home/src/myprojects/project/node_modules","recursive":true}
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Custom watchDirectory:: Close:: {"id":8,"path":"/home/src/myprojects/node_modules","recursive":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -707,12 +728,12 @@ Info seq  [hh:mm:ss:mss] event:
         "id": 9
       }
     }
-Custom watchDirectory:: Close:: {"id":9,"path":"/home/src/myprojects/node_modules","recursive":true}
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Custom watchDirectory:: Close:: {"id":9,"path":"/home/src/myprojects/project","recursive":false,"ignoreUpdate":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/functions/whatever/alert.ts SVC-1-0 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 	/home/src/myprojects/project/index.ts SVC-1-1 "import { alert } from '@app/functions/whatever/alert';\nalert('Hello, world!');\n"
 
@@ -759,21 +780,23 @@ PolledWatches::
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {"event":{"id":4,"path":"/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts"}}
 
+FsWatches *deleted*::
+/home/src/myprojects:
+  {"event":{"id":6,"path":"/home/src/myprojects","recursive":false,"ignoreUpdate":true}}
+/home/src/myprojects/project:
+  {"event":{"id":9,"path":"/home/src/myprojects/project","recursive":false,"ignoreUpdate":true}}
+
 FsWatchesRecursive::
-/home/src/myprojects/node_modules/@types:
-  {"event":{"id":6,"path":"/home/src/myprojects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 /home/src/myprojects/project:
   {"event":{"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}}
-/home/src/myprojects/project/node_modules/@types:
-  {"event":{"id":5,"path":"/home/src/myprojects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
 
 FsWatchesRecursive *deleted*::
 /home/src/myprojects/node_modules:
-  {"event":{"id":9,"path":"/home/src/myprojects/node_modules","recursive":true}}
+  {"event":{"id":8,"path":"/home/src/myprojects/node_modules","recursive":true}}
 /home/src/myprojects/project/components:
-  {"event":{"id":7,"path":"/home/src/myprojects/project/components","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":5,"path":"/home/src/myprojects/project/components","recursive":true,"ignoreUpdate":true}}
 /home/src/myprojects/project/node_modules:
-  {"event":{"id":8,"path":"/home/src/myprojects/project/node_modules","recursive":true}}
+  {"event":{"id":7,"path":"/home/src/myprojects/project/node_modules","recursive":true}}
 
 Projects::
 /home/src/myprojects/project/tsconfig.json (Configured) *changed*
@@ -836,7 +859,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Custom watchDirectory:: Added:: {"id":10,"path":"/home/src/myprojects/project/functions","recursive":true,"ignoreUpdate":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/functions 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -844,11 +867,26 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "createDirectoryWatcher",
       "body": {
         "id": 11,
+        "path": "/home/src/myprojects",
+        "recursive": false,
+        "ignoreUpdate": true
+      }
+    }
+Custom watchDirectory:: Added:: {"id":11,"path":"/home/src/myprojects","recursive":false,"ignoreUpdate":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createDirectoryWatcher",
+      "body": {
+        "id": 12,
         "path": "/home/src/myprojects/project/node_modules",
         "recursive": true
       }
     }
-Custom watchDirectory:: Added:: {"id":11,"path":"/home/src/myprojects/project/node_modules","recursive":true}
+Custom watchDirectory:: Added:: {"id":12,"path":"/home/src/myprojects/project/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
@@ -857,17 +895,32 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "createDirectoryWatcher",
       "body": {
-        "id": 12,
+        "id": 13,
         "path": "/home/src/myprojects/node_modules",
         "recursive": true
       }
     }
-Custom watchDirectory:: Added:: {"id":12,"path":"/home/src/myprojects/node_modules","recursive":true}
+Custom watchDirectory:: Added:: {"id":13,"path":"/home/src/myprojects/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/node_modules 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "createDirectoryWatcher",
+      "body": {
+        "id": 14,
+        "path": "/home/src/myprojects/project",
+        "recursive": false,
+        "ignoreUpdate": true
+      }
+    }
+Custom watchDirectory:: Added:: {"id":14,"path":"/home/src/myprojects/project","recursive":false,"ignoreUpdate":true}
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project 0 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/index.ts SVC-1-1 "import { alert } from '@app/functions/whatever/alert';\nalert('Hello, world!');\n"
 	/home/src/myprojects/project/components/whatever/alert.ts SVC-2-0 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 
@@ -905,19 +958,21 @@ PolledWatches::
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {"event":{"id":4,"path":"/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts"}}
 
+FsWatches::
+/home/src/myprojects: *new*
+  {"event":{"id":11,"path":"/home/src/myprojects","recursive":false,"ignoreUpdate":true}}
+/home/src/myprojects/project: *new*
+  {"event":{"id":14,"path":"/home/src/myprojects/project","recursive":false,"ignoreUpdate":true}}
+
 FsWatchesRecursive::
 /home/src/myprojects/node_modules: *new*
-  {"event":{"id":12,"path":"/home/src/myprojects/node_modules","recursive":true}}
-/home/src/myprojects/node_modules/@types:
-  {"event":{"id":6,"path":"/home/src/myprojects/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":13,"path":"/home/src/myprojects/node_modules","recursive":true}}
 /home/src/myprojects/project:
   {"event":{"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}}
 /home/src/myprojects/project/functions: *new*
   {"event":{"id":10,"path":"/home/src/myprojects/project/functions","recursive":true,"ignoreUpdate":true}}
 /home/src/myprojects/project/node_modules: *new*
-  {"event":{"id":11,"path":"/home/src/myprojects/project/node_modules","recursive":true}}
-/home/src/myprojects/project/node_modules/@types:
-  {"event":{"id":5,"path":"/home/src/myprojects/project/node_modules/@types","recursive":true,"ignoreUpdate":true}}
+  {"event":{"id":12,"path":"/home/src/myprojects/project/node_modules","recursive":true}}
 
 Timeout callback:: count: 2
 11: /home/src/myprojects/project/tsconfig.json *new*

@@ -8,6 +8,7 @@ class A {
 
 
 //// [privateNameFieldInitializer.js]
+"use strict";
 var _A_field, _A_uninitialized;
 class A {
     constructor() {

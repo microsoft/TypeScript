@@ -1,6 +1,6 @@
 // @target: ES6
 
-module m {
+namespace m {
     export interface foo {
     }
 }

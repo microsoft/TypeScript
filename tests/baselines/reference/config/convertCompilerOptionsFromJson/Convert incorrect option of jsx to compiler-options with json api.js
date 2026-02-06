@@ -27,5 +27,5 @@ CompilerOptions::
   "configFilePath": "/apath/tsconfig.json"
 }
 Errors::
-[91merror[0m[90m TS6046: [0mArgument for '--jsx' option must be: 'preserve', 'react-native', 'react', 'react-jsx', 'react-jsxdev'.
+[91merror[0m[90m TS6046: [0mArgument for '--jsx' option must be: 'preserve', 'react-native', 'react-jsx', 'react-jsxdev', 'react'.
 

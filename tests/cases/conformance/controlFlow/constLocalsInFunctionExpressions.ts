@@ -1,3 +1,4 @@
+// @target: es2015
 declare function getStringOrNumber(): string | number;
 
 function f1() {

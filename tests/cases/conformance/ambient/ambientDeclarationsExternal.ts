@@ -1,3 +1,6 @@
+// @target: es2015
+// @module: commonjs
+// @strict: false
 
 //@Filename: decls.ts
 // Ambient external module with export assignment

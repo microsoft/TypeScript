@@ -10,7 +10,7 @@ parserRealSource4.ts(195,38): error TS1011: An element access expression should 
                         ~~~~~~~~~~~~~
 !!! error TS6053: File 'typescript.ts' not found.
     
-    module TypeScript {
+    namespace TypeScript {
     
         export class BlockIntrinsics {
             public prototype = undefined;

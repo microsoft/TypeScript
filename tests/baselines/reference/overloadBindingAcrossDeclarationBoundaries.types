@@ -4,18 +4,22 @@
 interface Opt1 {
     p?: any;
 >p : any
+>  : ^^^
 }
 interface Opt2 {
     q?: any;
 >q : any
+>  : ^^^
 }
 interface Opt3 {
     r?: any;
 >r : any
+>  : ^^^
 }
 interface Opt4 {
     s?: any;
 >s : any
+>  : ^^^
 }
 interface A {
     a(o: Opt1): Opt1;

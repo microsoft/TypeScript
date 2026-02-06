@@ -1,15 +1,17 @@
-//@module: amd
-export module a {
-    export module b {
+// @target: es2015
+// @strict: false
+//@module: commonjs
+export namespace a {
+    export namespace b {
         export interface I {
             foo();
         }
     }
 }
 
-export module c {
+export namespace c {
     import b = a.b;
-    export var x: b.I;
+    export declare var x: b.I;
     x.foo();
 }
 

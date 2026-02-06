@@ -1,5 +1,6 @@
+// @target: es2015
 declare var x: any;
-module myMod {
+namespace myMod {
     var myFn;
     function myFn() {  }
 }

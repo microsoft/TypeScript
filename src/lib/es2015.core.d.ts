@@ -173,7 +173,7 @@ interface Math {
     hypot(...values: number[]): number;
 
     /**
-     * Returns the integral part of the a numeric expression, x, removing any fractional digits.
+     * Returns the integral part of the numeric expression x, removing any fractional digits.
      * If x is already an integer, the result is x.
      * @param x A numeric expression.
      */

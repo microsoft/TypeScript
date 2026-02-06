@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 // @filename: /p1/node_modules/csv-parse/lib/index.d.ts
 export function bar(): number;

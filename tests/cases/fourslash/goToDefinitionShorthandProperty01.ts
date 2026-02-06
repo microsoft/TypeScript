@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 //// var /*valueDeclaration1*/name = "hello";
 //// var /*valueDeclaration2*/id = 100000;
 //// declare var /*valueDeclaration3*/id;

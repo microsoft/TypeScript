@@ -1,3 +1,4 @@
+// @target: es2015
 class Base { foo() { } }
 class Derived1 extends Base { bar() { } }
 class Derived2 extends Base { baz() { } }
@@ -10,7 +11,7 @@ interface Document2 {
     createElement(tagName: string): Base;
 }
 
-var d2: Document2;
+declare var d2: Document2;
 
 // these are ok
 var htmlElement: Base = d2.createElement("yo")

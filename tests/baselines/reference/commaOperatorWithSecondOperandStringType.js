@@ -40,6 +40,7 @@ var resultIsString11 = (new Object, STRING + "string");
 
 
 //// [commaOperatorWithSecondOperandStringType.js]
+"use strict";
 var ANY;
 var BOOLEAN;
 var NUMBER;

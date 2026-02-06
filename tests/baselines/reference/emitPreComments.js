@@ -32,6 +32,7 @@ var y = 10;
 
 
 //// [emitPreComments.js]
+"use strict";
 // This is pre comment
 var y = 10;
 /**

@@ -2,22 +2,20 @@
 
 === initializedDestructuringAssignmentTypes.ts ===
 const [, a = ''] = ''.match('') || [];
-> : undefined
-> : ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >'' : ""
 >   : ^^
 >''.match('') || [] : RegExpMatchArray | []
 >                   : ^^^^^^^^^^^^^^^^^^^^^
->''.match('') : RegExpMatchArray
->             : ^^^^^^^^^^^^^^^^
->''.match : (regexp: string | RegExp) => RegExpMatchArray | null
->         : ^      ^^               ^^^^^                       
+>''.match('') : RegExpMatchArray | null
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+>''.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>         : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >'' : ""
 >   : ^^
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^                       
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>      : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >'' : ""
 >   : ^^
 >[] : []

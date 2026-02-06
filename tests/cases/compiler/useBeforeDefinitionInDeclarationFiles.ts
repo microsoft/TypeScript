@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: declaration.d.ts
 
 export declare class ClassWithSymbols {

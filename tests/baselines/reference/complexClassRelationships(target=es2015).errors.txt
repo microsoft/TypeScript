@@ -1,0 +1,60 @@
+complexClassRelationships.ts(2,23): error TS2449: Class 'Base' used before its declaration.
+complexClassRelationships.ts(14,5): error TS2564: Property 'ownerCollection' has no initializer and is not definitely assigned in the constructor.
+complexClassRelationships.ts(18,57): error TS2322: Type 'null' is not assignable to type 'ComponentCollection<any>'.
+
+
+==== complexClassRelationships.ts (3 errors) ====
+    // There should be no errors in this file
+    class Derived extends Base {
+                          ~~~~
+!!! error TS2449: Class 'Base' used before its declaration.
+!!! related TS2728 complexClassRelationships.ts:13:7: 'Base' is declared here.
+        public static createEmpty(): Derived {
+            var item = new Derived();
+            return item;
+        }
+    }
+    class BaseCollection<T extends Base> {
+        constructor(f: () => T) {
+            (item: Thing) => { return [item.Components]; };
+        }
+    }
+    class Base {
+        ownerCollection: BaseCollection<Base>;
+        ~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'ownerCollection' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class Thing {
+        public get Components(): ComponentCollection<any> { return null }
+                                                            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'ComponentCollection<any>'.
+    }
+    
+    class ComponentCollection<T> {
+        private static sortComponents(p: Foo) {
+            return p.prop1;
+        }
+    }
+    
+    class Foo {
+        public get prop1() {
+            return new GenericType<string>(this);
+        }
+        public populate() {
+            this.prop2;
+        }
+        public get prop2(): BaseCollection<Derived> {
+            return new BaseCollection<Derived>(Derived.createEmpty);
+        }
+    }
+    
+    class GenericType<T> {
+        constructor(parent: FooBase) { }
+    }
+    
+    class FooBase {
+        public populate() {
+    
+        }
+    }

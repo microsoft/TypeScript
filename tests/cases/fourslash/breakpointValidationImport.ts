@@ -2,7 +2,7 @@
 
 // @BaselineFile: bpSpan_import.baseline
 // @Filename: bpSpan_import.ts
-////module m {
+////namespace m {
 ////    class c {
 ////    }
 ////}

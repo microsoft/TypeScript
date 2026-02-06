@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 // Test cases for parameter variances affected by conditional types.

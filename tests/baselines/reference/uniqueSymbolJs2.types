@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/uniqueSymbolJs2.ts] ////
+
+=== /index.js ===
+/** @type {unique symbol} */
+const x = Symbol()
+>x : unique symbol
+>  : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+/** @type {unique symbol} */
+const y = Symbol()
+>y : unique symbol
+>  : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+/** @type {typeof x} */
+let z = x
+>z : unique symbol
+>  : ^^^^^^^^^^^^^
+>x : unique symbol
+>  : ^^^^^^^^^^^^^
+
+z == y // error
+>z == y : boolean
+>       : ^^^^^^^
+>z : unique symbol
+>  : ^^^^^^^^^^^^^
+>y : unique symbol
+>  : ^^^^^^^^^^^^^
+

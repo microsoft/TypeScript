@@ -5,7 +5,7 @@
 
 
 // @Filename: a.ts
-////export module Module {
+////export namespace Module {
 ////}
 ////export class /*classDefinition*/Class {
 ////    private f;

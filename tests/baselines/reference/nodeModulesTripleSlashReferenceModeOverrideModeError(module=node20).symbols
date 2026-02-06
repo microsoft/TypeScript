@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeOverrideModeError.ts] ////
+
+=== /index.ts ===
+/// <reference types="pkg" resolution-mode="esm"/>
+foo; // bad resolution mode, which resolves is arbitrary
+bar;
+>bar : Symbol(bar, Decl(require.d.ts, 2, 7))
+
+export {};
+=== /node_modules/pkg/require.d.ts ===
+export {};
+declare global {
+>global : Symbol(global, Decl(require.d.ts, 0, 10))
+
+    var bar: number;
+>bar : Symbol(bar, Decl(require.d.ts, 2, 7))
+}

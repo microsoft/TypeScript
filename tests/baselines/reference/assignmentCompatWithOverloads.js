@@ -33,6 +33,7 @@ var d: new(x: number) => void;
 d = C; // Error
 
 //// [assignmentCompatWithOverloads.js]
+"use strict";
 function f1(x) { return null; }
 function f2(x) { return null; }
 function f3(x) { return null; }
@@ -42,10 +43,8 @@ g = f1; // OK
 g = f2; // Error
 g = f3; // Error
 g = f4; // Error
-var C = /** @class */ (function () {
-    function C(x) {
-    }
-    return C;
-}());
+class C {
+    constructor(x) { }
+}
 var d;
 d = C; // Error

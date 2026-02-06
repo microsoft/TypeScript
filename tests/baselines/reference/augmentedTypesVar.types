@@ -80,7 +80,7 @@ var x6 = 1;
 >1 : 1
 >  : ^
 
-module x6 { } // ok since non-instantiated
+namespace x6 { } // ok since non-instantiated
 
 var x6a = 1; // error
 >x6a : number
@@ -88,7 +88,7 @@ var x6a = 1; // error
 >1 : 1
 >  : ^
 
-module x6a { var y = 2; } // error since instantiated
+namespace x6a { var y = 2; } // error since instantiated
 >x6a : typeof x6a
 >    : ^^^^^^^^^^
 >y : number
@@ -102,7 +102,7 @@ var x6b = 1; // error
 >1 : 1
 >  : ^
 
-module x6b { export var y = 2; } // error
+namespace x6b { export var y = 2; } // error
 >x6b : typeof x6b
 >    : ^^^^^^^^^^
 >y : number

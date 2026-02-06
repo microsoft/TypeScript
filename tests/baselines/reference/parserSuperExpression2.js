@@ -8,11 +8,9 @@ class C {
 }
 
 //// [parserSuperExpression2.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    M() {
+        super(0);
     }
-    C.prototype.M = function () {
-        _this = _super.call(this, 0) || this;
-    };
-    return C;
-}());
+}

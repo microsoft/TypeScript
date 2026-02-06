@@ -35,6 +35,7 @@ const O = {
 
 
 //// [newTarget.es6.js]
+"use strict";
 class A {
     constructor() {
         this.d = function () { return new.target; };

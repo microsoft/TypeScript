@@ -1,3 +1,4 @@
+// @target: es2015
 function foo<T>(x: { bar: T; baz: T }) {
     return x;
 }

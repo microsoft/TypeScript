@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalImportInstantiatedModuleNotReferencingInstance.ts] ////
 
 === internalImportInstantiatedModuleNotReferencingInstance.ts ===
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -16,7 +16,7 @@ module A {
 >   : ^^
 }
 
-module B {
+namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 

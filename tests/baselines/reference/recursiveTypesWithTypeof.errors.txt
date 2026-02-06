@@ -4,10 +4,23 @@ recursiveTypesWithTypeof.ts(6,5): error TS2502: 'e' is referenced directly or in
 recursiveTypesWithTypeof.ts(10,5): error TS2502: 'f' is referenced directly or indirectly in its own type annotation.
 recursiveTypesWithTypeof.ts(12,5): error TS2502: 'f2' is referenced directly or indirectly in its own type annotation.
 recursiveTypesWithTypeof.ts(14,5): error TS2502: 'f3' is referenced directly or indirectly in its own type annotation.
+recursiveTypesWithTypeof.ts(22,9): error TS2454: Variable 'h' is used before being assigned.
+recursiveTypesWithTypeof.ts(24,9): error TS2454: Variable 'i' is used before being assigned.
+recursiveTypesWithTypeof.ts(24,11): error TS2454: Variable 'i' is used before being assigned.
+recursiveTypesWithTypeof.ts(26,9): error TS2454: Variable 'j' is used before being assigned.
+recursiveTypesWithTypeof.ts(26,11): error TS2454: Variable 'j' is used before being assigned.
+recursiveTypesWithTypeof.ts(30,14): error TS2454: Variable 'h2' is used before being assigned.
+recursiveTypesWithTypeof.ts(32,14): error TS2454: Variable 'i2' is used before being assigned.
+recursiveTypesWithTypeof.ts(32,17): error TS2454: Variable 'i2' is used before being assigned.
+recursiveTypesWithTypeof.ts(34,14): error TS2454: Variable 'j2' is used before being assigned.
+recursiveTypesWithTypeof.ts(34,17): error TS2454: Variable 'j2' is used before being assigned.
+recursiveTypesWithTypeof.ts(38,9): error TS2454: Variable 'k' is used before being assigned.
+recursiveTypesWithTypeof.ts(44,11): error TS2454: Variable 'hy1' is used before being assigned.
+recursiveTypesWithTypeof.ts(46,11): error TS2454: Variable 'hy2' is used before being assigned.
 recursiveTypesWithTypeof.ts(51,5): error TS2502: 'hy3' is referenced directly or indirectly in its own type annotation.
 
 
-==== recursiveTypesWithTypeof.ts (7 errors) ====
+==== recursiveTypesWithTypeof.ts (20 errors) ====
     // The following are errors because of circular references
     var c: typeof c;
         ~
@@ -42,30 +55,56 @@ recursiveTypesWithTypeof.ts(51,5): error TS2502: 'hy3' is referenced directly or
     var g: typeof g.x;
     var h: () => typeof h;
     var h = h();
+            ~
+!!! error TS2454: Variable 'h' is used before being assigned.
     var i: (x: typeof i) => typeof x;
     var i = i(i);
+            ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+              ~
+!!! error TS2454: Variable 'i' is used before being assigned.
     var j: <T extends typeof j>(x: T) => T;
     var j = j(j);
+            ~
+!!! error TS2454: Variable 'j' is used before being assigned.
+              ~
+!!! error TS2454: Variable 'j' is used before being assigned.
     
     // Same as h, i, j with construct signatures
     var h2: new () => typeof h2;
     var h2 = new h2();
+                 ~~
+!!! error TS2454: Variable 'h2' is used before being assigned.
     var i2: new (x: typeof i2) => typeof x;
     var i2 = new i2(i2);
+                 ~~
+!!! error TS2454: Variable 'i2' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'i2' is used before being assigned.
     var j2: new <T extends typeof j2>(x: T) => T;
     var j2 = new j2(j2);
+                 ~~
+!!! error TS2454: Variable 'j2' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'j2' is used before being assigned.
     
     // Indexers
     var k: { [n: number]: typeof k;[s: string]: typeof k };
     var k = k[0];
+            ~
+!!! error TS2454: Variable 'k' is used before being assigned.
     var k = k[''];
     
     // Hybrid - contains type literals as well as type arguments
     // These two are recursive
     var hy1: { x: typeof hy1 }[];
     var hy1 = hy1[0].x;
+              ~~~
+!!! error TS2454: Variable 'hy1' is used before being assigned.
     var hy2: { x: Array<typeof hy2> };
     var hy2 = hy2.x[0];
+              ~~~
+!!! error TS2454: Variable 'hy2' is used before being assigned.
     
     interface Foo2<T, U> { }
     

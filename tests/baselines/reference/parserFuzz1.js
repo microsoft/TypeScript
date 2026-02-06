@@ -5,6 +5,7 @@ cla <ss {
   _ static try
 
 //// [parserFuzz1.js]
+"use strict";
 cla < ss;
 {
     _;

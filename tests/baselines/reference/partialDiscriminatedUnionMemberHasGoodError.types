@@ -34,8 +34,8 @@ interface Wrapper {
 const foo: Wrapper[] = [];
 >foo : Wrapper[]
 >    : ^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 foo.push({
 >foo.push({    types: [{        type: "A"    }]}) : number

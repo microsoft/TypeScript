@@ -1,0 +1,34 @@
+typeGuardEnums.ts(6,12): error TS2454: Variable 'x' is used before being assigned.
+typeGuardEnums.ts(10,5): error TS2454: Variable 'x' is used before being assigned.
+typeGuardEnums.ts(13,12): error TS2454: Variable 'x' is used before being assigned.
+typeGuardEnums.ts(14,5): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== typeGuardEnums.ts (4 errors) ====
+    enum E {}
+    enum V {}
+    
+    let x: number|string|E|V;
+    
+    if (typeof x === "number") {
+               ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+        x; // number|E|V
+    }
+    else {
+        x; // string
+        ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    }
+    
+    if (typeof x !== "number") {
+               ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+        x; // string
+        ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    }
+    else {
+        x; // number|E|V
+    }
+    

@@ -7,8 +7,8 @@ stringLiteralsWithEqualityChecks01.ts(19,5): error TS2367: This comparison appea
 
 
 ==== stringLiteralsWithEqualityChecks01.ts (6 errors) ====
-    let x: "foo";
-    let y: "foo" | "bar";
+    declare let x: "foo";
+    declare let y: "foo" | "bar";
     
     let b: boolean;
     b = x === y;

@@ -8,6 +8,7 @@ function f() {
 
 
 //// [catch.js]
+"use strict";
 function f() {
     try { }
     catch (e) { }

@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 //// var /*0*/name = "Foo";
 ////
 //// var obj = { /*1*/name };

@@ -19,7 +19,7 @@ declare module 'M' {
 >'M' : typeof import("M")
 >    : ^^^^^^^^^^^^^^^^^^
 
-    module C {
+    namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 

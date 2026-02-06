@@ -2,7 +2,7 @@
 
 === Performance Stats ===
 Type Count: 1,000
-Instantiation count: 2,500
+Instantiation count: 1,000
 
 === index.tsx ===
 interface MiddlewareArray<T> extends Array<T> {}

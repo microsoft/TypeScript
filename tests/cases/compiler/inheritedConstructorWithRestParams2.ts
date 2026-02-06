@@ -1,3 +1,4 @@
+// @target: es2015
 class IBaseBase<T, U> {
     constructor(x: U) { }
 }

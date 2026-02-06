@@ -7,7 +7,6 @@ import {x} from "f1"
 foo()
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -27,21 +26,16 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96md/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2306: [0mFile '/users/username/projects/project/f1.ts' is not a module.
+[91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m import {x} from "f1"
-[7m [0m [91m                ~~~~[0m
-
-[96mf1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'foo'.
-
-[7m1[0m foo()
-[7m [0m [91m~~~[0m
-
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/users/username/projects/project/f1.js]
+"use strict";
 foo();
 
 
@@ -53,14 +47,8 @@ define(["require", "exports"], function (require, exports) {
 
 
 
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /users/username/projects/project/d/f0.ts: *new*
   {}
@@ -79,17 +67,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/f1.ts
 /users/username/projects/project/d/f0.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/users/username/projects/project/f1.ts
-/users/username/projects/project/d/f0.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /users/username/projects/project/f1.ts (used version)
 /users/username/projects/project/d/f0.ts (used version)
 
@@ -115,22 +100,9 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96md/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2306: [0mFile '/users/username/projects/project/f1.ts' is not a module.
+[91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m import {x} from "f1"
-[7m [0m [91m                ~~~~[0m
-
-[96md/f0.ts[0m:[93m2[0m:[93m33[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m2[0m                             var x: string = 1;
-[7m [0m [91m                                ~[0m
-
-[96mf1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'foo'.
-
-[7m1[0m foo()
-[7m [0m [91m~~~[0m
-
-[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -152,12 +124,11 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/f1.ts
 /users/username/projects/project/d/f0.ts
 
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/d/f0.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /users/username/projects/project/d/f0.ts (computed .d.ts)
@@ -183,10 +154,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96md/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2792: [0mCannot find module 'f2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-
-[7m1[0m import {x} from "f2"
-[7m [0m [91m                ~~~~[0m
+[91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
@@ -203,15 +171,11 @@ define(["require", "exports"], function (require, exports) {
 PolledWatches::
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /users/username/projects: *new*
   {}
@@ -237,11 +201,10 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/d/f0.ts
 
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/d/f0.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /users/username/projects/project/d/f0.ts (computed .d.ts)
@@ -267,28 +230,14 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96md/f0.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2306: [0mFile '/users/username/projects/project/f1.ts' is not a module.
+[91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m import {x} from "f1"
-[7m [0m [91m                ~~~~[0m
-
-[96mf1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'foo'.
-
-[7m1[0m foo()
-[7m [0m [91m~~~[0m
-
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
 //// [/users/username/projects/project/f1.js] file written with same contents
 //// [/users/username/projects/project/d/f0.js] file written with same contents
-
-PolledWatches::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /users/username/projects/node_modules:
@@ -297,7 +246,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /users/username/projects/project/d/f0.ts:
   {}
@@ -323,14 +272,11 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/f1.ts
 /users/username/projects/project/d/f0.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/users/username/projects/project/f1.ts
-/users/username/projects/project/d/f0.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /users/username/projects/project/f1.ts (computed .d.ts)

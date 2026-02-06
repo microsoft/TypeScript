@@ -5,9 +5,11 @@ export function f() {
 >f : () => void
 >  : ^^^^^^^^^^
 
-    let e: {}[];
+    let e: {}[] = [];
 >e : {}
 >  : ^^
+>[] : {}
+>   : ^^
 
     while (true) {
 >true : true

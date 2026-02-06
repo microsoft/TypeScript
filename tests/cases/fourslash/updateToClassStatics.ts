@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-//// module TypeScript {
+//// namespace TypeScript {
 ////     export class PullSymbol {}
 ////     export class Diagnostic {}
 ////     export class SymbolAndDiagnostics<TSymbol extends PullSymbol> {
@@ -13,7 +13,7 @@
 ////         }
 ////     }
 //// }
-//// module TypeScript {
+//// namespace TypeScript {
 ////     var x : TypeScript.SymbolAndDiagnostics;
 //// }
 

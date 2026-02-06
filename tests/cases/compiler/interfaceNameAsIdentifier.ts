@@ -1,9 +1,10 @@
+// @target: es2015
 interface C {
     (): void;
 }
 C();
 
-module m2 {
+namespace m2 {
     export interface C {
         (): void;
     }

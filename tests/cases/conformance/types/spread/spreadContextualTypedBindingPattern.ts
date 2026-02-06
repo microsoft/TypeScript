@@ -1,3 +1,4 @@
+// @target: es2015
 // #18308
 interface Person {
   naam: string,

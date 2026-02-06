@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 var x = {
     a: 1,
     b: true, // OK

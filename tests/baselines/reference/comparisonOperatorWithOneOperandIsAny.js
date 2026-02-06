@@ -170,6 +170,7 @@ var r8b6 = f !== x;
 var r8b7 = g !== x;
 
 //// [comparisonOperatorWithOneOperandIsAny.js]
+"use strict";
 var x;
 var E;
 (function (E) {

@@ -2,7 +2,7 @@
 
 // @BaselineFile: nameOrDottedSpan_classes.baseline
 // @Filename: nameOrDottedSpan_classes.ts
-////module Foo.Bar {
+////namespace Foo.Bar {
 ////    "use strict";
 ////
 ////    class Greeter {

@@ -1,4 +1,5 @@
-﻿
+﻿// @target: es2015
+
 
 // Generic tag with one parameter
 function noParams<T>(n: T) { }

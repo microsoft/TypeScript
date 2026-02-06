@@ -23,11 +23,11 @@ class Foo {
 >x : Symbol(Foo.x, Decl(file1.ts, 6, 11))
 }
 
-module N {
+namespace N {
 >N : Symbol(N, Decl(file1.ts, 8, 1), Decl(file2.ts, 8, 1))
 
-    export module F {
->F : Symbol(F, Decl(file1.ts, 10, 10), Decl(file2.ts, 10, 18))
+    export namespace F {
+>F : Symbol(F, Decl(file1.ts, 10, 13), Decl(file2.ts, 10, 21))
 
         var t;
 >t : Symbol(t, Decl(file1.ts, 12, 11))
@@ -50,17 +50,17 @@ class f { } // error -- cannot merge function with non-ambient class
 var v = 3;
 >v : Symbol(v, Decl(file1.ts, 4, 3), Decl(file2.ts, 4, 3))
 
-module Foo {
+namespace Foo {
 >Foo : Symbol(Foo, Decl(file1.ts, 4, 10), Decl(file2.ts, 4, 10))
 
     export var x: number; // error for redeclaring var in a different parent
 >x : Symbol(x, Decl(file2.ts, 7, 14))
 }
 
-declare module N {
+declare namespace N {
 >N : Symbol(N, Decl(file1.ts, 8, 1), Decl(file2.ts, 8, 1))
 
     export function F(); // no error because function is ambient
->F : Symbol(F, Decl(file1.ts, 10, 10), Decl(file2.ts, 10, 18))
+>F : Symbol(F, Decl(file1.ts, 10, 13), Decl(file2.ts, 10, 21))
 }
 

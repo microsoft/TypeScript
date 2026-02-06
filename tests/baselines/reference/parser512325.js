@@ -4,5 +4,6 @@
 var tt = (a, (b, c)) => a+b+c;
 
 //// [parser512325.js]
+"use strict";
 var tt = (a, (b, c));
 a + b + c;

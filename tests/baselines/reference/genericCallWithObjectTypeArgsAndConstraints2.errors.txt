@@ -1,0 +1,67 @@
+genericCallWithObjectTypeArgsAndConstraints2.ts(5,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+genericCallWithObjectTypeArgsAndConstraints2.ts(8,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+genericCallWithObjectTypeArgsAndConstraints2.ts(13,12): error TS2454: Variable 'r' is used before being assigned.
+genericCallWithObjectTypeArgsAndConstraints2.ts(24,12): error TS2454: Variable 'r' is used before being assigned.
+genericCallWithObjectTypeArgsAndConstraints2.ts(27,13): error TS2454: Variable 'i' is used before being assigned.
+genericCallWithObjectTypeArgsAndConstraints2.ts(31,14): error TS2345: Argument of type 'null' is not assignable to parameter of type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+genericCallWithObjectTypeArgsAndConstraints2.ts(36,13): error TS2345: Argument of type 'null' is not assignable to parameter of type 'Base'.
+genericCallWithObjectTypeArgsAndConstraints2.ts(37,13): error TS2345: Argument of type 'null' is not assignable to parameter of type 'Base'.
+
+
+==== genericCallWithObjectTypeArgsAndConstraints2.ts (8 errors) ====
+    // Generic call with constraints infering type parameter from object member properties
+    // No errors expected
+    
+    class Base {
+        x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    class Derived extends Base {
+        y: string;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    function f<T extends Base>(x: { foo: T; bar: T }) {
+        var r: T;
+        return r;
+               ~
+!!! error TS2454: Variable 'r' is used before being assigned.
+    }
+    var r = f({ foo: new Base(), bar: new Derived() });
+    var r2 = f({ foo: new Derived(), bar: new Derived() });
+    
+    
+    interface I<T> {
+        a: T;
+    }
+    function f2<T extends Base>(x: I<T>) {
+        var r: T;
+        return r;
+               ~
+!!! error TS2454: Variable 'r' is used before being assigned.
+    }
+    var i: I<Derived>;
+    var r3 = f2(i);
+                ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    
+    
+    function f3<T extends Base>(x: T, y: (a: T) => T) {
+        return y(null);
+                 ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'T'.
+!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+    }
+    var r4 = f3(new Base(), x => x);
+    var r5 = f3(new Derived(), x => x);
+    
+    var r6 = f3(null, null); // any
+                ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'Base'.
+    var r7 = f3(null, x => x); // any
+                ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'Base'.
+    

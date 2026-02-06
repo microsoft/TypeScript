@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // moduleSuffixes is not specified. Normal module resolution should occur.
 // @filename: /tsconfig.json
 {

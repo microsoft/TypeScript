@@ -1,6 +1,6 @@
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationNamespace_02.ts ===
-// module Foo {
+// namespace Foo {
 //     <|export function [|hello|]() {}|>
 // }
 // 

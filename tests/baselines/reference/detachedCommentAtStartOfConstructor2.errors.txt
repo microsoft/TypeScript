@@ -1,0 +1,17 @@
+detachedCommentAtStartOfConstructor2.ts(3,12): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+
+
+==== detachedCommentAtStartOfConstructor2.ts (1 errors) ====
+    class TestFile {
+        public message: string;
+        public name: string;
+               ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+        constructor(message: string) {
+            /// <summary>Test summary</summary>
+            /// <param name="message" type="String" />
+    
+            var getMessage = () => message + this.name;
+            this.message = getMessage();
+        }
+    }

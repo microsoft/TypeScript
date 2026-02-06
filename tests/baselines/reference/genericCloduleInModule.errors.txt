@@ -1,0 +1,18 @@
+genericCloduleInModule.ts(12,1): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== genericCloduleInModule.ts (1 errors) ====
+    namespace A {
+        export class B<T> {
+            foo() { }
+            static bar() { }
+        }
+        export namespace B {
+            export var x = 1;
+        }
+    }
+    
+    var b: A.B<number>;
+    b.foo();
+    ~
+!!! error TS2454: Variable 'b' is used before being assigned.

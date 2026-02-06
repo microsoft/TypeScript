@@ -1,8 +1,7 @@
 //// [tests/cases/compiler/declarationEmitHigherOrderRetainedGenerics.ts] ////
 
 === Performance Stats ===
-Type Count: 1,000
-Instantiation count: 2,500 -> 5,000
+Instantiation count: 2,500
 
 === declarationEmitHigherOrderRetainedGenerics.ts ===
 export interface TypeLambda {
@@ -48,8 +47,8 @@ export declare const URI: unique symbol;
 
 export interface TypeClass<F extends TypeLambda> {
     readonly [URI]?: F
->[URI] : F
->      : ^
+>[URI] : F | undefined
+>      : ^^^^^^^^^^^^^
 >URI : unique symbol
 >    : ^^^^^^^^^^^^^
 }

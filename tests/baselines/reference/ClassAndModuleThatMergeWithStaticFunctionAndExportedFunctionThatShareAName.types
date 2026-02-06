@@ -26,17 +26,17 @@ class Point {
 >  : ^
 }
 
-module Point {
+namespace Point {
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
 
     export function Origin() { return null; } //expected duplicate identifier error
->Origin : () => any
->       : ^^^^^^^^^
+>Origin : () => null
+>       : ^^^^^^^^^^
 }
 
 
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -65,7 +65,7 @@ module A {
 >  : ^
     }
 
-    export module Point {
+    export namespace Point {
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
 

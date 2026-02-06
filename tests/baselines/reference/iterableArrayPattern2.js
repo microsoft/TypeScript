@@ -17,6 +17,7 @@ class SymbolIterator {
 var [a, ...b] = new SymbolIterator;
 
 //// [iterableArrayPattern2.js]
+"use strict";
 class SymbolIterator {
     next() {
         return {

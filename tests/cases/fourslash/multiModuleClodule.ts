@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 ////class C {
 ////    constructor(x: number) { }
 ////    foo() { }
@@ -7,11 +9,11 @@
 ////    static boo() { }
 ////}
 ////
-////module C {
+////namespace C {
 ////    export var x = 1;
 ////    var y = 2;
 ////}
-////module C {
+////namespace C {
 ////    export function foo() { }
 ////    function baz() { return ''; }
 ////}

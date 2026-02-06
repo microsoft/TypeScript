@@ -31,13 +31,11 @@ interface S3 extends T3 {
 }
 
 // object literal case
-var a: { Foo: Base; }
-var b: { Foo?: Derived; }
+declare var a: { Foo: Base; }
+declare var b: { Foo?: Derived; }
 var r = true ? a : b; // ok
 
 //// [subtypingWithObjectMembersOptionality2.js]
+"use strict";
 // Derived member is optional but base member is not, should be an error
-// object literal case
-var a;
-var b;
 var r = true ? a : b; // ok

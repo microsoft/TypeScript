@@ -95,7 +95,7 @@ var { d: renamed, ...d } = o2;
 >o2 : { c: string; d: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
+declare let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
 >nestedrest : { x: number; n1: { y: number; n2: { z: number; n3: { n4: number; }; }; }; rest: number; restrest: number; }
 >           : ^^^^^      ^^^^^^                                                       ^^^^^^^^      ^^^^^^^^^^^^      ^^^
 >x : number
@@ -137,7 +137,7 @@ var { x, n1: { y, n2: { z, n3: { ...nr } } }, ...restrest } = nestedrest;
 >nestedrest : { x: number; n1: { y: number; n2: { z: number; n3: { n4: number; }; }; }; rest: number; restrest: number; }
 >           : ^^^^^      ^^^^^^                                                       ^^^^^^^^      ^^^^^^^^^^^^      ^^^
 
-let complex: { x: { ka, ki }, y: number };
+declare let complex: { x: { ka, ki }, y: number };
 >complex : { x: { ka: any; ki: any; }; y: number; }
 >        : ^^^^^      ^^^      ^^^   ^^^^^      ^^^
 >x : { ka: any; ki: any; }
@@ -231,11 +231,11 @@ class Removable {
 >Removable : Removable
 >          : ^^^^^^^^^
 
-    private x: number;
+    private x!: number;
 >x : number
 >  : ^^^^^^
 
-    protected y: number;
+    protected y!: number;
 >y : number
 >  : ^^^^^^
 
@@ -261,11 +261,11 @@ class Removable {
 >m : () => void
 >  : ^^^^^^^^^^
 
-    removed: string;
+    removed!: string;
 >removed : string
 >        : ^^^^^^
 
-    remainder: string;
+    remainder!: string;
 >remainder : string
 >          : ^^^^^^
 }

@@ -1,3 +1,4 @@
+// @target: es2015
 class Base { foo: string; }
 class Derived extends Base { bar: string; }
 class Derived2 extends Derived { baz: string; }
@@ -34,7 +35,7 @@ class B3 extends A3 {
     '2.0': string; // error
 }
 
-module TwoLevels {
+namespace TwoLevels {
     class A {
         foo: Base;
         bar: Base;

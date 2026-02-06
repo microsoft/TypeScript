@@ -183,6 +183,7 @@ const errorCodes: readonly number[] = [
     Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode.code,
     Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig.code,
     Diagnostics.Cannot_find_namespace_0_Did_you_mean_1.code,
+    Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements.code,
     Diagnostics.This_JSX_tag_requires_0_to_be_in_scope_but_it_could_not_be_found.code,
 ];
 
@@ -369,7 +370,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
         );
 
         let fix: FixAddNewImport | ImportFixWithModuleSpecifier;
-        if (existingFix && importKind !== ImportKind.Namespace) {
+        if (existingFix && importKind !== ImportKind.Namespace && existingFix.kind !== ImportFixKind.UseNamespace && existingFix.kind !== ImportFixKind.JsdocTypeImport) {
             fix = {
                 ...existingFix,
                 addAsTypeOnly,
@@ -621,7 +622,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                     declaration.importClause!,
                     factory.updateImportClause(
                         declaration.importClause!,
-                        declaration.importClause!.isTypeOnly,
+                        declaration.importClause!.phaseModifier,
                         declaration.importClause!.name,
                         /*namedBindings*/ undefined,
                     ),
@@ -714,7 +715,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                         d.modifiers,
                         d.importClause && factory.updateImportClause(
                             d.importClause,
-                            d.importClause.isTypeOnly,
+                            d.importClause.phaseModifier,
                             verbatimImports.has(d.importClause) ? d.importClause.name : undefined,
                             verbatimImports.has(d.importClause.namedBindings as NamespaceImport)
                                 ? d.importClause.namedBindings as NamespaceImport :
@@ -1557,6 +1558,8 @@ function getUmdImportKind(importingFile: SourceFile | FutureSourceFile, program:
             // Fall back to the `import * as ns` style import.
             return ImportKind.Namespace;
         case ModuleKind.Node16:
+        case ModuleKind.Node18:
+        case ModuleKind.Node20:
         case ModuleKind.NodeNext:
             return getImpliedNodeFormatForEmit(importingFile, program) === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
         default:
@@ -2078,7 +2081,7 @@ function getNewImports(
             : factory.createImportDeclaration(
                 /*modifiers*/ undefined,
                 factory.createImportClause(
-                    shouldUseTypeOnly(namespaceLikeImport, preferences),
+                    shouldUseTypeOnly(namespaceLikeImport, preferences) ? SyntaxKind.TypeKeyword : undefined,
                     /*name*/ undefined,
                     factory.createNamespaceImport(factory.createIdentifier(namespaceLikeImport.name)),
                 ),

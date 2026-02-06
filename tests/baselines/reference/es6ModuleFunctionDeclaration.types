@@ -21,7 +21,7 @@ foo2();
 >foo2 : () => void
 >     : ^^^^^^^^^^
 
-export module m1 {
+export namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -57,7 +57,7 @@ export module m1 {
 >foo4 : () => void
 >     : ^^^^^^^^^^
 }
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 

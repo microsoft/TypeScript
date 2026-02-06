@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/statements/switchStatements/switchStatements.ts] ////
 
 === switchStatements.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(switchStatements.ts, 0, 0))
 
     export function fn(x: number) {
->fn : Symbol(fn, Decl(switchStatements.ts, 0, 10))
+>fn : Symbol(fn, Decl(switchStatements.ts, 0, 13))
 >x : Symbol(x, Decl(switchStatements.ts, 1, 23))
 
         return '';
@@ -26,7 +26,7 @@ switch (x) {
 >undefined : Symbol(undefined)
 
     case new Date(12):
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     case new Object():
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -45,9 +45,9 @@ switch (x) {
 >M : Symbol(M, Decl(switchStatements.ts, 0, 0))
 
     case M.fn(1):
->M.fn : Symbol(M.fn, Decl(switchStatements.ts, 0, 10))
+>M.fn : Symbol(M.fn, Decl(switchStatements.ts, 0, 13))
 >M : Symbol(M, Decl(switchStatements.ts, 0, 0))
->fn : Symbol(M.fn, Decl(switchStatements.ts, 0, 10))
+>fn : Symbol(M.fn, Decl(switchStatements.ts, 0, 13))
 
     case <T>(x: number) => '':
 >T : Symbol(T, Decl(switchStatements.ts, 23, 10))
@@ -92,7 +92,7 @@ switch (undefined) { }
 >undefined : Symbol(undefined)
 
 switch (new Date(12)) { }
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 switch (new Object()) { }
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

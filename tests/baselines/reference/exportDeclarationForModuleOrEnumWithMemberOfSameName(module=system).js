@@ -24,7 +24,7 @@ System.register([], function (exports_1, context_1) {
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
-        execute: function () {// https://github.com/microsoft/TypeScript/issues/55038
+        execute: function () {
             (function (A_1) {
                 A_1.A = 0;
             })(A || (exports_1("A", A = {})));

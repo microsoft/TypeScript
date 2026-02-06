@@ -1,5 +1,6 @@
+// @target: es2015
 // @module: es2020
-// @moduleResolution: node10
+// @moduleResolution: bundler
 // @esModuleInterop: true
 
 // @Filename: /node_modules/highlight.js/package.json

@@ -43,7 +43,7 @@ verify.completions({
   includes: {
     name: "React",
     hasAction: true,
-    source: "/node_modules/react/index",
+    source: "react",
     sortText: completion.SortText.AutoImportSuggestions
   },
   preferences: {
@@ -57,7 +57,7 @@ verify.completions({
   includes: {
     name: "Redux",
     hasAction: true,
-    source: "/dir/node_modules/redux/index",
+    source: "redux",
     sortText: completion.SortText.AutoImportSuggestions
   },
   preferences: {

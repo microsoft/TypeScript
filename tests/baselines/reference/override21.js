@@ -10,6 +10,7 @@ class B extends A {
 
 
 //// [override21.js]
+"use strict";
 const foo = Symbol();
 class A {
 }

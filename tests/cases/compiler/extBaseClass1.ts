@@ -1,4 +1,5 @@
-module M {
+// @target: es2015
+namespace M {
     export class B {
 	    public x=10;
     }
@@ -7,12 +8,12 @@ module M {
     }
 }
 
-module M {
+namespace M {
     export class C2 extends B {
     }
 }
 
-module N {
+namespace N {
     export class C3 extends M.B {
     }
 }

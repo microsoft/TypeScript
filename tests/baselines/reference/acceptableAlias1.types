@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/acceptableAlias1.ts] ////
 
 === acceptableAlias1.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-    export module N {
+    export namespace N {
     }
     export import X = N;
 >X : any

@@ -14,13 +14,18 @@ interface I<S> {
 }
  
 var x: I<{s: string}>
->x : Symbol(x, Decl(genericConstraintSatisfaction1.ts, 4, 3))
+>x : Symbol(x, Decl(genericConstraintSatisfaction1.ts, 4, 3), Decl(genericConstraintSatisfaction1.ts, 5, 11))
 >I : Symbol(I, Decl(genericConstraintSatisfaction1.ts, 0, 0))
 >s : Symbol(s, Decl(genericConstraintSatisfaction1.ts, 4, 10))
 
+declare var x: I<{s: string}>
+>x : Symbol(x, Decl(genericConstraintSatisfaction1.ts, 4, 3), Decl(genericConstraintSatisfaction1.ts, 5, 11))
+>I : Symbol(I, Decl(genericConstraintSatisfaction1.ts, 0, 0))
+>s : Symbol(s, Decl(genericConstraintSatisfaction1.ts, 5, 18))
+
 x.f({s: 1})
 >x.f : Symbol(I.f, Decl(genericConstraintSatisfaction1.ts, 0, 16))
->x : Symbol(x, Decl(genericConstraintSatisfaction1.ts, 4, 3))
+>x : Symbol(x, Decl(genericConstraintSatisfaction1.ts, 4, 3), Decl(genericConstraintSatisfaction1.ts, 5, 11))
 >f : Symbol(I.f, Decl(genericConstraintSatisfaction1.ts, 0, 16))
->s : Symbol(s, Decl(genericConstraintSatisfaction1.ts, 5, 5))
+>s : Symbol(s, Decl(genericConstraintSatisfaction1.ts, 6, 5))
 

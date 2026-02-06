@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @sourcemap: true
 // @maproot: file:///folder
 // @sourceroot: file:///folder

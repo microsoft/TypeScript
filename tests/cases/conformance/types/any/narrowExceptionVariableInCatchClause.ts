@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 declare function isFooError(x: any): x is { type: 'foo'; dontPanic(); };
 
 function tryCatch() {

@@ -1,4 +1,5 @@
-﻿// valid
+﻿// @target: es2015
+// valid
 
 // no params
 () => 1;

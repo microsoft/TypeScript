@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // test for #15371
 function f<T extends object, P extends keyof T>(s: string, tp: T[P]): void {

@@ -11,3 +11,4 @@ interface PropertyDescriptor2 {
 }
 
 //// [parserOptionalTypeMembers1.js]
+"use strict";

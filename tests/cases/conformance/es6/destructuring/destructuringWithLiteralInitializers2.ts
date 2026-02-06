@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 function f00([x, y]) {}

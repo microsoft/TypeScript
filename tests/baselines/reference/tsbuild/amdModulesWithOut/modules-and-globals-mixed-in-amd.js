@@ -58,7 +58,6 @@ const globalConst = 10;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -83,16 +82,50 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/soltion/lib/tsconfig.json'...
 
+[96mlib/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "target": "es5",
+[7m [0m [91m              ~~~~~[0m
+
+[96mlib/tsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mlib/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m9[0m     "outFile": "module.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Project 'app/tsconfig.json' is out of date because output file 'app/module.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/soltion/app/tsconfig.json'...
 
+[96mapp/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "target": "es5",
+[7m [0m [91m              ~~~~~[0m
+
+[96mapp/tsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mapp/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m9[0m     "outFile": "module.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 6 errors.
+
 
 
 //// [/home/src/workspaces/soltion/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/home/src/workspaces/soltion/lib/module.js]
+"use strict";
 var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -124,7 +157,7 @@ declare const globalConst = 10;
 //# sourceMappingURL=module.d.ts.map
 
 //// [/home/src/workspaces/soltion/lib/module.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3587416848-const myGlob = 20;","-10726455937-export const x = 10;","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3587416848-const myGlob = 20;","-10726455937-export const x = 10;","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"semanticDiagnosticsPerFile":[1,2,3,4,5],"outSignature":"29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/soltion/lib/module.tsbuildinfo.readable.baseline.txt]
 {
@@ -136,7 +169,7 @@ declare const globalConst = 10;
     "./global.ts"
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./file0.ts": "3587416848-const myGlob = 20;",
     "./file1.ts": "-10726455937-export const x = 10;",
     "./file2.ts": "-13729954175-export const y = 20;",
@@ -165,16 +198,39 @@ declare const globalConst = 10;
     "strict": false,
     "target": 1
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./file0.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./file1.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./file2.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./global.ts",
+      "not cached or not changed"
+    ]
+  ],
   "outSignature": "29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
   "latestChangedDtsFile": "./module.d.ts",
   "version": "FakeTSVersion",
-  "size": 1112
+  "size": 1113
 }
 
 //// [/home/src/workspaces/soltion/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file3.ts","file4.ts"],"names":[],"mappings":";;;;IAAa,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,KAAK,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file4.ts","file3.ts"],"names":[],"mappings":";;;;;ICAa,QAAA,CAAC,GAAG,EAAE,CAAC;;ADApB,IAAM,KAAK,GAAG,EAAE,CAAC"}
 
 //// [/home/src/workspaces/soltion/app/module.js]
+"use strict";
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -195,7 +251,7 @@ declare const myVar = 30;
 //# sourceMappingURL=module.d.ts.map
 
 //// [/home/src/workspaces/soltion/app/module.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","-10505171738-export const z = 30;\nimport { x } from \"file1\";\n","1463681686-const myVar = 30;"],"root":[3,4],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"-23302177839-declare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n","latestChangedDtsFile":"./module.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","-10505171738-export const z = 30;\nimport { x } from \"file1\";\n","1463681686-const myVar = 30;"],"root":[3,4],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"semanticDiagnosticsPerFile":[1,2,3,4],"outSignature":"-23302177839-declare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n","latestChangedDtsFile":"./module.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/soltion/app/module.tsbuildinfo.readable.baseline.txt]
 {
@@ -206,7 +262,7 @@ declare const myVar = 30;
     "./file4.ts"
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "../lib/module.d.ts": "29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
     "./file3.ts": "-10505171738-export const z = 30;\nimport { x } from \"file1\";\n",
     "./file4.ts": "1463681686-const myVar = 30;"
@@ -230,10 +286,28 @@ declare const myVar = 30;
     "strict": false,
     "target": 1
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../lib/module.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./file3.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./file4.ts",
+      "not cached or not changed"
+    ]
+  ],
   "outSignature": "-23302177839-declare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n",
   "latestChangedDtsFile": "./module.d.ts",
   "version": "FakeTSVersion",
-  "size": 1162
+  "size": 1161
 }
 
 //// [/home/src/workspaces/soltion/lib/module.js.map.baseline.txt]
@@ -247,6 +321,7 @@ sources: file0.ts,file1.ts,file2.ts,global.ts
 emittedFile:/home/src/workspaces/soltion/lib/module.js
 sourceFile:file0.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>var myGlob = 20;
 1 >
 2 >^^^^
@@ -261,12 +336,12 @@ sourceFile:file0.ts
 4 >           = 
 5 >             20
 6 >               ;
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
-3 >Emitted(1, 11) Source(1, 13) + SourceIndex(0)
-4 >Emitted(1, 14) Source(1, 16) + SourceIndex(0)
-5 >Emitted(1, 16) Source(1, 18) + SourceIndex(0)
-6 >Emitted(1, 17) Source(1, 19) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(2, 11) Source(1, 13) + SourceIndex(0)
+4 >Emitted(2, 14) Source(1, 16) + SourceIndex(0)
+5 >Emitted(2, 16) Source(1, 18) + SourceIndex(0)
+6 >Emitted(2, 17) Source(1, 19) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -289,12 +364,12 @@ sourceFile:file1.ts
 4 >              = 
 5 >                10
 6 >                  ;
-1->Emitted(6, 5) Source(1, 14) + SourceIndex(1)
-2 >Emitted(6, 13) Source(1, 14) + SourceIndex(1)
-3 >Emitted(6, 14) Source(1, 15) + SourceIndex(1)
-4 >Emitted(6, 17) Source(1, 18) + SourceIndex(1)
-5 >Emitted(6, 19) Source(1, 20) + SourceIndex(1)
-6 >Emitted(6, 20) Source(1, 21) + SourceIndex(1)
+1->Emitted(7, 5) Source(1, 14) + SourceIndex(1)
+2 >Emitted(7, 13) Source(1, 14) + SourceIndex(1)
+3 >Emitted(7, 14) Source(1, 15) + SourceIndex(1)
+4 >Emitted(7, 17) Source(1, 18) + SourceIndex(1)
+5 >Emitted(7, 19) Source(1, 20) + SourceIndex(1)
+6 >Emitted(7, 20) Source(1, 21) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -318,12 +393,12 @@ sourceFile:file2.ts
 4 >              = 
 5 >                20
 6 >                  ;
-1 >Emitted(12, 5) Source(1, 14) + SourceIndex(2)
-2 >Emitted(12, 13) Source(1, 14) + SourceIndex(2)
-3 >Emitted(12, 14) Source(1, 15) + SourceIndex(2)
-4 >Emitted(12, 17) Source(1, 18) + SourceIndex(2)
-5 >Emitted(12, 19) Source(1, 20) + SourceIndex(2)
-6 >Emitted(12, 20) Source(1, 21) + SourceIndex(2)
+1 >Emitted(13, 5) Source(1, 14) + SourceIndex(2)
+2 >Emitted(13, 13) Source(1, 14) + SourceIndex(2)
+3 >Emitted(13, 14) Source(1, 15) + SourceIndex(2)
+4 >Emitted(13, 17) Source(1, 18) + SourceIndex(2)
+5 >Emitted(13, 19) Source(1, 20) + SourceIndex(2)
+6 >Emitted(13, 20) Source(1, 21) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -344,12 +419,12 @@ sourceFile:global.ts
 4 >                = 
 5 >                  10
 6 >                    ;
-1 >Emitted(14, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(14, 5) Source(1, 7) + SourceIndex(3)
-3 >Emitted(14, 16) Source(1, 18) + SourceIndex(3)
-4 >Emitted(14, 19) Source(1, 21) + SourceIndex(3)
-5 >Emitted(14, 21) Source(1, 23) + SourceIndex(3)
-6 >Emitted(14, 22) Source(1, 24) + SourceIndex(3)
+1 >Emitted(15, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(15, 5) Source(1, 7) + SourceIndex(3)
+3 >Emitted(15, 16) Source(1, 18) + SourceIndex(3)
+4 >Emitted(15, 19) Source(1, 21) + SourceIndex(3)
+5 >Emitted(15, 21) Source(1, 23) + SourceIndex(3)
+6 >Emitted(15, 22) Source(1, 24) + SourceIndex(3)
 ---
 >>>//# sourceMappingURL=module.js.map
 
@@ -474,12 +549,13 @@ sourceFile:global.ts
 JsFile: module.js
 mapUrl: module.js.map
 sourceRoot: 
-sources: file3.ts,file4.ts
+sources: file4.ts,file3.ts
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/app/module.js
 sourceFile:file3.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>define("file3", ["require", "exports"], function (require, exports) {
 >>>    "use strict";
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
@@ -497,12 +573,12 @@ sourceFile:file3.ts
 4 >              = 
 5 >                30
 6 >                  ;
-1 >Emitted(5, 5) Source(1, 14) + SourceIndex(0)
-2 >Emitted(5, 13) Source(1, 14) + SourceIndex(0)
-3 >Emitted(5, 14) Source(1, 15) + SourceIndex(0)
-4 >Emitted(5, 17) Source(1, 18) + SourceIndex(0)
-5 >Emitted(5, 19) Source(1, 20) + SourceIndex(0)
-6 >Emitted(5, 20) Source(1, 21) + SourceIndex(0)
+1 >Emitted(6, 5) Source(1, 14) + SourceIndex(1)
+2 >Emitted(6, 13) Source(1, 14) + SourceIndex(1)
+3 >Emitted(6, 14) Source(1, 15) + SourceIndex(1)
+4 >Emitted(6, 17) Source(1, 18) + SourceIndex(1)
+5 >Emitted(6, 19) Source(1, 20) + SourceIndex(1)
+6 >Emitted(6, 20) Source(1, 21) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/app/module.js
@@ -523,12 +599,12 @@ sourceFile:file4.ts
 4 >          = 
 5 >            30
 6 >              ;
-1 >Emitted(7, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(7, 5) Source(1, 7) + SourceIndex(1)
-3 >Emitted(7, 10) Source(1, 12) + SourceIndex(1)
-4 >Emitted(7, 13) Source(1, 15) + SourceIndex(1)
-5 >Emitted(7, 15) Source(1, 17) + SourceIndex(1)
-6 >Emitted(7, 16) Source(1, 18) + SourceIndex(1)
+1 >Emitted(8, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(8, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(8, 10) Source(1, 12) + SourceIndex(0)
+4 >Emitted(8, 13) Source(1, 15) + SourceIndex(0)
+5 >Emitted(8, 15) Source(1, 17) + SourceIndex(0)
+6 >Emitted(8, 16) Source(1, 18) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=module.js.map
 
@@ -596,7 +672,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.d.ts.map
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: incremental-declaration-doesnt-change
 
@@ -611,20 +687,54 @@ Output::
     * lib/tsconfig.json
     * app/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'lib/tsconfig.json' is out of date because output 'lib/module.tsbuildinfo' is older than input 'lib/file1.ts'
+[[90mHH:MM:SS AM[0m] Project 'lib/tsconfig.json' is out of date because buildinfo file 'lib/module.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/soltion/lib/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'app/tsconfig.json' is up to date with .d.ts files from its dependencies
+[96mlib/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/home/src/workspaces/soltion/app/tsconfig.json'...
+[7m3[0m     "target": "es5",
+[7m [0m [91m              ~~~~~[0m
+
+[96mlib/tsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mlib/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m9[0m     "outFile": "module.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Project 'app/tsconfig.json' is out of date because buildinfo file 'app/module.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/soltion/app/tsconfig.json'...
+
+[96mapp/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "target": "es5",
+[7m [0m [91m              ~~~~~[0m
+
+[96mapp/tsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[96mapp/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m9[0m     "outFile": "module.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 6 errors.
 
 
 
 //// [/home/src/workspaces/soltion/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICAtB,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICAtB,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/home/src/workspaces/soltion/lib/module.js]
+"use strict";
 var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -644,7 +754,7 @@ var globalConst = 10;
 
 //// [/home/src/workspaces/soltion/lib/module.d.ts.map] file written with same contents
 //// [/home/src/workspaces/soltion/lib/module.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3587416848-const myGlob = 20;","-4405159098-export const x = 10;console.log(x);","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","3587416848-const myGlob = 20;","-4405159098-export const x = 10;console.log(x);","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"semanticDiagnosticsPerFile":[1,2,3,4,5],"outSignature":"29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/soltion/lib/module.tsbuildinfo.readable.baseline.txt]
 {
@@ -656,7 +766,7 @@ var globalConst = 10;
     "./global.ts"
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./file0.ts": "3587416848-const myGlob = 20;",
     "./file1.ts": "-4405159098-export const x = 10;console.log(x);",
     "./file2.ts": "-13729954175-export const y = 20;",
@@ -685,13 +795,34 @@ var globalConst = 10;
     "strict": false,
     "target": 1
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./file0.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./file1.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./file2.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./global.ts",
+      "not cached or not changed"
+    ]
+  ],
   "outSignature": "29754794677-declare const myGlob = 20;\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
   "latestChangedDtsFile": "./module.d.ts",
   "version": "FakeTSVersion",
-  "size": 1126
+  "size": 1127
 }
 
-//// [/home/src/workspaces/soltion/app/module.tsbuildinfo] file changed its modified time
 //// [/home/src/workspaces/soltion/lib/module.js.map.baseline.txt]
 ===================================================================
 JsFile: module.js
@@ -703,6 +834,7 @@ sources: file0.ts,file1.ts,file2.ts,global.ts
 emittedFile:/home/src/workspaces/soltion/lib/module.js
 sourceFile:file0.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>var myGlob = 20;
 1 >
 2 >^^^^
@@ -717,12 +849,12 @@ sourceFile:file0.ts
 4 >           = 
 5 >             20
 6 >               ;
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
-3 >Emitted(1, 11) Source(1, 13) + SourceIndex(0)
-4 >Emitted(1, 14) Source(1, 16) + SourceIndex(0)
-5 >Emitted(1, 16) Source(1, 18) + SourceIndex(0)
-6 >Emitted(1, 17) Source(1, 19) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(2, 11) Source(1, 13) + SourceIndex(0)
+4 >Emitted(2, 14) Source(1, 16) + SourceIndex(0)
+5 >Emitted(2, 16) Source(1, 18) + SourceIndex(0)
+6 >Emitted(2, 17) Source(1, 19) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -746,12 +878,12 @@ sourceFile:file1.ts
 4 >              = 
 5 >                10
 6 >                  ;
-1->Emitted(6, 5) Source(1, 14) + SourceIndex(1)
-2 >Emitted(6, 13) Source(1, 14) + SourceIndex(1)
-3 >Emitted(6, 14) Source(1, 15) + SourceIndex(1)
-4 >Emitted(6, 17) Source(1, 18) + SourceIndex(1)
-5 >Emitted(6, 19) Source(1, 20) + SourceIndex(1)
-6 >Emitted(6, 20) Source(1, 21) + SourceIndex(1)
+1->Emitted(7, 5) Source(1, 14) + SourceIndex(1)
+2 >Emitted(7, 13) Source(1, 14) + SourceIndex(1)
+3 >Emitted(7, 14) Source(1, 15) + SourceIndex(1)
+4 >Emitted(7, 17) Source(1, 18) + SourceIndex(1)
+5 >Emitted(7, 19) Source(1, 20) + SourceIndex(1)
+6 >Emitted(7, 20) Source(1, 21) + SourceIndex(1)
 ---
 >>>    console.log(exports.x);
 1->^^^^
@@ -770,14 +902,14 @@ sourceFile:file1.ts
 6 >                x
 7 >                         )
 8 >                          ;
-1->Emitted(7, 5) Source(1, 21) + SourceIndex(1)
-2 >Emitted(7, 12) Source(1, 28) + SourceIndex(1)
-3 >Emitted(7, 13) Source(1, 29) + SourceIndex(1)
-4 >Emitted(7, 16) Source(1, 32) + SourceIndex(1)
-5 >Emitted(7, 17) Source(1, 33) + SourceIndex(1)
-6 >Emitted(7, 26) Source(1, 34) + SourceIndex(1)
-7 >Emitted(7, 27) Source(1, 35) + SourceIndex(1)
-8 >Emitted(7, 28) Source(1, 36) + SourceIndex(1)
+1->Emitted(8, 5) Source(1, 21) + SourceIndex(1)
+2 >Emitted(8, 12) Source(1, 28) + SourceIndex(1)
+3 >Emitted(8, 13) Source(1, 29) + SourceIndex(1)
+4 >Emitted(8, 16) Source(1, 32) + SourceIndex(1)
+5 >Emitted(8, 17) Source(1, 33) + SourceIndex(1)
+6 >Emitted(8, 26) Source(1, 34) + SourceIndex(1)
+7 >Emitted(8, 27) Source(1, 35) + SourceIndex(1)
+8 >Emitted(8, 28) Source(1, 36) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -801,12 +933,12 @@ sourceFile:file2.ts
 4 >              = 
 5 >                20
 6 >                  ;
-1 >Emitted(13, 5) Source(1, 14) + SourceIndex(2)
-2 >Emitted(13, 13) Source(1, 14) + SourceIndex(2)
-3 >Emitted(13, 14) Source(1, 15) + SourceIndex(2)
-4 >Emitted(13, 17) Source(1, 18) + SourceIndex(2)
-5 >Emitted(13, 19) Source(1, 20) + SourceIndex(2)
-6 >Emitted(13, 20) Source(1, 21) + SourceIndex(2)
+1 >Emitted(14, 5) Source(1, 14) + SourceIndex(2)
+2 >Emitted(14, 13) Source(1, 14) + SourceIndex(2)
+3 >Emitted(14, 14) Source(1, 15) + SourceIndex(2)
+4 >Emitted(14, 17) Source(1, 18) + SourceIndex(2)
+5 >Emitted(14, 19) Source(1, 20) + SourceIndex(2)
+6 >Emitted(14, 20) Source(1, 21) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -827,15 +959,15 @@ sourceFile:global.ts
 4 >                = 
 5 >                  10
 6 >                    ;
-1 >Emitted(15, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(15, 5) Source(1, 7) + SourceIndex(3)
-3 >Emitted(15, 16) Source(1, 18) + SourceIndex(3)
-4 >Emitted(15, 19) Source(1, 21) + SourceIndex(3)
-5 >Emitted(15, 21) Source(1, 23) + SourceIndex(3)
-6 >Emitted(15, 22) Source(1, 24) + SourceIndex(3)
+1 >Emitted(16, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(16, 5) Source(1, 7) + SourceIndex(3)
+3 >Emitted(16, 16) Source(1, 18) + SourceIndex(3)
+4 >Emitted(16, 19) Source(1, 21) + SourceIndex(3)
+5 >Emitted(16, 21) Source(1, 23) + SourceIndex(3)
+6 >Emitted(16, 22) Source(1, 24) + SourceIndex(3)
 ---
 >>>//# sourceMappingURL=module.js.map
 
 //// [/home/src/workspaces/soltion/lib/module.d.ts.map.baseline.txt] file written with same contents
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

@@ -69,9 +69,10 @@ function a2() {
 >x : any
 
         () => x;
->() => x : () => any
->        : ^^^^^^^^^
->x : any
+>() => x : () => undefined
+>        : ^^^^^^^^^^^^^^^
+>x : undefined
+>  : ^^^^^^^^^
     }
 }
 
@@ -104,9 +105,10 @@ function a3() {
 >x : any
 
             () => x;
->() => x : () => any
->        : ^^^^^^^^^
->x : any
+>() => x : () => undefined
+>        : ^^^^^^^^^^^^^^^
+>x : undefined
+>  : ^^^^^^^^^
 
             break;
     }
@@ -132,9 +134,10 @@ function a4() {
 >x : any
 
             () => x;
->() => x : () => any
->        : ^^^^^^^^^
->x : any
+>() => x : () => undefined
+>        : ^^^^^^^^^^^^^^^
+>x : undefined
+>  : ^^^^^^^^^
 
             break;
     }
@@ -149,9 +152,10 @@ function a5() {
 >x : any
 
         () => x;
->() => x : () => any
->        : ^^^^^^^^^
->x : any
+>() => x : () => undefined
+>        : ^^^^^^^^^^^^^^^
+>x : undefined
+>  : ^^^^^^^^^
     }
     switch (1) {
 >1 : 1
@@ -216,9 +220,10 @@ function a7() {
 >x : any
 
             () => x;
->() => x : () => any
->        : ^^^^^^^^^
->x : any
+>() => x : () => undefined
+>        : ^^^^^^^^^^^^^^^
+>x : undefined
+>  : ^^^^^^^^^
 
             break;
     }
@@ -266,9 +271,10 @@ function a8() {
 >x : any
 
             () => x;
->() => x : () => any
->        : ^^^^^^^^^
->x : any
+>() => x : () => undefined
+>        : ^^^^^^^^^^^^^^^
+>x : undefined
+>  : ^^^^^^^^^
 
             break;
     }
@@ -290,9 +296,10 @@ function a9() {
 >x : any
 
             () => x;
->() => x : () => any
->        : ^^^^^^^^^
->x : any
+>() => x : () => undefined
+>        : ^^^^^^^^^^^^^^^
+>x : undefined
+>  : ^^^^^^^^^
 
             break;
     }
@@ -308,9 +315,10 @@ function a9() {
 >x : any
 
             () => x;
->() => x : () => any
->        : ^^^^^^^^^
->x : any
+>() => x : () => undefined
+>        : ^^^^^^^^^^^^^^^
+>x : undefined
+>  : ^^^^^^^^^
 
             break;
     }

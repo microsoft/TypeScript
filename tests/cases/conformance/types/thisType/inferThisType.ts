@@ -1,3 +1,4 @@
+// @target: es2015
 declare function f<T>(g: (this: T) => void): T
 declare function h(this: number): void;
 f(h)

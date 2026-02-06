@@ -14,6 +14,7 @@ foo(i3, i3); // should not crash the compiler :)
 
 
 //// [overloadCrash.js]
+"use strict";
 ;
 ;
 ;

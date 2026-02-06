@@ -1,5 +1,4 @@
 ﻿///<reference path="fourslash.ts" />
-// @ModuleResolution: classic
 
 // @Filename: A.ts
 ////export interface I1 { one: number }
@@ -10,7 +9,7 @@
 ////    one: string;
 ////}
 ////
-////export module Inner {
+////export namespace Inner {
 ////    export interface I3 {
 ////        three: boolean
 ////    }
@@ -25,11 +24,11 @@
 
 // @Filename: C.ts
 ////export var cVar = "see!";
-////export * from "A";
-////export * from "B"
+////export * from "./A";
+////export * from "./B"
 
 // @Filename: D.ts
-////import * as c from "C";
+////import * as c from "./C";
 ////var x: c.Inner./**/
 
 verify.completions({ marker: "", exact: "I3" });

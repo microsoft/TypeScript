@@ -27,11 +27,11 @@ describe("unittests:: tsserver:: getEditsForFileRename::", () => {
         };
         const tsconfig: File = {
             path: "/home/src/projects/project/tsconfig.json",
-            content: "{}",
+            content: `{ "compilerOptions": { "module": "commonjs" } }`,
         };
 
         const host = TestServerHost.createServerHost([userTs, newTs, tsconfig]);
-        const options: ts.CompilerOptions = {};
+        const options: ts.CompilerOptions = { module: ts.ModuleKind.CommonJS };
         const moduleResolutionCache = ts.createModuleResolutionCache(host.getCurrentDirectory(), ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames), options);
         const lsHost: ts.LanguageServiceHost = {
             getCompilationSettings: () => options,
@@ -45,7 +45,7 @@ describe("unittests:: tsserver:: getEditsForFileRename::", () => {
             getDefaultLibFileName: options => ts.getDefaultLibFileName(options),
             readFile: path => host.readFile(path),
             fileExists: path => host.fileExists(path),
-            resolveModuleNames: (moduleNames, containingFile) => moduleNames.map(name => ts.resolveModuleName(name, containingFile, options, lsHost, moduleResolutionCache).resolvedModule),
+            resolveModuleNames: (moduleNames, containingFile) => moduleNames.map(name => ts.resolveModuleName(name, containingFile, options, lsHost, moduleResolutionCache, /*redirectedReference*/ undefined, ts.ModuleKind.CommonJS).resolvedModule),
             getResolvedModuleWithFailedLookupLocationsFromCache: (moduleName, containingFile, mode) => moduleResolutionCache.getFromDirectoryCache(moduleName, mode, ts.getDirectoryPath(containingFile), /*redirectedReference*/ undefined),
         };
         const service = ts.createLanguageService(lsHost);

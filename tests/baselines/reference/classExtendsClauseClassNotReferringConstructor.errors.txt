@@ -1,12 +1,18 @@
+classExtendsClauseClassNotReferringConstructor.ts(1,11): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 classExtendsClauseClassNotReferringConstructor.ts(4,21): error TS2507: Type 'number' is not a constructor function type.
+classExtendsClauseClassNotReferringConstructor.ts(4,25): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
 
 
-==== classExtendsClauseClassNotReferringConstructor.ts (1 errors) ====
+==== classExtendsClauseClassNotReferringConstructor.ts (3 errors) ====
     class A { a: number; }
-    module Foo {
+              ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+    namespace Foo {
         var A = 1;
         class B extends A { b: string; }
                         ~
 !!! error TS2507: Type 'number' is not a constructor function type.
+                            ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
     }
     

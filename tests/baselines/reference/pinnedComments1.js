@@ -12,12 +12,10 @@ class C {
 }
 
 //// [pinnedComments1.js]
+"use strict";
 /*!=========
     Keep this pinned comment
    =========
 */
-var C = (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}

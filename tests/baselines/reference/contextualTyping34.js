@@ -4,4 +4,5 @@
 var foo = <{ id: number;}> ({id:4});
 
 //// [contextualTyping34.js]
+"use strict";
 var foo = ({ id: 4 });

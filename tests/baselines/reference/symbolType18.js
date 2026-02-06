@@ -13,6 +13,7 @@ else {
 }
 
 //// [symbolType18.js]
+"use strict";
 var x;
 x;
 if (typeof x === "object") {

@@ -1,3 +1,4 @@
+// @target: es2015
 function f<A, B extends A>() {
     var a: A;
     var b: B;

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @module: system
 
 declare function use(a: any);
@@ -8,6 +10,6 @@ export function foo() {
     use(M.NonTopLevelConstEnum.X);
 }
 
-module M {
+namespace M {
     export const enum NonTopLevelConstEnum { X }
 }

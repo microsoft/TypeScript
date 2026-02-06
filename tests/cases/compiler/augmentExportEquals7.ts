@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /node_modules/lib/index.d.ts
 declare var lib: () => void;
 declare namespace lib {}

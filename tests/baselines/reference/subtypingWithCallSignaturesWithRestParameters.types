@@ -23,18 +23,18 @@ interface Base {
 >   : ^ ^^      ^^ ^^^      ^^^^^ ^^        ^^^^^      
 >x : number
 >  : ^^^^^^
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >z : number[]
 >  : ^^^^^^^^
 
     a4: (x?: number, y?: string, ...z: number[]) => number;
 >a4 : (x?: number, y?: string, ...z: number[]) => number
 >   : ^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^      
->x : number
->  : ^^^^^^
->y : string
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >z : number[]
 >  : ^^^^^^^^
 }
@@ -65,20 +65,20 @@ interface I2 extends Base {
     a: (x?: number) => number; // ok, same number of required params
 >a : (x?: number) => number
 >  : ^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface I2B extends Base {
     a: (x?: number, y?: number, z?: number) => number; // ok, same number of required params
 >a : (x?: number, y?: number, z?: number) => number
 >  : ^ ^^^      ^^ ^^^      ^^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
->y : number
->  : ^^^^^^
->z : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface I3 extends Base {
@@ -93,8 +93,8 @@ interface I3B extends Base {
     a: (x?: string) => number; // error, incompatible type
 >a : (x?: string) => number
 >  : ^ ^^^      ^^^^^      
->x : string
->  : ^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 
@@ -117,8 +117,8 @@ interface I5 extends Base {
     a2: (x?: number) => number; // ok, fewer required params
 >a2 : (x?: number) => number
 >   : ^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface I6 extends Base {
@@ -165,8 +165,8 @@ interface I6E extends Base {
 >   : ^ ^^      ^^ ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 
@@ -181,8 +181,8 @@ interface I8 extends Base {
     a3: (x?: number) => number; // ok, fewer required params
 >a3 : (x?: number) => number
 >   : ^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface I9 extends Base {
@@ -209,10 +209,10 @@ interface I10B extends Base {
 >   : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
->y : number
->  : ^^^^^^
->z : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface I10C extends Base {
@@ -231,10 +231,10 @@ interface I10D extends Base {
 >   : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^      
 >x : string
 >  : ^^^^^^
->y : string
->  : ^^^^^^
->z : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>z : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface I10E extends Base {
@@ -257,10 +257,10 @@ interface I12 extends Base {
     a4: (x?: number, y?: number) => number; // error, type mismatch
 >a4 : (x?: number, y?: number) => number
 >   : ^ ^^^      ^^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
->y : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface I13 extends Base {
@@ -277,18 +277,18 @@ interface I14 extends Base {
 >   : ^ ^^      ^^ ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface I15 extends Base {
     a4: (x?: number, y?: string) => number;  // ok, same number of required params with matching types
 >a4 : (x?: number, y?: string) => number
 >   : ^ ^^^      ^^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
->y : string
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface I16 extends Base {

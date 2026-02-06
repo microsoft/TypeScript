@@ -8,6 +8,8 @@ a ? b : (c) : d => e
 
 
 //// [fileJs.js]
+"use strict";
 a ? b : (c) => e; // Not legal JS; "Unexpected token ':'" at last colon
 //// [fileTs.js]
+"use strict";
 a ? b : (c) => e;

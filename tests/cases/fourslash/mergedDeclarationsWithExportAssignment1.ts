@@ -4,7 +4,7 @@
 ////class Foo {
 ////    doStuff(x: number): number;
 ////}
-////module Foo {
+////namespace Foo {
 ////    export var x: number;
 ////}
 ////export = Foo;

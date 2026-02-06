@@ -35,14 +35,14 @@ Wagon.circle = function (wagons) {
 >       : ^      ^^^          ^^^^^^^^^^^^^^^^^^^^
 >function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[] | undefined) => number
 >                                                              : ^      ^^^          ^^^^^^^^^^^^^^^^^^^^
->wagons : Wagon[]
->       : ^^^^^^^
+>wagons : Wagon[] | undefined
+>       : ^^^^^^^^^^^^^^^^^^^
 
     return wagons ? wagons.length : 3.14;
 >wagons ? wagons.length : 3.14 : number
 >                              : ^^^^^^
->wagons : Wagon[]
->       : ^^^^^^^
+>wagons : Wagon[] | undefined
+>       : ^^^^^^^^^^^^^^^^^^^
 >wagons.length : number
 >              : ^^^^^^
 >wagons : Wagon[]
@@ -68,8 +68,8 @@ Wagon.prototype.load = function (supplies) {
 >     : ^^^
 >function (supplies) {} : (supplies?: any[] | undefined) => void
 >                       : ^        ^^^        ^^^^^^^^^^^^^^^^^^
->supplies : any[]
->         : ^^^^^
+>supplies : any[] | undefined
+>         : ^^^^^^^^^^^^^^^^^
 }
 /** @param {*[]=} supplies - Yep, still a great type */
 Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
@@ -87,12 +87,12 @@ Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
 >       : ^^^
 >supplies => supplies ? supplies.length : -1 : (supplies?: any[] | undefined) => number
 >                                            : ^        ^^^        ^^^^^^^^^^^^^^^^^^^^
->supplies : any[]
->         : ^^^^^
+>supplies : any[] | undefined
+>         : ^^^^^^^^^^^^^^^^^
 >supplies ? supplies.length : -1 : number
 >                                : ^^^^^^
->supplies : any[]
->         : ^^^^^
+>supplies : any[] | undefined
+>         : ^^^^^^^^^^^^^^^^^
 >supplies.length : number
 >                : ^^^^^^
 >supplies : any[]

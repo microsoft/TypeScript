@@ -1,3 +1,4 @@
+// @target: es2015
 //@noUnusedParameters:true
 
 function f<_T, U>() { }

@@ -120,23 +120,23 @@ var test9_1: i2;
 >test9_1 : Symbol(test9_1, Decl(optionalPropertiesTest.ts, 34, 3))
 >i2 : Symbol(i2, Decl(optionalPropertiesTest.ts, 19, 32))
 
-var test9_2: i1;
->test9_2 : Symbol(test9_2, Decl(optionalPropertiesTest.ts, 35, 3))
+declare var test9_2: i1;
+>test9_2 : Symbol(test9_2, Decl(optionalPropertiesTest.ts, 35, 11))
 >i1 : Symbol(i1, Decl(optionalPropertiesTest.ts, 17, 41))
 
 test9_1 = test9_2;
 >test9_1 : Symbol(test9_1, Decl(optionalPropertiesTest.ts, 34, 3))
->test9_2 : Symbol(test9_2, Decl(optionalPropertiesTest.ts, 35, 3))
+>test9_2 : Symbol(test9_2, Decl(optionalPropertiesTest.ts, 35, 11))
 
 var test10_1: i1;
 >test10_1 : Symbol(test10_1, Decl(optionalPropertiesTest.ts, 37, 3))
 >i1 : Symbol(i1, Decl(optionalPropertiesTest.ts, 17, 41))
 
-var test10_2: i2;
->test10_2 : Symbol(test10_2, Decl(optionalPropertiesTest.ts, 38, 3))
+declare var test10_2: i2;
+>test10_2 : Symbol(test10_2, Decl(optionalPropertiesTest.ts, 38, 11))
 >i2 : Symbol(i2, Decl(optionalPropertiesTest.ts, 19, 32))
 
 test10_1 = test10_2;
 >test10_1 : Symbol(test10_1, Decl(optionalPropertiesTest.ts, 37, 3))
->test10_2 : Symbol(test10_2, Decl(optionalPropertiesTest.ts, 38, 3))
+>test10_2 : Symbol(test10_2, Decl(optionalPropertiesTest.ts, 38, 11))
 

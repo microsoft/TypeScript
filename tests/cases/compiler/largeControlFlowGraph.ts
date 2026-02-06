@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 // The control flow graph for the following statement block is 10000 nodes deep. Check that

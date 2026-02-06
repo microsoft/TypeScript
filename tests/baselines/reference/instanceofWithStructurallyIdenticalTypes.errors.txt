@@ -1,12 +1,24 @@
+instanceofWithStructurallyIdenticalTypes.ts(3,12): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
+instanceofWithStructurallyIdenticalTypes.ts(4,12): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
+instanceofWithStructurallyIdenticalTypes.ts(5,12): error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
 instanceofWithStructurallyIdenticalTypes.ts(32,18): error TS2339: Property 'item' does not exist on type 'never'.
+instanceofWithStructurallyIdenticalTypes.ts(39,11): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+instanceofWithStructurallyIdenticalTypes.ts(41,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+instanceofWithStructurallyIdenticalTypes.ts(42,21): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
 
 
-==== instanceofWithStructurallyIdenticalTypes.ts (1 errors) ====
+==== instanceofWithStructurallyIdenticalTypes.ts (7 errors) ====
     // Repro from #7271
     
     class C1 { item: string }
+               ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
     class C2 { item: string[] }
+               ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
     class C3 { item: string }
+               ~~~~
+!!! error TS2564: Property 'item' has no initializer and is not definitely assigned in the constructor.
     
     function foo1(x: C1 | C2 | C3): string {
         if (x instanceof C1) {
@@ -43,9 +55,15 @@ instanceofWithStructurallyIdenticalTypes.ts(32,18): error TS2339: Property 'item
     // More tests
     
     class A { a: string }
+              ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     class A1 extends A { }
     class A2 { a: string }
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     class B extends A { b: string }
+                        ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
     
     function goo(x: A) {
         if (x instanceof A) {

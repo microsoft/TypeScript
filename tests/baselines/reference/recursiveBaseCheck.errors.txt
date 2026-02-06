@@ -6,7 +6,7 @@ recursiveBaseCheck.ts(10,18): error TS2506: 'D' is referenced directly or indire
 
 
 ==== recursiveBaseCheck.ts (5 errors) ====
-    declare module Module {
+    declare namespace Module {
         class C extends D {
               ~
 !!! error TS2506: 'C' is referenced directly or indirectly in its own base expression.

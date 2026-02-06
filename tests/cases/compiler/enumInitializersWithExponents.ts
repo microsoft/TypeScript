@@ -1,3 +1,4 @@
+// @target: es2015
 // Must be integer literals.
 declare enum E {
     a = 1e3, // ok

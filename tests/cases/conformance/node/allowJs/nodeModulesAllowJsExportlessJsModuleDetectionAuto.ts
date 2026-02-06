@@ -1,4 +1,5 @@
-// @module: node16,nodenext
+// @target: es2022
+// @module: node16,node18,node20,nodenext
 // @allowJs: true
 // @outDir: ./out
 // @moduleDetection: auto

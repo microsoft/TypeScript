@@ -1,0 +1,66 @@
+everyTypeWithAnnotationAndInitializer.ts(6,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+everyTypeWithAnnotationAndInitializer.ts(10,5): error TS2564: Property 'source' has no initializer and is not definitely assigned in the constructor.
+everyTypeWithAnnotationAndInitializer.ts(11,5): error TS2564: Property 'recurse' has no initializer and is not definitely assigned in the constructor.
+everyTypeWithAnnotationAndInitializer.ts(12,5): error TS2564: Property 'wrapped' has no initializer and is not definitely assigned in the constructor.
+everyTypeWithAnnotationAndInitializer.ts(19,9): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+
+
+==== everyTypeWithAnnotationAndInitializer.ts (5 errors) ====
+    interface I {
+        id: number;
+    }
+    
+    class C implements I {
+        id: number;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class D<T>{
+        source: T;
+        ~~~~~~
+!!! error TS2564: Property 'source' has no initializer and is not definitely assigned in the constructor.
+        recurse: D<T>;
+        ~~~~~~~
+!!! error TS2564: Property 'recurse' has no initializer and is not definitely assigned in the constructor.
+        wrapped: D<D<T>>
+        ~~~~~~~
+!!! error TS2564: Property 'wrapped' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    function F(x: string): number { return 42; }
+    
+    namespace M {
+        export class A {
+            name: string;
+            ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        export function F2(x: number): string { return x.toString(); }
+    }
+    
+    var aNumber: number = 9.9;
+    var aString: string = 'this is a string';
+    var aDate: Date = new Date(12);
+    var anObject: Object = new Object();
+    
+    var anAny: any = null;
+    var aSecondAny: any = undefined;
+    var aVoid: void = undefined;
+    
+    var anInterface: I = new C();
+    var aClass: C = new C();
+    var aGenericClass: D<string> = new D<string>();
+    var anObjectLiteral: I = { id: 12 };
+    var anOtherObjectLiteral: { id: number } = new C();
+    
+    var aFunction: typeof F = F;
+    var anOtherFunction: (x: string) => number = F;
+    var aLambda: typeof F = (x) => 2;
+    
+    var aModule: typeof M = M;
+    var aClassInModule: M.A = new M.A();
+    var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';
+    
+    

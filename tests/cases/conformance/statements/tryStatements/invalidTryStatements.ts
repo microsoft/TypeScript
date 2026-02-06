@@ -1,3 +1,4 @@
+// @target: es2015
 function fn() {
     catch(x) { } // error missing try
 

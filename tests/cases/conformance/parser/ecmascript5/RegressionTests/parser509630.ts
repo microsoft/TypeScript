@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class Type {
     public examples = [ // typing here
 }

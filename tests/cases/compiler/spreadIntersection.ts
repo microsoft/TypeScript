@@ -1,3 +1,4 @@
+// @target: es2015
 var intersection: { a: number } & { b: string };
 
 var o1: { a: number, b: string };

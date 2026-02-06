@@ -1,3 +1,4 @@
+// @target: es2015
 let x: string | number | boolean | RegExp;
 
 x = "";

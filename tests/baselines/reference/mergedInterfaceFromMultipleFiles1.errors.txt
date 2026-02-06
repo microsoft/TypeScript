@@ -1,0 +1,35 @@
+mergedInterfaceFromMultipleFiles1_1.ts(10,17): error TS2454: Variable 'c' is used before being assigned.
+mergedInterfaceFromMultipleFiles1_1.ts(11,17): error TS2454: Variable 'c' is used before being assigned.
+mergedInterfaceFromMultipleFiles1_1.ts(12,17): error TS2454: Variable 'c' is used before being assigned.
+mergedInterfaceFromMultipleFiles1_1.ts(13,15): error TS2454: Variable 'c' is used before being assigned.
+
+
+==== mergedInterfaceFromMultipleFiles1_1.ts (4 errors) ====
+    /// <reference path='mergedInterfaceFromMultipleFiles1_0.ts'/>
+    
+    interface D { bar(): number; }
+    
+    interface C extends D {
+    	b(): Date;
+    }
+    
+    var c:C;
+    var a: string = c.foo();
+                    ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var b: number = c.bar();
+                    ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var d: number = c.a();
+                    ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var e: Date = c.b();
+                  ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+==== mergedInterfaceFromMultipleFiles1_0.ts (0 errors) ====
+    interface I { foo(): string; }
+    
+    interface C extends I {
+    	a(): number;
+    }
+    

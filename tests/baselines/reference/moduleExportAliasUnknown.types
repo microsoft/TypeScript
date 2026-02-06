@@ -1,5 +1,8 @@
 //// [tests/cases/conformance/salsa/moduleExportAliasUnknown.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === bug27025.js ===
 module.exports = window.nonprop;
 >module.exports = window.nonprop : any

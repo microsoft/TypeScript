@@ -1,4 +1,5 @@
-// @target: ES5
+// @strict: false
+// @target: ES5, ES2015
 // no errors
 
 class C {

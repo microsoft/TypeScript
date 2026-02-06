@@ -28,9 +28,9 @@ opts.objectRef || opts.getObjectRef();
 >opts.objectRef : Symbol(objectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 8, 6), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 9, 6))
 >opts : Symbol(opts, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 7, 11))
 >objectRef : Symbol(objectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 8, 6), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 9, 6))
->opts.getObjectRef : Symbol(getObjectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 8, 29), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 9, 24))
+>opts.getObjectRef : Symbol(getObjectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 8, 29))
 >opts : Symbol(opts, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 7, 11))
->getObjectRef : Symbol(getObjectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 8, 29), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 9, 24))
+>getObjectRef : Symbol(getObjectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 8, 29))
 
 // repro #49643 issuecomment-1174455723
 
