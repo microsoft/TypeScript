@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/checkingObjectDefinePropertyOnFunctionNonexistentPropertyNoCrash1.ts] ////
+
+=== index.js ===
+export function test(fn) {
+>test : (fn: any) => { (...args: any[]): void; readonly name: string; }
+>     : ^  ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn : any
+>   : ^^^
+
+  const composed = function (...args) { }
+>composed : { (...args: any[]): void; readonly name: string; }
+>         : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (...args) { } : { (...args: any[]): void; readonly name: string; }
+>                       : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>args : any[]
+>     : ^^^^^
+
+  Object.defineProperty(composed, 'name', {
+>Object.defineProperty(composed, 'name', {    value: composed.fn + '_test'  }) : { (...args: any[]): void; readonly name: string; }
+>                                                                              : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
+>composed : { (...args: any[]): void; readonly name: string; }
+>         : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'name' : "name"
+>       : ^^^^^^
+>{    value: composed.fn + '_test'  } : { value: string; }
+>                                     : ^^^^^^^^^^^^^^^^^^
+
+    value: composed.fn + '_test'
+>value : string
+>      : ^^^^^^
+>composed.fn + '_test' : string
+>                      : ^^^^^^
+>composed.fn : any
+>            : ^^^
+>composed : { (...args: any[]): void; readonly name: string; }
+>         : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn : any
+>   : ^^^
+>'_test' : "_test"
+>        : ^^^^^^^
+
+  })
+
+  return composed
+>composed : { (...args: any[]): void; readonly name: string; }
+>         : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+

@@ -1,0 +1,12 @@
+b.ts(1,8): error TS18061: 'foo' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?
+b.ts(2,8): error TS17012: 'foo' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+
+
+==== b.ts (2 errors) ====
+    import.foo();
+           ~~~
+!!! error TS18061: 'foo' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?
+    import.foo;
+           ~~~
+!!! error TS17012: 'foo' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+    

@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 // TODO: we should probably support this like we do in completionListInvalidMemberNames.ts
 
 ////declare var Symbol: SymbolConstructor;

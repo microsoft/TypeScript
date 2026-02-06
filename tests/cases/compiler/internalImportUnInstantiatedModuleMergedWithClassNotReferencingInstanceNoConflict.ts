@@ -1,10 +1,11 @@
+// @target: es2015
 class A {
     aProp: string;
 }
-module A {
+namespace A {
     export interface X { s: string }
 }
 
-module B {
+namespace B {
     import Y = A;
 }

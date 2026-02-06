@@ -7,10 +7,8 @@ class foo<T> {
 } 
 
 //// [typeParametersInStaticMethods.js]
-var foo = /** @class */ (function () {
-    function foo() {
+"use strict";
+class foo {
+    static M(x) {
     }
-    foo.M = function (x) {
-    };
-    return foo;
-}());
+}

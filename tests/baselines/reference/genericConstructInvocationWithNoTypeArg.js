@@ -8,4 +8,5 @@ var f2: Foo<number> = new Foo(3);
 
 
 //// [genericConstructInvocationWithNoTypeArg.js]
+"use strict";
 var f2 = new Foo(3);

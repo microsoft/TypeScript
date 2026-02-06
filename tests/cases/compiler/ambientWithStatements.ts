@@ -1,4 +1,8 @@
-declare module M {
+// @target: es2015
+// @ignoreDeprecations: 6.0
+// @strict: false
+// @alwaysStrict: true, false
+declare namespace M {
     break;
     continue;
     debugger;

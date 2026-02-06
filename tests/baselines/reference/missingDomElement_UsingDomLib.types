@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/missingDomElement_UsingDomLib.ts] ////
+
+=== missingDomElement_UsingDomLib.ts ===
+interface HTMLMissingElement {}
+
+(({}) as any as HTMLMissingElement).textContent;
+>(({}) as any as HTMLMissingElement).textContent : any
+>                                                : ^^^
+>(({}) as any as HTMLMissingElement) : HTMLMissingElement
+>                                    : ^^^^^^^^^^^^^^^^^^
+>({}) as any as HTMLMissingElement : HTMLMissingElement
+>                                  : ^^^^^^^^^^^^^^^^^^
+>({}) as any : any
+>            : ^^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+>textContent : any
+>            : ^^^
+

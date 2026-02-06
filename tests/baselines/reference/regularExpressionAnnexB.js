@@ -47,6 +47,7 @@ const regexesWithBraces: RegExp[] = [
 
 
 //// [regularExpressionAnnexB.js]
+"use strict";
 const regexes = [
     /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/,
     /[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/,

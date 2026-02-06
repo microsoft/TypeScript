@@ -6,4 +6,5 @@ var c : {
 }
 
 //// [parser645484.js]
+"use strict";
 var c;

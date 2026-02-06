@@ -170,7 +170,7 @@ noImplicitAnyStringIndexerOnObject.ts(99,1): error TS7052: Element implicitly ha
 !!! error TS7053:   Property '[sym]' does not exist on type '{ a: number; }'.
     
     enum NumEnum { a, b }
-    let numEnumKey: NumEnum;
+    declare let numEnumKey: NumEnum;
     o[numEnumKey];
     ~~~~~~~~~~~~~
 !!! error TS7053: Element implicitly has an 'any' type because expression of type 'NumEnum' can't be used to index type '{ a: number; }'.
@@ -178,7 +178,7 @@ noImplicitAnyStringIndexerOnObject.ts(99,1): error TS7052: Element implicitly ha
     
     
     enum StrEnum { a = "a", b = "b" }
-    let strEnumKey: StrEnum;
+    declare let strEnumKey: StrEnum;
     o[strEnumKey];
     ~~~~~~~~~~~~~
 !!! error TS7053: Element implicitly has an 'any' type because expression of type 'StrEnum' can't be used to index type '{ a: number; }'.

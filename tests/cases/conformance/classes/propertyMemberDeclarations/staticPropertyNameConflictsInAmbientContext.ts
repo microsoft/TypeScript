@@ -1,3 +1,4 @@
+// @target: es2015
 
 //@Filename: decl.d.ts
 // name

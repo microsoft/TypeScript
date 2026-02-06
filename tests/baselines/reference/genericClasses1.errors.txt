@@ -1,0 +1,13 @@
+genericClasses1.ts(2,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== genericClasses1.ts (1 errors) ====
+    class C<T> {
+    	public x: T;
+    	       ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var v1 = new C<string>();
+    
+    var y = v1.x; // should be 'string'

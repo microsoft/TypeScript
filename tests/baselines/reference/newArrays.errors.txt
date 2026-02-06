@@ -1,0 +1,18 @@
+newArrays.ts(4,10): error TS2564: Property 'fa' has no initializer and is not definitely assigned in the constructor.
+
+
+==== newArrays.ts (1 errors) ====
+    namespace M {
+    	class Foo {}
+    	class Gar {
+    		public fa: Foo[];
+    		       ~~
+!!! error TS2564: Property 'fa' has no initializer and is not definitely assigned in the constructor.
+    		public x = 10;
+    		public y = 10;
+    
+    		public m () {
+    			this.fa = new Array<Foo>(this.x * this.y);		
+    		}
+    	}
+    }

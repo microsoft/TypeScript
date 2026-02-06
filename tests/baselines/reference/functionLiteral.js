@@ -16,11 +16,12 @@ var z: { new (x: number): number; };
 var z: new (x: number) => number;
 
 //// [functionLiteral.js]
+"use strict";
 // basic valid forms of function literals
-var x = function () { return 1; };
+var x = () => 1;
 var x;
 var y;
 var y;
-var y2 = function (x) { return x; };
+var y2 = (x) => x;
 var z;
 var z;

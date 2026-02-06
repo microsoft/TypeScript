@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @module: commonjs
 
 // @filename: t1.ts
@@ -13,10 +15,10 @@ export enum E {
 export const enum D {
     A, B, C
 }
-export module M {
+export namespace M {
     export var x;
 }
-export module N {
+export namespace N {
     export interface I {
     }
 }

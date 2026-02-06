@@ -1,3 +1,4 @@
+// @target: es2015
 //Note: Below simpler repro
 
 interface I1<T> {

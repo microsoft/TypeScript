@@ -14,3 +14,4 @@ interface IFace1{
 
 
 //// [implicitAnyFunctionOverloadWithImplicitAnyReturnType.js]
+"use strict";

@@ -1,4 +1,4 @@
-indexWithoutParamType2.ts(3,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+indexWithoutParamType2.ts(3,5): error TS2564: Property '[x]' has no initializer and is not definitely assigned in the constructor.
 indexWithoutParamType2.ts(3,6): error TS2304: Cannot find name 'x'.
 
 
@@ -7,7 +7,7 @@ indexWithoutParamType2.ts(3,6): error TS2304: Cannot find name 'x'.
         // Used to be indexer, now it is a computed property
         [x]: string
         ~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+!!! error TS2564: Property '[x]' has no initializer and is not definitely assigned in the constructor.
          ~
 !!! error TS2304: Cannot find name 'x'.
     }

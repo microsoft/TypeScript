@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es5
 // @allowUnreachableCode: true
 
@@ -14,7 +15,7 @@ declare module "fs" {
 import fs = module("fs");
 
 
-module TypeScriptAllInOne {
+namespace TypeScriptAllInOne {
     export class Program {
         static Main(...args: string[]) {
             try {

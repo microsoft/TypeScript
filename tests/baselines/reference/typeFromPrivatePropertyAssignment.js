@@ -15,6 +15,7 @@ class C {
 
 
 //// [typeFromPrivatePropertyAssignment.js]
+"use strict";
 class C {
     #a;
     #b;

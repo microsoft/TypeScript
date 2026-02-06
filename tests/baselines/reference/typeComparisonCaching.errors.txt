@@ -28,9 +28,9 @@ typeComparisonCaching.ts(27,1): error TS2322: Type 'D' is not assignable to type
     }
     
     var a: A;
-    var b: B;
+    declare var b: B;
     var c: C;
-    var d: D;
+    declare var d: D;
     
     a = b;
     ~

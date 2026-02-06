@@ -16,7 +16,7 @@ verify.completions({
   marker: "",
   includes: {
     name: "Component",
-    source: "/component",
+    source: "./component",
     hasAction: true,
     sortText: completion.SortText.AutoImportSuggestions,
   },
@@ -28,7 +28,7 @@ verify.completions({
 
 verify.applyCodeActionFromCompletion("", {
   name: "Component",
-  source: "/component",
+  source: "./component",
   description: `Add import from "./component"`,
   newFileContent:
 `import Component from "./component";

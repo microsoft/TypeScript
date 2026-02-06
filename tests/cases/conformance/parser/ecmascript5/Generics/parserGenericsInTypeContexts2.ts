@@ -1,3 +1,4 @@
+// @target: es2015
 class C extends A<X<T>, Y<Z<T>>> implements B<X<T>, Y<Z<T>>> {
 }
 

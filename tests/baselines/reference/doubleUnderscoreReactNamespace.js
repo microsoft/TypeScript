@@ -15,4 +15,4 @@ export {}
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var thing = __make(__foot, null);
+const thing = __make(__foot, null);

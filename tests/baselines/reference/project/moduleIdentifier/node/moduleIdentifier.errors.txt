@@ -1,0 +1,13 @@
+error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== decl.ts (0 errors) ====
+    export interface P { x: number; y: number; }
+    export var a = 1;
+==== consume.ts (0 errors) ====
+    import M = require("./decl");
+    
+    var p : M.P;
+    var x1 = M.a;
+    

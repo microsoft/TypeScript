@@ -6,7 +6,7 @@ import moduleC = require("moduleC");
 >moduleC : any
 >        : ^^^
 
-import ClassB = require("recursiveExportAssignmentAndFindAliasedType2_moduleB");
+import ClassB = require("./recursiveExportAssignmentAndFindAliasedType2_moduleB");
 >ClassB : typeof ClassB
 >       : ^^^^^^^^^^^^^
 

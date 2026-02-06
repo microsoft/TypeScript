@@ -1,0 +1,29 @@
+classWithEmptyBody.ts(5,13): error TS2454: Variable 'c' is used before being assigned.
+classWithEmptyBody.ts(17,13): error TS2454: Variable 'd' is used before being assigned.
+
+
+==== classWithEmptyBody.ts (2 errors) ====
+    class C {
+    }
+    
+    var c: C;
+    var o: {} = c;
+                ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    c = 1;
+    c = { foo: '' }
+    c = () => { }
+    
+    class D {
+        constructor() {
+            return 1;
+        }
+    }
+    
+    var d: D;
+    var o: {} = d;
+                ~
+!!! error TS2454: Variable 'd' is used before being assigned.
+    d = 1;
+    d = { foo: '' }
+    d = () => { }

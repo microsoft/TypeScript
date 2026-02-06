@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/declarationEmitShadowing.ts] ////
+
+=== declarationEmitShadowing.ts ===
+export class A<T = any> {
+>A : A<T>
+>  : ^^^^
+
+  public readonly ShadowedButDoesNotRequireRenaming = <T>(): T => {
+>ShadowedButDoesNotRequireRenaming : <T_1>() => T_1
+>                                  : ^^^^^^^^^^^   
+><T>(): T => {      return null as any  } : <T_1>() => T_1
+>                                         : ^^^^^^^^^^^   
+
+      return null as any
+>null as any : any
+  }
+}
+
+export function needsRenameForShadowing<T>() {
+>needsRenameForShadowing : <T>() => <T_1>(t: T, t2: T_1) => void
+>                        : ^ ^^^^^^^^   ^^   ^^^       ^^^^^^^^^
+
+  type A = T
+>A : T
+>  : ^
+
+  return function O<T>(t: A, t2: T) {
+>function O<T>(t: A, t2: T) {  } : <T_1>(t: T, t2: T_1) => void
+>                                : ^^^^^^ ^^^^^  ^^   ^^^^^^^^^
+>O : <T>(t: T_1, t2: T) => void
+>  : ^ ^^ ^^^^^^^  ^^ ^^^^^^^^^
+>t : T_1
+>  : ^^^
+>t2 : T
+>   : ^
+  }
+}
+

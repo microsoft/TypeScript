@@ -1,3 +1,6 @@
+// @target: es2015
+// @module: commonjs
+// @strict: false
 // @lib: es2015
 // @traceResolution: true
 

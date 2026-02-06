@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es2015
 
 label: function fn() { }
@@ -10,6 +11,6 @@ label: var a = 1;
 label: let b = 1;
 label: const c = 1;
 
-label: module M { }
+label: namespace M { }
 label: namespace N {}
 label: type T = {}

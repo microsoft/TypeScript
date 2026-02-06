@@ -14,6 +14,7 @@ new T2().f()
 
 
 //// [classFieldSuperNotAccessible.js]
+"use strict";
 class T {
     field = () => { };
 }

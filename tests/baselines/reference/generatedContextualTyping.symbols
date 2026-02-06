@@ -76,7 +76,7 @@ var x7: Base[] = [d1, d2];
 
 var x8: Array<Base> = [d1, d2];
 >x8 : Symbol(x8, Decl(generatedContextualTyping.ts, 12, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -167,7 +167,7 @@ class x19 { member: Base[] = [d1, d2] }
 class x20 { member: Array<Base> = [d1, d2] }
 >x20 : Symbol(x20, Decl(generatedContextualTyping.ts, 23, 39))
 >member : Symbol(x20.member, Decl(generatedContextualTyping.ts, 24, 11))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -262,7 +262,7 @@ class x31 { private member: Base[] = [d1, d2] }
 class x32 { private member: Array<Base> = [d1, d2] }
 >x32 : Symbol(x32, Decl(generatedContextualTyping.ts, 35, 47))
 >member : Symbol(x32.member, Decl(generatedContextualTyping.ts, 36, 11))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -357,7 +357,7 @@ class x43 { public member: Base[] = [d1, d2] }
 class x44 { public member: Array<Base> = [d1, d2] }
 >x44 : Symbol(x44, Decl(generatedContextualTyping.ts, 47, 46))
 >member : Symbol(x44.member, Decl(generatedContextualTyping.ts, 48, 11))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -452,7 +452,7 @@ class x55 { static member: Base[] = [d1, d2] }
 class x56 { static member: Array<Base> = [d1, d2] }
 >x56 : Symbol(x56, Decl(generatedContextualTyping.ts, 59, 46))
 >member : Symbol(x56.member, Decl(generatedContextualTyping.ts, 60, 11))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -547,7 +547,7 @@ class x67 { private static member: Base[] = [d1, d2] }
 class x68 { private static member: Array<Base> = [d1, d2] }
 >x68 : Symbol(x68, Decl(generatedContextualTyping.ts, 71, 54))
 >member : Symbol(x68.member, Decl(generatedContextualTyping.ts, 72, 11))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -642,7 +642,7 @@ class x79 { public static member: Base[] = [d1, d2] }
 class x80 { public static member: Array<Base> = [d1, d2] }
 >x80 : Symbol(x80, Decl(generatedContextualTyping.ts, 83, 53))
 >member : Symbol(x80.member, Decl(generatedContextualTyping.ts, 84, 11))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -737,7 +737,7 @@ class x91 { constructor(parm: Base[] = [d1, d2]) { } }
 class x92 { constructor(parm: Array<Base> = [d1, d2]) { } }
 >x92 : Symbol(x92, Decl(generatedContextualTyping.ts, 95, 54))
 >parm : Symbol(parm, Decl(generatedContextualTyping.ts, 96, 24))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -832,7 +832,7 @@ class x103 { constructor(public parm: Base[] = [d1, d2]) { } }
 class x104 { constructor(public parm: Array<Base> = [d1, d2]) { } }
 >x104 : Symbol(x104, Decl(generatedContextualTyping.ts, 107, 62))
 >parm : Symbol(x104.parm, Decl(generatedContextualTyping.ts, 108, 25))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -927,7 +927,7 @@ class x115 { constructor(private parm: Base[] = [d1, d2]) { } }
 class x116 { constructor(private parm: Array<Base> = [d1, d2]) { } }
 >x116 : Symbol(x116, Decl(generatedContextualTyping.ts, 119, 63))
 >parm : Symbol(x116.parm, Decl(generatedContextualTyping.ts, 120, 25))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -1022,7 +1022,7 @@ function x127(parm: Base[] = [d1, d2]) { }
 function x128(parm: Array<Base> = [d1, d2]) { }
 >x128 : Symbol(x128, Decl(generatedContextualTyping.ts, 131, 42))
 >parm : Symbol(parm, Decl(generatedContextualTyping.ts, 132, 14))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -1109,7 +1109,7 @@ function x139(): Base[] { return [d1, d2]; }
 
 function x140(): Array<Base> { return [d1, d2]; }
 >x140 : Symbol(x140, Decl(generatedContextualTyping.ts, 143, 44))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -1208,7 +1208,7 @@ function x151(): Base[] { return [d1, d2]; return [d1, d2]; }
 
 function x152(): Array<Base> { return [d1, d2]; return [d1, d2]; }
 >x152 : Symbol(x152, Decl(generatedContextualTyping.ts, 155, 61))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -1305,7 +1305,7 @@ var x163: () => Base[] = () => { return [d1, d2]; };
 
 var x164: () => Array<Base> = () => { return [d1, d2]; };
 >x164 : Symbol(x164, Decl(generatedContextualTyping.ts, 168, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -1388,7 +1388,7 @@ var x175: () => Base[] = function() { return [d1, d2]; };
 
 var x176: () => Array<Base> = function() { return [d1, d2]; };
 >x176 : Symbol(x176, Decl(generatedContextualTyping.ts, 180, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -1425,193 +1425,193 @@ var x180: () => Genric<Base> = function() { return { func: n => { return [d1, d2
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x181 { var t: () => Base[] = () => [d1, d2]; }
+namespace x181 { var t: () => Base[] = () => [d1, d2]; }
 >x181 : Symbol(x181, Decl(generatedContextualTyping.ts, 184, 90))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 185, 17))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 185, 20))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x182 { var t: () => Base[] = function() { return [d1, d2] }; }
->x182 : Symbol(x182, Decl(generatedContextualTyping.ts, 185, 53))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 186, 17))
+namespace x182 { var t: () => Base[] = function() { return [d1, d2] }; }
+>x182 : Symbol(x182, Decl(generatedContextualTyping.ts, 185, 56))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 186, 20))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x183 { var t: () => Base[] = function named() { return [d1, d2] }; }
->x183 : Symbol(x183, Decl(generatedContextualTyping.ts, 186, 69))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 187, 17))
+namespace x183 { var t: () => Base[] = function named() { return [d1, d2] }; }
+>x183 : Symbol(x183, Decl(generatedContextualTyping.ts, 186, 72))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 187, 20))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->named : Symbol(named, Decl(generatedContextualTyping.ts, 187, 35))
+>named : Symbol(named, Decl(generatedContextualTyping.ts, 187, 38))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x184 { var t: { (): Base[]; } = () => [d1, d2]; }
->x184 : Symbol(x184, Decl(generatedContextualTyping.ts, 187, 75))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 188, 17))
->Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
->d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
-
-module x185 { var t: { (): Base[]; } = function() { return [d1, d2] }; }
->x185 : Symbol(x185, Decl(generatedContextualTyping.ts, 188, 56))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 189, 17))
+namespace x184 { var t: { (): Base[]; } = () => [d1, d2]; }
+>x184 : Symbol(x184, Decl(generatedContextualTyping.ts, 187, 78))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 188, 20))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x186 { var t: { (): Base[]; } = function named() { return [d1, d2] }; }
->x186 : Symbol(x186, Decl(generatedContextualTyping.ts, 189, 72))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 190, 17))
->Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->named : Symbol(named, Decl(generatedContextualTyping.ts, 190, 38))
->d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
->d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
-
-module x187 { var t: Base[] = [d1, d2]; }
->x187 : Symbol(x187, Decl(generatedContextualTyping.ts, 190, 78))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 191, 17))
+namespace x185 { var t: { (): Base[]; } = function() { return [d1, d2] }; }
+>x185 : Symbol(x185, Decl(generatedContextualTyping.ts, 188, 59))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 189, 20))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x188 { var t: Array<Base> = [d1, d2]; }
->x188 : Symbol(x188, Decl(generatedContextualTyping.ts, 191, 41))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 192, 17))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+namespace x186 { var t: { (): Base[]; } = function named() { return [d1, d2] }; }
+>x186 : Symbol(x186, Decl(generatedContextualTyping.ts, 189, 75))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 190, 20))
+>Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
+>named : Symbol(named, Decl(generatedContextualTyping.ts, 190, 41))
+>d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
+>d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
+
+namespace x187 { var t: Base[] = [d1, d2]; }
+>x187 : Symbol(x187, Decl(generatedContextualTyping.ts, 190, 81))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 191, 20))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x189 { var t: { [n: number]: Base; } = [d1, d2]; }
->x189 : Symbol(x189, Decl(generatedContextualTyping.ts, 192, 46))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 193, 17))
->n : Symbol(n, Decl(generatedContextualTyping.ts, 193, 24))
+namespace x188 { var t: Array<Base> = [d1, d2]; }
+>x188 : Symbol(x188, Decl(generatedContextualTyping.ts, 191, 44))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 192, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x190 { var t: {n: Base[]; }  = { n: [d1, d2] }; }
->x190 : Symbol(x190, Decl(generatedContextualTyping.ts, 193, 57))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 194, 17))
->n : Symbol(n, Decl(generatedContextualTyping.ts, 194, 22))
+namespace x189 { var t: { [n: number]: Base; } = [d1, d2]; }
+>x189 : Symbol(x189, Decl(generatedContextualTyping.ts, 192, 49))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 193, 20))
+>n : Symbol(n, Decl(generatedContextualTyping.ts, 193, 27))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->n : Symbol(n, Decl(generatedContextualTyping.ts, 194, 39))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x191 { var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; }
->x191 : Symbol(x191, Decl(generatedContextualTyping.ts, 194, 56))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 195, 17))
->s : Symbol(s, Decl(generatedContextualTyping.ts, 195, 22))
+namespace x190 { var t: {n: Base[]; }  = { n: [d1, d2] }; }
+>x190 : Symbol(x190, Decl(generatedContextualTyping.ts, 193, 60))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 194, 20))
+>n : Symbol(n, Decl(generatedContextualTyping.ts, 194, 25))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->n : Symbol(n, Decl(generatedContextualTyping.ts, 195, 41), Decl(generatedContextualTyping.ts, 195, 52))
->n : Symbol(n, Decl(generatedContextualTyping.ts, 195, 41), Decl(generatedContextualTyping.ts, 195, 52))
+>n : Symbol(n, Decl(generatedContextualTyping.ts, 194, 42))
+>d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
+>d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
+
+namespace x191 { var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; }
+>x191 : Symbol(x191, Decl(generatedContextualTyping.ts, 194, 59))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 195, 20))
+>s : Symbol(s, Decl(generatedContextualTyping.ts, 195, 25))
+>Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
+>n : Symbol(n, Decl(generatedContextualTyping.ts, 195, 44), Decl(generatedContextualTyping.ts, 195, 55))
+>n : Symbol(n, Decl(generatedContextualTyping.ts, 195, 44), Decl(generatedContextualTyping.ts, 195, 55))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 
-module x192 { var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
->x192 : Symbol(x192, Decl(generatedContextualTyping.ts, 195, 81))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 196, 17))
+namespace x192 { var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
+>x192 : Symbol(x192, Decl(generatedContextualTyping.ts, 195, 84))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 196, 20))
 >Genric : Symbol(Genric, Decl(generatedContextualTyping.ts, 2, 42))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->func : Symbol(func, Decl(generatedContextualTyping.ts, 196, 37))
->n : Symbol(n, Decl(generatedContextualTyping.ts, 196, 43))
+>func : Symbol(func, Decl(generatedContextualTyping.ts, 196, 40))
+>n : Symbol(n, Decl(generatedContextualTyping.ts, 196, 46))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x193 { export var t: () => Base[] = () => [d1, d2]; }
->x193 : Symbol(x193, Decl(generatedContextualTyping.ts, 196, 74))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 197, 24))
->Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
->d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
-
-module x194 { export var t: () => Base[] = function() { return [d1, d2] }; }
->x194 : Symbol(x194, Decl(generatedContextualTyping.ts, 197, 60))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 198, 24))
+namespace x193 { export var t: () => Base[] = () => [d1, d2]; }
+>x193 : Symbol(x193, Decl(generatedContextualTyping.ts, 196, 77))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 197, 27))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x195 { export var t: () => Base[] = function named() { return [d1, d2] }; }
->x195 : Symbol(x195, Decl(generatedContextualTyping.ts, 198, 76))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 199, 24))
->Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->named : Symbol(named, Decl(generatedContextualTyping.ts, 199, 42))
->d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
->d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
-
-module x196 { export var t: { (): Base[]; } = () => [d1, d2]; }
->x196 : Symbol(x196, Decl(generatedContextualTyping.ts, 199, 82))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 200, 24))
+namespace x194 { export var t: () => Base[] = function() { return [d1, d2] }; }
+>x194 : Symbol(x194, Decl(generatedContextualTyping.ts, 197, 63))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 198, 27))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x197 { export var t: { (): Base[]; } = function() { return [d1, d2] }; }
->x197 : Symbol(x197, Decl(generatedContextualTyping.ts, 200, 63))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 201, 24))
+namespace x195 { export var t: () => Base[] = function named() { return [d1, d2] }; }
+>x195 : Symbol(x195, Decl(generatedContextualTyping.ts, 198, 79))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 199, 27))
+>Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
+>named : Symbol(named, Decl(generatedContextualTyping.ts, 199, 45))
+>d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
+>d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
+
+namespace x196 { export var t: { (): Base[]; } = () => [d1, d2]; }
+>x196 : Symbol(x196, Decl(generatedContextualTyping.ts, 199, 85))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 200, 27))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x198 { export var t: { (): Base[]; } = function named() { return [d1, d2] }; }
->x198 : Symbol(x198, Decl(generatedContextualTyping.ts, 201, 79))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 202, 24))
->Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->named : Symbol(named, Decl(generatedContextualTyping.ts, 202, 45))
->d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
->d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
-
-module x199 { export var t: Base[] = [d1, d2]; }
->x199 : Symbol(x199, Decl(generatedContextualTyping.ts, 202, 85))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 203, 24))
+namespace x197 { export var t: { (): Base[]; } = function() { return [d1, d2] }; }
+>x197 : Symbol(x197, Decl(generatedContextualTyping.ts, 200, 66))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 201, 27))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x200 { export var t: Array<Base> = [d1, d2]; }
->x200 : Symbol(x200, Decl(generatedContextualTyping.ts, 203, 48))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 204, 24))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+namespace x198 { export var t: { (): Base[]; } = function named() { return [d1, d2] }; }
+>x198 : Symbol(x198, Decl(generatedContextualTyping.ts, 201, 82))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 202, 27))
+>Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
+>named : Symbol(named, Decl(generatedContextualTyping.ts, 202, 48))
+>d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
+>d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
+
+namespace x199 { export var t: Base[] = [d1, d2]; }
+>x199 : Symbol(x199, Decl(generatedContextualTyping.ts, 202, 88))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 203, 27))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x201 { export var t: { [n: number]: Base; } = [d1, d2]; }
->x201 : Symbol(x201, Decl(generatedContextualTyping.ts, 204, 53))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 205, 24))
->n : Symbol(n, Decl(generatedContextualTyping.ts, 205, 31))
+namespace x200 { export var t: Array<Base> = [d1, d2]; }
+>x200 : Symbol(x200, Decl(generatedContextualTyping.ts, 203, 51))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 204, 27))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x202 { export var t: {n: Base[]; }  = { n: [d1, d2] }; }
->x202 : Symbol(x202, Decl(generatedContextualTyping.ts, 205, 64))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 206, 24))
->n : Symbol(n, Decl(generatedContextualTyping.ts, 206, 29))
+namespace x201 { export var t: { [n: number]: Base; } = [d1, d2]; }
+>x201 : Symbol(x201, Decl(generatedContextualTyping.ts, 204, 56))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 205, 27))
+>n : Symbol(n, Decl(generatedContextualTyping.ts, 205, 34))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->n : Symbol(n, Decl(generatedContextualTyping.ts, 206, 46))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
-module x203 { export var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; }
->x203 : Symbol(x203, Decl(generatedContextualTyping.ts, 206, 63))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 207, 24))
->s : Symbol(s, Decl(generatedContextualTyping.ts, 207, 29))
+namespace x202 { export var t: {n: Base[]; }  = { n: [d1, d2] }; }
+>x202 : Symbol(x202, Decl(generatedContextualTyping.ts, 205, 67))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 206, 27))
+>n : Symbol(n, Decl(generatedContextualTyping.ts, 206, 32))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->n : Symbol(n, Decl(generatedContextualTyping.ts, 207, 48), Decl(generatedContextualTyping.ts, 207, 59))
->n : Symbol(n, Decl(generatedContextualTyping.ts, 207, 48), Decl(generatedContextualTyping.ts, 207, 59))
+>n : Symbol(n, Decl(generatedContextualTyping.ts, 206, 49))
+>d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
+>d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
+
+namespace x203 { export var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; }
+>x203 : Symbol(x203, Decl(generatedContextualTyping.ts, 206, 66))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 207, 27))
+>s : Symbol(s, Decl(generatedContextualTyping.ts, 207, 32))
+>Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
+>n : Symbol(n, Decl(generatedContextualTyping.ts, 207, 51), Decl(generatedContextualTyping.ts, 207, 62))
+>n : Symbol(n, Decl(generatedContextualTyping.ts, 207, 51), Decl(generatedContextualTyping.ts, 207, 62))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 
-module x204 { export var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
->x204 : Symbol(x204, Decl(generatedContextualTyping.ts, 207, 88))
->t : Symbol(t, Decl(generatedContextualTyping.ts, 208, 24))
+namespace x204 { export var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
+>x204 : Symbol(x204, Decl(generatedContextualTyping.ts, 207, 91))
+>t : Symbol(t, Decl(generatedContextualTyping.ts, 208, 27))
 >Genric : Symbol(Genric, Decl(generatedContextualTyping.ts, 2, 42))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->func : Symbol(func, Decl(generatedContextualTyping.ts, 208, 44))
->n : Symbol(n, Decl(generatedContextualTyping.ts, 208, 50))
+>func : Symbol(func, Decl(generatedContextualTyping.ts, 208, 47))
+>n : Symbol(n, Decl(generatedContextualTyping.ts, 208, 53))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
 
@@ -1649,7 +1649,7 @@ var x211 = <Base[]>[d1, d2];
 
 var x212 = <Array<Base>>[d1, d2];
 >x212 : Symbol(x212, Decl(generatedContextualTyping.ts, 214, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -1717,7 +1717,7 @@ var x221 = (<Base[]>undefined) || [d1, d2];
 
 var x222 = (<Array<Base>>undefined) || [d1, d2];
 >x222 : Symbol(x222, Decl(generatedContextualTyping.ts, 223, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >undefined : Symbol(undefined)
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
@@ -1793,7 +1793,7 @@ var x231: Base[]; x231 = [d1, d2];
 
 var x232: Array<Base>; x232 = [d1, d2];
 >x232 : Symbol(x232, Decl(generatedContextualTyping.ts, 233, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >x232 : Symbol(x232, Decl(generatedContextualTyping.ts, 233, 3))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
@@ -1896,7 +1896,7 @@ var x243: { n: Base[]; } = { n: [d1, d2] };
 var x244: { n: Array<Base>; } = { n: [d1, d2] };
 >x244 : Symbol(x244, Decl(generatedContextualTyping.ts, 245, 3))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 245, 11))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 245, 33))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
@@ -1969,7 +1969,7 @@ var x255: Base[][] = [[d1, d2]];
 
 var x256: Array<Base>[] = [[d1, d2]];
 >x256 : Symbol(x256, Decl(generatedContextualTyping.ts, 254, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -2037,7 +2037,7 @@ var x265: Base[] = [d1, d2] || undefined;
 
 var x266: Array<Base> = [d1, d2] || undefined;
 >x266 : Symbol(x266, Decl(generatedContextualTyping.ts, 263, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -2099,7 +2099,7 @@ var x273: Base[] = undefined || [d1, d2];
 
 var x274: Array<Base> = undefined || [d1, d2];
 >x274 : Symbol(x274, Decl(generatedContextualTyping.ts, 271, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >undefined : Symbol(undefined)
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
@@ -2168,7 +2168,7 @@ var x281: Base[] = [d1, d2] || [d1, d2];
 
 var x282: Array<Base> = [d1, d2] || [d1, d2];
 >x282 : Symbol(x282, Decl(generatedContextualTyping.ts, 279, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -2257,7 +2257,7 @@ var x291: Base[] = true ? [d1, d2] : [d1, d2];
 
 var x292: Array<Base> = true ? [d1, d2] : [d1, d2];
 >x292 : Symbol(x292, Decl(generatedContextualTyping.ts, 289, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -2361,7 +2361,7 @@ var x303: Base[] = true ? undefined : [d1, d2];
 
 var x304: Array<Base> = true ? undefined : [d1, d2];
 >x304 : Symbol(x304, Decl(generatedContextualTyping.ts, 301, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >undefined : Symbol(undefined)
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
@@ -2456,7 +2456,7 @@ var x315: Base[] = true ? [d1, d2] : undefined;
 
 var x316: Array<Base> = true ? [d1, d2] : undefined;
 >x316 : Symbol(x316, Decl(generatedContextualTyping.ts, 313, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 4, 40))
@@ -2559,7 +2559,7 @@ function x327(n: Base[]) { }; x327([d1, d2]);
 function x328(n: Array<Base>) { }; x328([d1, d2]);
 >x328 : Symbol(x328, Decl(generatedContextualTyping.ts, 324, 45))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 325, 14))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >x328 : Symbol(x328, Decl(generatedContextualTyping.ts, 324, 45))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))
@@ -2673,7 +2673,7 @@ var x339 = (n: Base[]) => n; x339([d1, d2]);
 var x340 = (n: Array<Base>) => n; x340([d1, d2]);
 >x340 : Symbol(x340, Decl(generatedContextualTyping.ts, 337, 3))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 337, 12))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 337, 12))
 >x340 : Symbol(x340, Decl(generatedContextualTyping.ts, 337, 3))
@@ -2785,7 +2785,7 @@ var x351 = function(n: Base[]) { }; x351([d1, d2]);
 var x352 = function(n: Array<Base>) { }; x352([d1, d2]);
 >x352 : Symbol(x352, Decl(generatedContextualTyping.ts, 349, 3))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 349, 20))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >x352 : Symbol(x352, Decl(generatedContextualTyping.ts, 349, 3))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 4, 19))

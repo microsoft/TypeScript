@@ -1,9 +1,15 @@
+ParameterList13.ts(2,5): error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
 ParameterList13.ts(2,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+ParameterList13.ts(2,10): error TS7006: Parameter 'x' implicitly has an 'any' type.
 
 
-==== ParameterList13.ts (1 errors) ====
+==== ParameterList13.ts (3 errors) ====
     interface I {
         new (public x);
+        ~~~~~~~~~~~~~~~
+!!! error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
              ~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.
+             ~~~~~~~~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
     }

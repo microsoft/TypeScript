@@ -21,9 +21,11 @@ function fn2(): any {
 
     var x: any;
 >x : any
+>  : ^^^
 
     return x;
 >x : any
+>  : ^^^
 }
 // generates function fn3();
 function fn3() {
@@ -32,8 +34,10 @@ function fn3() {
 
     var x: any;
 >x : any
+>  : ^^^
 
     return x;
 >x : any
+>  : ^^^
 }
 

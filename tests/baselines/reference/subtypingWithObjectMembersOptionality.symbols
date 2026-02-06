@@ -92,11 +92,11 @@ var r = true ? a : b;
 >a : Symbol(a, Decl(subtypingWithObjectMembersOptionality.ts, 39, 3))
 >b : Symbol(b, Decl(subtypingWithObjectMembersOptionality.ts, 40, 3))
 
-module TwoLevels {
+namespace TwoLevels {
 >TwoLevels : Symbol(TwoLevels, Decl(subtypingWithObjectMembersOptionality.ts, 41, 21))
 
     interface T {
->T : Symbol(T, Decl(subtypingWithObjectMembersOptionality.ts, 43, 18))
+>T : Symbol(T, Decl(subtypingWithObjectMembersOptionality.ts, 43, 21))
 
         Foo?: Base;
 >Foo : Symbol(T.Foo, Decl(subtypingWithObjectMembersOptionality.ts, 44, 17))
@@ -105,7 +105,7 @@ module TwoLevels {
 
     interface S extends T {
 >S : Symbol(S, Decl(subtypingWithObjectMembersOptionality.ts, 46, 5))
->T : Symbol(T, Decl(subtypingWithObjectMembersOptionality.ts, 43, 18))
+>T : Symbol(T, Decl(subtypingWithObjectMembersOptionality.ts, 43, 21))
 
         Foo: Derived2 
 >Foo : Symbol(S.Foo, Decl(subtypingWithObjectMembersOptionality.ts, 48, 27))

@@ -1,5 +1,7 @@
 /// <reference path='../fourslash.ts' />
 
+// @lib: es5
+
 /////// <reference types="foo" />
 ////var x: number;
 ////x./*1*/

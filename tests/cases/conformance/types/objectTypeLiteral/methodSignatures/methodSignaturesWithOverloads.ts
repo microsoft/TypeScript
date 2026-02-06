@@ -1,3 +1,4 @@
+// @target: es2015
 // Object type literals permit overloads with optionality but they must match
 
 var c: {

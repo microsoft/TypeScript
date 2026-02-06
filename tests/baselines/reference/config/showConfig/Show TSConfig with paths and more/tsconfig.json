@@ -26,7 +26,9 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "resolveJsonModule": true,
-        "allowSyntheticDefaultImports": true
+        "resolvePackageJsonExports": false,
+        "resolvePackageJsonImports": false,
+        "useDefineForClassFields": false
     },
     "include": [
         "./src/**/*"

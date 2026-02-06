@@ -23,7 +23,6 @@ export default hello.hello
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -52,36 +51,53 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
-TSFILE: /home/src/workspaces/solution/project/dist/index.json
-TSFILE: /home/src/workspaces/solution/project/dist/index.js
+[96mproject/tsconfig.json[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "moduleResolution": "node",
+[7m [0m [91m                        ~~~~~~[0m
+
+[96mproject/tsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "outDir": "dist",
+[7m [0m [91m    ~~~~~~~~[0m
+
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.json
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
 TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 project/src/index.json
   Imported via "./index.json" from file 'project/src/index.ts'
   Matched by include pattern 'src/**/*.json' in 'project/tsconfig.json'
 project/src/index.ts
   Matched by include pattern 'src/**/*' in 'project/tsconfig.json'
 
+Found 2 errors.
 
-//// [/home/src/workspaces/solution/project/dist/index.json]
+
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
+//// [/home/src/workspaces/solution/project/dist/src/index.json]
 {
     "hello": "world"
 }
 
 
-//// [/home/src/workspaces/solution/project/dist/index.js]
+//// [/home/src/workspaces/solution/project/dist/src/index.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_json_1 = __importDefault(require("./index.json"));
+const index_json_1 = __importDefault(require("./index.json"));
 exports.default = index_json_1.default.hello;
 
 
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo]
-{"root":["../src/index.ts","../src/index.json"],"version":"FakeTSVersion"}
+{"root":["../src/index.ts","../src/index.json"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -89,9 +105,10 @@ exports.default = index_json_1.default.hello;
     "../src/index.ts",
     "../src/index.json"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 74
+  "size": 88
 }
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

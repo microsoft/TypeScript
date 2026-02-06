@@ -1,3 +1,4 @@
+// @target: es2015
 class X {
     constructor() {
         return 1;

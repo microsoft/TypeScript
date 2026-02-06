@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 
 export type InvalidKeys<K extends string|number|symbol> = { [P in K]? : never };

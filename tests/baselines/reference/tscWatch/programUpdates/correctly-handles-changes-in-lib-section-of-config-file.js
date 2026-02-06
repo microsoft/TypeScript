@@ -1,7 +1,6 @@
 currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/tslibs/TS/Lib/lib.es5.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -26,7 +25,7 @@ var x: Promise<string>;
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2015",
     "noImplicitAny": true,
     "sourceMap": false,
     "lib": [
@@ -36,7 +35,6 @@ var x: Promise<string>;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -66,19 +64,10 @@ Output::
 
 
 //// [/home/src/projects/project/app.js]
+"use strict";
 var x;
 
 
-
-PolledWatches::
-/home/src/projects/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/project/app.ts: *new*
@@ -97,7 +86,7 @@ Program root files: [
 ]
 Program options: {
   "module": 1,
-  "target": 1,
+  "target": 2,
   "noImplicitAny": true,
   "sourceMap": false,
   "lib": [
@@ -128,7 +117,7 @@ Input::
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2015",
     "noImplicitAny": true,
     "sourceMap": false,
     "lib": [
@@ -157,16 +146,6 @@ Output::
 
 //// [/home/src/projects/project/app.js] file written with same contents
 
-PolledWatches::
-/home/src/projects/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/project/app.ts:
   {}
@@ -187,7 +166,7 @@ Program root files: [
 ]
 Program options: {
   "module": 1,
-  "target": 1,
+  "target": 2,
   "noImplicitAny": true,
   "sourceMap": false,
   "lib": [

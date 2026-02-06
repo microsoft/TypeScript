@@ -12,6 +12,7 @@ a
 
 
 //// [inferringClassMembersFromAssignments8.js]
+"use strict";
 // no inference in TS files, even for `this` aliases:
 var app = function () {
     var _this = this;

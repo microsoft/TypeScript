@@ -1,3 +1,4 @@
+// @target: es2015
 type U1 = string | new () => void;
 type U2 = string | new (foo: number) => void
 type U3 = | new () => number

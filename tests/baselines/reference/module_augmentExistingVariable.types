@@ -5,7 +5,7 @@ var console: any;
 >console : any
 >        : ^^^
 
-module console {
+namespace console {
 >console : typeof console
 >        : ^^^^^^^^^^^^^^
 

@@ -28,20 +28,14 @@ let n: ns.nested.NestedClass = { a: '' };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ns;
 (function (ns) {
-    var Class = /** @class */ (function () {
-        function Class() {
-        }
-        return Class;
-    }());
+    class Class {
+    }
     ns.Class = Class;
     ns.Value = "";
-    var nested;
+    let nested;
     (function (nested) {
-        var NestedClass = /** @class */ (function () {
-            function NestedClass() {
-            }
-            return NestedClass;
-        }());
+        class NestedClass {
+        }
         nested.NestedClass = NestedClass;
     })(nested = ns.nested || (ns.nested = {}));
 })(ns || (ns = {}));
@@ -51,6 +45,6 @@ exports.default = ns;
 Object.defineProperty(exports, "__esModule", { value: true });
 ns.Class; // Error
 ns.Value; // Error
-var c;
-var t = "";
-var n = { a: '' };
+let c;
+let t = "";
+let n = { a: '' };

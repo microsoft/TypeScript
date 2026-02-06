@@ -1,3 +1,4 @@
+// @strict: false
 
 //// interface PartialObserver<T> {}
 //// interface Subscription {}

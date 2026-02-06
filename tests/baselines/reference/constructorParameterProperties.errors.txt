@@ -1,17 +1,21 @@
+constructorParameterProperties.ts(2,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 constructorParameterProperties.ts(8,12): error TS2341: Property 'x' is private and only accessible within class 'C'.
 constructorParameterProperties.ts(9,12): error TS2445: Property 'z' is protected and only accessible within class 'C' and its subclasses.
+constructorParameterProperties.ts(12,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 constructorParameterProperties.ts(18,12): error TS2341: Property 'x' is private and only accessible within class 'D<T>'.
 constructorParameterProperties.ts(19,12): error TS2339: Property 'a' does not exist on type 'D<string>'.
 constructorParameterProperties.ts(20,12): error TS2445: Property 'z' is protected and only accessible within class 'D<T>' and its subclasses.
 
 
-==== constructorParameterProperties.ts (5 errors) ====
+==== constructorParameterProperties.ts (7 errors) ====
     class C {
         y: string;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
         constructor(private x: string, protected z: string) { }
     }
     
-    var c: C;
+    declare var c: C;
     var r = c.y;
     var r2 = c.x; // error
                ~
@@ -22,10 +26,12 @@ constructorParameterProperties.ts(20,12): error TS2445: Property 'z' is protecte
     
     class D<T> {
         y: T;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
         constructor(a: T, private x: T, protected z: T) { }
     }
     
-    var d: D<string>;
+    declare var d: D<string>;
     var r = d.y;
     var r2 = d.x; // error
                ~

@@ -1,9 +1,13 @@
+ModuleWithExportedAndNonExportedFunctions.ts(8,9): error TS2322: Type 'null' is not assignable to type 'U'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+ModuleWithExportedAndNonExportedFunctions.ts(16,9): error TS2322: Type 'null' is not assignable to type 'U'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 ModuleWithExportedAndNonExportedFunctions.ts(28,13): error TS2339: Property 'fn2' does not exist on type 'typeof A'.
 ModuleWithExportedAndNonExportedFunctions.ts(29,14): error TS2551: Property 'fng2' does not exist on type 'typeof A'. Did you mean 'fng'?
 
 
-==== ModuleWithExportedAndNonExportedFunctions.ts (2 errors) ====
-    module A {
+==== ModuleWithExportedAndNonExportedFunctions.ts (4 errors) ====
+    namespace A {
     
         export function fn(s: string) {
             return true;
@@ -11,6 +15,9 @@ ModuleWithExportedAndNonExportedFunctions.ts(29,14): error TS2551: Property 'fng
     
         export function fng<T, U>(s: T): U {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'U'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'null'.
         }
     
         function fn2(s: string) {
@@ -19,6 +26,9 @@ ModuleWithExportedAndNonExportedFunctions.ts(29,14): error TS2551: Property 'fng
     
         function fng2<T, U>(s: T): U {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'U'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'null'.
         }
     }
     

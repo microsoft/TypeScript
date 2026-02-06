@@ -1,3 +1,4 @@
+// @target: es2015
 // Derived member is not optional but base member is, should be ok
 
 interface Base { foo: string; }
@@ -41,7 +42,7 @@ var a: { Foo?: Base; };
 var b = { Foo: <Derived>null };
 var r = true ? a : b;
 
-module TwoLevels {
+namespace TwoLevels {
     interface T {
         Foo?: Base;
     }

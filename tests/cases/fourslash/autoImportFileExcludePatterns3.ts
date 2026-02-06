@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
 // @module: commonjs
 
 // @Filename: /ambient1.d.ts

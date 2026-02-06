@@ -17,7 +17,9 @@ type Orig = { [k: string]: any, str: any, [sym]: any }
 >k : string
 >  : ^^^^^^
 >str : any
+>    : ^^^
 >[sym] : any
+>      : ^^^
 >sym : unique symbol
 >    : ^^^^^^^^^^^^^
 
@@ -74,7 +76,9 @@ function f<T>() {
 >k : string
 >  : ^^^^^^
 >str : any
+>    : ^^^
 >[sym] : any
+>      : ^^^
 >sym : unique symbol
 >    : ^^^^^^^^^^^^^
     
@@ -158,7 +162,9 @@ function g<T>() {
 >k : string
 >  : ^^^^^^
 >str : any
+>    : ^^^
 >[sym] : any
+>      : ^^^
 >sym : unique symbol
 >    : ^^^^^^^^^^^^^
     
@@ -237,6 +243,14 @@ function g<T>() {
 >  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"str" : "str"
 >      : ^^^^^
+
+    x = "whatever"; // error
+>x = "whatever" : "whatever"
+>               : ^^^^^^^^^^
+>x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
+>  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"whatever" : "whatever"
+>           : ^^^^^^^^^^
 }
 
 export {};

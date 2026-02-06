@@ -1,13 +1,14 @@
+// @target: es2015
 function foo(title: string) {
     var x = 10;
 }
 
-module foo.Bar {
+namespace foo.Bar {
     export function f() {
     }
 }
 
-module foo.Baz {
+namespace foo.Baz {
     export function g() {
         Bar.f();
     }

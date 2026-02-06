@@ -1,0 +1,48 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Boolean'.
+error TS2318: Cannot find global type 'CallableFunction'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'NewableFunction'.
+error TS2318: Cannot find global type 'Number'.
+error TS2318: Cannot find global type 'Object'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+error TS5053: Option 'lib' cannot be specified with option 'noLib'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Boolean'.
+!!! error TS2318: Cannot find global type 'CallableFunction'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'NewableFunction'.
+!!! error TS2318: Cannot find global type 'Number'.
+!!! error TS2318: Cannot find global type 'Object'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+!!! error TS5053: Option 'lib' cannot be specified with option 'noLib'.
+==== arrayIterationLibES5TargetDifferent.ts (0 errors) ====
+    declare function log(message?: any): void;
+    
+    for (const x of [1, 2, 3]) {
+        log(x);
+    }
+    
+    declare const aString: string;
+    
+    for (const x of aString) {
+        log(x);
+    }
+    
+    declare const aNumber: number;
+    
+    for (const x of aNumber) {
+        log(x);
+    }
+    
+    declare const anObject: { foo: string };
+    
+    for (const x of anObject) {
+        log(x);
+    }

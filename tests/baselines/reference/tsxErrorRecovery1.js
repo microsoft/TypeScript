@@ -11,6 +11,7 @@ var y = { a: 1 };
 
 
 //// [file.jsx]
+"use strict";
 function foo() {
     var x = <div>  {} </div>;
 }

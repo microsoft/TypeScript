@@ -1,6 +1,6 @@
 // @module: amd
 // @declaration: true
-// @target: ES5
+// @target: ES5, ES2015
 
 // @filename: es6ImportDefaultBindingAmd_0.ts
 var a = 10;

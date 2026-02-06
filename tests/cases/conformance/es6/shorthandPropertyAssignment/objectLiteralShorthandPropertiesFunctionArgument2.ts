@@ -1,4 +1,5 @@
-﻿// @lib: es5
+﻿// @target: es2015
+// @lib: es5
 var id: number = 10000;
 var name: string = "my name";
 

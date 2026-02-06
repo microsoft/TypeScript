@@ -19,21 +19,12 @@ function f2() {
 
 
 //// [spreadParameterTupleType.js]
+"use strict";
 function f1() {
-    return function fn() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-    };
+    return function fn(...args) { };
 }
 function f2() {
-    return function fn() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-    };
+    return function fn(...args) { };
 }
 
 

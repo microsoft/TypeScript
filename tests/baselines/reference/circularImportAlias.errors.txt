@@ -1,21 +1,27 @@
 circularImportAlias.ts(5,30): error TS2449: Class 'C' used before its declaration.
+circularImportAlias.ts(6,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+circularImportAlias.ts(11,22): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
 
 
-==== circularImportAlias.ts (1 errors) ====
+==== circularImportAlias.ts (3 errors) ====
     // expected no error
     
-    module B {
+    namespace B {
         export import a = A;
         export class D extends a.C {
                                  ~
 !!! error TS2449: Class 'C' used before its declaration.
 !!! related TS2728 circularImportAlias.ts:11:18: 'C' is declared here.
             id: number;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
         }
     }
     
-    module A {
+    namespace A {
         export class C { name: string }
+                         ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
         export import b = B;
     }
     

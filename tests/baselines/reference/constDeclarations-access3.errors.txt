@@ -19,7 +19,7 @@ constDeclarations-access3.ts(26,3): error TS2540: Cannot assign to 'x' because i
 
 
 ==== constDeclarations-access3.ts (18 errors) ====
-    module M {
+    namespace M {
         export const x = 0;
     }
     

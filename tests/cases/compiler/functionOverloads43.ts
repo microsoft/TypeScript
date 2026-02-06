@@ -1,3 +1,4 @@
+// @target: es2015
 function foo(bar: { a:number }[]): number;
 function foo(bar: { a:string }[]): string;
 function foo([x]: { a:number | string }[]): string | number {

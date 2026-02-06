@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////declare module mod {
+////declare namespace mod {
 ////    class Foo { }
 ////}
 ////class Bar extends mod./**/

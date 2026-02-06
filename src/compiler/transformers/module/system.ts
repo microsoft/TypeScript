@@ -33,6 +33,7 @@ import {
     ForOfStatement,
     ForStatement,
     FunctionDeclaration,
+    getAlwaysStrict,
     getEmitFlags,
     getExternalHelpersModuleName,
     getExternalModuleNameLiteral,
@@ -40,7 +41,6 @@ import {
     getNodeId,
     getOriginalNode,
     getOriginalNodeId,
-    getStrictOptionValue,
     getTextOfIdentifierOrLiteral,
     hasSyntacticModifier,
     Identifier,
@@ -357,7 +357,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         startLexicalEnvironment();
 
         // Add any prologue directives.
-        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || isExternalModule(currentSourceFile);
+        const ensureUseStrict = getAlwaysStrict(compilerOptions) || isExternalModule(currentSourceFile);
         const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict, topLevelVisitor);
 
         // var __moduleName = context_1 && context_1.id;

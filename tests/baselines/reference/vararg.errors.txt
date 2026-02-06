@@ -9,7 +9,7 @@ vararg.ts(33,17): error TS2345: Argument of type 'C' is not assignable to parame
 
 
 ==== vararg.ts (8 errors) ====
-    module M {
+    namespace M {
         export class C {
             public f(x:string,...rest:number[]) {
                 var sum=0;

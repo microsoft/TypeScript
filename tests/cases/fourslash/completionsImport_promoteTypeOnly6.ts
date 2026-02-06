@@ -1,5 +1,5 @@
 /// <reference path="fourslash.ts" />
-// @module: nodenext
+// @module: node18
 // @allowImportingTsExtensions: false
 
 // @Filename: /exports.ts

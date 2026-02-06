@@ -1,3 +1,4 @@
+// @target: es2015
 //@noimplicitany: true
 // this should be an error
 interface IFace {

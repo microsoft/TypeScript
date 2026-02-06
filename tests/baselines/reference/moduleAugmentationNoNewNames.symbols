@@ -41,7 +41,7 @@ declare module "./observable" {
 >a : Symbol(a, Decl(map.ts, 10, 24))
 >b : Symbol(b, Decl(map.ts, 10, 34))
 
-    module Z {}
+    namespace Z {}
 >Z : Symbol(Z, Decl(map.ts, 10, 46))
 }
 

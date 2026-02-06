@@ -48,6 +48,7 @@ class B {
 }
 
 //// [capturedLetConstInLoop10_ES6.js]
+"use strict";
 class A {
     foo() {
         for (let x of [0]) {

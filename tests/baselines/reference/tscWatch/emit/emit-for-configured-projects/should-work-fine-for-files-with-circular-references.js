@@ -12,7 +12,6 @@ export var t2 = 10;
 {}
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -36,30 +35,18 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/home/src/projects/a/b/file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.t2 = void 0;
 /// <reference path="./file1.ts" />
-exports.t2 = 10;
+export var t2 = 10;
 
 
 //// [/home/src/projects/a/b/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.t1 = void 0;
 /// <reference path="./file2.ts" />
-exports.t1 = 10;
+export var t1 = 10;
 
 
-
-PolledWatches::
-/home/src/projects/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/a/b/file1.ts: *new*
@@ -68,7 +55,7 @@ FsWatches::
   {}
 /home/src/projects/a/b/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -85,17 +72,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/file2.ts
 /home/src/projects/a/b/file1.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/file2.ts
 /home/src/projects/a/b/file1.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/a/b/file2.ts (used version)
 /home/src/projects/a/b/file1.ts (used version)
 
@@ -127,12 +114,9 @@ Output::
 
 //// [/home/src/projects/a/b/file2.js] file written with same contents
 //// [/home/src/projects/a/b/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.t3 = exports.t1 = void 0;
 /// <reference path="./file2.ts" />
-exports.t1 = 10;
-exports.t3 = 10;
+export var t1 = 10;
+export var t3 = 10;
 
 
 
@@ -147,7 +131,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/file2.ts
 /home/src/projects/a/b/file1.ts
 

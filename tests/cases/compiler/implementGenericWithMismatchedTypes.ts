@@ -1,3 +1,4 @@
+// @target: es2015
 // no errors because in the derived types the best common type for T's value is Object
 // and that matches the original signature for assignability since we treat its T's as Object
 

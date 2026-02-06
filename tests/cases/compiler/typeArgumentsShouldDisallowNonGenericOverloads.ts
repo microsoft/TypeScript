@@ -1,3 +1,4 @@
+// @target: es2015
 function foo(a: string): string;
 function foo<T>(a: T): number;
 function foo(a: any): any {

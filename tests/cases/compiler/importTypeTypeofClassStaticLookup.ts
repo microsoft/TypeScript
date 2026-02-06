@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: a.d.ts
 export declare class A {
     static foo(): void;

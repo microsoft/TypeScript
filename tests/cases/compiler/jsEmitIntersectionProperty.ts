@@ -1,3 +1,4 @@
+// @target: es2015
 // #37015 - test asserts lack of crash
 
 // @allowJs: true

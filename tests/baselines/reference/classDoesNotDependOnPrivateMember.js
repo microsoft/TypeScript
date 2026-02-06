@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/declarationEmit/classDoesNotDependOnPrivateMember.ts] ////
 
 //// [classDoesNotDependOnPrivateMember.ts]
-module M {
+namespace M {
     interface I { }
     export class C {
         private x: I;
@@ -9,13 +9,11 @@ module M {
 }
 
 //// [classDoesNotDependOnPrivateMember.js]
+"use strict";
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     M.C = C;
 })(M || (M = {}));
 

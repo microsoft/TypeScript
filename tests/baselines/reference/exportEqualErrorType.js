@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/exportEqualErrorType.ts] ////
 
 //// [exportEqualErrorType_0.ts]
-module server {
+namespace server {
     export interface connectModule {
         (res, req, next): void;
     }
@@ -9,7 +9,7 @@ module server {
         use: (mod: connectModule) => connectExport;
     }
 }
-var server: {
+declare var server: {
     (): server.connectExport;
     foo: Date;
 };
@@ -17,19 +17,16 @@ export = server;
  
 //// [exportEqualErrorType_1.ts]
 ///<reference path='exportEqualErrorType_0.ts'/>
-import connect = require('exportEqualErrorType_0');
+import connect = require('./exportEqualErrorType_0');
 connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
 
 
 //// [exportEqualErrorType_0.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    var server;
-    return server;
-});
+"use strict";
+module.exports = server;
 //// [exportEqualErrorType_1.js]
-define(["require", "exports", "exportEqualErrorType_0"], function (require, exports, connect) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+///<reference path='exportEqualErrorType_0.ts'/>
+const connect = require("./exportEqualErrorType_0");
+connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.

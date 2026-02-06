@@ -97,6 +97,7 @@ import {
     sourceMapCommentRegExpDontCareLineStart,
     sys,
     System,
+    usesWildcardTypes,
     WatchCompilerHost,
     WatchCompilerHostOfConfigFile,
     WatchCompilerHostOfFilesAndCompilerOptions,
@@ -436,7 +437,7 @@ export function getMatchedIncludeSpec(program: Program, fileName: string): strin
     const index = findIndex(configFile?.configFileSpecs?.validatedIncludeSpecs, includeSpec => {
         if (isJsonFile && !endsWith(includeSpec, Extension.Json)) return false;
         const pattern = getPatternFromSpec(includeSpec, basePath, "files");
-        return !!pattern && getRegexFromPattern(`(${pattern})$`, useCaseSensitiveFileNames).test(fileName);
+        return !!pattern && getRegexFromPattern(`(?:${pattern})$`, useCaseSensitiveFileNames).test(fileName);
     });
     return index !== -1 ? configFile.configFileSpecs.validatedIncludeSpecsBeforeSubstitution![index] : undefined;
 }
@@ -529,7 +530,7 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
                 options.outFile ? "--outFile" : "--out",
             );
         case FileIncludeKind.AutomaticTypeDirectiveFile: {
-            const messageAndArgs: DiagnosticAndArguments = options.types ?
+            const messageAndArgs: DiagnosticAndArguments = !usesWildcardTypes(options) ?
                 reason.packageId ?
                     [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
                     [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions, reason.typeReference] :

@@ -1,3 +1,4 @@
+// @strict: false
 //@target: ES6
 
 var;
@@ -17,7 +18,7 @@ namespace B {
     export let x, y, z;
 }
 
-module C {
+namespace C {
     export var a = 1, b, c = 2;
     export var x, y, z;
 }

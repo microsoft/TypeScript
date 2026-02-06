@@ -6,8 +6,6 @@ class C {
 }
 
 //// [parserMemberVariableDeclaration5.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}

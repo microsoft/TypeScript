@@ -1,11 +1,18 @@
-widenToAny1.ts(4,5): error TS2322: Type 'string' is not assignable to type 'number'.
+widenToAny1.ts(2,5): error TS2322: Type 'undefined' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+widenToAny1.ts(4,5): error TS2322: Type 'string | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
 
 
-==== widenToAny1.ts (1 errors) ====
+==== widenToAny1.ts (2 errors) ====
     function foo1<T>(f1: { x: T; y: T }): T {
         return undefined;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
     }
     var z1: number = foo1({ x: undefined, y: "def" });  // Best common type is any
         ~~
-!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'number'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'number'.
     

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/privacyGloInterface.ts] ////
 
 //// [privacyGloInterface.ts]
-module m1 {
+namespace m1 {
     export class C1_public {
         private f1() {
         }
@@ -89,7 +89,7 @@ interface C7_public {
     f3(): C5_public;
 }
 
-module m3 {
+namespace m3 {
     export interface m3_i_public {
         f1(): number;
     }
@@ -122,26 +122,18 @@ interface glo_C3_public extends glo_i_public {
 
 
 //// [privacyGloInterface.js]
+"use strict";
 var m1;
 (function (m1) {
-    var C1_public = /** @class */ (function () {
-        function C1_public() {
+    class C1_public {
+        f1() {
         }
-        C1_public.prototype.f1 = function () {
-        };
-        return C1_public;
-    }());
-    m1.C1_public = C1_public;
-    var C2_private = /** @class */ (function () {
-        function C2_private() {
-        }
-        return C2_private;
-    }());
-})(m1 || (m1 = {}));
-var C5_public = /** @class */ (function () {
-    function C5_public() {
     }
-    C5_public.prototype.f1 = function () {
-    };
-    return C5_public;
-}());
+    m1.C1_public = C1_public;
+    class C2_private {
+    }
+})(m1 || (m1 = {}));
+class C5_public {
+    f1() {
+    }
+}

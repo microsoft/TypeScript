@@ -21,23 +21,23 @@ function getSysForLibResolution(libRedirection?: boolean, forTsserver?: boolean)
             /// <reference lib="es5"/>
         `,
         "/home/src/workspace/projects/project1/tsconfig.json": jsonToReadableText({
-            compilerOptions: { composite: true, typeRoots: ["./typeroot1"], lib: ["es5", "dom"], traceResolution: true },
+            compilerOptions: { composite: true, typeRoots: ["./typeroot1"], lib: ["es5", "dom"], traceResolution: true, libReplacement: libRedirection },
         }),
         "/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts": `export type TheNum = "type1";`,
         "/home/src/workspace/projects/project2/utils.d.ts": `export const y = 10;`,
         "/home/src/workspace/projects/project2/index.ts": `export const y = 10`,
         "/home/src/workspace/projects/project2/tsconfig.json": jsonToReadableText({
-            compilerOptions: { composite: true, lib: ["es5", "dom"], traceResolution: true },
+            compilerOptions: { composite: true, lib: ["es5", "dom"], traceResolution: true, libReplacement: libRedirection },
         }),
         "/home/src/workspace/projects/project3/utils.d.ts": `export const y = 10;`,
         "/home/src/workspace/projects/project3/index.ts": `export const z = 10`,
         "/home/src/workspace/projects/project3/tsconfig.json": jsonToReadableText({
-            compilerOptions: { composite: true, lib: ["es5", "dom"], traceResolution: true },
+            compilerOptions: { composite: true, lib: ["es5", "dom"], traceResolution: true, libReplacement: libRedirection },
         }),
         "/home/src/workspace/projects/project4/utils.d.ts": `export const y = 10;`,
         "/home/src/workspace/projects/project4/index.ts": `export const z = 10`,
         "/home/src/workspace/projects/project4/tsconfig.json": jsonToReadableText({
-            compilerOptions: { composite: true, lib: ["esnext", "dom", "webworker"], traceResolution: true },
+            compilerOptions: { composite: true, lib: ["esnext", "dom", "webworker"], traceResolution: true, libReplacement: libRedirection },
         }),
         [getTypeScriptLibTestLocation("dom")]: "interface DOMInterface { }",
         [getTypeScriptLibTestLocation("webworker")]: "interface WebWorkerInterface { }",
@@ -71,6 +71,7 @@ function getLibResolutionEditOptions(
                                 typeRoots: ["./typeroot1", "./typeroot2"],
                                 lib: ["es5", "dom"],
                                 traceResolution: true,
+                                libReplacement: true,
                             },
                         }),
                     ),
@@ -90,6 +91,7 @@ function getLibResolutionEditOptions(
                                 typeRoots: ["./typeroot1"],
                                 lib: ["es5", "dom"],
                                 traceResolution: true,
+                                libReplacement: true,
                             },
                         }),
                     );
@@ -235,6 +237,7 @@ export function getSysForLibResolutionUnknown(): TestServerHost {
             compilerOptions: {
                 composite: true,
                 traceResolution: true,
+                libReplacement: true,
             },
         }),
         [getTypeScriptLibTestLocation("webworker")]: "interface WebWorkerInterface { }",

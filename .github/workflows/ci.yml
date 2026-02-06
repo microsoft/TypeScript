@@ -9,6 +9,10 @@ on:
     branches:
       - main
       - release-*
+  merge_group:
+    branches:
+      - main
+      # - release-*
 
 permissions:
   contents: read
@@ -22,45 +26,99 @@ defaults:
 jobs:
   test:
     strategy:
-      fail-fast: false
+      fail-fast: ${{ github.event_name == 'merge_group' }}
       matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-14
-        node-version:
-          - '22'
-          - '20'
-          - '18'
-          - '16'
-          - '14'
-        bundle:
-          - 'true'
-        include:
-          - node-version: 'lts/*'
-            bundle: false
-            os: ubuntu-latest
-        exclude:
-          # No Node 14 on ARM macOS
-          - node-version: '14'
-            os: macos-14
+        config:
+          # PRs only check the newest and oldest Node versions.
+          # macOS only ever checks the neest and oldest Node versions, but never in PR runs.
+          - os: ubuntu-latest
+            node-version: '24'
+            bundle: true
+          - os: windows-latest
+            node-version: '24'
+            bundle: true
+            skip: ${{ github.event_name == 'merge_group' }}
+          - os: macos-latest
+            node-version: '24'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
 
-    runs-on: ${{ matrix.os }}
-    name: Test Node ${{ matrix.node-version }} on ${{ matrix.os }}${{ (!matrix.bundle && ' with --no-bundle') || '' }}
+          - os: ubuntu-latest
+            node-version: '22'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+          - os: windows-latest
+            node-version: '22'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+
+          - os: ubuntu-latest
+            node-version: '20'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+          - os: windows-latest
+            node-version: '20'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+
+          - os: ubuntu-latest
+            node-version: '18'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+          - os: windows-latest
+            node-version: '18'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+
+          - os: ubuntu-latest
+            node-version: '16'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+          - os: windows-latest
+            node-version: '16'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+          - os: macos-latest
+            node-version: '16'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+
+          - os: ubuntu-latest
+            node-version: '14'
+            bundle: true
+            skip: ${{ github.event_name == 'merge_group' }}
+          - os: windows-latest
+            node-version: '14'
+            bundle: true
+            skip: ${{ github.event_name == 'merge_group' }}
+            # Node 14 does not support macOS ARM.
+
+          # --no-bundle build
+          - os: ubuntu-latest
+            node-version: 'lts/*'
+            bundle: false
+            skip: ${{ github.event_name == 'merge_group' }}
+
+        exclude:
+          - config:
+              skip: true
+
+    runs-on: ${{ matrix.config.os }}
+    name: Test Node ${{ matrix.config.node-version }} on ${{ matrix.config.os }}${{ (!matrix.config.bundle && ' with --no-bundle') || '' }}
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Use node version ${{ matrix.node-version }}
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Use node version ${{ matrix.config.node-version }}
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.config.node-version }}
           check-latest: true
       - run: npm ci
 
       - name: Tests
         id: test
         # run tests, but lint separately
-        run: npm run test -- --no-lint --bundle=${{ matrix.bundle }}
+        run: npm run test -- --no-lint --bundle=${{ matrix.config.bundle }}
 
       - name: Print baseline diff on failure
         if: ${{ failure() && steps.test.conclusion == 'failure' }}
@@ -70,18 +128,20 @@ jobs:
           git diff --staged --exit-code
 
   coverage:
+    if: ${{ github.event_name != 'merge_group' }}
+
     runs-on:
       - 'self-hosted'
       - '1ES.Pool=TypeScript-1ES-GitHub-Large'
-      - '1ES.ImageOverride=ubuntu-22.04'
+      - '1ES.ImageOverride=azure-linux-3'
 
     permissions:
       id-token: write
       contents: read
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 'lts/*'
       - run: npm ci
@@ -90,12 +150,12 @@ jobs:
         run: npm test -- --no-lint --coverage
 
       - name: Upload coverage artifact
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: coverage
           path: coverage
 
-      - uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238 # v4.6.0
+      - uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
           use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
           disable_search: true
@@ -105,8 +165,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 'lts/*'
       - run: npm ci
@@ -118,8 +178,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 'lts/*'
       - run: npm ci
@@ -131,13 +191,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 'lts/*'
       - run: npm ci
 
-      - uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
         with:
           path: ~/.cache/dprint
           key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
@@ -148,11 +208,13 @@ jobs:
         run: npx dprint check
 
   browser-integration:
+    if: ${{ github.event_name != 'merge_group' }}
+
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 'lts/*'
       - run: npm ci
@@ -167,8 +229,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 'lts/*'
       - run: npm ci
@@ -180,9 +242,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 'lts/*'
       - run: |
@@ -221,16 +283,16 @@ jobs:
     if: github.event_name == 'pull_request'
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           path: pr
 
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           path: base
           ref: ${{ github.base_ref }}
 
-      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 'lts/*'
       - run: |
@@ -246,24 +308,30 @@ jobs:
         working-directory: ./pr
 
       - run: npm ci
+        id: base-npm-ci
+        continue-on-error: true
         working-directory: ./base
 
       - run: npx hereby lkg
         working-directory: ./pr
 
       - run: npx hereby lkg
+        id: base-lkg
+        continue-on-error: true
+        if: ${{ steps.base-npm-ci.outcome == 'success' }}
         working-directory: ./base
 
       - run: |
           echo "See $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID for more info."
           node ./pr/scripts/checkPackageSize.mjs ./base ./pr >> $GITHUB_STEP_SUMMARY
+        if: ${{ steps.base-lkg.outcome == 'success' }}
 
   misc:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 'lts/*'
       - run: npm ci
@@ -278,8 +346,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 'lts/*'
       - run: npm ci
@@ -294,11 +362,13 @@ jobs:
         run: npx hereby build-src --built
 
   baselines:
+    if: ${{ github.event_name != 'merge_group' }}
+
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 'lts/*'
       - run: npm ci
@@ -334,7 +404,31 @@ jobs:
 
       - name: Upload baseline diff artifact
         if: ${{ failure() && steps.check-baselines.conclusion == 'failure' }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: fix_baselines.patch
           path: fix_baselines.patch
+
+  required:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs:
+      - test
+      - coverage
+      - lint
+      - knip
+      - format
+      - browser-integration
+      - typecheck
+      - smoke
+      - package-size
+      - misc
+      - self-check
+      - baselines
+
+    steps:
+      - name: Check required jobs
+        env:
+          NEEDS: ${{ toJson(needs) }}
+        run: |
+          ! echo $NEEDS | jq -e 'to_entries[] | { job: .key, result: .value.result } | select((.result == "success" or .result == "skipped") | not)'

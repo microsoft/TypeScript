@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es2015
 let ka: any;
 let nested: { ki };

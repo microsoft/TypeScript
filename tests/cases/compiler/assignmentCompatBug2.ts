@@ -1,3 +1,4 @@
+// @target: es2015
 var b2: { b: number;} = { a: 0 }; // error
 
 b2 = { a: 0 }; // error

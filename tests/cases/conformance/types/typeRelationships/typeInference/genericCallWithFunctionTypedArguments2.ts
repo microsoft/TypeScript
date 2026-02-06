@@ -1,3 +1,4 @@
+// @target: es2015
 // Generic functions used as arguments for function typed parameters are not used to make inferences from
 // Using construct signature arguments, no errors expected
 
@@ -11,9 +12,9 @@ interface I {
 interface I2<T> {
     new (x: T): T;
 }
-var i: I;
-var i2: I2<string>;
-var a: {
+declare var i: I;
+declare var i2: I2<string>;
+declare var a: {
     new <T>(x: T): T;
 }
 

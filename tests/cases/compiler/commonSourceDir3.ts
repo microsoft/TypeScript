@@ -1,3 +1,4 @@
+// @target: es2015
 // @useCaseSensitiveFileNames: false
 // @outDir: A:/
 // @Filename: A:/foo/bar.ts

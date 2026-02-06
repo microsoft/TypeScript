@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericInference2.ts] ////
 
 //// [genericInference2.ts]
-    declare module ko { 
+    declare namespace ko { 
        export interface Observable<T> { 
            (): T; 
            (value: T): any; 
@@ -23,6 +23,7 @@
     var rr_v = o.name.r;  // should be 'string'
 
 //// [genericInference2.js]
+"use strict";
 var o = {
     name: ko.observable("Bob"),
     age: ko.observable(37)

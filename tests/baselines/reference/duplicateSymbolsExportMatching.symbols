@@ -1,44 +1,44 @@
 //// [tests/cases/compiler/duplicateSymbolsExportMatching.ts] ////
 
 === duplicateSymbolsExportMatching.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 3, 1), Decl(duplicateSymbolsExportMatching.ts, 7, 1), Decl(duplicateSymbolsExportMatching.ts, 27, 1), Decl(duplicateSymbolsExportMatching.ts, 45, 1) ... and 1 more)
 
     export interface E { }
->E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 0, 10), Decl(duplicateSymbolsExportMatching.ts, 4, 10))
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 0, 13), Decl(duplicateSymbolsExportMatching.ts, 4, 13))
 
     interface I { }
 >I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 1, 26))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 3, 1), Decl(duplicateSymbolsExportMatching.ts, 7, 1), Decl(duplicateSymbolsExportMatching.ts, 27, 1), Decl(duplicateSymbolsExportMatching.ts, 45, 1) ... and 1 more)
 
     export interface E { } // ok
->E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 0, 10), Decl(duplicateSymbolsExportMatching.ts, 4, 10))
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 0, 13), Decl(duplicateSymbolsExportMatching.ts, 4, 13))
 
     interface I { } // ok
 >I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 5, 26))
 }
 
 // Doesn't match export visibility, but it's in a different parent, so it's ok
-module M {
+namespace M {
 >M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 3, 1), Decl(duplicateSymbolsExportMatching.ts, 7, 1), Decl(duplicateSymbolsExportMatching.ts, 27, 1), Decl(duplicateSymbolsExportMatching.ts, 45, 1) ... and 1 more)
 
     interface E { } // ok
->E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 10, 10))
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 10, 13))
 
     export interface I { } // ok
 >I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 11, 19))
 }
 
-module N {
+namespace N {
 >N : Symbol(N, Decl(duplicateSymbolsExportMatching.ts, 13, 1))
 
     interface I { }
->I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 15, 10), Decl(duplicateSymbolsExportMatching.ts, 16, 19))
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 15, 13), Decl(duplicateSymbolsExportMatching.ts, 16, 19))
 
     interface I { } // ok
->I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 15, 10), Decl(duplicateSymbolsExportMatching.ts, 16, 19))
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 15, 13), Decl(duplicateSymbolsExportMatching.ts, 16, 19))
 
     export interface E { }
 >E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 17, 19), Decl(duplicateSymbolsExportMatching.ts, 18, 26))
@@ -47,11 +47,11 @@ module N {
 >E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 17, 19), Decl(duplicateSymbolsExportMatching.ts, 18, 26))
 }
 
-module N2 {
+namespace N2 {
 >N2 : Symbol(N2, Decl(duplicateSymbolsExportMatching.ts, 20, 1))
 
     interface I { }
->I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 22, 11), Decl(duplicateSymbolsExportMatching.ts, 23, 19))
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 22, 14), Decl(duplicateSymbolsExportMatching.ts, 23, 19))
 
     export interface I { } // error
 >I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 23, 19))
@@ -64,16 +64,16 @@ module N2 {
 }
 
 // Should report error only once for instantiated module
-module M {
+namespace M {
 >M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 3, 1), Decl(duplicateSymbolsExportMatching.ts, 7, 1), Decl(duplicateSymbolsExportMatching.ts, 27, 1), Decl(duplicateSymbolsExportMatching.ts, 45, 1) ... and 1 more)
 
-    module inst {
->inst : Symbol(inst, Decl(duplicateSymbolsExportMatching.ts, 30, 10), Decl(duplicateSymbolsExportMatching.ts, 33, 5))
+    namespace inst {
+>inst : Symbol(inst, Decl(duplicateSymbolsExportMatching.ts, 30, 13), Decl(duplicateSymbolsExportMatching.ts, 33, 5))
 
         var t;
 >t : Symbol(t, Decl(duplicateSymbolsExportMatching.ts, 32, 11))
     }
-    export module inst { // one error
+    export namespace inst { // one error
 >inst : Symbol(inst, Decl(duplicateSymbolsExportMatching.ts, 33, 5))
 
         var t;
@@ -82,7 +82,7 @@ module M {
 }
 
 // Variables of the same / different type
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(duplicateSymbolsExportMatching.ts, 37, 1))
 
     var v: string;
@@ -98,11 +98,11 @@ module M2 {
 >w : Symbol(w, Decl(duplicateSymbolsExportMatching.ts, 44, 14))
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 3, 1), Decl(duplicateSymbolsExportMatching.ts, 7, 1), Decl(duplicateSymbolsExportMatching.ts, 27, 1), Decl(duplicateSymbolsExportMatching.ts, 45, 1) ... and 1 more)
 
-    module F {
->F : Symbol(F, Decl(duplicateSymbolsExportMatching.ts, 50, 5), Decl(duplicateSymbolsExportMatching.ts, 47, 10))
+    namespace F {
+>F : Symbol(F, Decl(duplicateSymbolsExportMatching.ts, 50, 5), Decl(duplicateSymbolsExportMatching.ts, 47, 13))
 
         var t;
 >t : Symbol(t, Decl(duplicateSymbolsExportMatching.ts, 49, 11))
@@ -111,17 +111,17 @@ module M {
 >F : Symbol(F, Decl(duplicateSymbolsExportMatching.ts, 50, 5))
 }
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 3, 1), Decl(duplicateSymbolsExportMatching.ts, 7, 1), Decl(duplicateSymbolsExportMatching.ts, 27, 1), Decl(duplicateSymbolsExportMatching.ts, 45, 1) ... and 1 more)
 
     class C { }
->C : Symbol(C, Decl(duplicateSymbolsExportMatching.ts, 54, 10), Decl(duplicateSymbolsExportMatching.ts, 55, 15), Decl(duplicateSymbolsExportMatching.ts, 56, 16))
+>C : Symbol(C, Decl(duplicateSymbolsExportMatching.ts, 54, 13), Decl(duplicateSymbolsExportMatching.ts, 55, 15), Decl(duplicateSymbolsExportMatching.ts, 56, 19))
 
-    module C { }
->C : Symbol(C, Decl(duplicateSymbolsExportMatching.ts, 54, 10), Decl(duplicateSymbolsExportMatching.ts, 55, 15), Decl(duplicateSymbolsExportMatching.ts, 56, 16))
+    namespace C { }
+>C : Symbol(C, Decl(duplicateSymbolsExportMatching.ts, 54, 13), Decl(duplicateSymbolsExportMatching.ts, 55, 15), Decl(duplicateSymbolsExportMatching.ts, 56, 19))
 
-    export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
->C : Symbol(C, Decl(duplicateSymbolsExportMatching.ts, 56, 16))
+    export namespace C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
+>C : Symbol(C, Decl(duplicateSymbolsExportMatching.ts, 56, 19))
 
         var t;
 >t : Symbol(t, Decl(duplicateSymbolsExportMatching.ts, 58, 11))

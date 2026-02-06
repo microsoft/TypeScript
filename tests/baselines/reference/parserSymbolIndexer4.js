@@ -6,4 +6,5 @@ var x: {
 }
 
 //// [parserSymbolIndexer4.js]
+"use strict";
 var x;

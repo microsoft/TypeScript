@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleVisibilityTest4.ts] ////
 
 //// [moduleVisibilityTest4.ts]
-module M {
+namespace M {
     export type nums = number;
 }
 
@@ -19,9 +19,10 @@ let c2: N.bar;
 
 
 //// [moduleVisibilityTest4.js]
-var a1;
-var b1;
-var c1;
-var a2;
-var b2;
-var c2;
+"use strict";
+let a1;
+let b1;
+let c1;
+let a2;
+let b2;
+let c2;

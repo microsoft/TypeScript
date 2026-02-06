@@ -19,7 +19,7 @@ interface IConstructor {
 >          : ^
 }
 
-var I: IConstructor;
+declare var I: IConstructor;
 >I : IConstructor
 >  : ^^^^^^^^^^^^
 
@@ -36,7 +36,7 @@ abstract class A {
 >  : ^^^^^^
 }
 
-var AA: typeof A;
+declare var AA: typeof A;
 >AA : typeof A
 >   : ^^^^^^^^
 >A : typeof A
@@ -50,7 +50,7 @@ AA = I;
 >I : IConstructor
 >  : ^^^^^^^^^^^^
 
-var AAA: typeof I;
+declare var AAA: typeof I;
 >AAA : IConstructor
 >    : ^^^^^^^^^^^^
 >I : IConstructor

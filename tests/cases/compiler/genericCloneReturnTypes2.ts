@@ -1,3 +1,4 @@
+// @target: es2015
 class MyList<T> {
     public size: number;
     public data: T[];

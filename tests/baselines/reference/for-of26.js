@@ -14,6 +14,7 @@ var x: any;
 for (var v of new MyStringIterator) { }
 
 //// [for-of26.js]
+"use strict";
 class MyStringIterator {
     next() {
         return x;

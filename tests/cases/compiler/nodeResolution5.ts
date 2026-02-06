@@ -1,6 +1,6 @@
+// @target: es2015
 // @module: commonjs
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @filename: node_modules/a.d.ts
 declare module "a" {
     var x: number;

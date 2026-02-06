@@ -14,7 +14,7 @@ export const thing = f();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.thing = void 0;
-var thing_1 = require("./thing");
+const thing_1 = require("./thing");
 exports.thing = (0, thing_1.f)();
 
 

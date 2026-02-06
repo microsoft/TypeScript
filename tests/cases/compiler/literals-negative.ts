@@ -1,4 +1,5 @@
-﻿// Type type of the null literal is the Null type.
+﻿// @target: es2015
+// Type type of the null literal is the Null type.
 // Null can be converted to anything except Void
 var n = <number>(null);
 var s = <string>(null);

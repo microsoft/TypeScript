@@ -7,7 +7,7 @@ class foo<T> { constructor(x: T) { } }
 >x : T
 >  : ^
 
-module foo {
+namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 

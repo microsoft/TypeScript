@@ -4,4 +4,5 @@
 var x = `123${ `456 ${ " | " } 654` }321 123${ `456 ${ " | " } 654` }321`;
 
 //// [templateStringWithEmbeddedTemplateStringES6.js]
+"use strict";
 var x = `123${`456 ${" | "} 654`}321 123${`456 ${" | "} 654`}321`;

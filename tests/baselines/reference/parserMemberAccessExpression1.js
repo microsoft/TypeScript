@@ -8,6 +8,7 @@ Foo<T>.Bar<T>();
 
 
 //// [parserMemberAccessExpression1.js]
+"use strict";
 Foo();
 Foo.Bar();
 Foo.Bar();

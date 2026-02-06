@@ -15,15 +15,15 @@ class C<T> {
 
 
 //// [comparabilityTypeParametersRelatedByUnion.js]
-var C = /** @class */ (function () {
-    function C(x) {
+"use strict";
+class C {
+    constructor(x) {
         this.x = x;
     }
-    C.prototype.good = function (y) {
+    good(y) {
         if (y === this.x) { }
-    };
-    C.prototype.bad = function (y) {
+    }
+    bad(y) {
         if (y === this.x) { }
-    };
-    return C;
-}());
+    }
+}

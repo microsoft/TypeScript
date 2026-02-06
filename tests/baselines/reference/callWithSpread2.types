@@ -4,38 +4,38 @@
 declare function all(a?: number, b?: number): void;
 >all : (a?: number, b?: number) => void
 >    : ^ ^^^      ^^ ^^^      ^^^^^    
->a : number
->  : ^^^^^^
->b : number
->  : ^^^^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare function weird(a?: number | string, b?: number | string): void;
 >weird : (a?: number | string, b?: number | string) => void
 >      : ^ ^^^               ^^ ^^^               ^^^^^    
->a : string | number
->  : ^^^^^^^^^^^^^^^
->b : string | number
->  : ^^^^^^^^^^^^^^^
+>a : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function prefix(s: string, a?: number, b?: number): void;
 >prefix : (s: string, a?: number, b?: number) => void
 >       : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^    
 >s : string
 >  : ^^^^^^
->a : number
->  : ^^^^^^
->b : number
->  : ^^^^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare function rest(s: string, a?: number, b?: number,  ...rest: number[]): void;
 >rest : (s: string, a?: number, b?: number, ...rest: number[]) => void
 >     : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^    ^^        ^^^^^    
 >s : string
 >  : ^^^^^^
->a : number
->  : ^^^^^^
->b : number
->  : ^^^^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >rest : number[]
 >     : ^^^^^^^^
 
@@ -56,10 +56,10 @@ declare function prefix2(s: string, n: number, a?: number, b?: number): void;
 >  : ^^^^^^
 >n : number
 >  : ^^^^^^
->a : number
->  : ^^^^^^
->b : number
->  : ^^^^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare var ns: number[];
 >ns : number[]

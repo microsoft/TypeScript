@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: typeofAmbientExternalModules_0.ts
 export class C { foo: string; }

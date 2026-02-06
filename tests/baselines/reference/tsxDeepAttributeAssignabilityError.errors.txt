@@ -2,6 +2,7 @@ file1.tsx(5,5): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
 ==== my-component.tsx (0 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
     import * as React from 'react'
     
     interface MyProps {
@@ -25,6 +26,6 @@ file1.tsx(5,5): error TS2322: Type 'number' is not assignable to type 'string'.
         value: 42
         ~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6500 my-component.tsx:9:5: The expected type comes from property 'value' which is declared here on type 'MyInnerProps'
+!!! related TS6500 my-component.tsx:10:5: The expected type comes from property 'value' which is declared here on type 'MyInnerProps'
     }} />;
     

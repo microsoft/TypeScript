@@ -8,7 +8,6 @@ Before request
 const x = 10
 
 //// [c:/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -37,38 +36,32 @@ Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/myprojects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/myprojects/project/x.js SVC-1-0 "const x = 10"
 
 
-	../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	x.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 
 PolledWatches::
-c:/myprojects/node_modules/@types: *new*
-  {"pollingInterval":500}
 c:/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-c:/myprojects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 c:/myprojects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-c:/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 Projects::
@@ -77,7 +70,7 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts *new*
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -109,11 +102,11 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "c:/home/src/tslibs/TS/Lib/lib.d.ts",
+        "c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts",
         "c:/myprojects/project/x.js"
       ],
       "compilerOptions": {
-        "target": 1,
+        "target": 12,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -163,7 +156,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
+        "target": 12,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -187,7 +180,7 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
+          "target": 12,
           "jsx": 1,
           "allowNonTsExtensions": true,
           "allowJs": true,
@@ -221,21 +214,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-c:/myprojects/node_modules/@types:
-  {"pollingInterval":500}
 c:/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
 c:/myprojects/project/jsconfig.json:
   {"pollingInterval":2000}
 c:/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
-c:/myprojects/project/node_modules/@types:
-  {"pollingInterval":500}
 c:/myprojects/project/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-c:/home/src/tslibs/TS/Lib/lib.d.ts:
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 
 Projects::
@@ -254,7 +243,6 @@ Before request
 const x = 10
 
 //// [//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -281,24 +269,26 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: //vda1cs4850/myprojects/project/x.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: //vda1cs4850/myprojects/project
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	//vda1cs4850/myprojects/project/x.js SVC-1-0 ""
 
 
-	../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	x.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 
 FsWatches::
-//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 Projects::
@@ -307,7 +297,7 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts *new*
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -339,11 +329,11 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts",
+        "//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts",
         "//vda1cs4850/myprojects/project/x.js"
       ],
       "compilerOptions": {
-        "target": 1,
+        "target": 12,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -380,8 +370,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "//vda1cs4850/myprojects/project/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] Skipping watcher creation at //vda1cs4850/myprojects/project/bower_components:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Skipping watcher creation at //vda1cs4850/myprojects/project/node_modules:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -391,7 +379,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
+        "target": 12,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -415,7 +403,7 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
+          "target": 12,
           "jsx": 1,
           "allowNonTsExtensions": true,
           "allowJs": true,
@@ -464,7 +452,6 @@ Before request
 const x = 10
 
 //// [//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -493,38 +480,32 @@ Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	//vda1cs4850/c$/myprojects/project/x.js SVC-1-0 ""
 
 
-	../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	x.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 
 PolledWatches::
-//vda1cs4850/c$/myprojects/node_modules/@types: *new*
-  {"pollingInterval":500}
 //vda1cs4850/c$/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-//vda1cs4850/c$/myprojects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 //vda1cs4850/c$/myprojects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 Projects::
@@ -537,7 +518,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts *new*
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -565,11 +546,11 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts",
+        "//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts",
         "//vda1cs4850/c$/myprojects/project/x.js"
       ],
       "compilerOptions": {
-        "target": 1,
+        "target": 12,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -619,7 +600,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
+        "target": 12,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -643,7 +624,7 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
+          "target": 12,
           "jsx": 1,
           "allowNonTsExtensions": true,
           "allowJs": true,
@@ -677,21 +658,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-//vda1cs4850/c$/myprojects/node_modules/@types:
-  {"pollingInterval":500}
 //vda1cs4850/c$/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
 //vda1cs4850/c$/myprojects/project/jsconfig.json:
   {"pollingInterval":2000}
 //vda1cs4850/c$/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
-//vda1cs4850/c$/myprojects/project/node_modules/@types:
-  {"pollingInterval":500}
 //vda1cs4850/c$/myprojects/project/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts:
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 
 Projects::
@@ -710,7 +687,6 @@ Before request
 const x = 10
 
 //// [c:/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -739,38 +715,32 @@ Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/users/username/myprojects/project/x.js SVC-1-0 "const x = 10"
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	x.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 
 PolledWatches::
-c:/users/username/myprojects/node_modules/@types: *new*
-  {"pollingInterval":500}
 c:/users/username/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-c:/users/username/myprojects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 c:/users/username/myprojects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-c:/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 Projects::
@@ -779,7 +749,7 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts *new*
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -811,11 +781,11 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "c:/home/src/tslibs/TS/Lib/lib.d.ts",
+        "c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts",
         "c:/users/username/myprojects/project/x.js"
       ],
       "compilerOptions": {
-        "target": 1,
+        "target": 12,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -865,7 +835,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
+        "target": 12,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -889,7 +859,7 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
+          "target": 12,
           "jsx": 1,
           "allowNonTsExtensions": true,
           "allowJs": true,
@@ -923,21 +893,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-c:/users/username/myprojects/node_modules/@types:
-  {"pollingInterval":500}
 c:/users/username/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
 c:/users/username/myprojects/project/jsconfig.json:
   {"pollingInterval":2000}
 c:/users/username/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
-c:/users/username/myprojects/project/node_modules/@types:
-  {"pollingInterval":500}
 c:/users/username/myprojects/project/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-c:/home/src/tslibs/TS/Lib/lib.d.ts:
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 
 Projects::
@@ -956,7 +922,6 @@ Before request
 const x = 10
 
 //// [//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -985,38 +950,32 @@ Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	//vda1cs4850/c$/users/username/myprojects/project/x.js SVC-1-0 ""
 
 
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	x.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 
 PolledWatches::
-//vda1cs4850/c$/users/username/myprojects/node_modules/@types: *new*
-  {"pollingInterval":500}
 //vda1cs4850/c$/users/username/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 //vda1cs4850/c$/users/username/myprojects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 Projects::
@@ -1029,7 +988,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts *new*
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -1057,11 +1016,11 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts",
+        "//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts",
         "//vda1cs4850/c$/users/username/myprojects/project/x.js"
       ],
       "compilerOptions": {
-        "target": 1,
+        "target": 12,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -1111,7 +1070,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
+        "target": 12,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -1135,7 +1094,7 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
+          "target": 12,
           "jsx": 1,
           "allowNonTsExtensions": true,
           "allowJs": true,
@@ -1169,21 +1128,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-//vda1cs4850/c$/users/username/myprojects/node_modules/@types:
-  {"pollingInterval":500}
 //vda1cs4850/c$/users/username/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
 //vda1cs4850/c$/users/username/myprojects/project/jsconfig.json:
   {"pollingInterval":2000}
 //vda1cs4850/c$/users/username/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
-//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types:
-  {"pollingInterval":500}
 //vda1cs4850/c$/users/username/myprojects/project/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts:
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 
 Projects::

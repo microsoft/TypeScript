@@ -124,18 +124,18 @@ function sayHello6(somebody) {
  * @param {<T>(m: Object<T>) => string} somebody
  */
 function sayHello7(somebody) {
->sayHello7 : (somebody: <T>(m: any) => string) => string
->          : ^        ^^       ^^^           ^^^^^^^^^^^
->somebody : <T>(m: any) => string
->         : ^ ^^ ^^^^^^^^^^      
+>sayHello7 : (somebody: <T>(m: Object<T>) => string) => string
+>          : ^        ^^                           ^^^^^^^^^^^
+>somebody : <T>(m: Object<T>) => string
+>         : ^ ^^ ^^         ^^^^^      
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
 >                    : ^^^^^^
 >'Hello ' : "Hello "
 >         : ^^^^^^^^
->somebody : <T>(m: any) => string
->         : ^ ^^ ^^^^^^^^^^      
+>somebody : <T>(m: Object<T>) => string
+>         : ^ ^^ ^^         ^^^^^      
 }
 
 === index8.js ===

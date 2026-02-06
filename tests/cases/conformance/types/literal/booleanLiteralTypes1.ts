@@ -1,3 +1,4 @@
+// @target: es2015
 type A1 = true | false;
 type A2 = false | true;
 

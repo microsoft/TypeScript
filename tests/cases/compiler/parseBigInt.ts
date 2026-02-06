@@ -1,3 +1,4 @@
+// @strict: false
 // @target: esnext
 
 // All bases should allow "n" suffix

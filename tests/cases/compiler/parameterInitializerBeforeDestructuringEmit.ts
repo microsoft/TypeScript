@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitUseStrict: false
 // @alwaysStrict: true
 interface Foo {

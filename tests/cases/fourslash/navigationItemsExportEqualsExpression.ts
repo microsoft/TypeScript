@@ -29,6 +29,9 @@
 ////         d: 1
 ////     }
 //// }
+////
+//// function foo(props: { x: number; y: number }) {}
+//// export = foo({ x: 1, y: 1 });
 
 verify.navigationTree({
   "text": '"navigationItemsExportEqualsExpression"',
@@ -85,7 +88,13 @@ verify.navigationTree({
     {
       "text": "export=",
       "kind": "class",
-      "kindModifiers": "export"
+      "kindModifiers": "export",
+      "childItems": [
+        {
+          "text": "AB",
+          "kind": "class"
+        }
+      ]
     },
     {
       "text": "export=",
@@ -113,6 +122,21 @@ verify.navigationTree({
       ]
     },
     {
+      "text": "export=",
+      "kind": "const",
+      "kindModifiers": "export",
+      "childItems": [
+        {
+          "text": "x",
+          "kind": "property"
+        },
+        {
+          "text": "y",
+          "kind": "property"
+        }
+      ]
+    },
+    {
       "text": "abc",
       "kind": "const"
     },
@@ -120,7 +144,10 @@ verify.navigationTree({
       "text": "export=",
       "kind": "const",
       "kindModifiers": "export"
+    },
+    {
+      "text": "foo",
+      "kind": "function"
     }
   ]
 });
-

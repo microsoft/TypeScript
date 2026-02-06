@@ -42,6 +42,7 @@ cod = y;  // Ok
 
 
 //// [intersectionAndUnionTypes.js]
+"use strict";
 var a;
 var b;
 var c;

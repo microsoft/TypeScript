@@ -95,7 +95,6 @@ export class MyLibClass { }
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -221,21 +220,17 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mylib/src 1 undefined Config: /user/username/projects/mylib/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mylib/src 1 undefined Config: /user/username/projects/mylib/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/shared/src/index.ts Text-1 "export class MyClass { }"
 	/user/username/projects/app/src/index.ts SVC-1-0 "\n\nimport { MyClass } from 'shared';"
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	../shared/src/index.ts
 	  Imported via 'shared' from file 'src/index.ts'
 	src/index.ts
@@ -285,7 +280,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 413,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -346,15 +341,11 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
-PolledWatches::
-/user/username/projects/app/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/app/package.json: *new*
   {}
@@ -387,7 +378,7 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/app/tsconfig.json
@@ -423,19 +414,25 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 1 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "flags": 1,
+        "flags": 9,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
         "entries": [
+          {
+            "name": "MyClass",
+            "kind": "alias",
+            "kindModifiers": "export",
+            "sortText": "11"
+          },
           {
             "name": "abstract",
             "kind": "keyword",
@@ -845,29 +842,23 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "MyClass",
-            "kind": "class",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "source": "/user/username/projects/shared/src/index",
-            "hasAction": true,
-            "data": {
-              "exportName": "MyClass",
-              "exportMapKey": "7 * MyClass ",
-              "fileName": "/user/username/projects/shared/src/index.ts"
-            }
-          },
-          {
             "name": "MyHelper",
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/user/username/projects/shared/src/helper",
+            "source": "shared/helper",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "shared/helper",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyHelper",
               "exportMapKey": "8 * MyHelper ",
+              "moduleSpecifier": "shared/helper",
               "fileName": "/user/username/projects/shared/src/helper.ts",
               "isPackageJsonImport": true
             }
@@ -922,7 +913,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/pro
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/shared/src/index.ts Text-1 "export class MyClass { }"
 	/user/username/projects/app/src/index.ts SVC-1-0 "\n\nimport { MyClass } from 'shared';"
 
@@ -953,19 +944,25 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 2 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "flags": 1,
+        "flags": 9,
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
         "entries": [
+          {
+            "name": "MyClass",
+            "kind": "alias",
+            "kindModifiers": "export",
+            "sortText": "11"
+          },
           {
             "name": "abstract",
             "kind": "keyword",
@@ -1375,29 +1372,23 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "MyClass",
-            "kind": "class",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "source": "/user/username/projects/shared/src/index",
-            "hasAction": true,
-            "data": {
-              "exportName": "MyClass",
-              "exportMapKey": "7 * MyClass ",
-              "fileName": "/user/username/projects/shared/src/index.ts"
-            }
-          },
-          {
             "name": "MyHelper",
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/user/username/projects/shared/src/helper",
+            "source": "shared/helper",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "shared/helper",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyHelper",
               "exportMapKey": "8 * MyHelper ",
+              "moduleSpecifier": "shared/helper",
               "fileName": "/user/username/projects/shared/src/helper.ts",
               "isPackageJsonImport": true
             }
@@ -1407,12 +1398,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/user/username/projects/shared/src/other",
+            "source": "shared/other",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "shared/other",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "OtherClass",
               "exportMapKey": "10 * OtherClass ",
+              "moduleSpecifier": "shared/other",
               "fileName": "/user/username/projects/shared/src/other.ts",
               "isPackageJsonImport": true
             }
@@ -1431,14 +1429,8 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/user/username/projects/app/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/app/package.json:
   {}
@@ -1475,7 +1467,7 @@ Projects::
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/app/tsconfig.json
@@ -1536,7 +1528,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/pro
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/shared/src/index.ts Text-1 "export class MyClass { }"
 	/user/username/projects/app/src/index.ts SVC-1-0 "\n\nimport { MyClass } from 'shared';"
 
@@ -1552,7 +1544,7 @@ Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new 
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -1564,6 +1556,12 @@ Info seq  [hh:mm:ss:mss] response:
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
         "entries": [
+          {
+            "name": "MyClass",
+            "kind": "alias",
+            "kindModifiers": "export",
+            "sortText": "11"
+          },
           {
             "name": "abstract",
             "kind": "keyword",
@@ -1973,29 +1971,23 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "MyClass",
-            "kind": "class",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "source": "/user/username/projects/shared/src/index",
-            "hasAction": true,
-            "data": {
-              "exportName": "MyClass",
-              "exportMapKey": "7 * MyClass ",
-              "fileName": "/user/username/projects/shared/src/index.ts"
-            }
-          },
-          {
             "name": "MyHelper",
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/user/username/projects/shared/src/helper",
+            "source": "shared/helper",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "shared/helper",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyHelper",
               "exportMapKey": "8 * MyHelper ",
+              "moduleSpecifier": "shared/helper",
               "fileName": "/user/username/projects/shared/src/helper.ts",
               "isPackageJsonImport": true
             }
@@ -2005,12 +1997,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "source": "/user/username/projects/shared/src/other",
+            "source": "shared/other",
             "hasAction": true,
+            "sourceDisplay": [
+              {
+                "text": "shared/other",
+                "kind": "text"
+              }
+            ],
             "isPackageJsonImport": true,
             "data": {
               "exportName": "OtherClass",
               "exportMapKey": "10 * OtherClass ",
+              "moduleSpecifier": "shared/other",
               "fileName": "/user/username/projects/shared/src/other.ts",
               "isPackageJsonImport": true
             }
@@ -2101,7 +2100,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -2113,6 +2112,12 @@ Info seq  [hh:mm:ss:mss] response:
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
         "entries": [
+          {
+            "name": "MyClass",
+            "kind": "alias",
+            "kindModifiers": "export",
+            "sortText": "11"
+          },
           {
             "name": "abstract",
             "kind": "keyword",
@@ -2520,19 +2525,6 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
-          },
-          {
-            "name": "MyClass",
-            "kind": "class",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "source": "/user/username/projects/shared/src/index",
-            "hasAction": true,
-            "data": {
-              "exportName": "MyClass",
-              "exportMapKey": "7 * MyClass ",
-              "fileName": "/user/username/projects/shared/src/index.ts"
-            }
           }
         ],
         "defaultCommitCharacters": [
@@ -2560,7 +2552,7 @@ Projects::
     autoImportProviderHost: false *changed*
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/app/tsconfig.json

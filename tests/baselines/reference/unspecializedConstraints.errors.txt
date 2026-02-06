@@ -1,8 +1,13 @@
+unspecializedConstraints.ts(37,13): error TS2322: Type 'undefined' is not assignable to type 'Property'.
+unspecializedConstraints.ts(40,13): error TS2322: Type 'undefined' is not assignable to type 'Property'.
+unspecializedConstraints.ts(46,13): error TS2322: Type 'undefined' is not assignable to type 'Signature'.
 unspecializedConstraints.ts(84,44): error TS2552: Cannot find name 'TypeParameter'. Did you mean 'Parameter'?
+unspecializedConstraints.ts(119,45): error TS2322: Type 'undefined' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
 
 
-==== unspecializedConstraints.ts (1 errors) ====
-    module ts {
+==== unspecializedConstraints.ts (5 errors) ====
+    namespace ts {
         interface Map<T> {
             [index: string]: T;
         }
@@ -39,15 +44,21 @@ unspecializedConstraints.ts(84,44): error TS2552: Cannot find name 'TypeParamete
             }
             getProperty(index: number): Property {
                 return undefined;
+                ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Property'.
             }
             getPropertyByName(name: string): Property {
                 return undefined;
+                ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Property'.
             }
             getPropertyCount(): number {
                 return 0;
             }
             getSignature(index: number): Signature {
                 return undefined;
+                ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Signature'.
             }
             getSignatureCount(): number {
                 return 0;
@@ -124,6 +135,9 @@ unspecializedConstraints.ts(84,44): error TS2552: Cannot find name 'TypeParamete
     
         function getProperty<T>(map: Map<T>, key: string): T {
             if (!hasOwnProperty.call(map, key)) return undefined;
+                                                ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
             return map[key];
         }
     

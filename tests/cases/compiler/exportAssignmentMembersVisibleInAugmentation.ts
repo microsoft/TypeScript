@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 
 // @Filename: /node_modules/foo/index.d.ts

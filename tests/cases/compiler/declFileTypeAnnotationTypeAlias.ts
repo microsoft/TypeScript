@@ -1,8 +1,9 @@
-// @target: ES5
+// @strict: false
+// @target: ES5, ES2015
 // @module: commonjs
 // @declaration: true
 
-module M {
+namespace M {
     export type Value = string | number | boolean;
     export var x: Value;
 
@@ -11,7 +12,7 @@ module M {
 
     export type C = c;
 
-    export module m {
+    export namespace m {
         export class c {
         }
     }
@@ -25,9 +26,9 @@ interface Window {
     someMethod();
 }
 
-module M {
+namespace M {
     export type W = Window | string;
-    export module N {
+    export namespace N {
         export class Window { }
         export var p: W;
     }

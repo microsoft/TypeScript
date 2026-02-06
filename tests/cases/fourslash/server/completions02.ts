@@ -1,8 +1,10 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
+
 ////class Foo {
 ////}
-////module Foo {
+////namespace Foo {
 ////    export var x: number;
 ////}
 ////Foo./**/

@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/declarationEmitNoInvalidCommentReuse2.ts] ////
+
+=== a.ts ===
+import { object } from "./obj.ts";
+>object : { foo: import("id").Id<{}>; }
+>       : ^^^^^^^                         ^^^
+
+export const _ = object;
+>_ : { foo: import("id").Id<{}>; }
+>  : ^^^^^^^                         ^^^
+>object : { foo: import("id").Id<{}>; }
+>       : ^^^^^^^                         ^^^
+
+///////////
+/**
+ * huh
+ */
+=== obj.d.ts ===
+export declare const object: import("./id.ts").Id<{
+>object : { foo: import("./id.ts").Id<{}>; }
+>       : ^^^^^^^                        ^^^
+
+    foo: import("./id.ts" ).Id<{}>;
+>foo : {}
+>    : ^^
+
+}>;
+
+=== id.d.ts ===
+export type Id<T> = T;
+>Id : T
+>   : ^
+

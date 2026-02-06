@@ -1,3 +1,4 @@
+// @target: es2015
 var x: typeof undefined;
 
 enum E { a, b, c }

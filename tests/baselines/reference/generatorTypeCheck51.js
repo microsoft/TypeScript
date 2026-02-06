@@ -8,6 +8,7 @@ function* g() {
 }
 
 //// [generatorTypeCheck51.js]
+"use strict";
 function* g() {
     function* h() {
         yield 0;

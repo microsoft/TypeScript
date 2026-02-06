@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/declarationEmitShadowing.ts] ////
+
+=== declarationEmitShadowing.ts ===
+export class A<T = any> {
+>A : Symbol(A, Decl(declarationEmitShadowing.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitShadowing.ts, 0, 15))
+
+  public readonly ShadowedButDoesNotRequireRenaming = <T>(): T => {
+>ShadowedButDoesNotRequireRenaming : Symbol(A.ShadowedButDoesNotRequireRenaming, Decl(declarationEmitShadowing.ts, 0, 25))
+>T : Symbol(T, Decl(declarationEmitShadowing.ts, 1, 55))
+>T : Symbol(T, Decl(declarationEmitShadowing.ts, 1, 55))
+
+      return null as any
+  }
+}
+
+export function needsRenameForShadowing<T>() {
+>needsRenameForShadowing : Symbol(needsRenameForShadowing, Decl(declarationEmitShadowing.ts, 4, 1))
+>T : Symbol(T, Decl(declarationEmitShadowing.ts, 6, 40))
+
+  type A = T
+>A : Symbol(A, Decl(declarationEmitShadowing.ts, 6, 46))
+>T : Symbol(T, Decl(declarationEmitShadowing.ts, 6, 40))
+
+  return function O<T>(t: A, t2: T) {
+>O : Symbol(O, Decl(declarationEmitShadowing.ts, 8, 8))
+>T : Symbol(T, Decl(declarationEmitShadowing.ts, 8, 20))
+>t : Symbol(t, Decl(declarationEmitShadowing.ts, 8, 23))
+>A : Symbol(A, Decl(declarationEmitShadowing.ts, 6, 46))
+>t2 : Symbol(t2, Decl(declarationEmitShadowing.ts, 8, 28))
+>T : Symbol(T, Decl(declarationEmitShadowing.ts, 8, 20))
+  }
+}
+

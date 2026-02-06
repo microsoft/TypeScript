@@ -1,12 +1,14 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+// @strict: false
 ////class A {
 ////    constructor(x: number) { }
 ////    foo() { }
 ////    static bar() { }
 ////}
 ////
-////module A {
+////namespace A {
 ////    export var x = 1;
 ////    export function baz() { }
 ////}

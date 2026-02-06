@@ -48,11 +48,11 @@ interface A2 {
 >  : ^^^^^^
 }
 
-var t1: A1;
+declare var t1: A1;
 >t1 : A1
 >   : ^^
 
-var t2: A2;
+declare var t2: A2;
 >t2 : A2
 >   : ^^
 

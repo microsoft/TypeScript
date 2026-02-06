@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/innerAliases2.ts] ////
 
 //// [innerAliases2.ts]
-module _provider {
+namespace _provider {
                 export class UsefulClass {
                                 public foo() {
                                 }
                 }
 }
 
-module consumer {
+namespace consumer {
                 import provider = _provider;
                 
                 var g:provider.UsefulClass= null;
@@ -22,15 +22,13 @@ module consumer {
 
 
 //// [innerAliases2.js]
+"use strict";
 var _provider;
 (function (_provider) {
-    var UsefulClass = /** @class */ (function () {
-        function UsefulClass() {
+    class UsefulClass {
+        foo() {
         }
-        UsefulClass.prototype.foo = function () {
-        };
-        return UsefulClass;
-    }());
+    }
     _provider.UsefulClass = UsefulClass;
 })(_provider || (_provider = {}));
 var consumer;

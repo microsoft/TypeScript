@@ -1,3 +1,4 @@
+// @target: es2015
 interface Number {
     doStuff(): string;
 }
@@ -12,8 +13,8 @@ interface NotNumber {
 }
 
 var x = 1;
-var a: Number;
-var b: NotNumber;
+declare var a: Number;
+declare var b: NotNumber;
 
 a = x; 
 a = b; 

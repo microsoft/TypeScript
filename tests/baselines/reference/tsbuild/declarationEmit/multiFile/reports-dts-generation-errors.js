@@ -37,7 +37,6 @@ export default ky;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -68,8 +67,8 @@ Output::
 
 TSFILE: /home/src/workspaces/project/index.js
 TSFILE: /home/src/workspaces/project/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.esnext.full.d.ts
-  Default library for target 'esnext'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'index.ts'
   File is ECMAScript module because 'node_modules/ky/package.json' has field "type" with value "module"
@@ -83,7 +82,7 @@ Found 1 error.
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.esnext.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/index.js]
 import ky from 'ky';
@@ -126,8 +125,8 @@ Output::
 
 TSFILE: /home/src/workspaces/project/index.js
 TSFILE: /home/src/workspaces/project/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.esnext.full.d.ts
-  Default library for target 'esnext'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'index.ts'
   File is ECMAScript module because 'node_modules/ky/package.json' has field "type" with value "module"

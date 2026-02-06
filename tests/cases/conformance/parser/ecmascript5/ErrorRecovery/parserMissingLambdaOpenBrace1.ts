@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class C {
     where(filter: Iterator<T, boolean>): Query<T> {
         return fromDoWhile(test =>

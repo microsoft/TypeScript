@@ -11,7 +11,7 @@ interface C { foo: string; }
 >foo : string
 >    : ^^^^^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

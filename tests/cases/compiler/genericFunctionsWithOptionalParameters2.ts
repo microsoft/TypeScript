@@ -1,8 +1,9 @@
+// @target: es2015
 interface Utils {
    fold<T, S>(c: Array<T>, folder?: (s: S, t: T) => T, init?: S): T;
 }
 
-var utils: Utils;
+declare var utils: Utils;
 
 utils.fold(); // error
 utils.fold(null); // no error

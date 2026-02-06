@@ -1,6 +1,6 @@
 /// <reference path="classA.ts" />
 
-module test {
+namespace test {
     export class ClassB extends ClassA 
     {
     }

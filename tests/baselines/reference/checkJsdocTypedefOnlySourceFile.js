@@ -15,6 +15,7 @@ const myString = 'str';
 
 
 //// [0.js]
+"use strict";
 // @ts-check
 var exports = {};
 /**
@@ -22,4 +23,4 @@ var exports = {};
  */
 exports.SomeName;
 /** @type {exports.SomeName} */
-var myString = 'str';
+const myString = 'str';

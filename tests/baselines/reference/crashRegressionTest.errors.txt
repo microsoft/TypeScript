@@ -1,8 +1,10 @@
+crashRegressionTest.ts(16,13): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
 crashRegressionTest.ts(16,56): error TS2339: Property '_name' does not exist on type 'StringTemplate'.
 
 
-==== crashRegressionTest.ts (1 errors) ====
-    module MsPortal.Util.TemplateEngine {
+==== crashRegressionTest.ts (2 errors) ====
+    namespace MsPortal.Util.TemplateEngine {
         "use strict";
      
         interface TemplateKeyValue {
@@ -18,6 +20,9 @@ crashRegressionTest.ts(16,56): error TS2339: Property '_name' does not exist on 
      
             public text(value?: string): any {
                 this._templateStorage.templateSources[this._name] = value;
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
                                                            ~~~~~
 !!! error TS2339: Property '_name' does not exist on type 'StringTemplate'.
             }

@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @module: nodenext
+// @module: node18
 // @allowJs: true
 
 // @Filename: /node_modules/dom7/index.d.ts

@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @module: esnext
 // @filename: /node_modules/foo/index.js
 ////function bar() {}

@@ -1,0 +1,57 @@
+decrementOperatorWithNumberType.ts(6,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+decrementOperatorWithNumberType.ts(15,25): error TS2454: Variable 'NUMBER' is used before being assigned.
+decrementOperatorWithNumberType.ts(17,23): error TS2454: Variable 'NUMBER' is used before being assigned.
+decrementOperatorWithNumberType.ts(28,3): error TS2454: Variable 'NUMBER' is used before being assigned.
+decrementOperatorWithNumberType.ts(35,1): error TS2454: Variable 'NUMBER' is used before being assigned.
+
+
+==== decrementOperatorWithNumberType.ts (5 errors) ====
+    // -- operator on number type
+    var NUMBER: number;
+    var NUMBER1: number[] = [1, 2];
+    
+    class A {
+        public a: number;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+    }
+    namespace M {
+        export var n: number;
+    }
+    
+    var objA = new A();
+    
+    // number type var
+    var ResultIsNumber1 = --NUMBER;
+                            ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+    
+    var ResultIsNumber2 = NUMBER--;
+                          ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+    
+    // expressions
+    var ResultIsNumber3 = --objA.a;
+    var ResultIsNumber4 = --M.n;
+    
+    var ResultIsNumber5 = objA.a--;
+    var ResultIsNumber6 = M.n--;
+    var ResultIsNumber7 = NUMBER1[0]--;
+    
+    // miss assignment operators
+    --NUMBER;
+      ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+    
+    --NUMBER1[0];
+    --objA.a;
+    --M.n;
+    --objA.a, M.n;
+    
+    NUMBER--;
+    ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+    NUMBER1[0]--;
+    objA.a--;
+    M.n--;
+    objA.a--, M.n--;

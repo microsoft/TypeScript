@@ -18,6 +18,7 @@ export const elem: HTMLElement = { field: 'a' };
 
 
 //// [bundle.js]
+"use strict";
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

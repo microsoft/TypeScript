@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration11.ts] ////
 
 //// [parserModuleDeclaration11.ts]
-declare module string {
+declare namespace string {
     interface X { }
     export function foo(s: string);
 }
@@ -10,5 +10,6 @@ var x: string.X;
 
 
 //// [parserModuleDeclaration11.js]
+"use strict";
 string.foo("abc");
 var x;

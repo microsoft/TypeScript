@@ -1,7 +1,10 @@
-arrayAssignmentTest1.ts(46,5): error TS2741: Property 'IM1' is missing in type 'undefined[]' but required in type 'I1'.
-arrayAssignmentTest1.ts(47,5): error TS2739: Type 'undefined[]' is missing the following properties from type 'C1': IM1, C1M1
-arrayAssignmentTest1.ts(48,5): error TS2739: Type 'undefined[]' is missing the following properties from type 'C2': C2M1, IM1, C1M1
-arrayAssignmentTest1.ts(49,5): error TS2741: Property 'CM3M1' is missing in type 'undefined[]' but required in type 'C3'.
+arrayAssignmentTest1.ts(6,16): error TS2322: Type 'null' is not assignable to type 'void[]'.
+arrayAssignmentTest1.ts(7,15): error TS2322: Type 'null' is not assignable to type 'C1[]'.
+arrayAssignmentTest1.ts(10,19): error TS2322: Type 'null' is not assignable to type 'C2[]'.
+arrayAssignmentTest1.ts(46,5): error TS2741: Property 'IM1' is missing in type 'never[]' but required in type 'I1'.
+arrayAssignmentTest1.ts(47,5): error TS2739: Type 'never[]' is missing the following properties from type 'C1': IM1, C1M1
+arrayAssignmentTest1.ts(48,5): error TS2739: Type 'never[]' is missing the following properties from type 'C2': C2M1, IM1, C1M1
+arrayAssignmentTest1.ts(49,5): error TS2741: Property 'CM3M1' is missing in type 'never[]' but required in type 'C3'.
 arrayAssignmentTest1.ts(60,1): error TS2322: Type 'C3[]' is not assignable to type 'I1[]'.
   Property 'IM1' is missing in type 'C3' but required in type 'I1'.
 arrayAssignmentTest1.ts(64,1): error TS2322: Type 'I1[]' is not assignable to type 'C1[]'.
@@ -21,24 +24,30 @@ arrayAssignmentTest1.ts(76,1): error TS2322: Type 'C1[]' is not assignable to ty
 arrayAssignmentTest1.ts(77,1): error TS2322: Type 'I1[]' is not assignable to type 'C3[]'.
   Property 'CM3M1' is missing in type 'I1' but required in type 'C3'.
 arrayAssignmentTest1.ts(79,1): error TS2322: Type '() => C1' is not assignable to type 'any[]'.
-arrayAssignmentTest1.ts(80,1): error TS2740: Type '{ one: number; }' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
-arrayAssignmentTest1.ts(82,1): error TS2740: Type 'C1' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
-arrayAssignmentTest1.ts(83,1): error TS2740: Type 'C2' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
-arrayAssignmentTest1.ts(84,1): error TS2740: Type 'C3' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
-arrayAssignmentTest1.ts(85,1): error TS2740: Type 'I1' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+arrayAssignmentTest1.ts(80,1): error TS2740: Type '{ one: number; }' is missing the following properties from type 'any[]': length, pop, push, concat, and 25 more.
+arrayAssignmentTest1.ts(82,1): error TS2740: Type 'C1' is missing the following properties from type 'any[]': length, pop, push, concat, and 25 more.
+arrayAssignmentTest1.ts(83,1): error TS2740: Type 'C2' is missing the following properties from type 'any[]': length, pop, push, concat, and 25 more.
+arrayAssignmentTest1.ts(84,1): error TS2740: Type 'C3' is missing the following properties from type 'any[]': length, pop, push, concat, and 25 more.
+arrayAssignmentTest1.ts(85,1): error TS2740: Type 'I1' is missing the following properties from type 'any[]': length, pop, push, concat, and 25 more.
 
 
-==== arrayAssignmentTest1.ts (19 errors) ====
+==== arrayAssignmentTest1.ts (22 errors) ====
     interface I1 {
     	IM1():void[];
     }
     
     class C1 implements I1 { 
     	IM1():void[] {return null;}
+    	              ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'void[]'.
     	C1M1():C1[] {return null;}
+    	             ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'C1[]'.
      }
     class C2 extends C1 {
         C2M1():C2[] { return null;}
+                      ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'C2[]'.
     }
     
     class C3 {
@@ -76,17 +85,17 @@ arrayAssignmentTest1.ts(85,1): error TS2740: Type 'I1' is missing the following 
     
     var i1_error: I1 = []; // should be an error - is
         ~~~~~~~~
-!!! error TS2741: Property 'IM1' is missing in type 'undefined[]' but required in type 'I1'.
+!!! error TS2741: Property 'IM1' is missing in type 'never[]' but required in type 'I1'.
 !!! related TS2728 arrayAssignmentTest1.ts:2:2: 'IM1' is declared here.
     var c1_error: C1 = []; // should be an error - is
         ~~~~~~~~
-!!! error TS2739: Type 'undefined[]' is missing the following properties from type 'C1': IM1, C1M1
+!!! error TS2739: Type 'never[]' is missing the following properties from type 'C1': IM1, C1M1
     var c2_error: C2 = []; // should be an error - is
         ~~~~~~~~
-!!! error TS2739: Type 'undefined[]' is missing the following properties from type 'C2': C2M1, IM1, C1M1
+!!! error TS2739: Type 'never[]' is missing the following properties from type 'C2': C2M1, IM1, C1M1
     var c3_error: C3 = []; // should be an error - is
         ~~~~~~~~
-!!! error TS2741: Property 'CM3M1' is missing in type 'undefined[]' but required in type 'C3'.
+!!! error TS2741: Property 'CM3M1' is missing in type 'never[]' but required in type 'C3'.
 !!! related TS2728 arrayAssignmentTest1.ts:14:5: 'CM3M1' is declared here.
     
     
@@ -155,17 +164,17 @@ arrayAssignmentTest1.ts(85,1): error TS2740: Type 'I1' is missing the following 
 !!! error TS2322: Type '() => C1' is not assignable to type 'any[]'.
     arr_any = o1; // should be an error - is
     ~~~~~~~
-!!! error TS2740: Type '{ one: number; }' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+!!! error TS2740: Type '{ one: number; }' is missing the following properties from type 'any[]': length, pop, push, concat, and 25 more.
     arr_any = a1; // should be ok - is
     arr_any = c1; // should be an error - is
     ~~~~~~~
-!!! error TS2740: Type 'C1' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+!!! error TS2740: Type 'C1' is missing the following properties from type 'any[]': length, pop, push, concat, and 25 more.
     arr_any = c2; // should be an error - is
     ~~~~~~~
-!!! error TS2740: Type 'C2' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+!!! error TS2740: Type 'C2' is missing the following properties from type 'any[]': length, pop, push, concat, and 25 more.
     arr_any = c3; // should be an error - is
     ~~~~~~~
-!!! error TS2740: Type 'C3' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+!!! error TS2740: Type 'C3' is missing the following properties from type 'any[]': length, pop, push, concat, and 25 more.
     arr_any = i1; // should be an error - is
     ~~~~~~~
-!!! error TS2740: Type 'I1' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+!!! error TS2740: Type 'I1' is missing the following properties from type 'any[]': length, pop, push, concat, and 25 more.

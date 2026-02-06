@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts] ////
 
 //// [ModuleWithExportedAndNonExportedFunctions.ts]
-module A {
+namespace A {
 
     export function fn(s: string) {
         return true;
@@ -32,6 +32,7 @@ var fn2 = A.fn2;
 var fng2 = A.fng2;
 
 //// [ModuleWithExportedAndNonExportedFunctions.js]
+"use strict";
 var A;
 (function (A) {
     function fn(s) {

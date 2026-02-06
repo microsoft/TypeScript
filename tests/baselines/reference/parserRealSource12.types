@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -3123,7 +3123,7 @@ module TypeScript {
 >                       : ^^^^^^^^^^^^^^^^
     }
 
-    module ChildrenWalkers {
+    namespace ChildrenWalkers {
 >ChildrenWalkers : typeof ChildrenWalkers
 >                : ^^^^^^^^^^^^^^^^^^^^^^
 

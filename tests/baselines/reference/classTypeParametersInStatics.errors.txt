@@ -1,15 +1,25 @@
+classTypeParametersInStatics.ts(5,16): error TS2564: Property 'next' has no initializer and is not definitely assigned in the constructor.
+classTypeParametersInStatics.ts(6,16): error TS2564: Property 'prev' has no initializer and is not definitely assigned in the constructor.
 classTypeParametersInStatics.ts(12,40): error TS2302: Static members cannot reference class type parameters.
 classTypeParametersInStatics.ts(13,29): error TS2302: Static members cannot reference class type parameters.
 classTypeParametersInStatics.ts(13,43): error TS2302: Static members cannot reference class type parameters.
+classTypeParametersInStatics.ts(20,52): error TS2345: Argument of type 'null' is not assignable to parameter of type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+classTypeParametersInStatics.ts(27,52): error TS2345: Argument of type 'null' is not assignable to parameter of type 'U'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 
 
-==== classTypeParametersInStatics.ts (3 errors) ====
-    module Editor {
+==== classTypeParametersInStatics.ts (7 errors) ====
+    namespace Editor {
     
     
         export class List<T> {
             public next: List<T>;
+                   ~~~~
+!!! error TS2564: Property 'next' has no initializer and is not definitely assigned in the constructor.
             public prev: List<T>;
+                   ~~~~
+!!! error TS2564: Property 'prev' has no initializer and is not definitely assigned in the constructor.
     
             constructor(public isHead: boolean, public data: T) {
             
@@ -30,6 +40,9 @@ classTypeParametersInStatics.ts(13,43): error TS2302: Static members cannot refe
     
             public static MakeHead2<T>(): List<T> { // should not error
                 var entry: List<T> = new List<T>(true, null);
+                                                       ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'T'.
+!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
                 entry.prev = entry;
                 entry.next = entry;
                 return entry;
@@ -37,6 +50,9 @@ classTypeParametersInStatics.ts(13,43): error TS2302: Static members cannot refe
     
             public static MakeHead3<U>(): List<U> { // should not error
                 var entry: List<U> = new List<U>(true, null);
+                                                       ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'U'.
+!!! error TS2345:   'U' could be instantiated with an arbitrary type which could be unrelated to 'null'.
                 entry.prev = entry;
                 entry.next = entry;
                 return entry;

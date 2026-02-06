@@ -1,3 +1,4 @@
+// @target: es2015
 
 // repro from #52568
 

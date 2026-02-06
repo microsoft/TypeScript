@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #8801
 
 function alert(s: string) {}

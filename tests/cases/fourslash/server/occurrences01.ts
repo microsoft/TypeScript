@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
+
 ////foo: [|switch|] (10) {
 ////    [|case|] 1:
 ////    [|case|] 2:

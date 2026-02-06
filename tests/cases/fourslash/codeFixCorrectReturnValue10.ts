@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 //// const a: ((() => number) | (() => undefined)) = () => { 1 }
 
 verify.codeFixAvailable([

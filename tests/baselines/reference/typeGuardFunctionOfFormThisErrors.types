@@ -146,7 +146,7 @@ function invalidGuard(c: any): this is number {
 >      : ^^^^^
 }
 
-let c: number | number[];
+declare var c: number | number[];
 >c : number | number[]
 >  : ^^^^^^^^^^^^^^^^^
 

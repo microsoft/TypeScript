@@ -1,7 +1,7 @@
 export var $;
 
 
-export module Yo {
+export namespace Yo {
     import test = require("test1");
     test.x;
 

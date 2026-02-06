@@ -1,15 +1,15 @@
 //// [tests/cases/compiler/mergedModuleDeclarationCodeGen4.ts] ////
 
 //// [mergedModuleDeclarationCodeGen4.ts]
-module superContain {
-    export module contain {
-        export module my.buz {
-            export module data {
+namespace superContain {
+    export namespace contain {
+        export namespace my.buz {
+            export namespace data {
                 export function foo() { }
             }
         }
-        export module my.buz {
-            export module data {
+        export namespace my.buz {
+            export namespace data {
                 export function bar(contain, my, buz, data) {
                     foo();
                 }
@@ -19,15 +19,16 @@ module superContain {
 }
 
 //// [mergedModuleDeclarationCodeGen4.js]
+"use strict";
 var superContain;
 (function (superContain) {
-    var contain;
+    let contain;
     (function (contain_1) {
-        var my;
+        let my;
         (function (my) {
-            var buz;
+            let buz;
             (function (buz) {
-                var data;
+                let data;
                 (function (data) {
                     function foo() { }
                     data.foo = foo;
@@ -35,9 +36,9 @@ var superContain;
             })(buz = my.buz || (my.buz = {}));
         })(my = contain_1.my || (contain_1.my = {}));
         (function (my_1) {
-            var buz;
+            let buz;
             (function (buz_1) {
-                var data;
+                let data;
                 (function (data_1) {
                     function bar(contain, my, buz, data) {
                         data_1.foo();

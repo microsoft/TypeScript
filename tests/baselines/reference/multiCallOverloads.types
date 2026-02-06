@@ -3,8 +3,8 @@
 === multiCallOverloads.ts ===
 interface ICallback {
     (x?: string):void;
->x : string
->  : ^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 function load(f: ICallback) {}
@@ -16,18 +16,18 @@ function load(f: ICallback) {}
 var f1: ICallback = function(z?) {}
 >f1 : ICallback
 >   : ^^^^^^^^^
->function(z?) {} : (z?: string) => void
->                : ^ ^^^^^^^^^^^^^^^^^^
->z : string
->  : ^^^^^^
+>function(z?) {} : (z?: string | undefined) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>z : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 var f2: ICallback = function(z?) {}
 >f2 : ICallback
 >   : ^^^^^^^^^
->function(z?) {} : (z?: string) => void
->                : ^ ^^^^^^^^^^^^^^^^^^
->z : string
->  : ^^^^^^
+>function(z?) {} : (z?: string | undefined) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>z : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 load(f1) // ok
 >load(f1) : void
@@ -58,8 +58,8 @@ load(function(z?) {}) // this shouldn't be an error
 >                      : ^^^^
 >load : (f: ICallback) => void
 >     : ^ ^^         ^^^^^^^^^
->function(z?) {} : (z?: string) => void
->                : ^ ^^^^^^^^^^^^^^^^^^
->z : string
->  : ^^^^^^
+>function(z?) {} : (z?: string | undefined) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>z : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 

@@ -9,6 +9,7 @@ function a() {
 }
 
 //// [nestedRedeclarationInES6AMD.js]
+"use strict";
 function a() {
     {
         let status = 1;

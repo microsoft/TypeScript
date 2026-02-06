@@ -1,3 +1,7 @@
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(2,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(6,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(10,13): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(14,13): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(23,12): error TS2365: Operator '<' cannot be applied to types 'A1' and 'B1'.
 comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(24,12): error TS2365: Operator '<' cannot be applied to types 'A2' and 'B2'.
 comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(26,12): error TS2365: Operator '<' cannot be applied to types 'B1' and 'A1'.
@@ -32,27 +36,35 @@ comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(75,12): error TS2367: T
 comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(76,12): error TS2367: This comparison appears to be unintentional because the types 'B2' and 'A2' have no overlap.
 
 
-==== comparisonOperatorWithNoRelationshipObjectsOnProperty.ts (32 errors) ====
+==== comparisonOperatorWithNoRelationshipObjectsOnProperty.ts (36 errors) ====
     class A1 {
         public a: number;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     }
     
     class B1 {
         public a: string;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     }
     
     class A2 {
         private a: string;
+                ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     }
     
     class B2 {
         private a: string;
+                ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     }
     
-    var a1: A1;
-    var b1: B1;
-    var a2: A2;
-    var b2: B2;
+    declare var a1: A1;
+    declare var b1: B1;
+    declare var a2: A2;
+    declare var b2: B2;
     
     // operator <
     var r1a1 = a1 < b1;

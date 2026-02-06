@@ -31,6 +31,7 @@ c2.func4 = c2.func5;
 c2.func5 = c2.func4;
 
 //// [methodSignaturesWithOverloads2.js]
+"use strict";
 // Object type literals permit overloads with optionality but they must match
 var c;
 // no errors

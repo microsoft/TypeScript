@@ -3,8 +3,8 @@
 === inheritSameNamePropertiesWithDifferentOptionality.ts ===
 interface C {
     x?: number;
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface C2 {

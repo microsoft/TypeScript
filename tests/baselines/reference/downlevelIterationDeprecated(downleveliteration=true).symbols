@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/downlevelIterationDeprecated.ts] ////
+
+=== downlevelIterationDeprecated.ts ===
+declare const log: (s: string) => void;
+>log : Symbol(log, Decl(downlevelIterationDeprecated.ts, 0, 13))
+>s : Symbol(s, Decl(downlevelIterationDeprecated.ts, 0, 20))
+
+declare const arr: string[];
+>arr : Symbol(arr, Decl(downlevelIterationDeprecated.ts, 2, 13))
+
+for (const a of arr) {
+>a : Symbol(a, Decl(downlevelIterationDeprecated.ts, 4, 10))
+>arr : Symbol(arr, Decl(downlevelIterationDeprecated.ts, 2, 13))
+
+    log(a);
+>log : Symbol(log, Decl(downlevelIterationDeprecated.ts, 0, 13))
+>a : Symbol(a, Decl(downlevelIterationDeprecated.ts, 4, 10))
+}

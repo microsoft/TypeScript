@@ -49,6 +49,7 @@ import {
     Debug,
     Declaration,
     deduplicate,
+    defaultHoverMaximumTruncationLength,
     DefinitionInfo,
     DefinitionInfoAndBoundSpan,
     Diagnostic,
@@ -1381,9 +1382,8 @@ export function displayPartsToString(displayParts: SymbolDisplayPart[] | undefin
 }
 
 export function getDefaultCompilerOptions(): CompilerOptions {
-    // Always default to "ScriptTarget.ES5" for the language service
     return {
-        target: ScriptTarget.ES5,
+        target: ScriptTarget.LatestStandard,
         jsx: JsxEmit.Preserve,
     };
 }
@@ -2274,7 +2274,7 @@ export function createLanguageService(
         return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, preferences);
     }
 
-    function getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel?: number): QuickInfo | undefined {
+    function getQuickInfoAtPosition(fileName: string, position: number, maximumLength?: number, verbosityLevel?: number): QuickInfo | undefined {
         synchronizeHostData();
 
         const sourceFile = getValidSourceFile(fileName);
@@ -2310,6 +2310,7 @@ export function createLanguageService(
                     nodeForQuickInfo,
                     /*semanticMeaning*/ undefined,
                     /*alias*/ undefined,
+                    maximumLength ?? defaultHoverMaximumTruncationLength,
                     verbosityLevel,
                 ),
         );
@@ -2480,7 +2481,7 @@ export function createLanguageService(
     function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false, excludeLibFiles = false): NavigateToItem[] {
         synchronizeHostData();
         const sourceFiles = fileName ? [getValidSourceFile(fileName)] : program.getSourceFiles();
-        return NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles, excludeLibFiles);
+        return NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles, excludeLibFiles, program);
     }
 
     function getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean) {
@@ -3544,6 +3545,7 @@ function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralEleme
         // falls through
 
         case SyntaxKind.Identifier:
+        case SyntaxKind.JsxNamespacedName:
             return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
                     node.parent.name === node ? node.parent : undefined;
@@ -3572,6 +3574,7 @@ function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symb
  * @internal
  */
 export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementWithName, checker: TypeChecker, contextualType: Type, unionSymbolOk: boolean): readonly Symbol[] {
+    contextualType = contextualType.getNonNullableType();
     const name = getNameFromPropertyName(node.name);
     if (!name) return emptyArray;
     if (!contextualType.isUnion()) {

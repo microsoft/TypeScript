@@ -5,7 +5,7 @@ function fee<T>() {
 >fee : Symbol(fee, Decl(typeParameterExplicitlyExtendsAny.ts, 0, 0))
 >T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 0, 13))
 
-    var t: T;
+    var t!: T;
 >t : Symbol(t, Decl(typeParameterExplicitlyExtendsAny.ts, 1, 7))
 >T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 0, 13))
 
@@ -22,7 +22,7 @@ function fee2<T extends any>() {
 >fee2 : Symbol(fee2, Decl(typeParameterExplicitlyExtendsAny.ts, 4, 1))
 >T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 6, 14))
 
-    var t: T;
+    var t!: T;
 >t : Symbol(t, Decl(typeParameterExplicitlyExtendsAny.ts, 7, 7))
 >T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 6, 14))
 

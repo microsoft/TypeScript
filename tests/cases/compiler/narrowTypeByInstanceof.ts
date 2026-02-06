@@ -1,4 +1,5 @@
-﻿    class Match {
+﻿// @target: es2015
+    class Match {
         public range(): any {
             return undefined;
         }

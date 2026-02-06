@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 function update(b: Readonly<Float32Array>) {
     const c = copy(b);

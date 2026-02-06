@@ -27,7 +27,7 @@ class D extends C {
 >    : ^^^^^^
 }
 
-module D {
+namespace D {
 >D : typeof D
 >  : ^^^^^^^^
 

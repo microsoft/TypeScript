@@ -17,7 +17,8 @@ app.foo.bar.someFun(1);
 
 
 //// [contextualReturnTypeOfIIFE3.js]
+"use strict";
 app.foo.bar = (function () {
-    return { someFun: function (arg) { } };
+    return { someFun(arg) { } };
 })();
 app.foo.bar.someFun(1);

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 var f = function (a = 3) { return a; }; // Type should be (a?: number) => number
 var n: number = f(4);
 n = f();
@@ -20,8 +22,8 @@ var f4: (a: number) => void = function (a = "") { };
 var f5: (a: (s: string) => any) => void = function (a = s => <number>s) { };
 
 // Instantiated module
-module T { }
-module U {
+namespace T { }
+namespace U {
     export var x;
 }
 

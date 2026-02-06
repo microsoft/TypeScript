@@ -1,6 +1,7 @@
+// @target: es2015
 //@module: amd
 // @declaration: true
-export module a {
+export namespace a {
     export enum weekend {
         Friday,
         Saturday,

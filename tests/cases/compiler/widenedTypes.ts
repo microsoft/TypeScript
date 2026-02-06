@@ -1,3 +1,5 @@
+// @strict: false
+// @target: es2015
 //@declaration: true
 
 null instanceof (() => { });

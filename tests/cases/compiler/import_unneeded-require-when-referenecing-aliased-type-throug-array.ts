@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: b.ts
 declare module "ITest" {
     interface Name {

@@ -14,6 +14,9 @@ import "./foo.ts";
 export * from "./foo.ts";
 //Shim
 import("./foo.ts");
+import("./foo.ts").then(() => {});
+function acceptAny(arg: any) {}
+acceptAny(import("./foo.ts"));
 import("./foo.ts", { with: { attr: "value" } });
 import("" + "./foo.ts");
 //// [js.js]
@@ -71,6 +74,9 @@ import "./foo.js";
 export * from "./foo.js";
 //Shim
 import("./foo.js");
+import("./foo.js").then(() => { });
+function acceptAny(arg) { }
+acceptAny(import("./foo.js"));
 import("./foo.js", { with: { attr: "value" } });
 import(__rewriteRelativeImportExtension("" + "./foo.ts"));
 //// [js.js]
@@ -112,4 +118,5 @@ import {} from "node:foo.ts";
 import("node:path");
 require("node:path");
 //// [lol.js]
+"use strict";
 // Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207

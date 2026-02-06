@@ -20,7 +20,7 @@ function foo() {
 
 	return "test";
 }
-module foo {
+namespace foo {
 >foo : Symbol(foo, Decl(foo_0.ts, 0, 0), Decl(foo_0.ts, 2, 1))
 
 	export var answer = 42;

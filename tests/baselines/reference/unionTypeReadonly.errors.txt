@@ -22,23 +22,23 @@ unionTypeReadonly.ts(25,15): error TS2339: Property 'value' does not exist on ty
     interface DifferentName {
         readonly other: number;
     }
-    let base: Base;
+    declare let base: Base;
     base.value = 12 // error, lhs can't be a readonly property
          ~~~~~
 !!! error TS2540: Cannot assign to 'value' because it is a read-only property.
-    let identical: Base | Identical;
+    declare let identical: Base | Identical;
     identical.value = 12; // error, lhs can't be a readonly property
               ~~~~~
 !!! error TS2540: Cannot assign to 'value' because it is a read-only property.
-    let mutable: Base | Mutable;
+    declare let mutable: Base | Mutable;
     mutable.value = 12; // error, lhs can't be a readonly property
             ~~~~~
 !!! error TS2540: Cannot assign to 'value' because it is a read-only property.
-    let differentType: Base | DifferentType;
+    declare let differentType: Base | DifferentType;
     differentType.value = 12; // error, lhs can't be a readonly property
                   ~~~~~
 !!! error TS2540: Cannot assign to 'value' because it is a read-only property.
-    let differentName: Base | DifferentName;
+    declare let differentName: Base | DifferentName;
     differentName.value = 12; // error, property 'value' doesn't exist
                   ~~~~~
 !!! error TS2339: Property 'value' does not exist on type 'Base | DifferentName'.

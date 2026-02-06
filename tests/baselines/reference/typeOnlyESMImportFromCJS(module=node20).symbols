@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/externalModules/typeOnly/typeOnlyESMImportFromCJS.ts] ////
+
+=== module.mts ===
+
+export {};
+
+=== common.cts ===
+import type {} from "./module.mts";
+import type {} from "./module.mts" with { "resolution-mode": "import" };
+import type {} from "./module.mts" with { "resolution-mode": "require" };
+type _1 = typeof import("./module.mts");
+>_1 : Symbol(_1, Decl(common.cts, 2, 73))
+
+type _2 = typeof import("./module.mts", { with: { "resolution-mode": "import" } });
+>_2 : Symbol(_2, Decl(common.cts, 3, 40))
+
+type _3 = typeof import("./module.mts", { with: { "resolution-mode": "require" } });
+>_3 : Symbol(_3, Decl(common.cts, 4, 83))
+

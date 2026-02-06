@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponents3.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : typeof React
 >      : ^^^^^^^^^^^^
@@ -11,6 +13,7 @@ const Foo = (props: any) => <div/>;
 >(props: any) => <div/> : (props: any) => JSX.Element
 >                       : ^     ^^   ^^^^^^^^^^^^^^^^
 >props : any
+>      : ^^^
 ><div/> : JSX.Element
 >       : ^^^^^^^^^^^
 >div : any
@@ -61,6 +64,7 @@ var App: React.StatelessComponent<{ children }> = ({children}) => (
 >React : any
 >      : ^^^
 >children : any
+>         : ^^^
 >({children}) => (    <div >        <MainMenu/>	</div>) : ({ children }: { children: any; } & { children?: React.ReactNode; }) => JSX.Element
 >                                                       : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >children : any

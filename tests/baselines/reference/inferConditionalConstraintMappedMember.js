@@ -16,8 +16,7 @@ export type RemoveIdxSgn<T> = Pick<T, KeysWithoutStringIndex<T>>
   //  Type 'unknown' is not assignable to type 'keyof T'.(2344)
 
 //// [inferConditionalConstraintMappedMember.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 // ERROR:
 // Type 'KeysWithoutStringIndex<T>' does not satisfy the constraint 'keyof T'.
 //  Type 'unknown' is not assignable to type 'keyof T'.(2344)

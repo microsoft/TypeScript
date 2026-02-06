@@ -1,3 +1,4 @@
+// @target: es5, es2015
 var a = 1;
 function strange(x = a, y = b) { 
     var b = "";

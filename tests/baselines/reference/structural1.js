@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/structural1.ts] ////
 
 //// [structural1.ts]
-module M {
+namespace M {
     export interface I {
         salt:number;
         pepper:number;
@@ -15,6 +15,7 @@ module M {
 
 
 //// [structural1.js]
+"use strict";
 var M;
 (function (M) {
     function f(i) {

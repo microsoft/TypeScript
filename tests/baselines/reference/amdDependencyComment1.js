@@ -10,5 +10,5 @@ m1.f();
 "use strict";
 ///<amd-dependency path='bar'/>
 Object.defineProperty(exports, "__esModule", { value: true });
-var m1 = require("m2");
+const m1 = require("m2");
 m1.f();

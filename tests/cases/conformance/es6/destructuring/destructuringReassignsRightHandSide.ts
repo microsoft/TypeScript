@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 var foo: any = { foo: 1, bar: 2 };
 var bar: any;
 

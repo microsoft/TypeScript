@@ -1,3 +1,4 @@
+// @target: es2015
 class C1 { foo() {} }
 
 new C1() as Record<string, unknown>;

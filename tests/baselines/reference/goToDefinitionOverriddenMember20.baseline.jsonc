@@ -1,0 +1,23 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionOverriddenMember20.ts ===
+// const prop = "foo" as const;
+// 
+// abstract class A {
+//   <|readonly [|[prop]|] = "A";|>
+// }
+// 
+// export class B extends A {
+//   /*GOTO DEF*/override readonly [prop] = "B";
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "[prop]",
+    "containerName": "A",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

@@ -11,6 +11,7 @@ import("./foo").then(f => {
 });
 
 //// [index.js]
+"use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -44,6 +45,6 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-Promise.resolve().then(function () { return __importStar(require("./foo")); }).then(function (f) {
+Promise.resolve().then(() => __importStar(require("./foo"))).then(f => {
     f.default;
 });

@@ -1,3 +1,4 @@
+// @target: es5, es2015
 // error
 export function bar(func = () => foo) {
     let foo = "in";

@@ -1,0 +1,8 @@
+ES5SymbolType1.ts(2,1): error TS2454: Variable 's' is used before being assigned.
+
+
+==== ES5SymbolType1.ts (1 errors) ====
+    var s: symbol;
+    s.toString();
+    ~
+!!! error TS2454: Variable 's' is used before being assigned.

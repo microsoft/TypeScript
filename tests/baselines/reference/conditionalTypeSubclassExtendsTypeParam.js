@@ -9,3 +9,4 @@ declare class Field<T extends TR, TR> {
 }
 
 //// [conditionalTypeSubclassExtendsTypeParam.js]
+"use strict";

@@ -31,16 +31,14 @@ interface I<T, U> {
 
 
 //// [typeParameterAsTypeArgument.js]
+"use strict";
 // These are all errors because type parameters cannot reference other type parameters from the same list
 function foo(x, y) {
     foo(y, y);
     return new C();
 }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 //function foo<T, U extends T>(x: T, y: U) {
 //    foo<U, U>(y, y);
 //    return new C<U, T>();

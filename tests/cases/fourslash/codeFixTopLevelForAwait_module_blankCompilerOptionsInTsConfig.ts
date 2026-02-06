@@ -6,6 +6,7 @@
 // @filename: /dir/tsconfig.json
 ////{
 ////    "compilerOptions": {
+////        "module": "commonjs"
 ////    }
 ////}
 

@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @module: commonjs
+
 // @Filename: /a.ts
 ////[|type /*0*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}T|] = number;|]
 ////[|namespace /*1*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}T|] {

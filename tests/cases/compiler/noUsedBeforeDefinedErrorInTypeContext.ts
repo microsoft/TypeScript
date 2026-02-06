@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @noEmit: true
 
 // https://github.com/microsoft/TypeScript/issues/8775

@@ -1,9 +1,10 @@
+// @target: es2015
 // @noTypesAndSymbols: true
 
 // @Filename: /tsconfig.json
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "nodenext",
     "moduleResolution": "bundler",
     "noEmit": true
   }

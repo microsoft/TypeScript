@@ -2,14 +2,14 @@ unusedImports10.ts(9,12): error TS6133: 'a' is declared but its value is never r
 
 
 ==== unusedImports10.ts (1 errors) ====
-    module A {
+    namespace A {
         export class Calculator {
             public handelChar() {
             }
         }
     }
     
-    module B {
+    namespace B {
         import a = A;
                ~
 !!! error TS6133: 'a' is declared but its value is never read.

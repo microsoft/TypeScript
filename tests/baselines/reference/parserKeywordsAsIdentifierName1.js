@@ -9,6 +9,7 @@ var big = {
 
 
 //// [parserKeywordsAsIdentifierName1.js]
+"use strict";
 var big = {
     break: 0,
     super: 0,

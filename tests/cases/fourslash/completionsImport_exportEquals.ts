@@ -1,6 +1,8 @@
 /// <reference path="fourslash.ts" />
 
 // @module: commonjs
+// @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
 
 // @Filename: /a.d.ts
 ////declare function a(): void;
@@ -19,7 +21,7 @@ verify.completions(
         marker: "0",
         includes: {
             name: "a",
-            source: "/a",
+            source: "./a",
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
         },
@@ -29,7 +31,7 @@ verify.completions(
         marker: "1",
         includes: {
             name: "b",
-            source: "/a",
+            source: "./a",
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
         },
@@ -40,7 +42,7 @@ verify.completions(
 // Import { b } first, or it will just add a qualified name from 'a' (which isn't what we're trying to test)
 verify.applyCodeActionFromCompletion("1", {
     name: "b",
-    source: "/a",
+    source: "./a",
     description: `Add import from "./a"`,
     newFileContent:
 `import { b } from "./a";
@@ -51,7 +53,7 @@ let x: b;`,
 
 verify.applyCodeActionFromCompletion("0", {
     name: "a",
-    source: "/a",
+    source: "./a",
     description: `Add import from "./a"`,
     newFileContent:
 `import { b } from "./a";

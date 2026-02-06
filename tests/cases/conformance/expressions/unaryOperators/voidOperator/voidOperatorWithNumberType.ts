@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // void  operator on number type
 var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
@@ -8,7 +10,7 @@ class A {
     public a: number;
     static foo() { return 1; }
 }
-module M {
+namespace M {
     export var n: number;
 }
 

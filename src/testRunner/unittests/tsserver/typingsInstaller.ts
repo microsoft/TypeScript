@@ -78,6 +78,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: jsonToReadableText({
                 compilerOptions: {
                     allowJs: true,
+                    types: ["*"],
                 },
                 typeAcquisition: {
                     enable: true,
@@ -146,6 +147,10 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             useSingleInferredProject: true,
             installAction: [jquery],
         });
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            allowJs: true,
+            types: ["*"],
+        }, session);
         openFilesForSession([file1], session);
 
         host.runPendingInstalls();
@@ -222,7 +227,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         });
         openExternalProjectForSession({
             projectFileName,
-            options: {},
+            options: { types: ["*"] },
             rootFiles: [toExternalFile(appJs.path)],
             typeAcquisition: { enable: true, include: ["node"] },
         }, session);
@@ -806,7 +811,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const jsconfig = {
             path: "/user/username/projects/project/jsconfig.json",
-            content: jsonToReadableText({}),
+            content: jsonToReadableText({ compilerOptions: { types: ["*"] } }),
         };
         // Should only accept direct dependencies.
         const commander = {
@@ -917,7 +922,9 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         });
     }
 
-    testConfiguredProjectNodeModules("discover from node_modules", {});
+    testConfiguredProjectNodeModules("discover from node_modules", {
+        jsconfigContent: { compilerOptions: { types: ["*"] } },
+    });
 
     // Explicit types prevent automatic inclusion from package.json listing
     testConfiguredProjectNodeModules("discover from node_modules empty types", {
@@ -942,7 +949,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const jsconfig = {
             path: "/user/username/projects/project/jsconfig.json",
-            content: jsonToReadableText({}),
+            content: jsonToReadableText({ compilerOptions: { types: ["*"] } }),
         };
         const jquery = {
             path: "/user/username/projects/project/bower_components/jquery/index.js",
@@ -980,7 +987,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         };
         const jsconfig = {
             path: "/user/username/projects/project/jsconfig.json",
-            content: jsonToReadableText({}),
+            content: jsonToReadableText({ compilerOptions: { types: ["*"] } }),
         };
         const bowerJson = {
             path: "/user/username/projects/project/bower.json",
@@ -1036,6 +1043,10 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host,
             installAction: [commander],
         });
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            allowJs: true,
+            types: ["*"],
+        }, session);
         openFilesForSession([f], session);
 
         host.writeFile(fixedPackageJson.path, fixedPackageJson.content);
@@ -1197,6 +1208,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: jsonToReadableText({
                 compilerOptions: {
                     allowJs: true,
+                    types: ["*"],
                 },
                 typeAcquisition: {
                     enable: true,
@@ -1221,6 +1233,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             content: jsonToReadableText({
                 compilerOptions: {
                     allowJs: true,
+                    types: ["*"],
                 },
                 typeAcquisition: {
                     enable: true,
@@ -1314,6 +1327,10 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             useSingleInferredProject: true,
             installAction: [jquery],
         });
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            allowJs: true,
+            types: ["*"],
+        }, session);
         openFilesForSession([file1], session);
         host.runPendingInstalls();
         host.runQueuedTimeoutCallbacks();
@@ -1368,9 +1385,128 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             useSingleInferredProject: true,
             installAction: true,
         });
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            allowJs: true,
+            types: ["*"],
+        }, session);
         openFilesForSession([file1], session);
         host.runPendingInstalls();
         baselineTsserverLogs("typingsInstaller", "non expired cache entry", session);
+    });
+
+    it("expired cache entry (inferred project, should install typings) lockFile3", () => {
+        const file1 = {
+            path: "/home/src/projects/project/app.js",
+            content: "",
+        };
+        const packageJson = {
+            path: "/home/src/projects/project/package.json",
+            content: jsonToReadableText({
+                name: "test",
+                dependencies: {
+                    jquery: "^3.1.0",
+                },
+            }),
+        };
+        const jquery = {
+            path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/jquery/index.d.ts"),
+            content: "declare const $: { x: number }",
+        };
+        const cacheConfig = {
+            path: getPathForTypeScriptTypingInstallerCacheTest("package.json"),
+            content: jsonToReadableText({
+                dependencies: {
+                    "types-registry": "^0.1.317",
+                },
+                devDependencies: {
+                    "@types/jquery": "^1.0.0",
+                },
+            }),
+        };
+        const cacheLockConfig = {
+            path: getPathForTypeScriptTypingInstallerCacheTest("package-lock.json"),
+            content: jsonToReadableText({
+                packages: {
+                    "node_modules/@types/jquery": {
+                        version: "1.0.0",
+                    },
+                },
+            }),
+        };
+        const host = TestServerHost.createServerHost(
+            [file1, packageJson, jquery, cacheConfig, cacheLockConfig],
+            { typingsInstallerTypesRegistry: "jquery" },
+        );
+        const session = new TestSession({
+            host,
+            useSingleInferredProject: true,
+            installAction: [jquery],
+        });
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            allowJs: true,
+            types: ["*"],
+        }, session);
+        openFilesForSession([file1], session);
+        host.runPendingInstalls();
+        host.runQueuedTimeoutCallbacks();
+        baselineTsserverLogs("typingsInstaller", "expired cache entry lockFile3", session);
+    });
+
+    it("non-expired cache entry (inferred project, should not install typings) lockFile3", () => {
+        const file1 = {
+            path: "/home/src/projects/project/app.js",
+            content: "",
+        };
+        const packageJson = {
+            path: "/home/src/projects/project/package.json",
+            content: jsonToReadableText({
+                name: "test",
+                dependencies: {
+                    jquery: "^3.1.0",
+                },
+            }),
+        };
+        const cacheConfig = {
+            path: getPathForTypeScriptTypingInstallerCacheTest("package.json"),
+            content: jsonToReadableText({
+                dependencies: {
+                    "types-registry": "^0.1.317",
+                },
+                devDependencies: {
+                    "@types/jquery": "^1.3.0",
+                },
+            }),
+        };
+        const cacheLockConfig = {
+            path: getPathForTypeScriptTypingInstallerCacheTest("package-lock.json"),
+            content: jsonToReadableText({
+                packages: {
+                    "node_modules/@types/jquery": {
+                        version: "1.3.0",
+                    },
+                },
+            }),
+        };
+        const jquery = {
+            path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/jquery/index.d.ts"),
+            content: "declare const $: { x: number }",
+        };
+        const host = TestServerHost.createServerHost(
+            [file1, packageJson, cacheConfig, cacheLockConfig, jquery],
+            { typingsInstallerTypesRegistry: "jquery" },
+        );
+        const session = new TestSession({
+            host,
+            useSingleInferredProject: true,
+            installAction: true,
+        });
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            allowJs: true,
+            types: ["*"],
+        }, session);
+        openFilesForSession([file1], session);
+        host.runPendingInstalls();
+        baselineTsserverLogs("typingsInstaller", "non expired cache entry lockFile3", session);
     });
 });
 
@@ -1472,7 +1608,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             { enable: true },
             ts.emptyArray,
             ts.emptyMap,
-            ts.emptyOptions,
+            { types: ["*"] },
         );
         baseline("should use mappings from safe list");
     });
@@ -1494,7 +1630,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
                 { enable: true },
                 [name, "somename"],
                 ts.emptyMap,
-                ts.emptyOptions,
+                { types: ["*"] },
             );
         }
         baseline("should return node for core modules");
@@ -1512,7 +1648,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
         const { discoverTypings, baseline } = setup([f, node]);
         const cache = new Map(Object.entries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }));
         const registry = createTypesRegistry("node");
-        discoverTypings([f.path], ts.getDirectoryPath(f.path as ts.Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry, ts.emptyOptions);
+        discoverTypings([f.path], ts.getDirectoryPath(f.path as ts.Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry, { types: ["*"] });
         baseline("should use cached locations");
     });
 
@@ -1535,7 +1671,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             { enable: true },
             ["fs", "bar"],
             ts.emptyMap,
-            ts.emptyOptions,
+            { types: ["*"] },
         );
         baseline("should gracefully handle packages that have been removed from the types-registry");
     });
@@ -1563,7 +1699,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             { enable: true },
             /*unresolvedImports*/ [],
             ts.emptyMap,
-            ts.emptyOptions,
+            { types: ["*"] },
         );
         baseline("should search only 2 levels deep");
     });
@@ -1587,7 +1723,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             { enable: true },
             /*unresolvedImports*/ [],
             ts.emptyMap,
-            ts.emptyOptions,
+            { types: ["*"] },
         );
         baseline("should support scoped packages");
     });
@@ -1618,7 +1754,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             { enable: true },
             ["http", "commander"],
             registry,
-            ts.emptyOptions,
+            { types: ["*"] },
         );
         baseline("should install expired typings");
     });
@@ -1646,7 +1782,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             { enable: true },
             ["http"],
             registry,
-            ts.emptyOptions,
+            { types: ["*"] },
         );
         baseline("should install expired typings with prerelease version of tsserver");
     });
@@ -1679,7 +1815,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             { enable: true },
             ["http", "commander"],
             registry,
-            ts.emptyOptions,
+            { types: ["*"] },
         );
         baseline("prerelease typings are properly handled");
     });
@@ -1772,6 +1908,10 @@ describe("unittests:: tsserver:: typingsInstaller:: telemetry events", () => {
             host,
             installAction: [commander],
         });
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            allowJs: true,
+            types: ["*"],
+        }, session);
         openFilesForSession([f1], session);
 
         host.runPendingInstalls();
@@ -1813,6 +1953,10 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
             host,
             installAction: [commander],
         });
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            allowJs: true,
+            types: ["*"],
+        }, session);
         openFilesForSession([f1], session);
 
         host.runPendingInstalls();
@@ -1837,6 +1981,10 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
             host,
             installAction: false,
         });
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            allowJs: true,
+            types: ["*"],
+        }, session);
         openFilesForSession([f1], session);
 
         host.runPendingInstalls();
@@ -2365,7 +2513,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
         ts.server.updateProjectIfDirty(project);
         const program = project.getLanguageService().getProgram()!;
         const sourceFile = program.getSourceFileByPath(appPath)!;
-        const foooResolution = program.getResolvedModule(sourceFile, "fooo", /*mode*/ undefined)!.resolvedModule!;
+        const foooResolution = program.getResolvedModule(sourceFile, "fooo", ts.ModuleKind.CommonJS)!.resolvedModule!;
         project.writeLog(`Resolution from : ${sourceFile.fileName} for "fooo" goes to: ${jsonToReadableText(foooResolution)}`);
         return foooResolution;
     }
@@ -2388,6 +2536,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
             host,
             installAction: typingFiles,
         });
+        setCompilerOptionsForInferredProjectsRequestForSession({ module: ts.ModuleKind.CommonJS }, session);
         openFilesForSession([app], session);
 
         const proj = session.getProjectService().inferredProjects[0];

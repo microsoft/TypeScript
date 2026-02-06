@@ -17,7 +17,9 @@ function foo(bar:any):any{ return bar }
 >foo : { (bar: string): string; (bar: number): number; }
 >    : ^^^   ^^      ^^^      ^^^   ^^      ^^^      ^^^
 >bar : any
+>    : ^^^
 >bar : any
+>    : ^^^
 
 var baz:number; var x = foo(baz);
 >baz : number

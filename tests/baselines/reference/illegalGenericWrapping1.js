@@ -10,3 +10,4 @@ interface Sequence<T> {
 
 
 //// [illegalGenericWrapping1.js]
+"use strict";

@@ -1,8 +1,9 @@
+// @target: es2015
 //@module: amd
 // @FileName: duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_0.ts
 export interface IPoint {}
 
-export module Shapes {
+export namespace Shapes {
 
     export class Point implements IPoint {}
 
@@ -12,7 +13,7 @@ export module Shapes {
 //var x = new Shapes.Point();
 //interface IPoint {}
 
-//module Shapes {
+//namespace Shapes {
 
 //    export class Point implements IPoint {}
 

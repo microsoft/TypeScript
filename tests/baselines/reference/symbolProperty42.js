@@ -10,6 +10,7 @@ class C {
 }
 
 //// [symbolProperty42.js]
+"use strict";
 class C {
     [Symbol.iterator](x) {
         return undefined;

@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
+// @lib: es5
+
 // @Filename: /home/src/workspaces/project/node_modules/a/dist/index.d.ts
 ////export declare class Foo {
 ////    bar: any;

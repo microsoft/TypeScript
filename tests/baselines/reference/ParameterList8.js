@@ -8,3 +8,4 @@ declare class C2 {
 }
 
 //// [ParameterList8.js]
+"use strict";

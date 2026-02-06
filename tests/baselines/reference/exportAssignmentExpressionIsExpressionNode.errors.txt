@@ -1,0 +1,54 @@
+/index.ts(7,7): error TS2322: Type '{ default: { configs: { 'stage-0': PluginConfig; }; }; configs: { 'stage-0': PluginConfig; }; }' is not assignable to type 'Plugin'.
+  Types of property 'configs' are incompatible.
+    Type '{ 'stage-0': PluginConfig; }' is not assignable to type 'Record<string, { parser: string | null; }>'.
+      Property ''stage-0'' is incompatible with index signature.
+        Type 'PluginConfig' is not assignable to type '{ parser: string | null; }'.
+          Types of property 'parser' are incompatible.
+            Type 'string | null | undefined' is not assignable to type 'string | null'.
+              Type 'undefined' is not assignable to type 'string | null'.
+
+
+==== /node_modules/eslint-plugin-import-x/package.json (0 errors) ====
+    {
+      "name": "eslint-plugin-import-x",
+      "version": "1.0.0",
+      "main": "index.cjs"
+    }
+    
+==== /node_modules/eslint-plugin-import-x/index.d.cts (0 errors) ====
+    declare const eslintPluginImportX: typeof import("./lib/index.js");
+    export = eslintPluginImportX;
+    
+==== /node_modules/eslint-plugin-import-x/lib/index.d.ts (0 errors) ====
+    interface PluginConfig {
+      parser?: string | null;
+    }
+    declare const configs: {
+        'stage-0': PluginConfig;
+    };
+    declare const _default: {
+        configs: {
+            'stage-0': PluginConfig;
+        };
+    };
+    export default _default;
+    export { configs };
+    
+==== /index.ts (1 errors) ====
+    import * as pluginImportX from 'eslint-plugin-import-x'
+    
+    interface Plugin {
+      configs?: Record<string, { parser: string | null }>
+    }
+    
+    const p: Plugin = pluginImportX;
+          ~
+!!! error TS2322: Type '{ default: { configs: { 'stage-0': PluginConfig; }; }; configs: { 'stage-0': PluginConfig; }; }' is not assignable to type 'Plugin'.
+!!! error TS2322:   Types of property 'configs' are incompatible.
+!!! error TS2322:     Type '{ 'stage-0': PluginConfig; }' is not assignable to type 'Record<string, { parser: string | null; }>'.
+!!! error TS2322:       Property ''stage-0'' is incompatible with index signature.
+!!! error TS2322:         Type 'PluginConfig' is not assignable to type '{ parser: string | null; }'.
+!!! error TS2322:           Types of property 'parser' are incompatible.
+!!! error TS2322:             Type 'string | null | undefined' is not assignable to type 'string | null'.
+!!! error TS2322:               Type 'undefined' is not assignable to type 'string | null'.
+    

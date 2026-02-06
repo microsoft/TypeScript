@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts] ////
 
 === internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts ===
-export module a {
+export namespace a {
 >a : typeof a
 >  : ^^^^^^^^
 
-    export module b {
+    export namespace b {
 >b : typeof b
 >  : ^^^^^^^^
 
@@ -16,7 +16,7 @@ export module a {
     }
 }
 
-export module c {
+export namespace c {
 >c : typeof c
 >  : ^^^^^^^^
 

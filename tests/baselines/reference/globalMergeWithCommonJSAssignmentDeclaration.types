@@ -1,5 +1,8 @@
 //// [tests/cases/conformance/salsa/globalMergeWithCommonJSAssignmentDeclaration.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === bug27099.js ===
 window.name = 1;
 >window.name = 1 : 1

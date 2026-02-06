@@ -2,16 +2,11 @@
 
 === commentOnArrayElement12.ts ===
 const array = [
->array : any[]
->      : ^^^^^
+>array : undefined[]
+>      : ^^^^^^^^^^^
 >[    ,, /* comment */] : undefined[]
 >                       : ^^^^^^^^^^^
 
     ,, /* comment */
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
-
 ];
 

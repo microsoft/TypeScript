@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // errors
 declare class C {
     constructor(x: "hi");

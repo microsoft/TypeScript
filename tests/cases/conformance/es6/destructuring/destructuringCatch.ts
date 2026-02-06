@@ -1,4 +1,6 @@
+// @target: es2015
 // @noImplicitAny: true
+// @useUnknownInCatchVariables: false
 
 try {
     throw [0, 1];

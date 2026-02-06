@@ -19,7 +19,7 @@
 ///<reference path='formatting.ts' />
 
 
-module Formatting {
+namespace Formatting {
 >Formatting : typeof Formatting
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -673,8 +673,8 @@ module Formatting {
 >       : ^^^
 
                 if (node.CanIndent() && token.Span.span.start() == node.AuthorNode.Details.StartOffset) {
->node.CanIndent() && token.Span.span.start() == node.AuthorNode.Details.StartOffset : boolean
->                                                                                   : ^^^^^^^
+>node.CanIndent() && token.Span.span.start() == node.AuthorNode.Details.StartOffset : any
+>                                                                                   : ^^^
 >node.CanIndent() : any
 >                 : ^^^
 >node.CanIndent : any

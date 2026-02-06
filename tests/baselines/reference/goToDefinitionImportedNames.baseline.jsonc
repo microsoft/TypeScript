@@ -1,6 +1,6 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/a.ts ===
-// export module Module {
+// export namespace Module {
 // }
 // <|export class [|Class|] {
 //     private f;

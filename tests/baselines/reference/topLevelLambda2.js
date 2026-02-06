@@ -6,6 +6,6 @@ function foo(x:any) {}
 foo(()=>this.window);
 
 //// [topLevelLambda2.js]
-var _this = this;
+"use strict";
 function foo(x) { }
-foo(function () { return _this.window; });
+foo(() => this.window);

@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #10901
 /**
  * Administrivia: JavaScript primitive types and Date

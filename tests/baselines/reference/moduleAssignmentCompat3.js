@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/moduleAssignmentCompat3.ts] ////
 
 //// [moduleAssignmentCompat3.ts]
-module A {
+namespace A {
     export var x = 1;
 }
-module B {
+namespace B {
     export var x = "";
 }
 
@@ -17,6 +17,7 @@ b = a;
 
 
 //// [moduleAssignmentCompat3.js]
+"use strict";
 var A;
 (function (A) {
     A.x = 1;

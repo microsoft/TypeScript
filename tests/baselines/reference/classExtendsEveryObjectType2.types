@@ -14,6 +14,6 @@ class C2 extends { foo: string; } { } // error
 class C6 extends []{ } // error
 >C6 : C6
 >   : ^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 

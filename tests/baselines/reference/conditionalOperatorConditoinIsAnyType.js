@@ -2,20 +2,20 @@
 
 //// [conditionalOperatorConditoinIsAnyType.ts]
 //Cond ? Expr1 : Expr2,  Cond is of any type, Expr1 and Expr2 have the same type
-var condAny: any;
-var x: any;
+declare var condAny: any;
+declare var x: any;
 
-var exprAny1: any;
-var exprBoolean1: boolean;
-var exprNumber1: number;
-var exprString1: string;
-var exprIsObject1: Object;
+declare var exprAny1: any;
+declare var exprBoolean1: boolean;
+declare var exprNumber1: number;
+declare var exprString1: string;
+declare var exprIsObject1: Object;
 
-var exprAny2: any;
-var exprBoolean2: boolean;
-var exprNumber2: number;
-var exprString2: string;
-var exprIsObject2: Object;
+declare var exprAny2: any;
+declare var exprBoolean2: boolean;
+declare var exprNumber2: number;
+declare var exprString2: string;
+declare var exprIsObject2: Object;
 
 //Cond is an any type variable
 condAny ? exprAny1 : exprAny2;
@@ -66,19 +66,7 @@ var resultIsObject3 = x.doSomeThing() ? exprIsObject1 : exprIsObject2;
 var resultIsStringOrBoolean5 = x.doSomeThing() ? exprString1 : exprBoolean1; // union
 
 //// [conditionalOperatorConditoinIsAnyType.js]
-//Cond ? Expr1 : Expr2,  Cond is of any type, Expr1 and Expr2 have the same type
-var condAny;
-var x;
-var exprAny1;
-var exprBoolean1;
-var exprNumber1;
-var exprString1;
-var exprIsObject1;
-var exprAny2;
-var exprBoolean2;
-var exprNumber2;
-var exprString2;
-var exprIsObject2;
+"use strict";
 //Cond is an any type variable
 condAny ? exprAny1 : exprAny2;
 condAny ? exprBoolean1 : exprBoolean2;

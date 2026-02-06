@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedImportAlias.ts] ////
 
 === ModuleWithExportedAndNonExportedImportAlias.ts ===
-module A {
+namespace A {
     export interface Point {
         x: number;
 >x : number
@@ -19,7 +19,7 @@ module A {
     }
 }
 
-module B {
+namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 
@@ -39,7 +39,7 @@ module B {
     }
 }
 
-module Geometry {
+namespace Geometry {
 >Geometry : typeof Geometry
 >         : ^^^^^^^^^^^^^^^
 

@@ -4,10 +4,10 @@ EmitSkipped: false
 EmitSkipped: false
 
 FileName : /tests/cases/fourslash/inputFile2.js
+"use strict";
 var x1 = "hello world";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+    x;
+    y;
+}
 

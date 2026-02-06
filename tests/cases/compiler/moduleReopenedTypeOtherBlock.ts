@@ -1,7 +1,8 @@
-module M {
+// @target: es2015
+namespace M {
     export class C1 { }
     export interface I { n: number; }
 }
-module M {
+namespace M {
     export class C2 { f(): I { return null; } }
 }

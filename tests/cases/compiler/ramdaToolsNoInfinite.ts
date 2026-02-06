@@ -1,3 +1,4 @@
+// @target: es2015
 
 // All the following types are explained here:
 // https://medium.freecodecamp.org/typescript-curry-ramda-types-f747e99744ab

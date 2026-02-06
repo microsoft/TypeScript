@@ -13,6 +13,7 @@ enum E { a, b, c }
 
 var a: any;
 >a : any
+>  : ^^^
 
 var b: boolean;
 >b : boolean
@@ -52,6 +53,7 @@ var r1 = x + a;
 >x : string
 >  : ^^^^^^
 >a : any
+>  : ^^^
 
 var r2 = x + b;
 >r2 : string
@@ -120,6 +122,7 @@ var r8 = a + x;
 >a + x : string
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >x : string
 >  : ^^^^^^
 
@@ -249,6 +252,6 @@ var r20 = x + [];
 >       : ^^^^^^
 >x : string
 >  : ^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 

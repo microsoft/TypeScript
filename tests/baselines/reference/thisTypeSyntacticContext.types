@@ -15,8 +15,8 @@ const o: { n: number, test?: (this: { n: number }) => void } = { n: 1 }
 >  : ^^^^^      ^^^^^^^^^                              ^^^
 >n : number
 >  : ^^^^^^
->test : (this: { n: number; }) => void
->     : ^    ^^              ^^^^^    
+>test : ((this: { n: number; }) => void) | undefined
+>     : ^^    ^^              ^^^^^    ^^^^^^^^^^^^^
 >this : { n: number; }
 >     : ^^^^^      ^^^
 >n : number
@@ -31,12 +31,12 @@ const o: { n: number, test?: (this: { n: number }) => void } = { n: 1 }
 o.test = f
 >o.test = f : (this: { n: number; }) => void
 >           : ^    ^^              ^^^^^^^^^
->o.test : (this: { n: number; }) => void
->       : ^    ^^              ^^^^^    
+>o.test : ((this: { n: number; }) => void) | undefined
+>       : ^^    ^^              ^^^^^    ^^^^^^^^^^^^^
 >o : { n: number; test?: (this: { n: number; }) => void; }
 >  : ^^^^^      ^^^^^^^^^                              ^^^
->test : (this: { n: number; }) => void
->     : ^    ^^              ^^^^^    
+>test : ((this: { n: number; }) => void) | undefined
+>     : ^^    ^^              ^^^^^    ^^^^^^^^^^^^^
 >f : (this: { n: number; }) => void
 >  : ^    ^^              ^^^^^^^^^
 

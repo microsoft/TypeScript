@@ -46,10 +46,10 @@ inheritance1.ts(61,1): error TS2741: Property 'select' is missing in type 'Contr
     class Locations1 {
         select() { }
     }
-    var sc: SelectableControl;
-    var c: Control;
+    declare var sc: SelectableControl;
+    declare var c: Control;
     
-    var b: Button;
+    declare var b: Button;
     sc = b;
     c = b;
     b = sc;
@@ -58,7 +58,7 @@ inheritance1.ts(61,1): error TS2741: Property 'select' is missing in type 'Contr
 !!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'Button'.
 !!! related TS2728 inheritance1.ts:9:5: 'select' is declared here.
     
-    var t: TextBox;
+    declare var t: TextBox;
     sc = t;
     c = t;
     t = sc;
@@ -67,7 +67,7 @@ inheritance1.ts(61,1): error TS2741: Property 'select' is missing in type 'Contr
 !!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'TextBox'.
 !!! related TS2728 inheritance1.ts:12:5: 'select' is declared here.
     
-    var i: ImageBase;
+    declare var i: ImageBase;
     sc = i;
     ~~
 !!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
@@ -76,7 +76,7 @@ inheritance1.ts(61,1): error TS2741: Property 'select' is missing in type 'Contr
     i = sc;
     i = c;
     
-    var i1: Image1;
+    declare var i1: Image1;
     sc = i1;
     ~~
 !!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
@@ -85,7 +85,7 @@ inheritance1.ts(61,1): error TS2741: Property 'select' is missing in type 'Contr
     i1 = sc;
     i1 = c;
     
-    var l: Locations;
+    declare var l: Locations;
     sc = l;
     ~~
 !!! error TS2741: Property 'state' is missing in type 'Locations' but required in type 'SelectableControl'.
@@ -100,7 +100,7 @@ inheritance1.ts(61,1): error TS2741: Property 'select' is missing in type 'Contr
 !!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'Locations'.
 !!! related TS2728 inheritance1.ts:19:5: 'select' is declared here.
     
-    var l1: Locations1;
+    declare var l1: Locations1;
     sc = l1;
     ~~
 !!! error TS2741: Property 'state' is missing in type 'Locations1' but required in type 'SelectableControl'.

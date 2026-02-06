@@ -1,3 +1,4 @@
+// @target: es2015
 // Simplified #43529
 
 export type CanBeExpanded<T extends object> = {

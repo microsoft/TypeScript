@@ -1,4 +1,6 @@
-// @moduleResolution: classic,node,node16,nodenext,bundler
+// @target: es2015
+// @strict: false
+// @moduleResolution: classic,node16,nodenext,bundler
 // @allowJs: true
 // @checkJs: true
 // @noEmit: true

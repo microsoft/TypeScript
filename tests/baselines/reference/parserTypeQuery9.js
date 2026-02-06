@@ -5,4 +5,5 @@ var s: typeof A[];
 
 
 //// [parserTypeQuery9.js]
+"use strict";
 var s;

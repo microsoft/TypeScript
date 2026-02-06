@@ -9,7 +9,7 @@ class Bug {
 
     private static func: Function[] = [
 >func : Symbol(Bug.func, Decl(thisInPropertyBoundDeclarations.ts, 1, 25))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
      (that: Bug, name: string) => {
 >that : Symbol(that, Decl(thisInPropertyBoundDeclarations.ts, 4, 6))
@@ -72,6 +72,7 @@ class A {
 
         a: function() { return this; },
 >a : Symbol(a, Decl(thisInPropertyBoundDeclarations.ts, 33, 13))
+>this : Symbol(__object, Decl(thisInPropertyBoundDeclarations.ts, 33, 11))
 
     };
 
@@ -81,6 +82,7 @@ class A {
         return {
             a: function() { return this; },
 >a : Symbol(a, Decl(thisInPropertyBoundDeclarations.ts, 38, 16))
+>this : Symbol(__object, Decl(thisInPropertyBoundDeclarations.ts, 38, 14))
 
         };
     };

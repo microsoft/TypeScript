@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @importHelpers: true
 // @esModuleInterop: true

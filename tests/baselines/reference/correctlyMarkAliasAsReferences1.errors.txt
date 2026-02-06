@@ -1,0 +1,19 @@
+0.tsx(7,21): error TS2698: Spread types may only be created from object types.
+
+
+==== 0.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    ///<reference path="declaration.d.ts" />
+    import * as cx from 'classnames';
+    import * as React from "react";
+    
+    let buttonProps; // any
+    let k = <button {...buttonProps}>
+                        ~~~~~~~~~~~
+!!! error TS2698: Spread types may only be created from object types.
+                <span className={cx('class1', { class2: true })} />
+            </button>;
+    
+==== declaration.d.ts (0 errors) ====
+    declare module "classnames";
+    

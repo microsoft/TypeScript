@@ -1,3 +1,4 @@
+// @target: es2015
 // some complex cases of assignment compat of generic signatures. No contextual signature instantiation
 
 interface A {
@@ -8,8 +9,8 @@ interface B {
     <S>(x: S, ...y: S[]): void
 }
 
-var a: A;
-var b: B;
+declare var a: A;
+declare var b: B;
 
 // Both errors
 a = b;

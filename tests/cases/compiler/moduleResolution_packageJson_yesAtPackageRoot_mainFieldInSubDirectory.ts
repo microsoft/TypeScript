@@ -1,3 +1,6 @@
+// @module: commonjs
+// @target: es2015
+// @strict: false
 // @traceResolution: true
 
 // @Filename: /node_modules/foo/package.json

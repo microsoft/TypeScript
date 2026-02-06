@@ -1,0 +1,26 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== abstractPropertyBasics.ts (0 errors) ====
+    interface A {
+        prop: string;
+        raw: string;
+        m(): void;
+    }
+    abstract class B implements A {
+        abstract prop: string;
+        abstract raw: string;
+        abstract readonly ro: string;
+        abstract get readonlyProp(): string;
+        abstract set readonlyProp(val: string);
+        abstract m(): void;
+    }
+    class C extends B {
+        get prop() { return "foo"; }
+        set prop(v) { }
+        raw = "edge";
+        readonly ro = "readonly please";
+        readonlyProp!: string;
+        m() { }
+    }

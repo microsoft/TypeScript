@@ -59,7 +59,7 @@ plainJSGrammarErrors.js(92,33): error TS2566: A rest element cannot have a prope
 plainJSGrammarErrors.js(93,42): error TS1186: A rest element cannot have an initializer.
 plainJSGrammarErrors.js(96,4): error TS1123: Variable declaration list cannot be empty.
 plainJSGrammarErrors.js(97,9): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
-plainJSGrammarErrors.js(98,14): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
+plainJSGrammarErrors.js(98,9): error TS5076: '??' and '||' operations cannot be mixed without parentheses.
 plainJSGrammarErrors.js(100,3): error TS1200: Line terminator not permitted before arrow.
 plainJSGrammarErrors.js(102,4): error TS1358: Tagged template expressions are not permitted in an optional chain.
 plainJSGrammarErrors.js(104,6): error TS1171: A comma expression is not allowed in a computed property name.
@@ -323,8 +323,8 @@ plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot
             ~~~~~~
 !!! error TS5076: '||' and '??' operations cannot be mixed without parentheses.
     var x = 2 ?? 3 || 4
-                 ~~~~~~
-!!! error TS5076: '||' and '??' operations cannot be mixed without parentheses.
+            ~~~~~~
+!!! error TS5076: '??' and '||' operations cannot be mixed without parentheses.
     const arr = x
       => x + 1
       ~~

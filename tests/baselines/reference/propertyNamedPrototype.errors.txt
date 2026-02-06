@@ -1,9 +1,12 @@
+propertyNamedPrototype.ts(2,5): error TS2564: Property 'prototype' has no initializer and is not definitely assigned in the constructor.
 propertyNamedPrototype.ts(3,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'C'.
 
 
-==== propertyNamedPrototype.ts (1 errors) ====
+==== propertyNamedPrototype.ts (2 errors) ====
     class C {
         prototype: number; // ok
+        ~~~~~~~~~
+!!! error TS2564: Property 'prototype' has no initializer and is not definitely assigned in the constructor.
         static prototype: C; // error
                ~~~~~~~~~
 !!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'C'.

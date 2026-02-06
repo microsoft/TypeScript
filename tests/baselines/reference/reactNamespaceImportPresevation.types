@@ -7,6 +7,7 @@ declare module "my-React-Lib" {
 
     var a: any;
 >a : any
+>  : ^^^
 
     export = a;
 >a : any
@@ -16,12 +17,15 @@ declare module "my-React-Lib" {
 === test.tsx ===
 import * as myReactLib from "my-React-Lib"; // should not be elided
 >myReactLib : any
+>           : ^^^
 
 declare var foo: any;
 >foo : any
+>    : ^^^
 
 <foo data/>;
-><foo data/> : error
+><foo data/> : any
+>            : ^^^
 >foo : any
 >    : ^^^
 >data : true

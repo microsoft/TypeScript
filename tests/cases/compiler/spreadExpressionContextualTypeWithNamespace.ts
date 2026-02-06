@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: spreadExpressionContextualTypeWithNamespace_0.ts
 
 // Repro from #44179 with some modification

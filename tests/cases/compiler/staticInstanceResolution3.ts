@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: staticInstanceResolution3_0.ts
 export class Promise {

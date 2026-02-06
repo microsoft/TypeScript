@@ -1,4 +1,5 @@
-﻿let let = 10;
+﻿// @target: es2015
+let let = 10;
 
 function foo() {
     "use strict"

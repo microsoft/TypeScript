@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     static f() {
         var y/*1*/ = this;

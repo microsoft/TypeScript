@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @esModuleInterop: true
 // @resolveJsonModule: true
 // @strict: true

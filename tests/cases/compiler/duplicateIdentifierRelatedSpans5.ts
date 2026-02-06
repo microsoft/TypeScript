@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @pretty: true
 // @filename: file1.ts
 declare global {

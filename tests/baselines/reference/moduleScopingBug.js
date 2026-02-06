@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleScopingBug.ts] ////
 
 //// [moduleScopingBug.ts]
-module M
+namespace M
 
 {
 
@@ -21,7 +21,7 @@ module M
 
     }
 
-    module X {
+    namespace X {
 
         var inner = outer;   // Error: outer not visible
 
@@ -32,19 +32,19 @@ module M
 
 
 //// [moduleScopingBug.js]
+"use strict";
 var M;
 (function (M) {
     var outer;
     function f() {
         var inner = outer; // Ok
     }
-    var C = /** @class */ (function () {
-        function C() {
+    class C {
+        constructor() {
             var inner = outer; // Ok
         }
-        return C;
-    }());
-    var X;
+    }
+    let X;
     (function (X) {
         var inner = outer; // Error: outer not visible
     })(X || (X = {}));

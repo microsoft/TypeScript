@@ -1,8 +1,9 @@
+// @module: commonjs
+// @target: es2015
 // @filename: file.tsx
 // @jsx: preserve
-// @noLib: true
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
+/// <reference path="/.lib/react.d.ts" />
 
 import React = require('react');
 

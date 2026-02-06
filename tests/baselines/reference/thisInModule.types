@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/thisInModule.ts] ////
 
 === thisInModule.ts ===
-module myMod {
+namespace myMod {
 >myMod : typeof myMod
 >      : ^^^^^^^^^^^^
 

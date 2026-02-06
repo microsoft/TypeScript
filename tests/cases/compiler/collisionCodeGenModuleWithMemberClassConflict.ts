@@ -1,10 +1,11 @@
-module m1 {
+// @target: es2015
+namespace m1 {
     export class m1 {
     }
 }
 var foo = new m1.m1();
 
-module m2 {
+namespace m2 {
     export class m2 {
     }
 

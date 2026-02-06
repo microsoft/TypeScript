@@ -1,0 +1,38 @@
+a.ts(3,5): error TS2564: Property 'payload' has no initializer and is not definitely assigned in the constructor.
+
+
+==== a.ts (1 errors) ====
+    declare var Err: any
+    class A extends Err {
+        payload: string
+        ~~~~~~~
+!!! error TS2564: Property 'payload' has no initializer and is not definitely assigned in the constructor.
+        constructor() {
+            super(1,2,3,3,4,56)
+            super.unknown
+            super['unknown']
+        }
+        process() {
+            return this.payload + "!";
+        }
+    }
+    
+    var o = {
+        m() {
+            super.unknown
+        }
+    }
+==== b.js (0 errors) ====
+    class B extends Err {
+        constructor() {
+            super()
+            this.wat = 12
+        }
+        f() {
+            this.wat
+            this.wit
+            this['wot']
+            super.alsoBad
+        }
+    }
+    

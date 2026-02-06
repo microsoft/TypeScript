@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-// @module: nodenext
+// @lib: es5
+// @module: node18
 // @allowImportingTsExtensions: true
 
 // @Filename: /node_modules/pkg/package.json

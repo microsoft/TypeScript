@@ -1,0 +1,56 @@
+mod.mts(1,37): error TS2322: Type '{ field: 0; }' is not assignable to type 'ImportAttributes'.
+  Property 'field' is incompatible with index signature.
+    Type 'number' is not assignable to type 'string'.
+mod.mts(1,51): error TS2858: Import attribute values must be string literal expressions.
+mod.mts(2,51): error TS2858: Import attribute values must be string literal expressions.
+mod.mts(3,37): error TS2322: Type '{ field: RegExp; }' is not assignable to type 'ImportAttributes'.
+  Property 'field' is incompatible with index signature.
+    Type 'RegExp' is not assignable to type 'string'.
+mod.mts(3,51): error TS2858: Import attribute values must be string literal expressions.
+mod.mts(4,37): error TS2322: Type '{ field: string[]; }' is not assignable to type 'ImportAttributes'.
+  Property 'field' is incompatible with index signature.
+    Type 'string[]' is not assignable to type 'string'.
+mod.mts(4,51): error TS2858: Import attribute values must be string literal expressions.
+mod.mts(5,37): error TS2322: Type '{ field: { a: number; }; }' is not assignable to type 'ImportAttributes'.
+  Property 'field' is incompatible with index signature.
+    Type '{ a: number; }' is not assignable to type 'string'.
+mod.mts(5,51): error TS2858: Import attribute values must be string literal expressions.
+mod.mts(6,65): error TS2858: Import attribute values must be string literal expressions.
+
+
+==== mod.mts (10 errors) ====
+    import * as thing1 from "./mod.mjs" with { field: 0 };
+                                        ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ field: 0; }' is not assignable to type 'ImportAttributes'.
+!!! error TS2322:   Property 'field' is incompatible with index signature.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+                                                      ~
+!!! error TS2858: Import attribute values must be string literal expressions.
+    import * as thing2 from "./mod.mjs" with { field: `a` };
+                                                      ~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
+    import * as thing3 from "./mod.mjs" with { field: /a/g };
+                                        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ field: RegExp; }' is not assignable to type 'ImportAttributes'.
+!!! error TS2322:   Property 'field' is incompatible with index signature.
+!!! error TS2322:     Type 'RegExp' is not assignable to type 'string'.
+                                                      ~~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
+    import * as thing4 from "./mod.mjs" with { field: ["a"] };
+                                        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ field: string[]; }' is not assignable to type 'ImportAttributes'.
+!!! error TS2322:   Property 'field' is incompatible with index signature.
+!!! error TS2322:     Type 'string[]' is not assignable to type 'string'.
+                                                      ~~~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
+    import * as thing5 from "./mod.mjs" with { field: { a: 0 } };
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ field: { a: number; }; }' is not assignable to type 'ImportAttributes'.
+!!! error TS2322:   Property 'field' is incompatible with index signature.
+!!! error TS2322:     Type '{ a: number; }' is not assignable to type 'string'.
+                                                      ~~~~~~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
+    import * as thing6 from "./mod.mjs" with { type: "json", field: 0..toString() };
+                                                                    ~~~~~~~~~~~~~
+!!! error TS2858: Import attribute values must be string literal expressions.
+    

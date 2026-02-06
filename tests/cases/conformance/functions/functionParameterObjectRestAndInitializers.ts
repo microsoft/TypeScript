@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es2015
 // @noTypesAndSymbols: true
 // https://github.com/microsoft/TypeScript/issues/47079

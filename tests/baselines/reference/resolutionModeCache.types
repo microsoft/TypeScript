@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/moduleResolution/resolutionModeCache.ts] ////
+
+=== /node_modules/pkg/index.d.mts ===
+declare const _default: "esm";
+>_default : "esm"
+>         : ^^^^^
+
+export default _default;
+>_default : "esm"
+>         : ^^^^^
+
+=== /node_modules/pkg/index.d.ts ===
+declare const _exports: "cjs";
+>_exports : "cjs"
+>         : ^^^^^
+
+export = _exports;
+>_exports : "cjs"
+>         : ^^^^^
+
+=== /index.ts ===
+import type pkgRequire from "pkg" with { "resolution-mode": "require" };
+>pkgRequire : any
+>           : ^^^
+
+import type pkgImport from "pkg" with { "resolution-mode": "import" };
+>pkgImport : any
+>          : ^^^
+
+pkgRequire;
+>pkgRequire : "cjs"
+>           : ^^^^^
+
+pkgImport;
+>pkgImport : "esm"
+>          : ^^^^^
+

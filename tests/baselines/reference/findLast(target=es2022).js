@@ -31,6 +31,7 @@ new BigUint64Array().findLastIndex((item) => item === BigInt(0));
 
 
 //// [findLast.js]
+"use strict";
 const itemNumber = [0].findLast((item) => item === 0);
 const itemString = ["string"].findLast((item) => item === "string");
 new Int8Array().findLast((item) => item === 0);

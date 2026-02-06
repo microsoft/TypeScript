@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: true
 // @allowJs: true
 // @checkJs: true

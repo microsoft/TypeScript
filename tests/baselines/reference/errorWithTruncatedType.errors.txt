@@ -2,7 +2,7 @@ errorWithTruncatedType.ts(10,5): error TS2322: Type '{ propertyWithAnExceedingly
 
 
 ==== errorWithTruncatedType.ts (1 errors) ====
-    var x: {
+    declare var x: {
         propertyWithAnExceedinglyLongName1: string;
         propertyWithAnExceedinglyLongName2: string;
         propertyWithAnExceedinglyLongName3: string;

@@ -1,0 +1,83 @@
+file.tsx(9,5): error TS7034: Variable 'p' implicitly has type 'any' in some locations where its type cannot be determined.
+file.tsx(21,31): error TS18048: 'p' is possibly 'undefined'.
+file.tsx(21,35): error TS18048: 'p' is possibly 'undefined'.
+file.tsx(22,33): error TS18048: 'p' is possibly 'undefined'.
+file.tsx(22,37): error TS18048: 'p' is possibly 'undefined'.
+file.tsx(27,26): error TS7005: Variable 'p' implicitly has an 'any' type.
+file.tsx(27,32): error TS7005: Variable 'p' implicitly has an 'any' type.
+file.tsx(27,35): error TS7005: Variable 'p' implicitly has an 'any' type.
+file.tsx(28,26): error TS7005: Variable 'p' implicitly has an 'any' type.
+file.tsx(31,28): error TS7005: Variable 'p' implicitly has an 'any' type.
+file.tsx(31,34): error TS7005: Variable 'p' implicitly has an 'any' type.
+file.tsx(31,37): error TS7005: Variable 'p' implicitly has an 'any' type.
+file.tsx(32,28): error TS7005: Variable 'p' implicitly has an 'any' type.
+
+
+==== file.tsx (13 errors) ====
+    declare namespace JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    		[s: string]: any;
+    	}
+    }
+    declare var React: any;
+    
+    var p;
+        ~
+!!! error TS7034: Variable 'p' implicitly has type 'any' in some locations where its type cannot be determined.
+    var selfClosed1 = <div />;
+    var selfClosed2 = <div x="1" />;
+    var selfClosed3 = <div x='1' />;
+    var selfClosed4 = <div x="1" y='0' />;
+    var selfClosed5 = <div x={0} y='0' />;
+    var selfClosed6 = <div x={"1"} y='0' />;
+    var selfClosed7 = <div x={p} y='p' b />;
+    
+    var openClosed1 = <div></div>;
+    var openClosed2 = <div n='m'>foo</div>;
+    var openClosed3 = <div n='m'>{p}</div>;
+    var openClosed4 = <div n='m'>{p < p}</div>;
+                                  ~
+!!! error TS18048: 'p' is possibly 'undefined'.
+                                      ~
+!!! error TS18048: 'p' is possibly 'undefined'.
+    var openClosed5 = <div n='m' b>{p > p}</div>;
+                                    ~
+!!! error TS18048: 'p' is possibly 'undefined'.
+                                        ~
+!!! error TS18048: 'p' is possibly 'undefined'.
+    
+    class SomeClass {
+    	f() {
+    		var rewrites1 = <div>{() => this}</div>;
+    		var rewrites2 = <div>{[p, ...p, p]}</div>;
+    		                       ~
+!!! error TS7005: Variable 'p' implicitly has an 'any' type.
+    		                             ~
+!!! error TS7005: Variable 'p' implicitly has an 'any' type.
+    		                                ~
+!!! error TS7005: Variable 'p' implicitly has an 'any' type.
+    		var rewrites3 = <div>{{p}}</div>;
+    		                       ~
+!!! error TS7005: Variable 'p' implicitly has an 'any' type.
+    
+    		var rewrites4 = <div a={() => this}></div>;
+    		var rewrites5 = <div a={[p, ...p, p]}></div>;
+    		                         ~
+!!! error TS7005: Variable 'p' implicitly has an 'any' type.
+    		                               ~
+!!! error TS7005: Variable 'p' implicitly has an 'any' type.
+    		                                  ~
+!!! error TS7005: Variable 'p' implicitly has an 'any' type.
+    		var rewrites6 = <div a={{p}}></div>;
+    		                         ~
+!!! error TS7005: Variable 'p' implicitly has an 'any' type.
+    	}
+    }
+    
+    var whitespace1 = <div>      </div>;
+    var whitespace2 = <div>  {p}    </div>;
+    var whitespace3 = <div>  
+          {p}    
+          </div>;
+    

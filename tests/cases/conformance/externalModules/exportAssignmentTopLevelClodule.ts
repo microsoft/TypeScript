@@ -1,9 +1,10 @@
+// @target: es2015
 // @module: amd
 // @Filename: foo_0.ts
 class Foo {
 	test = "test";
 }
-module Foo {
+namespace Foo {
 	export var answer = 42;
 }
 export = Foo;

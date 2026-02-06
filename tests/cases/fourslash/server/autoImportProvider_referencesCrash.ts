@@ -4,7 +4,7 @@
 //// {}
 
 // @Filename: /home/src/workspaces/project/a/tsconfig.json
-//// {}
+//// { "compilerOptions": { "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/a/index.ts
 //// class A {}
@@ -19,7 +19,7 @@
 
 // @Filename: /home/src/workspaces/project/b/tsconfig.json
 //// {
-////   "compilerOptions": { "disableSourceOfProjectReferenceRedirect": true },
+////   "compilerOptions": { "disableSourceOfProjectReferenceRedirect": true, "lib": ["es5"] },
 ////   "references": [{ "path": "../a" }]
 //// }
 
@@ -31,7 +31,7 @@
 //// { "dependencies": { "a": "*" } }
 
 // @Filename: /home/src/workspaces/project/c/tsconfig.json
-//// { "references" [{ "path": "../a" }] }
+//// { "compilerOptions": { "lib": ["es5"] }, "references" [{ "path": "../a" }] }
 
 // @Filename: /home/src/workspaces/project/c/index.ts
 //// export {};

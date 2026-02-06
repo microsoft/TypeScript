@@ -64,7 +64,7 @@ exports.ns = void 0;
 exports.ns = __importStar(require("./0"));
 ns.a;
 ns.b;
-var ns = { a: 1, b: 2 };
+let ns = { a: 1, b: 2 };
 ns.a;
 ns.b;
 //// [2.js]
@@ -103,7 +103,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo = __importStar(require("./1"));
+const foo = __importStar(require("./1"));
 foo.ns.a;
 foo.ns.b;
 

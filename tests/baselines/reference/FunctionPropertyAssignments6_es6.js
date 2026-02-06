@@ -4,4 +4,5 @@
 var v = { *<T>() { } }
 
 //// [FunctionPropertyAssignments6_es6.js]
+"use strict";
 var v = { *() { } };

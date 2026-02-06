@@ -1,3 +1,4 @@
+// @strict: false
 // @jsx: react
 // @target: es2015,esnext
 // @filename: /a.tsx

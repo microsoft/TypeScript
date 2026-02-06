@@ -20,7 +20,7 @@ var g: I = x;
 var h: { (): string } = x;
 var h2: { toString(): string } = x; // no error
 
-module M { export var a = 1; }
+namespace M { export var a = 1; }
 M = x;
 
 function i<T>(a: T) {
@@ -29,6 +29,7 @@ function i<T>(a: T) {
 i = x;
 
 //// [invalidBooleanAssignments.js]
+"use strict";
 var x = true;
 var a = x;
 var b = x;
@@ -39,11 +40,8 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 var e = x;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var f = x;
 var g = x;
 var h = x;

@@ -1,4 +1,5 @@
-﻿//@emitBOM: true
+﻿// @target: es2015
+//@emitBOM: true
 //@declaration: true
 //@sourcemap: true
 

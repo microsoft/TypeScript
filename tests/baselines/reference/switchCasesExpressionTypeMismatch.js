@@ -33,11 +33,9 @@ switch (s) {
 
 
 //// [switchCasesExpressionTypeMismatch.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+"use strict";
+class Foo {
+}
 switch (0) {
     case Foo: break; // Error
     case "sss": break; // Error

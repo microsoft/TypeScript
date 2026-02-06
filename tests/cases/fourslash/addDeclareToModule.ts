@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-//// /**/module mAmbient {
-////     module m3 { }
+//// /**/namespace mAmbient {
+////     namespace m3 { }
 //// }
 
 goTo.marker('');

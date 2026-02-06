@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 ////const f: () => Promise<number | string> = () => {
 ////    await Promise.resolve('foo');
 ////}

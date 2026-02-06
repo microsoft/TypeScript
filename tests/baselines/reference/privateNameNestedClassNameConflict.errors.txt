@@ -1,0 +1,18 @@
+privateNameNestedClassNameConflict.ts(2,5): error TS2564: Property '#foo' has no initializer and is not definitely assigned in the constructor.
+privateNameNestedClassNameConflict.ts(5,13): error TS2564: Property '#foo' has no initializer and is not definitely assigned in the constructor.
+
+
+==== privateNameNestedClassNameConflict.ts (2 errors) ====
+    class A {
+        #foo: string;
+        ~~~~
+!!! error TS2564: Property '#foo' has no initializer and is not definitely assigned in the constructor.
+        constructor() {
+            class A {
+                #foo: string;
+                ~~~~
+!!! error TS2564: Property '#foo' has no initializer and is not definitely assigned in the constructor.
+            }
+        }
+    }
+    

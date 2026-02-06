@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: system
 
 export let [x,y,z] = [1, 2, 3];

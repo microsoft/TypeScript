@@ -9,16 +9,16 @@ var a: { x: number; y?: number };
 >  : ^^^^^      ^^^^^^      ^^^
 >x : number
 >  : ^^^^^^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 var b: { x: number; z?: number };
 >b : { x: number; z?: number; }
 >  : ^^^^^      ^^^^^^      ^^^
 >x : number
 >  : ^^^^^^
->z : number
->  : ^^^^^^
+>z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 class Base { foo: string; }
 >Base : Base

@@ -8,19 +8,19 @@ function foo<T>(t: T) {
 >t : Symbol(t, Decl(arithmeticOperatorWithTypeParameter.ts, 1, 16))
 >T : Symbol(T, Decl(arithmeticOperatorWithTypeParameter.ts, 1, 13))
 
-    var a: any;
+    let a!: any;
 >a : Symbol(a, Decl(arithmeticOperatorWithTypeParameter.ts, 2, 7))
 
-    var b: boolean;
+    let b!: boolean;
 >b : Symbol(b, Decl(arithmeticOperatorWithTypeParameter.ts, 3, 7))
 
-    var c: number;
+    let c!: number;
 >c : Symbol(c, Decl(arithmeticOperatorWithTypeParameter.ts, 4, 7))
 
-    var d: string;
+    let d!: string;
 >d : Symbol(d, Decl(arithmeticOperatorWithTypeParameter.ts, 5, 7))
 
-    var e: {};
+    let e!: {};
 >e : Symbol(e, Decl(arithmeticOperatorWithTypeParameter.ts, 6, 7))
 
     var r1a1 = a * t;

@@ -1,25 +1,8 @@
-a.ts(12,1): error TS2578: Unused '@ts-expect-error' directive.
-b.tsx(32,1): error TS2578: Unused '@ts-expect-error' directive.
+b.tsx(33,1): error TS2578: Unused '@ts-expect-error' directive.
 
 
-==== a.ts (1 errors) ====
-    export const texts: string[] = [];
-    
-    /**
-     @ts-ignore */
-    texts.push(100);
-    
-    /**
-     @ts-expect-error */
-    texts.push(100);
-    
-    /**
-     @ts-expect-error */
-    ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2578: Unused '@ts-expect-error' directive.
-    texts.push("100");
-    
 ==== b.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
     import * as React from "react";
     
     export function MyComponent(props: { foo: string }) {
@@ -57,4 +40,19 @@ b.tsx(32,1): error TS2578: Unused '@ts-expect-error' directive.
         <MyComponent foo={"hooray"} />
       </div>
     );
+    
+==== a.ts (0 errors) ====
+    export const texts: string[] = [];
+    
+    /**
+     @ts-ignore */
+    texts.push(100);
+    
+    /**
+     @ts-expect-error */
+    texts.push(100);
+    
+    /**
+     @ts-expect-error */
+    texts.push("100");
     

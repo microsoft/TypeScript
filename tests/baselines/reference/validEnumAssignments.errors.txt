@@ -1,15 +1,17 @@
+validEnumAssignments.ts(21,1): error TS2322: Type 'null' is not assignable to type 'E'.
+validEnumAssignments.ts(22,1): error TS2322: Type 'undefined' is not assignable to type 'E'.
 validEnumAssignments.ts(26,1): error TS2322: Type '-1' is not assignable to type 'E'.
 
 
-==== validEnumAssignments.ts (1 errors) ====
+==== validEnumAssignments.ts (3 errors) ====
     enum E {
         A,
         B
     }
     
-    var n: number;
-    var a: any;
-    var e: E;
+    declare var n: number;
+    declare var a: any;
+    declare var e: E;
     
     n = e;
     n = E.A;
@@ -23,7 +25,11 @@ validEnumAssignments.ts(26,1): error TS2322: Type '-1' is not assignable to type
     e = E.B;
     e = n;
     e = null;
+    ~
+!!! error TS2322: Type 'null' is not assignable to type 'E'.
     e = undefined;
+    ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'E'.
     e = 1;
     e = 1.;
     e = 1.0;

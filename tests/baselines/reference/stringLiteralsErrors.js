@@ -31,6 +31,7 @@ var es12 = "\xmm";
 var es13 = " 
 
 //// [stringLiteralsErrors.js]
+"use strict";
 // Srtings missing line terminator
 var es1 = "line 1;
 ";;

@@ -4,13 +4,13 @@
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // error cases
 
-module Errors {
+namespace Errors {
     class Base { foo: string; }
     class Derived extends Base { bar: string; }
     class Derived2 extends Derived { baz: string; }
     class OtherDerived extends Base { bing: string; }
 
-    module WithNonGenericSignaturesInBaseType {
+    namespace WithNonGenericSignaturesInBaseType {
         // base type with non-generic call signatures
         interface A {
             a2: new (x: number) => string[];
@@ -80,7 +80,7 @@ module Errors {
         }
     }
 
-    module WithGenericSignaturesInBaseType {
+    namespace WithGenericSignaturesInBaseType {
         // base type has generic call signature
         interface B {
             a2: new <T>(x: T) => T[];
@@ -114,49 +114,17 @@ module Errors {
 }
 
 //// [constructSignatureAssignabilityInInheritance3.js]
+"use strict";
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // error cases
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Errors;
 (function (Errors) {
-    var Base = /** @class */ (function () {
-        function Base() {
-        }
-        return Base;
-    }());
-    var Derived = /** @class */ (function (_super) {
-        __extends(Derived, _super);
-        function Derived() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Derived;
-    }(Base));
-    var Derived2 = /** @class */ (function (_super) {
-        __extends(Derived2, _super);
-        function Derived2() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Derived2;
-    }(Derived));
-    var OtherDerived = /** @class */ (function (_super) {
-        __extends(OtherDerived, _super);
-        function OtherDerived() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return OtherDerived;
-    }(Base));
+    class Base {
+    }
+    class Derived extends Base {
+    }
+    class Derived2 extends Derived {
+    }
+    class OtherDerived extends Base {
+    }
 })(Errors || (Errors = {}));

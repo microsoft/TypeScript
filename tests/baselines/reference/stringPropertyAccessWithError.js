@@ -5,5 +5,6 @@ var x = '';
 var d = x['charAt']('invalid'); // error
 
 //// [stringPropertyAccessWithError.js]
+"use strict";
 var x = '';
 var d = x['charAt']('invalid'); // error

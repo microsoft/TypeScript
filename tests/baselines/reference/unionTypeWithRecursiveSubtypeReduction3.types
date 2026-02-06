@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction3.ts] ////
 
 === unionTypeWithRecursiveSubtypeReduction3.ts ===
-var a27: { prop: number } | { prop: T27 };
+declare var a27: { prop: number } | { prop: T27 };
 >a27 : { prop: number; } | { prop: T27; }
 >    : ^^^^^^^^      ^^^^^^^^^^^^^^   ^^^
 >prop : number
@@ -15,7 +15,7 @@ type T27 = typeof a27;
 >a27 : { prop: number; } | { prop: T27; }
 >    : ^^^^^^^^      ^^^^^^^^^^^^^^   ^^^
 
-var b: T27;
+declare var b: T27;
 >b : { prop: number; } | { prop: T27; }
 >  : ^^^^^^^^      ^^^^^^^^^^^^^^   ^^^
 

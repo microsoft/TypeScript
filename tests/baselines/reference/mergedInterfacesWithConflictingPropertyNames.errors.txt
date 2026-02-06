@@ -15,7 +15,7 @@ mergedInterfacesWithConflictingPropertyNames.ts(39,9): error TS2717: Subsequent 
 !!! related TS6203 mergedInterfacesWithConflictingPropertyNames.ts:2:5: 'x' was also declared here.
     }
     
-    module M {
+    namespace M {
         interface A<T> {
             x: T;
         }
@@ -28,25 +28,25 @@ mergedInterfacesWithConflictingPropertyNames.ts(39,9): error TS2717: Subsequent 
         }
     }
     
-    module M2 {
+    namespace M2 {
         interface A<T> {
             x: T;
         }   
     }
     
-    module M2 {
+    namespace M2 {
         interface A<T> {
             x: number;  // ok, different declaration space than other M2
         }
     }
     
-    module M3 {
+    namespace M3 {
         export interface A<T> {
             x: T;
         }
     }
     
-    module M3 {
+    namespace M3 {
         export interface A<T> {
             x: number;  // error
             ~

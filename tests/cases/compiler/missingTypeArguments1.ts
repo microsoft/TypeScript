@@ -1,3 +1,4 @@
+// @target: es2015
 interface I<T> { }
 class Y<T> {}
 class X<T> {

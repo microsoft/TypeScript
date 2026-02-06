@@ -48,9 +48,10 @@ function generic<T extends { x, y }>(t: T) {
 >rest : Symbol(rest, Decl(objectRestNegative.ts, 11, 12))
 }
 
-let rest: { b: string }
+let rest: { b: string } = { b: "" };
 >rest : Symbol(rest, Decl(objectRestNegative.ts, 15, 3))
 >b : Symbol(b, Decl(objectRestNegative.ts, 15, 11))
+>b : Symbol(b, Decl(objectRestNegative.ts, 15, 27))
 
 ({a, ...rest.b + rest.b} = o);
 >a : Symbol(a, Decl(objectRestNegative.ts, 16, 2))

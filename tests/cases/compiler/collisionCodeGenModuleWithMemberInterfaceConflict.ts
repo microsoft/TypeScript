@@ -1,4 +1,5 @@
-module m1 {
+// @target: es2015
+namespace m1 {
     export interface m1 {
     }
     export class m2 implements m1 {

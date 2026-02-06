@@ -2,7 +2,7 @@ ModuleWithExportedAndNonExportedImportAlias.ts(37,21): error TS2339: Property 'L
 
 
 ==== ModuleWithExportedAndNonExportedImportAlias.ts (1 errors) ====
-    module A {
+    namespace A {
         export interface Point {
             x: number;
             y: number;
@@ -13,13 +13,13 @@ ModuleWithExportedAndNonExportedImportAlias.ts(37,21): error TS2339: Property 'L
         }
     }
     
-    module B {
+    namespace B {
         export class Line {
             constructor(public start: A.Point, public end: A.Point) { }
         }
     }
     
-    module Geometry {
+    namespace Geometry {
         export import Points = A;
         import Lines = B;
     

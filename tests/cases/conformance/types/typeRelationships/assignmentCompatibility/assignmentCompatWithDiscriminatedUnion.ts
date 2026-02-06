@@ -1,3 +1,4 @@
+// @target: es2015
 // see 'typeRelatedToDiscriminatedType' in checker.ts:
 
 // IteratorResult
@@ -98,7 +99,7 @@ namespace GH14865 {
     }
 
     const a: Style2 = { type: "A", data: "whatevs" };
-    let b: Style1;
+    declare let b: Style1;
     a.type; // "A" | "B"
     b.type; // "A" | "B"
     b = a; // should be assignable

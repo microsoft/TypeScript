@@ -10,3 +10,4 @@ interface I<T> {
 }
 
 //// [parserGenericsInInterfaceDeclaration1.js]
+"use strict";

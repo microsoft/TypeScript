@@ -1,9 +1,13 @@
 ///<reference path="fourslash.ts" />
 
+// @lib: es5
+
 // Testing that quickInfo gets information with a corresponding meaning: values to values, types to types.
 // For quick info purposes, we don't resolve past aliases.
 // However, when we have an alias for a type, the quickInfo for a value with the same should skip the alias, and vice versa.
 // goToDefinition should work the same way.
+
+// @module: commonjs
 
 // @Filename: foo.d.ts
 ////declare const [|/*foo_value_declaration*/foo: number|];

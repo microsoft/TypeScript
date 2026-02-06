@@ -14,6 +14,7 @@ class C2 {
 }
 
 //// [autoAccessor5.js]
+"use strict";
 var _a;
 class C1 {
     #_a_accessor_storage;

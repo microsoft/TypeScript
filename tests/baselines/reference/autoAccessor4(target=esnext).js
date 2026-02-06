@@ -10,6 +10,7 @@ class C1 {
 
 
 //// [autoAccessor4.js]
+"use strict";
 class C1 {
     accessor 0;
     accessor 1 = 1;

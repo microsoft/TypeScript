@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 // @declaration: true
 
@@ -110,6 +111,9 @@ setState(foo, { c: true });  // Error
 
 class C<T> {
     state: T;
+    constructor(initialState: T) {
+        this.state = initialState;
+    }
     setState<K extends keyof T>(props: Pick<T, K>) {
         for (let k in props) {
             this.state[k] = props[k];
@@ -117,7 +121,7 @@ class C<T> {
     }
 }
 
-let c = new C<Foo>();
+let c = new C<Foo>({ a: "hello", b: 42 });
 c.setState({ a: "test", b: 43 });
 c.setState({ a: "hi" });
 c.setState({ b: undefined });

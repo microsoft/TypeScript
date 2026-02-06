@@ -9,13 +9,8 @@ class B implements A {}
 
 
 //// [classImplementsClass7.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+"use strict";
+class A {
+}
+class B {
+}

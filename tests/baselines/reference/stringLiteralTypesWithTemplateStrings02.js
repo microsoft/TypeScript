@@ -6,8 +6,10 @@ C`;
 let de_NEWLINE_f: "DE\nF" = `DE${"\n"}F`;
 
 //// [stringLiteralTypesWithTemplateStrings02.js]
-var abc = "AB\nC";
-var de_NEWLINE_f = "DE".concat("\n", "F");
+"use strict";
+let abc = `AB
+C`;
+let de_NEWLINE_f = `DE${"\n"}F`;
 
 
 //// [stringLiteralTypesWithTemplateStrings02.d.ts]

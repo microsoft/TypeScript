@@ -8,6 +8,7 @@ while (true) {
 }
 
 //// [parser_continueNotInIterationStatement2.js]
+"use strict";
 while (true) {
     function f() {
         continue;

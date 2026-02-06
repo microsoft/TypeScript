@@ -34,19 +34,19 @@ class E extends D {
     public foo(x?: string) { } // ok to add optional parameters
 >foo : (x?: string) => void
 >    : ^ ^^^      ^^^^^^^^^
->x : string
->  : ^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
-var c: C;
+declare var c: C;
 >c : C
 >  : ^
 
-var d: D;
+declare var d: D;
 >d : D
 >  : ^
 
-var e: E;
+declare var e: E;
 >e : E
 >  : ^
 

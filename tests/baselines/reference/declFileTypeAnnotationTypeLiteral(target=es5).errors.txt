@@ -1,0 +1,43 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== declFileTypeAnnotationTypeLiteral.ts (0 errors) ====
+    class c {
+    }
+    class g<T> {
+    }
+    namespace m {
+        export class c {
+        }
+    }
+    
+    // Object literal with everything
+    var x: {
+        // Call signatures
+        (a: number): c;
+        (a: string): g<string>;
+    
+        // Construct signatures
+        new (a: number): c;
+        new (a: string): m.c;
+    
+        // Indexers
+        [n: number]: c;
+        [n: string]: c;
+    
+        // Properties
+        a: c;
+        b: g<string>;
+    
+        // methods
+        m1(): g<number>;
+        m2(a: string, b?: number, ...c: c[]): string;
+    };
+    
+    
+    // Function type
+    var y: (a: string) => string;
+    
+    // constructor type
+    var z: new (a: string) => m.c;

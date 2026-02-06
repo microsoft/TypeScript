@@ -719,7 +719,7 @@ export function forEachFileNameOfModule<T>(
 ): T | undefined {
     const getCanonicalFileName = hostGetCanonicalFileName(host);
     const cwd = host.getCurrentDirectory();
-    const referenceRedirect = host.isSourceOfProjectReferenceRedirect(importedFileName) ? host.getProjectReferenceRedirect(importedFileName) : undefined;
+    const referenceRedirect = host.isSourceOfProjectReferenceRedirect(importedFileName) ? host.getRedirectFromSourceFile(importedFileName)?.outputDts : undefined;
     const importedPath = toPath(importedFileName, cwd, getCanonicalFileName);
     const redirects = host.redirectTargetsMap.get(importedPath) || emptyArray;
     const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];

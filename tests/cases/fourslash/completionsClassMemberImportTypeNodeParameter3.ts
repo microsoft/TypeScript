@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @module: nodenext
+// @module: node18
 
 // @FileName: /other/foo.d.ts
 //// export declare type Bar = { baz: string };

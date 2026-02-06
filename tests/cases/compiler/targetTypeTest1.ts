@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 declare class Point
 {
       constructor(x: number, y: number);

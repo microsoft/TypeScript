@@ -1,3 +1,4 @@
+// @target: es2015
 class IHeapObjectProperty { }
 class IDirectChildrenMap {
     // Decided to enforce a semicolon after declarations

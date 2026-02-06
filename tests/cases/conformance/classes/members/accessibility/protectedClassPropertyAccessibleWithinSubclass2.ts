@@ -1,11 +1,12 @@
+// @target: es2015
 class Base {
-    protected x: string;
+    protected x!: string;
     method() {
-        var b: Base;
-        var d1: Derived1;
-        var d2: Derived2;
-        var d3: Derived3;
-        var d4: Derived4;
+        var b: Base = undefined as any;
+        var d1: Derived1 = undefined as any;
+        var d2: Derived2 = undefined as any;
+        var d3: Derived3 = undefined as any;
+        var d4: Derived4 = undefined as any;
 
         b.x;            // OK, accessed within their declaring class
         d1.x;           // OK, accessed within their declaring class
@@ -17,11 +18,11 @@ class Base {
 
 class Derived1 extends Base {
     method1() {
-        var b: Base;
-        var d1: Derived1;
-        var d2: Derived2;
-        var d3: Derived3;
-        var d4: Derived4;
+        var b: Base = undefined as any;
+        var d1: Derived1 = undefined as any;
+        var d2: Derived2 = undefined as any;
+        var d3: Derived3 = undefined as any;
+        var d4: Derived4 = undefined as any;
 
         b.x;            // Error, isn't accessed through an instance of the enclosing class
         d1.x;           // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
@@ -33,11 +34,11 @@ class Derived1 extends Base {
 
 class Derived2 extends Base {
     method2() {
-        var b: Base;
-        var d1: Derived1;
-        var d2: Derived2;
-        var d3: Derived3;
-        var d4: Derived4;
+        var b: Base = undefined as any;
+        var d1: Derived1 = undefined as any;
+        var d2: Derived2 = undefined as any;
+        var d3: Derived3 = undefined as any;
+        var d4: Derived4 = undefined as any;
 
         b.x;            // Error, isn't accessed through an instance of the enclosing class
         d1.x;           // Error, isn't accessed through an instance of the enclosing class
@@ -48,13 +49,13 @@ class Derived2 extends Base {
 }
 
 class Derived3 extends Derived1 {
-    protected x: string;
+    protected x!: string;
     method3() {
-        var b: Base;
-        var d1: Derived1;
-        var d2: Derived2;
-        var d3: Derived3;
-        var d4: Derived4;
+        var b: Base = undefined as any;
+        var d1: Derived1 = undefined as any;
+        var d2: Derived2 = undefined as any;
+        var d3: Derived3 = undefined as any;
+        var d4: Derived4 = undefined as any;
 
         b.x;            // Error, isn't accessed through an instance of the enclosing class
         d1.x;           // Error, isn't accessed through an instance of the enclosing class
@@ -66,11 +67,11 @@ class Derived3 extends Derived1 {
 
 class Derived4 extends Derived2 {
     method4() {
-        var b: Base;
-        var d1: Derived1;
-        var d2: Derived2;
-        var d3: Derived3;
-        var d4: Derived4;
+        var b: Base = undefined as any;
+        var d1: Derived1 = undefined as any;
+        var d2: Derived2 = undefined as any;
+        var d3: Derived3 = undefined as any;
+        var d4: Derived4 = undefined as any;
 
         b.x;            // Error, isn't accessed through an instance of the enclosing class
         d1.x;           // Error, isn't accessed through an instance of the enclosing class
@@ -81,11 +82,11 @@ class Derived4 extends Derived2 {
 }
 
 
-var b: Base;
-var d1: Derived1;
-var d2: Derived2;
-var d3: Derived3;
-var d4: Derived4;
+var b: Base = undefined as any;
+var d1: Derived1 = undefined as any;
+var d2: Derived2 = undefined as any;
+var d3: Derived3 = undefined as any;
+var d4: Derived4 = undefined as any;
 
 b.x;                    // Error, neither within their declaring class nor classes derived from their declaring class
 d1.x;                   // Error, neither within their declaring class nor classes derived from their declaring class

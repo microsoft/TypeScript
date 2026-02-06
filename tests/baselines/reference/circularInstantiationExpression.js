@@ -6,6 +6,7 @@ foo("");
 
 
 //// [circularInstantiationExpression.js]
+"use strict";
 foo("");
 
 

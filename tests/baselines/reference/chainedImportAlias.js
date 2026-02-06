@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/chainedImportAlias.ts] ////
 
 //// [chainedImportAlias_file0.ts]
-export module m {
+export namespace m {
     export function foo() { }
 }
 
@@ -23,6 +23,6 @@ var m;
 //// [chainedImportAlias_file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var x = require("./chainedImportAlias_file0");
+const x = require("./chainedImportAlias_file0");
 var y = x;
 y.m.foo();

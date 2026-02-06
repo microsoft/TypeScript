@@ -1,5 +1,6 @@
+// @target: es2015
 //@module: commonjs
-module M {
+namespace M {
     class C { }
     interface C { }
     interface D { }

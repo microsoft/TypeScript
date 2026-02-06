@@ -1,3 +1,4 @@
+// @target: es2015
 // Widening vs. non-widening literal types
 
 function f1() {

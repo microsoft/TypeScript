@@ -26,6 +26,7 @@ D[Symbol.metadata].b; // 'z'
 
 
 //// [foo.js]
+"use strict";
 var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
     var useValue = arguments.length > 2;
     for (var i = 0; i < initializers.length; i++) {

@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 // @noUnusedLocals: true
 // @noUnusedParameters: true
 ////[|/*~a*/(/*~b*/x/*~c*/,/*~d*/y/*~e*/)/*~f*/ => /*~g*/x/*~h*/|]

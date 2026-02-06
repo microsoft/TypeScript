@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution11.tsx] ////
 
 === react.d.ts ===
-declare module JSX {
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(react.d.ts, 0, 0))
 
 	interface Element { }
->Element : Symbol(Element, Decl(react.d.ts, 0, 20))
+>Element : Symbol(Element, Decl(react.d.ts, 0, 23))
 
 	interface IntrinsicElements {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(react.d.ts, 1, 22))

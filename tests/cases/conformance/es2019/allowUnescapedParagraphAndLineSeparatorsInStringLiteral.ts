@@ -1,3 +1,4 @@
+// @target: es2015
 // Strings containing unescaped line / paragraph separators
 // Using both single quotes, double quotes and template literals
 

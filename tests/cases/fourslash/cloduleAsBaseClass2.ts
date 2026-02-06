@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @module: commonjs
+// @strict: false
 // @Filename: cloduleAsBaseClass2_0.ts
 ////class A {
 ////    constructor(x: number) { }
@@ -7,7 +9,7 @@
 ////    static bar() { }
 ////}
 ////
-////module A {
+////namespace A {
 ////    export var x = 1;
 ////    export function baz() { }
 ////}

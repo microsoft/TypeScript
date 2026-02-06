@@ -1,11 +1,12 @@
-module TypeScript {
+// @target: es2015
+namespace TypeScript {
     export class MemberName <A,B,C>{
         static create<A,B,C>(arg1: any, arg2?: any, arg3?: any): MemberName {
         }
     }
 }
  
-module TypeScript {
+namespace TypeScript {
     export class PullSymbol <A,B,C>{
         public type: PullTypeSymbol = null;
     }

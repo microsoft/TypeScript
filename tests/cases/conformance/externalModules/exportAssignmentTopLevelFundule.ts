@@ -1,9 +1,10 @@
+// @target: es2015
 // @module: amd
 // @Filename: foo_0.ts
 function foo() {
 	return "test";
 }
-module foo {
+namespace foo {
 	export var answer = 42;
 }
 export = foo;

@@ -3,7 +3,7 @@
 === shadowedInternalModule.ts ===
 // all errors imported modules conflict with local variables
 
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -32,7 +32,7 @@ module A {
     }
 } 
 
-module B {
+namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 
@@ -57,11 +57,11 @@ module B {
 >  : ^^^^^^^^^^^^
 }
 
-module X {
+namespace X {
 >X : typeof X
 >  : ^^^^^^^^
 
-    export module Y {
+    export namespace Y {
         export interface Point{
             x: number;
 >x : number
@@ -83,7 +83,7 @@ module X {
     }
 }
 
-module Z {
+namespace Z {
 >Z : typeof Z
 >  : ^^^^^^^^
 
@@ -104,13 +104,13 @@ module Z {
 
 //
 
-module a {
+namespace a {
   export type A = number;
 >A : number
 >  : ^^^^^^
 }
 
-module b {
+namespace b {
 >b : typeof b
 >  : ^^^^^^^^
 
@@ -122,10 +122,10 @@ module b {
 >A : number
 >  : ^^^^^^
 
-  export module A {}
+  export namespace A {}
 }
 
-module c {
+namespace c {
   import any = b.A;
 >any : any
 >    : ^^^
@@ -137,7 +137,7 @@ module c {
 
 //
 
-module q {
+namespace q {
 >q : typeof q
 >  : ^^^^^^^^
 
@@ -148,7 +148,7 @@ module q {
 >   : ^^
 }
 
-module r {
+namespace r {
 >r : typeof r
 >  : ^^^^^^^^
 
@@ -165,7 +165,7 @@ module r {
 >  : ^^^^^^
 }
 
-module s {
+namespace s {
 >s : typeof s
 >  : ^^^^^^^^
 

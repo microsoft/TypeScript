@@ -1,3 +1,4 @@
+// @target: es2015
 //@noUnusedLocals:true
 
 declare let props: any;

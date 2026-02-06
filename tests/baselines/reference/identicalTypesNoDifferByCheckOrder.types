@@ -81,6 +81,7 @@ const comp3: FunctionComponent2<SomePropsCloneX> = null as any;
 >comp3 : FunctionComponent2<SomePropsCloneX>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
+>            : ^^^
 
 needsComponentOfSomeProps3({ renderAs: comp3 });
 >needsComponentOfSomeProps3({ renderAs: comp3 }) : void
@@ -104,6 +105,7 @@ const comp2: FunctionComponent1<SomePropsX> = null as any;
 >comp2 : FunctionComponent1<SomePropsX>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
+>            : ^^^
 
 needsComponentOfSomeProps2({ renderAs: comp2 });
 >needsComponentOfSomeProps2({ renderAs: comp2 }) : void

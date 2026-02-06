@@ -151,6 +151,7 @@ function getMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(
             compilerOptions: {
                 outDir: "lib",
                 declaration: true,
+                rootDir: "src",
             },
             include: ["src/**/*.ts"],
         }),
@@ -169,6 +170,7 @@ function getMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(
             compilerOptions: {
                 outDir: "lib",
                 declaration: true,
+                rootDir: "src",
             },
             include: ["src/**/*.ts"],
         }),
@@ -183,6 +185,7 @@ function getMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(
         "/home/src/projects/b/2/b-impl/b/tsconfig.json": jsonToReadableText({
             compilerOptions: {
                 outDir: "lib",
+                rootDir: "src",
             },
             include: ["src/**/*.ts"],
         }),

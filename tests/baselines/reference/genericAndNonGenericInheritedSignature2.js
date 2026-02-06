@@ -12,3 +12,4 @@ interface Hello extends Bar, Foo {
 
 
 //// [genericAndNonGenericInheritedSignature2.js]
+"use strict";

@@ -61,6 +61,7 @@ export * from "../transformer.js";
 export * from "../emitter.js";
 export * from "../watchUtilities.js";
 export * from "../program.js";
+export * from "../programDiagnostics.js";
 export * from "../builderStatePublic.js";
 export * from "../builderState.js";
 export * from "../builder.js";

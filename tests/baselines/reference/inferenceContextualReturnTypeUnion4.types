@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/inferenceContextualReturnTypeUnion4.ts] ////
+
+=== inferenceContextualReturnTypeUnion4.ts ===
+// https://github.com/microsoft/TypeScript/issues/57905
+
+export abstract class Storage {
+>Storage : Storage
+>        : ^^^^^^^
+
+    abstract get<T extends string>(): T | Promise<T>;
+>get : <T extends string>() => T | Promise<T>
+>    : ^ ^^^^^^^^^      ^^^^^^^              
+}
+
+export abstract class SyncStorage extends Storage {
+>SyncStorage : SyncStorage
+>            : ^^^^^^^^^^^
+>Storage : Storage
+>        : ^^^^^^^
+
+    abstract override get<T extends string>(): T;
+>get : <T extends string>() => T
+>    : ^ ^^^^^^^^^      ^^^^^^^ 
+}
+
+export abstract class ASyncStorage extends Storage {
+>ASyncStorage : ASyncStorage
+>             : ^^^^^^^^^^^^
+>Storage : Storage
+>        : ^^^^^^^
+
+    abstract override get<T extends string>(): Promise<T>;
+>get : <T extends string>() => Promise<T>
+>    : ^ ^^^^^^^^^      ^^^^^^^          
+}
+

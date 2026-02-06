@@ -366,5 +366,368 @@ describe("unittests:: PrinterAPI", () => {
                 ts.factory.createNoSubstitutionTemplateLiteral("\n"),
                 ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
             ));
+
+        printsCorrectly("binaryBarBarExpressionWithLeftConditionalExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createConditionalExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionToken),
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.ColonToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.BarBarToken),
+                        ts.factory.createIdentifier("d"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryAmpersandAmpersandExpressionWithLeftConditionalExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createConditionalExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionToken),
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.ColonToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
+                        ts.factory.createIdentifier("d"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryQuestionQuestionExpressionWithLeftConditionalExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createConditionalExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionToken),
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.ColonToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                        ts.factory.createIdentifier("d"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryBarBarExpressionWithLeftBinaryQuestionQuestionExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                            ts.factory.createIdentifier("b"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.BarBarToken),
+                        ts.factory.createIdentifier("c"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryAmpersandAmpersandExpressionWithLeftBinaryQuestionQuestionExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                            ts.factory.createIdentifier("b"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
+                        ts.factory.createIdentifier("c"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryBarBarExpressionWithRightBinaryQuestionQuestionExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createIdentifier("a"),
+                        ts.factory.createToken(ts.SyntaxKind.BarBarToken),
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryAmpersandAmpersandExpressionWithRightBinaryQuestionQuestionExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createIdentifier("a"),
+                        ts.factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryQuestionQuestionExpressionWithLeftBinaryBarBarExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.BarBarToken),
+                            ts.factory.createIdentifier("b"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                        ts.factory.createIdentifier("c"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryQuestionQuestionExpressionWithLeftBinaryAmpersandAmpersandExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
+                            ts.factory.createIdentifier("b"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                        ts.factory.createIdentifier("c"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryQuestionQuestionExpressionWithRightBinaryBarBarExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createIdentifier("a"),
+                        ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.BarBarToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryQuestionQuestionExpressionWithRightBinaryAmpersandAmpersandExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createIdentifier("a"),
+                        ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.AmpersandAmpersandToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryQuestionQuestionExpressionWithLeftBinaryQuestionQuestionExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                            ts.factory.createIdentifier("b"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                        ts.factory.createIdentifier("c"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryQuestionQuestionExpressionWithRightBinaryQuestionQuestionExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createIdentifier("a"),
+                        ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryCommaExpressionWithLeftBinaryQuestionQuestionExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                            ts.factory.createIdentifier("b"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.CommaToken),
+                        ts.factory.createIdentifier("c"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryCommaExpressionWithRightBinaryQuestionQuestionExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createIdentifier("a"),
+                        ts.factory.createToken(ts.SyntaxKind.CommaToken),
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryEqualsEqualsExpressionWithLeftBinaryQuestionQuestionExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                            ts.factory.createIdentifier("b"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.EqualsEqualsToken),
+                        ts.factory.createIdentifier("c"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryEqualsEqualsExpressionWithRightBinaryQuestionQuestionExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createIdentifier("a"),
+                        ts.factory.createToken(ts.SyntaxKind.EqualsEqualsToken),
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryQuestionQuestionExpressionWithLeftBinaryCommaExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.CommaToken),
+                            ts.factory.createIdentifier("b"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                        ts.factory.createIdentifier("c"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryQuestionQuestionExpressionWithRightBinaryCommaExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createIdentifier("a"),
+                        ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.CommaToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryQuestionQuestionExpressionWithLeftBinaryEqualsEqualsExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("a"),
+                            ts.factory.createToken(ts.SyntaxKind.EqualsEqualsToken),
+                            ts.factory.createIdentifier("b"),
+                        ),
+                        ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                        ts.factory.createIdentifier("c"),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
+
+        printsCorrectly("binaryQuestionQuestionExpressionWithRightBinaryEqualsEqualsExpression", {}, printer =>
+            printer.printNode(
+                ts.EmitHint.Unspecified,
+                ts.factory.createExpressionStatement(
+                    ts.factory.createBinaryExpression(
+                        ts.factory.createIdentifier("a"),
+                        ts.factory.createToken(ts.SyntaxKind.QuestionQuestionToken),
+                        ts.factory.createBinaryExpression(
+                            ts.factory.createIdentifier("b"),
+                            ts.factory.createToken(ts.SyntaxKind.EqualsEqualsToken),
+                            ts.factory.createIdentifier("c"),
+                        ),
+                    ),
+                ),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+            ));
     });
 });

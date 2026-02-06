@@ -1,3 +1,4 @@
+// @target: es2015
 //@noImplicitThis:true
 //@noUnusedLocals:true
 //@noUnusedParameters:true

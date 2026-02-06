@@ -2,7 +2,7 @@
 
 //// [typeofOperatorWithNumberType.ts]
 // typeof  operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
 
 function foo(): number { return 1; }
@@ -11,8 +11,8 @@ class A {
     public a: number;
     static foo() { return 1; }
 }
-module M {
-    export var n: number;
+namespace M {
+    export var n!: number;
 }
 
 var objA = new A();
@@ -48,8 +48,9 @@ typeof M.n;
 typeof objA.a, M.n;
 
 // use typeof in type query
-var z: number;
-var x: number[];
+declare var z: number;
+declare var x: number[];
+declare var r: () => number;
 z: typeof NUMBER;
 x: typeof NUMBER1;
 r: typeof foo;
@@ -60,16 +61,12 @@ z: typeof A.foo;
 z: typeof M.n;
 
 //// [typeofOperatorWithNumberType.js]
-// typeof  operator on number type
-var NUMBER;
+"use strict";
 var NUMBER1 = [1, 2];
 function foo() { return 1; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return 1; };
-    return A;
-}());
+class A {
+    static foo() { return 1; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -80,7 +77,7 @@ var ResultIsString2 = typeof NUMBER1;
 // number type literal
 var ResultIsString3 = typeof 1;
 var ResultIsString4 = typeof { x: 1, y: 2 };
-var ResultIsString5 = typeof { x: 1, y: function (n) { return n; } };
+var ResultIsString5 = typeof { x: 1, y: (n) => { return n; } };
 // number type expressions
 var ResultIsString6 = typeof objA.a;
 var ResultIsString7 = typeof M.n;
@@ -99,9 +96,6 @@ typeof foo();
 typeof objA.a;
 typeof M.n;
 typeof objA.a, M.n;
-// use typeof in type query
-var z;
-var x;
 z: typeof NUMBER;
 x: typeof NUMBER1;
 r: typeof foo;

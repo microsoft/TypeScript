@@ -5,5 +5,6 @@ var v = a
   ? b : c;
 
 //// [conditionalExpressionNewLine2.js]
+"use strict";
 var v = a
     ? b : c;

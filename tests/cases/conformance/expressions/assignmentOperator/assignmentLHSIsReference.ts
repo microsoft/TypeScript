@@ -1,3 +1,4 @@
+// @target: es2015
 var value: any;
 
 // identifiers: variable and parameter

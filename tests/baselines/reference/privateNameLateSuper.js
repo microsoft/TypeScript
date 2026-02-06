@@ -12,6 +12,7 @@ class A extends B {
 
 
 //// [privateNameLateSuper.js]
+"use strict";
 var _A_x;
 class B {
 }

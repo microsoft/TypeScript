@@ -4,8 +4,8 @@
 interface indexSig {
     //Index signatures can't be optional
     [idx?: number]: any; //err
->idx : number
->    : ^^^^^^
+>idx : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 }
 
 class indexSig2 {
@@ -14,6 +14,6 @@ class indexSig2 {
 
     //Index signatures can't be optional
     [idx?: number]: any //err
->idx : number
->    : ^^^^^^
+>idx : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 }

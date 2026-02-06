@@ -46,7 +46,10 @@ interface NpmConfig {
 }
 
 interface NpmLock {
-    dependencies: { [packageName: string]: { version: string; }; };
+    dependencies?: { [packageName: string]: { version: string; }; };
+    packages?: {
+        [nodeModulesAtTypesPackage: string]: { version: string; };
+    };
 }
 
 export interface Log {
@@ -304,9 +307,13 @@ export abstract class TypingsInstaller {
                 this.log.writeLine(`Loaded content of '${packageJson}':${stringifyIndented(npmConfig)}`);
                 this.log.writeLine(`Loaded content of '${packageLockJson}':${stringifyIndented(npmLock)}`);
             }
-            if (npmConfig.devDependencies && npmLock.dependencies) {
+            // Packages is present in lock file 3 vs lockfile 2 has dependencies field for already installed types package
+            if (npmConfig.devDependencies && (npmLock.packages || npmLock.dependencies)) {
                 for (const key in npmConfig.devDependencies) {
-                    if (!hasProperty(npmLock.dependencies, key)) {
+                    if (
+                        (npmLock.packages && !hasProperty(npmLock.packages, `node_modules/${key}`)) ||
+                        (npmLock.dependencies && !hasProperty(npmLock.dependencies, key))
+                    ) {
                         // if package in package.json but not package-lock.json, skip adding to cache so it is reinstalled on next use
                         continue;
                     }
@@ -333,7 +340,8 @@ export abstract class TypingsInstaller {
                     if (this.log.isEnabled()) {
                         this.log.writeLine(`Adding entry into typings cache: '${packageName}' => '${typingFile}'`);
                     }
-                    const info = getProperty(npmLock.dependencies, key);
+                    const info = npmLock.packages && getProperty(npmLock.packages, `node_modules/${key}`) ||
+                        getProperty(npmLock.dependencies!, key);
                     const version = info && info.version;
                     if (!version) {
                         continue;

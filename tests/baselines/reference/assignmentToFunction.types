@@ -15,7 +15,7 @@ fn = () => 3;
 >3 : 3
 >  : ^
 
-module foo {
+namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 

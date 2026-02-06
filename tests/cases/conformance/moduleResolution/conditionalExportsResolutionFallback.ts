@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: esnext
 // @moduleResolution: node16,nodenext,bundler
 // @traceResolution: true
@@ -15,7 +16,7 @@
     ".": {
         "import": "./dist/index.mjs",
         "require": "./dist/index.js",
-        "types": "./dist/index.d.ts",
+        "types": "./dist/index.d.ts"
     }
   }
 }

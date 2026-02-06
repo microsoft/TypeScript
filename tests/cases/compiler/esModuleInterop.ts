@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @esModuleInterop: true
 // @filename: hybrid/index.d.ts
 export function sayHello(): string;

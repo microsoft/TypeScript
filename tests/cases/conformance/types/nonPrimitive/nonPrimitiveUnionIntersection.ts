@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 var a: object & string = ""; // error
 var b: object | string = ""; // ok

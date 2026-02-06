@@ -14,15 +14,15 @@ function bar() {
 }
 
 //// [a.js]
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+"use strict";
+class c {
+}
 //// [c.js]
+"use strict";
 function bar() {
 }
 //// [b.js]
+"use strict";
 /// <reference path="c.js"/>
 function foo() {
 }

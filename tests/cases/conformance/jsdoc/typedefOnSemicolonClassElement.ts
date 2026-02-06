@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: typedefOnSemicolonClassElement.js
 // @checkJs: true
 // @outdir: dist

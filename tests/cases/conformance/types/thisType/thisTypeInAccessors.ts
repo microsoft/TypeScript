@@ -1,6 +1,6 @@
 // @noImplicitAny: true
 // @noImplicitThis: true
-// @target: es5
+// @target: es5, es2015
 interface Foo {
     n: number;
     x: number;

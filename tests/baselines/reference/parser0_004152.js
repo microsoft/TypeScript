@@ -7,14 +7,9 @@ export class Game {
 }
 
 //// [parser0_004152.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Game = void 0;
-var Game = /** @class */ (function () {
-    function Game() {
+export class Game {
+    constructor() {
         this.position = new DisplayPosition([]);
     }
     ;
-    return Game;
-}());
-exports.Game = Game;
+}

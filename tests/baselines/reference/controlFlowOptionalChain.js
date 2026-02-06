@@ -612,16 +612,16 @@ function f50(obj: Test5) {
 //// [controlFlowOptionalChain.js]
 "use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
-var a;
+let a;
 o === null || o === void 0 ? void 0 : o[a = 1];
 a.toString();
-var b;
+let b;
 o === null || o === void 0 ? void 0 : o.x[b = 1];
 b.toString();
-var c;
+let c;
 o === null || o === void 0 ? void 0 : o(c = 1);
 c.toString();
-var d;
+let d;
 o === null || o === void 0 ? void 0 : o.x(d = 1);
 d.toString();
 if (f === null || f === void 0 ? void 0 : f(x)) {
@@ -1089,7 +1089,7 @@ function extractCoordinates(f) {
     }
     return f.geometry.coordinates;
 }
-var lastSomeProperty;
+let lastSomeProperty;
 function someFunction(someOptionalObject) {
     if ((someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty) !== lastSomeProperty) {
         console.log(someOptionalObject);
@@ -1097,13 +1097,13 @@ function someFunction(someOptionalObject) {
         lastSomeProperty = someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty;
     }
 }
-var someObject = {
+const someObject = {
     someProperty: 42
 };
 someFunction(someObject);
 someFunction(undefined);
 // Repro from #35970
-var i = 0;
+let i = 0;
 while (((_u = arr[i]) === null || _u === void 0 ? void 0 : _u.tag) === "left") {
     i += 1;
     if (((_v = arr[i]) === null || _v === void 0 ? void 0 : _v.tag) === "right") {
@@ -1112,7 +1112,7 @@ while (((_u = arr[i]) === null || _u === void 0 ? void 0 : _u.tag) === "left") {
 }
 function f50(obj) {
     var _a;
-    for (var key in (_a = obj.main) === null || _a === void 0 ? void 0 : _a.childs) {
+    for (const key in (_a = obj.main) === null || _a === void 0 ? void 0 : _a.childs) {
         if (obj.main.childs[key] === obj) {
             return obj;
         }

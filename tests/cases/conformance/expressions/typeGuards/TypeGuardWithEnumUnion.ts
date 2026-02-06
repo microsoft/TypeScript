@@ -1,3 +1,4 @@
+// @target: es2015
 enum Color { R, G, B }
 
 function f1(x: Color | string) {

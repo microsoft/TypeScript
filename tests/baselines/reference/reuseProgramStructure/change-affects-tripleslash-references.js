@@ -33,8 +33,7 @@ typerefs: {
 
 
 MissingPaths:: [
-  "non-existing-file.ts",
-  "lib.d.ts"
+  "non-existing-file.ts"
 ]
 
 a.ts(3,22): error TS6053: File 'non-existing-file.ts' not found.
@@ -61,9 +60,7 @@ File: a.ts
 var x = 1
 
 
-MissingPaths:: [
-  "lib.d.ts"
-]
+MissingPaths:: []
 
 
 

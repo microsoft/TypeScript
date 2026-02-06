@@ -25,3 +25,4 @@ interface I4 {
 }
 
 //// [symbolProperty60.js]
+"use strict";

@@ -1,1 +1,2 @@
-﻿while (true) break
+﻿// @target: es2015
+while (true) break

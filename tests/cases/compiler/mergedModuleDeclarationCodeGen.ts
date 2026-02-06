@@ -1,5 +1,7 @@
-export module X {
-    export module Y {
+// @module: commonjs
+// @target: es2015
+export namespace X {
+    export namespace Y {
         class A {
             constructor(Y: any) {
                 new B();
@@ -7,8 +9,8 @@ export module X {
         }
     }
 }
-export module X {
-    export module Y {
+export namespace X {
+    export namespace Y {
         export class B {
         }
     }

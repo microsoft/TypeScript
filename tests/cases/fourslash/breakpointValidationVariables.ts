@@ -6,7 +6,7 @@
 ////var b;
 ////var c = 10, d, e;
 ////var c2, d2 = 10;
-////module m {
+////namespace m {
 ////    var x1;
 ////    var x2 = 10, x3 = 10;
 ////    var x4, x5;

@@ -107,6 +107,7 @@ interface ResolutionInfo {
     fileName: string;
     name: string;
     mode: ts.ResolutionMode;
+    watched: boolean;
 }
 
 function getResolutionCacheDetails<File, T extends ts.ResolutionWithFailedLookupLocations>(
@@ -254,8 +255,8 @@ export function verifyResolutionCache(
     // Verify ref count
     resolutionToRefs.forEach((info, resolution) => {
         ts.Debug.assert(
-            resolution.files?.size === info.length,
-            `${projectName}:: Expected Resolution ref count ${info.length} but got ${resolution.files?.size}`,
+            (resolution.files?.size ?? 0) === info.filter(i => i.watched).length,
+            `${projectName}:: Expected Resolution ref count ${info.filter(i => i.watched).length} but got ${resolution.files?.size}`,
             () =>
                 `Expected from:: ${JSON.stringify(info, undefined, " ")}` +
                 `Actual from: ${resolution.files?.size}`,
@@ -317,12 +318,13 @@ export function verifyResolutionCache(
     ): ExpectedResolution {
         const existing = resolutionToRefs.get(resolved);
         let expectedResolution: ExpectedResolution;
+        const watched = !resolutionHostCacheHost.skipWatchingFailedLookups?.(fileName);
         if (existing) {
-            existing.push({ cacheType, fileName, name, mode });
+            existing.push({ cacheType, fileName, name, mode, watched });
             expectedResolution = resolutionToExpected.get(resolved)!;
         }
         else {
-            resolutionToRefs.set(resolved, [{ cacheType, fileName, name, mode }]);
+            resolutionToRefs.set(resolved, [{ cacheType, fileName, name, mode, watched }]);
             expectedResolution = {
                 resolvedModule: (resolved as any).resolvedModule,
                 resolvedTypeReferenceDirective: (resolved as any).resolvedTypeReferenceDirective,
@@ -333,7 +335,9 @@ export function verifyResolutionCache(
             expectedToResolution.set(expectedResolution, resolved);
             resolutionToExpected.set(resolved, expectedResolution);
         }
-        expected.watchFailedLookupLocationsOfExternalModuleResolutions(name, expectedResolution, fileName, () => ({ resolvedFileName }), deferWatchingNonRelativeResolution);
+        if (watched) {
+            expected.watchFailedLookupLocationsOfExternalModuleResolutions(name, expectedResolution, fileName, () => ({ resolvedFileName }), deferWatchingNonRelativeResolution);
+        }
         return expectedResolution;
     }
 
@@ -527,6 +531,8 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         getGlobalTypingsCacheLocation: project.getGlobalTypingsCacheLocation.bind(project),
         globalCacheResolutionModuleName: project.globalCacheResolutionModuleName.bind(project),
         fileIsOpen: project.fileIsOpen.bind(project),
+        skipWatchingFailedLookups: project.skipWatchingFailedLookups.bind(project),
+        skipWatchingTypeRoots: project.skipWatchingTypeRoots.bind(project),
         getCurrentProgram: () => project.getCurrentProgram(),
 
         preferNonRecursiveWatch: project.preferNonRecursiveWatch,

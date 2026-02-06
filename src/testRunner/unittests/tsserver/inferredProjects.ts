@@ -322,4 +322,27 @@ describe("unittests:: tsserver:: inferredProjects::", () => {
         }], session);
         baselineTsserverLogs("inferredProjects", "when existing inferred project has no root files", session);
     });
+
+    it("closing file with shared resolutions", () => {
+        const host = TestServerHost.createServerHost({
+            "/user/username/projects/myproject/unrelated.ts": dedent`
+                export {};
+            `,
+            "/user/username/projects/myproject/app.ts": dedent`
+                import type { y } from "pkg" assert { "resolution-mode": "require" };
+                import type { x } from "pkg" assert { "resolution-mode": "import" };
+            `,
+        });
+        const session = new TestSession(host);
+        openFilesForSession([{
+            file: "/user/username/projects/myproject/unrelated.ts",
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+        openFilesForSession([{
+            file: "/user/username/projects/myproject/app.ts",
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+        closeFilesForSession(["/user/username/projects/myproject/app.ts"], session);
+        baselineTsserverLogs("inferredProjects", "closing file with shared resolutions", session);
+    });
 });

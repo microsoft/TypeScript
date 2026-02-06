@@ -1,3 +1,4 @@
+// @target: es2015
 interface Stuff {
     a?: () => Promise<number[]>;
     b: () => Promise<string>;

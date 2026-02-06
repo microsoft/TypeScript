@@ -4,8 +4,8 @@
 function callee(n: number | undefined, m: string) { }
 >callee : (n: number | undefined, m: string) => void
 >       : ^ ^^                  ^^ ^^      ^^^^^^^^^
->n : number
->  : ^^^^^^
+>n : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >m : string
 >  : ^^^^^^
 
@@ -14,8 +14,8 @@ function caller(arg: (n?: number) => void) { }
 >       : ^   ^^                    ^^^^^^^^^
 >arg : (n?: number) => void
 >    : ^ ^^^      ^^^^^    
->n : number
->  : ^^^^^^
+>n : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 caller(callee);
 >caller(callee) : void

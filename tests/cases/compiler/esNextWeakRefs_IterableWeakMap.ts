@@ -52,6 +52,23 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
         return this.#weakMap.get(key)?.value;
     }
 
+    getOrInsert(key: K, defaultValue: V): V {
+        if (!this.has(key)) {
+            this.set(key, defaultValue);
+            return defaultValue;
+        }
+        return this.get(key)!;
+    }
+
+    getOrInsertComputed(key: K, callback: (key: K) => V): V {
+        if (!this.has(key)) {
+            const value = callback(key);
+            this.set(key, value);
+            return value;
+        }
+        return this.get(key)!;
+    }
+
     delete(key: K): boolean {
         const entry = this.#weakMap.get(key);
         if (entry === undefined) {

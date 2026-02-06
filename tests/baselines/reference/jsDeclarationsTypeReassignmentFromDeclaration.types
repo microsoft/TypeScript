@@ -19,8 +19,8 @@ export = items;
 const items = [];
 >items : Item[]
 >      : ^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 module.exports = items;
 >module.exports = items : Item[]

@@ -1,3 +1,4 @@
+// @target: es2015
 // es2015
 const noOp = () => {};
 const testReflectApply = Reflect.apply(noOp, this, []);

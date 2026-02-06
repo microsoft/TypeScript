@@ -7,7 +7,6 @@ import {
     createSignatureDeclarationFromSignature,
     createStubbedBody,
     eachDiagnostic,
-    getAllSupers,
     ImportAdder,
     registerCodeFix,
 } from "../_namespaces/ts.codefix.js";
@@ -40,6 +39,7 @@ import {
     firstOrUndefinedIterator,
     FunctionExpression,
     getCheckFlags,
+    getClassExtendsHeritageElement,
     getClassLikeDeclarationOfSymbol,
     getEmitScriptTarget,
     getEscapedTextOfJsxAttributeName,
@@ -796,4 +796,19 @@ function findScope(node: Node) {
         if (returnStatement) return returnStatement;
     }
     return getSourceFileOfNode(node);
+}
+
+function getAllSupers(decl: ClassLikeDeclaration | InterfaceDeclaration | undefined, checker: TypeChecker): readonly ClassLikeDeclaration[] {
+    const res: ClassLikeDeclaration[] = [];
+    while (decl) {
+        const superElement = getClassExtendsHeritageElement(decl);
+        const superSymbol = superElement && checker.getSymbolAtLocation(superElement.expression);
+        if (!superSymbol) break;
+        const symbol = superSymbol.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(superSymbol) : superSymbol;
+        const superDecl = symbol.declarations && find(symbol.declarations, isClassLike);
+        if (!superDecl) break;
+        res.push(superDecl);
+        decl = superDecl;
+    }
+    return res;
 }

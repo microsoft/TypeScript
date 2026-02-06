@@ -1,3 +1,5 @@
+// @strict: false
+// @target: es2015
 //@noUncheckedIndexedAccess: true
 //@strictNullChecks: true
 

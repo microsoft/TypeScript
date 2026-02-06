@@ -11,6 +11,7 @@ function f() {
 
 
 //// [emitter.noCatchBinding.es2019.js]
+"use strict";
 function f() {
     try { }
     catch { }

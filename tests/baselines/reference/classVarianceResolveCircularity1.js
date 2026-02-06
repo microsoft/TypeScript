@@ -14,10 +14,9 @@ declare function callme(x: object): string;
 //// [classVarianceResolveCircularity1.js]
 "use strict";
 // Issue #52813
-var Bar = /** @class */ (function () {
-    function Bar() {
+class Bar {
+    constructor() {
         this.Value = callme(this).num;
         this.Field = callme(this).num;
     }
-    return Bar;
-}());
+}

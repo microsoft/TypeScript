@@ -1,3 +1,4 @@
+// @target: es2015
 // without strict null checks, none of these should be an error
 declare var ab: { a: number, b: number };
 declare var abq: { a: number, b?: number };

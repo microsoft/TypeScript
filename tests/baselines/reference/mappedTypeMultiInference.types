@@ -11,8 +11,8 @@ declare function mergeStyleSets<K extends string>(
 >               : ^ ^^^^^^^^^      ^^^^^       ^^                       ^^^^^                    
 
     ...cssSets: { [P in K]?: Style }[]): { [P in K]: Style };
->cssSets : { [P in K]?: Style; }[]
->        : ^^^ ^^^^^^^^^^^^^^^^^^^
+>cssSets : { [P in K]?: Style | undefined; }[]
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Expected:
 //   let x: {
