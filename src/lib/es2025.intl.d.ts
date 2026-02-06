@@ -2,6 +2,56 @@
 
 declare namespace Intl {
     /**
+     * The locale matching algorithm to use.
+     *
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation).
+     */
+    type DurationFormatLocaleMatcher = "lookup" | "best fit";
+
+    /**
+     * The style of the formatted duration.
+     *
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/DurationFormat#style).
+     */
+    type DurationFormatStyle = "long" | "short" | "narrow" | "digital";
+
+    /**
+     * Whether to always display a unit, or only if it is non-zero.
+     *
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/DurationFormat#display).
+     */
+    type DurationFormatDisplayOption = "always" | "auto";
+
+    /**
+     * Value of the `unit` property in duration objects
+     *
+     * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/format#duration).
+     */
+    type DurationFormatUnit =
+        | "years"
+        | "months"
+        | "weeks"
+        | "days"
+        | "hours"
+        | "minutes"
+        | "seconds"
+        | "milliseconds"
+        | "microseconds"
+        | "nanoseconds";
+
+    type DurationFormatUnitSingular =
+        | "year"
+        | "month"
+        | "week"
+        | "day"
+        | "hour"
+        | "minute"
+        | "second"
+        | "millisecond"
+        | "microsecond"
+        | "nanosecond";
+
+    /**
      * An object representing the relative time format in parts
      * that can be used for custom locale-aware formatting.
      *
@@ -11,12 +61,12 @@ declare namespace Intl {
         | {
             type: "literal";
             value: string;
-            unit?: "year" | "month" | "week" | "day" | "hour" | "minute" | "second" | "milliseconds" | "microseconds" | "nanoseconds";
+            unit?: DurationFormatUnit;
         }
         | {
             type: Exclude<NumberFormatPartTypes, "literal">;
             value: string;
-            unit: "year" | "month" | "week" | "day" | "hour" | "minute" | "second" | "milliseconds" | "microseconds" | "nanoseconds";
+            unit: DurationFormatUnitSingular;
         };
 
     /**
@@ -25,29 +75,29 @@ declare namespace Intl {
      * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/DurationFormat#parameters)
      */
     interface DurationFormatOptions {
-        localeMatcher?: "lookup" | "best fit" | undefined;
+        localeMatcher?: DurationFormatLocaleMatcher | undefined;
         numberingSystem?: string | undefined;
-        style?: "long" | "short" | "narrow" | "digital" | undefined;
+        style?: DurationFormatStyle | undefined;
         years?: "long" | "short" | "narrow" | undefined;
-        yearsDisplay?: "always" | "auto" | undefined;
+        yearsDisplay?: DurationFormatDisplayOption | undefined;
         months?: "long" | "short" | "narrow" | undefined;
-        monthsDisplay?: "always" | "auto" | undefined;
+        monthsDisplay?: DurationFormatDisplayOption | undefined;
         weeks?: "long" | "short" | "narrow" | undefined;
-        weeksDisplay?: "always" | "auto" | undefined;
+        weeksDisplay?: DurationFormatDisplayOption | undefined;
         days?: "long" | "short" | "narrow" | undefined;
-        daysDisplay?: "always" | "auto" | undefined;
+        daysDisplay?: DurationFormatDisplayOption | undefined;
         hours?: "long" | "short" | "narrow" | "numeric" | "2-digit" | undefined;
-        hoursDisplay?: "always" | "auto" | undefined;
+        hoursDisplay?: DurationFormatDisplayOption | undefined;
         minutes?: "long" | "short" | "narrow" | "numeric" | "2-digit" | undefined;
-        minutesDisplay?: "always" | "auto" | undefined;
+        minutesDisplay?: DurationFormatDisplayOption | undefined;
         seconds?: "long" | "short" | "narrow" | "numeric" | "2-digit" | undefined;
-        secondsDisplay?: "always" | "auto" | undefined;
+        secondsDisplay?: DurationFormatDisplayOption | undefined;
         milliseconds?: "long" | "short" | "narrow" | "numeric" | undefined;
-        millisecondsDisplay?: "always" | "auto" | undefined;
+        millisecondsDisplay?: DurationFormatDisplayOption | undefined;
         microseconds?: "long" | "short" | "narrow" | "numeric" | undefined;
-        microsecondsDisplay?: "always" | "auto" | undefined;
+        microsecondsDisplay?: DurationFormatDisplayOption | undefined;
         nanoseconds?: "long" | "short" | "narrow" | "numeric" | undefined;
-        nanosecondsDisplay?: "always" | "auto" | undefined;
+        nanosecondsDisplay?: DurationFormatDisplayOption | undefined;
         fractionalDigits?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | undefined;
     }
 
@@ -62,13 +112,13 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/format).
          */
-        format(duration: Partial<Record<"years" | "months" | "weeks" | "days" | "hours" | "minutes" | "seconds" | "milliseconds" | "microseconds" | "nanoseconds", number>>): string;
+        format(duration: Partial<Record<DurationFormatUnit, number>>): string;
         /**
          * @param duration The duration object to be formatted. It should include some or all of the following properties: months, weeks, days, hours, minutes, seconds, milliseconds, microseconds, nanoseconds.
          *
          * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/formatToParts).
          */
-        formatToParts(duration: Partial<Record<"years" | "months" | "weeks" | "days" | "hours" | "minutes" | "seconds" | "milliseconds" | "microseconds" | "nanoseconds", number>>): DurationFormatPart[];
+        formatToParts(duration: Partial<Record<DurationFormatUnit, number>>): DurationFormatPart[];
         /**
          * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/resolvedOptions).
          */
@@ -76,29 +126,29 @@ declare namespace Intl {
     }
 
     interface ResolvedDurationFormatOptions {
-        locale: string;
+        locale: UnicodeBCP47LocaleIdentifier;
         numberingSystem: string;
-        style: "long" | "short" | "narrow" | "digital";
+        style: DurationFormatStyle;
         years: "long" | "short" | "narrow";
-        yearsDisplay: "always" | "auto";
+        yearsDisplay: DurationFormatDisplayOption;
         months: "long" | "short" | "narrow";
-        monthsDisplay: "always" | "auto";
+        monthsDisplay: DurationFormatDisplayOption;
         weeks: "long" | "short" | "narrow";
-        weeksDisplay: "always" | "auto";
+        weeksDisplay: DurationFormatDisplayOption;
         days: "long" | "short" | "narrow";
-        daysDisplay: "always" | "auto";
+        daysDisplay: DurationFormatDisplayOption;
         hours: "long" | "short" | "narrow" | "numeric" | "2-digit";
-        hoursDisplay: "always" | "auto";
+        hoursDisplay: DurationFormatDisplayOption;
         minutes: "long" | "short" | "narrow" | "numeric" | "2-digit";
-        minutesDisplay: "always" | "auto";
+        minutesDisplay: DurationFormatDisplayOption;
         seconds: "long" | "short" | "narrow" | "numeric" | "2-digit";
-        secondsDisplay: "always" | "auto";
+        secondsDisplay: DurationFormatDisplayOption;
         milliseconds: "long" | "short" | "narrow" | "numeric";
-        millisecondsDisplay: "always" | "auto";
+        millisecondsDisplay: DurationFormatDisplayOption;
         microseconds: "long" | "short" | "narrow" | "numeric";
-        microsecondsDisplay: "always" | "auto";
+        microsecondsDisplay: DurationFormatDisplayOption;
         nanoseconds: "long" | "short" | "narrow" | "numeric";
-        nanosecondsDisplay: "always" | "auto";
+        nanosecondsDisplay: DurationFormatDisplayOption;
         fractionalDigits?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
     }
 
@@ -129,6 +179,6 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl/DurationFormat/supportedLocalesOf).
          */
-        supportedLocalesOf(locales?: LocalesArgument, options?: Pick<DurationFormatOptions, "localeMatcher">): UnicodeBCP47LocaleIdentifier[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: { localeMatcher?: DurationFormatLocaleMatcher; }): UnicodeBCP47LocaleIdentifier[];
     };
 }
