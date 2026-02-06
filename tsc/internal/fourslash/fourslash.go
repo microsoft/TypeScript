@@ -22,6 +22,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
 	"github.com/microsoft/typescript-go/internal/execute/tsctests"
+	"github.com/microsoft/typescript-go/internal/jsonrpc"
 	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
@@ -69,7 +70,7 @@ type FourslashTest struct {
 	isStradaServer bool // Whether this is a fourslash server test in Strada. !!! Remove once we don't need to diff baselines.
 
 	// Async message handling
-	pendingRequests   map[lsproto.ID]chan *lsproto.ResponseMessage
+	pendingRequests   map[jsonrpc.ID]chan *lsproto.ResponseMessage
 	pendingRequestsMu sync.Mutex
 }
 
@@ -271,7 +272,7 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 		converters:              converters,
 		baselines:               make(map[baselineCommand]*strings.Builder),
 		openFiles:               make(map[string]struct{}),
-		pendingRequests:         make(map[lsproto.ID]chan *lsproto.ResponseMessage),
+		pendingRequests:         make(map[jsonrpc.ID]chan *lsproto.ResponseMessage),
 	}
 
 	ctx, cancel := context.WithCancel(t.Context())
@@ -341,13 +342,13 @@ func (f *FourslashTest) messageRouter(ctx context.Context) error {
 		}
 
 		switch msg.Kind {
-		case lsproto.MessageKindResponse:
+		case jsonrpc.MessageKindResponse:
 			f.handleResponse(ctx, msg.AsResponse())
-		case lsproto.MessageKindRequest:
+		case jsonrpc.MessageKindRequest:
 			if err := f.handleServerRequest(ctx, msg.AsRequest()); err != nil {
 				return err
 			}
-		case lsproto.MessageKindNotification:
+		case jsonrpc.MessageKindNotification:
 			// Server-initiated notifications (e.g., publishDiagnostics) are currently ignored
 			// in fourslash tests
 		}
@@ -411,7 +412,7 @@ func (f *FourslashTest) handleServerRequest(ctx context.Context, req *lsproto.Re
 		response = &lsproto.ResponseMessage{
 			ID:      req.ID,
 			JSONRPC: req.JSONRPC,
-			Error: &lsproto.ResponseError{
+			Error: &jsonrpc.ResponseError{
 				Code:    int32(lsproto.ErrorCodeMethodNotFound),
 				Message: fmt.Sprintf("Unknown method: %s", req.Method),
 			},

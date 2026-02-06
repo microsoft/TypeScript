@@ -20,7 +20,7 @@ func TestBaseReader(t *testing.T) {
 		{
 			name:  "empty",
 			input: []byte("Content-Length: 0\r\n\r\n"),
-			err:   "lsp: no content length",
+			err:   "jsonrpc: no content length",
 		},
 		{
 			name:  "early end",
@@ -30,7 +30,7 @@ func TestBaseReader(t *testing.T) {
 		{
 			name:  "negative length",
 			input: []byte("Content-Length: -1\r\n\r\n"),
-			err:   "lsp: invalid content length: negative value -1",
+			err:   "jsonrpc: invalid content length: negative value -1",
 		},
 		{
 			name:  "invalid content",
@@ -50,17 +50,17 @@ func TestBaseReader(t *testing.T) {
 		{
 			name:  "too long content length",
 			input: []byte("Content-Length: 100\r\n\r\n{}"),
-			err:   "lsp: read content: unexpected EOF",
+			err:   "jsonrpc: read content: unexpected EOF",
 		},
 		{
 			name:  "missing content length",
 			input: []byte("Content-Length: \r\n\r\n{}"),
-			err:   "lsp: invalid content length: parse error: strconv.ParseInt: parsing \"\": invalid syntax",
+			err:   "jsonrpc: invalid content length: parse error: strconv.ParseInt: parsing \"\": invalid syntax",
 		},
 		{
 			name:  "invalid header",
 			input: []byte("Nope\r\n\r\n{}"),
-			err:   "lsp: invalid header: \"Nope\\r\\n\"",
+			err:   "jsonrpc: invalid header: \"Nope\\r\\n\"",
 		},
 	}
 

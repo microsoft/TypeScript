@@ -22135,6 +22135,77 @@ func (s *ProfileResult) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 	return nil
 }
 
+// Parameters for the initializeAPISession request.
+type InitializeAPISessionParams struct {
+	// Optional path to use for the named pipe or Unix domain socket. If not provided, a unique path will be generated.
+	Pipe *string `json:"pipe,omitzero"`
+}
+
+// Result for the initializeAPISession request.
+type InitializeAPISessionResult struct {
+	// The unique identifier for this API session.
+	SessionId string `json:"sessionId"`
+
+	// The path to the named pipe or Unix domain socket for API communication.
+	Pipe string `json:"pipe"`
+}
+
+var _ json.UnmarshalerFrom = (*InitializeAPISessionResult)(nil)
+
+func (s *InitializeAPISessionResult) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+	const (
+		missingSessionId uint = 1 << iota
+		missingPipe
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return fmt.Errorf("expected object start, but encountered %v", k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"sessionId"`:
+			missing &^= missingSessionId
+			if err := json.UnmarshalDecode(dec, &s.SessionId); err != nil {
+				return err
+			}
+		case `"pipe"`:
+			missing &^= missingPipe
+			if err := json.UnmarshalDecode(dec, &s.Pipe); err != nil {
+				return err
+			}
+		default:
+			// Ignore unknown properties.
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingSessionId != 0 {
+			missingProps = append(missingProps, "sessionId")
+		}
+		if missing&missingPipe != 0 {
+			missingProps = append(missingProps, "pipe")
+		}
+		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+	}
+
+	return nil
+}
+
 // CallHierarchyItemData is a placeholder for custom data preserved on a CallHierarchyItem.
 type CallHierarchyItemData struct{}
 
@@ -23539,6 +23610,8 @@ func unmarshalParams(method Method, data []byte) (any, error) {
 		return unmarshalPtrTo[ProfileParams](data)
 	case MethodCustomStopCPUProfile:
 		return unmarshalEmpty(data)
+	case MethodCustomInitializeAPISession:
+		return unmarshalPtrTo[InitializeAPISessionParams](data)
 	case MethodWorkspaceDidChangeWorkspaceFolders:
 		return unmarshalPtrTo[DidChangeWorkspaceFoldersParams](data)
 	case MethodWindowWorkDoneProgressCancel:
@@ -23748,6 +23821,8 @@ func unmarshalResult(method Method, data []byte) (any, error) {
 		return unmarshalValue[StartCPUProfileResponse](data)
 	case MethodCustomStopCPUProfile:
 		return unmarshalValue[StopCPUProfileResponse](data)
+	case MethodCustomInitializeAPISession:
+		return unmarshalValue[CustomInitializeAPISessionResponse](data)
 	default:
 		return unmarshalAny(data)
 	}
@@ -24064,6 +24139,8 @@ const (
 	MethodCustomStartCPUProfile Method = "custom/startCPUProfile"
 	// Stops CPU profiling and saves the profile.
 	MethodCustomStopCPUProfile Method = "custom/stopCPUProfile"
+	// Custom request to initialize an API session.
+	MethodCustomInitializeAPISession Method = "custom/initializeAPISession"
 	// The `workspace/didChangeWorkspaceFolders` notification is sent from the client to the server when the workspace
 	// folder configuration changes.
 	MethodWorkspaceDidChangeWorkspaceFolders Method = "workspace/didChangeWorkspaceFolders"
@@ -24607,6 +24684,12 @@ type StopCPUProfileResponse = *ProfileResult
 
 // Type mapping info for `custom/stopCPUProfile`
 var CustomStopCPUProfileInfo = RequestInfo[any, StopCPUProfileResponse]{Method: MethodCustomStopCPUProfile}
+
+// Response type for `custom/initializeAPISession`
+type CustomInitializeAPISessionResponse = *InitializeAPISessionResult
+
+// Type mapping info for `custom/initializeAPISession`
+var CustomInitializeAPISessionInfo = RequestInfo[*InitializeAPISessionParams, CustomInitializeAPISessionResponse]{Method: MethodCustomInitializeAPISession}
 
 // Type mapping info for `workspace/didChangeWorkspaceFolders`
 var WorkspaceDidChangeWorkspaceFoldersInfo = NotificationInfo[*DidChangeWorkspaceFoldersParams]{Method: MethodWorkspaceDidChangeWorkspaceFolders}

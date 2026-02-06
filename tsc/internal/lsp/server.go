@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"iter"
+	"math/rand/v2"
 	"runtime/debug"
 	"slices"
 	"strings"
@@ -14,8 +15,10 @@ import (
 	"time"
 
 	"github.com/go-json-experiment/json"
+	"github.com/microsoft/typescript-go/internal/api"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/jsonrpc"
 	"github.com/microsoft/typescript-go/internal/jsonutil"
 	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/ls"
@@ -54,8 +57,8 @@ func NewServer(opts *ServerOptions) *Server {
 		stderr:                opts.Err,
 		requestQueue:          make(chan *lsproto.RequestMessage, 100),
 		outgoingQueue:         make(chan *lsproto.Message, 100),
-		pendingClientRequests: make(map[lsproto.ID]pendingClientRequest),
-		pendingServerRequests: make(map[lsproto.ID]chan *lsproto.ResponseMessage),
+		pendingClientRequests: make(map[jsonrpc.ID]pendingClientRequest),
+		pendingServerRequests: make(map[jsonrpc.ID]chan *lsproto.ResponseMessage),
 		cwd:                   opts.Cwd,
 		fs:                    opts.FS,
 		defaultLibraryPath:    opts.DefaultLibraryPath,
@@ -142,9 +145,9 @@ type Server struct {
 	clientSeq               atomic.Int32
 	requestQueue            chan *lsproto.RequestMessage
 	outgoingQueue           chan *lsproto.Message
-	pendingClientRequests   map[lsproto.ID]pendingClientRequest
+	pendingClientRequests   map[jsonrpc.ID]pendingClientRequest
 	pendingClientRequestsMu sync.Mutex
-	pendingServerRequests   map[lsproto.ID]chan *lsproto.ResponseMessage
+	pendingServerRequests   map[jsonrpc.ID]chan *lsproto.ResponseMessage
 	pendingServerRequestsMu sync.Mutex
 
 	cwd                string
@@ -162,6 +165,10 @@ type Server struct {
 	watchers     collections.SyncSet[project.WatcherID]
 
 	session *project.Session
+
+	// apiSessions holds active API sessions keyed by their ID
+	apiSessions   map[string]*api.Session
+	apiSessionsMu sync.Mutex
 
 	// Test options for initializing session
 	client project.Client
@@ -337,7 +344,7 @@ func (s *Server) readLoop(ctx context.Context) error {
 			return err
 		}
 
-		if s.initializeParams == nil && msg.Kind == lsproto.MessageKindRequest {
+		if s.initializeParams == nil && msg.Kind == jsonrpc.MessageKindRequest {
 			req := msg.AsRequest()
 			if req.Method == lsproto.MethodInitialize {
 				resp, err := s.handleInitialize(ctx, req.Params.(*lsproto.InitializeParams), req)
@@ -355,7 +362,7 @@ func (s *Server) readLoop(ctx context.Context) error {
 			continue
 		}
 
-		if msg.Kind == lsproto.MessageKindResponse {
+		if msg.Kind == jsonrpc.MessageKindResponse {
 			resp := msg.AsResponse()
 			s.pendingServerRequestsMu.Lock()
 			if respChan, ok := s.pendingServerRequests[*resp.ID]; ok {
@@ -454,7 +461,7 @@ func (s *Server) writeLoop(ctx context.Context) error {
 }
 
 func sendClientRequest[Req, Resp any](ctx context.Context, s *Server, info lsproto.RequestInfo[Req, Resp], params Req) (Resp, error) {
-	id := lsproto.NewIDString(fmt.Sprintf("ts%d", s.clientSeq.Add(1)))
+	id := jsonrpc.NewIDString(fmt.Sprintf("ts%d", s.clientSeq.Add(1)))
 	req := info.NewRequestMessage(id, params)
 
 	responseChan := make(chan *lsproto.ResponseMessage, 1)
@@ -486,14 +493,14 @@ func sendClientRequest[Req, Resp any](ctx context.Context, s *Server, info lspro
 	}
 }
 
-func (s *Server) sendResult(id *lsproto.ID, result any) error {
+func (s *Server) sendResult(id *jsonrpc.ID, result any) error {
 	return s.sendResponse(&lsproto.ResponseMessage{
 		ID:     id,
 		Result: result,
 	})
 }
 
-func (s *Server) sendError(id *lsproto.ID, err error) error {
+func (s *Server) sendError(id *jsonrpc.ID, err error) error {
 	code := lsproto.ErrorCodeInternalError
 	if errCode := lsproto.ErrorCode(0); errors.As(err, &errCode) {
 		code = errCode
@@ -501,7 +508,7 @@ func (s *Server) sendError(id *lsproto.ID, err error) error {
 	// TODO(jakebailey): error data
 	return s.sendResponse(&lsproto.ResponseMessage{
 		ID: id,
-		Error: &lsproto.ResponseError{
+		Error: &jsonrpc.ResponseError{
 			Code:    int32(code),
 			Message: err.Error(),
 		},
@@ -604,6 +611,7 @@ var handlers = sync.OnceValue(func() handlerMap {
 	registerRequestHandler(handlers, lsproto.CustomStartCPUProfileInfo, (*Server).handleStartCPUProfile)
 	registerRequestHandler(handlers, lsproto.CustomStopCPUProfileInfo, (*Server).handleStopCPUProfile)
 
+	registerRequestHandler(handlers, lsproto.CustomInitializeAPISessionInfo, (*Server).handleInitializeAPISession)
 	return handlers
 })
 
@@ -1253,6 +1261,71 @@ func (s *Server) handleCallHierarchyOutgoingCalls(
 		return lsproto.CallHierarchyOutgoingCallsOrNull{}, err
 	}
 	return languageService.ProvideCallHierarchyOutgoingCalls(ctx, params.Item)
+}
+
+func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto.InitializeAPISessionParams, _ *lsproto.RequestMessage) (lsproto.CustomInitializeAPISessionResponse, error) {
+	s.apiSessionsMu.Lock()
+	defer s.apiSessionsMu.Unlock()
+
+	if s.apiSessions == nil {
+		s.apiSessions = make(map[string]*api.Session)
+	}
+
+	var apiSession *api.Session
+	apiSession = api.NewSession(s.session, nil)
+
+	// Use provided pipe path or generate a unique one
+	var pipePath string
+	if params.Pipe != nil && *params.Pipe != "" {
+		pipePath = *params.Pipe
+	} else {
+		pipePath = s.generateAPIPipePath()
+	}
+
+	transport, err := api.NewPipeTransport(pipePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create API transport: %w", err)
+	}
+
+	// Start accepting connections in the background
+	go func() {
+		defer func() {
+			apiSession.Close()
+			s.removeAPISession(apiSession.ID())
+		}()
+
+		rwc, acceptErr := transport.Accept()
+		_ = transport.Close()
+		if acceptErr != nil {
+			s.logger.Errorf("API session %s: failed to accept connection: %v", apiSession.ID(), acceptErr)
+			return
+		}
+
+		conn := api.NewAsyncConn(rwc, apiSession)
+		if apiErr := conn.Run(s.backgroundCtx); apiErr != nil {
+			s.logger.Errorf("API session %s: %v", apiSession.ID(), apiErr)
+		}
+	}()
+
+	s.apiSessions[apiSession.ID()] = apiSession
+
+	return &lsproto.InitializeAPISessionResult{
+		SessionId: apiSession.ID(),
+		Pipe:      pipePath,
+	}, nil
+}
+
+func (s *Server) generateAPIPipePath() string {
+	// Generate a high-entropy path using time and random source
+	now := time.Now().UnixNano()
+	rnd := rand.Uint64()
+	return api.GeneratePipePath(fmt.Sprintf("tsgo-api-%x-%x", now, rnd))
+}
+
+func (s *Server) removeAPISession(id string) {
+	s.apiSessionsMu.Lock()
+	defer s.apiSessionsMu.Unlock()
+	delete(s.apiSessions, id)
 }
 
 // !!! temporary; remove when we have `handleDidChangeConfiguration`/implicit project config support

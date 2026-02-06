@@ -19,7 +19,7 @@ import {
     test,
 } from "node:test";
 import { fileURLToPath } from "node:url";
-import { runBenchmarks } from "./api.bench.ts";
+import { runBenchmarks } from "./api.sync.bench.ts";
 
 const defaultFiles = {
     "/tsconfig.json": "{}",
@@ -173,7 +173,7 @@ test("Dispose", () => {
         project.getTypeOfSymbol(symbol2);
     }, {
         name: "Error",
-        message: `symbol "${symbol.id}" not found`,
+        message: `api: client error: symbol handle "${symbol2.id}" not found in session registry`,
     });
 });
 

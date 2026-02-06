@@ -10,23 +10,21 @@ export interface ClientOptions {
 
 export class Client {
     private channel: SyncRpcChannel;
-    private decoder = new TextDecoder();
     private encoder = new TextEncoder();
 
     constructor(options: ClientOptions) {
-        this.channel = new SyncRpcChannel(options.tsserverPath, [
+        const args = [
             "--api",
-            "-cwd",
+            "--cwd",
             options.cwd ?? process.cwd(),
-        ]);
+        ];
 
-        this.channel.requestSync(
-            "configure",
-            JSON.stringify({
-                logFile: options.logFile,
-                callbacks: Object.keys(options.fs ?? {}),
-            }),
-        );
+        // Enable virtual FS callbacks for each provided FS function
+        if (options.fs && Object.keys(options.fs).length > 0) {
+            args.push(`--callbacks=${Object.keys(options.fs).join(",")}`);
+        }
+
+        this.channel = new SyncRpcChannel(options.tsserverPath, args);
 
         if (options.fs) {
             for (const [key, callback] of Object.entries(options.fs)) {

@@ -180,6 +180,10 @@ func (p *Project) Name() string {
 	return p.configFileName
 }
 
+func (p *Project) ID() tspath.Path {
+	return p.configFilePath
+}
+
 // ConfigFileName panics if Kind() is not KindConfigured.
 func (p *Project) ConfigFileName() string {
 	if p.Kind != KindConfigured {

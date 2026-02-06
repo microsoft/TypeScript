@@ -134,3 +134,186 @@ function pathComponents(path: string, rootLength: number) {
 function lastOrUndefined<T>(array: T[]): T | undefined {
     return array.length ? array[array.length - 1] : undefined;
 }
+
+const bundledScheme = "bundled:///";
+
+/**
+ * Returns true if the path refers to a bundled library file.
+ */
+export function isBundled(path: string): boolean {
+    return path.startsWith(bundledScheme);
+}
+
+/**
+ * Returns true if the file name represents a dynamic/virtual file
+ * that doesn't exist on disk (e.g., untitled files with paths like "^/untitled/...").
+ */
+export function isDynamicFileName(fileName: string): boolean {
+    return fileName.startsWith("^/");
+}
+
+/**
+ * Splits a Windows volume (e.g., "c:") from the rest of the path.
+ * Returns [volume, rest, ok] where ok is true if a volume was found.
+ */
+export function splitVolumePath(path: string): [volume: string, rest: string, ok: boolean] {
+    if (path.length >= 2 && isVolumeCharacter(path.charCodeAt(0)) && path.charCodeAt(1) === CharacterCodesColon) {
+        return [path.substring(0, 2).toLowerCase(), path.substring(2), true];
+    }
+    return ["", path, false];
+}
+
+// Characters that need extra escaping in URI path segments
+// https://github.com/microsoft/vscode-uri/blob/edfdccd976efaf4bb8fdeca87e97c47257721729/src/uri.ts#L455
+const extraEscapeChars: Record<string, string> = {
+    ":": "%3A",
+    "/": "%2F",
+    "?": "%3F",
+    "#": "%23",
+    "[": "%5B",
+    "]": "%5D",
+    "@": "%40",
+    "!": "%21",
+    "$": "%24",
+    "&": "%26",
+    "'": "%27",
+    "(": "%28",
+    ")": "%29",
+    "*": "%2A",
+    "+": "%2B",
+    ",": "%2C",
+    ";": "%3B",
+    "=": "%3D",
+    " ": "%20",
+};
+
+function extraEscape(s: string): string {
+    let result = s;
+    for (const [char, escape] of Object.entries(extraEscapeChars)) {
+        result = result.replaceAll(char, escape);
+    }
+    return result;
+}
+
+/**
+ * Converts a file name to a document URI.
+ *
+ * @example
+ * fileNameToDocumentURI("/path/to/file.ts") === "file:///path/to/file.ts"
+ * fileNameToDocumentURI("c:/path/to/file.ts") === "file:///c%3A/path/to/file.ts"
+ * fileNameToDocumentURI("^/untitled/ts-nul-authority/Untitled-1") === "untitled:Untitled-1"
+ * fileNameToDocumentURI("^/vscode-vfs/github/microsoft/typescript-go/file.ts") === "vscode-vfs://github/microsoft/typescript-go/file.ts"
+ */
+export function fileNameToDocumentURI(fileName: string): string {
+    // Bundled files are returned as-is
+    if (isBundled(fileName)) {
+        return fileName;
+    }
+
+    // Dynamic/virtual files (untitled, vscode-vfs, etc.) need special handling
+    if (isDynamicFileName(fileName)) {
+        // Format: ^/scheme/authority/path
+        const withoutPrefix = fileName.substring(2); // Remove "^/"
+        const firstSlash = withoutPrefix.indexOf("/");
+        if (firstSlash === -1) {
+            throw new Error("invalid file name: " + fileName);
+        }
+        const scheme = withoutPrefix.substring(0, firstSlash);
+        const rest = withoutPrefix.substring(firstSlash + 1);
+
+        const secondSlash = rest.indexOf("/");
+        if (secondSlash === -1) {
+            throw new Error("invalid file name: " + fileName);
+        }
+        const authority = rest.substring(0, secondSlash);
+        const path = rest.substring(secondSlash + 1);
+
+        // ts-nul-authority is a placeholder for URIs without an authority
+        if (authority === "ts-nul-authority") {
+            return scheme + ":" + path;
+        }
+        return scheme + "://" + authority + "/" + path;
+    }
+
+    // Regular file path - convert to file:// URI
+    let [volume, rest] = splitVolumePath(fileName);
+    if (volume !== "") {
+        volume = "/" + extraEscape(volume);
+    }
+
+    // Remove leading // for UNC paths (already handled by file://)
+    if (rest.startsWith("//")) {
+        rest = rest.substring(2);
+    }
+
+    const parts = rest.split("/");
+    const encodedParts = parts.map(part => extraEscape(encodeURIComponent(part)));
+
+    return "file://" + volume + encodedParts.join("/");
+}
+
+/**
+ * Converts a document URI to a file name.
+ *
+ * @example
+ * documentURIToFileName("file:///path/to/file.ts") === "/path/to/file.ts"
+ * documentURIToFileName("file:///c%3A/path/to/file.ts") === "c:/path/to/file.ts"
+ * documentURIToFileName("untitled:Untitled-1") === "^/untitled/ts-nul-authority/Untitled-1"
+ * documentURIToFileName("vscode-vfs://github/microsoft/typescript-go/file.ts") === "^/vscode-vfs/github/microsoft/typescript-go/file.ts"
+ */
+export function documentURIToFileName(uri: string): string {
+    // Bundled files are returned as-is
+    if (isBundled(uri)) {
+        return uri;
+    }
+
+    // Handle file:// URIs
+    if (uri.startsWith("file://")) {
+        let parsed: URL;
+        try {
+            parsed = new URL(uri);
+        }
+        catch {
+            throw new Error("invalid file URI: " + uri);
+        }
+
+        // UNC path: file://server/share/...
+        if (parsed.host !== "") {
+            return "//" + parsed.host + parsed.pathname;
+        }
+
+        // Local file - fix Windows path by removing leading slash before volume
+        const path = decodeURIComponent(parsed.pathname);
+        if (path.length >= 3 && path.charCodeAt(0) === CharacterCodesSlash) {
+            const [volume, rest, ok] = splitVolumePath(path.substring(1));
+            if (ok) {
+                return volume + rest;
+            }
+        }
+        return path;
+    }
+
+    // Leave all other URIs escaped so we can round-trip them.
+    // Convert to dynamic file name format: ^/scheme/authority/path
+
+    const colonIndex = uri.indexOf(":");
+    if (colonIndex === -1) {
+        throw new Error("invalid URI: " + uri);
+    }
+
+    const scheme = uri.substring(0, colonIndex);
+    let path = uri.substring(colonIndex + 1);
+
+    let authority = "ts-nul-authority";
+    if (path.startsWith("//")) {
+        const rest = path.substring(2);
+        const slashIndex = rest.indexOf("/");
+        if (slashIndex === -1) {
+            throw new Error("invalid URI: " + uri);
+        }
+        authority = rest.substring(0, slashIndex);
+        path = rest.substring(slashIndex + 1);
+    }
+
+    return "^/" + scheme + "/" + authority + "/" + path;
+}

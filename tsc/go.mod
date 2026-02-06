@@ -3,6 +3,7 @@ module github.com/microsoft/typescript-go
 go 1.25
 
 require (
+	github.com/Microsoft/go-winio v0.6.2
 	github.com/dlclark/regexp2 v1.11.5
 	github.com/go-json-experiment/json v0.0.0-20251027170946-4849db3c2f7e
 	github.com/google/go-cmp v0.7.0

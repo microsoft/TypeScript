@@ -118,6 +118,21 @@
             }
         },
         {
+            "label": "Watch api package",
+            "type": "npm",
+            "script": "watch",
+            "path": "_packages/api",
+            "isBackground": true,
+            "group": "build",
+            "presentation": {
+                "panel": "dedicated",
+                "reveal": "never"
+            },
+            "problemMatcher": [
+                "$tsc-watch"
+            ]
+        },
+        {
             "label": "Watch for extension run",
             "dependsOn": [
                 "Watch extension",

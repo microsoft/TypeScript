@@ -31,7 +31,6 @@
         "api:build": "npm run -w @typescript/api build",
         "extension:build": "npm run -w _extension build",
         "extension:watch": "npm run -w _extension watch",
-        "node": "node --no-warnings --conditions @typescript/source",
         "convertfourslash": "node --experimental-strip-types --no-warnings internal/fourslash/_scripts/convertFourslash.mts",
         "updatefailing": "node --experimental-strip-types --no-warnings internal/fourslash/_scripts/updateFailing.mts",
         "makemanual": "node --experimental-strip-types --no-warnings internal/fourslash/_scripts/makeManual.mts"

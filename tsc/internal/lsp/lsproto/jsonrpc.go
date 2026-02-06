@@ -1,93 +1,24 @@
 package lsproto
 
 import (
-	"errors"
 	"fmt"
-	"strconv"
 
 	"github.com/go-json-experiment/json"
 	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/typescript-go/internal/jsonrpc"
 )
 
-type JSONRPCVersion struct{}
-
-const jsonRPCVersion = `"2.0"`
-
-func (JSONRPCVersion) MarshalJSON() ([]byte, error) {
-	return []byte(jsonRPCVersion), nil
-}
-
-var ErrInvalidJSONRPCVersion = errors.New("invalid JSON-RPC version")
-
-func (*JSONRPCVersion) UnmarshalJSON(data []byte) error {
-	if string(data) != jsonRPCVersion {
-		return ErrInvalidJSONRPCVersion
-	}
-	return nil
-}
-
-type ID struct {
-	str string
-	int int32
-}
-
-func NewID(rawValue IntegerOrString) *ID {
+// NewID creates an ID from an IntegerOrString value.
+// This wrapper exists because lsproto has its own IntegerOrString type.
+func NewID(rawValue IntegerOrString) *jsonrpc.ID {
 	if rawValue.String != nil {
-		return &ID{str: *rawValue.String}
+		return jsonrpc.NewIDString(*rawValue.String)
 	}
-	return &ID{int: *rawValue.Integer}
+	return jsonrpc.NewIDInt(*rawValue.Integer)
 }
-
-func NewIDString(str string) *ID {
-	return &ID{str: str}
-}
-
-func (id *ID) String() string {
-	if id.str != "" {
-		return id.str
-	}
-	return strconv.Itoa(int(id.int))
-}
-
-func (id *ID) MarshalJSON() ([]byte, error) {
-	if id.str != "" {
-		return json.Marshal(id.str)
-	}
-	return json.Marshal(id.int)
-}
-
-func (id *ID) UnmarshalJSON(data []byte) error {
-	*id = ID{}
-	if len(data) > 0 && data[0] == '"' {
-		return json.Unmarshal(data, &id.str)
-	}
-	return json.Unmarshal(data, &id.int)
-}
-
-func (id *ID) TryInt() (int32, bool) {
-	if id == nil || id.str != "" {
-		return 0, false
-	}
-	return id.int, true
-}
-
-func (id *ID) MustInt() int32 {
-	if id.str != "" {
-		panic("ID is not an integer")
-	}
-	return id.int
-}
-
-type MessageKind int
-
-const (
-	MessageKindNotification MessageKind = iota
-	MessageKindRequest
-	MessageKindResponse
-)
 
 type Message struct {
-	Kind MessageKind
+	Kind jsonrpc.MessageKind
 	msg  any
 }
 
@@ -101,20 +32,20 @@ func (m *Message) AsResponse() *ResponseMessage {
 
 func (m *Message) UnmarshalJSON(data []byte) error {
 	var raw struct {
-		JSONRPC JSONRPCVersion `json:"jsonrpc"`
-		Method  Method         `json:"method"`
-		ID      *ID            `json:"id,omitzero"`
-		Params  jsontext.Value `json:"params"`
+		JSONRPC jsonrpc.JSONRPCVersion `json:"jsonrpc"`
+		Method  Method                 `json:"method"`
+		ID      *jsonrpc.ID            `json:"id,omitzero"`
+		Params  jsontext.Value         `json:"params"`
 		// We don't have a method in the response, so we have no idea what to decode.
 		// Store the raw text and let the caller decode it.
-		Result jsontext.Value `json:"result,omitzero"`
-		Error  *ResponseError `json:"error,omitzero"`
+		Result jsontext.Value         `json:"result,omitzero"`
+		Error  *jsonrpc.ResponseError `json:"error,omitzero"`
 	}
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return fmt.Errorf("%w: %w", ErrorCodeInvalidRequest, err)
 	}
 	if raw.ID != nil && raw.Method == "" {
-		m.Kind = MessageKindResponse
+		m.Kind = jsonrpc.MessageKindResponse
 		m.msg = &ResponseMessage{
 			ID:     raw.ID,
 			Result: raw.Result,
@@ -133,9 +64,9 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 	}
 
 	if raw.ID == nil {
-		m.Kind = MessageKindNotification
+		m.Kind = jsonrpc.MessageKindNotification
 	} else {
-		m.Kind = MessageKindRequest
+		m.Kind = jsonrpc.MessageKindRequest
 	}
 
 	m.msg = &RequestMessage{
@@ -152,16 +83,16 @@ func (m *Message) MarshalJSON() ([]byte, error) {
 }
 
 type RequestMessage struct {
-	JSONRPC JSONRPCVersion `json:"jsonrpc"`
-	ID      *ID            `json:"id,omitzero"`
-	Method  Method         `json:"method"`
-	Params  any            `json:"params,omitzero"`
+	JSONRPC jsonrpc.JSONRPCVersion `json:"jsonrpc"`
+	ID      *jsonrpc.ID            `json:"id,omitzero"`
+	Method  Method                 `json:"method"`
+	Params  any                    `json:"params,omitzero"`
 }
 
 func (r *RequestMessage) Message() *Message {
-	kind := MessageKindRequest
+	kind := jsonrpc.MessageKindRequest
 	if r.ID == nil {
-		kind = MessageKindNotification
+		kind = jsonrpc.MessageKindNotification
 	}
 	return &Message{
 		Kind: kind,
@@ -171,10 +102,10 @@ func (r *RequestMessage) Message() *Message {
 
 func (r *RequestMessage) UnmarshalJSON(data []byte) error {
 	var raw struct {
-		JSONRPC JSONRPCVersion `json:"jsonrpc"`
-		ID      *ID            `json:"id"`
-		Method  Method         `json:"method"`
-		Params  jsontext.Value `json:"params"`
+		JSONRPC jsonrpc.JSONRPCVersion `json:"jsonrpc"`
+		ID      *jsonrpc.ID            `json:"id"`
+		Method  Method                 `json:"method"`
+		Params  jsontext.Value         `json:"params"`
 	}
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return fmt.Errorf("%w: %w", ErrorCodeInvalidRequest, err)
@@ -193,32 +124,15 @@ func (r *RequestMessage) UnmarshalJSON(data []byte) error {
 }
 
 type ResponseMessage struct {
-	JSONRPC JSONRPCVersion `json:"jsonrpc"`
-	ID      *ID            `json:"id,omitzero"`
-	Result  any            `json:"result,omitzero"`
-	Error   *ResponseError `json:"error,omitzero"`
+	JSONRPC jsonrpc.JSONRPCVersion `json:"jsonrpc"`
+	ID      *jsonrpc.ID            `json:"id,omitzero"`
+	Result  any                    `json:"result,omitzero"`
+	Error   *jsonrpc.ResponseError `json:"error,omitzero"`
 }
 
 func (r *ResponseMessage) Message() *Message {
 	return &Message{
-		Kind: MessageKindResponse,
+		Kind: jsonrpc.MessageKindResponse,
 		msg:  r,
 	}
-}
-
-type ResponseError struct {
-	Code    int32  `json:"code"`
-	Message string `json:"message"`
-	Data    any    `json:"data,omitzero"`
-}
-
-func (r *ResponseError) String() string {
-	if r == nil {
-		return ""
-	}
-	data, err := json.Marshal(r.Data)
-	if err != nil {
-		return fmt.Sprintf("[%d]: %s\n%v", r.Code, r.Message, data)
-	}
-	return fmt.Sprintf("[%d]: %s", r.Code, r.Message)
 }

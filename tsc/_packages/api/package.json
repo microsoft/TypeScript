@@ -29,6 +29,14 @@
             "@typescript/source": "./src/api.ts",
             "default": "./dist/api.js"
         },
+        "./async": {
+            "@typescript/source": "./src/async/api.ts",
+            "default": "./dist/async/api.js"
+        },
+        "./base/*": {
+            "@typescript/source": "./src/base/*.ts",
+            "default": "./dist/base/*.js"
+        },
         "./fs": {
             "@typescript/source": "./src/fs.ts",
             "default": "./dist/fs.js"
@@ -39,16 +47,20 @@
         }
     },
     "scripts": {
+        "node": "node --experimental-strip-types --no-warnings --conditions @typescript/source",
         "build": "tsc -b",
+        "watch": "tsc -b --watch",
         "build:test": "tsc -b test",
-        "bench": "node --experimental-strip-types --no-warnings --conditions @typescript/source test/api.bench.ts",
-        "test": "node --test --experimental-strip-types --no-warnings --conditions @typescript/source ./test/**/*.test.ts"
+        "bench": "npm run node -- test/api.bench.ts",
+        "test": "npm run node -- --test ./test/**/*.test.ts"
     },
     "devDependencies": {
         "tinybench": "^6.0.0"
     },
     "dependencies": {
+        "@types/node": "^25.2.0",
         "@typescript/ast": "1.0.0",
-        "@typescript/libsyncrpc": "github:microsoft/libsyncrpc#00f42f7e419186ae06c768cb75fff973d95bcaa6"
+        "@typescript/libsyncrpc": "github:microsoft/libsyncrpc#00f42f7e419186ae06c768cb75fff973d95bcaa6",
+        "vscode-jsonrpc": "^9.0.0-next.10"
     }
 }

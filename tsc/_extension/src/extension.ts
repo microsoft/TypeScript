@@ -1,25 +1,21 @@
 import * as vscode from "vscode";
 
-import { Client } from "./client";
-import {
-    registerCodeLensShowLocationsCommand,
-    registerEnablementCommands,
-    registerLanguageCommands,
-} from "./commands";
-import { setupStatusBar } from "./statusBar";
+import { registerEnablementCommands } from "./commands";
 import {
     aiConnectionString,
     needsExtHostRestartOnChange,
 } from "./util";
-import { setupVersionStatusItem } from "./versionStatusItem";
 
 import { TelemetryReporter as VSCodeTelemetryReporter } from "@vscode/extension-telemetry";
-import {
-    createTelemetryReporter,
-    TelemetryReporter,
-} from "./telemetryReporting";
+import { SessionManager } from "./session";
+import { createTelemetryReporter } from "./telemetryReporting";
 
-export async function activate(context: vscode.ExtensionContext) {
+export interface ExtensionAPI {
+    onLanguageServerInitialized: vscode.Event<void>;
+    initializeAPIConnection(pipe?: string): Promise<string>;
+}
+
+export async function activate(context: vscode.ExtensionContext): Promise<ExtensionAPI | undefined> {
     await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", false);
 
     const telemetryReporter = createTelemetryReporter(new VSCodeTelemetryReporter(aiConnectionString));
@@ -31,7 +27,11 @@ export async function activate(context: vscode.ExtensionContext) {
     const traceOutput = vscode.window.createOutputChannel("typescript-native-preview (LSP)", { log: true });
     context.subscriptions.push(output, traceOutput);
 
-    let disposeLanguageFeatures: vscode.Disposable | undefined;
+    const languageServerInitializedEventEmitter = new vscode.EventEmitter<void>();
+    context.subscriptions.push(languageServerInitializedEventEmitter);
+
+    const sessionManager = new SessionManager(context, output, traceOutput, languageServerInitializedEventEmitter, telemetryReporter);
+    context.subscriptions.push(sessionManager);
 
     context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(async event => {
         if (event.affectsConfiguration("typescript.experimental.useTsgo")) {
@@ -48,12 +48,10 @@ export async function activate(context: vscode.ExtensionContext) {
             else {
                 const useTsgo = vscode.workspace.getConfiguration("typescript").get<boolean>("experimental.useTsgo");
                 if (useTsgo) {
-                    disposeLanguageFeatures = await activateLanguageFeatures(context, output, traceOutput, telemetryReporter);
-                    context.subscriptions.push(disposeLanguageFeatures);
+                    await sessionManager.restart(context);
                 }
                 else {
-                    disposeLanguageFeatures?.dispose();
-                    disposeLanguageFeatures = undefined;
+                    await sessionManager.stop();
                 }
             }
         }
@@ -88,23 +86,19 @@ export async function activate(context: vscode.ExtensionContext) {
         return;
     }
 
-    disposeLanguageFeatures = await activateLanguageFeatures(context, output, traceOutput, telemetryReporter);
-    context.subscriptions.push(disposeLanguageFeatures);
-}
+    await sessionManager.start(context);
 
-async function activateLanguageFeatures(
-    context: vscode.ExtensionContext,
-    output: vscode.LogOutputChannel,
-    traceOutput: vscode.LogOutputChannel,
-    telemetryReporter: TelemetryReporter,
-): Promise<vscode.Disposable> {
-    const disposables: vscode.Disposable[] = [];
+    function onLanguageServerInitialized(listener: () => void): vscode.Disposable {
+        if (sessionManager.currentSession?.client.isInitialized) {
+            listener();
+        }
+        return languageServerInitializedEventEmitter.event(listener);
+    }
 
-    const client = new Client(output, traceOutput, telemetryReporter);
-    disposables.push(...registerLanguageCommands(context, client, output, traceOutput, telemetryReporter));
-    disposables.push(await client.initialize(context));
-    disposables.push(setupStatusBar());
-    disposables.push(...setupVersionStatusItem(client));
-    disposables.push(registerCodeLensShowLocationsCommand());
-    return vscode.Disposable.from(...disposables);
+    return {
+        onLanguageServerInitialized: onLanguageServerInitialized,
+        async initializeAPIConnection(pipe?: string): Promise<string> {
+            return sessionManager.initializeAPIConnection(pipe);
+        },
+    };
 }

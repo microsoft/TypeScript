@@ -5,10 +5,19 @@ import type {
     Node,
     SourceFile,
 } from "@typescript/ast";
+import {
+    type API as BaseAPI,
+    type APIOptions as BaseAPIOptions,
+    type FileIdentifier,
+    type Project as BaseProject,
+    resolveFileName,
+    type Symbol as BaseSymbol,
+    type Type as BaseType,
+} from "./base/api.ts";
+import { ObjectRegistry } from "./base/objectRegistry.ts";
 import { Client } from "./client.ts";
 import type { FileSystem } from "./fs.ts";
 import { RemoteSourceFile } from "./node.ts";
-import { ObjectRegistry } from "./objectRegistry.ts";
 import type {
     ConfigResponse,
     ProjectResponse,
@@ -17,48 +26,22 @@ import type {
 } from "./proto.ts";
 
 export { SymbolFlags, TypeFlags };
+export type { FileIdentifier };
+export { documentURIToFileName, fileNameToDocumentURI } from "./path.ts";
 
-export interface APIOptions {
-    tsserverPath: string;
-    cwd?: string;
-    logFile?: string;
+export interface APIOptions extends BaseAPIOptions {
     fs?: FileSystem;
 }
 
-export class API {
-    private client: Client;
-    private objectRegistry: ObjectRegistry;
-    constructor(options: APIOptions) {
-        this.client = new Client(options);
-        this.objectRegistry = new ObjectRegistry(this.client);
-    }
+/** Type alias for the sync object registry */
+type SyncObjectRegistry = ObjectRegistry<Project, Symbol, Type>;
 
-    parseConfigFile(fileName: string): ConfigResponse {
-        return this.client.request("parseConfigFile", { fileName });
-    }
-
-    loadProject(configFileName: string): Project {
-        const data = this.client.request("loadProject", { configFileName });
-        return this.objectRegistry.getProject(data);
-    }
-
-    echo(message: string): string {
-        return this.client.echo(message);
-    }
-
-    echoBinary(message: Uint8Array): Uint8Array {
-        return this.client.echoBinary(message);
-    }
-
-    close(): void {
-        this.client.close();
-    }
-}
-
-export class DisposableObject {
+export abstract class DisposableObject {
     private disposed: boolean = false;
-    protected objectRegistry: ObjectRegistry;
-    constructor(objectRegistry: ObjectRegistry) {
+    protected objectRegistry: SyncObjectRegistry;
+    abstract readonly id: string;
+
+    constructor(objectRegistry: SyncObjectRegistry) {
         this.objectRegistry = objectRegistry;
     }
     [globalThis.Symbol.dispose](): void {
@@ -79,16 +62,54 @@ export class DisposableObject {
     }
 }
 
-export class Project extends DisposableObject {
+export class API implements BaseAPI<false> {
+    private client: Client;
+    private objectRegistry: SyncObjectRegistry;
+
+    constructor(options: APIOptions) {
+        this.client = new Client(options);
+        this.objectRegistry = new ObjectRegistry<Project, Symbol, Type>(
+            {
+                createProject: data => new Project(this.client, this.objectRegistry, data),
+                createSymbol: data => new Symbol(this.objectRegistry, data),
+                createType: data => new Type(this.objectRegistry, data),
+            },
+            id => this.client.request("release", id),
+        );
+    }
+
+    parseConfigFile(file: FileIdentifier | string): ConfigResponse {
+        return this.client.request("parseConfigFile", { fileName: resolveFileName(file) });
+    }
+
+    loadProject(configFile: FileIdentifier | string): Project {
+        const data = this.client.request("loadProject", { configFileName: resolveFileName(configFile) });
+        return this.objectRegistry.getProject(data);
+    }
+
+    echo(message: string): string {
+        return this.client.echo(message);
+    }
+
+    echoBinary(message: Uint8Array): Uint8Array {
+        return this.client.echoBinary(message);
+    }
+
+    close(): void {
+        this.client.close();
+    }
+}
+
+export class Project extends DisposableObject implements BaseProject<false> {
     private decoder = new TextDecoder();
     private client: Client;
 
-    id: string;
+    readonly id: string;
     configFileName!: string;
     compilerOptions!: Record<string, unknown>;
     rootFiles!: readonly string[];
 
-    constructor(client: Client, objectRegistry: ObjectRegistry, data: ProjectResponse) {
+    constructor(client: Client, objectRegistry: SyncObjectRegistry, data: ProjectResponse) {
         super(objectRegistry);
         this.id = data.id;
         this.client = client;
@@ -106,9 +127,9 @@ export class Project extends DisposableObject {
         this.loadData(this.client.request("loadProject", { configFileName: this.configFileName }));
     }
 
-    getSourceFile(fileName: string): SourceFile | undefined {
+    getSourceFile(file: FileIdentifier | string): SourceFile | undefined {
         this.ensureNotDisposed();
-        const data = this.client.requestBinary("getSourceFile", { project: this.id, fileName });
+        const data = this.client.requestBinary("getSourceFile", { project: this.id, fileName: resolveFileName(file) });
         return data ? new RemoteSourceFile(data, this.decoder) as unknown as SourceFile : undefined;
     }
 
@@ -124,10 +145,11 @@ export class Project extends DisposableObject {
         return data ? this.objectRegistry.getSymbol(data) : undefined;
     }
 
-    getSymbolAtPosition(fileName: string, position: number): Symbol | undefined;
-    getSymbolAtPosition(fileName: string, positions: readonly number[]): (Symbol | undefined)[];
-    getSymbolAtPosition(fileName: string, positionOrPositions: number | readonly number[]): Symbol | (Symbol | undefined)[] | undefined {
+    getSymbolAtPosition(file: FileIdentifier | string, position: number): Symbol | undefined;
+    getSymbolAtPosition(file: FileIdentifier | string, positions: readonly number[]): (Symbol | undefined)[];
+    getSymbolAtPosition(file: FileIdentifier | string, positionOrPositions: number | readonly number[]): Symbol | (Symbol | undefined)[] | undefined {
         this.ensureNotDisposed();
+        const fileName = resolveFileName(file);
         if (typeof positionOrPositions === "number") {
             const data = this.client.request("getSymbolAtPosition", { project: this.id, fileName, position: positionOrPositions });
             return data ? this.objectRegistry.getSymbol(data) : undefined;
@@ -149,16 +171,14 @@ export class Project extends DisposableObject {
     }
 }
 
-export class Symbol extends DisposableObject {
-    private client: Client;
-    id: string;
-    name: string;
-    flags: SymbolFlags;
-    checkFlags: number;
+export class Symbol extends DisposableObject implements BaseSymbol<false> {
+    readonly id: string;
+    readonly name: string;
+    readonly flags: SymbolFlags;
+    readonly checkFlags: number;
 
-    constructor(client: Client, objectRegistry: ObjectRegistry, data: SymbolResponse) {
+    constructor(objectRegistry: SyncObjectRegistry, data: SymbolResponse) {
         super(objectRegistry);
-        this.client = client;
         this.id = data.id;
         this.name = data.name;
         this.flags = data.flags;
@@ -166,13 +186,12 @@ export class Symbol extends DisposableObject {
     }
 }
 
-export class Type extends DisposableObject {
-    private client: Client;
-    id: string;
-    flags: TypeFlags;
-    constructor(client: Client, objectRegistry: ObjectRegistry, data: TypeResponse) {
+export class Type extends DisposableObject implements BaseType<false> {
+    readonly id: string;
+    readonly flags: TypeFlags;
+
+    constructor(objectRegistry: SyncObjectRegistry, data: TypeResponse) {
         super(objectRegistry);
-        this.client = client;
         this.id = data.id;
         this.flags = data.flags;
     }

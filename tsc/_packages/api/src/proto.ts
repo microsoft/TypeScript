@@ -10,6 +10,11 @@ export interface ProjectResponse {
     rootFiles: string[];
 }
 
+export interface SourceFileResponse {
+    /** Base64-encoded binary AST data */
+    data: string;
+}
+
 export interface SymbolResponse {
     id: string;
     name: string;

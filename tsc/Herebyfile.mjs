@@ -104,6 +104,10 @@ const goBuildFlags = [
     ...(options.debug ? ["-gcflags=all=-N -l"] : []),
 ];
 
+const goBuildEnv = {
+    ...(options.race ? {} : { CGO_ENABLED: "0" }),
+};
+
 /**
  * @template T
  * @param {() => T} fn
@@ -192,7 +196,8 @@ export const lib = task({
 function buildTsgo(opts) {
     opts ||= {};
     const out = opts.out ?? "./built/local/";
-    return $({ cancelSignal: opts.abortSignal, env: opts.env })`go build ${goBuildFlags} ${opts.extraFlags ?? []} ${options.debug ? goBuildTags("noembed") : goBuildTags("noembed", "release")} -o ${out} ./cmd/tsgo`;
+    const env = { ...goBuildEnv, ...opts.env };
+    return $({ cancelSignal: opts.abortSignal, env })`go build ${goBuildFlags} ${opts.extraFlags ?? []} ${options.debug ? goBuildTags("noembed") : goBuildTags("noembed", "release")} -o ${out} ./cmd/tsgo`;
 }
 
 export const tsgoBuild = task({
@@ -467,6 +472,14 @@ export const testTools = task({
     name: "test:tools",
     description: "Runs all tests in the _tools module.",
     run: runTestTools,
+});
+
+export const buildAPI = task({
+    name: "build:api",
+    description: "Builds @typescript/api and @typescript/ast.",
+    run: async () => {
+        await $`npm run -w @typescript/api build`;
+    },
 });
 
 export const buildAPITests = task({

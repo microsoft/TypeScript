@@ -388,7 +388,11 @@ func (s *Session) Snapshot() (*Snapshot, func()) {
 	defer s.snapshotMu.RUnlock()
 	snapshot := s.snapshot
 	snapshot.Ref()
-	return snapshot, func() {
+	return snapshot, s.createSnapshotRelease(snapshot)
+}
+
+func (s *Session) createSnapshotRelease(snapshot *Snapshot) func() {
+	return func() {
 		if snapshot.Deref() {
 			// The session itself accounts for one reference to the snapshot, and it derefs
 			// in UpdateSnapshot while holding the snapshotMu lock, so the only way to end

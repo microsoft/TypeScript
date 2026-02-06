@@ -1,9 +1,12 @@
 {
     "compilerOptions": {
+        "target": "es2022",
+        "lib": ["es2022"],
         "strict": true,
         "composite": true,
         "forceConsistentCasingInFileNames": true,
         "rewriteRelativeImportExtensions": true,
-        "verbatimModuleSyntax": true
+        "verbatimModuleSyntax": true,
+        "types": ["node"]
     }
 }
