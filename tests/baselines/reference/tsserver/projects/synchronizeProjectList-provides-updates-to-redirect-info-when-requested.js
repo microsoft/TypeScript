@@ -90,7 +90,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	a.ts
 	  Matched by default include pattern '**/*'
 
@@ -262,7 +262,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	b2.ts
 	  Imported via "../B/b2" from file 'b.ts'
 	  Matched by default include pattern '**/*'
@@ -673,7 +673,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	a.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 	../B/b2.ts

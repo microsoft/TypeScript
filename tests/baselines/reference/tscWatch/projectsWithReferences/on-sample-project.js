@@ -399,7 +399,7 @@ Using compiler options of project reference redirect '/user/username/projects/sa
 Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
   File is output of project reference source 'core/index.ts'
@@ -699,7 +699,7 @@ Output::
 
 Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
   File is output of project reference source 'core/index.ts'
@@ -971,7 +971,7 @@ Using compiler options of project reference redirect '/user/username/projects/sa
 Module resolution kind is not specified, using 'Bundler'.
 ======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
   File is output of project reference source 'core/index.ts'

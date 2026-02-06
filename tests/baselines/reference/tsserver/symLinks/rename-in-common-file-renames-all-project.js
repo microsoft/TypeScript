@@ -92,7 +92,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	c/fc.ts
 	  Imported via "./c/fc" from file 'a.ts'
 	  Matched by default include pattern '**/*'
@@ -265,7 +265,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	c/fc.ts
 	  Imported via "./c/fc" from file 'b.ts'
 	  Matched by default include pattern '**/*'

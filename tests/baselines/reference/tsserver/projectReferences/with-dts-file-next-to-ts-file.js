@@ -115,7 +115,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/index.ts
 	  Matched by include pattern 'src/*.d.ts' in 'tsconfig.json'
 
@@ -195,7 +195,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	index.d.ts
 	  Root file specified for compilation
 

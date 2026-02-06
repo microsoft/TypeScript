@@ -177,7 +177,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 fileWithImports.ts
@@ -536,7 +536,7 @@ FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/p
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 node_modules/pkg1/index.d.ts
@@ -880,7 +880,7 @@ FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/p
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 node_modules/pkg1/index.d.ts

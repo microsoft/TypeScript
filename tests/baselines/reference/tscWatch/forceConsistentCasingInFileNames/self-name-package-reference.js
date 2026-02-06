@@ -62,7 +62,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 index.ts
   Matched by default include pattern '**/*'
   Imported via "@this/package" from file 'index.ts'

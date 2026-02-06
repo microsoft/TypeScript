@@ -257,7 +257,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 20
 DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/lib :: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/lib :: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
 ../../../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 ../../../../a/1/a-impl/a/lib/a.d.ts
   Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
 ../../../../c/3/c-impl/c/lib/c.d.ts
@@ -651,7 +651,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 20
 [7m [0m [91m                  ~~~[0m
 
 ../../../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 src/index.ts
   Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
@@ -985,7 +985,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_mo
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 ../../../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 ../../../../a/1/a-impl/a/lib/a.d.ts
   Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
 ../../../../c/3/c-impl/c/lib/c.d.ts

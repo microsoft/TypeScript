@@ -15,6 +15,7 @@ Info seq  [hh:mm:ss:mss] request:
               "name": "invalidmodulename"
             }
           ],
+          "target": "es2025",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

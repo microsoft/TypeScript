@@ -274,7 +274,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../dependency/FnS.ts
 	  Imported via '../decls/fns' from file 'main.ts'
 	main.ts
@@ -437,7 +437,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	FnS.ts
 	  Matched by default include pattern '**/*'
 
@@ -624,7 +624,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	random.ts
 	  Matched by default include pattern '**/*'
 
@@ -2529,7 +2529,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../dependency/FnS.ts
 	  Imported via '../decls/fns' from file 'main.ts'
 	main.ts
@@ -2549,7 +2549,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	FnS.ts
 	  Matched by default include pattern '**/*'
 

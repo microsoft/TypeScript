@@ -269,7 +269,7 @@ Explicitly specified module resolution kind: 'Classic'.
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 a.d.ts
   Imported via "a" from file 'b.d.ts'
   File is output of project reference source 'a.ts'

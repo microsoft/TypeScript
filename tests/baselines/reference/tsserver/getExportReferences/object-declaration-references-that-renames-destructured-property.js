@@ -76,7 +76,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	mod.ts
 	  Imported via "./mod" from file 'main.ts'
 	  Matched by default include pattern '**/*'

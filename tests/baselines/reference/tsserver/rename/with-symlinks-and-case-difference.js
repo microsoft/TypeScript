@@ -113,7 +113,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	index.ts
 	  Matched by default include pattern '**/*'
 
@@ -404,7 +404,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../project1/index.ts
 	  Imported via 'project1' from file 'index.ts' with packageId 'project1/index.ts@1.0.0'
 	index.ts

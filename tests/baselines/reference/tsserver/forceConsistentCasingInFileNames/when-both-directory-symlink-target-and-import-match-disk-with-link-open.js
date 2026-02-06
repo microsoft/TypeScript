@@ -91,7 +91,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	XY/a.ts
 	  Imported via "./XY/a" from file 'b.ts'
 	  Matched by default include pattern '**/*'

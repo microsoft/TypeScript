@@ -81,7 +81,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/a.ts
 	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 	src/b.ts
@@ -282,7 +282,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/a.ts
 	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 	src/c.ts

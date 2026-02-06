@@ -61,7 +61,7 @@ TSFILE: /home/src/workspaces/solution/project/src/index.js
 TSFILE: /home/src/workspaces/solution/project/src/index.d.ts
 TSFILE: /home/src/workspaces/solution/project/tsconfig.tsbuildinfo
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project/src/hello.json
   Imported via "./hello.json" from file 'project/src/index.ts'
   Part of 'files' list in tsconfig.json
@@ -191,7 +191,7 @@ Output::
 [7m [0m [91m                        ~~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project/src/hello.json
   Imported via "./hello.json" from file 'project/src/index.ts'
   Part of 'files' list in tsconfig.json

@@ -135,7 +135,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	a.ts
 	  Matched by default include pattern '**/*'
 
@@ -375,7 +375,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	b.ts
 	  Matched by default include pattern '**/*'
 
@@ -455,7 +455,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	a.ts
 	  Matched by default include pattern '**/*'
 
@@ -668,7 +668,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../a/bin/a.d.ts
 	  Imported via "../a/bin/a" from file 'user.ts'
 	../b/bin/b.d.ts
@@ -685,7 +685,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	b.ts
 	  Matched by default include pattern '**/*'
 
@@ -1039,7 +1039,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	dummy.ts
 	  Root file specified for compilation
 
@@ -1054,7 +1054,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../a/bin/a.d.ts
 	  Imported via "../a/bin/a" from file 'user.ts'
 	../b/bin/b.d.ts

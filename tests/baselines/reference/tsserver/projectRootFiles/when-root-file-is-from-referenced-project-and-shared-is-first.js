@@ -173,7 +173,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../shared/src/logging.ts
 	  Matched by include pattern '../shared/src/**/*.ts' in 'tsconfig.json'
 	../shared/src/myClass.ts
@@ -566,7 +566,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../shared/src/logging.ts
 	  Matched by include pattern '../shared/src/**/*.ts' in 'tsconfig.json'
 	../shared/src/myClass.ts

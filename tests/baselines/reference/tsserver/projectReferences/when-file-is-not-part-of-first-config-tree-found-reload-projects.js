@@ -183,7 +183,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	demos/helpers.ts
 	  Imported via 'demos/helpers' from file 'app/Component-demos.ts'
 	  Matched by default include pattern '**/*'
@@ -277,7 +277,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	helpers.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 	  Imported via 'demos/helpers' from file '../app/Component-demos.ts'
@@ -528,7 +528,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	demos/helpers.ts
 	  Imported via 'demos/helpers' from file 'app/Component-demos.ts'
 	  Matched by default include pattern '**/*'
@@ -578,7 +578,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	helpers.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 	  Imported via 'demos/helpers' from file '../app/Component-demos.ts'

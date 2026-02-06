@@ -54,7 +54,7 @@ Output::
 [7m [0m [91m         ~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 alpha/bin/a.d.ts
   Imported via '../alpha/a' from file 'beta/b.ts'
   File is output of project reference source 'alpha/a.ts'

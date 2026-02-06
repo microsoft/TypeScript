@@ -110,7 +110,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 packages/a/index.js
   Matched by default include pattern '**/*'
   Imported via 'a' from file 'packages/a/test/index.js' with packageId 'a/index.js@0.0.0'
@@ -141,7 +141,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 packages/a/types/index.d.ts
   Imported via 'a' from file 'packages/b/index.js' with packageId 'a/index.js@0.0.0'
   File is output of project reference source 'packages/a/index.js'

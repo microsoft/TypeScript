@@ -163,7 +163,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../emit-composite/src/testModule.js
 	  Imported via './testModule' from file '../emit-composite/src/index.js'
 	../emit-composite/src/index.js

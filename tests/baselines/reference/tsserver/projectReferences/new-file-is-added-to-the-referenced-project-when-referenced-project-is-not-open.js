@@ -116,7 +116,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../project1/class1.ts
 	  Source from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	class2.ts
@@ -296,7 +296,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../project1/class1.ts
 	  Source from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	../project1/class3.ts

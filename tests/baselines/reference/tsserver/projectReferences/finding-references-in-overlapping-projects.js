@@ -188,7 +188,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../a/index.ts
 	  Source from referenced project '../a/tsconfig.json' included because '--module' is specified as 'none'
 	  Imported via "../a" from file 'index.ts'
@@ -367,7 +367,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -615,7 +615,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../a/index.ts
 	  Imported via "../a" from file 'index.ts'
 	  Imported via "../a" from file '../b/index.ts'
@@ -720,7 +720,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../a/index.ts
 	  Imported via "../a" from file 'index.ts'
 	  Imported via "../a" from file '../c/index.ts'

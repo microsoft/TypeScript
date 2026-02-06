@@ -68,7 +68,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../../node_modules/commander/index.js
 	  Imported via "commander" from file 'app.js'
 	app.js
@@ -434,7 +434,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../../../../../home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts
 	  Imported via "commander" from file 'app.js'
 	  Root file specified for compilation

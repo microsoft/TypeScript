@@ -276,7 +276,7 @@ Module resolution kind is not specified, using 'Bundler'.
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -491,7 +491,7 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -632,7 +632,7 @@ Module resolution kind is not specified, using 'Bundler'.
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -798,7 +798,7 @@ Module resolution kind is not specified, using 'Bundler'.
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -949,7 +949,7 @@ Module resolution kind is not specified, using 'Bundler'.
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 nrefs/a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
 b.d.ts
@@ -1097,7 +1097,7 @@ Module resolution kind is not specified, using 'Bundler'.
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   Imported via "@ref/a" from file 'c.ts'
@@ -1234,7 +1234,7 @@ File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it 
 [7m  [0m [91m~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b.ts'
   Imported via "@ref/a" from file 'c.ts'
@@ -1372,7 +1372,7 @@ Module resolution kind is not specified, using 'Bundler'.
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -1506,7 +1506,7 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 a.ts
   Imported via '@ref/a' from file 'b.d.ts'
 b.d.ts
@@ -1639,7 +1639,7 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'

@@ -176,7 +176,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 
 
 	c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../node_modules/@types/prop-types/index.d.ts
 	  Imported via 'prop-types' from file '../node_modules/@types/react/index.d.ts' with packageId '@types/prop-types/index.d.ts@15.7.3'
 	../node_modules/@types/react/index.d.ts

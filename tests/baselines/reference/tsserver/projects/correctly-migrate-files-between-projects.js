@@ -54,7 +54,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	f2.ts
 	  Root file specified for compilation
 
@@ -135,7 +135,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	f3.ts
 	  Root file specified for compilation
 
@@ -235,7 +235,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../c/f2.ts
 	  Imported via "../c/f2" from file 'f1.ts'
 	../d/f3.ts
@@ -256,7 +256,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	f2.ts
 	  Root file specified for compilation
 
@@ -269,7 +269,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	f3.ts
 	  Root file specified for compilation
 
@@ -393,7 +393,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	f2.ts
 	  Root file specified for compilation
 
@@ -410,7 +410,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	f3.ts
 	  Root file specified for compilation
 

@@ -244,7 +244,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -545,7 +545,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	dummy.ts
 	  Root file specified for compilation
 
@@ -877,7 +877,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -1084,7 +1084,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -1602,7 +1602,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	main.ts
 	  Root file specified for compilation
 
@@ -2060,7 +2060,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	dummy.ts
 	  Root file specified for compilation
 
@@ -2436,7 +2436,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -2507,7 +2507,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	dummy.ts
 	  Root file specified for compilation
 
@@ -2690,7 +2690,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -2802,7 +2802,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -3520,7 +3520,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../target/src/helpers/functions.d.ts
 	  Imported via 'helpers/functions' from file '../target/src/main.d.ts'
 	../target/src/main.d.ts
@@ -3624,7 +3624,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -3642,7 +3642,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -3662,7 +3662,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -3683,7 +3683,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	dummy.ts
 	  Root file specified for compilation
 
@@ -3956,7 +3956,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -4063,7 +4063,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -4130,7 +4130,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts

@@ -101,7 +101,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 
 
 	../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/a.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 	src/ambient.d.ts
@@ -1078,7 +1078,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/a.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 	src/ambient.d.ts

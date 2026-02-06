@@ -18,6 +18,7 @@ Info seq  [hh:mm:ss:mss] request:
               "../common/dist/src/*"
             ]
           },
+          "target": "es2025",
           "newLine": "crlf",
           "skipDefaultLibCheck": true,
           "outDir": "/home/src/workspaces/project/common/dist",

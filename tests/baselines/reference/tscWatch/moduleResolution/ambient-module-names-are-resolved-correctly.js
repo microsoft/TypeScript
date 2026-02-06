@@ -198,7 +198,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/package.json 2000 undefined File location affecting resolution
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 witha/node_modules/mymodule/index.d.ts
   Imported via 'mymodule' from file 'witha/a.ts'
 witha/a.ts
@@ -492,7 +492,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymoduleutils/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymodule/package.json 2000 undefined File location affecting resolution
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 witha/node_modules/mymodule/index.d.ts
   Imported via 'mymodule' from file 'witha/a.ts'
 witha/a.ts

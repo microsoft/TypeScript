@@ -106,7 +106,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 core/anotherModule.ts
   Matched by default include pattern '**/*'
 core/index.ts
@@ -118,7 +118,7 @@ core/some_decl.d.ts
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 core/index.d.ts
   Imported via '../core/index' from file 'logic/index.ts'
   File is output of project reference source 'core/index.ts'
@@ -132,7 +132,7 @@ logic/index.ts
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
   File is output of project reference source 'core/index.ts'
@@ -450,7 +450,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 core/anotherModule.ts
   Matched by default include pattern '**/*'
 core/index.ts
@@ -462,7 +462,7 @@ core/some_decl.d.ts
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 core/index.d.ts
   Imported via '../core/index' from file 'logic/index.ts'
   File is output of project reference source 'core/index.ts'
@@ -476,7 +476,7 @@ logic/index.ts
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
   File is output of project reference source 'core/index.ts'
@@ -757,7 +757,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 core/anotherModule.ts
   Matched by default include pattern '**/*'
 core/index.ts

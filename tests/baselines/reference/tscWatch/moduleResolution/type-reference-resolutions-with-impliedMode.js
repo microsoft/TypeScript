@@ -104,7 +104,7 @@ File '/package.json' does not exist.
 [7m [0m [91m                                 ~~~~~~~~~~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 node_modules/@types/pkg/import.d.ts
   Type library referenced via 'pkg' from file 'index.ts' with packageId 'pkg/import.d.ts@0.0.1'
   File is CommonJS module because 'node_modules/@types/pkg/package.json' does not have field "type"
@@ -260,7 +260,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 node_modules/@types/pkg/require.d.ts
   Type library referenced via 'pkg' from file 'index.ts' with packageId 'pkg/require.d.ts@0.0.1'
   File is CommonJS module because 'node_modules/@types/pkg/package.json' does not have field "type"

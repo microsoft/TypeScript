@@ -142,7 +142,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../dist/compositeb/b.d.ts
 	  Imported via "@ref/compositeb/b" from file 'a.ts'
 	a.ts
@@ -378,7 +378,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../compositeb/b.ts
 	  Imported via "@ref/compositeb/b" from file 'c.ts'
 	c.ts

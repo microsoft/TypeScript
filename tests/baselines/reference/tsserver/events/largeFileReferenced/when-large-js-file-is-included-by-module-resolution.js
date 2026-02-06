@@ -65,7 +65,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	large.js
 	  Imported via "./large" from file 'file.ts'
 	file.ts

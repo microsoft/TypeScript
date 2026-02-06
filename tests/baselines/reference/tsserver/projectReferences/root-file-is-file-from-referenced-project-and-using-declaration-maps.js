@@ -362,7 +362,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	input/keyboard.ts
 	  Imported via 'common/input/keyboard' from file 'input/keyboard.test.ts'
 	  Matched by include pattern './**/*' in 'tsconfig.json'
@@ -584,7 +584,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../out/input/keyboard.d.ts
 	  Imported via 'common/input/keyboard' from file 'terminal.ts'
 	  Matched by include pattern './**/*' in 'tsconfig.json'

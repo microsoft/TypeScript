@@ -55,7 +55,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../project/jquery.js
 	  Root file specified for compilation
 

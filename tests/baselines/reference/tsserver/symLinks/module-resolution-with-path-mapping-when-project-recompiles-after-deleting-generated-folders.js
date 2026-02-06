@@ -107,7 +107,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../recognizers-text/dist/types/recognizers-text.d.ts
 	  Imported via "@microsoft/recognizers-text" from file 'src/datetime/baseDate.ts'
 	src/datetime/baseDate.ts
@@ -411,7 +411,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/datetime/baseDate.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
@@ -699,7 +699,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../recognizers-text/dist/types/recognizers-text.d.ts
 	  Imported via "@microsoft/recognizers-text" from file 'src/datetime/baseDate.ts'
 	src/datetime/baseDate.ts

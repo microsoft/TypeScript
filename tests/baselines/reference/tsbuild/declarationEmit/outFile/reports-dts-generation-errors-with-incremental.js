@@ -76,7 +76,7 @@ Output::
 TSFILE: /home/src/workspaces/project/outFile.js
 TSFILE: /home/src/workspaces/project/outFile.tsbuildinfo
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 ky.d.ts
   Imported via 'ky' from file 'src/index.ts'
 src/index.ts
@@ -199,7 +199,7 @@ Output::
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 ky.d.ts
   Imported via 'ky' from file 'src/index.ts'
 src/index.ts

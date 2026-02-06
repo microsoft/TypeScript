@@ -39,7 +39,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project/src/main.tsx
   Matched by include pattern 'src/**/*.tsx' in 'project/tsconfig.json'
 

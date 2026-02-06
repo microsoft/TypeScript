@@ -67,7 +67,7 @@ Output::
     File is matched by 'files' list specified here.
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 node_modules/react/Jsx-Runtime/index.d.ts
   Part of 'files' list in tsconfig.json
   Imported via "react/jsx-runtime" from file 'index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions

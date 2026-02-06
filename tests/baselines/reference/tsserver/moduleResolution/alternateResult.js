@@ -400,7 +400,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
 	node_modules/@types/bar2/index.d.ts
@@ -2215,7 +2215,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
 	node_modules/foo2/index.d.ts
@@ -2548,7 +2548,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 
 
 	../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
 	node_modules/@types/bar/index.d.ts
@@ -2958,7 +2958,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
 	node_modules/@types/bar/index.d.ts
@@ -3352,7 +3352,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
 	node_modules/@types/bar/index.d.ts

@@ -93,7 +93,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	node_modules/@types/yargs/callback.d.ts
 	  Imported via "./callback" from file 'node_modules/@types/yargs/index.d.ts' with packageId '@types/yargs/callback.d.ts@1.0.0'
 	node_modules/@types/yargs/index.d.ts

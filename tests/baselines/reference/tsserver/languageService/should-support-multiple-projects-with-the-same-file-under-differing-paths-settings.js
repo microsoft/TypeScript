@@ -93,7 +93,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	foo.d.ts
 	  Imported via "foo" from file '../shared.ts'
 	  Part of 'files' list in tsconfig.json
@@ -273,7 +273,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	foo.d.ts
 	  Imported via "foo" from file '../shared.ts'
 	  Part of 'files' list in tsconfig.json

@@ -96,7 +96,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	client/folder1/module1.ts
 	  Matched by include pattern 'client/**/*' in 'tsconfig.json'
 	  Imported via "folder1/module1" from file 'client/linktofolder2/module2.ts'
@@ -274,7 +274,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	client/folder1/module1.ts
 	  Matched by include pattern 'client/**/*' in 'tsconfig.json'
 	  Imported via "folder1/module1" from file 'client/linktofolder2/module2.ts'

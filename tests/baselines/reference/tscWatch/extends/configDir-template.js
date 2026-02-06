@@ -172,7 +172,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/myproject/dec
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
 main.ts
@@ -396,7 +396,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
 main.ts

@@ -78,7 +78,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	file2.ts
 	  Referenced via './file2.ts' from file 'file1.ts'
 	  Matched by default include pattern '**/*'

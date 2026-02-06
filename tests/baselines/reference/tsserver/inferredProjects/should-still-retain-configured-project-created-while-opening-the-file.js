@@ -73,7 +73,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	app.ts
 	  Matched by default include pattern '**/*'
 
@@ -151,7 +151,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	jsFile1.js
 	  Root file specified for compilation
 
@@ -488,7 +488,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	jsFile2.js
 	  Root file specified for compilation
 
@@ -694,7 +694,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	jsFile1.js
 	  Root file specified for compilation
 
@@ -882,7 +882,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	lib.d.ts
 	  Root file specified for compilation
 
@@ -986,7 +986,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	app.ts
 	  Matched by default include pattern '**/*'
 

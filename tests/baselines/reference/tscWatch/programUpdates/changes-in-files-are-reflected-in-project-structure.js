@@ -30,7 +30,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 ../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project/f2.ts
   Imported via "./f2" from file 'project/f1.ts'
 project/f1.ts
@@ -103,7 +103,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 ../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 projectc/f3.ts
   Imported via "../projectc/f3" from file 'project/f2.ts'
 project/f2.ts

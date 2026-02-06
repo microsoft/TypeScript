@@ -85,7 +85,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../node_modules/@types/random-seed/index.d.ts
 	  Imported via "random-seed" from file 'main.ts'
 	main.ts
@@ -438,7 +438,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	main.ts
 	  Matched by default include pattern '**/*'
 
@@ -695,7 +695,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../node_modules/@types/random-seed/index.d.ts
 	  Imported via "random-seed" from file 'main.ts'
 	main.ts

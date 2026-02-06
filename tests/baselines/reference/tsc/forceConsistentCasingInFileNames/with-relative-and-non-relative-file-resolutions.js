@@ -55,7 +55,7 @@ Output::
     File is included via import here.
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/struct.d.ts'
   Imported via "fp-ts/lib/struct" from file 'src/struct.d.ts'

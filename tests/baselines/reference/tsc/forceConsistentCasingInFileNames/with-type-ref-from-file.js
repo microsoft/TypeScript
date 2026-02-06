@@ -42,7 +42,7 @@ File '/user/username/projects/myproject/src/fileOne.d.ts' exists - use it as a n
 Resolving real path for '/user/username/projects/myproject/src/fileOne.d.ts', result '/user/username/projects/myproject/src/fileOne.d.ts'.
 ======== Type reference directive './fileOne.d.ts' was successfully resolved to '/user/username/projects/myproject/src/fileOne.d.ts', primary: false. ========
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 src/fileOne.d.ts
   Type library referenced via './fileOne.d.ts' from file 'src/file2.d.ts'
   Matched by default include pattern '**/*'

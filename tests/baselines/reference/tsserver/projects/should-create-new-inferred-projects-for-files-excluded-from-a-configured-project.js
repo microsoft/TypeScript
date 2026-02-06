@@ -73,7 +73,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	commonFile1.ts
 	  Part of 'files' list in tsconfig.json
 	commonFile2.ts
@@ -245,7 +245,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	commonFile1.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -357,7 +357,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	commonFile2.ts
 	  Root file specified for compilation
 

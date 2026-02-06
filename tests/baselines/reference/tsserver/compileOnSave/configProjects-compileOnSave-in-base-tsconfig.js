@@ -86,7 +86,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	moduleFile1.ts
 	  Imported via "./moduleFile1" from file 'file1Consumer1.ts'
 	  Imported via "./moduleFile1" from file 'file1Consumer2.ts'

@@ -127,7 +127,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	types.ts
 	  Part of 'files' list in tsconfig.json
 	program.ts
@@ -485,7 +485,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../compiler/types.ts
 	  Source from referenced project '../compiler/tsconfig.json' included because '--module' is specified as 'none'
 	../compiler/program.ts

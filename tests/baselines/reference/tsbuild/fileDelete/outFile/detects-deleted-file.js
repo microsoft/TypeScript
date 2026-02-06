@@ -82,7 +82,7 @@ File '/home/src/workspaces/solution/child/child2.ts' exists - use it as a name r
 [7m [0m [91m              ~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 child/child2.ts
   Imported via "../child/child2" from file 'child/child.ts'
   Matched by default include pattern '**/*'
@@ -143,7 +143,7 @@ File '/child.jsx' does not exist.
 [7m [0m [91m              ~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 childResult.d.ts
   Output from referenced project 'child/tsconfig.json' included because '--outFile' specified
 main/main.ts
@@ -332,7 +332,7 @@ File '/home/src/workspaces/solution/child/child2.jsx' does not exist.
 [7m [0m [91m              ~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 child/child.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Project 'main/tsconfig.json' is out of date because buildinfo file 'mainResult.tsbuildinfo' indicates that program needs to report errors.
@@ -390,7 +390,7 @@ File '/child.jsx' does not exist.
 [7m [0m [91m              ~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 childResult.d.ts
   Output from referenced project 'child/tsconfig.json' included because '--outFile' specified
 main/main.ts

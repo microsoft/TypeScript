@@ -146,7 +146,7 @@ export const inverseJsxOptionMap: Map<string, string> = new Map(mapIterator(jsxO
 //       augmented in another lib.
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       `ScriptTargetFeatures`, `CommandLineOptionOfCustomType`, transformers/esnext.ts, compiler/commandLineParser.ts,
 //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 const libEntries: [string, string][] = [
     // JavaScript only
@@ -562,6 +562,10 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
 ];
 
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       `ScriptTargetFeatures`, `CommandLineOptionOfCustomType`, transformers/esnext.ts, compiler/commandLineParser.ts,
+//       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 /** @internal */
 export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     name: "target",
@@ -580,6 +584,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
         es2022: ScriptTarget.ES2022,
         es2023: ScriptTarget.ES2023,
         es2024: ScriptTarget.ES2024,
+        es2025: ScriptTarget.ES2025,
         esnext: ScriptTarget.ESNext,
     })),
     affectsSourceFile: true,

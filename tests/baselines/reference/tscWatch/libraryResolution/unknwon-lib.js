@@ -109,7 +109,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 25
 ../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project1/core.d.ts
   Matched by default include pattern '**/*'
 project1/file.ts
@@ -364,7 +364,7 @@ Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/worksp
 ../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project1/core.d.ts
   Matched by default include pattern '**/*'
 project1/file.ts
@@ -561,7 +561,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/project1/core.d.ts
 ../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project1/file.ts
   Matched by default include pattern '**/*'
 project1/file2.ts
@@ -762,7 +762,7 @@ Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/worksp
 ../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project1/file.ts
   Matched by default include pattern '**/*'
 project1/file2.ts
@@ -962,7 +962,7 @@ Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/worksp
 ../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project1/file.ts
   Matched by default include pattern '**/*'
 project1/file2.ts

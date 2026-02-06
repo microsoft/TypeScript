@@ -16,6 +16,7 @@ Info seq  [hh:mm:ss:mss] request:
               "message": "hello world"
             }
           ],
+          "target": "es2025",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

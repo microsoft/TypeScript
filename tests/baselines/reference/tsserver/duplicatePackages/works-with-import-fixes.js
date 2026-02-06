@@ -108,7 +108,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	a/node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'a/user.ts' with packageId 'foo/index.d.ts@1.2.3'
 	a/user.ts

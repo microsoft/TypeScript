@@ -22,6 +22,7 @@ Info seq  [hh:mm:ss:mss] request:
           "outDir": "/home/src/workspaces/project/packages/pkg-2/dist",
           "rootDir": "/home/src/workspaces/project/packages/pkg-2/src",
           "composite": true,
+          "target": "es2025",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

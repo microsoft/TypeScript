@@ -75,7 +75,7 @@ Output::
     File is included via import here.
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
@@ -211,7 +211,7 @@ Output::
     File is included via import here.
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'

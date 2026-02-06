@@ -47,7 +47,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	untitled:^Untitled-1
 	  Root file specified for compilation
 
@@ -310,7 +310,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	file.ts
 	  Matched by default include pattern '**/*'
 
@@ -384,7 +384,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	untitled:^Untitled-1
 	  Root file specified for compilation
 

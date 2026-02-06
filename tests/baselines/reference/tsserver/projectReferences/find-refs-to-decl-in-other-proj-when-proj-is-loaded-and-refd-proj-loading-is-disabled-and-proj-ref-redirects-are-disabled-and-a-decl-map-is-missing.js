@@ -132,7 +132,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../b/lib/index.d.ts
 	  Imported via "../b/lib" from file 'index.ts'
 	index.ts
@@ -299,7 +299,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	index.ts
 	  Imported via "." from file 'helper.ts'
 	  Matched by default include pattern '**/*'

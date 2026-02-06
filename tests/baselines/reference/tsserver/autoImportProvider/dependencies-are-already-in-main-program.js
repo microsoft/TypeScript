@@ -114,7 +114,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	node_modules/@angular/forms/forms.d.ts
 	  Imported via '@angular/forms' from file 'index.ts'
 	index.ts

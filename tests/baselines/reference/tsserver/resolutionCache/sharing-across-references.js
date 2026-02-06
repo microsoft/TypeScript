@@ -193,7 +193,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../node_modules/moduleX/index.d.ts
 	  Imported via "moduleX" from file 'appA.ts'
 	  Imported via "moduleX" from file '../common/moduleB.ts'

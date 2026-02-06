@@ -48,7 +48,7 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File '/home/src/workspaces/solution/child/child2.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child2' was successfully resolved to '/home/src/workspaces/solution/child/child2.ts'. ========
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 child/child2.ts
   Imported via "../child/child2" from file 'child/child.ts'
   Matched by default include pattern '**/*'
@@ -118,7 +118,7 @@ Directory '/home/src/workspaces/solution/child/child2' does not exist, skipping 
 [7m [0m [91m                       ~~~~~~~~~~~~~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 child/child.ts
   Matched by default include pattern '**/*'
 

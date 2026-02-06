@@ -42,7 +42,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 ../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project/a.ts
   Matched by default include pattern '**/*'
   Imported via "C:/workspaces/solution/project/a" from file 'project/b.ts'
@@ -135,7 +135,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 ../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project/a.ts
   Matched by default include pattern '**/*'
   Imported via "C:/workspaces/solution/project/a" from file 'project/b.ts'

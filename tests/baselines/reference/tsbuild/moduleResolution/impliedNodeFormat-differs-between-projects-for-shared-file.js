@@ -78,7 +78,7 @@ Resolving real path for '/home/src/workspaces/project/node_modules/@types/pg/ind
 ======== Type reference directive 'pg' was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', primary: true. ========
 File '/home/src/workspaces/project/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 a/src/index.ts
   Matched by default include pattern '**/*'
 node_modules/@types/pg/index.d.ts
@@ -112,7 +112,7 @@ File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 node_modules/@types/pg/index.d.ts
   Imported via "pg" from file 'b/src/index.ts'
   File is CommonJS module because 'node_modules/@types/pg/package.json' does not have field "type"

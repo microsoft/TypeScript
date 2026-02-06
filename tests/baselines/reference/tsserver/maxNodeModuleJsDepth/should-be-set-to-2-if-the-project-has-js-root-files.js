@@ -62,7 +62,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	node_modules/test/index.js
 	  Imported via "test" from file 'file1.js'
 	file1.js

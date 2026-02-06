@@ -96,7 +96,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	file1.ts
 	  Matched by default include pattern '**/*'
 	file2.ts

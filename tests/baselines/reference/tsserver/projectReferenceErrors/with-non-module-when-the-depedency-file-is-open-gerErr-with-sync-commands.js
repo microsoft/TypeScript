@@ -118,7 +118,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../dependency/fns.ts
 	  Source from referenced project '../dependency/tsconfig.json' included because '--outFile' specified
 	usage.ts
@@ -296,7 +296,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	fns.ts
 	  Matched by default include pattern '**/*'
 

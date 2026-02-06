@@ -130,7 +130,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	app.ts
 	  Matched by default include pattern '**/*'
 
@@ -2008,7 +2008,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	node_modules/@types/lodash/index.d.ts
 	  Imported via 'lodash' from file 'app.ts' with packageId '@types/lodash/index.d.ts@4.14.74'
 	app.ts

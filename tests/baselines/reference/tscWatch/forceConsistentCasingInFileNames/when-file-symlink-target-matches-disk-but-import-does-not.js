@@ -53,7 +53,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 unde
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/link.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 undefined Source file
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 XY.ts
   Matched by default include pattern '**/*'
   Imported via "./XY" from file 'b.ts'
@@ -174,7 +174,7 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/XY.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/link.ts"]
   options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 XY.ts
   Matched by default include pattern '**/*'
   Imported via "./XY" from file 'b.ts'

@@ -91,7 +91,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	apps/editor/scripts/createConfigVariable.js
 	  Matched by default include pattern '**/*'
 	apps/editor/src/src.js
@@ -354,7 +354,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/src.js
 	  Matched by include pattern './src' in 'tsconfig.json'
 

@@ -64,7 +64,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../../../../../user/username/projects/project/node_modules/tslib/index.d.ts
 	  Imported via "tslib" from file '../../../../../user/username/projects/project/app.ts' to import 'importHelpers' as specified in compilerOptions
 	../../../../../user/username/projects/project/app.ts

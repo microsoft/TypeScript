@@ -318,7 +318,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../B/src/foo.ts
 	  Imported via '@issue/b/lib/foo' from file 'src/test.ts'
 	../B/src/bar/foo.ts

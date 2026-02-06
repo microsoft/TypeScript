@@ -76,7 +76,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	moduleFile1.ts
 	  Matched by default include pattern '**/*'
 	  Referenced via './moduleFile1.ts' from file 'referenceFile1.ts'
@@ -256,7 +256,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	referenceFile1.ts
 	  Matched by default include pattern '**/*'
 

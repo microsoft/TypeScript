@@ -82,7 +82,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../../../../../user/username/projects/project1/src/node_modules/minimatch/index.js
 	  Imported via "minimatch" from file '../../../../../user/username/projects/project1/src/node_modules/glob/index.js'
 	  Imported via 'minimatch' from file '../../../../../user/username/projects/project1/src/file1.js'

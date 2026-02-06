@@ -295,7 +295,7 @@ Info seq  [hh:mm:ss:mss] 	Files (7)
 
 
 	../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../node_modules/module1/index.ts
 	  Imported via "module1" from file 'feature/file2.ts'
 	  Imported via "module1" from file '../test/file4.ts'

@@ -30,7 +30,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 ../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 commonFile1.ts
   Matched by default include pattern '**/*'
 commonFile2.ts
@@ -113,7 +113,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 ../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 commonFile1.ts
   Matched by default include pattern '**/*'
 commonFile2.ts
@@ -176,7 +176,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 ../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 commonFile1.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
@@ -243,7 +243,7 @@ Output::
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 ../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 commonFile1.ts
   Matched by default include pattern '**/*'
 commonFile2.ts

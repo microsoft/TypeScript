@@ -99,7 +99,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/shared/tsconfig.json'...
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
 projects/shared/src/myClass.ts
@@ -128,7 +128,7 @@ File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 projects/shared/dist/src/myClass.d.ts
   Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
@@ -520,7 +520,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/shared/tsconfig.json'...
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
 projects/shared/src/myClass.ts
@@ -641,7 +641,7 @@ File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 projects/shared/dist/src/myClass.d.ts
   Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
@@ -888,7 +888,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/projects/shared/tsconfig.json'...
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
 projects/shared/src/myClass.ts
@@ -1007,7 +1007,7 @@ File '/home/src/workspaces/solution/projects/shared/src/myClass.ts' exists - use
 [7m [0m [91m    ~~~~~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 projects/shared/dist/src/myClass.d.ts
   Imported via ':shared/myClass.js' from file 'projects/server/src/server.ts'
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'

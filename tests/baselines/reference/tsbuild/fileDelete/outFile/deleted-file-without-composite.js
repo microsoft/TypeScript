@@ -59,7 +59,7 @@ File '/home/src/workspaces/solution/child/child2.ts' exists - use it as a name r
 [7m [0m [91m              ~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 child/child2.ts
   Imported via "../child/child2" from file 'child/child.ts'
   Matched by default include pattern '**/*'
@@ -140,7 +140,7 @@ File '/home/src/workspaces/solution/child/child2.jsx' does not exist.
 [7m [0m [91m              ~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 child/child.ts
   Matched by default include pattern '**/*'
 

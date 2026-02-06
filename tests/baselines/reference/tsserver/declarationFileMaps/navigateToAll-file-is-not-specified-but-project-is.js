@@ -150,7 +150,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	a.ts
 	  Matched by default include pattern '**/*'
 
@@ -390,7 +390,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	b.ts
 	  Matched by default include pattern '**/*'
 
@@ -470,7 +470,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	a.ts
 	  Matched by default include pattern '**/*'
 
@@ -690,7 +690,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../a/a.ts
 	  Imported via "../a/a" from file 'user.ts'
 	../b/b.ts

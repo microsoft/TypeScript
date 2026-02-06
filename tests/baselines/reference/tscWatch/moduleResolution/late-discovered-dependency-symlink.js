@@ -125,7 +125,7 @@ File '/home/src/workspace/packageC/node_modules/package-a/index.d.ts' exists - u
 Resolving real path for '/home/src/workspace/packageC/node_modules/package-a/index.d.ts', result '/home/src/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/home/src/workspace/packageA/index.d.ts'. ========
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 ../packageA/index.d.ts
   Imported via "package-a" from file '../packageB/index.d.ts'
 ../packageB/index.d.ts
@@ -263,7 +263,7 @@ File '/home/src/workspace/packageC/node_modules/package-a/index.d.ts' exists - u
 Resolving real path for '/home/src/workspace/packageC/node_modules/package-a/index.d.ts', result '/home/src/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/home/src/workspace/packageA/index.d.ts'. ========
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 ../packageA/index.d.ts
   Imported via "package-a" from file '../packageB/index.d.ts'
 ../packageB/index.d.ts

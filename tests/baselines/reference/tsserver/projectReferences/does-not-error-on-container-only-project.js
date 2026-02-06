@@ -319,7 +319,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -442,7 +442,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts
@@ -567,7 +567,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts

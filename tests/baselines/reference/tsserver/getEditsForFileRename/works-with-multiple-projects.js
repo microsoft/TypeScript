@@ -81,7 +81,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	old.ts
 	  Part of 'files' list in tsconfig.json
 	  Imported via "./old" from file 'user.ts'
@@ -244,7 +244,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../a/old.ts
 	  Imported via "../a/old" from file 'user.ts'
 	user.ts

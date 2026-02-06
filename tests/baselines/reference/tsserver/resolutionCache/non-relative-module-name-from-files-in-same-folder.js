@@ -165,7 +165,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	src/node_modules/module1/index.ts
 	  Imported via "module1" from file 'src/file1.ts'
 	  Imported via "module1" from file 'src/file2.ts'

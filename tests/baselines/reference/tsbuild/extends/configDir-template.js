@@ -146,7 +146,7 @@ Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/inde
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
 main.ts

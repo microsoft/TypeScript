@@ -314,7 +314,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 
 	../../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../../../shared/src/library/index.ts
 	  Imported via "shared" from file 'bar.ts' with packageId 'shared/bld/library/index.d.ts@1.0.0'
 	bar.ts

@@ -119,7 +119,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	../a/a.d.ts
 	  Imported via "../a/a" from file 'b.ts'
 	  File is output of project reference source '../a/a.ts'
@@ -300,7 +300,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	a.ts
 	  Matched by default include pattern '**/*'
 

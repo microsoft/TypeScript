@@ -96,7 +96,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 ../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 node_modules/@types/yargs/index.d.mts
   Imported via "yargs" from file 'src/bin.ts' with packageId 'yargs/index.d.mts@17.0.12'
 src/bin.ts

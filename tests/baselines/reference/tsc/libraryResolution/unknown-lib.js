@@ -88,7 +88,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ../../tslibs/TS/Lib/lib.scripthost.d.ts
   Library referenced via 'scripthost' from file 'project1/file2.ts'
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project1/core.d.ts
   Matched by default include pattern '**/*'
 project1/file.ts

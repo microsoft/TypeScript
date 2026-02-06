@@ -67,7 +67,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	a.ts
 	  Matched by default include pattern '**/*'
 
@@ -205,7 +205,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	^/chat-editing-snapshot-text-model/ts-nul-authority/c/temp/codeRepo/src/services/user.service.ts
 	  Root file specified for compilation
 
@@ -286,7 +286,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	^/vscode-chat-code-block/dnnjb2rllwnoyxqtc2vzc2lvbjovl2xvy2fsl1peag1oelv6tkdvde9uvtvnuzawtxpbnuxxstrare10tvrobfpuvtbpvgmytudwaq/response_6b1244f1-9aca-4b8b-8f65-0ff7ed4e6b4e/2#{"references":[]}
 	  Root file specified for compilation
 

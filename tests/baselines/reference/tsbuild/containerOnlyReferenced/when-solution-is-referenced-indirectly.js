@@ -80,7 +80,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/tsconfig.json'...
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project2/src/b.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Project 'project3/tsconfig.json' is out of date because output file 'project3/tsconfig.tsbuildinfo' does not exist
@@ -88,7 +88,7 @@ project2/src/b.ts
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project3/tsconfig.json'...
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project3/src/c.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Project 'project4/tsconfig.json' is out of date because output file 'project4/tsconfig.tsbuildinfo' does not exist
@@ -96,7 +96,7 @@ project3/src/c.ts
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project4/tsconfig.json'...
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project4/src/d.ts
   Matched by default include pattern '**/*'
 
@@ -278,7 +278,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project3/tsconfig.json'...
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project3/src/c.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Project 'project4/tsconfig.json' is out of date because output 'project4/tsconfig.tsbuildinfo' is older than input 'project3'
@@ -286,7 +286,7 @@ project3/src/c.ts
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project4/tsconfig.json'...
 
 ../../tslibs/TS/Lib/lib.es2025.full.d.ts
-  Default library
+  Default library for target 'es2025'
 project4/src/d.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/solution/project4/tsconfig.json'...

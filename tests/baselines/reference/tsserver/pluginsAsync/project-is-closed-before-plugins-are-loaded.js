@@ -45,7 +45,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	^memfs:/foo.ts
 	  Root file specified for compilation
 
@@ -165,7 +165,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	foo2.ts
 	  Root file specified for compilation
 
@@ -178,7 +178,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 
 	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
-	  Default library
+	  Default library for target 'es2025'
 	^memfs:/foo.ts
 	  Root file specified for compilation
 
