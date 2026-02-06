@@ -1,6 +1,6 @@
 interface Map<K, V> {
     /**
-     * Removes all elements from the Set.
+     * Removes all elements from the Map.
      */
     clear(): void;
     /**
